@@ -84,7 +84,7 @@
             @include dialog-label;
         }
 
-        select, .ui-selectmenu {
+        select, .ui-selectmenu-button .ui-button {
             width: 225px;
         }
     }
