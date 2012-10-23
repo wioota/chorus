@@ -18,7 +18,7 @@ resource "Gnip instances" do
     parameter :username, "gnip account username"
     parameter :password, "gnip account password"
 
-    let(:name) { "example name" }
+    let(:name) { "example_name" }
     let(:description) { "Can you tell me how to get..." }
     let(:stream_url) { "https://historical.gnip.com/fake" }
     let(:username) { "example_user" }
@@ -57,7 +57,7 @@ resource "Gnip instances" do
     parameter :password, "gnip account password (password is not updated unless this parameter is provided)"
 
     let(:id) { gnip_instance.to_param }
-    let(:name) { "example name" }
+    let(:name) { "example_name" }
     let(:description) { "Can you tell me how to get..." }
     let(:stream_url) { "https://historical.gnip.com/fake" }
     let(:username) { "example_user" }

@@ -51,7 +51,7 @@ resource "Hadoop" do
     parameter :username, "Username for connection to instance"
     parameter :group_list, "Group list for connection"
 
-    let(:name) { "22 Duck Street" }
+    let(:name) { "a22_Duck_Street" }
     let(:description) { "Quack!" }
     let(:host) { "duck.heroku.com" }
     let(:port) { "8121" }
