@@ -20,7 +20,7 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
-        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
+        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(64), newAttrs);
         this.require("host", newAttrs);
         this.require("port", newAttrs);
         this.require("username", newAttrs);

@@ -36,6 +36,12 @@ describe("chorus.models.HadoopInstance", function() {
         })
     });
 
+    it("requires name with valid length", function() {
+        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        expect(this.model.performValidation(this.attrs)).toBeFalsy();
+        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"})
+    });
+
     describe("#providerIconUrl", function() {
         it("returns the right url for hadoop instances", function() {
             expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");

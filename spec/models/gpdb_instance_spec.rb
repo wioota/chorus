@@ -12,7 +12,11 @@ describe GpdbInstance do
         end
 
         it "fails validation due to field length" do
-          FactoryGirl.build(:gpdb_instance, :name => 'a'*45).should_not be_valid
+          FactoryGirl.build(:gpdb_instance, :name => 'a'*65).should_not be_valid
+        end
+
+        it "does not fail validation due to field length" do
+          FactoryGirl.build(:gpdb_instance, :name => 'a'*45).should be_valid
         end
       end
 

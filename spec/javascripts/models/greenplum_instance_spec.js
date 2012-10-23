@@ -187,6 +187,12 @@ describe("chorus.models.GreenplumInstance", function() {
                     expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
                 })
 
+                it("requires name with valid length", function() {
+                    this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                    expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "Instance name"})
+                })
+
                 it("requires valid port", function() {
                     this.attrs.port = "z123"
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();
@@ -216,6 +222,12 @@ describe("chorus.models.GreenplumInstance", function() {
                 }
                 spyOn(this.instance, "isNew").andReturn("true");
             });
+
+            it("requires name with valid length", function() {
+                this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "Instance name"})
+            })
 
             it("requires size", function() {
                 this.attrs.size = "";

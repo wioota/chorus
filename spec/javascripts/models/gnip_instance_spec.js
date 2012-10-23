@@ -42,6 +42,12 @@ describe("chorus.models.GnipInstance", function() {
         })
     });
 
+    it("requires name with valid length", function() {
+        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        expect(this.model.performValidation(this.attrs)).toBeFalsy();
+        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"})
+    })
+
     it("doesn't require a password if already saved", function () {
         this.attrs.password = "";
         expect(this.model.performValidation(this.attrs)).toBeTruthy();
