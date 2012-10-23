@@ -31,7 +31,8 @@ class ActivityMigrator < AbstractMigrator
           Events::WorkfileUpgradedVersion,
           Events::ChorusViewCreated,
           Events::ChorusViewChanged,
-          Events::WorkspaceChangeName
+          Events::WorkspaceChangeName,
+          Events::ViewCreated
       ]
     end
 
@@ -382,6 +383,55 @@ class ActivityMigrator < AbstractMigrator
         ON normalize_key(source_dataset.object_id) = datasets.legacy_id
     WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
     AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreated');
+    ))
+    end
+
+   def migrate_view_created
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO events(
+      legacy_id,
+      legacy_type,
+      action,
+      target1_id,
+      target1_type,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::ViewCreated',
+      datasets.id,
+      'Dataset',
+      chorus_view_dataset.id,
+      'Dataset',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object chorus_view
+        ON streams.id = chorus_view.activity_stream_id
+        AND chorus_view.entity_type = 'chorusView'
+      INNER JOIN datasets chorus_view_dataset
+        ON normalize_key(chorus_view.object_id) = chorus_view_dataset.legacy_id
+        AND chorus_view_dataset.edc_workspace_id = streams.workspace_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+      INNER JOIN edc_activity_stream_object source_dataset
+        ON streams.id = source_dataset.activity_stream_id
+        AND source_dataset.entity_type = 'view'
+      INNER JOIN datasets
+        ON normalize_key(source_dataset.object_id) = datasets.legacy_id
+    WHERE streams.type = 'VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
+    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ViewCreated');
     ))
     end
 
@@ -1179,6 +1229,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_chorus_view_created_from_dataset
       migrate_chorus_view_changed
       migrate_workspace_name_changed
+      migrate_view_created
 
       Events::Base.find_each { |event| event.create_activities }
 

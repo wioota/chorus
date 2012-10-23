@@ -76,6 +76,28 @@ describe ActivityMigrator do
         Events::ChorusViewCreated.where(:target2_type => 'Dataset').count.should == count
       end
 
+      it "copies VIEW CREATED data fields from the legacy activity" do
+        count = 0
+        Legacy.connection.select_all("
+          SELECT eas.* FROM legacy_migrate.edc_activity_stream eas
+          INNER JOIN legacy_migrate.edc_activity_stream_object easo
+            ON eas.id = easo.activity_stream_id
+          WHERE type = 'VIEW_CREATED'
+          AND easo.entity_type = 'view';
+          ").each do |row|
+          count +=1
+          event = Events::ViewCreated.find_by_legacy_id!(row["id"])
+          event.workspace.should be_instance_of(Workspace)
+          event.actor.should be_instance_of(User)
+          event.dataset.should be_a(Dataset)
+          event.source_dataset.should be_a(ChorusView)
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        count.should > 0
+        Events::ViewCreated.count.should == count
+      end
+
+
       it "copies DATASET CHANGED QUERY events for when users edit chorus views" do
         count = 0
         Legacy.connection.select_all("

@@ -79,7 +79,7 @@ class DatabaseObjectMigrator < AbstractMigrator
             (
               SELECT normalize_key(object_id) AS dataset_string
               FROM edc_activity_stream_object
-              WHERE entity_type = 'sourceObject'
+              WHERE entity_type in ('sourceObject', 'view')
               AND object_id LIKE '%|%|%|%|%'
             )
           ) a
