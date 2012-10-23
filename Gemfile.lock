@@ -327,7 +327,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-jdbc-adapter!
   activerecord-jdbcpostgresql-adapter!
   allowy
   attr_encrypted

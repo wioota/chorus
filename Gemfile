@@ -23,7 +23,6 @@ platform :jruby do
   gem 'jruby-openssl', :require => false
   # Pull request: https://github.com/jruby/activerecord-jdbc-adapter/pull/207
   gem 'activerecord-jdbcpostgresql-adapter', :github => "GreenplumChorus/activerecord-jdbc-adapter", :branch => "dynamic-schema-search-path"
-  gem 'activerecord-jdbc-adapter', :github => "GreenplumChorus/activerecord-jdbc-adapter", :branch => "dynamic-schema-search-path"
 end
 
 group :assets do
