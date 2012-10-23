@@ -53,6 +53,25 @@ class GpdbColumnStatistics
   end
 
   def parse_pseudo_csv(list_with_brackets)
-    CSV.parse(list_with_brackets[1...-1]).first
+    regex = /(?:"((?:[^"\\]|\\.)+)"|((?:[^"\\,\s]|\\.)+))/
+    list_without_brackets = list_with_brackets[1...-1]
+
+    matches = list_without_brackets.scan(regex).map { |s|
+      s.reject(&:nil?)
+    }.flatten
+
+    matches.map do |l|
+      line = l.strip.gsub('\"', '"')
+      strip_quotes(line)
+    end
+  end
+
+  def strip_quotes(string)
+    return string[1...-1] if in_quotes(string)
+    string
+  end
+
+  def in_quotes(string)
+    string[0] == '"' && string[-1] == '"'
   end
 end

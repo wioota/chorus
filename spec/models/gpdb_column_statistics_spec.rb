@@ -52,6 +52,41 @@ describe GpdbColumnStatistics do
         common_values.last.should == '5'
       end
     end
+
+    context "with escaped quotes in quotes" do
+      let(:most_common_vals) { '{"one", "and \"two\" or", "three"}' }
+
+      it "returns the correct values" do
+        common_values = subject.common_values
+        common_values.should have(3).items
+        common_values.first.should == 'one'
+        common_values[1].should == 'and "two" or'
+        common_values.last.should == 'three'
+      end
+    end
+
+    context "with commas inside of quotes" do
+      let(:most_common_vals) { '{"1","1,2","3"}' }
+
+      it "returns three items" do
+        common_values = subject.common_values
+        common_values.should have(3).items
+        common_values.first.should == '1'
+        common_values[1].should == '1,2'
+        common_values.last.should == '3'
+      end
+    end
+
+    context "with escaped quotes" do
+      let(:most_common_vals) { '{1,2,3,\"4\",5,6}' }
+
+      it "returns the first five" do
+        common_values = subject.common_values
+        common_values.should have(5).items
+        common_values.first.should == '1'
+        common_values.last.should == '5'
+      end
+    end
   end
 
   describe "#number_distinct" do
