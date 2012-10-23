@@ -25,7 +25,7 @@ case $RAILS_ENV in
         RAKE=bin/rake
         ;;
     * )
-        RUBY=ruby
+        RUBY=jruby
         RAKE=rake
         ;;
 esac
