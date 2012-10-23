@@ -6,7 +6,7 @@ module LoginHelpers
     fill_in 'username', :with => username
     fill_in 'password', :with => password
     click_button "Login"
-    wait_for_ajax(20)
+    wait_for_ajax(25)
     wait_until { current_route == '/' || page.all('.has_error').size > 0 || page.all('.errors li').size > 0 }
   end
 
