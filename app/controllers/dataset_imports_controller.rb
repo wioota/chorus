@@ -33,7 +33,12 @@ class DatasetImportsController < ApplicationController
     validate_import_attributes(src_table, attributes)
     src_table.import(attributes, current_user)
 
-    render :json => {}, :status => :created
+    if (attributes[:import_type] == "schedule")
+      import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
+      present import_schedule, :status => :created
+    else
+      render :json => {}, :status => :created
+    end
   end
 
   def update

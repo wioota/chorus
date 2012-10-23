@@ -230,6 +230,21 @@ describe DatasetImportsController do
         response.should be_success
       end
 
+      it "presents an import schedule" do
+        attributes[:sample_count] = ''
+        mock_present do |schedule|
+          schedule.should be_a(ImportSchedule)
+          schedule.id.should_not be_nil
+          schedule.workspace.should == active_workspace
+          schedule.user.should == account.owner
+          schedule.sample_count.should be_nil
+          schedule.new_table.should be_true
+          schedule.truncate.should be_true
+          schedule.to_table.should == 'the_new_table'
+        end
+        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
+      end
+
       it "limits the number of rows when set" do
         attributes[:sample_count] = '40'
         post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
