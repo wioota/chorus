@@ -12,15 +12,15 @@ describe "Visualizations", :database_integration do
   before do
     login(users(:admin))
     visit("#/instances")
-    wait_for_ajax
+    wait_for_ajax(15)
     click_link instance.name
-    wait_for_ajax
+    wait_for_ajax(15)
     click_link database.name
-    wait_for_ajax
+    wait_for_ajax(15)
     click_link schema.name
-    wait_for_ajax
+    wait_for_ajax(15)
     click_link table.name
-    wait_for_ajax
+    wait_for_ajax(15)
     click_button "Visualize"
   end
 
