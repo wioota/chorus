@@ -163,6 +163,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("doesn't display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).not.toExist();
                     });
+
+                    it("does not display the edit accounts link", function() {
+                        expect(this.view.$("a[data-dialog=InstancePermissions]")).not.toExist();
+                    });
                 });
 
                 context("when the instance is offline", function() {
@@ -186,6 +190,10 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
+                    });
+
+                    it("does display the edit accounts link", function() {
+                        expect(this.view.$("a[data-dialog=InstancePermissions]")).toExist();
                     });
                 });
             });

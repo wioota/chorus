@@ -27,7 +27,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             deleteable: this.instance.provisioningFailed() && this.instance.get("provision_type") == "create",
             isProvisioning: this.instance.isProvisioning(),
             provisioningFailed: this.instance.provisioningFailed(),
-            isOnline: this.instance.isOnline(),
+            isOnlineOrOffline: this.instance.isOnline() || this.instance.isOffline(),
             entityType: this.model.entityType,
             instanceProvider: t("instances.provider." + this.model.entityType),
             shared: this.model.isShared && this.model.isShared(),
