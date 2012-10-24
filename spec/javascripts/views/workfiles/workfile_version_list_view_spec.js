@@ -27,6 +27,10 @@ describe("chorus.views.WorkfileVersionList", function() {
         expect(this.view.$("li").length).toBe(2);
     });
 
+    it("displays the delete link when user is a member of the workspace", function () {
+        expect(this.view.$("li:eq(0) .delete_link")).toExist();
+    });
+
     it("displays the version number for each item", function() {
         expect(this.view.$("li:eq(0) .version_title")).toContainTranslation("workfile.version_title", {versionNum: 2});
         expect(this.view.$("li:eq(1) .version_title")).toContainTranslation("workfile.version_title", {versionNum: 1});
@@ -45,6 +49,32 @@ describe("chorus.views.WorkfileVersionList", function() {
 
         expect(this.view.$("li:eq(1) .version_details")).toContainTranslation("workfile.version_saved_by", {
             authorName: "Rob Doe", formattedDate: "November 29, 2011"
+        });
+    });
+
+    context("when the workspace is archived", function () {
+        beforeEach(function () {
+            this.view.collection.each(function(model) {
+                model.workspace().set({archivedAt: "archivedDate"});
+            });
+            this.view.render();
+        });
+        it("does not display the delete link", function () {
+            expect(this.view.$("li:eq(0) .delete_link")).not.toExist();
+        });
+    });
+
+    context("when user does not have admin or update permission in the workspace", function () {
+        beforeEach(function () {
+            this.view.collection.each(function(model) {
+                model.workspace().set({permission: ["read", "commenting"]});
+            });
+            this.view.render();
+        });
+
+        it("does not display the delete link", function () {
+            expect(this.view.$("li:eq(0) .delete_link")).not.toExist();
+
         });
     });
 });
