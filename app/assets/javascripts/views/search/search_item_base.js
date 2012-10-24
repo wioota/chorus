@@ -14,7 +14,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
     },
 
     makeCommentList: function() {
-        return new chorus.views.SearchResultCommentList({comments: this.getComments(), columns: this.getColumns()});
+        return new chorus.views.SearchResultCommentList({comments: this.getComments(), columns: this.getColumns(), columnDescriptions: this.getColumnDescriptions()});
     },
 
     getColumns: function() {
@@ -22,6 +22,13 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
         _.each(columns, function(column) { column.isColumn = true; });
 
         return columns;
+    },
+
+    getColumnDescriptions: function() {
+        var columnDescriptions = this.model.get("columnDescriptions") || [];
+        _.each(columnDescriptions, function(columnDescription) { columnDescription.isColumnDescription = true; });
+
+        return columnDescriptions;
     },
 
     getComments: function() {

@@ -1058,6 +1058,7 @@ describe("handlebars", function () {
                     expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.insight");
                 });
             });
+
             context("when the comment is a comment", function () {
                 beforeEach(function () {
                     this.comment = fixtures.searchResultCommentJson({isComment:true});
@@ -1065,6 +1066,16 @@ describe("handlebars", function () {
 
                 it("returns the comment title", function () {
                     expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.comment");
+                });
+            });
+
+            context("when the comment is a column description", function () {
+                beforeEach(function () {
+                    this.comment = fixtures.searchResultCommentJson({isColumnDescription:true});
+                });
+
+                it("returns the comment title", function () {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column_description");
                 });
             });
 

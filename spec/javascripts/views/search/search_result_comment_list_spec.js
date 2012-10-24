@@ -29,6 +29,14 @@ describe("chorus.views.SearchResultCommentList", function() {
                         body:["column <em>content</em>"]
                     }
                 })
+            ],
+            columnDescriptions: [
+                fixtures.searchResultCommentJson({
+                    isColumnDescription: true,
+                    highlightedAttributes: {
+                        body:["<em>column</em> description"]
+                    }
+                })
             ]
         });
         this.view.render();
@@ -36,10 +44,10 @@ describe("chorus.views.SearchResultCommentList", function() {
 
     it("shows the comments", function() {
         expect(this.view.$('.comments > .comment').length).toBe(3);
-        expect(this.view.$('.more_comments .comment').length).toBe(3);
+        expect(this.view.$('.more_comments .comment').length).toBe(4);
 
-        expect(this.view.$('a.show_more_comments')).toContainTranslation("search.comments_more", {count: 3});
-        expect(this.view.$('a.show_fewer_comments')).toContainTranslation("search.comments_less", {count: 3});
+        expect(this.view.$('a.show_more_comments')).toContainTranslation("search.comments_more", {count: 4});
+        expect(this.view.$('a.show_fewer_comments')).toContainTranslation("search.comments_less", {count: 4});
 
         var comments = this.view.$('.comments > .comment');
         expect(comments.find('.comment_type').eq(0)).toContainTranslation("activity.note");
@@ -61,6 +69,8 @@ describe("chorus.views.SearchResultCommentList", function() {
             expect(this.view.$('.comments .more_comments')).not.toHaveClass("hidden");
             expect(this.view.$('.more_comments > .comment').find('.comment_type').eq(2)).toContainTranslation("search.supporting_message_types.column");
             expect(this.view.$('.more_comments > .comment').find('.comment_content').eq(2).html()).toContain("column <em>content</em>");
+            expect(this.view.$('.more_comments > .comment').find('.comment_type').last()).toContainTranslation("search.supporting_message_types.column_description");
+            expect(this.view.$('.more_comments > .comment').find('.comment_content').last().html()).toContain("<em>column</em> description");
         });
 
         context("when the show fewer comments link is clicked", function() {

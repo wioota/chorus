@@ -104,5 +104,13 @@
             {{/with}}
             {{/if}}
         </div>
+        {{#if column.description}}
+        <div class='column description'>
+            <h4>{{t "dataset.column_statistics.description"}}</h4>
+            <p>
+                {{column.description}}
+            </p>
+        </div>
+        {{/if}}
     {{/if}}
 </div>

@@ -943,7 +943,7 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("column statistics", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.column = rspecFixtures.databaseColumnSet([{
+            this.column = rspecFixtures.databaseColumnSet([{},{
                 dataType: "int8",
                 typeCategory: "WHOLE_NUMBER",
                 statistics: {
@@ -953,7 +953,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     min: "200075.0",
                     nullFraction: 0.103678
                 }
-            }]).at(0);
+            }]).at(1);
 
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
             this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24T12:25:11Z"});
@@ -974,8 +974,13 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".column_statistics .pair").eq(3).find(".key")).toContainTranslation("dataset.column_statistics.max");
                 expect(this.view.$(".column_statistics .pair").eq(4).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
                 expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+                expect(this.view.$(".column.description").find("h4")).toContainTranslation("dataset.column_statistics.description");
 
                 expect(this.view.$(".column_statistics .multiline").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.common");
+            });
+
+            it("should display a comment for the column", function() {
+                expect(this.view.$(".column.description p")).toContainText(this.column.get("description"));
             });
         });
 

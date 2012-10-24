@@ -353,6 +353,7 @@ describe Dataset do
       Dataset.should have_searchable_field :database_name
       Dataset.should have_searchable_field :schema_name
       Dataset.should have_searchable_field :column_name
+      Dataset.should have_searchable_field :column_description
     end
 
     it "returns the schema name for schema_name" do
@@ -668,7 +669,7 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#metadata_for_tables" do
+  describe "#metadata_for_dataset" do
     context "Base table" do
       let(:sql) { subject.metadata_for_dataset("base_table1").to_sql }
 

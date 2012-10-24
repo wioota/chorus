@@ -41,6 +41,7 @@ class Dataset < ActiveRecord::Base
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :column_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
@@ -162,6 +163,10 @@ class Dataset < ActiveRecord::Base
 
   def column_name
     column_data.map(&:name)
+  end
+
+  def column_description
+    column_data.map(&:description)
   end
 
   def column_data
@@ -295,8 +300,6 @@ class Dataset < ActiveRecord::Base
     def metadata_for_dataset(table_name)
       relations_in_schema.
           where(RELATIONS[:relname].eq(table_name)).
-          join(DESCRIPTIONS, Arel::Nodes::OuterJoin).
-          on(RELATIONS[:oid].eq(DESCRIPTIONS[:objoid])).
           join(VIEWS, Arel::Nodes::OuterJoin).
           on(VIEWS[:viewname].eq(RELATIONS[:relname])).
           join(LAST_OPERATION, Arel::Nodes::OuterJoin).
@@ -313,7 +316,7 @@ class Dataset < ActiveRecord::Base
           ).as('partition_count'),
           RELATIONS[:reltuples].as('row_count'),
           RELATIONS[:relname].as('name'),
-          DESCRIPTIONS[:description].as('description'),
+          Arel.sql("obj_description(pg_catalog.pg_class.oid)").as('description'),
           VIEWS[:definition].as('definition'),
           RELATIONS[:relnatts].as('column_count'),
           LAST_OPERATION[:statime].as('last_analyzed'),

@@ -57,16 +57,16 @@ describe("chorus.views.SearchDataset", function() {
         })
     });
 
-    // TODO: Fix these when we have the new structure for column and table comments on a dataset. [#37076621]
-    xcontext("when there are column comments", function() {
+    context("when there are column comments", function() {
         beforeEach(function() {
-            this.model.set({'comments': [{highlightedAttributes: {body: ['comment 1', 'comment 2']}}]});
+            this.model.set({'columnDescriptions': [{highlightedAttributes: {body: ['comment 1']}}, {highlightedAttributes: {body: ['comment 2']}}]});
             this.view.render();
         });
 
         it("displays the column comments", function() {
-            expect(this.view.$('.comment .comment_content')).toContainText('comment 1');
-            expect(this.view.$('.comment .comment_content')).toContainText('comment 2');
+            expect(this.view.$('.comment .comment_type').eq(0)).toContainText('Column Comment:');
+            expect(this.view.$('.comment .comment_content').eq(0)).toContainText('comment 1');
+            expect(this.view.$('.comment .comment_content').eq(1)).toContainText('comment 2');
         });
     });
 

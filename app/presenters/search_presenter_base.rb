@@ -37,5 +37,8 @@ class SearchPresenterBase < Presenter
 
     column_name = result[:highlighted_attributes].delete(:column_name)
     result[:columns] = [{:highlighted_attributes => {:body => column_name}}] if column_name
+
+    column_description = result[:highlighted_attributes].delete(:column_description)
+    result[:column_descriptions] = [{:highlighted_attributes => {:body => column_description}}] if column_description
   end
 end
