@@ -1,11 +1,10 @@
 class GpdbDatabasePresenter < Presenter
-  delegate :id, :name, :gpdb_instance, :to => :model
 
   def to_hash
     {
-      :id => id,
-      :name => h(name),
-      :instance => present(gpdb_instance)
+      :id => model.id,
+      :name => h(model.name),
+      :instance => present(model.gpdb_instance)
     }
   end
 

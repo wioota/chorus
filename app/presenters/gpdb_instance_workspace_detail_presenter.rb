@@ -1,5 +1,4 @@
 class GpdbInstanceWorkspaceDetailPresenter < Presenter
-  delegate :used_by_workspaces, to: :model
 
   def to_hash
     account = model.account_for_user(current_user)
@@ -11,7 +10,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
     workspaces = []
     sandbox_sizes = {}
 
-    used_by_workspaces(current_user).each do |workspace|
+    model.used_by_workspaces(current_user).each do |workspace|
       sandbox_size = workspace.sandbox.disk_space_used(account)
       sandbox_sizes[workspace.sandbox.id] = sandbox_size || 0
 

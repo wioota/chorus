@@ -1,10 +1,9 @@
 class ImagePresenter < Presenter
-  delegate :url, :to => :model
 
   def to_hash
     {
-        :original => url(:original),
-        :icon => url(:icon)
+        :original => model.url(:original),
+        :icon => model.url(:icon)
     }
   end
 

@@ -1,21 +1,19 @@
 class GpdbInstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, :state, :shared, :provision_type,
-           :maintenance_db, :description, :instance_provider, :version, to: :model
 
   def to_hash
     {
-      :name => h(name),
-      :host => h(host),
-      :port => port,
-      :id => id,
-      :owner => present(owner),
-      :shared => shared,
-      :state => state,
-      :provision_type => provision_type,
-      :maintenance_db => maintenance_db,
-      :description => description,
-      :instance_provider => instance_provider,
-      :version => version,
+      :name => h(model.name),
+      :host => h(model.host),
+      :port => model.port,
+      :id => model.id,
+      :owner => present(model.owner),
+      :shared => model.shared,
+      :state => model.state,
+      :provision_type => model.provision_type,
+      :maintenance_db => model.maintenance_db,
+      :description => model.description,
+      :instance_provider => model.instance_provider,
+      :version => model.version,
       :entity_type => 'greenplum_instance'
     }
   end

@@ -2,17 +2,15 @@ module Visualization
   class HeatmapPresenter < Presenter
     include DbTypesToChorus
 
-    delegate :rows, :x_bins, :y_bins, :x_axis, :y_axis, :type, :filters, :to => :model
-
     def to_hash
       {
-        :x_bins => x_bins,
-        :y_bins => y_bins,
-        :x_axis => x_axis,
-        :y_axis => y_axis,
-        :type => type,
-        :rows => rows,
-        :filters => filters,
+        :x_bins => model.x_bins,
+        :y_bins => model.y_bins,
+        :x_axis => model.x_axis,
+        :y_axis => model.y_axis,
+        :type => model.type,
+        :rows => model.rows,
+        :filters => model.filters,
         :columns => [
           { name: 'x', typeCategory: 'WHOLE_NUMBER' },
           { name: 'y', typeCategory: 'WHOLE_NUMBER' },

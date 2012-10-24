@@ -1,27 +1,26 @@
 class UserPresenter < Presenter
-  delegate :id, :username, :first_name, :last_name, :email, :title, :dept, :notes, :admin?, :image, to: :model
 
   def to_hash
     if rendering_activities?
       {
-          :id => id,
-          :username => h(username),
-          :first_name => h(first_name),
-          :last_name => h(last_name),
-          :image => present(image)
+          :id => model.id,
+          :username => h(model.username),
+          :first_name => h(model.first_name),
+          :last_name => h(model.last_name),
+          :image => present(model.image)
       }
     else
       {
-          :id => id,
-          :username => h(username),
-          :first_name => h(first_name),
-          :last_name => h(last_name),
-          :email => h(email),
-          :title => h(title),
-          :dept => h(dept),
-          :notes => h(notes),
-          :admin => admin?,
-          :image => present(image)
+          :id => model.id,
+          :username => h(model.username),
+          :first_name => h(model.first_name),
+          :last_name => h(model.last_name),
+          :email => h(model.email),
+          :title => h(model.title),
+          :dept => h(model.dept),
+          :notes => h(model.notes),
+          :admin => model.admin?,
+          :image => present(model.image)
       }
     end
   end

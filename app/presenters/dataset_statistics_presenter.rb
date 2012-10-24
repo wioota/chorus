@@ -1,17 +1,15 @@
 class DatasetStatisticsPresenter < Presenter
-  delegate :table_type, :table_name, :row_count, :column_count, :description, :last_analyzed,
-           :disk_size, :partition_count, :definition, :to => :model
 
   def to_hash
     {
-        :object_type => table_type,
-        :rows => row_count,
-        :columns => column_count,
-        :description => description,
-        :last_analyzed_time => last_analyzed,
-        :on_disk_size => disk_size,
-        :partitions => partition_count,
-        :definition => definition
+        :object_type => model.table_type,
+        :rows => model.row_count,
+        :columns => model.column_count,
+        :description => model.description,
+        :last_analyzed_time => model.last_analyzed,
+        :on_disk_size => model.disk_size,
+        :partitions => model.partition_count,
+        :definition => model.definition
     }
   end
 

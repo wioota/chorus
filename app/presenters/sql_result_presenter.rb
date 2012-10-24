@@ -1,12 +1,11 @@
 class SqlResultPresenter < Presenter
-  delegate :columns, :rows, :warnings, :schema, :to => :model
 
   def to_hash
     {
-        :columns => present(columns),
-        :rows => rows,
-        :execution_schema => present(schema),
-        :warnings => warnings
+        :columns => present(model.columns),
+        :rows => model.rows,
+        :execution_schema => present(model.schema),
+        :warnings => model.warnings
     }
   end
 

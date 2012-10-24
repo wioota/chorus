@@ -13,6 +13,7 @@ describe LinkedTableauWorkfilePresenter, :type => :view do
   describe "#to_hash" do
     it "should work" do
       hash = presenter.to_hash
+      p hash
       hash.should be_a(Hash)
       hash[:file_name].should == model.file_name
       hash.should have_key(:file_type)

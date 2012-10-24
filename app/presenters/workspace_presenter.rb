@@ -1,29 +1,27 @@
 class WorkspacePresenter < Presenter
-  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, :image, :sandbox, :permissions_for, :has_added_member,
-           :has_added_workfile, :has_added_sandbox, :has_changed_settings, to: :model
 
   def to_hash
     if rendering_activities?
       {
-          :id => id,
-          :name => h(name)
+          :id => model.id,
+          :name => h(model.name)
       }
     else
       {
-          :id => id,
-          :name => h(name),
-          :summary => sanitize(summary),
-          :owner => present(owner),
-          :archiver => present(archiver),
-          :archived_at => archived_at,
-          :public => public,
-          :image => present(image),
-          :permission => permissions_for(current_user),
-          :has_added_member => has_added_member,
-          :has_added_workfile => has_added_workfile,
-          :has_added_sandbox => has_added_sandbox,
-          :has_changed_settings => has_changed_settings,
-          :sandbox_info => present(sandbox)
+          :id => model.id,
+          :name => h(model.name),
+          :summary => sanitize(model.summary),
+          :owner => present(model.owner),
+          :archiver => present(model.archiver),
+          :archived_at => model.archived_at,
+          :public => model.public,
+          :image => present(model.image),
+          :permission => model.permissions_for(current_user),
+          :has_added_member => model.has_added_member,
+          :has_added_workfile => model.has_added_workfile,
+          :has_added_sandbox => model.has_added_sandbox,
+          :has_changed_settings => model.has_changed_settings,
+          :sandbox_info => present(model.sandbox)
       }.merge(latest_comments_hash)
     end
   end

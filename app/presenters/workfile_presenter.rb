@@ -1,18 +1,18 @@
 class WorkfilePresenter < Presenter
-  delegate :id, :workspace, :owner, :content_type, :file_name, :latest_workfile_version, :has_draft, :execution_schema, to: :model
+  delegate :latest_workfile_version, to: :model
 
   def to_hash
     workfile = {
-      :id => id,
-      :workspace => present(workspace, @options),
-      :owner => present(owner),
-      :file_name => h(file_name),
-      :file_type => h(content_type),
+      :id => model.id,
+      :workspace => present(model.workspace, @options),
+      :owner => present(model.owner),
+      :file_name => h(model.file_name),
+      :file_type => h(model.content_type),
       :latest_version_id => latest_workfile_version.id,
-      :has_draft => has_draft(current_user),
+      :has_draft => model.has_draft(current_user),
       :is_deleted => model.deleted?
     }
-    workfile[:execution_schema] = present(execution_schema) if options[:include_execution_schema]
+    workfile[:execution_schema] = present(model.execution_schema) if options[:include_execution_schema]
     workfile
   end
 

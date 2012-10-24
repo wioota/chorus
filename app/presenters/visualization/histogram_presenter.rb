@@ -2,15 +2,13 @@ module Visualization
   class HistogramPresenter < Presenter
     include DbTypesToChorus
 
-    delegate :rows, :bins, :category, :filters, :type, :to => :model
-
     def to_hash
       {
-          :type => type,
-          :bins => bins,
-          :x_axis => category,
-          :filters => filters,
-          :rows => rows,
+          :type => model.type,
+          :bins => model.bins,
+          :x_axis => model.category,
+          :filters => model.filters,
+          :rows => model.rows,
           :columns => [{name: "bin", type_category: "STRING"}, {name: "frequency", type_category: "WHOLE_NUMBER"}]
       }
     end

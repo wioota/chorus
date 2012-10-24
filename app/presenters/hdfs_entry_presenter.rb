@@ -1,25 +1,24 @@
 class HdfsEntryPresenter < Presenter
-  delegate :id, :path, :parent_path, :modified_at, :size, :is_directory, :content_count, :name, :ancestors, :entries, :contents, :hadoop_instance, :to => :model
 
   def to_hash
     hash = {
-        :id => id,
-        :size => size,
-        :name => name,
-        :is_dir => is_directory,
+        :id => model.id,
+        :size => model.size,
+        :name => model.name,
+        :is_dir => model.is_directory,
         :is_binary => false,
-        :last_updated_stamp => modified_at.nil? ? "" : modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        :hadoop_instance => present(hadoop_instance),
-        :ancestors => ancestors,
+        :last_updated_stamp => model.modified_at.nil? ? "" : model.modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        :hadoop_instance => present(model.hadoop_instance),
+        :ancestors => model.ancestors,
     }
 
-    if is_directory
-      hash[:entries] = present entries if options[:deep]
-      hash[:count] = content_count
-      hash[:path]  = parent_path
+    if model.is_directory
+      hash[:entries] = present model.entries if options[:deep]
+      hash[:count] = model.content_count
+      hash[:path]  = model.parent_path
     else
-      hash[:contents] = contents if options[:deep]
-      hash[:path] = path
+      hash[:contents] = model.contents if options[:deep]
+      hash[:path] = model.path
     end
 
     hash

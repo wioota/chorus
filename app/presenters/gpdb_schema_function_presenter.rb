@@ -1,15 +1,15 @@
 class GpdbSchemaFunctionPresenter < Presenter
-  delegate :schema_name, :function_name, :language, :return_type, :arg_names, :arg_types, :definition, :description, :to => :model
+
   def to_hash
     {
-        :schema_name => schema_name,
-        :name => function_name,
-        :language => language,
-        :return_type => return_type,
-        :arg_names => arg_names,
-        :arg_types => arg_types,
-        :definition => definition,
-        :description => description
+        :schema_name => model.schema_name,
+        :name => model.function_name,
+        :language => model.language,
+        :return_type => model.return_type,
+        :arg_names => model.arg_names,
+        :arg_types => model.arg_types,
+        :definition => model.definition,
+        :description => model.description
     }
   end
 

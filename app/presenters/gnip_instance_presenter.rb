@@ -1,14 +1,13 @@
 class GnipInstancePresenter < Presenter
-  delegate :name, :stream_url, :id, :owner, :description, :username, :password, to: :model
 
   def to_hash
     {
-        :name => h(name),
-        :stream_url => h(stream_url),
-        :id => id,
-        :owner => owner,
-        :description => description,
-        :username => username,
+        :name => h(model.name),
+        :stream_url => h(model.stream_url),
+        :id => model.id,
+        :owner => model.owner,
+        :description => model.description,
+        :username => model.username,
         :state => "online",
         :entity_type => "gnip_instance"
     }

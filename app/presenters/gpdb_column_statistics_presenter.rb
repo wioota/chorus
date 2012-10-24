@@ -1,13 +1,12 @@
 class GpdbColumnStatisticsPresenter < Presenter
-  delegate :null_fraction, :common_values, :number_distinct, :min, :max, :to => :model
 
   def to_hash
     {
-      :distinct_value => number_distinct,
-      :common_values => common_values,
-      :null_fraction => null_fraction,
-      :min => min,
-      :max => max
+      :distinct_value => model.number_distinct,
+      :common_values => model.common_values,
+      :null_fraction => model.null_fraction,
+      :min => model.min,
+      :max => model.max
     }
   end
 

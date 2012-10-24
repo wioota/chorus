@@ -1,13 +1,12 @@
 class CommentPresenter < Presenter
-  delegate :id, :author, :text, :created_at, :to => :model
 
   def to_hash
     {
-        :id => id,
-        :author => present(author),
-        :text => text,
+        :id => model.id,
+        :author => present(model.author),
+        :text => model.text,
         :action => 'SUB_COMMENT',
-        :timestamp => created_at
+        :timestamp => model.created_at
     }
   end
 

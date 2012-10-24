@@ -1,5 +1,4 @@
 class LinkedTableauWorkfilePresenter < WorkfilePresenter
-  delegate :workbook_name, :workbook_url, :created_at, :to => :model
 
   def to_hash
     super.merge(tableau_hash)
@@ -7,10 +6,10 @@ class LinkedTableauWorkfilePresenter < WorkfilePresenter
 
   def tableau_hash
     {
-        :workbook_url => workbook_url,
-        :workbook_name => workbook_name,
+        :workbook_url => model.workbook_url,
+        :workbook_name => model.workbook_name,
         :version_info => {
-            :updated_at => created_at
+            :updated_at => model.created_at
         }
     }
   end

@@ -1,18 +1,17 @@
 class HadoopInstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, :description, :version, :username, :group_list, to: :model
 
   def to_hash
     {
-        :name => h(name),
-        :host => h(host),
-        :port => port,
-        :id => id,
-        :owner => present(owner),
+        :name => h(model.name),
+        :host => h(model.host),
+        :port => model.port,
+        :id => model.id,
+        :owner => present(model.owner),
         :state => model.state,
-        :description => description,
-        :version => version,
-        :username => username,
-        :group_list => group_list,
+        :description => model.description,
+        :version => model.version,
+        :username => model.username,
+        :group_list => model.group_list,
         :entity_type => "hadoop_instance"
     }
   end

@@ -1,20 +1,18 @@
 class GpdbColumnPresenter < Presenter
   include DbTypesToChorus
 
-  delegate :name, :data_type, :simplified_type, :description, :to => :model
-
   def to_hash
     {
-      :name => h(name),
-      :data_type => h(data_type),
+      :name => h(model.name),
+      :data_type => h(model.data_type),
       :type_category => type_category,
-      :description => h(description),
+      :description => h(model.description),
       :statistics => statistics
     }
   end
 
   def type_category
-    to_category(data_type)
+    to_category(model.data_type)
   end
 
   def statistics
