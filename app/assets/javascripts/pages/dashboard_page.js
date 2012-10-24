@@ -12,7 +12,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.attributes.showLatestComments = true;
         this.workspaceSet.attributes.active = true;
         this.workspaceSet.sortAsc("name");
-        this.workspaceSet.fetch();
+        this.workspaceSet.fetchAll();
 
         this.instanceSet = new chorus.collections.InstanceSet([], { hasCredentials: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);

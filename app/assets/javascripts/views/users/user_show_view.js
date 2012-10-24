@@ -3,7 +3,7 @@ chorus.views.UserShow = chorus.views.Base.extend({
 
     additionalContext:function () {
         if (!this._fetchedWorkspaces) {
-            this.model.workspaces().fetch();
+            this.model.workspaces().fetchAll();
             this._fetchedWorkspaces = true;
         }
 

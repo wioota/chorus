@@ -27,8 +27,14 @@ describe("chorus.views.UserShow", function() {
 
         context("after render has been called", function(){
             beforeEach(function(){
+                spyOn(this.view.model.workspaces(), "fetchAll").andCallThrough();
                 this.view.render();
             });
+
+            it("fetches all the workspaces", function () {
+                expect(this.view.model.workspaces().fetchAll).toHaveBeenCalled();
+            });
+
 
             it("renders a profile image for the user", function() {
                 var image = this.view.$(".edit_photo img");

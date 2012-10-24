@@ -161,10 +161,12 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
         describe("insight:promoted", function() {
             beforeEach(function() {
+                spyOn(this.view.collection, "fetchAll").andCallThrough();
                 chorus.PageEvents.broadcast("insight:promoted");
             });
 
-            it("re-fetches the collection", function() {
+            it("re-fetches all workspaces", function() {
+                expect(this.view.collection.fetchAll).toHaveBeenCalled();
                 expect(this.view.collection.attributes.active).toBe(true);
                 expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
             });

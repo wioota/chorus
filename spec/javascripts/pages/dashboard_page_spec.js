@@ -13,11 +13,13 @@ describe("chorus.pages.DashboardPage", function() {
         spyOn(chorus.collections.InstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.HadoopInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.GnipInstanceSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.WorkspaceSet.prototype, "fetchAll").andCallThrough();
         var page = new chorus.pages.DashboardPage();
         expect(page.userSet.fetchAll).toHaveBeenCalled();
         expect(page.instanceSet.fetchAll).toHaveBeenCalled();
         expect(page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
+        expect(page.workspaceSet.fetchAll).toHaveBeenCalled();
     });
 
 
@@ -166,7 +168,7 @@ describe("chorus.pages.DashboardPage", function() {
                 chorus.PageEvents.broadcast("instance:added");
             });
 
-            it("re-fetches the instances", function() {
+            it("re-fetches all instances", function() {
                 expect(this.page.fetchInstances).toHaveBeenCalled();
             });
         });
