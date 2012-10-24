@@ -18,15 +18,12 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
 
     populateCompetitionType: function() {
         //TODO: replace this with actual data from api once it's implemented
-        var list = ["natural language processing", "high dimensionality", "unsupervised learning",
-            "supervised learning", "semi-supervised learning", "computer vision", "data manipulation",
-            "unstructured", "exploratory", "visualization", "graph", "social", "time series",
-            "binary classification", "multiclass classification", "regression", "ranking", "QSAR", "actuarial",
-            "insurance", "health", "life sciences", "research", "government", "public policy", "retail",
-            "start-ups", "finance", "credit", "natural language processing", "high dimensionality",
-            "unsupervised learning", "supervised learning", "semi-supervised learning", "computer vision",
-            "data manipulation", "unstructured", "exploratory", "visualization", "graph", "social",
-            "time series", "binary classification", "multiclass classification", "regression", "ranking", "QSAR"];
+        var list = ["actuarial", "binary classification", "computer vision", "credit", "data manipulation",
+            "exploratory", "finance", "government", "graph", "health", "high dimensionality", "insurance",
+            "life sciences", "multiclass classification", "natural language processing", "public policy",
+            "QSAR", "ranking", "regression", "research", "retail", "semi-supervised learning", "social",
+            "start-ups", "supervised learning", "time series", "unstructured", "unsupervised learning",
+            "visualization"];
 
         var $select = this.$(".filter.competition_type select");
         _.each(list, function(name, index) {

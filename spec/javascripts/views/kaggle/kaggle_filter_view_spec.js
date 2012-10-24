@@ -31,15 +31,12 @@ describe("chorus.views.KaggleFilter", function () {
         });
 
         it("populates the competition_type's select options", function() {
-            var list = ["natural language processing", "high dimensionality", "unsupervised learning",
-                "supervised learning", "semi-supervised learning", "computer vision", "data manipulation",
-                "unstructured", "exploratory", "visualization", "graph", "social", "time series",
-                "binary classification", "multiclass classification", "regression", "ranking", "QSAR", "actuarial",
-                "insurance", "health", "life sciences", "research", "government", "public policy", "retail",
-                "start-ups", "finance", "credit", "natural language processing", "high dimensionality",
-                "unsupervised learning", "supervised learning", "semi-supervised learning", "computer vision",
-                "data manipulation", "unstructured", "exploratory", "visualization", "graph", "social",
-                "time series", "binary classification", "multiclass classification", "regression", "ranking", "QSAR"]
+            var list = ["actuarial", "binary classification", "computer vision", "credit", "data manipulation",
+                "exploratory", "finance", "government", "graph", "health", "high dimensionality", "insurance",
+                "life sciences", "multiclass classification", "natural language processing", "public policy",
+                "QSAR", "ranking", "regression", "research", "retail", "semi-supervised learning", "social",
+                "start-ups", "supervised learning", "time series", "unstructured", "unsupervised learning",
+                "visualization"];
 
             var view = this.view;
             expect(this.view.$(".filter.competition_type select option").length).toBe(list.length);
