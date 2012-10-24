@@ -1,5 +1,8 @@
 require 'will_paginate/array'
 
+class ModelNotCreated < Exception
+end
+
 class ApplicationController < ActionController::Base
   around_filter :set_current_user
   before_filter :require_login
@@ -16,6 +19,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
   rescue_from 'Gpdb::ViewAlreadyExists', :with => :render_query_error
+  rescue_from 'ModelNotCreated', :with => :render_model_error
 
   helper_method :current_user
 
@@ -45,6 +49,12 @@ class ApplicationController < ActionController::Base
 
   def render_query_error(e)
     present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :unprocessable_entity)
+  end
+
+  def render_model_error(e)
+    present_errors({:fields => {:general =>
+                                    { :GENERIC => {:message => e.message}}}},
+                   {:status => :unprocessable_entity})
   end
 
   def render_instance_still_provisioning_error(e)

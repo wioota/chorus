@@ -53,9 +53,7 @@ class TableauWorkbooksController < ApplicationController
     else
       messages = workbook.errors.full_messages
       messages = messages + workfile.errors.full_messages if workfile
-      present_errors({:fields => {:tableau =>
-             { :GENERIC => {:message => messages.join(". ")}}}},
-            {:status => :unprocessable_entity})
+      raise ModelNotCreated.new(messages.join(". "))
     end
   end
 

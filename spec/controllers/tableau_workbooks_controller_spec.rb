@@ -129,9 +129,23 @@ describe TableauWorkbooksController do
     context "when the save fails" do
       let(:save_status) { false }
 
+      before do
+        any_instance_of(TableauWorkbook) do |wb|
+          mock(wb).save.times(any_times) { false }
+          mock(wb).errors.times(any_times) {
+            errors = ActiveModel::Errors.new(wb);
+            errors.add(:base, "tableau is down")
+            errors
+          }
+        end
+      end
+
       it "responds with error" do
         post :create, params
         response.code.should == '422'
+        decoded_response = JSON.parse(response.body)
+        error_message = decoded_response['errors']['fields']['general']['GENERIC']['message']
+        error_message.should == 'tableau is down'
       end
     end
   end

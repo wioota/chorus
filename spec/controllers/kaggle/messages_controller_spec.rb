@@ -35,7 +35,8 @@ describe Kaggle::MessagesController, :kaggle_api => true do
         post :create, params
         response.code.should == '422'
         decoded_response = JSON.parse(response.body)
-        decoded_response['errors']['fields']['kaggle']['GENERIC']['message'].should_not be_nil
+        error_message = decoded_response['errors']['fields']['general']['GENERIC']['message']
+        error_message.should == 'This is an arbitrary error message'
       end
     end
   end

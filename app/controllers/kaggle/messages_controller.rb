@@ -6,9 +6,7 @@ class Kaggle::MessagesController < ApplicationController
     Kaggle::API.send_message(kaggleParams)
     render :json => {}, :status => 200
   rescue Kaggle::API::MessageFailed => e
-    present_errors({:fields => {:kaggle =>
-                                    { :GENERIC => {:message => e.message}}}},
-                   {:status => :unprocessable_entity})
+    raise ModelNotCreated.new(e.message)
   end
 
   private
