@@ -323,6 +323,9 @@ class ChorusInstaller
     log "Configuring secret key..."
     configure_secret_key
 
+    log "Configuring secret token..."
+    configure_secret_token
+
     log "Extracting postgres..." do
       extract_postgres
     end
@@ -390,6 +393,14 @@ class ChorusInstaller
       File.open(key_file, 'w') do |f|
         f.puts secret_key
       end
+    end
+  end
+
+  def configure_secret_token
+    passphrase = Random.new.bytes(32)
+    readable = OpenSSL::Digest.new("SHA-256", passphrase)
+    File.open("#{destination_path}/config/initializers/secret_token.rb", "w") do |file|
+      file.puts "Chorus::Application.config.secret_token = '#{readable}'"
     end
   end
 
