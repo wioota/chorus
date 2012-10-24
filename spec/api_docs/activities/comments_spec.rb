@@ -28,6 +28,8 @@ resource "Activities" do
 
     required_parameters :id
 
+    let(:id) { comment.id }
+
     example_request "Get a comment" do
       status.should == 200
     end
