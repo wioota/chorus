@@ -1,9 +1,8 @@
-xdescribe("chorus.views.CommentList", function() {
+describe("chorus.views.CommentList", function() {
     beforeEach(function() {
         stubDefer();
-        this.comment1 = fixtures.noteComment({
+        this.comment1 = rspecFixtures.comment({
             text : "Yes we can",
-            isInsight: true,
             author : {
                 firstName : "Barack",
                 lastName : "Obama",
@@ -11,16 +10,13 @@ xdescribe("chorus.views.CommentList", function() {
             },
             timestamp: "2010-01-01 01:00:00"
         });
-        this.comment2 = fixtures.noteComment({
+        this.comment2 = rspecFixtures.comment({
             text : "No hate plz",
             timestamp: "2010-01-01 02:00:00"
 
         });
-        this.comment3 = fixtures.comment({timestamp: "2010-01-01 03:00:00"});
-        this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3], {
-            entityId: 10000,
-            entityType: "workspace"
-        });
+        this.comment3 = rspecFixtures.comment({timestamp: "2010-01-01 03:00:00"});
+        this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3], {});
         this.view = new chorus.views.CommentList({ collection: this.comments, initialLimit: 2 });
     });
 
@@ -48,26 +44,12 @@ xdescribe("chorus.views.CommentList", function() {
         });
 
         it("displays the profile image of each comment's author", function() {
-            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().fetchImageUrl({ size: "original" }));
-        });
-
-        it("displays the insight ribbon when appropriate", function() {
-            expect(this.listItems.eq(0).find(".insight_ribbon")).toExist();
-            expect(this.listItems.eq(1).find(".insight_ribbon")).not.toExist();
+            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().fetchImageUrl({ size: "icon" }));
         });
 
         describe("header rendering", function() {
             beforeEach(function() {
-                this.view.options.displayStyle = 'without_workspace';
                 this.view.render();
-            });
-
-            it("is correct for notes", function() {
-                expect(this.view.$('.comment_header:eq(0)').text()).toMatch(this.comment1.get('workspace').get('name'));
-            });
-
-            it("sets a displayStyle of without_workspace on the presenter", function() {
-                expect(this.view.collectionModelContext(this.comment1)._impl.options.displayStyle).toBe('without_workspace');
             });
 
             it("is correct for comments", function() {
@@ -168,8 +150,6 @@ xdescribe("chorus.views.CommentList", function() {
 
             it("puts the right data attributes on the delete link", function() {
                 var deleteLink = this.view.$(".delete_link");
-                expect(deleteLink.data("entityId")).toBe(10000);
-                expect(deleteLink.data("entityType")).toBe("workspace");
                 expect(deleteLink.data("commentId").toString()).toBe(this.comment1.id.toString());
             });
 
@@ -182,9 +162,7 @@ xdescribe("chorus.views.CommentList", function() {
                 it("launches a delete note confirm alert", function() {
                     expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
                     expect(chorus.modal.model).toBeA(chorus.models.Comment);
-                    expect(chorus.modal.model.id.toString()).toBe(this.comment1.id)
-                    expect(chorus.modal.model.attributes.entityId).toBe(10000)
-                    expect(chorus.modal.model.attributes.entityType).toBe("workspace")
+                    expect(chorus.modal.model.id).toBe(this.comment1.id)
                 });
             });
         })

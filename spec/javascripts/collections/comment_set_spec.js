@@ -4,12 +4,6 @@ describe("chorus.collections.CommentSet", function() {
         this.commentSet = new chorus.collections.CommentSet([], {workspaceId: 17})
     });
 
-    describe("#url", function() {
-        it("has the workspace id in the url", function() {
-            expect(this.commentSet.url()).toContain("/comment/workspace/17");
-        });
-    });
-
     describe("comparator", function() {
         it("orders them by timestamp", function() {
             this.commentSet.add(fixtures.comment({timestamp: '2011-01-01 13:00:00'}));
