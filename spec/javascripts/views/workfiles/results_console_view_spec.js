@@ -509,13 +509,14 @@ describe("chorus.views.ResultsConsoleView", function() {
                         });
 
                         it("starts the file download", function() {
-                            expect($.fileDownload).toHaveBeenCalledWith("/data/cvsResultDownload",
+                            var content = new chorus.utilities.CsvWriter(
+                                _.pluck(this.view.resource.getColumns(), "name"), this.view.resource.getRows()).toCsv();
+                            expect($.fileDownload).toHaveBeenCalledWith("/download_data",
                             {
                                 data: {
-                                    columnData: JSON.stringify(this.view.resource.getColumns()),
-                                    rowsData: JSON.stringify(this.view.resource.getRows()),
-                                    datasetName: this.view.resource.name(),
-                                    workspaceId: this.view.resource.get("workspaceId")
+                                    content: content,
+                                    filename: this.view.resource.name()+'.csv',
+                                    mime_type: "text/csv"
                                 },
                                 httpMethod: "post"
                             });

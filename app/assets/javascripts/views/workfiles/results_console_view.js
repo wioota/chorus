@@ -33,14 +33,19 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             dialog.launchModal();
         } else {
             var data = {
-                columnData: JSON.stringify(this.resource.getColumns()),
-                rowsData: JSON.stringify(this.resource.getRows()),
-                datasetName: this.resource.name(),
-                workspaceId: this.resource.get("workspaceId")
+                content: this.constructFileContent(),
+                filename: this.resource.name() + ".csv",
+                mime_type: "text/csv"
             };
-
-            $.fileDownload("/data/cvsResultDownload", { data: data, httpMethod: "post" });
+            $.fileDownload("/download_data", { data: data, httpMethod: "post" });
         }
+    },
+
+    constructFileContent: function() {
+        var columnNames = _.pluck(this.resource.getColumns(), "name");
+        return new chorus.utilities.CsvWriter(
+            columnNames, this.resource.getRows(), this.options).toCsv();
+
     },
 
     execute: function(task) {

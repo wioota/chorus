@@ -40,7 +40,8 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
             sourceObjectId: this.id,
             sourceObjectType: "dataset",
             schemaId: this.schema().id,
-            workspace: this.get("workspace")
+            workspace: this.get("workspace"),
+            objectName: this.name()
         });
         chorusView.sourceObject = this;
         return chorusView;

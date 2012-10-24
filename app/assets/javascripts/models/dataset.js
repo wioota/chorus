@@ -170,7 +170,10 @@ chorus.models.Dataset = chorus.models.Base.include(
                 objectName: this.name()
             });
         } else {
-            return new chorus.models.DataPreviewTask({dataset: {id: this.id}});
+            return new chorus.models.DataPreviewTask({
+                dataset: {id: this.id},
+                objectName: this.name()
+            });
         }
     },
 
