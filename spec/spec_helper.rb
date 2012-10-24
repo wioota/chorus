@@ -1,5 +1,4 @@
 require 'rubygems'
-HADOOP_TEST_INSTANCE = "chorus-gphd02.sf.pivotallabs.com"
 ENV["RAILS_ENV"] ||= 'test'
 ENV["LOG_LEVEL"] = '3'
 require File.expand_path("../../config/environment", __FILE__)
@@ -47,6 +46,11 @@ RSpec.configure do |config|
   unless ENV['GPDB_HOST']
     warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :database_integration => true
+  end
+
+  unless ENV['HDFS_HOST']
+    warn "No Hadoop instance detected in environment variable 'HDFS_HOST'.  Skipping Hadoop integration tests.  See the project wiki for more information on running tests"
+    config.filter_run_excluding :hdfs_integration => true
   end
 
   unless Chorus::Application.config.chorus['kaggle'] && Chorus::Application.config.chorus['kaggle']['api_key']

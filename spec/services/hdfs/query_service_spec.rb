@@ -1,7 +1,8 @@
 require 'spec_helper'
 require 'java'
 
-describe Hdfs::QueryService do
+describe Hdfs::QueryService, :hdfs_integration do
+  let(:hdfs_host) { ENV["HDFS_HOST"] }
   before do
     devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
     com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull
@@ -10,7 +11,7 @@ describe Hdfs::QueryService do
   describe ".instance_version" do
     context "existing hadoop server" do
       let(:instance) do
-        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => "8020", :username => "pivotal"
+        HadoopInstance.new :host => hdfs_host, :port => "8020", :username => "pivotal"
       end
 
       it "returns the hadoop version" do
@@ -39,7 +40,7 @@ describe Hdfs::QueryService do
   end
 
   describe "#list" do
-    let(:service) { Hdfs::QueryService.new(HADOOP_TEST_INSTANCE, "8020", "pivotal", "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(hdfs_host, "8020", "pivotal", "0.20.1gp") }
 
     context "listing root with sub content" do
       it "returns list of content for root directory" do
@@ -71,7 +72,7 @@ describe Hdfs::QueryService do
   end
 
   describe "#show" do
-    let(:service) { Hdfs::QueryService.new(HADOOP_TEST_INSTANCE, "8020", "pivotal", "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(hdfs_host, "8020", "pivotal", "0.20.1gp") }
 
     context "show an existing file" do
       it "returns part of the content" do

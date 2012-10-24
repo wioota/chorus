@@ -10,7 +10,21 @@ describe Gppipe, :database_integration => true do
   end
 
   before do
-    stub(Gppipe).gpfdist_url { Socket.gethostname }
+    stub.proxy(Chorus::Application.config.chorus).[](anything)
+    stub(Chorus::Application.config.chorus).[](/^gpfdist\./) do |key|
+      case key.sub(/^gpfdist\./, '')
+        when "data_dir"
+          '/tmp'
+        when "write_port"
+          "8000"
+        when "read_port"
+          "8001"
+        when "url"
+          Socket.gethostname
+        when "ssl"
+          false
+      end
+    end
   end
 
   # In the test, use gpfdist to move data between tables in the same schema and database

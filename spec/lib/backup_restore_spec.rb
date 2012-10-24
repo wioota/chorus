@@ -61,7 +61,8 @@ describe 'BackupRestore' do
       end
 
       it "works even if chorus.yml does not exist" do
-        FileUtils.rm Rails.root.join("config/chorus.yml")
+        config = Rails.root.join("config/chorus.yml")
+        FileUtils.rm config if File.exists?(config)
         expect {
           run_backup
         }.to_not raise_error

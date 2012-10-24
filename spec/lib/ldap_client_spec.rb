@@ -85,7 +85,7 @@ ldap:
   base: DC=greenplum,DC=com
   user_dn:
   password:
-  dn_template: greenplum\{0}
+  dn_template: greenplum\\{0}
   attribute:
     uid: sAMAccountName
     ou: department
@@ -149,49 +149,54 @@ describe LdapClient do
 
 
   describe ".search" do
-    before :each do
-      any_instance_of(Net::LDAP) do |ldap|
-        stub(ldap).search.with_any_args do |options|
-          options[:filter].to_s.should == "(sAMAccountName=testguy)"
-          entries
+    context "when the enable flag is true" do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
+      end
+      before :each do
+        any_instance_of(Net::LDAP) do |ldap|
+          stub(ldap).search.with_any_args do |options|
+            options[:filter].to_s.should == "(sAMAccountName=testguy)"
+            entries
+          end
         end
       end
-    end
 
-    context "there are no results from the LDAP server" do
-      let(:entries) { [] }
+      context "there are no results from the LDAP server" do
+        let(:entries) { [] }
 
-      it "should return an empty array" do
-        stub(LdapClient).enabled? { true }
-        LdapClient.search("testguy").should be_empty
+        it "should return an empty array" do
+          stub(LdapClient).enabled? { true }
+          LdapClient.search("testguy").should be_empty
+        end
       end
-    end
 
-    context "there are multiple matches" do
-      let(:entries) { [Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_TESTGUY),
-                       Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_OTHERGUY)] }
+      context "there are multiple matches" do
+        let(:entries) { [Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_TESTGUY),
+                         Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_OTHERGUY)] }
 
-      before { stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] } }
+        before { stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] } }
 
 
-      it "maps the customized fields to our standardized fields" do
-        stub(LdapClient).enabled? { true }
-        results = LdapClient.search("testguy")
-        results.should be_a(Array)
-        results.first.should be_a(Hash)
-        results.first.should == { :first_name => "Test",
+        it "maps the customized fields to our standardized fields" do
+          stub(LdapClient).enabled? { true }
+          results = LdapClient.search("testguy")
+          results.should be_a(Array)
+          results.first.should be_a(Hash)
+          results.first.should == {:first_name => "Test",
+                                   :last_name => "Guy",
+                                   :title => "Big Kahuna",
+                                   :dept => "Greenery",
+                                   :email => "testguy@example.com",
+                                   :username => "testguy"}
+          results.last.should be_a(Hash)
+          results.last.should == {:first_name => "Other",
                                   :last_name => "Guy",
                                   :title => "Big Kahuna",
                                   :dept => "Greenery",
-                                  :email => "testguy@example.com",
-                                  :username => "testguy" }
-        results.last.should be_a(Hash)
-        results.last.should == { :first_name => "Other",
-                                 :last_name => "Guy",
-                                 :title => "Big Kahuna",
-                                 :dept => "Greenery",
-                                 :email => "otherguy@example.com",
-                                 :username => "testguy" }
+                                  :email => "otherguy@example.com",
+                                  :username => "testguy"}
+        end
       end
     end
 
@@ -207,20 +212,25 @@ describe LdapClient do
   end
 
   describe ".authenticate" do
-    context "when the LDAP authentication succeeds" do
-      it "returns true" do
-        any_instance_of(Net::LDAP) do |ldap|
-          mock(ldap).auth.with_any_args do |*args|
-            args[0].should == "greenplum\\testguy"
-            args[1].should == "secret"
-            true
+    context "when the enable flag is true" do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
+      end
+      context "when the LDAP authentication succeeds" do
+        it "returns true" do
+          any_instance_of(Net::LDAP) do |ldap|
+            mock(ldap).auth.with_any_args do |*args|
+              args[0].should == "greenplum\\testguy"
+              args[1].should == "secret"
+              true
+            end
+
+            mock(ldap).bind { true }
           end
+          stub(LdapClient).enabled? { true }
 
-          mock(ldap).bind { true }
+          LdapClient.authenticate("testguy", "secret").should be_true
         end
-        stub(LdapClient).enabled? { true }
-
-        LdapClient.authenticate("testguy", "secret").should be_true
       end
     end
 

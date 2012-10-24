@@ -4,10 +4,6 @@ require 'timeout'
 class Gppipe < GpTableCopier
   ImportFailed = Class.new(StandardError)
 
-  GPFDIST_DATA_DIR = Chorus::Application.config.chorus['gpfdist.data_dir']
-  GPFDIST_WRITE_PORT = Chorus::Application.config.chorus['gpfdist.write_port']
-  GPFDIST_READ_PORT = Chorus::Application.config.chorus['gpfdist.read_port']
-
   GPFDIST_TIMEOUT_SECONDS = 600
 
   def self.timeout_seconds
@@ -68,7 +64,7 @@ class Gppipe < GpTableCopier
   def run
     # p "CALLING RUN"
     Timeout::timeout(Gppipe.timeout_seconds) do
-      pipe_file = File.join(GPFDIST_DATA_DIR, pipe_name)
+      pipe_file = File.join(gpfdist_data_dir, pipe_name)
       count = src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count']
       no_rows_to_import = (count == 0) || row_limit == 0
       count = row_limit if row_limit && row_limit < count
@@ -82,9 +78,9 @@ class Gppipe < GpTableCopier
         begin
           system "mkfifo #{pipe_file}"
           src_conn.exec_query("CREATE WRITABLE EXTERNAL TABLE \"#{source_schema.name}\".#{pipe_name}_w (#{table_definition(src_conn)})
-                                 LOCATION ('#{Gppipe.write_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_WRITE_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+                                 LOCATION ('#{Gppipe.write_protocol}://#{Gppipe.gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}') FORMAT 'TEXT';")
           dst_conn.exec_query("CREATE EXTERNAL TABLE \"#{destination_schema.name}\".#{pipe_name}_r (#{table_definition(src_conn)})
-                               LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{GPFDIST_READ_PORT}/#{pipe_name}') FORMAT 'TEXT';")
+                               LOCATION ('#{Gppipe.read_protocol}://#{Gppipe.gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}') FORMAT 'TEXT';")
 
           semaphore = java.util.concurrent.Semaphore.new(0)
           thr1 = Thread.new { write_pipe_f(semaphore) }
@@ -163,6 +159,18 @@ class Gppipe < GpTableCopier
   end
 
   private
+
+  def gpfdist_data_dir
+    Chorus::Application.config.chorus['gpfdist.data_dir']
+  end
+
+  def gpfdist_write_port
+    Chorus::Application.config.chorus['gpfdist.write_port']
+  end
+
+  def gpfdist_read_port
+    Chorus::Application.config.chorus['gpfdist.read_port']
+  end
 
   def create_source_connection
     ActiveRecord::Base.postgresql_connection(
