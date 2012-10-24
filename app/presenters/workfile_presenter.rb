@@ -1,5 +1,4 @@
 class WorkfilePresenter < Presenter
-  delegate :latest_workfile_version, to: :model
 
   def to_hash
     workfile = {
@@ -19,4 +18,9 @@ class WorkfilePresenter < Presenter
   def complete_json?
     options[:include_execution_schema]
   end
+
+  def latest_workfile_version
+    model.latest_workfile_version
+  end
+
 end
