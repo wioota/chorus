@@ -58,9 +58,6 @@ resource "Users" do
 
   put "/users/:id" do
     parameter :id, "Id of a user"
-    let(:id) { other_user.id }
-
-    parameter :id, "Id of a user"
     parameter :first_name, "First Name"
     parameter :last_name, "Last Name"
     parameter :email, "E-mail"
@@ -71,8 +68,9 @@ resource "Users" do
 
     required_parameters :id, :first_name, :last_name, :email
 
-    let(:first_name) { "Cookie1" }
-    let(:last_name) { "Monster1" }
+    let(:id) { other_user.id }
+    let(:first_name) { "Big" }
+    let(:last_name) { "Bird" }
     let(:email) { "cookie@monster1.com" }
     let(:title) { "Cookie manager1" }
     let(:dept) { "jar1" }

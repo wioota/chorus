@@ -24,9 +24,9 @@ resource "Activities" do
   end
 
   get "/comments/:id" do
-    let(:id) { comment.id }
-
     parameter :id, "Comment id"
+
+    required_parameters :id
 
     example_request "Get a comment" do
       status.should == 200
@@ -34,9 +34,11 @@ resource "Activities" do
   end
 
   delete "/comments/:id" do
-    let(:id) { comment.id }
-
     parameter :id, "Comment id"
+
+    required_parameters :id
+
+    let(:id) { comment.id }
 
     example_request "Delete a comment" do
       status.should == 200
