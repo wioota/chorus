@@ -323,8 +323,10 @@ class ChorusInstaller
     log "Configuring secret key..."
     configure_secret_key
 
-    log "Configuring secret token..."
-    configure_secret_token
+    unless upgrade_existing?
+      log "Configuring secret token..."
+      configure_secret_token
+    end
 
     log "Extracting postgres..." do
       extract_postgres
