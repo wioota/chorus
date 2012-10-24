@@ -38,6 +38,7 @@
             ["/schemas/:schema_id", "SchemaBrowse"],
             ["/datasets/:id", "DatasetShow"],
             ["/gnip_instances/:id", "GnipInstanceShow"],
+            ["/hadoop_instances/:instanceId/browse", "HdfsEntryIndex"],
             ["/hadoop_instances/:instanceId/browse/:id", "HdfsEntryIndex"],
             ["/hadoop_instances/:instanceId/browseFile/:id", "HdfsShowFile"],
             ["/notifications", "NotificationIndex"],
