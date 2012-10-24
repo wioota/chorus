@@ -410,7 +410,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     #Notification
-    notes = Events::NoteOnGreenplumInstance.by(owner)
+    notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
     @notification2 = Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true)
     @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
