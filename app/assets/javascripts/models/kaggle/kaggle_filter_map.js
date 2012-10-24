@@ -14,7 +14,7 @@
 
     chorus.models.KaggleFilterMaps.String = chorus.models.Base.extend({
         comparators: {
-            "equal": { usesInput: true, condition: "=" }
+            "includes": { usesInput: true }
         },
 
         declareValidations: function(attrs) {
@@ -29,7 +29,9 @@
         declareValidations: function(attrs) {
             return this.require('value', attrs)
         }
-    });    chorus.models.KaggleFilterMaps.Other = chorus.models.Base.extend({
+    });
+
+    chorus.models.KaggleFilterMaps.Other = chorus.models.Base.extend({
         type: "Other",
 
         declareValidations: function(attrs) {

@@ -60,6 +60,28 @@ describe Kaggle::UsersController do
       decoded_response.length.should == 2
     end
 
+    it "searches software, techniques and location by substring match" do
+      get :index, :kaggle_user => ["favorite_technique|includes|svm",
+                                   "favorite_software|includes|ggplot2",
+                                   "location|includes|SaN FrAnCiScO"]
+      response.should be_success
+      decoded_response.length.should == 1
+      user = decoded_response.first
+      user['username'].should == 'tstark'
+    end
+
+    it "searches software, techniques and location by substring match" do
+      get :index, :kaggle_user => ["favorite_technique|includes|"]
+      response.should be_success
+      decoded_response.length.should == 2
+    end
+
+    it "does something ok" do
+      get :index, :kaggle_user => ["notakey|includes|foo"]
+      response.should be_success
+      decoded_response.length.should == 0
+    end
+
     generate_fixture "kaggleUserSet.json" do
       get :index
     end

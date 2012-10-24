@@ -13,23 +13,23 @@ describe("chorus.models.KaggleFilterMaps", function() {
 
         it("marks whole numbers as valid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "1234" })).toBeTruthy();
-        })
+        });
 
         it("marks floating comma numbers as valid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "4,5" })).toBeTruthy();
-        })
+        });
 
         it("marks floating point numbers as valid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "4.5" })).toBeTruthy();
-        })
+        });
 
         it("marks non-numerical strings as invalid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "I'm the string" })).toBeFalsy();
-        })
+        });
 
         it("marks negative numbers as valid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "-1" })).toBeTruthy();
-        })
+        });
 
         it("marks numbers with lots of dashes as invalid", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "--1" })).toBeFalsy();
@@ -37,18 +37,17 @@ describe("chorus.models.KaggleFilterMaps", function() {
             expect(this.kaggleFilterMap.performValidation({ value: "-" })).toBeFalsy();
             expect(this.kaggleFilterMap.performValidation({ value: "-1,2,.-" })).toBeFalsy();
             expect(this.kaggleFilterMap.performValidation({ value: "1-" })).toBeFalsy();
-        })
+        });
 
     });
 
     describe("String", function() {
         beforeEach(function() {
             this.kaggleFilterMap = new chorus.models.KaggleFilterMaps.String();
-        })
+        });
 
         it("should return the right comparators", function() {
-            expect(this.kaggleFilterMap.comparators["equal"].usesInput).toBeTruthy();
-            expect(this.kaggleFilterMap.comparators["equal"].condition).toBeTruthy("=");
+            expect(this.kaggleFilterMap.comparators["includes"].usesInput).toBeTruthy();
         });
 
         it("should allow blank values", function() {

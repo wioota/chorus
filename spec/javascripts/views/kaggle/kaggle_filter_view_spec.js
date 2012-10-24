@@ -113,7 +113,7 @@ describe("chorus.views.KaggleFilter", function () {
             });
 
             it("adds a second select with the string options", function() {
-                expect(this.view.$("option")).toContainTranslation("kaggle.filter.equal");
+                expect(this.view.$("option")).toContainTranslation("kaggle.filter.includes");
             });
 
             describe("when choosing a comparator", function() {
