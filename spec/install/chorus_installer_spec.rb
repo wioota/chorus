@@ -472,23 +472,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#configure_secret_token" do
-    let(:filename) { '/usr/local/greenplum-chorus/config/initializers/secret_token.rb' }
-
-    before do
-      installer.destination_path = "/usr/local/greenplum-chorus"
-      FileUtils.mkdir_p '/usr/local/greenplum-chorus/config/initializers/'
-      File.open(filename, "w") { |f| f.puts "1234" }
-    end
-
-    it "should write a file to the correct location" do
-      installer.configure_secret_token
-      new_token = File.read(filename)
-
-      new_token.should_not == "1234"
-    end
-  end
-
   describe "#generate_paths_file" do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
