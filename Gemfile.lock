@@ -47,7 +47,7 @@ GIT
 
 GIT
   remote: git://github.com/GreenplumChorus/rspec_api_documentation.git
-  revision: 8731385a1de734173ac23d4e971f139db97ad60b
+  revision: 43365c427f0884841db325a6736c62062e581410
   specs:
     rspec_api_documentation (0.8.0)
       activesupport (>= 3.0.0)
