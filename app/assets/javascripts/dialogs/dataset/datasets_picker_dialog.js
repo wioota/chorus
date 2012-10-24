@@ -1,6 +1,7 @@
 chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
     title: t("dataset.pick"),
     constructorName: "DatasetsPickerDialog",
+    additionalClass: "with_sub_header pick_dataset_with_action",
     submitButtonTranslationKey: "actions.dataset_select",
     emptyListTranslationKey: "dataset.none",
     searchPlaceholderKey: "dataset.dialog.search_table",

@@ -1,12 +1,12 @@
-.manage_join_tables, .preview_columns, .join_configuration {
+.pick_dataset_with_action, .preview_columns, .join_configuration {
     max-height: 600px;
 }
 
-.manage_join_tables {
+.pick_dataset_with_action {
     width: 480px;
 }
 
-.manage_join_tables, .import_datasets_picker_list {
+.pick_dataset_with_action, .import_datasets_picker_list {
     .search {
         padding: 5px 10px;
         border-bottom: 1px solid $menu-border-color;
