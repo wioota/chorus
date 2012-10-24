@@ -40,7 +40,7 @@ module Kaggle
           when 'less'
             return_val = return_val && (user_attributes[key] < value)
           when 'includes'
-            return_val = return_val && (user_attributes[key] || '').downcase.include?(value.downcase)
+            return_val = return_val && (user_attributes[key] || '').downcase.include?(value.to_s.downcase)
           else #'equal'
             if key == 'past_competition_types'
               return_val = return_val && (user_attributes[key].map(&:downcase).include?(value.downcase))

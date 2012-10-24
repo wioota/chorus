@@ -70,6 +70,12 @@ describe Kaggle::UsersController do
       user['username'].should == 'tstark'
     end
 
+    it "doesn't break if you pass in a number" do
+      get :index, :kaggle_user => ["favorite_technique|includes|1234"]
+
+      response.should be_success
+    end
+
     it "searches software, techniques and location by substring match" do
       get :index, :kaggle_user => ["favorite_technique|includes|"]
       response.should be_success
