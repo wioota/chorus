@@ -62,17 +62,17 @@ describe("chorus.dialogs.DatasetsPicker", function() {
             });
 
             it("shows a Preview Columns link for each dataset", function() {
-                expect(dialog.$(".items li:eq(0) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
-                expect(dialog.$(".items li:eq(1) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
+                expect(dialog.$("ul li:eq(0) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
+                expect(dialog.$("ul li:eq(1) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
             });
 
             it("has the correct id, not the CID", function() {
-                expect(dialog.$(".items li:eq(0)").data("id")).toBe("REAL_ID");
-                expect(dialog.$(".items li:eq(1)").data("id")).toBe("AGENT_SMITH");
+                expect(dialog.$("ul li:eq(0)").data("id")).toBe("REAL_ID");
+                expect(dialog.$("ul li:eq(1)").data("id")).toBe("AGENT_SMITH");
             });
 
             it("shows the preview columns submodal with the appropriate dataset when you click the link", function() {
-                dialog.$(".items li:eq(0) a.preview_columns").click();
+                dialog.$("ul li:eq(0) a.preview_columns").click();
                 expect(chorus.dialogs.PreviewColumns.prototype.render).toHaveBeenCalled();
                 var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
                 expect(previewColumnsDialog.title).toBe(dialog.title);
@@ -80,8 +80,8 @@ describe("chorus.dialogs.DatasetsPicker", function() {
             });
 
             it("shows the number of columns in each dataset", function() {
-                expect(dialog.$(".items li:eq(0) .column_count")).toContainTranslation("dataset.column_count", {count: 42});
-                expect(dialog.$(".items li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
+                expect(dialog.$("ul li:eq(0) .column_count")).toContainTranslation("dataset.column_count", {count: 42});
+                expect(dialog.$("ul li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
             });
         });
 
