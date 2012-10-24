@@ -39,6 +39,7 @@ class Dataset < ActiveRecord::Base
   searchable :unless => :stale? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :table_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :column_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
@@ -157,6 +158,16 @@ class Dataset < ActiveRecord::Base
     schema.database.name
   end
 
+  def table_description
+    result = schema.with_gpdb_connection(schema.database.gpdb_instance.owner_account) do |conn|
+      conn.select_all(Query.new(schema).metadata_for_dataset(name).to_sql)
+    end.first
+
+    DatasetStatistics.new(result).description
+  rescue
+    nil
+  end
+
   def schema_name
     schema.name
   end
@@ -166,11 +177,11 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_description
-    column_data.map(&:description)
+    column_data.map(&:description).compact
   end
 
   def column_data
-    GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
+    @column_data ||= GpdbColumn.columns_for(schema.database.gpdb_instance.owner_account, self)
   end
 
   def query_setup_sql

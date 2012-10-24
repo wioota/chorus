@@ -37,7 +37,9 @@ class Search
         limit 3
         truncate
       end
-      fulltext query, :highlight => true
+      fulltext query do
+        highlight :max_snippets => 100
+      end
       paginate :page => page, :per_page => per_page
 
       if count_using_facets?

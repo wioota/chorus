@@ -350,6 +350,7 @@ describe Dataset do
     let(:dataset) { datasets(:searchquery_table) }
     it "indexes text fields" do
       Dataset.should have_searchable_field :name
+      Dataset.should have_searchable_field :table_description
       Dataset.should have_searchable_field :database_name
       Dataset.should have_searchable_field :schema_name
       Dataset.should have_searchable_field :column_name

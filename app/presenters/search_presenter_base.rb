@@ -36,9 +36,12 @@ class SearchPresenterBase < Presenter
     result[:highlighted_attributes][:object_name] = object_name if object_name
 
     column_name = result[:highlighted_attributes].delete(:column_name)
-    result[:columns] = [{:highlighted_attributes => {:body => column_name}}] if column_name
+    result[:columns] = column_name.map { |name| { :highlighted_attributes => { :body => name } } } if column_name
 
     column_description = result[:highlighted_attributes].delete(:column_description)
-    result[:column_descriptions] = [{:highlighted_attributes => {:body => column_description}}] if column_description
+    result[:column_descriptions] = column_description.map { |desc| { :highlighted_attributes => { :body => desc } } } if column_description
+
+    table_description = result[:highlighted_attributes].delete(:table_description)
+    result[:table_description] = [{:highlighted_attributes => {:body => table_description}}] if table_description
   end
 end

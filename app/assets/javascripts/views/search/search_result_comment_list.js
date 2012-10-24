@@ -11,8 +11,9 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
         var comments = this.options.comments || [];
         var columns = this.options.columns || [];
         var columnDescriptions = this.options.columnDescriptions || [];
+        var tableDescriptions = this.options.tableDescriptions || [];
 
-        this.collection = comments.concat(columns).concat(columnDescriptions);
+        this.collection = comments.concat(columns).concat(columnDescriptions).concat(tableDescriptions);
     },
 
     showMoreComments: function(e) {

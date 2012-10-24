@@ -75,21 +75,24 @@ describe SearchPresenter, :type => :view do
         datasets_hash = @hash[:datasets]
         datasets_hash.should have_key(:numFound)
         datasets_hash.should have_key(:results)
-        datasets_hash[:results][0].should have_key(:highlighted_attributes)
-        datasets_hash[:results][0][:highlighted_attributes].should have_key(:object_name)
-        #datasets_hash[:results][0][:schema].should have_key(:highlighted_attributes)
-        #datasets_hash[:results][0][:schema][:highlighted_attributes].should have_key(:name)
-        datasets_hash[:results][0][:columns][0].should have_key(:highlighted_attributes)
-        datasets_hash[:results][0][:columns][0][:highlighted_attributes].should have_key(:body)
-        #datasets_hash[:results][0][:schema][:database].should have_key(:highlighted_attributes)
-        #datasets_hash[:results][0][:schema][:database][:highlighted_attributes].should have_key(:name)
+        table_hash = datasets_hash[:results][0]
+        table_hash.should have_key(:highlighted_attributes)
+        table_hash[:highlighted_attributes].should have_key(:object_name)
+        table_hash[:columns][0].should have_key(:highlighted_attributes)
+        table_hash[:columns][0][:highlighted_attributes].should have_key(:body)
+        table_hash[:columns][1].should have_key(:highlighted_attributes)
 
-        datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:name)
-        datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:database_name)
-        datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:schema_name)
-        datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:column_name)
+        table_hash[:column_descriptions][0][:highlighted_attributes].should have_key(:body)
+        table_hash[:column_descriptions][1][:highlighted_attributes].should have_key(:body)
+        table_hash[:table_description][0][:highlighted_attributes].should have_key(:body)
 
-        datasets_hash[:results][0][:entity_type].should == 'dataset'
+        table_hash[:highlighted_attributes].should_not have_key(:name)
+        table_hash[:highlighted_attributes].should_not have_key(:database_name)
+        table_hash[:highlighted_attributes].should_not have_key(:schema_name)
+        table_hash[:highlighted_attributes].should_not have_key(:column_name)
+        table_hash[:highlighted_attributes].should_not have_key(:column_description)
+
+        table_hash[:entity_type].should == 'dataset'
       end
 
       it "includes the hdfs entries" do

@@ -163,7 +163,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the tabular data item in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("searchquery_shared_table");
+                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead");
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
