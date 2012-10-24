@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Visualization::Timeseries, :database_integration => true do
-  let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:account) { InstanceIntegration.real_gpdb_account }
   let(:filters) { [%Q{"#{dataset.name}"."time_value" > '2012-03-03'},
                    %Q{"#{dataset.name}"."column1" < 5}] }
 
@@ -21,7 +21,7 @@ describe Visualization::Timeseries, :database_integration => true do
     end
 
     context "with a table" do
-      let(:database) { GpdbIntegration.real_database }
+      let(:database) { InstanceIntegration.real_database }
       let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
       context "with no filter" do

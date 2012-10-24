@@ -5,10 +5,10 @@ describe "gpdb instances", :database_integration => true, :network => true do
     {
         :name => "chorusgpdb42",
         :port => 5432,
-        :host => GpdbIntegration::REAL_GPDB_HOST,
+        :host => InstanceIntegration::REAL_GPDB_HOST,
         :maintenance_db => "postgres",
-        :db_username => GpdbIntegration::REAL_GPDB_USERNAME,
-        :db_password => GpdbIntegration::REAL_GPDB_PASSWORD
+        :db_username => InstanceIntegration::REAL_GPDB_USERNAME,
+        :db_password => InstanceIntegration::REAL_GPDB_PASSWORD
     }
   end
 

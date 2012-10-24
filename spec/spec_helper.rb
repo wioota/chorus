@@ -48,8 +48,8 @@ RSpec.configure do |config|
     config.filter_run_excluding :database_integration => true
   end
 
-  unless ENV['HDFS_HOST']
-    warn "No Hadoop instance detected in environment variable 'HDFS_HOST'.  Skipping Hadoop integration tests.  See the project wiki for more information on running tests"
+  unless ENV['HADOOP_HOST']
+    warn "No Hadoop instance detected in environment variable 'HADOOP_HOST'.  Skipping Hadoop integration tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :hdfs_integration => true
   end
 
@@ -104,7 +104,7 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
-  config.include GpdbIntegration, :database_integration => true
+  config.include InstanceIntegration, :database_integration => true
   config.include SunspotMatchers
   config.include SolrHelpers
   config.extend ApiDocHelper, :api_doc_dsl => :endpoint

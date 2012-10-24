@@ -45,7 +45,7 @@ Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
 require Rails.root.join('spec', 'factories.rb')
 require "#{Rails.root}/spec/support/fixture_builder.rb"
-require "#{Rails.root}/spec/support/database_integration/setup_gpdb.rb"
+require "#{Rails.root}/spec/support/database_integration/instance_integration.rb"
 
 RSpec.configure do |config|
   unless ENV['GPDB_HOST']
@@ -63,7 +63,7 @@ RSpec.configure do |config|
 
   config.include LoginHelpers
   config.include CleditorHelpers
-  config.include GpdbIntegration
+  config.include InstanceIntegration
 
   Capybara.default_wait_time = 5
 end

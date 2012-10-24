@@ -2,10 +2,10 @@ require "spec_helper"
 
 describe ChorusView do
   describe "#validate_query", :database_integration => true do
-    let(:database) { GpdbIntegration.real_database }
+    let(:database) { InstanceIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('public') }
-    let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
 
     it "can be valid" do
       chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;"}, :without_protection => true)
@@ -117,8 +117,8 @@ describe ChorusView do
                       :query => "select 1"},
                      :without_protection => true)
     end
-    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
-    let(:database) { GpdbIntegration.real_database }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:database) { InstanceIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:account) { gpdb_instance.owner_account }
     let(:user) { account.owner }

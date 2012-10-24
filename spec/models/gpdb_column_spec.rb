@@ -4,9 +4,9 @@ describe GpdbColumn do
   describe ".columns_for", :database_integration do
     subject { GpdbColumn.columns_for(account, dataset) }
 
-    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
-    let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:database) { gpdb_instance.databases.find_by_name(InstanceIntegration.database_name) }
 
     describe 'for a real table' do
       let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }

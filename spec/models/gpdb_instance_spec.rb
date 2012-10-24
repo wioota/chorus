@@ -54,8 +54,8 @@ describe GpdbInstance do
 
   describe "#create_database" do
     context "using a real remote greenplum instance", :database_integration => true do
-      let(:account) { GpdbIntegration.real_gpdb_account }
-      let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+      let(:account) { InstanceIntegration.real_gpdb_account }
+      let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
 
       after do
         exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
@@ -290,9 +290,9 @@ describe GpdbInstance do
 
   describe "refresh_databases", :database_integration => true do
     context "with database integration", :database_integration => true do
-      let(:account_with_access) { GpdbIntegration.real_gpdb_account }
+      let(:account_with_access) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { account_with_access.gpdb_instance }
-      let(:database) { gpdb_instance.databases.find_by_name(GpdbIntegration.database_name) }
+      let(:database) { gpdb_instance.databases.find_by_name(InstanceIntegration.database_name) }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
         mock(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
@@ -377,7 +377,7 @@ describe GpdbInstance do
   end
 
   describe "#databases", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:account) { InstanceIntegration.real_gpdb_account }
 
     subject { account.gpdb_instance }
 

@@ -1,4 +1,4 @@
-require_relative "./database_integration/setup_gpdb"
+require_relative "./database_integration/instance_integration"
 
 def FixtureBuilder.password
   'password'
@@ -15,7 +15,7 @@ FixtureBuilder.configure do |fbuilder|
     record['username'].downcase
   end
 
-  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{GpdbIntegration::REAL_GPDB_HOST}_#{Rails.env}.yml"
+  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{InstanceIntegration::REAL_GPDB_HOST}_#{Rails.env}.yml"
 
   # now declare objects
   fbuilder.factory do
@@ -80,9 +80,9 @@ FixtureBuilder.configure do |fbuilder|
     HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
 
-    chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
-    chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
-    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, GpdbIntegration.instance_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:name => GpdbIntegration::real_gpdb_hostname, :owner => admin))
+    chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+    chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:name => InstanceIntegration::real_gpdb_hostname, :owner => admin))
 
     gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
     FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead')
@@ -96,9 +96,9 @@ FixtureBuilder.configure do |fbuilder|
 
     FactoryGirl.create(:instance_account, :owner => owner, :gpdb_instance => provisioning)
 
-    @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
-    @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))
-    @chorus_gpdb42_test_superuser = FactoryGirl.create(:instance_account, GpdbIntegration.account_config_for_gpdb(GpdbIntegration::REAL_GPDB_HOST).merge(:owner => admin, :gpdb_instance => chorus_gpdb42_instance))
+    @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
+    @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))
+    @chorus_gpdb42_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => admin, :gpdb_instance => chorus_gpdb42_instance))
 
     [chorus_gpdb40_instance, chorus_gpdb41_instance, chorus_gpdb42_instance].each do |instance|
       FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :gpdb_instance => instance)
@@ -409,11 +409,11 @@ FixtureBuilder.configure do |fbuilder|
     @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
 
     if ENV['GPDB_HOST']
-      GpdbIntegration.refresh_chorus
+      InstanceIntegration.refresh_chorus
       chorus_gpdb42_instance.refresh_databases
-      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GpdbIntegration.database_name), :refresh_all => true)
+      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(InstanceIntegration.database_name), :refresh_all => true)
 
-      test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance)
+      test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)
       test_schema = test_database.schemas.find_by_name('test_schema')
       @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
       @executable_chorus_view.bound_workspaces << public_workspace

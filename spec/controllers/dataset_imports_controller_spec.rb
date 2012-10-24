@@ -95,9 +95,9 @@ describe DatasetImportsController do
   end
 
   describe "#create", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:account) { InstanceIntegration.real_gpdb_account }
     let(:user) { account.owner }
-    let(:database) { GpdbIntegration.real_database }
+    let(:database) { InstanceIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:src_table) { database.find_dataset_in_schema('base_table1', 'test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
@@ -375,9 +375,9 @@ describe DatasetImportsController do
 
   describe "smoke test for import schedules", :database_integration => true do
     # In the test, use gpfdist to move data between tables in the same schema and database
-    let(:instance_account) { GpdbIntegration.real_gpdb_account }
+    let(:instance_account) { InstanceIntegration.real_gpdb_account }
     let(:user) { instance_account.owner }
-    let(:database) { GpdbIntegration.real_database }
+    let(:database) { InstanceIntegration.real_database }
     let(:schema_name) { 'test_schema' }
     let(:schema) { database.schemas.find_by_name(schema_name) }
     let(:source_table) { "candy" }

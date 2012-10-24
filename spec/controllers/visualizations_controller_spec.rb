@@ -22,7 +22,7 @@ describe VisualizationsController do
       end
 
       describe "fixtures", :database_integration => true do
-        let(:account) { GpdbIntegration.real_gpdb_account }
+        let(:account) { InstanceIntegration.real_gpdb_account }
         before do
           log_in account.owner
         end

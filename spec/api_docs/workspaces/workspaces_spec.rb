@@ -66,7 +66,7 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_name, :schema_name, :id
 
-    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
     let(:database_name) { "a_new_database_name" }
     let(:schema_name) { "a_new_schema_name" }
     let(:user) { gpdb_instance.owner }
@@ -90,8 +90,8 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_id, :schema_name, :id
 
-    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
-    let(:database) { GpdbIntegration.real_database }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:database) { InstanceIntegration.real_database }
     let(:schema_name) { "a_new_schema" }
     let(:user) { gpdb_instance.owner }
 

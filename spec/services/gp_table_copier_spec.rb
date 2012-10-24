@@ -16,9 +16,9 @@ describe GpTableCopier, :database_integration => true do
     DISTRIBUTION_KEY_SQL
   end
 
-  let(:account) { GpdbIntegration.real_gpdb_account }
+  let(:account) { InstanceIntegration.real_gpdb_account }
   let(:user) { account.owner }
-  let(:database) { GpdbIntegration.real_database }
+  let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:source_table_name) { "src_table" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table_name) }

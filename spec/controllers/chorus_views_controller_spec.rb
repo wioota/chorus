@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ChorusViewsController, :database_integration => true do
-  let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
+  let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
   let(:account) { gpdb_instance.owner_account }
   let(:user) { account.owner }
-  let(:database) { GpdbIntegration.real_database }
+  let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:public) }
   let(:dataset) { datasets(:table) }

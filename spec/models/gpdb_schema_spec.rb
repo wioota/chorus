@@ -110,8 +110,8 @@ describe GpdbSchema do
   end
 
   context "refresh returns the list of schemas", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
-    let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
+    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:database) { GpdbDatabase.find_by_name(InstanceIntegration.database_name) }
 
     it "returns the sorted list of schemas" do
       schemas = GpdbSchema.refresh(account, database)
@@ -123,8 +123,8 @@ describe GpdbSchema do
   describe ".find_and_verify_in_source", :database_integration => true do
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:rails_only_schema) { GpdbSchema.find_by_name('rails_only_schema') }
-    let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
-    let(:user) { GpdbIntegration.real_gpdb_account.owner }
+    let(:database) { GpdbDatabase.find_by_name(InstanceIntegration.database_name) }
+    let(:user) { InstanceIntegration.real_gpdb_account.owner }
     let(:restricted_user) { users(:restricted_user) }
 
     context "when it exists in the source database" do
@@ -185,8 +185,8 @@ describe GpdbSchema do
   end
 
   describe "#disk_space_used", :database_integration => true do
-    let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema3') }
-    let(:account) { GpdbIntegration.real_gpdb_instance.owner_account }
+    let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema3') }
+    let(:account) { InstanceIntegration.real_gpdb_instance.owner_account }
 
     it "returns the disk space used by all relations in the schema" do
       schema.disk_space_used(account).should > 0
@@ -199,7 +199,7 @@ describe GpdbSchema do
     end
 
     context "when we can't calculate the size" do
-      let(:schema) { GpdbIntegration.real_database.schemas.find_by_name('test_schema') }
+      let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
 
       it "should return nil" do
         schema.disk_space_used(account).should be_nil

@@ -77,7 +77,7 @@ describe Dataset do
   end
 
   describe ".find_and_verify_in_source", :database_integration => true do
-    let(:account) { GpdbIntegration.real_gpdb_account }
+    let(:account) { InstanceIntegration.real_gpdb_account }
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table') }
     let(:dataset) { GpdbTable.find_by_name('base_table1') }
@@ -420,8 +420,8 @@ describe Dataset do
 end
 
 describe Dataset::Query, :database_integration => true do
-  let(:account) { GpdbIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(GpdbIntegration.database_name, GpdbIntegration.real_gpdb_instance) }
+  let(:account) { InstanceIntegration.real_gpdb_account }
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   subject do
@@ -442,8 +442,8 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "when 'public' schema does not exist" do
-      let(:database_name) { "#{GpdbIntegration.database_name}_no_pub_sch" }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(database_name, GpdbIntegration.real_gpdb_instance) }
+      let(:database_name) { "#{InstanceIntegration.database_name}_no_pub_sch" }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(database_name, InstanceIntegration.real_gpdb_instance) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 

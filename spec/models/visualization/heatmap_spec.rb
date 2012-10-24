@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Visualization::Heatmap do
-  let(:database) { GpdbIntegration.real_database }
+  let(:database) { InstanceIntegration.real_database }
   let(:visualization) do
     Visualization::Heatmap.new(dataset, {
         :x_bins => 3,
@@ -11,7 +11,7 @@ describe Visualization::Heatmap do
         :filters => filters
     })
   end
-  let(:instance_account) { GpdbIntegration.real_gpdb_account }
+  let(:instance_account) { InstanceIntegration.real_gpdb_account }
 
   describe "#fetch!", :database_integration => true do
 

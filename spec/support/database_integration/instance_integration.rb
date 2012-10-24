@@ -1,12 +1,13 @@
 require "tempfile"
 require 'digest/md5'
 
-module GpdbIntegration
-  config_file = "test_gpdb_connection_config.yml"
+module InstanceIntegration
+  config_file = "test_instance_connection_config.yml"
 
   REAL_GPDB_HOST = ENV['GPDB_HOST'] || 'local_greenplum'
+  REAL_HADOOP_HOST = ENV['HADOOP_HOST']
   CONFIG          = YAML.load_file(Rails.root + "config/#{config_file}")
-  INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == REAL_GPDB_HOST }
+  INSTANCE_CONFIG = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == REAL_GPDB_HOST }
   ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
   REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
@@ -22,8 +23,8 @@ module GpdbIntegration
     puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 
-    sql = sql_read.gsub('gpdb_test_database', GpdbIntegration.database_name)
-    puts "  Replacing gpdb_test_database with #{GpdbIntegration.database_name}"
+    sql = sql_read.gsub('gpdb_test_database', InstanceIntegration.database_name)
+    puts "  Replacing gpdb_test_database with #{InstanceIntegration.database_name}"
 
     connection_params = [
         "-U #{ACCOUNT_CONFIG['db_username']}",
@@ -82,27 +83,31 @@ module GpdbIntegration
   end
 
   def self.instance_config_for_gpdb(name)
-    config = CONFIG['instances'].find { |hash| hash["host"] == name }
+    config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
     config.reject { |k,v| k == "account"}
   end
 
+  def self.instance_config_for_hadoop(name = REAL_HADOOP_HOST)
+    CONFIG['instances']['hadoop'].find { |hash| hash["host"] == name }
+  end
+
   def self.account_config_for_gpdb(name)
-    config = CONFIG['instances'].find { |hash| hash["host"] == name }
+    config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
     config["account"]
   end
 
   def self.refresh_chorus
-    account = GpdbIntegration.real_gpdb_account
+    account = InstanceIntegration.real_gpdb_account
 
-    GpdbIntegration.setup_gpdb
+    InstanceIntegration.setup_gpdb
     GpdbDatabase.refresh(account)
 
-    database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
+    database = GpdbDatabase.find_by_name(InstanceIntegration.database_name)
     GpdbSchema.refresh(account, database)
     gpdb_schema = database.schemas.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
 
-    database_without_public_schema = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_pub_sch")
+    database_without_public_schema = GpdbDatabase.find_by_name("#{InstanceIntegration.database_name}_no_pub_sch")
     GpdbSchema.refresh(account, database_without_public_schema)
     gpdb_schema_without_public_schema = database_without_public_schema.schemas.find_by_name('non_public_schema')
     Dataset.refresh(account, gpdb_schema_without_public_schema)
@@ -111,11 +116,11 @@ module GpdbIntegration
   end
 
   def refresh_chorus
-    GpdbIntegration.refresh_chorus
+    InstanceIntegration.refresh_chorus
   end
 
   def self.real_gpdb_account
-    gpdb_instance = GpdbIntegration.real_gpdb_instance
+    gpdb_instance = InstanceIntegration.real_gpdb_instance
     gpdb_instance.owner_account
   end
 

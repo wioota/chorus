@@ -2,7 +2,7 @@
 
 export RAILS_ENV=test
 GPDB_HOST=chorus-gpdb42
-HDFS_HOST=chorus-gphd02.sf.pivotallabs.com
+HADOOP_HOST=chorus-gphd02
 
 . script/ci/setup.sh
 
