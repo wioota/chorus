@@ -10,7 +10,7 @@ namespace :package do
 
   task :prepare_app => :check_clean_working_tree do
     Rake::Task[:'api_docs:package'].invoke
-    system("rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace") || exit(1)
+    #system("rake assets:precompile RAILS_ENV=production RAILS_GROUPS=assets --trace") || exit(1)
     system("bundle exec jetpack .") || exit(1)
     PackageMaker.write_version
   end
@@ -214,7 +214,7 @@ module PackageMaker
   end
 
   def version_name
-    "#{Chorus::VERSION::STRING}-#{head_sha}".strip[0..27]
+    "#{Chorus::VERSION::STRING}-#{head_sha}".strip[0..20]
   end
 end
 
