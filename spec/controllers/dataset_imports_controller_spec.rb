@@ -273,6 +273,12 @@ describe DatasetImportsController do
         post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
       end
 
+      it "returns a dataset_id" do
+        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
+        decoded_response.dataset_id.should == src_table.id
+        decoded_response.source_id.should == src_table.id
+      end
+
       it "limits the number of rows when set" do
         attributes[:sample_count] = '40'
         post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
@@ -320,6 +326,13 @@ describe DatasetImportsController do
         import_schedule.frequency.should == frequency
         import_schedule.end_date.should == import_schedule.end_date
         import_schedule.start_datetime.should == import_schedule.start_datetime
+      end
+
+      it "shows the import_schedule" do
+        put :update, import_params.merge(:frequency => frequency)
+        response.code.should == "200"
+        decoded_response.dataset_id.should == src_table.id
+        decoded_response.source_id.should == src_table.id
       end
 
       it "returns an error when importing into a new table but name already exists" do

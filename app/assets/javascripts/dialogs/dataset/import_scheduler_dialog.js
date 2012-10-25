@@ -134,7 +134,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     updateExistingTableLink: function() {
         var disableExisting = this.$(".new_table input:radio").prop("checked");
-        var disableExisting = this.$(".new_table input:radio").prop("checked");
 
         var $tableName = this.$(".new_table input.name");
         $tableName.prop("disabled", !disableExisting);
