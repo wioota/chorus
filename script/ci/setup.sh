@@ -13,4 +13,4 @@ rm tmp/fixture_builder*.yml
 
 cp config/chorus.yml.example config/chorus.yml
 
-CHORUS_HOME=`pwd` b/rake db:drop db:create db:migrate development:generate_secret_token development:generate_secret_key --trace > "$WORKSPACE/bundle.log"
+CHORUS_HOME=`pwd` b/rake development:generate_secret_token development:generate_secret_key db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
