@@ -6,6 +6,7 @@ describe DatasetImportsController do
     let(:import_schedule) { import_schedules(:default) }
     let(:import) { imports(:default) }
     let(:previous_import) { imports(:previous) }
+    let(:import_now ) { imports(:now) }
     let(:dataset) { import_schedule.source_dataset }
 
     before do
@@ -17,8 +18,30 @@ describe DatasetImportsController do
     end
 
     shared_examples_for "import data" do
-      context "with an import schedule and a last import" do
-        it "should retrieve the db object for a schema" do
+      context "with an import schedule that has a last import" do
+        it "should return the import schedule" do
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+
+          response.code.should == "200"
+          decoded_response.should_not be_nil
+          decoded_response.to_table.should == import_schedule.to_table
+          decoded_response.frequency.should == import_schedule.frequency
+          decoded_response.dataset_id.should == dataset.id
+        end
+
+        it "should retrieve info from last import and put it in execution info" do
+          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+          decoded_response.should_not be_nil
+          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
+          decoded_response.execution_info.to_table.should == import.to_table
+        end
+      end
+
+      context "with an import schedule and a last import from somewhere else (import now)" do
+        before do
+          import_now.update_attribute(:created_at, import.created_at + 1.day)
+        end
+        it "should return the import schedule" do
           get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
 
           response.code.should == "200"
@@ -27,10 +50,11 @@ describe DatasetImportsController do
           decoded_response.frequency.should == import_schedule.frequency
         end
 
-        it "should retrieve info from last import" do
+        it "should retrieve info from last import and put it in execution info" do
           get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
           decoded_response.should_not be_nil
-          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
+          decoded_response.execution_info.started_stamp.to_json.should == import_now.created_at.to_json
+          decoded_response.execution_info.to_table.should == import_now.to_table
         end
       end
 
@@ -38,6 +62,7 @@ describe DatasetImportsController do
         it "should return empty execution_info" do
           import.delete
           previous_import.delete
+          import_now.delete
           get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
           response.code.should == "200"
           decoded_response.should_not be_nil
@@ -57,7 +82,10 @@ describe DatasetImportsController do
       end
     end
 
-    it_should_behave_like "import data"
+    context "for a source dataset" do
+      let!(:dataset) { import_schedule.source_dataset}
+      it_should_behave_like "import data"
+    end
 
     context "when requesting for the destination dataset" do
       let!(:dataset) { FactoryGirl.create(:gpdb_table, :schema => import_schedule.workspace.sandbox, :name => import_schedule.to_table) }

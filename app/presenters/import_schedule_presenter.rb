@@ -3,7 +3,8 @@ class ImportSchedulePresenter < Presenter
   def to_hash
     {
         :id => (model.id if model.is_active),
-        :dataset_id => model.source_dataset_id,
+        :source_id => model.source_dataset_id,
+        :dataset_id => @options[:dataset_id],
         :workspace_id => model.workspace_id,
         :start_datetime => model.start_datetime,
         :end_date => model.end_date,
@@ -20,7 +21,12 @@ class ImportSchedulePresenter < Presenter
   end
 
   def execution_info_hash
-    import = model.imports.order("created_at asc").last
+    if @options[:import]
+      import = @options[:import]
+    else
+      import = model.imports.order("created_at asc").last
+    end
+
     if import
       present import
     else

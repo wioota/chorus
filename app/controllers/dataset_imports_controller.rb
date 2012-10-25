@@ -1,24 +1,26 @@
 class DatasetImportsController < ApplicationController
   def show
-    import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
     dataset = Dataset.find(params[:dataset_id])
-    if import_schedule
-      present import_schedule
-    else
+
+    import = Import.where(:workspace_id => params[:workspace_id],
+                          :source_dataset_id => params[:dataset_id])
+    .order("created_at asc").last
+
+    import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(
+        params[:workspace_id], params[:dataset_id])
+
+    if !import_schedule
       import_schedule = ImportSchedule.where(:workspace_id => params[:workspace_id], :to_table => dataset.name).last
-      if import_schedule
-        present import_schedule
-        return
-      end
-
-      import = Import.where(:workspace_id => params[:workspace_id],
-                             :source_dataset_id => params[:dataset_id])
-                      .order("created_at asc").last
-
-      unless import
+      if !import
+        #The dataset must be a destination table to get here
         import = Import.where(:workspace_id => params[:workspace_id], :to_table => dataset.name).order("created_at asc").last
       end
+    end
 
+    if import_schedule
+      present import_schedule, :presenter_options => {:import => import,
+                                                      :dataset_id => params[:dataset_id].to_i }
+    else
       present import
     end
   end

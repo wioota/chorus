@@ -100,6 +100,30 @@ describe("chorus.presenters.DatasetSidebar", function() {
                                 " into My New Table");
                     });
                 });
+
+                context("The dataset is the destination dataset, not source", function() {
+                    beforeEach(function() {
+                        var importSchedule = rspecFixtures.importSchedule({
+                            sourceId: '1',
+                            datasetId: '2'
+                        });
+                        spyOn(resource, 'getImport').andReturn(
+                            importSchedule
+                        );
+
+                        spyOn(resource, 'nextImportDestination').andReturn(
+                            new chorus.models.WorkspaceDataset({
+                                objectName: 'My New Table',
+                                workspace: {id: 13},
+                                id: 234 //id of dataset
+                            })
+                        );
+                    });
+
+                    it("returns blank", function() {
+                        expect(presenter.nextImport()).toBeFalsy();
+                    });
+                });
             });
         });
 

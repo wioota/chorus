@@ -74,6 +74,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     nextImport: function() {
         if(!this.resource || !this.resource.nextImportDestination()) return "";
 
+        if(this.resource.getImport() && !this.resource.getImport().thisDatasetIsSource()) return "";
+
         next_time = this.resource.importRunsAt();
         if(this.resource.nextImportDestination().get("id") == null) {
             return chorus.helpers.safeT("import.next_import", {
