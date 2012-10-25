@@ -191,6 +191,7 @@ GEM
     journey (1.0.3)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
+    jshint_on_rails (1.0.2)
     json (1.7.5)
     json (1.7.5-java)
     libwebsocket (0.1.5)
@@ -353,6 +354,7 @@ DEPENDENCIES
   jetpack!
   journey (= 1.0.3)
   jruby-openssl
+  jshint_on_rails
   license_finder
   mizuno!
   net-ldap

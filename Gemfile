@@ -71,6 +71,7 @@ end
 
 group :development do
   gem 'license_finder'
+  gem 'jshint_on_rails'
   gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
   gem 'newrelic_rpm'
 end
