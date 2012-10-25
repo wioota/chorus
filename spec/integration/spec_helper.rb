@@ -32,6 +32,14 @@ def wait_for_ajax(timeout = 10)
   end
 end
 
+def run_jobs_synchronously
+  stub(QC.default_queue).enqueue.with_any_args do |class_and_message, *args|
+    p "Running job #{class_and_message}(#{args}) synchronously for test..."
+    className, message = class_and_message.split(".")
+    className.constantize.send(message, *args)
+  end
+end
+
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444

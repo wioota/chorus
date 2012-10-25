@@ -42,6 +42,17 @@ module GpdbIntegration
     end
   end
 
+  def self.exec_sql_line(sql)
+    conn = ActiveRecord::Base.postgresql_connection(
+        :host => INSTANCE_CONFIG['host'],
+        :port => INSTANCE_CONFIG['port'],
+        :database => self.database_name,
+        :username => ACCOUNT_CONFIG['db_username'],
+        :password => ACCOUNT_CONFIG['db_password'],
+        :adapter => "jdbcpostgresql")
+    conn.exec_query(sql)
+  end
+
   def self.setup_gpdb
     execute_sql("setup_gpdb.sql")
     record_sql_changes

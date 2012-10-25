@@ -33,13 +33,13 @@ class CsvImporter
         copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
         sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-      rescue
+      rescue Exception => e
         connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
         raise
       end
     end
     create_success_event
-  rescue => e
+  rescue Exception => e
     create_failure_event(e.message)
   end
 

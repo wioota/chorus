@@ -419,6 +419,9 @@ FixtureBuilder.configure do |fbuilder|
       @executable_chorus_view.bound_workspaces << public_workspace
       @executable_chorus_view.save!(:validate => false)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;")
+
+      real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
+      fbuilder.name :real, real_workspace
     end
 
     #Notification
