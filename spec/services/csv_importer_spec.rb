@@ -58,7 +58,8 @@ describe CsvImporter, :database_integration => true do
       csv_file.update_attribute(:delimiter, nil)
       expect do
         CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-      end.to raise_error(Exception)
+      end.to change(Events::FileImportFailed, :count).by 1
+      Events::FileImportFailed.last.error_message.should == 'CSV file cannot be imported'
     end
 
     it "imports a basic csv file as a new table" do

@@ -35,7 +35,7 @@ class CsvImporter
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
       rescue Exception => e
         connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
-        raise
+        raise e
       end
     end
     create_success_event
