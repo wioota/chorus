@@ -117,6 +117,7 @@ module PackageMaker
     postgres_build = config['postgres_build']
     legacy_path = config['legacy_path']
     clean_install = config['clean_install']
+    legacy_data_host = config['legacy_data_host']
 
     File.open('install_answers.txt', 'w') do |f|
       # where the existing install lives
@@ -147,6 +148,17 @@ module PackageMaker
       chorus_home = "#{install_path}/current"
       run "ssh #{host} 'test -e #{install_path} && CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/chorus_control.sh stop'"
       run "ssh #{host} 'rm -rf #{install_path}'"
+      if legacy_data_host
+        run "ssh #{legacy_data_host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/pg_dump -p 8543 chorus -O -f ~/legacy_database.sql'"
+        run "scp #{legacy_data_host}:~/legacy_database.sql ."
+        run "scp legacy_database.sql #{host}:~"
+        run "ssh #{legacy_data_host} 'rm legacy_database.sql'"
+        run "ssh #{host} 'cd #{legacy_path}; source edc_path.sh; cd bin; ./edcsvrctl start'"
+        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c "drop schema public cascade"'}
+        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c "create schema public"'}
+        run "ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus < ~/legacy_database.sql; rm ~/legacy_database.sql'"
+        run "ssh #{host} 'rsync -avce ssh #{legacy_data_host}:#{legacy_path}/chorus-apps/runtime/data/ #{legacy_path}/chorus-apps/runtime/data'"
+      end
     end
 
     # run upgrade script
