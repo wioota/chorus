@@ -4,7 +4,7 @@ class GpdbInstance < ActiveRecord::Base
 
   validates_presence_of :name, :maintenance_db
   validates_numericality_of :port, :only_integer => true, :if => :host?
-  validates_format_of :name, :with => /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/
+  validates_length_of :name, :maximum => 64
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities

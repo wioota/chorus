@@ -54,6 +54,11 @@ describe("chorus.ValidationRegexes", function() {
         bad: ["", "one", "12three", "a2342"]
     });
 
+    itWorks("MaxLength64", {
+        good: ["1 test$^", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+        bad: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+    })
+
     function itWorks(functionName, options) {
         describe(functionName, function() {
             _.each(options.good, function(value) {

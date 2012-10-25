@@ -20,8 +20,7 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
 
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
-        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
-        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(64), newAttrs);
+        this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
         this.require("streamUrl", newAttrs);
         this.require("username", newAttrs);
 

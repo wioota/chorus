@@ -181,10 +181,9 @@ describe("chorus.models.GpdbInstance", function() {
                     })
                 });
 
-                it("requires valid name", function() {
+                it("allows name with spaces", function() {
                     this.attrs.name = "foo bar"
-                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
+                    expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 })
 
                 it("requires name with valid length", function() {

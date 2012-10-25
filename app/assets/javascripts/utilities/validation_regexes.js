@@ -16,6 +16,10 @@ chorus.ValidationRegexes = (function(){
             return chorusIdentifier64;
         },
 
+        MaxLength64: function() {
+            return new RegExp("^.{0,64}$");
+        },
+
         ChorusIdentifierLower64: function() {
             return chorusIdentifierLower64;
         },

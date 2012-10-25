@@ -10,8 +10,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
 
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
-        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
-        this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(64), newAttrs);
+        this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
         switch (newAttrs.provision_type) {
             case "register" :
                 this.require("host", newAttrs);
@@ -24,7 +23,6 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
                 }
                 break;
             case "create" :
-                this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(64), newAttrs);
                 this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGb"), newAttrs);
                 if (this.isNew()) {
                     this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);

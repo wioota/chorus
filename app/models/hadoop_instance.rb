@@ -5,7 +5,7 @@ class HadoopInstance < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :hdfs_entries
   validates_presence_of :name, :host, :port
-  validates_format_of :name, :with => /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/
+  validates_length_of :name, :maximum => 64
 
   after_create :create_root_entry
 

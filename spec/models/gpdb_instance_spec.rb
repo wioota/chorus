@@ -5,26 +5,8 @@ describe GpdbInstance do
     it { should validate_presence_of :name }
     it { should validate_presence_of :maintenance_db }
 
-    describe "name" do
-      context "when gpdb instance name is invalid format" do
-        it "fails validation when not a valid format" do
-          FactoryGirl.build(:gpdb_instance, :name => "1aaa1").should_not be_valid
-        end
-
-        it "fails validation due to field length" do
-          FactoryGirl.build(:gpdb_instance, :name => 'a'*65).should_not be_valid
-        end
-
-        it "does not fail validation due to field length" do
-          FactoryGirl.build(:gpdb_instance, :name => 'a'*45).should be_valid
-        end
-      end
-
-      context "when gpdb instance name is valid" do
-        it "validates" do
-          FactoryGirl.build(:gpdb_instance, :name => "aaa1").should be_valid
-        end
-      end
+    it_should_behave_like 'a model with name validations' do
+      let(:factory_name) { :gpdb_instance }
     end
 
     describe "port" do
