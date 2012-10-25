@@ -268,7 +268,7 @@ class ChorusInstaller
   def stop_old_install
     return unless upgrade_existing?
     log "Stopping Chorus..." do
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/current/packaging/chorus_control.sh stop"
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/chorus_control.sh stop"
     end
   end
 
