@@ -22,6 +22,8 @@ class NoteMigrator < AbstractMigrator
     def migrate(options)
       prerequisites(options)
 
+      @@events_table_name = options[:event_table]
+
       migrate_notes_on_gpdb_instances
       migrate_notes_on_hadoop_instances
       migrate_notes_on_hdfs_files
@@ -36,7 +38,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_gpdb_instances
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -70,7 +72,7 @@ class NoteMigrator < AbstractMigrator
           ON gpdb_instances.legacy_id = edc_comment.entity_id
       WHERE
         edc_comment.entity_type = 'instance'
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnGreenplumInstance');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnGreenplumInstance');
       ))
   
       copy_note_body_for_class Events::NoteOnGreenplumInstance
@@ -78,7 +80,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_hadoop_instances
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -112,7 +114,7 @@ class NoteMigrator < AbstractMigrator
           ON hadoop_instances.legacy_id = edc_comment.entity_id
       WHERE
         edc_comment.entity_type = 'instance'
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnHadoopInstance');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnHadoopInstance');
       ))
   
       copy_note_body_for_class Events::NoteOnHadoopInstance
@@ -120,7 +122,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_hdfs_files
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -154,7 +156,7 @@ class NoteMigrator < AbstractMigrator
           ON users.username = edc_comment.author_name
       WHERE
         edc_comment.entity_type = 'hdfs'
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnHdfsFile');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnHdfsFile');
       ))
   
       copy_note_body_for_class Events::NoteOnHdfsFile
@@ -162,7 +164,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_workspaces
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -191,7 +193,7 @@ class NoteMigrator < AbstractMigrator
           ON users.username = edc_comment.author_name
       WHERE
         edc_comment.entity_type = 'workspace'
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnWorkspace');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnWorkspace');
       ))
   
       copy_note_body_for_class Events::NoteOnWorkspace
@@ -199,7 +201,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_workfiles
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -230,7 +232,7 @@ class NoteMigrator < AbstractMigrator
           ON users.username = edc_comment.author_name
       WHERE
         edc_comment.entity_type = 'workfile'
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnWorkfile');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnWorkfile');
       ))
   
       copy_note_body_for_class Events::NoteOnWorkfile
@@ -238,7 +240,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_workspace_datasets
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -273,7 +275,7 @@ class NoteMigrator < AbstractMigrator
           ON workspaces.legacy_id = edc_comment.workspace_id
       WHERE
         edc_comment.entity_type IN ( 'databaseObject', 'chorusView')
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnWorkspaceDataset');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnWorkspaceDataset');
       ))
   
       copy_note_body_for_class Events::NoteOnWorkspaceDataset
@@ -281,7 +283,7 @@ class NoteMigrator < AbstractMigrator
   
     def migrate_notes_on_datasets
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -313,7 +315,7 @@ class NoteMigrator < AbstractMigrator
       WHERE
         edc_comment.entity_type = 'databaseObject'
         AND edc_comment.workspace_id IS NULL
-        AND edc_comment.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::NoteOnDataset');
+        AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnDataset');
       ))
   
       copy_note_body_for_class Events::NoteOnDataset

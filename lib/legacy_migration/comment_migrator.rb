@@ -1,8 +1,7 @@
 class CommentMigrator < AbstractMigrator
   class << self
     def prerequisites(options)
-      NoteMigrator.migrate(options)
-      ActivityMigrator.migrate(options)
+      InOrderEventMigrator.migrate(options)
     end
 
     def migrate(options={})

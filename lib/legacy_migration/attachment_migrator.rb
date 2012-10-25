@@ -1,7 +1,7 @@
 class AttachmentMigrator < AbstractMigrator
   class << self
     def prerequisites(options)
-      NoteMigrator.migrate(options)
+      InOrderEventMigrator.migrate(options)
     end
 
     def classes_to_validate

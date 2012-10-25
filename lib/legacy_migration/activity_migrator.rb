@@ -38,7 +38,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_source_table_created
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -70,13 +70,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
       WHERE streams.type = 'SOURCE_TABLE_CREATED'
-      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::SourceTableCreated');
+      AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::SourceTableCreated');
       ))
     end
 
     def migrate_file_import_success
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -109,7 +109,7 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
       WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of file'
-      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::FileImportSuccess');
+      AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::FileImportSuccess');
       ))
 
       backfill_file_import_success_additional_data
@@ -127,7 +127,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_file_import_failed
       Legacy.connection.exec_query(%Q(
-      INSERT INTO events(
+      INSERT INTO #{@@events_table_name}(
         legacy_id,
         legacy_type,
         action,
@@ -151,7 +151,7 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
       WHERE streams.type = 'IMPORT_FAILED' AND streams.indirect_verb = 'of file'
-      AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::FileImportFailed');
+      AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::FileImportFailed');
       ))
 
       backfill_file_import_failed_additional_data
@@ -177,7 +177,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_dataset_import_success
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -219,13 +219,13 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of dataset'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetImportSuccess');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::DatasetImportSuccess');
     ))
     end
 
     def migrate_dataset_import_failed
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -258,7 +258,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_FAILED' AND streams.indirect_verb = 'of dataset'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::DatasetImportFailed');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::DatasetImportFailed');
     ))
 
       backfill_dataset_import_failed_additional_data
@@ -290,7 +290,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_chorus_view_created_from_workfile
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -333,13 +333,13 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN workfiles
         ON source_workfile.object_id = workfiles.legacy_id
     WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_workfile.object_id NOT LIKE '%|%'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreated');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ChorusViewCreated');
     ))
     end
 
     def migrate_chorus_view_created_from_dataset
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -382,13 +382,13 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN datasets
         ON normalize_key(source_dataset.object_id) = datasets.legacy_id
     WHERE streams.type = 'CHORUS_VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewCreated');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ChorusViewCreated');
     ))
     end
 
    def migrate_view_created
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -431,13 +431,13 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN datasets
         ON normalize_key(source_dataset.object_id) = datasets.legacy_id
     WHERE streams.type = 'VIEW_CREATED' AND source_dataset.object_id LIKE '%|%'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ViewCreated');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ViewCreated');
     ))
     end
 
     def migrate_chorus_view_changed
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -471,13 +471,13 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'DATASET_CHANGED_QUERY'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ChorusViewChanged');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ChorusViewChanged');
     ))
     end
 
     def migrate_workspace_name_changed
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -504,7 +504,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'WORKSPACE_CHANGE_NAME'
-    AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceChangeName');
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceChangeName');
     ))
 
 
@@ -524,7 +524,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_file_import_created
       Legacy.connection.exec_query(%Q(
-    INSERT INTO events(
+    INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
@@ -557,7 +557,7 @@ class ActivityMigrator < AbstractMigrator
       INNER JOIN users
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_CREATED' AND streams.indirect_verb = 'of file'
-    AND streams.id NOT IN (SELECT legacy_id from events);
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name});
     ))
 
       backfill_file_import_created_additional_data
@@ -577,7 +577,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_public_workspace_created
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -602,13 +602,13 @@ class ActivityMigrator < AbstractMigrator
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_CREATED'
         AND workspaces.public = true
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::PublicWorkspaceCreated');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::PublicWorkspaceCreated');
         ))
     end
 
     def migrate_private_workspace_created
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -633,13 +633,13 @@ class ActivityMigrator < AbstractMigrator
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_CREATED'
         AND workspaces.public = false
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::PrivateWorkspaceCreated');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::PrivateWorkspaceCreated');
         ))
     end
 
     def migrate_workspace_archived
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -663,13 +663,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_ARCHIVED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceArchived');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceArchived');
         ))
     end
 
     def migrate_workspace_unarchived
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -693,13 +693,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_UNARCHIVED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceUnarchived');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceUnarchived');
         ))
     end
 
     def migrate_workspace_make_public
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -723,13 +723,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_MAKE_PUBLIC'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceMakePublic');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceMakePublic');
         ))
     end
 
     def migrate_workspace_make_private
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -753,13 +753,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKSPACE_MAKE_PRIVATE'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkspaceMakePrivate');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceMakePrivate');
         ))
     end
 
     def migrate_workfile_created
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -791,13 +791,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKFILE_CREATED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileCreated');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkfileCreated');
         ))
     end
 
     def migrate_dataset_import_created
       Legacy.connection.exec_query(%Q(
-  INSERT INTO events(
+  INSERT INTO #{@@events_table_name}(
     legacy_id,
     legacy_type,
     action,
@@ -839,7 +839,7 @@ class ActivityMigrator < AbstractMigrator
     INNER JOIN users
       ON users.legacy_id = actor.object_id
   WHERE streams.type = 'IMPORT_CREATED' AND streams.indirect_verb = 'of dataset'
-  AND streams.id NOT IN (SELECT legacy_id from events);
+  AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name});
   ))
 
       backfill_dataset_import_created_additional_data
@@ -857,7 +857,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_greenplum_instance_created
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -885,13 +885,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'INSTANCE_CREATED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::GreenplumInstanceCreated');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::GreenplumInstanceCreated');
         ))
     end
 
     def migrate_hadoop_instance_created
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -919,13 +919,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'INSTANCE_CREATED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::HadoopInstanceCreated');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::HadoopInstanceCreated');
         ))
     end
 
     def migrate_user_added
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -954,13 +954,13 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users actor_user
           ON actor_user.legacy_id = actor.object_id
         WHERE streams.type = 'USER_ADDED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::UserAdded');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::UserAdded');
         ))
     end
 
     def migrate_member_added
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -994,8 +994,8 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users user_added
           ON target_user.object_id = user_added.legacy_id
         WHERE streams.type = 'MEMBERS_ADDED' AND target_user.object_id IN (SELECT object_id from
-          edc_activity_stream_object where activity_stream_id = streams.id limit 1 )
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::MembersAdded');
+          edc_activity_stream_object where activity_stream_id = streams.id limit 1  )
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::MembersAdded');
         ))
 
       backfill_member_added_additional_data
@@ -1017,7 +1017,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_provision_failed
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -1045,14 +1045,14 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'PROVISIONING_FAIL'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ProvisioningFail');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ProvisioningFail');
         ))
 
     end
 
     def migrate_provision_success
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -1080,14 +1080,14 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'PROVISIONING_SUCCESS'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::ProvisioningSuccess');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ProvisioningSuccess');
         ))
 
     end
 
     def migrate_workfile_upgrade_success
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -1119,7 +1119,7 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKFILE_UPGRADED_VERSION'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileUpgradedVersion');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkfileUpgradedVersion');
         ))
 
       backfill_version_upgrade_additional_data
@@ -1127,7 +1127,7 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate_workfile_version_deleted_success
       Legacy.connection.exec_query(%Q(
-        INSERT INTO events(
+        INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
           action,
@@ -1159,7 +1159,7 @@ class ActivityMigrator < AbstractMigrator
         INNER JOIN users
           ON users.legacy_id = actor.object_id
         WHERE streams.type = 'WORKFILE_VERSION_DELETED'
-        AND streams.id NOT IN (SELECT legacy_id from events WHERE action = 'Events::WorkfileVersionDeleted');
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkfileVersionDeleted');
         ))
 
       backfill_version_delete_additional_data
@@ -1200,6 +1200,8 @@ class ActivityMigrator < AbstractMigrator
 
     def migrate(options)
       prerequisites(options)
+      
+      @@events_table_name = options[:event_table]
 
       ActiveRecord::Base.record_timestamps = false
 

@@ -7,7 +7,7 @@ describe NoteMigrator do
       stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
     end
 
-    NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+    NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
   end
 
   describe ".migrate" do
@@ -179,16 +179,17 @@ describe NoteMigrator do
 
     it "is idempotent" do
       count = Events::Note.unscoped.count
-      NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
       Events::Note.unscoped.count.should == count
     end
 
     it "migrates all the notes" do
-      Legacy.connection.select_all("
+      legacy_count = Legacy.connection.select_value("
         SELECT count(*) as count
         FROM edc_comment
         WHERE entity_type NOT IN ('comment', 'activitystream')
-      ").first["count"].should == Events::Note.unscoped.count
+      ")
+      Events::Note.unscoped.count.should == legacy_count
     end
   end
 end

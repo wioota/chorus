@@ -8,7 +8,6 @@ class DataMigrator
     ImageMigrator.migrate
     SandboxMigrator.migrate
     AssociatedDatasetMigrator.migrate
-    ActivityMigrator.migrate(options)
     AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
