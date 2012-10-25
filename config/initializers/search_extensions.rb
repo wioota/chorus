@@ -88,8 +88,16 @@ module SunspotSearchExtensions
     group_response.groups.each do |group|
       docs << {'id' => group.value}
       group.hits.each do |group_hit|
-        if group_hit.class_name =~ /^Event/
-          notes_for_object[group.value] << {:highlighted_attributes => group_hit.highlights_hash}
+        if group_hit.class_name =~ /^(Event|Comment)/
+          notes = {:highlighted_attributes => group_hit.highlights_hash}
+
+          if group_hit.class_name =~ /^Event/
+            notes[:is_insight] = true if group_hit.result.try(:insight)
+          else
+            notes[:is_comment] = true
+          end
+
+          notes_for_object[group.value] << notes
         end
       end
     end
@@ -110,10 +118,12 @@ end
 
 module Sunspot
   module Search
+    # reopen sunspot standard search class
     class StandardSearch
       include SunspotSearchExtensions
     end
 
+    # reopen sunspot hit class
     class Hit
       attr_accessor :notes
 
@@ -129,6 +139,7 @@ module Sunspot
         end
       end
 
+      # intercept the result load in sunspot and attach search result notes
       def result=(new_result)
         if (notes && new_result)
           new_result.search_result_notes = notes

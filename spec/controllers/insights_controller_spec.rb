@@ -344,26 +344,27 @@ describe InsightsController do
         :promotion_time => Time.now(),
         :promoted_by => user) }
 
+    # TODO: fix this.  below are a bunch of numbers that depend on the fixtures.  bad idea!
     context "when getting insights for the dashboard" do
       it "returns a count of all the insights visible to the current user" do
         log_in user
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 3
+        decoded_response[:number_of_insight].should == 4
       end
 
       it "returns a count of all the insights visible to another user" do
         log_in not_a_member
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 2
+        decoded_response[:number_of_insight].should == 3
       end
 
       it "returns a count of all the insights visible to the admin" do
         log_in admin
         get :count, :entity_type => "dashboard"
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 3
+        decoded_response[:number_of_insight].should == 4
       end
 
       context "with an empty entity_type" do
@@ -371,7 +372,7 @@ describe InsightsController do
           log_in user
           get :count
           response.code.should == "200"
-          decoded_response[:number_of_insight].should == 3
+          decoded_response[:number_of_insight].should == 4
         end
       end
     end

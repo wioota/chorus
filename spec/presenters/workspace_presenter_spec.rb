@@ -94,12 +94,12 @@ describe WorkspacePresenter, :type => :view do
 
         before do
           Timecop.freeze(1.day.ago) do
-            @comment = Comment.create!(:text => 'comment body of event', :author_id => user.id, :event_id => event.id)
+            @comment = Comment.create!(:body => 'comment body of event', :author_id => user.id, :event_id => event.id)
           end
           Timecop.freeze(1.minute.ago) do
             insight = Events::NoteOnWorkspace.create(:workspace => workspace, :body => 'insight body', :actor => user, :insight => true)
-            Comment.create!(:text => 'comment body of insight', :author_id => user.id, :event_id => insight.id)
-            Comment.create!(:text => 'comment body of insight 2', :author_id => user.id, :event_id => insight.id)
+            Comment.create!(:body => 'comment body of insight', :author_id => user.id, :event_id => insight.id)
+            Comment.create!(:body => 'comment body of insight 2', :author_id => user.id, :event_id => insight.id)
             @event_to_be_promoted = Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -1', :actor => user)
             Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -2', :actor => user)
           end

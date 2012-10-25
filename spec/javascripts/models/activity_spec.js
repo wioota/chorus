@@ -559,7 +559,7 @@ describe("chorus.models.Activity", function() {
             this.model.set({
                 comments: [
                     {
-                        text: "I'm cold.'",
+                        body: "I'm cold.'",
                         author: {
                             image: { original: "/foo", icon: "/bar" },
                             id: "1234",
@@ -584,7 +584,7 @@ describe("chorus.models.Activity", function() {
 
         it("contains the activity item's comments", function() {
             var commentsJson = this.model.get("comments");
-            expect(this.comments.models[0].get("text")).toBe(commentsJson[0].text);
+            expect(this.comments.models[0].get("body")).toBe(commentsJson[0].body);
             expect(this.comments.models[0].get("timestamp")).toBe(commentsJson[0].timestamp);
             expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
         });

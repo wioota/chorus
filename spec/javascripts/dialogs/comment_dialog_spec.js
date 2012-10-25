@@ -31,17 +31,17 @@ describe("chorus.dialogs.CommentDialog", function () {
         });
 
         it("renders the body", function () {
-            this.dialog.model.set({text:"cats"});
+            this.dialog.model.set({body:"cats"});
             this.dialog.render();
-            expect(this.dialog.$("textarea[name=text]").val()).toBe("cats");
+            expect(this.dialog.$("textarea[name=body]").val()).toBe("cats");
         });
 
         it("has the right placeholder", function () {
-            expect(this.dialog.$("textarea[name=text]").attr("placeholder")).toBe(t("comments.placeholder", {commentSubject:"note"}));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", {commentSubject:"note"}));
         });
 
         it("makes a cl editor with toolbar", function () {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "text", { width:566, height:150 });
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width:566, height:150 });
             expect(this.dialog.$('.toolbar')).toExist();
         });
     });
@@ -51,12 +51,12 @@ describe("chorus.dialogs.CommentDialog", function () {
             this.dialog.render();
             spyOn(this.dialog.model, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
-            this.dialog.$("textarea[name=text]").val("The body of a note");
+            this.dialog.$("textarea[name=body]").val("The body of a note");
             this.dialog.$("form").trigger("submit");
         });
 
         it("saves the data", function () {
-            expect(this.dialog.model.get("text")).toBe("The body of a note");
+            expect(this.dialog.model.get("body")).toBe("The body of a note");
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
@@ -71,9 +71,9 @@ describe("chorus.dialogs.CommentDialog", function () {
         });
 
         it("trims the comment", function () {
-            this.dialog.$("textarea[name=text]").val("trim me<div><br></div>");
+            this.dialog.$("textarea[name=body]").val("trim me<div><br></div>");
             this.dialog.$("form").trigger("submit");
-            expect(this.dialog.model.get("text")).toBe("trim me");
+            expect(this.dialog.model.get("body")).toBe("trim me");
         });
 
         it("triggers the 'invalidated' event on the model", function () {
@@ -95,7 +95,7 @@ describe("chorus.dialogs.CommentDialog", function () {
             this.dialog.render();
             spyOn(this.dialog.model, "save").andCallThrough();
             spyOn(this.dialog, "markInputAsInvalid");
-            this.dialog.$("textarea[name=text]").val("");
+            this.dialog.$("textarea[name=body]").val("");
             this.dialog.$("form").trigger("submit");
         });
 

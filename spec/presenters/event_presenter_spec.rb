@@ -187,7 +187,7 @@ describe EventPresenter, :type => :view do
         hash = subject.to_hash
         hash[:comments].count.should > 1
         hash[:comments].each do | comment |
-          comment[:text].should_not be_nil
+          comment[:body].should_not be_nil
           comment[:author].should_not be_nil
         end
       end

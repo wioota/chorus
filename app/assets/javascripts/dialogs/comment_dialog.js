@@ -25,7 +25,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     postRender: function() {
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "text", { width: 566, height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 566, height: 150 });
         }, this));
     },
 
@@ -47,7 +47,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     save:function (e) {
         e.preventDefault();
-        this.model.save({ text: this.getNormalizedText(this.$("textarea[name=text]")) });
+        this.model.save({ body: this.getNormalizedText(this.$("textarea[name=body]")) });
     },
 
     saved:function () {

@@ -32,7 +32,7 @@ class Search
   end
 
   def build_search
-    @search = Sunspot.new_search(*(models_to_search + [Events::Note])) do
+    @search = Sunspot.new_search(*(models_to_search + [Events::Note, Comment])) do
       group :grouping_id do
         limit 3
         truncate

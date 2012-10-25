@@ -1,4 +1,5 @@
 require "spec_helper"
+
 describe Search do
   let(:user) { users(:owner) }
 
@@ -39,6 +40,8 @@ describe Search do
       Sunspot.session.should be_a_search_for(Dataset)
       Sunspot.session.should be_a_search_for(HdfsEntry)
       Sunspot.session.should be_a_search_for(Attachment)
+      Sunspot.session.should be_a_search_for(Events::Note)
+      Sunspot.session.should be_a_search_for(Comment)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
       Sunspot.session.should have_search_params(:facet, :type_name)
       Sunspot.session.should have_search_params(:group, Proc.new {
@@ -283,7 +286,7 @@ describe Search do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           dataset = search.datasets.first
-          dataset.highlighted_attributes.length.should == 4
+          dataset.highlighted_attributes.length.should == 6
           dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
           dataset.highlighted_attributes[:database_name][0].should == "<em>searchquery</em>_database"
           dataset.highlighted_attributes[:schema_name][0].should == "<em>searchquery</em>_schema"
@@ -315,6 +318,37 @@ describe Search do
         create_and_record_search(owner, :query => 'notesearch') do |search|
           dataset = search.datasets.first
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> ftw"
+        end
+      end
+
+      context "when the search results include note that has been deleted (i.e. the search index is stale)" do
+        it "doesn't raise an error" do
+          note = events(:note_on_dataset)
+          note.body.should == "notesearch ftw"
+          create_and_record_search(owner, :query => 'notesearch') do |search|
+            expect {
+              note.destroy
+              search.datasets
+            }.to_not raise_error
+          end
+        end
+      end
+
+      it "includes insights" do
+        events(:insight_on_dataset).body.should == "insightsearch ftw"
+        create_and_record_search(owner, :query => 'insightsearch') do |search|
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>insightsearch</em> ftw"
+          dataset.search_result_notes[0][:is_insight].should be_true
+        end
+      end
+
+      it "includes comments on notes" do
+        comments(:comment_on_note_on_dataset).body.should == "commentsearch ftw"
+        create_and_record_search(owner, :query => 'commentsearch') do |search|
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>commentsearch</em> ftw"
+          dataset.search_result_notes[0][:is_comment].should be_true
         end
       end
 

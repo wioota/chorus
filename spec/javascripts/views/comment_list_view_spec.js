@@ -2,7 +2,7 @@ describe("chorus.views.CommentList", function() {
     beforeEach(function() {
         stubDefer();
         this.comment1 = rspecFixtures.comment({
-            text : "Yes we can",
+            body : "Yes we can",
             author : {
                 firstName : "Barack",
                 lastName : "Obama",
@@ -11,7 +11,7 @@ describe("chorus.views.CommentList", function() {
             timestamp: "2010-01-01 01:00:00"
         });
         this.comment2 = rspecFixtures.comment({
-            text : "No hate plz",
+            body : "No hate plz",
             timestamp: "2010-01-01 02:00:00"
 
         });

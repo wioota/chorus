@@ -5,15 +5,9 @@ module Events
   class Note < Base
     validates_presence_of :actor_id
     belongs_to :promoted_by, :class_name => 'User'
+    include SearchableText
 
-    searchable do
-      text :body, :stored => true do
-        search_body
-      end
-      string :grouping_id
-      string :type_name
-      string :security_type_name
-    end
+    searchable_text :body
     attr_accessible :dataset_ids, :workfile_ids
 
     has_additional_data :body
@@ -49,18 +43,6 @@ module Events
 
     def self.insights
       where(:insight => true)
-    end
-
-    def search_body
-      result = ""
-      doc = Nokogiri::HTML(body)
-      doc.xpath("//text()").each do |node|
-        if result.length > 0
-          result += " "
-        end
-        result += node.to_s
-      end
-      result
     end
 
     def promote_to_insight(actor)

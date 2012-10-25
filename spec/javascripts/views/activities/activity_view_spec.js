@@ -78,7 +78,7 @@ describe("chorus.views.Activity", function() {
 
             it("displays the content as html", function () {
                 expect(this.view.$(".activity_content .truncated_text")).toExist();
-                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("text"));
+                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("body"));
                 expect(this.view.$(".activity_content .body")).not.toExist();
                 expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
                 expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();

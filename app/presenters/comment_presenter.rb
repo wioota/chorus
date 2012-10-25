@@ -4,7 +4,7 @@ class CommentPresenter < Presenter
     {
         :id => model.id,
         :author => present(model.author),
-        :text => model.text,
+        :body => model.body,
         :action => 'SUB_COMMENT',
         :timestamp => model.created_at
     }

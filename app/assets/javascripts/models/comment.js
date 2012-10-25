@@ -10,11 +10,11 @@ chorus.models.Comment = chorus.models.Activity.extend({
     },
 
     declareValidations:function (newAttrs) {
-        this.require('text', newAttrs);
+        this.require('body', newAttrs);
     },
 
     attrToLabel:{
-        "text":"notes.text"
+        "body":"notes.body"
     },
 
     note: function() {

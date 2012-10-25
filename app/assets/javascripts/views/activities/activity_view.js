@@ -36,7 +36,7 @@ chorus.views.Activity = chorus.views.Base.extend({
     setupSubviews:function () {
         this.commentList = new chorus.views.CommentList({ collection: this.model.comments() });
         if (this.model.isUserGenerated()) {
-            var attribute = this.model.isSubComment() ? 'text' : 'body';
+            var attribute = 'body';
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: attribute, attributeIsHtmlSafe: true});
         }
         if (this.model.hasCommitMessage()) {

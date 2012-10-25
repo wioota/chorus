@@ -16,7 +16,7 @@ class CommentMigrator < AbstractMigrator
       Legacy.connection.exec_query(%Q(
       INSERT INTO comments(
         legacy_id,
-        text,
+        body,
         event_id,
         author_id,
         created_at,

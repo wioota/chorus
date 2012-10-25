@@ -16,7 +16,7 @@ describe CommentsController do
     before do
       @params = {
           event_id: event.id,
-          text: "hello world in jasmine test!"
+          body: "hello world in jasmine test!"
       }
     end
 
@@ -32,13 +32,13 @@ describe CommentsController do
 
     it "should create make the current user the author" do
       post :create, @params
-      Comment.find_by_text(@params[:text]).author.should == commenter
+      Comment.find_by_body(@params[:body]).author.should == commenter
     end
 
     context "when event author comments" do
       before do
-        Comment.create!({:event => event, :author => first_commenter, :text => "Nice event"}, :without_protection => true)
-        Comment.create!({:event => event, :author => second_commenter, :text => "Great event"}, :without_protection => true)
+        Comment.create!({:event => event, :author => first_commenter, :body => "Nice event"}, :without_protection => true)
+        Comment.create!({:event => event, :author => second_commenter, :body => "Great event"}, :without_protection => true)
         post :create, @params
       end
 
@@ -60,7 +60,7 @@ describe CommentsController do
       let(:commenter) { first_commenter }
 
       before do
-        Comment.create!({:event => event, :author => second_commenter, :text => "I am a second comment"}, :without_protection => true)
+        Comment.create!({:event => event, :author => second_commenter, :body => "I am a second comment"}, :without_protection => true)
         post :create, @params
       end
 
@@ -79,9 +79,9 @@ describe CommentsController do
 
     context "when some user's have commented multiple times" do
       before do
-        Comment.create!(:event_id => event.id, :author_id => event_author.id, :text => "I comment on myself")
-        Comment.create!(:event_id => event.id, :author_id => first_commenter.id, :text => "Great event")
-        Comment.create!(:event_id => event.id, :author_id => first_commenter.id, :text => "Great event again")
+        Comment.create!(:event_id => event.id, :author_id => event_author.id, :body => "I comment on myself")
+        Comment.create!(:event_id => event.id, :author_id => first_commenter.id, :body => "Great event")
+        Comment.create!(:event_id => event.id, :author_id => first_commenter.id, :body => "Great event again")
       end
 
       let(:commenter) { second_commenter }
@@ -101,7 +101,7 @@ describe CommentsController do
   end
 
   describe "#show" do
-    let(:comment) { Comment.new({:event_id => event.id, :text => "Comment on a note", :author_id => commenter.id}) }
+    let(:comment) { Comment.new({:event_id => event.id, :body => "Comment on a note", :author_id => commenter.id}) }
     before do
       comment.save!
     end
@@ -113,7 +113,7 @@ describe CommentsController do
 
     it "presents the comment" do
       get :show, :id => comment.id
-      decoded_response.text.should == "Comment on a note"
+      decoded_response.body.should == "Comment on a note"
     end
 
     generate_fixture "comment.json" do
@@ -124,7 +124,7 @@ describe CommentsController do
 
   describe "#destroy" do
     before do
-      @comment = Comment.new({:event_id => event.id, :author_id => commenter.id, :text => "Delete me!"})
+      @comment = Comment.new({:event_id => event.id, :author_id => commenter.id, :body => "Delete me!"})
       @comment.save!
     end
 

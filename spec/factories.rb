@@ -292,7 +292,7 @@ FactoryGirl.define do
   factory :comment do
     event factory: :user_created_event
     author factory: :user
-    text "this is a comment"
+    body "this is a comment"
   end
 
   factory :insight, :parent => :note_on_workspace_event do

@@ -10,7 +10,7 @@ describe CommentPresenter, :type => :view do
     it "includes the right keys" do
       hash.should have_key(:id)
       hash.should have_key(:author)
-      hash.should have_key(:text)
+      hash.should have_key(:body)
       hash.should have_key(:timestamp)
     end
   end

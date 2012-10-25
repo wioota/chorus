@@ -349,6 +349,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
     note_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_dataset, note_on_dataset
+    insight_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'insightsearch ftw')
+    insight_on_dataset.promote_to_insight(owner)
+    fbuilder.name :insight_on_dataset, insight_on_dataset
     @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
     @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
@@ -356,14 +359,17 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
 
     #Comments
-    comment_on_note_on_greenplum = Comment.create!({:text => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})             
+    comment_on_note_on_greenplum = Comment.create!({:body => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})
     fbuilder.name :comment_on_note_on_greenplum, comment_on_note_on_greenplum
 
-    second_comment_on_note_on_greenplum = Comment.create!({:text => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => the_collaborator.id})
+    second_comment_on_note_on_greenplum = Comment.create!({:body => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => the_collaborator.id})
     fbuilder.name :second_comment_on_note_on_greenplum, second_comment_on_note_on_greenplum
 
     fbuilder.name :comment_on_note_on_no_collaborators_private,
-                  Comment.create!({:text => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
+                  Comment.create!({:body => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
+
+    comment_on_note_on_dataset = Comment.create!({:body => "commentsearch ftw", :event_id => note_on_dataset.id, :author_id => owner.id})
+    fbuilder.name :comment_on_note_on_dataset, comment_on_note_on_dataset
 
     #Events
     Timecop.travel(-1.day)

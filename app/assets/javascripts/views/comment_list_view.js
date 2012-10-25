@@ -35,7 +35,7 @@ chorus.views.CommentList = chorus.views.Base.extend({
         this.commentViews = [];
         this.collection.each(function(comment, index) {
             comment.loaded = true;
-            var view = new chorus.views.TruncatedText({model: comment, attribute: "text", attributeIsHtmlSafe: true});
+            var view = new chorus.views.TruncatedText({model: comment, attribute: "body", attributeIsHtmlSafe: true});
             $lis.eq(index).append(view.render().el);
             this.registerSubView(view);
             this.commentViews.push(view);
