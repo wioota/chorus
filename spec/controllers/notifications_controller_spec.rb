@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe NotificationsController do
-  let(:notification1) { current_user.notifications.first }
-  let(:notification2) { current_user.notifications[1] }
+  let(:notification1) { notifications(:notification1) }
+  let(:notification2) { notifications(:notification2) }
   let(:event1) { notification1.event }
   let(:event2) { notification2.event }
   let(:current_user) { users(:owner) }
@@ -22,7 +22,6 @@ describe NotificationsController do
       notification = decoded_response.last
       event = notification.event
       event.actor.id.should == event1.actor_id
-      event.action.include? event1.action #TODO FIX ME
       event.gpdb_instance.id.should == event1.target1_id
       event.body.should == event1.body
       notification.should have_key(:unread)
