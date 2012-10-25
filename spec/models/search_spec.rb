@@ -321,6 +321,16 @@ describe Search do
         end
       end
 
+      it "removes tags from the note body" do
+        create_and_record_search(owner, :query => 'searchwithhtml') do |search|
+          note = events(:note_on_dataset)
+          note.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
+          Sunspot.commit
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
+        end
+      end
+
       context "when the search results include note that has been deleted (i.e. the search index is stale)" do
         it "doesn't raise an error" do
           note = events(:note_on_dataset)
@@ -349,6 +359,16 @@ describe Search do
           dataset = search.datasets.first
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>commentsearch</em> ftw"
           dataset.search_result_notes[0][:is_comment].should be_true
+        end
+      end
+
+      it "removes tags from the comment body" do
+        create_and_record_search(owner, :query => 'searchwithhtml') do |search|
+          comment = comments(:comment_on_note_on_dataset)
+          comment.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
+          Sunspot.commit
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
         end
       end
 

@@ -230,14 +230,6 @@ describe Events::Note do
         note.security_type_name.should == workspace.security_type_name
       end
     end
-
-    describe "#search_body" do
-      it "removes tags from the body" do
-        note = Events::Note.last
-        note.body = 'this<div>is text</div>'
-        note.search_body.should == 'this is text'
-      end
-    end
   end
 
   describe "#promote_to_insight" do

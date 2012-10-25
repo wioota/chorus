@@ -24,13 +24,5 @@ describe Comment do
         comment.security_type_name.should == note.security_type_name
       end
     end
-
-    describe "#search_body" do
-      it "removes tags from the body" do
-        comment = Comment.last
-        comment.body = 'this<div>is text</div>'
-        comment.search_body.should == 'this is text'
-      end
-    end
   end
 end

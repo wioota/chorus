@@ -1,4 +1,6 @@
 class Attachment < ActiveRecord::Base
+  include SharedSearch
+
   attr_accessible :contents
 
   has_attached_file :contents,
@@ -18,30 +20,9 @@ class Attachment < ActiveRecord::Base
     text :name, :stored => true, :using => :contents_file_name, :boost => SOLR_PRIMARY_FIELD_BOOST
     string :grouping_id
     string :type_name
-    string :security_type_name
   end
 
-  def self.include_shared_search_fields(target_name)
-    klass = ModelMap::CLASS_MAP[target_name.to_s]
-    define_shared_search_fields(klass.shared_search_fields, :note, :proc => proc { |method_name|
-      if note.respond_to? :"search_#{method_name}"
-        note.send(:"search_#{method_name}")
-      end
-    })
-  end
-
-  include_shared_search_fields(:workspace)
-  include_shared_search_fields(:dataset)
-
-  def self.add_search_permissions(current_user, search)
-    [Dataset, Workspace, Workfile].each do |klass|
-      klass.add_search_permissions(current_user, search)
-    end
-  end
-
-  def security_type_name
-    note.security_type_name
-  end
+  delegate_search_permissions_for :workspace, :dataset, :to => :note
 
   def contents_are_image?
     MIME::Types.type_for(contents_file_name).first.to_s.starts_with?('image/')

@@ -3,11 +3,18 @@ require 'model_map'
 
 module Events
   class Note < Base
+    include SearchableHtml
+
     validates_presence_of :actor_id
     belongs_to :promoted_by, :class_name => 'User'
-    include SearchableText
 
-    searchable_text :body
+    searchable_html :body
+    searchable do
+      string :grouping_id
+      string :type_name
+      string :security_type_name
+    end
+
     attr_accessible :dataset_ids, :workfile_ids
 
     has_additional_data :body
