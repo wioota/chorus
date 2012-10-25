@@ -18,7 +18,7 @@ describe "CSV Uploads", :database_integration do
     attach_file("csv[contents]", csv_file)
     click_button "Upload File"
     click_button "Import Data"
-    wait_for_ajax
+    wait_for_ajax(30)
     click_link "test"
     wait_for_ajax
     current_route.should =~ /datasets\/(\d)+/
