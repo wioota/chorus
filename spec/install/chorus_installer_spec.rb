@@ -680,7 +680,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/chorus_control.sh stop") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/current/packaging/chorus_control.sh stop") { true }
       end
 
       it "should stop the previous version" do
