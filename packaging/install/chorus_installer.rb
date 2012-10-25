@@ -268,7 +268,7 @@ class ChorusInstaller
   def stop_old_install
     return unless upgrade_existing?
     log "Stopping Chorus..." do
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/chorus_control.sh stop"
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh stop"
     end
   end
 
@@ -375,7 +375,7 @@ class ChorusInstaller
   def remove_and_restart_previous!
     if upgrade_existing?
       log "Restarting server..."
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh start"
+      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/packaging/chorus_control.sh start"
     else
       stop_postgres
     end

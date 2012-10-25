@@ -680,7 +680,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/packaging/chorus_control.sh stop") { true }
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/chorus_control.sh stop") { true }
       end
 
       it "should stop the previous version" do
@@ -839,7 +839,7 @@ describe ChorusInstaller do
     context "when upgrading an existing 2.2 installation" do
       before do
         installer.install_mode = :upgrade_existing
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/chorus_control.sh start")
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/packaging/chorus_control.sh start")
       end
 
       it "starts up the old install" do
