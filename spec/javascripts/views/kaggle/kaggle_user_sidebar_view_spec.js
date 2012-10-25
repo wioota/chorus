@@ -10,6 +10,24 @@ describe("chorus.views.KaggleUserSidebar", function () {
         this.view.render();
     });
 
+    context("with no user", function() {
+        beforeEach(function() {
+            chorus.PageEvents.broadcast('kaggleUser:deselected', null);
+        });
+
+        it("does not show an username", function () {
+            expect(this.view.$(".info .name").text()).toBe("");
+        });
+
+        it("does not show the user information sidebar", function() {
+           expect(this.view.$('.tab_control')).toBeEmpty();
+        });
+
+        it("does not show the 'Compose message' link", function() {
+           expect(this.view.$('.actions .sendMessage')).not.toExist();
+        });
+    })
+
     context("with a user", function () {
         beforeEach(function () {
             chorus.PageEvents.broadcast('kaggleUser:selected', this.model);

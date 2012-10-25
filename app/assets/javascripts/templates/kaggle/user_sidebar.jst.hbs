@@ -11,11 +11,13 @@
 
 <div class="actions">
     <ul>
+        {{#if hasModel}}
         <li>
             <a class="sendMessage" href="#" data-dialog="ComposeKaggleMessage">
                 {{t "actions.compose_kaggle_message"}}
             </a>
         </li>
+        {{/if}}
     </ul>
 </div>
 

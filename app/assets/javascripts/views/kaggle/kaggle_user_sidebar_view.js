@@ -13,19 +13,28 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     setup: function(options) {
         this.workspace = options.workspace;
         chorus.PageEvents.subscribe("kaggleUser:selected", this.setKaggleUser, this);
+        chorus.PageEvents.subscribe("kaggleUser:deselected", this.setKaggleUser, this);
         chorus.PageEvents.subscribe("kaggleUser:checked", this.kaggleUserChecked, this);
-        this.tabs = new chorus.views.TabControl(["information"]);
     },
 
     postRender: function(){
         this.showOrHideMultipleSelectionSection();
     },
 
+    additionalContext: function() {
+        return { hasModel: this.model != null }
+    },
+
     setKaggleUser: function(user) {
         this.resource = this.model = user;
-        this.tabs.information = new chorus.views.KaggleUserInformation({
-            model: user
-        });
+        if(user) {
+            this.tabs = new chorus.views.TabControl(["information"]);
+            this.tabs.information = new chorus.views.KaggleUserInformation({
+                model: user
+            });
+        } else {
+            this.tabs = null
+        }
         this.render();
         this.showOrHideMultipleSelectionSection();
     },
