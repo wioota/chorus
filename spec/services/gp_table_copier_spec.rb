@@ -26,7 +26,7 @@ describe GpTableCopier, :database_integration => true do
   let(:destination_table_name) { "dst_table" }
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
-  let(:attributes) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true"}.merge(extra_attributes) }
+  let(:attributes) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true", "import_id" => import.id }.merge(extra_attributes) }
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, attributes) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
@@ -38,6 +38,7 @@ describe GpTableCopier, :database_integration => true do
     ).id
   end
   let(:extra_attributes) { {:dataset_import_created_event_id => dataset_import_created_event_id} }
+  let(:import) { imports(:now) }
 
   after do
     call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{source_table_name}\";") unless source_table_name =~ /^candy/
@@ -65,53 +66,78 @@ describe GpTableCopier, :database_integration => true do
           dest_rows.count.should == 2
         end
 
-        it "creates a DatasetImportSuccess on a successful import" do
-          GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          event = Events::DatasetImportSuccess.last
-          event.actor.should == user
-          event.dataset.name.should == destination_table_name
-          event.dataset.schema.should == sandbox
-          event.workspace.should == workspace
-          event.source_dataset.should == source_dataset
+        describe "on a successful import" do
+          before do
+            GpTableCopier.run_import(source_dataset.id, user.id, attributes)
+          end
+
+          it "creates a DatasetImportSuccess" do
+            event = Events::DatasetImportSuccess.last
+            event.actor.should == user
+            event.dataset.name.should == destination_table_name
+            event.dataset.schema.should == sandbox
+            event.workspace.should == workspace
+            event.source_dataset.should == source_dataset
+          end
+
+          it "creates a notification" do
+            notification = Notification.last
+            notification.recipient_id.should == user.id
+            notification.event_id.should == Events::DatasetImportSuccess.last.id
+          end
+
+          it "marks the import as success" do
+            import.reload
+            import.state.should == "success"
+            import.finished_at.should_not be_nil
+          end
+
+          it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
+            event = Events::DatasetImportCreated.last
+            event.id = dataset_import_created_event_id
+            event.actor.should == user
+            event.dataset.name.should == destination_table_name
+            event.dataset.schema.should == sandbox
+            event.workspace.should == workspace
+          end
         end
 
-        it "creates a notification on a successful import" do
-          GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          notification = Notification.last
-          notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportSuccess.last.id
-        end
+        describe "on a failed import" do
+          it "creates a DatasetImportFailed" do
+            expect {
+              GpTableCopier.run_import(-1, user.id, attributes)
+            }.to raise_exception(ActiveRecord::RecordNotFound)
+            event = Events::DatasetImportFailed.last
+            event.actor.should == user
+            event.error_message.should match "Couldn't find Dataset with id=-1"
+            event.workspace.should == workspace
+            event.source_dataset.should == nil
+            event.destination_table.should == destination_table_name
+          end
 
-        it "creates a DatasetImportFailed on a failed import" do
-          expect {
-            GpTableCopier.run_import(-1, user.id, attributes)
-          }.to raise_exception(ActiveRecord::RecordNotFound)
-          event = Events::DatasetImportFailed.last
-          event.actor.should == user
-          event.error_message.should match "Couldn't find Dataset with id=-1"
-          event.workspace.should == workspace
-          event.source_dataset.should == nil
-          event.destination_table.should == destination_table_name
-        end
+          it "creates a notification" do
+            expect {
+              GpTableCopier.run_import(-1, user.id, attributes)
+            }.to raise_exception(ActiveRecord::RecordNotFound)
 
-        it "creates a notification on a failed import" do
-          expect {
-            GpTableCopier.run_import(-1, user.id, attributes)
-          }.to raise_exception(ActiveRecord::RecordNotFound)
+            notification = Notification.last
+            notification.recipient_id.should == user.id
+            notification.event_id.should == Events::DatasetImportFailed.last.id
+          end
 
-          notification = Notification.last
-          notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportFailed.last.id
-        end
+          it "marks the import as failed" do
+            any_instance_of(GpTableCopier) do |copier|
+              stub(copier).run { raise Exception }
+            end
 
-        it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
-          GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          event = Events::DatasetImportCreated.last
-          event.id = dataset_import_created_event_id
-          event.actor.should == user
-          event.dataset.name.should == destination_table_name
-          event.dataset.schema.should == sandbox
-          event.workspace.should == workspace
+            expect {
+              GpTableCopier.run_import(source_dataset.id, user.id, attributes)
+            }.to raise_exception
+
+            import.reload
+            import.state.should == "failed"
+            import.finished_at.should_not be_nil
+          end
         end
 
         it "if the table is expected to exist but does not, it raises an exception and creates a failed import event" do

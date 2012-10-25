@@ -50,7 +50,8 @@ describe Import do
     let(:expected_attributes) do
       import_attributes.merge(
           :workspace_id => workspace.id,
-          :dataset_import_created_event_id => import.dataset_import_created_event_id
+          :dataset_import_created_event_id => import.dataset_import_created_event_id,
+          :import_id => import.id
       )
     end
 

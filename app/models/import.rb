@@ -12,6 +12,8 @@ class Import < ActiveRecord::Base
     import_attributes = attributes.symbolize_keys
     import_attributes.slice!(:workspace_id, :to_table, :new_table, :sample_count, :truncate, :dataset_import_created_event_id)
 
+    import_attributes[:import_id] = id
+
     if workspace.sandbox.database != source_dataset.schema.database
       Gppipe.run_import(source_dataset.id, user.id, import_attributes)
     else

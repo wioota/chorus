@@ -16,9 +16,11 @@ class GpTableCopier
 
     run
 
+    mark_import("success")
     create_success_event
 
   rescue Exception => e
+    mark_import("failed")
     create_failed_event(e.message)
     raise e
   end
@@ -86,6 +88,13 @@ class GpTableCopier
 
   def execute_sql(connection, sql)
     connection.execute(sql)
+  end
+
+  def mark_import(state)
+    import = Import.find(attributes[:import_id])
+    import.state = state
+    import.finished_at = Time.now
+    import.save!
   end
 
   def create_success_event

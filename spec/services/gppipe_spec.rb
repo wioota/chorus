@@ -79,7 +79,7 @@ describe Gppipe, :database_integration => true do
                       PRIMARY KEY("id2", "id3", "id")'.tr("\n","").gsub(/\s+/, " ").strip }
   let(:distrib_def) { "" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
-  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true"}.merge(extra_options) }
+  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true", "import_id" => imports(:now).id }.merge(extra_options) }
   let(:extra_options) { {:dataset_import_created_event_id => Events::DatasetImportCreated.by(user).add(
       :workspace => workspace,
       :dataset => nil,
