@@ -1,13 +1,13 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
-        this.instance1 = rspecFixtures.greenplumInstance({ name: "broccoli" });
+        this.instance1 = rspecFixtures.gpdbInstance({ name: "broccoli" });
         this.instance2 = rspecFixtures.hadoopInstance({ name: "Camels" });
         this.instance3 = rspecFixtures.hadoopInstance({ name: "doppler" });
-        this.instance4 = rspecFixtures.greenplumInstance({ name: "Ego" });
-        this.instance5 = rspecFixtures.greenplumInstance({ name: "fatoush" });
+        this.instance4 = rspecFixtures.gpdbInstance({ name: "Ego" });
+        this.instance5 = rspecFixtures.gpdbInstance({ name: "fatoush" });
         this.instance6 = rspecFixtures.gnipInstance({ name: "kangaroo" });
         this.instance7 = rspecFixtures.gnipInstance({ name: "chicken" });
-        this.collection = new chorus.collections.InstanceSet([
+        this.collection = new chorus.collections.GpdbInstanceSet([
             this.instance5,
             this.instance2,
             this.instance4,

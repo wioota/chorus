@@ -55,7 +55,7 @@
 //= require models/dataset
 //= require models/workspace_dataset
 //= require models/instance
-//= require models/greenplum_instance
+//= require models/gpdb_instance
 //= require models/tasks/task
 //= require models/tasks/chart_task
 //= require models/csv_import
@@ -66,7 +66,7 @@
 //= require models/insight
 //= require models/filter
 //= require_tree ./models
-//= require collections/instance_set
+//= require collections/gpdb_instance_set
 //= require collections/hdfs_entry_set
 //= require collections/dataset_set
 //= require collections/user_set

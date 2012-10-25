@@ -339,7 +339,7 @@
         chorus.router.trigger("leaving")
 
         delete chorus.models.Config._instance;
-        delete chorus.models.GreenplumInstance._aurora;
+        delete chorus.models.GpdbInstance._aurora;
 
         $.cookie("userId", null)
         if (this instanceof jasmine.Spec) {

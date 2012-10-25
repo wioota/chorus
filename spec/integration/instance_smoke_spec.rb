@@ -19,7 +19,7 @@ describe "Instances", :database_integration do
         click_button "Add Instance"
       end
 
-      find(".greenplum_instance ul").should have_content("new_gpdb_instance")
+      find(".gpdb_instance ul").should have_content("new_gpdb_instance")
     end
   end
 

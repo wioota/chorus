@@ -7,7 +7,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     describe("#setup", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            this.instance = rspecFixtures.greenplumInstance({shared: true, id: "5"});
+            this.instance = rspecFixtures.gpdbInstance({shared: true, id: "5"});
             this.dialog = new chorus.dialogs.InstancePermissions({ instance: this.instance });
         });
 
@@ -23,7 +23,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.greenplumInstance({"shared":true});
+            this.instance = rspecFixtures.gpdbInstance({"shared":true});
             var account = rspecFixtures.instanceAccount({
                 dbUsername: 'some_db_username',
                 instanceId: this.instance.id
@@ -219,7 +219,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
             this.owner = rspecFixtures.user({firstName: 'EDC', lastName: 'Admin'});
-            this.instance = rspecFixtures.greenplumInstance({owner: {
+            this.instance = rspecFixtures.gpdbInstance({owner: {
                 id: this.owner.get("id"),
                 username: this.owner.get("username"),
                 firstName: this.owner.get("firstName"),

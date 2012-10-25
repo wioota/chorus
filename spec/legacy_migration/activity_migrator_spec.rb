@@ -356,7 +356,7 @@ describe ActivityMigrator do
           event = Events::GreenplumInstanceCreated.find_by_legacy_id(row['id'])
           event.workspace.should be_blank
           event.actor.username.should == row["author"]
-          event.greenplum_instance.legacy_id.should == row['entity_id']
+          event.gpdb_instance.legacy_id.should == row['entity_id']
         end
         count.should > 0
         Events::GreenplumInstanceCreated.count.should == count
@@ -414,7 +414,7 @@ describe ActivityMigrator do
           event = Events::ProvisioningFail.find_by_legacy_id(row['id'])
           event.actor.username.should == row["author"]
           event.workspace.should be_blank
-          event.greenplum_instance.legacy_id.should == row['entity_id']
+          event.gpdb_instance.legacy_id.should == row['entity_id']
           event.additional_data['error_message'].should == nil
         end
         count.should > 0
@@ -430,7 +430,7 @@ describe ActivityMigrator do
           event = Events::ProvisioningSuccess.find_by_legacy_id(row['id'])
           event.actor.username.should == row["author"]
           event.workspace.should be_blank
-          event.greenplum_instance.legacy_id.should == row['entity_id']
+          event.gpdb_instance.legacy_id.should == row['entity_id']
           event.additional_data['error_message'].should == nil
         end
         count.should > 0

@@ -10,7 +10,7 @@ describe "Notes" do
       instance = gpdb_instances(:default)
       visit("#/instances")
       wait_for_ajax
-      within ".greenplum_instance ul" do
+      within ".gpdb_instance ul" do
         find("li:contains('#{instance.name}')").click
       end
       click_link "Add a note"

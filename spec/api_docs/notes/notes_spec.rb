@@ -18,7 +18,7 @@ resource "Notes" do
 
     let(:body) { note.body }
     let(:gpdb_instance) { gpdb_instances(:owners) }
-    let(:entity_type) { "greenplum_instance" }
+    let(:entity_type) { "gpdb_instance" }
     let(:entity_id) { gpdb_instance.id }
 
     example_request "Post a new note/insight on an entity" do

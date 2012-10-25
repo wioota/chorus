@@ -93,7 +93,7 @@ describe AuroraProvider do
       it "generates a ProvisioningSuccess event" do
         AuroraProvider.provide!(gpdb_instance.id, attributes)
         event = Events::ProvisioningSuccess.where(:actor_id => gpdb_instance.owner.id).last
-        event.greenplum_instance.should == gpdb_instance
+        event.gpdb_instance.should == gpdb_instance
       end
 
       context "state" do
@@ -147,7 +147,7 @@ describe AuroraProvider do
       it "generates a ProvisioningFail event" do
         AuroraProvider.provide!(gpdb_instance.id, attributes)
         event = Events::ProvisioningFail.find_last_by_actor_id(gpdb_instance.owner)
-        event.greenplum_instance.should == gpdb_instance
+        event.gpdb_instance.should == gpdb_instance
         event.additional_data['error_message'].should == "server cannot be reached"
       end
 

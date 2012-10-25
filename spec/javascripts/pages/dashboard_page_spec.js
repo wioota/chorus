@@ -10,13 +10,13 @@ describe("chorus.pages.DashboardPage", function() {
 
     it("uses fetch all for the collections", function() {
         spyOn(chorus.collections.UserSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.InstanceSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.GpdbInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.HadoopInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.GnipInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.WorkspaceSet.prototype, "fetchAll").andCallThrough();
         var page = new chorus.pages.DashboardPage();
         expect(page.userSet.fetchAll).toHaveBeenCalled();
-        expect(page.instanceSet.fetchAll).toHaveBeenCalled();
+        expect(page.gpdbInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.workspaceSet.fetchAll).toHaveBeenCalled();
@@ -25,9 +25,9 @@ describe("chorus.pages.DashboardPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.page.instanceSet, [
-                                         rspecFixtures.greenplumInstance(),
-                                         rspecFixtures.greenplumInstance()
+            this.server.completeFetchAllFor(this.page.gpdbInstanceSet, [
+                                         rspecFixtures.gpdbInstance(),
+                                         rspecFixtures.gpdbInstance()
             ]);
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
                                          rspecFixtures.hadoopInstance(),
@@ -80,9 +80,9 @@ describe("chorus.pages.DashboardPage", function() {
 
     context("#setup", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.page.instanceSet, [
-                rspecFixtures.greenplumInstance(),
-                rspecFixtures.greenplumInstance()
+            this.server.completeFetchAllFor(this.page.gpdbInstanceSet, [
+                rspecFixtures.gpdbInstance(),
+                rspecFixtures.gpdbInstance()
             ]);
 
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
@@ -125,9 +125,9 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("fetches only the chorus instances where the user has permissions", function() {
-            expect(this.page.instanceSet).toBeA(chorus.collections.InstanceSet);
-            expect(this.page.instanceSet.attributes.hasCredentials).toBe(true);
-            expect(this.page.instanceSet).toHaveBeenFetched();
+            expect(this.page.gpdbInstanceSet).toBeA(chorus.collections.GpdbInstanceSet);
+            expect(this.page.gpdbInstanceSet.attributes.hasCredentials).toBe(true);
+            expect(this.page.gpdbInstanceSet).toHaveBeenFetched();
         });
 
         it("fetches the hadoop instances", function() {
@@ -141,7 +141,7 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("passes the instance set through to the instance list view", function() {
-            var packedUpGreenplumSet = _.map(this.page.instanceSet.models, function(instance) {
+            var packedUpGreenplumSet = _.map(this.page.gpdbInstanceSet.models, function(instance) {
                 return new chorus.models.Base({ theInstance: instance });
             });
             var packedUpHadoopSet = _.map(this.page.hadoopInstanceSet.models, function(instance) {

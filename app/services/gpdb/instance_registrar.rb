@@ -18,7 +18,7 @@ module Gpdb
         account.save!
       end
 
-      Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => gpdb_instance)
+      Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => gpdb_instance)
 
       gpdb_instance
     end
@@ -31,7 +31,7 @@ module Gpdb
 
       if gpdb_instance.name_changed?
         Events::GreenplumInstanceChangedName.by(updater).add(
-          :greenplum_instance => gpdb_instance,
+          :gpdb_instance => gpdb_instance,
           :old_name => gpdb_instance.name_was,
           :new_name => gpdb_instance.name
         )

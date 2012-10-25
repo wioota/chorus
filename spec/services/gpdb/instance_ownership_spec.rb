@@ -11,7 +11,7 @@ describe Gpdb::InstanceOwnership do
     it "creates a GreenplumInstanceChangedOwner event" do
       request_ownership_update
       event = Events::GreenplumInstanceChangedOwner.by(old_owner).last
-      event.greenplum_instance.should == gpdb_instance
+      event.gpdb_instance.should == gpdb_instance
       event.new_owner.should == new_owner
     end
 

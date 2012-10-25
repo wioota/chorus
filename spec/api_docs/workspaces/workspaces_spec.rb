@@ -6,8 +6,8 @@ resource "Workspaces" do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:greenplum_instance) { database.gpdb_instance}
-  let(:instance_id) { greenplum_instance.id }
+  let(:gpdb_instance) { database.gpdb_instance}
+  let(:instance_id) { gpdb_instance.id }
   let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
@@ -66,13 +66,13 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_name, :schema_name, :id
 
-    let(:greenplum_instance) { GpdbIntegration.real_gpdb_instance }
+    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
     let(:database_name) { "a_new_database_name" }
     let(:schema_name) { "a_new_schema_name" }
-    let(:user) { greenplum_instance.owner }
+    let(:user) { gpdb_instance.owner }
 
     after do
-      Gpdb::ConnectionBuilder.connect!(greenplum_instance, greenplum_instance.owner_account) do |conn|
+      Gpdb::ConnectionBuilder.connect!(gpdb_instance, gpdb_instance.owner_account) do |conn|
         conn.exec_query("DROP DATABASE IF EXISTS #{database_name};")
       end
     end
@@ -90,13 +90,13 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_id, :schema_name, :id
 
-    let(:greenplum_instance) { GpdbIntegration.real_gpdb_instance }
+    let(:gpdb_instance) { GpdbIntegration.real_gpdb_instance }
     let(:database) { GpdbIntegration.real_database }
     let(:schema_name) { "a_new_schema" }
-    let(:user) { greenplum_instance.owner }
+    let(:user) { gpdb_instance.owner }
 
     after do
-      database.with_gpdb_connection(greenplum_instance.owner_account) do |conn|
+      database.with_gpdb_connection(gpdb_instance.owner_account) do |conn|
         conn.exec_query("DROP SCHEMA IF EXISTS #{schema_name}")
       end
     end

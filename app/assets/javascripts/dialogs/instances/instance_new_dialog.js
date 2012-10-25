@@ -11,7 +11,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.aurora = chorus.models.GreenplumInstance.aurora();
+        this.aurora = chorus.models.GpdbInstance.aurora();
         this.aurora.fetch();
 
         this.requiredResources.add(chorus.models.Config.instance());
@@ -40,12 +40,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.GreenplumInstance();
+        this.model = this.model || new chorus.models.GpdbInstance();
     },
 
     additionalContext: function() {
         return {
-            auroraInstalled: chorus.models.GreenplumInstance.aurora().isInstalled(),
+            auroraInstalled: chorus.models.GpdbInstance.aurora().isInstalled(),
             provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGb"),
             gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured')
         }
@@ -78,7 +78,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         } else if (instanceType === "register_existing_gnip") {
             return chorus.models.GnipInstance;
         } else {
-            return chorus.models.GreenplumInstance;
+            return chorus.models.GpdbInstance;
         }
     },
 

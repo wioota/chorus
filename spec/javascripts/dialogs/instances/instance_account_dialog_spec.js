@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InstanceAccount", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.greenplumInstance();
+        this.instance = rspecFixtures.gpdbInstance();
         this.dialog = new chorus.dialogs.InstanceAccount({
             instance: this.instance,
             title: t("instances.account.add.title")

@@ -2,7 +2,7 @@ module ModelMap
   UnknownEntityType = Class.new(StandardError)
 
   CLASS_MAP = {
-    "greenplum_instance" => GpdbInstance,
+    "gpdb_instance" => GpdbInstance,
     "hdfs_file" => HdfsEntry,
     "hadoop_instance" => HadoopInstance,
     "gnip_instance" => GnipInstance,

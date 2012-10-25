@@ -2,7 +2,7 @@
     var CLASS_MAP = {
         "actor": "User",
         "dataset": "WorkspaceDataset",
-        "greenplumInstance": "GreenplumInstance",
+        "gpdbInstance": "GpdbInstance",
         "gnipInstance": "GnipInstance",
         "newOwner": "User",
         "hadoopInstance": "HadoopInstance",
@@ -34,7 +34,7 @@
         newOwner: makeAssociationMethod("newOwner"),
         workspace: makeAssociationMethod("workspace"),
         actor: makeAssociationMethod("actor"),
-        greenplumInstance: makeAssociationMethod("greenplumInstance"),
+        gpdbInstance: makeAssociationMethod("gpdbInstance"),
         gnipInstance: makeAssociationMethod("gnipInstance"),
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
@@ -71,8 +71,8 @@
                     model.set(this.get("hadoopInstance"));
                     break;
                 case "NoteOnGreenplumInstance":
-                    model = new chorus.models.GreenplumInstance();
-                    model.set(this.get("greenplumInstance"));
+                    model = new chorus.models.GpdbInstance();
+                    model.set(this.get("gpdbInstance"));
                     break;
                 case "NoteOnGnipInstance":
                     model = new chorus.models.GnipInstance();

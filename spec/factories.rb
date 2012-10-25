@@ -16,7 +16,7 @@ FactoryGirl.define do
     admin true
   end
 
-  factory :gpdb_instance, :aliases => [:greenplum_instance] do
+  factory :gpdb_instance do
     sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
@@ -193,7 +193,7 @@ FactoryGirl.define do
     actor
 
     factory :greenplum_instance_created_event, :class => Events::GreenplumInstanceCreated do
-      greenplum_instance
+      gpdb_instance
     end
 
     factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do
@@ -201,12 +201,12 @@ FactoryGirl.define do
     end
 
     factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
-      greenplum_instance
+      gpdb_instance
       new_owner :factory => :user
     end
 
     factory :greenplum_instance_changed_name_event, :class => Events::GreenplumInstanceChangedName do
-      greenplum_instance
+      gpdb_instance
       new_name "new_instance_name"
       old_name "old_instance_name"
     end
@@ -242,7 +242,7 @@ FactoryGirl.define do
     end
 
     factory :note_on_greenplum_instance_event, :class => Events::NoteOnGreenplumInstance do
-      greenplum_instance
+      gpdb_instance
       body "Note to self, add a body"
     end
 

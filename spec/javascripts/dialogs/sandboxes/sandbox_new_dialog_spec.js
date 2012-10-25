@@ -10,7 +10,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     });
 
     xit("fetches the aurora provisioning status", function() {
-        expect(chorus.models.GreenplumInstance.aurora()).toHaveBeenFetched();
+        expect(chorus.models.GpdbInstance.aurora()).toHaveBeenFetched();
     });
 
     it("fetches the workspace", function() {
@@ -21,7 +21,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
 //            TODO: Uncomment this when the aurora provisioning is done
-//            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
+//            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora());
             var modelWithError = rspecFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.instanceMode.trigger("error", modelWithError);
@@ -41,7 +41,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when aurora is not configured", function() {
         beforeEach(function() {
-//            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), { installationStatus: "no" });
+//            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), { installationStatus: "no" });
         });
 
         it("does not display the radio buttons", function() {
@@ -241,7 +241,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     xcontext("when aurora is configured", function() {
         beforeEach(function() {
             spyOn(this.dialog, "render").andCallThrough();
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), { installationStatus: "install_succeed" });
+            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), { installationStatus: "install_succeed" });
             this.server.completeFetchFor(chorus.models.Config.instance(), { provisionMaxSizeInGB: 2000 });
 
         });
@@ -252,13 +252,13 @@ describe("chorus.dialogs.SandboxNew", function() {
         });
 
         it("fetches the aurora templates", function() {
-            expect(chorus.models.GreenplumInstance.auroraTemplates()).toHaveBeenFetched();
+            expect(chorus.models.GpdbInstance.auroraTemplates()).toHaveBeenFetched();
             expect(this.dialog.render).toHaveBeenCalled();
         });
 
         context("when the aurora template fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
+                this.server.completeFetchFor(chorus.models.GpdbInstance.auroraTemplates(), [
                     newFixtures.provisioningTemplate({name: "Small"}),
                     newFixtures.provisioningTemplate({name: "Medium"}),
                     newFixtures.provisioningTemplate({name: "Large"})

@@ -23,7 +23,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
-        this.aurora = chorus.models.GreenplumInstance.aurora();
+        this.aurora = chorus.models.GpdbInstance.aurora();
         this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
 
 //      TODO: when Aurora is done on the backend, comment this back in and un-xit all the specs in sandbox_new_dialog_spec.js (and fix them)
@@ -46,7 +46,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     fetchTemplates: function() {
         if (this.aurora.isInstalled()) {
-            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
+            this.templates = chorus.models.GpdbInstance.auroraTemplates();
             this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
             this.templates.fetch();
             this.render();

@@ -9,15 +9,15 @@ describe("chorus.dialogs.InstancesNew", function() {
     });
 
     it("fetches the aurora install status", function() {
-        expect(chorus.models.GreenplumInstance.aurora()).toHaveBeenFetched();
+        expect(chorus.models.GpdbInstance.aurora()).toHaveBeenFetched();
     });
 
     context("when aurora is installed", function() {
         beforeEach(function() {
             chorus.models.Config.instance().set({ provisionMaxSizeInGb: "101GB" });
-            chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
+            chorus.models.GpdbInstance.aurora().set({ installSucceed: true });
             this.dialog = new chorus.dialogs.InstancesNew();
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
         });
 
@@ -48,7 +48,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
     context("when aurora is not installed", function() {
         beforeEach(function() {
-            chorus.models.GreenplumInstance.aurora().set({ installSucceed: false });
+            chorus.models.GpdbInstance.aurora().set({ installSucceed: false });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
         });
@@ -59,7 +59,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         describe("when the fetches complete", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
+                this.server.completeFetchFor(chorus.models.GpdbInstance.aurora());
                 this.server.completeFetchFor(chorus.models.Config.instance());
             });
 
@@ -175,7 +175,7 @@ describe("chorus.dialogs.InstancesNew", function() {
         beforeEach(function() {
             chorus.models.Config.instance().set({ gnipConfigured: true  });
             this.dialog = new chorus.dialogs.InstancesNew();
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
         });
 
@@ -194,7 +194,7 @@ describe("chorus.dialogs.InstancesNew", function() {
         beforeEach(function() {
             chorus.models.Config.instance().set({ gnipConfigured: false });
             this.dialog = new chorus.dialogs.InstancesNew();
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), rspecFixtures.provisioning().attributes);
             this.dialog.render();
         });
 
@@ -206,9 +206,9 @@ describe("chorus.dialogs.InstancesNew", function() {
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            chorus.models.GreenplumInstance.aurora().set({ installSucceed: true });
+            chorus.models.GpdbInstance.aurora().set({ installSucceed: true });
             this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433 }));
-            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), rspecFixtures.provisioning().attributes);
+            this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), rspecFixtures.provisioning().attributes);
         });
 
         context("when registering a hadoop instance", function() {
@@ -253,7 +253,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 section.find("input[name=maintenanceDb]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
-                spyOn(chorus.models.GreenplumInstance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.GpdbInstance.prototype, "save").andCallThrough();
             });
 
 
@@ -285,7 +285,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$(".create_new_greenplum input[name=dbPassword]").val("supersecret");
                 this.dialog.$(".create_new_greenplum select").val("small");
 
-                spyOn(chorus.models.GreenplumInstance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.GpdbInstance.prototype, "save").andCallThrough();
                 spyOn(chorus, "toast");
             });
 

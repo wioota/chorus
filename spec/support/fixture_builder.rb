@@ -56,14 +56,14 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    greenplum_instance = FactoryGirl.create(:gpdb_instance, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
-    fbuilder.name :default, greenplum_instance
-    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
+    gpdb_instance = FactoryGirl.create(:gpdb_instance, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
+    fbuilder.name :default, gpdb_instance
+    Events::GreenplumInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
     aurora_instance = FactoryGirl.create(:gpdb_instance, :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create")
-    Events::GreenplumInstanceCreated.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::ProvisioningSuccess.by(admin).add(:greenplum_instance => aurora_instance)
-    Events::ProvisioningFail.by(admin).add(:greenplum_instance => aurora_instance, :error_message => "could not provision")
+    Events::GreenplumInstanceCreated.by(admin).add(:gpdb_instance => aurora_instance)
+    Events::ProvisioningSuccess.by(admin).add(:gpdb_instance => aurora_instance)
+    Events::ProvisioningFail.by(admin).add(:gpdb_instance => aurora_instance, :error_message => "could not provision")
 
     shared_instance = FactoryGirl.create(:gpdb_instance, :name => "Shared", :owner => admin, :shared => true)
     owners_instance = FactoryGirl.create(:gpdb_instance, :name => "Owners", :owner => owner, :shared => false)
@@ -71,11 +71,11 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:gpdb_instance, :name => "Offline", :owner => owner, :state => "offline")
     provisioning = FactoryGirl.create(:gpdb_instance, :name => "Provisioning", :owner => owner, :state => "provisioning")
 
-    @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:greenplum_instance => owners_instance)
+    @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => owners_instance)
 
     hadoop_instance = HadoopInstance.create!({ :name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
-    Events::HadoopInstanceCreated.by(admin).add(:greenplum_instance => greenplum_instance)
+    Events::HadoopInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
     HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
@@ -139,7 +139,7 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
     @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead')#, :owner => type_ahead_user)
-    typeahead_instance = FactoryGirl.create :greenplum_instance, :name => 'typeahead'
+    typeahead_instance = FactoryGirl.create :gpdb_instance, :name => 'typeahead'
     [:workspace, :hadoop_instance].each do |model|
       FactoryGirl.create model, :name => 'typeahead'
     end
@@ -147,7 +147,7 @@ FixtureBuilder.configure do |fbuilder|
     typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
     FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
 
-    note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
+    note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
     note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
 
     typeahead_public_workspace.bound_datasets << typeahead_chorus_view
@@ -317,14 +317,14 @@ FixtureBuilder.configure do |fbuilder|
     csv_file_owner.save!(:validate => false)
     fbuilder.name :default, csv_file_owner
     #Notes
-    note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
+    note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => gpdb_instance, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     fbuilder.name :note_on_greenplum, note_on_greenplum
-    insight_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i am an insight with greenpluminsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
+    insight_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => gpdb_instance, :body => 'i am an insight with greenpluminsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
     fbuilder.name :insight_on_greenplum, insight_on_greenplum
-    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => greenplum_instance, :body => 'i love searchquery', :created_at => '2010-01-01 02:01')
-    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
-    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
-    Events::NoteOnGreenplumInstance.by(owner).add(:greenplum_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
+    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => gpdb_instance, :body => 'i love searchquery', :created_at => '2010-01-01 02:01')
+    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
+    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
+    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
     note_on_hadoop_instance = Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
     fbuilder.name :note_on_hadoop_instance, note_on_hadoop_instance
     note_on_hdfs_file = Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
@@ -361,8 +361,8 @@ FixtureBuilder.configure do |fbuilder|
 
     #Events
     Timecop.travel(-1.day)
-    Events::GreenplumInstanceChangedOwner.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => no_collaborators)
-    Events::GreenplumInstanceChangedName.by(admin).add(:greenplum_instance => greenplum_instance, :old_name => 'mahna_mahna', :new_name => greenplum_instance.name)
+    Events::GreenplumInstanceChangedOwner.by(admin).add(:gpdb_instance => gpdb_instance, :new_owner => no_collaborators)
+    Events::GreenplumInstanceChangedName.by(admin).add(:gpdb_instance => gpdb_instance, :old_name => 'mahna_mahna', :new_name => gpdb_instance.name)
     Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
     Events::SourceTableCreated.by(admin).add(:dataset => default_table, :workspace => public_workspace)
     Events::WorkspaceAddSandbox.by(owner).add(:sandbox_schema => default_schema, :workspace => public_workspace)

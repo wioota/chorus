@@ -23,7 +23,7 @@ describe NotificationsController do
       event = notification.event
       event.actor.id.should == event1.actor_id
       event.action.include? event1.action #TODO FIX ME
-      event.greenplum_instance.id.should == event1.target1_id
+      event.gpdb_instance.id.should == event1.target1_id
       event.body.should == event1.body
       notification.should have_key(:unread)
     end

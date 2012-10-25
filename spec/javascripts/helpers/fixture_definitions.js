@@ -107,7 +107,7 @@ window.rspecFixtureDefinitions = {
 
     image: {},
 
-    greenplumInstance: { unique: [ "id" ] },
+    gpdbInstance: { unique: [ "id" ] },
     database: {},
 
     instanceAccount: {},

@@ -14,7 +14,7 @@ class GpdbInstancePresenter < Presenter
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => 'greenplum_instance'
+      :entity_type => 'gpdb_instance'
     }
   end
 

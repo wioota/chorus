@@ -1,8 +1,8 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         var workspaceSet = new chorus.collections.WorkspaceSet();
-        var instanceSet = new chorus.collections.InstanceSet();
-        this.view = new chorus.views.Dashboard({ collection: workspaceSet, instanceSet: instanceSet });
+        var gpdbInstanceSet = new chorus.collections.GpdbInstanceSet();
+        this.view = new chorus.views.Dashboard({ collection: workspaceSet, gpdbInstanceSet: gpdbInstanceSet });
     });
 
     describe("#setup", function() {

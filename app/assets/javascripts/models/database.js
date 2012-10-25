@@ -4,7 +4,7 @@ chorus.models.Database = chorus.models.Base.extend({
     urlTemplate: "databases/{{id}}",
 
     instance: function() {
-        return new chorus.models.GreenplumInstance(this.get("instance"))
+        return new chorus.models.GpdbInstance(this.get("instance"))
     },
 
     schemas: function() {

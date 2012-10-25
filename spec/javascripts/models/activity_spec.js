@@ -10,7 +10,7 @@ describe("chorus.models.Activity", function() {
             it("returns a user with the newOwner data", function() {
                 activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
                     actor: { id: 5 },
-                    greenplumInstance: { id: 6 },
+                    gpdbInstance: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
@@ -24,7 +24,7 @@ describe("chorus.models.Activity", function() {
             it("returns a user with the right data", function() {
                 activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
                     actor: { id: 5 },
-                    greenplumInstance: { id: 6 },
+                    gpdbInstance: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
@@ -38,7 +38,7 @@ describe("chorus.models.Activity", function() {
             it("returns a user with the right data", function() {
                 activity = rspecFixtures.activity.insightOnGreenplumInstance({
                     promotedBy: { id: 5 },
-                    greenplumInstance: { id: 6 }
+                    gpdbInstance: { id: 6 }
                 });
 
                 var promoter = activity.promoter();
@@ -89,17 +89,17 @@ describe("chorus.models.Activity", function() {
             });
         });
 
-        describe("#greenplumInstance", function() {
-            it("returns a greenplum instance with the right data", function() {
+        describe("#gpdbInstance", function() {
+            it("returns a gpdb instance with the right data", function() {
                 activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
                     actor: { id: 5 },
-                    greenplumInstance: { id: 6 },
+                    gpdbInstance: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
-                var greenplumInstance = activity.greenplumInstance();
-                expect(greenplumInstance).toBeA(chorus.models.GreenplumInstance);
-                expect(greenplumInstance.id).toBe(6);
+                var gpdbInstance = activity.gpdbInstance();
+                expect(gpdbInstance).toBeA(chorus.models.GpdbInstance);
+                expect(gpdbInstance.id).toBe(6);
             });
         });
 
@@ -183,13 +183,13 @@ describe("chorus.models.Activity", function() {
 
         describe("#noteObject", function() {
             context("for a NoteOnGreenplumInstance", function() {
-                it("returns a greenplumInstance with the right data", function() {
+                it("returns a gpdbInstance with the right data", function() {
                     activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                        greenplumInstance: { id: 13 }
+                        gpdbInstance: { id: 13 }
                     });
 
-                    var instance = activity.greenplumInstance();
-                    expect(instance).toBeA(chorus.models.GreenplumInstance);
+                    var instance = activity.gpdbInstance();
+                    expect(instance).toBeA(chorus.models.GpdbInstance);
                     expect(instance.id).toBe(13);
                 });
             });
@@ -348,7 +348,7 @@ describe("chorus.models.Activity", function() {
 
         it("returns true for notes is current user is the owner of note", function() {
             activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                greenplumInstance: { id: 13 },
+                gpdbInstance: { id: 13 },
                 actor: {id: chorus.session.user().id}
 
             });
@@ -356,7 +356,7 @@ describe("chorus.models.Activity", function() {
         });
         it("returns false for notes is current user is not the owner of note", function() {
             activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                greenplumInstance: { id: 13 },
+                gpdbInstance: { id: 13 },
                 actor: {id: 1}
 
             });

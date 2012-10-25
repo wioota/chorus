@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InstanceUsage", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.greenplumInstance({
+        this.instance = rspecFixtures.gpdbInstance({
             name: "pasta",
             host: "greenplum",
             port: "8555",

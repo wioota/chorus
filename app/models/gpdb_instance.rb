@@ -124,7 +124,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def entity_type_name
-    'greenplum_instance'
+    'gpdb_instance'
   end
 
   def self.type_name

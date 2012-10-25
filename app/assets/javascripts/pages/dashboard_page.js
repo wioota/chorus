@@ -14,7 +14,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetchAll();
 
-        this.instanceSet = new chorus.collections.InstanceSet([], { hasCredentials: true });
+        this.gpdbInstanceSet = new chorus.collections.GpdbInstanceSet([], { hasCredentials: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
@@ -32,8 +32,8 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     fetchInstances: function() {
-        this.bindings.add(this.instanceSet, "loaded", this.mergeInstances);
-        this.instanceSet.fetchAll();
+        this.bindings.add(this.gpdbInstanceSet, "loaded", this.mergeInstances);
+        this.gpdbInstanceSet.fetchAll();
 
         this.bindings.add(this.hadoopInstanceSet, "loaded", this.mergeInstances);
         this.hadoopInstanceSet.fetchAll();
@@ -43,7 +43,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     instancesLoaded: function() {
-        return (this.instanceSet && this.instanceSet.loaded &&
+        return (this.gpdbInstanceSet && this.gpdbInstanceSet.loaded &&
             this.hadoopInstanceSet && this.hadoopInstanceSet.loaded &&
                 this.gnipInstanceSet && this.gnipInstanceSet.loaded);
     },
@@ -56,7 +56,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
                 });
             };
 
-            var proxyInstances = package(this.instanceSet.models);
+            var proxyInstances = package(this.gpdbInstanceSet.models);
             var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
             var proxyGnipInstances = package(this.gnipInstanceSet.models);
 
@@ -72,7 +72,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
             this.mainContent = new chorus.views.Dashboard({
                 collection: this.workspaceSet,
-                instanceSet: this.arraySet
+                gpdbInstanceSet: this.arraySet
             });
             this.render();
         }

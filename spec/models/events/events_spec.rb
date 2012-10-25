@@ -6,7 +6,7 @@ describe "Event types" do
   extend EventHelpers
 
   let(:actor) { users(:owner) }
-  let(:greenplum_instance) { gpdb_instances(:default) }
+  let(:gpdb_instance) { gpdb_instances(:default) }
   let(:aurora_instance) { gpdb_instances(:aurora) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
@@ -69,15 +69,15 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceCreated.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance
+          :gpdb_instance => gpdb_instance
       )
     end
 
     its(:action) { should == "GreenplumInstanceCreated" }
-    its(:greenplum_instance) { should == greenplum_instance }
-    its(:targets) { should == {:greenplum_instance => greenplum_instance} }
+    its(:gpdb_instance) { should == gpdb_instance }
+    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
 
-    it_creates_activities_for { [actor, greenplum_instance] }
+    it_creates_activities_for { [actor, gpdb_instance] }
     it_creates_a_global_activity
   end
 
@@ -117,16 +117,16 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceChangedOwner.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance,
+          :gpdb_instance => gpdb_instance,
           :new_owner => user
       )
     end
 
-    its(:greenplum_instance) { should == greenplum_instance }
+    its(:gpdb_instance) { should == gpdb_instance }
     its(:new_owner) { should == user }
-    its(:targets) { should == {:greenplum_instance => greenplum_instance, :new_owner => user} }
+    its(:targets) { should == {:gpdb_instance => gpdb_instance, :new_owner => user} }
 
-    it_creates_activities_for { [user, greenplum_instance] }
+    it_creates_activities_for { [user, gpdb_instance] }
     it_creates_a_global_activity
   end
 
@@ -134,20 +134,20 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceChangedName.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance,
+          :gpdb_instance => gpdb_instance,
           :old_name => "brent",
           :new_name => "brenda"
       )
     end
 
-    its(:greenplum_instance) { should == greenplum_instance }
+    its(:gpdb_instance) { should == gpdb_instance }
     its(:old_name) { should == "brent" }
     its(:new_name) { should == "brenda" }
 
-    its(:targets) { should == {:greenplum_instance => greenplum_instance} }
+    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
-    it_creates_activities_for { [actor, greenplum_instance] }
+    it_creates_activities_for { [actor, gpdb_instance] }
     it_creates_a_global_activity
   end
 
@@ -176,13 +176,13 @@ describe "Event types" do
     subject do
       Events::ProvisioningSuccess.add(
           :actor => actor,
-          :greenplum_instance => aurora_instance
+          :gpdb_instance => aurora_instance
       )
     end
 
     its(:action) { should == "ProvisioningSuccess" }
-    its(:greenplum_instance) { should == aurora_instance }
-    its(:targets) { should == {:greenplum_instance => aurora_instance} }
+    its(:gpdb_instance) { should == aurora_instance }
+    its(:targets) { should == {:gpdb_instance => aurora_instance} }
 
     it_creates_activities_for { [actor, aurora_instance] }
     it_creates_a_global_activity
@@ -192,14 +192,14 @@ describe "Event types" do
     subject do
       Events::ProvisioningFail.add(
           :actor => actor,
-          :greenplum_instance => aurora_instance,
+          :gpdb_instance => aurora_instance,
           :error_message => "provisioning has failed"
       )
     end
 
     its(:action) { should == "ProvisioningFail" }
-    its(:greenplum_instance) { should == aurora_instance }
-    its(:targets) { should == {:greenplum_instance => aurora_instance} }
+    its(:gpdb_instance) { should == aurora_instance }
+    its(:targets) { should == {:gpdb_instance => aurora_instance} }
     its(:additional_data) { should == {'error_message' => "provisioning has failed"} }
 
     it_creates_activities_for { [actor, aurora_instance] }

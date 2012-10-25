@@ -37,7 +37,7 @@ class AuroraProvider
     db = provider.aurora_service.create_database(db_attributes)
     gpdb_instance.host = db.public_ip
     gpdb_instance.save!
-    Events::ProvisioningSuccess.by(gpdb_instance.owner).add(:greenplum_instance => gpdb_instance)
+    Events::ProvisioningSuccess.by(gpdb_instance.owner).add(:gpdb_instance => gpdb_instance)
     schema_name =  attributes["schema_name"]
     if schema_name != 'public'
       create_new_schema(gpdb_instance.owner_account, attributes["database_name"], schema_name);
@@ -49,7 +49,7 @@ class AuroraProvider
     gpdb_instance = GpdbInstance.find(instance_id)
     gpdb_instance.state = 'fault'
     gpdb_instance.save!
-    Events::ProvisioningFail.by(gpdb_instance.owner).add(:greenplum_instance => gpdb_instance,
+    Events::ProvisioningFail.by(gpdb_instance.owner).add(:gpdb_instance => gpdb_instance,
                                                        :error_message => e.message)
   end
 

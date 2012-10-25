@@ -44,7 +44,7 @@ describe GpdbInstancesController do
         get :show, :id => gpdb_instance.to_param
       end
 
-      generate_fixture "greenplumInstance.json" do
+      generate_fixture "gpdbInstance.json" do
         get :show, :id => gpdb_instance.to_param
       end
     end

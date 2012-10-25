@@ -1,10 +1,10 @@
-describe("chorus.models.GreenplumInstance", function() {
+describe("chorus.models.GpdbInstance", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.greenplumInstance({id: 1});
+        this.instance = rspecFixtures.gpdbInstance({id: 1});
     });
 
     it("has the right entity type", function() {
-        expect(this.instance.entityType).toBe("greenplum_instance");
+        expect(this.instance.entityType).toBe("gpdb_instance");
     });
 
     it("has the right show url", function() {
@@ -17,7 +17,7 @@ describe("chorus.models.GreenplumInstance", function() {
 
     describe(".aurora", function() {
         beforeEach(function() {
-            this.aurora = chorus.models.GreenplumInstance.aurora();
+            this.aurora = chorus.models.GpdbInstance.aurora();
         });
 
         it("returns a provisioning object", function() {
@@ -25,7 +25,7 @@ describe("chorus.models.GreenplumInstance", function() {
         });
 
         it("memoizes", function() {
-            expect(this.aurora).toBe(chorus.models.GreenplumInstance.aurora());
+            expect(this.aurora).toBe(chorus.models.GpdbInstance.aurora());
         });
     });
 
@@ -145,7 +145,7 @@ describe("chorus.models.GreenplumInstance", function() {
     })
 
     describe("#isGreenplum", function() {
-        it("returns true for greenplum instances", function() {
+        it("returns true for gpdb instances", function() {
             expect(this.instance.isGreenplum()).toBeTruthy();
         });
     });
@@ -362,7 +362,7 @@ describe("chorus.models.GreenplumInstance", function() {
     });
 
     describe("#providerIconUrl", function() {
-        it("returns the right url for greenplum instances", function() {
+        it("returns the right url for gpdb instances", function() {
             expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
         });
     });

@@ -1,7 +1,7 @@
 chorus.models.DynamicInstance = function(instanceJson) {
     var typeMap = {
-        instance: 'GreenplumInstance',
-        greenplum_instance: 'GreenplumInstance',
+        instance: 'GpdbInstance',
+        gpdb_instance: 'GpdbInstance',
         hadoop_instance: 'HadoopInstance',
         gnip_instance: 'GnipInstance'
     };

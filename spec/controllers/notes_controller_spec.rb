@@ -8,7 +8,7 @@ describe NotesController do
       log_in user
     end
 
-    let(:entity_type) { "greenplum_instance"}
+    let(:entity_type) { "gpdb_instance"}
     let(:entity_id) { "entity-id"}
     let(:attributes) { { :entity_type => entity_type, :entity_id => entity_id, :body => "I'm a note" } }
 

@@ -12,7 +12,7 @@ module Gpdb
         end
 
         Events::GreenplumInstanceChangedOwner.by(updater).add(
-          :greenplum_instance => gpdb_instance,
+          :gpdb_instance => gpdb_instance,
           :new_owner => new_owner
         )
       end

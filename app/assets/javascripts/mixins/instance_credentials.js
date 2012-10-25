@@ -2,7 +2,7 @@ chorus.Mixins.InstanceCredentials = {};
 
 chorus.Mixins.InstanceCredentials.model = {
     instanceRequiringCredentials: function() {
-        return new chorus.models.GreenplumInstance(this.errorData.gpdb_instance);
+        return new chorus.models.GpdbInstance(this.errorData.gpdb_instance);
     }
 };
 

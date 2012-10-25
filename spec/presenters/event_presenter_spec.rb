@@ -15,7 +15,7 @@ describe EventPresenter, :type => :view do
 
     it "has targets and additional_data values in it" do
       hash = subject.simple_hash
-      hash[:greenplum_instance].should be
+      hash[:gpdb_instance].should be
       hash["body"].should == 'i am a comment with greenplumsearch in me'
     end
   end
@@ -65,7 +65,7 @@ describe EventPresenter, :type => :view do
     end
 
     context "Non-note event" do
-      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => gpdb_instance) }
+      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :gpdb_instance => gpdb_instance) }
 
       it "includes the 'id', 'timestamp', 'actor', 'action'" do
         hash = subject.to_hash

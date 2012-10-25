@@ -36,7 +36,7 @@
             } else {
                 this.setState({ instance: LOADING, database: HIDDEN, schema: HIDDEN });
 
-                this.instances = new chorus.collections.InstanceSet();
+                this.instances = new chorus.collections.GpdbInstanceSet();
                 this.bindings.add(this.instances, "loaded", this.instancesLoaded);
                 this.instances.attributes = {accessible: true};
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
@@ -60,7 +60,7 @@
         },
 
         instancesLoaded: function () {
-            var state = (this.greenplumInstances().length === 0) ? UNAVAILABLE : SELECT;
+            var state = (this.gpdbInstances().length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ instance: state });
         },
 
@@ -254,7 +254,7 @@
             return select;
         },
 
-        greenplumInstances: function() {
+        gpdbInstances: function() {
             return this.instances.filter(function(instance) {
                 return instance.get("instanceProvider") != "Hadoop";
             });
@@ -270,7 +270,7 @@
         },
 
         populateSelect: function(type) {
-            var models = (type === "instance") ? this.greenplumInstances() : this[type + "s"].models;
+            var models = (type === "instance") ? this.gpdbInstances() : this[type + "s"].models;
             var select = this.resetSelect(type);
 
             _.each(this.sortModels(models), function(model) {

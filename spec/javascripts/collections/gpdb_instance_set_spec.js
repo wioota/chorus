@@ -1,11 +1,11 @@
-describe("chorus.collections.InstanceSet", function() {
+describe("chorus.collections.GpdbInstanceSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.InstanceSet([
-            rspecFixtures.greenplumInstance({ name: "Gun_instance" }),
-            rspecFixtures.greenplumInstance({ name: "cat_instance" }),
-            rspecFixtures.greenplumInstance({ name: "Fat_instance" }),
-            rspecFixtures.greenplumInstance({ name: "egg_instance" }),
-            rspecFixtures.greenplumInstance({ name: "Dog_instance" })
+        this.collection = new chorus.collections.GpdbInstanceSet([
+            rspecFixtures.gpdbInstance({ name: "Gun_instance" }),
+            rspecFixtures.gpdbInstance({ name: "cat_instance" }),
+            rspecFixtures.gpdbInstance({ name: "Fat_instance" }),
+            rspecFixtures.gpdbInstance({ name: "egg_instance" }),
+            rspecFixtures.gpdbInstance({ name: "Dog_instance" })
         ]);
     });
 

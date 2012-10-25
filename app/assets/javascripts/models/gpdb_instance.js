@@ -1,8 +1,8 @@
-chorus.models.GreenplumInstance = chorus.models.Instance.extend({
-    constructorName: "GreenplumInstance",
+chorus.models.GpdbInstance = chorus.models.Instance.extend({
+    constructorName: "GpdbInstance",
     urlTemplate: "gpdb_instances/{{id}}",
     nameAttribute: 'name',
-    entityType: "greenplum_instance",
+    entityType: "gpdb_instance",
 
     showUrlTemplate: "instances/{{id}}/databases",
 

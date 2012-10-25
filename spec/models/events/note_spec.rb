@@ -6,7 +6,7 @@ describe Events::Note do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
-  let(:greenplum_instance) { gpdb_instances(:default) }
+  let(:gpdb_instance) { gpdb_instances(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
@@ -42,16 +42,16 @@ describe Events::Note do
     subject do
       Events::NoteOnGreenplumInstance.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance,
+          :gpdb_instance => gpdb_instance,
           :body => "This is the body"
       )
     end
 
-    its(:greenplum_instance) { should == greenplum_instance }
-    its(:targets) { should == {:greenplum_instance => greenplum_instance} }
+    its(:gpdb_instance) { should == gpdb_instance }
+    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
     its(:additional_data) { should == {'body' => "This is the body"} }
 
-    it_creates_activities_for { [actor, greenplum_instance] }
+    it_creates_activities_for { [actor, gpdb_instance] }
     it_creates_a_global_activity
   end
 
@@ -245,7 +245,7 @@ describe Events::Note do
     let(:event) {
       Events::NoteOnGreenplumInstance.add(
           :actor => actor,
-          :greenplum_instance => greenplum_instance,
+          :gpdb_instance => gpdb_instance,
           :body => "This is the body"
       )
     }
@@ -275,16 +275,16 @@ describe Events::Note do
     let(:user) { users(:owner) }
 
     it "creates a note on a greenplum instance" do
-      greenplum_instance = gpdb_instances(:default)
+      gpdb_instance = gpdb_instances(:default)
       Events::Note.create_from_params({
-        :entity_type => "greenplum_instance",
-        :entity_id => greenplum_instance.id,
+        :entity_type => "gpdb_instance",
+        :entity_id => gpdb_instance.id,
         :body => "Some crazy content",
       }, user)
 
       last_note = Events::Note.last
       last_note.action.should == "NoteOnGreenplumInstance"
-      last_note.greenplum_instance.should == greenplum_instance
+      last_note.gpdb_instance.should == gpdb_instance
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
     end

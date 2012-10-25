@@ -50,7 +50,7 @@ describe("chorus.presenters.Activity", function() {
 
             beforeEach(function() {
                 model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-                noteObject = model.greenplumInstance();
+                noteObject = model.gpdbInstance();
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
             });
@@ -214,13 +214,13 @@ describe("chorus.presenters.Activity", function() {
         })
     });
 
-    context("greenplum instance created", function() {
-        var greenplumInstance;
+    context("gpdb instance created", function() {
+        var gpdbInstance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.greenplumInstance();
+            gpdbInstance = model.gpdbInstance();
             actor = model.actor();
         });
 
@@ -230,19 +230,19 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
+                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name())
                 }
             );
         });
     });
 
     context("aurora instance provisioned", function() {
-        var greenplumInstance;
+        var gpdbInstance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.auroraInstanceProvisioned();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.greenplumInstance();
+            gpdbInstance = model.gpdbInstance();
             actor = model.actor();
         });
 
@@ -251,20 +251,20 @@ describe("chorus.presenters.Activity", function() {
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.ProvisioningSuccess.default", {
-                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
-                    instanceAddress: greenplumInstance.get("host")
+                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
+                    instanceAddress: gpdbInstance.get("host")
                 }
             );
         });
     });
 
     context("aurora instance provisioning fails", function() {
-        var greenplumInstance;
+        var gpdbInstance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.auroraInstanceProvisioningFailed();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.greenplumInstance();
+            gpdbInstance = model.gpdbInstance();
             actor = model.actor();
         });
 
@@ -273,7 +273,7 @@ describe("chorus.presenters.Activity", function() {
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.ProvisioningFail.default", {
-                    greenplumInstanceName: greenplumInstance.name()
+                    gpdbInstanceName: gpdbInstance.name()
                 }
             );
         });
@@ -323,13 +323,13 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("greenplum instance changed owner", function() {
-        var greenplumInstance, newOwner;
+    context("gpdb instance changed owner", function() {
+        var gpdbInstance, newOwner;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceChangedOwner();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.greenplumInstance();
+            gpdbInstance = model.gpdbInstance();
             newOwner = model.newOwner();
             actor = model.actor();
         });
@@ -340,15 +340,15 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceChangedOwner.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
+                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
                 }
             );
         });
     });
 
-    context("greenplum instance changed name", function() {
-        var greenplumInstance;
+    context("gpdb instance changed name", function() {
+        var gpdbInstance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceChangedName({
@@ -356,7 +356,7 @@ describe("chorus.presenters.Activity", function() {
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.greenplumInstance();
+            gpdbInstance = model.gpdbInstance();
             actor = model.actor();
         });
 
@@ -366,7 +366,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
+                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
                     newName: "jane",
                     oldName: "john"
                 }
@@ -811,19 +811,19 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("note on a greenplum instance", function() {
+    context("note on a gpdb instance", function() {
         var instance;
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                greenplumInstance: {
+                gpdbInstance: {
                     id: 42,
                     name: 'my_instance'
                 }
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            instance = rspecFixtures.greenplumInstance({id: 42, name: 'my_instance'});
+            instance = rspecFixtures.gpdbInstance({id: 42, name: 'my_instance'});
         });
 
         itHasTheActorIcon();

@@ -1,10 +1,10 @@
 describe("chorus.presenters.InstanceList", function() {
-    var greenplumInstances, hadoopInstances, gnipInstances, presenter;
+    var gpdbInstances, hadoopInstances, gnipInstances, presenter;
 
     beforeEach(function() {
-        greenplumInstances = new chorus.collections.InstanceSet([
-            rspecFixtures.greenplumInstance({ name: "joe_instance", state: "online" }),
-            rspecFixtures.greenplumInstance({ state: "offline" })
+        gpdbInstances = new chorus.collections.GpdbInstanceSet([
+            rspecFixtures.gpdbInstance({ name: "joe_instance", state: "online" }),
+            rspecFixtures.gpdbInstance({ state: "offline" })
         ]);
 
         hadoopInstances = new chorus.collections.HadoopInstanceSet([
@@ -20,7 +20,7 @@ describe("chorus.presenters.InstanceList", function() {
         ]);
         
         presenter = new chorus.presenters.InstanceList({ 
-            greenplum: greenplumInstances, 
+            greenplum: gpdbInstances,
             hadoop: hadoopInstances,
             gnip: gnipInstances
         });
@@ -39,7 +39,7 @@ describe("chorus.presenters.InstanceList", function() {
         expect(presenter.hasGnip).toBeTruthy();
 
         presenter = new chorus.presenters.InstanceList({
-            greenplum: new chorus.collections.InstanceSet(),
+            greenplum: new chorus.collections.GpdbInstanceSet(),
             hadoop: new chorus.collections.HadoopInstanceSet(),
             gnip: new chorus.collections.GnipInstanceSet()
 
@@ -69,7 +69,7 @@ describe("chorus.presenters.InstanceList", function() {
 
     function itPresentsModelAttribute(name) {
         it("presents each model's " + name + " attribute", function() {
-            greenplumInstances.each(function(model, i) {
+            gpdbInstances.each(function(model, i) {
                 expect(presenter.greenplum[i][name]).toBe(model.get(name));
             });
 
@@ -87,7 +87,7 @@ describe("chorus.presenters.InstanceList", function() {
         presentedName || (presentedName = methodName);
 
         it("presents each model's " + methodName + " method as '" + presentedName + "''", function() {
-            greenplumInstances.each(function(model, i) {
+            gpdbInstances.each(function(model, i) {
                 expect(presenter.greenplum[i][presentedName]).toBe(model[methodName]());
             });
 

@@ -1,6 +1,6 @@
-chorus.collections.InstanceSet = chorus.collections.Base.extend({
-    constructorName: "InstanceSet",
-    model: chorus.models.GreenplumInstance,
+chorus.collections.GpdbInstanceSet = chorus.collections.Base.extend({
+    constructorName: "GpdbInstanceSet",
+    model: chorus.models.GpdbInstance,
     urlTemplate: "gpdb_instances/",
 
     urlParams: function() {

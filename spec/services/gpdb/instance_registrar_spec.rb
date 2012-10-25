@@ -101,7 +101,7 @@ describe Gpdb::InstanceRegistrar do
     it "makes a GreenplumInstanceCreated event" do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
       event = Events::GreenplumInstanceCreated.last
-      event.greenplum_instance.should == instance
+      event.gpdb_instance.should == instance
       event.actor.should == owner
     end
 
@@ -196,7 +196,7 @@ describe Gpdb::InstanceRegistrar do
       it "generates a GreenplumInstanceChangedName event" do
         updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
         event = Events::GreenplumInstanceChangedName.find_last_by_actor_id(admin)
-        event.greenplum_instance.should == updated_instance
+        event.gpdb_instance.should == updated_instance
         event.old_name.should == old_name
         event.new_name.should == new_name
       end

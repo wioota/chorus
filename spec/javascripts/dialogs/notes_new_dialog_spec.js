@@ -4,7 +4,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         this.dialog = new chorus.dialogs.NotesNew({
             entityType: "instance",
             entityId: 1,
-            pageModel: new chorus.models.GreenplumInstance()
+            pageModel: new chorus.models.GpdbInstance()
         });
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
@@ -30,7 +30,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
                     entityType: "instance",
                     entityId: 1,
                     workspaceId: 45,
-                    pageModel: new chorus.models.GreenplumInstance()
+                    pageModel: new chorus.models.GpdbInstance()
                 });
 
                 expect(this.dialog.model.get("workspaceId")).toBe(45);
@@ -57,7 +57,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
                     entityType: "instance",
                     entityId: 1,
                     displayEntityType: 'foo',
-                    pageModel: new chorus.models.GreenplumInstance()
+                    pageModel: new chorus.models.GpdbInstance()
                 });
                 $('#jasmine_content').append(this.dialog.el);
                 this.dialog.render();

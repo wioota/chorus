@@ -50,7 +50,7 @@ describe("chorus.models.Instance", function() {
         });
         it("returns false if object is of different type", function() {
             var owner = this.instance.owner();
-            var brokenParameter = rspecFixtures.greenplumInstance({id: owner.get('id')});
+            var brokenParameter = rspecFixtures.gpdbInstance({id: owner.get('id')});
             expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
         });
     });

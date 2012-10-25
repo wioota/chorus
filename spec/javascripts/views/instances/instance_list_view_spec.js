@@ -1,14 +1,14 @@
 describe("chorus.views.InstanceList", function() {
     beforeEach(function() {
-        this.greenplumInstances = new chorus.collections.InstanceSet();
+        this.gpdbInstances = new chorus.collections.GpdbInstanceSet();
         this.hadoopInstances = new chorus.collections.HadoopInstanceSet();
         this.gnipInstances = new chorus.collections.GnipInstanceSet();
-        this.greenplumInstances.fetch();
+        this.gpdbInstances.fetch();
         this.hadoopInstances.fetch();
         this.gnipInstances.fetch();
 
         this.view = new chorus.views.InstanceList({
-            greenplumInstances: this.greenplumInstances,
+            gpdbInstances: this.gpdbInstances,
             hadoopInstances: this.hadoopInstances,
             gnipInstances: this.gnipInstances
         });
@@ -21,7 +21,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders empty text for each instance type", function() {
-                expect(this.view.$(".greenplum_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".gpdb_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
@@ -35,10 +35,10 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
                 rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
             ]);
-            this.server.completeFetchFor(this.greenplumInstances, [
-                rspecFixtures.greenplumInstance({name : "GP9", id: "1"}),
-                rspecFixtures.greenplumInstance({name : "gP1", id: "2"}),
-                rspecFixtures.greenplumInstance({name : "GP10", id: "3"})
+            this.server.completeFetchFor(this.gpdbInstances, [
+                rspecFixtures.gpdbInstance({name : "GP9", id: "1"}),
+                rspecFixtures.gpdbInstance({name : "gP1", id: "2"}),
+                rspecFixtures.gpdbInstance({name : "GP10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
                 rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
@@ -59,12 +59,12 @@ describe("chorus.views.InstanceList", function() {
             expect(this.view.$("div.instance_provider .details").length).toBe(3);
         });
 
-        it("renders the greenplum instances in the correct instance div", function() {
-            var greenplumItems = this.view.$(".greenplum_instance li.instance");
-            expect(greenplumItems.length).toBe(3);
-            expect(greenplumItems).toContainText("gP1");
-            expect(greenplumItems).toContainText("GP9");
-            expect(greenplumItems).toContainText("GP10");
+        it("renders the gpdb instances in the correct instance div", function() {
+            var gpdbItems = this.view.$(".gpdb_instance li.instance");
+            expect(gpdbItems.length).toBe(3);
+            expect(gpdbItems).toContainText("gP1");
+            expect(gpdbItems).toContainText("GP9");
+            expect(gpdbItems).toContainText("GP10");
         });
 
         it("renders the hadoop instances in the correct instance div", function() {
@@ -91,7 +91,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("when an instance is destroyed", function() {
             beforeEach(function() {
-                this.oldLength = this.greenplumInstances.length;
+                this.oldLength = this.gpdbInstances.length;
                 var liToSelect = this.view.$("li").eq(2);
                 liToSelect.click();
                 this.selectedId = liToSelect.data("instanceId");
@@ -99,7 +99,7 @@ describe("chorus.views.InstanceList", function() {
 
             context("when it is currently selected", function() {
                 beforeEach(function() {
-                    this.greenplumInstances.get(this.selectedId).destroy();
+                    this.gpdbInstances.get(this.selectedId).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
@@ -109,8 +109,8 @@ describe("chorus.views.InstanceList", function() {
                 });
 
                 it("renders only the existing items", function() {
-                    expect(this.greenplumInstances.models.length).toBe(this.oldLength - 1);
-                    expect(this.view.$(".greenplum_instance li.instance").length).toBe(this.oldLength - 1);
+                    expect(this.gpdbInstances.models.length).toBe(this.oldLength - 1);
+                    expect(this.view.$(".gpdb_instance li.instance").length).toBe(this.oldLength - 1);
                 });
             });
 
@@ -118,7 +118,7 @@ describe("chorus.views.InstanceList", function() {
                 beforeEach(function() {
                     var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
                     var id = nonSelectedLi.data("instanceId");
-                    this.greenplumInstances.get(id).destroy();
+                    this.gpdbInstances.get(id).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
@@ -130,57 +130,57 @@ describe("chorus.views.InstanceList", function() {
 
         describe("when an instance is provisioning", function() {
             beforeEach(function() {
-                this.greenplumInstances.reset([
-                    rspecFixtures.greenplumInstance({ name: "Greenplum", state: "provisioning" })
+                this.gpdbInstances.reset([
+                    rspecFixtures.gpdbInstance({ name: "Greenplum", state: "provisioning" })
                 ]);
                 this.view.render();
             });
 
             it("should display the offline/unknown state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
+                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should not display the name should as a link", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).not.toExist();
-                expect(this.view.$(".greenplum_instance li:eq(0) span.name")).toContainText("Greenplum");
+                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).not.toExist();
+                expect(this.view.$(".gpdb_instance li:eq(0) span.name")).toContainText("Greenplum");
             });
         });
 
         describe("when an instance is offline", function() {
             beforeEach(function() {
-                this.greenplumInstances.reset([
-                    rspecFixtures.greenplumInstance({ name: "Greenplum", state: "offline" })
+                this.gpdbInstances.reset([
+                    rspecFixtures.gpdbInstance({ name: "Greenplum", state: "offline" })
                 ]);
                 this.view.render();
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
+                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should display the name as a link", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).toExist();
-                expect(this.view.$(".greenplum_instance li:eq(0) a.name")).toContainText("Greenplum");
+                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).toExist();
+                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).toContainText("Greenplum");
             });
         });
 
         describe("instance:added event", function() {
             beforeEach(function() {
-                this.newInstance = rspecFixtures.greenplumInstance({id: "1234567"});
-                spyOn(this.view.greenplumInstances, "fetchAll");
+                this.newInstance = rspecFixtures.gpdbInstance({id: "1234567"});
+                spyOn(this.view.gpdbInstances, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 spyOn(this.view.gnipInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
-            it("re-fetches the greenplum, hadoop and gnip instances", function() {
-                expect(this.view.greenplumInstances.fetchAll).toHaveBeenCalled();
+            it("re-fetches the gpdb, hadoop and gnip instances", function() {
+                expect(this.view.gpdbInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
             });
 
             it("selects the li with a matching id when fetch completes", function() {
-                this.greenplumInstances.add(this.newInstance);
+                this.gpdbInstances.add(this.newInstance);
                 this.view.render(); // re-renders when fetch completes
 
                 expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
@@ -188,7 +188,7 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe("clicking on a greenplum instance", function() {
+        describe("clicking on a gpdb instance", function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy();
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);

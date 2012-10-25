@@ -1,8 +1,8 @@
 describe("chorus.views.InstanceIndexContentDetails", function() {
     beforeEach(function() {
-        var greenplumInstances = new chorus.collections.InstanceSet([
-            rspecFixtures.greenplumInstance(),
-            rspecFixtures.greenplumInstance()
+        var gpdbInstances = new chorus.collections.GpdbInstanceSet([
+            rspecFixtures.gpdbInstance(),
+            rspecFixtures.gpdbInstance()
         ]);
         var hadoopInstances = new chorus.collections.HadoopInstanceSet([
             rspecFixtures.hadoopInstance(),
@@ -14,7 +14,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         ]);
 
         this.view = new chorus.views.InstanceIndexContentDetails({
-            greenplumInstances : greenplumInstances,
+            gpdbInstances : gpdbInstances,
             hadoopInstances: hadoopInstances,
             gnipInstances: gnipInstances
         });
@@ -27,7 +27,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
 
     describe("when gpInstances and hadoopInstances are loaded", function() {
         beforeEach(function() {
-            this.view.options.greenplumInstances.loaded = true;
+            this.view.options.gpdbInstances.loaded = true;
             this.view.options.hadoopInstances.loaded = true;
             this.view.options.gnipInstances.loaded = true;
             this.view.render();

@@ -12,9 +12,9 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-    context("when a greenplum instance is selected", function() {
+    context("when a gpdb instance is selected", function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.greenplumInstance({name: "Harry's House of Glamour", version: "99.999" });
+            this.instance = rspecFixtures.gpdbInstance({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
@@ -68,7 +68,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
                 expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
                 expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('greenplum_instance');
+                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_instance');
             });
 
             context("when user is an admin or owner of the instance", function() {
@@ -230,10 +230,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".instance_configuration_details")).toContainText("99.999");
                 });
 
-                describe("for existing greenplum instance", function() {
+                describe("for existing gpdb instance", function() {
                     context("and the instance has a shared account", function() {
                         beforeEach(function() {
-                            var instance = rspecFixtures.greenplumInstance({"shared":true});
+                            var instance = rspecFixtures.gpdbInstance({"shared":true});
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
@@ -256,13 +256,13 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 });
 
-                describe("for a new greenplum instance", function() {
+                describe("for a new gpdb instance", function() {
                     beforeEach(function() {
                         this.view.model = this.view.model.set({ size: "1", port: null, host: null });
                         this.view.render();
                     });
 
-                    it("includes greenplum db size information", function() {
+                    it("includes gpdb size information", function() {
                         expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
                     });
 
