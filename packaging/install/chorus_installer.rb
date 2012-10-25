@@ -195,6 +195,7 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
+    FileUtils.ln_sf("#{destination_path}/shared/secret.token", "#{release_path}/config/secret.token")
 
     #Symlink the data paths under shared to the actual data_path directory.  So the app actually
     #goes through two symlinks
@@ -317,15 +318,14 @@ class ChorusInstaller
       create_shared_structure
       copy_config_files
       create_database_config
-      link_shared_files
-    end
 
-    log "Configuring secret key..."
-    configure_secret_key
+      log "Configuring secret key..."
+      configure_secret_key
 
-    unless upgrade_existing?
       log "Configuring secret token..."
       configure_secret_token
+
+      link_shared_files
     end
 
     log "Extracting postgres..." do
@@ -385,24 +385,25 @@ class ChorusInstaller
 
   def configure_secret_key
     key_file = "#{destination_path}/shared/secret.key"
-    unless File.exists?(key_file)
-      passphrase = prompt_for_passphrase
-      if passphrase.nil? || passphrase.strip.empty?
-        passphrase = Random.new.bytes(32)
-      end
-      # only a subset of openssl is available built-in to jruby, so this is the best we could do without including the full jruby-openssl gem
-      secret_key = Base64.strict_encode64(OpenSSL::Digest.new("SHA-256", passphrase).digest)
-      File.open(key_file, 'w') do |f|
-        f.puts secret_key
-      end
+    return if File.exists?(key_file)
+
+    passphrase = prompt_for_passphrase
+    if passphrase.nil? || passphrase.strip.empty?
+      passphrase = Random.new.bytes(32)
+    end
+    # only a subset of openssl is available built-in to jruby, so this is the best we could do without including the full jruby-openssl gem
+    secret_key = Base64.strict_encode64(OpenSSL::Digest.new("SHA-256", passphrase).digest)
+    File.open(key_file, 'w') do |f|
+      f.puts secret_key
     end
   end
 
   def configure_secret_token
-    passphrase = Random.new.bytes(32)
-    readable = OpenSSL::Digest.new("SHA-256", passphrase)
-    File.open("#{release_path}/config/initializers/secret_token.rb", "w") do |file|
-      file.puts "Chorus::Application.config.secret_token = '#{readable}'"
+    token_file = "#{destination_path}/shared/secret.token"
+    return if File.exists?(token_file)
+
+    File.open(token_file, 'w') do |f|
+      f << SecureRandom.hex(64)
     end
   end
 

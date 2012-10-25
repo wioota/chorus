@@ -473,20 +473,34 @@ describe ChorusInstaller do
   end
 
   describe "#configure_secret_token" do
-    let(:filename) { '/usr/local/greenplum-chorus/releases/version1/config/initializers/secret_token.rb' }
-
     before do
-      stub(installer).version { "version1" }
       installer.destination_path = "/usr/local/greenplum-chorus"
-      FileUtils.mkdir_p '/usr/local/greenplum-chorus/releases/version1/config/initializers/'
-      File.open(filename, "w") { |f| f.puts "1234" }
+
+      FileUtils.mkdir_p './chorus_installation/config'
+      FileUtils.mkdir_p './chorus_installation/packaging'
+      FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.yml.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      installer.copy_config_files
     end
 
-    it "should write a file to the correct location" do
-      installer.configure_secret_token
-      new_token = File.read(filename)
+    context "when token is not already present in shared" do
+      it "generates the token and stores it in shared/secret.token" do
+        installer.configure_secret_token
+        File.read('/usr/local/greenplum-chorus/shared/secret.token').strip.should_not be_nil
+      end
+    end
 
-      new_token.should_not == "1234"
+    context "when token is already present" do
+      let(:secret_token) { "its secret" }
+      before do
+        File.open('/usr/local/greenplum-chorus/shared/secret.token', 'w') { |f| f << secret_token }
+      end
+
+      it "does not change the existing token" do
+        installer.configure_secret_token
+        File.read('/usr/local/greenplum-chorus/shared/secret.token').strip.should == secret_token
+      end
     end
   end
 
@@ -541,6 +555,10 @@ describe ChorusInstaller do
 
     it "links the secret.key file" do
       File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/secret.key').should == '/usr/local/greenplum-chorus/shared/secret.key'
+    end
+
+    it "links the secret.token file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/secret.token').should == '/usr/local/greenplum-chorus/shared/secret.token'
     end
 
     it "links tmp" do

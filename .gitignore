@@ -91,3 +91,7 @@ GREENPLUM_IP
 
 # Ignore chorus.yml
 /config/chorus.yml
+
+# Ignore secret keys
+/config/secret.token
+/config/secret.key

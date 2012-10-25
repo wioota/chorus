@@ -1,6 +1,7 @@
 require 'erb'
 require 'yaml'
 require 'active_support/core_ext/hash/deep_merge'
+require 'pathname'
 
 class ChorusConfig
   attr_accessor :config
@@ -12,7 +13,10 @@ class ChorusConfig
     defaults = YAML.load_file(File.join(@root_dir, 'config/chorus.defaults.yml'))
 
     @config = defaults.deep_merge(app_config)
-    @config['secret_key'] = File.read(File.join(@root_dir, 'config/secret.key')).strip
+
+    secret_key_file = File.join(@root_dir, 'config/secret.key')
+    abort "No config/secret.key file found.  Run rake development:init or rake development:generate_secret_key" unless File.exists?(secret_key_file)
+    @config['secret_key'] = File.read(secret_key_file).strip
   end
 
   def [](key_string)

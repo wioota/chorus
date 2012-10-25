@@ -1,24 +1,31 @@
 require "spec_helper"
+require 'fakefs/spec_helpers'
 
 describe ChorusConfig do
+  include FakeFS::SpecHelpers
+
   let(:config) { ChorusConfig.new }
   before do
-    stub(YAML).load_file(Rails.root.join('config/chorus.yml').to_s) do
-      {
+    FileUtils.mkdir_p(Rails.root.join('config').to_s)
+    File.open(Rails.root.join('config/chorus.yml').to_s, 'w') do |file|
+      new_config = {
           'parent' => {'child' => 'yes'},
           'simple' => 'no',
       }
+      YAML.dump(new_config, file)
     end
-    stub(YAML).load_file(Rails.root.join('config/chorus.defaults.yml').to_s) do
-      {
+
+    File.open(Rails.root.join('config/chorus.defaults.yml').to_s, 'w') do |file|
+      new_config = {
           'simple' => 'yes!',
           'a_default' => 'maybe'
       }
+      YAML.dump(new_config, file)
     end
-    stub(File).read(Rails.root.join('config/secret.key').to_s) do
-      "secret_key_goes_here\n"
+
+    File.open(Rails.root.join('config/secret.key').to_s, 'w') do |file|
+      file << "secret_key_goes_here\n"
     end
-    stub(File).exists?(Rails.root.join('config/chorus.yml').to_s) { true }
   end
 
   it "reads the chorus.yml file" do
@@ -53,14 +60,14 @@ describe ChorusConfig do
     end
 
     it 'returns true if the tableau url/port and username/password are configured' do
-      config.config = { 'tableau' =>  tableau_config }
+      config.config = {'tableau' => tableau_config}
       config.tableau_configured?.should be_true
     end
 
     it 'returns false if any of the keys are missing' do
       tableau_config.each do |key, _value|
         invalid_config = tableau_config.reject { |attr, _value| attr == key }
-        config.config = { 'tableau' => invalid_config }
+        config.config = {'tableau' => invalid_config}
         config.should_not be_tableau_configured
       end
     end
@@ -74,14 +81,14 @@ describe ChorusConfig do
     end
 
     it 'returns true if the tableau url/port and username/password are configured' do
-      config.config = { 'kaggle' =>  kaggle_config }
+      config.config = {'kaggle' => kaggle_config}
       config.kaggle_configured?.should be_true
     end
 
     it 'returns false if any of the keys are missing' do
       kaggle_config.each do |key, _value|
         invalid_config = kaggle_config.reject { |attr, _value| attr == key }
-        config.config = { 'kaggle' => invalid_config }
+        config.config = {'kaggle' => invalid_config}
         config.should_not be_kaggle_configured
       end
     end
