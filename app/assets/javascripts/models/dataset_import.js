@@ -79,8 +79,8 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     importSource: function() {
         return new chorus.models.WorkspaceDataset({
-            id: this.get("sourceId"),
-            objectName: this.get("sourceTable"),
+            id: this.get("executionInfo").sourceId,
+            objectName: this.get("executionInfo").sourceTable,
             workspaceId: this.get("workspaceId")
         });
     },

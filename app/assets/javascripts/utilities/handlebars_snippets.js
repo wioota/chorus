@@ -448,7 +448,10 @@
         },
 
         importFrequencyForModel: function(model) {
-            return model.importFrequency && model.importFrequency() && t("import.frequency." + model.importFrequency().toLowerCase())
+            return model.getImport() && model.getImport().thisDatasetIsSource()
+                && model.importFrequency
+                && model.importFrequency()
+                && t("import.frequency." + model.importFrequency().toLowerCase())
         },
 
         safeT: function() {

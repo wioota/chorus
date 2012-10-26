@@ -265,26 +265,28 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                xcontext("and the dataset has received an import from a dataset", function() {
+                context("and the dataset has received an import from a dataset", function() {
                     beforeEach(function() {
                         this.import = rspecFixtures.importSchedule({
                             datasetId: this.dataset.id,
-                            workspaceId: this.dataset.workspace().id,
+                            workspaceId: 5,
                             executionInfo: {
                                 startedStamp: "2012-02-29T14:35:38Z",
                                 completedStamp: "2012-02-29T14:35:38Z",
                                 sourceId: this.dataset.id,
-                                sourceTable: "some_source_table"
+                                sourceTable: "some_source_table",
+                                state: "success"
                             },
-                            id: "123"
+                            sourceTable: "some_other_table",
+                            datasetId: "123"
                         });
                         this.server.completeFetchFor(this.dataset.getImport(), this.import);
                     });
 
                     it("has an 'imported xx ago' description", function() {
                         var sourceTable = new chorus.models.WorkspaceDataset({
-                            id: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
-                            workspaceId: this.dataset.get("workspace").id
+                            id: this.dataset.id,
+                            workspaceId: 5
                         });
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
                             timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
@@ -298,15 +300,17 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                context("and the dataset has received an import from a file", function() {
+                xcontext("and the dataset has received an import from a file", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.dataset.getImport(), {
                             executionInfo: {
                                 startedStamp: "2012-02-29T14:35:38Z",
-                                completedStamp: "2012-02-29T14:35:38Z"
+                                completedStamp: "2012-02-29T14:35:38Z",
+                                state: "success",
+                                sourceId: "543"
                             },
-                            id: "123",
-                            sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
+                            datasetId: "123",
+                            sourceId: '543',
                             sourceTable: "some_source_file.csv",
                             sourceType: "upload_file"
                         });
@@ -314,7 +318,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     it("has an 'imported xx ago' description", function() {
                         var sourceTable = new chorus.models.WorkspaceDataset({
-                            id: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
+                            id: this.dataset.get("id"),
                             workspaceId: this.dataset.get("workspace").id
                         });
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {

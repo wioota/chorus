@@ -79,7 +79,6 @@ chorus.models.Dataset = chorus.models.Base.include(
         var importConfig = this.getImport();
 
         return importConfig
-            && importConfig.thisDatasetIsSource()
             && importConfig.isInProgress()
             && importConfig.lastDestination();
     },

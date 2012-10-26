@@ -125,6 +125,124 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     });
                 });
             });
+
+            describe("#lastImport", function() {
+                context("for a source table", function() {
+                    beforeEach(function() {
+                        this.importSchedule = rspecFixtures.importSchedule({
+                            sourceId: '1',
+                            datasetId: '1',
+                            executionInfo: {
+                                completedStamp: Date.parse("Today - 33 days").toJSONString(),
+                                state: "success"
+                            }
+                        });
+                    });
+
+                    describe("unfinished import", function() {
+                        beforeEach(function() {
+                            delete this.importSchedule.attributes.executionInfo.completedStamp;
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+                        it("has inProgressText and lastImport", function() {
+                            expect(presenter.inProgressText()).toMatch("Import into");
+                            expect(presenter.importInProgress()).toBeTruthy();
+                            expect(presenter.importFailed()).toBeFalsy();
+                            expect(presenter.lastImport()).toMatch("Import started");
+
+                        });
+                    });
+
+                    describe("successfully finished import", function() {
+                        beforeEach(function() {
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+
+                        it("has normal lastImport text", function() {
+                            expect(presenter.importInProgress()).toBeFalsy();
+                            expect(presenter.importFailed()).toBeFalsy();
+                            expect(presenter.lastImport()).toMatch("Imported 1 month ago into");
+                        });
+                    });
+
+                    describe("failed import", function() {
+                        beforeEach(function() {
+                            this.importSchedule.attributes.executionInfo.state = "failed";
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+
+                        it("has failed lastImport text", function() {
+                            expect(presenter.importInProgress()).toBeFalsy();
+                            expect(presenter.importFailed()).toBeTruthy();
+                            expect(presenter.lastImport()).toMatch("Import failed 1 month ago into");
+                        });
+                    });
+                });
+
+                context("for a sandbox table", function() {
+                    beforeEach(function() {
+                        this.importSchedule = rspecFixtures.importSchedule({
+                            sourceId: '1',
+                            datasetId: '99',
+                            executionInfo: {
+                                completedStamp: Date.parse("Today - 33 days").toJSONString(),
+                                state: "success"
+                            }
+                        });
+                    });
+
+                    describe("unfinished import", function() {
+                        beforeEach(function() {
+                            delete this.importSchedule.attributes.executionInfo.completedStamp;
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+                        it("has inProgressText and lastImport", function() {
+                            expect(presenter.inProgressText()).toMatch("Import from");
+                            expect(presenter.importInProgress()).toBeTruthy();
+                            expect(presenter.importFailed()).toBeFalsy();
+                            expect(presenter.lastImport()).toMatch("Import started");
+
+                        });
+                    });
+
+                    describe("successfully finished import", function() {
+                        beforeEach(function() {
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+
+                        it("has normal lastImport text", function() {
+                            expect(presenter.importInProgress()).toBeFalsy();
+                            expect(presenter.importFailed()).toBeFalsy();
+                            expect(presenter.lastImport()).toMatch("Imported 1 month ago from");
+                        });
+                    });
+
+                    describe("failed import", function() {
+                        beforeEach(function() {
+                            this.importSchedule.attributes.executionInfo.state = "failed";
+                            spyOn(resource, 'getImport').andReturn(
+                                this.importSchedule
+                            );
+                        });
+
+                        it("has failed lastImport text", function() {
+                            expect(presenter.importInProgress()).toBeFalsy();
+                            expect(presenter.importFailed()).toBeTruthy();
+                            expect(presenter.lastImport()).toMatch("Import failed 1 month ago from");
+                        });
+                    });
+                });
+            })
         });
 
         context("with a workspace table", function() {
