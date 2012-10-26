@@ -12,4 +12,8 @@ class LinkedTableauWorkfile < Workfile
     self
   end
 
+  def self.type_name
+    'Workfile'
+  end
+
 end

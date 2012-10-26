@@ -1,10 +1,11 @@
 (function() {
     var viewConstructorMap = {
-        workfile:       chorus.views.SearchWorkfile,
-        dataset: chorus.views.SearchDataset,
-        chorusView:     chorus.views.SearchDataset,
-        workspace:      chorus.views.SearchWorkspace,
-        attachment:     chorus.views.SearchAttachment
+        workfile:                   chorus.views.SearchWorkfile,
+        linked_tableau_workfile:    chorus.views.SearchWorkfile,
+        dataset:                    chorus.views.SearchDataset,
+        chorusView:                 chorus.views.SearchDataset,
+        workspace:                  chorus.views.SearchWorkspace,
+        attachment:                 chorus.views.SearchAttachment
     };
 
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({
