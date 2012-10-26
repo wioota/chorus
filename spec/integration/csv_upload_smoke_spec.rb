@@ -5,7 +5,7 @@ describe "CSV Uploads", :database_integration do
 
   before do
     run_jobs_synchronously
-    GpdbIntegration.exec_sql_line("DROP TABLE IF EXISTS test_schema.test;")
+    InstanceIntegration.exec_sql_line("DROP TABLE IF EXISTS test_schema.test;")
   end
 
   it "uploads a csv file into a new table" do
