@@ -1,4 +1,5 @@
 require 'legacy_migration_spec_helper'
+require 'fakefs/spec_helpers'
 
 PROPERTIES = <<EOF
 # Enable/disable LDAP
@@ -23,36 +24,37 @@ chorus.ldap.attribute.gn = givenName
 chorus.ldap.attribute.sn = sn
 chorus.ldap.attribute.cn = cn
 chorus.ldap.attribute.mail = mail
-chorus.ldap.attribute.title = title
+chorus.ldap.attribute.title = old title
 
-foo.bar = sna
+ignored = foo
 EOF
 
-EXAMPLE = <<EOF
-some_key_not_present_in_properties_file: baz
+DEFAULTS = <<EOF
+some_key_not_present_in_properties_file = baz
+ldap.attribute.title = new default
 EOF
 
 describe ConfigMigrator, :legacy_migration => true, :type => :legacy_migration do
+  include FakeFS::SpecHelpers
+  let(:defaults_file) { '/defaults.properties' }
+  let(:properties_file) { '/chorus.properties' }
+  let(:output_file) { '/output.properties' }
+
   before do
-    example_file = Tempfile.open('chorus.yaml.example')
-    properties_file = Tempfile.open('chorus.properties')
-    example_file.puts EXAMPLE
-    example_file.flush
-    properties_file.puts PROPERTIES
-    properties_file.flush
+    File.open(defaults_file, 'w') { |f| f << DEFAULTS }
+    File.open(properties_file, 'w') { |f| f << PROPERTIES }
 
     @migrator = ConfigMigrator.new
-    @migrator.output_path = output_file.path
-    @migrator.example_path = example_file.path
-    @migrator.properties_path = properties_file.path
+    @migrator.output_path = output_file
+    @migrator.defaults_path = defaults_file
+    @migrator.properties_path = properties_file
 
     @migrator.migrate
   end
 
-  let(:output_file) { Tempfile.open('chorus.properties') }
-  let(:config) { YAML.load(output_file) }
+  let(:config) { Properties.load_file(output_file) }
 
-  it "includes keys from the example yml file that aren't present in the properties file" do
+  it "defaults to the default properties for keys that arent in the properties file" do
     config["some_key_not_present_in_properties_file"].should == "baz"
   end
 
@@ -60,7 +62,7 @@ describe ConfigMigrator, :legacy_migration => true, :type => :legacy_migration d
     it "should contain all fields converted from chorus.properties" do
       ldap_config = config["ldap"]
 
-      ldap_config["foo.bar"].should_not be_present
+      ldap_config["ignored"].should_not be_present
 
       ldap_config["enable"].should == false
       ldap_config["host"].should == "10.32.88.212"
@@ -73,18 +75,18 @@ describe ConfigMigrator, :legacy_migration => true, :type => :legacy_migration d
       ldap_config["dn_template"].should == "greenplum\\{0}"
 
       ldap_config["attribute"].should == {
-        "uid" => "sAMAccountName",
-        "ou" => "department",
-        "gn" => "givenName",
-        "sn" => "sn",
-        "cn" => "cn",
-        "mail" => "mail",
-        "title" => "title"
+          "uid" => "sAMAccountName",
+          "ou" => "department",
+          "gn" => "givenName",
+          "sn" => "sn",
+          "cn" => "cn",
+          "mail" => "mail",
+          "title" => "old title"
       }
 
       ldap_config["search"].should == {
-        "timeout" => 20000,
-        "size_limit" => 200
+          "timeout" => 20000,
+          "size_limit" => 200
       }
     end
   end

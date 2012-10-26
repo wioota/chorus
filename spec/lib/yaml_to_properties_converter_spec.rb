@@ -1,23 +1,7 @@
 require 'yaml_to_properties_converter'
 
 describe YamlToPropertiesConverter do
-  describe '.write_properties' do
-    let(:hash) { {
-        'namespace' => {'key' => 'value', 'another_key' => 'another_value'},
-        'top_level_key' => 'top_level_value'
-    }}
-
-    it 'returns a list of properties' do
-      YamlToPropertiesConverter.write_properties(hash).should == [
-        'namespace.key= value',
-        'namespace.another_key= another_value',
-        'top_level_key= top_level_value'
-      ]
-    end
-  end
-
   describe 'convert_yml_to_properties' do
-    let(:hash) { Object.new }
     let(:source) { 'spec/lib/fixtures/sample.yml'}
     let(:destination) { 'spec/lib/fixtures/converted.properties'}
 

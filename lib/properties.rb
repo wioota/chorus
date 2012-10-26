@@ -18,7 +18,24 @@ module Properties
     result
   end
 
+  def self.write_file(hash, destination_file_path)
+    list = self.property_list(hash)
+    File.open(destination_file_path, 'w') do |f|
+      list.each { |property| f.print(property, "\n") }
+    end
+  end
+
   private
+  def self.property_list(hash, parents='')
+    hash.map {|key, value|
+      if value.is_a?(Hash)
+        self.property_list(value, parents + "#{key}.")
+      else
+        ["#{parents}#{key}= #{value}"]
+      end
+    }.flatten
+  end
+
   def self.compacted_lines(file_path)
     propertiesString = File.read(file_path)
     lineJoiningRegex = /\\\s*\n/

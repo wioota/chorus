@@ -479,8 +479,8 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      FileUtils.touch './chorus_installation/config/chorus.properties.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
       installer.copy_config_files
     end
 

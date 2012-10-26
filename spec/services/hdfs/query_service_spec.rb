@@ -20,18 +20,18 @@ describe Hdfs::QueryService, :hdfs_integration do
       end
     end
 
-    context "unexisting hadoop server" do
+    context "nonexistent hadoop server" do
       let(:instance) { "garbage" }
       let(:port) { 8888 }
       let(:username) { "pivotal" }
-      let(:unexisting_instance) do
+      let(:nonexistent_instance) do
         HadoopInstance.new :host => instance, :port => port, :username => username
       end
 
       it "raises ApiValidationError and prints to log file" do
         Timecop.freeze(DateTime.now)
         mock(Rails.logger).error("#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{instance}:#{port}")
-        expect { described_class.instance_version(unexisting_instance) }.to raise_error(ApiValidationError) { |error|
+        expect { described_class.instance_version(nonexistent_instance) }.to raise_error(ApiValidationError) { |error|
           error.record.errors.get(:connection).should == [[:generic, { :message => "Unable to determine HDFS server version or unable to reach server at #{instance}:#{port}. Check connection parameters." }]]
         }
         Timecop.return
