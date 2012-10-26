@@ -38,7 +38,7 @@ describe("chorus.views.SearchResultCommentList", function() {
                     }
                 })
             ],
-            tableDescriptions: [
+            tableDescription: [
                 fixtures.searchResultCommentJson({
                     isTableDescription: true,
                     highlightedAttributes: {

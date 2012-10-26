@@ -15,11 +15,11 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
 
     makeCommentList: function() {
         return new chorus.views.SearchResultCommentList({comments: this.getComments(), columns: this.getColumns(),
-            columnDescriptions: this.getColumnDescriptions(), tableDescriptions: this.getTableDescription()});
+            columnDescriptions: this.getColumnDescriptions(), tableDescription: this.getTableDescription()});
     },
 
     getTableDescription: function() {
-        var descriptions = this.model.get("tableDescriptions") || [];
+        var descriptions = this.model.get("tableDescription") || [];
         _.each(descriptions, function(description) { description.isTableDescription = true; });
 
         return descriptions;
