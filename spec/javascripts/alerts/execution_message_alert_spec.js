@@ -5,9 +5,30 @@ describe("chorus.alerts.ExecutionMessage", function() {
         this.alert.render();
     });
 
-    it("has the correct title", function() {
-        expect(this.alert.title).toMatchTranslation("workfile.execution.message.title");
+    context("when executing workfile", function () {
+        beforeEach(function() {
+            this.task = this.task.set({"workfile": {} });
+            this.alert = new chorus.alerts.ExecutionMessage({ model: this.task });
+            this.alert.render();
+        });
+
+        it("has the correct title", function () {
+            expect(this.alert.title).toMatchTranslation("workfile.execution.message.title");
+        });
     });
+
+    context("when executing dataset", function () {
+
+        beforeEach(function() {
+            this.task = this.task.set({"dataset": {}});
+            this.alert = new chorus.alerts.ExecutionMessage({ model: this.task });
+            this.alert.render();
+        })
+            it("has the correct title", function () {
+                expect(this.alert.title).toMatchTranslation("dataset.execution.message.title");
+            });
+
+        });
 
     it("has no secondary text", function() {
         expect(this.alert.text).toBeFalsy();
