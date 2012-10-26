@@ -3,6 +3,7 @@ require 'sunspot'
 
 describe SearchableHtml do
   describe ".searchable_html" do
+    #TODO: Get this working, it's close
     #
     #class TestClass < ActiveRecord::Base
     #  @columns = []
