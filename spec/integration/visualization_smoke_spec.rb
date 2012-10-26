@@ -36,8 +36,13 @@ describe "Visualizations", :database_integration do
         click_link "Show Data Table"
         page.should have_content "Results Console"
         click_link "Hide Data Table"
-        click_button "Close"
+        click_button "Save As..."
       end
+
+      find('a[data-menu-name="save_to_desktop"]').click
+      # We would like to make an assertion about the content-type header or response code,
+      # but Selenium does not support this. Add assertion if we move to different driver.
+      within_modal { click_button "Close" }
     end
   end
 
