@@ -6,7 +6,26 @@ module Events
     include Recent
 
     def self.eager_load_associations
-      [{:attachments => :note}, :workfiles, :comments, :datasets, :actor, :target1, :target2, {:workspace => [:associated_datasets, :owner, {:sandbox => {:database => :gpdb_instance}}]}]
+      [
+          {:attachments => :note},
+          :workfiles,
+          :comments,
+          :datasets,
+          :actor,
+          :target1,
+          :target2,
+          {
+              :workspace => [
+                  :associated_datasets,
+                  :owner,
+                  {
+                      :sandbox => {
+                        :database => :gpdb_instance
+                      }
+                  }
+              ]
+          }
+      ]
     end
 
     self.table_name = :events
