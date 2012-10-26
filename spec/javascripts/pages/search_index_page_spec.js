@@ -49,7 +49,8 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance");
             });
 
-            describe("filtering by result type", function() {
+            describe("" +
+                "", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, "navigate");
                     this.page.$('.default_content_header li[data-type="workspace"] a').click();
