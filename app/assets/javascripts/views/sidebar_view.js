@@ -8,6 +8,11 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
     },
 
+    teardown: function() {
+        $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
+        this._super("teardown")
+    },
+
     template: function() {
         var result = this._super('template', arguments);
         return "<div class='spacer'/>" + result;

@@ -54,6 +54,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     setDataset: function(dataset) {
         this.resource = dataset;
+        this.tabs.statistics && this.tabs.statistics.teardown();
+        this.tabs.activity && this.tabs.activity.teardown();
         if (dataset) {
 
             var activities = dataset.activities();
