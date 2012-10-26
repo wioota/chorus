@@ -61,6 +61,7 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     closeModal:function () {
+        this.teardown();
         $(document).trigger("close.facebox");
     },
 

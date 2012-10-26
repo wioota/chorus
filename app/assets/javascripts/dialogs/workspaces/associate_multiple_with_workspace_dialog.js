@@ -11,7 +11,6 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
     },
 
     submit: function() {
-        this._super("submit", arguments);
         this.$("button.submit").startLoading("actions.associating");
 
         var workspace = this.selectedItem();
@@ -19,15 +18,14 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         datasetSet.reset(this.datasets.models);
 
         this.bindings.add(datasetSet, "saved", this.saved);
-
         datasetSet.save();
     },
 
     saved: function() {
-        this.closeModal();
         chorus.toast("dataset.associate.toast.other", {
             workspaceNameTarget: this.selectedItem().get("name"),
             count: this.datasets.length
         });
+        this.closeModal();
     }
 });
