@@ -816,5 +816,15 @@ describe("chorus.views.visualizations.Axes", function() {
             expect(axes.xAxis.timeType).toBe("date");
             expect(axes.xAxis.timeFormat).toEqual(timeFormat);
         });
+
+        it("has one label for a singular value domain", function() {
+           var axis = new chorus.views.visualizations.YAxis({
+               el: this.el,
+               minValue: 1,
+               maxValue: 1,
+               scaleType: "numeric"
+           });
+           expect(axis.labels().length).toBe(1);
+        });
     });
 });

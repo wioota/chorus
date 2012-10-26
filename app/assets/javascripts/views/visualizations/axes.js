@@ -41,7 +41,9 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
 
     labels: function() {
         if (this.scaleType === "numeric") {
-            return this.scale().ticks(8);
+            var tickArray = this.scale().ticks(8);
+            if (tickArray.length == 0) tickArray = [this.minValue];
+            return tickArray;
         } else if (this.scaleType === "time") {
             if (this.timeType === "datetime") {
                 return this.scale().ticks(4);
