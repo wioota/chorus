@@ -28,7 +28,7 @@ class InsightsController < ApplicationController
 
   def index
     params[:entity_type] ||= 'dashboard'
-    present paginate get_insights
+    present paginate(get_insights), :presenter_options => {:activity_stream => true}
   end
 
   def count
