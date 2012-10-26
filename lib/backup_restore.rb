@@ -1,12 +1,12 @@
 require 'safe_mktmpdir'
 require 'pathname'
 require 'open3'
+require 'tempfile'
 
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_DATA_FILENAME = "database.gz"
-  ASSETS_FILENAME = "assets.tgz"
-  ASSET_PATHS = %w{assets_storage_path}
+  ASSET_PATH = "assets_storage_path"
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
@@ -92,19 +92,17 @@ module BackupRestore
       capture_output "#{ENV['CHORUS_HOME']}/packaging/pg_dump.sh -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
-    def compress_asset_path(path)
-      Dir.chdir config_path(path) do
-        asset_list = Dir.glob asset_path_wildcard
-        asset_string = asset_list.join " "
-        capture_output "tar cz #{asset_string} > #{temp_dir.join path + ".tgz"}",
-                       :error => "Compressing assets failed." unless asset_list.empty?
-      end
-    rescue Errno::ENOENT
-    end
-
     def compress_assets
       log "Compressing assets..."
-      ASSET_PATHS.map { |path| compress_asset_path path }
+      Dir.chdir config_path(ASSET_PATH) do
+        asset_list = Dir.glob asset_path_wildcard
+        return if asset_list.empty?
+
+        asset_string = asset_list.join " "
+        asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+        capture_output "tar czf #{asset_file} #{asset_string}",
+                       :error => "Compressing assets failed."
+      end
     end
 
     def delete_old_backups

@@ -1,138 +1,158 @@
 require 'spec_helper'
-require 'fakefs/spec_helpers'
 require 'timecop'
 
 require 'backup_restore'
 require 'pathname'
 
 describe 'BackupRestore' do
-  include FakeFS::SpecHelpers
-  before do
-    stub(FileUtils).chmod.with(0755,anything) {}
-  end
-
   describe 'Backup' do
     describe ".backup" do
-      before do
-        # stub out system calls
-        any_instance_of(BackupRestore::Backup) do |instance|
-          stub(instance).log.with_any_args
-          stub(instance).dump_database { touch "database.sql.gz" }
-          stub(instance).compress_assets { touch "assets.tgz" }
-          stub(instance).capture_output.with_any_args do |cmd|
-            touch $1 if /tar cf (\S+)/ =~ cmd
-            true
-          end
-        end
-
-        FakeFS::FileSystem.clone Rails.root.join("config")
-        touch Rails.root.join("version_build")
-        FileUtils.mkdir_p File.expand_path(backup_path)
-      end
-
-      let(:backup_path) { Pathname.new "backup_path" }
-      let(:rolling_days) { 3 }
-
-      def run_backup
-
-        Timecop.freeze do
-          BackupRestore.backup backup_path, rolling_days
-          @expected_backup_file = File.expand_path backup_path.join(backup_filename(Time.current))
-        end
-      end
-
-      it "creates the backup directory if it does not exist" do
-        backup_dir = File.expand_path backup_path
-        FileUtils.rm_rf backup_dir
-        Dir.exists?(backup_dir).should be_false
-        run_backup
-        Dir.exists?(backup_dir).should be_true
-      end
-
-      it "creates a backup file with the correct timestamp" do
-        run_backup
-        File.exists?(@expected_backup_file).should be_true
-      end
-
-      it "creates only the backup file and leaves no other trace" do
-        new_files_created_by do
-          run_backup
-        end.should == [@expected_backup_file]
-      end
-
-      it "works even if chorus.properties does not exist" do
-        config = Rails.root.join("config/chorus.properties")
-        FileUtils.rm config if File.exists?(config)
-        expect {
-          run_backup
-        }.to_not raise_error
-      end
-
-      context "when a system command fails" do
-        it "cleans up all the files it created" do
-          any_instance_of(BackupRestore::Backup) do |instance|
-            stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
-          end
-          new_files_created_by do
-            expect {
-              run_backup
-            }.to raise_error("you can't do that!")
-          end.should == []
-        end
-      end
-
-      it "requires a positive integer for the number of rolling days" do
-        expect {
-          BackupRestore.backup backup_path, 0
-        }.to raise_error(/positive integer/)
-      end
-
-      describe "rolling backups: " do
-        let(:old_backup) { backup_path.join backup_filename(old_backup_time) }
-        let(:rolling_days) { nil }
+      context "with a fake chorus installation in a temporary directory" do
+        let(:backup_path) { Pathname.new "backup_path" }
+        let(:rolling_days) { 3 }
+        let(:assets) {["users/asset_file.icon"]}
 
         before do
-          touch old_backup
-          BackupRestore.backup *[backup_path, rolling_days].compact
+          any_instance_of(BackupRestore::Backup) do |instance|
+            stub(instance).log.with_any_args
+          end
         end
 
-        context "when rolling days parameter is provided" do
+        around do |example|
+          # create fake install
+          make_tmp_path("rspec_backup_install") do |chorus_path|
+            @chorus_path = chorus_path
+            populate_fake_chorus_install(chorus_path, :assets => assets)
 
-          let(:rolling_days) { 11 }
+            FileUtils.mkdir_p chorus_path.join(backup_path)
 
-          context "when the old backup was created more than the stated time ago" do
-            let(:old_backup_time) { rolling_days.days.ago - 1.hour }
+            with_rails_root chorus_path do
+              Dir.chdir chorus_path do
+                example.call
+              end
+            end
+          end
+        end
 
-            it "deletes it" do
-              File.exists?(old_backup).should be_false
+        def run_backup
+          Timecop.freeze do
+            Dir.chdir @chorus_path do
+              BackupRestore.backup backup_path, rolling_days
+              @expected_backup_file = @chorus_path.join backup_path, backup_filename(Time.current)
+            end
+          end
+        end
+
+        it "creates the backup directory if it does not exist" do
+          backup_dir = @chorus_path.join backup_path
+          FileUtils.rm_rf backup_dir
+          Dir.exists?(backup_dir).should be_false
+          run_backup
+          Dir.exists?(backup_dir).should be_true
+        end
+
+        it "creates a backup file with the correct timestamp" do
+          run_backup
+          File.exists?(@expected_backup_file).should be_true
+        end
+
+        it "creates only the backup file and leaves no other trace" do
+          new_files_created_by(@chorus_path.join backup_path) do
+            run_backup
+          end.should == [Pathname.new(@expected_backup_file)]
+        end
+
+        it "works even if chorus.properties does not exist" do
+          config = Rails.root.join("config/chorus.properties")
+          FileUtils.rm config if File.exists?(config)
+          expect {
+            run_backup
+          }.to_not raise_error
+        end
+
+        context "when a system command fails" do
+          it "cleans up all the files it created" do
+            any_instance_of(BackupRestore::Backup) do |instance|
+              stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
+            end
+            new_files_created_by(@chorus_path) do
+              expect {
+                run_backup
+              }.to raise_error("you can't do that!")
+            end.should == []
+          end
+        end
+
+        it "requires a positive integer for the number of rolling days" do
+          expect {
+            BackupRestore.backup backup_path, 0
+          }.to raise_error(/positive integer/)
+        end
+
+        it "includes the assets in the backup" do
+          run_backup
+          asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar t`
+          asset_list.split.should include(*assets)
+        end
+
+        context "when there are no assets" do
+          let(:assets) {[]}
+
+          it "doesn't create the assets file" do
+            run_backup
+            File.exists?(@expected_backup_file).should be_true
+            file_list = `tar tf #{@expected_backup_file}`
+            file_list.should_not include("assets_storage_path")
+          end
+        end
+
+        describe "rolling backups: " do
+          let(:old_backup) { @chorus_path.join backup_path.join(backup_filename(old_backup_time)) }
+          let(:rolling_days) { nil }
+
+          before do
+            FileUtils.touch old_backup
+            BackupRestore.backup *[backup_path, rolling_days].compact
+          end
+
+          context "when rolling days parameter is provided" do
+
+            let(:rolling_days) { 11 }
+
+            context "when the old backup was created more than the stated time ago" do
+              let(:old_backup_time) { rolling_days.days.ago - 1.hour }
+
+              it "deletes it" do
+                File.exists?(old_backup).should be_false
+              end
+            end
+
+            context "when old backup was created within stated time" do
+              let(:old_backup_time) { rolling_days.days.ago + 1.hour }
+
+              it "keeps it" do
+                File.exists?(old_backup).should be_true
+              end
             end
           end
 
-          context "when old backup was created within stated time" do
-            let(:old_backup_time) { rolling_days.days.ago + 1.hour }
+          context "when rolling days parameter is not provided" do
 
-            it "keeps it" do
+            let(:rolling_days) { nil }
+            let(:old_backup_time) { 1.year.ago }
+
+            it "does not remove old backups" do
               File.exists?(old_backup).should be_true
             end
-          end
-        end
-
-        context "when rolling days parameter is not provided" do
-
-          let(:rolling_days) { nil }
-          let(:old_backup_time) { 1.year.ago }
-
-          it "does not remove old backups" do
-            File.exists?(old_backup).should be_true
           end
         end
       end
     end
 
-    def new_files_created_by
-      entries_before_block = all_filesystem_entries("/")
+    def new_files_created_by(dir)
+      entries_before_block = all_filesystem_entries(dir)
       yield
-      all_filesystem_entries("/") - entries_before_block
+      all_filesystem_entries(dir) - entries_before_block
     end
 
     def backup_filename(time)
@@ -144,7 +164,6 @@ describe 'BackupRestore' do
     self.use_transactional_fixtures = false
 
     before do
-      FakeFS.deactivate!
       any_instance_of(BackupRestore::Restore) do |instance|
         stub(instance).log.with_any_args
         stub(instance).restore_database
@@ -158,7 +177,8 @@ describe 'BackupRestore' do
       let(:current_version_string) {"0.2.0.0-1d012455"}
       let(:backup_version_string) { current_version_string }
       let(:backup_tar) { backup_path.join "backup.tar" }
-      let(:no_chorus_yml) { false }
+      let(:no_chorus_properties) { false }
+      let(:no_assets_storage_path) { false }
 
       around do |example|
         make_tmp_path("rspec_backup_restore") do |tmp_path|
@@ -166,26 +186,28 @@ describe 'BackupRestore' do
 
           # create a directory to restore to
           Dir.mkdir restore_path
-          populate_fake_chorus_install(restore_path, current_version_string)
+          populate_fake_chorus_install(restore_path, :version => current_version_string)
           FileUtils.rm_f restore_path.join("config/chorus.properties")
 
           # create a fake backup in another directory
           Dir.mkdir backup_path and Dir.chdir backup_path do
             create_version_build(backup_version_string)
             system "echo database | gzip > database.sql.gz"
-            touch "chorus.properties" unless no_chorus_yml
-            system "tar cf #{backup_tar} version_build database.sql.gz"
+            FileUtils.touch "chorus.properties" unless no_chorus_properties
+            FileUtils.touch "sample_asset"
+            system "tar czf assets_storage_path.tgz sample_asset > /dev/null"
+            FileUtils.rm "sample_asset"
+            files = "version_build database.sql.gz"
+            files += " assets_storage_path.tgz" unless no_assets_storage_path
+            system "tar cf #{backup_tar} #{files}"
           end
 
           Dir.chdir restore_path do
-            example.call
+            with_rails_root restore_path do
+              example.call
+            end
           end
         end
-      end
-
-      before do
-        # can't put this in around for some unknown reason
-        stub(Rails).root { restore_path }
       end
 
       it "restores the backed-up data" do
@@ -197,9 +219,17 @@ describe 'BackupRestore' do
       end
 
       context "when chorus.properties does not exist" do
-        let(:no_chorus_yml) { true }
+        let(:no_chorus_properties) { true }
 
         it "works without chorus.properties" do
+          BackupRestore.restore "../backup/backup.tar", true
+        end
+      end
+
+      context "when assets_storage_path.tgz does not exist" do
+        let(:no_assets_storage_path) { true }
+
+        it "works without chorus.yml" do
           BackupRestore.restore "../backup/backup.tar", true
         end
       end
@@ -240,11 +270,6 @@ describe 'BackupRestore' do
       end
     end
   end
-
-  # need this because File.touch doesn't exist in FakeFS
-  def touch(filename)
-    File.open(filename, 'w') {}
-  end
 end
 
 describe "Backup and Restore" do
@@ -261,6 +286,10 @@ describe "Backup and Restore" do
     end
   end
 
+  after do
+    system "rake db:test:prepare"
+  end
+
   around do |example|
     # create fake original and restored install
     make_tmp_path("rspec_backup_restore_original") do |original_path|
@@ -269,14 +298,7 @@ describe "Backup and Restore" do
         @restore_path = restore_path
 
         # populate original directory from development tree
-        populate_fake_chorus_install @original_path
-
-        # create a fake asset in original
-        stub(Rails).root { @original_path }
-        chorus_config = ChorusConfig.new
-        asset_path = Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
-        FileUtils.mkdir_p asset_path.join "users"
-        FileUtils.touch "#{asset_path}/users/asset_file.icon"
+        populate_fake_chorus_install @original_path, :assets => ["users/asset_file.icon"]
 
         # populate restore target with just config directory minus chorus.properties
         populate_fake_chorus_install @restore_path
@@ -284,7 +306,9 @@ describe "Backup and Restore" do
         # remove chorus.properties file from restore dir so we can replace it later
         FileUtils.rm_f @restore_path.join "config/chorus.properties"
 
-        example.call
+        with_rails_root @original_path do
+          example.call
+        end
       end
     end
   end
@@ -322,13 +346,6 @@ describe "Backup and Restore" do
     end
   end
 
-  def with_rails_root(root)
-    original_rails_root = Rails.root
-    stub(Rails).root { Pathname.new root }
-    yield
-  ensure
-    stub(Rails).root { original_rails_root }
-  end
 
   def get_filesystem_entries_at_path(path)
     pathname = Pathname.new(path)
@@ -336,6 +353,17 @@ describe "Backup and Restore" do
       Pathname.new(entry).relative_path_from(pathname).to_s
     end.sort.uniq
   end
+end
+
+def with_rails_root(root)
+  original_chorus_home = ENV['CHORUS_HOME']
+  ENV['CHORUS_HOME'] = root.to_s
+  original_rails_root = Rails.root
+  Rails.application.config.root = Pathname.new root
+  yield
+ensure
+  ENV['CHORUS_HOME'] = original_chorus_home
+  Rails.application.config.root = original_rails_root
 end
 
 def create_version_build(version_string)
@@ -352,13 +380,37 @@ end
 
 def all_filesystem_entries(path)
   path = Pathname.new(path)
-  %w{. **/ **/*}.map do |wildcard|
+  files = %w{. **/ **/*}.map do |wildcard|
     Dir.glob path.join wildcard
   end.flatten.sort.uniq
+  files.map {|f| Pathname.new(f).realpath}
 end
 
-def populate_fake_chorus_install(install_path, version = "0.2.0.0-1d012455")
-  FileUtils.cp_r Rails.root.join("config"), install_path
+def populate_fake_chorus_install(install_path, options = {})
+  version = options[:version] || "0.2.0.0-1d012455"
+  assets = options[:assets] || []
+
+  %w{config}.each do |dir|
+    FileUtils.cp_r Rails.root.join(dir), install_path
+  end
+
+  %w{packaging postgres}.each do |dir|
+    FileUtils.ln_s Rails.root.join(dir), install_path.join(dir)
+  end
+
+  # create a fake asset in original
+  with_rails_root(install_path) do
+    chorus_config = ChorusConfig.new
+    asset_path = Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
+
+    FileUtils.mkdir_p asset_path
+
+    assets.each do |asset|
+      FileUtils.mkdir_p asset_path.join(File.dirname(asset))
+      FileUtils.touch asset_path.join(asset)
+    end
+  end
+
   Dir.chdir install_path do
     create_version_build(version)
   end
