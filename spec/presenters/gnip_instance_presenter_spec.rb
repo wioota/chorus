@@ -23,5 +23,7 @@ describe GnipInstancePresenter, :type => :view do
     it "should not present the password" do
       hash.should_not have_key(:password)
     end
+
+    it_behaves_like "activity stream instance presenter"
   end
 end

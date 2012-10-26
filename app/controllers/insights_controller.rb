@@ -44,7 +44,7 @@ class InsightsController < ApplicationController
     insight_query = Events::Base.where(insight: true).order("events.id DESC")
     insight_query = insight_query.visible_to(current_user) unless current_user.admin?
     insight_query = insight_query.where(workspace_id: params[:workspace_id]) if params[:entity_type] == "workspace"
-    insight_query = insight_query.includes(Events::Base.eager_load_associations)
+    insight_query = insight_query.includes(Events::Base.activity_stream_eager_load_associations)
     insight_query
   end
 

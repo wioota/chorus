@@ -6,7 +6,6 @@ class GpdbInstancePresenter < Presenter
       :host => h(model.host),
       :port => model.port,
       :id => model.id,
-      :owner => present(model.owner),
       :shared => model.shared,
       :state => model.state,
       :provision_type => model.provision_type,
@@ -15,10 +14,20 @@ class GpdbInstancePresenter < Presenter
       :instance_provider => model.instance_provider,
       :version => model.version,
       :entity_type => 'gpdb_instance'
-    }
+    }.merge(owner_hash)
   end
 
   def complete_json?
-    true
+    !rendering_activities?
+  end
+
+  private
+
+  def owner_hash
+    if rendering_activities?
+      {}
+    else
+      {:owner => present(model.owner)}
+    end
   end
 end

@@ -5,26 +5,17 @@ module Events
     include SoftDelete
     include Recent
 
-    def self.eager_load_associations
+    def self.activity_stream_eager_load_associations
       [
           {:attachments => :note},
-          :workfiles,
-          :comments,
+          {:workfiles => {:latest_workfile_version => :workfile}},
+          {:comments => :author},
           :datasets,
           :actor,
+          :promoted_by,
           :target1,
           :target2,
-          {
-              :workspace => [
-                  :associated_datasets,
-                  :owner,
-                  {
-                      :sandbox => {
-                        :database => :gpdb_instance
-                      }
-                  }
-              ]
-          }
+          :workspace
       ]
     end
 
@@ -49,6 +40,7 @@ module Events
     has_many :workfiles, :through => :notes_workfiles
     has_many :datasets_notes, :foreign_key => 'note_id'
     has_many :datasets, :through => :datasets_notes
+    belongs_to :promoted_by, :class_name => 'User'
 
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true

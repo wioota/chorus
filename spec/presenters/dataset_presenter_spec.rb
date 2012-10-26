@@ -53,6 +53,13 @@ describe DatasetPresenter, :type => :view do
         hash[:schema][:id].should == schema.id
         hash[:schema].keys.size.should == 1
       end
+
+      it "renders empty/false value for mutiple keys" do
+        hash[:frequency].should == ""
+        hash[:tableau_workbooks].should == []
+        hash[:associated_workspaces].should == []
+        hash[:has_credentials].should == false
+      end
     end
 
     context "for a sandbox table" do

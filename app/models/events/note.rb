@@ -6,7 +6,6 @@ module Events
     include SearchableHtml
 
     validates_presence_of :actor_id
-    belongs_to :promoted_by, :class_name => 'User'
 
     searchable_html :body
     searchable do

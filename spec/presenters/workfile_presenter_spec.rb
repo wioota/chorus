@@ -68,6 +68,15 @@ describe WorkfilePresenter, :type => :view do
 
       json[:file_name].should_not include '"'
     end
+
+    context "for activity stream" do
+      let(:options) { {:activity_stream => true} }
+
+      it "should not include owner or draft status" do
+        hash[:owner].should be_nil
+        hash[:has_draft].should be_nil
+      end
+    end
   end
 
   describe "complete_json?" do
@@ -78,9 +87,20 @@ describe WorkfilePresenter, :type => :view do
     end
 
     context "when including execution schema" do
-      let(:options) { {:include_execution_schema => true} }
-      it "is true" do
-        presenter.complete_json?.should be_true
+      let(:options) { {:include_execution_schema => true, :activity_stream => activity_stream} }
+
+      context "when rendering activity stream" do
+        let(:activity_stream) { true }
+        it "should be false" do
+          presenter.should_not be_complete_json
+        end
+      end
+
+      context "when not rendering for activity stream" do
+        let(:activity_stream) { false }
+        it "is true" do
+          presenter.complete_json?.should be_true
+        end
       end
     end
   end

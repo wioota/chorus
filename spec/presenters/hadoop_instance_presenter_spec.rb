@@ -32,6 +32,7 @@ describe HadoopInstancePresenter, :type => :view do
       owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
+    it_behaves_like "activity stream instance presenter"
     it_behaves_like "sanitized presenter", :hadoop_instance, :name
     it_behaves_like "sanitized presenter", :hadoop_instance, :host
   end

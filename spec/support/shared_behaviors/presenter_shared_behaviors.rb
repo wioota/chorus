@@ -44,7 +44,7 @@ shared_examples "dataset presenter" do |dataset_factory_name|
   end
 
   it "checks if the user is allowed to access" do
-    hash[:hasCredentials].should_not be_nil
+    hash[:has_credentials].should_not be_nil
   end
 
   context "when the 'workspace' option is not passed" do
@@ -67,4 +67,14 @@ shared_examples "dataset presenter" do |dataset_factory_name|
   end
 
   it_behaves_like "sanitized presenter", dataset_factory_name, :name, :object_name
+end
+
+shared_examples "activity stream instance presenter" do
+  context "For activity Stream" do
+    let(:options) { {:activity_stream => true} }
+
+    it "should not present the owner" do
+      hash[:owner].should be_nil
+    end
+  end
 end

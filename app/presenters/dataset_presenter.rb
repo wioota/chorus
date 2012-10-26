@@ -5,9 +5,9 @@ class DatasetPresenter < Presenter
       :id => model.id,
       :type => thetype,
       :object_name => h(model.name),
-      :schema => schema_hash,
-      :hasCredentials => model.accessible_to(current_user)
+      :schema => schema_hash
     }.merge(workspace_hash).
+      merge(credentials_hash).
       merge(associated_workspaces_hash).
       merge(frequency).
       merge(tableau_workbooks_hash)
@@ -35,8 +35,14 @@ class DatasetPresenter < Presenter
     options[:workspace] ? {:workspace => present(options[:workspace], @options)} : {}
   end
 
+  def credentials_hash
+    {
+        :has_credentials => rendering_activities? ? false : model.accessible_to(current_user)
+    }
+  end
+
   def frequency
-    if options[:workspace] && options[:workspace].id
+    if !rendering_activities? && options[:workspace] && options[:workspace].id
       import_schedule = model.import_schedules.where("workspace_id = #{options[:workspace].id}")
       {:frequency => import_schedule.first ? import_schedule.first.frequency : ""}
     else
