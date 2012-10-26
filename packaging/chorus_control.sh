@@ -120,7 +120,7 @@ function backup () {
   fi
 
   echo "Backing up chorus data..."
-  run_in_root_dir_with_postgres "rake backup:create[$BACKUP_DIR,$ROLLING_DAYS]"
+  run_in_root_dir_with_postgres "$RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]"
 }
 
 function restore () {
@@ -142,7 +142,7 @@ function restore () {
   BACKUP_ABSOLUTE_FILENAME="$BACKUP_ABSOLUTE_DIR/"`basename $BACKUP_FILENAME`
 
   echo "Restoring chorus data..."
-  run_in_root_dir_with_postgres "rake backup:restore[$BACKUP_ABSOLUTE_FILENAME] --trace"
+  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME] --trace"
 }
 
 function run_in_root_dir_with_postgres () {
@@ -153,7 +153,7 @@ function run_in_root_dir_with_postgres () {
       $bin/start-postgres.sh
   fi
 
-  ${@}
+  RAILS_ENV=$RAILS_ENV CHORUS_HOME=$CHORUS_HOME ${@}
 
   if [ -n "$postgres_started" ]; then
       $bin/stop-postgres.sh

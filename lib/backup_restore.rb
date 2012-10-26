@@ -89,7 +89,7 @@ module BackupRestore
     def dump_database
       log "Dumping database contents..."
 
-      capture_output "pg_dump -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
+      capture_output "#{ENV['CHORUS_HOME']}/packaging/pg_dump.sh -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
     def compress_asset_path(path)
@@ -225,7 +225,7 @@ PROMPT
     def restore_database
       log "Restoring database..."
       capture_output "dropdb -p #{database_port} #{database_name}", :error => "Existing database could not be dropped."
-      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | pg_restore -C -p #{database_port} -d postgres", :error => "Could not restore database."
+      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/packaging/pg_restore.sh -C -p #{database_port} -d postgres", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)
