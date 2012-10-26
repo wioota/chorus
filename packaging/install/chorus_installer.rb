@@ -166,6 +166,7 @@ class ChorusInstaller
     FileUtils.mkdir_p("#{destination_path}/shared/tmp/pids")
     FileUtils.mkdir_p("#{destination_path}/shared/solr/data")
     FileUtils.mkdir_p("#{destination_path}/shared/log")
+    FileUtils.mkdir_p("#{destination_path}/shared/log/nginx")
     FileUtils.mkdir_p("#{destination_path}/shared/system")
   end
 
@@ -217,6 +218,7 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")
+    FileUtils.ln_sf("#{destination_path}/shared/log/nginx", "#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/system", "#{release_path}/system")
   end
 

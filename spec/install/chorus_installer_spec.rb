@@ -539,6 +539,8 @@ describe ChorusInstaller do
       installer.destination_path = destination_path
       installer.data_path = data_path
       stub_version
+      FileUtils.mkdir_p '/usr/local/greenplum-chorus/releases/2.2.0.0/vendor/nginx/nginx_dist/nginx_data'
+
       installer.link_shared_files
     end
 
@@ -587,6 +589,10 @@ describe ChorusInstaller do
     it "links log" do
       File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/log').should == '/usr/local/greenplum-chorus/shared/log'
       File.readlink('/usr/local/greenplum-chorus/shared/log').should == '/data/chorus/log'
+    end
+
+    it "links the nginx logs" do
+      File.readlink('/usr/local/greenplum-chorus/shared/log/nginx').should == '/data/chorus/vendor/nginx/nginx_dist/nginx_data/logs'
     end
 
     shared_examples "not link the data paths" do
