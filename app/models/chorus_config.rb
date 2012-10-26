@@ -1,7 +1,7 @@
 require 'erb'
 require 'active_support/core_ext/hash/deep_merge'
 require 'pathname'
-require 'lib/properties'
+require_relative '../../lib/properties'
 
 class ChorusConfig
   attr_accessor :config
