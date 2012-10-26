@@ -9,6 +9,7 @@ class SvgToPng
   def initialize(svg_content)
     transcoder_class = org.apache.batik.transcoder.image.PNGTranscoder
 
+    svg_content.gsub!(/&([^#])/, "&#038;#{$1}") if svg_content
     input = org.apache.batik.transcoder.TranscoderInput.new(org.jruby.util.IOInputStream.new(StringIO.new(svg_content)))
 
     ostream = java.io.ByteArrayOutputStream.new
@@ -19,7 +20,7 @@ class SvgToPng
     transcoder.addTranscodingHint(transcoder_class::KEY_USER_STYLESHEET_URI, "file://" + Rails.root.join("public/assets/visualizations.css").to_s)
     transcoder.transcode(input, output)
     @binary_data = String.from_java_bytes(ostream.to_byte_array)
-  rescue TypeError, org.apache.batik.transcoder.TranscoderException
+  rescue TypeError, org.apache.batik.transcoder.TranscoderException => e
     raise InvalidSvgData
   end
 
