@@ -54,7 +54,7 @@ RSpec.configure do |config|
   end
 
   unless Chorus::Application.config.chorus['kaggle'] && Chorus::Application.config.chorus['kaggle']['api_key']
-    warn "No Kaggle API key detected in chorus.yml.  Skipping Kaggle API tests.  See the project wiki for more information on running tests"
+    warn "No Kaggle API key detected in chorus.properties.  Skipping Kaggle API tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :kaggle_api => true
   end
 

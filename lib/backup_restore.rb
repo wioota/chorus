@@ -35,7 +35,7 @@ module BackupRestore
     end
 
     def config_path(name)
-      raise "Could not find path for ''#{name}' in chorus.yml" unless chorus_config[name]
+      raise "Could not find path for ''#{name}' in chorus.properties" unless chorus_config[name]
       chorus_config[name].gsub ":rails_root", Rails.root.to_s
     end
 
@@ -126,7 +126,7 @@ module BackupRestore
     end
 
     def package_backup
-      %w{version_build config/chorus.yml}.map {|f|Rails.root.join f}.each do |file|
+      %w{version_build config/chorus.properties}.map {|f|Rails.root.join f}.each do |file|
         FileUtils.cp file, "." if File.exists?(file)
       end
 
@@ -162,7 +162,7 @@ module BackupRestore
 
             compare_versions(backup_version, current_version)
 
-            FileUtils.cp "chorus.yml", Rails.root.join("config/chorus.yml") if File.exists?("chorus.yml")
+            FileUtils.cp "chorus.properties", Rails.root.join("config/chorus.properties") if File.exists?("chorus.properties")
             self.chorus_config = ChorusConfig.new
 
             restore_assets

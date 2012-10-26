@@ -49,7 +49,7 @@ describe ConfigMigrator, :legacy_migration => true, :type => :legacy_migration d
     @migrator.migrate
   end
 
-  let(:output_file) { Tempfile.open('chorus.yml') }
+  let(:output_file) { Tempfile.open('chorus.properties') }
   let(:config) { YAML.load(output_file) }
 
   it "includes keys from the example yml file that aren't present in the properties file" do

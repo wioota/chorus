@@ -11,6 +11,6 @@ bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 mkdir -p tmp/pids
 rm tmp/fixture_builder*.yml
 
-cp config/chorus.yml.example config/chorus.yml
+cp config/chorus.properties.example config/chorus.properties
 
 b/rake development:generate_secret_token development:generate_secret_key db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"

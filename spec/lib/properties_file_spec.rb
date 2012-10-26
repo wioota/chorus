@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PropertiesFile do
-  let(:properties_file) {PropertiesFile.read("#{::Rails.root}/spec/fixtures/chorus.properties")}
+  let(:properties_file) {PropertiesFile.read("#{::Rails.root}/spec/lib/fixtures/chorus21.properties")}
 
   it "should create a Hash" do
     properties_file.should be_instance_of Hash

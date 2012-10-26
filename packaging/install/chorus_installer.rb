@@ -174,9 +174,9 @@ class ChorusInstaller
     unless File.exists? "#{destination_path}/shared/database.yml"
       FileUtils.cp("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
     end
-    FileUtils.cp("#{chorus_installation_path}/config/chorus.yml.example", "#{destination_path}/shared/chorus.yml.example")
-    unless File.exists? "#{destination_path}/shared/chorus.yml"
-      FileUtils.cp("#{chorus_installation_path}/config/chorus.defaults.yml", "#{destination_path}/shared/chorus.yml")
+    FileUtils.cp("#{chorus_installation_path}/config/chorus.properties.example", "#{destination_path}/shared/chorus.properties.example")
+    unless File.exists? "#{destination_path}/shared/chorus.properties"
+      FileUtils.cp("#{chorus_installation_path}/config/chorus.defaults.properties", "#{destination_path}/shared/chorus.properties")
     end
   end
 
@@ -192,7 +192,7 @@ class ChorusInstaller
   end
 
   def link_shared_files
-    FileUtils.ln_sf("#{destination_path}/shared/chorus.yml", "#{release_path}/config/chorus.yml")
+    FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
     FileUtils.ln_sf("#{destination_path}/shared/secret.token", "#{release_path}/config/secret.token")
@@ -409,7 +409,7 @@ class ChorusInstaller
 
   def configure_file_storage_directory
     return if upgrade_existing?
-    chorus_config_file = "#{@destination_path}/shared/chorus.yml"
+    chorus_config_file = "#{@destination_path}/shared/chorus.properties"
     config = YAML.load_file(chorus_config_file)
 
     default_path = "#{@destination_path}/shared"

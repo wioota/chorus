@@ -7,20 +7,20 @@ describe ChorusConfig do
   let(:config) { ChorusConfig.new }
   before do
     FileUtils.mkdir_p(Rails.root.join('config').to_s)
-    File.open(Rails.root.join('config/chorus.yml').to_s, 'w') do |file|
-      new_config = {
-          'parent' => {'child' => 'yes'},
-          'simple' => 'no',
-      }
-      YAML.dump(new_config, file)
+    File.open(Rails.root.join('config/chorus.properties').to_s, 'w') do |file|
+      new_config = <<-EOF
+        parent.child=yes
+        simple=no
+      EOF
+      file << new_config
     end
 
-    File.open(Rails.root.join('config/chorus.defaults.yml').to_s, 'w') do |file|
-      new_config = {
-          'simple' => 'yes!',
-          'a_default' => 'maybe'
-      }
-      YAML.dump(new_config, file)
+    File.open(Rails.root.join('config/chorus.defaults.properties').to_s, 'w') do |file|
+      new_config = <<-EOF
+        simple= yes!
+        a_default= maybe
+      EOF
+      file << new_config
     end
 
     File.open(Rails.root.join('config/secret.key').to_s, 'w') do |file|
@@ -28,7 +28,7 @@ describe ChorusConfig do
     end
   end
 
-  it "reads the chorus.yml file" do
+  it "reads the chorus.properties file" do
     config['simple'].should == 'no'
   end
 
@@ -41,7 +41,7 @@ describe ChorusConfig do
     config['parent.child'].should == 'yes'
   end
 
-  it "falls back on values from chorus.defaults.yml" do
+  it "falls back on values from chorus.defaults.properties" do
     config['a_default'].should == 'maybe'
   end
 

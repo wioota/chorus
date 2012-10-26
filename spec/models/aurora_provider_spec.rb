@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AuroraProvider do
-  describe(".create_from_aurora_service") do
+  describe ".create_from_aurora_service" do
     before do
       @previous_config = Chorus::Application.config.chorus
     end
@@ -14,7 +14,7 @@ describe AuroraProvider do
       before do
         mock(Aurora::JavaModules::AuroraService).get_instance(anything) { Object.new }
 
-        aurora_config = YAML.load_file(Rails.root.join('config', 'chorus.yml.example'))['aurora']
+        aurora_config = Properties.load_file(Rails.root.join('config', 'chorus.properties.example'))['aurora']
         Chorus::Application.config.chorus = {'aurora' => aurora_config}
       end
 

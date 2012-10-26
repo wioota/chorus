@@ -1,7 +1,7 @@
 require 'erb'
-require 'yaml'
 require 'active_support/core_ext/hash/deep_merge'
 require 'pathname'
+require 'lib/properties'
 
 class ChorusConfig
   attr_accessor :config
@@ -9,8 +9,8 @@ class ChorusConfig
   def initialize(root_dir=nil)
     set_root_dir(root_dir)
     app_config = {}
-    app_config = YAML.load_file(config_file_path) if File.exists?(config_file_path)
-    defaults = YAML.load_file(File.join(@root_dir, 'config/chorus.defaults.yml'))
+    app_config = Properties.load_file(config_file_path) if File.exists?(config_file_path)
+    defaults = Properties.load_file(File.join(@root_dir, 'config/chorus.defaults.properties'))
 
     @config = defaults.deep_merge(app_config)
 
@@ -48,7 +48,7 @@ class ChorusConfig
 
   def self.config_file_path(root_dir=nil)
     root_dir = Rails.root unless root_dir
-    File.join root_dir, 'config/chorus.yml'
+    File.join root_dir, 'config/chorus.properties'
   end
 
   def config_file_path

@@ -60,8 +60,8 @@ describe 'BackupRestore' do
         end.should == [@expected_backup_file]
       end
 
-      it "works even if chorus.yml does not exist" do
-        config = Rails.root.join("config/chorus.yml")
+      it "works even if chorus.properties does not exist" do
+        config = Rails.root.join("config/chorus.properties")
         FileUtils.rm config if File.exists?(config)
         expect {
           run_backup
@@ -167,13 +167,13 @@ describe 'BackupRestore' do
           # create a directory to restore to
           Dir.mkdir restore_path
           populate_fake_chorus_install(restore_path, current_version_string)
-          FileUtils.rm_f restore_path.join("config/chorus.yml")
+          FileUtils.rm_f restore_path.join("config/chorus.properties")
 
           # create a fake backup in another directory
           Dir.mkdir backup_path and Dir.chdir backup_path do
             create_version_build(backup_version_string)
             system "echo database | gzip > database.sql.gz"
-            touch "chorus.yml" unless no_chorus_yml
+            touch "chorus.properties" unless no_chorus_yml
             system "tar cf #{backup_tar} version_build database.sql.gz"
           end
 
@@ -196,10 +196,10 @@ describe 'BackupRestore' do
         BackupRestore.restore "../backup/backup.tar", true
       end
 
-      context "when chorus.yml does not exist" do
+      context "when chorus.properties does not exist" do
         let(:no_chorus_yml) { true }
 
-        it "works without chorus.yml" do
+        it "works without chorus.properties" do
           BackupRestore.restore "../backup/backup.tar", true
         end
       end
@@ -278,11 +278,11 @@ describe "Backup and Restore" do
         FileUtils.mkdir_p asset_path.join "users"
         FileUtils.touch "#{asset_path}/users/asset_file.icon"
 
-        # populate restore target with just config directory minus chorus.yml
+        # populate restore target with just config directory minus chorus.properties
         populate_fake_chorus_install @restore_path
 
-        # remove chorus.yml file from restore dir so we can replace it later
-        FileUtils.rm_f @restore_path.join "config/chorus.yml"
+        # remove chorus.properties file from restore dir so we can replace it later
+        FileUtils.rm_f @restore_path.join "config/chorus.properties"
 
         example.call
       end

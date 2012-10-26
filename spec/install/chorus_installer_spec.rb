@@ -364,36 +364,36 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      FileUtils.touch './chorus_installation/config/chorus.properties.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
     end
 
-    it "should create chorus.yml.example in shared path" do
-      File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml.example').should be_false
+    it "should create chorus.properties.example in shared path" do
+      File.exists?('/usr/local/greenplum-chorus/shared/chorus.properties.example').should be_false
       installer.copy_config_files
 
-      File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml.example').should be_true
+      File.exists?('/usr/local/greenplum-chorus/shared/chorus.properties.example').should be_true
     end
 
-    context "chorus.yml" do
-      context "when chorus.yml doesn't exist in shared path" do
-        it "creates chorus.yml file in shared path" do
-          File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml').should be_false
+    context "chorus.properties" do
+      context "when chorus.properties doesn't exist in shared path" do
+        it "creates chorus.properties file in shared path" do
+          File.exists?('/usr/local/greenplum-chorus/shared/chorus.properties').should be_false
           installer.copy_config_files
 
-          File.exists?('/usr/local/greenplum-chorus/shared/chorus.yml').should be_true
+          File.exists?('/usr/local/greenplum-chorus/shared/chorus.properties').should be_true
         end
       end
 
-      context "when chorus.yml file already exists in the shared path" do
+      context "when chorus.properties file already exists in the shared path" do
         before do
           FileUtils.mkdir_p('/usr/local/greenplum-chorus/shared')
-          File.open('/usr/local/greenplum-chorus/shared/chorus.yml', 'w') { |f| f.puts "some yaml stuff" }
+          File.open('/usr/local/greenplum-chorus/shared/chorus.properties', 'w') { |f| f.puts "some yaml stuff" }
         end
 
-        it "should not overwrite existing chorus.yml" do
+        it "should not overwrite existing chorus.properties" do
           installer.copy_config_files
-          File.read('/usr/local/greenplum-chorus/shared/chorus.yml').strip.should == "some yaml stuff"
+          File.read('/usr/local/greenplum-chorus/shared/chorus.properties').strip.should == "some yaml stuff"
         end
       end
     end
@@ -427,8 +427,8 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.yml'
+      FileUtils.touch './chorus_installation/config/chorus.properties.example'
+      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
       installer.copy_config_files
     end
 
@@ -545,8 +545,8 @@ describe ChorusInstaller do
     let(:data_path) { "/data/chorus" }
     let(:destination_path) { "/usr/local/greenplum-chorus" }
 
-    it "links the chorus.yml file" do
-      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/chorus.yml').should == '/usr/local/greenplum-chorus/shared/chorus.yml'
+    it "links the chorus.properties file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/chorus.properties').should == '/usr/local/greenplum-chorus/shared/chorus.properties'
     end
 
     it "links the database.yml file" do
