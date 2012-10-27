@@ -1,5 +1,5 @@
-require 'lib/properties'
-require 'YAML'
+require 'properties'
+require 'yaml'
 
 module YamlToPropertiesConverter
   def self.convert_yml_to_properties(source_path, destination_path)
