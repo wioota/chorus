@@ -3,10 +3,10 @@ describe("chorus.PageEvents", function() {
         beforeEach(function() {
             chorus.PageEvents.reset();
             this.subscriber1 = new chorus.models.Base();
-            this.subscriber1.method = jasmine.createSpy();
+            this.subscriber1.method = jasmine.createSpy("method1");
 
             this.subscriber2 = new chorus.models.Base();
-            this.subscriber2.method = jasmine.createSpy();
+            this.subscriber2.method = jasmine.createSpy("method2");
         });
 
         it("removes all subscriptions", function() {
@@ -36,18 +36,42 @@ describe("chorus.PageEvents", function() {
             expect(this.subscriber2.method.mostRecentCall.object).toBe(this.subscriber2);
         });
 
-        it("unsubscribes single events correctly", function() {
-            chorus.PageEvents.subscribe("foo", this.subscriber1.method, this.subscriber1);
-            var handle = chorus.PageEvents.subscribe("foo", this.subscriber2.method, this.subscriber2);
-            chorus.PageEvents.unsubscribe(handle);
-
+        it("won't bind the same callback twice if given an id", function() {
+            chorus.PageEvents.subscribe("foo", this.subscriber1.method, this.subscriber1, "fooSubscribe");
+            chorus.PageEvents.subscribe("foo", this.subscriber1.method, this.subscriber1, "fooSubscribe");
             chorus.PageEvents.broadcast("foo");
-            expect(this.subscriber1.method).toHaveBeenCalled();
-            expect(this.subscriber2.method).not.toHaveBeenCalled();
-            expect(this.subscriber1.method.mostRecentCall.object).toBe(this.subscriber1);
+            expect(this.subscriber1.method.callCount).toBe(1);
+        });
 
-            // subscriptionHandles is not intended for public consumption
-            expect(_.keys(chorus.PageEvents.subscriptionHandles).length).toBe(1);
+        context("#unsubscribe", function() {
+            beforeEach(function() {
+                chorus.PageEvents.subscribe("foo", this.subscriber1.method, this.subscriber1, "otherId");
+                this.handle = chorus.PageEvents.subscribe("foo", this.subscriber2.method, this.subscriber2, "fooSubscribe");
+            });
+            it("works correctly on passing an id", function() {
+                chorus.PageEvents.unsubscribe("fooSubscribe");
+
+                chorus.PageEvents.broadcast("foo");
+                expect(this.subscriber1.method).toHaveBeenCalled();
+                expect(this.subscriber2.method).not.toHaveBeenCalled();
+
+                // subscriptionHandles and Ids are not intended for public consumption
+                expect(_.keys(chorus.PageEvents.subscriptionIds).length).toBe(1);
+                expect(_.keys(chorus.PageEvents.subscriptionHandles).length).toBe(1);
+            });
+
+            it("works when passing a handle", function() {
+                chorus.PageEvents.unsubscribe(this.handle);
+
+                chorus.PageEvents.broadcast("foo");
+                expect(this.subscriber1.method).toHaveBeenCalled();
+                expect(this.subscriber2.method).not.toHaveBeenCalled();
+                expect(this.subscriber1.method.mostRecentCall.object).toBe(this.subscriber1);
+
+                // subscriptionHandles and Ids are not intended for public consumption
+                expect(_.keys(chorus.PageEvents.subscriptionIds).length).toBe(1);
+                expect(_.keys(chorus.PageEvents.subscriptionHandles).length).toBe(1);
+            });
         });
 
         it("handles resubscribing to an event", function() {
@@ -109,7 +133,8 @@ describe("chorus.PageEvents", function() {
         });
 
         it("returns false when the callback doesn't match", function() {
-            this.subscriber.otherMethod = function() {}
+            this.subscriber.otherMethod = function() {
+            }
             chorus.PageEvents.subscribe("foo", this.subscriber.method, this.subscriber);
             expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.otherMethod, this.subscriber)).toBeFalsy();
         });

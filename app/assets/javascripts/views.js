@@ -253,7 +253,7 @@ chorus.views.Bare = Backbone.View.include(
 
                     el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
-                    chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this);
+                    chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this, "contentChangedRecalcScrolling"+this.cid);
 
                     if (!alreadyInitialized) {
                         el.addClass("custom_scroll");
@@ -266,7 +266,11 @@ chorus.views.Bare = Backbone.View.include(
                         el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
 
                         if (chorus.page && chorus.page.bind) {
-                            chorus.page.bind("resized", function() { this.recalculateScrolling(el) }, this);
+                            if(this.resizeCallback) {
+                                this.bindings.remove(chorus.page, "resized", this.resizeCallback)
+                            }
+                            this.resizeCallback = function() { this.recalculateScrolling(el) };
+                            this.bindings.add(chorus.page, "resized", this.resizeCallback, this);
                         }
 
                     }
