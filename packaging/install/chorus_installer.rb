@@ -5,6 +5,7 @@ require_relative 'installer_errors'
 require 'base64'
 require 'openssl'
 require 'pathname'
+require_relative '../../lib/properties'
 
 class ChorusInstaller
   attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :legacy_installation_path, :log_stack
