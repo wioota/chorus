@@ -21,6 +21,15 @@ describe ImportPresenter, :type => :view do
       hash[:execution_info].should have_key(:state)
       hash[:execution_info].should have_key(:source_id)
       hash[:execution_info].should have_key(:source_table)
+      hash[:execution_info].should have_key(:file_name)
+    end
+
+    it "should not blow up if the source dataset does not exist" do
+      import.source_dataset_id = -1
+      hash = ImportPresenter.new(import, view).to_hash
+
+      hash[:execution_info][:source_table].should be_nil
+      hash[:source_table].should be_nil
     end
   end
 end

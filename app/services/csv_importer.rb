@@ -18,29 +18,50 @@ class CsvImporter
   end
 
   def import
-    raise Exception, "CSV file cannot be imported" unless csv_file.ready_to_import?
-    schema.with_gpdb_connection(account) do |connection|
-      begin
-        it_exists = check_if_table_exists(csv_file.to_table, csv_file)
-        if csv_file.new_table
-          connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
-        end
+    begin
+      import_record = self.create_csv_import
 
-        if csv_file.truncate
-          connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
-        end
+      raise Exception, "CSV file cannot be imported" unless csv_file.ready_to_import?
+      schema.with_gpdb_connection(account) do |connection|
+        begin
+          it_exists = check_if_table_exists(csv_file.to_table, csv_file)
+          if csv_file.new_table
+            connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
+          end
 
-        copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
-        sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
-        copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-      rescue Exception => e
-        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
-        raise e
+          if csv_file.truncate
+            connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
+          end
+
+          copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
+          sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
+          copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+        rescue Exception => e
+          connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
+          raise e
+        end
       end
+
+      create_success_event
+      import_record.state = "success"
+
+    rescue Exception => e
+      create_failure_event(e.message)
+      import_record.state = "failure"
+
+    ensure
+      import_record.finished_at = Time.now
+      import_record.save!
     end
-    create_success_event
-  rescue Exception => e
-    create_failure_event(e.message)
+  end
+
+  def create_csv_import
+    Import.create!({
+        :file_name => csv_file.contents_file_name,
+        :workspace_id => csv_file.workspace_id,
+        :to_table => csv_file.to_table},
+        :without_protection => true
+    )
   end
 
   def check_if_table_exists(table_name, csv_file)

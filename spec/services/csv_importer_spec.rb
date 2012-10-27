@@ -74,6 +74,23 @@ describe CsvImporter, :database_integration => true do
       end
     end
 
+    it "creates an Import with the correct details" do
+      csv_file = create_csv_file
+
+      Timecop.freeze(Time.now) do
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to change(Import, :count).by(1)
+
+        import = Import.last
+        import.file_name.should == csv_file.contents_file_name
+        import.workspace_id.should == csv_file.workspace_id
+        import.to_table.should == csv_file.to_table
+        import.state.should == 'success'
+        import.finished_at.should == Time.now
+      end
+    end
+
     it "import a basic csv file into an existing table" do
       csv_file = create_csv_file(:new_table => true, :to_table => "table_to_append_to")
       CsvImporter.import_file(csv_file.id, file_import_created_event.id)
@@ -194,6 +211,22 @@ describe CsvImporter, :database_integration => true do
     end
 
     context "when import fails" do
+      it "sets the import record state to 'failure'" do
+        Timecop.freeze(Time.now) do
+          csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
+                                     :column_names => [:id, :name],
+                                     :types => [:integer, :varchar],
+                                     :file_contains_header => false,
+                                     :new_table => true)
+
+          stub(csv_file).ready_to_import? { false }
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+
+          Import.last.state.should == "failure"
+          Import.last.finished_at.should == Time.now
+        end
+      end
+
       it "removes import table when new_table is true" do
         any_instance_of(CsvImporter) { |importer|
           stub(importer).check_if_table_exists.with_any_args { false }
