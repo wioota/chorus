@@ -285,10 +285,22 @@ describe "Backup and Restore" do
     end
   end
 
-  #after do
-  #  system "rake db:test:prepare"
-  #  system "rake db:fixtures:load"
-  #end
+  after(:all) do
+    # return the test database to it's original state
+    without_database_connection do
+      begin
+        original_rake_application = Rake.application
+        @rake = Rake::Application.new
+        Rake.application = @rake
+        Rake.application.rake_require "backup_and_restore"
+        Rake::Task.define_task(:environment)
+        @rake["db:test:prepare"].invoke
+        @rake["db:fixtures:load"].invoke
+      ensure
+        Rake.application = original_rake_application
+      end
+    end
+  end
 
   around do |example|
     # create fake original and restored install
@@ -414,6 +426,17 @@ def populate_fake_chorus_install(install_path, options = {})
   Dir.chdir install_path do
     create_version_build(version)
   end
+end
+
+def without_database_connection
+  existing_connection = ActiveRecord::Base.connection_handler.active_connections?
+  if existing_connection
+    connection_config = ActiveRecord::Base.connection_config
+    ActiveRecord::Base.connection.disconnect!
+  end
+  yield
+ensure
+  ActiveRecord::Base.establish_connection connection_config if existing_connection
 end
 
 require 'stringio'
