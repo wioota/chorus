@@ -281,14 +281,14 @@ describe "Backup and Restore" do
       stub(backup).log.with_any_args
     end
     any_instance_of(BackupRestore::Restore) do |restore|
-      #stub(restore).restore_database
       stub(restore).log.with_any_args
     end
   end
 
-  after do
-    system "rake db:test:prepare"
-  end
+  #after do
+  #  system "rake db:test:prepare"
+  #  system "rake db:fixtures:load"
+  #end
 
   around do |example|
     # create fake original and restored install

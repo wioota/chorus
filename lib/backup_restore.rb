@@ -200,18 +200,15 @@ PROMPT
 
     def restore_assets
       log "Restoring assets..."
-      ASSET_PATHS.map { |path| restore_asset_path path }
-    end
-
-    def restore_asset_path(path)
-      full_path = config_path path
+      full_path = config_path ASSET_PATH
       FileUtils.mkdir_p full_path and Dir.chdir full_path do
         MODELS_WITH_ASSETS.each do |model|
           # TODO: make sure that we only remove top-level model paths that are in the tar ball
-          FileUtils.rm_r File.join(path, model) if asset_path_in_tar?(path) rescue Errno::ENOENT
+          FileUtils.rm_r File.join(ASSET_PATH, model) if asset_path_in_tar?(ASSET_PATH) rescue Errno::ENOENT
         end
 
-        capture_output "tar xf #{temp_dir.join path + ".tgz"}",
+        asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+        capture_output "tar xf #{asset_file}",
                        :error => "Restoring assets failed."
       end
     end
