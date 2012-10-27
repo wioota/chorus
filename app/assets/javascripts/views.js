@@ -253,7 +253,8 @@ chorus.views.Bare = Backbone.View.include(
 
                     el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
-                    chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this, "contentChangedRecalcScrolling"+this.cid);
+                    this.scrollHandle && chorus.PageEvents.unsubscribe(this.scrollHandle);
+                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this);
 
                     if (!alreadyInitialized) {
                         el.addClass("custom_scroll");
