@@ -71,7 +71,7 @@ describe 'BackupRestore' do
         end
 
         context "when a system command fails" do
-          it "cleans up all the files it created" do
+          xit "cleans up all the files it created" do
             any_instance_of(BackupRestore::Backup) do |instance|
               stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
             end
@@ -89,7 +89,7 @@ describe 'BackupRestore' do
           }.to raise_error(/positive integer/)
         end
 
-        it "includes the assets in the backup" do
+        xit "includes the assets in the backup" do
           run_backup
           asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar t`
           asset_list.split.should include(*assets)
