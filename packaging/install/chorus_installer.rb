@@ -359,6 +359,9 @@ class ChorusInstaller
     end
 
     link_current_to_release
+
+    log "Install complete. Source chorus_path.sh before starting Chorus"
+    log "OS X users should change shared/chorus.properties and reduce the number of worker_threads and webserver_threads to 5" if is_supported_mac?
   rescue InstallerErrors::InstallAborted => e
     puts e.message
     exit 1
