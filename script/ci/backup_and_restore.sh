@@ -1,6 +1,7 @@
 #!/bin/bash
 hostname=$1
+dir=$2
 echo "Running backup"
-ssh $hostname chorus_control.sh backup -d backups
+ssh $hostname cd $dir && chorus_control.sh backup -d backups
 echo "Running restore"
-ssh $hostname chorus_control.sh restore backups/*.tar
+ssh $hostname cd $dir && chorus_control.sh restore backups/*.tar
