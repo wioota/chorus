@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Import do
+describe Import, :database_integration => true do
   describe "associations" do
     it { should belong_to :workspace }
     it { should belong_to(:source_dataset).class_name('Dataset') }
@@ -8,20 +8,70 @@ describe Import do
     it { should belong_to :import_schedule }
   end
 
-  describe ".run" do
-    let(:user) { users(:owner) }
-    let (:import) do
-      Import.create!(
-          {:user => user},
-          :without_protection => true
-      )
+  describe "validations" do
+    let(:import) {
+      i = Import.new
+      i.workspace = workspaces(:real)
+      i.to_table = 'new_table1234'
+      i.new_table = true
+      i.source_dataset = i.workspace.sandbox.datasets.first
+      i.user = users(:owner)
+      i
+    }
+
+    it "validates the presence of to_table" do
+      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :to_table => nil)
+      import.valid?
+      import.should have_at_least(1).errors_on(:to_table)
     end
 
-    it "calls the run method of the instance with the given id" do
-      any_instance_of(Import) do |instance|
-        mock(instance).run
-      end
-      Import.run(import.id)
+    it "validates the presence of source_dataset" do
+      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil)
+      import.valid?
+      import.should have_at_least(1).errors_on(:source_dataset)
+    end
+
+    it "validates the presence of user" do
+      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :user => nil)
+      import.valid?
+      import.should have_at_least(1).errors_on(:user)
+    end
+
+    it "validates that the to_table does not exist already if it is a new table" do
+      import.to_table = "master_table1"
+      import.should_not be_valid
+      import.errors.messages[:base].select { |a,b| a == :table_exists }.should_not be_empty
+    end
+
+    it "is valid if an old import's to_table exists" do
+      import.save
+      import.to_table = 'master_table1'
+      import.should be_valid
+    end
+
+    it "validates that the source and destination have consistent schemas" do
+      stub(import.source_dataset).dataset_consistent? { false }
+      import.to_table = 'pg_all_types'
+      import.new_table = false
+      import.should_not be_valid
+
+
+      import.errors.messages[:base].select { |a,b| a == :table_not_consistent }.should_not be_empty
+    end
+
+    it "is valid if an imports table become inconsistent after saving" do
+      import.save
+      stub(import.source_dataset).dataset_consistent? { false }
+
+      import.should be_valid
+    end
+
+    it "validates that to_table exists if new_table is false" do
+      import.new_table = false
+      import.to_table = 'hello12345'
+      import.should_not be_valid
+
+      import.errors.messages[:base].select { |a,b| a == :table_not_exists }.should_not be_empty
     end
   end
 
@@ -50,7 +100,6 @@ describe Import do
     let(:expected_attributes) do
       import_attributes.merge(
           :workspace_id => workspace.id,
-          :dataset_import_created_event_id => import.dataset_import_created_event_id,
           :import_id => import.id
       )
     end

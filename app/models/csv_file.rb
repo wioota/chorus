@@ -39,7 +39,8 @@ class CsvFile < ActiveRecord::Base
 
   def check_table(table_name, account, schema)
     schema.with_gpdb_connection(account) do |connection|
-      check_results = connection.exec_query("select table_name FROM information_schema.tables where table_name = '#{table_name}'")
+      check_results = connection.exec_query("select table_name FROM information_schema.tables
+        where table_name = '#{table_name}' AND table_schema = '#{schema.name}'")
       check_results.count > 0
     end
   end

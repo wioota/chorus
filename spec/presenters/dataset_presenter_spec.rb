@@ -74,11 +74,12 @@ describe DatasetPresenter, :type => :view do
     end
 
     context "for a source table" do
-      let(:workspace) { FactoryGirl.create :workspace }
+      let(:workspace) { FactoryGirl.create :workspace, :sandbox => schema2 }
       let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
       let(:schema) { FactoryGirl.create :gpdb_schema }
+      let(:schema2) { FactoryGirl.create :gpdb_schema }
       let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
-      let!(:import_schedule) { FactoryGirl.create(:import_schedule, :source_dataset => dataset, :workspace => workspace, :start_datetime => Time.now(), :end_date => '2012-12-12', :frequency => "weekly" ) }
+      let!(:import_schedule) { FactoryGirl.create(:import_schedule, :source_dataset => dataset, :workspace => workspace, :start_datetime => Time.now(), :end_date => '2012-12-12', :frequency => "weekly", :workspace => workspace ) }
 
       it "has the correct type" do
         hash[:type].should == 'SOURCE_TABLE'

@@ -113,7 +113,7 @@ describe CsvImporter do
           import.file_name.should == csv_file.contents_file_name
           import.workspace_id.should == csv_file.workspace_id
           import.to_table.should == csv_file.to_table
-          import.state.should == 'success'
+          import.success.should be_true
           import.finished_at.should == Time.now
         end
       end
@@ -222,7 +222,6 @@ describe CsvImporter do
               :types => [:integer, :varchar],
               :delimiter => "\t",
               :file_contains_header => true)
-
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
           fetch_from_gpdb("select * from #{table_name} order by ID asc;") do |result|
@@ -249,7 +248,7 @@ describe CsvImporter do
             expect {
               CsvImporter.import_file(csv_file.id, file_import_created_event.id)
             }.to raise_error("CSV file cannot be imported")
-            Import.last.state.should == "failure"
+            Import.last.success.should be_false
             Import.last.finished_at.should == Time.now
           end
         end

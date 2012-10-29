@@ -8,8 +8,7 @@ class ImportScheduler
           :truncate => schedule.truncate,
           :new_table => schedule.new_table,
           :user_id => schedule.user_id,
-          :sample_count => schedule.sample_count,
-          :dataset_import_created_event_id => schedule.dataset_import_created_event_id
+          :sample_count => schedule.sample_count
       }
 
       Import.transaction do

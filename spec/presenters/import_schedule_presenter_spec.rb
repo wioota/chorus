@@ -2,9 +2,19 @@ require 'spec_helper'
 
 describe ImportSchedulePresenter, :type => :view do
   before do
-    @presenter = ImportSchedulePresenter.new(import_schedule, view, {:dataset_id => dataset_id, :import => import})
+    @presenter = ImportSchedulePresenter.new(import_schedule, view, {:dataset_id => dataset_id})
+
+    any_instance_of(Dataset) do |d|
+      stub(d).dataset_consistent?(anything) { true }
+    end
   end
-  let(:import_schedule) { import_schedules(:default) }
+  let(:import_schedule) do
+    schedule = import_schedules(:default)
+    schedule.new_table = false
+    schedule.destination_dataset_id = 1234
+    schedule.save
+    schedule
+  end
 
   describe "#to_hash" do
     let(:hash) { @presenter.to_hash }
@@ -21,27 +31,9 @@ describe ImportSchedulePresenter, :type => :view do
       hash[:last_scheduled_at].should == import_schedule.last_scheduled_at
       hash[:next_import_at].should == import_schedule.next_import_at
       hash[:new_table].should == import_schedule.new_table
-      hash[:destination_dataset_id].should == import_schedule.target_dataset_id
-      hash[:is_active].should == import_schedule.is_active
+      hash[:destination_dataset_id].should == import_schedule.destination_dataset_id
       hash[:dataset_id].should == dataset_id
-    end
-
-    context "when given an import" do
-      let(:import) { imports(:now) }
-
-      it "should have the import" do
-        hash[:execution_info][:started_stamp].should == import.created_at.to_s
-      end
-    end
-
-    context "when deleted" do
-      before do
-        stub(import_schedule).is_active { false }
-      end
-
-      it "does not include an id" do
-        hash[:id].should be_nil
-      end
+      hash[:source_id].should == import_schedule.source_dataset_id
     end
   end
 end

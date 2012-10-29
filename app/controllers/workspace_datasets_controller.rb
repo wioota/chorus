@@ -20,6 +20,12 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def show
+    if params[:name]
+      present workspace.datasets(current_user).find_by_name(params[:name]), :presenter_options => { :workspace => workspace }
+      return
+    end
+
+
     present workspace.datasets(current_user).find(params[:id]), :presenter_options => { :workspace => workspace }
   end
 

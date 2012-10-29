@@ -106,7 +106,7 @@ describe CsvFile do
     end
 
     it "returns true when the table name already exists" do
-      csv_file.table_already_exists("base_table1").should be_true
+      csv_file.table_already_exists('base_table1').should be_true
     end
 
     it "returns false" do

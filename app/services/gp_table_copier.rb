@@ -16,11 +16,11 @@ class GpTableCopier
 
     run
 
-    mark_import("success")
+    mark_import(true)
     create_success_event
 
   rescue Exception => e
-    mark_import("failed")
+    mark_import(false)
     create_failed_event(e.message)
     raise e
   end
@@ -90,10 +90,17 @@ class GpTableCopier
     connection.execute(sql)
   end
 
-  def mark_import(state)
+  def mark_import(success)
     import = Import.find(attributes[:import_id])
-    import.state = state
+    import.success = success
     import.finished_at = Time.now
+
+    if success
+      Dataset.refresh(destination_account, destination_schema)
+      dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
+      import.destination_dataset_id = dst_table.id
+    end
+
     import.save!
   end
 
@@ -101,11 +108,9 @@ class GpTableCopier
     user = User.find_by_id!(user_id)
     source_table = Dataset.find_by_id!(source_table_id)
     workspace = Workspace.find_by_id!(attributes[:workspace_id])
-
-    Dataset.refresh(destination_account, destination_schema)
     dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
 
-    Events::DatasetImportCreated.find(attributes[:dataset_import_created_event_id]).tap do |event|
+    Events::DatasetImportCreated.find_by_reference_id(attributes[:import_id]).tap do |event|
       event.dataset = dst_table
       event.save!
     end

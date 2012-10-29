@@ -273,20 +273,28 @@ FactoryGirl.define do
     end_date Time.now + 1.year
     frequency 'monthly'
     truncate false
+    new_table true
     sample_count 1
-    dataset_import_created_event_id 2
+    association :workspace
+    association :user
+    sequence(:to_table) { |n| "factoried_import_schedule_table#{n}" }
+    association :source_dataset, :factory => :gpdb_table
   end
 
   factory :import do
     created_at Time.now
-    association :import_schedule, :factory => :import_schedule
+    #association :import_schedule, :factory => :import_schedule
     association :workspace, :factory => :workspace
     association :source_dataset, :factory => :gpdb_table
     user
-    to_table "import_target_dataset"
+    sequence(:to_table) { |n| "factoried_import_table#{n}" }
     truncate false
     new_table true
     sample_count 10
+  end
+
+  factory :import_with_schedule, :parent => :import do
+    association :import_schedule
   end
 
   factory :comment do

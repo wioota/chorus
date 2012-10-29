@@ -211,10 +211,10 @@ FixtureBuilder.configure do |fbuilder|
     )
 
     tableau_workfile = LinkedTableauWorkfile.create({:file_name => 'tableau',
-                                                     :workspace => public_workspace,
-                                                     :owner => owner,
-                                                     :tableau_workbook_publication => publication
-                                                    }, :without_protection => true)
+                                  :workspace => public_workspace,
+                                  :owner => owner,
+                                  :tableau_workbook_publication => publication
+                                 }, :without_protection => true)
 
     fbuilder.name :owner_creates_tableau_workfile, Events::TableauWorkfileCreated.by(owner).add(
         :workbook_name => publication.name,
@@ -293,30 +293,39 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :dataset_import_created, dataset_import_created
 
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
-                                         :frequency => 'weekly', :workspace_id => public_workspace.id,
+                        :frequency => 'weekly', :workspace => public_workspace,
+                        :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
+                        :new_table => 't', :user_id => owner.id
+                        )
+    fbuilder.name :default, import_schedule
+
+    import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
+                                         :frequency => 'weekly', :workspace => public_workspace,
                                          :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
-                                         :new_table => 't', :user_id => owner.id, :dataset_import_created_event_id => dataset_import_created.id
+                                         :new_table => 't', :user_id => owner.id
     )
     fbuilder.name :default, import_schedule
 
+
+
+
+
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                                :import_schedule => import_schedule,
-                                :dataset_import_created_event_id => dataset_import_created.id,
-                                :created_at => Time.now,
-                                :source_dataset_id => default_table.id)
-    fbuilder.name :default, import
+                  :import_schedule => import_schedule,
+                  :created_at => Time.now,
+                  :source_dataset_id => default_table.id)
+    fbuilder.name :three, import
 
     previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                                          :import_schedule => import_schedule, :created_at => '2012-09-04 23:00:00-07',
                                          :dataset_import_created_event_id => dataset_import_created.id,
                                          :source_dataset_id => default_table.id)
-    fbuilder.name :previous, previous_import
+    fbuilder.name :one, previous_import
 
     import_now = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                                    :created_at => '2012-09-03 23:00:00-07',
-                                    :dataset_import_created_event_id => dataset_import_created.id,
-                                    :source_dataset_id => default_table.id)
-    fbuilder.name :now, import_now
+                                         :created_at => '2012-09-03 23:00:00-07',
+                                         :source_dataset_id => default_table.id)
+    fbuilder.name :two, import_now
 
     #CSV File
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
@@ -325,6 +334,12 @@ FixtureBuilder.configure do |fbuilder|
     csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file_owner.save!(:validate => false)
     fbuilder.name :default, csv_file_owner
+
+
+    unimported_csv_file = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table_will_not_be_imported', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    unimported_csv_file.save!(:validate => false)
+    fbuilder.name :unimported, unimported_csv_file
+
     #Notes
     note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => gpdb_instance, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     fbuilder.name :note_on_greenplum, note_on_greenplum
@@ -402,7 +417,6 @@ FixtureBuilder.configure do |fbuilder|
     Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :error_message => "an error", :gnip_instance => gnip_instance)
     Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => default_table)
     Events::ImportScheduleUpdated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
-    Events::ImportScheduleDeleted.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table_deleted')
     Timecop.return
 
     #NotesAttachment
@@ -440,15 +454,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
-
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
-    Timecop.travel(Time.now + 1.minute)
     @notification2 = Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true)
-    Timecop.travel(Time.now + 1.minute)
     @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
-    Timecop.travel(Time.now + 1.minute)
     @notification4 = Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true)
-    Timecop.return
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
     #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.

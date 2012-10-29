@@ -86,7 +86,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     wasSuccessfullyExecuted: function() {
-        return this.get("executionInfo") && this.get("executionInfo").state == "success";
+        return this.get("executionInfo") && this.get("executionInfo").success;
     },
 
     isInProgress: function() {

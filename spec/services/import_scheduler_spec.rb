@@ -13,9 +13,9 @@ describe ImportScheduler do
            :sample_count => 1,
            :truncate => true,
            :workspace => workspaces(:public),
-           :dataset_import_created_event_id => 'dataset-import-created-event-id',
            :source_dataset => datasets(:table),
-           :to_table => 'destination-table'
+           :to_table => 'destination-table',
+           :new_table => true
           },
           :without_protection => true)
     end

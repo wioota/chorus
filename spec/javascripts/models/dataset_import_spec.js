@@ -13,12 +13,12 @@ describe("chorus.models.DatasetImport", function() {
 
     describe("#wasSuccessfullyExecuted", function() {
         it("returns true when the import succeeded on its last execution", function() {
-            this.model.set({ executionInfo: { state: "success" } })
+            this.model.set({ executionInfo: { success: true } });
             expect(this.model.wasSuccessfullyExecuted()).toBeTruthy();
         });
 
         it("returns false if the import failed on its last execution", function() {
-            this.model.set({ executionInfo: { state: "failed" } })
+            this.model.set({ executionInfo: { success: false } });
             expect(this.model.wasSuccessfullyExecuted()).toBeFalsy();
         });
 
@@ -30,12 +30,12 @@ describe("chorus.models.DatasetImport", function() {
 
     describe("#isInProgress", function() {
         it("returns true when the import has a startedStamp but no completedStamp", function() {
-            this.model.set({ executionInfo: { state: "success", startedStamp: "something", completedStamp: null } })
+            this.model.set({ executionInfo: { success: true, startedStamp: "something", completedStamp: null } })
             expect(this.model.isInProgress()).toBeTruthy();
         });
 
         it("returns false if the import has a completedStamp", function() {
-            this.model.set({ executionInfo: { state: "success", completedStamp: "Yesterday" } })
+            this.model.set({ executionInfo: { success: true, completedStamp: "Yesterday" } })
             expect(this.model.isInProgress()).toBeFalsy();
         });
 

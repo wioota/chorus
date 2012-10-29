@@ -1,96 +1,46 @@
 require 'spec_helper'
 
 describe DatasetImportsController do
-  describe "#show" do
+  describe "#index" do
     let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:default) }
-    let(:import) { imports(:default) }
-    let(:previous_import) { imports(:previous) }
-    let(:import_now ) { imports(:now) }
-    let(:dataset) { import_schedule.source_dataset }
+    let(:source_dataset) { import_three.source_dataset }
+
+    let(:import_one) { imports(:one) }
+    let(:import_two) { imports(:two) }
+    let(:import_three) { imports(:three) }
 
     before do
       log_in user
     end
 
-    generate_fixture "importSchedule.json" do
-      get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
+    it "uses authorization based on the visible datasets"
+    it "is paginated"
+
+    it "shows the latest imports for a dataset as the source dataset" do
+      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+      response.should be_success
+      decoded_response.should_not be_nil
+      decoded_response.length.should == 3
     end
 
-    shared_examples_for "import data" do
-      context "with an import schedule that has a last import" do
-        it "should return the import schedule" do
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-
-          response.code.should == "200"
-          decoded_response.should_not be_nil
-          decoded_response.to_table.should == import_schedule.to_table
-          decoded_response.frequency.should == import_schedule.frequency
-          decoded_response.dataset_id.should == dataset.id
-        end
-
-        it "should retrieve info from last import and put it in execution info" do
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-          decoded_response.should_not be_nil
-          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
-          decoded_response.execution_info.to_table.should == import.to_table
-        end
-      end
-
-      context "with an import schedule and a last import from somewhere else (import now)" do
-        before do
-          import_now.update_attribute(:created_at, import.created_at + 1.day)
-        end
-        it "should return the import schedule" do
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-
-          response.code.should == "200"
-          decoded_response.should_not be_nil
-          decoded_response.to_table.should == import_schedule.to_table
-          decoded_response.frequency.should == import_schedule.frequency
-        end
-
-        it "should retrieve info from last import and put it in execution info" do
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-          decoded_response.should_not be_nil
-          decoded_response.execution_info.started_stamp.to_json.should == import_now.created_at.to_json
-          decoded_response.execution_info.to_table.should == import_now.to_table
-        end
-      end
-
-      context "with an import schedule, but no last import" do
-        it "should return empty execution_info" do
-          import.delete
-          previous_import.delete
-          import_now.delete
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-          response.code.should == "200"
-          decoded_response.should_not be_nil
-          decoded_response.to_table.should == import_schedule.to_table
-          decoded_response.frequency.should == import_schedule.frequency
-          decoded_response.execution_info.should == {}
-        end
-      end
-
-      context "without a schedule, but with an import" do
-        it "should still return the last import info" do
-          import_schedule.delete
-          get :show, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
-          decoded_response.should_not be_nil
-          decoded_response.execution_info.started_stamp.to_json.should == import.created_at.to_json
-        end
-      end
+    it "should take a limit clause" do
+      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id, :limit => 1
+      response.should be_success
+      decoded_response.should_not be_nil
+      decoded_response.length.should == 1
+      latest_import = decoded_response.first
+      latest_import.id.should == import_three.id
     end
 
-    context "for a source dataset" do
-      let!(:dataset) { import_schedule.source_dataset}
-      it_should_behave_like "import data"
-    end
+    context "for a destination dataset" do
+      let(:workspace) { import_three.workspace }
+      let(:destination_dataset) { workspace.sandbox.datasets.create!({:name => 'new_table_for_import'}, :without_protection => true) }
 
-    context "when requesting for the destination dataset" do
-      let!(:dataset) { FactoryGirl.create(:gpdb_table, :schema => import_schedule.workspace.sandbox, :name => import_schedule.to_table) }
-
-      it_should_behave_like "import data"
+      it "shows the latest imports for a destination dataset" do
+        get :index, :workspace_id => workspace.id, :dataset_id => destination_dataset.id
+        response.should be_success
+        decoded_response.length.should == 3
+      end
     end
   end
 
@@ -135,6 +85,11 @@ describe DatasetImportsController do
 
         let(:active_workspace) { FactoryGirl.create :workspace, :name => "TestImportWorkspace", :sandbox => schema, :owner => user }
 
+        it "uses authorization" do
+          mock(subject).authorize! :can_edit_sub_objects, active_workspace
+          post :create, attributes
+        end
+
         it "enqueues a new Import.run job for active workspaces and returns success" do
           mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
             Import.find(import_id).tap do |import|
@@ -156,11 +111,20 @@ describe DatasetImportsController do
           expect {
             post :create, attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
+
+          event = Events::DatasetImportCreated.last
+          event.actor.should == user
+          event.dataset.should == nil
+          event.source_dataset.should == src_table
+          event.workspace.should == active_workspace
+          event.destination_table.should == 'the_new_table'
         end
 
         it "should return error for archived workspaces" do
           attributes[:workspace_id] = archived_workspace.id
-          post :create, attributes
+          expect {
+            post :create, attributes
+          }.to change(Events::DatasetImportCreated, :count).by(0)
           response.code.should == "422"
         end
 
@@ -173,6 +137,8 @@ describe DatasetImportsController do
         it "throws an error if table already exists" do
           post :create, attributes.merge(:to_table => "master_table1")
           response.code.should == "422"
+
+          decoded_errors.fields.base.TABLE_EXISTS.should be_present
         end
 
         it "throws an error if source table can't be found" do
@@ -182,9 +148,11 @@ describe DatasetImportsController do
       end
 
       context "when importing into an existing table" do
+        let(:dst_table_name) { active_workspace.sandbox.datasets.first.name }
+
         before do
           attributes[:new_table] = "false"
-          attributes[:to_table] = active_workspace.sandbox.datasets.first.name
+          attributes[:to_table] = dst_table_name
           attributes.merge! :dataset_id => src_table.to_param, :workspace_id => active_workspace.id
         end
 
@@ -212,6 +180,13 @@ describe DatasetImportsController do
             expect {
               post :create, attributes
             }.to change(Events::DatasetImportCreated, :count).by(1)
+            event = Events::DatasetImportCreated.last
+
+            event.actor.should == user
+            event.dataset.name.should == dst_table_name
+            event.source_dataset.should == src_table
+            event.workspace.should == active_workspace
+            event.destination_table.should == dst_table_name
           end
         end
 
@@ -219,175 +194,19 @@ describe DatasetImportsController do
           attributes[:to_table] = "table_that_does_not_exist"
           post :create, attributes
           response.code.should == "422"
+          decoded_errors.fields.base.TABLE_NOT_EXISTS.should be_present
         end
 
         it "throws an error if table structure is not consistent" do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { false }
           end
+
           post :create, attributes
           response.code.should == "422"
           decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
         end
       end
-    end
-
-    context "Scheduling an Import" do
-      before do
-        attributes[:new_table] = 'true'
-        attributes[:truncate] = 'true'
-        attributes[:import_type] = 'schedule'
-        attributes[:frequency] = 'weekly'
-        attributes[:start_datetime] = "2012-08-23 23:00:00.0"
-        attributes[:end_date] = "2012-08-24"
-      end
-
-      it "makes a new import schedule and returns success" do
-        attributes[:sample_count] = ''
-        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
-
-        src_table.import_schedules.last.tap do |schedule|
-          schedule.workspace.should == active_workspace
-          schedule.user.should == account.owner
-          schedule.sample_count.should be_nil
-          schedule.new_table.should be_true
-          schedule.truncate.should be_true
-          schedule.to_table.should == 'the_new_table'
-        end
-
-        response.should be_success
-      end
-
-      it "presents an import schedule" do
-        attributes[:sample_count] = ''
-        mock_present do |schedule|
-          schedule.should be_a(ImportSchedule)
-          schedule.id.should_not be_nil
-          schedule.workspace.should == active_workspace
-          schedule.user.should == account.owner
-          schedule.sample_count.should be_nil
-          schedule.new_table.should be_true
-          schedule.truncate.should be_true
-          schedule.to_table.should == 'the_new_table'
-        end
-        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
-      end
-
-      it "returns a dataset_id" do
-        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
-        decoded_response.dataset_id.should == src_table.id
-        decoded_response.source_id.should == src_table.id
-      end
-
-      it "limits the number of rows when set" do
-        attributes[:sample_count] = '40'
-        post :create, attributes.merge(:dataset_id => src_table.to_param, :workspace_id => active_workspace.id)
-
-        src_table.import_schedules.last.tap do |schedule|
-          schedule.workspace.should == active_workspace
-          schedule.user.should == account.owner
-          schedule.sample_count.should == 40
-          schedule.new_table.should be_true
-          schedule.truncate.should be_true
-          schedule.to_table.should == 'the_new_table'
-        end
-      end
-    end
-  end
-
-  describe "#update", :database_integration => true do
-    let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules :default }
-    let(:src_table) { Dataset.find import_schedule[:source_dataset_id] }
-    let(:import_params) { import_schedule.attributes.symbolize_keys.merge :import_type => "schedule" }
-
-    before do
-      log_in user
-    end
-
-    let(:frequency) { "DAILY" }
-    let(:to_table) { import_schedule.workspace.sandbox.datasets.first }
-
-    before do
-      import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
-    end
-
-    it "updates the start time for the import schedule" do
-      put :update, import_params.merge(:start_datetime => '2012-01-01 0:00')
-      import_schedule.reload.start_datetime.should == Time.parse('2012-01-01 0:00')
-    end
-
-    it "updates the import's frequency only and returns success" do
-      put :update, import_params.merge(:frequency => frequency)
-      response.code.should == "200"
-      import_schedule.reload
-
-      import_schedule.frequency.should == frequency
-      import_schedule.end_date.should == import_schedule.end_date
-      import_schedule.start_datetime.should == import_schedule.start_datetime
-    end
-
-    it "shows the import_schedule" do
-      put :update, import_params.merge(:frequency => frequency)
-      response.code.should == "200"
-      decoded_response.dataset_id.should == src_table.id
-      decoded_response.source_id.should == src_table.id
-    end
-
-    it "returns an error when importing into a new table but name already exists" do
-      put :update, import_params.merge(:new_table => 'true', :to_table => to_table.name)
-      response.code.should == '422'
-      decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
-    end
-
-    it "returns an error when importing into an existing table but name doesnt exist" do
-      put :update, import_params.merge(:new_table => 'false', :to_table => "non_existent")
-      response.code.should == '422'
-      decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
-    end
-
-    it "makes a IMPORT_SCHEDULE_UPDATED event" do
-      expect {
-        put :update, import_params.merge(:new_table => 'true', :to_table => "new_table_non_existent")
-      }.to change(Events::ImportScheduleUpdated, :count).by(1)
-      event = Events::ImportScheduleUpdated.last
-      event.workspace.should == import_schedule.workspace
-      event.source_dataset.should == import_schedule.source_dataset
-      event.destination_table.should == "new_table_non_existent"
-    end
-  end
-
-  describe "#destroy" do
-    let(:user) { users(:owner) }
-    let(:import_schedule) { import_schedules(:default) }
-    let(:src_table) { Dataset.find(import_schedule[:source_dataset_id]) }
-    before do
-      log_in user
-    end
-    it "deletes the import schedule and returns success" do
-      delete :destroy, :dataset_id => src_table.id,
-             :workspace_id => import_schedule.workspace_id
-
-      response.code.should == "200"
-      import_schedule.reload.deleted_at.should_not be_nil
-      import_schedule.is_active.should be_false
-      ImportSchedule.find_by_workspace_id_and_source_dataset_id(import_schedule.workspace_id, src_table.id).should be_nil
-    end
-
-    it "uses authorization" do
-      mock(subject).authorize! :can_edit_sub_objects, Workspace.find(import_schedule.workspace_id)
-      delete :destroy, :dataset_id => src_table.id,
-             :workspace_id => import_schedule.workspace_id
-    end
-
-    it "makes a IMPORT_SCHEDULE_DELETED event" do
-      expect {
-        delete :destroy, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
-      }.to change(Events::ImportScheduleDeleted, :count).by(1)
-      event = Events::ImportScheduleDeleted.last
-      event.workspace.should == import_schedule.workspace
-      event.source_dataset.should == import_schedule.source_dataset
-      event.destination_table.should == import_schedule.to_table
     end
   end
 
@@ -479,29 +298,6 @@ describe DatasetImportsController do
       check_destination_table
     end
 
-    context "does a scheduled import" do
-      before do
-        import_attributes.merge!(
-            :import_type => 'schedule',
-            :frequency => 'weekly',
-            :start_datetime => start_time,
-            :end_date => "2012-08-24")
-      end
-
-      it "copies data when the start time has passed" do
-        Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
-          expect {
-            post :create, import_attributes
-          }.to change(Events::DatasetImportCreated, :count).by(1)
-        end
-        Timecop.freeze(DateTime.parse(start_time) + 1.day) do
-          expect {
-            ImportScheduler.run
-          }.to change(Events::DatasetImportSuccess, :count).by(1)
-        end
-        check_destination_table
-      end
-    end
 
     after do
       gpdb2.exec_query("drop table if exists #{destination_table_fullname};")

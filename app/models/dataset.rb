@@ -10,7 +10,7 @@ class Dataset < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   after_save :update_counter_cache
 
-  has_many :import_schedules, :foreign_key => 'source_dataset_id'
+  has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
   has_many :tableau_workbook_publications
   delegate :gpdb_instance, :account_for_user!, :to => :schema
@@ -215,23 +215,6 @@ class Dataset < ActiveRecord::Base
 
   def type_name
     'Dataset'
-  end
-
-  def import(params, user)
-    event = create_import_event(params, user)
-
-    import_attributes =
-        params.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate).merge(
-            :user_id => user.id,
-            :dataset_import_created_event_id => event.id)
-
-    if params[:import_type] == "schedule" # scheduled imports
-      import_attributes.merge!(params.slice(:start_datetime, :end_date, :frequency))
-      import_schedules.create!(import_attributes, :without_protection => true)
-    else # immediate imports
-      import = imports.create!(import_attributes, :without_protection => true)
-      QC.enqueue("Import.run", import.id)
-    end
   end
 
   def preview_sql

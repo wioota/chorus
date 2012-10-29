@@ -275,7 +275,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                 completedStamp: "2012-02-29T14:35:38Z",
                                 sourceId: this.dataset.id,
                                 sourceTable: "some_source_table",
-                                state: "success"
+                                success: true
                             },
                             sourceTable: "some_other_table",
                             datasetId: "123"
@@ -306,7 +306,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             executionInfo: {
                                 startedStamp: "2012-02-29T14:35:38Z",
                                 completedStamp: "2012-02-29T14:35:38Z",
-                                state: "success",
+                                success: true,
                                 sourceId: "543"
                             },
                             datasetId: "123",
@@ -451,10 +451,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                     executionInfo: {
                                         startedStamp: "2012-02-29T14:23:58Z",
                                         completedStamp: "2012-02-29T14:23:59Z",
-                                        result: {
-                                            executeResult: "success"
-                                        },
-                                        state: "success",
+                                        success: true,
                                         toTable: 'our_destination',
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                         creator: "InitialUser"
@@ -484,7 +481,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                         toTable: 'our_destination_plus_some_more',
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination_plus_some_more"',
                                         creator: "InitialUser",
-                                        state: "success"
+                                        success: true
                                     }
                                 })
 
@@ -513,10 +510,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"',
                                         startedStamp: "2012-02-29T14:23:58Z",
                                         completedStamp: "2012-02-29T14:23:59Z",
-                                        result: {
-                                            executeResult: "failed"
-                                        },
-                                        state: "failed",
+                                        success: false,
                                         creator: "InitialUser"
                                     }
                                 });
@@ -561,12 +555,9 @@ describe("chorus.views.DatasetSidebar", function() {
                                     executionInfo: {
                                         startedStamp: "2012-02-29T14:23:58Z",
                                         completedStamp: "2012-02-29T14:23:59Z",
-                                        result: {
-                                            executeResult: "success"
-                                        },
                                         toTable: 'our_destination',
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
-                                        state: "success",
+                                        success: true,
                                         creator: "InitialUser"
                                     }
                                 });
@@ -591,10 +582,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                     executionInfo: {
                                         startedStamp: "2012-02-29T14:23:58Z",
                                         completedStamp: "2012-02-29T14:23:59Z",
-                                        result: {
-                                            executeResult: "failed"
-                                        },
-                                        state: "failed",
+                                        success: false,
                                         toTable: 'our_destination',
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                         creator: "InitialUser"

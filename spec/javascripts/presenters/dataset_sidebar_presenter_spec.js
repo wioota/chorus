@@ -134,7 +134,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             datasetId: '1',
                             executionInfo: {
                                 completedStamp: Date.parse("Today - 33 days").toJSONString(),
-                                state: "success"
+                                success: true
                             }
                         });
                     });
@@ -171,7 +171,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.importSchedule.attributes.executionInfo.state = "failed";
+                            this.importSchedule.attributes.executionInfo.success = false;
                             spyOn(resource, 'getImport').andReturn(
                                 this.importSchedule
                             );
@@ -192,7 +192,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             datasetId: '99',
                             executionInfo: {
                                 completedStamp: Date.parse("Today - 33 days").toJSONString(),
-                                state: "success"
+                                success: true
                             }
                         });
                     });
@@ -229,7 +229,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.importSchedule.attributes.executionInfo.state = "failed";
+                            this.importSchedule.attributes.executionInfo.success = false;
                             spyOn(resource, 'getImport').andReturn(
                                 this.importSchedule
                             );

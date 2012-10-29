@@ -307,9 +307,6 @@ beforeEach(function() {
                 executionInfo: {
                     startedStamp: "2012-02-29T14:23:58Z",
                     completedStamp: "2012-02-29T14:23:59Z",
-                    result: {
-                        executeResult: "success"
-                    },
                     state: "success",
                     toTable: 'someTable',
                     creator: "InitialUser"

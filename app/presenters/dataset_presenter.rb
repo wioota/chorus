@@ -43,7 +43,7 @@ class DatasetPresenter < Presenter
 
   def frequency
     if !rendering_activities? && options[:workspace] && options[:workspace].id
-      import_schedule = model.import_schedules.where("workspace_id = #{options[:workspace].id}")
+      import_schedule = model.import_schedules.where(:workspace_id => options[:workspace].id)
       {:frequency => import_schedule.first ? import_schedule.first.frequency : ""}
     else
       {:frequency => ""}

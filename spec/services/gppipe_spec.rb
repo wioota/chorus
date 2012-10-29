@@ -78,13 +78,18 @@ describe Gppipe, :database_integration => true do
                       "time_stamp_with_precision" timestamp(3) with time zone,
                       PRIMARY KEY("id2", "id3", "id")'.tr("\n","").gsub(/\s+/, " ").strip }
   let(:distrib_def) { "" }
+  let(:import) { imports(:two) }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
-  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true", "import_id" => imports(:now).id }.merge(extra_options) }
-  let(:extra_options) { {:dataset_import_created_event_id => Events::DatasetImportCreated.by(user).add(
-      :workspace => workspace,
-      :dataset => nil,
-      :destination_table => destination_table_name
-  ).id} }
+  let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true", "import_id" => import.id }.merge(extra_options) }
+  let(:extra_options) { {} }
+  let!(:dataset_import_created_event) {
+    Events::DatasetImportCreated.by(user).add(
+        :workspace => workspace,
+        :dataset => nil,
+        :destination_table => destination_table_name,
+        :reference_id => import.id
+    )
+  }
   let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
   let(:sandbox) { workspace.sandbox }
@@ -116,7 +121,6 @@ describe Gppipe, :database_integration => true do
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           Gppipe.run_import(source_dataset.id, user.id, options)
           event = Events::DatasetImportCreated.last
-          event.id = options[:dataset_import_created_event_id]
           event.actor.should == user
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox

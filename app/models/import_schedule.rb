@@ -1,35 +1,38 @@
 class ImportSchedule < ActiveRecord::Base
   include SoftDelete
+  include ImportMixins
 
-  belongs_to :workspace
   belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
-  attr_accessible :start_datetime, :end_date, :sample_count, :truncate, :new_table, :to_table, :frequency, :source_dataset_id,
-                  :workspace_id, :is_active
+  has_many :imports
+
+  attr_accessible :to_table, :new_table, :sample_count, :truncate
+  attr_accessible :start_datetime, :end_date, :frequency
 
   before_save :set_next_import
 
-  has_many :imports
-
   scope :ready_to_run, lambda { where('next_import_at <= ?', Time.current) }
 
-  def target_dataset_id
-    if dataset_import_created_event_id
-      event = Events::DatasetImportCreated.find(dataset_import_created_event_id)
-      event.target2_id if event
-    end
-  end
+  validates :to_table, :presence => true
+  validates :source_dataset, :presence => true
+  validates :user, :presence => true
+  validates :start_datetime, :presence => true
+  validates :end_date, :presence => true
 
-  def is_active
-    deleted_at.nil?
-  end
+  validates :frequency, :inclusion => {:in => %w( daily weekly monthly )}
 
-  def is_active=(value)
-    if value
-      self.deleted_at = nil
-    else
-      destroy
-    end
+  validate :table_does_not_exist, :if => :new_table
+  validate :table_does_exist, :unless => :new_table
+  validate :tables_have_consistent_schema, :unless => :new_table
+
+  def create_import_event
+    dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
+    Events::DatasetImportCreated.by(user).add(
+        :workspace => workspace,
+        :source_dataset => source_dataset,
+        :dataset => dst_table,
+        :destination_table => to_table
+    )
   end
 
   def set_next_import

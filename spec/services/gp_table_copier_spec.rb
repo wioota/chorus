@@ -30,15 +30,17 @@ describe GpTableCopier, :database_integration => true do
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, attributes) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
-  let(:dataset_import_created_event_id) do
-    Events::DatasetImportCreated.by(user).add(
+  let!(:dataset_import_created_event_id) do
+    event = Events::DatasetImportCreated.by(user).add(
         :workspace => workspace,
         :dataset => nil,
-        :destination_table => destination_table_name
-    ).id
+        :destination_table => destination_table_name,
+        :reference_id => import.id
+    )
+    event.id
   end
-  let(:extra_attributes) { {:dataset_import_created_event_id => dataset_import_created_event_id} }
-  let(:import) { imports(:now) }
+  let(:extra_attributes) { {} }
+  let(:import) { imports(:two) }
 
   after do
     call_sql("DROP TABLE IF EXISTS \"#{schema.name}\".\"#{source_table_name}\";") unless source_table_name =~ /^candy/
@@ -88,8 +90,14 @@ describe GpTableCopier, :database_integration => true do
 
           it "marks the import as success" do
             import.reload
-            import.state.should == "success"
+            import.success.should be_true
             import.finished_at.should_not be_nil
+          end
+
+          it "updates the destination dataset id" do
+            import.reload
+            import.success.should be_true
+            import.destination_dataset_id.should_not be_nil
           end
 
           it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
@@ -135,7 +143,7 @@ describe GpTableCopier, :database_integration => true do
             }.to raise_exception
 
             import.reload
-            import.state.should == "failed"
+            import.success.should be_false
             import.finished_at.should_not be_nil
           end
         end
