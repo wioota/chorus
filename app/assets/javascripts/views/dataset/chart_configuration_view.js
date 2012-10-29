@@ -66,15 +66,10 @@
             }
         },
 
-        cleanup: function() {
-            this._super("cleanup");
+        teardown: function() {
             this.clearSqlErrors();
             chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
-        },
-
-        teardown: function() {
-            this.cleanup();
-            this._super("teardown")
+            this._super("teardown", arguments)
         },
 
         postRender: function() {

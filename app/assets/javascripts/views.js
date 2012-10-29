@@ -38,13 +38,18 @@ chorus.views.Bare = Backbone.View.include(
             return this.subViewObjects;
         },
 
-        teardown: function() {
+        teardown: function(preserveContainer) {
             chorus.unregisterView(this);
             this.unbind();
             this.bindings.removeAll();
-            delete this.bindings.defaultContext;
+            delete this.bindings;
             this.requiredResources.cleanUp();
-            $(this.el).remove();
+            if(preserveContainer) {
+                $(this.el).children().remove();
+                $(this.el).html("");
+            } else {
+                $(this.el).remove();
+            }
 
             while(!_.isEmpty(this.subViewObjects)) {
                 var subViewObject = this.subViewObjects.pop();

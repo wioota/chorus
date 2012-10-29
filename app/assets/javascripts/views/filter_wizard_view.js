@@ -22,8 +22,9 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
 
     postRender: function() {
         _.each(this.filterViews, function(filterView) {
+            this.bindings.remove(filterView);
             filterView.teardown();
-        });
+        }, this);
         this.filterViews = [];
         if (!this.collection.length) {
             this.addFilter();
@@ -59,7 +60,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
 
     removeFilterView: function(filterView) {
         this.collection.remove(filterView.model);
-        $(filterView.el).remove();
+        filterView.teardown();
         this.tagLastLi();
     },
 

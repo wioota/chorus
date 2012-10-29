@@ -1341,6 +1341,26 @@ describe("chorus.views.Base", function() {
             it("should tear down registered subviews", function() {
                 expect(this.subViewObject.teardown).toHaveBeenCalled();
             });
+
+            describe("when the teardown function is told to preserve the container", function() {
+
+                beforeEach(function() {
+                    this.view = new chorus.views.Bare();
+                    this.view.templateName = "plain_text";
+                    this.view.context = function() { return { text: "Foo" }; };
+
+                    $("#jasmine_content").append($(this.view.render().el));
+                    expect($(this.view.el).closest("#jasmine_content")).toExist();
+
+                    this.view.teardown(true);
+                });
+                it("keeps itself in the DOM", function() {
+                    expect($(this.view.el).closest("#jasmine_content")).toExist();
+                });
+                it("contains nothing", function() {
+                    expect($(this.view.el).html()).toBe("");
+                });
+            });
         });
 
         describe("#registerSubViews", function() {
