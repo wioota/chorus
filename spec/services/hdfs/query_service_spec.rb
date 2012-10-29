@@ -73,8 +73,15 @@ describe Hdfs::QueryService, :hdfs_integration do
 
   describe "#show" do
     let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp") }
+    before do
+      any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |java_hdfs|
+        stub(java_hdfs).content(is_a(String), 200) { file_content }
+      end
+    end
 
     context "show an existing file" do
+      let(:file_content) { "a, b, c" }
+
       it "returns part of the content" do
         response = service.show("/data/test.csv")
         response.should_not be_empty
@@ -83,15 +90,9 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
 
     context "show a non existing file" do
+      let(:file_content) { nil }
+
       it "should return an error" do
-        expect { service.show("/file") }.to raise_error(Hdfs::FileNotFoundError)
-      end
-    end
-
-    context "connection is invalid" do
-      let(:service) { Hdfs::QueryService.new("garbage", "8020", "pivotal", "0.20.1gp") }
-
-      it "raises an exception" do
         expect { service.show("/file") }.to raise_error(Hdfs::FileNotFoundError)
       end
     end
