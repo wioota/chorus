@@ -1,5 +1,5 @@
 #!/bin/bash
-hostname = $1
+hostname=$1
 echo "Running backup"
 ssh $hostname chorus_control.sh backup -d backups
 echo "Running restore"
