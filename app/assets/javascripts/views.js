@@ -42,7 +42,7 @@ chorus.views.Bare = Backbone.View.include(
             chorus.unregisterView(this);
             this.unbind();
             this.bindings.removeAll();
-            delete this.bindings;
+            delete this.bindings.defaultContext;
             this.requiredResources.cleanUp();
             if(preserveContainer) {
                 $(this.el).children().remove();
