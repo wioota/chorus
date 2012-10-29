@@ -1,5 +1,6 @@
 chorus.views.TaskDataTable = chorus.views.Base.extend({
     templateName: "data_table",
+    constructorName: "TaskDataTable",
 
     events: {
         "click a.move_to_first": "moveColumnToFirst"

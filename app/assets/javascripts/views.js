@@ -51,6 +51,8 @@ chorus.views.Bare = Backbone.View.include(
                 $(this.el).remove();
             }
 
+            this.scrollHandle && chorus.PageEvents.unsubscribe(this.scrollHandle);
+
             while(!_.isEmpty(this.subViewObjects)) {
                 var subViewObject = this.subViewObjects.pop();
                 subViewObject.teardown();

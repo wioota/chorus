@@ -125,6 +125,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.info_bar').addClass('hidden');
         this.$(".chart_config").addClass('hidden');
         chorus.PageEvents.broadcast('cancel:visualization');
+        if(this.chartConfig) {
+            this.chartConfig.teardown(true);
+            delete this.chartConfig;
+        }
+
     },
 
     startCreateChorusViewWizard: function() {
