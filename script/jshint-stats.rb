@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-LOOK_FOR_OTHERS = false
+LOOK_FOR_OTHERS = true
 
 ERROR_TYPES = [
 	/Missing semicolon/,
@@ -40,27 +40,66 @@ ERROR_TYPES = [
 	/Unexpected dangling/,
 	/Use the function form of "use strict"/,
 	/Expected a number and instead saw/,
-	/Input is an empty string/
+	/Input is an empty string/,
+  /Missing space after '(.+)'/,
+  /Unexpected space before/,
+  /Trailing whitespace/,
+  /Line too long/,
+  /to have an indentation at/,
+  /Bad escapement/,
+  /eval is evil/,
+  /Unexpected space after/,
+  /and instead saw/,
+  /Bad for in variable/,
+  /Missing name in function declaration/,
+  /Do not use 'new' for side effects/,
+  /Empty block/,
+  /A constructor name should start with an uppercase letter/,
+  /The body of a for in should be wrapped in an if statement to filter unwanted properties from the prototype/,
+  /Redefinition of/,
+  /Line breaking error/,
+  /Label '\w+' on \S+ statement/,
+  /'(.+)' is not defined/
 ]
 
-sub_dirs = ["collections", "views", "models", "presenters", "mixins", "dialogs", "alerts", "views", "pages", "utilities"]
-directories = sub_dirs.map { |sub| "app/assets/javascripts/#{sub}" }
+class Error
+  attr_reader :error_type
+  attr_reader :specifics
 
-code_output = `jshint #{directories.join(" ")}`.split("\n")
-spec_output = `jshint spec/javascripts`.split("\n")
+  def initialize(error_type)
+    @error_type = error_type
+    @specifics = Hash.new { 0 }
+  end
+
+  def add_specific(specific)
+    @specifics[specific || '__general__'] += 1
+  end
+
+  def count
+    specifics.values.inject(:+)
+  end
+
+  def print_out
+    puts "#{error_type}: #{count}"
+    specifics.reject {|key| key == "__general__"}.each do |name, count|
+      puts "  #{name}: #{count}"
+    end
+  end
+end
 
 def get_results(input)
-	results = Hash.new { 0 }
+	results = Hash.new { |hash, new_key| hash[new_key] = Error.new(new_key) }
 	input.each do |line|
-		flag = false
+		known_error = false
+    print '.'
 		ERROR_TYPES.each do |error|
 			if line.match(error)
-				results[error.source] += 1
-				flag = true
+				results[error.source].add_specific $1
+				known_error = true
 			end
 		end
 
-		unless flag || !LOOK_FOR_OTHERS
+		unless known_error || !LOOK_FOR_OTHERS
 			puts line
 			results["Other"] += 1
 		end
@@ -69,7 +108,11 @@ def get_results(input)
 	results
 end
 
+puts "Gathering error information..."
+code_output = `rake jshint 2> /dev/null | grep Lint`.split("\n")
 CODE_RESULTS = get_results(code_output)
+
+spec_output = `rake jshint:specs 2> /dev/null | grep Lint`.split("\n")
 SPEC_RESULTS = get_results(spec_output)
 
 def output_result(title, results)
@@ -77,15 +120,14 @@ def output_result(title, results)
 	puts "=" * title.length
 	puts
 
-	results.each do |error_type, error_count|
-		puts "#{error_type}: #{error_count}"
-	end
+	results.values.each(&:print_out)
 
 	puts
-	error_count = results.values.inject(:+)
-	puts "#{title} Warning Count: #{error_count}"
+	error_count = results.values.map(&:count).inject(:+)
+	puts "#{title} Error Count: #{error_count}"
 	puts
 end
 
+puts ""
 output_result("Application Code", CODE_RESULTS)
 output_result("Spec Code", SPEC_RESULTS)

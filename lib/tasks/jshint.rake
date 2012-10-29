@@ -14,7 +14,7 @@ if Rails.env.development?
       lint = JSHint::Lint.new paths: include_paths, exclude_paths: exclude_paths, config_path: 'config/jshint_specs.yml'
       lint.run
     end
-  end
 
-  task :jshint => 'jshint:specs'
+    task :all => ['jshint', 'jshint:specs']
+  end
 end
