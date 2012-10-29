@@ -244,6 +244,12 @@
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
             },
 
+            ImportScheduleUpdated: {
+                links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+            },
+
             DatasetImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],

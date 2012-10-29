@@ -11,8 +11,10 @@ class ActivityMigrator < AbstractMigrator
     def classes_to_validate
       [
           Events::SourceTableCreated,
+          Events::FileImportCreated,
           Events::FileImportSuccess,
           Events::FileImportFailed,
+          Events::DatasetImportCreated,
           Events::DatasetImportSuccess,
           Events::DatasetImportFailed,
           Events::PublicWorkspaceCreated,
@@ -32,7 +34,8 @@ class ActivityMigrator < AbstractMigrator
           Events::ChorusViewCreated,
           Events::ChorusViewChanged,
           Events::WorkspaceChangeName,
-          Events::ViewCreated
+          Events::ViewCreated,
+          Events::ImportScheduleUpdated,
       ]
     end
 
@@ -169,7 +172,7 @@ class ActivityMigrator < AbstractMigrator
 
         event.additional_data = {:filename => rows.select { |r| r['entity_type'] == 'file' }.first['object_name'],
                                  :import_type => 'file',
-                                 :destination_table => rows.select { |r| r['entity_type'] == 'table'}.first['object_name'],
+                                 :destination_table => rows.select { |r| r['entity_type'] == 'table' }.first['object_name'],
                                  :error_message => error_message}
         event.save!
       end
@@ -386,7 +389,7 @@ class ActivityMigrator < AbstractMigrator
     ))
     end
 
-   def migrate_view_created
+    def migrate_view_created
       Legacy.connection.exec_query(%Q(
     INSERT INTO #{@@events_table_name}(
       legacy_id,
@@ -855,6 +858,67 @@ class ActivityMigrator < AbstractMigrator
       end
     end
 
+
+    def migrate_import_schedule_updated
+      Legacy.connection.exec_query(<<-SQL)
+        INSERT INTO #{@@events_table_name}(
+          legacy_id,
+          legacy_type,
+          action,
+          target1_id,
+          target1_type,
+          target2_id,
+          target2_type,
+          created_at,
+          updated_at,
+          workspace_id,
+          actor_id)
+        SELECT
+          streams.id,
+          'edc_activity_stream',
+          'Events::ImportScheduleUpdated',
+          source_dataset.id,
+          'Dataset',
+          target_dataset.id,
+          'Dataset',
+          streams.created_tx_stamp,
+          streams.last_updated_tx_stamp,
+          workspaces.id,
+          users.id
+        FROM edc_activity_stream streams
+          INNER JOIN edc_activity_stream_object target_dataset_aso
+            ON streams.id = target_dataset_aso.activity_stream_id
+            AND target_dataset_aso.entity_type = 'table'
+          INNER JOIN datasets target_dataset
+            ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
+          INNER JOIN edc_activity_stream_object source_dataset_aso
+            ON streams.id = source_dataset_aso.activity_stream_id
+            AND source_dataset_aso.entity_type = 'databaseObject'
+          INNER JOIN datasets as source_dataset
+            ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
+          INNER JOIN workspaces
+            ON workspaces.legacy_id = streams.workspace_id
+          INNER JOIN edc_activity_stream_object actor
+            ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+          INNER JOIN users
+            ON users.legacy_id = actor.object_id
+        WHERE streams.type = 'IMPORT_UPDATED'
+        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name});
+      SQL
+
+      backfill_import_schedule_updated_additional_data
+    end
+
+    def backfill_import_schedule_updated_additional_data
+      Events::ImportScheduleUpdated.where('additional_data IS NULL').each do |event|
+        row = Legacy.connection.exec_query("SELECT object_name, object_id FROM edc_activity_stream_object aso
+                                    WHERE aso.activity_stream_id = '#{event.legacy_id}'
+                                    AND aso.entity_type = 'table';").first
+        event.additional_data = {:destination_table => row['object_name']}
+        event.save!
+      end
+    end
+
     def migrate_greenplum_instance_created
       Legacy.connection.exec_query(%Q(
         INSERT INTO #{@@events_table_name}(
@@ -1193,17 +1257,19 @@ class ActivityMigrator < AbstractMigrator
           WHERE aso.activity_stream_id = '#{event.legacy_id}'
           AND aso.object_type = 'object' AND aso.entity_type = 'version';
         ").first
-        event.additional_data = { :version_num => "#{row['version_num']}".to_s }
+        event.additional_data = {:version_num => "#{row['version_num']}".to_s}
         event.save!
       end
     end
 
     def migrate(options)
       prerequisites(options)
-      
+
       @@events_table_name = options[:event_table]
 
       ActiveRecord::Base.record_timestamps = false
+      original_table = Events::Base.table_name
+      Events::Base.table_name = @@events_table_name
 
       migrate_source_table_created
       migrate_file_import_created
@@ -1232,7 +1298,9 @@ class ActivityMigrator < AbstractMigrator
       migrate_chorus_view_changed
       migrate_workspace_name_changed
       migrate_view_created
+      migrate_import_schedule_updated
 
+      Events::Base.table_name = original_table
       Events::Base.find_each { |event| event.create_activities }
 
       ActiveRecord::Base.record_timestamps = true
