@@ -305,55 +305,47 @@ describe DatasetImportsController do
       log_in user
     end
 
-    let(:frequency) { "DAILY" }
-    let(:to_table) { import_schedule.workspace.sandbox.datasets.first }
+    describe "updating other values of Import schedule" do
+      let(:frequency) { "DAILY" }
+      let(:to_table) { import_schedule.workspace.sandbox.datasets.first }
 
-    before do
-      import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
-    end
+      before do
+        import_params.merge! :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
+      end
 
-    it "updates the start time for the import schedule" do
-      put :update, import_params.merge(:start_datetime => '2012-01-01 0:00')
-      import_schedule.reload.start_datetime.should == Time.parse('2012-01-01 0:00')
-    end
+      it "updates the start time for the import schedule" do
+        put :update, import_params.merge(:start_datetime => '2012-01-01 0:00')
+        import_schedule.reload.start_datetime.should == Time.parse('2012-01-01 0:00')
+      end
 
-    it "updates the import's frequency only and returns success" do
-      put :update, import_params.merge(:frequency => frequency)
-      response.code.should == "200"
-      import_schedule.reload
+      it "updates the import's frequency only and returns success" do
+        put :update, import_params.merge(:frequency => frequency)
+        response.code.should == "200"
+        import_schedule.reload
 
-      import_schedule.frequency.should == frequency
-      import_schedule.end_date.should == import_schedule.end_date
-      import_schedule.start_datetime.should == import_schedule.start_datetime
-    end
+        import_schedule.frequency.should == frequency
+        import_schedule.end_date.should == import_schedule.end_date
+        import_schedule.start_datetime.should == import_schedule.start_datetime
+      end
 
-    it "shows the import_schedule" do
-      put :update, import_params.merge(:frequency => frequency)
-      response.code.should == "200"
-      decoded_response.dataset_id.should == src_table.id
-      decoded_response.source_id.should == src_table.id
-    end
+      it "shows the import_schedule" do
+        put :update, import_params.merge(:frequency => frequency)
+        response.code.should == "200"
+        decoded_response.dataset_id.should == src_table.id
+        decoded_response.source_id.should == src_table.id
+      end
 
-    it "returns an error when importing into a new table but name already exists" do
-      put :update, import_params.merge(:new_table => 'true', :to_table => to_table.name)
-      response.code.should == '422'
-      decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
-    end
+      it "returns an error when importing into a new table but name already exists" do
+        put :update, import_params.merge(:new_table => 'true', :to_table => to_table.name)
+        response.code.should == '422'
+        decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
+      end
 
-    it "returns an error when importing into an existing table but name doesnt exist" do
-      put :update, import_params.merge(:new_table => 'false', :to_table => "non_existent")
-      response.code.should == '422'
-      decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
-    end
-
-    it "makes a IMPORT_SCHEDULE_UPDATED event" do
-      expect {
-        put :update, import_params.merge(:new_table => 'true', :to_table => "new_table_non_existent")
-      }.to change(Events::ImportScheduleUpdated, :count).by(1)
-      event = Events::ImportScheduleUpdated.last
-      event.workspace.should == import_schedule.workspace
-      event.source_dataset.should == import_schedule.source_dataset
-      event.destination_table.should == "new_table_non_existent"
+      it "returns an error when importing into an existing table but name doesnt exist" do
+        put :update, import_params.merge(:new_table => 'false', :to_table => "non_existent")
+        response.code.should == '422'
+        decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
+      end
     end
   end
 

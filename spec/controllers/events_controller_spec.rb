@@ -178,8 +178,7 @@ describe EventsController do
         "gnipStreamImportCreated" => Events::GnipStreamImportCreated,
         "gnipStreamImportSuccess" => Events::GnipStreamImportSuccess,
         "gnipStreamImportFailed" => Events::GnipStreamImportFailed,
-        "viewCreated" => Events::ViewCreated,
-        "importScheduleUpdated" => Events::ImportScheduleUpdated
+        "viewCreated" => Events::ViewCreated
     }
 
     FIXTURE_FILES.each do |filename, event_relation|

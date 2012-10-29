@@ -172,8 +172,8 @@ window.rspecFixtureDefinitions = {
             workspaceChangeName: {},
             tableauWorkbookPublished: {},
             tableauWorkfileCreated: {},
-            viewCreated: {},
-            importScheduleUpdated: {}
+            viewCreated: {}
+
         }
     },
 

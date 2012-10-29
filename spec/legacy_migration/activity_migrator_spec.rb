@@ -207,26 +207,6 @@ describe ActivityMigrator do
         Events::DatasetImportCreated.count.should == count
       end
 
-      it "copies IMPORT SCHEDULE UPDATED events" do
-        count = 0
-        Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, source_dataset_aso.object_name as source_table_name, aso.object_id from legacy_migrate.edc_activity_stream ed
-          INNER JOIN legacy_migrate.edc_activity_stream_object as aso
-            ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
-          INNER JOIN legacy_migrate.edc_activity_stream_object as source_dataset_aso
-            ON ed.id = source_dataset_aso.activity_stream_id and source_dataset_aso.entity_type = 'databaseObject'
-          where type = 'IMPORT_UPDATED';").each do |row|
-          count += 1
-          event = Events::ImportScheduleUpdated.find_by_legacy_id(row['id'])
-          event.workspace.legacy_id.should == row["workspace_id"]
-          event.actor.username.should == row["author"]
-          event.dataset.name.should == row["table_name"]
-          event.source_dataset.name.should == row["source_table_name"]
-          event.additional_data['destination_table'].should == row["table_name"]
-        end
-        count.should > 0
-        Events::ImportScheduleUpdated.count.should == count
-      end
-
       it "copies DATASET IMPORT SUCCESS events" do
         count = 0
         Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, source_dataset_aso.object_name as source_table_name, aso.object_id from legacy_migrate.edc_activity_stream ed

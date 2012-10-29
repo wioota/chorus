@@ -55,14 +55,6 @@ class DatasetImportsController < ApplicationController
     normalize_import_attributes!(attributes)
     validate_import_attributes(src_table, attributes, destination_table_change)
     import_schedule.update_attributes!(attributes)
-    dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(attributes[:to_table])
-
-    Events::ImportScheduleUpdated.by(current_user).add(
-        :workspace => import_schedule.workspace,
-        :source_dataset => import_schedule.source_dataset,
-        :dataset => dst_table,
-        :destination_table => import_schedule.to_table
-    )
 
     present import_schedule, :presenter_options => {:dataset_id => params[:dataset_id].to_i}
   end

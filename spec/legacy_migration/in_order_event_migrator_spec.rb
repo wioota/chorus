@@ -13,7 +13,7 @@ describe InOrderEventMigrator do
 
     it "inserts the event objects in created_at order" do
       #TODO: a large portion of this filtering should go away when we correctly migrate imports from chorus views story 38441081
-      not_yet_implemented_events = %w(WORKSPACE_DELETED INSTANCE_DELETED WORKSPACE_ADD_HDFS_AS_EXT_TABLE WORKSPACE_ADD_TABLE WORKSPACE_ADD_SANDBOX)
+      not_yet_implemented_events = %w(WORKSPACE_DELETED INSTANCE_DELETED WORKSPACE_ADD_HDFS_AS_EXT_TABLE WORKSPACE_ADD_TABLE IMPORT_UPDATED WORKSPACE_ADD_SANDBOX)
       not_supported_in_2_2 = %w(MEMBERS_DELETED)
       import_events = %w(IMPORT_CREATED IMPORT_SUCCESS)
       excluded_events = (not_yet_implemented_events + not_supported_in_2_2 + import_events).map { |ev| "'#{ev}'" }.join(', ')

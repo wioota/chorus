@@ -11,7 +11,7 @@ class ImportPresenter < Presenter
           :source_id => model.source_dataset_id,
           :file_name => model.file_name
         },
-        :source_id => model.source_dataset_id
+        :source_id => model.source_dataset_id,
     }
 
     dataset = Dataset.find_by_id(model.source_dataset_id)
