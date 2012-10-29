@@ -12,6 +12,7 @@ paths:
 exclude_paths:
   - spec/javascripts/vendor/**/*.js
   - spec/javascripts/support/old-jasmine-core/**/*.js
+  - spec/javascripts/helpers/sinon*.js
 
 # ------------ jshint options ------------
 # visit http://jshint.com/ for complete documentation
