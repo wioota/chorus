@@ -1,5 +1,7 @@
 chorus.views.Filter = chorus.views.Base.extend({
     templateName: "dataset_filter",
+    constructorName: "FilterView",
+
     tagName: "li",
     persistent: true,
 

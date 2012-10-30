@@ -14,11 +14,12 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var self = this;
+        var selectEl = this.$("select");
+        var showAliasedName = this.options.showAliasedName;
         _.defer(function() {
-            chorus.styleSelect(self.$('select'), {format: function(text, option) {
+            chorus.styleSelect(selectEl, {format: function(text, option) {
                 var aliasedName = $(option).data('aliasedName');
-                if (aliasedName && self.options.showAliasedName) {
+                if (aliasedName && showAliasedName) {
                     return '<span class="aliased_name"><span class="letter">' + aliasedName + '</span></span>' + text;
                 } else {
                     return text;

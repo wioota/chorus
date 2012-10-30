@@ -1,5 +1,6 @@
 chorus.views.FilterWizard = chorus.views.Base.extend({
     templateName: "filter_wizard",
+    constructorName: "FilterWizard",
     persistent: true,
 
     events: {

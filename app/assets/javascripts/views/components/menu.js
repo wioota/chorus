@@ -1,5 +1,7 @@
 chorus.views.Menu = chorus.views.Bare.extend({
     tagName: "ul",
+    constructorName: "MenuView",
+
     templateName: "components/menu",
 
     events: {
