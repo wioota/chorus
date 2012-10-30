@@ -39,7 +39,11 @@ class ChorusConfig
   end
 
   def gnip_configured?
-    (self['gnip_enabled']  && true)
+    (self['gnip_enabled'] && true)
+  end
+
+  def syslog_configured?
+    (self['logging.syslog'] && true)
   end
 
   def kaggle_configured?

@@ -18,6 +18,7 @@ gem 'attr_encrypted'
 gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
 gem 'turbo-sprockets-rails3'
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
+gem "logger-syslog", git: 'git@github.com:scambra/logger-syslog.git'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

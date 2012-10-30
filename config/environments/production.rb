@@ -1,3 +1,5 @@
+require_relative '../../app/models/chorus_config'
+
 Chorus::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -36,6 +38,10 @@ Chorus::Application.configure do
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  local_chorus_config = ChorusConfig.new
+  if local_chorus_config.syslog_configured?
+    config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new('Chorus'))
+  end
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store

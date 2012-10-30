@@ -73,6 +73,12 @@ GIT
       hpricot
       rchardet19
 
+GIT
+  remote: git@github.com:scambra/logger-syslog.git
+  revision: 234ef81ebe5e9e8c7fe9d2ba46551a8786afc1ff
+  specs:
+    logger-syslog (1.7.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -356,6 +362,7 @@ DEPENDENCIES
   jruby-openssl
   jshint_on_rails
   license_finder
+  logger-syslog!
   mizuno!
   net-ldap
   newrelic_rpm

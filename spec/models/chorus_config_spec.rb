@@ -107,6 +107,19 @@ describe ChorusConfig do
     end
   end
 
+  describe "#syslog_configured?" do
+
+    it 'returns true if the logger.syslog key is there' do
+      config.config = {'logging' => {'syslog' => true} }
+      config.syslog_configured?.should be_true
+    end
+
+    it 'returns false if the logger.syslog value is false' do
+      config.config = {'logging' => {'syslog' => false} }
+      config.should_not be_syslog_configured
+    end
+  end
+
   describe "#gpfdist_configured?" do
     it "returns true if all the gpfdist keys are set" do
       config.config = {
