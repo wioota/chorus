@@ -89,9 +89,9 @@ describe 'BackupRestore' do
           }.to raise_error(/positive integer/)
         end
 
-        xit "includes the assets in the backup" do
+        it "includes the assets in the backup" do
           run_backup
-          asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar t`
+          asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar tz`
           asset_list.split.should include(*assets)
         end
 
@@ -304,13 +304,22 @@ describe "Backup and Restore" do
   #  # return the test database to its original state
   #  without_database_connection do
   #    begin
+  #      p Dir.pwd
+  #      p Rails.root
+  #      p Rails.env
   #      original_rake_application = Rake.application
   #      @rake = Rake::Application.new
   #      Rake.application = @rake
-  #      Rake.application.rake_require "backup_and_restore"
-  #      Rake::Task.define_task(:environment)
-  #      @rake["db:test:prepare"].invoke
-  #      @rake["db:fixtures:load"].invoke
+  #      begin
+  #        old_env, Rails.env = Rails.env, 'development'
+  #        @rake[:"db:test:prepare"].invoke
+  #        @rake[:"db:test:prepare"].reenable
+  #      ensure
+  #        Rails.env = old_env
+  #      end
+  #
+  #      @rake[:"db:fixtures:load"].invoke
+  #      @rake[:"db:fixtures:load"].reenable
   #    ensure
   #      Rake.application = original_rake_application
   #    end
