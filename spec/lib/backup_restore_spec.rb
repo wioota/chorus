@@ -300,32 +300,6 @@ describe "Backup and Restore" do
     end
   end
 
-  #after(:all) do
-  #  # return the test database to its original state
-  #  without_database_connection do
-  #    begin
-  #      p Dir.pwd
-  #      p Rails.root
-  #      p Rails.env
-  #      original_rake_application = Rake.application
-  #      @rake = Rake::Application.new
-  #      Rake.application = @rake
-  #      begin
-  #        old_env, Rails.env = Rails.env, 'development'
-  #        @rake[:"db:test:prepare"].invoke
-  #        @rake[:"db:test:prepare"].reenable
-  #      ensure
-  #        Rails.env = old_env
-  #      end
-  #
-  #      @rake[:"db:fixtures:load"].invoke
-  #      @rake[:"db:fixtures:load"].reenable
-  #    ensure
-  #      Rake.application = original_rake_application
-  #    end
-  #  end
-  #end
-
   around do |example|
     # create fake original and restored install
     make_tmp_path("rspec_backup_restore_original") do |original_path|
@@ -350,30 +324,44 @@ describe "Backup and Restore" do
   end
 
   xit "backs up and restores the data" do
-    make_tmp_path("rspec_backup_restore_backup") do |backup_path|
-      all_models_before_backup = all_models
+    begin
+      connection_config = ActiveRecord::Base.connection_config
 
-      with_rails_root @original_path do
-        BackupRestore.backup backup_path
+      make_tmp_path("rspec_backup_restore_backup") do |backup_path|
+        all_models_before_backup = all_models
+
+        with_rails_root @original_path do
+          BackupRestore.backup backup_path
+        end
+
+        backup_filename = Dir.glob(backup_path.join "*.tar").first
+
+        deleted_user = User.first.delete
+
+        with_rails_root @restore_path do
+          BackupRestore.restore backup_filename, true
+        end
+
+        original_entries = get_filesystem_entries_at_path @original_path
+        restored_entries = get_filesystem_entries_at_path @restore_path
+
+        restored_entries.should == original_entries
+
+        User.find_by_id(deleted_user.id).should == deleted_user
+
+        all_models.should_not == []
+        all_models.should =~ all_models_before_backup
       end
 
-      backup_filename = Dir.glob(backup_path.join "*.tar").first
+    rescue => e
+      # return the test database to its original state
+      ActiveRecord::Base.connection.disconnect! if ActiveRecord::Base.connection_handler.active_connections?
 
-      deleted_user = User.first.delete
+      system "RAILS_ENV=development rake db:test:prepare"
+      system "RAILS_ENV=test rake db:fixtures:load"
+      ActiveRecord::Base.establish_connection connection_config
 
-      with_rails_root @restore_path do
-        BackupRestore.restore backup_filename, true
-      end
-
-      original_entries = get_filesystem_entries_at_path @original_path
-      restored_entries = get_filesystem_entries_at_path @restore_path
-
-      restored_entries.should == original_entries
-
-      User.find_by_id(deleted_user.id).should == deleted_user
-
-      all_models.should_not == []
-      all_models.should =~ all_models_before_backup
+      raise e
     end
   end
 
@@ -450,17 +438,6 @@ def populate_fake_chorus_install(install_path, options = {})
   Dir.chdir install_path do
     create_version_build(version)
   end
-end
-
-def without_database_connection
-  existing_connection = ActiveRecord::Base.connection_handler.active_connections?
-  if existing_connection
-    connection_config = ActiveRecord::Base.connection_config
-    ActiveRecord::Base.connection.disconnect!
-  end
-  yield
-ensure
-  ActiveRecord::Base.establish_connection connection_config if existing_connection
 end
 
 def asset_path
