@@ -9,7 +9,7 @@ namespace :backup do
   end
 
   desc 'restore from a backup'
-  task :restore, [:backup_file] do |t, args|
-    BackupRestore.restore args[:backup_file]
+  task :restore, [:backup_file, :silent] do |t, args|
+    BackupRestore.restore args[:backup_file], args[:silent]
   end
 end

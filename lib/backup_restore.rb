@@ -146,7 +146,7 @@ module BackupRestore
     end
 
     def restore
-      prompt_user
+      prompt_user unless do_not_warn_before_restore
 
       without_connection do
         full_backup_filename = File.expand_path(backup_filename)

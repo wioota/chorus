@@ -125,7 +125,23 @@ function backup () {
 
 function restore () {
 
-  BACKUP_FILENAME=${@}
+  SILENT=""
+
+  while getopts "s" OPTION
+  do
+       case $OPTION in
+           s)
+               SILENT="true"
+               shift
+               ;;
+           ?)
+               usage
+               exit
+               ;;
+       esac
+  done
+
+  BACKUP_FILENAME=$1
   while true; do
       if [ -z "$BACKUP_FILENAME" ]; then
           read -p "Please enter the name of a backup file to restore: " BACKUP_FILENAME
@@ -142,7 +158,7 @@ function restore () {
   BACKUP_ABSOLUTE_FILENAME="$BACKUP_ABSOLUTE_DIR/"`basename $BACKUP_FILENAME`
 
   echo "Restoring chorus data..."
-  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME] --trace"
+  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME,$SILENT] --trace"
 }
 
 function run_in_root_dir_with_postgres () {
