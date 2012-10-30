@@ -10,5 +10,12 @@ chorus.dialogs.InstanceUsage = chorus.dialogs.Base.extend({
         this.usage = this.resource = this.options.instance.usage();
         this.usage.fetchIfNotLoaded();
         this.requiredResources.push(this.usage);
+
+        if (this.model.stateText() == 'Offline') {
+            this.usage = _.map(this.usage.get("workspaces"), function(ea) {
+                ea.size = 'Offline';
+                ea.percentageUsed = 0;
+            });
+        }
     }
 });
