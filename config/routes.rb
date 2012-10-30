@@ -138,6 +138,4 @@ Chorus::Application.routes.draw do
   match "/" => "root#index"
   match "VERSION" => "configurations#version"
 
-  # TODO: Remove this when it's no longer needed
-  match '*not_found' => 'root#not_found'
 end

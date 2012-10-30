@@ -101,8 +101,13 @@ resource "Workfiles: versions" do
     parameter :workfile_id, "Id of a workfile"
 
     required_parameters :workfile_id, :id
-    let!(:another_version) { workfile.build_new_version(owner, test_file('some.txt'), "commit message - 1")}
-    let!(:id) { another_version.to_param }
+    let!(:another_version) {
+      workfile.build_new_version(owner, test_file('some.txt'), "commit message - 1").tap do |file|
+        file.save!
+      end
+    }
+    let!(:id) { another_version.id }
+    let!(:workfile_id) { workfile.id }
 
 
     example_request "Delete a version of a workfile" do

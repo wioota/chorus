@@ -145,7 +145,7 @@ describe Workspace do
 
       context "when the user does not have an instance account" do
         it "lets them see associated datasets and chorus views only" do
-          workspace.datasets(user).should =~ [source_table, chorus_view, chorus_view_from_source]
+          workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
         end
       end
 
@@ -158,14 +158,14 @@ describe Workspace do
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
-            workspace.datasets(user).should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
+            workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
           end
 
           it "filters by type" do
-            workspace.datasets(user, "SANDBOX_TABLE").should =~ [sandbox_table]
-            workspace.datasets(user, "SANDBOX_DATASET").should =~ [sandbox_table, sandbox_view]
-            workspace.datasets(user, "CHORUS_VIEW").should =~ [chorus_view, chorus_view_from_source]
-            workspace.datasets(user, "SOURCE_TABLE").should =~ [source_table]
+            workspace.datasets(user, "SANDBOX_TABLE").to_a.should =~ [sandbox_table]
+            workspace.datasets(user, "SANDBOX_DATASET").to_a.should =~ [sandbox_table, sandbox_view]
+            workspace.datasets(user, "CHORUS_VIEW").to_a.should =~ [chorus_view, chorus_view_from_source]
+            workspace.datasets(user, "SOURCE_TABLE").to_a.should =~ [source_table]
           end
         end
 

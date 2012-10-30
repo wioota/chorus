@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'rails', '3.2.5'
+gem 'rails', '3.2.9.rc1'
 
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
@@ -11,12 +11,10 @@ gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120720'
 gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'sunspot_solr', '2.0.0.pre.120720'
-gem 'quiet_assets'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
 gem 'attr_encrypted'
 gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
-gem 'turbo-sprockets-rails3'
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
 gem "logger-syslog", git: 'git@github.com:scambra/logger-syslog.git'
 
@@ -33,6 +31,7 @@ group :assets do
   gem 'therubyrhino'
   gem 'uglifier', '>= 1.0.3'
   gem 'yui-compressor'
+  gem 'turbo-sprockets-rails3'
 end
 
 group :integration do
@@ -47,7 +46,7 @@ group :test, :integration, :packaging do
   gem 'factory_girl'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'
-  gem 'journey', '1.0.3'
+  gem 'journey'
   gem 'timecop'
   gem 'hashie'
   gem 'vcr'

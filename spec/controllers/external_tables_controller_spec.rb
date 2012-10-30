@@ -14,7 +14,7 @@ describe ExternalTablesController do
       log_in user
     end
 
-    it_behaves_like "an action that requires authentication", :post, :create
+    it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
     context "without sandbox" do
       let(:parameters) do

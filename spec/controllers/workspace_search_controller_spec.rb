@@ -9,7 +9,7 @@ describe WorkspaceSearchController do
       log_in user
     end
 
-    it_behaves_like "an action that requires authentication", :get, :show
+    it_behaves_like "an action that requires authentication", :get, :show, :workspace_id => '-1'
 
     it "uses the workspace search object" do
       fake_search = Object.new

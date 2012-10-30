@@ -156,7 +156,7 @@ describe WorkfilesController do
           :versions_attributes => [{:contents => file}]
     } }
 
-    it_behaves_like "an action that requires authentication", :post, :create
+    it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
     context "as a member of the workspace" do
       it "creates a workfile" do

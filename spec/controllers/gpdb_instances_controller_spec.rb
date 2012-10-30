@@ -86,7 +86,7 @@ describe GpdbInstancesController do
   end
 
   describe "#create" do
-    it_behaves_like "an action that requires authentication", :put, :update
+    it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
 
     context "with register provision type" do
       let(:valid_attributes) { Hash.new }

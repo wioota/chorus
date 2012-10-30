@@ -1,13 +1,26 @@
+Rake::Task["db:test:load_structure"].clear_actions
 namespace :db do
+
+  namespace :test do
+    task :load_structure do
+      begin
+        old_env, Rails.env = Rails.env, 'test'
+        Rake::Task["db:structure:load"].invoke
+      ensure
+        Rails.env = old_env
+      end
+    end
+  end
+
   namespace :integration do
     # desc "Recreate the integration database from an existent structure.sql file"
     task :load_structure => 'db:integration:purge' do
       begin
-        old_env, ENV['RAILS_ENV'] = ENV['RAILS_ENV'], 'integration'
+        old_env, Rails.env = Rails.env, 'integration'
         Rake::Task[:"db:structure:load"].invoke
         Rake::Task[:"db:structure:load"].reenable
       ensure
-        ENV['RAILS_ENV'] = old_env
+        Rails.env = old_env
       end
     end
 

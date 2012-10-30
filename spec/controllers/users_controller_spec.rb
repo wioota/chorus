@@ -130,7 +130,7 @@ describe UsersController do
     let(:admin) { users(:admin) }
     let(:non_admin) { users(:owner) }
 
-    it_behaves_like "an action that requires authentication", :put, :update
+    it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
 
     context "when logged in as an admin" do
       before do
@@ -217,7 +217,7 @@ describe UsersController do
       log_in user
     end
 
-    it_behaves_like "an action that requires authentication", :get, :show
+    it_behaves_like "an action that requires authentication", :get, :show, :id => '-1'
 
     context "with a valid user id" do
       it "succeeds" do

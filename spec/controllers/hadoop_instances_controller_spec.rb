@@ -63,7 +63,7 @@ describe HadoopInstancesController do
 
   describe "#index" do
     it "presents all hadoop instances" do
-      mock_present { |model| model.should =~ HadoopInstance.all }
+      mock_present { |models| models.to_a.to_a.should =~ HadoopInstance.all.to_a }
       get :index
     end
 

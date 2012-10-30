@@ -15,7 +15,7 @@ describe GpdbInstances::MembersController do
       log_in instance_owner
     end
 
-    it_behaves_like "an action that requires authentication", :get, :index
+    it_behaves_like "an action that requires authentication", :get, :index, :gpdb_instance_id => '-1'
 
     it "succeeds" do
       get :index, :gpdb_instance_id => gpdb_instance.to_param
