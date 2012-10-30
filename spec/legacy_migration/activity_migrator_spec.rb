@@ -8,6 +8,8 @@ describe ActivityMigrator do
         stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
       end
 
+      clear_events_and_associations
+
       ActivityMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
     end
 

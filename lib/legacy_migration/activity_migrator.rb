@@ -567,7 +567,6 @@ class ActivityMigrator < AbstractMigrator
     end
 
     def backfill_file_import_created_additional_data
-
       Events::FileImportCreated.where('additional_data IS NULL').each do |event|
         row = Legacy.connection.exec_query("SELECT aso1.object_name as file_name, aso2.object_name as table_name FROM edc_activity_stream_object aso1
                                       INNER JOIN edc_activity_stream_object aso2 ON aso2.activity_stream_id  = '#{event.legacy_id}' AND aso2.entity_type = 'table'
@@ -1270,7 +1269,7 @@ class ActivityMigrator < AbstractMigrator
       ActiveRecord::Base.record_timestamps = false
       original_table = Events::Base.table_name
       Events::Base.table_name = @@events_table_name
-
+      Events::Base.descendants.each { |klass| klass.table_name = @@events_table_name }
       migrate_source_table_created
       migrate_file_import_created
       migrate_file_import_success
@@ -1301,6 +1300,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_import_schedule_updated
 
       Events::Base.table_name = original_table
+      Events::Base.descendants.each { |klass| klass.table_name = original_table }
       Events::Base.find_each { |event| event.create_activities }
 
       ActiveRecord::Base.record_timestamps = true

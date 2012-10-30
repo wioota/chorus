@@ -8,6 +8,7 @@ describe InOrderEventMigrator do
         stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
       end
 
+      clear_events_and_associations
       InOrderEventMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
     end
 
@@ -49,7 +50,8 @@ describe InOrderEventMigrator do
       Events::Base.unscoped.count.should == (comment_count + activity_count + import_event_count)
 
       id_order = Events::Base.unscoped.order("id")
-      created_order = Events::Base.unscoped.order("created_at")
+      created_order = Events::Base.unscoped.order("created_at, id")
+
       (0..Events::Base.unscoped.count).each do |count|
         id_order[count].should == created_order[count]
       end

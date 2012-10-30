@@ -16,7 +16,7 @@ class InOrderEventMigrator < AbstractMigrator
          from temp_events
          left outer join events on (temp_events.legacy_type = events.legacy_type AND temp_events.legacy_id = events.legacy_id)
          where events.id is null
-         order by created_at asc);
+         order by created_at, temp_events.id asc);
       SQL
       Legacy.connection.exec_query("DROP TABLE temp_events;")
     end

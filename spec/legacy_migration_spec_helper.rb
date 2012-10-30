@@ -41,3 +41,13 @@ RSpec.configure do |config|
   config.include FileHelper
   config.include FakeRelations
 end
+
+def clear_events_and_associations
+  # Because the tables are not cleaned up after every test,
+  # the InOrderEventMigrator and ActivityMigrator both need to have this run beforehand
+  # otherwise they will use each other's data.
+  Legacy.connection.exec_query("DELETE FROM events;")
+  Legacy.connection.exec_query("DELETE FROM notifications;")
+  Legacy.connection.exec_query("DELETE FROM comments;")
+  Legacy.connection.exec_query("DELETE FROM activities;")
+end
