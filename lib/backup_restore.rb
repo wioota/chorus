@@ -124,7 +124,7 @@ module BackupRestore
     end
 
     def package_backup
-      %w{version_build config/chorus.properties}.map {|f|Rails.root.join f}.each do |file|
+      %w{version_build config/chorus.properties}.map { |f| Rails.root.join f }.each do |file|
         FileUtils.cp file, "." if File.exists?(file)
       end
 
@@ -200,22 +200,21 @@ PROMPT
 
     def restore_assets
       log "Restoring assets..."
-      full_path = config_path ASSET_PATH
+      full_path = Pathname.new config_path(ASSET_PATH)
       FileUtils.mkdir_p full_path and Dir.chdir full_path do
+        # remove old assets
         MODELS_WITH_ASSETS.each do |model|
-          # TODO: make sure that we only remove top-level model paths that are in the tar ball
-          FileUtils.rm_r File.join(ASSET_PATH, model) if asset_path_in_tar?(ASSET_PATH) rescue Errno::ENOENT
+          FileUtils.rm_r full_path.join(model) rescue Errno::ENOENT
         end
 
         asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+        return unless File.exists? asset_file
+
         capture_output "tar xf #{asset_file}",
                        :error => "Restoring assets failed."
       end
     end
 
-    def asset_path_in_tar?(path)
-      true
-    end
 
     def restore_database
       log "Restoring database..."

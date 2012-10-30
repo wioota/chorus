@@ -53,11 +53,11 @@ describe 'BackupRestore' do
 
         it "creates a backup file with the correct timestamp" do
           run_backup
-          File.exists?(@expected_backup_file).should be_true
+          @expected_backup_file.should exist
         end
 
         it "creates only the backup file and leaves no other trace" do
-          new_files_created_by(@chorus_path.join backup_path) do
+          new_files_created(@chorus_path.join backup_path) do
             run_backup
           end.should == [Pathname.new(@expected_backup_file)]
         end
@@ -75,7 +75,7 @@ describe 'BackupRestore' do
             any_instance_of(BackupRestore::Backup) do |instance|
               stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
             end
-            new_files_created_by(@chorus_path) do
+            new_files_created(@chorus_path) do
               expect {
                 run_backup
               }.to raise_error("you can't do that!")
@@ -100,7 +100,7 @@ describe 'BackupRestore' do
 
           it "doesn't create the assets file" do
             run_backup
-            File.exists?(@expected_backup_file).should be_true
+            @expected_backup_file.should exist
             file_list = `tar tf #{@expected_backup_file}`
             file_list.should_not include("assets_storage_path")
           end
@@ -123,7 +123,7 @@ describe 'BackupRestore' do
               let(:old_backup_time) { rolling_days.days.ago - 1.hour }
 
               it "deletes it" do
-                File.exists?(old_backup).should be_false
+                old_backup.should_not exist
               end
             end
 
@@ -131,7 +131,7 @@ describe 'BackupRestore' do
               let(:old_backup_time) { rolling_days.days.ago + 1.hour }
 
               it "keeps it" do
-                File.exists?(old_backup).should be_true
+                old_backup.should exist
               end
             end
           end
@@ -142,14 +142,14 @@ describe 'BackupRestore' do
             let(:old_backup_time) { 1.year.ago }
 
             it "does not remove old backups" do
-              File.exists?(old_backup).should be_true
+              old_backup.should exist
             end
           end
         end
       end
     end
 
-    def new_files_created_by(dir)
+    def new_files_created(dir)
       entries_before_block = all_filesystem_entries(dir)
       yield
       all_filesystem_entries(dir) - entries_before_block
@@ -167,7 +167,6 @@ describe 'BackupRestore' do
       any_instance_of(BackupRestore::Restore) do |instance|
         stub(instance).log.with_any_args
         stub(instance).restore_database
-        stub(instance).restore_assets
       end
     end
 
@@ -179,6 +178,8 @@ describe 'BackupRestore' do
       let(:backup_tar) { backup_path.join "backup.tar" }
       let(:no_chorus_properties) { false }
       let(:no_assets_storage_path) { false }
+      let(:old_asset_file) {"users/old_asset_file.icon"}
+      let(:assets) {[old_asset_file]}
 
       around do |example|
         make_tmp_path("rspec_backup_restore") do |tmp_path|
@@ -186,7 +187,7 @@ describe 'BackupRestore' do
 
           # create a directory to restore to
           Dir.mkdir restore_path
-          populate_fake_chorus_install(restore_path, :version => current_version_string)
+          populate_fake_chorus_install(restore_path, :version => current_version_string, :assets => assets)
           FileUtils.rm_f restore_path.join("config/chorus.properties")
 
           # create a fake backup in another directory
@@ -218,6 +219,13 @@ describe 'BackupRestore' do
         BackupRestore.restore "../backup/backup.tar", true
       end
 
+      it "removes the old assets" do
+        old_asset = asset_path.join old_asset_file
+        old_asset.should exist
+        BackupRestore.restore "../backup/backup.tar", true
+        old_asset.should_not exist
+      end
+
       context "when chorus.properties does not exist" do
         let(:no_chorus_properties) { true }
 
@@ -226,11 +234,18 @@ describe 'BackupRestore' do
         end
       end
 
-      context "when assets_storage_path.tgz does not exist" do
+      context "when the original backup has no assets" do
         let(:no_assets_storage_path) { true }
 
-        it "works without chorus.yml" do
+        it "still works" do
           BackupRestore.restore "../backup/backup.tar", true
+        end
+
+        it "still removes the old assets" do
+          old_asset = asset_path.join old_asset_file
+          old_asset.should exist
+          BackupRestore.restore "../backup/backup.tar", true
+          old_asset.should_not exist
         end
       end
 
@@ -412,9 +427,6 @@ def populate_fake_chorus_install(install_path, options = {})
 
   # create a fake asset in original
   with_rails_root(install_path) do
-    chorus_config = ChorusConfig.new
-    asset_path = Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
-
     FileUtils.mkdir_p asset_path
 
     assets.each do |asset|
@@ -437,6 +449,11 @@ def without_database_connection
   yield
 ensure
   ActiveRecord::Base.establish_connection connection_config if existing_connection
+end
+
+def asset_path
+  chorus_config = ChorusConfig.new
+  Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
 end
 
 require 'stringio'
