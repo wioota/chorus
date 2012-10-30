@@ -1,40 +1,55 @@
 .tab_control {
-    .tabbed_area {
-        margin-right: 10px;
-    }
+  .tabbed_area {
+    margin-right: 10px;
+  }
+
+  .tabs_container {
+    border-bottom: 1px solid $link-color;
+    margin-bottom: 16px;
+    text-align: center;
 
     .tabs {
-        margin: 13px 10px 16px 0;
+      margin-top: 13px;
+      margin-bottom: 0px;
+      position: relative;
+
+      .divider {
+        margin: 0px;
+        padding: 0px;
+        position: absolute;
+        bottom: 0px;
+        width: 1px;
+        height: 25px;
+      }
+
+      li {
+        position: relative;
+        padding: 0 7px;
+        @include list-section-heading;
         @include tab-gradient;
-        border-bottom: 1px solid $link-color;
+        margin-left: 1px;
 
-        li {
-            position: relative;
-            padding: 0 7px;
-            @include list-section-heading;
+        display: inline-block;
+        color: $link-color;
+        line-height: 24px;
+        vertical-align: middle;
+        cursor: pointer;
 
-            display: inline-block;
-            color : $link-color;
-            line-height: 24px;
-            vertical-align: middle;
-            cursor: pointer;
-
-
-            &.selected {
-                background-image: none;
-                color: white;
-                background-color: $link-color;
-                &:after {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: -8px;
-                    background: url("/images/blue_triangle.png") no-repeat bottom center
-                }
-            }
+        &.selected {
+          background-image: none;
+          color: white;
+          background-color: $link-color;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            background: url("/images/blue_triangle.png") no-repeat bottom center;
+          }
         }
+      }
     }
-
+  }
 }
