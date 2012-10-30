@@ -300,22 +300,22 @@ describe "Backup and Restore" do
     end
   end
 
-  after(:all) do
-    # return the test database to its original state
-    without_database_connection do
-      begin
-        original_rake_application = Rake.application
-        @rake = Rake::Application.new
-        Rake.application = @rake
-        Rake.application.rake_require "backup_and_restore"
-        Rake::Task.define_task(:environment)
-        @rake["db:test:prepare"].invoke
-        @rake["db:fixtures:load"].invoke
-      ensure
-        Rake.application = original_rake_application
-      end
-    end
-  end
+  #after(:all) do
+  #  # return the test database to its original state
+  #  without_database_connection do
+  #    begin
+  #      original_rake_application = Rake.application
+  #      @rake = Rake::Application.new
+  #      Rake.application = @rake
+  #      Rake.application.rake_require "backup_and_restore"
+  #      Rake::Task.define_task(:environment)
+  #      @rake["db:test:prepare"].invoke
+  #      @rake["db:fixtures:load"].invoke
+  #    ensure
+  #      Rake.application = original_rake_application
+  #    end
+  #  end
+  #end
 
   around do |example|
     # create fake original and restored install
@@ -342,6 +342,8 @@ describe "Backup and Restore" do
 
   xit "backs up and restores the data" do
     make_tmp_path("rspec_backup_restore_backup") do |backup_path|
+      all_models_before_backup = all_models
+
       with_rails_root @original_path do
         BackupRestore.backup backup_path
       end
@@ -349,7 +351,6 @@ describe "Backup and Restore" do
       backup_filename = Dir.glob(backup_path.join "*.tar").first
 
       deleted_user = User.first.delete
-      all_models_before_restore = all_models
 
       with_rails_root @restore_path do
         BackupRestore.restore backup_filename, true
@@ -362,17 +363,14 @@ describe "Backup and Restore" do
 
       User.find_by_id(deleted_user.id).should == deleted_user
 
-      all_models.should == all_models_before_restore
+      all_models.should_not == []
+      all_models.should =~ all_models_before_backup
     end
   end
 
   def all_models
-    ActiveRecord::Base.subclasses.map(&:unscoped).map(&:all).flatten.map(&:reload).group_by(&:class).inject({}) do |hash, (key, value)|
-      hash[key] = value.map(&:attributes)
-      hash
-    end
+    ActiveRecord::Base.subclasses.map(&:unscoped).flatten.map(&:reload)
   end
-
 
   def get_filesystem_entries_at_path(path)
     pathname = Pathname.new(path)
