@@ -142,23 +142,23 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("passes the instance set through to the instance list view", function() {
             var packedUpGreenplumSet = _.map(this.page.gpdbInstanceSet.models, function(instance) {
-                return new chorus.models.Base({ theInstance: instance });
+                return new chorus.models.Base(instance);
             });
             var packedUpHadoopSet = _.map(this.page.hadoopInstanceSet.models, function(instance) {
-                return new chorus.models.Base({ theInstance: instance });
+                return new chorus.models.Base(instance);
             });
             var packedUpGnipSet = _.map(this.page.gnipInstanceSet.models, function(instance) {
-                return new chorus.models.Base({ theInstance: instance });
+                return new chorus.models.Base(instance);
             });
             var packedUpInstanceSet = new chorus.collections.Base();
+            packedUpInstanceSet.add(packedUpGnipSet);
             packedUpInstanceSet.add(packedUpGreenplumSet);
             packedUpInstanceSet.add(packedUpHadoopSet);
-            packedUpInstanceSet.add(packedUpGnipSet);
 
             expect(packedUpInstanceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
 
-            _.each(this.page.mainContent.instanceList.collection, function(instance, i) {
-                expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.models[i].get("name"));
+            this.page.mainContent.instanceList.collection.each(function(instance, i) {
+                expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.at(i).get("name"));
             });
         });
 
