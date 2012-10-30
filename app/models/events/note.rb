@@ -11,14 +11,14 @@ module Events
     searchable do
       string :grouping_id
       string :type_name
-      string :security_type_name
+      string :security_type_name, :multiple => true
     end
 
     attr_accessible :dataset_ids, :workfile_ids
 
     has_additional_data :body
 
-    delegate :grouping_id, :type_name, :to => :primary_target
+    delegate :grouping_id, :type_name, :security_type_name, :to => :primary_target
 
     def self.create_from_params(params, creator)
       body = params[:body]

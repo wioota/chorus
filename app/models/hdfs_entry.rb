@@ -22,7 +22,7 @@ class HdfsEntry < ActiveRecord::Base
     text :parent_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
-    string :security_type_name
+    string :security_type_name, :multiple => true
   end
 
   before_save :build_full_path, :on_create => true

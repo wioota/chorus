@@ -11,7 +11,7 @@ module SharedSearch
         include_shared_search_fields target, delegatee
 
         searchable do
-          string :security_type_name
+          string :security_type_name, :multiple => true
         end
       end
 
@@ -23,14 +23,17 @@ module SharedSearch
 
     def include_shared_search_fields(target_name, delegatee)
       klass = ModelMap::CLASS_MAP[target_name.to_s]
-      define_shared_search_fields(klass.shared_search_fields, delegatee,
-                                  :proc => proc { |method_name|
-                                    delegatee_object = send delegatee
-                                    method = :"search_#{method_name}"
-                                    if delegatee_object.respond_to? method
-                                      delegatee_object.send method
-                                    end
-                                  })
+      params = {}
+      if target_name != delegatee
+        params[:proc] = proc { |method_name|
+          delegatee_object = send delegatee
+          method = :"search_#{method_name}"
+          if delegatee_object.respond_to? method
+            delegatee_object.send method
+          end
+        }
+      end
+      define_shared_search_fields(klass.shared_search_fields, delegatee, params)
     end
 
     def add_search_permissions(current_user, search)

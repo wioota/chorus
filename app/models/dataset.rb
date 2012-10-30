@@ -46,7 +46,7 @@ class Dataset < ActiveRecord::Base
     text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
-    string :security_type_name
+    string :security_type_name, :multiple => true
   end
 
   has_shared_search_fields [
@@ -72,6 +72,12 @@ class Dataset < ActiveRecord::Base
         without :security_type_name, Dataset.security_type_name
         account_ids = current_user.accessible_account_ids
         with :instance_account_ids, account_ids unless account_ids.blank?
+      end
+
+      any_of do
+        without :security_type_name, "ChorusView"
+        with :member_ids, current_user.id
+        with :public, true
       end
     end
   end

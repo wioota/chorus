@@ -220,12 +220,12 @@ describe Search do
       end
     end
 
-    describe "#num_found" do
+    describe "num_found" do
       it "returns a hash with the number found of each type" do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 3
-          search.num_found[:datasets].should == 5
+          search.num_found[:datasets].should == 6
         end
       end
 
@@ -239,12 +239,12 @@ describe Search do
       it "includes the number of workspace specific results found" do
         workspace = workspaces(:search_public)
         create_and_record_search(owner, :query => 'searchquery', :workspace_id => workspace.id) do |search|
-          search.num_found[:this_workspace].should == 6
+          search.num_found[:this_workspace].should == 7
         end
       end
     end
 
-    describe "#users" do
+    describe "users" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           user = search.users.first
@@ -260,7 +260,7 @@ describe Search do
       end
     end
 
-    describe "#instances" do
+    describe "instances" do
       it "should include Gpdb, Hadoop, and Gnip" do
         create_and_record_search do |search|
           search.instances.should include(gpdb_instance)
@@ -282,7 +282,7 @@ describe Search do
       end
     end
 
-    describe "#datasets" do
+    describe "datasets" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           dataset = search.datasets.first
@@ -302,7 +302,7 @@ describe Search do
 
       it "returns the Dataset objects found" do
         create_and_record_search do |search|
-          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view)]
+          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private)]
         end
       end
 
@@ -388,7 +388,34 @@ describe Search do
       end
     end
 
-    describe "#hdfs_entries" do
+    describe "chorus_views" do
+      let(:chorus_view) { datasets(:searchquery_chorus_view_private) }
+
+      context "when the user has access to the workspace" do
+        let(:user) { owner }
+
+        it "is included in search results" do
+          create_and_record_search(user, :query => 'searchquery') do |search|
+            search.datasets.should include(chorus_view)
+          end
+        end
+      end
+
+      context "when the user does not have access to the workspace" do
+        let(:user) { users(:not_a_member) }
+
+        it "is excluded from search results" do
+          create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
+            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            chorus_view.schema.database.instance_accounts << instance_account
+            chorus_view.solr_index!
+            search.datasets.should_not include(chorus_view)
+          end
+        end
+      end
+    end
+
+    describe "hdfs_entries" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           hdfs = search.hdfs_entries.first
@@ -406,7 +433,7 @@ describe Search do
       end
     end
 
-    describe "#attachments" do
+    describe "attachments" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
           attachment = search.attachments.first
@@ -462,7 +489,7 @@ describe Search do
       end
     end
 
-    describe "#highlighted notes" do
+    describe "highlighted notes" do
       it "includes highlighted notes in the highlighted_attributes" do
         create_and_record_search(owner, :query => 'greenplumsearch') do |search|
           search.instances.length.should == 2
@@ -473,7 +500,7 @@ describe Search do
       end
     end
 
-    describe "#per_type=" do
+    describe "per_type=" do
       it "limits the search to not return more than some number of models" do
         create_and_record_search(owner, :query => 'alphasearch', :per_type => 1) do |search|
           search.users.length.should == 1
@@ -527,6 +554,18 @@ describe Search do
           search.workspaces.should include(private_workspace_not_a_member)
         end
       end
+    end
+  end
+end
+
+describe "SearchExtensions" do
+  describe "security_type_name" do
+    it "returns an array including the type_name of all ancestors" do
+      ChorusView.security_type_name.should =~ [ChorusView.type_name, Dataset.type_name]
+    end
+
+    it "instances behave the same way" do
+      ChorusView.first.security_type_name.should =~ ChorusView.security_type_name
     end
   end
 end

@@ -42,7 +42,7 @@ class Workspace < ActiveRecord::Base
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
-    string :security_type_name
+    string :security_type_name, :multiple => true
   end
 
   def solr_reindex

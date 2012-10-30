@@ -7,6 +7,13 @@ class Gpdb::ViewAlreadyExists < Exception
 end
 
 class ChorusView < Dataset
+  include SharedSearch
+
+  has_one :associated_dataset, :foreign_key => :dataset_id
+  has_one :workspace, :through => :associated_dataset, :source => :workspace
+
+  include_shared_search_fields :workspace, :workspace
+
   validate :validate_query
 
   def validate_query
@@ -36,10 +43,6 @@ class ChorusView < Dataset
   end
 
   def column_name
-  end
-
-  def workspace
-    bound_workspaces.first
   end
 
   def query_setup_sql

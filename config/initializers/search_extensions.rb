@@ -11,7 +11,13 @@ module SearchExtensions
     end
 
     def security_type_name
-      type_name
+      types = [type_name]
+      klass = self.superclass
+      while klass != ActiveRecord::Base
+        types << klass.type_name
+        klass = klass.superclass
+      end
+      types
     end
 
     def has_shared_search_fields(field_definitions)
@@ -50,7 +56,7 @@ module SearchExtensions
   end
 
   def security_type_name
-    type_name
+    self.class.security_type_name
   end
 
   def entity_type_name

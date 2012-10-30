@@ -124,6 +124,8 @@ FixtureBuilder.configure do |fbuilder|
     searchquery_table = FactoryGirl.create(:gpdb_table, :name => "searchquery_table", :schema => searchquery_schema)
     searchquery_chorus_view = FactoryGirl.build(:chorus_view, :name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table")
     searchquery_chorus_view.save!(:validate => false)
+    searchquery_chorus_view_private = FactoryGirl.build(:chorus_view, :name => "searchquery_chorus_view_private", :schema => searchquery_schema, :query => "select searchquery from a_table")
+    searchquery_chorus_view_private.save!(:validate => false)
 
     shared_search_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => shared_instance, :name => 'shared_database')
     shared_search_schema = FactoryGirl.create(:gpdb_schema, :name => 'shared_schema', :database => shared_search_database)
@@ -183,6 +185,7 @@ FixtureBuilder.configure do |fbuilder|
     public_workspace.bound_datasets << source_table
     public_workspace.bound_datasets << source_view
     search_public_workspace.bound_datasets << searchquery_chorus_view
+    search_private_workspace.bound_datasets << searchquery_chorus_view_private
 
     @owner_creates_public_workspace = Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
     @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
@@ -419,7 +422,10 @@ FixtureBuilder.configure do |fbuilder|
       @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
       @executable_chorus_view.bound_workspaces << public_workspace
       @executable_chorus_view.save!(:validate => false)
+      @gpdb_workspace = FactoryGirl.build(:workspace, :owner => owner, :sandbox => test_schema)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;")
+      @convert_chorus_view.bound_workspaces << @gpdb_workspace
+      @convert_chorus_view.save!(:validate => false)
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
       fbuilder.name :real, real_workspace
