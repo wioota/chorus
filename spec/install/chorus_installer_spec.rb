@@ -614,6 +614,10 @@ describe ChorusInstaller do
         File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/log').should == '/usr/local/greenplum-chorus/shared/log'
         File.symlink?('/usr/local/greenplum-chorus/shared/log').should be_false
       end
+
+      it "creates the nginx folder" do
+        File.exists?('/usr/local/greenplum-chorus/shared/log/nginx').should be_true
+      end
     end
 
     context "when data_path is not set" do
