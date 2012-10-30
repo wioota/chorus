@@ -71,7 +71,7 @@ describe 'BackupRestore' do
         end
 
         context "when a system command fails" do
-          xit "cleans up all the files it created" do
+          it "cleans up all the files it created" do
             any_instance_of(BackupRestore::Backup) do |instance|
               stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
             end
@@ -149,10 +149,10 @@ describe 'BackupRestore' do
       end
     end
 
-    def new_files_created(dir)
-      entries_before_block = all_filesystem_entries(dir)
+    def new_files_created(*dirs)
+      entries_before_block = all_filesystem_entries(*dirs)
       yield
-      all_filesystem_entries(dir) - entries_before_block
+      all_filesystem_entries(*dirs) - entries_before_block
     end
 
     def backup_filename(time)
@@ -301,7 +301,7 @@ describe "Backup and Restore" do
   end
 
   after(:all) do
-    # return the test database to it's original state
+    # return the test database to its original state
     without_database_connection do
       begin
         original_rake_application = Rake.application
@@ -405,11 +405,14 @@ def make_tmp_path(*args)
   end
 end
 
-def all_filesystem_entries(path)
-  path = Pathname.new(path)
-  files = %w{. **/ **/*}.map do |wildcard|
-    Dir.glob path.join wildcard
+def all_filesystem_entries(*paths)
+  files = paths.map do |path|
+    path = Pathname.new(path)
+    files = %w{. **/ **/*}.map do |wildcard|
+      Dir.glob path.join wildcard
+    end
   end.flatten.sort.uniq
+
   files.map {|f| Pathname.new(f).realpath}
 end
 
@@ -422,7 +425,9 @@ def populate_fake_chorus_install(install_path, options = {})
   end
 
   %w{packaging postgres}.each do |dir|
-    FileUtils.ln_s Rails.root.join(dir), install_path.join(dir)
+    path = Rails.root.join(dir)
+    path.should exist
+    FileUtils.ln_s path, install_path.join(dir)
   end
 
   # create a fake asset in original

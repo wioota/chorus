@@ -89,7 +89,10 @@ module BackupRestore
     def dump_database
       log "Dumping database contents..."
 
-      capture_output "#{ENV['CHORUS_HOME']}/packaging/pg_dump.sh -Fc -p #{database_port} #{database_name} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
+      pg_dump = "#{ENV['CHORUS_HOME']}/packaging/pg_dump.sh -Fc"
+      pg_dump += " --compress=0" # because our postgres 9.2 install warns that it can't compress otherwise
+      pg_dump += " -p #{database_port} #{database_name}"
+      capture_output "#{pg_dump} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
     def compress_assets
