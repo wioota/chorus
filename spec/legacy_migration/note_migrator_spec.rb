@@ -114,6 +114,7 @@ describe NoteMigrator do
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]
+        note.workspace.legacy_id.should == legacy_comment["workspace_id"]
         note.actor_id.should == User.find_with_destroyed(:first, :conditions => {:username => legacy_comment["author_name"]}).id
         note.workfile.legacy_id.should == legacy_comment["entity_id"]
         note.deleted_at.should == legacy_comment["last_updated_stamp"] if legacy_comment["is_deleted"] == 't'

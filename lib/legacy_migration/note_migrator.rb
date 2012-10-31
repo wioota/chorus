@@ -210,7 +210,8 @@ class NoteMigrator < AbstractMigrator
         created_at,
         updated_at,
         deleted_at,
-        actor_id)
+        actor_id,
+        workspace_id)
       SELECT
         edc_comment.id,
         'edc_comment',
@@ -223,7 +224,8 @@ class NoteMigrator < AbstractMigrator
           WHEN 't' THEN edc_comment.last_updated_stamp
           ELSE null
         END,
-        users.id
+        users.id,
+        workfiles.workspace_id
       FROM
         edc_comment
         INNER JOIN workfiles
