@@ -355,9 +355,9 @@ FixtureBuilder.configure do |fbuilder|
     insight_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'insightsearch ftw')
     insight_on_dataset.promote_to_insight(owner)
     fbuilder.name :insight_on_dataset, insight_on_dataset
+    note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch')
     @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
     @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
-    note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch')
 
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
