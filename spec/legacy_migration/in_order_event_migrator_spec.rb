@@ -49,12 +49,10 @@ describe InOrderEventMigrator do
 
       Events::Base.unscoped.count.should == (comment_count + activity_count + import_event_count)
 
-      id_order = Events::Base.unscoped.order("id")
-      created_order = Events::Base.unscoped.order("created_at, id")
+      id_order = Events::Base.unscoped.order("id").pluck("id")
+      created_order = Events::Base.unscoped.order("created_at, id").pluck("id")
 
-      (0..Events::Base.unscoped.count).each do |count|
-        id_order[count].should == created_order[count]
-      end
+			id_order.should == created_order
 
       expect { Legacy.connection.select_value("SELECT 1 from temp_events;") }.to raise_exception()
     end
