@@ -219,6 +219,7 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")
     FileUtils.mkdir_p("#{destination_path}/shared/log/nginx")
+    FileUtils.rm_rf("#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/log/nginx", "#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/system", "#{release_path}/system")
   end
@@ -426,6 +427,10 @@ class ChorusInstaller
     Properties.write_file(config, chorus_config_file)
   end
 
+  def release_path
+    "#{destination_path}/releases/#{version}"
+  end
+
   private
 
   def get_input
@@ -435,10 +440,6 @@ class ChorusInstaller
 
   def version
     @version ||= File.read("#{chorus_installation_path}/version_build").strip
-  end
-
-  def release_path
-    "#{destination_path}/releases/#{version}"
   end
 
   def chorus_exec(command)

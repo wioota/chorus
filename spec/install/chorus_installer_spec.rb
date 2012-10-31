@@ -540,6 +540,8 @@ describe ChorusInstaller do
       installer.data_path = data_path
       stub_version
 
+      FileUtils.mkdir_p "#{installer.release_path}/vendor/nginx/nginx_dist/nginx_data/logs"
+
       installer.link_shared_files
     end
 
