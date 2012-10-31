@@ -67,7 +67,7 @@ module Events
       private
 
       def include_shared_search_fields(target_name)
-        klass = ModelMap::CLASS_MAP[target_name.to_s]
+        klass = ModelMap.class_from_type(target_name.to_s)
         define_shared_search_fields(klass.shared_search_fields, target_name)
       end
 

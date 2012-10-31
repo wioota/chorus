@@ -22,7 +22,7 @@ module SharedSearch
     end
 
     def include_shared_search_fields(target_name, delegatee)
-      klass = ModelMap::CLASS_MAP[target_name.to_s]
+      klass = ModelMap.class_from_type(target_name.to_s)
       params = {}
       if target_name != delegatee
         params[:proc] = proc { |method_name|
