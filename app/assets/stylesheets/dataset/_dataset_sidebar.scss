@@ -71,6 +71,7 @@
             font-size: 16px;
             font-weight: $semibold;
             overflow: hidden; /*this is neccesary for alignment in firefox due to the overflow:hidden firefox bug*/
+            line-height: 22px;
         }
 
         .column_title {
