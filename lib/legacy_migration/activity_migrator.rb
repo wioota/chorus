@@ -124,7 +124,7 @@ class ActivityMigrator < AbstractMigrator
         row = Legacy.connection.exec_query("SELECT object_name FROM edc_activity_stream_object
                                         WHERE activity_stream_id = '#{event.legacy_id}'
                                         AND entity_type = 'file';").first
-        event.additional_data = {:filename => row['object_name'], :import_type => 'file'}
+        event.additional_data = {:file_name => row['object_name'], :import_type => 'file'}
         event.save!
       end
     end
@@ -171,7 +171,7 @@ class ActivityMigrator < AbstractMigrator
                                                           ON aso.entity_type = 'task' AND aso.object_id = edc_task.id
                                                         WHERE aso.activity_stream_id = '#{event.legacy_id}'").first['result']
 
-        event.additional_data = {:filename => rows.select { |r| r['entity_type'] == 'file' }.first['object_name'],
+        event.additional_data = {:file_name => rows.select { |r| r['entity_type'] == 'file' }.first['object_name'],
                                  :import_type => 'file',
                                  :destination_table => rows.select { |r| r['entity_type'] == 'table' }.first['object_name'],
                                  :error_message => error_message}
@@ -606,7 +606,7 @@ class ActivityMigrator < AbstractMigrator
                                       INNER JOIN edc_activity_stream_object aso2 ON aso2.activity_stream_id  = '#{event.legacy_id}' AND aso2.entity_type = 'table'
                                       WHERE aso1.activity_stream_id = '#{event.legacy_id}'
                                       AND aso1.entity_type = 'file';").first
-        event.additional_data = {:filename => row['file_name'], :import_type => 'file', :destination_table => row['table_name']}
+        event.additional_data = {:file_name => row['file_name'], :import_type => 'file', :destination_table => row['table_name']}
         event.save!
       end
     end

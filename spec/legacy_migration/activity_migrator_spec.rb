@@ -144,7 +144,7 @@ describe ActivityMigrator do
           event.workspace.legacy_id.should == row["workspace_id"]
           event.actor.username.should == row["author"]
           event.dataset.name.should == row["table_name"]
-          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['file_name'].should == row["entity_name"]
           event.additional_data['import_type'].should == "file"
           event.additional_data['destination_table'].should == row["table_name"]
         end
@@ -162,7 +162,7 @@ describe ActivityMigrator do
           event.workspace.legacy_id.should == row["workspace_id"]
           event.actor.username.should == row["author"]
           event.dataset.name.should == row["table_name"]
-          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['file_name'].should == row["entity_name"]
           event.additional_data['import_type'].should == "file"
         end
         count.should > 0
@@ -180,7 +180,7 @@ describe ActivityMigrator do
           event = Events::FileImportFailed.find_by_legacy_id(row['id'])
           event.workspace.legacy_id.should == row["workspace_id"]
           event.actor.username.should == row["author"]
-          event.additional_data['filename'].should == row["entity_name"]
+          event.additional_data['file_name'].should == row["entity_name"]
           event.additional_data['import_type'].should == "file"
           event.additional_data['destination_table'].should == row["table_name"]
           event.additional_data['error_message'].should == row["result"]
