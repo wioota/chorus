@@ -41,6 +41,7 @@ chorus.views.Bare = Backbone.View.include(
         teardown: function(preserveContainer) {
             chorus.unregisterView(this);
             this.unbind();
+            this.undelegateEvents();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
             this.requiredResources.cleanUp();
@@ -88,8 +89,11 @@ chorus.views.Bare = Backbone.View.include(
             this._super('_configure', arguments);
 
             this.requiredResources = new chorus.RequiredResources();
-            this.requiredResources.bind('add', function(resource) {
-                resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+            this.requiredResources.bind('add', function(resources) {
+                resources = _.isArray(resources) ? resources.slice() : [resources];
+                _.each(resources, _.bind(function (resource) {
+                    resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+                }, this));
             }, this);
             this.requiredResources.reset(options.requiredResources);
         },
@@ -249,6 +253,9 @@ chorus.views.Bare = Backbone.View.include(
         setupScrolling: function(selector_or_element, options) {
             _.defer(_.bind(function() {
                 var el = this.$(selector_or_element);
+                if (!el.length) {
+                    el = selector_or_element;
+                }
 
                 if (el.length > 0) {
 

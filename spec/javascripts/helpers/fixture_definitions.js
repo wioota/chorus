@@ -46,12 +46,12 @@ window.fixtureDefinitions = {
 };
 
 window.rspecFixtureDefinitions = {
-    comment: { model: "Comment" },
+    comment: { model: "Comment", unique: ['id'] },
     csvImport: {  model: "CSVImport" },
     user:    { unique: [ "id" ] },
     userWithErrors: { model:'User' },
     userSet: { unique: [ "id" ] },
-    kaggleUserSet: {},
+    kaggleUserSet: { unique: ["id"] },
 
     workspaceDataset: {
         unique: ["id"],
@@ -88,7 +88,7 @@ window.rspecFixtureDefinitions = {
         }
     },
     workfileSet: {},
-    workfileVersion: {},
+    workfileVersion: { unique: ['id']},
     draft: {},
     provisioning: {},
 
@@ -101,16 +101,16 @@ window.rspecFixtureDefinitions = {
 //
     config: {},
 
-    hadoopInstance: {},
+    hadoopInstance: { unique: ["id"] },
 
-    gnipInstance: {},
+    gnipInstance: { unique: ["id"] },
 
     image: {},
 
     gpdbInstance: { unique: [ "id" ] },
-    database: {},
+    database: { unique: ["id"] },
 
-    instanceAccount: {},
+    instanceAccount: { unique: ["id"] },
     instanceAccountSet: {},
 
     instanceDetails: {
@@ -272,8 +272,8 @@ window.rspecFixtureDefinitions = {
 
     schemaFunctionSet: {},
 
-    hdfsFile: { model: "HdfsEntry" },
-    hdfsDir: { model: "HdfsEntry" },
+    hdfsFile: {  unique: ["id"], model: "HdfsEntry" },
+    hdfsDir: {  unique: ["id"], model: "HdfsEntry" },
 
     workfileExecutionResults: {
         model: "WorkfileExecutionTask"
@@ -290,15 +290,5 @@ window.rspecFixtureDefinitions = {
     workfileExecutionError: {
         model: "WorkfileExecutionTask"
     }
-//
-//    test: {
-//        model:   "User",
-//        unique:  [ "id" ],
-//
-//        children: {
-//            noOverrides: {},
-//            withOverrides: { model: "Workspace" }
-//        }
-//    }
 };
 

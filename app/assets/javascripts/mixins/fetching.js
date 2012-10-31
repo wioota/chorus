@@ -40,6 +40,7 @@
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});
+            options.parse = false;
             var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
             options.error = function(collection_or_model, xhr) {

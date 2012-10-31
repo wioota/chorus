@@ -7,12 +7,15 @@ chorus.RequiredResources = chorus.collections.Base.extend({
         });
     },
 
-    _add:function (obj) {
-        this._super('_add', [obj, {silent:true}]);
+    add:function (obj, options) {
+        this._super('add', [obj, _.extend({}, options, {silent: true})]);
         this.trigger('add', obj);
     },
 
     _prepareModel:function (obj) {
+        if (!obj.cid) {
+            obj.cid = _.uniqueId('rr');
+        }
         return obj;
     },
 

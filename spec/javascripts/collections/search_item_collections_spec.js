@@ -30,11 +30,11 @@ describe("chorus.collections.Search", function() {
 
         it("populates the collection with the right data from the search", function() {
             expect(this.collection.length).toBe(5);
-            expect(this.collection.at(0).id).toBe('101');
-            expect(this.collection.at(1).id).toBe('102');
-            expect(this.collection.at(2).id).toBe('103');
-            expect(this.collection.at(3).id).toBe('104');
-            expect(this.collection.at(4).id).toBe('105');
+            expect(this.collection.at(0).get('id')).toBe('101');
+            expect(this.collection.at(1).get('id')).toBe('102');
+            expect(this.collection.at(2).get('id')).toBe('103');
+            expect(this.collection.at(3).get('id')).toBe('104');
+            expect(this.collection.at(4).get('id')).toBe('105');
         });
 
         it("sets the collection's pagination information correctly, *before* triggering a reset", function() {

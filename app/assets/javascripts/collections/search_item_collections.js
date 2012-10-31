@@ -35,12 +35,17 @@
         searchCollectionMixins
     ).extend({
         constructorName: "WorkspaceItemSet",
+        searchKey: "thisWorkspace",
         model: function(modelJson, options) {
             var constructor = constructorMap[modelJson.entityType];
             return new constructor(modelJson, options);
         },
-
-        searchKey: "thisWorkspace"
+        // TODO: don't mess with the id of all the models, but backbone is enforcing uniqueness
+        _prepareModel: function () {
+            var model = this._super('_prepareModel', arguments);
+            model.id = model.id + model.constructorName;
+            return model;
+        }
     });
 
     chorus.collections.Search.HdfsEntrySet = chorus.collections.HdfsEntrySet.include(
@@ -53,7 +58,13 @@
         searchCollectionMixins
     ).extend({
         searchKey: "instances",
-        model: chorus.models.DynamicInstance
+        model: chorus.models.DynamicInstance,
+        // TODO: don't mess with the id of all the models, but backbone is enforcing uniqueness
+        _prepareModel: function () {
+            var model = this._super('_prepareModel', arguments);
+            model.id = model.id + model.constructorName;
+            return model;
+        }
     });
 
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(

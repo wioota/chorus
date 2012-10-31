@@ -11,7 +11,7 @@ describe("chorus.router", function() {
 
         it("generates a new cachebuster value when navigating", function() {
             spyOn(this.chorus, "updateCachebuster").andCallThrough();
-            this.chorus.router.navigate("/login");
+            this.chorus.router.navigate("login");
             expect(this.chorus.updateCachebuster).toHaveBeenCalled();
         });
 
@@ -70,7 +70,7 @@ describe("chorus.router", function() {
                 });
 
                 it("navigates to login", function() {
-                   expect(this.chorus.router.navigate).toHaveBeenCalledWith('/login');
+                   expect(this.chorus.router.navigate).toHaveBeenCalledWith('login');
                 });
             });
         });
@@ -84,18 +84,18 @@ describe("chorus.router", function() {
             context("when the user is already logged in", function() {
                 beforeEach(function() {
                     spyOn(this.chorus.session, "loggedIn").andReturn(true);
-                    this.chorus.router.navigate("/login");
+                    this.chorus.router.navigate("login");
                 });
 
                 it("redirects them to their dashboard", function() {
-                    expect(this.chorus.router.navigate).toHaveBeenCalledWith("/");
+                    expect(this.chorus.router.navigate).toHaveBeenCalledWith("");
                 });
             });
 
             context("when the user is not logged in", function() {
                 beforeEach(function() {
                     spyOn(this.chorus.session, "loggedIn").andReturn(false);
-                    this.chorus.router.navigate("/login");
+                    this.chorus.router.navigate("login");
                 });
 
                 it("goes to the login page", function() {

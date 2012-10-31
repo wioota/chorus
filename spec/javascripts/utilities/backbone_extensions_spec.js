@@ -74,7 +74,7 @@ describe("backbone_extensions", function() {
 
             context("with an existing object", function() {
                 beforeEach(function() {
-                    this.model.set({id: '123'})
+                    this.model.set({id: '123'});
                     this.model.save();
                 });
 
@@ -337,15 +337,16 @@ describe("backbone_extensions", function() {
             };
             spyOn(this.newHandler, "callback");
             var handlers = [this.newHandler];
-            Backbone.History.prototype.handlers = handlers;
+            chorus.startHistory();
+            Backbone.history.handlers = handlers;
         });
 
         afterEach(function(){
-            Backbone.History.prototype.handlers = undefined;
+            Backbone.history.handlers = undefined;
         });
 
         it("removes the trailing slash from the end of a URL", function() {
-            Backbone.History.prototype.loadUrl("#/users/");
+            Backbone.history.loadUrl("#/users/");
             expect(this.newHandler.callback).toHaveBeenCalledWith("/users")
         });
     });

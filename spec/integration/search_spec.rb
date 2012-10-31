@@ -34,7 +34,7 @@ describe "Search" do
       click_link 'All Results'
       click_link 'Workspaces'
       wait_for_ajax
-      current_route.should == "/search/all/workspace/searchquery"
+      current_route.should == "search/all/workspace/searchquery"
       page.find(".workspace_list").should have_content(workspaces(:public_with_no_collaborators).name)
     end
   end

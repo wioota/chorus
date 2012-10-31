@@ -109,7 +109,13 @@ describe("chorus.views.NotificationList", function() {
 
                     context("when the fetch completes", function() {
                         beforeEach(function() {
-                            var newNotifications = this.collection.models;
+                            var newNotifications = this.collection.map(function(model) {
+                                var newModel = model.clone();
+                                newModel.cid = _.uniqueId('rr');
+                                newModel.id += _.uniqueId('xx');
+                                newModel.set("id", newModel.id);
+                                return newModel;
+                            });
 
                             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
                             this.server.completeFetchFor(this.collection, newNotifications,

@@ -1,8 +1,8 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
-            newFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
-            newFixtures.workspaceDataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
+            rspecFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
+            rspecFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "bar" }),
             rspecFixtures.workspaceDataset.datasetTable({ objectName: "baz" })
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
@@ -84,9 +84,9 @@ describe("chorus.views.DatasetList", function() {
                 describe("when the fetch completes", function() {
                     beforeEach(function() {
                         this.allDatasets = this.collection.models.concat([
-                            newFixtures.workspaceDataset.sandboxTable(),
-                            newFixtures.workspaceDataset.sandboxTable(),
-                            newFixtures.workspaceDataset.sandboxTable()
+                            rspecFixtures.workspaceDataset.datasetTable(),
+                            rspecFixtures.workspaceDataset.datasetTable(),
+                            rspecFixtures.workspaceDataset.datasetTable()
                         ]);
                         this.server.completeFetchAllFor(this.collection, this.allDatasets);
                     });

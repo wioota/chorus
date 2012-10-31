@@ -10,39 +10,39 @@
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
             ["*path", "InvalidRoute"],
-            ["/unauthorized", "Unauthorized"],
-            ["/invalidRoute", "InvalidRoute"],
-            ["/unprocessableEntity", "UnprocessableEntity"],
+            ["unauthorized", "Unauthorized"],
+            ["invalidRoute", "InvalidRoute"],
+            ["unprocessableEntity", "UnprocessableEntity"],
             ["", "Dashboard"],
-            ["/login", "Login"],
-            ["/search/:query", "SearchIndex"],
-            ["/search/:scope/:entityType/:query", "SearchIndex"],
-            ["/users", "UserIndex"],
-            ["/users/:id", "UserShow"],
-            ["/users/:id/edit", "UserEdit"],
-            ["/users/new", "UserNew"],
-            ["/workspaces", "WorkspaceIndex"],
-            ["/workspaces/:id", "WorkspaceShow"],
-            ["/workspaces/:id/quickstart", "WorkspaceQuickstart"],
-            ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
-            ["/workspaces/:workspaceId/datasets/:datasetId", "WorkspaceDatasetShow"],
-            ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
-            ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
-            ["/workspaces/:workspaceId/datasets", "WorkspaceDatasetIndex"],
-            ["/workspaces/:workspaceId/kaggle", "KaggleUserIndex"],
-            ["/workspaces/:workspaceId/search/:query", "WorkspaceSearchIndex"],
-            ["/workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
-            ["/instances", "InstanceIndex"],
-            ["/instances/:instanceId/databases", "DatabaseIndex"],
-            ["/databases/:databaseId", "SchemaIndex"],
-            ["/schemas/:schema_id", "SchemaBrowse"],
-            ["/datasets/:id", "DatasetShow"],
-            ["/gnip_instances/:id", "GnipInstanceShow"],
-            ["/hadoop_instances/:instanceId/browse", "HdfsEntryIndex"],
-            ["/hadoop_instances/:instanceId/browse/:id", "HdfsEntryIndex"],
-            ["/hadoop_instances/:instanceId/browseFile/:id", "HdfsShowFile"],
-            ["/notifications", "NotificationIndex"],
-            ["/styleguide", "StyleGuide"]
+            ["login", "Login"],
+            ["search/:query", "SearchIndex"],
+            ["search/:scope/:entityType/:query", "SearchIndex"],
+            ["users", "UserIndex"],
+            ["users/:id", "UserShow"],
+            ["users/:id/edit", "UserEdit"],
+            ["users/new", "UserNew"],
+            ["workspaces", "WorkspaceIndex"],
+            ["workspaces/:id", "WorkspaceShow"],
+            ["workspaces/:id/quickstart", "WorkspaceQuickstart"],
+            ["workspaces/:workspaceId/workfiles", "WorkfileIndex"],
+            ["workspaces/:workspaceId/datasets/:datasetId", "WorkspaceDatasetShow"],
+            ["workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
+            ["workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
+            ["workspaces/:workspaceId/datasets", "WorkspaceDatasetIndex"],
+            ["workspaces/:workspaceId/kaggle", "KaggleUserIndex"],
+            ["workspaces/:workspaceId/search/:query", "WorkspaceSearchIndex"],
+            ["workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
+            ["instances", "InstanceIndex"],
+            ["instances/:instanceId/databases", "DatabaseIndex"],
+            ["databases/:databaseId", "SchemaIndex"],
+            ["schemas/:schema_id", "SchemaBrowse"],
+            ["datasets/:id", "DatasetShow"],
+            ["gnip_instances/:id", "GnipInstanceShow"],
+            ["hadoop_instances/:instanceId/browse", "HdfsEntryIndex"],
+            ["hadoop_instances/:instanceId/browse/:id", "HdfsEntryIndex"],
+            ["hadoop_instances/:instanceId/browseFile/:id", "HdfsShowFile"],
+            ["notifications", "NotificationIndex"],
+            ["styleguide", "StyleGuide"]
         ],
 
         initialize:function (app) {
@@ -56,16 +56,16 @@
                 self.route(pattern, pageClassName, callback);
             });
 
-            self.route("/logout", "Logout", self.app.session.logout);
+            self.route("logout", "Logout", self.app.session.logout);
         },
 
         navigate:function (fragment, pageOptions) {
             this.app.pageOptions = pageOptions;
-            fragment = fragment.match(/#?(.+)/)[1];
+            fragment = fragment.match(/#?(.*)/)[1];
             if (Backbone.history.fragment == fragment || Backbone.history.fragment == decodeURIComponent(fragment)) {
                 Backbone.history.loadUrl(fragment);
             } else {
-                Backbone.Router.prototype.navigate(fragment, true);
+                Backbone.Router.prototype.navigate.call(this, fragment, true);
             }
         },
 
@@ -86,7 +86,7 @@
                 var navFunction = function() {
                     chorus.PageEvents.reset();
                     if (className == "Login" && self.app.session.loggedIn()) {
-                        self.navigate("/");
+                        self.navigate("");
                     } else {
                         self.trigger("leaving");
                         var pageClass = chorus.pages[className + "Page"];
@@ -108,7 +108,7 @@
                     self.app.session.fetch(
                         {
                             success: navFunction,
-                            error: function() { self.navigate("/login"); }
+                            error: function() { self.navigate("login"); }
                         });
                 } else {
                     navFunction();

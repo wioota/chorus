@@ -37,7 +37,7 @@ describe("chorus.views.CommentList", function() {
         it("displays the text of each comment", function() {
             expect(this.listItems.eq(0).find(".body")).toContainText("Yes we can");
             expect(this.listItems.eq(1).find(".body")).toContainText("No hate plz");
-        })
+        });
 
         it("displays the name of each comment's author", function() {
             expect(this.listItems.eq(0).find("a.author").text()).toBe("Barack Obama");
@@ -93,8 +93,8 @@ describe("chorus.views.CommentList", function() {
 
             it("displays a delete link", function() {
                 expect(this.view.$(".delete_link")).toExist();
-            })
-        })
+            });
+        });
 
         context("when the current user is not an admin", function() {
             context("and is the author of the note", function() {
@@ -106,12 +106,12 @@ describe("chorus.views.CommentList", function() {
                 it("displays a delete link", function() {
                     expect(this.view.$(".delete_link")).toExist();
                 })
-            })
+            });
 
             context("and is not the author of the note", function() {
                 it("does not display a delete link", function() {
                     expect(this.view.$(".delete_link")).not.toExist();
-                })
+                });
 
                 context("but is the owner of the workspace", function() {
                     beforeEach(function() {
@@ -122,9 +122,9 @@ describe("chorus.views.CommentList", function() {
                     it("displays a delete link", function() {
                         expect(this.view.$(".delete_link")).toExist();
                     });
-                })
-            })
-        })
+                });
+            });
+        });
 
         context("when the delete link appears", function() {
             beforeEach(function() {
@@ -132,7 +132,6 @@ describe("chorus.views.CommentList", function() {
                 this.view.render();
 
                 var commentId = this.view.$(".delete_link").data("commentId");
-                var comment = this.view.collection.get(commentId);
 
                 // put view in page for correct alert click handling
                 this.page = new chorus.pages.Base();
@@ -144,9 +143,9 @@ describe("chorus.views.CommentList", function() {
             it("shows the hidden delete comment link", function() {
                 var deleteLink = this.view.$(".delete_link");
                 expect(deleteLink).toExist();
-                expect(deleteLink.text()).toContainTranslation("actions.delete")
+                expect(deleteLink.text()).toContainTranslation("actions.delete");
                 expect(deleteLink).toBeHidden();
-            })
+            });
 
             it("puts the right data attributes on the delete link", function() {
                 var deleteLink = this.view.$(".delete_link");
@@ -155,16 +154,16 @@ describe("chorus.views.CommentList", function() {
 
             describe("clicking the delete link", function() {
                 beforeEach(function() {
-                    stubModals()
+                    stubModals();
                     this.view.$(".delete_link").click();
                 });
 
                 it("launches a delete note confirm alert", function() {
                     expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
                     expect(chorus.modal.model).toBeA(chorus.models.Comment);
-                    expect(chorus.modal.model.id).toBe(this.comment1.id)
+                    expect(chorus.modal.model.id.toString()).toBe(this.comment1.id.toString());
                 });
             });
-        })
+        });
     });
 });

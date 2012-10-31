@@ -393,10 +393,16 @@
 
     window.setLoggedInUser = function(options, chorusInstance) {
         var target = (chorusInstance || chorus);
-        target.session._user = new chorus.models.User(_.extend({
-            username: 'chorusadmin',
-            id: "10000"
-        }, options));
+        var user;
+        if(options instanceof chorus.models.User) {
+            user = options.clone();
+        } else {
+            user = new chorus.models.User(_.extend({
+                username: 'chorusadmin',
+                id: "10000"
+            }, options));
+        }
+        target.session._user = user;
         target.session.set({id: target.session._user.get('id')});
     };
 
@@ -410,7 +416,7 @@
             },
 
             render: function() {
-                this.$(this.el).html(html)
+                this.$el.html(html)
                 return this;
             },
 
@@ -545,7 +551,9 @@
         var origLogin = chorus.requireLogin;
         var origHistory = chorus.startHistory;
         chorus.requireLogin = $.noop;
-        chorus.startHistory = $.noop;
+        chorus.startHistory = function () {
+          Backbone.history.options = {root: '/'};
+        };
 
         chorus.initialize();
 

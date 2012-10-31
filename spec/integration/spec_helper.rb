@@ -22,8 +22,7 @@ Capybara.save_and_open_page_path = ENV['WORKSPACE']
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
 
 def current_route
-  route = URI.parse(current_url).fragment
-  route if route and not route.empty?
+  URI.parse(current_url).fragment
 end
 
 def wait_for_ajax(timeout = 10)

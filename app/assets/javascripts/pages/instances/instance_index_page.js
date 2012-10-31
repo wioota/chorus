@@ -13,7 +13,7 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
         hadoopInstances.fetchAll();
         gnipInstances.fetchAll();
 
-        this.dependOn(gpdbInstances, this.setPreselection);
+        this.dependOn(gpdbInstances);
 
         var options = {
             gpdbInstances: gpdbInstances,
@@ -30,13 +30,6 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.InstanceListSidebar();
 
         chorus.PageEvents.subscribe("instance:selected", this.setModel, this);
-    },
-
-    setPreselection: function() {
-        if (this.pageOptions && this.pageOptions.selectId) {
-            this.mainContent.content.selectedInstanceId = this.pageOptions.selectId;
-            this.mainContent.content.render();
-        }
     },
 
     setModel:function (instance) {

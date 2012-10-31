@@ -1,6 +1,5 @@
 describe("chorus.models.Session", function() {
     var models = chorus.models;
-
     describe("#save", function() {
         beforeEach(function() {
             this.model = new models.Session({ username: "johnjohn", password: "partytime"});
@@ -14,9 +13,10 @@ describe("chorus.models.Session", function() {
 
     describe("#logout", function() {
         beforeEach(function() {
+            Backbone.history.fragment = "foo"
             this.model = new models.Session();
             spyOnEvent(this.model, "needsLogin");
-            spyOn(chorus.router, "navigate")
+            spyOn(chorus.router, "navigate").andCallThrough();
         });
 
         context("when the model has errors", function() {
@@ -189,7 +189,7 @@ describe("chorus.models.Session", function() {
 
             context("when navigating to logout", function() {
                 beforeEach(function() {
-                    Backbone.history.fragment = "/logout";
+                    Backbone.history.fragment = "logout";
                     this.session.rememberPathBeforeLoggedOut()
                 });
 
@@ -200,7 +200,7 @@ describe("chorus.models.Session", function() {
 
             context("when navigating to login", function() {
                 beforeEach(function() {
-                    Backbone.history.fragment = "/login";
+                    Backbone.history.fragment = "login";
                     this.session.rememberPathBeforeLoggedOut()
                 });
 
@@ -211,22 +211,22 @@ describe("chorus.models.Session", function() {
 
             context("when navigating elsewhere", function() {
                 beforeEach(function() {
-                    Backbone.history.fragment = "/elsewhere";
+                    Backbone.history.fragment = "elsewhere";
                     this.session.rememberPathBeforeLoggedOut();
                 });
 
                 it("remembers the path", function() {
-                    expect(this.session.resumePath()).toEqual("/elsewhere");
+                    expect(this.session.resumePath()).toEqual("elsewhere");
                 });
 
                 context("and then trying to log in with bad credentials", function() {
                     beforeEach(function() {
-                        Backbone.history.fragment = "/login";
+                        Backbone.history.fragment = "login";
                         this.session.rememberPathBeforeLoggedOut();
                     });
 
                     it("remembers the non-login path", function() {
-                        expect(this.session.resumePath()).toEqual("/elsewhere");
+                        expect(this.session.resumePath()).toEqual("elsewhere");
                     });
                 });
             });
@@ -236,7 +236,7 @@ describe("chorus.models.Session", function() {
             beforeEach(function() {
                 this.session.user().id = 2;
                 this.session._previousUserId = 2;
-                this.session._pathBeforeLoggedOut = '/somewhere';
+                this.session._pathBeforeLoggedOut = 'somewhere';
             });
 
             it("is true if it has somewhere to go", function() {

@@ -1,4 +1,4 @@
-describe("chorus.collections.DatasetSet", function() {
+describe("chorus.collections.WorkspaceDatasetSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: 10000});
     });
@@ -50,8 +50,8 @@ describe("chorus.collections.DatasetSet", function() {
             });
 
             it("includes the datasetId param for the create method", function() {
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234, objectName: 'second'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
 
                 expect(this.collection.url({per_page: 10, page: 1, method: "create"})).toContainQueryParams({
                     datasetIds: "5678,1234"
@@ -70,8 +70,8 @@ describe("chorus.collections.DatasetSet", function() {
     describe("sorting", function() {
         context("without a sorting override", function() {
             beforeEach(function() {
-                this.collection.add(newFixtures.workspaceDataset.sandboxTable({objectName: 'zTable'}));
-                this.collection.add(newFixtures.workspaceDataset.sandboxTable({objectName: 'aTable'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
             });
 
             it("sorts by objectName", function() {
@@ -83,8 +83,8 @@ describe("chorus.collections.DatasetSet", function() {
         context("with a sorting override", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: 10000, unsorted: true});
-                this.collection.add(newFixtures.workspaceDataset.sandboxTable({objectName: 'zTable'}));
-                this.collection.add(newFixtures.workspaceDataset.sandboxTable({objectName: 'aTable'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
             });
 
             it("does not sort", function() {
