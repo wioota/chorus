@@ -357,6 +357,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :insight_on_dataset, insight_on_dataset
     @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
     @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
+    note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch')
+
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
@@ -373,6 +375,9 @@ FixtureBuilder.configure do |fbuilder|
 
     comment_on_note_on_dataset = Comment.create!({:body => "commentsearch ftw", :event_id => note_on_dataset.id, :author_id => owner.id})
     fbuilder.name :comment_on_note_on_dataset, comment_on_note_on_dataset
+
+    Comment.create!({:body => "commentsearch", :event_id => note_on_chorus_view_private.id, :author_id => owner.id})
+
 
     #Events
     Timecop.travel(-1.day)
@@ -411,6 +416,7 @@ FixtureBuilder.configure do |fbuilder|
     @attachment_hadoop = note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
     @attachment_hdfs = note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
     @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
+    @attachment_on_chorus_view = note_on_chorus_view_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'attachmentsearch')))
 
     if ENV['GPDB_HOST']
       InstanceIntegration.refresh_chorus

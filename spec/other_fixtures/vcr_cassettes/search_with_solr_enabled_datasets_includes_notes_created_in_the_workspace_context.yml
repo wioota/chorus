@@ -39,11 +39,14 @@ http_interactions:
         AND -instance_account_ids_im:(1000000 OR 1000002 OR 1000004))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.3056376,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000049'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.3056376}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
-        1000049''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']}}}'
+        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''GpdbTable
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.8504632,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000049'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>2.8504632}]}},{''groupValue''=>''ChorusView
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.8504632,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000051'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>2.8504632}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
+        1000049''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']},''Events::NoteOnWorkspaceDataset
+        1000051''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Tue, 30 Oct 2012 23:32:00 GMT
+  recorded_at: Wed, 31 Oct 2012 00:35:22 GMT
 recorded_with: VCR 2.1.1
 ...

@@ -354,9 +354,10 @@ describe Search do
       end
 
       it "includes comments on notes" do
-        comments(:comment_on_note_on_dataset).body.should == "commentsearch ftw"
+        comment = comments(:comment_on_note_on_dataset)
+        comment.body.should == "commentsearch ftw"
         create_and_record_search(owner, :query => 'commentsearch') do |search|
-          dataset = search.datasets.first
+          dataset = search.datasets.find { |dataset| comment.event.target1 == dataset }
           dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>commentsearch</em> ftw"
           dataset.search_result_notes[0][:is_comment].should be_true
         end
@@ -395,7 +396,19 @@ describe Search do
         let(:user) { owner }
 
         it "is included in search results" do
-          create_and_record_search(user, :query => 'searchquery') do |search|
+          create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
+            search.datasets.should include(chorus_view)
+          end
+        end
+
+        it "includes chorus views associated with matching notes" do
+          create_and_record_search(user, :query => 'workspacedatasetnotesearch', :entity_type => 'Dataset') do |search|
+            search.datasets.should include(chorus_view)
+          end
+        end
+
+        it "includes chorus views associated with matching notes" do
+          create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
             search.datasets.should include(chorus_view)
           end
         end
@@ -406,6 +419,24 @@ describe Search do
 
         it "is excluded from search results" do
           create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
+            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            chorus_view.schema.database.instance_accounts << instance_account
+            chorus_view.solr_index!
+            search.datasets.should_not include(chorus_view)
+          end
+        end
+
+        it "excludes results with matching notes on the chorus view" do
+          create_and_record_search(user, :query => 'workspacedatasetnotesearch', :entity_type => 'Dataset') do |search|
+            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            chorus_view.schema.database.instance_accounts << instance_account
+            chorus_view.solr_index!
+            search.datasets.should_not include(chorus_view)
+          end
+        end
+
+        it "excludes results with matching comments on the chorus view" do
+          create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
             instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
@@ -484,6 +515,34 @@ describe Search do
         it "includes them for users with access" do
           create_and_record_search(user_with_access, :query => 'searchquery', :entity_type => :attachment) do |search|
             search.attachments.should include(dataset_attachment)
+          end
+        end
+      end
+
+      context "when the attachment belongs on a chorus view" do
+        let(:chorus_view) { datasets(:searchquery_chorus_view_private) }
+        let(:attachment) { attachments(:attachment_on_chorus_view) }
+
+        context "when the user has access to the workspace" do
+          let(:user) { owner }
+
+          it "includes attachments where the chorus_view is accessible" do
+            create_and_record_search(user, :query => 'attachmentsearch', :entity_type => 'Attachment') do |search|
+              search.attachments.should include(attachment)
+            end
+          end
+        end
+
+        context "when the user does not have access to the workspace" do
+          let(:user) { users(:not_a_member) }
+
+          it "excludes attachments when the chorus view is not accessible" do
+            create_and_record_search(user, :query => 'attachmentsearch', :entity_type => 'Attachment') do |search|
+              instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+              chorus_view.schema.database.instance_accounts << instance_account
+              chorus_view.solr_index!
+              search.attachments.should_not include(attachment)
+            end
           end
         end
       end
