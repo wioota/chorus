@@ -16,6 +16,7 @@ module GpdbTestHelpers
   end
 
   def clone_response(response)
+    return response.call if response.respond_to?(:call)
     response.map(&:clone)
   end
 

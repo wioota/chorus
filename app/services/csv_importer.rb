@@ -1,13 +1,12 @@
 class CsvImporter
 
-  attr_accessor :csv_file, :schema, :account, :import_created_event_id
+  attr_accessor :csv_file, :schema, :account, :import_created_event_id, :import_record
 
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
 
   def self.import_file(csv_file_id, import_created_event_id)
     csv_importer = new(csv_file_id, import_created_event_id)
-    csv_importer.import
-    csv_importer.csv_file.delete
+    csv_importer.import_with_events
   end
 
   def initialize(csv_file_id, import_created_event_id)
@@ -17,41 +16,40 @@ class CsvImporter
     self.account = schema.gpdb_instance.account_for_user!(csv_file.user)
   end
 
+  def import_with_events
+    import
+    create_success_event
+    import_record.update_attribute(:state, "success")
+  rescue => e
+    create_failure_event(e.message)
+    import_record.try(:update_attribute, :state, "failure")
+  ensure
+    csv_file.try(:delete)
+    import_record.try(:touch, :finished_at)
+  end
+
   def import
-    begin
-      import_record = self.create_csv_import
+    self.import_record = self.create_csv_import
 
-      raise Exception, "CSV file cannot be imported" unless csv_file.ready_to_import?
-      schema.with_gpdb_connection(account) do |connection|
-        begin
-          it_exists = check_if_table_exists(csv_file.to_table, csv_file)
-          if csv_file.new_table
-            connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
-          end
-
-          if csv_file.truncate
-            connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
-          end
-
-          copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
-          sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
-          copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-        rescue Exception => e
-          connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
-          raise e
+    raise StandardError, "CSV file cannot be imported" unless csv_file.ready_to_import?
+    schema.with_gpdb_connection(account) do |connection|
+      begin
+        it_exists = check_if_table_exists(csv_file.to_table, csv_file)
+        if csv_file.new_table
+          connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
         end
+
+        if csv_file.truncate
+          connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
+        end
+
+        copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
+        sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
+        copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+      rescue Exception => e
+        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
+        raise e
       end
-
-      create_success_event
-      import_record.state = "success"
-
-    rescue Exception => e
-      create_failure_event(e.message)
-      import_record.state = "failure"
-
-    ensure
-      import_record.finished_at = Time.now
-      import_record.save!
     end
   end
 
@@ -94,10 +92,6 @@ class CsvImporter
     )
 
     Notification.create!(:recipient_id => csv_file.user.id, :event_id => event.id)
-  end
-
-  def destination_dataset
-    @destination_dataset ||= get_destination_dataset
   end
 
   def destination_dataset

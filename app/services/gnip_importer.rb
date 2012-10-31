@@ -1,31 +1,65 @@
-class GnipImporter < CsvImporter
+class GnipException < RuntimeError
+end
+
+class GnipImporter
+  attr_accessor :table_name, :gnip_instance_id, :workspace_id, :user_id, :event_id, :workspace
+
   def self.import_to_table(table_name, gnip_instance_id, workspace_id, user_id, event_id)
-    event = Events::Base.find(event_id)
+    importer = new(table_name, gnip_instance_id, workspace_id, user_id, event_id)
+    importer.import
+  end
 
+  def initialize(table_name, gnip_instance_id, workspace_id, user_id, event_id)
+    self.table_name = table_name
+    self.gnip_instance_id = gnip_instance_id
+    self.workspace_id = workspace_id
+    self.user_id = user_id
+    self.event_id = event_id
+    self.workspace = Workspace.find(workspace_id)
+  end
+
+  def import
     gnip_instance = GnipInstance.find(gnip_instance_id)
-    c = ChorusGnip.from_stream(gnip_instance.stream_url, gnip_instance.username, gnip_instance.password)
-    result = c.to_result
+    stream = ChorusGnip.from_stream(gnip_instance.stream_url, gnip_instance.username, gnip_instance.password)
 
-    workspace = Workspace.find(workspace_id)
-    csv_file = workspace.csv_files.new(
-        :contents => StringIO.new(result.contents),
-        :column_names => result.column_names,
-        :types => result.types,
-        :delimiter => ',',
-        :to_table => table_name,
-        :new_table => true,
-        :file_contains_header => false
-    )
-    csv_file.user_uploaded = false
-    csv_file.user = User.find(user_id)
-    csv_file.save!
-    GnipImporter.import_file(csv_file, event)
-  rescue Exception => e
-    GnipImporter.create_failure_event(e.message, event, table_name)
+    first_time = true
+    [*stream.fetch].each do |url|
+      import_url_from_stream url, stream, first_time
+      first_time = false
+    end
+
+    create_success_event
+
+  rescue => e
+    create_failure_event(e.message)
+    raise e
+  end
+
+  private
+
+  def import_url_from_stream(url, stream, first_time)
+    raise GnipException, JSON.parse($&)["reason"] if url =~ /^.*\"status\":\"error\".*$/
+    result = stream.to_result_in_batches([url])
+    csv_file = create_csv_file(result, first_time)
+    begin
+      csv_importer = CsvImporter.new(csv_file.id, event_id)
+      csv_importer.import
+    rescue => e
+      cleanup_table
+      raise e
+    ensure
+      csv_file.delete
+    end
+  end
+
+  def cleanup_table
+    workspace.sandbox.with_gpdb_connection(account) do |connection|
+      connection.exec_query("DROP TABLE IF EXISTS #{table_name}")
+    end
   end
 
   def create_success_event
-    gnip_event = Events::GnipStreamImportCreated.find(import_created_event_id).tap do |event|
+    gnip_event = Events::GnipStreamImportCreated.find(event_id).tap do |event|
       event.dataset = destination_dataset
       event.save!
     end
@@ -39,11 +73,7 @@ class GnipImporter < CsvImporter
   end
 
   def create_failure_event(error_message)
-    gnip_event = Events::GnipStreamImportCreated.find(import_created_event_id)
-    GnipImporter.create_failure_event(error_message, gnip_event, csv_file.to_table)
-  end
-
-  def self.create_failure_event(error_message, gnip_event, table_name)
+    gnip_event = Events::GnipStreamImportCreated.find(event_id)
     event = Events::GnipStreamImportFailed.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
         :destination_table => table_name,
@@ -51,5 +81,32 @@ class GnipImporter < CsvImporter
         :error_message => error_message
     )
     Notification.create!(:recipient_id => gnip_event.actor.id, :event_id => event.id)
+  end
+
+  def create_csv_file(result, first_time)
+    workspace.csv_files.create!(
+        {:contents => StringIO.new(result.contents),
+         :column_names => result.column_names,
+         :types => result.types,
+         :delimiter => ',',
+         :to_table => table_name,
+         :new_table => first_time,
+         :file_contains_header => false,
+         :user_uploaded => false,
+         :user_id => user_id
+        },
+        :without_protection => true)
+  end
+
+  def destination_dataset
+    Dataset.refresh(account, workspace.sandbox)
+    workspace.sandbox.datasets.find_by_name(table_name)
+  end
+
+  def account
+    @account ||= begin
+      user = User.find(user_id)
+      workspace.sandbox.gpdb_instance.account_for_user!(user)
+    end
   end
 end

@@ -2,128 +2,157 @@ require 'spec_helper'
 
 describe GnipImporter do
   let(:gnip_import_created_event) { events(:gnip_stream_import_created) }
-  let(:csv_file) { csv_files(:default) }
-
-  before do
-    any_instance_of(GnipImporter) { |importer| stub(importer).destination_dataset { datasets(:table) } }
-  end
-
-  describe "#create_success_event" do
-    before do
-      gnip_import_created_event.dataset = nil
-      gnip_import_created_event.save!
-      importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
-      importer.create_success_event
-    end
-
-    it "creates an import stream success event" do
-      expect {
-        importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
-        importer.create_success_event
-      }.to change(Events::GnipStreamImportSuccess, :count).by(1)
-    end
-
-    it "creates a success event with correct attributes" do
-      event = Events::GnipStreamImportSuccess.last
-      event.actor.should == gnip_import_created_event.actor
-
-      gnip_import_created_event.reload.dataset.should_not be_nil
-
-      event.dataset.should == gnip_import_created_event.dataset
-      event.workspace.should == gnip_import_created_event.workspace
-    end
-
-    it "creates notification for actor on import success" do
-      notification = Notification.last
-      notification.recipient_id.should == gnip_import_created_event.actor.id
-      notification.event_id.should == Events::GnipStreamImportSuccess.last.id
-    end
-  end
-
-  describe "#create_failure_event" do
-    let(:error_message) { "sample error message" }
-    before do
-      importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
-      importer.create_failure_event(error_message)
-    end
-
-    it "creates an import stream failure event" do
-      expect {
-        importer = GnipImporter.new(csv_file.id, gnip_import_created_event.id);
-        importer.create_failure_event(error_message)
-      }.to change(Events::GnipStreamImportFailed, :count).by(1)
-    end
-
-    it "creates a failure event with correct attributes" do
-      event = Events::GnipStreamImportFailed.last
-      event.actor.should == gnip_import_created_event.actor
-      event.destination_table.should == csv_file.to_table
-      event.error_message.should == error_message
-      event.workspace.should == gnip_import_created_event.workspace
-    end
-
-    it "creates notification for actor on import failure" do
-      notification = Notification.last
-      notification.recipient_id.should == gnip_import_created_event.actor.id
-      notification.event_id.should == Events::GnipStreamImportFailed.last.id
-    end
-  end
 
   describe "#import_to_table" do
     let(:user) { users(:owner) }
     let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
     let(:gnip_instance) { gnip_instances(:default) }
     let(:workspace) { workspaces(:public) }
+    let(:resource_urls) { ["url1"] }
+    let(:raise_error_message) { "" }
 
-    context "ChorusGnip imports successfully" do
-      before do
-        mock(ChorusGnip).from_stream(gnip_instance.stream_url,
-                                     gnip_instance.username,
-                                     gnip_instance.password) do |c|
-          o = Object.new
-          stub(o).to_result { gnip_csv_result_mock }
-        end
-
-        mock(GnipImporter).import_file(anything, gnip_import_created_event)
+    before do
+      mock(ChorusGnip).from_stream(gnip_instance.stream_url,
+                                   gnip_instance.username,
+                                   gnip_instance.password) do |c|
+        raise raise_error_message unless raise_error_message.blank?
+        stub(c).to_result_in_batches(is_a(Array)) {
+          gnip_csv_result_mock
+        }
+        mock(c).fetch { resource_urls }
       end
 
-      it "creates a csv file and passes it to import_file" do
-        expect {
-          GnipImporter.import_to_table('foobar', gnip_instance.id,
-                                       workspace.id, user.id, gnip_import_created_event.id)
-        }.to change(CsvFile, :count).by(1)
-
-        file = CsvFile.last
-        file.contents.should_not be_nil
-        file.column_names.should == gnip_csv_result_mock.column_names
-        file.types.should == gnip_csv_result_mock.types
-        file.delimiter.should == ","
-        file.to_table.should == 'foobar'
-        file.new_table.should == true
-        file.file_contains_header.should == false
-        file.should be_ready_to_import
-        file.user.should == user
-        file.workspace.should == workspace
-        file.user_uploaded.should be_false
+      stub_gpdb(workspace.sandbox.gpdb_instance.owner_account,
+                "DROP TABLE IF EXISTS foobar" => lambda {
+                  throw :dropped_table if @throw_on_dropped_table
+                  []
+                })
+      stub(Dataset).refresh(anything, workspace.sandbox) do
+        FactoryGirl.create(:gpdb_table, :name => "foobar", :schema => workspace.sandbox)
       end
     end
 
-    context "ChorusGnip or something else raises an exception" do
+    def do_import
+      GnipImporter.import_to_table('foobar', gnip_instance.id,
+                                   workspace.id, user.id, gnip_import_created_event.id)
+    end
+
+    context "when the gnip stream is split into multiple csv files" do
+      let(:resource_urls) { ['url_1', 'url_2'] }
+
       before do
-        mock(ChorusGnip).from_stream(gnip_instance.stream_url,
-                                     gnip_instance.username,
-                                     gnip_instance.password) do |c|
-          raise Exception, "mock exception from test"
+        any_instance_of(CsvImporter) do |importer|
+          stub(importer).import { @imports_remaining -= 1 }
         end
 
-        dont_allow(GnipImporter).import_file
+        @imports_remaining = resource_urls.length
       end
 
-      it "creates a csv file and passes it to import_file" do
-        expect do
-          GnipImporter.import_to_table('foobar', gnip_instance.id,
-                                       workspace.id, user.id, gnip_import_created_event.id)
-        end.to change(Events::GnipStreamImportFailed, :count).by(1)
+      it "iterates through each url and passes it to import_file" do
+        do_import
+        @imports_remaining.should == 0
+      end
+
+      it "leaves no csv files in the database" do
+        expect {
+          do_import
+        }.to change(CsvFile, :count).by(0)
+      end
+
+      it "generates a single success event with the correct attributes" do
+        expect {
+          do_import
+        }.to change(Events::GnipStreamImportSuccess, :count).by(1)
+
+        event = Events::GnipStreamImportSuccess.last
+        event.actor.should == gnip_import_created_event.actor
+
+        gnip_import_created_event.reload.dataset.should_not be_nil
+
+        event.dataset.should == gnip_import_created_event.dataset
+        event.workspace.should == gnip_import_created_event.workspace
+      end
+
+      it "creates notification for actor on import success" do
+        expect {
+          do_import
+        }.to change(Notification, :count).by(1)
+        notification = Notification.last
+        notification.recipient_id.should == gnip_import_created_event.actor.id
+        notification.event_id.should == Events::GnipStreamImportSuccess.last.id
+      end
+    end
+
+    context "when the list of urls is empty" do
+      let(:resource_urls) { [] }
+
+      it "does not generate an error" do
+        expect {
+          do_import
+        }.to_not raise_error
+      end
+    end
+
+    context "when the list of urls contains an error message" do
+      let(:resource_urls) { "{\"status\":\"error\",\"reason\":\"Data file not found, please contact support@gnip.com regarding snapshot job: xxxxxxx\"}" }
+
+      it "raises a GnipException with the message" do
+        expect {
+          do_import
+        }.to raise_error(GnipException, "Data file not found, please contact support@gnip.com regarding snapshot job: xxxxxxx")
+      end
+    end
+
+    context "when ChorusGnip or something else raises an exception" do
+      let(:raise_error_message) { "mock exception from test" }
+
+      it "creates a import failed event with the correct attributes" do
+        expect {
+          expect {
+            do_import
+          }.to raise_error("mock exception from test")
+        }.to change(Events::GnipStreamImportFailed, :count).by(1)
+        event = Events::GnipStreamImportFailed.last
+        event.actor.should == gnip_import_created_event.actor
+        event.destination_table.should == 'foobar'
+        event.error_message.should == raise_error_message
+        event.workspace.should == gnip_import_created_event.workspace
+      end
+
+      it "creates notification for actor on import failure" do
+        expect {
+          expect {
+            do_import
+          }.to raise_error("mock exception from test")
+        }.to change(Notification, :count).by(1)
+        notification = Notification.last
+        notification.recipient_id.should == gnip_import_created_event.actor.id
+        notification.event_id.should == Events::GnipStreamImportFailed.last.id
+      end
+    end
+
+    context "when importing an individual csv file to the table fails" do
+      before do
+        any_instance_of(CsvImporter) do |csv_importer|
+          mock(csv_importer).import do
+            raise "csv import failed"
+          end
+        end
+      end
+
+      it "leaves no csv files in the database" do
+        expect {
+          expect {
+            do_import
+          }.to raise_error "csv import failed"
+        }.to change(CsvFile, :count).by(0)
+      end
+
+      it "drops the new table" do
+        @throw_on_dropped_table = true
+        expect {
+          do_import
+        }.to throw_symbol(:dropped_table)
       end
     end
   end
