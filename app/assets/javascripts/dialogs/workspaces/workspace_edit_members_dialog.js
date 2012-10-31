@@ -35,6 +35,8 @@ chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
     },
 
     updateMembers:function () {
+        this.$("button.submit").startLoading("actions.saving");
+
         var self = this;
         var ids = this.shuttle.getSelectedIDs();
         var users = _.map(ids, function (userId) {

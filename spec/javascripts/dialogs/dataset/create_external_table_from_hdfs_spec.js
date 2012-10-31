@@ -115,7 +115,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
                 it("starts the loading spinner", function() {
                     expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-                    expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating")
+                    expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating");
                 });
 
                 it("posts to the right URL", function() {

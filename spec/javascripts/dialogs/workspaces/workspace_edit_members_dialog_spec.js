@@ -54,11 +54,17 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
                 this.dialog.collection.add([ this.user1, this.user2, this.user3 ]);
 
                 spyOn(this.dialog.shuttle, "getSelectedIDs").andReturn(["2", "3"]);
-            })
+            });
 
             it("adds the selected models from the shuttle to the 'members' collection", function() {
                 this.dialog.$("button.submit").click();
                 expect(this.dialog.members.models).toEqual([this.user2, this.user3]);
+            });
+
+            it("starts the loading spinner", function() {
+                this.dialog.$("button.submit").click();
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                expect(this.dialog.$("button.submit")).toContainTranslation("actions.saving");
             });
 
             it("saves the members collection", function() {
