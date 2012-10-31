@@ -129,7 +129,17 @@ describe("chorus.views.SearchResults", function() {
 
         describe("clicking an li", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, 'broadcast');
+                this.eventSpy = spyOn(chorus.PageEvents, 'broadcast');
+            });
+
+            context("when the item was already selected", function() {
+                it("doesn't trigger an event", function() {
+                    var workfileToClick = this.model.workfiles().at(1);
+                    this.view.$(".workfile_list li").eq(1).click();
+                    this.eventSpy.reset();
+                    this.view.$(".workfile_list li").eq(1).click();
+                    expect(chorus.PageEvents.broadcast).not.toHaveBeenCalledWith("workfile:selected", workfileToClick);
+                });
             });
 
             context("when the li is in the 'this workspace' section", function() {

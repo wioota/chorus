@@ -28,12 +28,16 @@ chorus.views.SelectableList = chorus.views.Base.extend({
 
     selectItem: function($target) {
         var $lis = this.$(">li");
+        var preSelected = $target.hasClass("selected");
+
         $lis.removeClass("selected");
         $target.addClass("selected");
 
         this.selectedIndex = $lis.index($target);
         if (this.selectedIndex >= 0) {
-            this.itemSelected(this.collection.at(this.selectedIndex));
+            if(!preSelected) {
+                this.itemSelected(this.collection.at(this.selectedIndex));
+            }
         } else {
             this.selectedIndex = 0;
             this.itemDeselected();

@@ -1,6 +1,6 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        this.eventSpy = spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.UserSet([rspecFixtures.user(), rspecFixtures.user()]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
@@ -19,6 +19,17 @@ describe("chorus.views.SelectableList", function() {
         expect(this.view.$("> li").eq(0)).toHaveClass("selected");
         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(0));
     })
+
+    describe("clicking on the same entry again", function() {
+        beforeEach(function() {
+            this.eventSpy.reset();
+            this.view.$("> li").eq(0).click();
+        });
+
+        it("doesn't fire the selected event again", function() {
+            expect(this.eventSpy).not.toHaveBeenCalled();
+        });
+    });
 
     describe("clicking another entry", function() {
         beforeEach(function() {
