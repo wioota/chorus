@@ -76,6 +76,16 @@ describe DatasetsController do
         decoded_response.object_type.should == "TABLE"
       end
 
+      context "when the user does not have permission" do
+        let(:user) { users(:not_a_member) }
+
+        it "should return forbidden" do
+          get :show, :id => table.to_param
+
+          response.code.should == "403"
+        end
+      end
+
       generate_fixture "dataset.json" do
         get :show, :id => table.to_param
       end
