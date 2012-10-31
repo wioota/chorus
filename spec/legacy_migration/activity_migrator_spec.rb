@@ -516,6 +516,22 @@ describe ActivityMigrator do
         count.should > 0
         Events::WorkspaceChangeName.count.should == count
       end
+
+      it "copies WORKSPACE_ADD_SANDBOX from legacy activity" do
+        count = 0
+        Legacy.connection.select_all("SELECT ed.*, aso.object_name as workspace_old_name FROM legacy_migrate.edc_activity_stream ed
+          INNER JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id AND aso.object_type = 'object'
+          where  type = 'WORKSPACE_ADD_SANDBOX';").each do |row|
+          count += 1
+
+          event = Events::WorkspaceAddSandbox.find_by_legacy_id(row["id"])
+
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceAddSandbox.count.should == count
+      end
     end
 
     it "should create activities" do

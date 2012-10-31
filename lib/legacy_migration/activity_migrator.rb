@@ -36,6 +36,7 @@ class ActivityMigrator < AbstractMigrator
           Events::WorkspaceChangeName,
           Events::ViewCreated,
           Events::ImportScheduleUpdated,
+          Events::WorkspaceAddSandbox,
       ]
     end
 
@@ -523,6 +524,39 @@ class ActivityMigrator < AbstractMigrator
         event.additional_data = {:workspace_old_name => row['workspace_old_name']}
         event.save!
       end
+    end
+
+    def migrate_workspace_add_sandbox
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO #{@@events_table_name}(
+      legacy_id,
+      legacy_type,
+      action,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::WorkspaceAddSandbox',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      users.id
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object aso
+        ON streams.id = aso.activity_stream_id
+        AND aso.object_type = 'object'
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+      INNER JOIN edc_activity_stream_object actor
+        ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
+      INNER JOIN users
+        ON users.legacy_id = actor.object_id
+    WHERE streams.type = 'WORKSPACE_ADD_SANDBOX'
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::WorkspaceAddSandbox');
+    ))
     end
 
     def migrate_file_import_created
@@ -1298,6 +1332,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_workspace_name_changed
       migrate_view_created
       migrate_import_schedule_updated
+      migrate_workspace_add_sandbox
 
       Events::Base.table_name = original_table
       Events::Base.descendants.each { |klass| klass.table_name = original_table }
