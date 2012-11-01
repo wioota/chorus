@@ -1,291 +1,312 @@
 require 'tempfile'
 require 'spec_helper'
 
-describe CsvImporter, :database_integration => true do
-  describe "actually performing the import" do
+describe CsvImporter do
+  let(:csv_file) { create_csv_file }
+  let(:table_name) { "another_new_table_from_csv" }
+  let(:user) { csv_file.user }
+  let(:file_import_created_event) { Events::FileImportCreated.last }
+  let(:destination_dataset) { FactoryGirl.build :gpdb_table, :name => csv_file.to_table }
 
-    before do
-      any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { datasets(:table) } }
-    end
-
-    after do
-      schema.with_gpdb_connection(account) do |connection|
-        connection.exec_query("DROP TABLE IF EXISTS another_new_table_from_csv,new_table_from_csv,new_table_from_csv_2,table_to_append_to,table_to_replace,test_import_existing_2")
-      end
-    end
-
+  describe "with a real database connection", :database_integration => true do
     let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
     let(:account) { InstanceIntegration.real_gpdb_account }
-    let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
-    let(:file_import_created_event) { Events::FileImportCreated.last }
+    let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema, :owner => user, :name => "test_csv_workspace") }
+    let(:error_on_import) { false }
 
-    def fetch_from_gpdb(sql)
+    before do
+      any_instance_of(CsvImporter) do |importer|
+        stub(importer).destination_dataset { destination_dataset }
+      end
+    end
+
+    after do
       schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query(sql)
-        yield result
+        connection.exec_query("DROP TABLE IF EXISTS #{table_name}")
       end
     end
 
-    def create_csv_file(options = {})
-      defaults = {
-          :contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
-          :column_names => [:id, :name],
-          :types => [:integer, :varchar],
-          :delimiter => ',',
-          :file_contains_header => false,
-          :new_table => true,
-          :to_table => "new_table_from_csv",
-          :truncate => false
-      }
-      csv_file = CsvFile.new(defaults.merge(options))
-      csv_file.user = user
-      csv_file.workspace = workspace
-      csv_file.save!
-      csv_file
-    end
-
-    def tempfile_with_contents(str)
-      f = Tempfile.new("test_csv")
-      f.puts str
-      f.close
-      f
-    end
-
-    it "refuses to import a csv file that is not completely populated" do
-      csv_file = create_csv_file
-      csv_file.update_attribute(:delimiter, nil)
-      expect do
-        expect {
-          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to raise_error
-      end.to change(Events::FileImportFailed, :count).by 1
-      Events::FileImportFailed.last.error_message.should == 'CSV file cannot be imported'
-    end
-
-    it "imports a basic csv file as a new table" do
-      csv_file = create_csv_file
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query("select * from new_table_from_csv order by ID asc;")
-        result[0].should == {"id" => 1, "name" => "foo"}
-        result[1].should == {"id" => 2, "name" => "bar"}
-        result[2].should == {"id" => 3, "name" => "baz"}
-      end
-    end
-
-    it "creates an Import with the correct details" do
-      csv_file = create_csv_file
-
-      Timecop.freeze(Time.now) do
-        expect {
-          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to change(Import, :count).by(1)
-
-        import = Import.last
-        import.file_name.should == csv_file.contents_file_name
-        import.workspace_id.should == csv_file.workspace_id
-        import.to_table.should == csv_file.to_table
-        import.state.should == 'success'
-        import.finished_at.should == Time.now
-      end
-    end
-
-    it "import a basic csv file into an existing table" do
-      csv_file = create_csv_file(:new_table => true, :to_table => "table_to_append_to")
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      csv_file = create_csv_file(:new_table => false, :to_table => "table_to_append_to")
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      fetch_from_gpdb("select count(*) from table_to_append_to;") do |result|
-        result[0]["count"].should == 6
-      end
-    end
-
-    it "should truncate the existing table when truncate=true" do
-      csv_file = create_csv_file(:new_table => true, :to_table => "table_to_replace")
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      csv_file = create_csv_file(:new_table => false,
-                                 :truncate => true,
-                                 :to_table => "table_to_replace",
-                                 :contents => tempfile_with_contents("1,larry\n2,barry\n"))
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      fetch_from_gpdb("select * from table_to_replace order by id asc;") do |result|
-        result[0]["name"].should == "larry"
-        result[1]["name"].should == "barry"
-        result.count.should == 2
-      end
-    end
-
-    it "import a csv file into an existing table with different column order" do
-      first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
-                             :column_names => [:id, :name],
-                             :types => [:integer, :varchar],
-                             :file_contains_header => false,
-                             :new_table => true,
-                             :to_table => "new_table_from_csv_2")
-
-      CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
-
-      second_csv_file = create_csv_file(:contents => tempfile_with_contents("dig,4\ndug,5\ndag,6\n"),
-                             :column_names => [:name, :id],
-                             :types => [:varchar, :integer],
-                             :file_contains_header => false,
-                             :new_table => false,
-                             :to_table => "new_table_from_csv_2")
-
-      CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
-
-      fetch_from_gpdb("select * from new_table_from_csv_2 order by id asc;") do |result|
-        result[0]["id"].should == 1
-        result[0]["name"].should == "foo"
-        result[1]["id"].should == 2
-        result[1]["name"].should == "bar"
-        result[2]["id"].should == 3
-        result[2]["name"].should == "baz"
-        result[3]["id"].should == 4
-        result[3]["name"].should == "dig"
-        result[4]["id"].should == 5
-        result[4]["name"].should == "dug"
-        result[5]["id"].should == 6
-        result[5]["name"].should == "dag"
-      end
-    end
-
-    it "import a csv file that has fewer columns than destination table" do
-      tablename = "test_import_existing_2"
-
-      first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,a,snickers\n2,b,kitkat\n"),
-                                   :column_names => [:id, :name, :candy_type],
-                                   :types => [:integer, :varchar, :varchar],
-                                   :file_contains_header => false,
-                                   :new_table => true,
-                                   :to_table => tablename)
-
-      CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
-
-      second_csv_file = create_csv_file(:contents => tempfile_with_contents("marsbar,3\nhersheys,4\n"),
-                                    :column_names => [:candy_type, :id],
-                                    :types => [:varchar, :integer],
-                                    :file_contains_header => false,
-                                    :new_table => false,
-                                    :to_table => tablename)
-
-      CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
-
-      fetch_from_gpdb("select * from #{tablename} order by id asc;") do |result|
-        result[0]["id"].should == 1
-        result[0]["name"].should == "a"
-        result[0]["candy_type"].should == "snickers"
-        result[1]["id"].should == 2
-        result[1]["name"].should == "b"
-        result[1]["candy_type"].should == "kitkat"
-        result[2]["id"].should == 3
-        result[2]["name"].should == nil
-        result[2]["candy_type"].should == "marsbar"
-        result[3]["id"].should == 4
-        result[3]["name"].should == nil
-        result[3]["candy_type"].should == "hersheys"
-      end
-    end
-
-    it "imports a file with different column names, header rows and a different delimiter" do
-      csv_file = create_csv_file(:contents => tempfile_with_contents("ignore\tme\n1\tfoo\n2\tbar\n3\tbaz\n"),
-                                :column_names => [:id, :dog],
-                                :types => [:integer, :varchar],
-                                :delimiter => "\t",
-                                :file_contains_header => true,
-                                :new_table => true,
-                                :to_table => "another_new_table_from_csv")
-
-      CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
-      fetch_from_gpdb("select * from another_new_table_from_csv order by ID asc;") do |result|
-        result[0].should == {"id" => 1, "dog" => "foo"}
-        result[1].should == {"id" => 2, "dog" => "bar"}
-        result[2].should == {"id" => 3, "dog" => "baz"}
-      end
-    end
-
-    context "when import fails" do
-      let(:csv_file) do
-        create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
-                        :column_names => [:id, :name],
-                        :types => [:integer, :varchar],
-                        :file_contains_header => false,
-                        :new_table => true)
-      end
-
-      it "sets the import record state to 'failure'" do
-        Timecop.freeze(Time.now) do
-          any_instance_of(CsvFile) do |file|
-            stub(file).ready_to_import? { false }
+    describe ".import_file" do
+      before do
+        any_instance_of(CsvImporter) do |importer|
+          mock(importer).import_with_events do
+            raise "import failed!" if error_on_import
           end
+        end
+      end
+
+      subject do
+        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+      end
+
+      it "creates an import" do
+        mock.proxy(CsvImporter).new(csv_file.id, file_import_created_event.id)
+        subject
+      end
+
+      it "executes import_with_events" do
+        subject
+      end
+
+      it "deletes the csv file" do
+        subject
+        CsvFile.find_by_id(csv_file.id).should be_nil
+      end
+
+      context "when the import fails" do
+        let(:error_on_import) {true}
+        it "still deletes the csv file" do
+          expect {
+            subject
+          }.to raise_error "import failed!"
+          CsvFile.find_by_id(csv_file.id).should be_nil
+        end
+      end
+    end
+
+    describe "#import" do
+      subject do
+        CsvImporter.new(csv_file.id, file_import_created_event.id).import
+      end
+
+      it "imports the data" do
+        subject
+      end
+    end
+
+    describe "#import_with_events" do
+      context "when the target table does not exist" do
+        it "creates a new table with data from the csv file" do
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+
+          schema.with_gpdb_connection(account) do |connection|
+            result = connection.exec_query("select * from #{table_name} order by ID asc;")
+            result[0].should == {"id" => 1, "name" => "foo"}
+            result[1].should == {"id" => 2, "name" => "bar"}
+            result[2].should == {"id" => 3, "name" => "baz"}
+          end
+        end
+      end
+
+      context "when the target table does exist" do
+        it "appends data from the csv file to that table" do
+          2.times do |iteration|
+            csv_file = create_csv_file(:new_table => (iteration == 0))
+            CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+
+            fetch_from_gpdb("select count(*) from #{table_name};") do |result|
+              result[0]["count"].should == 3 * (iteration + 1)
+            end
+          end
+        end
+      end
+
+      it "persists an Import record with the details of the import" do
+        Timecop.freeze(Time.now) do
           expect {
             CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-          }.to raise_error("CSV file cannot be imported")
-          Import.last.state.should == "failure"
-          Import.last.finished_at.should == Time.now
+          }.to change(Import, :count).by(1)
+
+          import = Import.last
+          import.file_name.should == csv_file.contents_file_name
+          import.workspace_id.should == csv_file.workspace_id
+          import.to_table.should == csv_file.to_table
+          import.state.should == 'success'
+          import.finished_at.should == Time.now
         end
       end
 
-      it "removes import table when new_table is true" do
-        any_instance_of(CsvImporter) { |importer|
-          stub(importer).check_if_table_exists.with_any_args { false }
-        }
-        table_name = csv_file.to_table
-        expect {
+      context "when the csv file is not completely populated" do
+        it "refuses to import a csv file" do
+          csv_file.update_attribute(:delimiter, nil)
+          expect do
+            expect {
+              CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+            }.to raise_error
+          end.to change(Events::FileImportFailed, :count).by 1
+          Events::FileImportFailed.last.error_message.should == 'CSV file cannot be imported'
+        end
+      end
+
+      context "when truncation is enabled for the import" do
+        it "should truncate the existing table" do
+          existing_csv_file = create_csv_file(:new_table => true)
+          CsvImporter.import_file(existing_csv_file.id, file_import_created_event.id)
+
+          csv_file = create_csv_file(:new_table => false,
+                                     :truncate => true,
+                                     :contents => tempfile_with_contents("1,larry\n2,barry\n"))
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to raise_error
-        schema.with_gpdb_connection(account) do |connection|
-          expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
+
+          fetch_from_gpdb("select * from #{table_name} order by id asc;") do |result|
+            result[0]["name"].should == "larry"
+            result[1]["name"].should == "barry"
+            result.count.should == 2
+          end
         end
       end
 
-      it "does not remove import table when new_table is false" do
-        table_name = "test_import_existing_2"
+      context "when the column order is different between the csv file and the existing table" do
+        it "imports the data, matching existing column names" do
+          first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
+                                 :column_names => [:id, :name],
+                                 :types => [:integer, :varchar])
 
-        first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi"),
-                                         :column_names => [:id, :name],
-                                         :types => [:integer, :varchar],
-                                         :file_contains_header => false,
-                                         :new_table => true,
-                                         :to_table => table_name)
+          CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
 
-        CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
+          second_csv_file = create_csv_file(:contents => tempfile_with_contents("dig,4\ndug,5\ndag,6\n"),
+                                 :column_names => [:name, :id],
+                                 :types => [:varchar, :integer],
+                                 :new_table => false)
 
-        second_csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
-                                          :column_names => [:id, :name],
-                                          :types => [:integer, :varchar],
-                                          :file_contains_header => false,
-                                          :new_table => false,
-                                          :to_table => table_name)
-
-        expect {
           CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
-        }.to raise_error
 
-        schema.with_gpdb_connection(account) do |connection|
-          expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
+          fetch_from_gpdb("select * from #{table_name} order by id asc;") do |result|
+            result[0]["id"].should == 1
+            result[0]["name"].should == "foo"
+            result[1]["id"].should == 2
+            result[1]["name"].should == "bar"
+            result[2]["id"].should == 3
+            result[2]["name"].should == "baz"
+            result[3]["id"].should == 4
+            result[3]["name"].should == "dig"
+            result[4]["id"].should == 5
+            result[4]["name"].should == "dug"
+            result[5]["id"].should == 6
+            result[5]["name"].should == "dag"
+          end
         end
       end
 
-      it "does not remove the table if new_table is true, but the table already existed" do
-        any_instance_of(CsvImporter) { |importer|
-          stub(importer).check_if_table_exists.with_any_args { true }
-        }
+      context "when the csv file has fewer columns than the destination table" do
+        it "sets the extra columns to nil" do
+          first_csv_file = create_csv_file(
+              :contents => tempfile_with_contents("1,a,snickers\n2,b,kitkat\n"),
+              :column_names => [:id, :name, :candy_type],
+              :types => [:integer, :varchar, :varchar])
 
-        table_name = csv_file.to_table
-        expect {
+          CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
+
+          second_csv_file = create_csv_file(
+              :contents => tempfile_with_contents("marsbar,3\nhersheys,4\n"),
+              :column_names => [:candy_type, :id],
+              :types => [:varchar, :integer],
+              :new_table => false)
+
+          CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
+
+          fetch_from_gpdb("select * from #{table_name} order by id asc;") do |result|
+            result[0]["id"].should == 1
+            result[0]["name"].should == "a"
+            result[0]["candy_type"].should == "snickers"
+            result[1]["id"].should == 2
+            result[1]["name"].should == "b"
+            result[1]["candy_type"].should == "kitkat"
+            result[2]["id"].should == 3
+            result[2]["name"].should == nil
+            result[2]["candy_type"].should == "marsbar"
+            result[3]["id"].should == 4
+            result[3]["name"].should == nil
+            result[3]["candy_type"].should == "hersheys"
+          end
+        end
+      end
+
+      context "when the csv file has different column names, header rows and a different delimiter" do
+        it "loads the data but ignores the extra columns" do
+          csv_file = create_csv_file(
+              :contents => tempfile_with_contents("ignore\tme\n1\tfoo\n2\tbar\n3\tbaz\n"),
+              :column_names => [:id, :dog],
+              :types => [:integer, :varchar],
+              :delimiter => "\t",
+              :file_contains_header => true)
+
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to raise_error
+
+          fetch_from_gpdb("select * from #{table_name} order by ID asc;") do |result|
+            result[0].should == {"id" => 1, "dog" => "foo"}
+            result[1].should == {"id" => 2, "dog" => "bar"}
+            result[2].should == {"id" => 3, "dog" => "baz"}
+          end
+        end
+      end
+
+      context "when import fails" do
+        let(:csv_file) do
+          create_csv_file(
+              :contents => tempfile_with_contents("1,hi,three"),
+              :column_names => [:id, :name],
+              :types => [:integer, :varchar])
+        end
+
+        it "sets the import record state to 'failure'" do
+          Timecop.freeze(Time.now) do
+            any_instance_of(CsvFile) do |file|
+              stub(file).ready_to_import? { false }
+            end
+            expect {
+              CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+            }.to raise_error("CSV file cannot be imported")
+            Import.last.state.should == "failure"
+            Import.last.finished_at.should == Time.now
+          end
+        end
+
+        it "removes import table when new_table is true" do
+          any_instance_of(CsvImporter) { |importer|
+            stub(importer).check_if_table_exists.with_any_args { false }
+          }
+          expect {
+            CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+          }.to raise_error
+          schema.with_gpdb_connection(account) do |connection|
+            expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
+          end
+        end
+
+        it "does not remove import table when new_table is false" do
+          first_csv_file = create_csv_file(
+              :contents => tempfile_with_contents("1,hi"),
+              :column_names => [:id, :name],
+              :types => [:integer, :varchar])
+
+          CsvImporter.import_file(first_csv_file.id, file_import_created_event.id)
+
+          second_csv_file = create_csv_file(
+              :contents => tempfile_with_contents("1,hi,three"),
+              :column_names => [:id, :name],
+              :types => [:integer, :varchar],
+              :new_table => false)
+
+          expect {
+            CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
+          }.to raise_error
+
+          schema.with_gpdb_connection(account) do |connection|
+            expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
+          end
+        end
+
+        it "does not remove the table if new_table is true, but the table already existed" do
+          any_instance_of(CsvImporter) { |importer|
+            stub(importer).check_if_table_exists.with_any_args { true }
+          }
+
+          expect {
+            CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+          }.to raise_error
+          schema.with_gpdb_connection(account) do |connection|
+            expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
+          end
+        end
+      end
+
+      def fetch_from_gpdb(sql)
         schema.with_gpdb_connection(account) do |connection|
-          expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
+          result = connection.exec_query(sql)
+          yield result
         end
       end
     end
@@ -293,17 +314,11 @@ describe CsvImporter, :database_integration => true do
 
   describe "without connecting to GPDB" do
     let(:csv_file) { CsvFile.first }
-    let(:user) { csv_file.user }
-    let(:dataset) { datasets(:table) }
     let(:instance_account) { csv_file.workspace.sandbox.gpdb_instance.account_for_user!(csv_file.user) }
-    let(:file_import_created_event) { Events::FileImportCreated.last }
 
-    describe "destination_dataset" do
-      before do
-        mock(Dataset).refresh(instance_account, csv_file.workspace.sandbox)
-      end
-
+    describe "after creating the csv file" do
       it "performs a refresh and returns the dataset matching the import table name" do
+        mock(Dataset).refresh(instance_account, csv_file.workspace.sandbox)
         importer = CsvImporter.new(csv_file.id,  file_import_created_event.id)
         importer.destination_dataset.name.should == csv_file.to_table
       end
@@ -311,33 +326,46 @@ describe CsvImporter, :database_integration => true do
 
     describe "when the import is successful" do
       before do
+        # skip database connection
         any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection }
-        any_instance_of(CsvImporter) { |importer| stub(importer).destination_dataset { dataset } }
+
+        # fake out dataset refresh and search for new dataset
+        any_instance_of(CsvImporter) do |importer|
+          stub(importer).destination_dataset { destination_dataset }
+        end
+      end
+
+      subject do
         CsvImporter.import_file(csv_file.id, file_import_created_event.id)
       end
 
       it "makes a IMPORT_SUCCESS event" do
+        expect {
+          subject
+        }.to change(Events::FileImportSuccess, :count).by(1)
         event = Events::FileImportSuccess.last
         event.actor.should == user
-        event.dataset.should == dataset
+        event.dataset.should == destination_dataset
         event.workspace.should == csv_file.workspace
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
       end
 
       it "makes sure the FileImportSuccess event object is linked to the dataset" do
-        dataset = datasets(:table)
+        subject
         file_import_created_event.reload
-        file_import_created_event.dataset.should == dataset
+        file_import_created_event.dataset.should == destination_dataset
         file_import_created_event.target2_type.should == "Dataset"
-        file_import_created_event.target2_id.should == dataset.id
+        file_import_created_event.target2_id.should == destination_dataset.id
       end
 
       it "deletes the file" do
-        expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        subject
+        CsvFile.find_by_id(csv_file.id).should be_nil
       end
 
       it "generates notification to import actor" do
+        subject
         notification = Notification.last
         notification.recipient_id.should == user.id
         notification.event_id.should == Events::FileImportSuccess.last.id
@@ -349,15 +377,24 @@ describe CsvImporter, :database_integration => true do
         @error = 'ActiveRecord::JDBCError: ERROR: relation "test" already exists: CREATE TABLE test(a float, b float, c float);'
         exception = ActiveRecord::StatementInvalid.new(@error)
         any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection { raise exception } }
+        any_instance_of(CsvImporter) do |importer|
+          stub(importer).destination_dataset { destination_dataset }
+        end
+      end
+
+      subject do
         expect {
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to raise_error
+        }.to raise_error(ActiveRecord::StatementInvalid)
       end
 
       it "makes a IMPORT_FAILED event" do
+        expect {
+          subject
+        }.to change(Events::FileImportFailed, :count).by(1)
         event = Events::FileImportFailed.last
         event.actor.should == user
-        event.destination_table.should == dataset.name
+        event.destination_table.should == destination_dataset.name
         event.workspace.should == csv_file.workspace
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
@@ -365,14 +402,40 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "deletes the file" do
-        expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        subject
+        CsvFile.find_by_id(csv_file.id).should be_nil
       end
 
       it "generates notification to import actor" do
+        subject
         notification = Notification.last
         notification.recipient_id.should == user.id
         notification.event_id.should == Events::FileImportFailed.last.id
       end
     end
+  end
+
+  def create_csv_file(options = {})
+    defaults = {
+        :contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
+        :column_names => [:id, :name],
+        :types => [:integer, :varchar],
+        :delimiter => ',',
+        :file_contains_header => false,
+        :new_table => true,
+        :to_table => table_name,
+        :truncate => false
+    }
+    CsvFile.create(defaults.merge(options)) do |csv_file|
+      csv_file.user = user
+      csv_file.workspace = workspace
+    end
+  end
+
+  def tempfile_with_contents(str)
+    f = Tempfile.open("test_csv")
+    f.puts str
+    f.close
+    f
   end
 end

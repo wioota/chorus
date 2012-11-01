@@ -1,5 +1,4 @@
 class CsvImporter
-
   attr_accessor :csv_file, :schema, :account, :import_created_event_id, :import_record
 
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
@@ -8,7 +7,7 @@ class CsvImporter
     csv_importer = new(csv_file_id, import_created_event_id)
     csv_importer.import_with_events
   ensure
-    csv_importer.csv_file.try(:destroy)
+    csv_importer.csv_file.destroy
   end
 
   def initialize(csv_file_id, import_created_event_id)
