@@ -83,6 +83,16 @@ describe Gpdb::ConnectionBuilder do
         end
       end
 
+      context "when the instance is overloaded" do
+        let(:adapter_exception) { ActiveRecord::JDBCError.new("FATAL: sorry, too many clients already") }
+
+        it 'raises a Gpdb::InstanceOverloaded error' do
+          expect {
+            Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+          }.to raise_error(Gpdb::InstanceOverloaded)
+        end
+      end
+
       context "with an invalid password" do
         let(:adapter_exception) { ActiveRecord::JDBCError.new("org.postgresql.util.PSQLException: FATAL: password authentication failed for user 'user1'") }
         let(:nice_exception) { ActiveRecord::JDBCError.new("Password authentication failed for user 'user1'") }

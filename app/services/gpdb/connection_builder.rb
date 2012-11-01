@@ -1,5 +1,6 @@
 module Gpdb
   class InstanceStillProvisioning < StandardError; end
+  class InstanceOverloaded < StandardError; end
 
   module ConnectionBuilder
     def self.connect!(gpdb_instance, account, database_name=nil)
@@ -20,6 +21,8 @@ module Gpdb
 
       if e.message.include?("password")
         raise ActiveRecord::JDBCError.new("Password authentication failed for user '#{account.db_username}'")
+      elsif e.message.include?("too many clients")
+        raise InstanceOverloaded
       else
         raise ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment")
       end
