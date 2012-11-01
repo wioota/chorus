@@ -22,7 +22,7 @@ describe Workspace do
 
   describe "validations" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
-    let(:max_workspace_icon_size) {Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon']}
+    let(:max_workspace_icon_size) { Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon'] }
 
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }
@@ -130,7 +130,7 @@ describe Workspace do
     let(:chorus_view_from_source) {
       ChorusView.new({:name => "chorus_view_from_source", :schema => other_schema, :query => "select 1"}, :without_protection => true)
     }
-    let(:user) {users(:the_collaborator)}
+    let(:user) { users(:the_collaborator) }
 
     context "when the workspace has a sandbox" do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
@@ -154,7 +154,7 @@ describe Workspace do
 
         context "when the sandbox has tables" do
           before do
-            stub(Dataset).refresh(account, schema) {[sandbox_table, sandbox_view] }
+            stub(Dataset).refresh(account, schema) { [sandbox_table, sandbox_view] }
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
@@ -175,7 +175,7 @@ describe Workspace do
           end
 
           it "returns no results" do
-            workspace.datasets(user, "SANDBOX_TABLE" ).should =~ []
+            workspace.datasets(user, "SANDBOX_TABLE").should =~ []
             workspace.datasets(user, "SANDBOX_DATASET").should =~ []
           end
         end
@@ -276,21 +276,39 @@ describe Workspace do
     end
   end
 
-  describe "#solr_reindex" do
+  describe "#reindex_workspace" do
     let(:workspace) { workspaces(:public) }
 
-    it "reindexes itself" do
+    before do
       stub(Sunspot).index.with_any_args
+    end
+
+    it "reindexes itself" do
       mock(Sunspot).index(workspace)
-      workspace.solr_reindex
+      Workspace.reindex_workspace(workspace.id)
     end
 
     it "reindexes the workfiles" do
-      stub(Sunspot).index.with_any_args
-      workspace.workfiles.each do |workfile|
-        mock(Sunspot).index(workfile)
-      end
-      workspace.solr_reindex
+      mock(Sunspot).index(is_a(Workfile)).times(workspace.workfiles.count)
+      Workspace.reindex_workspace(workspace.id)
+    end
+
+    it "should reindex notes in the workspace" do
+      mock(Sunspot).index(is_a(Events::Note)).times(workspace.owned_notes.count)
+      Workspace.reindex_workspace(workspace.id)
+    end
+
+    it "should reindex comments in the workspace" do
+      mock(Sunspot).index(is_a(Comment)).times(workspace.comments.count)
+      Workspace.reindex_workspace(workspace.id)
+    end
+  end
+
+  describe "#solr_reindex_later" do
+    let(:workspace) { workspaces(:public) }
+    it "should enqueue a job" do
+      mock(QC.default_queue).enqueue("Workspace.reindex_workspace", workspace.id)
+      workspace.solr_reindex_later
     end
   end
 
@@ -417,7 +435,7 @@ describe Workspace do
         expect {
           workspace.name = "new_workspace_name"
           workspace.save
-        }.to change{ Events::WorkspaceChangeName.count }.by(1)
+        }.to change { Events::WorkspaceChangeName.count }.by(1)
         workspace.reload.name.should == 'new_workspace_name'
         Events::WorkspaceChangeName.last.additional_data.should == {'workspace_old_name' => old_name}
       end
@@ -426,7 +444,27 @@ describe Workspace do
         expect {
           workspace.name = workspace.name
           workspace.save
-        }.not_to change{ Events::WorkspaceChangeName.count }
+        }.not_to change { Events::WorkspaceChangeName.count }
+      end
+
+      it "should not reindex" do
+        dont_allow(workspace).solr_reindex_later
+        workspace.update_attributes(:name => "foo")
+      end
+
+      describe "making the workspace private" do
+        it "should reindex" do
+          mock(workspace).solr_reindex_later
+          workspace.update_attributes(:public => false)
+        end
+      end
+
+      describe "making the workspace public" do
+        let(:workspace) { workspaces(:private_with_no_collaborators) }
+        it "should reindex" do
+          mock(workspace).solr_reindex_later
+          workspace.update_attributes(:public => true)
+        end
       end
     end
   end

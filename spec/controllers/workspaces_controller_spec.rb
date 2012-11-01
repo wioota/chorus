@@ -170,6 +170,10 @@ describe WorkspacesController do
         :archived => workspace.archived?.to_s
     } }
 
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
     context "when the current user has update authorization" do
       it "uses authentication" do
         mock(subject).authorize!(:update, workspace)

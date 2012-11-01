@@ -10,6 +10,7 @@ class MembersController < ApplicationController
 
     workspace_current_members = workspace.members.map(&:id)
     workspace.update_attributes!(:member_ids => params[:member_ids], :has_added_member => true)
+    workspace.solr_reindex_later
 
     create_events(workspace, workspace_current_members, params[:member_ids])
     present workspace.reload.members

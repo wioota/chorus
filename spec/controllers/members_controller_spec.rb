@@ -77,11 +77,20 @@ describe MembersController do
 
     before :each do
       log_in workspace.owner
+      @reindexed = false
+      any_instance_of(Workspace) do |wk|
+        stub(wk).solr_reindex_later { @reindexed = true }
+      end
     end
 
     it "uses authorization" do
       mock(subject).authorize!(:owner, workspace)
       post :create, parameters
+    end
+
+    it "should reindex the workspace" do
+      post :create, parameters
+      @reindexed.should be_true
     end
 
     it "should respond with a 200" do

@@ -33,6 +33,7 @@ class Workspace < ActiveRecord::Base
   before_update :clear_assigned_datasets_on_sandbox_assignment, :create_name_change_event
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
+  after_update :solr_reindex_later, :if => :public_changed?
 
   scope :active, where(:archived_at => nil)
 
@@ -45,9 +46,16 @@ class Workspace < ActiveRecord::Base
     string :security_type_name, :multiple => true
   end
 
-  def solr_reindex
-    solr_index
-    workfiles(:reload => true).each(&:solr_index)
+  def self.reindex_workspace(workspace_id)
+    workspace = Workspace.find(workspace_id)
+    workspace.solr_index
+    workspace.workfiles(:reload => true).each(&:solr_index)
+    workspace.owned_notes(:reload => true).each(&:solr_index)
+    workspace.comments(:reload => true).each(&:solr_index)
+  end
+
+  def solr_reindex_later
+    QC.enqueue('Workspace.reindex_workspace', id)
   end
 
   has_shared_search_fields [
