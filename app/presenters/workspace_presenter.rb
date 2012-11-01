@@ -4,12 +4,12 @@ class WorkspacePresenter < Presenter
     if rendering_activities?
       {
           :id => model.id,
-          :name => h(model.name)
+          :name => model.name
       }
     else
       {
           :id => model.id,
-          :name => h(model.name),
+          :name => model.name,
           :summary => sanitize(model.summary),
           :owner => present(model.owner),
           :archiver => present(model.archiver),

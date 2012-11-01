@@ -31,6 +31,4 @@ describe GpdbSchemaPresenter, :type => :view do
       database[:instance][:name].should == "instance1"
     end
   end
-
-  it_behaves_like "sanitized presenter", :gpdb_schema, :name
 end

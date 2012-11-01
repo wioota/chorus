@@ -31,7 +31,7 @@ class Presenter
     ActiveRecord::Base.current_user
   end
 
-  delegate :h, :sanitize, :to => :@view_context
+  delegate :sanitize, :to => :@view_context
 
   attr_reader :model, :options
 

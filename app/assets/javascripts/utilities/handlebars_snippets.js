@@ -72,7 +72,7 @@
             return results;
         },
 
-        currentUserName: function(block) {
+        currentUserName: function() {
             return chorus.session.get("username");
         },
 
@@ -81,7 +81,7 @@
         },
 
         displayTimestamp: function(timestamp) {
-            var date = Date.parseFromApi(timestamp)
+            var date = Date.parseFromApi(timestamp);
             return date ? date.toString("MMMM d") : "WHENEVER"
         },
 
@@ -151,9 +151,9 @@
         },
 
         linkTo: function(url, text, attributes) {
-            var link = $("<a></a>").attr("href", url).attr(attributes || {})
+            var link = $("<a></a>").attr("href", url).attr(attributes || {});
 
-            link.html(Handlebars.Utils.escapeExpression(text))
+            link.html(Handlebars.Utils.escapeExpression(text));
 
             return new Handlebars.SafeString(link.outerHtml());
         },
@@ -179,7 +179,7 @@
         },
 
         workspaceUsage: function(percentageUsed, sizeText) {
-            var markup = ""
+            var markup = "";
             if (percentageUsed >= 100) {
                 markup = '<div class="usage_bar">' +
                     '<div class="used full" style="width: 100%;">' +
@@ -215,7 +215,7 @@
             _.each(choices, function(thing) {
                 markup = markup + '<li>' + thing + '</li>';
             });
-            markup = markup + '</ul></div></div>'
+            markup = markup + '</ul></div></div>';
             return new Handlebars.SafeString(markup);
         },
 
@@ -223,7 +223,7 @@
             if (!definition) {
                 return '';
             }
-            definition || (definition = '')
+            definition || (definition = '');
             var promptSpan = $('<span>').addClass('sql_prompt').text(t("dataset.content_details.sql_prompt")).outerHtml();
             var sqlSpan = $('<span>').addClass('sql_content').attr('title', definition).text(definition).outerHtml();
             return new Handlebars.SafeString(t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan}));
@@ -284,22 +284,21 @@
             var workspaceLink = linkToContextObject(workspaceSet.at(0));
 
             var result = $("<div></div>").addClass('found_in workspace_association');
-            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceSet.length - 1}), {'class': 'open_other_menu'}).toString()
+            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceSet.length - 1}), {'class': 'open_other_menu'}).toString();
 
             result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspaceSet.length }));
             if (workspaceSet.length > 1) {
                 var list = $('<ul></ul>').addClass('other_menu');
                 _.each(_.rest(workspaceSet.models), function(workspace) {
                     list.append($('<li></li>').html(linkToContextObject(workspace)));
-                })
+                });
                 result.append(list);
             }
 
             return new Handlebars.SafeString(result.outerHtml());
         },
 
-        usedInTableau: function(tableauWorkbookSet, contextObject) {
-            contextObject = contextObject.clone();
+        usedInTableau: function(tableauWorkbookSet) {
             if (!tableauWorkbookSet || tableauWorkbookSet.length == 0) { return ""; }
 
             if (!(tableauWorkbookSet instanceof chorus.collections.TableauWorkbookSet)) {
@@ -316,8 +315,8 @@
 
             var workbookLink = linkToContextObject(tableauWorkbookSet.at(0));
 
-            var result = $("<div></div>").addClass('published_to')
-            var otherWorkbooksMenu = chorus.helpers.linkTo('#', t('tableau.other_workbooks', {count: tableauWorkbookSet.length - 1}), {'class': 'open_other_menu'}).toString()
+            var result = $("<div></div>").addClass('published_to');
+            var otherWorkbooksMenu = chorus.helpers.linkTo('#', t('tableau.other_workbooks', {count: tableauWorkbookSet.length - 1}), {'class': 'open_other_menu'}).toString();
 
             result.append(t('tableau.body',
                 {
@@ -351,27 +350,28 @@
         },
         
         attachmentFoundIn: function(model) {
+            var datasetLink;
             if (model.workspace()) {
                 var workspaceLink = model.workspace().showLink();
-                var datasetLink = model.dataset().showLink();
+                datasetLink = model.dataset().showLink();
                 return t("attachment.found_in.dataset_in_workspace", { workspaceLink: workspaceLink, datasetLink: datasetLink })
             } else {
-                var datasetLink = model.dataset().showLink();
+                datasetLink = model.dataset().showLink();
                 return t("attachment.found_in.dataset_not_in_workspace", { datasetLink: datasetLink })
             }
         },
 
         datasetLocation: function(dataset, label) {
             label = _.isString(label) ? label : "dataset.from";
-            var highlightedDataset = chorus.helpers.withSearchResults(dataset)
+            var highlightedDataset = chorus.helpers.withSearchResults(dataset);
             var instance = dataset.instance();
             var schema = dataset.schema();
             var database = schema.database();
 
             var schemaPieces = [];
             var instanceName = instance.name();
-            var databaseName = chorus.helpers.withSearchResults(database).name()
-            var schemaName = chorus.helpers.withSearchResults(schema).name()
+            var databaseName = chorus.helpers.withSearchResults(database).name();
+            var schemaName = chorus.helpers.withSearchResults(schema).name();
 
             if (dataset.get('hasCredentials') === false) {
                 schemaPieces.push(instanceName);

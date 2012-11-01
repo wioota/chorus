@@ -4,7 +4,7 @@ class DatasetPresenter < Presenter
     {
       :id => model.id,
       :type => thetype,
-      :object_name => h(model.name),
+      :object_name => model.name,
       :schema => schema_hash
     }.merge(workspace_hash).
       merge(credentials_hash).

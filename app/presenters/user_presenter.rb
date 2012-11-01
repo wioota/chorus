@@ -4,21 +4,21 @@ class UserPresenter < Presenter
     if rendering_activities?
       {
           :id => model.id,
-          :username => h(model.username),
-          :first_name => h(model.first_name),
-          :last_name => h(model.last_name),
+          :username => model.username,
+          :first_name => model.first_name,
+          :last_name => model.last_name,
           :image => present(model.image)
       }
     else
       {
           :id => model.id,
-          :username => h(model.username),
-          :first_name => h(model.first_name),
-          :last_name => h(model.last_name),
-          :email => h(model.email),
-          :title => h(model.title),
-          :dept => h(model.dept),
-          :notes => h(model.notes),
+          :username => model.username,
+          :first_name => model.first_name,
+          :last_name => model.last_name,
+          :email => model.email,
+          :title => model.title,
+          :dept => model.dept,
+          :notes => model.notes,
           :admin => model.admin?,
           :image => present(model.image)
       }

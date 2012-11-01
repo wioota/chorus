@@ -2,8 +2,8 @@ class GnipInstancePresenter < Presenter
 
   def to_hash
     {
-        :name => h(model.name),
-        :stream_url => h(model.stream_url),
+        :name => model.name,
+        :stream_url => model.stream_url,
         :id => model.id,
         :description => model.description,
         :username => model.username,

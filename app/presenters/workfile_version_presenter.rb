@@ -5,7 +5,7 @@ class WorkfileVersionPresenter < Presenter
       :version_info => {
         :id => model.id,
         :version_num => model.version_num,
-        :commit_message => h(model.commit_message),
+        :commit_message => model.commit_message,
         :owner => owner_hash,
         :modifier => modifier_hash,
         :created_at => model.created_at,

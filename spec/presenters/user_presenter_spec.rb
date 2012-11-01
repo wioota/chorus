@@ -28,10 +28,6 @@ describe UserPresenter, :type => :view do
       @hash.should_not have_key(:password_digest)
     end
 
-    [:username, :first_name, :last_name, :email, :title, :dept, :notes].each do |attribute|
-      it_behaves_like "sanitized presenter", :user, attribute
-    end
-
     context "When rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
 

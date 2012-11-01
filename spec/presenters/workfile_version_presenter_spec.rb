@@ -31,18 +31,6 @@ describe WorkfileVersionPresenter, :type => :view do
       hash[:modifier].to_hash.should == UserPresenter.new(owner, view).presentation_hash
     end
 
-    it "sanitizes values" do
-      bad_value = "<script>alert('got your cookie')</script>"
-
-      workfile_version = FactoryGirl.build :workfile_version, :commit_message => bad_value
-      workfile_version.contents = test_file('small1.gif')
-      workfile_version.workfile = workfile
-
-      json = WorkfileVersionPresenter.new(workfile_version, view).to_hash[:version_info]
-
-      json[:commit_message].should_not match "<"
-    end
-
     context "when not on the workfile page" do
       let(:workfile) { workfiles(:'text.txt') }
 

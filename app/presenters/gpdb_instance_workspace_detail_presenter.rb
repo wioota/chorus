@@ -16,7 +16,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
 
       workspaces << {
           :id => workspace.id,
-          :name => h(workspace.name),
+          :name => workspace.name,
           :size_in_bytes => sandbox_size,
           :size => format_size(sandbox_size),
           :percentage_used => sandbox_size ? (sandbox_size / recommended_bytes.to_f * 100).round : nil,

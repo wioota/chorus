@@ -18,7 +18,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
     setup: function() {
         this.popupEventName = "chorus:menu:popup." + this.cid;
-        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this))
+        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this));
         this.session = chorus.session;
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
@@ -70,12 +70,12 @@ chorus.views.Header = chorus.views.Base.extend({
             $('select.switch_user').remove();
             var $select = $("<select class='switch_user'></select>");
 
-            $select.append("<option>Switch to user..</option>")
+            $select.append("<option>Switch to user..</option>");
             this.users.each(function(user) {
-                $select.append("<option value=" + user.get("username") + ">" + user.displayName() + "</option>")
+                $select.append("<option value=" + Handlebars.Utils.escapeExpression(user.get("username")) + ">" + Handlebars.Utils.escapeExpression(user.displayName()) + "</option>")
             });
 
-            $select.css({position: 'fixed', bottom: 0, right: 0})
+            $select.css({position: 'fixed', bottom: 0, right: 0});
             $("body").append($select);
             $select.unbind("change").bind("change", function() {
                 switchUser($(this).val());
@@ -88,7 +88,7 @@ chorus.views.Header = chorus.views.Base.extend({
         function switchUser(username) {
             session.requestLogout(function() {
                 // log back in as new user
-                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router))
+                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router));
                 self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
                 session.save({username: username, password: "secret"});
             });

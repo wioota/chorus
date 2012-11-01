@@ -4,8 +4,8 @@ class WorkfilePresenter < Presenter
     workfile = {
       :id => model.id,
       :workspace => present(model.workspace, @options),
-      :file_name => h(model.file_name),
-      :file_type => h(model.content_type),
+      :file_name => model.file_name,
+      :file_type => model.content_type,
       :latest_version_id => model.latest_workfile_version_id,
       :is_deleted => model.deleted?
     }

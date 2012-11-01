@@ -1,14 +1,3 @@
-shared_examples "sanitized presenter" do |factory_name, field_to_sanitize, presented_field = field_to_sanitize|
-  it "sanitizes #{field_to_sanitize}" do
-    bad_value = "<script>alert('got your cookie')</script>"
-
-    presented = FactoryGirl.build factory_name, field_to_sanitize => bad_value
-    json = described_class.new(presented, view).to_hash
-
-    json[presented_field].should_not match "<"
-  end
-end
-
 shared_examples "dataset presenter" do |dataset_factory_name|
   before do
     gpdb_instance = FactoryGirl.build(:gpdb_instance, :id => 123, :name => "instance1")
@@ -65,8 +54,6 @@ shared_examples "dataset presenter" do |dataset_factory_name|
       hash[:workspace].should == Presenter.present(workspace, view)
     end
   end
-
-  it_behaves_like "sanitized presenter", dataset_factory_name, :name, :object_name
 end
 
 shared_examples "activity stream instance presenter" do

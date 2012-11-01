@@ -817,7 +817,7 @@ describe("handlebars", function () {
                         fixtures.tableauWorkbookJson({name: "foo", url: "foo.com"}),
                         fixtures.tableauWorkbookJson({name: "bar", url: "bar.com"})
                     ];
-                    this.result = Handlebars.helpers.usedInTableau(this.workbookList, this.contextObject).toString();
+                    this.result = Handlebars.helpers.usedInTableau(this.workbookList).toString();
                 });
 
                 it("includes the 'published to workbook' information", function () {

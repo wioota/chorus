@@ -3,10 +3,10 @@ class GpdbColumnPresenter < Presenter
 
   def to_hash
     {
-      :name => h(model.name),
-      :data_type => h(model.data_type),
+      :name => model.name,
+      :data_type => model.data_type,
       :type_category => type_category,
-      :description => h(model.description),
+      :description => model.description,
       :statistics => statistics
     }
   end

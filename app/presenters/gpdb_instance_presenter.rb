@@ -2,8 +2,8 @@ class GpdbInstancePresenter < Presenter
 
   def to_hash
     {
-      :name => h(model.name),
-      :host => h(model.host),
+      :name => model.name,
+      :host => model.host,
       :port => model.port,
       :id => model.id,
       :shared => model.shared,

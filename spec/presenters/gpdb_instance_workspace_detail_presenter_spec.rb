@@ -63,12 +63,6 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
         workspace_hash[:percentage_used].should == (10 / (1 * 1024 * 1024 * 1024).to_f * 100).round
       end
 
-      it "sanitizes the workspace names" do
-        workspace = gpdb_instance.used_by_workspaces(user).first
-        workspace.update_attributes!(:name => "<script>")
-        workspaces.detect{|w| w[:id] == workspace.id}[:name].should == "&lt;script&gt;"
-      end
-
       context "when size cannot be calculated" do
         let(:size) { nil }
 

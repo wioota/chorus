@@ -16,7 +16,5 @@ describe GpdbDatabasePresenter, :type => :view do
       @hash[:id].should == 456
       @hash[:instance][:id].should == 123
     end
-
-    it_behaves_like "sanitized presenter", :gpdb_database, :name
   end
 end

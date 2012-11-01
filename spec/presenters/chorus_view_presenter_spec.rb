@@ -23,6 +23,4 @@ describe ChorusViewPresenter, :type => :view do
     schema[:id].should == chorus_view.schema.id
     schema[:name].should == chorus_view.schema.name
   end
-
-  it_behaves_like "sanitized presenter", :chorus_view, :name, :object_name
 end

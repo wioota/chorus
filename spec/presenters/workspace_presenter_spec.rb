@@ -59,7 +59,10 @@ describe WorkspacePresenter, :type => :view do
       new_sandbox.to_hash.should == (GpdbSchemaPresenter.new(schema, view).presentation_hash)
     end
 
-    it_behaves_like "sanitized presenter", :workspace, :summary
+    it "sanitizes summary" do
+      workspace.summary = "<script>alert('got your cookie')</script>"
+      hash[:summary].should_not match "<"
+    end
 
     context "when rendering an activity stream" do
       let(:options) { {:activity_stream => true} }

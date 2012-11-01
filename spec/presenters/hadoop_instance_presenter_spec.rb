@@ -33,7 +33,5 @@ describe HadoopInstancePresenter, :type => :view do
     end
 
     it_behaves_like "activity stream instance presenter"
-    it_behaves_like "sanitized presenter", :hadoop_instance, :name
-    it_behaves_like "sanitized presenter", :hadoop_instance, :host
   end
 end

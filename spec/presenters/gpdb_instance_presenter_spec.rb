@@ -40,7 +40,5 @@ describe GpdbInstancePresenter, :type => :view do
     end
 
     it_behaves_like "activity stream instance presenter"
-    it_behaves_like "sanitized presenter", :gpdb_instance, :name
-    it_behaves_like "sanitized presenter", :gpdb_instance, :host
   end
 end

@@ -30,7 +30,5 @@ describe InstanceAccountPresenter, :type => :view do
       @owner = @hash[:owner]
       @owner.to_hash.should == (UserPresenter.new(@user, view).presentation_hash)
     end
-
-    it_behaves_like "sanitized presenter", :instance_account, :db_username
   end
 end
