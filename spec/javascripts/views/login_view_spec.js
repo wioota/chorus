@@ -25,12 +25,22 @@ describe("chorus.views.Login", function() {
 
     describe("when the version string is returned", function() {
         beforeEach(function() {
-            this.server.requests[0].respond(200, {}, "THE_VERSION");
+            this.version = "0123456789ABCDEF012";
+            this.server.requests[0].respond(200, {}, this.version);
         });
 
         it("inserts the version string", function() {
-            expect(this.view.$(".legal .version")).toHaveText("THE_VERSION")
-        })
+            expect(this.view.$(".legal .version")).toHaveText(this.version);
+        });
+
+        it("limits the version to 19 characters", function() {
+            this.server.requests[0].respond(200, {}, "0123456789ABCDEF012345");
+            expect(this.view.$(".legal .version")).toHaveText("0123456789ABCDEF012");
+        });
+
+        it("sets the version title to the full version", function() {
+            expect(this.view.$(".legal .version").attr('title')).toBe("Version " + this.version);
+        });
     })
 
     describe("attempting to login", function() {

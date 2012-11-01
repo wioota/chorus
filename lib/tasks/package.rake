@@ -218,7 +218,7 @@ module PackageMaker
   end
 
   def version_name
-    "#{Chorus::VERSION::STRING}-#{head_sha}".strip[0..18]
+    "#{Chorus::VERSION::STRING}-#{head_sha}"
   end
 end
 
