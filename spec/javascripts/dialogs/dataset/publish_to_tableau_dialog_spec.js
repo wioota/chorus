@@ -8,7 +8,21 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
 
     it("populates the dataset name in the name input", function () {
         expect(this.dialog.$("input[name='name']").val()).toBe("myDataset");
+        expect(this.dialog.$("label[name='name']").text()).toMatchTranslation("tableau.dialog.name");
     });
+
+    it("has an empty and enabled 'Tableau Username' field", function() {
+        expect(this.dialog.$("input[name=tableau_username]").val()).toBe("");
+        expect(this.dialog.$("input[name=tableau_username]").prop("disabled")).toBeFalsy();
+        expect(this.dialog.$("label[name='tableau_username']").text()).toMatchTranslation("tableau.dialog.username");
+    });
+
+    it("has an empty and enabled 'Tableau Password' field", function() {
+        expect(this.dialog.$("input[name=tableau_password]").val()).toBe("");
+        expect(this.dialog.$("input[name=tableau_password]").prop("disabled")).toBeFalsy();
+        expect(this.dialog.$("label[name='tableau_password']").text()).toMatchTranslation("tableau.dialog.password");
+    });
+
 
     it("checks the create workfile checkbox", function () {
         expect(this.dialog.$("input[name='create_work_file']")).toBeChecked();
@@ -23,6 +37,8 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
     describe("when publish is clicked", function () {
         beforeEach(function () {
             this.dialog.$("input[name='name']").val("foo");
+            this.dialog.$("input[name='tableau_username']").val("fooname");
+            this.dialog.$("input[name='tableau_password']").val("foopass");
             this.dialog.$("button.submit").click();
         });
 
@@ -35,6 +51,7 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         });
 
         it("saves the workbook", function() {
+            debugger
             expect(this.server.lastCreateFor(this.model)).toBeDefined();
         });
 
@@ -47,7 +64,7 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
                spyOn(chorus.Modal.prototype, "closeModal");
                spyOn(chorus, "toast");
                this.originalWorkbooksCount = this.dataset.tableauWorkbooks().length;
-              this.server.lastCreateFor(this.model).succeed();
+               this.server.lastCreateFor(this.model).succeed();
            });
 
            it("closes the modal", function() {

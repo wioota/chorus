@@ -16,7 +16,16 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
     },
 
     publishToTableau: function() {
-        this.model.set({name: this.$("input[name='name']").val(), createWorkFile: this.$("input[name='create_work_file']").is(':checked')}, {silent: true});
+        var attrs = {};
+
+        _.each(["name", "tableau_username", "tableau_password"], function(name) {
+            var input = this.$("input[name=" + name + "]");
+            if (input.length) {
+                attrs[name] = input.val().trim();
+            }
+        }, this);
+        attrs['createWorkFile'] = this.$("input[name='create_work_file']").is(':checked');
+        this.model.set(attrs, {silent: true});
         this.$("button.submit").startLoading('actions.publishing');
         this.$("button.cancel").prop("disabled", true);
         this.model.save();

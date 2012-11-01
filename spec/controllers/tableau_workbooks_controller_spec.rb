@@ -15,7 +15,14 @@ describe TableauWorkbooksController do
     let(:dataset) { datasets(:table) }
     let(:workspace) { workspaces(:public)}
     let(:name) { 'myTableauWorkbook' }
-    let(:params) { extra_options.merge({ :dataset_id => dataset.id, :workspace_id => workspace.id, :name => name }) }
+    let(:params) { extra_options.merge( {
+                      :dataset_id => dataset.id,
+                      :workspace_id => workspace.id,
+                      :name => name,
+                      :tableau_username => 'chorusadmin',
+                      :tableau_password => 'secret'})
+                 }
+
     let(:extra_options) { {} }
 
     context 'when the dataset is a table' do

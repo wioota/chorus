@@ -1,10 +1,29 @@
 .publish_to_tableau_dialog {
-  width: 450px;
+  $dialog-width : 450px;
+  $account_width : 200px;
+  $input-spacing : 16px;
+
+  width: $dialog-width;
 
   .target_location {
-    width: 450px;
+    width: $dialog-width;
     @include results-console-message;
     @include ellipsis;
     padding-bottom: 10px;
+  }
+
+  label {
+    margin-top: 15px;
+    margin-bottom: $padding-y;
+    display: inline-block;
+  }
+
+  .username, .password {
+    display: inline-block;
+    width: $account_width;
+  }
+
+  .password {
+    margin-left: 16px;
   }
 }

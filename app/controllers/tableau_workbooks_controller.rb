@@ -6,7 +6,9 @@ class TableauWorkbooksController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
     dataset = Dataset.find(params[:dataset_id])
-    workbook = create_new_workbook(dataset, params[:tableau_workbook][:name])
+    workbook = create_new_workbook(dataset, params[:tableau_workbook][:name],
+                                   params[:tableau_workbook][:tableau_username],
+                                   params[:tableau_workbook][:tableau_password])
 
     workfile = nil
     if params[:tableau_workbook][:create_work_file] == "true"
@@ -59,13 +61,13 @@ class TableauWorkbooksController < ApplicationController
 
   private
 
-  def create_new_workbook(dataset, workbook_name)
+  def create_new_workbook(dataset, workbook_name, username, password)
     login_params = {
         :name => workbook_name,
         :server => Chorus::Application.config.chorus['tableau.url'],
         :port => Chorus::Application.config.chorus['tableau.port'],
-        :tableau_username => Chorus::Application.config.chorus['tableau.username'],
-        :tableau_password => Chorus::Application.config.chorus['tableau.password'],
+        :tableau_username => username,
+        :tableau_password => password,
         :db_username => dataset.gpdb_instance.account_for_user!(current_user).db_username,
         :db_password => dataset.gpdb_instance.account_for_user!(current_user).db_password,
         :db_host => dataset.gpdb_instance.host,
