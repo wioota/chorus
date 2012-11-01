@@ -58,6 +58,16 @@ describe WorkspaceCsvImportsController do
         post :create, csv_import_params
       end
 
+      it "presents an empty array" do
+        mock_present {|model| model.should == []}
+        post :create, csv_import_params
+      end
+
+      it "returns 201" do
+        post :create, csv_import_params
+        response.code.to_i.should == 201
+      end
+
       context "when has_header is true" do
         let(:has_header) { true }
         it "changes the has_header field to file_contains_header FIXME" do
