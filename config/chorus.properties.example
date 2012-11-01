@@ -49,7 +49,10 @@ tableau.port= 80
 tableau.username= chorusadmin
 tableau.password= secret
 
+logging.syslog=false
+
 gnip_enabled= true
+gnip.csv_import_max_file_size_mb= 50
 
 kaggle.api_key= KAGGLE_API_KEY
 

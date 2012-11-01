@@ -57,7 +57,9 @@ describe CsvImporter, :database_integration => true do
       csv_file = create_csv_file
       csv_file.update_attribute(:delimiter, nil)
       expect do
-        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to raise_error
       end.to change(Events::FileImportFailed, :count).by 1
       Events::FileImportFailed.last.error_message.should == 'CSV file cannot be imported'
     end
@@ -211,17 +213,22 @@ describe CsvImporter, :database_integration => true do
     end
 
     context "when import fails" do
+      let(:csv_file) do
+        create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
+                        :column_names => [:id, :name],
+                        :types => [:integer, :varchar],
+                        :file_contains_header => false,
+                        :new_table => true)
+      end
+
       it "sets the import record state to 'failure'" do
         Timecop.freeze(Time.now) do
-          csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
-                                     :column_names => [:id, :name],
-                                     :types => [:integer, :varchar],
-                                     :file_contains_header => false,
-                                     :new_table => true)
-
-          stub(csv_file).ready_to_import? { false }
-          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-
+          any_instance_of(CsvFile) do |file|
+            stub(file).ready_to_import? { false }
+          end
+          expect {
+            CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+          }.to raise_error("CSV file cannot be imported")
           Import.last.state.should == "failure"
           Import.last.finished_at.should == Time.now
         end
@@ -231,13 +238,10 @@ describe CsvImporter, :database_integration => true do
         any_instance_of(CsvImporter) { |importer|
           stub(importer).check_if_table_exists.with_any_args { false }
         }
-        csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
-                                   :column_names => [:id, :name],
-                                   :types => [:integer, :varchar],
-                                   :file_contains_header => false,
-                                   :new_table => true)
         table_name = csv_file.to_table
-        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to raise_error
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
         end
@@ -262,7 +266,10 @@ describe CsvImporter, :database_integration => true do
                                           :new_table => false,
                                           :to_table => table_name)
 
-        CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
+        expect {
+          CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
+        }.to raise_error
+
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
         end
@@ -272,13 +279,11 @@ describe CsvImporter, :database_integration => true do
         any_instance_of(CsvImporter) { |importer|
           stub(importer).check_if_table_exists.with_any_args { true }
         }
-        csv_file = create_csv_file(:contents => tempfile_with_contents("1,hi,three"),
-                                   :column_names => [:id, :name],
-                                   :types => [:integer, :varchar],
-                                   :file_contains_header => false,
-                                   :new_table => true)
+
         table_name = csv_file.to_table
-        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to raise_error
         schema.with_gpdb_connection(account) do |connection|
           expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
         end
@@ -344,7 +349,9 @@ describe CsvImporter, :database_integration => true do
         @error = 'ActiveRecord::JDBCError: ERROR: relation "test" already exists: CREATE TABLE test(a float, b float, c float);'
         exception = ActiveRecord::StatementInvalid.new(@error)
         any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection { raise exception } }
-        CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to raise_error
       end
 
       it "makes a IMPORT_FAILED event" do

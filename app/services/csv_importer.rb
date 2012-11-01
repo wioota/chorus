@@ -7,6 +7,8 @@ class CsvImporter
   def self.import_file(csv_file_id, import_created_event_id)
     csv_importer = new(csv_file_id, import_created_event_id)
     csv_importer.import_with_events
+  ensure
+    csv_importer.csv_file.try(:destroy)
   end
 
   def initialize(csv_file_id, import_created_event_id)
@@ -23,8 +25,8 @@ class CsvImporter
   rescue => e
     create_failure_event(e.message)
     import_record.try(:update_attribute, :state, "failure")
+    raise e
   ensure
-    csv_file.try(:delete)
     import_record.try(:touch, :finished_at)
   end
 
@@ -46,7 +48,7 @@ class CsvImporter
         copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
         sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-      rescue Exception => e
+      rescue => e
         connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
         raise e
       end

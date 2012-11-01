@@ -52,6 +52,13 @@ describe ConfigurationsController do
       decoded_response.gpfdist_configured.should == false
     end
 
+    it "returns the max file size allowed for gnip import" do
+      stub(Chorus::Application.config.chorus).[]('gnip.csv_import_max_file_size_mb') { 40 }
+      get :show
+      response.code.should == "200"
+      decoded_response.gnip_csv_import_max_file_size_mb.should == 40
+    end
+
     it "includes the file size maximums" do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }

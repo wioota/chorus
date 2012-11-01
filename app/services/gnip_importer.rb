@@ -1,4 +1,7 @@
 class GnipException < RuntimeError
+  end
+
+class GnipFileSizeExceeded < RuntimeError
 end
 
 class GnipImporter
@@ -41,15 +44,17 @@ class GnipImporter
     raise GnipException, JSON.parse($&)["reason"] if url =~ /^.*\"status\":\"error\".*$/
     result = stream.to_result_in_batches([url])
     csv_file = create_csv_file(result, first_time)
-    begin
-      csv_importer = CsvImporter.new(csv_file.id, event_id)
-      csv_importer.import
-    rescue => e
-      cleanup_table
-      raise e
-    ensure
-      csv_file.delete
-    end
+    csv_importer = CsvImporter.new(csv_file.id, event_id)
+    csv_importer.import
+  rescue => e
+    cleanup_table
+    raise e
+  ensure
+    csv_file.try(:destroy)
+  end
+
+  def max_file_size
+    Chorus::Application.config.chorus["gnip.csv_import_max_file_size_mb"]
   end
 
   def cleanup_table
@@ -95,7 +100,11 @@ class GnipImporter
          :user_uploaded => false,
          :user_id => user_id
         },
-        :without_protection => true)
+        :without_protection => true).tap do |csv_file|
+      if csv_file.contents_file_size > max_file_size
+        raise GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit."
+      end
+    end
   end
 
   def destination_dataset

@@ -155,5 +155,30 @@ describe GnipImporter do
         }.to throw_symbol(:dropped_table)
       end
     end
+
+    context "when individual chunk size exceeds the max file size allowed" do
+      before do
+        stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { 70 }
+        any_instance_of (CsvFile) do |file|
+          stub(file).contents_file_size { 60 }
+        end
+      end
+
+      it "creates a failed event with a helpful message" do
+        expect {
+          expect {
+            do_import
+          }.to raise_error(GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit.")
+        }.to change(Events::GnipStreamImportFailed, :count).by(1)
+      end
+
+      it "creates a notification" do
+        expect {
+          expect {
+            do_import
+          }.to raise_error(GnipFileSizeExceeded)
+        }.to change(Notification, :count).by(1)
+      end
+    end
   end
 end
