@@ -77,6 +77,8 @@ module PackageMaker
 
   PATHS_TO_EXCLUDE = %w{
     config/secret.key
+    config/test.crt
+    config/test.key
   }
 
   extend self
