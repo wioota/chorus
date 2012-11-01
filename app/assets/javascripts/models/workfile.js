@@ -113,7 +113,6 @@
 
         allVersions: function() {
             return new chorus.collections.WorkfileVersionSet([], {
-                workspaceId: this.workspace().id,
                 workfileId: this.get("id")
             });
         },

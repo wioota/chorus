@@ -109,6 +109,10 @@ describe WorkfileVersionsController do
       decoded_response[1].version_num = 2
     end
 
+    generate_fixture "workfileVersionSet.json" do
+      get :index, :workfile_id => workfile.id
+    end
+
     it_behaves_like "a paginated list" do
       let(:params) {{ :workfile_id => workfile.to_param }}
     end

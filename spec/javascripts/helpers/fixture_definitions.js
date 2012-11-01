@@ -88,6 +88,7 @@ window.rspecFixtureDefinitions = {
         }
     },
     workfileSet: {},
+    workfileVersionSet: {},
     workfileVersion: { unique: ['id']},
     draft: {},
     provisioning: {},

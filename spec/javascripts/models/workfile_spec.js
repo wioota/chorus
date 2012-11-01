@@ -318,7 +318,6 @@ describe("chorus.models.Workfile", function() {
         it("sets the required attributes", function() {
             var workfileVersionSet = this.model.allVersions();
             expect(workfileVersionSet).toBeA(chorus.collections.WorkfileVersionSet);
-            expect(workfileVersionSet.attributes.workspaceId).toBe(this.model.workspace().id);
             expect(workfileVersionSet.attributes.workfileId).toBe(this.model.get("id"));
         });
     });
