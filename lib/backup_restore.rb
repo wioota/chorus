@@ -2,6 +2,7 @@ require 'safe_mktmpdir'
 require 'pathname'
 require 'open3'
 require 'tempfile'
+require 'yaml'
 
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
@@ -221,8 +222,8 @@ PROMPT
 
     def restore_database
       log "Restoring database..."
-      capture_output "dropdb -p #{database_port} #{database_name}", :error => "Existing database could not be dropped."
-      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/packaging/pg_restore.sh -C -p #{database_port} -d postgres", :error => "Could not restore database."
+      capture_output "dropdb -p #{database_port} -U #{postgres_username} #{database_name}", :error => "Existing database could not be dropped."
+      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/packaging/pg_restore.sh -C -p #{database_port} -U #{postgres_username} -d postgres", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)
@@ -240,6 +241,10 @@ PROMPT
       yield
     ensure
       ActiveRecord::Base.establish_connection connection_config if existing_connection
+    end
+
+    def postgres_username
+      @pg_user ||= YAML.load(Rails.root.join('config/database.yml'))['production']['username']
     end
   end
 end
