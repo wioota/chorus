@@ -282,25 +282,24 @@ chorus.views.Bare = Backbone.View.include(
 
                         if (chorus.page && chorus.page.bind) {
                             if(this.resizeCallback) {
-                                this.bindings.remove(chorus.page, "resized", this.resizeCallback)
+                                this.bindings.remove(chorus.page, "resized", this.resizeCallback);
                             }
                             this.resizeCallback = function() { this.recalculateScrolling(el) };
                             this.bindings.add(chorus.page, "resized", this.resizeCallback, this);
                         }
-
                     }
                 }
-            }, this))
+            }, this));
         },
 
-        onMouseWheel: function(event, d) {
+        onMouseWheel: function(event) {
             event.preventDefault();
         },
 
         recalculateScrolling: function(el) {
             var elements = el ? [el] : this.$(".custom_scroll");
             _.each(elements, function(el) {
-                el = $(el)
+                el = $(el);
                 var api = el.data("jsp");
                 if (api) {
                     _.defer(_.bind(function() {
@@ -469,7 +468,7 @@ chorus.views.MainContentView = chorus.views.Base.extend({
     templateName: "main_content",
 
     setup: function(options) {
-        options = options || {}
+        options = options || {};
         this.contentHeader = this.contentHeader || options.contentHeader;
         this.contentDetails = this.contentDetails || options.contentDetails;
         this.content = this.content || options.content;
@@ -505,11 +504,11 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
                 var menu = new chorus.views.LinkMenu(menuOptions);
                 self.$(".menus").append(
                     menu.render().el
-                )
+                );
                 $(menu.el).addClass(menuKey);
                 menu.bind("choice", function(eventType, choice) {
                     self.trigger("choice:" + eventType, choice);
-                })
+                });
             })
         }
     }
@@ -521,7 +520,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         var collection = this.collection;
         this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
 
-        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl, sandbox: options.sandbox})
+        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl, sandbox: options.sandbox});
 
         if (options.hasOwnProperty('persistent')) {
             this.persistent = options.persistent;
