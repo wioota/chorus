@@ -1,7 +1,5 @@
 require 'yaml'
 
-environment = ENV['RAILS_ENV']
-
 chorus_home = File.expand_path(File.dirname(__FILE__) + '/../')
 require File.join(chorus_home, 'config', 'boot')
 require File.join(chorus_home, 'app/models/chorus_config')

@@ -18,7 +18,7 @@ module Properties
     result
   end
 
-  def self.write_file(hash, destination_file_path)
+  def self.dump_file(hash, destination_file_path)
     list = self.property_list(hash)
     File.open(destination_file_path, 'w') do |f|
       list.each { |property| f.print(property, "\n") }

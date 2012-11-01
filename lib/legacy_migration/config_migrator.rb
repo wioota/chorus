@@ -7,7 +7,7 @@ class ConfigMigrator < AbstractMigrator
 
   def migrate
     return if not @properties_path
-    Properties.write_file(config, @output_path)
+    Properties.dump_file(config, @output_path)
   end
 
   def config

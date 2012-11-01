@@ -4,58 +4,58 @@ default:
   encoding: unicode
   username: postgres_chorus
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 development:
   database: chorus_rails_development
   adapter: jdbcpostgresql
   encoding: unicode
   username: postgres_chorus
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 test:
   database: chorus_rails_test
   adapter: jdbcpostgresql
   encoding: unicode
   username: postgres_chorus
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 integration:
   database: chorus_rails_integration
   adapter: jdbcpostgresql
   encoding: unicode
   username: postgres_chorus
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 production:
   database: chorus_rails_production
   adapter: jdbcpostgresql
   encoding: unicode
   username: pivotal
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 packaging:
   database: chorus_rails_packaging
   adapter: jdbcpostgresql
   encoding: unicode
   username: postgres_chorus
   password:
-  port: 1234
+  port: 8543
   min_messages: warning
   host: 127.0.0.1
-  pool: 50
+  pool: 5
 ...

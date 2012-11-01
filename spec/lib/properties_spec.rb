@@ -1,5 +1,4 @@
-require 'properties'
-require 'spec/support/rr'
+require 'spec_helper'
 
 describe Properties do
   describe '.load_file' do
@@ -73,7 +72,7 @@ describe Properties do
 
   end
 
-  describe '.write_file' do
+  describe '.dump_file' do
     let(:hash) { {
       'test1' => {'value1' => 10},
       'test2' => 20
@@ -81,7 +80,7 @@ describe Properties do
     let(:destination) { 'spec/lib/fixtures/converted.properties' }
 
     it 'writes to the properties file' do
-      Properties.write_file(hash, destination)
+      Properties.dump_file(hash, destination)
       lines = File.read(destination).split("\n")
       lines[0].should == "test1.value1= 10"
       lines[1].should == "test2= 20"

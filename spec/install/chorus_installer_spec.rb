@@ -841,23 +841,6 @@ describe ChorusInstaller do
     end
   end
 
-  def stub_chorus_exec(installer)
-    stub(installer).chorus_exec.with_any_args do |cmd|
-      @call_order << :import_legacy_schema if cmd =~ /chorus_migrate/
-      @call_order << :stop_old_app if cmd =~ /edcsvrctl stop; true/
-      @call_order << :stop_old_app_or_fail if cmd =~ /edcsvrctl stop(?!; true)/
-      @call_order << :start_old_app if cmd =~ /edcsvrctl start/
-      @call_order << :pg_dump if cmd =~ /pg_dump/
-      cmd =~ /rake/ and cmd.scan /db:(\S+)/ do |targets|
-        @call_order << :"rake_db_#{targets[0]}"
-      end
-      @call_order << :start_postgres if cmd =~ /chorus_control\.sh start postgres/
-      @call_order << :stop_postgres if cmd =~ /chorus_control\.sh stop postgres/
-      @call_order << :create_user if cmd =~ /CREATE ROLE/
-      @call_order << :create_database if cmd =~ /initdb/
-    end
-  end
-
   describe "#remove_and_restart_previous!" do
     before do
       stub(installer).version { "2.2.0.0" }
@@ -895,6 +878,39 @@ describe ChorusInstaller do
         installer.remove_and_restart_previous!
         File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end
+    end
+  end
+
+  describe "#warn_and_change_osx_properties" do
+    before do
+      installer.destination_path = '/usr/local/greenplum-chorus'
+    end
+    let(:chorus_config_path) { File.join(installer.destination_path, 'shared', 'chorus.properties') }
+
+    it "modifies the properties to be OS X specific" do
+      mock(Properties).load_file(chorus_config_path) { {} }
+      stub(Properties).dump_file(hash_including({
+       'worker_threads' => 5,
+       'webserver_threads' => 5,
+       'database_threads' => 15}), chorus_config_path)
+      installer.warn_and_change_osx_properties
+    end
+  end
+
+  def stub_chorus_exec(installer)
+    stub(installer).chorus_exec.with_any_args do |cmd|
+      @call_order << :import_legacy_schema if cmd =~ /chorus_migrate/
+      @call_order << :stop_old_app if cmd =~ /edcsvrctl stop; true/
+      @call_order << :stop_old_app_or_fail if cmd =~ /edcsvrctl stop(?!; true)/
+      @call_order << :start_old_app if cmd =~ /edcsvrctl start/
+      @call_order << :pg_dump if cmd =~ /pg_dump/
+      cmd =~ /rake/ and cmd.scan /db:(\S+)/ do |targets|
+        @call_order << :"rake_db_#{targets[0]}"
+      end
+      @call_order << :start_postgres if cmd =~ /chorus_control\.sh start postgres/
+      @call_order << :stop_postgres if cmd =~ /chorus_control\.sh stop postgres/
+      @call_order << :create_user if cmd =~ /CREATE ROLE/
+      @call_order << :create_database if cmd =~ /initdb/
     end
   end
 
