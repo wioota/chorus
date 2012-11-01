@@ -156,6 +156,21 @@ describe GnipImporter do
       end
     end
 
+    context "when there is no max file size configuration" do
+      before do
+        stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { nil }
+        any_instance_of (CsvFile) do |file|
+          stub(file).contents_file_size { 51 }
+        end
+      end
+
+      it "fails if the file is larger than 50mb" do
+        expect {
+          do_import
+        }.to raise_error(GnipFileSizeExceeded)
+      end
+    end
+
     context "when individual chunk size exceeds the max file size allowed" do
       before do
         stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { 70 }

@@ -54,7 +54,7 @@ class GnipImporter
   end
 
   def max_file_size
-    Chorus::Application.config.chorus["gnip.csv_import_max_file_size_mb"]
+    Chorus::Application.config.chorus["gnip.csv_import_max_file_size_mb"] || 50
   end
 
   def cleanup_table
