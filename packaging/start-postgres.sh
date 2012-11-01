@@ -8,7 +8,7 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-POSTGRES_PORT=8543
+POSTGRES_PORT=`ruby script/get_db_port.rb`
 
 if [ -f $POSTGRES_PID_FILE ]; then
   if kill -0 `head -1 $POSTGRES_PID_FILE` > /dev/null 2>&1; then

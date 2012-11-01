@@ -37,6 +37,8 @@ case $RAILS_ENV in
         if ( test -f $MIZUNO_PID_FILE ) && ( kill -0 `cat $MIZUNO_PID_FILE` > /dev/null 2>&1 ); then
             log "Mizuno already running as process `cat $MIZUNO_PID_FILE`."
         else
+			log "updating database.yml.."
+			$RUBY packaging/update_database_yml.rb
             log "starting mizuno on port 3000..."
             #running mizuno in daemon mode (-D) is causing the command prompt to get screwed up
             if bundle exec mizuno -p 3000 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
@@ -47,7 +49,7 @@ case $RAILS_ENV in
     * )
         log "updating jetty config..."
         $RUBY packaging/update_jetty_xml.rb
-        $RUBY packaging/update_database_pool_size.rb
+        $RUBY packaging/update_database_yml.rb
 
         log "starting jetty..."
         cd $CHORUS_HOME/vendor/jetty/

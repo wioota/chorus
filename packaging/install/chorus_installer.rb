@@ -251,7 +251,8 @@ class ChorusInstaller
       log "Initializing database..." do
         chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 -D #{data_path}/db"
         start_postgres
-        chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+				port = `ruby script/get_db_port.rb`
+        chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p#{port} -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
         db_commands = "db:create db:migrate"
         db_commands += " db:seed" unless upgrade_legacy?
         log "Running rake #{db_commands}"

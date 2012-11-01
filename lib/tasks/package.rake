@@ -151,14 +151,16 @@ module PackageMaker
       run "ssh #{host} 'test -e #{install_path} && CHORUS_HOME=#{chorus_home} #{chorus_home}/packaging/chorus_control.sh stop'"
       run "ssh #{host} 'rm -rf #{install_path}'"
       if legacy_data_host
+				port = `ssh #{host} "ruby #{install_path}/script/get_db_port.rb"`
+
         run "ssh pivotal@#{legacy_data_host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/pg_dump -p 8543 chorus -O -f ~/legacy_database.sql'"
         run "scp pivotal@#{legacy_data_host}:~/legacy_database.sql ."
         run "scp legacy_database.sql #{host}:~"
         run "ssh pivotal@#{legacy_data_host} 'rm legacy_database.sql'"
         run "ssh #{host} 'cd #{legacy_path}; source edc_path.sh; cd bin; ./edcsvrctl start'"
-        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c "drop schema public cascade"'}
-        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c "create schema public"'}
-        run "ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus < ~/legacy_database.sql; rm ~/legacy_database.sql'"
+        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p #{port} chorus -c "drop schema public cascade"'}
+        run %Q{ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p #{port} chorus -c "create schema public"'}
+        run "ssh #{host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p #{port} chorus < ~/legacy_database.sql; rm ~/legacy_database.sql'"
         run "ssh #{host} 'rsync -avce ssh pivotal@#{legacy_data_host}:#{legacy_path}/chorus-apps/runtime/data/ #{legacy_path}/chorus-apps/runtime/data'"
       end
     end
