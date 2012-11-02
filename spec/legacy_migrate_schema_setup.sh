@@ -10,6 +10,9 @@ test "$RAILS_ENV" = "" && RAILS_ENV=production
 dropdb -p 8543 chorus_tmp_migrate
 psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
 
+dropdb -p 8543 chorus_tmp_migrate
+psql -p 8543 chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null
+
 # Create a temporary database so we can namespace legacy tables into their own schema
 createdb -p 8543 chorus_tmp_migrate
 psql -p 8543 chorus_tmp_migrate < $1 > /dev/null

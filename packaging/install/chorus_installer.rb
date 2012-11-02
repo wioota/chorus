@@ -363,7 +363,10 @@ class ChorusInstaller
     link_current_to_release
 
     log "Install complete. Source chorus_path.sh before starting Chorus"
-    log "OS X users should change shared/chorus.properties and reduce the number of worker_threads and webserver_threads to 5" if is_supported_mac?
+    if is_supported_mac?
+      warn_and_change_osx_properties
+    end
+
   rescue InstallerErrors::InstallAborted => e
     puts e.message
     exit 1
@@ -377,6 +380,16 @@ class ChorusInstaller
     chorus_control "stop" if upgrade_legacy? rescue # rescue in case chorus_control blows up
     log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
+  end
+
+  def warn_and_change_osx_properties
+    log "OS X Users:"
+    log "The properties file 'shared/chorus.properties' has had the number of worker_threads and webserver_threads reduced to 5 and the number of database_threads reduced to 15."
+
+    properties_file = File.join(destination_path, "shared", "chorus.properties")
+    properties = Properties.load_file(properties_file)
+    properties.merge!({"worker_threads" => 5, "webserver_threads" => 5, "database_threads" => 15})
+    Properties.dump_file(properties, properties_file)
   end
 
   def remove_and_restart_previous!
@@ -424,7 +437,7 @@ class ChorusInstaller
       config['assets_storage_path'] = "#{data_path}/system/"
     end
 
-    Properties.write_file(config, chorus_config_file)
+    Properties.dump_file(config, chorus_config_file)
   end
 
   def release_path
