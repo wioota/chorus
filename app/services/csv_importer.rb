@@ -20,10 +20,10 @@ class CsvImporter
   def import_with_events
     import
     create_success_event
-    import_record.update_attribute(:state, "success")
+    import_record.update_attribute(:success, true)
   rescue => e
     create_failure_event(e.message)
-    import_record.try(:update_attribute, :state, "failure")
+    import_record.try(:update_attribute, :success, false)
     raise e
   ensure
     import_record.try(:touch, :finished_at)
@@ -40,30 +40,27 @@ class CsvImporter
           connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
         end
 
-          if csv_file.truncate
-            connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
-          end
-
-          copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
-          sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
-          copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-          Dataset.refresh(account, schema)
-        rescue Exception => e
-          connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
-          raise e
+        if csv_file.truncate
+          connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
         end
+
+        copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
+        sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
+        copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+        Dataset.refresh(account, schema)
+      rescue Exception => e
+        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
+        raise e
       end
-
-      create_success_event
-      import_record.success = true
-    rescue Exception => e
-      create_failure_event(e.message)
-      import_record.success = false
-
-    ensure
-      import_record.finished_at = Time.now
-      import_record.save!(:validate => false)
     end
+
+    import_record.success = true
+  rescue Exception => e
+    import_record.success = false
+    raise e
+  ensure
+    import_record.finished_at = Time.now
+    import_record.save!(:validate => false)
   end
 
   def create_csv_import
@@ -112,6 +109,7 @@ class CsvImporter
   end
 
   def destination_dataset
+    Dataset.refresh(account, schema)
     schema.datasets.find_by_name(csv_file.to_table)
   end
 

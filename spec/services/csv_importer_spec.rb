@@ -240,7 +240,7 @@ describe CsvImporter do
               :types => [:integer, :varchar])
         end
 
-        it "sets the import record state to 'failure'" do
+        it "sets the import record success to false" do
           Timecop.freeze(Time.now) do
             any_instance_of(CsvFile) do |file|
               stub(file).ready_to_import? { false }

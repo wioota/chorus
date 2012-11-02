@@ -183,7 +183,9 @@ describe DatasetImportSchedulesController do
 
     let(:attributes) {
       {
-          :id => import_schedule.id
+          :id => import_schedule.id,
+          :dataset_id => source_table.id,
+          :workspace_id => 3482374324
       }
     }
 
@@ -228,7 +230,7 @@ describe DatasetImportSchedulesController do
 
       it "uses authorization" do
         mock(subject).authorize! :can_edit_sub_objects, Workspace.find(import_schedule.workspace_id)
-        put :update, :id => import_schedule.id, :workspace_id => 3482374324
+        put :update, :id => import_schedule.id, :workspace_id => 3482374324, :dataset_id => 8675309
       end
     end
   end
@@ -237,7 +239,7 @@ describe DatasetImportSchedulesController do
     let(:source_table) { Dataset.find(import_schedule[:source_dataset_id]) }
 
     it "deletes the import schedule and returns success" do
-      delete :destroy, :id => import_schedule.id
+      delete :destroy, :id => import_schedule.id, :workspace_id => 3482374324, :dataset_id => source_table.id
 
       response.code.should == "200"
       import_schedule.reload.deleted_at.should_not be_nil
@@ -248,7 +250,7 @@ describe DatasetImportSchedulesController do
 
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, Workspace.find(import_schedule.workspace_id)
-      delete :destroy, :id => import_schedule.id, :workspace_id => 3482374324
+      delete :destroy, :id => import_schedule.id, :workspace_id => 3482374324, :dataset_id => source_table.id
     end
   end
 end
