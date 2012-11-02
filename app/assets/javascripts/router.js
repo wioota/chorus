@@ -62,7 +62,8 @@
         navigate:function (fragment, pageOptions) {
             this.app.pageOptions = pageOptions;
             fragment = fragment.match(/#?(.*)/)[1];
-            if (Backbone.history.fragment == fragment || Backbone.history.fragment == decodeURIComponent(fragment)) {
+            var fragComparison = fragment.match(/\/?(.*)/)[1]
+            if (Backbone.history.fragment == fragComparison || Backbone.history.fragment == decodeURIComponent(fragComparison)) {
                 Backbone.history.loadUrl(fragment);
             } else {
                 Backbone.Router.prototype.navigate.call(this, fragment, true);

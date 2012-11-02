@@ -116,7 +116,7 @@ describe("chorus.router", function() {
             spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
                 options.success(session, { status: "ok" });
             })
-        })
+        });
 
         it("renders the page with parameters", function() {
             this.chorus.router.navigate("/workspaces/5");
@@ -137,7 +137,7 @@ describe("chorus.router", function() {
 
         describe("when triggerRoute is true", function() {
             beforeEach(function() {
-                Backbone.history.fragment = "/foo";
+                Backbone.history.fragment = "foo";
             });
 
             describe("and the target fragment is not the current fragment", function() {
@@ -150,20 +150,20 @@ describe("chorus.router", function() {
             describe("and the target fragment is the current fragment", function() {
                 it("calls loadUrl on the fragment", function() {
                     this.chorus.router.navigate("/foo");
-                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                 });
 
                 it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
                     this.chorus.router.navigate("#/foo");
-                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                 });
             });
 
             describe("when the fragment is URI encoded", function() {
                 beforeEach(function() {
-                    Backbone.history.fragment = "/foo/'1'|2";
+                    Backbone.history.fragment = "foo/'1'|2";
                 });
 
                 describe("and the target fragment is the current fragment", function() {
