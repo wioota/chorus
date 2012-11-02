@@ -21,11 +21,10 @@ namespace :development do
   desc "Initialize the database and create the database user used by Chorus"
   task :init_database do
     root = Pathname.new(__FILE__).dirname.join("../..")
-		port = `ruby script/get_db_port.rb`
     next if root.join("postgres-db").exist?
     `DYLD_LIBRARY_PATH=#{root}/postgres/lib LD_LIBRARY_PATH=#{root}/postgres/lib #{root}/postgres/bin/initdb -D #{root}/postgres-db -E utf8`
     `CHORUS_HOME=#{root} #{root}/packaging/chorus_control.sh start postgres`
-    `DYLD_LIBRARY_PATH=#{root}/postgres/lib LD_LIBRARY_PATH=#{root}/postgres/lib #{root}/postgres/bin/createuser -hlocalhost -p #{port} -sdr postgres_chorus`
+    `DYLD_LIBRARY_PATH=#{root}/postgres/lib LD_LIBRARY_PATH=#{root}/postgres/lib #{root}/postgres/bin/createuser -hlocalhost -p 8543 -sdr postgres_chorus`
     Rake::Task["db:create"].invoke
     Rake::Task["db:migrate"].invoke
     Rake::Task["db:seed"].invoke

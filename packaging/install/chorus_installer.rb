@@ -251,8 +251,7 @@ class ChorusInstaller
       log "Initializing database..." do
         chorus_exec "#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 -D #{data_path}/db"
         start_postgres
-				port = `$RUBY script/get_db_port.rb`
-        chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p#{port} -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+        chorus_exec %Q{#{release_path}/postgres/bin/psql -U `whoami` -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
         db_commands = "db:create db:migrate"
         db_commands += " db:seed" unless upgrade_legacy?
         log "Running rake #{db_commands}"
@@ -287,19 +286,19 @@ class ChorusInstaller
   end
 
   def dump_and_shutdown_legacy
-    set_env = "cd #{legacy_installation_path} && source edc_path.sh"
+    set_env = "EDCHOME=#{legacy_installation_path}"
     log "Shutting down Chorus..." do
-      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} && ./edcsvrctl stop; true")
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop; true")
     end
     log "Starting legacy Chorus services (i.e. postgres)..." do
     # run twice because sometimes this fails the first time
-      chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} && ./edcsvrctl start || #{set_env} && ./edcsvrctl start)")
+      chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} ./edcsvrctl start || #{set_env} ./edcsvrctl start)")
     end
     log "Dumping previous Chorus data..." do
       chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
     end
     log "Stopping legacy Chorus services (i.e. postgres)..." do
-      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} && ./edcsvrctl stop")
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop")
     end
   end
 
@@ -364,10 +363,7 @@ class ChorusInstaller
     link_current_to_release
 
     log "Install complete. Source chorus_path.sh before starting Chorus"
-    if is_supported_mac?
-      warn_and_change_osx_properties
-    end
-
+    log "OS X users should change shared/chorus.properties and reduce the number of worker_threads and webserver_threads to 5" if is_supported_mac?
   rescue InstallerErrors::InstallAborted => e
     puts e.message
     exit 1
@@ -381,16 +377,6 @@ class ChorusInstaller
     chorus_control "stop" if upgrade_legacy? rescue # rescue in case chorus_control blows up
     log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
-  end
-
-  def warn_and_change_osx_properties
-    log "OS X Users:"
-    log "The properties file 'shared/chorus.properties' has had the number of worker_threads and webserver_threads reduced to 5 and the number of database_threads reduced to 15."
-
-    properties_file = File.join(destination_path, "shared", "chorus.properties")
-    properties = Properties.load_file(properties_file)
-    properties.merge!({"worker_threads" => 5, "webserver_threads" => 5, "database_threads" => 15})
-    Properties.dump_file(properties, properties_file)
   end
 
   def remove_and_restart_previous!
@@ -438,7 +424,7 @@ class ChorusInstaller
       config['assets_storage_path'] = "#{data_path}/system/"
     end
 
-    Properties.dump_file(config, chorus_config_file)
+    Properties.write_file(config, chorus_config_file)
   end
 
   def release_path

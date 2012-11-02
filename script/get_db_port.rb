@@ -1,5 +1,5 @@
-require_relative("../app/models/chorus_config")
+require_relative("../lib/properties")
 
-config = ChorusConfig.new File.dirname(__FILE__) + "/.." 
+config = Properties.load_file("config/chorus.properties")
 puts config['postgres_port']
 

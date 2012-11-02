@@ -10,15 +10,10 @@ database_yml = File.join(chorus_home, 'config', 'database.yml')
 db_config = YAML.load_file database_yml
 
 pool_size = [chorus_config['webserver_threads'].to_i, chorus_config['worker_threads'].to_i].max
-postgres_port = chorus_config['postgres_port']
+if db_config[environment] && db_config[environment]['pool'] != pool_size
+  db_config[environment]['pool'] = pool_size
 
-db_config.each do |key, config|
-	if config['port'] != postgres_port || config['pool'] != pool_size
-		config['pool'] = pool_size
-		config['port'] = postgres_port
-	end
-end
-
-File.open(database_yml, 'w') do |f|
-	f.write(YAML.dump(db_config))
+  File.open(database_yml, 'w') do |f|
+    f.write(YAML.dump(db_config))
+  end
 end

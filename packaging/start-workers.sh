@@ -18,7 +18,7 @@ if [ -f $WORKER_PID_FILE ]; then
   fi
 fi
 
-$RUBY packaging/update_database_yml.rb
+$RUBY packaging/update_database_pool_size.rb
 RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "ChorusWorker.new.start" >> $CHORUS_HOME/log/worker.$RAILS_ENV.log 2>&1 &
 worker_pid=$!
 echo $worker_pid > $WORKER_PID_FILE
