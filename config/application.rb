@@ -82,5 +82,20 @@ module Chorus
     config.middleware.use Rack::Sendfile
     config.middleware.delete(::ActionDispatch::RemoteIp)
     config.middleware.insert_before(::Rails::Rack::Logger, ::ActionDispatch::RemoteIp)
+
+    config.middleware.delete(ActionDispatch::Cookies)
+    config.middleware.delete(ActionDispatch::Session::CookieStore)
+    config.middleware.insert_before(Rails::Rack::Logger, ActionDispatch::Session::CookieStore)
+    config.middleware.insert_before(ActionDispatch::Session::CookieStore, ActionDispatch::Cookies)
+
+    config.log_tags += [
+      proc do |req|
+        if req.session[:user_id].nil?
+          "not_logged_in"
+        else
+          "user_id:#{req.session[:user_id]}"
+        end
+      end
+    ]
   end
 end
