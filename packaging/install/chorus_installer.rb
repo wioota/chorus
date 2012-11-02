@@ -287,19 +287,19 @@ class ChorusInstaller
   end
 
   def dump_and_shutdown_legacy
-    set_env = "EDCHOME=#{legacy_installation_path}"
+    set_env = "cd #{legacy_installation_path} && source edc_path.sh"
     log "Shutting down Chorus..." do
-      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop; true")
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} && ./edcsvrctl stop; true")
     end
     log "Starting legacy Chorus services (i.e. postgres)..." do
     # run twice because sometimes this fails the first time
-      chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} ./edcsvrctl start || #{set_env} ./edcsvrctl start)")
+      chorus_exec("cd #{legacy_installation_path}/bin && (#{set_env} && ./edcsvrctl start || #{set_env} && ./edcsvrctl start)")
     end
     log "Dumping previous Chorus data..." do
       chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
     end
     log "Stopping legacy Chorus services (i.e. postgres)..." do
-      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} ./edcsvrctl stop")
+      chorus_exec("cd #{legacy_installation_path}/bin && #{set_env} && ./edcsvrctl stop")
     end
   end
 
