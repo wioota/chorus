@@ -154,4 +154,22 @@ module Sunspot
       end
     end
   end
+
+  class Indexer
+    def add(model)
+      documents = Util.Array(model).map { |m| prepare(m) }.compact
+      if batcher.batching?
+        batcher.concat(documents)
+      else
+        add_documents(documents)
+      end
+    end
+
+    def prepare_with_rescue(model)
+      prepare_without_rescue(model)
+    rescue
+      nil
+    end
+    alias_method_chain :prepare, :rescue
+  end
 end

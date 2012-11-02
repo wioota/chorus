@@ -74,7 +74,7 @@ describe GpdbInstance do
       it "raises an error if a database with the same name already exists" do
         expect {
           gpdb_instance.create_database(gpdb_instance.databases.last.name, account.owner)
-        }.to raise_error(ActiveRecord::StatementInvalid) {|error|
+        }.to raise_error(ActiveRecord::StatementInvalid) { |error|
           error.message.should match "already exists"
         }
       end
@@ -404,6 +404,73 @@ describe GpdbInstance do
     it "should refresh all databases for the instance" do
       described_class.refresh(instance.id)
       @refreshed_databases.should == true
+    end
+  end
+
+  describe "automatic reindexing" do
+    let(:instance) { gpdb_instances(:owners) }
+
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
+    context "making the instance shared" do
+      it "should reindex" do
+        mock(instance).solr_reindex_later
+        instance.shared = true
+        instance.save
+      end
+    end
+
+    context "making the instance un-shared" do
+      let(:instance) { gpdb_instances(:shared) }
+      it "should reindex" do
+        mock(instance).solr_reindex_later
+        instance.shared = false
+        instance.save
+      end
+    end
+
+    context "not changing the shared state" do
+      it "should not reindex" do
+        dont_allow(instance).solr_reindex_later
+        instance.update_attributes(:name => 'foo')
+      end
+    end
+  end
+
+  describe "#solr_reindex_later" do
+    let(:instance) { gpdb_instances(:owners) }
+    it "should enqueue a job" do
+      mock(QC.default_queue).enqueue("GpdbInstance.reindex_instance", instance.id)
+      instance.solr_reindex_later
+    end
+  end
+
+  describe "#refresh_databases_later" do
+    let(:instance) { gpdb_instances(:owners) }
+    it "should enqueue a job" do
+      mock(QC.default_queue).enqueue("GpdbInstance.refresh_databases", instance.id)
+      instance.refresh_databases_later
+    end
+  end
+
+
+  describe "#reindex_instance" do
+    let(:instance) { gpdb_instances(:owners) }
+
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
+    it "reindexes itself" do
+      mock(Sunspot).index(instance)
+      GpdbInstance.reindex_instance(instance.id)
+    end
+
+    it "should reindex all of it's datasets" do
+      mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
+      GpdbInstance.reindex_instance(instance.id)
     end
   end
 end

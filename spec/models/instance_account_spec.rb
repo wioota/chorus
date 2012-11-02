@@ -38,4 +38,39 @@ describe InstanceAccount do
       end
     end
   end
+
+  describe "automatic reindexing" do
+    let(:instance) { gpdb_instances(:owners) }
+    let(:user) { users(:not_a_member) }
+
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
+    context "creating a new account" do
+      it "should reindex" do
+        mock(instance).refresh_databases_later
+        InstanceAccount.create!({:owner => user, :gpdb_instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
+      end
+    end
+
+    context "deleting an account" do
+      let(:user) { users(:the_collaborator) }
+      let(:account) { instance.account_for_user(user) }
+      it "should reindex" do
+        mock(account.gpdb_instance).refresh_databases_later
+        account.destroy
+      end
+    end
+
+    context "updating an account" do
+      let(:user) { users(:the_collaborator) }
+      let(:account) { instance.account_for_user(user) }
+
+      it "should not reindex" do
+        dont_allow(instance).refresh_databases_later
+        account.update_attributes(:db_username => "baz")
+      end
+    end
+  end
 end

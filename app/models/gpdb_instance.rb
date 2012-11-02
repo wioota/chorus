@@ -12,7 +12,9 @@ class GpdbInstance < ActiveRecord::Base
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
+  has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
+  after_update :solr_reindex_later, :if => :shared_changed?
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
@@ -25,6 +27,24 @@ class GpdbInstance < ActiveRecord::Base
 
   def self.unshared
     where("gpdb_instances.shared = false OR gpdb_instances.shared IS NULL")
+  end
+
+  def self.reindex_instance instance_id
+    instance = GpdbInstance.find(instance_id)
+    instance.solr_index
+    instance.datasets(:reload => true).each(&:solr_index)
+  end
+
+  def self.refresh_databases instance_id
+    GpdbInstance.find(instance_id).refresh_databases
+  end
+
+  def solr_reindex_later
+    QC.enqueue('GpdbInstance.reindex_instance', id)
+  end
+
+  def refresh_databases_later
+    QC.enqueue('GpdbInstance.refresh_databases', id)
   end
 
   def self.owned_by(user)

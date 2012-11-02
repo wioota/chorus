@@ -7,4 +7,10 @@ class InstanceAccount < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :gpdb_instance
   has_and_belongs_to_many :gpdb_databases
+  after_create :reindex_gpdb_instance
+  after_destroy :reindex_gpdb_instance
+
+  def reindex_gpdb_instance
+    gpdb_instance.refresh_databases_later
+  end
 end
