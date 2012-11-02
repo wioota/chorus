@@ -7,7 +7,7 @@ fi
 
 test "$RAILS_ENV" = "" && RAILS_ENV=production
 
-PORT=`ruby script/get_db_port.rb`
+PORT=`$RUBY script/get_db_port.rb`
 
 dropdb -p $PORT chorus_tmp_migrate
 psql -p $PORT chorus_rails_$RAILS_ENV -c 'drop schema legacy_migrate cascade' 2> /dev/null

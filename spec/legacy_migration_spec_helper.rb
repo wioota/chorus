@@ -35,7 +35,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-		port = `ruby script/get_db_port.rb`
+		port = `$RUBY script/get_db_port.rb`
     #`psql -p #{port} chorus_rails_test -c 'drop schema if exists legacy_migrate cascade'`
   end
 

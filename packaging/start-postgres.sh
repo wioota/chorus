@@ -8,7 +8,7 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-POSTGRES_PORT=`ruby script/get_db_port.rb`
+POSTGRES_PORT=`$RUBY script/get_db_port.rb`
 
 MAX_CONNECTIONS=$($RUBY packaging/update_database_thread_count.rb)
 echo "Setting maximum database connections to $MAX_CONNECTIONS"

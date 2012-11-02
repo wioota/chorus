@@ -57,7 +57,7 @@ PGPASSWORD=$bin/database.pgpass
 log "Ensuring that application database exists..."
 RAILS_ENV=$RAILS_ENV $RAKE db:create
 
-PORT=`ruby script/get_db_port.rb`
+PORT=`$RUBY script/get_db_port.rb`
 
 PGPASSWORD=$PGPASSWORD psql     -p $PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
 PGPASSWORD=$PGPASSWORD psql     -p $PORT -U postgres_chorus chorus_rails_$RAILS_ENV -c 'drop schema if exists legacy_migrate cascade'
