@@ -155,7 +155,7 @@ resource "Workspaces: imports" do
     let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
 
     example_request "Complete import of a CSV file" do
-      status.should == 200
+      status.should == 201
     end
   end
 

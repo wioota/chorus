@@ -28,8 +28,8 @@ resource "Tableau" do
     let(:dataset_id) { dataset.id }
     let(:workspace_id) { workspace.id }
     let(:name) { 'MyTableauWorkbook'}
-    let(:tabluea_username) { "username" }
-    let(:tabluea_password) { "password" }
+    let(:tableau_username) { "username" }
+    let(:tableau_password) { "password" }
 
     example_request "Create a tableau workbook" do
       status.should == 201
