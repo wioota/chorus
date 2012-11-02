@@ -61,6 +61,10 @@ module BackupRestore
         end
       end
     end
+
+    def postgres_username
+      @pg_user ||= YAML.load_file(Rails.root.join('config/database.yml'))['production']['username']
+    end
   end
 
   class Backup
@@ -92,7 +96,7 @@ module BackupRestore
 
       pg_dump = "#{ENV['CHORUS_HOME']}/packaging/pg_dump.sh -Fc"
       pg_dump += " --compress=0" # because our postgres 9.2 install warns that it can't compress otherwise
-      pg_dump += " -p #{database_port} #{database_name}"
+      pg_dump += " -p #{database_port} -U #{postgres_username} #{database_name}"
       capture_output "#{pg_dump} | gzip > #{DATABASE_DATA_FILENAME}", :error => "Database dump failed."
     end
 
@@ -247,8 +251,5 @@ PROMPT
       ActiveRecord::Base.establish_connection connection_config if existing_connection
     end
 
-    def postgres_username
-      @pg_user ||= YAML.load(Rails.root.join('config/database.yml'))['production']['username']
-    end
   end
 end
