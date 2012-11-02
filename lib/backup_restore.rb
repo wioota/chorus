@@ -97,8 +97,11 @@ module BackupRestore
     end
 
     def compress_assets
+      asset_path = config_path(ASSET_PATH)
+      return unless Dir.exists?(asset_path)
+
       log "Compressing assets..."
-      Dir.chdir config_path(ASSET_PATH) do
+      Dir.chdir asset_path do
         asset_list = Dir.glob asset_path_wildcard
         return if asset_list.empty?
 
@@ -203,22 +206,23 @@ PROMPT
     end
 
     def restore_assets
-      log "Restoring assets..."
-      full_path = Pathname.new config_path(ASSET_PATH)
-      FileUtils.mkdir_p full_path and Dir.chdir full_path do
-        # remove old assets
+      log "Deleting existing assets..."
+      asset_path = Pathname.new config_path(ASSET_PATH)
+      Dir.exists? asset_path and Dir.chdir asset_path do
         MODELS_WITH_ASSETS.each do |model|
-          FileUtils.rm_r full_path.join(model) rescue Errno::ENOENT
+          FileUtils.rm_r asset_path.join(model) rescue Errno::ENOENT
         end
+      end
 
-        asset_file = temp_dir.join(ASSET_PATH + ".tgz")
-        return unless File.exists? asset_file
-
-        capture_output "tar xf #{asset_file}",
-                       :error => "Restoring assets failed."
+      log "Restoring backed up assets..."
+      asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+      if File.exists? asset_file
+        FileUtils.mkdir_p asset_path and Dir.chdir asset_path do
+          capture_output "tar xf #{asset_file}",
+                         :error => "Restoring assets failed."
+        end
       end
     end
-
 
     def restore_database
       log "Restoring database..."

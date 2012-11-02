@@ -95,8 +95,19 @@ describe 'BackupRestore' do
           asset_list.split.should include(*assets)
         end
 
-        context "when there are no assets" do
+        context "when there are no assets in the asset folder" do
           let(:assets) {[]}
+
+          it "doesn't create the assets file" do
+            run_backup
+            @expected_backup_file.should exist
+            file_list = `tar tf #{@expected_backup_file}`
+            file_list.should_not include("assets_storage_path")
+          end
+        end
+
+        context "when the asset folder does not exist" do
+          let(:assets) { nil }
 
           it "doesn't create the assets file" do
             run_backup
@@ -239,6 +250,15 @@ describe 'BackupRestore' do
 
         it "still works" do
           BackupRestore.restore "../backup/backup.tar", true
+        end
+
+        context "when the restore directory doesn't have an assets folder" do
+          let(:assets) { nil }
+
+          it "doesn't create an assets folder" do
+            BackupRestore.restore "../backup/backup.tar", true
+            asset_path.should_not exist
+          end
         end
 
         it "still removes the old assets" do
@@ -413,7 +433,7 @@ end
 
 def populate_fake_chorus_install(install_path, options = {})
   version = options[:version] || "0.2.0.0-1d012455"
-  assets = options[:assets] || []
+  assets = options[:assets]
 
   %w{config}.each do |dir|
     FileUtils.cp_r Rails.root.join(dir), install_path
@@ -426,12 +446,14 @@ def populate_fake_chorus_install(install_path, options = {})
   end
 
   # create a fake asset in original
-  with_rails_root(install_path) do
-    FileUtils.mkdir_p asset_path
+  if assets
+    with_rails_root(install_path) do
+      FileUtils.mkdir_p asset_path
 
-    assets.each do |asset|
-      FileUtils.mkdir_p asset_path.join(File.dirname(asset))
-      FileUtils.touch asset_path.join(asset)
+      assets.each do |asset|
+        FileUtils.mkdir_p asset_path.join(File.dirname(asset))
+        FileUtils.touch asset_path.join(asset)
+      end
     end
   end
 
