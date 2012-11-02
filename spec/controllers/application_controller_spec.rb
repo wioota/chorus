@@ -4,7 +4,16 @@ require 'timecop'
 describe ApplicationController do
 
   it "has a uuid for every web request" do
-    Chorus::Application.config.log_tags.should == [:uuid]
+    Chorus::Application.config.log_tags.first.should == :uuid
+  end
+
+  it "should include user id in logs for every web request" do
+    user_id_proc = Chorus::Application.config.log_tags[1]
+    request = Object.new
+    stub(request).session { {:user_id => nil} }
+    user_id_proc.call(request).should == 'not_logged_in'
+    stub(request).session { {:user_id => 123} }
+    user_id_proc.call(request).should == 'user_id:123'
   end
 
   describe "rescuing from errors" do
