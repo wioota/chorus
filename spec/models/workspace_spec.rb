@@ -252,10 +252,13 @@ describe Workspace do
 
   describe "#destroy" do
     let(:workspace) { workspaces(:public) }
+    let(:workfile) { workfiles(:public) }
 
     it "should not delete the database entry" do
       workspace.destroy
-      workspace.reload.should_not be_nil
+      expect {
+        workspace.reload
+      }.to_not raise_error(Exception)
     end
 
     it "should update the deleted_at field" do
@@ -274,6 +277,26 @@ describe Workspace do
       end
       workspace.destroy
     end
+
+    it "soft-deletes the associated workfiles" do
+      workspace.workfiles << workfile
+      workspace.save!
+
+      workspace.destroy
+      workfile.reload
+      workfile.deleted_at.should_not be_nil
+    end
+
+    #it "soft deletes associated chorus views" do
+    #  workspace.bound_datasets.chorus_views.should_not be_empty
+    #  chorus_views =  workspace.bound_datasets.chorus_views
+    #
+    #  workspace.destroy
+    #
+    #  chorus_views.each do |view|
+    #    view.reload.deleted_at.should_not be_nil
+    #  end
+    #end
   end
 
   describe "#reindex_workspace" do

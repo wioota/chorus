@@ -11,7 +11,7 @@ class Workspace < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :memberships, :inverse_of => :workspace
   has_many :members, :through => :memberships, :source => :user
-  has_many :workfiles
+  has_many :workfiles, :dependent => :destroy
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :owned_notes, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'"
@@ -21,7 +21,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :csv_files
 
-  has_many :associated_datasets
+  has_many :associated_datasets#,  :dependent => :destroy
   has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
 
   validates_presence_of :name
