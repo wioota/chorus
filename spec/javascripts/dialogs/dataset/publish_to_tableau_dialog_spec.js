@@ -51,7 +51,6 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         });
 
         it("saves the workbook", function() {
-            debugger
             expect(this.server.lastCreateFor(this.model)).toBeDefined();
         });
 
