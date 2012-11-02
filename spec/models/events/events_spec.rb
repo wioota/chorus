@@ -485,6 +485,27 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
+  describe "ImportScheduleDeleted" do
+    let(:source_dataset) { datasets(:other_table) }
+    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    subject do
+      Events::ImportScheduleDeleted.add(
+          :actor => actor,
+          :dataset => dataset,
+          :source_dataset => source_dataset,
+          :workspace => workspace,
+          :destination_table => dataset.name
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :source_dataset => source_dataset} }
+    its(:additional_data) { should == { 'destination_table' => dataset.name } }
+
+    it_creates_activities_for { [actor, workspace, dataset, source_dataset] }
+    it_does_not_create_a_global_activity
+  end
+
   describe "DatasetImportSuccess" do
     let(:source_dataset) { datasets(:other_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }

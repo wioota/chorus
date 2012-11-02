@@ -71,6 +71,13 @@ class DatasetImportsController < ApplicationController
     authorize! :can_edit_sub_objects, Workspace.find(params[:workspace_id])
     import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(params[:workspace_id], params[:dataset_id])
     begin
+      dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(import_schedule.to_table)
+      Events::ImportScheduleDeleted.by(current_user).add(
+          :workspace => import_schedule.workspace,
+          :source_dataset => import_schedule.source_dataset,
+          :dataset => dst_table,
+          :destination_table => import_schedule.to_table
+      )
       import_schedule.destroy
     rescue Exception => e
       raise ApiValidationError.new(:base, :delete_unsuccessful)

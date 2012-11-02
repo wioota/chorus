@@ -250,6 +250,12 @@
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
             },
 
+            ImportScheduleDeleted: {
+                links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+            },
+
             DatasetImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],

@@ -379,6 +379,16 @@ describe DatasetImportsController do
       delete :destroy, :dataset_id => src_table.id,
              :workspace_id => import_schedule.workspace_id
     end
+
+    it "makes a IMPORT_SCHEDULE_DELETED event" do
+      expect {
+        delete :destroy, :dataset_id => src_table.id, :workspace_id => import_schedule.workspace_id
+      }.to change(Events::ImportScheduleDeleted, :count).by(1)
+      event = Events::ImportScheduleDeleted.last
+      event.workspace.should == import_schedule.workspace
+      event.source_dataset.should == import_schedule.source_dataset
+      event.destination_table.should == import_schedule.to_table
+    end
   end
 
   describe "smoke test for import schedules", :database_integration => true do
