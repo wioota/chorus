@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_pg_error(e)
-    head :unprocessable_entity
+    present_errors({:message => e.message}, :status => :unprocessable_entity)
   end
 
   def render_query_error(e)

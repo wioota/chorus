@@ -1,3 +1,8 @@
+{{#if error}}
+<div class="notice">
+    <span class="top">{{error}}</span>
+</div>
+{{else}}
 {{#if schemaAssociated}}
     {{#if noCredentials}}
         <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
@@ -29,4 +34,5 @@
         <span class="top">{{t "database.sidebar.no_schema.title"}}</span>
         <span class="bottom">{{t "database.sidebar.no_schema.text"}}</span>
     </div>
+{{/if}}
 {{/if}}

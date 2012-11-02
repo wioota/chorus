@@ -106,6 +106,10 @@ describe GpdbSchema do
         GpdbSchema.refresh(account, database)
         schema.reload.should_not be_stale
       end
+
+      it "should return an empty array" do
+        GpdbSchema.refresh(account, database).should == []
+      end
     end
   end
 

@@ -78,7 +78,8 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
 
     additionalContext: function() {
         return _.extend(this._super("additionalContext", arguments), {
-            hasCollection: !!this.collection
+            hasCollection: !!this.collection,
+            error: this.collection && this.collection.serverErrors && this.collection.serverErrors.message
         });
     },
 

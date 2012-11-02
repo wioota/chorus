@@ -56,11 +56,12 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a Postgres error occurs" do
-      stub(controller).index { raise ActiveRecord::JDBCError.new }
+      stub(controller).index { raise ActiveRecord::JDBCError.new("oops") }
 
       get :index
 
       response.code.should == "422"
+      decoded_errors.message.should == 'oops'
     end
 
     it "returns error 422 when a QueryError occurs" do
