@@ -287,16 +287,29 @@ describe Workspace do
       workfile.deleted_at.should_not be_nil
     end
 
-    #it "soft deletes associated chorus views" do
-    #  workspace.bound_datasets.chorus_views.should_not be_empty
-    #  chorus_views =  workspace.bound_datasets.chorus_views
-    #
-    #  workspace.destroy
-    #
-    #  chorus_views.each do |view|
-    #    view.reload.deleted_at.should_not be_nil
-    #  end
-    #end
+    it "soft deletes associated chorus views" do
+      workspace.bound_datasets.chorus_views.should_not be_empty
+      chorus_views =  workspace.bound_datasets.chorus_views
+
+      workspace.destroy
+
+      chorus_views.each do |view|
+        view.reload.deleted_at.should_not be_nil
+        view.associated_dataset.deleted_at.should_not be_nil
+      end
+    end
+
+    it "soft deletes the associated source tables" do
+      workspace.bound_datasets.tables.should_not be_empty
+      tables =  workspace.bound_datasets.tables
+
+      workspace.destroy
+
+      tables.each do |table|
+        table.reload.deleted_at.should_not be_nil
+        table.associated_dataset.deleted_at.should_not be_nil
+      end
+    end
   end
 
   describe "#reindex_workspace" do

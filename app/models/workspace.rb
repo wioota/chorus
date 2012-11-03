@@ -21,7 +21,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :csv_files
 
-  has_many :associated_datasets#,  :dependent => :destroy
+  has_many :associated_datasets,  :dependent => :destroy
   has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
 
   validates_presence_of :name
