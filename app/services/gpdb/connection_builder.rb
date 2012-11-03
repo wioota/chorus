@@ -14,7 +14,11 @@ module Gpdb
         :password => account.db_password,
         :adapter => "jdbcpostgresql"
       )
-      yield connection if block_given?
+      if block_given?
+        yield connection
+      else
+        connection
+      end
     rescue ActiveRecord::JDBCError => e
       friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}"
       Rails.logger.error(friendly_message + " - " + e.message)
@@ -31,7 +35,7 @@ module Gpdb
       Rails.logger.info(friendly_message + " - " + e.message)
       raise e
     ensure
-      connection.try(:disconnect!)
+      connection.try(:disconnect!) if block_given?
     end
   end
 end

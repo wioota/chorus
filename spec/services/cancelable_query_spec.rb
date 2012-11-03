@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timeout'
 
 describe CancelableQuery do
   let(:connection) { ActiveRecord::Base.connection }
@@ -35,44 +36,93 @@ describe CancelableQuery do
   describe "#cancel" do
     let(:check_id) { '54321' }
 
-    it "cancels the query" do
-      pending "'pg_stat_activity' table doesn't have a 'current_query' column on PostgreSQL 9.2"
-      sleep_thread = Thread.new(check_id) do |check_id|
-        begin
-          conn = ActiveRecord::Base.connection
-          expect {
-            CancelableQuery.new(conn, check_id).execute("select pg_sleep(15)")
-          }.to raise_error(CancelableQuery::QueryError)
-        ensure
-          conn.close
+    shared_examples_for :a_cancelable_query do
+      it "cancels the query" do
+        query_thread = Thread.new(check_id, connection_pool) do |check_id, connection_pool|
+          with_connection connection_pool do |conn|
+            expect {
+              CancelableQuery.new(conn, check_id).execute("SELECT pg_sleep(15)")
+            }.to raise_error(CancelableQuery::QueryError)
+          end
+        end
+
+        with_connection connection_pool do |cancel_connection|
+          wait_until { get_running_queries_by_check_id(cancel_connection).present? }
+          CancelableQuery.new(cancel_connection, check_id).cancel
+          wait_until { get_running_queries_by_check_id(cancel_connection).nil? }
+        end
+
+        query_thread.join
+      end
+
+      def get_running_queries_by_check_id(conn)
+        query = "select query from pg_stat_activity;"
+        conn.select_all(query).find { |row| row["query"].include? check_id }
+      rescue ActiveRecord::StatementInvalid
+        query = "select current_query from pg_stat_activity;"
+        conn.select_all(query).find { |row| row["current_query"].include? check_id }
+      end
+
+      def wait_until
+        Timeout::timeout 5.seconds do
+          until yield
+            sleep 0.1
+          end
         end
       end
 
-      sleep 0.5
-
-      begin
-        #can't use ActiveRecord::Base.connection because pg_cancel_backend respects the transaction barrier.
-        pool= ActiveRecord::Base.connection_handler.retrieve_connection_pool(ActiveRecord::Base)
-        conn = pool.checkout
-        rows_before = get_rows_by_check_id(conn)
-        CancelableQuery.new(conn, check_id).cancel
-
-        sleep 0.5
-
-        rows_after = get_rows_by_check_id(conn)
-
-        rows_before.should be_present
-        rows_after.should be_nil
+      def with_connection(connection_pool)
+        connection = connection_pool.checkout
+        yield connection
       ensure
-        pool.checkin(conn)
+        connection_pool.checkin connection
       end
-
-      sleep_thread.join
     end
 
-    def get_rows_by_check_id(conn)
-      query = "select current_query from pg_stat_activity;"
-      conn.select_all(query).find { |row| row["current_query"].include? check_id }
+    # TODO: Work out why this pollutes the tests.
+    #it_behaves_like :a_cancelable_query do
+    #  let(:connection_pool) {
+    #    ActiveRecordConnectionPool.new
+    #  }
+    #end
+
+    class ActiveRecordConnectionPool
+      def initialize
+        @pool = ActiveRecord::Base.connection_handler.retrieve_connection_pool(ActiveRecord::Base)
+      end
+
+      def checkout
+        @pool.checkout
+      end
+
+      def checkin(connection)
+        @pool.checkin connection
+      end
+    end
+
+    describe "with a real database connection", :database_integration => true do
+      let(:account) { InstanceIntegration.real_gpdb_account }
+
+      it_behaves_like :a_cancelable_query do
+        let(:connection_pool) {
+          GpdbConnectionPool.new(account)
+        }
+      end
+
+      class GpdbConnectionPool
+        def initialize(account)
+          @account = account
+        end
+
+        def checkout
+          gpdb_instance = @account.gpdb_instance
+          Gpdb::ConnectionBuilder.connect!(gpdb_instance, @account)
+        end
+
+        def checkin(connection)
+          connection.disconnect!
+        end
+      end
     end
   end
 end

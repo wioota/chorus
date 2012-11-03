@@ -124,6 +124,6 @@ describe DatasetStreamer, :database_integration => true do
     while true
       enum.next
     end
-  rescue => e
+  rescue
   end
 end

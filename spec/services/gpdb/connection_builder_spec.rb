@@ -56,6 +56,13 @@ describe Gpdb::ConnectionBuilder do
         mock(fake_connection_adapter).disconnect!
         Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
       end
+
+      context "when not given a block" do
+        it "returns a connection" do
+          result = Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+          result.should == fake_connection_adapter
+        end
+      end
     end
 
     context "when the connection fails" do
