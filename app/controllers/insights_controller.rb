@@ -42,8 +42,16 @@ class InsightsController < ApplicationController
 
   def get_insights
     insight_query = Events::Base.where(insight: true).order("events.id DESC")
-    insight_query = insight_query.visible_to(current_user) unless current_user.admin?
-    insight_query = insight_query.where(workspace_id: params[:workspace_id]) if params[:entity_type] == "workspace"
+
+    if params[:entity_type] == "workspace"
+      workspace = Workspace.find(params[:workspace_id])
+      insight_query = insight_query.where(workspace_id: params[:workspace_id])
+    end
+
+    if (workspace && !workspace.public?) || params[:entity_type] != "workspace"
+      insight_query = insight_query.visible_to(current_user) unless current_user.admin?
+    end
+
     insight_query = insight_query.includes(Events::Base.activity_stream_eager_load_associations)
     insight_query
   end

@@ -386,6 +386,23 @@ describe InsightsController do
         decoded_response[:number_of_insight].should == 1
       end
 
+      context "in a public workspace" do
+        let(:user) { users(:not_a_member) }
+        let!(:secret_workspace_insight) { Events::NoteOnWorkspace.by(admin).add(
+            :workspace => workspace,
+            :body => 'I am unpublished, but in a public workspace!',
+            :insight => true,
+            :promotion_time => Time.now(),
+            :promoted_by => admin) }
+
+        it "returns all the insights if the workspace is public" do
+          log_in user
+          get :count, :entity_type => "workspace", :workspace_id => workspace.id
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == 1
+        end
+      end
+
       it "returns a count of all the insights visible to the admin" do
         log_in admin
         get :count, :entity_type => "workspace", :workspace_id => private_workspace.id

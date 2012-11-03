@@ -78,7 +78,7 @@ module Events
         group("events.id").readonly(false).
             joins(:activities).
             where(%Q{(events.published = true) OR (activities.entity_type = 'GLOBAL') OR (activities.entity_type = 'Workspace'
-            and activities.entity_id in (SELECT workspace_id from memberships where user_id = #{user.id}))})
+            AND activities.entity_id IN (SELECT workspace_id FROM memberships WHERE user_id = #{user.id}))})
     end
     class << self
       alias_method :for_dashboard_of, :visible_to
