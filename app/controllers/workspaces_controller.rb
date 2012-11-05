@@ -66,12 +66,12 @@ class WorkspacesController < ApplicationController
   end
 
   def destroy
-  workspace = Workspace.find(params[:id])
-  authorize!(:destroy, workspace)
-  workspace.destroy
+    workspace = Workspace.find(params[:id])
+    authorize!(:destroy, workspace)
+    workspace.destroy
 
-  render :json => {}
-end
+    render :json => {}
+  end
 
   private
 

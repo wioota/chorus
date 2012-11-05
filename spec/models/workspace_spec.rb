@@ -310,6 +310,13 @@ describe Workspace do
         workspace.destroy
       }.to change{ workspace.associated_datasets.select { |ad| ad.deleted_at != nil }.size }.by_at_least(1)
     end
+
+    it "soft deletes import schedules" do
+      import_schedule = FactoryGirl.create(:import_schedule, :workspace_id => workspace.id)
+      workspace.destroy
+      import_schedule.reload
+      import_schedule.deleted_at.should_not be_nil
+    end
   end
 
   describe "#reindex_workspace" do
