@@ -42,12 +42,12 @@ describe InsightsController do
       end
 
       context "when the user is admin" do
-      let(:user) { users(:admin) }
+        let(:user) { users(:admin) }
 
-      it "returns status 201" do
-        post :promote, :note_id => note.id
-        response.code.should == "201"
-      end
+        it "returns status 201" do
+          post :promote, :note_id => note.id
+          response.code.should == "201"
+        end
       end
     end
   end
@@ -122,7 +122,7 @@ describe InsightsController do
 
       context "checks the Note should be insight first" do
         let(:note_on_workfile) { Events::NoteOnWorkfile.last }
-        let(:user) {note_on_workfile.actor}
+        let(:user) { note_on_workfile.actor }
 
         before do
           note_on_workfile.insight = false
@@ -209,7 +209,7 @@ describe InsightsController do
 
       context "checks the Note should be published first" do
         let(:note_on_workfile) { Events::NoteOnWorkfile.last }
-        let(:user) {note_on_workfile.actor}
+        let(:user) { note_on_workfile.actor }
 
         before do
           note_on_workfile.insight = true
@@ -236,9 +236,9 @@ describe InsightsController do
     let(:user) { users(:owner) }
     let(:insight) { events(:insight_on_greenplum) }
     let(:non_insight) { events(:note_on_greenplum) }
-    let(:workspace) { workspaces(:public) }
+    let(:public_workspace) { workspaces(:public) }
     let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
-        :workspace => workspace,
+        :workspace => public_workspace,
         :body => 'Come see my awesome workspace!',
         :insight => true,
         :promotion_time => Time.now(),
@@ -325,7 +325,7 @@ describe InsightsController do
           models.should include(workspace_insight)
           models.should_not include(insight)
         }
-        get :index, :entity_type => "workspace", :workspace_id => workspace.id
+        get :index, :entity_type => "workspace", :workspace_id => public_workspace.id
         response.code.should == "200"
       end
     end
@@ -335,7 +335,7 @@ describe InsightsController do
     let(:user) { users(:owner) }
     let(:admin) { users(:admin) }
     let(:not_a_member) { users(:not_a_member) }
-    let(:workspace) { workspaces(:public) }
+    let(:public_workspace) { workspaces(:public) }
     let(:private_workspace) { workspaces(:private) }
 
     let!(:workspace_insight) { Events::NoteOnWorkspace.by(user).add(
@@ -345,76 +345,94 @@ describe InsightsController do
         :promotion_time => Time.now(),
         :promoted_by => user) }
 
-    # TODO: fix this.  below are a bunch of numbers that depend on the fixtures.  bad idea!
+    let(:all_insights) { Events::Base.where(insight: true) }
+    let(:filtered_insights) { all_insights.visible_to(user) }
+
     context "when getting insights for the dashboard" do
-      it "returns a count of all the insights visible to the current user" do
-        log_in user
-        get :count, :entity_type => "dashboard"
-        response.code.should == "200"
-        decoded_response[:number_of_insight].should == 4
+      context "when you are member of a workspace with insights" do
+        it "returns a count of all the visible insights" do
+          log_in user
+          get :count, :entity_type => "dashboard"
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == filtered_insights.count.keys.length
+        end
       end
 
-      it "returns a count of all the insights visible to another user" do
-        log_in not_a_member
-        get :count, :entity_type => "dashboard"
-        response.code.should == "200"
-        decoded_response[:number_of_insight].should == 3
+      context "when you are not a member of a workspace with insights" do
+        let(:user) { not_a_member }
+
+        it "returns a count of all the visible insights" do
+          log_in user
+          get :count, :entity_type => "dashboard"
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == filtered_insights.count.keys.length
+        end
       end
 
-      it "returns a count of all the insights visible to the admin" do
-        log_in admin
-        get :count, :entity_type => "dashboard"
-        response.code.should == "200"
-        decoded_response[:number_of_insight].should == 4
+      context "when you are an admin" do
+        let(:user) { admin }
+
+        it "returns a count of all the visible insights" do
+          log_in user
+          get :count, :entity_type => "dashboard"
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == all_insights.count
+        end
       end
 
       context "with an empty entity_type" do
-        it "returns a count of all the insights visible to the current user" do
+        it "returns a count of all the visible insights" do
           log_in user
           get :count
           response.code.should == "200"
-          decoded_response[:number_of_insight].should == 4
+          decoded_response[:number_of_insight].should == filtered_insights.count.keys.length
         end
       end
     end
 
     context "when getting insights for a workspace" do
+      let(:workspace) { private_workspace }
+      let(:workspace_insights) { filtered_insights.where(workspace_id: workspace.id) }
+
       it "returns a count of all the insights visible to the current user" do
         log_in user
         get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
         response.code.should == "200"
-        decoded_response[:number_of_insight].should == 1
+        decoded_response[:number_of_insight].should == workspace_insights.count.keys.length
       end
 
       context "in a public workspace" do
-        let(:user) { users(:not_a_member) }
-        let!(:secret_workspace_insight) { Events::NoteOnWorkspace.by(admin).add(
-            :workspace => workspace,
-            :body => 'I am unpublished, but in a public workspace!',
-            :insight => true,
-            :promotion_time => Time.now(),
-            :promoted_by => admin) }
+        let(:user) { not_a_member }
+        let(:workspace) { public_workspace }
 
         it "returns all the insights if the workspace is public" do
           log_in user
           get :count, :entity_type => "workspace", :workspace_id => workspace.id
           response.code.should == "200"
-          decoded_response[:number_of_insight].should == 1
+          decoded_response[:number_of_insight].should == workspace_insights.count.keys.length
         end
       end
 
-      it "returns a count of all the insights visible to the admin" do
-        log_in admin
-        get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
-        response.code.should == "200"
-        decoded_response[:number_of_insight].should == 1
+      context "when an admin" do
+        let(:user) { admin }
+
+        it "returns a count of all the insights visible to the admin" do
+          log_in user
+          get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == all_insights.where(:workspace_id => private_workspace.id).count
+        end
       end
 
-      it "returns a count of zero for a user that can't see any insights on this workspace" do
-        log_in not_a_member
-        get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
-        response.code.should == "200"
-        decoded_response[:number_of_insight].should == 0
+      context "when not a member of the workspace" do
+        let(:user) { not_a_member }
+
+        it "returns a count of zero for a user that can't see any insights on this workspace" do
+          log_in user
+          get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
+          response.code.should == "200"
+          decoded_response[:number_of_insight].should == 0
+        end
       end
     end
   end
