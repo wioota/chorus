@@ -38,7 +38,7 @@ describe ImportScheduler do
     context "when next import time is set" do
       before do
         ImportSchedule.delete_all # don't run import schedule on fixtures
-        Timecop.freeze(start_time - 1.hour) do
+        Timecop.freeze(start_time - 2.hours) do # use 2.hours to avoid dst problems
           import_schedule.save!
         end
         expect_qc_enqueue
@@ -46,7 +46,7 @@ describe ImportScheduler do
 
       context "when run before the end date" do
         around do |example|
-          Timecop.freeze(start_time + 1.hour) do
+          Timecop.freeze(start_time + 2.hours) do
             example.call
           end
         end
@@ -64,7 +64,7 @@ describe ImportScheduler do
         it "sets the next scheduled import" do
           ImportScheduler.run
           import_schedule.reload
-          import_schedule.next_import_at.should == start_time + 1.day
+          import_schedule.next_import_at.should >= 2.hours.from_now # dst safe
         end
       end
 
@@ -82,7 +82,7 @@ describe ImportScheduler do
         it "sets the last scheduled time" do
           ImportScheduler.run
           import_schedule.reload
-          import_schedule.last_scheduled_at.should == start_time + 1.year
+          import_schedule.last_scheduled_at.should == Time.now
         end
 
         it "does not schedule another import" do
