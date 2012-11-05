@@ -9,29 +9,22 @@ HADOOP_HOST=chorus-gphd02
 set -e
 
 targets=${@}
+possible_targets="jasmine ruby legacy_migrations api_docs"
 
-run_jasmine=true
-run_ruby=true
-run_legacy_migrations=true
-run_api_docs= true
+for target in $possible_targets; do
+    set run_${target}=true
+done
+
 if [[ -nz "$targets" ]]; then
-    run_jasmine=false
-    run_ruby=false
-    run_legacy_migrations=false
-    run_api_docs=false
+    for target in $possible_targets; do
+        declare run_${target}=false
+    done
     for target in "$targets"; do
-        if [[ "$target" == "jasmine" ]] ; then
-           run_jasmine=true
-        fi
-        if [[ "$target" == "backend" ]] ; then
-           run_ruby=true
-        fi
-        if [[ "$target" == "legacy_migrations" ]] ; then
-           run_legacy_migrations=true
-        fi
-        if [[ "$target" == "api_docs" ]] ; then
-           run_api_docs=true
-        fi
+        for possible_target in $possible_targets; do
+           if [[ "$target" == "$possible_target" ]] ; then
+                declare run_${target}=true
+           fi
+        done
     done
 fi
 
@@ -57,6 +50,15 @@ fi
 set +e
 
 unset RAILS_ENV
+
+if $run_ruby ; then
+    echo "Running unit tests"
+    mv .rspec-ci .rspec
+    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
+    RUBY_TESTS_RESULT=$?
+else
+    RUBY_TESTS_RESULT=0
+fi
 
 if $run_ruby ; then
     echo "Running unit tests"
