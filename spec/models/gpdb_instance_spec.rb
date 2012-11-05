@@ -67,7 +67,7 @@ describe GpdbInstance do
             database.name.should == "new_database"
             database.gpdb_instance.should == gpdb_instance
           end
-        end.to change(GpdbDatabase, :count).by(1)
+        end.to change(GpdbDatabase, :count).by_at_least(1)
         exec_on_gpdb("select datname from pg_database where datname = 'new_database';").should_not be_empty
       end
 
