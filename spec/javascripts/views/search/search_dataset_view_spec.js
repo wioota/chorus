@@ -70,10 +70,9 @@ describe("chorus.views.SearchDataset", function() {
         });
     });
 
-    // TODO: Fix these when we have the new structure for column and table comments on a dataset. [#37076621]
-    xcontext("when there is a table comment", function() {
+    context("when there is a table comment", function() {
         beforeEach(function() {
-            this.model.get('highlightedAttributes').description = ['comment 1'];
+            this.model.set({'tableDescription': [{highlightedAttributes: {body: ['comment 1']}}]});
             this.view.render();
         });
 
