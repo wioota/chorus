@@ -53,25 +53,7 @@ unset RAILS_ENV
 
 if $run_ruby ; then
     echo "Running unit tests"
-    mv .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
-    RUBY_TESTS_RESULT=$?
-else
-    RUBY_TESTS_RESULT=0
-fi
-
-if $run_fixtures ; then
-    echo "Building fixtures"
-    mv .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
-    RUBY_TESTS_RESULT=$?
-else
-    RUBY_TESTS_RESULT=0
-fi
-
-if $run_ruby ; then
-    echo "Running unit tests"
-    mv .rspec-ci .rspec
+    ln -sf .rspec-ci .rspec
     GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
     RUBY_TESTS_RESULT=$?
 else
