@@ -296,6 +296,7 @@ describe GpdbInstance do
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
         mock(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
+        stub(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", anything)
         database.instance_accounts = []
         database.instance_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_instance.refresh_databases
@@ -303,7 +304,7 @@ describe GpdbInstance do
       end
 
       it "does not enqueue GpdbDatabase.reindexDatasetPermissions if the instance accounts for a database have not changed" do
-        dont_allow(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", anything)
+        dont_allow(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
         gpdb_instance.refresh_databases
       end
     end
