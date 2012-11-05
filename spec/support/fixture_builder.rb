@@ -73,7 +73,7 @@ FixtureBuilder.configure do |fbuilder|
 
     @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => owners_instance)
 
-    hadoop_instance = HadoopInstance.create!({ :name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    hadoop_instance = HadoopInstance.create!({:name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
     Events::HadoopInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
@@ -136,11 +136,11 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
     typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :schema => searchquery_schema)
     fbuilder.name :typeahead_chorus_view, typeahead_chorus_view
-    typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead'#, :owner => type_ahead_user
+    typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
-    @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead')#, :owner => type_ahead_user)
+    @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
     typeahead_instance = FactoryGirl.create :gpdb_instance, :name => 'typeahead'
     [:workspace, :hadoop_instance].each do |model|
       FactoryGirl.create model, :name => 'typeahead'
@@ -211,10 +211,10 @@ FixtureBuilder.configure do |fbuilder|
     )
 
     tableau_workfile = LinkedTableauWorkfile.create({:file_name => 'tableau',
-                                  :workspace => public_workspace,
-                                  :owner => owner,
-                                  :tableau_workbook_publication => publication
-                                 }, :without_protection => true)
+                                                     :workspace => public_workspace,
+                                                     :owner => owner,
+                                                     :tableau_workbook_publication => publication
+                                                    }, :without_protection => true)
 
     fbuilder.name :owner_creates_tableau_workfile, Events::TableauWorkfileCreated.by(owner).add(
         :workbook_name => publication.name,
@@ -287,23 +287,23 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :default, FactoryGirl.create(:workfile_draft, :owner => owner)
 
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
-        :workspace => public_workspace, :dataset => nil,
-        :source_dataset => default_table, :destination_table => 'new_table_for_import'
+                                                :workspace => public_workspace, :dataset => nil,
+                                                :source_dataset => default_table, :destination_table => 'new_table_for_import'
     )
     fbuilder.name :dataset_import_created, dataset_import_created
 
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
-                        :frequency => 'weekly', :workspace_id => public_workspace.id,
-                        :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
-                        :new_table => 't', :user_id => owner.id, :dataset_import_created_event_id => dataset_import_created.id
-                        )
+                                         :frequency => 'weekly', :workspace_id => public_workspace.id,
+                                         :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
+                                         :new_table => 't', :user_id => owner.id, :dataset_import_created_event_id => dataset_import_created.id
+    )
     fbuilder.name :default, import_schedule
 
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                  :import_schedule => import_schedule,
-                  :dataset_import_created_event_id => dataset_import_created.id,
-                  :created_at => Time.now,
-                  :source_dataset_id => default_table.id)
+                                :import_schedule => import_schedule,
+                                :dataset_import_created_event_id => dataset_import_created.id,
+                                :created_at => Time.now,
+                                :source_dataset_id => default_table.id)
     fbuilder.name :default, import
 
     previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
@@ -313,9 +313,9 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :previous, previous_import
 
     import_now = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                                         :created_at => '2012-09-03 23:00:00-07',
-                                         :dataset_import_created_event_id => dataset_import_created.id,
-                                         :source_dataset_id => default_table.id)
+                                    :created_at => '2012-09-03 23:00:00-07',
+                                    :dataset_import_created_event_id => dataset_import_created.id,
+                                    :source_dataset_id => default_table.id)
     fbuilder.name :now, import_now
 
     #CSV File
@@ -440,10 +440,15 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
+
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
+    Timecop.travel(Time.now + 1.minute)
     @notification2 = Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true)
+    Timecop.travel(Time.now + 1.minute)
     @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
+    Timecop.travel(Time.now + 1.minute)
     @notification4 = Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true)
+    Timecop.return
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
     #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.
