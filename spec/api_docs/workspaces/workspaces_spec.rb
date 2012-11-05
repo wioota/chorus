@@ -133,6 +133,16 @@ resource "Workspaces" do
     end
   end
 
+ delete "/workspaces/:id" do
+    parameter :id, "Id of a workspace"
+
+    required_parameters :id
+
+    example_request "Delete a workspace" do
+      status.should == 200
+    end
+  end
+
   delete "/workspaces/:workspace_id/quickstart" do
     parameter :workspace_id, "Id of a workspace"
 

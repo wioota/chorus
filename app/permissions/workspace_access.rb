@@ -11,6 +11,10 @@ class WorkspaceAccess < AdminFullAccess
     workspace.public || workspace.member?(current_user)
   end
 
+  def destroy?(workspace)
+    owner?(workspace)
+  end
+
   def can_edit_sub_objects?(workspace)
     !workspace.archived? && workspace.member?(current_user)
   end
@@ -26,4 +30,5 @@ class WorkspaceAccess < AdminFullAccess
   def owner?(workspace)
     workspace.owner == current_user
   end
+
 end
