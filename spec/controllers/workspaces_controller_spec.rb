@@ -391,6 +391,27 @@ describe WorkspacesController do
     end
   end
 
+  describe "#destroy" do
+    let(:workspace) { workspaces(:public) }
+    let(:params) { {:id => workspace.id} }
+
+    it "uses authorization" do
+      mock(subject).authorize!(:destroy, workspace)
+      delete :destroy, :id => workspace.to_param
+    end
+
+    it "destroys the workspace" do
+      expect {
+        delete :destroy, params
+      }.to change(Workspace, :count).by(-1)
+    end
+
+    it "destroys the workspace" do
+      delete :destroy, params
+      response.code.should == "200"
+    end
+  end
+
   def expect_to_add_event(event_class, owner)
     expect {
       expect {

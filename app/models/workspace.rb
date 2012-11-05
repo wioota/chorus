@@ -1,5 +1,6 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
+
   attr_accessor :archived
   attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings
 
@@ -21,7 +22,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :csv_files
 
-  has_many :associated_datasets,  :dependent => :destroy
+  has_many :associated_datasets
   has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
 
   validates_presence_of :name
@@ -34,6 +35,7 @@ class Workspace < ActiveRecord::Base
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
   after_update :solr_reindex_later, :if => :public_changed?
+  before_destroy :destroy_datasets_and_associations
 
   scope :active, where(:archived_at => nil)
 
@@ -184,6 +186,15 @@ class Workspace < ActiveRecord::Base
   end
 
   private
+
+  def destroy_datasets_and_associations
+    bound_datasets.each do |bound_dataset|
+      bound_dataset.destroy
+    end
+    associated_datasets.each do |assoc_dataset|
+      assoc_dataset.destroy
+    end
+  end
 
   def owner_is_member
     unless members.include? owner

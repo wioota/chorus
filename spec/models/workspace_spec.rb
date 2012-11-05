@@ -288,27 +288,27 @@ describe Workspace do
     end
 
     it "soft deletes associated chorus views" do
-      workspace.bound_datasets.chorus_views.should_not be_empty
       chorus_views =  workspace.bound_datasets.chorus_views
 
-      workspace.destroy
-
-      chorus_views.each do |view|
-        view.reload.deleted_at.should_not be_nil
-        view.associated_dataset.deleted_at.should_not be_nil
-      end
+      expect {
+        workspace.destroy
+        chorus_views.map(&:reload)
+      }.to change{ chorus_views.select { |view| view.deleted_at != nil }.size }.by_at_least(1)
     end
 
     it "soft deletes the associated source tables" do
-      workspace.bound_datasets.tables.should_not be_empty
       tables =  workspace.bound_datasets.tables
 
-      workspace.destroy
+      expect {
+        workspace.destroy
+        tables.map(&:reload)
+      }.to change{ tables.select { |table| table.deleted_at != nil }.size }.by_at_least(1)
+    end
 
-      tables.each do |table|
-        table.reload.deleted_at.should_not be_nil
-        table.associated_dataset.deleted_at.should_not be_nil
-      end
+    it "soft deletes dataset associations" do
+      expect {
+        workspace.destroy
+      }.to change{ workspace.associated_datasets.select { |ad| ad.deleted_at != nil }.size }.by_at_least(1)
     end
   end
 
