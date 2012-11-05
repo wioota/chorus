@@ -362,7 +362,6 @@ class ChorusInstaller
 
     link_current_to_release
 
-    log "Install complete. Source chorus_path.sh before starting Chorus"
     if is_supported_mac?
       warn_and_change_osx_properties
     end
