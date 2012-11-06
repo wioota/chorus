@@ -19,8 +19,6 @@ FixtureBuilder.configure do |fbuilder|
 
   fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{InstanceIntegration::REAL_GPDB_HOST}_#{Rails.env}.yml"
 
-  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{Rails.env}.yml"
-
   # now declare objects
   fbuilder.factory do
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
