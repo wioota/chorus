@@ -31,7 +31,10 @@ RSpec.configure do |config|
       FileUtils.mkdir_p('db/legacy')
       `wget  -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci/~ci/legacy_#{legacy_sql_md5}.sql`
     end
-    `cd #{Rails.root} && RAILS_ENV=test spec/legacy_migrate_schema_setup.sh db/legacy/legacy_#{legacy_sql_md5}.sql`
+
+    Dir.chdir Rails.root do
+      system("spec/legacy_migrate_schema_setup.sh db/legacy/legacy_#{legacy_sql_md5}.sql #{ActiveRecord::Base.connection.current_database}") or raise "legacy migration failed!"
+    end
   end
 
   config.after(:suite) do

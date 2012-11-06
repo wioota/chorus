@@ -59,6 +59,7 @@ if $run_ruby ; then
     ln -sf .rspec-ci .rspec
     GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
     RUBY_TESTS_RESULT=$?
+    run_fixtures=false
 else
     RUBY_TESTS_RESULT=0
 fi

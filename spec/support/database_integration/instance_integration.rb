@@ -79,7 +79,7 @@ module InstanceIntegration
   end
 
   def self.database_name
-    "gpdb_#{Socket.gethostname}_#{Rails.env.slice(0..2)}"
+    "gpdb_#{Socket.gethostname}_#{Rails.env}".slice(0, 26) # needs to fit in 31 characters with _priv appended
   end
 
   def self.instance_config_for_gpdb(name)
@@ -107,7 +107,7 @@ module InstanceIntegration
     gpdb_schema = database.schemas.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
 
-    database_without_public_schema = GpdbDatabase.find_by_name("#{InstanceIntegration.database_name}_no_pub_sch")
+    database_without_public_schema = GpdbDatabase.find_by_name("#{InstanceIntegration.database_name}_priv")
     GpdbSchema.refresh(account, database_without_public_schema)
     gpdb_schema_without_public_schema = database_without_public_schema.schemas.find_by_name('non_public_schema')
     Dataset.refresh(account, gpdb_schema_without_public_schema)

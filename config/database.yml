@@ -36,6 +36,10 @@ test-jasmine:
   database: chorus_rails_test_jasmine
   <<: *default
 
+test-legacy-migration:
+  database: chorus_rails_test_legacy_migration
+  <<: *default
+
 integration:
   database: chorus_rails_integration
   <<: *default

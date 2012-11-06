@@ -69,7 +69,7 @@ namespace :db do
     end
   end
 
-  %w{integration test-jasmine}.each do |database_name|
+  %w{integration test-jasmine test-legacy-migration}.each do |database_name|
      create_database_tasks(database_name)
   end
 
