@@ -13,13 +13,11 @@ resource "Workspaces: imports" do
     stub(File).readlines.with_any_args { ["The river was there."] }
   end
 
-  post "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+  post "/workspaces/:workspace_id/datasets/:dataset_id/imports" do
     parameter :dataset_id, "Id of the source dataset"
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :is_active, "True/false: if true, import schedule is active"
-    parameter :import_type, "schedule or oneTime"
     parameter :sample_count, "Maximum number of rows to import"
 
     required_parameters :dataset_id, :to_table, :new_table
@@ -27,33 +25,45 @@ resource "Workspaces: imports" do
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
-    let(:is_active) { "false" }
-    let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
-    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
-
-    before do
-      any_instance_of(Dataset) do |dataset|
-        stub(dataset).verify_in_source
-        stub(dataset).add_metadata!.with_any_args { statistics }
-        stub(dataset).statistics.with_any_args { statistics }
-      end
-    end
 
     example_request "Import an existing dataset into a workspace, or create an import for a dataset" do
       status.should == 201
     end
   end
 
-  put "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+  post "/workspaces/:workspace_id/datasets/:dataset_id/import_schedules" do
+    parameter :dataset_id, "Id of the source dataset"
+    parameter :to_table, "Table name of the destination table"
+    parameter :truncate, "True/false: truncate into existing table (only if new_table is false)"
+    parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
+    parameter :sample_count, "Maximum number of rows to import"
+    parameter :start_datetime, "Time of day and first date to import"
+    parameter :end_date, "Date to end importing"
+    parameter :frequency, "How often to import"
+
+    required_parameters :dataset_id, :to_table, :new_table
+
+    let(:to_table) { "fancyTable" }
+    let(:truncate) { "false" }
+    let(:new_table) { "true" }
+    let(:sample_count) { "500" }
+    let(:start_datetime) { '2012-09-04 23:00:00-07' }
+    let(:end_date) { '2012-12-04' }
+    let(:frequency) { 'weekly' }
+
+    example_request "create an import schedule for a dataset" do
+      status.should == 201
+    end
+  end
+
+  put "/workspaces/:workspace_id/datasets/:dataset_id/import_schedules/:id" do
 
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
     parameter :to_table, "Table name of the destination table"
     parameter :truncate, "True/false: truncate into existing table (only if new_table is false)"
     parameter :new_table, "True/false: if true, import into new table. Otherwise, import into existing table."
-    parameter :is_active, "True/false: if true , the schedule is active"
-    parameter :import_type, "schedule or oneTime"
     parameter :sample_count, "Maximum number of rows to import"
 
     required_parameters :dataset_id, :to_table, :new_table
@@ -62,50 +72,38 @@ resource "Workspaces: imports" do
     let(:to_table) { "fancyTable" }
     let(:truncate) { "false" }
     let(:new_table) { "true" }
-    let(:is_active) { "true" }
-    let(:import_type) { "oneTime" }
     let(:sample_count) { "500" }
     let(:id) { import_schedules(:default).id }
-    let(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
-    before do
-      any_instance_of(Dataset) do |dataset|
-        stub(dataset).verify_in_source
-        stub(dataset).add_metadata!.with_any_args { statistics }
-        stub(dataset).statistics.with_any_args { statistics }
-      end
-    end
 
     example_request "Update an import for a dataset" do
       status.should == 200
     end
   end
 
-  get "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+  get "/workspaces/:workspace_id/datasets/:dataset_id/imports" do
     parameter :workspace_id, "Id of the workspace that the dataset belongs to"
     parameter :dataset_id, "Id of the dataset"
 
     required_parameters :dataset_id, :workspace_id
 
-    before do
-      ImportSchedule.create!(
-          :start_datetime => '2012-09-04 23:00:00-07',
-          :end_date => '2012-12-04',
-          :frequency => 'weekly',
-          :workspace_id => workspace_id,
-          :to_table => "new_table_for_import",
-          :source_dataset_id => dataset_id,
-          :truncate => 't',
-          :new_table => 't',
-          :user_id => user.id)
+    example_request "Get the last import for a dataset" do
+      status.should == 200
     end
+  end
+
+  get "/workspaces/:workspace_id/datasets/:dataset_id/import_schedules" do
+    parameter :workspace_id, "Id of the workspace that the dataset belongs to"
+    parameter :dataset_id, "Id of the dataset"
+
+    required_parameters :dataset_id, :workspace_id
 
     example_request "Get the import schedule for a dataset" do
       status.should == 200
     end
   end
 
-  delete "/workspaces/:workspace_id/datasets/:dataset_id/import" do
+  delete "/workspaces/:workspace_id/datasets/:dataset_id/import_schedules/:id" do
     parameter :workspace_id, "Id of the workspace that the dataset belongs to"
     parameter :dataset_id, "Id of the dataset"
     parameter :id, "id of the import schedule"
@@ -158,5 +156,4 @@ resource "Workspaces: imports" do
       status.should == 201
     end
   end
-
 end

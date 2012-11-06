@@ -485,7 +485,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             var link = this.view.$("a." + linkClass)
                             expect(link).toExist();
                             expect(link.text()).toMatchTranslation("actions." + linkClass);
-                            expect(link.data("dialog")).toBe("ImportScheduler");
+                            var dialog = linkClass == "import_now" ? "ImportNow" : "ImportScheduler"
+                            expect(link.data("dialog")).toBe(dialog);
                         });
 
                         it("attaches the dataset to the '" + linkClass + "' link", function() {

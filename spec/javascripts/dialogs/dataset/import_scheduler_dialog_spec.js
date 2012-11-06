@@ -74,26 +74,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 });
             });
         });
-
-        describe("when doing a single import", function() {
-            beforeEach(function() {
-                this.dialog = new chorus.dialogs.ImportScheduler({
-                    dataset: this.dataset,
-                    workspace: this.workspace,
-                    action: "import_now"
-                });
-                this.server.completeFetchFor(this.importSchedules);
-                this.attrs = this.dialog.getNewModelAttrs();
-            });
-
-            it("has the 'importType' parameter set to 'oneTime'", function() {
-                expect(this.attrs.importType).toBe("oneTime");
-            });
-
-            it("does not include any scheduling parameters", function() {
-                expect(_.find(this.attrs, function(val, key) { return key.indexOf("schedule") === 0; })).toBeFalsy();
-            });
-        });
     });
 
     describe("creating a new schedule", function() {

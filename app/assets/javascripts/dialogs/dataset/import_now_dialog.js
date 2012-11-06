@@ -24,7 +24,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     },
 
     resourcesLoaded: function() {
-        this.schedule = this.dataset.importSchedule();
+        this.schedule = this.schedule || this.dataset.importSchedule();
         this.bindings.add(this.model, "saved", this.importSaved);
         this.bindings.add(this.model, "saveFailed validationFailed", function() {
             this.$("button.submit").stopLoading();

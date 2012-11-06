@@ -3,7 +3,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     showSchedule: true,
 
     resourcesLoaded: function() {
-        this.model = this.dataset.importSchedule() || this.model;
+        this.model = this.schedule = this.dataset.importSchedule() || this.model;
         this._super('resourcesLoaded');
     },
 

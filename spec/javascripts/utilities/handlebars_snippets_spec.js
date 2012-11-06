@@ -1169,16 +1169,11 @@ describe("handlebars", function () {
     describe("#importFrequencyForModel", function() {
         it("returns a frequency string for a source dataset", function() {
             var model = rspecFixtures.dataset();
-            spyOn(model, "importSchedule").andReturn(rspecFixtures.importSchedule());
+            var schedule = rspecFixtures.datasetImportScheduleSet().last();
+            schedule.set("sourceDatasetId", model.id);
+            spyOn(model, "importSchedule").andReturn(schedule);
             spyOn(model, "importFrequency").andReturn("WEEKLY");
             expect(chorus.helpers.importFrequencyForModel(model)).toMatchTranslation("import.frequency.weekly");
-        });
-
-        it("returns false for a destination dataset", function() {
-            var model = rspecFixtures.dataset();
-            spyOn(model, "importSchedule").andReturn(rspecFixtures.importSchedule({ sourceId: 21324234 }));
-            spyOn(model, "importFrequency").andReturn("WEEKLY");
-            expect(chorus.helpers.importFrequencyForModel(model)).toBe(false);
         });
     });
 });

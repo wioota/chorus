@@ -1,9 +1,9 @@
 describe("chorus.alerts.ImportScheduleDelete", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable()
-        this.dataset.setImport(rspecFixtures.importSchedule());
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+        this.schedules = rspecFixtures.datasetImportScheduleSet();
         setLoggedInUser({ id: "1011" });
-        this.import = this.dataset.importSchedule();
+        this.dataset._datasetImportSchedules = this.schedules;
         this.alert = new chorus.alerts.ImportScheduleDelete({ pageModel: this.dataset });
     });
 
@@ -13,7 +13,7 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
 
     describe("#makeModel", function() {
         it("gets the current user's account for the instance that is the current page model", function(){
-            expect(this.alert.model.get("datasetId")).toBe(this.import.get("datasetId"));
+            expect(this.alert.model.get("datasetId")).toBe(this.schedules.last().get("datasetId"));
         });
     });
 

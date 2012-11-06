@@ -19,7 +19,7 @@ class DatasetImportSchedulesController < ApplicationController
     import_schedule.user         = current_user
     if import_schedule.save
       import_schedule.create_import_event
-      present import_schedule
+      present import_schedule, :status => :created
     else
       raise ApiValidationError.new(import_schedule.errors)
     end

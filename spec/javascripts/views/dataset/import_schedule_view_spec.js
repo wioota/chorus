@@ -49,7 +49,8 @@ describe("chorus.views.ImportSchedule", function() {
 
     describe("#setFieldValues(model)", function() {
         beforeEach(function() {
-            var importModel = rspecFixtures.importSchedule({
+            var importModel = rspecFixtures.datasetImportScheduleSet().last()
+            importModel.set({
                 id:'12',
                 truncate:true,
                 endDate:"2013-05-27",
@@ -79,22 +80,6 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".end input[name='month']").val()).toBe("5");
             expect(this.view.$(".end input[name='day']").val()).toBe("27");
         });
-
-        context("when there is no time data", function() {
-            beforeEach(function() {
-                this.importModel = fixtures.importSchedule({
-                    id: '12',
-                    truncate: true
-                });
-                this.importModel.unset('startDatetime');
-                this.importModel.unset('endDate');
-                this.importModel.unset('isActive');
-            })
-
-            it("does not blow up", function() {
-                this.view.setFieldValues(this.importModel);
-            })
-        })
     });
 
     it("should have a select with daily, weekly, monthly as options", function() {
