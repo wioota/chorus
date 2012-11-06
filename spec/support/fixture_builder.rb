@@ -101,6 +101,7 @@ FixtureBuilder.configure do |fbuilder|
     @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
     @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))
     @chorus_gpdb42_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => admin, :gpdb_instance => chorus_gpdb42_instance))
+    FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :gpdb_instance => chorus_gpdb42_instance))
 
     [chorus_gpdb40_instance, chorus_gpdb41_instance, chorus_gpdb42_instance].each do |instance|
       FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :gpdb_instance => instance)
@@ -124,20 +125,19 @@ FixtureBuilder.configure do |fbuilder|
     searchquery_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
     searchquery_table = FactoryGirl.create(:gpdb_table, :name => "searchquery_table", :schema => searchquery_schema)
-    searchquery_chorus_view = FactoryGirl.build(:chorus_view, :name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table")
-    searchquery_chorus_view.save!(:validate => false)
-    searchquery_chorus_view_private = FactoryGirl.build(:chorus_view, :name => "searchquery_chorus_view_private", :schema => searchquery_schema, :query => "select searchquery from a_table")
-    searchquery_chorus_view_private.save!(:validate => false)
 
     shared_search_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => shared_instance, :name => 'shared_database')
     shared_search_schema = FactoryGirl.create(:gpdb_schema, :name => 'shared_schema', :database => shared_search_database)
     FactoryGirl.create(:gpdb_table, :name => "searchquery_shared_table", :schema => shared_search_schema)
 
     # type ahead search fixtures
+    FactoryGirl.create :workspace, :name => "typeahead_private", :public => false, :owner => owner
+    typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
+    FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
+
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
-    typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :schema => searchquery_schema)
-    fbuilder.name :typeahead_chorus_view, typeahead_chorus_view
+    @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)
     typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
@@ -145,16 +145,11 @@ FixtureBuilder.configure do |fbuilder|
     @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
     typeahead_instance = FactoryGirl.create :gpdb_instance, :name => 'typeahead'
     [:workspace, :hadoop_instance].each do |model|
-      FactoryGirl.create model, :name => 'typeahead'
+      fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead')
     end
-    FactoryGirl.create :workspace, :name => "typeahead_private", :public => false, :owner => owner
-    typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
-    FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
 
     note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
     note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
-
-    typeahead_public_workspace.bound_datasets << typeahead_chorus_view
 
     # Search Database Instance Accounts
     searchquery_database.instance_accounts << owner_instance_account
@@ -186,8 +181,6 @@ FixtureBuilder.configure do |fbuilder|
     # Workspace / Dataset associations
     public_workspace.bound_datasets << source_table
     public_workspace.bound_datasets << source_view
-    search_public_workspace.bound_datasets << searchquery_chorus_view
-    search_private_workspace.bound_datasets << searchquery_chorus_view_private
 
     @owner_creates_public_workspace = Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
     @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
@@ -196,9 +189,10 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
 
     # Chorus View
-    chorus_view = ChorusView.new({:name => "chorus_view", :schema => default_schema, :query => "select * from a_table"}, :without_protection => true)
-    chorus_view.bound_workspaces << public_workspace
-    chorus_view.save!(:validate => false)
+    chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)
+    # Search Chorus Views
+    FactoryGirl.create(:chorus_view, :name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_public_workspace)
+    searchquery_chorus_view_private = FactoryGirl.create(:chorus_view, :name => "searchquery_chorus_view_private", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_private_workspace)
 
     # Tableau publications
     publication = FactoryGirl.create :tableau_workbook_publication, :name => "default",
@@ -436,13 +430,9 @@ FixtureBuilder.configure do |fbuilder|
 
       test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)
       test_schema = test_database.schemas.find_by_name('test_schema')
-      @executable_chorus_view = FactoryGirl.build(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;")
-      @executable_chorus_view.bound_workspaces << public_workspace
-      @executable_chorus_view.save!(:validate => false)
-      @gpdb_workspace = FactoryGirl.build(:workspace, :owner => owner, :sandbox => test_schema)
-      @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;")
-      @convert_chorus_view.bound_workspaces << @gpdb_workspace
-      @convert_chorus_view.save!(:validate => false)
+      @executable_chorus_view = FactoryGirl.create(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => public_workspace)
+      @gpdb_workspace = FactoryGirl.create(:workspace, :owner => owner, :sandbox => test_schema)
+      @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
       fbuilder.name :real, real_workspace

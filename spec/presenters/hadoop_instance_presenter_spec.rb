@@ -7,7 +7,7 @@ describe HadoopInstancePresenter, :type => :view do
   let(:options) { {} }
 
   before do
-    stub(ActiveRecord::Base).current_user { user }
+    set_current_user(user)
   end
 
   describe "#to_hash" do

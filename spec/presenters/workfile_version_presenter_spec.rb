@@ -8,7 +8,7 @@ describe WorkfileVersionPresenter, :type => :view do
   let(:options) { {} }
 
   before(:each) do
-    stub(ActiveRecord::Base).current_user { owner }
+    set_current_user(owner)
   end
 
   describe "#to_hash" do

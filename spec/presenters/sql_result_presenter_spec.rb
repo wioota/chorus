@@ -16,7 +16,7 @@ describe SqlResultPresenter, :type => :view do
   let(:hash) { subject.to_hash }
 
   before do
-    stub(ActiveRecord::Base).current_user { users(:owner) }
+    set_current_user(users(:owner))
   end
 
   subject { SqlResultPresenter.new(result, view) }

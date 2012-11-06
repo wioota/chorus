@@ -8,7 +8,7 @@ describe WorkspacePresenter, :type => :view do
   let(:presenter) { WorkspacePresenter.new(workspace, view, options) }
 
   before(:each) do
-    stub(ActiveRecord::Base).current_user { user }
+    set_current_user(user)
   end
 
   let(:options) { {} }

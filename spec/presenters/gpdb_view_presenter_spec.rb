@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe GpdbViewPresenter, :type => :view do
   before(:each) do
-    @user = FactoryGirl.create :user
-    stub(ActiveRecord::Base).current_user { @user }
+    set_current_user(users(:admin))
 
     gpdb_instance = FactoryGirl.build(:gpdb_instance, :id => 123, :name => "instance1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :gpdb_instance => gpdb_instance)
@@ -16,9 +15,10 @@ describe GpdbViewPresenter, :type => :view do
 
   describe "#to_hash" do
     let(:hash) { @presenter.to_hash }
-    subject { hash }
 
-    its [:object_type] { should == "VIEW" }
+    it 'has the right object type' do
+      hash[:object_type].should == 'VIEW'
+    end
   end
 
   it_behaves_like "dataset presenter", :gpdb_view

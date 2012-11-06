@@ -9,7 +9,7 @@ describe GpdbSchemaPresenter, :type => :view do
     FactoryGirl.create(:gpdb_view, :id => 2, :name => "view1", :schema => schema)
     schema.reload
 
-    stub(ActiveRecord::Base).current_user { users(:owner) }
+    set_current_user(users(:owner))
 
     @presenter = GpdbSchemaPresenter.new(schema, view)
   end

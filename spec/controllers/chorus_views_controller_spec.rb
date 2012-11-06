@@ -14,7 +14,7 @@ describe ChorusViewsController, :database_integration => true do
     log_in user
   end
 
-  context "#create" do
+  describe "#create" do
     context "when creating a chorus view from a dataset" do
       let(:options) {
         HashWithIndifferentAccess.new(
@@ -27,12 +27,17 @@ describe ChorusViewsController, :database_integration => true do
         )
       }
 
+      it "uses authorization" do
+        mock(controller).authorize!(:can_edit_sub_objects, workspace)
+        post :create, options
+      end
+
       it "creates a chorus view" do
         post :create, options
 
         chorus_view = Dataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
-        workspace.bound_datasets.should include(chorus_view)
+        chorus_view.workspace.should == workspace
 
         response.code.should == "201"
         decoded_response[:query].should == "Select * from base_table1"
@@ -68,12 +73,17 @@ describe ChorusViewsController, :database_integration => true do
         )
       }
 
+      it "uses authorization" do
+        mock(controller).authorize!(:can_edit_sub_objects, workspace)
+        post :create, options
+      end
+
       it "creates a chorus view" do
         post :create, options
 
         chorus_view = Dataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
-        workspace.bound_datasets.should include(chorus_view)
+        chorus_view.workspace.should == workspace
 
         response.code.should == "201"
         decoded_response[:query].should == "Select * from base_table1"
@@ -115,21 +125,18 @@ describe ChorusViewsController, :database_integration => true do
   end
 
   describe "#update" do
-    let(:chorus_view) do
-      datasets(:chorus_view).tap { |c|
-        c.schema = schema
-        c.query = "select 1;"
-        c.save!
-      }
-    end
+    let(:chorus_view) { datasets(:executable_chorus_view) }
 
     let(:options) do
       {
         :id => chorus_view.to_param,
-        :workspace_dataset => {
-            :query => 'select 2;'
-        }
+        :query => 'select 2;'
       }
+    end
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      put :update, options
     end
 
     it "updates the definition of chorus view" do
@@ -164,21 +171,17 @@ describe ChorusViewsController, :database_integration => true do
   end
 
   describe "#destroy" do
-    let(:chorus_view) do
-      datasets(:chorus_view).tap { |c| c.schema = schema }
+    let(:chorus_view) { datasets(:chorus_view) }
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      delete :destroy, :id => chorus_view.to_param
     end
 
     it "lets a workspace member soft delete a chorus view" do
       delete :destroy, :id => chorus_view.to_param
       response.should be_success
       chorus_view.reload.deleted?.should be_true
-    end
-
-    it "deletes the workspace association" do
-      AssociatedDataset.find_by_dataset_id(chorus_view.id).should_not be_nil
-      delete :destroy, :id => chorus_view.to_param
-      response.should be_success
-      AssociatedDataset.find_by_dataset_id(chorus_view.id).should be_nil
     end
 
     it "deletes any imports from that chorus view" do
@@ -213,9 +216,12 @@ describe ChorusViewsController, :database_integration => true do
       chorus_view.save!
     end
 
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, chorus_view.workspace)
+      post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
+    end
 
     context "When there is no error in creation" do
-
       after do
         Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
           connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
@@ -237,7 +243,7 @@ describe ChorusViewsController, :database_integration => true do
         the_event.action.should == "ViewCreated"
         the_event.source_dataset.id.should == chorus_view.id
         the_event.source_dataset.should be_a(Dataset)
-        the_event.workspace.id.should == workspace.id
+        the_event.workspace.id.should == chorus_view.workspace.id
       end
     end
 

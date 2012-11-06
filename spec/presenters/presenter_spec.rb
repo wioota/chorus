@@ -12,14 +12,6 @@ describe Presenter, :type => :view do
     end
   end
 
-  describe '#current_user' do
-    it "returns the ActiveRecord's current user" do
-      viewer = User.new
-      mock(ActiveRecord::Base).current_user { viewer }
-      @presenter.current_user.should == viewer
-    end
-  end
-
   describe ".present_collection" do
     it "serializes an array" do
       Presenter.present_collection([@model], view, {}).should be_a(Array)

@@ -5,7 +5,7 @@ describe EventPresenter, :type => :view do
   let(:current_user) { users(:owner) }
 
   before do
-    stub(ActiveRecord::Base).current_user { current_user }
+    set_current_user(current_user)
   end
 
   describe "#simple_hash" do

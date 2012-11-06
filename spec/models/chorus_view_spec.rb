@@ -1,75 +1,124 @@
 require "spec_helper"
 
 describe ChorusView do
-  describe "#validate_query", :database_integration => true do
-    let(:database) { InstanceIntegration.real_database }
-    let(:schema) { database.schemas.find_by_name('public') }
-    let(:account) { InstanceIntegration.real_gpdb_account }
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
-
-    it "can be valid" do
-      chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;"}, :without_protection => true)
-      chorus_view.should be_valid
-      chorus_view.query.should == "selecT 1;"
+  describe "validations" do
+    it "validates presence of workspace_id" do
+      chorus_view = ChorusView.new
+      chorus_view.should have_at_least(1).error_on(:workspace_id)
     end
 
-    it "should return only one result set" do
-      described_class.new(
-          {
-              :name => 'multiple result sets',
-              :schema => schema,
-              :query => "select 1; select 2;"
-          },
-          :without_protection => true).should_not be_valid
+    it "validates presence of query" do
+      chorus_view = ChorusView.new
+      chorus_view.should have_at_least(1).error_on(:query)
     end
 
-    it 'does not execute the query' do
-      schema.with_gpdb_connection(account) do |conn|
-        conn.exec_query("drop table if exists bad_chorus_view_table;")
+    it "validates presence of schema_id" do
+      chorus_view = ChorusView.new
+      chorus_view.should have_at_least(1).error_on(:schema_id)
+    end
+
+    describe "#validate_query", :database_integration => true do
+      let(:database) { InstanceIntegration.real_database }
+      let(:schema) { database.schemas.find_by_name('public') }
+      let(:account) { InstanceIntegration.real_gpdb_account }
+      let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+      let(:workspace) { workspaces(:public)}
+      let(:user) { users(:the_collaborator) }
+
+      before do
+        set_current_user(user)
       end
 
-      chorus_view = described_class.new(
-          {
-              :name => 'multiple result sets',
-              :schema => schema,
-              :query => "select 1; drop table if exists bad_chorus_view_table; create table bad_chorus_view_table();"
-          },
-          :without_protection => true)
-      chorus_view.validate_query
-      schema.with_gpdb_connection(account) do |conn|
-        expect {
-          conn.exec_query("select * from bad_chorus_view_table")
-        }.to raise_error(ActiveRecord::StatementInvalid)
+      it "runs as current_user" do
+        chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;", :workspace => workspace}, :without_protection => true)
+        mock(schema).with_gpdb_connection(gpdb_instance.account_for_user!(user), true)
+        chorus_view.valid?
+      end
+
+      it "can be valid" do
+        chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;", :workspace => workspace}, :without_protection => true)
+        chorus_view.should be_valid
+        chorus_view.query.should == "selecT 1;"
+      end
+
+      it "should return only one result set" do
+        described_class.new(
+            {
+                :name => 'multiple result sets',
+                :schema => schema,
+                :query => "select 1; select 2;"
+            },
+            :without_protection => true).should_not be_valid
+      end
+
+      it 'does not execute the query' do
+        chorus_view = described_class.new(
+            {
+                :name => 'multiple result sets',
+                :schema => schema,
+                :query => "select 1; drop table if exists bad_chorus_view_table; create table bad_chorus_view_table();"
+            },
+            :without_protection => true)
+        chorus_view.validate_query
+        schema.with_gpdb_connection(account) do |conn|
+          expect {
+            conn.exec_query("select * from bad_chorus_view_table")
+          }.to raise_error(ActiveRecord::StatementInvalid)
+        end
+      end
+
+      it "returns the cause" do
+        chorus_view = described_class.new(
+            {
+                :name => 'multiple result sets',
+                :schema => schema,
+                :query => "select potato"
+            },
+            :without_protection => true)
+        chorus_view.validate_query
+        chorus_view.errors[:query][0][1][:message].should_not =~ /postgres/
+      end
+
+      it "should be invalid if it references a nonexistent table" do
+        described_class.new({:name => "invalid_query",
+                             :schema => schema,
+                             :query => "select * from nonexistent_table;"},
+                            :without_protection => true).should_not be_valid
+      end
+
+      it "should start with select or with" do
+        chorus_view = described_class.new({:name => "invalid_query",
+                                           :schema => schema,
+                                           :query => "create table query_not_starting_with_keyword_table();"},
+                                          :without_protection => true)
+        chorus_view.should_not be_valid
+        chorus_view.errors[:query][0][0].should == :start_with_keywords
+
       end
     end
+  end
 
-    it "returns the cause" do
-      chorus_view = described_class.new(
-          {
-              :name => 'multiple result sets',
-              :schema => schema,
-              :query => "select potato"
-          },
-          :without_protection => true)
-      chorus_view.validate_query
-      chorus_view.errors[:query][0][1][:message].should_not =~ /postgres/
+  describe "update" do
+    let(:chorus_view) { datasets(:chorus_view) }
+
+    it "prevents schema from being updated" do
+      new_schema = gpdb_schemas(:public)
+      chorus_view.schema.should_not == new_schema
+      chorus_view.schema = new_schema
+      chorus_view.schema_id = new_schema.id
+      chorus_view.save!
+      chorus_view.reload
+      chorus_view.schema.should_not == new_schema
     end
 
-    it "should be invalid if it references a nonexistent table" do
-      described_class.new({:name => "invalid_query",
-                           :schema => schema,
-                           :query => "select * from nonexistent_table;"},
-                          :without_protection => true).should_not be_valid
-    end
-
-    it "should start with select or with" do
-      chorus_view = described_class.new({:name => "invalid_query",
-                                         :schema => schema,
-                                         :query => "create table query_not_starting_with_keyword_table();"},
-                                        :without_protection => true)
-      chorus_view.should_not be_valid
-      chorus_view.errors[:query][0][0].should == :start_with_keywords
-
+    it "prevents workspace from being updated" do
+      new_workspace = workspaces(:public_with_no_collaborators)
+      chorus_view.workspace.should_not == new_workspace
+      chorus_view.workspace = new_workspace
+      chorus_view.workspace_id = new_workspace.id
+      chorus_view.save!
+      chorus_view.reload
+      chorus_view.workspace.should_not == new_workspace
     end
   end
 

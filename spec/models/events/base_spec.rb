@@ -38,12 +38,12 @@ describe Events::Base do
     let(:event_owner) { users(:owner) }
 
     it "retrieves the notification for the event" do
-      stub(ActiveRecord::Base).current_user { event_owner }
+      set_current_user(event_owner)
       event.notification_for_current_user.should be_present
     end
 
     it "does not retrieve the notification for a user for whom there is none" do
-      stub(ActiveRecord::Base).current_user { users(:no_collaborators) }
+      set_current_user(users(:no_collaborators))
       event.notification_for_current_user.should be_nil
     end
   end

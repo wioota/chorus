@@ -7,7 +7,7 @@ describe WorkspaceSearchPresenter, :type => :view do
 
   before(:each) do
     reindex_solr_fixtures
-    stub(ActiveRecord::Base).current_user { user }
+    set_current_user(user)
   end
 
   describe "#to_hash" do

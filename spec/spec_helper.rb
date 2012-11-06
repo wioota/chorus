@@ -89,8 +89,10 @@ RSpec.configure do |config|
   config.after do
     QC::Conn.disconnect
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+    set_current_user nil
   end
 
+  config.include CurrentUserHelpers
   config.include FileHelper
   config.include FakeRelations
   config.include AuthHelper, :type => :controller

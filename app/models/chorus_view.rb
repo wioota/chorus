@@ -9,12 +9,17 @@ end
 class ChorusView < Dataset
   include SharedSearch
 
-  has_one :associated_dataset, :foreign_key => :dataset_id
-  has_one :workspace, :through => :associated_dataset, :source => :workspace
+  attr_accessible :query, :object_name, :schema_id, :workspace_id
+  attr_readonly :schema_id, :workspace_id
+
+  belongs_to :workspace
 
   include_shared_search_fields :workspace, :workspace
 
   validate :validate_query
+  validates_presence_of :workspace_id, :query, :schema_id
+
+  alias_attribute :object_name, :name
 
   def validate_query
     return unless changes.include?(:query)
@@ -22,7 +27,7 @@ class ChorusView < Dataset
       errors.add(:query, :start_with_keywords)
     end
 
-    account = account_for_user!(schema.database.gpdb_instance.owner)
+    account = account_for_user!(current_user)
     schema.with_gpdb_connection(account, true) do |connection|
       jdbc_conn = connection.instance_variable_get(:"@connection").connection
       s = jdbc_conn.prepareStatement(query)

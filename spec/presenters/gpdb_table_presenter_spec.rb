@@ -5,8 +5,7 @@ describe GpdbTablePresenter, :type => :view do
   let(:presenter) { GpdbTablePresenter.new(table, view) }
 
   before(:each) do
-    @user = FactoryGirl.create :user
-    stub(ActiveRecord::Base).current_user { @user }
+    set_current_user(users(:admin))
   end
 
   describe "#to_hash" do

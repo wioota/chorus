@@ -307,8 +307,9 @@ describe Search do
       end
 
       it "excludes datasets you don't have permissions to" do
-        the_collaborator.instance_accounts.joins(:gpdb_databases).should be_empty
-        create_and_record_search(the_collaborator, :query => 'searchquery', :entity_type => :dataset) do |search|
+        user = users(:no_collaborators)
+        user.instance_accounts.joins(:gpdb_databases).should be_empty
+        create_and_record_search(user, :query => 'searchquery', :entity_type => :dataset) do |search|
           search.datasets.should == [shared_dataset]
         end
       end

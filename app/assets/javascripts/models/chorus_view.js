@@ -128,7 +128,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
         }
         var join = _.find(this.joins, function(join) {
             return dataset == join.destinationColumn.dataset;
-        })
+        });
         if (join) {
             return join.columns;
         }

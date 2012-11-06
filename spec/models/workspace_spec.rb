@@ -124,22 +124,14 @@ describe Workspace do
     let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, :schema => schema) }
     let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
     let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
-    let(:chorus_view) {
-      ChorusView.new({:name => "chorus_view", :schema => schema, :query => "select * from a_table"}, :without_protection => true)
-    }
-    let(:chorus_view_from_source) {
-      ChorusView.new({:name => "chorus_view_from_source", :schema => other_schema, :query => "select 1"}, :without_protection => true)
-    }
+    let!(:chorus_view) { FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => schema, :query => "select * from a_table", :workspace => workspace) }
+    let!(:chorus_view_from_source) { FactoryGirl.create(:chorus_view, :name => "chorus_view_from_source", :schema => other_schema, :query => "select 1", :workspace => workspace) }
     let(:user) { users(:the_collaborator) }
 
     context "when the workspace has a sandbox" do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       before do
-        chorus_view.save!(:validate => false)
-        chorus_view_from_source.save!(:validate => false)
-        workspace.bound_datasets << chorus_view
-        workspace.bound_datasets << chorus_view_from_source
         workspace.bound_datasets << source_table
       end
 
@@ -183,7 +175,7 @@ describe Workspace do
     end
 
     context "when the workspace does not have a sandbox" do
-      let!(:workspace) { FactoryGirl.build(:workspace, :sandbox => nil) }
+      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
       before do
         workspace.bound_datasets << source_table
       end
@@ -288,12 +280,13 @@ describe Workspace do
     end
 
     it "soft deletes associated chorus views" do
-      chorus_views =  workspace.bound_datasets.chorus_views
+      chorus_views = workspace.chorus_views
+      chorus_views.length.should > 0
 
-      expect {
-        workspace.destroy
-        chorus_views.map(&:reload)
-      }.to change{ chorus_views.select { |view| view.deleted_at != nil }.size }.by_at_least(1)
+      workspace.destroy
+      chorus_views.each do |cv|
+        cv.reload.deleted_at.should_not be_nil
+      end
     end
 
     it "soft deletes the associated source tables" do
@@ -470,7 +463,7 @@ describe Workspace do
       let(:owner) { users(:no_collaborators) }
 
       before do
-        stub(ActiveRecord::Base).current_user { owner }
+        set_current_user(owner)
       end
 
       it "creates an event if the workspace name was changed" do

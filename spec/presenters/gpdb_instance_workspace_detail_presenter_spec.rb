@@ -7,7 +7,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
 
   before do
     Chorus::Application.config.chorus.config['sandbox_recommended_size_in_gb'] = 1
-    stub(ActiveRecord::Base).current_user { user }
+    set_current_user(user)
   end
 
   describe "#to_hash" do

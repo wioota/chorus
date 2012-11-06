@@ -19,6 +19,7 @@ class Workspace < ActiveRecord::Base
   has_many :owned_notes, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'"
   has_many :owned_events, :class_name => 'Events::Base'
   has_many :comments, :through => :owned_events
+  has_many :chorus_views, :dependent => :destroy
   belongs_to :sandbox, :class_name => 'GpdbSchema'
 
   has_many :csv_files
@@ -107,13 +108,12 @@ class Workspace < ActiveRecord::Base
         when "SANDBOX_DATASET" then
           datasets = datasets.where(:schema_id => sandbox.id)
         when "CHORUS_VIEW" then
-          associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-          datasets = Dataset.where(:type => "ChorusView").where(:id => associated_dataset_ids)
+          datasets = chorus_views
         when "SOURCE_TABLE" then
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
           datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids).where("type != 'ChorusView'")
         else
-          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids))
+          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids + chorus_view_ids))
       end
       return datasets
     else
@@ -232,6 +232,6 @@ class Workspace < ActiveRecord::Base
   end
 
   def create_workspace_name_change_event
-    Events::WorkspaceChangeName.by(ActiveRecord::Base.current_user).add(:workspace => self, :workspace_old_name => self.name_was)
+    Events::WorkspaceChangeName.by(current_user).add(:workspace => self, :workspace_old_name => self.name_was)
   end
 end

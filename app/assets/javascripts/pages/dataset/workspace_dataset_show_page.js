@@ -23,7 +23,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
 
         this.contentDetailsOptions = {
             workspace: this.workspace
-        }
+        };
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
     },
 

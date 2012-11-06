@@ -70,6 +70,10 @@ FactoryGirl.define do
   factory :chorus_view do
     sequence(:name) { |n| "chorus_view#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema
+    query "select 1;"
+    after(:build) do |chorus_view|
+      chorus_view.instance_variable_get(:@changed_attributes).delete("query")
+    end
   end
 
   factory :gpdb_column do

@@ -27,10 +27,6 @@ class Presenter
     @view_context = view_context
   end
 
-  def current_user
-    ActiveRecord::Base.current_user
-  end
-
   delegate :sanitize, :to => :@view_context
 
   attr_reader :model, :options
