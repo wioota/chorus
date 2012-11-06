@@ -14,10 +14,10 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
         this._super("postRender", arguments);
     },
 
-    //TODO populate the input values after the render or remove the filters
+    // TODO: populate the input values after the render or remove the filters
 
     populateCompetitionType: function() {
-        //TODO: replace this with actual data from api once it's implemented
+        // TODO: replace this with actual data from api once it's implemented
         var list = ["actuarial", "binary classification", "computer vision", "credit", "data manipulation",
             "exploratory", "finance", "government", "graph", "health", "high dimensionality", "insurance",
             "life sciences", "multiclass classification", "natural language processing", "public policy",

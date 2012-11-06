@@ -9,7 +9,6 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.DisplayNameHeader({model: this.model, imageUrl: '/images/instances/gnip.png'})
         });
 
-        // TODO: This should be refactored to use a less general view
         this.sidebar = new chorus.views.InstanceListSidebar();
         this.sidebar.setInstance(this.model);
     },

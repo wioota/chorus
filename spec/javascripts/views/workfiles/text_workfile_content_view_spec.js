@@ -368,7 +368,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
     });
 
-
     describe("when navigating away", function() {
         beforeEach(function() {
             this.view.render();
@@ -395,7 +394,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
             });
         });
     });
-
 
     describe("when the user changes the selection", function() {
         beforeEach(function() {

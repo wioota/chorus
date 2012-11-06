@@ -92,9 +92,5 @@ describe ImportScheduler do
         end
       end
     end
-
-    #context "when no next import has been scheduled" do
-    #  pending
-    #end
   end
 end
