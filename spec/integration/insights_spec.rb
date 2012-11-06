@@ -15,7 +15,7 @@ describe "Insights" do
     wait_until { page.find('a[data-dialog="InsightsNew"]').text == "Add an insight"}
     click_link "Add an insight"
 
-    within_modal do
+    within_modal(30) do
       set_cleditor_value("body", "This is adding an Insight")
       click_on "Add Insight"
     end
