@@ -132,6 +132,8 @@ Chorus::Application.routes.draw do
     end
   end
 
+  resource :status, :only => [:show], :controller => 'status'
+
   post 'download_chart', :controller => 'image_downloads'
 
   post 'download_data', :controller => 'data_downloads'
