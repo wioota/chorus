@@ -279,8 +279,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             sourceDatasetId: this.dataset.id + 1
 
                         });
-                        this.imports.add(this.lastImport);
-                        this.server.completeFetchFor(this.view.imports, this.imports.models);
+                        this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                     });
 
                     it("has an 'imported xx ago' description", function() {
@@ -456,7 +455,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             destinationDatasetId: 12345,
                             sourceDatasetId: this.dataset.id
                         });
-                        this.server.completeFetchFor(this.view.imports, this.imports.models);
+                        this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                         this.server.completeFetchFor(this.view.importSchedules, []);
                     });
 

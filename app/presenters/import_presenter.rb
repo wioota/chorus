@@ -10,7 +10,8 @@ class ImportPresenter < Presenter
         :success => model.success,
         :source_dataset_id => model.source_dataset_id,
         :source_dataset_name => model.source_dataset.try(:name),
-        :file_name => model.file_name
+        :file_name => model.file_name,
+        :workspace_id => model.workspace_id
     }
   end
 end

@@ -129,7 +129,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         }
 
         if(lastImport.get("sourceDatasetId") == this.resource.get("id")) {
-            var destination = lastImport.lastDestination();
+            var destination = lastImport.destination();
             tableLink = this._linkToModel(destination);
             if(lastImport.get('success')) {
                 importStatusKey = "import.last_imported";
@@ -138,8 +138,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             }
         } else {
             var source = lastImport.importSource();
-            tableLink = (lastImport.get("sourceType") === "upload_file") ?
-                chorus.helpers.spanFor(this.ellipsize(source.name()), { 'class': "source_file", title: source.name() }) :
+            tableLink = (lastImport.get("fileName")) ?
+                chorus.helpers.spanFor(this.ellipsize(lastImport.get("fileName")), { 'class': "source_file", title: lastImport.get("fileName") }) :
                 this._linkToModel(source);
             if(lastImport.get('success')) {
                 importStatusKey = "import.last_imported_into";

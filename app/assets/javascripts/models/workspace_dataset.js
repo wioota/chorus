@@ -96,7 +96,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     lastImport: function() {
         if(this.hasImport())
         {
-            return this.getImports().last();
+            return this.getImports().first();
         }
     },
 

@@ -18,6 +18,7 @@ describe ImportPresenter, :type => :view do
       hash.should have_key(:source_dataset_id)
       hash.should have_key(:source_dataset_name)
       hash.should have_key(:file_name)
+      hash.should have_key(:workspace_id)
     end
 
     it "should not blow up if the source dataset does not exist" do

@@ -97,31 +97,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
                                 " into My New Table");
                     });
                 });
-
-                xcontext("The dataset is the destination dataset, not source", function() {
-                    //TODO, don't think we need this
-                    beforeEach(function() {
-                        var importSchedule = rspecFixtures.importSchedule({
-                            sourceId: '1',
-                            datasetId: '2'
-                        });
-                        spyOn(resource, 'importSchedule').andReturn(
-                            importSchedule
-                        );
-
-                        spyOn(resource, 'nextImportDestination').andReturn(
-                            new chorus.models.WorkspaceDataset({
-                                objectName: 'My New Table',
-                                workspace: {id: 13},
-                                id: 234 //id of dataset
-                            })
-                        );
-                    });
-
-                    it("returns blank", function() {
-                        expect(presenter.nextImport()).toBeFalsy();
-                    });
-                });
             });
 
             describe("#lastImport", function() {
@@ -183,7 +158,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                 context("for a sandbox table", function() {
                     beforeEach(function () {
-                        this.import = rspecFixtures.datasetImportSet().last();
+                        this.import = rspecFixtures.datasetImportSet().first();
                         this.import.set({
                             sourceDatasetId: resource.get('id') + 1,
                             completedStamp: Date.parse("Today - 33 days").toJSONString(),
@@ -218,6 +193,24 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             expect(presenter.importInProgress()).toBeFalsy();
                             expect(presenter.importFailed()).toBeFalsy();
                             expect(presenter.lastImport()).toMatch("Imported 1 month ago from");
+                        });
+                    });
+
+                    describe("import from a file", function() {
+                        beforeEach(function () {
+                            this.import.unset("sourceDatasetId");
+                            this.import.unset("sourceDatasetName");
+                            this.import.set("fileName", "foo.csv");
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
+                            );
+                        });
+
+                        it("shows last import from file text", function() {
+                            expect(presenter.importInProgress()).toBeFalsy();
+                            expect(presenter.importFailed()).toBeFalsy();
+                            expect(presenter.lastImport()).toMatch("Imported 1 month ago from");
+                            expect(presenter.lastImport()).toMatch("foo.csv");
                         });
                     });
 

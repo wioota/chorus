@@ -196,11 +196,11 @@ describe("chorus.models.WorkspaceDataset", function() {
            expect(this.dataset.lastImport()).toBeFalsy();
         });
 
-        it("returns the last import if there are more than one", function() {
+        it("returns the first import if there are more than one", function() {
             var imports = rspecFixtures.datasetImportSet().models;
             this.dataset.getImports().add(imports);
             expect(imports.length).toBeGreaterThan(1);
-            expect(this.dataset.lastImport()).toBe(_.last(imports));
+            expect(this.dataset.lastImport()).toBe(_.first(imports));
         });
     });
 
