@@ -48,56 +48,76 @@ describe Events::Base do
     end
   end
 
-  describe ".visible_to(user)" do
+  describe ".for_dashboard_of(user)" do
     let(:user) { users(:no_collaborators) }
-    let(:the_events) do
-      [
-        events(:no_collaborators_creates_private_workfile),
-        events(:private_workfile_created),
-        events(:public_workfile_created),
-        events(:no_collaborators_creates_private_workfile)
-      ]
+
+    let(:private_event) { events(:private_workfile_created) }
+    let(:public_event) { events(:public_workfile_created) }
+    let(:user_creates_private_workfile_event) { events(:no_collaborators_creates_private_workfile) }
+
+    subject { Events::Base.for_dashboard_of(user) }
+
+    context "global events" do
+      let(:workspace) { workspaces(:public) }
+      let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => public_event) }
+
+      let!(:global_activity) { Activity.global.create!(:event => user_creates_private_workfile_event) }
+
+      it "includes global events" do
+        subject.should include(global_activity.event)
+      end
+
+      it "does not include multiples of the same event" do
+        Activity.global.create!(:event => user_creates_private_workfile_event)
+
+        ids = subject.map(&:id)
+        ids.should == ids.uniq
+      end
+
+      it "can be filtered further (like any activerecord relation)" do
+        event = global_activity.event
+        subject.find(event.to_param).should == event
+        subject.find_by_id(workspace_activity.event).should be_nil
+      end
     end
 
-    let(:other_workspace1) { workspaces(:public) }
-    let(:other_workspace2) { workspaces(:private) }
-    let(:user_workspace) { workspaces(:public_with_no_collaborators) }
+    context "event on public workspace" do
+      context "user is not a member" do
+        let(:workspace) { workspaces(:public) }
+        let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => public_event) }
 
-    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0] ) }
+        it "does not include events" do
+          subject.should_not include(workspace_activity.event)
+        end
+      end
 
-    let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => the_events[1]) }
-    let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => the_events[2]) }
+      context "user is a member" do
+        let(:workspace) { workspaces(:public_with_no_collaborators) }
+        let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => user_creates_private_workfile_event ) }
 
-    let!(:global_activity) { Activity.global.create!(:event => the_events[3]) }
-    let!(:duplicate_global_activity) { Activity.global.create!(:event => the_events[0]) }
-
-    subject { Events::Base.visible_to(user) }
-
-    it "includes global events" do
-      subject.should include(global_activity.event)
+        it "includes events" do
+          subject.should include(workspace_activity.event)
+        end
+      end
     end
 
-    it "includes events for the user's workspaces" do
-      subject.should include(workspace_activity.event)
-    end
+    context "when the event is in a private workspace" do
+      let(:workspace) { workspaces(:private) }
+      let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => private_event) }
 
-    it "does not include events for other public workspaces" do
-      subject.should_not include(other_workspace2_activity.event)
-    end
 
-    it "does not include other's private workspaces" do
-      subject.should_not include(other_workspace1_activity.event)
-    end
+      context "user is not a member" do
+        it "does not include" do
+          subject.should_not include(workspace_activity.event)
+        end
+      end
 
-    it "does not include multiples of the same event" do
-      ids = subject.map(&:id)
-      ids.should == ids.uniq
-    end
-
-    it "can be filtered further (like any activerecord relation)" do
-      event = global_activity.event
-      subject.find(event.to_param).should == event
-      subject.find_by_id(other_workspace1_activity.event).should be_nil
+      context "user is a member" do
+        it "includes events" do
+          workspace.members << user
+          subject.should include(workspace_activity.event)
+        end
+      end
     end
   end
 
@@ -137,6 +157,79 @@ describe Events::Base do
         event.reload
         event.target1.should == target1
         event.target2.should == target2
+      end
+    end
+  end
+
+  describe ".visible_to(user)" do
+    let(:user) { users(:no_collaborators) }
+
+    let(:private_event) { events(:private_workfile_created) }
+    let(:public_event) { events(:public_workfile_created) }
+    let(:user_creates_private_workfile_event) { events(:no_collaborators_creates_private_workfile) }
+
+    subject { Events::Base.visible_to(user) }
+
+    context "global events" do
+      let(:workspace) { workspaces(:private) }
+      let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => private_event) }
+
+      let!(:global_activity) { Activity.global.create!(:event => user_creates_private_workfile_event) }
+
+      it "includes global events" do
+        subject.should include(global_activity.event)
+      end
+
+      it "does not include multiples of the same event" do
+        Activity.global.create!(:event => user_creates_private_workfile_event)
+
+        ids = subject.map(&:id)
+        ids.should == ids.uniq
+      end
+
+      it "can be filtered further (like any activerecord relation)" do
+        event = global_activity.event
+        subject.find(event.to_param).should == event
+        subject.find_by_id(workspace_activity.event).should be_nil
+      end
+    end
+
+    context "event on public workspace" do
+      context "user is not a member" do
+        let(:workspace) { workspaces(:public) }
+        let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => public_event) }
+
+        it "does include events" do
+          subject.should include(workspace_activity.event)
+        end
+      end
+
+      context "user is a member" do
+        let(:workspace) { workspaces(:public_with_no_collaborators) }
+        let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => user_creates_private_workfile_event ) }
+
+        it "includes events" do
+          subject.should include(workspace_activity.event)
+        end
+      end
+    end
+
+    context "when the event is in a private workspace" do
+      let(:workspace) { workspaces(:private) }
+      let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => private_event) }
+
+
+      context "user is not a member" do
+        it "does not include" do
+          subject.should_not include(workspace_activity.event)
+        end
+      end
+
+      context "user is a member" do
+        it "includes events" do
+          workspace.members << user
+          subject.should include(workspace_activity.event)
+        end
       end
     end
   end

@@ -74,14 +74,25 @@ module Events
       end
     end
 
-    def self.visible_to(user)
-        group("events.id").readonly(false).
-            joins(:activities).
-            where(%Q{(events.published = true) OR (activities.entity_type = 'GLOBAL') OR (activities.entity_type = 'Workspace'
-            AND activities.entity_id IN (SELECT workspace_id FROM memberships WHERE user_id = #{user.id}))})
+    def self.for_dashboard_of(user)
+      workspace_activities = <<-SQL
+      activities.entity_id IN (
+        SELECT workspace_id
+        FROM memberships
+        WHERE user_id = #{user.id})
+      SQL
+      self.activity_query(user, workspace_activities)
     end
-    class << self
-      alias_method :for_dashboard_of, :visible_to
+
+    def self.visible_to(user)
+      workspace_activities = <<-SQL
+      activities.entity_id IN (
+        SELECT workspace_id
+        FROM memberships
+        WHERE user_id = #{user.id})
+      OR workspaces.public = true
+      SQL
+      self.activity_query(user, workspace_activities).joins('LEFT OUTER JOIN "workspaces" ON "workspaces"."id" = "events"."workspace_id"')
     end
 
     def create_activities
@@ -91,6 +102,13 @@ module Events
     end
 
     private
+
+    def self.activity_query(user, workspace_activities)
+      group("events.id").readonly(false).
+          joins(:activities).
+          where(%Q{(events.published = true) OR (activities.entity_type = 'GLOBAL') OR (activities.entity_type = 'Workspace'
+          AND (#{workspace_activities}))})
+    end
 
     def create_activity(entity_name)
       if entity_name == :global

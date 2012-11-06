@@ -28,6 +28,18 @@ describe InsightsController do
       note.promotion_time.should_not be_nil
     end
 
+    context "when the user promoting is not the actor" do
+      let(:user) { users(:not_a_member) }
+      let(:note) { events(:note_on_public_workfile) }
+
+      it "should allow them to promote the note" do
+        post :promote, :note_id => note.id
+        note.reload.should be_insight
+        note.promoted_by.should == user
+        note.promotion_time.should_not be_nil
+      end
+    end
+
     context 'when the note is private' do
       let(:note) { events(:note_on_no_collaborators_private_workfile) }
 
