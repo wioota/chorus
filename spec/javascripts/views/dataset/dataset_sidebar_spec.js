@@ -141,7 +141,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
 
-            xit("shows a no-permissions message", function() {
+            it("shows a no-permissions message", function() {
                 this.view.render();
                 expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                     linkText: t("dataset.credentials.missing.linkText"),
