@@ -60,6 +60,15 @@ else
     RUBY_TESTS_RESULT=0
 fi
 
+if $run_fixtures ; then
+    echo "Building fixtures"
+    ln -sf .rspec-ci .rspec
+    CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
+    FIXTURES_RESULT=$?
+else
+    FIXTURES_RESULT=0
+fi
+
 if $run_jasmine ; then
     echo "Running javascript tests"
     CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec phantom 2>&1
@@ -109,5 +118,5 @@ if $run_api_docs ; then
   echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
 end
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
+SUCCESS=`expr $RUBY_TESTS_RESULT + $FIXTURES_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
 exit $SUCCESS
