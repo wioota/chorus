@@ -9,7 +9,6 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
     modelClass: "Table",
     pagination: true,
     multiSelection: false,
-    serverSideSearch: true,
 
     events: _.extend({
         "click a.preview_columns": "clickPreviewColumns"

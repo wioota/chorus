@@ -14,11 +14,6 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         expect(this.dialog.multiSelection).toBeTruthy();
     });
 
-    it("enables server-side search", function() {
-        expect(this.dialog.serverSideSearch).toBeTruthy();
-    });
-
-
     it("fetches the results sorted by objectName ascending", function() {
         var url = this.server.lastFetch().url
         expect(url).toHaveUrlPath("/workspaces/33/datasets");

@@ -51,10 +51,6 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                 expect(dialog.multiSelection).toBeFalsy();
             });
 
-            it("has serverside search", function() {
-                expect(dialog.serverSideSearch).toBeTruthy();
-            });
-
             it("only shows real sandbox tables (no hdfs, source, externals, views)", function() {
                 _.each(dialog.collection.models, function(model) {
                     expect(model.get("type")).toBe("SANDBOX_TABLE");

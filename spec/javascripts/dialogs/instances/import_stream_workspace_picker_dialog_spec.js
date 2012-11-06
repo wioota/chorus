@@ -7,12 +7,12 @@ describe("chorus.dialogs.ImportStreamWorkspacePicker", function() {
     });
 
     it("has the right title", function () {
-        expect(this.dialog.$("h1")).toContainTranslation("gnip.import_stream.select_workspace_title")
+        expect(this.dialog.$("h1")).toContainTranslation("gnip.import_stream.select_workspace_title");
         expect(this.dialog.submitButtonTranslationKey).toBe("gnip.import_stream.select_workspace");
     });
 
     it("only fetches the active workspaces", function() {
-        expect(this.dialog.collection.attributes.active).toBeTruthy();
+        expect(this.server.lastFetch().url).toMatch(/\?active=true&/);
     });
 
     context("when the fetch completes", function() {

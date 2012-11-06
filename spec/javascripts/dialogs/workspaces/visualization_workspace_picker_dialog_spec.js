@@ -1,7 +1,7 @@
 describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
     beforeEach(function() {
         setLoggedInUser({id: 4003});
-        chorus.session.trigger("saved")
+        chorus.session.trigger("saved");
 
         stubModals();
         this.dialog = new chorus.dialogs.VisualizationWorkspacePicker();
@@ -23,9 +23,9 @@ describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
         });
 
         it("only fetches the active workspaces", function() {
-            expect(this.dialog.collection.attributes.active).toBeTruthy();
+            expect(this.server.lastFetch().url).toMatch(/\?active=true&/);
         });
-    })
+    });
 
     context("when the fetch completes", function() {
         beforeEach(function() {
