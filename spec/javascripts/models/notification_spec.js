@@ -6,7 +6,7 @@ describe("chorus.models.Notification", function() {
 
     describe("initialization", function() {
         it("has the correct url template", function() {
-            expect(this.notification.urlTemplate).toBe("notification/{{id}}");
+            expect(this.notification.urlTemplate).toBe("notifications/{{id}}");
         });
     });
 

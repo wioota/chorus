@@ -9,4 +9,11 @@ class NotificationsController < ApplicationController
     Notification.where(:id => params[:notification_ids]).update_all(:read => true)
     head :ok
   end
+
+  def destroy
+    notification = Notification.find(params[:id])
+    authorize! :destroy, notification
+    notification.destroy
+    render :json => {}
+  end
 end

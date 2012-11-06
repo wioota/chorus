@@ -54,4 +54,31 @@ describe NotificationsController do
       response.code.should == '200'
     end
   end
+
+  describe "#destroy" do
+    let(:note) {events(:note_on_greenplum)}
+    before(:each) do
+      @notification = Notification.create!({:recipient => current_user, :event => note}, :without_protection => true)
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :destroy, @notification
+      delete :destroy, :id => @notification.id
+    end
+
+    describe "deleting" do
+      before do
+        delete :destroy, :id => @notification.id
+      end
+
+      it "should soft delete the notification" do
+        notification = Notification.find_with_destroyed(@notification.id)
+        notification.deleted_at.should_not be_nil
+      end
+
+      it "should respond with success" do
+        response.should be_success
+      end
+    end
+  end
 end

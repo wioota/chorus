@@ -103,7 +103,7 @@ Chorus::Application.routes.draw do
 
   resources :comments, :only => [:create, :show, :destroy]
 
-  resources :notifications, :only => [:index] do
+  resources :notifications, :only => [:index, :destroy] do
     collection do
       put :read
     end
