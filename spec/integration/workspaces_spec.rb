@@ -36,7 +36,7 @@ describe "Workspaces" do
   describe "Delete a workspace" do
     let(:workspace) { workspaces(:public) }
 
-    xit "deletes the workspace" do
+    it "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")
       click_link "Delete this Workspace"
       wait_until { page.has_selector?(".submit") }
@@ -47,7 +47,7 @@ describe "Workspaces" do
       wait_for_ajax
       page.execute_script("$('.popup').click()")
       click_link("All Workspaces")
-      within(".workspace_list") { page.should_not have_content(workspace.name) }
+      within(".workspace_list") { page.should_not have_link(workspace_url(workspace)) }
     end
   end
 end
