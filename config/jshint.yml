@@ -46,6 +46,7 @@ fragment: false     # true if HTML fragments should be allowed
 laxbreak: false     # true if statement breaks should not be checked
 on:       false     # true if HTML event handlers (e.g. onclick="...") should be allowed
 sub:      true      # true if subscript notation may be used for expressions better expressed in dot notation
+expr:     true      # true if expressions are allowed in statements such as e && e.preventDefault()
 
 # other options
 
