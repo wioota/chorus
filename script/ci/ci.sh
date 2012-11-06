@@ -32,7 +32,7 @@ if [[ "$targets" ]]; then
 fi
 
 if $run_ruby; then
-   b/rake assets:precompile --trace
+    b/rake assets:precompile --trace
 
     echo "starting gpfdist (Linux RHEL5 only)"
     export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
@@ -95,7 +95,7 @@ if $run_legacy_migrations; then
     LEGACY_MIGRATION_TESTS_RESULT=$?
 else
     LEGACY_MIGRATION_TESTS_RESULT=0
-end
+fi
 
 if $run_api_docs ; then
     echo "Running API docs check"
@@ -106,7 +106,7 @@ else
 fi
 
 if $run_ruby ; then
-  echo "RSpec exit code: $RUBY_TESTS_RESULT"
+    echo "RSpec exit code: $RUBY_TESTS_RESULT"
 fi
 
 if $run_jasmine ; then
@@ -114,11 +114,11 @@ if $run_jasmine ; then
 fi
 
 if $run_legacy_migrations ; then
-  echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
+    echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
 fi
 
 if $run_api_docs ; then
-  echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
+    echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
 fi
 
 SUCCESS=`expr $RUBY_TESTS_RESULT + $FIXTURES_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
