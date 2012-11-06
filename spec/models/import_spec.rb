@@ -59,6 +59,14 @@ describe Import, :database_integration => true do
       import.errors.messages[:base].select { |a,b| a == :table_not_consistent }.should_not be_empty
     end
 
+    it "sets the destination_dataset before validation" do
+      stub(import.source_dataset).dataset_consistent? { true }
+      import.to_table = 'master_table1'
+      import.new_table = false
+      import.should be_valid
+      import.destination_dataset.should == import.workspace.sandbox.datasets.find_by_name('master_table1')
+    end
+
     it "is valid if an imports table become inconsistent after saving" do
       import.save
       stub(import.source_dataset).dataset_consistent? { false }

@@ -293,13 +293,6 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :dataset_import_created, dataset_import_created
 
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
-                        :frequency => 'weekly', :workspace => public_workspace,
-                        :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
-                        :new_table => 't', :user_id => owner.id
-                        )
-    fbuilder.name :default, import_schedule
-
-    import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
                                          :frequency => 'weekly', :workspace => public_workspace,
                                          :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
                                          :new_table => 't', :user_id => owner.id

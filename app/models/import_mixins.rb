@@ -29,9 +29,17 @@ module ImportMixins
     end
   end
 
+  def set_destination_dataset_id
+    dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
+    self.destination_dataset = dst_table
+  end
+
   included do
     belongs_to :workspace
     validate :workspace_is_not_archived
     validates :workspace, :presence => true
+
+    belongs_to :destination_dataset, :class_name => 'Dataset'
+    before_validation :set_destination_dataset_id, :unless => :new_table
   end
 end

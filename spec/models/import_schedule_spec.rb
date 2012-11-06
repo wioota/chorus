@@ -13,6 +13,14 @@ describe ImportSchedule do
       schedule = FactoryGirl.build(:import_schedule, :frequency => 'tri-weekly', :workspace => workspaces(:public))
       schedule.should have_at_least(1).error_on(:frequency)
     end
+
+    it "sets the destination_dataset before validation" do
+      import_schedule.new_table = false
+      import_schedule.to_table = 'table'
+      stub(import_schedule.source_dataset).dataset_consistent? { true }
+      import_schedule.should be_valid
+      import_schedule.destination_dataset.name.should == 'table'
+    end
   end
 
   describe "callbacks:" do
