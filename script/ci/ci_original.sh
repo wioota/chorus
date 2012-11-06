@@ -44,7 +44,6 @@ killall gpfdist
 
 echo "Running legacy migration tests"
 b/rake db:test:prepare
-RAILS_ENV=test packaging/chorus_migrate.sh db/legacy/legacy.sql
 CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration
 LEGACY_MIGRATION_TESTS_RESULT=$?
 
