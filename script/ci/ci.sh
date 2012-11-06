@@ -1,6 +1,9 @@
 #!/bin/bash
 
-export RAILS_ENV=test
+if [[ -z "$RAILS_ENV" ]]; then
+  export RAILS_ENV=test
+fi
+
 GPDB_HOST=chorus-gpdb42
 HADOOP_HOST=chorus-gphd02
 
