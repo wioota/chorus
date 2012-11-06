@@ -112,11 +112,11 @@ fi
 
 if $run_legacy_migrations ; then
   echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
-end
+fi
 
 if $run_api_docs ; then
   echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
-end
+fi
 
 SUCCESS=`expr $RUBY_TESTS_RESULT + $FIXTURES_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
 exit $SUCCESS
