@@ -14,6 +14,6 @@ chorus.views.InstanceIndexContentDetails = chorus.views.Base.extend({
         return {
             loaded: gpdbInstances.loaded && hadoopInstances.loaded && gnipInstances.loaded,
             count: gpdbInstances.models.length + hadoopInstances.models.length + gnipInstances.models.length
-        }
+        };
     }
 });

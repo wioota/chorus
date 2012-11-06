@@ -21,7 +21,7 @@ exclude_paths:
 
 adsafe:   false     # true if ADsafe rules should be enforced. See http://www.ADsafe.org/
 bitwise:  true      # true if bitwise operators should not be allowed
-newcap:   true      # true if Initial Caps must be used with constructor functions
+newcap:   false     # true if Initial Caps must be used with constructor functions
 eqeqeq:   true      # true if === should be required (for ALL equality comparisons)
 immed:    false     # true if immediate function invocations must be wrapped in parens
 nomen:    false     # true if initial or trailing underscore in identifiers should be forbidden
@@ -52,6 +52,7 @@ expr:     true      # true if expressions are allowed in statements such as e &&
 
 # other options
 
+maxlen:   1000      # basically no line limit
 indent:   4         # Number of spaces that should be used for indentation - used only if 'white' option is set
 maxerr:   1000      # The maximum number of warnings reported (per file)
 passfail: false     # true if the scan should stop on first error (per file)

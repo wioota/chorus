@@ -5,6 +5,6 @@ chorus.views.WorkspaceQuickstartHeader = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             iconUrl: this.model.defaultIconUrl()
-        }
+        };
     }
 });

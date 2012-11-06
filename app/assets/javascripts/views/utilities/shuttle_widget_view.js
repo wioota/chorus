@@ -17,14 +17,14 @@ chorus.views.ShuttleWidget = chorus.views.Base.extend({
     collectionModelContext:function (model) {
         var ctx = {};
         var selections = this.selectionSource.map(function (item) {
-            return item.get("id")
+            return item.get("id");
         });
         ctx.isAdded = _.include(selections, model.get("id"));
         ctx.displayName = model.displayName();
         ctx.imageUrl = model.fetchImageUrl();
 
         var nonRemovableModelIds = _.map(this.nonRemovableModels, function (model) {
-            return model.get("id")
+            return model.get("id");
         });
         ctx.isNonRemovable = _.include(nonRemovableModelIds, model.get("id"));
         ctx.nonRemovableText = this.options.nonRemovableText;
@@ -81,5 +81,5 @@ chorus.views.ShuttleWidget = chorus.views.Base.extend({
     _updateLabels:function () {
         this.$(".selected_count").text(this.$("ul.selected li.added").length);
     }
-})
+});
 

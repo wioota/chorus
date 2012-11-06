@@ -26,7 +26,7 @@ chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
             instanceLink: chorus.helpers.linkTo(hadoopInstance.showUrl(), hadoopInstance.get('name')),
             completePath: new Handlebars.SafeString(pathLinks.join(" / ")),
             displayableFiletype: this.model.get('isBinary') === false
-        }
+        };
     },
 
     getHighlightedPathSegments: function() {

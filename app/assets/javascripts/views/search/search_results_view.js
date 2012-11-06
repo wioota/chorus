@@ -54,7 +54,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             hasResults: this.model.total() > 0,
             isConstrained: this.model.isConstrained(),
             expandHref: new chorus.models.SearchResult({ query: this.model.get("query") }).showUrl()
-        }
+        };
     },
 
     buildListView: function(entityType, collection) {

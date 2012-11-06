@@ -8,7 +8,7 @@ chorus.views.SearchWorkfile = chorus.views.SearchItemBase.extend({
             showUrl: this.model.showUrl(),
             iconUrl: this.model.iconUrl(),
             workspaces: [this.model.workspace().attributes]
-        }
+        };
     },
 
     makeCommentList: function (){

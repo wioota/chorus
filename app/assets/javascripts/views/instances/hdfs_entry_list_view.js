@@ -20,6 +20,6 @@ chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
             showUrl: model.showUrl(),
             dirInfo: message,
             displayableFiletype: model.get('isBinary') === false
-        }
+        };
     }
 });

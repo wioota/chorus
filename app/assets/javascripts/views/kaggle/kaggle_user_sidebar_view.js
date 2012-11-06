@@ -17,12 +17,8 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("kaggleUser:checked", this.kaggleUserChecked, this);
     },
 
-    postRender: function(){
-        this.showOrHideMultipleSelectionSection();
-    },
-
     additionalContext: function() {
-        return { hasModel: this.model != null }
+        return { hasModel: this.model !== null };
     },
 
     setKaggleUser: function(user) {
@@ -33,7 +29,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
                 model: user
             });
         } else {
-            this.tabs = null
+            this.tabs = null;
         }
         this.render();
         this.showOrHideMultipleSelectionSection();
@@ -48,7 +44,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
         var multiSelectEl = this.$(".multiple_selection");
         var numChecked = this.checkedKaggleUsers ? this.checkedKaggleUsers.length : 0;
         multiSelectEl.toggleClass("hidden", numChecked <= 1);
-        multiSelectEl.find(".count").text(t("kaggle.sidebar.multiple_selection.count", { count: numChecked }))
+        multiSelectEl.find(".count").text(t("kaggle.sidebar.multiple_selection.count", { count: numChecked }));
     },
 
     launchMultipleUserKaggleSendMessageDialog: function(e) {
@@ -65,6 +61,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
+        this.showOrHideMultipleSelectionSection();
         this.$('.actions a.sendMessage').data('recipients', new chorus.collections.KaggleUserSet([this.model]));
         this.$('.actions a.sendMessage').data('workspace', this.workspace);
     }

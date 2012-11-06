@@ -24,7 +24,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             userCanEditInstance: this.canEditInstance(),
             instanceAccountsCount: this.instance.accounts().length,
             editable: !this.instance.provisioningFailed() && !this.instance.isProvisioning(),
-            deleteable: this.instance.provisioningFailed() && this.instance.get("provision_type") == "create",
+            deleteable: this.instance.provisioningFailed() && this.instance.get("provision_type") === "create",
             isProvisioning: this.instance.isProvisioning(),
             provisioningFailed: this.instance.provisioningFailed(),
             isOnlineOrOffline: this.instance.isOnline() || this.instance.isOffline(),
@@ -99,7 +99,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditInstance: function() {
-        return (this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin");
+        return (this.resource.owner().get("id") === chorus.session.user().get("id") ) || chorus.session.user().get("admin");
     },
 
     updateWorkspaceUsage: function() {

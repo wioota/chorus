@@ -4,7 +4,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     numMembers: 24,
 
     setup: function() {
-        chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this)
+        chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this);
     },
 
     context: function() {
@@ -19,9 +19,9 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
                         };
                     }).value(),
                 extra_members: Math.max(this.model.members().totalRecordCount() - this.numMembers, 0)
-            }
+            };
         } else {
-            return {}
+            return {};
         }
     },
 
@@ -31,6 +31,6 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
             workspace.members().fetchAllIfNotLoaded();
             this.bindings.add(workspace.members(), "loaded", this.render);
         }
-        this.render()
+        this.render();
     }
 });

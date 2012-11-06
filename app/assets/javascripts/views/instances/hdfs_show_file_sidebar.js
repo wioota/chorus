@@ -11,7 +11,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        this.tabs = new chorus.views.TabControl(["activity"])
+        this.tabs = new chorus.views.TabControl(["activity"]);
         this.tabs.activity && this.tabs.activity.collection.fetch();
 
         var activities = this.model.activities();
@@ -26,7 +26,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
             type: t("hdfs.file")
         });
 
-        chorus.PageEvents.subscribe("csv_import:started", function() {activities.fetch()}, this)
+        chorus.PageEvents.subscribe("csv_import:started", function() { activities.fetch(); }, this);
     },
 
     additionalContext: function() {
@@ -34,7 +34,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
             fileName: this.model.get("name"),
             entityId: this.model.id,
             lastUpdated: t("hdfs.last_updated", { when: chorus.helpers.relativeTimestamp(this.model.get('lastUpdatedStamp')) })
-        }
+        };
     },
 
 
@@ -44,7 +44,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         var csvOptions = {
             tableName: this.model.get("name"),
             contents: this.model.get('contents')
-        }
+        };
         
         var hdfsExternalTable = new chorus.models.HdfsExternalTable({
             hdfs_entry_id: this.model.get('id')
@@ -53,4 +53,4 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: hdfsExternalTable, csvOptions: csvOptions});
         dialog.launchModal();
     }
-})
+});

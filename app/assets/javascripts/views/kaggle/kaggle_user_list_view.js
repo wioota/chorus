@@ -11,7 +11,7 @@ chorus.views.KaggleUserList = chorus.views.SelectableList.extend({
         return {
             kaggleRank: new Handlebars.SafeString(t('kaggle.rank', {rankHtml: chorus.helpers.spanFor(model.get('rank'), {'class': 'kaggle_rank'})})),
             avatarUrl: model.get("gravatarUrl") || "/images/kaggle/default_user.jpeg"
-        }
+        };
     },
 
     postRender: function() {

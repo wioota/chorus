@@ -13,14 +13,14 @@
 
         setup:function () {
             this.bindings.add(this.model, "saved", userSuccessfullySaved);
-            this.bindings.add(this.model, "image:change", function() { this.model.trigger("invalidated") });
+            this.bindings.add(this.model, "image:change", function() { this.model.trigger("invalidated"); });
             this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
         },
 
         additionalContext:function () {
             return {
-                permission:((this.model.get("username") == chorus.session.user().get("username")) || chorus.session.user().get("admin"))
-            }
+                permission:((this.model.get("username") === chorus.session.user().get("username")) || chorus.session.user().get("admin"))
+            };
         },
 
         postRender: function() {
@@ -36,7 +36,7 @@
             });
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
-            updates.notes = this.$("textarea").val().trim()
+            updates.notes = this.$("textarea").val().trim();
 
             this.model.save(updates);
         },

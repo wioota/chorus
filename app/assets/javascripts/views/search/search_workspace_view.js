@@ -7,6 +7,6 @@ chorus.views.SearchWorkspace = chorus.views.SearchItemBase.extend({
         return {
             showUrl: this.model.showUrl(),
             iconUrl: this.model.defaultIconUrl()
-        }
+        };
     }
-})
+});

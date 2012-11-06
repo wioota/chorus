@@ -14,7 +14,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         var ctx = {query: this.model.get("query")};
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
 
-            var isBinaryHdfs = result.get('entityType') == 'hdfs_file' && ( result.get('isBinary') !== false )
+            var isBinaryHdfs = result.get('entityType') === 'hdfs_file' && ( result.get('isBinary') !== false );
 
             return {
                 name: result.highlightedName(),
@@ -28,7 +28,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     },
 
     entityTypeForResult: function(result) {
-        if(result.get('entityType') == 'dataset' && result.get('type') == 'CHORUS_VIEW') {
+        if(result.get('entityType') === 'dataset' && result.get('type') === 'CHORUS_VIEW') {
             return 'chorusView';
         }
         return result.get('entityType');

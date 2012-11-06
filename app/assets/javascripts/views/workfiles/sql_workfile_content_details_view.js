@@ -49,7 +49,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
                 name: "newSelectionChorusView",
                 text: t("workfile.content_details.save_selection_as_chorus_view"),
                 onSelect: _.bind(this.createChorusViewFromSelection, this)
-            })
+            });
         return items;
     },
 
@@ -59,7 +59,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             name: "newChorusView",
             text: t("workfile.content_details.save_file_as_chorus_view"),
             onSelect: _.bind(this.createChorusViewFromFile, this)
-        })
+        });
         return items;
     },
 

@@ -2,7 +2,7 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     templateName:"alpine_workfile_content_details",
 
     additionalContext: function() {
-    return  { alpineUrl: this.createAlpineUrl() }
+    return  { alpineUrl: this.createAlpineUrl() };
     },
 
     createAlpineUrl: function() {

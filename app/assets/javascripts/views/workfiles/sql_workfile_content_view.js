@@ -14,7 +14,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     setup: function() {
         this._super("setup");
 
-        this.textContent = new chorus.views.TextWorkfileContent({ model: this.model, hotkeys: this.hotkeys })
+        this.textContent = new chorus.views.TextWorkfileContent({ model: this.model, hotkeys: this.hotkeys });
         this.resultsConsole = new chorus.views.ResultsConsole({
             enableResize: true,
             enableExpander: true
@@ -116,7 +116,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         executionSucceeded: function(task) {
         this.executing = false;
         chorus.PageEvents.broadcast("file:executionSucceeded", task);
-        chorus.PageEvents.broadcast("workfile:executed", this.model, task.executionSchema())
+        chorus.PageEvents.broadcast("workfile:executed", this.model, task.executionSchema());
     },
 
     executionFailed: function(task) {

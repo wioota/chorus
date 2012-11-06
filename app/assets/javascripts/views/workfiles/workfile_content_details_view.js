@@ -13,7 +13,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
         var time = this.formatTime(new Date());
         this.$("span.auto_save").removeClass("hidden");
-        this.$("span.auto_save").text(t(text, {time:time}))
+        this.$("span.auto_save").text(t(text, {time:time}));
     },
 
     additionalContext: function() {
@@ -112,7 +112,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
             suffix = "PM";
             hours = hours - 12;
         }
-        if (hours == 0) {
+        if (hours === 0) {
             hours = 12;
         }
         if (minutes < 10) {

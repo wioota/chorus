@@ -36,7 +36,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             this.tabs = new chorus.views.TabControl(["datasets_and_columns","database_function_list","activity"]);
             var schema = this.model.executionSchema();
             this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: schema });
-            this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({ model: schema })
+            this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({ model: schema });
         } else {
             this.tabs = new chorus.views.TabControl(["activity"]);
         }
@@ -46,7 +46,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             additionalClass: "sidebar",
             displayStyle: ['without_object', 'without_workspace']
         });
-        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this))
+        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
     },
 
     postRender:function () {
@@ -58,7 +58,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     },
 
     versionDestroyed: function(versionNumber) {
-        if(versionNumber == this.model.get("versionInfo").versionNum) {
+        if(versionNumber === this.model.get("versionInfo").versionNum) {
             chorus.router.navigate(this.model.baseShowUrl());
         } else {
             this.allVersions.fetch();
@@ -71,13 +71,13 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function (ctx) {
         var modifier = this.model.modifier();
-        var ctx = {
+        ctx = {
             updatedBy: modifier.displayShortName(),
             modifierUrl: modifier.showUrl(),
             downloadUrl: this.model.downloadUrl(),
             activeWorkspace: this.model.workspace().isActive(),
             canUpdate: this.model.workspace().canUpdate()
-        }
+        };
 
         if(this.model.isTableau()) {
             ctx.hideCopyLink = true;

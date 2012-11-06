@@ -13,7 +13,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
     },
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.User()
+        this.model = this.model || new chorus.models.User();
     },
 
     postRender: function() {
@@ -40,7 +40,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
 
         updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
 
-        this.model.set(updates)
+        this.model.set(updates);
 
         this.model.id = undefined; // since User#idAttribute is username, we need this for isNew to return true
         this.model.save();

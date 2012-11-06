@@ -39,8 +39,8 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
 
     insertText: function(text) {
         this.editor.focus();
-        this.editor.replaceSelection(text)
-        this.editor.setCursor(this.editor.getCursor(false))
+        this.editor.replaceSelection(text);
+        this.editor.setCursor(this.editor.getCursor(false));
     }
 });
 

@@ -12,7 +12,7 @@
         },
 
         setup: function() {
-            this.model.ldap = true
+            this.model.ldap = true;
             this.bindings.add(this.model, "saved", userSuccessfullySaved);
         },
 

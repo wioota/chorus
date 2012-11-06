@@ -11,13 +11,13 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     },
 
     fetchNextPage: function() {
-        var page = parseInt(this.collection.pagination.page);
+        var page = parseInt(this.collection.pagination.page, 10);
         this.collection.fetchPage(page + 1);
         this.scrollToTopOfPage();
     },
 
     fetchPreviousPage: function() {
-        var page = parseInt(this.collection.pagination.page);
+        var page = parseInt(this.collection.pagination.page, 10);
         this.collection.fetchPage(page - 1);
         this.scrollToTopOfPage();
     },
@@ -41,16 +41,16 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         if (this.$(".pagination").hasClass("hidden") && this.options.hideIfNoPagination) {
             el.addClass("hidden");
         } else {
-            el.removeClass("hidden")
+            el.removeClass("hidden");
         }
 
         if (this.options.search) {
             this.setupSearch();
         }
 
-        if (this.provisioningState == "provisioning") {
+        if (this.provisioningState === "provisioning") {
             this.$(".provisioning_bar").removeClass("hidden");
-        } else if (this.provisioningState == "fault") {
+        } else if (this.provisioningState === "fault") {
             this.$(".provisioning_fault_bar").removeClass("hidden");
         }
     },
@@ -82,7 +82,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     },
 
     updatePagination: function() {
-        var count = this.collection.pagination ? parseInt(this.collection.pagination.records) : this.collection.length;
+        var count = this.collection.pagination ? parseInt(this.collection.pagination.records, 10) : this.collection.length;
         this.$(".count").text(t("entity.name." + this.options.modelClass, {count: count}));
 
         if (this.collection.loaded && this.collection.pagination) {
@@ -91,10 +91,10 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
                 this.$(".total").text(this.collection.pagination.total);
             }
 
-            var page = parseInt(this.collection.pagination.page);
-            var total = parseInt(this.collection.pagination.total);
+            var page = parseInt(this.collection.pagination.page, 10);
+            var total = parseInt(this.collection.pagination.total, 10);
 
-            this.$(".pagination").toggleClass("hidden", !(total > 1));
+            this.$(".pagination").toggleClass("hidden", total <= 1);
 
             var hasPreviousLink = page > 1;
             this.$("a.previous").toggleClass("hidden", !hasPreviousLink);
@@ -118,8 +118,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         };
 
         if (this.collection.loaded && this.collection.pagination) {
-            var page = parseInt(this.collection.pagination.page);
-            var total = parseInt(this.collection.pagination.total);
+            var page = parseInt(this.collection.pagination.page, 10);
+            var total = parseInt(this.collection.pagination.total, 10);
 
             hash.nextPage = page < total;
         }

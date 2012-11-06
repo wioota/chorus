@@ -24,11 +24,11 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         this._super("postRender");
         if (this.resource && this.resource.get("isDir")) {
-            this.$(".tab_control").addClass("hidden")
-            this.$(".tabbed_area").addClass("hidden")
+            this.$(".tab_control").addClass("hidden");
+            this.$(".tabbed_area").addClass("hidden");
         } else {
-            this.$(".tab_control").removeClass("hidden")
-            this.$(".tabbed_area").removeClass("hidden")
+            this.$(".tab_control").removeClass("hidden");
+            this.$(".tabbed_area").removeClass("hidden");
         }
     },
 
@@ -65,7 +65,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         return {
             entityId: this.resource && this.resource.id,
             lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
-        }
+        };
     },
 
     createExternalTable: function(e) {

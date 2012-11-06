@@ -15,7 +15,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
             needsWorkfile: !this.model.get("hasAddedWorkfile"),
             needsSandbox: !this.model.get("hasAddedSandbox"),
             needsSettings: !this.model.get("hasChangedSettings")
-        }
+        };
     },
 
     setup: function() {
@@ -29,10 +29,10 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     render: function() {
 
-        if (this.model.get("hasAddedMember") == true &&
-            this.model.get("hasAddedSandbox") == true &&
-            this.model.get("hasAddedWorkfile") == true &&
-            this.model.get("hasChangedSettings") == true) {
+        if (this.model.get("hasAddedMember") === true &&
+            this.model.get("hasAddedSandbox") === true &&
+            this.model.get("hasAddedWorkfile") === true &&
+            this.model.get("hasChangedSettings") === true) {
 
             chorus.router.navigate(this.model.showUrl());
         }

@@ -63,9 +63,9 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
             this.editor.setCursor(this.cursor.line, this.cursor.ch);
         } else {
             var lineCount = this.editor.lineCount();
-            var lastLine = this.editor.getLine(lineCount - 1)
-            var charCount = lastLine.length
-            this.editor.setCursor(lineCount - 1, charCount)
+            var lastLine = this.editor.getLine(lineCount - 1);
+            var charCount = lastLine.length;
+            this.editor.setCursor(lineCount - 1, charCount);
         }
 
         this.editor.setOption("readOnly", false);
@@ -92,7 +92,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         this.model.content(this.editor.getValue(), {silent: true});
         var overrides = {};
         if (this.model.get("hasDraft")) {
-            overrides.method = 'update'
+            overrides.method = 'update';
         }
         this.model.createDraft().save({}, overrides);
     },

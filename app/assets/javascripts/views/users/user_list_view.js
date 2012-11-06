@@ -8,6 +8,6 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
             showUrl: model.showUrl(),
             fullName: model.displayName(),
             title: model.get("title")
-        }
+        };
     }
 });

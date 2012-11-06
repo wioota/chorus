@@ -33,7 +33,7 @@ chorus.views.TaskDataTable = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            shuttle: this.options.shuttle == undefined || this.options.shuttle,
+            shuttle: this.options.shuttle === undefined || this.options.shuttle,
             columns: this.model.columnOrientedData()
         };
     },

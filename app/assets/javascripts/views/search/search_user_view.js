@@ -11,7 +11,7 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
                 if (value) {
                     var result = {};
                     result[fieldName] = new Handlebars.SafeString(value);
-                    return result
+                    return result;
                 }
             }, this), this);
 
@@ -25,4 +25,4 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
             hasMoreSupportingMessage: Math.max(0, supportingMessage.length - 3)
         };
     }
-})
+});

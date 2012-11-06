@@ -6,6 +6,6 @@ chorus.views.HdfsShowFileHeader = chorus.views.Base.extend({
         return {
             iconUrl: this.model.iconUrl(),
             fileName: this.model.get("name")
-        }
+        };
     }
 });

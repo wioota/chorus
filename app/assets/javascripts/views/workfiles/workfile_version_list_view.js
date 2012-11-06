@@ -17,6 +17,6 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
             authorName: author.displayName(),
             formattedDate: formattedDate,
             showUrl: workfileVersion.showUrl()
-        }
+        };
     }
 });

@@ -23,7 +23,7 @@ chorus.views.Workfile = chorus.views.Base.extend({
 
         ctx.activeWorkspace = this.options.activeWorkspace;
 
-        ctx.tableauWorkbook = this.model.get('fileType') == 'tableau_workbook';
+        ctx.tableauWorkbook = this.model.get('fileType') === 'tableau_workbook';
         ctx.tableauIcon = chorus.helpers.tableauIcon();
 
         var lastComment = this.model.lastComment();

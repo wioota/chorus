@@ -61,7 +61,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     executionStarted: function() {
         this.executionStartedTime = $.now();
         this.$('.controls').addClass('hidden');
-        this.$(".right").addClass("executing")
+        this.$(".right").addClass("executing");
 
         this.$(".spinner").addClass("hidden").startLoading();
         _.delay(_.bind(this.showSpinner, this), 250);
@@ -82,7 +82,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     hideSpinner: function() {
-        this.cancelTimers()
+        this.cancelTimers();
         this.$(".right").removeClass("executing");
         this.$(".spinner").addClass('hidden').stopLoading();
     },
@@ -134,7 +134,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     minimizeTable: function(e) {
-        e && e.preventDefault()
+        e && e.preventDefault();
         this.$('.data_table').css("height", "");
         this.$("a.minimize").addClass("hidden");
         this.$("a.maximize").removeClass("hidden");
@@ -151,7 +151,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     maximizeTable: function(e) {
-        e && e.preventDefault()
+        e && e.preventDefault();
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").removeClass("hidden");
         this.$(".controls").removeClass("collapsed");
@@ -193,7 +193,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     clickCloseError: function(e) {
         e && e.preventDefault();
         this.closeError();
-        this.clickClose()
+        this.clickClose();
     },
 
     viewErrorDetails: function(e) {
@@ -237,7 +237,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             enableResize: this.options.enableResize,
             enableExpander: this.options.enableExpander,
             hasResults: this.model && this.model.hasResults()
-        }
+        };
     }
 });
 

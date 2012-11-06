@@ -62,4 +62,4 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
             chorus.PageEvents.broadcast(this.eventType + ":selected", this.model);
         }
     }
-})
+});

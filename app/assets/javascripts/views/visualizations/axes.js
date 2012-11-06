@@ -42,7 +42,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
     labels: function() {
         if (this.scaleType === "numeric") {
             var tickArray = this.scale().ticks(8);
-            if (tickArray.length == 0) tickArray = [this.minValue];
+            if (tickArray.length === 0) tickArray = [this.minValue];
             return tickArray;
         } else if (this.scaleType === "time") {
             if (this.timeType === "datetime") {
@@ -64,7 +64,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
         if (this.scaleType === "numeric" || this.scaleType === "time") {
             return scale;
         } else {
-            return function(d) { return scale(d) + scale.rangeBand() / 2 };
+            return function(d) { return scale(d) + scale.rangeBand() / 2; };
         }
     },
 
@@ -87,22 +87,22 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
 
 chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
     requiredBottomSpace: function() {
-        var self = this
+        var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
         var testTickLabels = this.el.selectAll(".label")
             .data(this.labels()).enter()
             .append("svg:g")
             .attr("class", "label")
-            .append("svg:text")
+            .append("svg:text");
 
-        if (this.scaleType == "time") {
+        if (this.scaleType === "time") {
             testTickLabels.text(function(d) {
-                return self.timeFormat(d)
-            })
+                return self.timeFormat(d);
+            });
         } else {
             testTickLabels.text(function(d) {
-                return self.labelFormat(d)
-            })
+                return self.labelFormat(d);
+            });
         }
 
         this.rotateTickLabelsIfNeeded();
@@ -119,7 +119,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
     tickLabelHeight: function() {
         return _.max(_.map(this.el.selectAll(".label")[0], function(label) {
             return label.getBBox().height;
-        }))
+        }));
     },
 
     axisLabelHeight: function() {
@@ -165,12 +165,12 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .text(this.axisLabel)
             .attr("x", 0)
             .attr("y", this.maxY())
-            .attr("class", "axis_label")
+            .attr("class", "axis_label");
 
         // reposition axis label now that we know its width
-        var axisLabelWidth = axisLabel[0][0].getBBox().width
+        var axisLabelWidth = axisLabel[0][0].getBBox().width;
         var centerX = (this.minX() + this.maxX()) / 2 - axisLabelWidth / 2;
-        this.el.select(".axis_label").attr("x", centerX)
+        this.el.select(".axis_label").attr("x", centerX);
 
         // draw tick labels
         var tickLabelBottom = this.maxY() - this.labelSpacing - this.axisLabelHeight();
@@ -183,13 +183,13 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", tickLabelBottom)
             .attr("x", 0);
 
-        if (this.scaleType == "time") {
+        if (this.scaleType === "time") {
             tickLabels.text(function(d) {
-                return self.timeFormat(d)
+                return self.timeFormat(d);
             });
         } else {
             tickLabels.text(function(d) {
-                return self.labelFormatKeepPercentage(d)
+                return self.labelFormatKeepPercentage(d);
             });
         }
 
@@ -214,7 +214,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("y1", tickTop)
             .attr("y2", tickBottom)
             .attr("x1", tickScale)
-            .attr("x2", tickScale)
+            .attr("x2", tickScale);
 
         // draw grid lines if applicable
         if (this.hasGrids) {
@@ -225,7 +225,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
                 .attr("y1", this.minY())
                 .attr("y2", tickTop)
                 .attr("x1", tickScale)
-                .attr("x2", tickScale)
+                .attr("x2", tickScale);
         }
 
         // draw main axis line
@@ -248,14 +248,14 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
             .text(function(d) {
-                return self.labelFormat(d)
+                return self.labelFormat(d);
             });
         var testAxisLabel = this.el.append("svg:g")
             .attr("class", "axis_label")
             .append("svg:text")
             .attr("x", 0)
             .attr("y", 0)
-            .text(this.axisLabel)
+            .text(this.axisLabel);
 
         var axisLabelHeight = testAxisLabel[0][0].getBBox().height;
         var width = axisLabelHeight + this.labelWidth() + 2 * this.labelSpacing + this.tickLength;
@@ -266,8 +266,8 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
 
     labelWidth: function() {
         return _.max(_.map(this.el.selectAll(".label")[0], function(label) {
-            return label.getBBox().width
-        }))
+            return label.getBBox().width;
+        }));
     },
 
     range: function() {
@@ -283,21 +283,21 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
 
         // draw axis label
         var axisLabelContainer = this.el.append("svg:g")
-            .attr("class", "axis_label")
+            .attr("class", "axis_label");
         var axisLabel = axisLabelContainer.append("svg:text")
             .attr("x", 0)
             .attr("y", 0)
-            .text(this.axisLabel)
+            .text(this.axisLabel);
 
         // reposition axis label now that we know its height
-        var centerY = (this.minY() + this.maxY()) / 2
+        var centerY = (this.minY() + this.maxY()) / 2;
         var axisLabelBox = axisLabel[0][0].getBBox();
         var axisLabelWidth = axisLabelBox.width;
         var axisLabelHeight = axisLabelBox.height;
         axisLabel
             .attr("transform", "rotate(270)")
             .attr("x", -1 * (centerY + axisLabelWidth / 2))
-            .attr("y", this.paddingX + axisLabelHeight)
+            .attr("y", this.paddingX + axisLabelHeight);
 
         var tickLabelLeft = this.paddingX + axisLabelHeight + this.labelSpacing;
 
@@ -309,7 +309,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", 0)
             .attr("x", 0)
             .text(function(d) {
-                return self.labelFormat(d)
+                return self.labelFormat(d);
             })
             .attr("title", function(d) { return d; });
 
@@ -344,7 +344,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
                 .attr("y1", tickScale)
                 .attr("y2", tickScale)
                 .attr("x1", tickRight)
-                .attr("x2", this.maxX())
+                .attr("x2", this.maxX());
         }
 
         // draw main axis line
@@ -386,7 +386,7 @@ chorus.views.visualizations.Axes = function(options) {
         paddingY: options.paddingY
 
     });
-}
+};
 
 _.extend(chorus.views.visualizations.Axes.prototype, {
     scales: function() {
@@ -397,8 +397,8 @@ _.extend(chorus.views.visualizations.Axes.prototype, {
         this.xAxis.offsetX = this.yAxis.requiredLeftSpace();
         this.yAxis.offsetY = this.xAxis.requiredBottomSpace();
 
-        this.xAxis.render()
-        this.yAxis.render()
+        this.xAxis.render();
+        this.yAxis.render();
 
     }
-})
+});
