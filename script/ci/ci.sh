@@ -12,7 +12,7 @@ HADOOP_HOST=chorus-gphd02
 set -e
 
 targets=${@}
-possible_targets="jasmine ruby legacy_migrations api_docs"
+possible_targets="fixtures jasmine ruby legacy_migrations api_docs"
 
 for target in $possible_targets; do
     declare run_${target}=true
