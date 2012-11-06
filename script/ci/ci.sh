@@ -66,7 +66,7 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
-    CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
+    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
