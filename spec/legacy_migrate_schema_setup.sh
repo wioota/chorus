@@ -5,6 +5,9 @@ if [ $# -eq 0 ] ; then
     exit 0
 fi
 
+database=$2
+[[ -z "$database" ]] && database=production
+
 dropdb -p 8543 chorus_tmp_migrate
 psql -p 8543 $database -c 'drop if exists schema legacy_migrate cascade' 2> /dev/null
 
