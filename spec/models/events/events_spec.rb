@@ -13,7 +13,8 @@ describe "Event types" do
   let(:user) { users(:the_collaborator) }
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:view) }
+  let(:destination_dataset) { datasets(:table) }
   let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
   let(:chorus_view) { datasets(:chorus_view) }
@@ -538,14 +539,15 @@ describe "Event types" do
           :import_type => 'file',
           :destination_table => 'test',
           :workspace => workspace,
-          :error_message => 'Flying Monkey Attack'
+          :error_message => 'Flying Monkey Attack',
+          :dataset => destination_dataset
       )
     end
 
-    its(:targets) { should == {:workspace => workspace} }
+    its(:targets) { should == {:workspace => workspace, :dataset => destination_dataset} }
     its(:additional_data) { should == {'file_name' => "import.csv", 'import_type' => "file", 'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack'} }
 
-    it_creates_activities_for { [actor, workspace] }
+    it_creates_activities_for { [actor, workspace, destination_dataset] }
     it_does_not_create_a_global_activity
   end
 
@@ -558,18 +560,19 @@ describe "Event types" do
           :source_dataset => source_dataset,
           :destination_table => 'test',
           :workspace => workspace,
-          :error_message => 'Flying Monkey Attack again'
+          :error_message => 'Flying Monkey Attack again',
+          :dataset => destination_dataset
       )
     end
 
-    its(:targets) { should == {:workspace => workspace, :source_dataset => source_dataset} }
+    its(:targets) { should == {:workspace => workspace, :source_dataset => source_dataset, :dataset => destination_dataset} }
     its(:additional_data) { should == {'destination_table' => 'test', 'error_message' => 'Flying Monkey Attack again'} }
 
     it "has a workspace in the source_dataset" do
       subject.source_dataset.bound_workspaces.should include(workspace)
     end
 
-    it_creates_activities_for { [actor, workspace, source_dataset] }
+    it_creates_activities_for { [actor, workspace, source_dataset, destination_dataset] }
     it_does_not_create_a_global_activity
   end
 

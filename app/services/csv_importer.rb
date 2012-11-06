@@ -102,7 +102,8 @@ class CsvImporter
         :file_name => csv_file.contents_file_name,
         :import_type => 'file',
         :destination_table => csv_file.to_table,
-        :error_message => error_message
+        :error_message => error_message,
+        :dataset => destination_dataset
     )
 
     Notification.create!(:recipient_id => csv_file.user.id, :event_id => event.id)

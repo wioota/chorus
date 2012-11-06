@@ -157,6 +157,7 @@ describe GpTableCopier, :database_integration => true do
           Events::DatasetImportFailed.last.tap do |event|
             event.actor.should == user
             event.destination_table.should == destination_table_name
+            event.dataset.should be_nil
             event.workspace.should == workspace
             event.source_dataset.id.should == source_dataset.id
             event.error_message.should == "Couldn't find destination table."
@@ -238,6 +239,7 @@ describe GpTableCopier, :database_integration => true do
           event.workspace.should == workspace
           event.source_dataset.should == nil
           event.destination_table.should == destination_table_name
+          event.dataset.name.should == destination_table_name
         end
       end
     end

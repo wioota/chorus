@@ -395,6 +395,7 @@ describe CsvImporter do
         event.actor.should == user
         event.destination_table.should == destination_dataset.name
         event.workspace.should == csv_file.workspace
+        event.dataset.should == destination_dataset
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
         event.error_message.should == @error

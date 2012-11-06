@@ -747,7 +747,7 @@ describe("chorus.presenters.Activity", function() {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
-                    datasetLink: model.get('destinationTable'),
+                    destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
             )
@@ -774,7 +774,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.DatasetImportFailed.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
-                    datasetLink: model.get('destinationTable'),
+                    destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
             )

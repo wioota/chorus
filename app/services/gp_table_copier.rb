@@ -135,7 +135,8 @@ class GpTableCopier
         :workspace => workspace,
         :destination_table => attributes[:to_table],
         :error_message => error_message,
-        :source_dataset => source_table
+        :source_dataset => source_table,
+        :dataset => destination_schema.datasets.find_by_name(destination_table_name)
     )
 
     Notification.create!(:recipient_id => user.id, :event_id => event.id)

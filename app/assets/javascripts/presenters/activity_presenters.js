@@ -230,7 +230,7 @@
             FileImportFailed: {
                 links: ["workspace"],
                 attrs: ["importType", "destinationTable"],
-                computed: ["importSourceLink", "datasetType", "datasetLink"]
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
             },
 
             MembersAdded: {
@@ -265,7 +265,7 @@
             DatasetImportFailed: {
                 links: ["workspace"],
                 attrs: ["sourceDataset"],
-                computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
             },
 
             GnipStreamImportCreated: {
@@ -486,7 +486,7 @@
         },
 
         destObjectOrName: function(self) {
-            dataset = self.model["dataset"]();
+            var dataset = self.model["dataset"]();
             if (dataset.get("id")){
                 return hidden.modelLink(dataset);
             }
