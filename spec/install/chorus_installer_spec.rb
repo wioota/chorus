@@ -812,7 +812,8 @@ describe ChorusInstaller do
       installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
       stub_chorus_exec(installer)
-
+      FileUtils.mkdir_p installer.legacy_installation_path
+      
       @call_order = []
     end
 
