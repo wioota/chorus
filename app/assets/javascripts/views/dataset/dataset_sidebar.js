@@ -76,14 +76,17 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
             this.bindings.add(statistics, "loaded", this.render);
 
             if (dataset.canBeImportSourceOrDestination()) {
-                this.importConfiguration = dataset.getImport();
-                this.bindings.add(this.importConfiguration, "loaded", this.render);
-                this.importConfiguration.fetch();
+                this.imports = dataset.getImports();
+                this.importSchedules = dataset.getImportSchedules();
+                this.bindings.add(this.imports, "loaded", this.render);
+                this.bindings.add(this.importSchedules, "loaded", this.render);
+                this.imports.fetch();
+                this.importSchedules.fetch();
             }
         } else {
             delete this.tabs.statistics;
             delete this.tabs.activity;
-            delete this.importConfiguration;
+            delete this.imports;
         }
 
         this.render();
@@ -151,11 +154,11 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         dialog.launchModal();
     },
 
-    updateImportSchedule: function(importConfiguration) {
+    updateImportSchedule: function(importSchedule) {
         if(!this.resource)
             return;
 
-        this.resource._datasetImport = importConfiguration;
+        this.resource.getImportSchedules().reset([importSchedule])
         this.render();
     },
 

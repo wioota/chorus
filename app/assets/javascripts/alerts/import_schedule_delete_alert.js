@@ -12,7 +12,7 @@ chorus.alerts.ImportScheduleDelete = chorus.alerts.ModelDelete.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.model = this.pageModel.getImport();
+        this.model = this.pageModel.importSchedule();
     },
 
     modelDeleted: function() {

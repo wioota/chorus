@@ -11,7 +11,7 @@ describe DatasetImportSchedulesController do
   describe "#index" do
     let(:dataset) { import_schedule.source_dataset }
 
-    generate_fixture "importSchedule.json" do
+    generate_fixture "datasetImportScheduleSet.json" do
       get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
     end
 

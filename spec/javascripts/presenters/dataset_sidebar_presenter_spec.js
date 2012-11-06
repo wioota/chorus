@@ -107,7 +107,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             sourceId: '1',
                             datasetId: '2'
                         });
-                        spyOn(resource, 'getImport').andReturn(
+                        spyOn(resource, 'importSchedule').andReturn(
                             importSchedule
                         );
 
@@ -129,21 +129,19 @@ describe("chorus.presenters.DatasetSidebar", function() {
             describe("#lastImport", function() {
                 context("for a source table", function() {
                     beforeEach(function() {
-                        this.importSchedule = rspecFixtures.importSchedule({
-                            sourceId: '1',
-                            datasetId: '1',
-                            executionInfo: {
-                                completedStamp: Date.parse("Today - 33 days").toJSONString(),
-                                success: true
-                            }
+                        this.import = rspecFixtures.datasetImportSet().last();
+                        this.import.set({
+                            sourceDatasetId: resource.get('id'),
+                            completedStamp: Date.parse("Today - 33 days").toJSONString(),
+                            success: true
                         });
                     });
 
                     describe("unfinished import", function() {
                         beforeEach(function() {
-                            delete this.importSchedule.attributes.executionInfo.completedStamp;
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            delete this.import.attributes.completedStamp;
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
                         it("has inProgressText and lastImport", function() {
@@ -157,8 +155,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("successfully finished import", function() {
                         beforeEach(function() {
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
 
@@ -171,9 +169,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.importSchedule.attributes.executionInfo.success = false;
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            this.import.attributes.success = false;
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
 
@@ -186,22 +184,20 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 });
 
                 context("for a sandbox table", function() {
-                    beforeEach(function() {
-                        this.importSchedule = rspecFixtures.importSchedule({
-                            sourceId: '1',
-                            datasetId: '99',
-                            executionInfo: {
-                                completedStamp: Date.parse("Today - 33 days").toJSONString(),
-                                success: true
-                            }
+                    beforeEach(function () {
+                        this.import = rspecFixtures.datasetImportSet().last();
+                        this.import.set({
+                            sourceDatasetId: resource.get('id') + 1,
+                            completedStamp: Date.parse("Today - 33 days").toJSONString(),
+                            success: true
                         });
                     });
 
                     describe("unfinished import", function() {
                         beforeEach(function() {
-                            delete this.importSchedule.attributes.executionInfo.completedStamp;
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            delete this.import.attributes.completedStamp;
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
                         it("has inProgressText and lastImport", function() {
@@ -215,8 +211,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("successfully finished import", function() {
                         beforeEach(function() {
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
 
@@ -229,9 +225,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.importSchedule.attributes.executionInfo.success = false;
-                            spyOn(resource, 'getImport').andReturn(
-                                this.importSchedule
+                            this.import.attributes.success = false;
+                            spyOn(resource, 'lastImport').andReturn(
+                                this.import
                             );
                         });
 

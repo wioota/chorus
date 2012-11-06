@@ -359,8 +359,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             context("when the dataset has an import schedule", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.page.dataset.getImport(), rspecFixtures.importSchedule());
-                    expect(this.page.dataset.getImport().frequency()).toBe("WEEKLY");
+                    this.server.completeFetchFor(this.page.dataset.importSchedule(), rspecFixtures.importSchedule());
+                    expect(this.page.dataset.importSchedule().frequency()).toBe("WEEKLY");
                     this.page.render();
                 });
 
@@ -375,7 +375,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             context("when the dataset does not have an import schedule", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.page.dataset.getImport(), []);
+                    this.server.completeFetchFor(this.page.dataset.importSchedule(), []);
                     this.page.render();
                 });
 

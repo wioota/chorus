@@ -37,7 +37,8 @@ class Import < ActiveRecord::Base
         :source_dataset => source_dataset,
         :dataset => dst_table,
         :destination_table => to_table,
-        :reference_id => id
+        :reference_id => id,
+        :reference_type => 'Import'
     )
   end
 
@@ -46,7 +47,6 @@ class Import < ActiveRecord::Base
     import_attributes.slice!(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
 
     import_attributes[:import_id] = id
-
     if workspace.sandbox.database != source_dataset.schema.database
       Gppipe.run_import(source_dataset.id, user.id, import_attributes)
     else

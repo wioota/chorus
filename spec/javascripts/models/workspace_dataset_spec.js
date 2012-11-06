@@ -157,16 +157,53 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
     });
 
-    describe("getImport", function() {
-        it("returns a DatasetImport object with the right ids", function() {
-            expect(this.dataset.getImport().get("datasetId")).toBe(this.dataset.id);
-            expect(this.dataset.getImport().get("workspaceId")).toBe(this.dataset.get("workspace").id);
+    describe("#getImportSchedules", function() {
+        it("returns the imports for this dataset", function() {
+            expect(this.dataset.getImportSchedules().attributes.datasetId).toBe(this.dataset.id);
+            expect(this.dataset.getImportSchedules().attributes.workspaceId).toBe(this.dataset.get("workspace").id);
         });
 
         it("memoizes", function() {
-            expect(this.dataset.getImport()).toBe(this.dataset.getImport());
+            expect(this.dataset.getImportSchedules()).toBe(this.dataset.getImportSchedules());
         })
     });
+
+    describe("#getImports", function() {
+        it("returns the imports for this dataset", function() {
+            expect(this.dataset.getImports().attributes.datasetId).toBe(this.dataset.id);
+            expect(this.dataset.getImports().attributes.workspaceId).toBe(this.dataset.get("workspace").id);
+        });
+
+        it("memoizes", function() {
+            expect(this.dataset.getImports()).toBe(this.dataset.getImports());
+        })
+    });
+
+    describe("#hasImport", function() {
+        it("is false if there are no loaded imports", function() {
+            spyOn(this.dataset, 'getImports').andReturn(new chorus.collections.DatasetImportSet());
+            expect(this.dataset.hasImport()).toBeFalsy();
+        });
+
+        it("is true if there are imports", function() {
+            this.dataset.getImports().add(rspecFixtures.datasetImportSet().models);
+            expect(this.dataset.hasImport()).toBeTruthy();
+        });
+    });
+
+    describe("#lastImport", function() {
+        it("is falsy when there are no imports", function() {
+           expect(this.dataset.lastImport()).toBeFalsy();
+        });
+
+        it("returns the last import if there are more than one", function() {
+            var imports = rspecFixtures.datasetImportSet().models;
+            this.dataset.getImports().add(imports);
+            expect(imports.length).toBeGreaterThan(1);
+            expect(this.dataset.lastImport()).toBe(_.last(imports));
+        });
+    });
+
 
     describe("#deriveChorusView", function() {
         beforeEach(function() {
@@ -239,33 +276,23 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#importFrequency", function() {
         beforeEach(function() {
             this.dataset.set({frequency: 'WEEKLY'});
-        })
+        });
 
         context("when the dataset's import is not loaded", function() {
             it("returns the importFrequency", function() {
-                this.dataset.setImport(undefined);
                 expect(this.dataset.importFrequency()).toBe('WEEKLY');
-            })
+            });
         });
 
         context("when dataset's import is loaded", function() {
             beforeEach(function() {
-                this.dataset.getImport().fetch();
-                this.server.completeFetchFor(this.dataset.getImport(), {frequency: "DAILY" });
+                this.dataset.getImportSchedules().fetch();
+                this.server.completeFetchFor(this.dataset.getImportSchedules(),
+                    [{frequency: "DAILY" }]);
             });
 
-            context("and its schedule is active", function() {
-                it("returns the frequency of the import", function() {
-                    spyOn(this.dataset.getImport(), "hasActiveSchedule").andReturn(true);
-                    expect(this.dataset.importFrequency()).toBe("DAILY");
-                });
-            });
-
-            context("and its schedule is inactive", function() {
-                it("returns undefined for the frequency", function() {
-                    spyOn(this.dataset.getImport(), "hasActiveSchedule").andReturn(false);
-                    expect(this.dataset.importFrequency()).toBeUndefined();
-                });
+            it("returns the frequency of the import", function() {
+                expect(this.dataset.importFrequency()).toBe("DAILY");
             });
         });
     });

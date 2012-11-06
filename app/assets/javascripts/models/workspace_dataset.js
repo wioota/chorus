@@ -68,14 +68,36 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         return stats;
     },
 
-    getImport: function() {
-        if (!this._datasetImport) {
-            this._datasetImport = new chorus.models.DatasetImport({
+    getImports: function() {
+        if (!this._datasetImports) {
+            this._datasetImports = new chorus.collections.DatasetImportSet([], {
                 datasetId: this.get("id"),
                 workspaceId: this.get("workspace").id
             });
         }
-        return this._datasetImport
+        return this._datasetImports
+    },
+
+
+    getImportSchedules: function() {
+        if (!this._datasetImportSchedules) {
+            this._datasetImportSchedules = new chorus.collections.DatasetImportScheduleSet([], {
+                datasetId: this.get("id"),
+                workspaceId: this.get("workspace").id
+            });
+        }
+        return this._datasetImportSchedules
+    },
+
+    importSchedule: function() {
+        return this.getImportSchedules().last();
+    },
+
+    lastImport: function() {
+        if(this.hasImport())
+        {
+            return this.getImports().last();
+        }
     },
 
     setImport: function(datasetImport) {
@@ -83,10 +105,10 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     importFrequency: function() {
-        if (this.getImport().loaded) {
-            if (this.getImport().hasActiveSchedule()) { return this.getImport().frequency(); }
+        if (this.importSchedule()) {
+            return this.importSchedule().get('frequency');
         } else {
-            return this.get("frequency");
+            return this.get('frequency');
         }
     },
 

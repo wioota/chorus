@@ -1,4 +1,6 @@
 class DatasetImportSchedulesController < ApplicationController
+  wrap_parameters :dataset_import_schedule, :exclude => [:id]
+
   def index
     import_schedules = ImportSchedule.where(
         :workspace_id => params[:workspace_id],
@@ -8,14 +10,13 @@ class DatasetImportSchedulesController < ApplicationController
   end
 
   def create
+    import_params = normalize_attributes(params[:dataset_import_schedule])
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
     src_table = Dataset.find(params[:dataset_id])
-
-    import_schedule = src_table.import_schedules.new(params)
+    import_schedule = src_table.import_schedules.new(import_params)
     import_schedule.workspace    = workspace
     import_schedule.user         = current_user
-
     if import_schedule.save
       import_schedule.create_import_event
       present import_schedule
@@ -25,10 +26,12 @@ class DatasetImportSchedulesController < ApplicationController
   end
 
   def update
+    unnormalize_params = params[:dataset_import_schedule]
     import_schedule = ImportSchedule.find(params[:id])
+    import_params = normalize_attributes(unnormalize_params)
     authorize! :can_edit_sub_objects, import_schedule.workspace
 
-    if import_schedule.update_attributes(params)
+    if import_schedule.update_attributes(import_params)
       import_schedule.create_import_event
       present import_schedule
     else
@@ -42,5 +45,12 @@ class DatasetImportSchedulesController < ApplicationController
 
     import_schedule.destroy
     render :json => {}
+  end
+
+  def normalize_attributes(unnormalized_params)
+    normalized_params = unnormalized_params
+    normalized_params[:frequency] = unnormalized_params[:frequency].downcase if unnormalized_params[:frequency]
+    normalized_params[:start_datetime] = DateTime.parse(unnormalized_params[:start_datetime]) if unnormalized_params[:start_datetime]
+    normalized_params
   end
 end

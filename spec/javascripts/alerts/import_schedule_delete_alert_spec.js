@@ -3,7 +3,7 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable()
         this.dataset.setImport(rspecFixtures.importSchedule());
         setLoggedInUser({ id: "1011" });
-        this.import = this.dataset.getImport();
+        this.import = this.dataset.importSchedule();
         this.alert = new chorus.alerts.ImportScheduleDelete({ pageModel: this.dataset });
     });
 

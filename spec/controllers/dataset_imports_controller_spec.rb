@@ -42,6 +42,11 @@ describe DatasetImportsController do
         decoded_response.length.should == 3
       end
     end
+
+    generate_fixture 'datasetImportSet.json' do
+      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+      response.should be_success
+    end
   end
 
   describe "#create", :database_integration => true do

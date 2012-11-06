@@ -448,7 +448,7 @@
         },
 
         importFrequencyForModel: function(model) {
-            return model.getImport() && model.getImport().thisDatasetIsSource()
+            return model.importSchedule() && (model.get("id") == model.importSchedule().get("sourceDatasetId"))
                 && model.importFrequency
                 && model.importFrequency()
                 && t("import.frequency." + model.importFrequency().toLowerCase())

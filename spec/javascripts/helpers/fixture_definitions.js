@@ -66,10 +66,9 @@ window.rspecFixtureDefinitions = {
 
     databaseColumnSet: {},
 
-    importSchedule: {
-        model: 'DatasetImport',
-        unique: ["scheduleInfo.id"]
-    },
+    datasetImportScheduleSet: {},
+
+    datasetImportSet: {},
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
@@ -232,9 +231,6 @@ window.rspecFixtureDefinitions = {
     boxplotTask: {},
     timeseriesTask: {},
     histogramTask: {},
-    importSchedule: {
-        model: "DatasetImport"
-    },
 
 //    activity: {
 //        unique: [ "id" ],

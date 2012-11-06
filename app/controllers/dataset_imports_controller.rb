@@ -1,4 +1,5 @@
 class DatasetImportsController < ApplicationController
+  wrap_parameters :dataset_import, :exclude => [:id]
   def index
     workspace = Workspace.find(params[:workspace_id])
     table = Dataset.find(params[:dataset_id])
@@ -9,12 +10,12 @@ class DatasetImportsController < ApplicationController
   end
 
   def create
+    import_params = params[:dataset_import]
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
     src_table = Dataset.find(params[:dataset_id])
-
-    import = src_table.imports.new(params)
+    import = src_table.imports.new(import_params)
 
     import.workspace    = workspace
     import.user         = current_user

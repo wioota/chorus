@@ -896,13 +896,14 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#hasImport", function() {
-        it("fails if there is no config", function() {
+        it("is false if there are no loaded imports", function() {
+            expect(this.dataset.getImports()).toBeEmpty();
             expect(this.dataset.hasImport()).toBeFalsy();
         });
 
-        it("succeed if there is a config, but it has an id", function() {
+        it("is true if there are imports", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            importDataset.getImport().set( {id: "1234" });
+            importDataset.getImports().add(rspecFixtures.datasetImportSet().models);
             expect(importDataset.hasImport()).toBeTruthy();
         });
     });
@@ -957,14 +958,14 @@ describe("chorus.models.Dataset", function() {
 
         it("fails if there is a config, but it isn't loaded", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.dataset.importConfiguration = importDataset.getImport();
+            this.dataset.importConfiguration = importDataset.importSchedule();
             this.dataset.importConfiguration.loaded = false;
             expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
         });
 
         it("succeeds if there's a loaded config", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            importDataset.getImport().loaded = true;
+            importDataset.importSchedule().loaded = true;
             expect(importDataset.isImportConfigLoaded()).toBeTruthy();
         });
     });

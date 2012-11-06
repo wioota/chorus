@@ -87,7 +87,8 @@ describe Gppipe, :database_integration => true do
         :workspace => workspace,
         :dataset => nil,
         :destination_table => destination_table_name,
-        :reference_id => import.id
+        :reference_id => import.id,
+        :reference_type => "Import"
     )
   }
   let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }

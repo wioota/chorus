@@ -82,7 +82,7 @@ describe("chorus.views.ImportSchedule", function() {
 
         context("when there is no time data", function() {
             beforeEach(function() {
-                this.importModel = fixtures.datasetImport({
+                this.importModel = fixtures.importSchedule({
                     id: '12',
                     truncate: true
                 });

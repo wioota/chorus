@@ -293,7 +293,7 @@ beforeEach(function() {
             return new chorus.models.ChorusView(attributes);
         },
 
-        datasetImport: function(overrides) {
+        importSchedule: function(overrides) {
             var in1year = new Date();
             in1year.setFullYear(in1year.getFullYear() + 1);
             var in1yearStr = Date.formatForApi(in1year);

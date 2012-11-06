@@ -215,7 +215,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                 this.dataset._workspace = this.view.resource._workspace;
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
-                this.server.completeFetchFor(this.view.importConfiguration, []);
+                this.server.completeFetchFor(this.view.imports, []);
             });
 
             it("has no action links except for 'Preview Data' and 'Download'", function() {
@@ -257,7 +257,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("and the dataset has not received an import", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.view.importConfiguration, []);
+                        this.server.completeFetchFor(this.view.imports, []);
                     });
 
                     it("doesn't display a 'import now' link", function() {
@@ -265,33 +265,27 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                context("and the dataset has received an import from a dataset", function() {
+                context("when the dataset has a last import (as a destination dataset)", function() {
                     beforeEach(function() {
-                        this.import = rspecFixtures.importSchedule({
-                            datasetId: this.dataset.id,
-                            workspaceId: 5,
-                            executionInfo: {
-                                startedStamp: "2012-02-29T14:35:38Z",
-                                completedStamp: "2012-02-29T14:35:38Z",
-                                sourceId: this.dataset.id,
-                                sourceTable: "some_source_table",
-                                success: true
-                            },
-                            sourceTable: "some_other_table",
-                            datasetId: "123"
+                        this.imports = rspecFixtures.datasetImportSet();
+                        this.lastImport = this.imports.last();
+                        this.lastImport.set({
+                            startedStamp: "2012-02-29T14:23:58Z",
+                            completedStamp: "2012-02-29T14:23:59Z",
+                            success: true,
+                            toTable: this.dataset.name(),
+                            destinationDatasetId: this.dataset.id,
+                            sourceDatasetName: "sourcey",
+                            sourceDatasetId: this.dataset.id + 1
+
                         });
-                        this.server.completeFetchFor(this.dataset.getImport(), this.import);
+                        this.imports.add(this.lastImport);
+                        this.server.completeFetchFor(this.view.imports, this.imports.models);
                     });
 
                     it("has an 'imported xx ago' description", function() {
-                        var sourceTable = new chorus.models.WorkspaceDataset({
-                            id: this.dataset.id,
-                            workspaceId: 5
-                        });
-                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
-                            timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
-                            tableLink: "some_source_..."
-                        });
+                        var sourceTable = this.lastImport.importSource();
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {timeAgo: chorus.helpers.relativeTimestamp(this.lastImport.get('completedStamp')), tableLink: "sourcey"});
                         expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
                     });
 
@@ -302,7 +296,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 xcontext("and the dataset has received an import from a file", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.getImport(), {
+                        this.server.completeFetchFor(this.dataset.importSchedule(), {
                             executionInfo: {
                                 startedStamp: "2012-02-29T14:35:38Z",
                                 completedStamp: "2012-02-29T14:35:38Z",
@@ -340,7 +334,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             });
 
-            context("when the dataset is the source of this import", function() {
+            context("when the dataset can be the source of an import", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
@@ -348,14 +342,15 @@ describe("chorus.views.DatasetSidebar", function() {
                 itShowsTheAppropriateDeleteLink(true, "table");
                 itDoesNotHaveACreateDatabaseViewLink();
 
-                it("fetches the import configuration for the dataset", function() {
-                    expect(this.dataset.getImport()).toHaveBeenFetched();
+                it("fetches the imports and import schedules for the dataset", function() {
+                    expect(this.dataset.getImports()).toHaveBeenFetched();
+                    expect(this.dataset.getImportSchedules()).toHaveBeenFetched();
                 });
 
-                describe("when the import fetch completes", function() {
-                    context("and the dataset has no import information", function() {
+                context("when the dataset has no import information", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(this.view.resource.getImport(), []);
+                            this.server.completeFetchFor(this.view.resource.getImports(), []);
+                            this.server.completeFetchFor(this.view.resource.getImportSchedules(), []);
                         });
 
                         context("and the current user has update permissions on the workspace", function() {
@@ -388,7 +383,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                     delete this.view.resource.workspace()._sandbox;
                                     this.view.resource.workspace().set({
                                         "sandboxInfo": null
-                                    })
+                                    });
                                     this.view.render();
                                 });
 
@@ -424,267 +419,101 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
                     });
 
-                    context("when the dataset has an import schedule", function() {
-                        beforeEach(function() {
-                            this.importResponse = rspecFixtures.importSchedule({
-                                executionInfo: {},
-                                    endDate: "2013-06-02T00:00:00Z",
-                                    frequency: "weekly",
-                                    toTable: "our_destination",
-                                    startDatetime: "2012-02-29T14:23:58Z",
-                                    nextImportAt: Date.formatForApi(Date.today().add(1).year())
-                            });
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, id: 6000, permission: ["update"] })
+                context("when the dataset has an import schedule", function() {
+                    beforeEach(function() {
+                        var importSchedules = rspecFixtures.datasetImportScheduleSet();
+
+                        this.importSchedule = importSchedules.last();
+                        this.importSchedule.set({
+                            endDate: "2013-06-02T00:00:00Z",
+                            frequency: "weekly",
+                            toTable: "our_destination",
+                            startDatetime: "2012-02-29T14:23:58Z",
+                            nextImportAt: Date.formatForApi(Date.today().add(1).year())
                         });
-
-                        it("shows the next import time", function() {
-                            this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
-                                nextTime: "in 1 year",
-                                tableRef: "our_destinat..."
-                            });
-                        });
-
-                        context("when the import has been successfully executed", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({
-                                    executionInfo: {
-                                        startedStamp: "2012-02-29T14:23:58Z",
-                                        completedStamp: "2012-02-29T14:23:59Z",
-                                        success: true,
-                                        toTable: 'our_destination',
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
-                                        creator: "InitialUser"
-                                    }
-                                });
-
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "edit_schedule"]);
-
-                            it("has an 'imported xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo")
-                                var destTable = new chorus.models.WorkspaceDataset({
-                                    id: execInfo.toTableId,
-                                    workspace: {id: this.dataset.get("workspace").id}});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destinat..."})
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
-                            });
-                        });
-
-                        context("when the import is in progress", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({
-                                    executionInfo: {
-                                        startedStamp: "2012-02-29T14:23:58Z",
-                                        toTable: 'our_destination_plus_some_more',
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination_plus_some_more"',
-                                        creator: "InitialUser",
-                                        success: true
-                                    }
-                                })
-
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "edit_schedule"]);
-
-                            it("has an 'import in progress' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo");
-                                var destTable = new chorus.models.WorkspaceDataset({
-                                    id: execInfo.toTableId,
-                                    workspace: { id: this.dataset.get("workspace").id}});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destinat..."});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.startedStamp)});
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
-                                expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
-                            });
-                        });
-
-                        context("when the import has failed to execute", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({
-                                    executionInfo: {
-                                        toTable: "bad_destination_table",
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"',
-                                        startedStamp: "2012-02-29T14:23:58Z",
-                                        completedStamp: "2012-02-29T14:23:59Z",
-                                        success: false,
-                                        creator: "InitialUser"
-                                    }
-                                });
-
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            it("has an 'import failed xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo");
-                                var destTable = new chorus.models.WorkspaceDataset({
-                                    id: execInfo.toTableId,
-                                    workspace: { id: this.dataset.get("workspace").id}});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destinat..."});
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
-                                expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
-                            });
-
-                            itHasActionLinks(["import_now", "edit_schedule"]);
-                        });
-
-                        context("when the import has not yet executed", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({executionInfo: {} });
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "edit_schedule"]);
-                        });
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, permission: ["update"] })
+                        this.server.completeFetchFor(this.dataset.getImportSchedules(), importSchedules.models);
                     });
 
-                    context("when the dataset does not have an import schedule", function() {
-                        beforeEach(function() {
-                            this.importResponse = new chorus.models.DatasetImport({
-                                datasetId: this.dataset.get("id"),
-                                workspaceId: this.dataset.workspace().id
-                            });
-                        });
-
-                        context("when the import has been successfully executed", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({
-                                    executionInfo: {
-                                        startedStamp: "2012-02-29T14:23:58Z",
-                                        completedStamp: "2012-02-29T14:23:59Z",
-                                        toTable: 'our_destination',
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
-                                        success: true,
-                                        creator: "InitialUser"
-                                    }
-                                });
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "create_schedule"]);
-
-                            it("has an 'imported xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo");
-                                var destTable = new chorus.models.WorkspaceDataset({
-                                    id: execInfo.toTableId,
-                                    workspace: {id: this.dataset.workspace().id}});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destinat..."});
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
-                            });
-                        });
-
-                        context("when the import has failed to execute", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({
-                                    executionInfo: {
-                                        startedStamp: "2012-02-29T14:23:58Z",
-                                        completedStamp: "2012-02-29T14:23:59Z",
-                                        success: false,
-                                        toTable: 'our_destination',
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
-                                        creator: "InitialUser"
-                                    }
-                                });
-
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "create_schedule"]);
-
-                            it("has an 'import failed xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo");
-                                var destTable = new chorus.models.WorkspaceDataset({
-                                    id: execInfo.toTableId,
-                                    workspace: {id: this.dataset.workspace().id}});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destinat..."});
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
-                                expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
-                            });
-                        });
-
-                        context("when an Import Now is in progress", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({executionInfo: {
-                                    startedStamp: "2012-02-29T14:23:58Z",
-                                    toTable: "our_destination",
-                                    toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"'
-                                }});
-
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            it("says the import is in progress", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo");
-                                var destTable = new chorus.models.WorkspaceDataset({ id: execInfo.toTableId,
-                                    workspace: {id: this.dataset.workspace().id}});
-
-                                expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destinat..."});
-                                expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.startedStamp), tableLink: "our_destination..."});
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
-                                expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
-                            });
-
-                            itHasActionLinks(["import_now", "create_schedule"]);
-                        });
-
-                        context("when the import has not yet executed", function() {
-                            beforeEach(function() {
-                                this.importResponse.set({ executionInfo: {} });
-                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
-                            });
-
-                            itHasActionLinks(["import_now", "create_schedule"]);
+                    it("shows the next import time", function() {
+                        expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
+                            nextTime: "in 1 year",
+                            tableRef: "our_destinat..."
                         });
                     });
-
-                    function itHasActionLinks(linkClasses) {
-                        var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
-
-                        context("when the user has permission to update in the workspace", function() {
-                            beforeEach(function() {
-                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] })
-                                this.view.render();
-                            });
-
-                            _.each(linkClasses, function(linkClass) {
-                                it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
-                                    var link = this.view.$("a." + linkClass)
-                                    expect(link).toExist();
-                                    expect(link.text()).toMatchTranslation("actions." + linkClass);
-                                    expect(link.data("dialog")).toBe("ImportScheduler");
-                                });
-
-                                it("attaches the dataset to the '" + linkClass + "' link", function() {
-                                    var link = this.view.$("a." + linkClass)
-                                    expect(link.data("dataset")).toBe(this.dataset);
-                                });
-                            });
-
-                            _.each(_.difference(possibleLinkClasses, linkClasses), function(linkClass) {
-                                it("does not have a '" + linkClass + "' link", function() {
-                                    expect(this.view.$("a." + linkClass)).not.toExist();
-                                });
-                            });
-                        });
-
-                        context("when the user does not have permission to update things in the workspace", function() {
-                            beforeEach(function() {
-                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] })
-                                this.view.render();
-                            });
-
-                            _.each(possibleLinkClasses, function(linkClass) {
-                                it("does not have a '" + linkClass + "' link", function() {
-                                    expect(this.view.$("a." + linkClass)).not.toExist();
-                                });
-                            });
-                        });
-                    }
+                    itHasActionLinks(["import_now", "edit_schedule"]);
                 });
+
+                context("when the dataset has a last import", function() {
+                    beforeEach(function() {
+                        this.imports = rspecFixtures.datasetImportSet();
+                        this.lastImport = this.imports.last();
+                        this.lastImport.set({
+                            startedStamp: "2012-02-29T14:23:58Z",
+                            completedStamp: "2012-02-29T14:23:59Z",
+                            success: true,
+                            toTable: 'our_destination',
+                            destinationDatasetId: 12345,
+                            sourceDatasetId: this.dataset.id
+                        });
+                        this.server.completeFetchFor(this.view.imports, this.imports.models);
+                        this.server.completeFetchFor(this.view.importSchedules, []);
+                    });
+
+                    itHasActionLinks(["import_now", "create_schedule"]);
+
+                    it("has an 'imported xx ago' description", function() {
+                        var lastImport = this.view.imports.last();
+                        var destTable = lastImport.destination();
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."})
+                        expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                    });
+                });
+
             });
+            function itHasActionLinks(linkClasses) {
+                var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
+
+                context("when the user has permission to update in the workspace", function() {
+                    beforeEach(function() {
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] })
+                        this.view.render();
+                    });
+
+                    _.each(linkClasses, function(linkClass) {
+                        it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
+                            var link = this.view.$("a." + linkClass)
+                            expect(link).toExist();
+                            expect(link.text()).toMatchTranslation("actions." + linkClass);
+                            expect(link.data("dialog")).toBe("ImportScheduler");
+                        });
+
+                        it("attaches the dataset to the '" + linkClass + "' link", function() {
+                            var link = this.view.$("a." + linkClass)
+                            expect(link.data("dataset")).toBe(this.dataset);
+                        });
+                    });
+
+                    _.each(_.difference(possibleLinkClasses, linkClasses), function(linkClass) {
+                        it("does not have a '" + linkClass + "' link", function() {
+                            expect(this.view.$("a." + linkClass)).not.toExist();
+                        });
+                    });
+                });
+
+                context("when the user does not have permission to update things in the workspace", function() {
+                    beforeEach(function() {
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] })
+                        this.view.render();
+                    });
+
+                    _.each(possibleLinkClasses, function(linkClass) {
+                        it("does not have a '" + linkClass + "' link", function() {
+                            expect(this.view.$("a." + linkClass)).not.toExist();
+                        });
+                    });
+                });
+            }
 
             context("when the dataset is a source view", function() {
                 beforeEach(function() {
@@ -1084,12 +913,13 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("when importSchedule:changed is triggered", function() {
         beforeEach(function() {
             this.view.resource = rspecFixtures.workspaceDataset.datasetTable();
-            this.newImport = rspecFixtures.importSchedule();
+            this.newImportSchedule = rspecFixtures.datasetImportScheduleSet().at(0);
             spyOn(this.view, 'render').andCallThrough();
-            chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
+            chorus.PageEvents.broadcast("importSchedule:changed", this.newImportSchedule);
         });
+
         it("updates the importConfiguration and renders", function() {
-            expect(this.view.resource.getImport()).toBe(this.newImport);
+            expect(this.view.resource.importSchedule()).toBe(this.newImportSchedule);
             expect(this.view.render).toHaveBeenCalled();
         });
     });

@@ -35,7 +35,8 @@ describe GpTableCopier, :database_integration => true do
         :workspace => workspace,
         :dataset => nil,
         :destination_table => destination_table_name,
-        :reference_id => import.id
+        :reference_id => import.id,
+        :reference_type => "Import"
     )
     event.id
   end

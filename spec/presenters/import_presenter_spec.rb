@@ -11,7 +11,7 @@ describe ImportPresenter, :type => :view do
 
     it "includes the right keys" do
       hash.should have_key(:to_table)
-      hash.should have_key(:to_table_id)
+      hash.should have_key(:destination_dataset_id)
       hash.should have_key(:started_stamp)
       hash.should have_key(:completed_stamp)
       hash.should have_key(:success)

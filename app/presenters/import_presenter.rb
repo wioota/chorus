@@ -4,7 +4,7 @@ class ImportPresenter < Presenter
     {
         :id => model.id,
         :to_table => model.to_table,
-        :to_table_id => model.destination_dataset_id,
+        :destination_dataset_id => model.destination_dataset_id,
         :started_stamp => model.created_at,
         :completed_stamp => model.finished_at,
         :success => model.success,

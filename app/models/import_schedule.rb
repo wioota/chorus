@@ -6,8 +6,8 @@ class ImportSchedule < ActiveRecord::Base
   belongs_to :user
   has_many :imports
 
-  attr_accessible :to_table, :new_table, :sample_count, :truncate
-  attr_accessible :start_datetime, :end_date, :frequency
+  attr_accessible :to_table, :new_table, :sample_count,
+                  :truncate, :start_datetime, :end_date, :frequency
 
   before_save :set_next_import
 
@@ -31,7 +31,9 @@ class ImportSchedule < ActiveRecord::Base
         :workspace => workspace,
         :source_dataset => source_dataset,
         :dataset => dst_table,
-        :destination_table => to_table
+        :destination_table => to_table,
+        :reference_id => id,
+        :reference_type => 'ImportSchedule'
     )
   end
 

@@ -1,6 +1,6 @@
 chorus.models.DatasetImport = chorus.models.Base.extend({
     constructorName: "DatasetImport",
-    urlTemplate: "workspaces/{{workspaceId}}/datasets/{{datasetId}}/import",
+    urlTemplate: "workspaces/{{workspaceId}}/datasets/{{datasetId}}/imports",
 
     declareValidations: function(newAttrs) {
         if (newAttrs.newTable == "true") {
@@ -21,44 +21,12 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         }
     },
 
-    startTime:function () {
-        if (this.get("startDatetime")) {
-            return Date.parseFromApi(this.get("startDatetime").split(".")[0]);
-        } else {
-            return Date.today().set({hour:23});
-        }
-    },
-
-    frequency:function () {
-        return this.get("frequency") && this.get("frequency").toUpperCase();
-    },
-
-    endTime:function () {
-        return  this.get("endDate") && Date.parse(this.get("endDate"));
-    },
-
-    lastExecutionAt:function () {
-        return this.get("executionInfo").completedStamp
-    },
-
-    hasLastImport: function() {
-        return this.has("executionInfo") && this.get("executionInfo").startedStamp;
-    },
-
-    nextExecutionAt: function() {
-        return this.get("nextImportAt")
-    },
-
-    hasNextImport: function() {
-        return !!this.get("nextImportAt")
-    },
-
-    thisDatasetIsSource: function() {
-        return this.get("datasetId") === this.get("sourceId") || !this.get("sourceId");
-    },
-
-    thisDatasetIsDestination: function() {
-        return !this.thisDatasetIsSource() && this.has("sourceId")
+    destination: function() {
+        return new chorus.models.WorkspaceDataset({
+            id: this.get("destinationDatasetId"),
+            objectName: this.get("toTable"),
+            workspace: {id: this.get("workspaceId")}
+        });
     },
 
     nextDestination: function() {
@@ -71,30 +39,21 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     lastDestination: function() {
         return new chorus.models.WorkspaceDataset({
-            id: this.get("executionInfo").toTableId,
-            objectName: this.get("executionInfo").toTable,
+            id: this.get('destinationDatasetId'),
+            objectName: this.get("toTable"),
             workspace: {id: this.get("workspaceId")}
         });
     },
 
     importSource: function() {
         return new chorus.models.WorkspaceDataset({
-            id: this.get("executionInfo").sourceId,
-            objectName: this.get("executionInfo").sourceTable,
-            workspaceId: this.get("workspaceId")
+            id: this.get('sourceDatasetId'),
+            objectName: this.get('sourceDatasetName'),
+            workspace: { id: this.get("workspaceId") }
         });
     },
 
-    wasSuccessfullyExecuted: function() {
-        return this.get("executionInfo") && this.get("executionInfo").success;
-    },
-
     isInProgress: function() {
-        var executionInfo = this.get("executionInfo");
-        return executionInfo && executionInfo.startedStamp && !executionInfo.completedStamp;
-    },
-
-    hasActiveSchedule: function() {
-        return this.has("id") ;
+        return this.get('startedStamp') && !this.get('completedStamp');
     }
 });

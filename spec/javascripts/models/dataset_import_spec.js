@@ -1,51 +1,29 @@
 describe("chorus.models.DatasetImport", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.importSchedule({
+        this.model = rspecFixtures.datasetImportSet().at(0);
+        this.model.set({
             datasetId: '102',
             workspaceId: '1'
         });
-        this.model.unset("id");
     });
 
     it("has the right url", function() {
         expect(this.model.url()).toContain("/datasets/102/import");
     });
 
-    describe("#wasSuccessfullyExecuted", function() {
-        it("returns true when the import succeeded on its last execution", function() {
-            this.model.set({ executionInfo: { success: true } });
-            expect(this.model.wasSuccessfullyExecuted()).toBeTruthy();
-        });
-
-        it("returns false if the import failed on its last execution", function() {
-            this.model.set({ executionInfo: { success: false } });
-            expect(this.model.wasSuccessfullyExecuted()).toBeFalsy();
-        });
-
-        it("returns false if the import has not been executed", function() {
-            this.model.unset("executionInfo");
-            expect(this.model.wasSuccessfullyExecuted()).toBeFalsy();
-        });
-    });
-
     describe("#isInProgress", function() {
         it("returns true when the import has a startedStamp but no completedStamp", function() {
-            this.model.set({ executionInfo: { success: true, startedStamp: "something", completedStamp: null } })
+            this.model.set({ success: true, startedStamp: "something", completedStamp: null })
             expect(this.model.isInProgress()).toBeTruthy();
         });
 
         it("returns false if the import has a completedStamp", function() {
-            this.model.set({ executionInfo: { success: true, completedStamp: "Yesterday" } })
+            this.model.set({ success: true, completedStamp: "Yesterday" });
             expect(this.model.isInProgress()).toBeFalsy();
         });
 
-        it("returns false if the import has no executionInfo", function() {
-            this.model.unset("executionInfo");
-            expect(this.model.isInProgress()).toBeFalsy();
-        });
-
-        it("returns false if the import has empty executionInfo", function() {
-            this.model.set({ executionInfo: {} });
+        it("returns false if the import has no time info", function() {
+            this.model.set({ success: null, startedStamp: null, completedStamp: null });
             expect(this.model.isInProgress()).toBeFalsy();
         });
     });
@@ -126,7 +104,7 @@ describe("chorus.models.DatasetImport", function() {
 
             it("sets the 'sampleMethod' parameter, as required by the API", function() {
                 this.model.save();
-                var params = this.server.lastCreate().params();
+                var params = this.server.lastUpdate().params();
                 expect(params["dataset_import[sample_count]"]).toBe('477');
             });
         });
@@ -233,14 +211,17 @@ describe("chorus.models.DatasetImport", function() {
 
     describe("#lastDestination", function() {
         it("sets the model correctly", function() {
-            this.model = rspecFixtures.importSchedule({
-                datasetId: '102',
-                workspaceId: '1',
-                executionInfo: {
-                    toTableId: '103'
-                }
-            });
-           expect(this.model.lastDestination().url()).toContain("/workspaces/1/datasets/103");
+            this.model.set({toTable: "destination", destinationDatasetId: 567, workspaceId: 123})
+           expect(this.model.lastDestination().url()).toContain("/workspaces/123/datasets/567");
+           expect(this.model.lastDestination().name()).toBe("destination");
+        });
+    });
+
+    describe("#importSource", function() {
+        it("sets the model correctly", function() {
+            this.model.set({workspaceId: 123, sourceDatasetId: 567, sourceDatasetName: 'source'})
+            expect(this.model.importSource().url()).toContain("/workspaces/123/datasets/567");
+            expect(this.model.importSource().name()).toBe('source');
         });
     });
 });

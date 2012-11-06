@@ -56,27 +56,35 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.schema().database();
     },
 
-    getImport: function() {
+    importSchedule: function() {
         return false;
     },
 
+    getImports: $.noop,
+
+    getImportSchedules: $.noop,
+
+    lastImport: $.noop,
+
+    importSchedule: $.noop,
+
     hasImport: function() {
-        return this.getImport()  && this.getImport().get("id");
+        return this.getImports() && !this.getImports().isEmpty();
     },
 
     importRunsAt: function() {
-        if (!this.hasImport() || !this.getImport().hasNextImport()) return;
+        return
+        if (!this.hasImport() || !this.importSchedule().hasNextImport()) return;
 
-        return chorus.helpers.relativeTimestamp(this.getImport().nextExecutionAt());
+        return chorus.helpers.relativeTimestamp(this.importSchedule().nextExecutionAt());
     },
 
     nextImportDestination: function() {
-        if (!this.hasImport() || !this.getImport().hasNextImport()) return;
-        return this.getImport().nextDestination();
+        return this.importSchedule().destination();
     },
 
     lastImportDestination:function () {
-        var importConfig = this.getImport();
+        var importConfig = this.lastImport();
 
         return importConfig
             && importConfig.isInProgress()
@@ -123,7 +131,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isImportConfigLoaded: function() {
-        return this.getImport() && this.getImport().loaded;
+        return this.getImportSchedules() && this.getImportSchedules().loaded;
     },
 
     invalidateWorkspacesAssociated: function() {

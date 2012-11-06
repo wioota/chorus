@@ -109,11 +109,14 @@ class GpTableCopier
     source_table = Dataset.find_by_id!(source_table_id)
     workspace = Workspace.find_by_id!(attributes[:workspace_id])
     dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
-
-    Events::DatasetImportCreated.find_by_reference_id(attributes[:import_id]).tap do |event|
-      event.dataset = dst_table
-      event.save!
+    import_created_event = Events::DatasetImportCreated.find_by_reference_id_and_reference_type(attributes[:import_id], "Import")
+    if !import_created_event
+      import = Import.find(attributes[:import_id])
+      import_created_event = Events::DatasetImportCreated.find_by_reference_id_and_reference_type(import.import_schedule_id, "ImportSchedule")
     end
+
+    import_created_event.dataset = dst_table
+    import_created_event.save!
 
     event = Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
