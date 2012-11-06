@@ -287,9 +287,7 @@ class ChorusInstaller
 
   def dump_and_shutdown_legacy
     Dir.chdir legacy_installation_path do
-      set_env = "source ./edc_path.sh"
-      p `pwd`
-      p `env`
+      set_env = "source edc_path.sh"
       log "Shutting down Chorus..." do
         chorus_exec("#{set_env} && edcsvrctl stop; true")
       end
