@@ -66,7 +66,7 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
+    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST CI_REPORTS=spec/fixtures/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
@@ -107,7 +107,7 @@ fi
 
 if $run_ruby ; then
   echo "RSpec exit code: $RUBY_TESTS_RESULT"
-end
+fi
 
 if $run_jasmine ; then
     echo "Jasmine exit code: $JS_TESTS_RESULT"
