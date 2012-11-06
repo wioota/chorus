@@ -96,4 +96,4 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("choice:" + eventName, pickedChoiceData, this);
         this.render();
     }
-})
+});

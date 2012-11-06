@@ -9,7 +9,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-        var options = {}
+        var options = {};
         if (this.modelIsWorkspace()) {
             options.urlParams = {
                 workspaceId: this.model.get("id"),
@@ -47,9 +47,9 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
     postRender: function() {
         if (this.collection.attributes.insights) {
-            this.$("a.insights").addClass("active")
+            this.$("a.insights").addClass("active");
         } else {
-            this.$("a.all").addClass("active")
+            this.$("a.all").addClass("active");
         }
     },
 

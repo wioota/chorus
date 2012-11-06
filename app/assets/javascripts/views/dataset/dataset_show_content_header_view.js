@@ -8,7 +8,7 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
             tableauWorkbooks: this.model.tableauWorkbooks(),
             dataset: this.model.asWorkspaceDataset(),
             showLocation: this.options && this.options.showLocation
-        }
+        };
     },
 
     postRender: function() {

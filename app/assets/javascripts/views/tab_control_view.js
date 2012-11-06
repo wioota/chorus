@@ -24,8 +24,8 @@ chorus.views.TabControl = chorus.views.Base.extend({
     },
 
     setSelectedTab: function(tab) {
-        this.$(".tabs li").removeClass("selected")
-        tab.addClass("selected")
+        this.$(".tabs li").removeClass("selected");
+        tab.addClass("selected");
 
         this.selectedTabName = tab.data('name');
         this.toggleTabbedArea();

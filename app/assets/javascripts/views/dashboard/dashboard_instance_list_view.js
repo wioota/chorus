@@ -11,7 +11,7 @@ chorus.views.DashboardInstanceList = chorus.views.Base.extend({
             name: model.get("theInstance").get("name"),
             imageUrl: model.get("theInstance").providerIconUrl(),
             showUrl: model.get("theInstance").showUrl()
-        }
+        };
     }
 });
 

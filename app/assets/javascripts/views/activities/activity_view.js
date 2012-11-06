@@ -48,7 +48,7 @@ chorus.views.Activity = chorus.views.Base.extend({
         e.preventDefault();
         this.model.promoteToInsight({
             success: _.bind(function() {
-                chorus.PageEvents.broadcast("insight:promoted", this.model)
+                chorus.PageEvents.broadcast("insight:promoted", this.model);
             }, this)
         });
     },

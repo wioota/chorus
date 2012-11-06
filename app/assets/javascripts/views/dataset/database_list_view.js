@@ -10,6 +10,6 @@ chorus.views.DatabaseList = chorus.views.SelectableList.extend({
     collectionModelContext: function(model) {
         return {
             showUrl: model.showUrl()
-        }
+        };
     }
 });

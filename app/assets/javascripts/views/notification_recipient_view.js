@@ -17,7 +17,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     },
 
     preRender: function() {
-        this.collection.remove(chorus.session.user())
+        this.collection.remove(chorus.session.user());
     },
 
     postRender: function() {
@@ -66,7 +66,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         chorus.styleSelect(this.$("select"));
 
         var $availableUser = this.$(".ui-selectmenu-button");
-        this.collection.length == 0 ? $availableUser.addClass("hidden") : $availableUser.removeClass("hidden");
+        this.collection.length === 0 ? $availableUser.addClass("hidden") : $availableUser.removeClass("hidden");
     },
 
     updateSelectedUserList: function() {

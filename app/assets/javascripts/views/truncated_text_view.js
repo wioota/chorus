@@ -8,13 +8,13 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        var value = this.model.get(this.options.attribute)
+        var value = this.model.get(this.options.attribute);
         if(this.options.attributeIsHtmlSafe && value) {
             value = new Handlebars.SafeString(value);
         }
         return {
             text: value
-        }
+        };
     },
 
     postRender: function() {
@@ -32,7 +32,7 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
             }
 
             var text = this.$(".original");
-            var heightLimit = parseInt(text.css("line-height")) * numLines;
+            var heightLimit = parseInt(text.css("line-height"), 10) * numLines;
             if (text.height() > heightLimit) {
                 $(this.el).addClass('expandable');
             } else {
@@ -50,7 +50,7 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
 
     openLink: function(e) {
         e && e.preventDefault();
-        window.open($(e.currentTarget).attr("href"))
+        window.open($(e.currentTarget).attr("href"));
     }
 });
 

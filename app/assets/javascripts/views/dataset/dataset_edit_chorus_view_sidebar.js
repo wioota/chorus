@@ -19,14 +19,14 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
         this.tabs = new chorus.views.TabControl(["datasets_and_columns", "database_function_list", "activity"]);
         this.schema = this.model.schema();
 
-        this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
-        this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({model: this.schema})
+        this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: this.schema });
+        this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({ model: this.schema });
         this.tabs.activity = new chorus.views.ActivityList({
             collection: this.collection,
             additionalClass: "sidebar",
             displayStyle: ['without_object', 'without_workspace']
         });
 
-        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this))
+        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
     }
 });

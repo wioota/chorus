@@ -54,7 +54,7 @@ chorus.views.Filter = chorus.views.Base.extend({
 
 
         _.defer(function() {
-            chorus.styleSelect($comparator, { menuWidth: 240 })
+            chorus.styleSelect($comparator, { menuWidth: 240 });
         });
 
         this.selectComparator();
@@ -105,7 +105,7 @@ chorus.views.Filter = chorus.views.Base.extend({
             input = { value: '' };
         }
 
-        if (this.model.get("column") && (this.model.get("column").get("typeCategory") == "DATE")) {
+        if (this.model.get("column") && (this.model.get("column").get("typeCategory") === "DATE")) {
             $filters.find("input[name='day']").val(input.day);
             $filters.find("input[name='month']").val(input.month);
             $filters.find("input[name='year']").val(input.year);

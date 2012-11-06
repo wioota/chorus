@@ -51,7 +51,7 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
             startDatetime : startTime.toString("yyyy-MM-dd HH:mm" + ":00.0"),
             endDate   : endTime.toString("yyyy-MM-dd"),
             frequency : this.$("select.frequency").val()
-        }
+        };
     },
 
     setFieldValues: function(model) {
@@ -96,7 +96,7 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
                  day: later.getDate(),
                  year: later.getFullYear()
              }
-         }
+         };
     },
 
     enable: function() {

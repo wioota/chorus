@@ -11,26 +11,26 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     toggleCommentList:function (event) {
         event.preventDefault();
         $(event.target).closest(".comments").toggleClass("more");
-        chorus.PageEvents.broadcast("content:changed")
+        chorus.PageEvents.broadcast("content:changed");
     },
 
     fetchMoreActivities:function (ev) {
         ev.preventDefault();
-        var pageToFetch = parseInt(this.collection.pagination.page) + 1;
+        var pageToFetch = parseInt(this.collection.pagination.page, 10) + 1;
         this.collection.fetchPage(pageToFetch, { add: true, success: _.bind(this.render, this) });
     },
 
     additionalContext:function () {
         var ctx = { activityType: this.options.type };
         if (this.collection.loaded && this.collection.pagination) {
-            var page = parseInt(this.collection.pagination.page);
-            var total = parseInt(this.collection.pagination.total);
+            var page = parseInt(this.collection.pagination.page, 10);
+            var total = parseInt(this.collection.pagination.total, 10);
 
-            if (this.collection.pagination.total != -1) {
+            if (parseInt(this.collection.pagination.total, 10) !== -1) {
                 ctx.showMoreLink = total > page;
             } else {
                 var maxSize = this.collection.attributes.pageSize * page;
-                ctx.showMoreLink = this.collection.length == maxSize;
+                ctx.showMoreLink = this.collection.length === maxSize;
             }
         } else {
             ctx.showMoreLink = false;

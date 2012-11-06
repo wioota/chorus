@@ -22,9 +22,9 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
         chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
-        chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this)
-        chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this)
-        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this)
+        chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this);
+        chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this);
+        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this);
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
     },
 
@@ -98,7 +98,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         var multiSelectEl = this.$(".multiple_selection");
         var numChecked = this.checkedDatasets ? this.checkedDatasets.length : 0;
         multiSelectEl.toggleClass("hidden", numChecked <= 1);
-        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: numChecked }))
+        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: numChecked }));
     },
 
     resetStatistics: function(){

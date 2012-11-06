@@ -18,7 +18,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
         return {
             title: t(this.title),
             extraContent: this.extraContent()
-        }
+        };
     },
 
     postRender: function() {

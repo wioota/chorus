@@ -99,7 +99,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chart_icon:eq(0)').click();
         this.$('.column_count').addClass('hidden');
         this.$('.info_bar').removeClass('hidden');
-        this.$('.definition').addClass("hidden")
+        this.$('.definition').addClass("hidden");
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
         this.filterWizardView.options.showAliasedName = false;
@@ -118,10 +118,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     cancelVisualization: function(e) {
         e.preventDefault();
-        this.$('.definition').removeClass("hidden")
+        this.$('.definition').removeClass("hidden");
         this.$('.create_chart').addClass("hidden");
         this.$(".filters").addClass("hidden");
-        this.$('.column_count').removeClass("hidden")
+        this.$('.column_count').removeClass("hidden");
         this.$('.info_bar').addClass('hidden');
         this.$(".chart_config").addClass('hidden');
         chorus.PageEvents.broadcast('cancel:visualization');
@@ -135,7 +135,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     startCreateChorusViewWizard: function() {
         this.trigger("transform:sidebar", "chorus_view");
         this.$('.chorusview').addClass("selected");
-        this.$('.definition').addClass("hidden")
+        this.$('.definition').addClass("hidden");
         this.$('.create_chart').addClass("hidden");
         this.$('.create_chorus_view').removeClass("hidden");
         this.$('.chorus_view_info').removeClass("hidden");
@@ -151,10 +151,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     cancelCreateChorusView: function(e) {
         e.preventDefault();
         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
-        this.$('.definition').removeClass("hidden")
+        this.$('.definition').removeClass("hidden");
         this.$('.create_chorus_view').addClass("hidden");
         this.$(".filters").addClass("hidden");
-        this.$('.column_count').removeClass("hidden")
+        this.$('.column_count').removeClass("hidden");
         this.$('.chorus_view_info').addClass('hidden');
 
         this.$(".column_count input.search").trigger("textchange");
@@ -236,17 +236,17 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             showEdit: this.dataset.isChorusView() && !workspaceArchived,
             showDerive: !this.dataset.isChorusView() && !this.options.isInstanceBrowser && !workspaceArchived,
             showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isInstanceBrowser && !workspaceArchived && canUpdate
-        }
+        };
     },
 
     showError: function(task, alertClass) {
-        this.$('.dataset_errors').removeClass('hidden')
-        this.alertClass = alertClass
-        this.taskWithErrors = task
+        this.$('.dataset_errors').removeClass('hidden');
+        this.alertClass = alertClass;
+        this.taskWithErrors = task;
     },
 
     updateColumnCount: function() {
-        this.$('.count').text(t("dataset.column_count", {count: this.collection.length}))
+        this.$('.count').text(t("dataset.column_count", {count: this.collection.length}));
     },
 
     displayPublishDialog: function() {

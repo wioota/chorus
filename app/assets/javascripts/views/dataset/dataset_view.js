@@ -52,7 +52,7 @@ chorus.views.Dataset = chorus.views.Base.extend({
                 body: recentComment.get("body"),
                 creator: recentComment.author(),
                 on: date && date.toString("MMM d")
-            }
+            };
             ctx.otherCommentCount = parseInt(this.model.get("commentCount"), 10) - 1;
         }
 

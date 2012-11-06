@@ -16,7 +16,7 @@ chorus.views.Login = chorus.views.Base.extend({
             $(this).text(response.slice(0, 19));
             $(this).attr('title', "Version " + response);
         });
-        _.defer(_.bind(function() { this.$("input[name='username']").focus() }, this));
+        _.defer(_.bind(function() { this.$("input[name='username']").focus(); }, this));
     },
 
     onLogin : function () {

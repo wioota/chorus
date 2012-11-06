@@ -1,4 +1,4 @@
-;(function() {
+(function() {
 
     // states
     var HIDDEN = 0,
@@ -56,7 +56,7 @@
             this.updateAllSectionsToReflectStates();
 
             this.$('.loading_spinner').startLoading();
-            this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this))
+            this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this));
         },
 
         instancesLoaded: function () {
@@ -122,7 +122,7 @@
         },
 
         clearDatabaseSelection: function() {
-            this.resetSelect('database')
+            this.resetSelect('database');
         },
 
         createNewSchema:function (e) {
@@ -256,7 +256,7 @@
 
         gpdbInstances: function() {
             return this.instances.filter(function(instance) {
-                return instance.get("instanceProvider") != "Hadoop";
+                return instance.get("instanceProvider") !== "Hadoop";
             });
         },
 
@@ -276,7 +276,7 @@
             _.each(this.sortModels(models), function(model) {
                 var option = $("<option/>")
                     .prop("value", model.get("id"))
-                    .text(model.get("name"))
+                    .text(model.get("name"));
                 select.append(option);
             });
 

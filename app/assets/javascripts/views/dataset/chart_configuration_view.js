@@ -1,4 +1,3 @@
-;
 (function() {
     chorus.views.ChartConfiguration = chorus.views.Base.extend({
         additionalClass: "chart_configuration",
@@ -11,20 +10,21 @@
         setup: function() {
             var alphaSort = function(column) {
                 return column.get("name") && column.get("name").toLowerCase();
-            }
+            };
             this.columns = _.sortBy(this.collection.models, alphaSort);
 
-            this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
+            function filterColumns(types, columns) {
+                return _.filter(columns, function(col) {
+                    var category = col.get('typeCategory');
+                    return _.include(types, category);
+                });
+            }
+
+            this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns);
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
             this.cancelVisualizationHandle = chorus.PageEvents.subscribe("cancel:visualization", this.cancelVisualization, this);
 
-            function filterColumns(types, columns) {
-                return _.filter(columns, function(col) {
-                    var category = col.get('typeCategory')
-                    return _.include(types, category)
-                })
-            }
         },
 
         additionalContext: function() {
@@ -69,7 +69,7 @@
         teardown: function() {
             this.clearSqlErrors();
             chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
-            this._super("teardown", arguments)
+            this._super("teardown", arguments);
         },
 
         postRender: function() {
@@ -86,10 +86,10 @@
                     contentEvents: {
                         'li': limiterSelected
                     }
-                })
-            })
+                });
+            });
 
-            this._super("postRender")
+            this._super("postRender");
         },
 
         limiterSelected: function(e, api) {
@@ -121,7 +121,7 @@
             this.task.bindOnce("saveFailed", this.showSqlErrors, this);
 
             this.task.bindOnce("saved", this.cleanupVisualization, this);
-            this.task.bindOnce("saveFailed", this.cleanupVisualization, this)
+            this.task.bindOnce("saveFailed", this.cleanupVisualization, this);
 
             this.task.save();
         },
@@ -153,7 +153,7 @@
         },
 
         showSqlErrors: function() {
-            this.options.errorContainer.showError(this.task, chorus.alerts.VisualizationError)
+            this.options.errorContainer.showError(this.task, chorus.alerts.VisualizationError);
         },
 
         clearSqlErrors: function() {
@@ -171,6 +171,6 @@
             return _.map(this[prop], function(col) {
                 return col.get('name');
             });
-        }
+        };
     }
 })();

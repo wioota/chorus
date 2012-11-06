@@ -24,14 +24,14 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                 insightCountString = t("dashboard.workspaces.recent_comments_and_insights", {
                     recent_comments: t("dashboard.workspaces.recent_comments", {count: numComments}),
                     recent_insights: t("dashboard.workspaces.recent_insights", {count: numInsights})
-                })
+                });
             } else {
-                insightCountString = t("dashboard.workspaces.recent_comments", {count: numComments})
+                insightCountString = t("dashboard.workspaces.recent_comments", {count: numComments});
             }
         } else if (numInsights > 0) {
-            insightCountString = t("dashboard.workspaces.recent_insights", {count: numInsights})
+            insightCountString = t("dashboard.workspaces.recent_insights", {count: numInsights});
         } else {
-            insightCountString = t("dashboard.workspaces.no_recent_comments_or_insights")
+            insightCountString = t("dashboard.workspaces.no_recent_comments_or_insights");
         }
 
         return {
@@ -43,7 +43,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                 timestamp: comments[0].get("timestamp"),
                 author: comments[0].author().displayName()
             }
-        }
+        };
     },
 
     cleanupCommentLists: function() {

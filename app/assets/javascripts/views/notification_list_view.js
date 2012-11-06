@@ -13,7 +13,7 @@ chorus.views.NotificationList = chorus.views.Base.extend({
 
     fetchMoreNotifications: function (ev) {
         ev.preventDefault();
-        var pageToFetch = parseInt(this.collection.pagination.page) + 1;
+        var pageToFetch = parseInt(this.collection.pagination.page, 10) + 1;
         this.collection.fetchPage(pageToFetch, { add: true, success: _.bind(this.render, this) });
         this.collection.bindOnce("loaded", function() {
             this.collection.markAllRead({});
@@ -23,8 +23,8 @@ chorus.views.NotificationList = chorus.views.Base.extend({
     additionalContext:function () {
         var ctx = {  };
         if (this.collection.loaded && this.collection.pagination) {
-            var page = parseInt(this.collection.pagination.page);
-            var total = parseInt(this.collection.pagination.total);
+            var page = parseInt(this.collection.pagination.page, 10);
+            var total = parseInt(this.collection.pagination.total, 10);
             ctx.showMoreLink = this.options.allowMoreLink && (total > page);
         } else {
             ctx.showMoreLink = false;
@@ -67,6 +67,6 @@ chorus.views.NotificationList = chorus.views.Base.extend({
     show: function() {
         _.each(this.activities, function(activity) {
             activity.show();
-        })
+        });
     }
 });

@@ -6,6 +6,6 @@ chorus.views.DisplayNameHeader = chorus.views.Base.extend({
         return {
             title:this.model && this.model.loaded ? this.model.displayName() : "",
             imageUrl: this.options.imageUrl
-        }
+        };
     }
-})
+});

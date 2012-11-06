@@ -13,14 +13,13 @@ chorus.views.DatasetFilter = chorus.views.Filter.extend({
             "%d": this.$(".filter.date input[name='day']")
         });
 
-        this._super("postRender", arguments)
+        this._super("postRender", arguments);
     },
 
     fieldValues: function() {
         switch (this.map.type) {
             case "Time":
                 return { value: this.$(".filter.time input").val() };
-                break;
             case "Date":
                 var year = this.$(".filter.date input[name='year']").val(),
                     month = this.$(".filter.date input[name='month']").val(),
@@ -31,10 +30,8 @@ chorus.views.DatasetFilter = chorus.views.Filter.extend({
                     day: day,
                     value: ((year + month + day).length > 0) ? [year, month, day].join("/") : ""
                 };
-                break;
             default:
                 return { value: this.$(".filter.default input").val() };
-                break;
         }
     }
 });

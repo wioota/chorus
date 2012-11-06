@@ -11,7 +11,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     setup: function() {
         this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
         this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
-        this.chorusView = this.model.deriveChorusView()
+        this.chorusView = this.model.deriveChorusView();
         this.chorusView.aggregateColumnSet = this.options.aggregateColumnSet;
         this.bindings.add(this.chorusView, "change", this.render);
     },
@@ -31,20 +31,19 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         this.$("a.preview, button.create").data("parent", this);
-        this.$("a.add_join").data("chorusView", this.chorusView)
-        this._super("postRender")
+        this.$("a.add_join").data("chorusView", this.chorusView);
+        this._super("postRender");
     },
 
     additionalContext: function(ctx) {
         return {
             columns: this.chorusView.sourceObjectColumns,
             joins: this.chorusView.joins
-        }
+        };
     },
 
     addColumn: function(column) {
-        this.chorusView.addColumn(column)
-
+        this.chorusView.addColumn(column);
         this.$("button.create").prop("disabled", false);
     },
 
@@ -65,7 +64,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     removeJoinClicked: function(e) {
         var cid = $(e.target).closest("div.join").data("cid");
-        var dialog = new chorus.alerts.RemoveJoinConfirmAlert({dataset: this.chorusView.getJoinDatasetByCid(cid), chorusView: this.chorusView})
+        var dialog = new chorus.alerts.RemoveJoinConfirmAlert({dataset: this.chorusView.getJoinDatasetByCid(cid), chorusView: this.chorusView});
         dialog.launchModal();
     },
 
