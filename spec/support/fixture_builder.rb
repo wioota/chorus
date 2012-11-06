@@ -5,6 +5,8 @@ def FixtureBuilder.password
 end
 
 FixtureBuilder.configure do |fbuilder|
+  # rebuild at d25bfe404b2ca5eab336f0e1e0e5353b1c25c5ad
+
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb", "db/structure.sql", "spec/support/database_integration/setup_gpdb.sql", "tmp/GPDB_HOST_STALE"]
 
