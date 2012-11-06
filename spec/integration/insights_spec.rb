@@ -9,7 +9,7 @@ describe "Insights" do
     wait_until {page.find(".title h1").text == "Insights"}
   end
 
-  it "creates an insight" do
+  xit "creates an insight" do
     login(users(:owner))
     click_link workspaces(:public).name
     wait_until { page.find('a[data-dialog="InsightsNew"]').text == "Add an insight"}
