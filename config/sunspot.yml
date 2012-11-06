@@ -19,6 +19,14 @@ test:
     log_level: WARNING
   auto_commit_after_request: true
 
+# expect all ci traffic to hit in vcr and not go to solr
+ci_jasmine:
+  solr:
+    hostname: localhost
+    port: 8981
+    log_level: WARNING
+  auto_commit_after_request: true
+
 integration:
   solr:
     hostname: localhost
