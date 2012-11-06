@@ -32,7 +32,15 @@ class DatasetImportSchedulesController < ApplicationController
     authorize! :can_edit_sub_objects, import_schedule.workspace
 
     if import_schedule.update_attributes(import_params)
-      import_schedule.create_import_event
+      dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(import_schedule[:to_table])
+
+      Events::ImportScheduleUpdated.by(current_user).add(
+          :workspace => import_schedule.workspace,
+          :source_dataset => import_schedule.source_dataset,
+          :dataset => dst_table,
+          :destination_table => import_schedule.to_table
+      )
+
       present import_schedule
     else
       raise ApiValidationError.new(import_schedule.errors)
@@ -42,8 +50,19 @@ class DatasetImportSchedulesController < ApplicationController
   def destroy
     import_schedule = ImportSchedule.find(params[:id])
     authorize! :can_edit_sub_objects, import_schedule.workspace
+    begin
+      dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(import_schedule.to_table)
+      Events::ImportScheduleDeleted.by(current_user).add(
+          :workspace => import_schedule.workspace,
+          :source_dataset => import_schedule.source_dataset,
+          :dataset => dst_table,
+          :destination_table => import_schedule.to_table
+      )
+      import_schedule.destroy
+    rescue Exception => e
+      raise ApiValidationError.new(:base, :delete_unsuccessful)
+    end
 
-    import_schedule.destroy
     render :json => {}
   end
 

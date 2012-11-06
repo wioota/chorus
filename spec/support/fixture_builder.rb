@@ -417,6 +417,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :error_message => "an error", :gnip_instance => gnip_instance)
     Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => default_table)
     Events::ImportScheduleUpdated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
+    Events::ImportScheduleDeleted.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table_deleted')
     Timecop.return
 
     #NotesAttachment
