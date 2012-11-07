@@ -120,4 +120,25 @@ resource "Chorus Views" do
       status.should == 201
     end
   end
+
+  post "/chorus_views/:id/duplicate" do
+    let(:chorus_view) { datasets(:chorus_view) }
+    let(:id) { chorus_view.id }
+    let(:object_name) { "new_chorus_view" }
+    let(:owner) {chorus_view.workspace.owner}
+
+    before do
+      any_instance_of(GpdbSchema) do |schema|
+        mock(schema).with_gpdb_connection.with_any_args
+      end
+    end
+
+    parameter :id, "Id of the chorus view to be duplicated"
+    parameter :object_name, "Name of the new chorus view"
+    required_parameters :id, :object_name
+
+    example_request "Duplicate Chorus View" do
+      status.should == 201
+    end
+  end
 end
