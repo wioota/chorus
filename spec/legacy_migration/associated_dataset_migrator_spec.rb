@@ -13,7 +13,7 @@ describe AssociatedDatasetMigrator do
       FROM edc_dataset
       LEFT JOIN edc_instance
         ON edc_dataset.instance_id = edc_instance.id
-      where edc_dataset.is_deleted = false
+      where edc_dataset.is_deleted = false AND edc_dataset.type != 'CHORUS_VIEW'
     SQL
 
     describe "copying the data" do

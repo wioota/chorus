@@ -14,6 +14,9 @@ tmp_database="chorus_tmp_migrate_$RAILS_ENV"
 dropdb -p 8543 $tmp_database 2>&1
 psql -p 8543 $database -c 'drop schema if exists legacy_migrate cascade' 2>&1
 
+# TODO: why do we do this twice?
+dropdb -p 8543 $tmp_database
+psql -p 8543 $database -c 'drop schema if exists legacy_migrate cascade' 2> /dev/null
 # Create a temporary database so we can namespace legacy tables into their own schema
 createdb -p 8543 $tmp_database 2>&1
 psql -p 8543 $tmp_database -f $sql 2>&1
