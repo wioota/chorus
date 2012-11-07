@@ -40,6 +40,8 @@ fi
 
 # start jasmine
 if $run_jasmine ; then
+    echo "Precompile Assets"
+    b/rake assets:precompile --trace
     b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
@@ -68,8 +70,6 @@ else
 fi
 
 if $run_jasmine ; then
-    echo "Precompile Assets"
-    b/rake assets:precompile --trace
     echo "Running javascript tests"
     CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec phantom 2>&1
     JS_TESTS_RESULT=$?
