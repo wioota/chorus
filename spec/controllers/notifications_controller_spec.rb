@@ -19,12 +19,14 @@ describe NotificationsController do
 
     it "shows list of notifications" do
       get :index
-      notification = decoded_response.last
-      event = notification.event
+      notifications = decoded_response
+      matching_notification = notifications.find { |n| n.id == notification1.id }
+
+      event = matching_notification.event
       event.actor.id.should == event1.actor_id
       event.gpdb_instance.id.should == event1.target1_id
       event.body.should == event1.body
-      notification.should have_key(:unread)
+      matching_notification.should have_key(:unread)
     end
 
     it "should paginate notifications" do
