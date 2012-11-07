@@ -31,6 +31,7 @@ RSpec.configure do |config|
     end
 
     Dir.chdir Rails.root do
+      # using system below seems to cause the script to hang
       result = `spec/legacy_migrate_schema_setup.sh db/legacy/legacy_#{legacy_sql_md5}.sql #{ActiveRecord::Base.connection.current_database}`
       raise "legacy migration failed:\n#{result}" unless $?.success?
     end
