@@ -22,7 +22,7 @@ if [[ "$targets" ]]; then
     for target in $possible_targets; do
         declare run_${target}=false
     done
-    for target in "$targets"; do
+    for target in $targets; do
         for possible_target in $possible_targets; do
            if [[ "$target" == "$possible_target" ]] ; then
                 declare run_${target}=true
