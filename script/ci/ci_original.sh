@@ -4,9 +4,10 @@ export RAILS_ENV=test
 GPDB_HOST=chorus-gpdb42
 HADOOP_HOST=chorus-gphd02
 
-. script/ci/setup.sh
-
+set -v
 set -e
+
+. script/ci/setup.sh
 
 b/rake assets:precompile --trace
 

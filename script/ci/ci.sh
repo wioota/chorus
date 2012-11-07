@@ -7,9 +7,11 @@ fi
 GPDB_HOST=chorus-gpdb42
 HADOOP_HOST=chorus-gphd02
 
+set -v
+set -e
+
 . script/ci/setup.sh
 
-set -e
 
 targets=${@}
 possible_targets="fixtures jasmine ruby legacy_migration api_docs"
