@@ -18,8 +18,7 @@ describe("chorus.dialogs.ImportNow", function () {
 
         this.dialog = new chorus.dialogs.ImportNow({
             dataset: this.dataset,
-            workspace: this.workspace,
-            action: "import_now"
+            workspace: this.workspace
         });
     });
 
@@ -30,7 +29,6 @@ describe("chorus.dialogs.ImportNow", function () {
                 objectName: "bar"
             });
             this.server.completeFetchFor(this.dataset.getImportSchedules(), this.importSchedules.models);
-            spyOn(this.dialog.model, "isNew").andReturn(false);
             this.dialog.render();
             this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
             expect(this.dialog.$("button.submit")).toBeEnabled();

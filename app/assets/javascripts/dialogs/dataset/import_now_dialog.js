@@ -6,11 +6,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     persistent: true,
 
     showSchedule: false,
+    allowTruncate: false,
 
-    subviews: {
-        ".new_table .schedule": "scheduleViewNew",
-        ".existing_table .schedule": "scheduleViewExisting"
-    },
 
     events: {
         "change input:radio": "onDestinationChosen",
@@ -18,14 +15,14 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "cut input:text": "onInputFieldChanged",
-        "click button.submit": "beginImport",
+        "click button.submit": "saveModel",
         "click button.cancel": "onClickCancel",
         "click .existing_table a.dataset_picked": "launchDatasetPickerDialog"
     },
 
     resourcesLoaded: function() {
         this.schedule = this.schedule || this.dataset.importSchedule();
-        this.bindings.add(this.model, "saved", this.importSaved);
+        this.bindings.add(this.model, "saved", this.modelSaved);
         this.bindings.add(this.model, "saveFailed validationFailed", function() {
             this.$("button.submit").stopLoading();
         });
@@ -45,41 +42,44 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.importSchedules.fetchIfNotLoaded();
         this.requiredResources.push(this.importSchedules);
 
-        this.scheduleViewNew = new chorus.views.ImportSchedule();
-        this.registerSubView(this.scheduleViewNew);
-        this.scheduleViewExisting = new chorus.views.ImportSchedule();
-        this.registerSubView(this.scheduleViewExisting);
-
-        var action = this.options.action;
-
-        if (action === "create_schedule") {
-            this.title = t("import.title_schedule");
-            this.submitText = t("import.begin_schedule");
-            this.activeScheduleView = this.scheduleViewNew;
-        } else if (action === "edit_schedule") {
-            this.title = t("import.title_edit_schedule");
-            this.submitText = t("actions.save_changes");
-            this.activeScheduleView = this.scheduleViewNew;
-        } else {
-            this.title = t("import.title");
-            this.submitText = t("import.begin");
-        }
+        this.customSetup();
     },
+
+    customSetup: function() {
+        this.title = t("import.title");
+        this.submitText = t("import.begin");
+    },
+
+
+    saveModel: function() {
+        this.$("button.submit").startLoading("import.importing");
+
+        this.model.set({ workspaceId: this.workspace.get("id") });
+
+        this.model.unset("sampleCount", {silent: true});
+        this.model.save(this.getNewModelAttrs());
+    },
+
+    modelSaved: function() {
+        chorus.toast("import.success");
+        this.dataset.trigger('change');
+        this.closeModal();
+    },
+
 
     postRender: function() {
         this.schedule && this.setFieldValues(this.schedule);
-        if (this.options.action === "create_schedule") {
-            this.activeScheduleView.enable();
-        }
         this.updateExistingTableLink();
     },
 
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
+            var destination = this.schedule && this.schedule.destination();
+
             var datasetDialog = new chorus.dialogs.DatasetsPicker({
                 workspaceId: this.workspace.get('id'),
-                defaultSelection: this.schedule && this.schedule.destination()
+                defaultSelection: destination && destination.id && destination
             });
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
@@ -116,20 +116,12 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var newTable = model.get("newTable");
         if (!newTable) {
             this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
-            this.activeScheduleView = this.scheduleViewExisting;
             this.changeSelectedDataset(model.get("toTable"));
         } else {
-            this.activeScheduleView = this.scheduleViewNew;
             this.$(".new_table input.name").val(model.get("toTable"));
             this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
         }
-        this.scheduleViewExisting.setFieldValues(model);
-        this.scheduleViewNew.setFieldValues(model);
-        if (model.get("truncate")) {
-            this.$(".truncate").prop("checked", true);
-        } else {
-            this.$(".truncate").prop("checked", false);
-        }
+        this.$(".truncate").prop("checked", !!model.get("truncate"));
 
         if (model.get("sampleCount") && model.get("sampleCount") != '0') {
             this.$("input[name='limit_num_rows']").prop("checked", true);
@@ -152,11 +144,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
         this.$("fieldset.existing_table").toggleClass("disabled", disableExisting);
 
-        this.activeScheduleView = disableExisting ? this.scheduleViewNew : this.scheduleViewExisting;
-        if (this.options.action === "create_schedule") {
-            this.activeScheduleView.enable();
-        }
-
         this.toggleExistingTableLink(!disableExisting);
         this.onInputFieldChanged();
         if (disableExisting && !this.existingTableSelected()) {
@@ -166,7 +153,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            allowNewTruncate: this.options.action !== "import_now",
+            allowNewTruncate: this.allowTruncate,
             canonicalName: this.workspace.sandbox().schema().canonicalName(),
             showSchedule: this.showSchedule,
             submitText: this.submitText
@@ -199,47 +186,10 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var enabled = $fieldSet.find("input[name=limit_num_rows]").prop("checked");
         var $limitInput = $fieldSet.find(".limit input:text");
         $limitInput.prop("disabled", !enabled);
-        this.activeScheduleView.enable();
+//        this.activeScheduleView && this.activeScheduleView.enable();
         this.onInputFieldChanged();
     },
 
-    oneTimeImport: function() {
-        return !this.showSchedule;
-    },
-
-    beginImport: function() {
-        if (this.oneTimeImport()) {
-            this.$("button.submit").startLoading("import.importing");
-        } else {
-            this.$("button.submit").startLoading("actions.saving");
-        }
-
-        this.model.set({ workspaceId: this.workspace.get("id") });
-
-        saveOptions = {};
-        if (this.options.action === "import_now") {
-            saveOptions.method = "create";
-        } else if (this.options.action === "edit_schedule") {
-            saveOptions.method = "update";
-        } else {
-            // Error handler?
-        }
-
-        this.model.unset("sampleCount", {silent: true});
-        this.model.save(this.getNewModelAttrs(), saveOptions);
-    },
-
-    importSaved: function() {
-        if (this.oneTimeImport()) {
-            this.dataset.setImport(undefined);
-            chorus.toast("import.success");
-        } else {
-            chorus.toast("import.schedule.toast");
-        }
-        chorus.PageEvents.broadcast('importSchedule:changed', this.model);
-        this.dataset.trigger('change');
-        this.closeModal();
-    },
 
     getNewModelAttrs: function() {
         var updates = {};
@@ -267,10 +217,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         } else {
             updates.sampleCount = $enabledFieldSet.find("input[name='sampleCount']").val();
         }
-
-        _.extend(updates, this.activeScheduleView.fieldValues());
-
-        updates.importType = this.oneTimeImport() ? "oneTime" : "schedule";
 
         return updates;
     },

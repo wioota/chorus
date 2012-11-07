@@ -16,66 +16,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
         this.importSchedule.unset('id');
     });
 
-    describe("#getNewModelAttrs", function() {
-        describe("when creating a new schedule", function() {
-            beforeEach(function() {
-                this.dialog = new chorus.dialogs.ImportScheduler({
-                    dataset: this.dataset,
-                    workspace: this.workspace,
-                    action: "create_schedule"
-                });
-                this.server.completeFetchFor(this.importSchedules);
-                this.dialog.$(".new_table input:radio").prop("checked", false);
-                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                this.attrs = this.dialog.getNewModelAttrs();
-            });
-
-            it("takes the workspace from the options passed", function() {
-                expect(this.dialog.workspace).toBe(this.workspace);
-            });
-
-            it("has the 'importType' parameter set to 'schedule'", function() {
-                expect(this.attrs.importType).toBe("schedule");
-            });
-        });
-
-        describe("when editing an existing schedule", function() {
-            beforeEach(function() {
-                this.dialog = new chorus.dialogs.ImportScheduler({
-                    dataset: this.dataset,
-                    workspace: this.workspace,
-                    action: "edit_schedule"
-                });
-                this.server.completeFetchFor(this.importSchedules);
-                this.dialog.$(".new_table input:radio").prop("checked", false);
-                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                this.dialog.$(".dataset_picked").text("my_existing_table");
-                this.dialog.$(".dataset_picked").data("dataset", "my_existing_table");
-                this.attrs = this.dialog.getNewModelAttrs();
-            });
-
-            it("has the 'importType' parameter set to 'schedule'", function() {
-                expect(this.attrs.importType).toBe("schedule");
-            });
-
-            it("has the right table", function() {
-                expect(this.attrs.toTable).toBe("my_existing_table");
-            });
-
-            context("when the dialog has errors", function() {
-                beforeEach(function() {
-                    spyOn(this.dialog.model, "clearErrors");
-                });
-
-                it("clears any errors on the model when the dialog is closed", function() {
-                    this.dialog.model.errors = { name: "wrong name" };
-                    this.dialog.$("button.cancel").click();
-                    expect(this.dialog.model.clearErrors).toHaveBeenCalled();
-                });
-            });
-        });
-    });
-
     describe("creating a new schedule", function() {
         beforeEach(function() {
             this.dialog = new chorus.dialogs.ImportScheduler({
@@ -87,6 +27,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
             spyOn(chorus.views.ImportSchedule.prototype, "enable");
             this.dialog.render();
             this.dialog.$(".new_table input.name").val("abc").trigger("keyup");
+        });
+
+        it("takes the workspace from the options passed", function() {
+            expect(this.dialog.workspace).toBe(this.workspace);
         });
 
         it("should have a truncate checkbox for a new table", function() {
@@ -135,6 +79,17 @@ describe("chorus.dialogs.ImportScheduler", function() {
             itShouldHaveAllTheFields(".existing_table");
         });
 
+        context("when the dialog has errors", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, "clearErrors");
+            });
+
+            it("clears any errors on the model when the dialog is closed", function() {
+                this.dialog.model.errors = { name: "wrong name" };
+                this.dialog.$("button.cancel").click();
+                expect(this.dialog.model.clearErrors).toHaveBeenCalled();
+            });
+        });
 
         function itShouldHaveAllTheFields(selector) {
             it("should enable the schedule view", function() {
@@ -298,7 +253,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("pre-populates the table name", function() {
                 expect(this.dialog.$(".new_table input.name").val()).toBe("my_table");
-            })
+            });
 
             it("should have a truncate checkbox for a new table", function() {
                 expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
@@ -309,7 +264,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             beforeEach(function () {
                 this.importSchedule.set({newTable: false});
                 this.server.completeFetchFor(this.dataset.getImportSchedules(), [this.importSchedule]);
-//                this.server.completeFetchFor(this.importSchedules);
                 this.dialog.render();
             });
 
@@ -360,6 +314,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.model.unset("sampleCount");
                 this.dialog.render();
                 expect(this.dialog.$("input[name='sampleCount']").val()).toBe("500");
+            });
+
+            it("has the right table", function() {
+                expect(this.dialog.getNewModelAttrs().toTable).toBe(this.importSchedule.destination().name());
             });
 
             describe("submitting the form", function () {
