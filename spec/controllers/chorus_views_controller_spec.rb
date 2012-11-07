@@ -124,6 +124,68 @@ describe ChorusViewsController, :database_integration => true do
     end
   end
 
+  context "#duplicate" do
+    let(:chorus_view) do
+      FactoryGirl.create(:chorus_view, :schema => schema, :workspace => workspace, :query => "select 1;")
+    end
+
+    it "duplicate the chorus view" do
+      post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+
+      new_chorus_view = Dataset.chorus_views.last
+      new_chorus_view.name.should == "duplicate_chorus_view"
+      chorus_view.workspace.bound_datasets.should include(new_chorus_view)
+
+      response.code.should == "201"
+      decoded_response[:query].should == "select 1;"
+      decoded_response[:schema][:id].should == schema.id
+      decoded_response[:object_name].should == "duplicate_chorus_view"
+      decoded_response[:workspace][:id].should == workspace.id
+    end
+
+    context "when chorus View have import schedule" do
+      before do
+        ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
+                                :frequency => 'weekly', :workspace => chorus_view.workspace,
+                                :to_table => "new_table_for_import", :source_dataset_id => chorus_view.id, :truncate => 't',
+                                :new_table => 't', :user_id => user.id}, {:without_protection => true})
+
+      end
+
+      it "copies the import schedule" do
+        post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+        new_chorus_view = Dataset.chorus_views.last
+
+        new_import_schedule = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first
+        old_import_schedule = chorus_view.import_schedules.where("workspace_id = #{chorus_view.workspace.id}").first
+
+        new_import_schedule[:frequency].should == old_import_schedule[:frequency]
+        new_import_schedule[:destination_dataset_id].should == old_import_schedule[:destination_dataset_id]
+        new_import_schedule[:to_table].should == old_import_schedule[:to_table]
+        new_import_schedule[:source_dataset_id] = new_chorus_view.id
+        new_import_schedule[:truncate].should == old_import_schedule[:truncate]
+        new_import_schedule[:sample_count].should ==  old_import_schedule[:sample_count]
+        new_import_schedule[:new_table].should ==     old_import_schedule[:new_table]
+        new_import_schedule[:user_id].should ==       old_import_schedule[:user_id]
+        new_import_schedule[:start_datetime].should ==old_import_schedule[:start_datetime]
+        new_import_schedule[:end_date].should ==      old_import_schedule[:end_date]
+        new_import_schedule[:workspace_id].should ==  old_import_schedule[:workspace_id]
+      end
+    end
+
+    context "when chorus View does not  import schedule" do
+
+      it "does not copy the import schedule" do
+        post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+
+        new_chorus_view = Dataset.chorus_views.last
+        new_import = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first
+
+        new_import.should == nil
+      end
+    end
+  end
+
   describe "#update" do
     let(:chorus_view) { datasets(:executable_chorus_view) }
 

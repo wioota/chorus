@@ -21,6 +21,16 @@ class ChorusView < Dataset
 
   alias_attribute :object_name, :name
 
+  def create_duplicate_chorus_view name
+    chorus_view = ChorusView.new
+    chorus_view.schema = schema
+    chorus_view.query = query
+    chorus_view.master_table = master_table
+    chorus_view.name = name
+    chorus_view.workspace = workspace
+    chorus_view
+  end
+
   def validate_query
     return unless changes.include?(:query)
     unless query.upcase.start_with?("SELECT", "WITH")

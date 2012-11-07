@@ -4,6 +4,14 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
 
     showUrlTemplate: "workspaces/{{workspace.id}}/chorus_views/{{id}}",
 
+    urlTemplate: function(options) {
+        if(this.duplicate) {
+            return "chorus_views/" + this.get("sourceObjectId") + "/duplicate"
+        } else {
+            return "chorus_views";
+        }
+    },
+    
     schemaId: function() {
         return this.schema().id
     },

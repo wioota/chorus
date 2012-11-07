@@ -46,4 +46,20 @@ class ImportSchedule < ActiveRecord::Base
     ).next_import_time
     self.next_import_at = val
   end
+
+  def create_duplicate_import_schedule (source_dataset_id)
+    new_import_schedule = ImportSchedule.new
+    new_import_schedule.frequency = frequency
+    new_import_schedule.destination_dataset_id = destination_dataset_id
+    new_import_schedule.to_table = to_table
+    new_import_schedule.source_dataset_id = source_dataset_id
+    new_import_schedule.truncate = truncate
+    new_import_schedule.sample_count = sample_count
+    new_import_schedule.new_table = new_table
+    new_import_schedule.user_id = user_id
+    new_import_schedule.start_datetime = start_datetime
+    new_import_schedule.end_date = end_date
+    new_import_schedule.workspace_id = workspace_id
+    new_import_schedule
+  end
 end

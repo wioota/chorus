@@ -89,8 +89,9 @@ describe("chorus.models.WorkspaceDataset", function() {
                 expect(this.copy.get(attrName)).toBeDefined();
             }, this);
 
-            expect(this.copy.get("instanceId")).toBe(this.model.get("instance").id);
             expect(this.copy.get("sourceObjectId")).toBe(this.model.id);
+            expect(this.copy.sourceObject).toBe(this.model);
+            expect(this.copy.duplicate).toBeTruthy();
         });
 
         it("does not give the chorus view an id", function() {

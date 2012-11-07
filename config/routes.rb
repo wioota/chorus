@@ -59,6 +59,7 @@ Chorus::Application.routes.draw do
   resources :chorus_views, :only => [:create, :update, :destroy] do
     member do
       post :convert
+      post :duplicate
     end
   end
 

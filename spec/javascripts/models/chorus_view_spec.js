@@ -9,8 +9,19 @@ describe("chorus.models.ChorusView", function() {
     it("has the right url for create, update, and delete", function() {
         _.each(['create', 'update', 'delete'], function(method) {
             this.model.attributes.sourceObjectId = "100";
-            expect(this.model.url({method: method})).toMatchUrl('/chorus_views/');
+            expect(this.model.url({method: method})).toMatchUrl('/chorus_views');
         }, this)
+    });
+
+    it("has the right url when duplicate is true", function() {
+        this.model.attributes.sourceObjectId = "100";
+        this.model.duplicate= true;
+        expect(this.model.url()).toMatchUrl('/chorus_views/100/duplicate');
+    });
+
+    it("delegates to the source object for #schema and #workspace", function() {
+        expect(this.model.schema().name()).toBe(this.sourceDataset.schema().name());
+        expect(this.model.workspace().attributes).toEqual(this.sourceDataset.workspace().attributes);
     });
 
     it("initializes its 'type' and 'object type' attributes correctly", function() {
