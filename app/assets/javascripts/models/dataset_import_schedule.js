@@ -14,15 +14,6 @@ chorus.models.DatasetImportSchedule = chorus.models.Base.extend({
         return this.get("frequency") && this.get("frequency").toUpperCase();
     },
 
-    nextExecutionAt: function() {
-        return this.get("nextImportAt")
-    },
-
-    hasNextImport: function() {
-        return !!this.get("nextImportAt")
-    },
-
-
     endTime:function () {
         return  this.get("endDate") && Date.parse(this.get("endDate"));
     },
