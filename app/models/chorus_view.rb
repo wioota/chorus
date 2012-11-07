@@ -86,4 +86,8 @@ class ChorusView < Dataset
     view.save!
     view
   end
+
+  def add_metadata!(account)
+    @statistics = DatasetStatistics.new(nil)
+  end
 end

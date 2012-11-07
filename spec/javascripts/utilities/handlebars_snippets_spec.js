@@ -58,8 +58,8 @@ describe("handlebars", function () {
                     Handlebars.helpers.ifAdminOr(false, this.ifAdminOrSpy);
                     expect(this.ifAdminOrSpy).toHaveBeenCalled();
                     expect(this.ifAdminOrSpy.inverse).not.toHaveBeenCalled();
-                })
-            })
+                });
+            });
 
             context("when user is not an admin", function () {
                 beforeEach(function () {
@@ -70,15 +70,15 @@ describe("handlebars", function () {
                     Handlebars.helpers.ifAdminOr(true, this.ifAdminOrSpy);
                     expect(this.ifAdminOrSpy).toHaveBeenCalled();
                     expect(this.ifAdminOrSpy.inverse).not.toHaveBeenCalled();
-                })
+                });
 
                 it("executes the inverse block when the flag is false", function () {
                     Handlebars.helpers.ifAdminOr(false, this.ifAdminOrSpy);
                     expect(this.ifAdminOrSpy).not.toHaveBeenCalled();
                     expect(this.ifAdminOrSpy.inverse).toHaveBeenCalled();
-                })
-            })
-        })
+                });
+            });
+        });
 
         describe("ifCurrentUserNameIs", function () {
             beforeEach(function () {
@@ -92,12 +92,12 @@ describe("handlebars", function () {
                     Handlebars.helpers.ifCurrentUserNameIs("benjamin", this.spy);
                     expect(this.spy).toHaveBeenCalled();
                     expect(this.spy.inverse).not.toHaveBeenCalled();
-                })
+                });
             });
 
             describe("when the given username does NOT match the current user's name", function () {
                 it("execute the inverse block", function () {
-                    Handlebars.helpers.ifCurrentUserNameIs("noe valley", this.spy)
+                    Handlebars.helpers.ifCurrentUserNameIs("noe valley", this.spy);
                     expect(this.spy.inverse).toHaveBeenCalled();
                     expect(this.spy).not.toHaveBeenCalled();
                 });
@@ -113,7 +113,7 @@ describe("handlebars", function () {
                     expect(this.spy.inverse).toHaveBeenCalled();
                     expect(this.spy).not.toHaveBeenCalled();
                 });
-            })
+            });
         });
 
         describe("ifAll", function () {
@@ -244,8 +244,8 @@ describe("handlebars", function () {
         describe("displayNameFromPerson", function () {
             it("renders the fullname", function () {
                 expect(Handlebars.helpers.displayNameFromPerson({firstName:"EDC", lastName:"Admin"})).toBe("EDC Admin");
-            })
-        })
+            });
+        });
 
         describe("displayTimestamp", function () {
             it("renders the timestamp without milliseconds", function () {
@@ -254,27 +254,27 @@ describe("handlebars", function () {
 
             it("tolerates bogus timestamps", function () {
                 expect(Handlebars.helpers.displayTimestamp("yo momma")).toBe("WHENEVER");
-            })
+            });
 
             it("tolerates undefined", function () {
                 expect(Handlebars.helpers.displayTimestamp()).toBe("WHENEVER");
-            })
-        })
+            });
+        });
 
         describe("relativeTimestamp", function () {
             it("renders the relative timestamp", function () {
                 var tm = Date.formatForApi((50).hours().ago());
                 expect(Handlebars.helpers.relativeTimestamp(tm)).toBe("2 days ago");
-            })
+            });
 
             it("tolerates bogus timestamps", function () {
                 expect(Handlebars.helpers.relativeTimestamp("yo momma")).toBe("WHENEVER");
-            })
+            });
 
             it("tolerates undefined", function () {
                 expect(Handlebars.helpers.relativeTimestamp()).toBe("WHENEVER");
-            })
-        })
+            });
+        });
 
         describe("moreLink", function () {
             describe("when the collection has more than max elements", function () {
@@ -365,22 +365,22 @@ describe("handlebars", function () {
                     ];
                     Handlebars.helpers.eachWithMoreLink(this.collection, 2, "activity.comments.more",
                         "activity.comments.less", true, this.yieldSpy);
-                })
+                });
 
                 it("yields to the block for each element", function () {
                     expect(this.yieldSpy.callCount).toBe(2);
-                })
+                });
 
                 it("calls moreLink", function () {
                     expect(Handlebars.helpers.moreLink).toHaveBeenCalledWith(this.collection, 2,
                         "activity.comments.more", "activity.comments.less");
-                })
+                });
 
                 it("does not set the 'more' context attribute when yielding for any element", function () {
                     expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("");
                     expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
-                })
-            })
+                });
+            });
         });
 
         describe("pluralize", function () {
@@ -395,54 +395,54 @@ describe("handlebars", function () {
                 it("uses the singular string if there is only one element", function () {
                     expect(Handlebars.helpers.pluralize([1], "breadcrumbs.home"))
                         .toMatchTranslation("breadcrumbs.home");
-                })
+                });
 
                 context("when there is more than one element", function () {
                     context("and no plural string is present", function () {
                         it("adds an 's' to the singular string", function () {
                             expect(Handlebars.helpers.pluralize([1, 2], "breadcrumbs.home"))
                                 .toBe(t("breadcrumbs.home") + "s")
-                        })
-                    })
+                        });
+                    });
 
                     context("and a plural string is present", function () {
                         it("uses the plural string", function () {
                             expect(Handlebars.helpers.pluralize([1, 2], "test.mouse"))
                                 .toMatchTranslation("test.mouse_plural");
-                        })
-                    })
-                })
+                        });
+                    });
+                });
             });
 
             context("when the first argument is a number", function () {
                 it("uses the singular string if the number is exactly one", function () {
                     expect(Handlebars.helpers.pluralize(1, "breadcrumbs.home"))
                         .toMatchTranslation("breadcrumbs.home");
-                })
+                });
 
                 context("when there is more than one element", function () {
                     context("and no plural string is present", function () {
                         it("adds an 's' to the singular string", function () {
                             expect(Handlebars.helpers.pluralize(3, "breadcrumbs.home"))
                                 .toBe(t("breadcrumbs.home") + "s")
-                        })
-                    })
+                        });
+                    });
 
                     context("and a plural string is present", function () {
                         it("uses the plural string", function () {
                             expect(Handlebars.helpers.pluralize(3, "test.mouse"))
                                 .toMatchTranslation("test.mouse_plural");
-                        })
-                    })
-                })
+                        });
+                    });
+                });
             });
-        })
+        });
 
         describe("fileIconUrl", function () {
             it("returns the icon url for the file", function () {
                 expect(Handlebars.helpers.fileIconUrl("SQL", "medium")).toBe(chorus.urlHelpers.fileIconUrl("SQL", "medium"))
-            })
-        })
+            });
+        });
 
         describe("renderTemplate", function () {
             it("renders the template", function () {
@@ -482,13 +482,13 @@ describe("handlebars", function () {
             });
 
             it("html escapes the text", function () {
-                var unsafeString = "<em>stuff</em>"
+                var unsafeString = "<em>stuff</em>";
                 var link = Handlebars.helpers.linkTo("/", unsafeString).toString();
                 expect(link).toMatch('&lt;em&gt;');
             });
 
             it("does not html escape the text if it has been declared safe", function () {
-                var safeString = new Handlebars.SafeString("<em>stuff</em>")
+                var safeString = new Handlebars.SafeString("<em>stuff</em>");
                 var link = Handlebars.helpers.linkTo("/", safeString).toString();
                 expect(link).toMatch('<em>');
             });
@@ -519,13 +519,13 @@ describe("handlebars", function () {
         describe("workspaceUsage", function () {
             it("should never have a width greater than 100%", function () {
                 expect($(Handlebars.helpers.workspaceUsage(101).toString()).find('.used').attr('style')).toContain("100%");
-            })
+            });
 
             it("should be red if percentage is >= 100%", function () {
                 expect($(Handlebars.helpers.workspaceUsage(99, '1GB').toString()).find('.used')).not.toHaveClass('full');
                 expect($(Handlebars.helpers.workspaceUsage(100, '1GB').toString()).find('.used')).toHaveClass('full');
                 expect($(Handlebars.helpers.workspaceUsage(101, '1GB').toString()).find('.used')).toHaveClass('full');
-            })
+            });
 
             it("with percentage >= 100% it has percentage text", function () {
                 expect($(Handlebars.helpers.workspaceUsage(99, '1GB').toString()).find('.percentage_text')).not.toExist();
@@ -556,7 +556,7 @@ describe("handlebars", function () {
                 var html = Handlebars.compile('{{chooserMenu false max=3 className="foo"}}')();
                 var chooser = $(html);
                 expect(chooser).toHaveClass('foo');
-            })
+            });
 
             context("when an array of choices is specified", function () {
                 var chooser;
@@ -593,7 +593,7 @@ describe("handlebars", function () {
                     var html = Handlebars.compile("{{chooserMenu false max=3 initial=2}}")();
                     var chooser = $(html);
                     expect(chooser.find('a')).toContainText('2');
-                })
+                });
 
                 it("sets the default to max if no default provided", function () {
                     var html = Handlebars.compile("{{chooserMenu false max=3}}")();
@@ -665,7 +665,7 @@ describe("handlebars", function () {
             });
 
             it("should not round the value", function () {
-                var context = {value:.0012344}
+                var context = {value:.0012344};
                 var string = Handlebars.compile(this.template)(context);
                 expect(string.toString()).toContainText("0.0012344");
             });
@@ -683,13 +683,13 @@ describe("handlebars", function () {
             });
 
             it("encodes the appropriate entities", function () {
-                var context = {value:"% /xyz"}
+                var context = {value:"% /xyz"};
                 var string = Handlebars.compile(this.template)(context);
                 expect(string).toBe("%25%20%2Fxyz");
             });
 
             it("handles html-ish stuff correctly", function () {
-                var context = {value:"<stuff>"}
+                var context = {value:"<stuff>"};
                 var string = Handlebars.compile(this.template)(context);
                 expect(string).toBe("%3Cstuff%3E");
             });
@@ -701,14 +701,14 @@ describe("handlebars", function () {
                 setWorkspace:function (workspace) {
                     this.attributes.workspaceId = workspace.get('id')
                 }
-            })
+            });
             beforeEach(function () {
                 this.contextObject = new contextObjectClass();
             });
 
             context("when the first arguments is an array", function () {
                 beforeEach(function () {
-                    this.workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()]
+                    this.workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
@@ -754,12 +754,12 @@ describe("handlebars", function () {
 
                 it("should not indicate there are any other workspaces", function () {
                     expect($(this.result).find('a').length).toBe(1);
-                })
+                });
 
                 it("does not modify the contexObject", function () {
                     expect(this.contextObject.get('workspaceId')).toBeUndefined();
-                })
-            })
+                });
+            });
 
             context("when there are exactly 2 'found in' workspaces", function () {
                 beforeEach(function () {
@@ -771,8 +771,8 @@ describe("handlebars", function () {
 
                 it("should indicate there is 1 other workspace", function () {
                     expect($(this.result)).toContainTranslation("workspaces_used_in.other_workspaces", {count:1});
-                })
-            })
+                });
+            });
 
             context("when there are exactly 3 'found in' workspaces", function () {
                 beforeEach(function () {
@@ -784,16 +784,16 @@ describe("handlebars", function () {
 
                 it("should indicate there is 2 other workspaces", function () {
                     expect($(this.result)).toContainTranslation("workspaces_used_in.other_workspaces", {count:2});
-                })
+                });
 
                 it("includes a menu to the other workspaces", function () {
                     expect($(this.result).find("a.open_other_menu")).toExist();
                     expect($(this.result).find(".other_menu li").length).toBe(2);
                     var workspace = this.workspaceList.at(1);
-                    expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', '#/' + workspace.get('id') + '/contextObject')
+                    expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', '#/' + workspace.get('id') + '/contextObject');
                     expect($(this.result).find(".other_menu li a:eq(0)")).toContainText(workspace.get('name'))
-                })
-            })
+                });
+            });
 
             function itIncludesTheFoundInWorkspaceInformation() {
                 it("includes the 'found in workspace' information", function () {
@@ -918,7 +918,7 @@ describe("handlebars", function () {
 
             context("when credentials are not present", function () {
                 beforeEach(function () {
-                    this.model = fixtures.dataset({hasCredentials:false})
+                    this.model = fixtures.dataset({hasCredentials:false});
                     this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 });
 
@@ -979,7 +979,7 @@ describe("handlebars", function () {
                 });
 
                 it("returns the correct dataset type translation", function() {
-                    Handlebars.helpers.humanizedDatasetType({ type: "type" }, { objectType: "objectType" });
+                    Handlebars.helpers.humanizedDatasetType({ type: "type" }, rspecFixtures.datasetStatisticsTable({ objectType: "objectType" }));
                     expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
                 });
             });
@@ -988,17 +988,17 @@ describe("handlebars", function () {
         describe("displaySearchMatch", function () {
             context("on plain JS objects", function () {
                 it("uses the search result if present", function () {
-                    var attributes = { schemaName:'ddemo', highlightedAttributes:{schemaName:["d<em>demo</em>"]}}
+                    var attributes = { schemaName:'ddemo', highlightedAttributes:{schemaName:["d<em>demo</em>"]}};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe("d<em>demo</em>");
                 });
 
                 it("falls back to the attributes", function () {
-                    var attributes = { schemaName:'ddemo', highlightedAttributes:{anotherAttribute:["d<em>demo</em>"]}}
+                    var attributes = { schemaName:'ddemo', highlightedAttributes:{anotherAttribute:["d<em>demo</em>"]}};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe('ddemo');
                 });
 
                 it("doesn't complain if the highlightedAttributes are missing", function () {
-                    var attributes = { schemaName:'ddemo'}
+                    var attributes = { schemaName:'ddemo'};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe('ddemo');
                 });
 
@@ -1010,12 +1010,12 @@ describe("handlebars", function () {
                 it("doesn't html-escape safe fields", function () {
                     var attributes = {content:"this <b>content</b> has <i>html</i>"};
                     expect(Handlebars.helpers.displaySearchMatchFromSafeField.call(attributes, 'content').toString()).toBe("this <b>content</b> has <i>html</i>")
-                })
+                });
 
                 it("html-escapes unsafe fields", function () {
                     var attributes = {content:"this <b>content</b> has <i>html</i>"};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content').toString()).toBe("this &lt;b&gt;content&lt;/b&gt; has &lt;i&gt;html&lt;/i&gt;")
-                })
+                });
             });
 
             context("on backbone models", function () {
@@ -1046,7 +1046,7 @@ describe("handlebars", function () {
                 var definition = Handlebars.helpers.sqlDefinition("<script>");
                 expect(definition).not.toMatch('<script>');
             });
-        })
+        });
 
         describe("searchResultCommentTitle", function () {
             context("when the comment is an insight", function () {
@@ -1159,7 +1159,7 @@ describe("handlebars", function () {
                 it("renders the messages", function () {
                     var el = $(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials));
                     expect(el.find("li").length).toBe(2);
-                    expect(el.find("li:eq(0)").text()).toContain("Username or password is invalid")
+                    expect(el.find("li:eq(0)").text()).toContain("Username or password is invalid");
                     expect(el.find("li:eq(1)").text()).toContain("Password can't be blank")
                 });
             });

@@ -56,7 +56,9 @@ window.rspecFixtureDefinitions = {
     workspaceDataset: {
         unique: ["id"],
         children: {
-            chorusView: {},
+            chorusView: {
+                model: 'ChorusView'
+            },
             datasetTable: {},
             datasetView: {},
             sourceTable: {},
@@ -265,8 +267,12 @@ window.rspecFixtureDefinitions = {
     dataPreviewTaskResults: {
         model: "DataPreviewTask"
     },
-    datasetStatisticsTable: {},
-    datasetStatisticsView: {},
+    datasetStatisticsTable: {
+        model: "DatasetStatistics"
+    },
+    datasetStatisticsView: {
+        model: "DatasetStatistics"
+    },
 
     schemaFunctionSet: {},
 

@@ -252,6 +252,14 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#setSchema", function() {
+        it("sets the schema", function() {
+            var newSchema = rspecFixtures.schema();
+            this.dataset.setSchema(newSchema);
+            expect(this.dataset.schema().attributes).toEqual(newSchema.attributes);
+        });
+    });
+
     xdescribe("#lastComment", function() {
         beforeEach(function() {
             this.model = rspecFixtures.dataset();
@@ -573,6 +581,11 @@ describe("chorus.models.Dataset", function() {
         it("is a chorus.models.Workspace when it has a workspace", function() {
             this.dataset.set({workspace: rspecFixtures.workspaceJson()});
             expect(this.dataset.workspace()).toBeA(chorus.models.Workspace);
+        });
+
+        it("memoizes", function() {
+            this.dataset.set({workspace: rspecFixtures.workspaceJson()});
+            expect(this.dataset.workspace()).toEqual(this.dataset.workspace());
         });
 
         it("is undefined when there is no workspace", function() {

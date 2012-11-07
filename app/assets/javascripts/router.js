@@ -26,6 +26,7 @@
             ["workspaces/:id/quickstart", "WorkspaceQuickstart"],
             ["workspaces/:workspaceId/workfiles", "WorkfileIndex"],
             ["workspaces/:workspaceId/datasets/:datasetId", "WorkspaceDatasetShow"],
+            ["workspaces/:workspaceId/chorus_views/:datasetId", "ChorusViewShow"],
             ["workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["workspaces/:workspaceId/datasets", "WorkspaceDatasetIndex"],

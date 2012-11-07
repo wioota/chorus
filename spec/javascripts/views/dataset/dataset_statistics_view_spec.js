@@ -29,7 +29,7 @@ describe("chorus.views.DatasetStatistics", function() {
         });
 
         it("displays the dataset's translated type", function() {
-            expect(this.view.$(".table_type").text()).toBe(Handlebars.helpers.humanizedDatasetType(this.dataset.attributes, this.dataset.statistics().attributes));
+            expect(this.view.$(".table_type").text()).toBe(Handlebars.helpers.humanizedDatasetType(this.dataset.attributes, this.dataset.statistics()));
         });
 
         it("displays rows when the value is 0", function() {

@@ -144,9 +144,6 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             });
 
             context("when the fetch for the schemas completes", function () {
-                beforeEach(function () {
-                });
-
                 it("shows a drop-down menu when the schema link is clicked", function () {
                     var $link = this.dialog.$(".canonical_name a.schema_qtip");
                     expect($link).toContainText(this.schema.get("name"));

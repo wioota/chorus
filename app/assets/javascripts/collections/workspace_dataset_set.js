@@ -1,6 +1,6 @@
 chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend({
 
-    model:chorus.models.WorkspaceDataset,
+    model: chorus.models.DynamicDataset,
     constructorName: "WorkspaceDatasetSet",
 
     setup: function() {

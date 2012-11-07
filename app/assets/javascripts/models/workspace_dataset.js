@@ -6,7 +6,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         if(options.download) {
             return this._super("urlTemplate", arguments);
         } else if(this.isChorusView() &&
-            (_.indexOf(["update", "delete"], options.method) > -1)) {
+            (_.indexOf(["create", "update", "delete"], options.method) > -1)) {
             return "chorus_views/{{id}}"
         } else {
             return "workspaces/{{workspace.id}}/datasets/{{id}}";
@@ -39,10 +39,10 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         var chorusView = new chorus.models.ChorusView({
             sourceObjectId: this.id,
             sourceObjectType: "dataset",
-            schemaId: this.schema().id,
             workspace: this.get("workspace"),
             objectName: this.name()
         });
+        chorusView.setSchema(this.schema());
         chorusView.sourceObject = this;
         return chorusView;
     },
@@ -58,11 +58,11 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     statistics: function() {
-        var stats = this._super("statistics")
+        var stats = this._super("statistics");
 
         if (this.isChorusView() && !stats.datasetId) {
-            stats.set({ workspace: this.get("workspace")})
-            stats.datasetId = this.get("id")
+            stats.set({ workspace: this.get("workspace")});
+            stats.datasetId = this.get("id");
         }
 
         return stats;

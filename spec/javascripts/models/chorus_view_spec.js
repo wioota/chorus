@@ -1,19 +1,16 @@
 describe("chorus.models.ChorusView", function() {
     beforeEach(function() {
         this.sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()])
+        this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
         this.model = this.sourceDataset.deriveChorusView();
         this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
     });
 
-    it("has the right url", function() {
-        this.model.attributes.sourceObjectId = "100";
-        expect(this.model.url()).toMatchUrl('/chorus_views');
-    });
-
-    it("delegates to the source object for #schema and #workspace", function() {
-        expect(this.model.schema().name()).toBe(this.sourceDataset.schema().name());
-        expect(this.model.workspace()).toBe(this.sourceDataset.workspace());
+    it("has the right url for create, update, and delete", function() {
+        _.each(['create', 'update', 'delete'], function(method) {
+            this.model.attributes.sourceObjectId = "100";
+            expect(this.model.url({method: method})).toMatchUrl('/chorus_views/');
+        }, this)
     });
 
     it("initializes its 'type' and 'object type' attributes correctly", function() {
@@ -96,7 +93,7 @@ describe("chorus.models.ChorusView", function() {
                 _.each(this.model.joins, function(join, index) {
                     expect(join.destinationColumn.dataset.datasetNumber).toBe(index + 2);
                 })
-            })
+            });
 
             it("removes the join", function() {
                 expect(this.model.joins.length).toBe(1);
@@ -142,38 +139,38 @@ describe("chorus.models.ChorusView", function() {
             this.column = this.sourceDataset.columns().models[0];
             spyOnEvent(this.column, 'change');
             this.model.addColumn(this.column);
-        })
+        });
 
         it("has the column", function() {
             expect(this.model.sourceObjectColumns).toContain(this.column);
-        })
+        });
 
         it("triggers change on the model", function() {
             expect('change').toHaveBeenTriggeredOn(this.model);
-        })
+        });
 
         it("marks the column as selected", function() {
             expect(this.column.selected).toBeTruthy();
-        })
+        });
 
         it("triggers change on the column", function() {
             expect('change').toHaveBeenTriggeredOn(this.column);
-        })
+        });
 
         context("for a column already added", function() {
             beforeEach(function() {
                 resetBackboneEventSpies(this.model);
                 this.model.addColumn(this.column);
-            })
+            });
 
             it("prevents duplicates", function() {
                 expect(this.model.columns.length).toBe(1);
-            })
+            });
 
             it("does not trigger change on the model", function() {
                 expect('change').not.toHaveBeenTriggeredOn(this.model);
-            })
-        })
+            });
+        });
 
         context("for a column on a join", function() {
             beforeEach(function() {
@@ -184,22 +181,22 @@ describe("chorus.models.ChorusView", function() {
 
             it("adds the column to the column list of the join", function() {
                 expect(this.join.columns).toContain(this.joinedColumn);
-            })
+            });
             describe("removeColumn", function() {
                 beforeEach(function() {
                     resetBackboneEventSpies(this.model);
-                    expect(this.join.columns.length).toBe(1)
+                    expect(this.join.columns.length).toBe(1);
                     this.model.removeColumn(this.joinedColumn);
-                })
+                });
 
                 it("removes the column", function() {
                     expect(this.join.columns.length).toBe(0)
-                })
+                });
 
                 it("triggers change on the model", function() {
                     expect('change').toHaveBeenTriggeredOn(this.model);
-                })
-            })
+                });
+            });
         });
 
         describe("removeColumn", function() {
@@ -209,41 +206,41 @@ describe("chorus.models.ChorusView", function() {
                     resetBackboneEventSpies(this.model);
                     resetBackboneEventSpies(this.column);
                     this.model.removeColumn(this.column);
-                })
+                });
 
                 it("removes the column", function() {
                     expect(this.model.sourceObjectColumns.length).toBe(0);
-                })
+                });
 
                 it("triggers change on the model", function() {
                     expect('change').toHaveBeenTriggeredOn(this.model);
-                })
+                });
 
                 it("marks the column as not selected", function() {
                     expect(this.column.selected).toBeFalsy();
-                })
+                });
 
                 it("triggers change on the column", function() {
                     expect('change').toHaveBeenTriggeredOn(this.column);
-                })
-            })
+                });
+            });
 
             context("with a column that does not exists", function() {
 
                 beforeEach(function() {
                     resetBackboneEventSpies(this.model);
                     this.model.removeColumn(this.sourceDataset.columns().models[1]);
-                })
+                });
 
                 it("does nothing to the columns", function() {
                     expect(this.model.columns.length).toBe(1);
-                })
+                });
 
                 it("does not trigger change on the model", function() {
                     expect('change').not.toHaveBeenTriggeredOn(this.model);
-                })
-            })
-        })
+                });
+            });
+        });
     });
 
     describe("generateFromClause", function() {
@@ -257,14 +254,14 @@ describe("chorus.models.ChorusView", function() {
             beforeEach(function() {
                 this.sourceColumn = this.sourceDataset.columns().models[0];
                 this.firstJoinedColumn = addJoin(this, this.sourceColumn);
-            })
+            });
 
             it("has the second table joined in", function() {
                 var lines = this.model.generateFromClause().split('\n');
                 expect(lines[0]).toBe('FROM ' + this.sourceDataset.get("schema").name + '.' + this.sourceDataset.quotedName());
                 expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.dataset.fromClause() + ' ON '
                     + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
-            })
+            });
         })
     });
 
@@ -272,29 +269,29 @@ describe("chorus.models.ChorusView", function() {
         context("when there are no columns selected", function() {
             it("is not valid", function() {
                 expect(this.model.valid()).toBeFalsy();
-            })
-        })
+            });
+        });
 
         context("when there are sourceDataset columns selected", function() {
             beforeEach(function() {
                 this.model.addColumn(this.sourceDataset.columns().models[0]);
-            })
+            });
 
             it("is valid", function() {
                 expect(this.model.valid()).toBeTruthy();
-            })
-        })
+            });
+        });
 
         context("when there are join columns selected", function() {
             beforeEach(function() {
                 var joinedColumn = addJoin(this);
                 this.model.addColumn(joinedColumn);
-            })
+            });
 
             it("is valid", function() {
                 expect(this.model.valid()).toBeTruthy();
-            })
-        })
+            });
+        });
     });
 
     describe("generateSelectClause", function() {
@@ -345,7 +342,7 @@ describe("chorus.models.ChorusView", function() {
             });
             expect(this.model.toJSON()['chorus_view']).toEqual({
                 object_name: 'my_chorus_view',
-                schema_id: this.model.get("schemaId"),
+                schema_id: this.model.schema().get("id"),
                 source_object_id: this.model.get("sourceObjectId"),
                 source_object_type: this.model.get("sourceObjectType"),
                 workspace_id: this.model.workspace().get('id'),

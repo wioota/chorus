@@ -13,7 +13,7 @@ describe("chorus.models.WorkspaceDataset", function() {
             objectType: "foo",
             objectName: "japanese_teas"
         });
-    })
+    });
 
     it("has the right showUrl", function() {
         expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
@@ -106,13 +106,13 @@ describe("chorus.models.WorkspaceDataset", function() {
 
             it("sets the workspace info into the statistics object", function() {
                 expect(this.dataset.statistics().get("workspace")).toEqual(this.dataset.get("workspace"))
-            })
+            });
 
             it("sets the dataset id onto the statistics object as 'datasetId'", function() {
                 expect(this.dataset.statistics().datasetId).toBe(this.dataset.get("id"))
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("#activities", function() {
         context("for a chorus view", function() {
@@ -121,9 +121,9 @@ describe("chorus.models.WorkspaceDataset", function() {
             });
 
             it("sets the workspace info into the ActivitySet object", function() {
-                expect(this.dataset.activities().attributes.workspace).toEqual(this.dataset.get("workspace"))
-            })
-        })
+                expect(this.dataset.activities().attributes.workspace).toEqual(this.dataset.get("workspace"));
+            });
+        });
 
         context("for a non-chorus view", function() {
             beforeEach(function() {
@@ -133,8 +133,8 @@ describe("chorus.models.WorkspaceDataset", function() {
             it("does not set the workspace info into the ActivitySet object", function() {
                 expect(this.dataset.activities().attributes.workspace).toBeUndefined();
             })
-        })
-    })
+        });
+    });
 
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
@@ -148,8 +148,8 @@ describe("chorus.models.WorkspaceDataset", function() {
                 var lockedIconUrl = this.dataset.iconUrl();
                 expect(lockedIconUrl).toBe(this.unlockedIconUrl.replace(".png", "_locked.png"));
             });
-        })
-    })
+        });
+    });
 
     describe("#columns", function() {
         it("returns a DatabaseColumnSet with a workspaceId", function() {
@@ -230,8 +230,6 @@ describe("chorus.models.WorkspaceDataset", function() {
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
                 sourceObjectId: this.dataset.id,
-                schemaId: this.dataset.schema().id,
-                workspace: this.dataset.get("workspace"),
                 objectName: this.dataset.name()
             });
         });
@@ -241,7 +239,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         it("returns true", function() {
             expect(this.dataset.hasOwnPage()).toBeTruthy();
         })
-    })
+    });
 
     describe("#lastImportSource", function() {
         context("when the dataset has been imported into (and has a 'importInfo' key)", function() {
@@ -250,7 +248,7 @@ describe("chorus.models.WorkspaceDataset", function() {
                     completedStamp: "2012-02-29 14:35:38.165",
                     sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                     sourceTable: "some_source_table"
-                }})
+                }});
                 this.source = this.dataset.lastImportSource();
             });
 
@@ -307,4 +305,4 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.dataset.get("workspace").id).toBe(this.newWorkspace.get("id"))
         })
     })
-})
+});

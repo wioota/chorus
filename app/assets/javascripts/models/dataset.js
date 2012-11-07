@@ -30,7 +30,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isDeleteable: function() {
-        var type = this.get("type")
+        var type = this.get("type");
         return type && (type == "SOURCE_TABLE" || type == "CHORUS_VIEW");
     },
 
@@ -102,6 +102,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         return new chorus.models.Schema(this.get("schema"));
     },
 
+    setSchema: function(newSchema) {
+        this.set('schema', newSchema.attributes);
+    },
+
     workspace: function() {
         if (!this._workspace && this.get("workspace")) {
             this._workspace = new chorus.models.Workspace(this.get("workspace"));
@@ -111,7 +115,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     workspacesAssociated: function() {
         if (!this._workspaceAssociated) {
-            var workspaceList = this.get("associatedWorkspaces")
+            var workspaceList = this.get("associatedWorkspaces");
             this._workspaceAssociated = new chorus.collections.WorkspaceSet(workspaceList);
         }
         return this._workspaceAssociated;

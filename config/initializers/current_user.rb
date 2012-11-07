@@ -1,3 +1,5 @@
+require 'presenter'
+
 module CurrentUser
   extend ActiveSupport::Concern
 

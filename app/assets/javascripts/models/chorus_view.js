@@ -2,8 +2,10 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     constructorName: "ChorusView",
     paramsToSave: ['id', 'objectName', 'schemaId', 'workspaceId', 'query', 'sourceObjectId', 'sourceObjectType'],
 
-    urlTemplate: function(options) {
-        return "chorus_views";
+    showUrlTemplate: "workspaces/{{workspace.id}}/chorus_views/{{id}}",
+
+    schemaId: function() {
+        return this.schema().id
     },
 
     workspaceId: function() {
@@ -25,7 +27,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     },
 
     addJoin: function(sourceColumn, destinationColumn, joinType) {
-        this.joins.push({ sourceColumn: sourceColumn, destinationColumn: destinationColumn, joinType: joinType, columns: [] })
+        this.joins.push({ sourceColumn: sourceColumn, destinationColumn: destinationColumn, joinType: joinType, columns: [] });
         destinationColumn.dataset.setDatasetNumber(this.joins.length + 1);
         this.trigger("change");
         this.aggregateColumnSet.add(destinationColumn.dataset.columns().models);
@@ -33,14 +35,11 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
         this.aggregateColumnSet.trigger("join:added");
     },
 
-    schema: function() { return this.sourceObject.schema(); },
-    workspace: function() { return this.sourceObject.workspace(); },
-
     addColumn: function(column) {
         var columnList = this._columnListForDataset(column.dataset);
 
         if (!_.contains(columnList, column)) {
-            columnList.push(column)
+            columnList.push(column);
             column.selected = true;
             column.trigger("change");
             this.trigger("change")
@@ -53,14 +52,14 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
             columnList.splice(columnList.indexOf(column), 1);
             column.selected = false;
             column.trigger("change");
-            this.trigger("change")
+            this.trigger("change");
         }
     },
 
     removeJoin: function(dataset) {
         var joinToRemove = _.find(this.joins, function(join) {
             return join.destinationColumn.dataset == dataset;
-        })
+        });
         this.joins = _.without(this.joins, joinToRemove);
 
         this.removeDependentJoins(joinToRemove);
@@ -69,7 +68,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
 
         var columnsToRemove = this.aggregateColumnSet.select(function(column) {
             return column.dataset == dataset;
-        })
+        });
         this.aggregateColumnSet.remove(columnsToRemove);
 
         this.trigger("change");

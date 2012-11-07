@@ -38,7 +38,6 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         makeModel: function(datasetId) {
             this.model = this.dataset = new chorus.models.Dataset({
-
                 id: datasetId
             });
         },

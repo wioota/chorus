@@ -51,12 +51,12 @@ class Presenter
       return options.delete(:presenter_class).to_s.constantize
     end
     case model
-    when Paperclip::Attachment
-      ImagePresenter
-    when Events::Base
-      EventPresenter
-    else
-      "#{model.class.name}Presenter".constantize
+      when Paperclip::Attachment
+        ImagePresenter
+      when Events::Base
+        EventPresenter
+      else
+        "#{model.class.name}Presenter".constantize
     end
   end
 

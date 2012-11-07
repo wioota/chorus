@@ -32,7 +32,7 @@ describe("chorus.pages.DatasetShowPage", function() {
         context("when the dataset fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.dataset);
-            })
+            });
 
 
             describe("when the columnSet fetch completes", function() {
@@ -40,21 +40,21 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.columnSet);
-                    })
+                    });
 
                     it("creates the sidebar", function() {
                         expect(this.page.sidebar).toBeDefined();
                         expect(this.page.sidebar.resource).toBe(this.page.dataset);
-                    })
+                    });
 
                     it("does not set workspace", function() {
                         expect(this.page.sidebar.options.workspace).toBeFalsy();
-                    })
+                    });
 
                     it("sets the main content as persistent", function() {
                         expect(this.page.mainContent.persistent).toBeTruthy();
-                    })
-                })
+                    });
+                });
                 context("with errors", function() {
                     beforeEach(function() {
                         this.server.lastFetchAllFor(this.columnSet).failForbidden({message: "No permission"});
@@ -94,7 +94,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("when the model fails to load properly", function() {
                 beforeEach(function() {
-                    spyOn(Backbone.history, "loadUrl")
+                    spyOn(Backbone.history, "loadUrl");
                     this.page.model.trigger('resourceNotFound', this.page.model);
                 });
 
@@ -109,7 +109,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("qtip-ifies the other_menu", function() {
-                    this.page.$('.content_header .found_in .open_other_menu').click()
+                    this.page.$('.content_header .found_in .open_other_menu').click();
                     expect(this.qtipSpy).toHaveVisibleQtip();
                     expect(this.qtipSpy.find('li').length).toBe(2);
                 });
@@ -141,7 +141,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("qtip-ifies the other_menu", function() {
-                    this.page.$('.content_header .published_to .open_other_menu').click()
+                    this.page.$('.content_header .published_to .open_other_menu').click();
                     expect(this.qtipSpy).toHaveVisibleQtip();
                     expect(this.qtipSpy.find('li').length).toBe(2);
                 });
@@ -194,7 +194,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.dataset.database().name());
 
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.dataset.schema().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.dataset.schema().name())
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.dataset.schema().name());
 
                     expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.dataset.name());
                 });

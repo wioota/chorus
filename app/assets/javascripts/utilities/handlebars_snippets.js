@@ -423,8 +423,8 @@
         humanizedDatasetType: function(dataset, statistics) {
             if (!dataset) { return ""; }
             var keys = ["dataset.types", dataset.type];
-            if (statistics && statistics.objectType) {
-                keys.push(statistics.objectType);
+            if (statistics instanceof chorus.models.DatasetStatistics && statistics.get("objectType")) {
+                keys.push(statistics.get("objectType"));
             }
             else if (dataset.type === "CHORUS_VIEW" || dataset.type === "SOURCE_TABLE")
             {

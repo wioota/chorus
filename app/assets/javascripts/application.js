@@ -73,6 +73,7 @@
 //= require collections/workfile_set
 //= require collections/workspace_set
 //= require pages/dataset/dataset_show_page
+//= require pages/dataset/workspace_dataset_show_page
 //= require pages/search_index_page
 //= require pages/workspaces/workspace_show_page
 //= require_tree .

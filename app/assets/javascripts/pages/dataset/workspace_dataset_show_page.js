@@ -40,25 +40,6 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
     },
 
-    drawColumns: function() {
-        this._super('drawColumns');
-
-        this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
-    },
-
-    editChorusView: function() {
-        var sameHeader = this.mainContent.contentHeader;
-        this.mainContent = new chorus.views.MainContentView({
-            content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
-            contentHeader: sameHeader,
-            contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
-        });
-
-        chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this);
-
-        this.renderSubview('mainContent');
-    },
-
     constructSidebarForType: function(type) {
         switch (type) {
             case 'chorus_view':
@@ -69,9 +50,6 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
                 this.mainContent.content.render();
                 this.mainContent.content.selectNone();
                 this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
-                break;
-            case 'edit_chorus_view':
-                this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
                 break;
             default:
                 this._super('constructSidebarForType', arguments);
