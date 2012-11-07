@@ -32,8 +32,6 @@ if [[ "$targets" ]]; then
 fi
 
 if $run_ruby; then
-    b/rake assets:precompile --trace
-
     echo "starting gpfdist (Linux RHEL5 only)"
     export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
     ./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
@@ -46,8 +44,6 @@ if $run_jasmine ; then
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
     echo $jasmine_pid > tmp/pids/jasmine-$RAILS_ENV.pid
-
-    sleep 30
 fi
 
 set +e
@@ -65,13 +61,15 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST CI_REPORTS=spec/fixtures/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec fixtures 2>&1
+    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake fixtures 2>&1
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
 fi
 
 if $run_jasmine ; then
+    echo "Precompile Assets"
+    b/rake assets:precompile --trace
     echo "Running javascript tests"
     CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec phantom 2>&1
     JS_TESTS_RESULT=$?

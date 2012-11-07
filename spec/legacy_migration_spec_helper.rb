@@ -29,7 +29,7 @@ RSpec.configure do |config|
     unless File.exist?("db/legacy/legacy_#{legacy_sql_md5}.sql")
       p "Downloading legacy dump from server"
       FileUtils.mkdir_p('db/legacy')
-      `wget  -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci/~ci/legacy_#{legacy_sql_md5}.sql`
+      `wget  -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci.sf.pivotallabs.com/~ci/legacy_#{legacy_sql_md5}.sql`
     end
 
     Dir.chdir Rails.root do
