@@ -52,8 +52,6 @@ fi
 
 set +e
 
-unset RAILS_ENV
-
 if $run_ruby ; then
     echo "Running unit tests"
     ln -sf .rspec-ci .rspec
@@ -91,7 +89,7 @@ fi
 
 if $run_legacy_migration; then
     echo "Running legacy migration tests"
-    b/rake db:$RAILS_ENV:prepare
+    b/rake db:reset
     CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration
     LEGACY_MIGRATION_TESTS_RESULT=$?
 else
