@@ -12,7 +12,6 @@ set -e
 
 . script/ci/setup.sh
 
-
 targets=${@}
 possible_targets="fixtures jasmine ruby legacy_migration api_docs"
 
@@ -90,7 +89,7 @@ fi
 
 if $run_legacy_migration; then
     echo "Running legacy migration tests"
-    b/rake db:reset
+    b/rake db:drop db:create db:migrate
     CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration --trace
     LEGACY_MIGRATION_TESTS_RESULT=$?
 else
