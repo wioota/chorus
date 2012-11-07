@@ -250,14 +250,9 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
             });
 
-            xcontext("when you are replacing a deleted version", function() {
-                //TODO replace with error 2.2 app gives (https://www.pivotaltracker.com/story/show/35346593)
+            context("when you are replacing a deleted version", function() {
                 it("shows the version conflict alert", function() {
-                    this.server.lastUpdate().fail([{
-                        "message" : "Bad version, bro",
-                        "msgkey" : "WORKFILE.VERSION_NOT_EXIST"
-                    }]);
-
+                    this.server.lastUpdate().failNotFound();
                     expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
                 });
             });

@@ -175,14 +175,14 @@ describe("chorus.models.Abstract", function() {
                     });
                 });
 
-                describe("when an unexpected error occurs", function() {
-                    beforeEach(function() {
-                        spyOn(chorus, 'toast');
-                        this.server.lastUpdate().failServerError();
-                    });
+                describe("when an error occurs", function() {
+                    it("handles them correctly", function() {
+                        spyOn(this.model, "handleRequestFailure");
 
-                    it("responds to the errors", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("server_error");
+                        var options = { someOption: true };
+                        this.model.save({}, options);
+                        options.error(this.model, "hello");
+                        expect(this.model.handleRequestFailure).toHaveBeenCalled();
                     });
                 });
             });

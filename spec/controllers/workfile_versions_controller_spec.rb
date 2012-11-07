@@ -31,6 +31,13 @@ describe WorkfileVersionsController do
       post :update, params
       draft_count(workfile, user).should == 0
     end
+
+    context "when the workfile version does not exist" do
+      it "should return a 404 error" do
+        post :update, params.merge(:id => -1)
+        response.code.should == "404"
+      end
+    end
   end
 
   describe "#create" do

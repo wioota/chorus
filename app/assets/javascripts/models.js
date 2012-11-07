@@ -43,7 +43,7 @@ chorus.models = {
             };
 
             options.error = function(model, xhr) {
-                model.handleRequestFailure("saveFailed", xhr)
+                model.handleRequestFailure("saveFailed", xhr, options)
                 if (error) error(model, xhr);
             };
 

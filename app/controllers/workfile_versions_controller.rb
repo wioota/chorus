@@ -4,7 +4,12 @@ class WorkfileVersionsController < ApplicationController
   def update
     workfile = Workfile.find(params[:workfile_id])
     authorize! :can_edit_sub_objects, workfile.workspace
-    workfile_version = workfile.versions.find(params[:id])
+    workfile_version = workfile.versions.find_by_id(params[:id])
+
+    unless workfile_version
+      raise ActiveRecord::RecordNotFound.new(workfile)
+    end
+
     workfile_version.update_content(params[:workfile][:content])
     remove_draft(workfile)
 

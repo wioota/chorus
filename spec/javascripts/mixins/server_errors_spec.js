@@ -25,6 +25,11 @@ describe("chorus.Mixins.ServerErrors", function() {
                 this.host.serverErrors = {fields: {a: {EQUAL_TO: {count: 5}}}}
                 expect(_.first(this.host.serverErrorMessages())).toBe("A must be equal to 5");
             });
+
+            it("catches errors that are not directly on model fields", function() {
+                this.host.serverErrors = {"record":"NOT_FOUND"};
+                expect(_.first(this.host.serverErrorMessages())).toBe("The record you requested could not be found");
+            });
         });
 
         context("when the model does not have serverErrors", function() {

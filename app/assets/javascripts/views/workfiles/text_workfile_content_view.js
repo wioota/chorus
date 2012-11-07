@@ -135,8 +135,16 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     replaceCurrentVersionWithContent: function(value) {
         this.stopTimer();
         this.model.content(value, {silent: true});
+        var model = this.model;
 
-        this.model.save({}, {silent: true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
+        this.model.save({}, {
+            silent: true,
+            notFound: function() {
+                this.alert = new chorus.alerts.WorkfileConflict({ model: model });
+                this.alert.launchModal();
+            }
+        }); // Need to save silently because content details and content share the same models, and we don't want to render content details
+
         this.render();
     },
 

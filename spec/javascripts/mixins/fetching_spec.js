@@ -259,7 +259,7 @@ describe("chorus.Mixins.Fetching", function() {
         });
     });
 
-    describe("#parseErrors", function() {
+    describe("#respondToErrors", function() {
         beforeEach(function() {
             this.things = [
                 {hi: "there"},
@@ -315,6 +315,19 @@ describe("chorus.Mixins.Fetching", function() {
                 this.resource.respondToErrors(404);
                 expect(this.resource.trigger).toHaveBeenCalledWith("resourceNotFound");
             });
+
+            context("when passing a 'notFound' error handler", function() {
+                it("executes the 'notFound' handler", function() {
+                    this.spy = jasmine.createSpy();
+                    this.resource.respondToErrors(404, { notFound: this.spy });
+                    expect(this.spy).toHaveBeenCalled();
+                });
+
+                it("should not trigger the 'resourceNotFound' event", function() {
+                    this.resource.respondToErrors(404, { notFound: function() {} });
+                    expect(this.resource.trigger).not.toHaveBeenCalledWith("resourceNotFound");
+                });
+            });
         });
 
         context("when the response is '422 unprocessable entity'", function() {
@@ -328,6 +341,19 @@ describe("chorus.Mixins.Fetching", function() {
             it("triggers unprocessableEntity on the resource", function() {
                 this.resource.respondToErrors(422);
                 expect(this.resource.trigger).toHaveBeenCalledWith("unprocessableEntity");
+            });
+
+            context("when passing a 'unprocessableEntity' error handler", function() {
+                it("executes the 'unprocessableEntity' handler", function() {
+                    this.spy = jasmine.createSpy();
+                    this.resource.respondToErrors(422, { unprocessableEntity: this.spy });
+                    expect(this.spy).toHaveBeenCalled();
+                });
+
+                it("should not trigger the 'unprocessableEntity' event", function() {
+                    this.resource.respondToErrors(422, { unprocessableEntity: function() {} });
+                    expect(this.resource.trigger).not.toHaveBeenCalledWith("unprocessableEntity");
+                });
             });
         });
 

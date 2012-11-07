@@ -60,34 +60,32 @@
             return this.camelizeKeys(data.response);
         },
 
-        handleRequestFailure: function(failureEvent, xhr) {
+        handleRequestFailure: function(failureEvent, xhr, options) {
             var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
             this.parseErrors(data);
             this.trigger(failureEvent, this);
-            this.respondToErrors(xhr.status);
+            this.respondToErrors(xhr.status, options);
         },
 
         parseErrors: function(data) {
             this.errorData = data.response;
-            this.serverErrors = this.dataErrors(data);
+            this.serverErrors = data.errors;
         },
 
-        respondToErrors: function(status) {
+        respondToErrors: function(status, options) {
+            options = options || {}
+
             if (status === 401) {
                 chorus.session.trigger("needsLogin");
             } else if (status == 403) {
                 this.trigger("resourceForbidden");
             } else if (status == 404) {
-                this.trigger("resourceNotFound");
+                options.notFound ? options.notFound() : this.trigger("resourceNotFound");
             } else if (status == 422) {
-                this.trigger("unprocessableEntity");
+                options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
             } else if (status == 500) {
                 chorus.toast("server_error");
             }
-        },
-
-        dataErrors: function(data) {
-            return data.errors;
         }
     };
 
