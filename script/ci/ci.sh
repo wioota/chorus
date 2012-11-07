@@ -88,7 +88,7 @@ fi
 if $run_legacy_migration; then
     echo "Running legacy migration tests"
     b/rake db:reset
-    CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration
+    CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration --trace
     LEGACY_MIGRATION_TESTS_RESULT=$?
 else
     LEGACY_MIGRATION_TESTS_RESULT=0
