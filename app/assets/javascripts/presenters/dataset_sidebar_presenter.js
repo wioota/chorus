@@ -90,9 +90,9 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     inProgressText: function() {
-        var lastDestination = this.resource && this.resource.lastImportDestination();
+        var destination = this.resource && this.resource.lastImport() && this.resource.lastImport().destination();
 
-        if(!lastDestination) return "";
+        if(!destination) return "";
 
         var importStringKey;
         var lastImport = this.resource.lastImport();
@@ -101,7 +101,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         } else {
             importStringKey = "import.in_progress_into";
         }
-        return chorus.helpers.safeT(importStringKey, { tableLink: this._linkToModel(lastDestination) });
+        return chorus.helpers.safeT(importStringKey, { tableLink: this._linkToModel(destination) });
     },
 
     importInProgress: function() {

@@ -1024,38 +1024,6 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-
-    xdescribe("#nextImportDestination", function() {
-        it("returns the import destination", function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            var anImport = new chorus.models.DatasetImport({ nextImportAt: "2012-12-21", id: 1337, toTable: "toronto" });
-            this.dataset._datasetImport = anImport;
-            expect(this.dataset.nextImportDestination().get("objectName")).toEqual("toronto");
-        });
-    });
-
-    xdescribe("#importRunsAt", function() {
-        //TODO
-        it("returns the import run time", function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            var anImport = new chorus.models.DatasetImport({nextImportAt: Date.formatForApi((50).hours().ago()), id: 1337, toTable: "toronto" });
-            this.dataset._datasetImport = anImport;
-            expect(this.dataset.importRunsAt()).toEqual("2 days ago");
-        });
-    });
-
-    xdescribe("#lastImportDestination", function() {
-        //TODO
-        it("returns the correct progress message", function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            var anImport = new chorus.models.DatasetImport({ nextImportTime: Date.formatForApi((50).hours().ago()), id: 1337 });
-            anImport.set({ executionInfo: { toTable: "ca-na-da", toTableId: 29394, startedStamp: "2011-01-01 19:19:19" } });
-            spyOn(this.dataset, "hasImport").andReturn(true)
-            spyOn(this.dataset, "lastImport").andReturn(anImport);
-            expect(this.dataset.lastImportDestination().get("objectName")).toBe("ca-na-da");
-        });
-    });
-
     describe("Analyze", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.dataset({

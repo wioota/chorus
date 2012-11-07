@@ -72,25 +72,6 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.getImports() && !this.getImports().isEmpty();
     },
 
-    importRunsAt: function() {
-        return
-        if (!this.hasImport() || !this.importSchedule().hasNextImport()) return;
-
-        return chorus.helpers.relativeTimestamp(this.importSchedule().nextExecutionAt());
-    },
-
-    nextImportDestination: function() {
-        return this.importSchedule().destination();
-    },
-
-    lastImportDestination:function () {
-        var importConfig = this.lastImport();
-
-        return importConfig
-            && importConfig.isInProgress()
-            && importConfig.lastDestination();
-    },
-
     canExport:function () {
         return this.workspace() && this.workspace().canUpdate()
             && this.hasCredentials()
