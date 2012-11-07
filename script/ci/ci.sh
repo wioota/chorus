@@ -46,6 +46,7 @@ if $run_jasmine ; then
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
     echo $jasmine_pid > tmp/pids/jasmine-$RAILS_ENV.pid
+    sleep 30
 fi
 
 set +e
