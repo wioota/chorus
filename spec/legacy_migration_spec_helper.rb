@@ -20,8 +20,6 @@ RSpec.configure do |config|
   config.mock_with :rr
 
   config.before(:suite) do
-    DatabaseCleaner.clean
-
     def legacy_sql_md5
       '7f1c289ca0fc9c5645812d30fa7b0d7e'
     end
