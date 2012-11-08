@@ -117,7 +117,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.activeScheduleView.$("select.ampm").val("PM");
                     this.dialog.activeScheduleView.$("select.hours").val("12");
                     this.dialog.activeScheduleView.$("select.minutes").val("09");
-
+                    this.startDatetime = new Date(2012, 1, 29, 12, 9, 0, 0);
                     expect(this.dialog.$("button.submit")).toBeEnabled();
 
                     this.dialog.$("button.submit").click();
@@ -127,7 +127,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import_schedule[truncate]"]).toBe("false");
                     expect(params["dataset_import_schedule[sample_count]"]).toBe("123");
-                    expect(params["dataset_import_schedule[start_datetime]"]).toBe("2012-02-29 12:09:00.0");
+                    expect(params["dataset_import_schedule[start_datetime]"]).toBe(this.startDatetime.toISOString());
                     expect(params["dataset_import_schedule[end_date]"]).toBe("2012-03-21")
                 });
             });
@@ -158,13 +158,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.$("button.submit")).toBeEnabled();
 
                     this.dialog.$("button.submit").click();
+
+                    this.startDatetime = new Date(2012, 1, 29, 12, 9, 0, 0);
                 });
 
                 it("should put the values in the correct API form fields", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import_schedule[truncate]"]).toBe("false");
                     expect(params["dataset_import_schedule[sample_count]"]).toBe("");
-                    expect(params["dataset_import_schedule[start_datetime]"]).toBe("2012-02-29 12:09:00.0");
+                    expect(params["dataset_import_schedule[start_datetime]"]).toBe(this.startDatetime.toISOString());
                     expect(params["dataset_import_schedule[end_date]"]).toBe("2012-03-21");
                 });
 
