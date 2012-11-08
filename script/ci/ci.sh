@@ -72,8 +72,12 @@ fi
 
 if $run_jasmine ; then
     echo "Running javascript tests"
-    filter=youll_never_find_me b/rake phantom
-    sleep 30
+    loaded=1
+    while [ $loaded -ne 0 ]
+    do
+        filter=youll_never_find_me b/rake phantom | grep -v -e '^Phantom callbacks not attached in time'
+        loaded=$?
+    done
     b/rake phantom 2>&1
     JS_TESTS_RESULT=$?
     echo "Cleaning up jasmine process $jasmine_pid"
