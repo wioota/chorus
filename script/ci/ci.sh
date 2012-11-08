@@ -7,7 +7,6 @@ fi
 export GPDB_HOST=chorus-gpdb42
 export HADOOP_HOST=chorus-gphd02
 
-set -v
 set -e
 
 . script/ci/setup.sh
@@ -41,8 +40,7 @@ fi
 
 # start jasmine
 if $run_jasmine ; then
-    echo "Precompile Assets"
-    b/rake assets:precompile --trace
+    rm -fr tmp/cache
     b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
