@@ -312,7 +312,11 @@ describe CsvImporter do
   end
 
   describe "without connecting to GPDB" do
-    let(:csv_file) { CsvFile.first }
+    let(:csv_file) do
+      file = CsvFile.first
+      file.update_attributes :new_table => false
+      file
+    end
     let(:instance_account) { csv_file.workspace.sandbox.gpdb_instance.account_for_user!(csv_file.user) }
 
     describe "after creating the csv file" do
@@ -368,6 +372,20 @@ describe CsvImporter do
         notification = Notification.last
         notification.recipient_id.should == user.id
         notification.event_id.should == Events::FileImportSuccess.last.id
+      end
+    end
+
+    describe "when trying to make an invalid import" do
+      let(:csv_file) do
+        file = CsvFile.first
+        file.update_attributes :new_table => true
+        file
+      end
+
+      it "does not crash" do
+        expect {
+          CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        }.to raise_exception
       end
     end
 

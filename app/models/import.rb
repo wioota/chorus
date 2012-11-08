@@ -22,7 +22,7 @@ class Import < ActiveRecord::Base
 
   validates :source_dataset, :presence => true, :unless => :file_name
   validates :file_name, :presence => true, :unless => :source_dataset
-  validate :tables_have_consistent_schema, :unless => :new_table, :on => :create
+  validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
   # Running an import must use this method to ensure the call is serializable
   # and can be moved into a job

@@ -68,11 +68,11 @@ class CsvImporter
         :file_name => csv_file.contents_file_name,
         :to_table => csv_file.to_table,
         :new_table => csv_file.new_table,
-        :truncate => csv_file.truncate
+        :truncate => csv_file.truncate,
     )
     i.workspace_id = csv_file.workspace_id
     i.user_id = csv_file.user_id
-    i.save!(:validate => false) # TODO: fix me when csv files are merged with imports
+    i.save!
     i
   end
 
