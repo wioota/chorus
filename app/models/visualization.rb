@@ -30,9 +30,5 @@ module Visualization
     def relation
       @relation ||= Arel::Table.new(@dataset.scoped_name)
     end
-
-    def sql_execution_timeout
-      (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout"] || 0) )
-    end
   end
 end

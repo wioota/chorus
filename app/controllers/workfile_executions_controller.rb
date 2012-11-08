@@ -5,7 +5,7 @@ class WorkfileExecutionsController < ApplicationController
 
   def create
     account = @schema.account_for_user! current_user
-    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => 500, :timeout => sql_execution_timeout)
+    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => 500)
     @workfile.execution_schema = @schema
     @workfile.save!
     present result
@@ -32,9 +32,5 @@ class WorkfileExecutionsController < ApplicationController
 
   def check_authorization
     authorize! :can_edit_sub_objects, @workfile.workspace
-  end
-
-  def sql_execution_timeout
-    (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout"] || 0) )
   end
 end

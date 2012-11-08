@@ -13,7 +13,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, :timeout => sql_execution_timeout)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       @rows = result.rows.map { |row| { :bucket => row[0], :count => row[1].to_i } }
     end
 

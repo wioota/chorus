@@ -142,6 +142,11 @@ describe SqlExecutor do
     let(:schema) { GpdbSchema.find_by_name!('test_schema') }
     let(:sql) { 'select 1' }
     let(:check_id) { '42' }
+    let(:timeout) { 0 }
+
+    before do
+      stub(subject).sql_execution_timeout { timeout }
+    end
 
     it "returns a SqlResult" do
       result = SqlExecutor.execute_sql(schema, account, check_id, sql)
@@ -162,14 +167,18 @@ describe SqlExecutor do
       result = SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
     end
 
-    it "times out when the query exceeds the timeout limit" do
-      options = {:timeout => 100}
-      sql = "SELECT pg_sleep(1);"
+    context "with a timeout set" do
+      let(:timeout) { 100 }
+      it "times out when the query exceeds the timeout limit" do
 
-      expect {
-        SqlExecutor.execute_sql(schema, account, check_id, sql, options)
-      }.to raise_error(MultipleResultsetQuery::QueryError)
+        sql = "SELECT pg_sleep(.2);"
+
+        expect {
+          SqlExecutor.execute_sql(schema, account, check_id, sql)
+        }.to raise_error(MultipleResultsetQuery::QueryError)
+      end
     end
+
   end
 
   describe "#cancel_query" do

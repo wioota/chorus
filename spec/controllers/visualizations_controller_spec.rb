@@ -110,21 +110,6 @@ describe VisualizationsController do
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
     end
-
-    context "when the query time exceeds the timeout" do
-      before do
-        any_instance_of(Visualization::Base) do |vis|
-          stub(vis).fetch!(anything, anything) {
-            raise Timeout::Error.new
-          }
-        end
-      end
-
-      it "gives appropriate response code for database timeout error" do
-        post :create, :type => "histogram", :check_id => '43', :dataset_id => dataset.id
-        response.code.should == "422"
-      end
-    end
   end
 
   describe "#destroy" do

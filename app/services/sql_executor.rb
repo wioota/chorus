@@ -8,8 +8,8 @@ module SqlExecutor
         schema.with_gpdb_connection(account) do |conn|
           cancelable_query = CancelableQuery.new(conn, check_id)
 
-          if (options[:timeout] && options[:timeout] > 0)
-            cancelable_query.execute("SET statement_timeout TO #{options[:timeout]}", options)
+          if sql_execution_timeout > 0
+            cancelable_query.execute("SET statement_timeout TO #{sql_execution_timeout}", options)
           end
 
           result = cancelable_query.execute(sql, options)
@@ -23,6 +23,10 @@ module SqlExecutor
         cancelable_query = CancelableQuery.new(conn, check_id)
         cancelable_query.cancel
       end
+    end
+
+    def sql_execution_timeout
+      (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout"] || 0) )
     end
   end
 end

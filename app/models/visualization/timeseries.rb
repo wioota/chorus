@@ -15,7 +15,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, :timeout => sql_execution_timeout)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
       @rows = result.rows.map { |row| {:value => row[0].to_f.round(3), :time => row[1]} }
     end
 
