@@ -53,6 +53,6 @@ case $RAILS_ENV in
         cd $CHORUS_HOME/vendor/jetty/
         JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV ./jetty-init start &>/dev/null &
         cd $CHORUS_HOME
-        wait_for_start $JETTY_PID_FILE
+        wait_for_start $JETTY_PID_FILE && reset
         ;;
 esac
