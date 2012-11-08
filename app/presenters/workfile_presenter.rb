@@ -2,6 +2,8 @@ class WorkfilePresenter < Presenter
 
   def to_hash
     notes = model.events.select { |e| e.is_a?(Events::NoteOnWorkfile) }
+    comments_and_notes = Comment.where(:event_id => notes.map(&:id)) + notes
+    comments_and_notes.sort_by!(&:created_at).reverse!
 
     workfile = {
       :id => model.id,
@@ -10,14 +12,14 @@ class WorkfilePresenter < Presenter
       :file_type => model.content_type,
       :latest_version_id => model.latest_workfile_version_id,
       :is_deleted => model.deleted?,
-      :recent_comments => notes.map do |note|
+      :recent_comments => comments_and_notes.map do |comment|
         {
-            :body => note.body,
-            :author => present(note.actor),
-            :timestamp => note.created_at
+            :body => comment.body,
+            :author => present(comment.author),
+            :timestamp => comment.created_at
         }
       end,
-      :comment_count => notes.count
+      :comment_count => comments_and_notes.count
     }
 
     unless rendering_activities?

@@ -43,26 +43,64 @@ describe WorkfilePresenter, :type => :view do
 
     context "when there are notes on a workfile" do
       let(:recent_comments) { hash[:recent_comments] }
-      let(:timestamp) { Time.now }
+      let(:today) { Time.now }
+      let(:yesterday) { today - 1.day }
 
       before do
         workfile.events.clear
-        Timecop.freeze timestamp do
-          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note1')
-          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note2')
+        Timecop.freeze yesterday do
+          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note for yesterday')
+        end
+        Timecop.freeze today do
+          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note for today')
         end
         workfile.reload
       end
 
-      it "presents the notes as comments" do
+      it "presents the notes as comments in reverse timestamp order" do
         recent_comments.count.should == 2
         recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
-        recent_comments[0][:body].should == "note1"
-        recent_comments[0][:timestamp].should == timestamp
+        recent_comments[0][:body].should == "note for today"
+        recent_comments[0][:timestamp].should == today
       end
 
       it "includes the comment count" do
         hash[:comment_count].should == 2
+      end
+
+      context "when there is a comment on a note" do
+        let(:comment_timestamp) { today + 2.hours }
+
+        before do
+          Timecop.freeze comment_timestamp do
+            last_note = workfile.events.last
+            FactoryGirl.create :comment, :event => last_note, :body => "comment on yesterday's note", :author => user
+          end
+        end
+
+        context "when the comment is newer than the notes" do
+          it "presents the comment before the notes" do
+            recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
+            recent_comments[0][:body].should == "comment on yesterday's note"
+            recent_comments[0][:timestamp].should == comment_timestamp
+            recent_comments[1][:body].should == "note for today"
+            recent_comments[2][:body].should == "note for yesterday"
+          end
+        end
+
+        context "when the comment is older than the newest note" do
+          let(:comment_timestamp) { today - 2.hours }
+
+          it "presents the comment after the newset note" do
+            recent_comments[0][:body].should == "note for today"
+            recent_comments[1][:body].should == "comment on yesterday's note"
+            recent_comments[2][:body].should == "note for yesterday"
+          end
+        end
+
+        it "includes the comment in the comment count" do
+          hash[:comment_count].should == 3
+        end
       end
     end
 
