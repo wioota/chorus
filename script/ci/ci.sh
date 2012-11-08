@@ -48,6 +48,7 @@ if $run_jasmine ; then
     echo "Jasmine process id is : $jasmine_pid"
     echo $jasmine_pid > tmp/pids/jasmine-$RAILS_ENV.pid
     sleep 30
+    kill -CONT $jasmine_pid
 fi
 
 set +e
@@ -73,9 +74,10 @@ fi
 
 if $run_jasmine ; then
     echo "Running javascript tests"
-    CI_REPORTS=spec/javascripts/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec phantom 2>&1
+    filter=youll_never_find_me b/rake phantom
+    sleep 30
+    b/rake phantom 2>&1
     JS_TESTS_RESULT=$?
-
     echo "Cleaning up jasmine process $jasmine_pid"
     kill -s SIGTERM $jasmine_pid
 else
