@@ -342,10 +342,11 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                 expect(this.view.chorusView.get("objectType")).toBe("CHORUS_VIEW");
                 expect(this.view.chorusView.get("query")).toBe('select * from table;');
-                expect(this.view.chorusView.get("schemaId")).toBe(this.schema.id);
+                expect(this.view.chorusView.get("schema").id).toBe(this.schema.id);
                 expect(this.view.chorusView.get("sourceObjectId")).toBe(this.workfile.id);
                 expect(this.view.chorusView.get("sourceObjectType")).toBe("workfile");
                 expect(this.view.chorusView.sourceObject).toBe(this.workfile);
+                expect(this.view.chorusView.get("workspace")).toBe(this.workfile.get("workspace"));
             });
         });
 
@@ -356,7 +357,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 chorus.PageEvents.broadcast("file:newSelectionChorusView");
 
                 expect(this.view.chorusView.get("query")).toBe('select');
-                expect(this.view.chorusView.get("schemaId")).toBe(this.schema.id);
+                expect(this.view.chorusView.get("schema").id).toBe(this.schema.id);
                 expect(this.view.chorusView.sourceObject).toBe(this.workfile);
                 expect(this.view.chorusView.get("sourceObjectId")).toBe(this.workfile.id);
             });

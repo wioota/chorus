@@ -100,10 +100,11 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.chorusView = new chorus.models.ChorusView({
             sourceObjectId: this.model.id,
             sourceObjectType: "workfile",
-            schemaId: executionSchema.id,
+            workspace: this.model.get("workspace"),
             query: content
         });
         this.chorusView.sourceObject = this.model;
+        this.chorusView.setSchema(executionSchema);
 
         var dialog = new chorus.dialogs.VerifyChorusView({model: this.chorusView});
         dialog.launchModal();
