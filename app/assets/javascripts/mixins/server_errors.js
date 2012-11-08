@@ -3,7 +3,6 @@ chorus.Mixins.ServerErrors = {
         var output = [];
         if (!this.serverErrors) { return output; }
 
-        var that = this;
         if (this.serverErrors.fields) {
             _.each(this.serverErrors.fields, function(errors, field) {
                 _.each(errors, function(context, error) {
@@ -11,20 +10,22 @@ chorus.Mixins.ServerErrors = {
                         genericKey = "field_error." + error,
                         message;
 
-                    var message = that.translateError(fullKey, context);
-
-                    if(!message) {
+                    if (I18n.lookup(fullKey)) {
+                        message = t(fullKey, context);
+                    } else {
                         context.field = _.humanize(field);
-                        message = that.translateError(genericKey, context);
+                        message = t(genericKey, context);
                     }
 
-                    output.push(message)
+                    output.push(message);
                 })
             })
         } else if (this.serverErrors.record) {
-            var key = "record_error." + this.serverErrors.record;
+            var fullKey = "record_error." + this.serverErrors.record;
 
-            output = [this.translateError(key) || this.serverErrors.record];
+            if (I18n.lookup(fullKey)) {
+                output = [t(fullKey)];
+            }
         }
 
         return output;
@@ -32,11 +33,5 @@ chorus.Mixins.ServerErrors = {
 
     serverErrorMessage: function() {
         return this.serverErrorMessages().join("\n");
-    },
-
-    translateError: function(key, context) {
-        if (I18n.lookup(key)) {
-            return t(key, context)
-        }
     }
 };
