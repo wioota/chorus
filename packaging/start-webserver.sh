@@ -47,7 +47,7 @@ case $RAILS_ENV in
     * )
         log "updating jetty config..."
         $RUBY packaging/update_jetty_xml.rb
-        $RUBY packaging/update_database_pool_size.rb
+        RAILS_ENV=$RAILS_ENV $RUBY packaging/update_database_yml.rb
 
         log "starting jetty..."
         cd $CHORUS_HOME/vendor/jetty/

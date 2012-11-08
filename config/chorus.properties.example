@@ -5,6 +5,7 @@ delete_unimported_csv_files_after_hours = 12
 reindex_search_data_interval_hours = 24
 assets_storage_path = :rails_root/system/
 server_port = 8080
+postgres_port = 8543
 ssl = false
 ssl_server_port = 8443
 ssl_certificate = 

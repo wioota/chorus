@@ -21,8 +21,8 @@ fi
 
 case $RAILS_ENV in
     production )
-        RUBY=bin/ruby
-        RAKE=bin/rake
+        RUBY=$CHORUS_HOME/bin/ruby
+        RAKE=$CHORUS_HOME/bin/rake
         ;;
     * )
         RUBY=jruby
@@ -44,6 +44,7 @@ MIZUNO_PID_FILE=$CHORUS_HOME/tmp/pids/mizuno.pid
 
 POSTGRES_DATA_DIR=$CHORUS_HOME/postgres-db
 POSTGRES_PID_FILE=$POSTGRES_DATA_DIR/postmaster.pid
+POSTGRES_PORT=$($RUBY $CHORUS_HOME/packaging/get_postgres_port.rb)
 
 ##### Determine which nginx binary to use for this platform #####
 

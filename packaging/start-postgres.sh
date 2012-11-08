@@ -8,8 +8,6 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-POSTGRES_PORT=8543
-
 MAX_CONNECTIONS=$($RUBY $CHORUS_HOME/packaging/update_database_thread_count.rb)
 echo "Setting maximum database connections to $MAX_CONNECTIONS"
 
