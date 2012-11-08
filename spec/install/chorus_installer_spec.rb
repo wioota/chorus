@@ -868,14 +868,26 @@ describe ChorusInstaller do
     context "when doing a legacy_upgrade or a fresh install" do
       before do
         installer.install_mode = :upgrade_legacy
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
       end
 
-      it "stops postgres" do
-        installer.remove_and_restart_previous!
+      context "when postgres is started" do
+        it "stops postgres" do
+          mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
+          stub(File).directory? { true }
+          installer.remove_and_restart_previous!
+        end
+      end
+
+      context "when postgres is not started" do
+        it "does nothing" do
+          stub(File).directory? { false }
+          do_not_allow(installer).chorus_control.with_any_args
+          installer.remove_and_restart_previous!
+        end
       end
 
       it "removes the release folder" do
+        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
         installer.remove_and_restart_previous!
         File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end

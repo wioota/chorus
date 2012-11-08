@@ -25,6 +25,7 @@ if __FILE__ == $0
       puts "chorus_control.sh start"
     end
   rescue InstallerErrors::InstallationFailed => e
+    puts "An error has occurred. Trying to back out and restore previous state.."
     installer.remove_and_restart_previous!
     exit 1
   rescue => e
