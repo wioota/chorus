@@ -4,8 +4,8 @@ if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
 
-#export GPDB_HOST=chorus-gpdb42
-#export HADOOP_HOST=chorus-gphd02
+export GPDB_HOST=chorus-gpdb42
+export HADOOP_HOST=chorus-gphd02
 
 set -v
 set -e
@@ -32,12 +32,12 @@ if [[ "$targets" ]]; then
     done
 fi
 
-#if $run_ruby; then
-#    echo "starting gpfdist (Linux RHEL5 only)"
-#    export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
-#    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
-#    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp &
-#fi
+if $run_ruby; then
+    echo "starting gpfdist (Linux RHEL5 only)"
+    export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp &
+fi
 
 # start jasmine
 if $run_jasmine ; then
@@ -84,10 +84,10 @@ else
     JS_TESTS_RESULT=0
 fi
 
-#if $run_ruby ; then
-#    echo "Cleaning up gpfdist"
-#    killall gpfdist
-#fi
+if $run_ruby ; then
+    echo "Cleaning up gpfdist"
+    killall gpfdist
+fi
 
 if $run_legacy_migration; then
     echo "Running legacy migration tests"
