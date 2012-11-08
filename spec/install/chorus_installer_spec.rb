@@ -913,6 +913,24 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#prompt_for_eula" do
+    subject { installer.prompt_for_eula }
+    before do
+      stub(installer).eula { "" }
+      mock(io).require_confirmation(:accept_terms)
+    end
+
+    it "should set upgrade_legacy?" do
+      subject
+    end
+  end
+
+  describe "#eula" do
+    it "contains the eula" do
+      installer.eula.should match(/LIMITATION OF LIABILITY/)
+    end
+  end
+
   def stub_chorus_exec(installer)
     stub(installer).chorus_exec.with_any_args do |cmd|
       @call_order << :import_legacy_schema if cmd =~ /chorus_migrate/

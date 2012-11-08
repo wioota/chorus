@@ -46,6 +46,7 @@ class InstallerIO
       passphrase: "Enter optional passphrase to generate a recoverable secret key for encrypting passwords.  By default, a random key will be generated.",
       confirm_legacy_upgrade: "Chorus 2.1 installation detected, do you want to upgrade to 2.2?",
       legacy_destination_path: "Chorus 2.2 cannot be installed in the same directory as 2.1, please provide an empty directory",
+      accept_terms: "Do you accept the terms above?",
       select_os: <<-TEXT
 Could not detect your Linux version. Please select one of the following:
   [1] - RedHat (CentOS/RHEL) 5.5 or compatible

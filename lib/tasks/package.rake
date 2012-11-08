@@ -122,6 +122,9 @@ module PackageMaker
     legacy_data_host = config['legacy_data_host']
 
     File.open('install_answers.txt', 'w') do |f|
+      # Accept the EULA
+      f.puts("y")
+
       # where the existing install lives
       if legacy_path.present?
         f.puts(legacy_path)
