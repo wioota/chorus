@@ -231,7 +231,7 @@ PROMPT
     def restore_database
       log "Restoring database..."
       capture_output "DYLD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib LD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib exec $CHORUS_HOME/postgres/bin/dropdb -p #{database_port} -U #{postgres_username} #{database_name}", :error => "Existing database could not be dropped."
-      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/packaging/pg_restore.sh -C -p #{database_port} -U #{postgres_username} -d postgres", :error => "Could not restore database."
+      capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/postgres/bin/pg_restore -C -p #{database_port} -U #{postgres_username} -d postgres", :error => "Could not restore database."
     end
 
     def compare_versions(backup_version, current_version)
