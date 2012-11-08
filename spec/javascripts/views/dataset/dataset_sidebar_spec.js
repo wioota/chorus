@@ -283,7 +283,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
 
                     it("has an 'imported xx ago' description", function() {
-                        var sourceTable = this.lastImport.importSource();
+                        var sourceTable = this.lastImport.source();
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {timeAgo: chorus.helpers.relativeTimestamp(this.lastImport.get('completedStamp')), tableLink: "sourcey"});
                         expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
                     });
@@ -293,27 +293,19 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                xcontext("and the dataset has received an import from a file", function() {
+                context("and the dataset has received an import from a file", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.importSchedule(), {
-                            executionInfo: {
-                                startedStamp: "2012-02-29T14:35:38Z",
-                                completedStamp: "2012-02-29T14:35:38Z",
-                                success: true,
-                                sourceId: "543"
-                            },
-                            datasetId: "123",
-                            sourceId: '543',
-                            sourceTable: "some_source_file.csv",
-                            sourceType: "upload_file"
+                        this.csvImport = rspecFixtures.csvImportSet().first();
+                        this.csvImport.set({
+                            startedStamp: "2012-02-29T13:35:38Z",
+                            completedStamp: "2012-02-29T14:35:38Z",
+                            success: true,
+                            fileName: "some_source_file.csv"
                         });
+                        this.server.completeFetchFor(this.dataset.getImports(), [this.csvImport]);
                     });
 
                     it("has an 'imported xx ago' description", function() {
-                        var sourceTable = new chorus.models.WorkspaceDataset({
-                            id: this.dataset.get("id"),
-                            workspaceId: this.dataset.get("workspace").id
-                        });
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
                             timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
                             tableLink: "some_source_..."

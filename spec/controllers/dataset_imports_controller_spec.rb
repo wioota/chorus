@@ -14,22 +14,16 @@ describe DatasetImportsController do
     end
 
     it "uses authorization based on the visible datasets"
-    it "is paginated"
+
+    it_behaves_like "a paginated list" do
+      let(:params) {{:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id}}
+    end
 
     it "shows the latest imports for a dataset as the source dataset" do
       get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
       response.should be_success
       decoded_response.should_not be_nil
       decoded_response.length.should == 3
-    end
-
-    it "should take a limit clause" do
-      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id, :limit => 1
-      response.should be_success
-      decoded_response.should_not be_nil
-      decoded_response.length.should == 1
-      latest_import = decoded_response.first
-      latest_import.id.should == import_three.id
     end
 
     context "for a destination dataset" do
@@ -45,6 +39,11 @@ describe DatasetImportsController do
 
     generate_fixture 'datasetImportSet.json' do
       get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+      response.should be_success
+    end
+
+    generate_fixture 'csvImportSet.json' do
+      get :index, :workspace_id => imports(:csv).workspace_id, :dataset_id => datasets(:csv_import_table).id
       response.should be_success
     end
   end

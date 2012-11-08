@@ -13,12 +13,6 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         if (newAttrs.useLimitRows) {
             this.requirePositiveInteger("sampleCount", newAttrs, 'import.validation.sampleCount.positive');
         }
-
-        if (newAttrs.isActive) {
-            if (newAttrs.scheduleStartTime > newAttrs.scheduleEndTime) {
-                this.setValidationError("year", "import.schedule.error.start_date_must_precede_end_date", null, newAttrs);
-            }
-        }
     },
 
     destination: function() {
@@ -29,23 +23,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         });
     },
 
-    nextDestination: function() {
-        return new chorus.models.WorkspaceDataset({
-            id: this.get("destinationDatasetId"),
-            objectName: this.get("toTable"),
-            workspace: {id: this.get("workspaceId")}
-        });
-    },
-
-    lastDestination: function() {
-        return new chorus.models.WorkspaceDataset({
-            id: this.get('destinationDatasetId'),
-            objectName: this.get("toTable"),
-            workspace: {id: this.get("workspaceId")}
-        });
-    },
-
-    importSource: function() {
+    source: function() {
         return new chorus.models.WorkspaceDataset({
             id: this.get('sourceDatasetId'),
             objectName: this.get('sourceDatasetName'),

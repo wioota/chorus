@@ -287,7 +287,6 @@ FactoryGirl.define do
 
   factory :import do
     created_at Time.now
-    #association :import_schedule, :factory => :import_schedule
     association :workspace, :factory => :workspace
     association :source_dataset, :factory => :gpdb_table
     user
@@ -295,10 +294,23 @@ FactoryGirl.define do
     truncate false
     new_table true
     sample_count 10
+    file_name nil
   end
 
   factory :import_with_schedule, :parent => :import do
     association :import_schedule
+  end
+
+  factory :csv_import, :class => Import do
+    created_at Time.now
+    association :workspace, :factory => :workspace
+    association :destination_dataset, :factory => :gpdb_table
+    user
+    file_name "import.csv"
+    sequence(:to_table) { |n| "factoried_import_table#{n}" }
+    truncate false
+    new_table true
+    sample_count 10
   end
 
   factory :comment do

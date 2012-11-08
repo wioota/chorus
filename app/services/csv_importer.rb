@@ -30,7 +30,7 @@ class CsvImporter
   end
 
   def import
-    self.import_record = self.create_csv_import
+    self.import_record = create_csv_import
 
     raise StandardError, "CSV file cannot be imported" unless csv_file.ready_to_import?
     schema.with_gpdb_connection(account) do |connection|

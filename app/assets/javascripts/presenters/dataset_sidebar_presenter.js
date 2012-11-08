@@ -137,7 +137,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
                 importStatusKey = "import.last_import_failed";
             }
         } else {
-            var source = lastImport.importSource();
+            var source = lastImport.source();
             tableLink = (lastImport.get("fileName")) ?
                 chorus.helpers.spanFor(this.ellipsize(lastImport.get("fileName")), { 'class': "source_file", title: lastImport.get("fileName") }) :
                 this._linkToModel(source);

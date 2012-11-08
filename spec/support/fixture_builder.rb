@@ -316,6 +316,15 @@ FixtureBuilder.configure do |fbuilder|
                                          :source_dataset_id => default_table.id)
     fbuilder.name :two, import_now
 
+    csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table")
+    public_workspace.bound_datasets << csv_import_table
+
+    csv_import = FactoryGirl.create(:csv_import, :user => owner, :workspace => public_workspace, :to_table => "csv_import_table",
+                                    :destination_dataset => csv_import_table,
+                                    :created_at => '2012-09-03 23:04:00-07',
+                                    :file_name => "import.csv")
+    fbuilder.name :csv, csv_import
+
     #CSV File
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)

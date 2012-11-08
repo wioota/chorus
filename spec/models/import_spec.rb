@@ -25,10 +25,16 @@ describe Import, :database_integration => true do
       import.should have_at_least(1).errors_on(:to_table)
     end
 
-    it "validates the presence of source_dataset" do
-      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil)
+    it "validates the presence of source_dataset if no file_name present" do
+      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil, :file_name => nil)
       import.valid?
       import.should have_at_least(1).errors_on(:source_dataset)
+      import.should have_at_least(1).errors_on(:file_name)
+    end
+
+    it "does not validate the presence of source_dataset if file_name present" do
+      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil, :file_name => "foo.csv")
+      import.should be_valid
     end
 
     it "validates the presence of user" do

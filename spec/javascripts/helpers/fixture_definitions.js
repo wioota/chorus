@@ -70,7 +70,12 @@ window.rspecFixtureDefinitions = {
 
     datasetImportScheduleSet: {},
 
-    datasetImportSet: {},
+    datasetImportSet: {
+    },
+
+    csvImportSet: {
+        collection: "DatasetImportSet"
+    },
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
@@ -94,13 +99,6 @@ window.rspecFixtureDefinitions = {
     draft: {},
     provisioning: {},
 
-//    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
-//
-//    csvImport: { model: "CSVImport" },
-//
-//    provisioningTemplate: {},
-//    provisioningTemplateSet: {},
-//
     config: {},
 
     hadoopInstance: { unique: ["id"] },
@@ -234,35 +232,6 @@ window.rspecFixtureDefinitions = {
     timeseriesTask: {},
     histogramTask: {},
 
-//    activity: {
-//        unique: [ "id" ],
-//
-//        children: {
-//            provisioningSuccess: {},
-//            provisioningFail:    {},
-//            addHdfsPatternAsExtTable: {},
-//            addHdfsDirectoryAsExtTable: {}
-//        }
-//    },
-//
-//    dataset: {
-//        derived: {
-//            id: function(a) {
-//                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName ].join('"|"') + '"';
-//            }
-//        },
-//
-//        children: {
-//            sourceTable:   {},
-//            sourceView:    {},
-//            sandboxTable:  {},
-//            sandboxView:   {},
-//            chorusView:    {},
-//            chorusViewSearchResult: {},
-//            externalTable: {}
-//        }
-//    },
-//
     dataset: { unique: [ "id" ] },
     dataPreviewTaskResults: {
         model: "DataPreviewTask"

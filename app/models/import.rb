@@ -20,8 +20,8 @@ class Import < ActiveRecord::Base
   validate :table_does_not_exist, :if => :new_table, :on => :create
   validate :table_does_exist, :unless => :new_table, :on => :create
 
-  # specific to imports from Datasets
-  validates :source_dataset, :presence => true
+  validates :source_dataset, :presence => true, :unless => :file_name
+  validates :file_name, :presence => true, :unless => :source_dataset
   validate :tables_have_consistent_schema, :unless => :new_table, :on => :create
 
   # Running an import must use this method to ensure the call is serializable

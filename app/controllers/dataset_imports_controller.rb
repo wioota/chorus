@@ -5,8 +5,7 @@ class DatasetImportsController < ApplicationController
     table = Dataset.find(params[:dataset_id])
     imports = Import.where('source_dataset_id = ? OR (to_table = ? AND workspace_id = ?)',
                            table.id, table.name, workspace.id).order('created_at DESC')
-    imports = imports.limit(params[:limit]) if params[:limit]
-    present imports
+    present paginate imports
   end
 
   def create

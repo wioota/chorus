@@ -133,19 +133,11 @@ describe("chorus.models.DatasetImport", function() {
         });
     });
 
-    describe("#lastDestination", function() {
-        it("sets the model correctly", function() {
-            this.model.set({toTable: "destination", destinationDatasetId: 567, workspaceId: 123})
-           expect(this.model.lastDestination().url()).toContain("/workspaces/123/datasets/567");
-           expect(this.model.lastDestination().name()).toBe("destination");
-        });
-    });
-
-    describe("#importSource", function() {
+    describe("#source", function() {
         it("sets the model correctly", function() {
             this.model.set({workspaceId: 123, sourceDatasetId: 567, sourceDatasetName: 'source'})
-            expect(this.model.importSource().url()).toContain("/workspaces/123/datasets/567");
-            expect(this.model.importSource().name()).toBe('source');
+            expect(this.model.source().url()).toContain("/workspaces/123/datasets/567");
+            expect(this.model.source().name()).toBe('source');
         });
     });
 });
