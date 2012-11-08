@@ -31,7 +31,7 @@ module Kaggle
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      http.ca_path = Rails.root.join('config', 'certs').to_s
+      http.ca_file = Rails.root.join('config/certs/sf-class2-root.pem').to_s
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.set_form_data(post_params)
