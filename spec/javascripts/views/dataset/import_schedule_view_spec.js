@@ -20,11 +20,12 @@ describe("chorus.views.ImportSchedule", function() {
 
             this.view.$("select.frequency").val("MONTHLY");
 
-            this.attrs = this.view.fieldValues();
+            this.startDatetime = new Date(2012, 1, 29, 13, 9, 0, 0);
         });
 
         it("returns a properly formatted start time and end time", function() {
-            expect(this.attrs.startDatetime).toBe("2012-02-29 13:09:00.0");
+            this.attrs = this.view.fieldValues();
+            expect(this.attrs.startDatetime).toBe(this.startDatetime.toISOString());
             expect(this.attrs.endDate).toBe("2012-03-21")
         });
 
@@ -32,18 +33,20 @@ describe("chorus.views.ImportSchedule", function() {
             this.view.$("select.ampm option").val("PM");
             this.view.$("select.hours option").val("12");
 
-            expect(this.view.fieldValues().startDatetime).toBe("2012-02-29 12:09:00.0");
+            this.startDatetime.setHours(12);
+            expect(this.view.fieldValues().startDatetime).toBe(this.startDatetime.toISOString());
         });
 
         it("handles the case of '12 am' correctly", function() {
             this.view.$("select.ampm option").val("AM");
             this.view.$("select.hours option").val("12");
 
-            expect(this.view.fieldValues().startDatetime).toBe("2012-02-29 00:09:00.0");
+            this.startDatetime.setHours(0);
+            expect(this.view.fieldValues().startDatetime).toBe(this.startDatetime.toISOString());
         });
 
         it("has the right frequency value", function() {
-            expect(this.attrs.frequency).toBe("MONTHLY");
+            expect(this.view.fieldValues().frequency).toBe("MONTHLY");
         });
     });
 

@@ -34,7 +34,9 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
             month:  parseInt(this.$(".start input[name='month']").val(), 10) - 1,
             day:    parseInt(this.$(".start input[name='day']").val(), 10),
             hour:   parseInt(this.$("select.hours").val(), 10),
-            minute: parseInt(this.$("select.minutes").val(), 10)
+            minute: parseInt(this.$("select.minutes").val(), 10),
+            second: 0,
+            millisecond: 0
         });
 
         var isPM = this.$("select.ampm").val() === "PM";
@@ -48,7 +50,7 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         });
 
         return {
-            startDatetime : startTime.toString("yyyy-MM-dd HH:mm" + ":00.0"),
+            startDatetime : startTime.toISOString(),
             endDate   : endTime.toString("yyyy-MM-dd"),
             frequency : this.$("select.frequency").val()
         };

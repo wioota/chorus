@@ -57,19 +57,6 @@ describe ImportSchedule do
   end
 
   describe "default scope" do
-    it "excludes deleted import schedules" do
-      new_import_schedule = FactoryGirl.create(:import_schedule,
-                                               :workspace => workspaces(:public),
-                                               :deleted_at => nil)
-      deleted_import_schedule = FactoryGirl.create(:import_schedule,
-                                                   :workspace => workspaces(:public),
-                                                   :deleted_at => Time.now)
-      ImportSchedule.all.should include(new_import_schedule)
-      ImportSchedule.all.should_not include(deleted_import_schedule)
-    end
-  end
-
-  describe "default scope" do
     it "does not show deleted schedules" do
       active_schedule = FactoryGirl.create(:import_schedule, :workspace => workspaces(:public), :start_datetime => Time.now, :end_date => Time.now + 1.year, :frequency => 'monthly')
       deleted_schedule = FactoryGirl.create(:import_schedule, :workspace => workspaces(:public), :deleted_at => Time.now, :start_datetime => Time.now, :end_date => Time.now + 1.year, :frequency => 'monthly')
