@@ -461,7 +461,7 @@ class ChorusInstaller
   end
 
   def stop_postgres
-    if File.directory? release_path
+    if File.directory? "#{release_path}/postgres"
       log "Stopping postgres..."
       chorus_control "stop postgres"
     end

@@ -670,6 +670,8 @@ describe ChorusInstaller do
       installer.data_path = "/data/chorus"
       @call_order = []
       stub_chorus_exec(installer)
+      FileUtils.mkdir_p "#{installer.release_path}/postgres"
+      #stub(File).directory? { true }
     end
 
     let(:destination_path) { "/usr/local/greenplum-chorus" }
@@ -887,6 +889,7 @@ describe ChorusInstaller do
       end
 
       it "removes the release folder" do
+        FileUtils.mkdir_p "#{installer.release_path}/postgres"
         mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
         installer.remove_and_restart_previous!
         File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
