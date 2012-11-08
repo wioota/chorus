@@ -13,11 +13,10 @@ module Visualization
       @type = attributes[:type]
       @dataset = dataset
       @schema = dataset.try :schema
-      @timeout = timeout
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, timeout: @timeout)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, :timeout => sql_execution_timeout)
       row_data = result.rows.map { |row| {:bucket => row[0], :ntile => row[1].to_i, :min => row[2].to_f, :max => row[3].to_f, :count => row[4].to_i} }
       @rows = BoxplotSummary.summarize(row_data, @bins)
     end

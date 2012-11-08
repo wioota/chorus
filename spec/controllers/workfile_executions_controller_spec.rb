@@ -16,8 +16,9 @@ describe WorkfileExecutionsController do
       before do
         log_in workspace_member
 
+        stub(controller).sql_execution_timeout { 10 }
         sandbox = workspace.sandbox
-        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => 500) do
+        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => 500, :timeout => 10) do
           SqlResult.new
         end
       end

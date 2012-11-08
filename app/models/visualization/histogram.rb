@@ -10,7 +10,6 @@ module Visualization
       @filters = attributes[:filters]
       @dataset = dataset
       @schema = dataset.try :schema
-      @timeout = timeout
     end
 
     def build_row_sql
@@ -37,12 +36,12 @@ module Visualization
 
     def fetch!(account, check_id)
 
-      min_max_result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql, timeout: @timeout)
+      min_max_result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql, :timeout => sql_execution_timeout)
 
       @min = min_max_result.rows[0][0].to_f
       @max = min_max_result.rows[0][1].to_f
 
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, timeout: @timeout)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, :timeout => sql_execution_timeout)
       row_data = result.rows.map { |row| {:bin => row[0].to_i, :frequency => row[1].to_i} }
 
       @rows = massage(row_data)

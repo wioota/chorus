@@ -12,7 +12,6 @@ module Visualization
       @type = attributes[:type]
       @dataset = dataset
       @schema = dataset.try :schema
-      @timeout = timeout
     end
 
     def column_information
@@ -53,7 +52,7 @@ module Visualization
     end
 
     def fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql, timeout: @timeout).rows[0]
+      result = SqlExecutor.execute_sql(@schema, account, check_id, min_max_sql, :timeout => sql_execution_timeout).rows[0]
 
       @min_x = result[0].to_f
       @max_x = result[1].to_f
@@ -63,7 +62,7 @@ module Visualization
 
     def fetch!(account, check_id)
       fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, timeout: @timeout)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, :timeout => sql_execution_timeout)
       row_data = result.rows.map { |row| {:x => row[0].to_i, :y => row[1].to_i, :value => row[2].to_i} }
       @rows = fill_missing(row_data)
     end
