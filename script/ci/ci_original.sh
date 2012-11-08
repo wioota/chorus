@@ -43,18 +43,12 @@ kill -s SIGTERM $jasmine_pid
 echo "Cleaning up gpfdist"
 killall gpfdist
 
-echo "Running legacy migration tests"
-b/rake db:test:prepare
-CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration
-LEGACY_MIGRATION_TESTS_RESULT=$?
-
 echo "Running API docs check"
 b/rake api_docs:check
 API_DOCS_CHECK_RESULT=$?
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
+SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
 echo "RSpec exit code: $RUBY_TESTS_RESULT"
 echo "Jasmine exit code: $JS_TESTS_RESULT"
-echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
 echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
 exit $SUCCESS
