@@ -29,8 +29,12 @@ describe("chorus.views.Workfile", function() {
         });
     });
 
-    // TODO: make these work with new api and fixtures [#37135825]
-    xcontext("when the workfile has one comment", function() {
+    context("when the workfile has one comment", function() {
+        beforeEach(function() {
+            this.model.get("recentComments")[0].timestamp = "2012-11-08T18:06:51Z";
+            this.view.render();
+        });
+
         it("includes the most recent comment body", function() {
             expect(this.view.$(".comment .body")).toContainText(this.model.lastComment().get("body"));
         });
@@ -44,11 +48,11 @@ describe("chorus.views.Workfile", function() {
         });
 
         it("displays the abbreviated date of the most recent comment", function() {
-            expect(this.view.$(".comment_info .on").text().trim()).toBe("Dec 15");
+            expect(this.view.$(".comment_info .on").text().trim()).toBe("Nov 8");
         });
     });
 
-    xcontext("when the workfile has more than one comment", function() {
+    context("when the workfile has more than one comment", function() {
         beforeEach(function() {
             this.model.set({ commentCount: 3 });
         });

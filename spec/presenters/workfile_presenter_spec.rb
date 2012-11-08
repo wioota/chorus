@@ -23,6 +23,9 @@ describe WorkfilePresenter, :type => :view do
       hash.should have_key(:latest_version_id)
       hash.should have_key(:has_draft)
       hash.should have_key(:is_deleted)
+      hash.should have_key(:recent_comments)
+      hash.should have_key(:comment_count)
+
       hash.should_not have_key(:execution_schema)
     end
 
@@ -36,6 +39,31 @@ describe WorkfilePresenter, :type => :view do
 
     it "uses the workfile file name" do
       hash[:file_name].should == workfile.file_name
+    end
+
+    context "when there are notes on a workfile" do
+      let(:recent_comments) { hash[:recent_comments] }
+      let(:timestamp) { Time.now }
+
+      before do
+        workfile.events.clear
+        Timecop.freeze timestamp do
+          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note1')
+          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note2')
+        end
+        workfile.reload
+      end
+
+      it "presents the notes as comments" do
+        recent_comments.count.should == 2
+        recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
+        recent_comments[0][:body].should == "note1"
+        recent_comments[0][:timestamp].should == timestamp
+      end
+
+      it "includes the comment count" do
+        hash[:comment_count].should == 2
+      end
     end
 
     context "workfile has a draft for that user" do

@@ -95,14 +95,14 @@ describe("chorus.models.Workfile", function() {
         })
     });
 
-    xdescribe("#lastComment", function() {
+    describe("#lastComment", function() {
         beforeEach(function() {
             this.comment = this.model.lastComment();
             this.lastCommentJson = this.model.get('recentComments')[0];
         });
 
         it("has the right body", function() {
-            expect(this.comment.get("body")).toBe(this.lastCommentJson.text);
+            expect(this.comment.get("body")).toBe(this.lastCommentJson.body);
         });
 
         it("sets the 'loaded' flag to true", function() {

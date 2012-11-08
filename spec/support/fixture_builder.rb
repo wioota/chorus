@@ -236,6 +236,8 @@ FixtureBuilder.configure do |fbuilder|
       sql_workfile = FactoryGirl.create(:workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace)
       fbuilder.name :sql, sql_workfile
 
+      Events::NoteOnWorkfile.by(owner).add(:workspace => sql_workfile.workspace, :workfile => sql_workfile, :body => 'note on workfile')
+
       no_collaborators_workfile_version = FactoryGirl.create(:workfile_version, :workfile => no_collaborators_private, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => no_collaborators_public, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => private_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)

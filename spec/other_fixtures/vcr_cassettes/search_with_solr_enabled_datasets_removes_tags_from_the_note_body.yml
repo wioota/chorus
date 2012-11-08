@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnDataset 1000047</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000010</field><field name="found_in_workspace_id_im">1000011</field><field name="grouping_id_s">GpdbTable 1000006</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">GpdbTable</field><field name="security_type_name_sm">Dataset</field><field name="body_texts">sometext  searchwithhtml  ftw</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NoteOnDataset 1000048</field><field name="type">Events::NoteOnDataset</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NoteOnDataset</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000010</field><field name="found_in_workspace_id_im">1000011</field><field name="grouping_id_s">GpdbTable 1000006</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">GpdbTable</field><field name="security_type_name_sm">Dataset</field><field name="body_texts">sometext  searchwithhtml  ftw</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -24,9 +24,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Mon, 05 Nov 2012 23:44:00 GMT
+  recorded_at: Thu, 08 Nov 2012 20:04:14 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -51,9 +51,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version: '1.1'
-  recorded_at: Mon, 05 Nov 2012 23:44:00 GMT
+  recorded_at: Thu, 08 Nov 2012 20:04:14 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -78,7 +78,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>17,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts table_description_texts schema_name_texts
         column_name_texts column_description_texts query_texts parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -94,10 +94,10 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.4109912,''docs''=>[{''id''=>''Events::NoteOnDataset
-        1000047'',''body_texts''=>[''sometext  searchwithhtml  ftw''],''score''=>2.4109912}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnDataset
-        1000047''=>{''body_texts''=>[''sometext  @@@hl@@@searchwithhtml@@@endhl@@@  ftw'']}}}'
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.425384,''docs''=>[{''id''=>''Events::NoteOnDataset
+        1000048'',''body_texts''=>[''sometext  searchwithhtml  ftw''],''score''=>2.425384}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnDataset
+        1000048''=>{''body_texts''=>[''sometext  @@@hl@@@searchwithhtml@@@endhl@@@  ftw'']}}}'
     http_version: '1.1'
-  recorded_at: Mon, 05 Nov 2012 23:44:00 GMT
+  recorded_at: Thu, 08 Nov 2012 20:04:14 GMT
 recorded_with: VCR 2.1.1
 ...

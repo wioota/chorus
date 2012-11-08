@@ -92,7 +92,7 @@
             var commentsJson = this.get("recentComments");
             if (commentsJson && commentsJson.length > 0) {
                 var comment = new chorus.models.Comment({
-                    body: commentsJson[0].text,
+                    body: commentsJson[0].body,
                     author: commentsJson[0].author,
                     commentCreatedStamp: commentsJson[0].timestamp
                 });

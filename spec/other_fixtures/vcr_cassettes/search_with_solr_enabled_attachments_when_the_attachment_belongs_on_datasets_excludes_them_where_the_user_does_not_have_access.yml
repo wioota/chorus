@@ -24,7 +24,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Attachment
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Attachment)'',''-(security_type_name_sm:(Dataset)
@@ -32,20 +32,20 @@ http_interactions:
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000003 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>7,''ngroups''=>7,''groups''=>[{''groupValue''=>''Attachment
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000005'',''name_texts''=>[''searchquery_workspace''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000007'',''name_texts''=>[''searchquery_workspace''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1341912.5,''docs''=>[{''id''=>''Attachment
-        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>1341912.5}]}},{''groupValue''=>''Attachment
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1073530.0,''docs''=>[{''id''=>''Attachment
-        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>1073530.0}]}}]}},''highlighting''=>{''Attachment
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000005'',''name_texts''=>[''searchquery_workspace''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000007'',''name_texts''=>[''searchquery_workspace''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1371796.9,''docs''=>[{''id''=>''Attachment
+        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>1371796.9}]}},{''groupValue''=>''Attachment
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1097437.5,''docs''=>[{''id''=>''Attachment
+        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>1097437.5}]}}]}},''highlighting''=>{''Attachment
         1000003''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_instance'']},''Attachment
         1000004''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace'']},''Attachment
         1000005''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace'']},''Attachment
@@ -54,6 +54,6 @@ http_interactions:
         1000009''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''Attachment
         1000010''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hdfs_file'']}}}'
     http_version: '1.1'
-  recorded_at: Tue, 30 Oct 2012 23:32:18 GMT
+  recorded_at: Thu, 08 Nov 2012 20:05:17 GMT
 recorded_with: VCR 2.1.1
 ...
