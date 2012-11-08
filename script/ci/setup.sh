@@ -15,4 +15,4 @@ cp config/chorus.properties.example config/chorus.properties
 
 rm -f postgres && ln -s /usr/pgsql-9.2 postgres
 
-b/rake development:init db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
+b/rake development:generate_database_yml development:generate_secret_token development:generate_secret_key db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
