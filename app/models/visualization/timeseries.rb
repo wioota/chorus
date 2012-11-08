@@ -12,10 +12,11 @@ module Visualization
       @filters = attributes[:filters]
       @dataset = dataset
       @schema = dataset.try :schema
+      @timeout = timeout
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql, timeout: @timeout)
       @rows = result.rows.map { |row| {:value => row[0].to_f.round(3), :time => row[1]} }
     end
 

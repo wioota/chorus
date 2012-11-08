@@ -161,6 +161,15 @@ describe SqlExecutor do
       end
       result = SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
     end
+
+    it "times out when the query exceeds the timeout limit" do
+      options = {:timeout => 100}
+      sql = "SELECT pg_sleep(1);"
+
+      expect {
+        SqlExecutor.execute_sql(schema, account, check_id, sql, options)
+      }.to raise_error(MultipleResultsetQuery::QueryError)
+    end
   end
 
   describe "#cancel_query" do

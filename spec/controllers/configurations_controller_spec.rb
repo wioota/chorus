@@ -58,6 +58,7 @@ describe ConfigurationsController do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.attachment') { 10 }
+      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 3 }
       get :show
       response.code.should == "200"
       decoded_response.file_sizes_mb_csv_imports.should == 1
@@ -65,6 +66,7 @@ describe ConfigurationsController do
       decoded_response.file_sizes_mb_user_icon.should == 5
       decoded_response.file_sizes_mb_workspace_icon.should == 5
       decoded_response.file_sizes_mb_attachment.should == 10
+      decoded_response.execution_timeout.should == 3
     end
 
     generate_fixture "config.json" do
@@ -73,6 +75,7 @@ describe ConfigurationsController do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.attachment') { 10 }
+      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 15 }
       get :show
     end
   end

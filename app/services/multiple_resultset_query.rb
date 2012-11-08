@@ -7,7 +7,7 @@ class MultipleResultsetQuery
   end
 
   def driver
-    @driver ||= @connection.instance_variable_get(:"@connection").connection
+    @driver ||= @connection.raw_connection.connection
   end
 
   def execute(sql, options = {})
