@@ -9,7 +9,7 @@ describe("chorus.models.ChorusView", function() {
     it("has the right url for create, update, and delete", function() {
         _.each(['create', 'update', 'delete'], function(method) {
             this.model.attributes.sourceObjectId = "100";
-            expect(this.model.url({method: method})).toMatchUrl('/chorus_views');
+            expect(this.model.url({method: method})).toMatchUrl('/chorus_views/');
         }, this)
     });
 
