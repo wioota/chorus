@@ -41,7 +41,7 @@ fi
 # start jasmine
 if $run_jasmine ; then
     rm -fr tmp/cache
-    RAILS_ENV=test b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
+    b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
     echo $jasmine_pid > tmp/pids/jasmine-$RAILS_ENV.pid
