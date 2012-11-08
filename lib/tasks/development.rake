@@ -1,5 +1,6 @@
 require 'securerandom'
 require 'pathname'
+require 'fileutils'
 
 namespace :development do
   desc "Generate config/secret.token which is used for signing cookies"
@@ -18,8 +19,16 @@ namespace :development do
     secret_key_file.open("w") { |f| f << secret_key }
   end
 
+  desc "Copy database.yml.example to database.yml"
+  task :generate_database_yml do
+    root = Pathname.new(__FILE__).dirname.join("../..")
+    database_yml_example = root.join("config/database.yml.example")
+    database_yml = root.join("config/database.yml")
+    FileUtils.cp(database_yml_example.to_s, database_yml.to_s) unless database_yml.exist?
+  end
+
   desc "Initialize the database and create the database user used by Chorus"
-  task :init_database do
+  task :init_database => [:generate_database_yml] do
     root = Pathname.new(__FILE__).dirname.join("../..")
     postgres_port = `ruby #{File.join(root, 'packaging', 'get_postgres_port.rb')}`
     next if root.join("postgres-db").exist?

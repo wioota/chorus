@@ -13,7 +13,7 @@ rm -f tmp/fixture_builder*.yml
 
 cp config/chorus.properties.example config/chorus.properties
 
-b/rake development:generate_secret_token development:generate_secret_key db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
+b/rake development:init db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
 
 # backup and restore tests need postgres to be installed in CHORUS_HOME
 rm -f postgres && ln -s /usr/pgsql-9.2 postgres

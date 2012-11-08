@@ -66,8 +66,9 @@ GREENPLUM_IP
 # Ignore regression specs, as they live in another repo and should only be symlinked into spec/
 /spec/regression
 
-# Ignore chorus.properties
+# Ignore app configuration
 /config/chorus.properties
+/config/database.yml
 
 # Ignore secret keys
 /config/secret.token

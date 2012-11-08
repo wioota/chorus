@@ -18,6 +18,11 @@ end
 
 module Chorus
   class Application < Rails::Application
+
+    config.before_initialize do
+      abort("No database.yml file found.  Run rake development:init or rake development:generate_database_yml") unless File.exists?(File.expand_path('../database.yml', __FILE__))
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
