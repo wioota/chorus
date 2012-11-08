@@ -1,7 +1,7 @@
 module SqlExecutor
   class << self
     def preview_dataset(dataset, account, check_id)
-      execute_sql(dataset.schema, account, check_id, dataset.preview_sql, :limit => 100)
+      execute_sql(dataset.schema, account, check_id, dataset.preview_sql, :limit => limit_rows)
     end
 
     def execute_sql(schema, account, check_id, sql, options = {})
@@ -27,6 +27,10 @@ module SqlExecutor
 
     def sql_execution_timeout
       (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout"] || 0) )
+    end
+
+    def limit_rows
+      (Chorus::Application.config.chorus['default_preview_row_limit'] || 100).to_i
     end
   end
 end

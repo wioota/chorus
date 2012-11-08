@@ -8,6 +8,7 @@ describe WorkfileExecutionsController do
   let(:archived_workfile) { workfiles(:archived) }
   let(:sql) { "Select something from somewhere" }
   let(:check_id) { '12345' }
+  let(:row_limit) {2}
 
   describe "#create" do
     it_behaves_like "an action that requires authentication", :post, :create, :workfile_id => '-1'
@@ -17,12 +18,14 @@ describe WorkfileExecutionsController do
         log_in workspace_member
 
         sandbox = workspace.sandbox
-        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => 500) do
+        stub.proxy(Chorus::Application.config.chorus).[](anything)
+        stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { row_limit }
+        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => row_limit) do
           SqlResult.new
         end
       end
 
-      it "executes the sql, with the check_id, limiting to 500 rows" do
+      it "executes the sql, with the check_id with the mentioned row limit" do
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
       end
 

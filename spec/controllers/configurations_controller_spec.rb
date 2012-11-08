@@ -52,13 +52,26 @@ describe ConfigurationsController do
       decoded_response.gpfdist_configured.should == false
     end
 
+    it "includes the default preview row limits" do
+      stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { 12 }
+      get :show
+      response.code.should == "200"
+      decoded_response.default_preview_row_limit.should == 12
+    end
+
+    it "includes the execution timeout" do
+      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 3 }
+      get :show
+      response.code.should == "200"
+      decoded_response.execution_timeout.should == 3
+    end
+
     it "includes the file size maximums" do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.attachment') { 10 }
-      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 3 }
       get :show
       response.code.should == "200"
       decoded_response.file_sizes_mb_csv_imports.should == 1
@@ -66,7 +79,6 @@ describe ConfigurationsController do
       decoded_response.file_sizes_mb_user_icon.should == 5
       decoded_response.file_sizes_mb_workspace_icon.should == 5
       decoded_response.file_sizes_mb_attachment.should == 10
-      decoded_response.execution_timeout.should == 3
     end
 
     generate_fixture "config.json" do
@@ -76,6 +88,7 @@ describe ConfigurationsController do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.attachment') { 10 }
       stub(Chorus::Application.config.chorus).[]('execution_timeout') { 15 }
+      stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { 20 }
       get :show
     end
   end

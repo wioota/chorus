@@ -18,7 +18,8 @@ class ConfigurationsController < ApplicationController
       :provision_max_size_in_gb => Chorus::Application.config.chorus['provision_max_size_in_gb'],
       :kaggle_configured => Chorus::Application.config.chorus.kaggle_configured?,
       :gnip_configured => Chorus::Application.config.chorus.gnip_configured?,
-      :execution_timeout => Chorus::Application.config.chorus['execution_timeout']
+      :execution_timeout => Chorus::Application.config.chorus['execution_timeout'],
+      :default_preview_row_limit => Chorus::Application.config.chorus['default_preview_row_limit'] || 100
     } }
   end
 

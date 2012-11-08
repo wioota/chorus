@@ -43,6 +43,8 @@ file_sizes_mb.workspace_icon = 5
 file_sizes_mb.attachment = 10
 file_sizes_mb.max_upload_size_megabytes = 100
 
+default_preview_row_limit = 20
+
 logging.syslog = true
 
 gpfdist.ssl = false

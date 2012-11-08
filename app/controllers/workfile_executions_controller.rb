@@ -5,7 +5,7 @@ class WorkfileExecutionsController < ApplicationController
 
   def create
     account = @schema.account_for_user! current_user
-    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => 500)
+    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
     @workfile.execution_schema = @schema
     @workfile.save!
     present result
@@ -32,5 +32,9 @@ class WorkfileExecutionsController < ApplicationController
 
   def check_authorization
     authorize! :can_edit_sub_objects, @workfile.workspace
+  end
+
+  def row_limit
+    (Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
   end
 end
