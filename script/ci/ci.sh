@@ -4,8 +4,8 @@ if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
 
-#GPDB_HOST=chorus-gpdb42
-HADOOP_HOST=chorus-gphd02
+#export GPDB_HOST=chorus-gpdb42
+#export HADOOP_HOST=chorus-gphd02
 
 set -v
 set -e
@@ -55,7 +55,7 @@ set +e
 if $run_ruby ; then
     echo "Running unit tests"
     ln -sf .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
+    b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
     RUBY_TESTS_RESULT=$?
     run_fixtures=false
 else
@@ -65,7 +65,7 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
-    GPDB_HOST=$GPDB_HOST HADOOP_HOST=$HADOOP_HOST b/rake fixtures 2>&1
+    b/rake fixtures 2>&1
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
