@@ -3,6 +3,7 @@ describe("chorus.Modal", function() {
         this.model = new chorus.models.Base();
         this.modal = new chorus.Modal({ pageModel: this.model });
         spyOn(chorus.Modal.prototype, "resize").andCallThrough();
+        spyOn(chorus.Modal.prototype, "recalculateScrolling").andCallThrough();
         stubModals();
         stubDefer();
     });
@@ -220,6 +221,10 @@ describe("chorus.Modal", function() {
 
             it("calls #resize", function() {
                 expect(this.modal.resize).toHaveBeenCalled();
+            });
+
+            it("resets the previous modals ability to scroll'", function() {
+                expect(this.modal.recalculateScrolling).toHaveBeenCalled();
             });
         });
 

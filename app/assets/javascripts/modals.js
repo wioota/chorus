@@ -98,6 +98,7 @@ chorus.Modal = chorus.views.Base.extend({
         chorus.modal = this;
         this.foreground();
         this.listenToFacebox();
+        this.recalculateScrolling();
         _.defer(this.resize);
     },
 
