@@ -8,7 +8,7 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-SOLR_PORT=$($RUBY $CHORUS_HOME/packaging/configure_solr_port.rb)
+SOLR_PORT=$(RAILS_ENV=$RAILS_ENV $RUBY $CHORUS_HOME/packaging/configure_solr_port.rb)
 SOLR_LOG_LEVEL=INFO
 
 DATA_DIR=$CHORUS_HOME/solr/data/$RAILS_ENV/
