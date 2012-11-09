@@ -20,8 +20,6 @@ module Events
 
     delegate :grouping_id, :type_name, :security_type_name, :to => :primary_target
 
-    alias_method :author, :actor
-
     def self.create_from_params(params, creator)
       body = params[:body]
       entity_id = params[:entity_id]

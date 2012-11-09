@@ -27,13 +27,6 @@ describe Events::Note do
     note.errors.messages[:actor_id].length.should == 1
   end
 
-  describe "#author" do
-    it "is an alias for actor" do
-      note = Events::Note.new :actor => actor
-      note.author.should == actor
-    end
-  end
-
   describe ".insights" do
     let(:insight) { events(:insight_on_greenplum) }
     let(:normal) { events(:note_on_dataset) }

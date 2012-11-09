@@ -12,7 +12,9 @@ class Workfile < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :notes, :through => :activities, :source => :event, :conditions => {:action => 'Events::NoteOnWorkfile'}
-  has_many :comments_on_notes, :through => :notes, :source => :comments
+  has_many :comments, :through => :events
+  has_many :commit_messages, :through => :activities, :source => :event,
+           :conditions => {:action => ['Events::WorkfileCreated', 'Events::WorkfileUpgradedVersion']}
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
 

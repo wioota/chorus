@@ -277,7 +277,7 @@ describe Workfile do
     it { should have_many :activities }
     it { should have_many :events }
     it { should have_many :notes }
-    it { should have_many :comments_on_notes }
+    it { should have_many :comments }
 
     it "belongs to an execution_schema" do
       workfile = workfiles(:private)

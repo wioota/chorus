@@ -41,6 +41,59 @@ describe WorkfilePresenter, :type => :view do
       hash[:file_name].should == workfile.file_name
     end
 
+    describe "it presents the commit message for a workfile" do
+      let(:recent_comments) { hash[:recent_comments] }
+      let(:workfile_created_event) {Events::WorkfileCreated.by(user).add(:workfile => workfile, :commit_message => "original version", :workspace => workspace)}
+
+      before do
+        workfile.events.clear
+        workfile_created_event
+      end
+
+      it "presents the commit message" do
+        recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
+        recent_comments[0][:body].should == "original version"
+        recent_comments[0][:timestamp].should == workfile_created_event.created_at
+      end
+
+      context "when there's a newer version of a workfile" do
+        let(:latest_workfile_version) {
+          workfile.versions.create! :owner => user, :modifier => user
+        }
+        let(:new_workfile_version_event) {
+          Timecop.freeze Time.now + 1.day do
+            Events::WorkfileUpgradedVersion.by(user).add(:workfile => workfile, :commit_message => "new version", :workspace => workspace, :version_id => latest_workfile_version.id)
+          end
+        }
+
+        before do
+          latest_workfile_version
+          new_workfile_version_event
+        end
+
+        it "presents the commit message" do
+          recent_comments[0][:body].should == "new version"
+        end
+
+        context "when there is a note before the newer version" do
+          before do
+            Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note on old version')
+          end
+
+          it "still presents the commit message" do
+            recent_comments[0][:body].should == "new version"
+          end
+        end
+
+        context "when the newer version of a workfile has been deleted" do
+          it "does not present the commit message for the newer version" do
+            latest_workfile_version.destroy
+            recent_comments[0][:body].should == "original version"
+          end
+        end
+      end
+    end
+
     context "when there are notes on a workfile" do
       let(:recent_comments) { hash[:recent_comments] }
       let(:today) { Time.now }
@@ -58,10 +111,13 @@ describe WorkfilePresenter, :type => :view do
       end
 
       it "presents the notes as comments in reverse timestamp order" do
-        recent_comments.count.should == 2
         recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
         recent_comments[0][:body].should == "note for today"
         recent_comments[0][:timestamp].should == today
+      end
+
+      it "presents only the last comment" do
+        recent_comments.count.should == 1
       end
 
       it "includes the comment count" do
@@ -83,8 +139,6 @@ describe WorkfilePresenter, :type => :view do
             recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
             recent_comments[0][:body].should == "comment on yesterday's note"
             recent_comments[0][:timestamp].should == comment_timestamp
-            recent_comments[1][:body].should == "note for today"
-            recent_comments[2][:body].should == "note for yesterday"
           end
         end
 
@@ -93,8 +147,6 @@ describe WorkfilePresenter, :type => :view do
 
           it "presents the comment after the newset note" do
             recent_comments[0][:body].should == "note for today"
-            recent_comments[1][:body].should == "comment on yesterday's note"
-            recent_comments[2][:body].should == "note for yesterday"
           end
         end
 

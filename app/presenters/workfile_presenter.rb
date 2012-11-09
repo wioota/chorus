@@ -1,8 +1,19 @@
 class WorkfilePresenter < Presenter
 
   def to_hash
-    comments_and_notes = model.notes + model.comments_on_notes
-    comments_and_notes.sort_by!(&:created_at).reverse!
+    notes = model.notes
+    comments = model.comments
+    commit_messages = model.commit_messages
+
+    commit_messages.keep_if do |message|
+      next true unless message.is_a?(Events::WorkfileUpgradedVersion)
+      message.workfile.versions.find_by_id(message.version_id).present?
+    end
+
+    recent_comments = [notes.last,
+                       comments.last,
+                       commit_messages.last].compact
+    recent_comments = [recent_comments.sort_by(&:created_at).last]
 
     workfile = {
       :id => model.id,
@@ -11,14 +22,8 @@ class WorkfilePresenter < Presenter
       :file_type => model.content_type,
       :latest_version_id => model.latest_workfile_version_id,
       :is_deleted => model.deleted?,
-      :recent_comments => comments_and_notes.map do |comment|
-        {
-            :body => comment.body,
-            :author => present(comment.author),
-            :timestamp => comment.created_at
-        }
-      end,
-      :comment_count => comments_and_notes.count
+      :recent_comments => present(recent_comments, :as_comment => true),
+      :comment_count => comments.count + notes.count
     }
 
     unless rendering_activities?

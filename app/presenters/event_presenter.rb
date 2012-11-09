@@ -1,5 +1,7 @@
 class EventPresenter < Presenter
   def to_hash
+    return as_comment if @options[:as_comment]
+
     basic_hash.
       merge(targets_hash).
       merge(additional_data_hash).
@@ -26,6 +28,14 @@ class EventPresenter < Presenter
   def comments_hash
     {
       :comments => present(model.comments)
+    }
+  end
+
+  def as_comment
+    {
+        :body => model.respond_to?(:body) ? model.body : model.commit_message,
+        :author => present(model.actor),
+        :timestamp => model.created_at
     }
   end
 
