@@ -37,6 +37,8 @@ describe AttachmentsController do
         controller.head :ok
       }
       get :show, :note_id => attachment.note.to_param, :id => attachment.to_param, :style => 'icon'
+      response.code.should == "200"
+      decoded_response.type == "image/gif"
     end
   end
 end

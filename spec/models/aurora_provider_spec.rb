@@ -40,6 +40,7 @@ describe AuroraProvider do
   end
 
   describe "#valid?" do
+
     it "returns the aurora provider status" do
       aurora_service = Object.new
       mock(aurora_service).valid? { true }

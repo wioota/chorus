@@ -9,8 +9,8 @@ gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120720'
-gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/sunspot/pull/267
 gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
+gem 'sunspot_solr', '2.0.0.pre.120720'
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
 gem 'attr_encrypted'

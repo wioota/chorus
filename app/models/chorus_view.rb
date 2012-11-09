@@ -44,7 +44,7 @@ class ChorusView < Dataset
       begin
         flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
         s.executeWithFlags(flag)
-      rescue java::sql::SQLException => e
+      rescue => e
         errors.add(:query, :generic, {:message => "Cannot execute SQL query. #{e.cause}"})
       end
       if s.getMoreResults

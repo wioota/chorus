@@ -40,6 +40,8 @@ describe WorkspaceImagesController do
         controller.head :ok
       }
       get :show, :workspace_id => workspace.id
+      response.code.should == "200"
+      decoded_response.type == "image/jpg"
     end
   end
 end

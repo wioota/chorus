@@ -45,7 +45,7 @@ class AuroraProvider
     gpdb_instance.refresh_databases
     gpdb_instance
 
-  rescue Exception => e
+  rescue StandardError => e
     gpdb_instance = GpdbInstance.find(instance_id)
     gpdb_instance.state = 'fault'
     gpdb_instance.save!
