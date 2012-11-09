@@ -8,24 +8,8 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-case $RAILS_ENV in
-    development )
-        SOLR_PORT=8982
-        SOLR_LOG_LEVEL=INFO
-        ;;
-    test )
-        SOLR_PORT=8981
-        SOLR_LOG_LEVEL=WARNING
-        ;;
-    production )
-        SOLR_PORT=8983
-        SOLR_LOG_LEVEL=WARNING
-        ;;
-    integration )
-        SOLR_PORT=8984
-        SOLR_LOG_LEVEL=WARNING
-        ;;
-esac
+SOLR_PORT=$($RUBY $CHORUS_HOME/packaging/configure_solr_port.rb)
+SOLR_LOG_LEVEL=INFO
 
 DATA_DIR=$CHORUS_HOME/solr/data/$RAILS_ENV/
 SOLR_LOG_FILE=$CHORUS_HOME/log/solr-$RAILS_ENV.log

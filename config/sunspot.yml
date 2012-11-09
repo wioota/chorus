@@ -1,42 +1,38 @@
+---
 production:
   solr:
     hostname: localhost
     port: 8983
     log_level: WARNING
   auto_commit_after_request: false
-
 development:
   solr:
     hostname: localhost
-    port: 8982
+    port: 5309
     log_level: INFO
   auto_commit_after_request: false
-
 test:
   solr:
     hostname: localhost
     port: 8981
     log_level: WARNING
   auto_commit_after_request: true
-
-# expect all ci traffic to hit in vcr and not go to solr
 ci_jasmine:
   solr:
     hostname: localhost
     port: 8981
     log_level: WARNING
   auto_commit_after_request: true
-
 integration:
   solr:
     hostname: localhost
     port: 8984
     log_level: WARNING
   auto_commit_after_request: true
-
 packaging:
   solr:
     hostname: localhost
     port: 8981
     log_level: WARNING
   auto_commit_after_request: true
+...

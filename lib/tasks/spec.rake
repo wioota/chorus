@@ -16,7 +16,7 @@ unless Rails.env.production?
 
   desc 'Run backend specs'
   RSpec::Core::RakeTask.new(:spec => spec_prereq) do |t|
-    t.pattern = 'spec/{controllers,permissions,models,lib,presenters,requests,services,install}/**/*_spec.rb'
+    t.pattern = 'spec/{controllers,permissions,models,lib,presenters,requests,services,install,scripts}/**/*_spec.rb'
   end
   task :spec => [:gpdb_host_check_stale]
 
