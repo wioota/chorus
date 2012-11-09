@@ -8,7 +8,7 @@ production:
 development:
   solr:
     hostname: localhost
-    port: 5309
+    port: 8982
     log_level: INFO
   auto_commit_after_request: false
 test:
