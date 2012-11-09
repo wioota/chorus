@@ -91,7 +91,7 @@ class Gppipe < GpTableCopier
           # p "Read thread status: #{thr2.status}"
 
           thread_hung = !semaphore.tryAcquire(Gppipe.grace_period_seconds * 1000, java.util.concurrent.TimeUnit::MILLISECONDS)
-          raise Exception if thread_hung
+          raise Exception.new("Thread hung") if thread_hung
 
           #collect any exceptions raised inside thread1 or thread2
           thr1.join
