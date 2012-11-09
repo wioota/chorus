@@ -25,7 +25,7 @@ def current_route
   URI.parse(current_url).fragment
 end
 
-def wait_for_ajax(timeout = 10)
+def wait_for_ajax(timeout = 15)
   page.wait_until(timeout) do
     page.evaluate_script 'jQuery.active == 0'
   end
