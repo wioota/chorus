@@ -135,7 +135,7 @@ module BackupRestore
     end
 
     def package_backup
-      %w{version_build config/chorus.properties}.map { |f| Rails.root.join f }.each do |file|
+      %w{version_build config/chorus.properties config/secret.token config/secret.key}.map { |f| Rails.root.join f }.each do |file|
         FileUtils.cp file, "." if File.exists?(file)
       end
 
@@ -172,6 +172,8 @@ module BackupRestore
             compare_versions(backup_version, current_version)
 
             FileUtils.cp "chorus.properties", Rails.root.join("config/chorus.properties") if File.exists?("chorus.properties")
+            FileUtils.cp "secret.key", Rails.root.join("config/secret.key") if File.exists?("secret.key")
+            FileUtils.cp "secret.token", Rails.root.join("config/secret.token") if File.exists?("secret.token")
             self.chorus_config = ChorusConfig.new
 
             restore_assets
