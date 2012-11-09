@@ -22,7 +22,7 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
     typeOptions: function() {
         var options = this._super("typeOptions", arguments);
         if (this.search.isScoped()) {
-            var toDisable = ["instance", "user", "workspace", "hdfs"];
+            var toDisable = ["instance", "user", "workspace", "hdfs_entry"];
             _.each(options, function(option) {
                 if (_.include(toDisable, option.data)) {
                     option.disabled = true;

@@ -56,15 +56,14 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             it("has filtered result links", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile");
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs_entry");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance");
             });
 
-            describe("" +
-                "", function() {
+            describe("filtering by result type", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, "navigate");
                     this.page.$('.default_content_header li[data-type="workspace"] a').click();

@@ -1,4 +1,4 @@
-describe("chorus.views.SearchHdfs", function() {
+describe("chorus.views.SearchHdfsEntry", function() {
     describe("getHighlightedPathSegments", function() {
         context("when there are no search results", function() {
             beforeEach(function() {
@@ -14,7 +14,7 @@ describe("chorus.views.SearchHdfs", function() {
                 });
 
                 this.model = this.result.hdfs().models[0];
-                this.view = new chorus.views.SearchHdfs({model: this.model});
+                this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
 
@@ -41,7 +41,7 @@ describe("chorus.views.SearchHdfs", function() {
                 });
 
                 this.model = this.result.hdfs().models[0];
-                this.view = new chorus.views.SearchHdfs({model: this.model});
+                this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
 
@@ -71,7 +71,7 @@ describe("chorus.views.SearchHdfs", function() {
             });
 
             this.model = this.result.hdfs().models[0];
-            this.view = new chorus.views.SearchHdfs({model: this.model});
+            this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });
 
@@ -122,7 +122,7 @@ describe("chorus.views.SearchHdfs", function() {
             });
 
             this.model = this.result.hdfs().models[0];
-            this.view = new chorus.views.SearchHdfs({model: this.model});
+            this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });
 

@@ -151,7 +151,7 @@
                 case "instance":
                     return this.instances();
                     break;
-                case "hdfs":
+                case "hdfs_entry":
                     return this.hdfs();
                 case "attachment":
                     return this.attachments();

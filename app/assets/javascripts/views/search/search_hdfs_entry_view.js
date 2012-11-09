@@ -1,5 +1,5 @@
-chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
-    constructorName: "SearchHdfsView",
+chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
+    constructorName: "SearchHdfsEntryView",
     templateName: "search_hdfs",
     eventType: "hdfs_entry",
 

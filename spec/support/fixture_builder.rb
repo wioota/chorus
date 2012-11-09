@@ -79,8 +79,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :hadoop, hadoop_instance
     Events::HadoopInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
-    HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
-
+    fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
     chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
     chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))

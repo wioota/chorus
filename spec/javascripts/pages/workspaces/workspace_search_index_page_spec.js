@@ -37,7 +37,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 expect(menuOptions.filter("[data-type=instance]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=workspace]")).not.toContain("a");
-                expect(menuOptions.filter("[data-type=hdfs]")).not.toContain("a");
+                expect(menuOptions.filter("[data-type=hdfs_entry]")).not.toContain("a");
 
                 expect(menuOptions.filter("[data-type=workfile]")).toContain("a");
                 expect(menuOptions.filter("[data-type=dataset]")).toContain("a");
@@ -70,7 +70,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 expect(menuOptions.filter("[data-type=instance]")).toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).toContain("a");
                 expect(menuOptions.filter("[data-type=workspace]")).toContain("a");
-                expect(menuOptions.filter("[data-type=hdfs]")).toContain("a");
+                expect(menuOptions.filter("[data-type=hdfs_entry]")).toContain("a");
                 expect(menuOptions.filter("[data-type=workfile]")).toContain("a");
                 expect(menuOptions.filter("[data-type=dataset]")).toContain("a");
                 expect(menuOptions.filter("[data-type=all]")).toContain("a");
