@@ -1,17 +1,17 @@
 chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
-    urlTemplateBase: "workfiles/{{workfile.id}}/executions",
+    urlTemplateBase: "workfiles/{{workfileId}}/executions",
     constructorName: "",
     paramsToSave: ['checkId', 'schemaId', 'sql'],
 
     name: function() {
-        return this.get("workfile").get("fileName");
+        return this.get("workfile").get("fileName") || this.get("fileName");
     },
 
     executionSchema: function() {
         if(!this._executionSchema) {
             this._executionSchema = new chorus.models.Schema(this.get("executionSchema"));
         }
-        return this._executionSchema
+        return this._executionSchema;
     },
 
     clear: function() {

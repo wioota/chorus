@@ -8,7 +8,11 @@ class WorkfileExecutionsController < ApplicationController
     result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
     @workfile.execution_schema = @schema
     @workfile.save!
-    present result
+    if params[:download]
+      send_data CsvWriter.to_csv(result.columns.map(&:name), result.rows), :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
+    else
+      present result
+    end
   end
 
   def destroy

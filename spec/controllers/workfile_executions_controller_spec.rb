@@ -66,6 +66,34 @@ describe WorkfileExecutionsController do
       end
     end
 
+    context "when downloading the results" do
+      let(:sql_result) {
+        SqlResult.new.tap{ |result|
+          result.add_column("a", "string")
+          result.add_column("b", "string")
+          result.add_column("c", "string")
+          result.add_row([1,2,3])
+          result.add_row([4,5,6])
+          result.add_row([7,8,9])
+        }
+      }
+      before do
+        log_in users(:owner)
+
+        mock(SqlExecutor).execute_sql.with_any_args {
+          sql_result
+        }
+        mock(CsvWriter).to_csv(sql_result.columns.map(&:name), sql_result.rows)
+      end
+
+      it "sets content disposition: attachment" do
+        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
+        response.headers['Content-Disposition'].should include("attachment")
+        response.headers['Content-Disposition'].should include('filename="some.csv"')
+        response.headers['Content-Type'].should == 'text/csv'
+      end
+    end
+
     describe "rspec fixtures", :database_integration do
       let(:schema) { GpdbSchema.find_by_name!('test_schema') }
       before do

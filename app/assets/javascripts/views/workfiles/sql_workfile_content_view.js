@@ -50,7 +50,9 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     },
 
     runAndDownload: function(options) {
-        this.runInDefault(_.extend({taskClass: chorus.models.SqlExecutionAndDownloadTask}, options));
+        this.runInDefault(_.extend({
+            taskClass: chorus.models.SqlExecutionAndDownloadTask
+        }, options));
     },
 
     run: function(options) {
@@ -67,7 +69,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.executing = true;
         this.task.set({
             sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
-            workfile: this.model,
+            workfileId: this.model.id,
+            fileName: this.model.get("fileName"),
             schemaId: options.schemaId,
             checkId: (new Date().getTime().toString()),
             numOfRows: options.numOfRows

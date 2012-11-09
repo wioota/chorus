@@ -3,6 +3,7 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         this.workfile = rspecFixtures.workfile.sql({id: 1});
         this.model = new chorus.models.WorkfileExecutionTask({
             workfile: this.workfile,
+            workfileId: 1,
             schemaId: '7',
             sql: "show tables"
         });
