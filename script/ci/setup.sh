@@ -1,4 +1,4 @@
-export JRUBY_OPTS="--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m"
+export JRUBY_OPTS="--client -J-Xmx512m -J-Xms512m -J-Xmn128m -Xcext.enabled=true"
 export PATH="$HOME/phantomjs/bin:$HOME/.rbenv/bin:$PATH"
 
 eval "$(rbenv init - --no-rehash)"

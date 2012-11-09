@@ -16,7 +16,7 @@ module Aurora
     def initialize(config)
       @aurora_service = JavaModules::AuroraService.get_instance(config)
       @valid = true
-    rescue StandardError
+    rescue Exception
       @valid = false
     end
 

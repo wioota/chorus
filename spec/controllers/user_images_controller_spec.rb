@@ -48,8 +48,6 @@ describe UserImagesController do
         controller.head :ok
       }
       get :show, :user_id => user.id
-      response.code.should == "200"
-      decoded_response.type == "image/gif"
     end
 
     context "when no image exists for the user" do
