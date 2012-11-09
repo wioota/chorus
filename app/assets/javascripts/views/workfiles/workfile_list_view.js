@@ -8,15 +8,6 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
         return this;
     },
 
-    setup: function() {
-        this._super("setup", arguments);
-        this.addCommentHandle = chorus.PageEvents.subscribe("comment:added", this.addComment, this);
-    },
-
-    addComment: function(comment) {
-        this.collection.fetch();
-    },
-
     postRender:function () {
         _.each(this.workfileViews, function(workfileView) {
            workfileView.teardown();
@@ -34,7 +25,5 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
 
     teardown: function() {
         this._super("teardown");
-        chorus.PageEvents.unsubscribe(this.addCommentHandle);
     }
-
 });
