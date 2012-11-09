@@ -55,5 +55,18 @@ describe("chorus.views.WorkfileList", function() {
         it("should call fetch", function() {
             expect(this.view.collection.fetch).toHaveBeenCalled();
         })
-    })
+    });
+
+    describe("when a comment is added", function() {
+        beforeEach(function() {
+            this.collection = new chorus.collections.WorkfileSet([], {workspaceId : 1234});
+            this.view = new chorus.views.WorkfileList({collection: this.collection});
+            spyOn(this.view.collection, "fetch");
+        })
+
+        it("reloads the collection", function() {
+            chorus.PageEvents.broadcast("comment:added", this.model);
+            expect(this.view.collection.fetch).toHaveBeenCalled();
+        });
+    });
 });

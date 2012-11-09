@@ -6,6 +6,15 @@ chorus.views.Workfile = chorus.views.Base.extend({
         ".comment .body": "commentBody"
     },
 
+    setup: function() {
+        this._super("setup", arguments);
+        this.bindings.add(this.model, "invalidated", this.invalidateModel, this)
+    },
+
+    invalidateModel: function() {
+        this.model.fetch();
+    },
+
     setupSubviews: function() {
         this.commentBody = new chorus.views.TruncatedText({
             model: this.model.lastComment(),
