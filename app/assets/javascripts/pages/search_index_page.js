@@ -20,7 +20,16 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         var searchParams = _.toArray(arguments);
         this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
         this.requiredResources.add(this.model);
+        this.bindings.add(this.model, "unprocessableEntity", this.unprocessableEntity);
         this.model.fetch();
+    },
+
+    unprocessableEntity: function (search) {
+        chorus.pageOptions = {
+            title: t("search.bad_entity_type.title"),
+            text: t("search.bad_entity_type.text")
+        };
+        Backbone.history.loadUrl("/unprocessableEntity");
     },
 
     searchInMenuOptions: function() {

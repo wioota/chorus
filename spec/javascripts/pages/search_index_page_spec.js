@@ -8,6 +8,20 @@ describe("chorus.pages.SearchIndexPage", function() {
         expect(this.page.helpId).toBe("search")
     });
 
+    context("when the search returns with unprocessableEntity", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.SearchIndexPage(this.query);
+            spyOn(Backbone.history, 'loadUrl');
+            this.server.lastFetchFor(this.page.model).failUnprocessableEntity();
+        });
+
+        it("shows a nice error popup", function() {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
+            expect(chorus.pageOptions.title).toMatchTranslation('search.bad_entity_type.title');
+            expect(chorus.pageOptions.text).toMatchTranslation('search.bad_entity_type.text');
+        });
+    });
+
     describe("when searching for all items, across all of chorus", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);
