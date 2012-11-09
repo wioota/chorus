@@ -10,7 +10,6 @@ ssl = false
 ssl_server_port = 8443
 ssl_certificate = 
 ssl_certificate_key = 
-timezone_offset = -8
 sandbox_recommended_size_in_gb = 5
 
 #Maximum execution time of visualizations and workfiles, in minutes

@@ -32,8 +32,8 @@ describe("chorus.models.Config", function() {
     describe("#isExternalAuth", function() {
         it("returns externalAuthEnabled", function() {
             expect(config.isExternalAuth()).toBeTruthy();
-        })
-    })
+        });
+    });
 
     describe("#fileSizeMbWorkfiles", function() {
         it("returns the workfiles size limit", function() {
@@ -44,20 +44,6 @@ describe("chorus.models.Config", function() {
     describe("#fileSizeMbCsvImports", function() {
         it("returns the csv import size limit", function() {
             expect(config.fileSizeMbCsvImports()).toBe(1);
-        });
-    });
-
-    describe("#timezoneOffset", function() {
-        it("returns the server's timezone offset as an integer multiple of one hundred", function() {
-            var config = rspecFixtures.config({ timezoneOffset: "-8" });
-            expect(config.timezoneOffset()).toBe(-800);
-        });
-
-        context("when the information is not-yet fetched", function() {
-            it("returns a falsy value", function() {
-                var config = new chorus.models.Config();
-                expect(config.timezoneOffset()).toBeFalsy();
-            });
         });
     });
 });
