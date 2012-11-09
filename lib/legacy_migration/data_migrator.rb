@@ -14,6 +14,10 @@ class DataMigrator
     # Note attachments
     # Note comments
 
+    # Chorus Views
+    # Imports
+    # Import Schedules
+
 
     ActivityMigrator.validate
     AssociatedDatasetMigrator.validate

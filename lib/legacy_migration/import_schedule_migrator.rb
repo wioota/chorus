@@ -2,6 +2,7 @@ class ImportScheduleMigrator < AbstractMigrator
   class << self
     def prerequisites
       DatabaseObjectMigrator.migrate
+      ChorusViewMigrator.migrate
       WorkspaceMigrator.migrate
     end
 
@@ -55,4 +56,3 @@ class ImportScheduleMigrator < AbstractMigrator
     end
   end
 end
-

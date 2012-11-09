@@ -26,8 +26,9 @@ describe ImportScheduleMigrator do
     end
 
     describe "copying the data" do
-      it "creates new instances for legacy hadoop instances and is idempotent" do
+      it "creates new instances for legacy import schedules and is idempotent" do
         count = Legacy.connection.select_all("Select count(*) from legacy_migrate.edc_import_schedule").first["count"]
+        count.should > 0
         ImportSchedule.count.should == count
         ImportScheduleMigrator.migrate
         ImportSchedule.count.should == count
