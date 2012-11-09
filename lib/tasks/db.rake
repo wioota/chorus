@@ -1,15 +1,5 @@
-Rake::Task["db:test:load_structure"].clear_actions
 namespace :db do
   namespace :test do
-    task :load_structure do
-      begin
-        old_env, Rails.env = Rails.env, 'test'
-        Rake::Task["db:structure:load"].invoke
-      ensure
-        Rails.env = old_env
-      end
-    end
-
     task :prepare => 'db:integration:load_structure'
   end
 
@@ -30,11 +20,11 @@ namespace :db do
   end
 
   def load_database_structure(database_name)
-    old_env, Rails.env = Rails.env, database_name
+    current_config(:config => ActiveRecord::Base.configurations[database_name])
     Rake::Task[:"db:structure:load"].invoke
     Rake::Task[:"db:structure:load"].reenable
   ensure
-    Rails.env = old_env
+    current_config(:config => nil)
   end
 
   def empty_test_database(database_name)
