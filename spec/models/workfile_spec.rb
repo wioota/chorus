@@ -276,10 +276,24 @@ describe Workfile do
     it { should belong_to :owner }
     it { should have_many :activities }
     it { should have_many :events }
+    it { should have_many :notes }
+    it { should have_many :comments_on_notes }
 
     it "belongs to an execution_schema" do
       workfile = workfiles(:private)
       workfile.execution_schema.should be_a GpdbSchema
+    end
+
+    describe "#notes" do
+      let(:workfile) { workfiles(:private) }
+      let(:author) { workfile.owner }
+
+      it "should return notes" do
+        note = Events::NoteOnWorkfile.by(author).add(:workfile => workfile, :body => "note on a workfile", :workspace => workfile.workspace)
+        workfile.reload
+        workfile.notes.first.should be_a(Events::NoteOnWorkfile)
+        workfile.notes.should == [note]
+      end
     end
   end
 

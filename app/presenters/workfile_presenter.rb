@@ -1,8 +1,7 @@
 class WorkfilePresenter < Presenter
 
   def to_hash
-    notes = model.events.select { |e| e.is_a?(Events::NoteOnWorkfile) }
-    comments_and_notes = Comment.where(:event_id => notes.map(&:id)) + notes
+    comments_and_notes = model.notes + model.comments_on_notes
     comments_and_notes.sort_by!(&:created_at).reverse!
 
     workfile = {
