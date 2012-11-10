@@ -301,9 +301,9 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
-        describe("#hdfs", function() {
+        describe("#hdfs_entries", function() {
             it("returns a Search HdfsEntrySet", function() {
-                expect(this.model.hdfs()).toBeA(chorus.collections.Search.HdfsEntrySet)
+                expect(this.model.hdfs_entries()).toBeA(chorus.collections.Search.HdfsEntrySet)
             });
         });
 
@@ -324,7 +324,7 @@ describe("chorus.models.SearchResult", function() {
                 var emptyModel = new chorus.models.SearchResult();
 
                 var methodCollectionPairs = {
-                    hdfs: "HdfsEntrySet",
+                    hdfs_entries: "HdfsEntrySet",
                     datasets: "DynamicDatasetSet",
                     workfiles: "WorkfileSet",
                     workspaces: "WorkspaceSet",

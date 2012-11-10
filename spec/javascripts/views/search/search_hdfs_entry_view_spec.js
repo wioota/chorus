@@ -13,7 +13,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
                     numFound: 10}
                 });
 
-                this.model = this.result.hdfs().models[0];
+                this.model = this.result.hdfs_entries().models[0];
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
@@ -40,7 +40,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
                     numFound: 10}
                 });
 
-                this.model = this.result.hdfs().models[0];
+                this.model = this.result.hdfs_entries().models[0];
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
@@ -70,7 +70,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
                 numFound: 10}
             });
 
-            this.model = this.result.hdfs().models[0];
+            this.model = this.result.hdfs_entries().models[0];
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });
@@ -121,7 +121,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
                 numFound: 10}
             });
 
-            this.model = this.result.hdfs().models[0];
+            this.model = this.result.hdfs_entries().models[0];
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });

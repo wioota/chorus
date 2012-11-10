@@ -23,7 +23,7 @@ describe "Search" do
       page.find(".dataset_list").should have_content(datasets(:searchquery_table).name)
       found_user = users(:owner)
       page.find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
-      page.find(".hdfs_list").should have_content(hdfs_entries(:searchable).name.name)
+      page.find(".hdfs_list").should have_content(hdfs_entries(:searchable).name)
       page.find(".workspace_list").should have_content(workspaces(:search_public).name)
       page.find(".workfile_list").should have_content(workfiles(:public).file_name)
       page.find(".instance_list").should have_content(gpdb_instances(:default).name)

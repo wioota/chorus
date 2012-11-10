@@ -20,8 +20,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
-        if (this.model.hdfs().length) {
-            this.hdfsList = this.buildListView('hdfs_entry', this.model.hdfs());
+        if (this.model.hdfs_entries().length) {
+            this.hdfsList = this.buildListView('hdfs_entry', this.model.hdfs_entries());
         }
         if (this.model.users().length) {
             this.userList = this.buildListView('user', this.model.users());

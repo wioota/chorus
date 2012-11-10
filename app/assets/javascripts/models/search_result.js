@@ -1,6 +1,6 @@
 ;(function() {
     var collectionMap = {
-        hdfs: "HdfsEntrySet",
+        hdfs_entries: "HdfsEntrySet",
         datasets: "DynamicDatasetSet",
         workfiles: "WorkfileSet",
         workspaces: "WorkspaceSet",
@@ -126,7 +126,7 @@
         workspaces: makeCollectionMethod("workspaces"),
         instances: makeCollectionMethod("instances"),
         users: makeCollectionMethod("users"),
-        hdfs: makeCollectionMethod("hdfs"),
+        hdfs_entries: makeCollectionMethod("hdfs_entries"),
         workspaceItems: makeCollectionMethod("workspaceItems"),
         attachments: makeCollectionMethod("attachments"),
 
@@ -152,7 +152,7 @@
                     return this.instances();
                     break;
                 case "hdfs_entry":
-                    return this.hdfs();
+                    return this.hdfs_entries();
                 case "attachment":
                     return this.attachments();
             }

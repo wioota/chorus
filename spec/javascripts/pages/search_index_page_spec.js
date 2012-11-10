@@ -251,7 +251,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             describe("the hdfs section", function() {
                 beforeEach(function() {
-                    this.files = this.page.search.hdfs();
+                    this.files = this.page.search.hdfs_entries();
                     this.fileLis = this.page.$(".hdfs_list li");
                 });
 
