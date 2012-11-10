@@ -36,7 +36,7 @@ module ImportMixins
 
   included do
     belongs_to :workspace
-    validate :workspace_is_not_archived
+
     validates :workspace, :presence => true
 
     belongs_to :destination_dataset, :class_name => 'Dataset'

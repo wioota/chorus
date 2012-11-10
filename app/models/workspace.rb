@@ -36,11 +36,13 @@ class Workspace < ActiveRecord::Base
   before_update :clear_assigned_datasets_on_sandbox_assignment, :create_name_change_event
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
-  after_update :solr_reindex_later, :if => :public_changed?
+
+  after_update :unschedule_imports, :if => :archived_at_changed?
   before_destroy :destroy_datasets_and_associations
 
   scope :active, where(:archived_at => nil)
 
+  after_update :solr_reindex_later, :if => :public_changed?
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -195,6 +197,10 @@ class Workspace < ActiveRecord::Base
     associated_datasets.each do |assoc_dataset|
       assoc_dataset.destroy
     end
+  end
+
+  def unschedule_imports
+    import_schedules.destroy_all if archived?
   end
 
   def owner_is_member

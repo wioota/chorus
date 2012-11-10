@@ -17,6 +17,8 @@ class Import < ActiveRecord::Base
 
   validates :user, :presence => true
 
+  validate :workspace_is_not_archived
+
   validate :table_does_not_exist, :if => :new_table, :on => :create
   validate :table_does_exist, :unless => :new_table, :on => :create
 

@@ -288,22 +288,6 @@ describe User do
   describe "#destroy" do
     let(:user) { users(:default) }
 
-    before do
-      user.destroy
-    end
-
-    it "should not delete the database entry" do
-      User.find_with_destroyed(user.id).should_not be_nil
-    end
-
-    it "should update the deleted_at field" do
-      User.find_with_destroyed(user.id).deleted_at.should_not be_nil
-    end
-
-    it "should be hidden from subsequent #find calls" do
-      User.find_by_id(user.id).should be_nil
-    end
-
     it "should not allow deleting a user who owns a gpdb instance" do
       user.gpdb_instances << FactoryGirl.build(:gpdb_instance, :owner => user)
       begin
@@ -322,6 +306,37 @@ describe User do
       rescue ActiveRecord::RecordInvalid => e
         e.record.errors.messages[:workspace_count].should == [[:equal_to, {:count => 0}]]
       end
+    end
+
+    it "deletes associated memberships" do
+      workspace = workspaces(:public)
+      workspace.members << user
+      expect {
+        user.destroy
+      }.to change(workspace.members, :count).by(-1)
+    end
+
+    it "deletes associated import schedules" do
+      FactoryGirl.create(:import_schedule, :user => user, :workspace => workspaces(:public))
+
+      expect {
+        user.destroy
+      }.to change(ImportSchedule, :count).by(-1)
+    end
+
+    it "should not delete the database entry" do
+      user.destroy
+      User.find_with_destroyed(user.id).should_not be_nil
+    end
+
+    it "should update the deleted_at field" do
+      user.destroy
+      User.find_with_destroyed(user.id).deleted_at.should_not be_nil
+    end
+
+    it "should be hidden from subsequent #find calls" do
+      user.destroy
+      User.find_by_id(user.id).should be_nil
     end
   end
 

@@ -18,6 +18,7 @@ class ImportSchedule < ActiveRecord::Base
   validates :user, :presence => true
   validates :start_datetime, :presence => true
   validates :end_date, :presence => true
+  validate :workspace_is_not_archived, :unless => :deleted?
 
   validates :frequency, :inclusion => {:in => %w( daily weekly monthly )}
 

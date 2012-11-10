@@ -9,6 +9,11 @@ describe ImportSchedule do
       schedule.should have_at_least(1).error_on(:workspace)
     end
 
+    it "should be valid if the import schedule is deleted and the workspace is archived" do
+      schedule = FactoryGirl.build(:import_schedule, :workspace => workspaces(:archived), :deleted_at => Time.current)
+      schedule.should be_valid
+    end
+
     it "is not valid with unsupported frequencies" do
       schedule = FactoryGirl.build(:import_schedule, :frequency => 'tri-weekly', :workspace => workspaces(:public))
       schedule.should have_at_least(1).error_on(:frequency)
@@ -24,10 +29,12 @@ describe ImportSchedule do
   end
 
   describe "callbacks:" do
+    let(:start_day) { Time.now + 2.days }
+    let(:next_year) { Time.now + 1.year }
     describe "before saving, automatically updating the next_import_at attribute" do
+
       context "when the start date is changed to be sooner in the future" do
-        let(:start_day) { Time.now + 2.days }
-        let(:next_year) { Time.now + 1.year }
+
         let(:import_schedule) do
           FactoryGirl.create(:import_schedule,
                               :start_datetime => next_year,

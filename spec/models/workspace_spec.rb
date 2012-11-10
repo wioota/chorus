@@ -466,6 +466,25 @@ describe Workspace do
         set_current_user(owner)
       end
 
+      context 'its import schedules' do
+        let(:workspace) { workspaces(:public) }
+
+        it "are unscheduled after archiving" do
+          expect {
+            workspace.archiver = owner
+            workspace.archived = 'true'
+            workspace.save
+          }.to change(workspace.import_schedules, :count).by(-1)
+        end
+
+        it "are not unscheduled unless it is archived" do
+          expect {
+            workspace.name = 'notArchived'
+            workspace.save
+          }.to_not change(workspace.import_schedules, :count)
+        end
+      end
+
       it "creates an event if the workspace name was changed" do
         old_name = workspace.name
         expect {

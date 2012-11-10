@@ -17,8 +17,10 @@ class User < ActiveRecord::Base
   has_many :gnip_instances, :foreign_key => :owner_id
   has_many :gpdb_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
-  has_many :memberships
+  has_many :memberships, :dependent => :destroy
   has_many :workspaces, :through => :memberships
+  has_many :import_schedules, :dependent => :destroy
+
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :notifications, :foreign_key => 'recipient_id'

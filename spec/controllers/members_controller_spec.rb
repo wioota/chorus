@@ -133,11 +133,22 @@ describe MembersController do
 
     context "change some of the members for the workspace" do
       let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member2.id]} }
+      let(:import_schedule) { FactoryGirl.create(:import_schedule, :user => member3, :workspace => workspace) }
 
       it "should remove members for the workspace" do
         lambda {
           post :create, parameters
         }.should change(Membership, :count).by(-1)
+      end
+
+      it "removes dependent import schedules" do
+        any_instance_of(ImportSchedule) do |i|
+          stub(i).valid? { true }
+        end
+        import_schedule
+        lambda {
+          post :create, parameters
+        }.should change(ImportSchedule, :count).by(-1)
       end
 
       it "does not create any events" do
