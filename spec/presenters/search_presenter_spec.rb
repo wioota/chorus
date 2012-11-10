@@ -96,8 +96,8 @@ describe SearchPresenter, :type => :view do
       end
 
       it "includes the hdfs entries" do
-        @hash.should have_key(:hdfs)
-        hdfs_hash = @hash[:hdfs]
+        @hash.should have_key(:hdfs_entries)
+        hdfs_hash = @hash[:hdfs_entries]
         hdfs_hash.should have_key(:numFound)
         hdfs_hash.should have_key(:results)
         first_result = hdfs_hash[:results][0]

@@ -28,7 +28,7 @@ class SearchPresenter < SearchPresenterBase
             :numFound => model.num_found[:datasets]
         },
 
-        :hdfs => {
+        :hdfs_entries => {
             :results => present_models_with_highlights(model.hdfs_entries),
             :numFound => model.num_found[:hdfs_entries]
         },

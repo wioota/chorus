@@ -51,7 +51,7 @@
     chorus.collections.Search.HdfsEntrySet = chorus.collections.HdfsEntrySet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "hdfs"
+        searchKey: "hdfsEntries"
     });
 
     chorus.collections.Search.InstanceSet = chorus.collections.GpdbInstanceSet.include(

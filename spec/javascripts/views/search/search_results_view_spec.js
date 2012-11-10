@@ -74,7 +74,7 @@ describe("chorus.views.SearchResults", function() {
                 this.model.unset("workspaces");
                 this.model.unset("attachment");
                 this.model.unset("users");
-                this.model.unset("hdfs");
+                this.model.unset("hdfsEntries");
                 this.model.unset("datasets");
                 this.model.unset("instances");
                 this.view = new chorus.views.SearchResults({ model: this.model });
