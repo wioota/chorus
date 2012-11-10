@@ -1,11 +1,20 @@
 class DatasetPresenter < Presenter
 
   def to_hash
+    notes = model.notes
+    comments = model.comments
+
+    recent_comments = [notes.last,
+                       comments.last].compact
+    recent_comments = *recent_comments.sort_by(&:created_at).last
+
     {
       :id => model.id,
       :type => thetype,
       :object_name => model.name,
-      :schema => schema_hash
+      :schema => schema_hash,
+      :recent_comments => present(recent_comments, :as_comment => true),
+      :comment_count => comments.count + notes.count
     }.merge(workspace_hash).
       merge(credentials_hash).
       merge(associated_workspaces_hash).

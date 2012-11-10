@@ -13,7 +13,7 @@ class WorkfilePresenter < Presenter
     recent_comments = [notes.last,
                        comments.last,
                        commit_messages.last].compact
-    recent_comments = [recent_comments.sort_by(&:created_at).last]
+    recent_comments = *recent_comments.sort_by(&:created_at).last
 
     workfile = {
       :id => model.id,

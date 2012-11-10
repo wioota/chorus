@@ -13,6 +13,8 @@ describe Dataset do
   describe "associations" do
     it { should belong_to(:schema) }
     it { should have_many(:imports) }
+    it { should have_many :notes }
+    it { should have_many :comments }
   end
 
   describe "workspace association" do

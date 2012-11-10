@@ -142,13 +142,14 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     lastComment: function() {
-        var commentJson = this.get("recentComment");
-        if (commentJson) {
+        var commentsJson = this.get("recentComments");
+        if (commentsJson && commentsJson.length > 0) {
             var comment = new chorus.models.Comment({
-                body: commentJson.text,
-                author: commentJson.author,
-                commentCreatedStamp: commentJson.timestamp
+                body: commentsJson[0].body,
+                author: commentsJson[0].author,
+                commentCreatedStamp: commentsJson[0].timestamp
             });
+
             comment.loaded = true;
             return comment;
         }

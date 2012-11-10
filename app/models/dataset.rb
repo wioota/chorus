@@ -24,7 +24,8 @@ class Dataset < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :associated_datasets
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
-  has_and_belongs_to_many :events_notes, :class_name => 'Events::Note'
+  has_many :notes, :through => :activities, :source => :event, :conditions => ["action LIKE ?", "Events::Note%"]
+  has_many :comments, :through => :events
 
   scope :tables, where(:type => 'GpdbTable')
   scope :views, where(:type => 'GpdbView')

@@ -108,15 +108,15 @@ describe("chorus.views.Dataset", function() {
 
     context("when the dataset has a comment", function() {
         beforeEach(function() {
-            this.dataset.set({ recentComment: {
-                text: "I love you john.",
+            this.dataset.set({ recentComments: [{
+                body: "I love you john.",
                 author: {
                     id: "1",
                     lastName: "Smith",
                     firstName: "Bob"
                 },
                 timestamp: "2011-12-15T12:34:56Z"
-            }});
+            }]});
         });
 
         it("renders the most recent comment", function() {
@@ -124,15 +124,30 @@ describe("chorus.views.Dataset", function() {
             expect(this.view.$(".comment a")).toContainText("Bob Smith");
             expect(this.view.$(".comment_info .on")).toContainText("Dec 15");
         });
+
+        it("does not display the 'other comments' text", function() {
+            expect(this.view.$(".comment")).not.toContainText(t("comments.other_comments", {count: 0}));
+        });
+
     });
 
     context("when there are no comments", function() {
         beforeEach(function() {
-            this.dataset.unset("recentComment");
+            this.dataset.unset("recentComments");
         });
 
         it("does not display the most recent comment", function() {
             expect(this.view.$(".comment")).not.toExist();
+        });
+    });
+
+    context("when the dataset has more than one comment", function() {
+        beforeEach(function() {
+            this.dataset.set({ commentCount: 3 });
+        });
+
+        it("displays the 'other comments' text", function() {
+            expect(this.view.$(".comment")).toContainText(t("comments.other_comments", { count: 2 }));
         });
     });
 

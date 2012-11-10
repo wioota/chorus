@@ -36,6 +36,9 @@
             {{userProfileLink lastComment.creator}}
             <span class="comment_info">
                 {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
+                    {{#if otherCommentCount }}
+                        - {{t "comments.other_comments" count=otherCommentCount}}
+                    {{/if}}
             </span>
         </div>
     {{/if}}

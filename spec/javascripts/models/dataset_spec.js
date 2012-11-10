@@ -260,15 +260,15 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    xdescribe("#lastComment", function() {
+    describe("#lastComment", function() {
         beforeEach(function() {
             this.model = rspecFixtures.dataset();
             this.comment = this.model.lastComment();
-            this.lastCommentJson = this.model.get('recentComment');
+            this.lastCommentJson = this.model.get('recentComments')[0];
         });
 
         it("has the right body", function() {
-            expect(this.comment.get("body")).toBe(this.lastCommentJson.text);
+            expect(this.comment.get("body")).toBe(this.lastCommentJson.body);
         });
 
         it("has the right creator", function() {
@@ -284,7 +284,7 @@ describe("chorus.models.Dataset", function() {
 
         context("when the data doesn't have any comments", function() {
             it("returns null", function() {
-                expect(rspecFixtures.dataset({recentComment: null}).lastComment()).toBeFalsy();
+                expect(rspecFixtures.dataset({recentComments: null}).lastComment()).toBeFalsy();
             });
         });
     });

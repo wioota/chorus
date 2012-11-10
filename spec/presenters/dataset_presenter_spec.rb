@@ -67,9 +67,30 @@ describe DatasetPresenter, :type => :view do
       let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
       let(:schema) { FactoryGirl.create :gpdb_schema }
 
-      it "has the correct type" do
+      before do
         workspace.sandbox_id = schema.id
+      end
+
+      it "has the correct type" do
         hash[:type].should == 'SANDBOX_TABLE'
+      end
+
+      it "includes comments fields" do
+        hash[:recent_comments].should == []
+        hash[:comment_count].should == 0
+      end
+
+      context "when it has comments" do
+        let!(:dataset_note) { Events::NoteOnDataset.by(@user).add(:dataset => dataset, :body => 'Note on dataset') }
+
+        it "presents the most recent note" do
+          hash[:recent_comments].count.should == 1
+          hash[:recent_comments][0][:body].should == "Note on dataset"
+        end
+
+        it "presents the number of comments/notes" do
+          hash[:comment_count].should == 1
+        end
       end
     end
 
