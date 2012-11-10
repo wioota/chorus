@@ -54,7 +54,7 @@ function start () {
   fi
   popd > /dev/null
   if (($EXIT_STATUS > 0)); then
-    exit $EXIT_STATUS;
+    exit_control $EXIT_STATUS;
   fi
 }
 
@@ -83,7 +83,7 @@ function stop () {
   fi
   popd > /dev/null
   if (($EXIT_STATUS > 0)); then
-    exit $EXIT_STATUS;
+    exit_control $EXIT_STATUS;
   fi
 }
 
@@ -110,7 +110,7 @@ function backup () {
                ;;
            ?)
                usage
-               exit
+               exit_control 0
                ;;
        esac
   done
@@ -136,7 +136,7 @@ function restore () {
                ;;
            ?)
                usage
-               exit
+               exit_control 0
                ;;
        esac
   done
@@ -236,3 +236,5 @@ case $command in
        usage
        ;;
 esac
+
+exit_control

@@ -30,6 +30,8 @@ case $RAILS_ENV in
         ;;
 esac
 
+SHELL_CONFIG=`stty -g`
+
 PATH=$PATH:$CHORUS_HOME/packaging/dummy
 
 ##### PID file locations #####
@@ -110,4 +112,9 @@ function wait_for_stop () {
         sleep 5
     done
     echo " ( Stopped )"
+}
+
+function exit_control () {
+  stty $SHELL_CONFIG
+  exit $1
 }
