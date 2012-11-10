@@ -6,6 +6,11 @@ chorus.views.Dataset = chorus.views.Base.extend({
         ".comment .body": "commentBody"
     },
 
+    setup: function() {
+        this._super("setup", arguments);
+        this.bindings.add(this.model, "invalidated", function() { this.model.fetch() }, this)
+    },
+
     setupSubviews: function() {
         this.commentBody = new chorus.views.TruncatedText({
             model: this.model.lastComment(),

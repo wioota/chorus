@@ -179,6 +179,17 @@ describe("chorus.views.Dataset", function() {
         expect(view.$(".image")).toHaveHref(table.showUrl());
     });
 
+    describe("when the model received an 'invalidated' trigger", function() {
+        beforeEach(function() {
+            spyOn(this.dataset, "fetch");
+        })
+
+        it("reloads the model", function() {
+            this.dataset.trigger("invalidated");
+            expect(this.dataset.fetch).toHaveBeenCalled();
+        });
+    });
+
     function itRendersTheNameAndIcon() {
         it("renders the dataset's name", function() {
             expect(this.view.$(".name")).toContainText("john_the_table");

@@ -8,11 +8,7 @@ chorus.views.Workfile = chorus.views.Base.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.bindings.add(this.model, "invalidated", this.invalidateModel, this)
-    },
-
-    invalidateModel: function() {
-        this.model.fetch();
+        this.bindings.add(this.model, "invalidated", function() { this.model.fetch() }, this)
     },
 
     setupSubviews: function() {
