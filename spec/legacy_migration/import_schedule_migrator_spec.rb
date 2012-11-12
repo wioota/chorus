@@ -46,7 +46,12 @@ describe ImportScheduleMigrator do
           import_schedule.start_datetime.should == dt(row["start_time"])
           import_schedule.end_date.should == d(row["end_time"])
           import_schedule.frequency.should == int_to_frequency(row['frequency'])
-          import_schedule.deleted_at.should be_nil
+
+          if row['job_name'].nil?
+            import_schedule.deleted_at.should == dt(row['last_updated_tx_stamp'])
+          else
+            import_schedule.deleted_at.should be_nil
+          end
           import_schedule.updated_at.should == dt(row['last_updated_tx_stamp'])
           import_schedule.created_at.should == dt(row['created_tx_stamp'])
           import_schedule.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
@@ -55,13 +60,12 @@ describe ImportScheduleMigrator do
           import_schedule.truncate.should == (row["truncate"] =="t")
           import_schedule.user.legacy_id.should == row["owner_id"]
           import_schedule.sample_count.should == row["sample_count"].try(:to_i)
-          import_schedule.deleted_at.should !=nil if import_schedule.workspace.deleted_at
           import_schedule.next_import_at.should == ImportTime.new(
               import_schedule.start_datetime,
               import_schedule.end_date,
               import_schedule.frequency,
               current_time
-          ).next_import_time
+          ).next_import_time if row['job_name']
           import_schedule.destination_dataset_id.should == row["dataset_id"]
           import_schedule.new_table.should be_nil
         end

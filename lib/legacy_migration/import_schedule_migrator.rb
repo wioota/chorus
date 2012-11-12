@@ -41,7 +41,7 @@ class ImportScheduleMigrator < AbstractMigrator
             WHEN 5 THEN 'weekly'
             WHEN 6 THEN 'monthly'
           END,
-          w.deleted_at,
+          CASE WHEN s.job_name IS NULL THEN s.last_updated_tx_stamp ELSE NULL END,
           s.created_tx_stamp,
           s.last_updated_tx_stamp,
           w.id,
