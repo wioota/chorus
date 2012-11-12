@@ -237,4 +237,4 @@ case $command in
        ;;
 esac
 
-exit_control
+exit_control 0
