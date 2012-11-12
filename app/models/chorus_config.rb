@@ -1,5 +1,4 @@
 require 'erb'
-require 'active_support/core_ext/hash/deep_merge'
 require 'pathname'
 require_relative '../../lib/properties'
 
@@ -12,7 +11,7 @@ class ChorusConfig
     app_config = Properties.load_file(config_file_path) if File.exists?(config_file_path)
     defaults = Properties.load_file(File.join(@root_dir, 'config/chorus.defaults.properties'))
 
-    @config = defaults.deep_merge(app_config)
+    @config = ChorusConfig.deep_merge(defaults, app_config)
 
     secret_key_file = File.join(@root_dir, 'config/secret.key')
     abort "No config/secret.key file found.  Run rake development:init or rake development:generate_secret_key" unless File.exists?(secret_key_file)
@@ -57,6 +56,18 @@ class ChorusConfig
 
   def config_file_path
     self.class.config_file_path(@root_dir)
+  end
+
+  def self.deep_merge(hash, other_hash)
+    deep_merge!(hash.dup, other_hash)
+  end
+
+  def self.deep_merge!(hash, other_hash)
+    other_hash.each_pair do |k,v|
+      tv = hash[k]
+      hash[k] = tv.is_a?(Hash) && v.is_a?(Hash) ? deep_merge(tv, v) : v
+    end
+    hash
   end
 
   private
