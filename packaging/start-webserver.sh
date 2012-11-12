@@ -39,7 +39,7 @@ case $RAILS_ENV in
         else
             log "starting mizuno on port 3000..."
             #running mizuno in daemon mode (-D) is causing the command prompt to get screwed up
-            if bundle exec mizuno -p 3000 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
+            if SOLR_PORT=$SOLR_PORT bundle exec mizuno -p 3000 --threads 10 -D --pidfile $MIZUNO_PID_FILE; then
                 wait_for_start $MIZUNO_PID_FILE
             fi
         fi
@@ -51,7 +51,7 @@ case $RAILS_ENV in
 
         log "starting jetty..."
         cd $CHORUS_HOME/vendor/jetty/
-        JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV ./jetty-init start &>/dev/null &
+        JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT ./jetty-init start &>/dev/null &
         cd $CHORUS_HOME
         wait_for_start $JETTY_PID_FILE
         ;;
