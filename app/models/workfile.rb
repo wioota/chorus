@@ -11,7 +11,7 @@ class Workfile < ActiveRecord::Base
   has_many :drafts, :class_name => 'WorkfileDraft'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
-  has_many :notes, :through => :activities, :source => :event, :conditions => ["action LIKE ?", "Events::Note%"]
+  has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
   has_many :comments, :through => :events
   has_many :commit_messages, :through => :activities, :source => :event,
            :conditions => {:action => ['Events::WorkfileCreated', 'Events::WorkfileUpgradedVersion']}
