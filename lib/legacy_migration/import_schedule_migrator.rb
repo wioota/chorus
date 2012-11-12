@@ -4,6 +4,8 @@ class ImportScheduleMigrator < AbstractMigrator
       DatabaseObjectMigrator.migrate
       ChorusViewMigrator.migrate
       WorkspaceMigrator.migrate
+      SandboxMigrator.migrate
+      InstanceAccountMigrator.migrate
     end
 
     def migrate
@@ -23,7 +25,9 @@ class ImportScheduleMigrator < AbstractMigrator
           source_dataset_id,
           truncate,
           user_id,
-          sample_count
+          sample_count,
+          new_table,
+          destination_dataset_id
           )
         SELECT
           s.id,
@@ -42,7 +46,9 @@ class ImportScheduleMigrator < AbstractMigrator
           d.id,
           i.truncate,
           u.id,
-          sample_count
+          sample_count,
+          CASE WHEN d.id IS NULL THEN true ELSE false END,
+          d.id
         FROM edc_import_schedule s
         INNER JOIN edc_import i
           on i.schedule_id = s.id
@@ -53,6 +59,12 @@ class ImportScheduleMigrator < AbstractMigrator
         INNER JOIN workspaces w
           on w.legacy_id = i.workspace_id
         WHERE s.id NOT IN (SELECT legacy_id FROM import_schedules);")
+
+      ImportSchedule.find_each do |schedule|
+        silence_activerecord do
+          schedule.save!(:validate => false)
+        end
+      end
     end
   end
 end
