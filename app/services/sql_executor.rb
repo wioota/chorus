@@ -35,7 +35,7 @@ module SqlExecutor
     end
 
     def limit_rows
-      (Chorus::Application.config.chorus['default_preview_row_limit'] || 100).to_i
+      (Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
     end
   end
 end

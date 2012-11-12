@@ -71,13 +71,19 @@ describe PreviewsController do
     let(:schema) { gpdb_schemas(:default) }
     let(:query) { "SELECT * FROM table;" }
     let(:user) { users(:owner) }
-    let(:expected_sql) { "SELECT * FROM (SELECT * FROM table) AS chorus_view LIMIT 500;" }
+    let(:expected_sql) { "SELECT * FROM (SELECT * FROM table) AS chorus_view;" }
     let(:params) { {:schema_id => schema.id,
                     :query => query,
                     :check_id => check_id } }
+    let(:row_limit) { 200 }
+
+    before do
+      stub.proxy(Chorus::Application.config.chorus).[](anything)
+      stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { row_limit }
+    end
 
     it "returns the results of the sql" do
-      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql) { SqlResult.new }
+      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { SqlResult.new }
 
       post :preview_sql, params
 
@@ -86,10 +92,22 @@ describe PreviewsController do
       decoded_response.rows.should_not be_nil
     end
 
-    it "limits the rows to 500" do
-      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql) { SqlResult.new }
+    context "no row limit set" do
+      let(:row_limit) { nil }
 
-      post :preview_sql, params
+      it "limits the rows to 500" do
+        mock(SqlExecutor).execute_sql(schema, account, check_id,expected_sql, :limit => 500) { SqlResult.new }
+        post :preview_sql, params
+      end
+    end
+
+    context "row limit set" do
+      let(:row_limit) { 3 }
+
+      it "limits the rows to the row limit" do
+        mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { SqlResult.new }
+        post :preview_sql, params
+      end
     end
   end
 end

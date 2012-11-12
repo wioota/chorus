@@ -40,6 +40,7 @@ class WorkfileExecutionsController < ApplicationController
     authorize! :can_edit_sub_objects, @workfile.workspace
   end
 
+  # TODO: DRY this out of this controller and the previews controller [#39410527]
   def row_limit
     (Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
   end
