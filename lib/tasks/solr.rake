@@ -8,7 +8,11 @@ namespace :services do
 
       rails_environment = ENV['RAILS_ENV'] || 'development'
 
-      solr_config = YAML.load_file(path)[rails_environment]
+      solr_config = nil
+      File.open(path) do |file|
+        yaml_contents = ERB.new(file.read).result
+        solr_config = YAML.load(yaml_contents)[rails_environment]
+      end
 
       server = Sunspot::Solr::Server.new
       server.bind_address = 'localhost'
