@@ -64,7 +64,7 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
-    b/rake fixtures 2>&1
+    b/rake jasmine:fixtures 2>&1
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
