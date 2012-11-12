@@ -11,7 +11,7 @@
         },
 
         iconSrc: function() {
-            if (this.model.isFailure()) {
+            if (this.isFailure()) {
                 return "/images/message_error.png";
             } else if (this.model.isSuccessfulImport()) {
                 return "/images/import_icon.png";
@@ -21,7 +21,7 @@
         },
 
         iconHref: function() {
-            if (this.model.isFailure()) {
+            if (this.isFailure()) {
                 return null;
             } else if (this.model.isSuccessfulImport()) {
                 return this.model.dataset().showUrl();
@@ -71,7 +71,7 @@
         },
 
         iconClass: function() {
-            if (this.model.isFailure()) {
+            if (this.isFailure()) {
                 return "error";
             } else if (this.model.isSuccessfulImport()) {
                 return "icon";

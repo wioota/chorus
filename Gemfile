@@ -29,7 +29,7 @@ group :assets do
   gem 'compass-rails'
   gem 'handlebars_assets'
   gem 'therubyrhino'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
   gem 'yui-compressor'
   gem 'turbo-sprockets-rails3'
 end
