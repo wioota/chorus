@@ -6,8 +6,8 @@ class WorkfilePresenter < Presenter
     commit_messages = model.commit_messages
 
     commit_messages.keep_if do |message|
-      next true unless message.is_a?(Events::WorkfileUpgradedVersion)
-      message.workfile.versions.find_by_id(message.version_id).present?
+      !message.is_a?(Events::WorkfileUpgradedVersion) or
+          message.version_id == model.latest_workfile_version_id
     end
 
     recent_comments = [notes.last,

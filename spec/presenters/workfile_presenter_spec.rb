@@ -58,7 +58,9 @@ describe WorkfilePresenter, :type => :view do
 
       context "when there's a newer version of a workfile" do
         let(:latest_workfile_version) {
-          workfile.versions.create! :owner => user, :modifier => user
+          workfile.versions.create!(:owner => user, :modifier => user).tap do |version|
+            workfile.latest_workfile_version = version
+          end
         }
         let(:new_workfile_version_event) {
           Timecop.freeze Time.now + 1.day do
@@ -82,13 +84,6 @@ describe WorkfilePresenter, :type => :view do
 
           it "still presents the commit message" do
             recent_comments[0][:body].should == "new version"
-          end
-        end
-
-        context "when the newer version of a workfile has been deleted" do
-          it "does not present the commit message for the newer version" do
-            latest_workfile_version.destroy
-            recent_comments[0][:body].should == "original version"
           end
         end
       end
