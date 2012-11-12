@@ -1,5 +1,5 @@
 class AbstractMigrator
-  class MigratorValidationError < Exception; end
+  class MigratorValidationError < StandardError; end
 
   def self.validate
     classes_to_validate.each do |klass|

@@ -63,8 +63,7 @@ describe ImportScheduleMigrator do
               current_time
           ).next_import_time
           import_schedule.destination_dataset_id.should == row["dataset_id"]
-          import_schedule.new_table.should == row["dataset_id"].nil?
-
+          import_schedule.new_table.should be_nil
         end
       end
     end

@@ -8,6 +8,7 @@ class DataMigrator
     ImageMigrator.migrate
     SandboxMigrator.migrate
     AssociatedDatasetMigrator.migrate
+    ImportScheduleMigrator.migrate
     AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
@@ -27,6 +28,7 @@ class DataMigrator
     InstanceAccountMigrator.validate
     GpdbInstanceMigrator.validate
     MembershipMigrator.validate
+    ImportScheduleMigrator.validate
     AttachmentMigrator.validate
     NoteMigrator.validate
     NotificationMigrator.validate

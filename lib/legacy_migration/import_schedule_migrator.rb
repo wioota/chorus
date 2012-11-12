@@ -8,6 +8,10 @@ class ImportScheduleMigrator < AbstractMigrator
       InstanceAccountMigrator.migrate
     end
 
+    def classes_to_validate
+      [ImportSchedule]
+    end
+
     def migrate
       prerequisites
 
@@ -26,7 +30,6 @@ class ImportScheduleMigrator < AbstractMigrator
           truncate,
           user_id,
           sample_count,
-          new_table,
           destination_dataset_id
           )
         SELECT
@@ -47,7 +50,6 @@ class ImportScheduleMigrator < AbstractMigrator
           i.truncate,
           u.id,
           sample_count,
-          CASE WHEN d.id IS NULL THEN true ELSE false END,
           d.id
         FROM edc_import_schedule s
         INNER JOIN edc_import i

@@ -12,6 +12,7 @@ describe DataMigrator do
       mock.proxy(ImageMigrator).migrate.any_number_of_times
       mock.proxy(SandboxMigrator).migrate.any_number_of_times
       mock.proxy(AssociatedDatasetMigrator).migrate.any_number_of_times
+      mock.proxy(ImportScheduleMigrator).migrate.any_number_of_times
       mock.proxy(ActivityMigrator).migrate.with(anything).any_number_of_times
       mock.proxy(NoteMigrator).migrate.with(anything).any_number_of_times
       mock.proxy(NotificationMigrator).migrate.with(anything).any_number_of_times
@@ -24,6 +25,7 @@ describe DataMigrator do
       mock.proxy(InstanceAccountMigrator).validate
       mock.proxy(GpdbInstanceMigrator).validate
       mock.proxy(MembershipMigrator).validate
+      mock.proxy(ImportScheduleMigrator).validate
       mock.proxy(AttachmentMigrator).validate
       mock.proxy(NoteMigrator).validate
       mock.proxy(NotificationMigrator).validate

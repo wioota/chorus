@@ -36,6 +36,7 @@ class ActivityMigrator < AbstractMigrator
           Events::WorkspaceChangeName,
           Events::ViewCreated,
           Events::ImportScheduleUpdated,
+          Events::ImportScheduleDeleted,
           Events::WorkspaceAddSandbox,
       ]
     end
@@ -893,7 +894,7 @@ class ActivityMigrator < AbstractMigrator
 
 
     def migrate_import_schedule_updated
-      Legacy.connection.exec_query(<<-SQL)
+      Legacy.connection.exec_query(%Q(
         INSERT INTO #{@@events_table_name}(
           legacy_id,
           legacy_type,
@@ -937,7 +938,7 @@ class ActivityMigrator < AbstractMigrator
             ON users.legacy_id = actor.object_id
         WHERE streams.type = 'IMPORT_UPDATED'
         AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name});
-      SQL
+      ))
 
       backfill_import_schedule_updated_additional_data
     end
