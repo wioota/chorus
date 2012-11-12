@@ -96,4 +96,18 @@ describe ImportSchedule do
       end
     end
   end
+
+  describe ".build_import" do
+    it "should return a new unsaved Import" do
+      import = import_schedule.build_import
+      import.workspace_id.should      == import_schedule.workspace_id
+      import.to_table.should          == import_schedule.to_table
+      import.source_dataset_id.should == import_schedule.source_dataset_id
+      import.truncate.should          == import_schedule.truncate
+      import.new_table.should         == import_schedule.new_table
+      import.user_id.should           == import_schedule.user_id
+      import.sample_count.should      == import_schedule.sample_count
+      import.should_not be_persisted
+    end
+  end
 end

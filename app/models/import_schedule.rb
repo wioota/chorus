@@ -40,6 +40,18 @@ class ImportSchedule < ActiveRecord::Base
     )
   end
 
+  def build_import
+    import = imports.build
+    import.user = user
+    import.workspace = workspace
+    import.to_table = to_table
+    import.source_dataset = source_dataset
+    import.truncate = truncate
+    import.new_table = new_table
+    import.sample_count = sample_count
+    import
+  end
+
   def set_next_import
     val = ImportTime.new(
         start_datetime,

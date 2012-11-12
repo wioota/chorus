@@ -3,25 +3,33 @@ require 'spec_helper'
 describe ImportScheduler do
   describe ".run" do
     let(:start_time) { Time.local(2012, 8, 22, 11, 0).to_datetime }
+    let(:import_schedule_attrs) {
+      {:start_datetime => start_time,
+       :end_date => Date.parse("2012-08-25"),
+       :last_scheduled_at => nil,
+       :frequency => 'daily',
+       :user => users(:owner),
+       :sample_count => 1,
+       :truncate => false,
+       :workspace => workspaces(:public),
+       :source_dataset => datasets(:table),
+       :new_table => true
+      }
+    }
     let(:import_schedule) do
       ImportSchedule.create!(
-          {:start_datetime => start_time,
-           :end_date => Date.parse("2012-08-25"),
-           :last_scheduled_at => nil,
-           :frequency => 'daily',
-           :user => users(:owner),
-           :sample_count => 1,
-           :truncate => true,
-           :workspace => workspaces(:public),
-           :source_dataset => datasets(:table),
-           :to_table => 'destination-table',
-           :new_table => true
-          },
+          import_schedule_attrs.merge(:to_table => 'destination_table'),
+          :without_protection => true)
+    end
+
+    let(:other_import_schedule) do
+      ImportSchedule.create!(
+          import_schedule_attrs.merge(:to_table => 'other_destination_table'),
           :without_protection => true)
     end
 
     def expect_qc_enqueue
-      mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
+      mock(QC.default_queue).enqueue("Import.run", anything) do |_, import_id|
         Import.find(import_id).tap do |import|
           import.import_schedule.should == import_schedule
           import.workspace.should == import_schedule.workspace
@@ -31,6 +39,26 @@ describe ImportScheduler do
           import.user_id.should == import_schedule.user_id
           import.sample_count.should == import_schedule.sample_count
           import.dataset_import_created_event_id.should == import_schedule.dataset_import_created_event_id
+        end
+      end
+    end
+
+    context "with two import schedules" do
+      it "schedules the second even if the first raises" do
+        Timecop.freeze(start_time - 2.hours) do # use 2.hours to avoid dst problems
+          import_schedule.save!
+          other_import_schedule.save!
+
+          # make the first import schedule invalid
+          import_schedule.update_attribute(:user, nil)
+        end
+
+        Timecop.freeze(start_time + 2.hours) do
+          mock(QC.default_queue).enqueue("Import.run", anything) do |_, import_id|
+            Import.find(import_id).import_schedule.should == other_import_schedule
+          end
+
+          ImportScheduler.run
         end
       end
     end
@@ -58,7 +86,7 @@ describe ImportScheduler do
         it "sets the last scheduled time" do
           ImportScheduler.run
           import_schedule.reload
-          import_schedule.last_scheduled_at.should == Time.now
+          import_schedule.last_scheduled_at.should == Time.current
         end
 
         it "sets the next scheduled import" do
@@ -82,7 +110,7 @@ describe ImportScheduler do
         it "sets the last scheduled time" do
           ImportScheduler.run
           import_schedule.reload
-          import_schedule.last_scheduled_at.should == Time.now
+          import_schedule.last_scheduled_at.should == Time.current
         end
 
         it "does not schedule another import" do
