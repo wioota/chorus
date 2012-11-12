@@ -30,7 +30,10 @@ case $RAILS_ENV in
         ;;
 esac
 
-SHELL_CONFIG=`stty -g`
+# Test for interactive shell
+if [ -t 0 ]; then
+    SHELL_CONFIG=`stty -g`
+fi
 
 PATH=$PATH:$CHORUS_HOME/packaging/dummy
 
@@ -115,6 +118,7 @@ function wait_for_stop () {
 }
 
 function exit_control () {
-  stty $SHELL_CONFIG
-  exit $1
+    # Test for interactive shell
+    test -t 0 && stty $SHELL_CONFIG
+    exit $1
 }
