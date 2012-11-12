@@ -1,19 +1,34 @@
 describe("chorus.views.SearchHdfsEntry", function() {
-    describe("getHighlightedPathSegments", function() {
-        context("when there are no search results", function() {
-            beforeEach(function() {
-                this.result = fixtures.searchResult({hdfs: {
-                    results: [
-                        fixtures.searchResultHdfsJson({
-                            path: "/aaa/bbb",
-                            isDir: false,
-                            isBinary: false
-                        })
-                    ],
-                    numFound: 10}
-                });
+    beforeEach(function() {
+        this.result = rspecFixtures.searchResult();
+        this.model = this.result.hdfs_entries().first();
+        this.model.set('highlightedAttributes', {});
+    });
 
-                this.model = this.result.hdfs_entries().models[0];
+    var ancestorId = 42;
+    var setModelPath = function (model, path) {
+        var parts = path.split('/');
+        var name = _.last(parts);
+        var ancestors = _.map(parts, function (part) {
+            return {
+                name: part || "root",
+                id: ancestorId++
+            };
+        });
+        ancestors.pop();
+        ancestors = ancestors.reverse();
+
+        model.set({
+            name: name,
+            path: path,
+            ancestors: ancestors
+        });
+    };
+
+    describe("getHighlightedPathSegments", function() {
+        context("when there are no highlights", function() {
+            beforeEach(function() {
+                setModelPath(this.model, '/aaa/bbb');
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
@@ -23,24 +38,10 @@ describe("chorus.views.SearchHdfsEntry", function() {
             });
         });
 
-        context("when there are multiple search results", function() {
+        context("when there are highlights", function() {
             beforeEach(function() {
-                this.result = fixtures.searchResult({hdfs: {
-                    results: [
-                        fixtures.searchResultHdfsJson({
-                            name: "bar",
-                            path: "/aaa/bbb/ccc",
-                            isDir: false,
-                            isBinary: false,
-                            highlightedAttributes: {
-                                path: ["/<em>aaa</em>/bbb/ccc"]
-                            }
-                        })
-                    ],
-                    numFound: 10}
-                });
-
-                this.model = this.result.hdfs_entries().models[0];
+                this.model.set('highlightedAttributes', {path: ['/<em>aaa</em>/bbb/ccc']});
+                setModelPath(this.model, '/aaa/bbb/ccc');
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
                 this.view.render()
             });
@@ -53,24 +54,8 @@ describe("chorus.views.SearchHdfsEntry", function() {
 
     describe("when the file is not a binary file", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult({hdfs: {
-                results: [
-                    fixtures.searchResultHdfsJson({
-                        id: 55,
-                        name: "bbb",
-                        path: "/aaa/bbb",
-                        ancestors: [{name: "aaa", id: 44}, {name: "root", id: 33}],
-                        isDir: false,
-                        isBinary: false,
-                        highlightedAttributes: {
-                            path: ["/<em>aaa</em>/bbb"]
-                        }
-                    })
-                ],
-                numFound: 10}
-            });
-
-            this.model = this.result.hdfs_entries().models[0];
+            this.model.set({isBinary: false, highlightedAttributes: {path: ['/<em>aaa</em>/bbb']} });
+            setModelPath(this.model, '/aaa/bbb');
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });
@@ -82,8 +67,8 @@ describe("chorus.views.SearchHdfsEntry", function() {
         it("should render the instance location", function() {
             var $inst = this.view.$(".instance a");
 
-            expect($inst.text()).toBe("hadoop");
-            expect($inst.attr("href")).toBe("#/hadoop_instances/10001/browse/");
+            expect($inst.text()).toBe(this.model.getHadoopInstance().name());
+            expect($inst.attr("href")).toBe(this.model.getHadoopInstance().showUrl());
         });
 
         it("should render a link to each file", function() {
@@ -95,33 +80,17 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).html()).toEqual("<em>aaa</em>");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/44");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/" + this.model.getHadoopInstance().id + "/browse/" + this.model.get('ancestors')[0].id);
 
             expect($links.eq(1).html()).toEqual("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browseFile/55");
+            expect($links.eq(1).attr("href")).toBe(this.model.showUrl());
         });
     });
 
     describe("when the file is a binary file", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult({hdfs: {
-                results: [
-                    fixtures.searchResultHdfsJson({
-                        id: 55,
-                        name: "bbb",
-                        path: "/aaa/bbb",
-                        isDir: false,
-                        isBinary: true,
-                        ancestors: [{name: "aaa", id: 44}, {name: "root", id: 33}],
-                        highlightedAttributes: {
-                            path: ["/<em>aaa</em>/bbb"]
-                        }
-                    })
-                ],
-                numFound: 10}
-            });
-
-            this.model = this.result.hdfs_entries().models[0];
+            this.model.set({isBinary: true});
+            setModelPath(this.model, '/aaa/bbb');
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
             this.view.render()
         });
@@ -129,8 +98,8 @@ describe("chorus.views.SearchHdfsEntry", function() {
          it("should render the instance location", function() {
             var $inst = this.view.$(".instance a");
 
-            expect($inst.text()).toBe("hadoop");
-            expect($inst.attr("href")).toBe("#/hadoop_instances/10001/browse/");
+            expect($inst.text()).toBe(this.model.getHadoopInstance().name());
+            expect($inst.attr("href")).toBe(this.model.getHadoopInstance().showUrl());
         });
 
         it("should not render a link to each file", function() {
@@ -143,10 +112,10 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).text()).toBe("aaa");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/44");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/" + this.model.getHadoopInstance().id + "/browse/" + this.model.get('ancestors')[0].id);
 
             expect($links.eq(1).text()).toBe("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browseFile/55");
+            expect($links.eq(1).attr("href")).toMatchUrl(this.model.showUrl());
         });
     });
 });
