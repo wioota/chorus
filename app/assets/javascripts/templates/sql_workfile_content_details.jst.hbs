@@ -19,7 +19,11 @@
             {{/if}}
         </li>
         <li>
+        {{#if schemaName}}
             <a href="#" class="run_and_download">{{t "workfile.content_details.run_and_download"}}</a>
+        {{else}}
+            <span class="run_and_download">{{t "workfile.content_details.run_and_download"}}</span>
+        {{/if}}
         </li>
 
         <li>

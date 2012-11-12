@@ -124,8 +124,11 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     workfileExecuted: function(workfile, executionSchema) {
-        this.model.set({executionSchema: executionSchema}, {silent: true});
-        this.render();
+
+        if(executionSchema.id) {
+            this.model.set({executionSchema: executionSchema}, {silent: true});
+            this.render();
+        }
     }
 });
 

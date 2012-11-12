@@ -6,13 +6,15 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
             data: _.extend({
                 download: true
             }, this.underscoreKeys(this.attributes)),
-            httpMethod: "post"
+            httpMethod: "post",
+            successCallback: _.bind(this.saved, this),
+            failCallback: _.bind(this.saveFailed, this),
+            cookieName: 'fileDownload_' + this.get('checkId')
         });
     },
 
     saved: function() {
         this.trigger("saved", this);
-        this.trigger("change");
     },
 
     saveFailed: function() {

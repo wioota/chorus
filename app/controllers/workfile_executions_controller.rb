@@ -6,9 +6,11 @@ class WorkfileExecutionsController < ApplicationController
   def create
     account = @schema.account_for_user! current_user
     result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
+
     @workfile.execution_schema = @schema
     @workfile.save!
-    if params[:download]
+    if params[:download] && result
+      cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       send_data CsvWriter.to_csv(result.columns.map(&:name), result.rows), :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
     else
       present result

@@ -151,7 +151,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     workfileExecuted: function(workfile, executionSchema) {
-        if (!this.schema || (executionSchema.id != this.schema.id)) {
+        if (!this.schema || (executionSchema.id && executionSchema.id != this.schema.id)) {
             this.setSchema(new chorus.models.Schema(executionSchema))
         }
     },

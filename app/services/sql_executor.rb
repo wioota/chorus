@@ -14,6 +14,11 @@ module SqlExecutor
 
           result = cancelable_query.execute(sql, options)
           result.schema = schema
+
+          if cancelable_query.canceled?
+            return nil
+          end
+
           result
         end
     end

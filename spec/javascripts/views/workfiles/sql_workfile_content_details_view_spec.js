@@ -226,6 +226,12 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     expect(runLink).toBe("span");
                 });
 
+                it("disables the 'run and download ' link", function() {
+                    var runAndDownloadLink = this.qtipElement.find(".run_and_download");
+                    expect(runAndDownloadLink).toContainTranslation("workfile.content_details.run_and_download");
+                    expect(runAndDownloadLink).toBe("span");
+                });
+
                 it("does nothing when the disabled span is clicked", function() {
                     spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                     this.qtipElement.find(".run_default").click();
@@ -288,6 +294,16 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             it("updates the execution schema in the workfile", function() {
                 expect(this.view.model.get("executionSchema")).toBe(this.executionSchema);
+            });
+
+            context("does not update model if executionSchema is nil", function() {
+                beforeEach(function() {
+                    this.executionSchema = null;
+                    this.oldSchema = this.view.model.get("executionSchema")
+                });
+                it("updates the execution schema in the workfile", function() {
+                    expect(this.view.model.get("executionSchema")).toBe(this.oldSchema);
+                });
             });
 
             it("re-renders", function() {
