@@ -81,7 +81,6 @@ class ChorusInstaller
       self.data_path = File.expand_path(relative_path)
       log "Data path = #{@data_path}"
     end
-
   end
 
   def prompt_for_passphrase
