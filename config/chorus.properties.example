@@ -1,18 +1,19 @@
-session_timeout_minutes = 120
+# 8 hours
+session_timeout_minutes = 480
 instance_poll_interval_minutes = 5
 delete_unimported_csv_files_interval_hours = 1
 delete_unimported_csv_files_after_hours = 12
 reindex_search_data_interval_hours = 24
 server_port = 8080
 postgres_port = 8543
-ssl = false
+ssl.enabled = false
 ssl_server_port = 8443
 ssl_certificate = 
 ssl_certificate_key = 
 sandbox_recommended_size_in_gb = 5
 
 #Maximum execution time of visualizations and workfiles, in minutes
-execution_timeout= 10
+execution_timeout_in_minutes = 10
 
 # Configure thread pool size of webserver and worker processes.
 #
@@ -35,33 +36,35 @@ webserver_threads = 20
 database_threads = 25
 
 file_sizes_mb.workfiles = 10
-file_sizes_mb.csv_imports = 10
+file_sizes_mb.csv_imports = 100
 file_sizes_mb.user_icon = 5
 file_sizes_mb.workspace_icon = 5
 file_sizes_mb.attachment = 10
-file_sizes_mb.max_upload_size_megabytes = 100
 
 # The number of rows to be shown in a preview by default.
 default_preview_row_limit = 500
 
-logging.syslog = true
+logging.syslog.enabled = true
 
-gpfdist.ssl = false
+# To enable data movement between databases, gpfdist must be installed and running on the Chorus host.
+# Two gpfdist processes must be started with different ports pointing to the same directory.
+# SSL Certificate must be installed on all segment servers
+gpfdist.ssl.enabled = false
 gpfdist.url = sample-gpfdist-server
 gpfdist.write_port = 8000
 gpfdist.read_port = 8001
 gpfdist.data_dir = /tmp
 
+tableau.enabled = false
 tableau.url = 10.80.129.44
 tableau.port = 80
 tableau.username = chorusadmin
 tableau.password = secret
 
-logging.syslog =false
-
-gnip_enabled = true
+gnip.enabled = true
 gnip.csv_import_max_file_size_mb = 50
 
+kaggle.enabled = false
 kaggle.api_key = KAGGLE_API_KEY
 
 ldap.host = 10.32.88.212

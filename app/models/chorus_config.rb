@@ -29,24 +29,24 @@ class ChorusConfig
 
   def gpfdist_configured?
     (self['gpfdist.url'] && self['gpfdist.write_port'] && self['gpfdist.read_port'] &&
-        self['gpfdist.data_dir'] && self['gpfdist.ssl'] != nil && true)
+        self['gpfdist.data_dir'] && self['gpfdist.ssl.enabled'] != nil && true)
   end
 
   def tableau_configured?
-    (self['tableau.url'] && self['tableau.port'] && self['tableau.username'] &&
-     self['tableau.password'] && true)
+    (self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'] &&
+        self['tableau.username'] && self['tableau.password'])
   end
 
   def gnip_configured?
-    (self['gnip_enabled'] && true)
+    (self['gnip.enabled'] && true)
   end
 
   def syslog_configured?
-    (self['logging.syslog'] && true)
+    (self['logging.syslog.enabled'] && true)
   end
 
   def kaggle_configured?
-    (self['kaggle.api_key'] && true)
+    (self['kaggle.enabled'] && self['kaggle.api_key'] && true)
   end
 
   def self.config_file_path(root_dir=nil)

@@ -27,7 +27,7 @@ module SqlExecutor
     end
 
     def sql_execution_timeout
-      (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout"] || 0) )
+      (60 * 1000 * (Chorus::Application.config.chorus["execution_timeout_in_minutes"] || 0) )
     end
 
     def limit_rows

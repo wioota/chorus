@@ -60,10 +60,10 @@ describe ConfigurationsController do
     end
 
     it "includes the execution timeout" do
-      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 3 }
+      stub(Chorus::Application.config.chorus).[]('execution_timeout_in_minutes') { 3 }
       get :show
       response.code.should == "200"
-      decoded_response.execution_timeout.should == 3
+      decoded_response.execution_timeout_in_minutes.should == 3
     end
 
     it "includes the file size maximums" do
@@ -87,7 +87,7 @@ describe ConfigurationsController do
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.user_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(Chorus::Application.config.chorus).[]('file_sizes_mb.attachment') { 10 }
-      stub(Chorus::Application.config.chorus).[]('execution_timeout') { 15 }
+      stub(Chorus::Application.config.chorus).[]('execution_timeout_in_minutes') { 15 }
       stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { 20 }
       get :show
     end

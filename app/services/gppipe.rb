@@ -19,7 +19,7 @@ class Gppipe < GpTableCopier
   end
 
   def self.protocol
-    Chorus::Application.config.chorus['gpfdist.ssl'] ? 'gpfdists' : 'gpfdist'
+    Chorus::Application.config.chorus['gpfdist.ssl.enabled'] ? 'gpfdists' : 'gpfdist'
   end
 
   def self.write_protocol

@@ -52,8 +52,9 @@ describe ChorusConfig do
   describe "#tableau_configured?" do
     let(:tableau_config) do
       {
+          'enabled' => true,
           'url' => 'localhost',
-          'port' => '1234',
+          'port' => 1234,
           'username' => 'user',
           'password' => 'password'
       }
@@ -64,6 +65,12 @@ describe ChorusConfig do
       config.tableau_configured?.should be_true
     end
 
+    it 'returns false if the enabled flag is false but all the others are present' do
+      disabled_config = tableau_config.merge({'enabled' => false})
+      config.config = {'tableau' => disabled_config}
+      config.tableau_configured?.should be_false
+    end
+
     it 'returns false if any of the keys are missing' do
       tableau_config.each do |key, _value|
         invalid_config = tableau_config.reject { |attr, _value| attr == key }
@@ -71,18 +78,31 @@ describe ChorusConfig do
         config.should_not be_tableau_configured
       end
     end
+
+    it 'returns false if the enabled key is undefined' do
+      tableau_config.delete('enabled')
+      config.config = {'tableau' => tableau_config}
+      config.tableau_configured?.should be_false
+    end
   end
 
   describe "#kaggle_configured?" do
     let(:kaggle_config) do
       {
+          'enabled' => true,
           'api_key' => "kaggle_api_key"
       }
     end
 
-    it 'returns true if the tableau url/port and username/password are configured' do
+    it 'returns true if the kaggle url/port and username/password are configured' do
       config.config = {'kaggle' => kaggle_config}
       config.kaggle_configured?.should be_true
+    end
+
+    it 'returns false if the enabled flag is false but all the others are present' do
+      disabled_config = kaggle_config.merge({'enabled' => false})
+      config.config = {'kaggle' => disabled_config}
+      config.kaggle_configured?.should be_false
     end
 
     it 'returns false if any of the keys are missing' do
@@ -92,30 +112,59 @@ describe ChorusConfig do
         config.should_not be_kaggle_configured
       end
     end
+
+    it 'returns false if the enabled key is undefined' do
+      kaggle_config.delete('enabled')
+      config.config = {'kaggle' => kaggle_config}
+      config.kaggle_configured?.should be_false
+    end
   end
 
   describe "#gnip_configured?" do
-
-    it 'returns true if the gnip_enabled key is there' do
-      config.config = {'gnip_enabled' => true}
+    it 'returns true if the gnip.enabled key is there' do
+      config.config = {
+        'gnip' => {
+          'enabled' => true
+        }
+      }
       config.gnip_configured?.should be_true
     end
 
-    it 'returns false if the gnip_enabled value is false' do
-      config.config = {'gnip_enabled' => false}
-      config.should_not be_gnip_configured
+    it 'returns false if the gnip.enabled value is false' do
+      config.config = {
+        'gnip' => {
+          'enabled' => false
+        }
+      }
+      config.gnip_configured?.should be_false
+    end
+
+    it 'returns false if the enabled key is undefined' do
+      config.config = {}
+      config.kaggle_configured?.should be_false
     end
   end
 
   describe "#syslog_configured?" do
-
-    it 'returns true if the logger.syslog key is there' do
-      config.config = {'logging' => {'syslog' => true} }
+    it 'returns true if the logger.syslog.enabled key is there' do
+      config.config = {
+        'logging' => {
+          'syslog' => {
+            'enabled' => true
+          }
+        }
+      }
       config.syslog_configured?.should be_true
     end
 
-    it 'returns false if the logger.syslog value is false' do
-      config.config = {'logging' => {'syslog' => false} }
+    it 'returns false if the logger.syslog.enabled value is false' do
+      config.config = {
+          'logging' => {
+              'syslog' => {
+                  'enabled' => false
+              }
+          }
+      }
       config.should_not be_syslog_configured
     end
   end
@@ -128,7 +177,9 @@ describe ChorusConfig do
               'write_port' => 8181,
               'read_port' => 8180,
               'data_dir' => '/tmp',
-              'ssl' => false
+              'ssl' => {
+                  'enabled' => false
+              }
           }
       }
       config.gpfdist_configured?.should == true
@@ -142,7 +193,9 @@ describe ChorusConfig do
                 'write_port' => 8181,
                 'read_port' => 8180,
                 'data_dir' => '/tmp',
-                'ssl' => false
+                'ssl' => {
+                    'enabled' => false
+                }
             }
         }
         config.config['gpfdist'].delete(gpfdist_key)

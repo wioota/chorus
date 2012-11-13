@@ -21,7 +21,7 @@ describe Gppipe, :database_integration => true do
           "8001"
         when "url"
           Socket.gethostname
-        when "ssl"
+        when "ssl.enabled"
           false
       end
     end
@@ -95,7 +95,7 @@ describe Gppipe, :database_integration => true do
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
   let(:sandbox) { workspace.sandbox }
 
-  it 'uses gpfdist if the gpfdist.ssl configuration is false (no in the test environment)' do
+  it 'uses gpfdist if the gpfdist.ssl.enabled configuration is false (no in the test environment)' do
     Gppipe.protocol.should == 'gpfdist'
   end
 
