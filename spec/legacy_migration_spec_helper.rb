@@ -8,8 +8,6 @@ require 'database_cleaner'
 
 DatabaseCleaner.strategy = :truncation
 
-
-
 SPEC_WORKFILE_PATH = Rails.root + "system/legacy_workfiles"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -37,6 +35,17 @@ RSpec.configure do |config|
       result = `spec/legacy_migrate_schema_setup.sh db/legacy/legacy_#{legacy_sql_md5}.sql #{ActiveRecord::Base.connection.current_database}`
       raise "legacy migration failed:\n#{result}" unless $?.success?
     end
+
+    any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
+      # Stub everything with a PNG so paperclip doesn't blow up
+      stub(p).path { Rails.root.join "spec/fixtures/small2.png" }
+    end
+
+    # quiet the tests
+    stub(AbstractMigrator).log.with_any_args
+
+    # run all migrations
+    DataMigrator.migrate_all SPEC_WORKFILE_PATH
   end
 
   config.after(:suite) do

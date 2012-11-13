@@ -2,10 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe GpdbInstanceMigrator do
   describe ".migrate" do
-    before do
-      GpdbInstanceMigrator.migrate
-    end
-
     describe "copying the data" do
       it "creates new gpdb instances for legacy gpdb instances and is idempotent" do
         count = Legacy.connection.select_all("SELECT count(*) FROM edc_instance WHERE instance_provider = 'Greenplum Database'").first["count"]

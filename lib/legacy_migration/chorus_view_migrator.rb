@@ -56,7 +56,7 @@ class ChorusViewMigrator < AbstractMigrator
           # check to see if this chorus view's name conflicts with any tables/views or other chorus views.
           unless dataset.valid?
             new_name =  "#{dataset_name}_#{row_hash['workspace_id']}"
-            puts "Found a duplicate chorus view: #{dataset_name}. Renaming to #{new_name}"
+            log "Found a duplicate chorus view: #{dataset_name}. Renaming to #{new_name}"
             dataset.name = new_name
           end
 

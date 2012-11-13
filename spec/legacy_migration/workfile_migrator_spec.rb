@@ -2,15 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe WorkfileMigrator do
   describe ".migrate" do
-    before :all do
-      any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-        # Stub everything with a PNG so paperclip doesn't blow up
-        stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-      end
-
-      WorkfileMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
-    end
-
     def should_be_equal_dates(date1, date2_str)
       date1.should == DateTime.parse(date2_str)
     end

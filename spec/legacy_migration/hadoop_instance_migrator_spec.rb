@@ -2,10 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe HadoopInstanceMigrator do
   describe ".migrate" do
-    before :all do
-      HadoopInstanceMigrator.migrate
-    end
-
     describe "copying the data" do
       it "creates new instances for legacy hadoop instances and is idempotent" do
         count = Legacy.connection.select_all("select count(*) from edc_instance where instance_provider = 'Hadoop'").first["count"]

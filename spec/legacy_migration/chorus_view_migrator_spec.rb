@@ -1,11 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe ChorusViewMigrator do
-
-  before :all do
-    ChorusViewMigrator.migrate
-  end
-
   it "should migrate all chorus views and be idempotent" do
     legacy_chorus_views = Legacy.connection.exec_query(%Q(select * from edc_dataset where type = 'CHORUS_VIEW'))
     ChorusView.unscoped.count.should == legacy_chorus_views.count
@@ -29,4 +24,6 @@ describe ChorusViewMigrator do
     ChorusView.joins(:workspace).where("workspaces.legacy_id != datasets.edc_workspace_id").should be_empty
     ChorusView.where('workspace_id IS NULL').should be_empty
   end
+
+  xit "duplicate chorus views are given unique names"
 end

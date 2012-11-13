@@ -1,15 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe CommentMigrator do
-  before :all do
-    any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-      # Stub everything with a PNG so paperclip doesn't blow up
-      stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-    end
-
-    CommentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
-  end
-
   describe ".migrate" do
     it "migrates comments on notes" do
       count = 0

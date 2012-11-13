@@ -3,10 +3,6 @@ require 'legacy_migration_spec_helper'
 describe UserMigrator do
   describe ".migrate" do
     context "when user database is empty" do
-      before do
-        UserMigrator.migrate
-      end
-
       describe "copying the data" do
         it "creates new users for legacy users and is idempotent" do
           count = Legacy.connection.exec_query("SELECT count(*) FROM edc_user").first["count"]

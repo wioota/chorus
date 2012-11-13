@@ -23,4 +23,8 @@ class AbstractMigrator
     yield
     Sunspot.session = Sunspot.session.original_session
   end
+
+  def self.log(*args)
+    puts *args
+  end
 end

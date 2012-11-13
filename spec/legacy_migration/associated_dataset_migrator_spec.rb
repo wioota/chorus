@@ -1,11 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe AssociatedDatasetMigrator do
-
-  before :all do
-    AssociatedDatasetMigrator.migrate
-  end
-
   describe ".migrate" do
     LEGACY_ASSOCIATED_DATASETS_SQL = <<-SQL
       SELECT

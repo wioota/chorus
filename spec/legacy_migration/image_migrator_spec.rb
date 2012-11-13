@@ -9,10 +9,6 @@ TYPE_MAP = {
 
 describe ImageMigrator do
   describe ".migrate" do
-    before :all do
-      ImageMigrator.migrate
-    end
-
     describe "copying the data" do
       it "gives an image attachment to all users who had profile images" do
         legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")

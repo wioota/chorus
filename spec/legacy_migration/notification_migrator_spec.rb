@@ -1,25 +1,13 @@
 require 'legacy_migration_spec_helper'
 
 describe NotificationMigrator do
-  before :all do
-    any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-      # Stub everything with a PNG so paperclip doesn't blow up
-      stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-    end
-
-    NotificationMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
-  end
-
   describe ".migrate" do
     it "creates new notifications for legacy notifications" do
-      count = 0
       Legacy.connection.select_all("
         SELECT ea.*
         FROM edc_alert ea
         WHERE type IN ('NOTE', 'MEMBERS_ADDED', 'NOTE_COMMENT');
       ").each do |legacy_alert|
-        count += 1
-
         notification = Notification.unscoped.find_by_legacy_id(legacy_alert["id"])
 
         recipient = User.find(notification.recipient_id)
@@ -34,6 +22,17 @@ describe NotificationMigrator do
         else
           notification.deleted_at.should be_nil
         end
+      end
+    end
+
+    it "is idempotent" do
+      count = 0
+      Legacy.connection.select_all("
+        SELECT ea.*
+        FROM edc_alert ea
+        WHERE type IN ('NOTE', 'MEMBERS_ADDED', 'NOTE_COMMENT');
+      ").each do |legacy_alert|
+        count += 1
       end
 
       Notification.unscoped.count.should == count

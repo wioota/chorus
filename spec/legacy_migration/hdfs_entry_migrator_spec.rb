@@ -1,10 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe HdfsEntryMigrator do
-  before :all do
-    HdfsEntryMigrator.migrate
-  end
-
   describe ".migrate" do
     it "should migrate the hdfs references found in the edc_comment table to the new database" do
       count = 0

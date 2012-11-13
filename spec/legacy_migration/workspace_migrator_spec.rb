@@ -2,10 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe WorkspaceMigrator do
   describe ".migrate" do
-    before :all do
-      WorkspaceMigrator.migrate
-    end
-
     describe "copying the data" do
       it "creates new workspaces for legacy workspaces" do
         count = Legacy.connection.select_all("SELECT count(*)  FROM edc_workspace ").first["count"]

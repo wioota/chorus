@@ -1,10 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe SandboxMigrator do
-  before do
-    SandboxMigrator.migrate
-  end
-
   it "creates new sandbox for legacy sandbox and is idempotent" do
     count = Legacy.connection.select_all("SELECT count(*) FROM edc_sandbox").first["count"]
     Workspace.unscoped.where("sandbox_id is not null").count.should == count

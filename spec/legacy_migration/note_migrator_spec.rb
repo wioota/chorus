@@ -1,15 +1,6 @@
 require 'legacy_migration_spec_helper'
 
 describe NoteMigrator do
-  before :all do
-    any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-      # Stub everything with a PNG so paperclip doesn't blow up
-      stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-    end
-
-    NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
-  end
-
   describe ".migrate" do
     it "should migrate the Notes on Greenplum Instance to the new database" do
       count = 0

@@ -2,17 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe ActivityMigrator do
   describe ".migrate" do
-    before :all do
-      any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-        # Stub everything with a PNG so paperclip doesn't blow up
-        stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-      end
-
-      clear_events_and_associations
-
-      ActivityMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
-    end
-
     context "migrating activities that reference datasets" do
       it "copies SOURCE TABLE CREATED data fields from the legacy activity" do
         count = 0

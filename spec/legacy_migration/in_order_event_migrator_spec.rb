@@ -2,16 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe InOrderEventMigrator do
   describe ".migrate" do
-    before :all do
-      any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-        # Stub everything with a PNG so paperclip doesn't blow up
-        stub(p).path { File.join(Rails.root, "spec/fixtures/small2.png") }
-      end
-
-      clear_events_and_associations
-      InOrderEventMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
-    end
-
     it "inserts the event objects in created_at order" do
       #TODO: a large portion of this filtering should go away when we correctly migrate imports from chorus views story 38441081
       not_yet_implemented_events = %w(WORKSPACE_DELETED INSTANCE_DELETED WORKSPACE_ADD_HDFS_AS_EXT_TABLE WORKSPACE_ADD_TABLE)
