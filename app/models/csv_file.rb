@@ -7,7 +7,7 @@ class CsvFile < ActiveRecord::Base
   belongs_to :workspace
   belongs_to :user
 
-  has_attached_file :contents, :path => Chorus::Application.config.chorus['assets_storage_path']+ ":class/:id/:basename.:extension"
+  has_attached_file :contents, :path => ":rails_root/system/:class/:id/:basename.:extension"
 
   validates :contents, :attachment_presence => true
   validates_attachment_size :contents,

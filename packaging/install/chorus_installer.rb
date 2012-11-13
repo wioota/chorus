@@ -357,8 +357,6 @@ class ChorusInstaller
       setup_database
     end
 
-    configure_file_storage_directory
-
     if upgrade_legacy?
       #log "Migrating settings from previous version..."
       #migrate_legacy_settings
@@ -431,19 +429,6 @@ class ChorusInstaller
     File.open(token_file, 'w') do |f|
       f << SecureRandom.hex(64)
     end
-  end
-
-  def configure_file_storage_directory
-    return if upgrade_existing?
-    chorus_config_file = "#{@destination_path}/shared/chorus.properties"
-    config = Properties.load_file(chorus_config_file)
-
-    default_path = "#{@destination_path}/shared"
-    if File.expand_path(data_path) != File.expand_path(default_path)
-      config['assets_storage_path'] = "#{data_path}/system/"
-    end
-
-    Properties.dump_file(config, chorus_config_file)
   end
 
   def release_path

@@ -463,8 +463,7 @@ def populate_fake_chorus_install(install_path, options = {})
 end
 
 def asset_path
-  chorus_config = ChorusConfig.new
-  Rails.root.join chorus_config['assets_storage_path'].gsub(":rails_root/", "")
+  Rails.root.join "system"
 end
 
 require 'stringio'

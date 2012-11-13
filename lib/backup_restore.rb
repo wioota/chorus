@@ -7,7 +7,7 @@ require 'yaml'
 module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_DATA_FILENAME = "database.gz"
-  ASSET_PATH = "assets_storage_path"
+  ASSET_FILENAME = "assets_storage_path"
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
@@ -35,9 +35,8 @@ module BackupRestore
       db_config['port']
     end
 
-    def config_path(name)
-      raise "Could not find path for ''#{name}' in chorus.properties" unless chorus_config[name]
-      chorus_config[name].gsub ":rails_root", Rails.root.to_s
+    def asset_path
+      Rails.root.join "system"
     end
 
     def chorus_config
@@ -101,7 +100,6 @@ module BackupRestore
     end
 
     def compress_assets
-      asset_path = config_path(ASSET_PATH)
       return unless Dir.exists?(asset_path)
 
       log "Compressing assets..."
@@ -110,7 +108,7 @@ module BackupRestore
         return if asset_list.empty?
 
         asset_string = asset_list.join " "
-        asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+        asset_file = temp_dir.join(ASSET_FILENAME + ".tgz")
         capture_output "tar czf #{asset_file} #{asset_string}",
                        :error => "Compressing assets failed."
       end
@@ -218,17 +216,17 @@ PROMPT
 
     def restore_assets
       log "Deleting existing assets..."
-      asset_path = Pathname.new config_path(ASSET_PATH)
-      Dir.exists? asset_path and Dir.chdir asset_path do
+      asset_pathname = Pathname.new asset_path
+      Dir.exists? asset_pathname and Dir.chdir asset_pathname do
         MODELS_WITH_ASSETS.each do |model|
-          FileUtils.rm_r asset_path.join(model) rescue Errno::ENOENT
+          FileUtils.rm_r asset_pathname.join(model) rescue Errno::ENOENT
         end
       end
 
       log "Restoring backed up assets..."
-      asset_file = temp_dir.join(ASSET_PATH + ".tgz")
+      asset_file = temp_dir.join(ASSET_FILENAME + ".tgz")
       if File.exists? asset_file
-        FileUtils.mkdir_p asset_path and Dir.chdir asset_path do
+        FileUtils.mkdir_p asset_pathname and Dir.chdir asset_pathname do
           capture_output "tar xf #{asset_file}",
                          :error => "Restoring assets failed."
         end
@@ -257,6 +255,5 @@ PROMPT
     ensure
       ActiveRecord::Base.establish_connection connection_config if existing_connection
     end
-
   end
 end
