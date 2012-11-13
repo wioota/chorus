@@ -45,7 +45,8 @@ describe EventPresenter, :type => :view do
           hash = subject.to_hash
           hash[:workspace].should have_key(:id)
           hash[:workspace].should have_key(:name)
-          hash[:workspace].keys.size.should == 2
+          hash[:workspace].should have_key(:is_deleted)
+          hash[:workspace].keys.size.should == 3
         end
       end
     end
