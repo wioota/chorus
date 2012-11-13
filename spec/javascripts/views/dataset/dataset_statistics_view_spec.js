@@ -19,7 +19,7 @@ describe("chorus.views.DatasetStatistics", function() {
                 onDiskSize: "1 GB",
                 description: "foo",
                 objectType: "BASE_TABLE",
-                partitions: 2
+                partitions: 0
             });
             this.server.completeFetchFor(this.stats);
         });
@@ -52,18 +52,6 @@ describe("chorus.views.DatasetStatistics", function() {
             expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
         });
 
-        it("displays the partitions", function() {
-            expect(this.view.$(".partitions .value").text()).toBe("2")
-        });
-
-        it("displays the statistics in the correct order", function() {
-            expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
-            expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
-            expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
-            expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
-            expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
-            expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
-        });
 
         describe("when the partitions are 0", function() {
             beforeEach(function() {
@@ -73,6 +61,37 @@ describe("chorus.views.DatasetStatistics", function() {
 
             it("should not show the partitions pair", function() {
                 expect(this.view.$(".partitions")).not.toExist();
+            });
+
+            it("displays the statistics in the correct order", function() {
+                expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
+                expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
+                expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
+                expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
+                expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
+            });
+        });
+
+        describe("when the partitions are greater than 0", function() {
+            beforeEach(function() {
+                this.stats.set({ partitions: 10 });
+                this.view.render();
+            });
+
+            it("displays the partitions", function() {
+                expect(this.view.$(".partitions .value").text()).toBe("10")
+            });
+
+            it("should not show the rows pair", function() {
+                expect(this.view.$(".rows")).not.toExist();
+            });
+
+            it("displays the statistics in the correct order", function() {
+                expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
+                expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
+                expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
+                expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
+                expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
             });
         });
 

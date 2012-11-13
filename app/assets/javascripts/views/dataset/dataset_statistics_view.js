@@ -24,6 +24,10 @@ chorus.views.DatasetStatistics = chorus.views.Base.extend({
             ctx.statistics.rows = "0";
         }
 
+        if (ctx.statistics.partitions > 0) {
+            delete ctx.statistics.rows;
+        }
+
         if (ctx.statistics.columns === 0) {
             ctx.statistics.columns = "0";
         }
