@@ -47,7 +47,7 @@ resource "Workspaces" do
     parameter :sandbox_id, "Id of the schema to be used as the workspace's sandbox"
     parameter :summary, "Notes about the workspace"
 
-    required_parameters :name, :id
+    required_parameters :id
 
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
