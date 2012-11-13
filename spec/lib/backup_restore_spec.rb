@@ -439,7 +439,7 @@ def populate_fake_chorus_install(install_path, options = {})
     FileUtils.cp_r Rails.root.join(dir), install_path
   end
 
-  %w{packaging postgres}.each do |dir|
+  %w{packaging postgres app}.each do |dir|
     path = Rails.root.join(dir)
     path.should exist
     FileUtils.ln_s path, install_path.join(dir)
