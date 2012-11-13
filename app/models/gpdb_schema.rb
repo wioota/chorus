@@ -11,8 +11,17 @@ class GpdbSchema < ActiveRecord::Base
   ORDER BY lower(schemas.nspname)
   SQL
 
+  ARRAY_AGG_QUERY = <<-SQL
+     DROP AGGREGATE IF EXISTS "%s".fake_array_agg(anyelement);
+      CREATE AGGREGATE "%s".fake_array_agg(anyelement) (
+        SFUNC=array_append,
+        STYPE=anyarray,
+        INITCOND='{}'
+      );
+  SQL
+
   SCHEMA_FUNCTION_QUERY = <<-SQL
-      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, ARRAY_AGG(t2.typname ORDER BY inputtypeid) AS proargtypes, t1.prosrc, d.description
+      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, "%s".FAKE_ARRAY_AGG((SELECT t2.typname ORDER BY inputtypeid)) AS proargtypes, t1.prosrc, d.description
       FROM ( SELECT p.oid,p.proname,
                 CASE WHEN p.proargtypes='' THEN NULL
                     ELSE unnest(p.proargtypes)
@@ -26,8 +35,10 @@ class GpdbSchema < ActiveRecord::Base
       LEFT JOIN pg_type AS t2
       ON t1.inputtype=t2.oid
       LEFT JOIN pg_description AS d ON t1.oid=d.objoid
+      WHERE t1.proname != 'fake_array_agg'
+
       GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.prosrc, t1.proargnames, d.description
-      ORDER BY t1.proname
+      ORDER BY t1.proname;
   SQL
 
   SCHEMA_DISK_SPACE_QUERY = <<-SQL
@@ -103,13 +114,14 @@ class GpdbSchema < ActiveRecord::Base
 
   def stored_functions(account)
     results = database.with_gpdb_connection(account) do |conn|
-      conn.exec_query(SCHEMA_FUNCTION_QUERY % [name])
+      conn.exec_query(ARRAY_AGG_QUERY % [name, name])
+      conn.exec_query(SCHEMA_FUNCTION_QUERY % [name, name])
     end
 
-    results.map do |result|
+    results.map { |result|
       result_array = result.values
       GpdbSchemaFunction.new(name, *result_array[1..7])
-    end
+    }
   end
 
   def disk_space_used(account)
