@@ -174,7 +174,8 @@ window.rspecFixtureDefinitions = {
             tableauWorkfileCreated: {},
             viewCreated: {},
             importScheduleUpdated: {},
-            importScheduleDeleted: {}
+            importScheduleDeleted: {},
+            workspaceDeleted: {}
         }
     },
 

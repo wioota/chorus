@@ -410,6 +410,12 @@ describe WorkspacesController do
       delete :destroy, params
       response.code.should == "200"
     end
+
+    it "creates an event" do
+      expect_to_add_event(Events::WorkspaceDeleted, owner) do
+        post :destroy, params
+      end
+    end
   end
 
   def expect_to_add_event(event_class, owner)

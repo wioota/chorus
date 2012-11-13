@@ -68,6 +68,7 @@ class WorkspacesController < ApplicationController
   def destroy
     workspace = Workspace.find(params[:id])
     authorize!(:destroy, workspace)
+    Events::WorkspaceDeleted.by(current_user).add(:workspace => workspace)
     workspace.destroy
 
     render :json => {}

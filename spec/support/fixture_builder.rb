@@ -186,6 +186,7 @@ FixtureBuilder.configure do |fbuilder|
 
     Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace, :actor => owner)
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
+    Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace, :actor => owner)
 
     # Chorus View
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)

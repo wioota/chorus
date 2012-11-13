@@ -185,6 +185,10 @@
                 links: [ "actor", "workspace" ]
             },
 
+            WorkspaceDeleted: {
+                links: [ "actor", "workspace" ]
+            },
+
             WorkspaceUnarchived: {
                 links: [ "actor", "workspace" ]
             },

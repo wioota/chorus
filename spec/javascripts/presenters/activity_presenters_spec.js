@@ -507,6 +507,33 @@ describe("chorus.presenters.Activity", function() {
 
     });
 
+    context("workspace deleted", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.workspaceDeleted({
+                workspace :{
+                    id: 1,
+                    name: "abc",
+                    isDeleted: true
+                }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workspace = model.workspace();
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkspaceDeleted.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+
+    });
+
     context("workspace unarchived", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workspaceUnarchived();

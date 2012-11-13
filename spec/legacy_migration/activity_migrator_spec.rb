@@ -311,6 +311,20 @@ describe ActivityMigrator do
         Events::WorkspaceArchived.count.should == count
       end
 
+      it "copied WORKSPACE_DELETED data fields from the legacy activity" do
+        count = 0
+        Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
+        type = 'WORKSPACE_DELETED' ;").each do |row|
+          count += 1
+
+          event = Events::WorkspaceDeleted.find_by_legacy_id(row['id'])
+          Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
+          event.actor.username.should == row["author"]
+        end
+        count.should > 0
+        Events::WorkspaceDeleted.count.should == count
+      end
+
       it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
         count = 0
         Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where

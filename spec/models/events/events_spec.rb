@@ -687,6 +687,33 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
+  describe "WorkspaceDeleted" do
+    subject do
+      Events::WorkspaceDeleted.add(
+          :actor => actor,
+          :workspace => workspace
+      )
+    end
+
+    context "when workspace is not public " do
+      let(:workspace) {workspaces(:private)}
+
+      its(:workspace) { should == workspace }
+
+      its(:targets) { should == {:workspace => workspace} }
+
+      it_creates_activities_for { [actor] }
+      it_does_not_create_a_global_activity
+    end
+
+    context "when workspace is public" do
+
+      let(:workspace) {workspaces(:public)}
+
+      it_creates_a_global_activity
+    end
+  end
+
   describe "TableauWorkbookPublished" do
     subject do
       Events::TableauWorkbookPublished.add(

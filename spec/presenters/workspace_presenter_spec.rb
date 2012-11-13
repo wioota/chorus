@@ -70,7 +70,8 @@ describe WorkspacePresenter, :type => :view do
       it "should only render the sandbox id" do
         hash[:id].should == workspace.id
         hash[:name].should == workspace.name
-        hash.keys.size.should == 2
+        hash[:is_deleted].should == workspace.deleted?
+        hash.keys.size.should == 3
       end
     end
 

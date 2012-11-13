@@ -4,7 +4,8 @@ class WorkspacePresenter < Presenter
     if rendering_activities?
       {
           :id => model.id,
-          :name => model.name
+          :name => model.name,
+          :is_deleted => model.deleted?
       }
     else
       {
