@@ -91,7 +91,7 @@ FactoryGirl.define do
             'column_count' => '5',
             'description' => 'This is a nice table.',
             'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-            'disk_size' => '2048 kB',
+            'disk_size' => 2097152,
             'partition_count' => '0',
             'definition' => "SELECT * FROM foo"
           })

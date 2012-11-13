@@ -277,6 +277,7 @@ describe Dataset do
 
   describe ".add_metadata!(dataset, account)" do
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset([dataset.name]).to_sql }
+    let(:partition_data_sql) { Dataset::Query.new(schema).partition_data_for_dataset([dataset.name]).to_sql }
 
     before do
       stub_gpdb(account,
@@ -293,8 +294,14 @@ describe Dataset do
                         'row_count' => '5',
                         'table_type' => 'BASE_TABLE',
                         'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-                        'disk_size' => '500 kB',
+                        'disk_size' => '500',
                         'partition_count' => '6'
+                    }
+                ],
+
+                partition_data_sql => [
+                    {
+                        'disk_size' => '120000'
                     }
                 ]
       )
@@ -310,8 +317,8 @@ describe Dataset do
       dataset.statistics.row_count.should == 5
       dataset.statistics.table_type.should == 'BASE_TABLE'
       dataset.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
-      dataset.statistics.disk_size == '500 kB'
-      dataset.statistics.partition_count == 6
+      dataset.statistics.disk_size.should == 120500
+      dataset.statistics.partition_count.should == 6
     end
   end
 
@@ -330,7 +337,7 @@ describe Dataset do
                         'definition' => 'SELECT * FROM users;',
                         'column_count' => '3',
                         'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-                        'disk_size' => '0 kB',
+                        'disk_size' => '0',
                     }
                 ]
       )
@@ -344,7 +351,7 @@ describe Dataset do
       dataset_view.statistics.definition.should == 'SELECT * FROM users;'
       dataset_view.statistics.column_count.should == 3
       dataset_view.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
-      dataset_view.statistics.disk_size == '0 kB'
+      dataset_view.statistics.disk_size == 0
     end
   end
 
@@ -511,7 +518,7 @@ describe Dataset::Query, :database_integration => true do
         row['row_count'].should == 9
         row['table_type'].should == "BASE_TABLE"
         row['last_analyzed'].should_not be_nil
-        row['disk_size'].should =~ /kB/
+        row['disk_size'].to_i.should > 0
         row['partition_count'].should == 0
       end
     end
@@ -529,7 +536,7 @@ describe Dataset::Query, :database_integration => true do
         row['row_count'].should == 0 # will always be zero for a master table
         row['table_type'].should == 'MASTER_TABLE'
         row['last_analyzed'].should_not be_nil
-        row['disk_size'].should == '0 bytes' # will always be zero for a master table
+        row['disk_size'].should == '0'
         row['partition_count'].should == 7
       end
     end
@@ -547,7 +554,7 @@ describe Dataset::Query, :database_integration => true do
         row['row_count'].should == 0 # will always be zero for an external table
         row['table_type'].should == 'EXT_TABLE'
         row['last_analyzed'].should_not be_nil
-        row['disk_size'].should == '0 bytes' # will always be zero for an external table
+        row['disk_size'].should == '0'
         row['partition_count'].should == 0
       end
     end
@@ -562,7 +569,7 @@ describe Dataset::Query, :database_integration => true do
         row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category, base_table1.time_value FROM base_table1;"
         row['column_count'].should == 5
         row['row_count'].should == 0
-        row['disk_size'].should == '0 bytes'
+        row['disk_size'].should == '0'
         row['partition_count'].should == 0
       end
     end

@@ -137,10 +137,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def add_metadata!(account)
-    result = schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(Query.new(schema).metadata_for_dataset(name).to_sql)
-    end.first
-    @statistics = DatasetStatistics.new(result)
+    @statistics = DatasetStatistics.for_dataset(self, account)
   end
 
   def self.with_name_like(name)
@@ -166,11 +163,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def table_description
-    result = schema.with_gpdb_connection(schema.database.gpdb_instance.owner_account) do |conn|
-      conn.select_all(Query.new(schema).metadata_for_dataset(name).to_sql)
-    end.first
-
-    DatasetStatistics.new(result).description
+    DatasetStatistics.for_dataset(self, schema.database.gpdb_instance.owner_account).description
   rescue
     nil
   end
@@ -245,7 +238,7 @@ class Dataset < ActiveRecord::Base
     DISK_SIZE = <<-SQL
     CASE WHEN position('''' in pg_catalog.pg_class.relname) > 0 THEN 'unknown'
          WHEN position('\\\\' in pg_catalog.pg_class.relname) > 0 THEN 'unknown'
-         ELSE pg_size_pretty(pg_total_relation_size(pg_catalog.pg_class.oid))
+         ELSE CAST(pg_total_relation_size(pg_catalog.pg_class.oid) AS VARCHAR)
     END
     SQL
 
@@ -325,6 +318,19 @@ class Dataset < ActiveRecord::Base
           Arel.sql(TABLE_TYPE).as('table_type')
       )
     end
+
+    def partition_data_for_dataset(table_name)
+      PARTITIONS.where(PARTITIONS[:tablename].eq(table_name).
+          and(PARTITIONS[:schemaname].eq(schema.name))).project(
+          Arel.sql('sum(pg_total_relation_size(partitiontablename))').as('disk_size')
+      )
+    end
+  end
+
+  def query_results(account, query_method)
+    schema.with_gpdb_connection(account) do |conn|
+      conn.select_all(Query.new(schema).send(query_method, name).to_sql)
+    end.first
   end
 
   def entity_type_name
