@@ -6,7 +6,6 @@ describe ImportScheduler do
     let(:import_schedule_attrs) {
       {:start_datetime => start_time,
        :end_date => Date.parse("2012-08-25"),
-       :last_scheduled_at => nil,
        :frequency => 'daily',
        :user => users(:owner),
        :sample_count => 1,
@@ -38,7 +37,6 @@ describe ImportScheduler do
           import.truncate.should == import_schedule.truncate
           import.user_id.should == import_schedule.user_id
           import.sample_count.should == import_schedule.sample_count
-          import.dataset_import_created_event_id.should == import_schedule.dataset_import_created_event_id
         end
       end
     end
@@ -83,12 +81,6 @@ describe ImportScheduler do
           ImportScheduler.run
         end
 
-        it "sets the last scheduled time" do
-          ImportScheduler.run
-          import_schedule.reload
-          import_schedule.last_scheduled_at.should == Time.current
-        end
-
         it "sets the next scheduled import" do
           ImportScheduler.run
           import_schedule.reload
@@ -105,12 +97,6 @@ describe ImportScheduler do
 
         it "enqueues the job" do
           ImportScheduler.run
-        end
-
-        it "sets the last scheduled time" do
-          ImportScheduler.run
-          import_schedule.reload
-          import_schedule.last_scheduled_at.should == Time.current
         end
 
         it "does not schedule another import" do

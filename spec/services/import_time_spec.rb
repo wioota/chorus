@@ -11,10 +11,9 @@ describe ImportTime do
 
   let(:current_time) { dt("2012-08-20 12:00:00") }
 
-  it "should be the start_datetime if last_scheduled_at is nil" do
+  it "should be the start_datetime" do
     start_datetime = dt("2012-08-21 11:00:00")
     end_date       =  d("2012-08-22")
-    last_scheduled_at    = nil
     t = ImportTime.new(start_datetime, end_date, :daily, current_time)
     t.next_import_time.should == start_datetime
   end

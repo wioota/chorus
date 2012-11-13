@@ -3,14 +3,12 @@ class ImportScheduler
     ImportSchedule.ready_to_run.each do |schedule|
       begin
         Import.transaction do
-          import = schedule.build_import
-          import.save!
-          schedule.last_scheduled_at = Time.current
-          schedule.save!
+          import = schedule.create_import
+          schedule.save! # Refresh next imported at time
           QC.enqueue("Import.run", import.id)
         end
-      rescue Exception => e
-        Rails.logger.error "Import schedule #{schedule} failed to run."
+      rescue => e
+        Rails.logger.error "Import schedule #{schedule} failed to run, error was #{e.message}."
       end
     end
   end

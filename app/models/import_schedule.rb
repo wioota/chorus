@@ -26,8 +26,6 @@ class ImportSchedule < ActiveRecord::Base
   validate :table_does_exist, :if => Proc.new { |schedule| schedule.new_table == false }
   validate :tables_have_consistent_schema, :if => Proc.new { |schedule| schedule.new_table == false }
 
-  #TODO, get rid of unneeded columns, dataset_import_created_event_id, last_scheduled_at
-
   def create_import_event
     dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
     Events::DatasetImportCreated.by(user).add(
@@ -40,16 +38,16 @@ class ImportSchedule < ActiveRecord::Base
     )
   end
 
-  def build_import
-    import = imports.build
-    import.user = user
-    import.workspace = workspace
-    import.to_table = to_table
-    import.source_dataset = source_dataset
-    import.truncate = truncate
-    import.new_table = new_table
-    import.sample_count = sample_count
-    import
+  def create_import
+    imports.create do |import|
+      import.user = user
+      import.workspace = workspace
+      import.to_table = to_table
+      import.source_dataset = source_dataset
+      import.truncate = truncate
+      import.new_table = new_table
+      import.sample_count = sample_count
+    end
   end
 
   def set_next_import

@@ -232,7 +232,6 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.dataset.name.should == row["table_name"]
           event.source_dataset.name.should == row["source_table_name"]
-
         end
         count.should > 0
         Events::DatasetImportSuccess.count.should == count

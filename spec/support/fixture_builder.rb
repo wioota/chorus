@@ -309,7 +309,6 @@ FixtureBuilder.configure do |fbuilder|
 
     previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                                          :import_schedule => import_schedule, :created_at => '2012-09-04 23:00:00-07',
-                                         :dataset_import_created_event_id => dataset_import_created.id,
                                          :source_dataset_id => default_table.id)
     fbuilder.name :one, previous_import
 

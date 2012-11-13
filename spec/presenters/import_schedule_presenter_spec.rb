@@ -28,7 +28,6 @@ describe ImportSchedulePresenter, :type => :view do
       hash[:frequency].should == import_schedule.frequency
       hash[:sample_count].should == import_schedule.sample_count
       hash[:truncate].should == import_schedule.truncate
-      hash[:last_scheduled_at].should == import_schedule.last_scheduled_at
       hash[:next_import_at].should == import_schedule.next_import_at
       hash[:new_table].should == import_schedule.new_table
       hash[:destination_dataset_id].should == import_schedule.destination_dataset_id

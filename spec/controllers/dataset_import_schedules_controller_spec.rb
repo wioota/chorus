@@ -92,7 +92,6 @@ describe DatasetImportSchedulesController do
         import_schedule.to_table.should == "the_new_table"
         import_schedule.new_table.should == true
         import_schedule.sample_count.should == 12
-        import_schedule.last_scheduled_at.should == nil
         import_schedule.user.should == user
         import_schedule.truncate.should == true
         import_schedule.next_import_at.should == start
