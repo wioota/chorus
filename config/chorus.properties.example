@@ -1,19 +1,36 @@
-# 8 hours
+# Server Settings
+
+server_port = 8080
+postgres_port = 8543
+solr_port = 8983
+
+# SSL Settings
+
+ssl.enabled = false
+ssl_server_port = 8443
+ssl_certificate =
+ssl_certificate_key =
+
+# Runtime Settings
+
+# The default session timeout time (length of time that you need to remain
+# inactive for you to be logged out) is 8 hours.
 session_timeout_minutes = 480
+
 instance_poll_interval_minutes = 5
 delete_unimported_csv_files_interval_hours = 1
 delete_unimported_csv_files_after_hours = 12
 reindex_search_data_interval_hours = 24
-server_port = 8080
-postgres_port = 8543
-ssl.enabled = false
-ssl_server_port = 8443
-ssl_certificate = 
-ssl_certificate_key = 
+
 sandbox_recommended_size_in_gb = 5
 
-#Maximum execution time of visualizations and workfiles, in minutes
+# The number of rows to be shown in a preview by default.
+default_preview_row_limit = 500
+
+# Maximum execution time of visualizations and workfiles, in minutes
 execution_timeout_in_minutes = 10
+
+# Concurrency Settings
 
 # Configure thread pool size of webserver and worker processes.
 #
@@ -26,14 +43,16 @@ execution_timeout_in_minutes = 10
 # database, thus the sum of 'worker_threads' + 'webserver_threads' must be less
 # than the 'max_connections' configured in postgresql.conf.
 #
-# The 'max_connections' parameter may be based on your operating system's kernel
-# shared memory size. For example, on OS X this parameter will default to 20.
-# You can also set the number of database threads per process here with the
-# 'database_threads' property. This overrides postgresql.conf.
+# The 'max_connections' parameter may be based on your operating system's
+# kernel shared memory size. For example, on OS X this parameter will default
+# to 20.  You can also set the number of database threads per process here with
+# the 'database_threads' property. This overrides postgresql.conf.
 
 worker_threads = 1
 webserver_threads = 20
 database_threads = 25
+
+# File Size Settings
 
 file_sizes_mb.workfiles = 10
 file_sizes_mb.csv_imports = 100
@@ -41,19 +60,23 @@ file_sizes_mb.user_icon = 5
 file_sizes_mb.workspace_icon = 5
 file_sizes_mb.attachment = 10
 
-# The number of rows to be shown in a preview by default.
-default_preview_row_limit = 500
+# Log Settings
 
 logging.syslog.enabled = true
 
-# To enable data movement between databases, gpfdist must be installed and running on the Chorus host.
-# Two gpfdist processes must be started with different ports pointing to the same directory.
-# SSL Certificate must be installed on all segment servers
+# Gpfdist Settings
+
+# To enable data movement between databases, gpfdist must be installed and
+# running on the Chorus host.  Two gpfdist processes must be started with
+# different ports pointing to the same directory.  SSL Certificate must be
+# installed on all segment servers
 gpfdist.ssl.enabled = false
 gpfdist.url = sample-gpfdist-server
 gpfdist.write_port = 8000
 gpfdist.read_port = 8001
 gpfdist.data_dir = /tmp
+
+# Tableau Settings
 
 tableau.enabled = false
 tableau.url = 10.80.129.44
@@ -61,11 +84,17 @@ tableau.port = 80
 tableau.username = chorusadmin
 tableau.password = secret
 
+# Gnip Settings
+
 gnip.enabled = true
 gnip.csv_import_max_file_size_mb = 50
 
+# Kaggle Settings
+
 kaggle.enabled = false
 kaggle.api_key = KAGGLE_API_KEY
+
+# LDAP Settings
 
 ldap.host = 10.32.88.212
 ldap.enable = false
