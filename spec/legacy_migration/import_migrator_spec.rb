@@ -2,11 +2,6 @@ require 'legacy_migration_spec_helper'
 
 describe ImportMigrator do
   describe ".migrate" do
-
-    before :all do
-      ImportMigrator.migrate
-    end
-
     it "creates new instances for legacy imports and is idempotent" do
       legacy_count = Legacy.connection.select_all("Select count(*) from legacy_migrate.edc_import").first["count"]
       expect(Import.count).to be > 0
