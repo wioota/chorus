@@ -13,7 +13,6 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             spyOn($, 'fileDownload');
             this.model.save();
             expect($.fileDownload).toHaveBeenCalled();
-            debugger
             expect($.fileDownload.mostRecentCall.args[0]).toBe('/workfiles/1/executions');
         });
     });
