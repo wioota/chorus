@@ -20,6 +20,10 @@ class SqlResult
     @warnings = []
   end
 
+  def canceled?
+    warnings.any? { |message| message =~ /cancel(ed|ing)/i }
+  end
+
   def hashes
     rows.map do |row|
       hash = {}

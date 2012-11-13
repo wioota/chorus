@@ -83,14 +83,29 @@ describe WorkfileExecutionsController do
         mock(SqlExecutor).execute_sql.with_any_args {
           sql_result
         }
-        mock(CsvWriter).to_csv(sql_result.columns.map(&:name), sql_result.rows)
       end
 
       it "sets content disposition: attachment" do
+        mock(CsvWriter).to_csv(sql_result.columns.map(&:name), sql_result.rows)
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
         response.headers['Content-Disposition'].should include("attachment")
         response.headers['Content-Disposition'].should include('filename="some.csv"')
         response.headers['Content-Type'].should == 'text/csv'
+      end
+
+      context "when the query is cancelled" do
+        let(:sql_result) do
+          SqlResult.new.tap do |result|
+            result.warnings << "Canceled"
+          end
+        end
+
+        it "should not present as an attachment" do
+          dont_allow(CsvWriter).to_csv.with_any_args
+          post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
+          response.headers.should_not have_key('Content-Disposition')
+          response.headers['Content-Type'].should =~ /application\/json/
+        end
       end
     end
 
