@@ -3,11 +3,16 @@ describe("chorus.views.TypeAheadSearch", function() {
         this.result = rspecFixtures.typeAheadSearchResult();
         this.result.set({query: "test"});
         this.view = new chorus.views.TypeAheadSearch();
+        this.view.$el.addClass('hidden');
         this.view.searchFor("test");
     });
 
     it("should fetch the search result", function() {
         expect(this.result).toHaveBeenFetched();
+    });
+
+    it("should show the list", function() {
+        expect(this.view.$el).not.toHaveClass('hidden');
     });
 
     describe("when the fetch completes with results", function() {
@@ -335,6 +340,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             this.result = rspecFixtures.typeAheadSearchResult();
             this.result.set({query: " "});
             this.view = new chorus.views.TypeAheadSearch();
+            this.view.$el.removeClass('hidden');
             this.view.searchFor(' ');
             spyOn(this.view.model, "fetch").andCallThrough();
         });
@@ -342,5 +348,9 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should not fetch any", function() {
             expect(this.view.model.fetch).not.toHaveBeenCalled();
         });
+
+        it("not show the list", function() {
+            expect(this.view.$el).toHaveClass('hidden');
+        });
     });
-})
+});

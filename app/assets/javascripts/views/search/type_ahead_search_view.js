@@ -86,6 +86,11 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         if (trimmedQuery && trimmedQuery !== "" ){
             this.model.set({query: trimmedQuery}, {silent: true});
             this.model.fetch();
+            this.$el.removeClass("hidden");
+            return true;
+        } else {
+            this.$el.addClass("hidden");
+            return false;
         }
     }
 });

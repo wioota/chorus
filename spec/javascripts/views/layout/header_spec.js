@@ -166,19 +166,8 @@ describe("chorus.views.Header", function() {
                 this.view.$(".search input:text").val("test_query/with/slashes").trigger("textchange");
             });
 
-
-            it("should display the type ahead search view", function() {
-                expect(this.view.$(this.view.typeAheadView.el)).toExist();
-                expect($(this.view.typeAheadView.el)).not.toHaveClass("hidden");
-            });
-
             it("sets the query in the typeAhead view", function() {
                 expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test_query/with/slashes");
-            });
-
-            it("hides the search results if the input is empty", function() {
-                this.view.$(".search input:text").val("").trigger("textchange");
-                expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
             });
 
             it("hides the search view when a link is clicked (if navigating to same route as displayed in browser url bar)", function() {
@@ -250,7 +239,7 @@ describe("chorus.views.Header", function() {
                     });
                 });
             });
-        })
+        });
 
         describe("username", function() {
             beforeEach(function() {
@@ -269,22 +258,22 @@ describe("chorus.views.Header", function() {
 
             it("has a hidden popup menu", function() {
                 expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
-            })
+            });
 
             describe("when clicked", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
                     $(document).bind("chorus:menu:popup", this.popupSpy);
                     this.view.$(".username a").click();
-                })
+                });
 
                 it("shows a popup menu", function() {
                     expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
-                })
+                });
 
                 it("triggers chorus:menu:popup on the document", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
-                })
+                });
 
                 describe("and when clicked again", function() {
                     beforeEach(function() {
@@ -311,7 +300,7 @@ describe("chorus.views.Header", function() {
                     this.view.$(".username a").click();
                     expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
                     $(document).trigger("chorus:menu:popup", $(""));
-                })
+                });
 
                 it("dismisses the popup", function() {
                     expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
@@ -333,7 +322,7 @@ describe("chorus.views.Header", function() {
                     }, this));
                     spyOn(this.view.notificationList, "show");
                     this.view.$("a.notifications").click();
-                })
+                });
 
                 it("shows a popup menu", function() {
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
@@ -346,7 +335,7 @@ describe("chorus.views.Header", function() {
                 it("marks the notifications as read", function() {
                     expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
                     expect(this.successFunction).toBeDefined();
-                })
+                });
 
                 it("calls show on the notification list", function() {
                     expect(this.view.notificationList.show).toHaveBeenCalled();
@@ -443,22 +432,22 @@ describe("chorus.views.Header", function() {
 
             it("has a hidden popup menu", function() {
                 expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-            })
+            });
 
             describe("when clicked", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
                     $(document).bind("chorus:menu:popup", this.popupSpy);
                     this.view.$(".gear a").click();
-                })
+                });
 
                 it("shows a popup menu", function() {
                     expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
-                })
+                });
 
                 it("triggers chorus:menu:popup on the document", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
-                })
+                });
 
                 describe("and when clicked again", function() {
                     beforeEach(function() {
@@ -493,7 +482,7 @@ describe("chorus.views.Header", function() {
                     this.view.$(".gear a").click();
                     expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
                     $(document).trigger("chorus:menu:popup", $(""));
-                })
+                });
 
                 it("dismisses the popup", function() {
                     expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
@@ -520,7 +509,7 @@ describe("chorus.views.Header", function() {
 
         it("should fetch the users", function() {
             expect(this.server.lastFetch().url).toBe(this.view.users.url({ page: 1, per_page: 1000}));
-        })
+        });
 
         context("after fetches completes", function() {
             beforeEach(function() {
@@ -538,17 +527,17 @@ describe("chorus.views.Header", function() {
 
             it("should have an option to switch to each user", function() {
                 this.users.each(function(user, i) {
-                    var option = $(".switch_user option").eq(i + 1)
-                    expect(option).toContainText(user.displayName())
+                    var option = $(".switch_user option").eq(i + 1);
+                    expect(option).toContainText(user.displayName());
                     expect(option.val()).toBe(user.get("username"))
                 }, this);
             });
 
             context("selecting a user", function() {
                 beforeEach(function() {
-                    var select = $('.switch_user')
-                    this.selectedUserName = $('.switch_user option:eq(1)').val()
-                    select.val(this.selectedUserName)
+                    var select = $('.switch_user');
+                    this.selectedUserName = $('.switch_user option:eq(1)').val();
+                    select.val(this.selectedUserName);
                     select.change();
                 });
 

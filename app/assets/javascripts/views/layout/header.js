@@ -103,12 +103,9 @@ chorus.views.Header = chorus.views.Base.extend({
 
     displayResult: function() {
         var query = this.$(".search input").val();
-        this.typeAheadView.searchFor(query);
-        if (query.length > 0) {
-            this.$(".type_ahead_result").removeClass("hidden");
+        if (this.typeAheadView.searchFor(query)) {
             this.captureClicks();
         } else {
-            this.$(".type_ahead_result").addClass("hidden");
             this.releaseClicks();
         }
     },
