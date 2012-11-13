@@ -176,12 +176,22 @@ describe Workspace do
 
     context "when the workspace does not have a sandbox" do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+      let!(:chorus_view) {
+        FactoryGirl.create(:chorus_view, :name => "chorus_view", :query => "select 1",
+                           :schema => schema, :workspace => workspace)
+      }
+
       before do
         workspace.bound_datasets << source_table
+        workspace.chorus_views << chorus_view
       end
 
       it "includes the workspace's bound datasets" do
-        workspace.datasets(user).should =~ [source_table]
+        workspace.datasets(user).to_a.should include(source_table)
+      end
+
+      it "includes the workspace's chorus views" do
+        workspace.datasets(user).to_a.should include(chorus_view)
       end
     end
 
@@ -190,6 +200,7 @@ describe Workspace do
 
       before do
         workspace.associated_datasets.destroy_all
+        workspace.chorus_views.destroy_all
       end
 
       it "returns an empty relation" do

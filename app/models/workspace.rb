@@ -119,7 +119,7 @@ class Workspace < ActiveRecord::Base
       end
       return datasets
     else
-      bound_datasets
+      Dataset.where(:id => (bound_dataset_ids + chorus_view_ids))
     end
   end
 

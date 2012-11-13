@@ -20,13 +20,15 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def show
+    datasets = workspace.datasets(current_user)
+
     if params[:name]
-      present workspace.datasets(current_user).find_by_name(params[:name]), :presenter_options => { :workspace => workspace }
-      return
+      dataset = datasets.find_by_name(params[:name])
+    else
+      dataset =  datasets.find(params[:id])
     end
 
-
-    present workspace.datasets(current_user).find(params[:id]), :presenter_options => { :workspace => workspace }
+    present dataset, :presenter_options => { :workspace => workspace }
   end
 
   def destroy

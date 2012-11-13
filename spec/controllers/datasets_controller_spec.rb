@@ -24,6 +24,7 @@ describe DatasetsController do
       ])
       stub(table).add_metadata!(instance_account)
     end
+
     context "without any filter " do
       let(:options) { {:sort => [{:relname => 'asc'}]} }
       it "should retrieve authorized db objects for a schema" do
@@ -51,6 +52,7 @@ describe DatasetsController do
         # stub checks for valid SQL with sorting
       end
     end
+
     context "with filter" do
       let(:options) { {:filter => [{:relname => 'view'}], :sort => [{:relname => 'asc'}]} }
       it "should filter db objects by name" do
@@ -101,5 +103,4 @@ describe DatasetsController do
       end
     end
   end
-
 end
