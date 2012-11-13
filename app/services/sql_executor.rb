@@ -16,7 +16,7 @@ module SqlExecutor
           result.schema = schema
 
           if cancelable_query.canceled?
-            return nil
+            return result.merge(:canceled => true)
           end
 
           result

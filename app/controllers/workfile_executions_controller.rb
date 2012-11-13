@@ -9,7 +9,7 @@ class WorkfileExecutionsController < ApplicationController
 
     @workfile.execution_schema = @schema
     @workfile.save!
-    if params[:download] && result
+    if params[:download] && !result[:canceled]
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       send_data CsvWriter.to_csv(result.columns.map(&:name), result.rows), :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
     else

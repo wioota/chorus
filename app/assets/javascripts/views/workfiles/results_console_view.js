@@ -65,6 +65,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
         this.$(".spinner").addClass("hidden").startLoading();
         _.delay(_.bind(this.showSpinner, this), 250);
+        this.$(".elapsed_time").text("");
         this.elapsedTimer = setInterval(_.bind(this.updateElapsedTime, this), 1000);
         this.$(".execution").removeClass("hidden");
         this.$(".bottom_gutter").addClass("hidden");
