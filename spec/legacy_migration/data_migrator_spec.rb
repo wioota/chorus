@@ -3,14 +3,15 @@ require 'legacy_migration_spec_helper'
 describe DataMigrator do
   describe ".migrate" do
     it "migrates and validates all without blowing up" do
-      mock(InstanceAccountMigrator).migrate.any_number_of_times
-      mock(ImageMigrator).migrate.any_number_of_times
-      mock(SandboxMigrator).migrate.any_number_of_times
-      mock(AssociatedDatasetMigrator).migrate.any_number_of_times
-      mock(ImportScheduleMigrator).migrate.any_number_of_times
-      mock(ActivityMigrator).migrate.with(anything).any_number_of_times
-      mock(NoteMigrator).migrate.with(anything).any_number_of_times
-      mock(NotificationMigrator).migrate.with(anything).any_number_of_times
+      mock(InstanceAccountMigrator).migrate.at_least(1)
+      mock(ImageMigrator).migrate.at_least(1)
+      mock(SandboxMigrator).migrate.at_least(1)
+      mock(AssociatedDatasetMigrator).migrate.at_least(1)
+      mock(ImportScheduleMigrator).migrate.at_least(1)
+      mock(ImportMigrator).migrate.at_least(1)
+      mock(ActivityMigrator).migrate.with(anything).at_least(1)
+      mock(NoteMigrator).migrate.with(anything).at_least(1)
+      mock(NotificationMigrator).migrate.with(anything).at_least(1)
 
       mock(ActivityMigrator).validate
       mock(AssociatedDatasetMigrator).validate

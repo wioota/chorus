@@ -9,6 +9,7 @@ class DataMigrator
     SandboxMigrator.migrate
     AssociatedDatasetMigrator.migrate
     ImportScheduleMigrator.migrate
+    ImportMigrator.migrate
     AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
@@ -17,8 +18,6 @@ class DataMigrator
 
     # Chorus Views
     # Imports
-    # Import Schedules
-
 
     ActivityMigrator.validate
     AssociatedDatasetMigrator.validate
