@@ -707,6 +707,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     beforeEach(function() {
                         spyOn(chorus, 'toast');
                         spyOn(this.dialog, "populateOwnerSelect").andCallThrough();
+                        spyOn(this.dialog.collection, "fetch");
                         this.otherSavedSpy = jasmine.createSpy();
                         spyOn(this.dialog, "postRender").andCallThrough();
                         this.instance.sharing().bind("saved", this.otherSavedSpy);
@@ -729,6 +730,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("should populate the Owner Select", function () {
                         expect(this.dialog.populateOwnerSelect).toHaveBeenCalled();
+                    });
+
+                    it("should re-fetch the instance accounts", function() {
+                        expect(this.dialog.collection.fetch).toHaveBeenCalled();
                     });
 
                     context("then clicking on the change owner link", function () {

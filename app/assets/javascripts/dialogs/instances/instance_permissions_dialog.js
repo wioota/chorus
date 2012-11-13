@@ -293,17 +293,19 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     confirmAddSharedAccount: function() {
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(this.instance.sharing(), "saved", displaySuccessToast);
+        localGroup.add(this.instance.sharing(), "saved", success);
         localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
 
         this.instance.sharing().unset("id"); // so that model isNew() is true, and server sees a create
         this.instance.sharing().save();
 
-        function displaySuccessToast() {
+        function success() {
             this.instance.set({shared: true});
             chorus.toast("instances.shared_account_added");
             this.render();
             localGroup.removeAll();
+
+            this.collection.fetch();
         }
 
         function displayFailureToast() {
