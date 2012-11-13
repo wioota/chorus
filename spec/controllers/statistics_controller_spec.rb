@@ -14,6 +14,7 @@ describe StatisticsController do
 
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table").to_sql }
     let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
+    let(:partition_data_sql) { Dataset::Query.new(schema).partition_data_for_dataset(["table"]).to_sql }
     let(:metadata_info) {
       {
           'name' => 'table',
@@ -23,8 +24,14 @@ describe StatisticsController do
           'row_count' => '5',
           'table_type' => 'BASE_TABLE',
           'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-          'disk_size' => '500 kB',
+          'disk_size' => '500',
           'partition_count' => '6'
+      }
+    }
+
+    let(:partitiondata_info) {
+      {
+          'disk_size' => '120000'
       }
     }
 
@@ -35,6 +42,9 @@ describe StatisticsController do
                 ],
                 metadata_sql => [
                     metadata_info
+                ],
+                partition_data_sql => [
+                    partitiondata_info
                 ]
       )
     end
@@ -47,7 +57,7 @@ describe StatisticsController do
       decoded_response.rows.should == 5
       decoded_response.description.should == 'a description'
       decoded_response.last_analyzed_time.to_s.should == "2012-06-06T23:02:42Z"
-      decoded_response.on_disk_size.should == '500 kB'
+      decoded_response.on_disk_size.should == '118 KB'
       decoded_response.partitions.should == 6
     end
 
@@ -65,7 +75,7 @@ describe StatisticsController do
             'row_count' => '5',
             'table_type' => 'BASE_TABLE',
             'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-            'disk_size' => '500 kB',
+            'disk_size' => '500',
             'partition_count' => '6',
             'definition' => 'Bobby DROP TABLES;'
         }
