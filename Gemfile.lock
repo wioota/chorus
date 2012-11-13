@@ -58,6 +58,13 @@ GIT
       webmock (>= 1.7.0)
 
 GIT
+  remote: git://github.com/pivotal-leopold/ci_reporter.git
+  revision: 3ec35b81c0d32bb76b48d426b79de2c7ea526362
+  specs:
+    ci_reporter (1.7.3)
+      builder (>= 2.1.2)
+
+GIT
   remote: git://github.com/pivotal/sunspot_matchers.git
   revision: e4488522e02da1f58c5117dbc38800deb32ffbd3
   branch: sunspot_2_pre
@@ -147,8 +154,6 @@ GEM
       ffi (~> 1.0, >= 1.0.6)
     choice (0.1.6)
     chunky_png (1.2.6)
-    ci_reporter (1.7.3)
-      builder (>= 2.1.2)
     clockwork (0.4.1)
       tzinfo
     cocaine (0.2.1)
@@ -349,7 +354,7 @@ DEPENDENCIES
   capybara-screenshot
   chorusgnip!
   chunky_png
-  ci_reporter
+  ci_reporter!
   clockwork
   compass-rails
   database_cleaner
