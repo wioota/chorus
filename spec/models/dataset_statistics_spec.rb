@@ -10,7 +10,7 @@ describe DatasetStatistics do
            'row_count' => '23',
            'table_type' => 'BASE_TABLE',
            'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-           'disk_size' => '230 kB',
+           'disk_size' => '230',
            'partition_count' => '2'
           }
       )
@@ -20,7 +20,7 @@ describe DatasetStatistics do
       statistics.column_count.should == 4
       statistics.description.should == 'New Description'
       statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
-      statistics.disk_size.should == '230 kB'
+      statistics.disk_size.should == 230
       statistics.partition_count.should == 2
     end
 
