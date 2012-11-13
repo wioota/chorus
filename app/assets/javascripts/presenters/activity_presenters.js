@@ -470,7 +470,7 @@
 
         chorusViewSourceType: function(self) {
             var model = chorusViewSourceModel(self);
-            return model.get("fileName") ? "workfile" : chorusViewSourceModel(self).metaType();
+            return model.get("fileName") ? "workfile" : t("dataset.types." + chorusViewSourceModel(self).metaType());
         },
 
         versionLink: function(self) {

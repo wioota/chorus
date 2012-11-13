@@ -128,9 +128,10 @@ describe ChorusViewsController, :database_integration => true do
     let(:chorus_view) do
       FactoryGirl.create(:chorus_view, :schema => schema, :workspace => workspace, :query => "select 1;")
     end
+    let(:options) { { :id => chorus_view.id, :object_name => 'duplicate_chorus_view' } }
 
     it "duplicate the chorus view" do
-      post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+      post :duplicate, options
 
       new_chorus_view = Dataset.chorus_views.last
       new_chorus_view.name.should == "duplicate_chorus_view"
@@ -143,6 +144,24 @@ describe ChorusViewsController, :database_integration => true do
       decoded_response[:workspace][:id].should == workspace.id
     end
 
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      post :duplicate, options
+    end
+
+    it "creates an event" do
+      post :duplicate, options
+
+      new_chorus_view = Dataset.chorus_views.last
+
+      the_event = Events::Base.last
+      the_event.action.should == "ChorusViewCreated"
+      the_event.source_object.id.should == chorus_view.id
+      the_event.source_object.should be_a(ChorusView)
+      the_event.workspace.id.should == workspace.id
+      the_event.dataset.id.should == new_chorus_view.id
+    end
+
     context "when chorus View have import schedule" do
       before do
         ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
@@ -153,7 +172,7 @@ describe ChorusViewsController, :database_integration => true do
       end
 
       it "copies the import schedule" do
-        post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+        post :duplicate, options
         new_chorus_view = Dataset.chorus_views.last
 
         new_import_schedule = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first
@@ -176,7 +195,7 @@ describe ChorusViewsController, :database_integration => true do
     context "when chorus View does not  import schedule" do
 
       it "does not copy the import schedule" do
-        post :duplicate, :id => chorus_view.id, :object_name => 'duplicate_chorus_view'
+        post :duplicate, options
 
         new_chorus_view = Dataset.chorus_views.last
         new_import = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first

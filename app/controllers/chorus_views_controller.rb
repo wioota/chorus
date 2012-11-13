@@ -27,6 +27,8 @@ class ChorusViewsController < ApplicationController
     old_chorus_view = ChorusView.find(params[:id])
     chorus_view = old_chorus_view.create_duplicate_chorus_view(params[:chorus_view][:object_name])
 
+    authorize! :can_edit_sub_objects, chorus_view.workspace
+
     ChorusView.transaction do
       chorus_view.save!
       old_chorus_view.workspace.bound_datasets << chorus_view
@@ -37,6 +39,12 @@ class ChorusViewsController < ApplicationController
 
         new_import_schedule.save!
       end
+
+      Events::ChorusViewCreated.by(current_user).add(
+          :workspace => chorus_view.workspace,
+          :source_object => old_chorus_view,
+          :dataset => chorus_view
+      )
     end
     present chorus_view, :presenter_options => {:workspace => chorus_view.workspace}, :status => :created
   end

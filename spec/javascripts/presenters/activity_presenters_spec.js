@@ -141,7 +141,7 @@ describe("chorus.presenters.Activity", function() {
                     expect(presenter.isNote()).toBeFalsy();
                 });
             });
-        })
+        });
 
         describe("isNotification and isReadOnly", function() {
             beforeEach(function() {
@@ -1487,13 +1487,56 @@ describe("chorus.presenters.Activity", function() {
                 actor = model.actor();
                 workspace = model.workspace();
                 dataset = model.dataset();
-                sourceObject = new chorus.models.WorkspaceDataset(model.get('sourceObject'));
+                var sourceObject = new chorus.models.WorkspaceDataset(model.get('sourceObject'));
                 sourceObject.set({workspace: workspace});
+                model.set({sourceObject: sourceObject});
 
                 translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
                     chorusViewSourceType: t("dataset.types.table"),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                };
+            });
+
+            context("without workspace", function() {
+                it("has the right header html", function() {
+                    presenter.options.displayStyle = ["without_workspace"];
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.ChorusViewCreated.without_workspace", translation_params
+                    );
+                });
+            });
+
+            context("with workspace", function() {
+                it("has the right header html", function() {
+                    presenter.options.displayStyle = ["default"];
+                    expect(presenter.headerHtml().toString()).toMatchTranslation(
+                        "activity.header.ChorusViewCreated.default", translation_params
+                    );
+                });
+            });
+
+            itHasTheActorIcon();
+        });
+
+        context("from duplication of a ChorusView", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.chorusViewCreatedFromDataset();
+                presenter = new chorus.presenters.Activity(model);
+                actor = model.actor();
+                workspace = model.workspace();
+                dataset = model.dataset();
+                var sourceObject = new chorus.models.WorkspaceDataset(model.get('sourceObject'));
+                sourceObject.set({objectType: "CHORUS_VIEW"});
+                sourceObject.set({workspace: workspace});
+                model.set({sourceObject: sourceObject});
+
+                translation_params = {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
+                    chorusViewSourceType: t("dataset.types.query"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 };
@@ -1527,7 +1570,7 @@ describe("chorus.presenters.Activity", function() {
                 actor = model.actor();
                 workspace = model.workspace();
                 dataset = model.dataset();
-                sourceObject = new chorus.models.Workfile(model.get('sourceObject'));
+                var sourceObject = new chorus.models.Workfile(model.get('sourceObject'));
                 translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
