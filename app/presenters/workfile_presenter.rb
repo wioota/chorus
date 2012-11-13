@@ -5,9 +5,9 @@ class WorkfilePresenter < Presenter
     comments = model.comments
     commit_messages = model.commit_messages
 
-    commit_messages.keep_if do |message|
-      !message.is_a?(Events::WorkfileUpgradedVersion) or
-          message.version_id == model.latest_workfile_version_id
+    # optimized so the happy path only does one LIMIT 1 sql query
+    while commit_messages.last && !latest_commit_message?(commit_messages.last)
+      commit_messages.pop
     end
 
     recent_comments = [notes.last,
@@ -34,6 +34,11 @@ class WorkfilePresenter < Presenter
     end
     workfile[:execution_schema] = present(model.execution_schema) if options[:include_execution_schema]
     workfile
+  end
+
+  def latest_commit_message?(message)
+    !message.is_a?(Events::WorkfileUpgradedVersion) ||
+        message.version_id == model.latest_workfile_version_id
   end
 
   def complete_json?

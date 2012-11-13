@@ -86,6 +86,17 @@ describe WorkfilePresenter, :type => :view do
             recent_comments[0][:body].should == "new version"
           end
         end
+
+        context "when the new workfile version has been deleted" do
+          before do
+            latest_workfile_version.destroy
+            workfile.latest_workfile_version_id = nil
+          end
+
+          it "presents the original commit message for the workfile" do
+            recent_comments[0][:body].should == "original version"
+          end
+        end
       end
     end
 
