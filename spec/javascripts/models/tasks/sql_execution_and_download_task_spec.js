@@ -16,4 +16,21 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             expect($.fileDownload.mostRecentCall.args[0]).toBe('/workfiles/1/executions');
         });
     });
+
+    describe("saveFailed", function() {
+        var saveFailed;
+        beforeEach(function() {
+            saveFailed = jasmine.createSpy('saveFailed');
+            this.model.on('saveFailed', saveFailed);
+            this.model.saveFailed('<pre>{"errors":"foo"}</pre>');
+        });
+
+        it("should save error data", function() {
+            expect(this.model.serverErrors).toEqual('foo');
+        });
+
+        it("should trigger saveFailed", function() {
+            expect(saveFailed).toHaveBeenCalledWith(this.model);
+        });
+    });
 });
