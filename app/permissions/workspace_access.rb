@@ -30,5 +30,4 @@ class WorkspaceAccess < AdminFullAccess
   def owner?(workspace)
     workspace.owner == current_user
   end
-
 end

@@ -6,7 +6,7 @@ class NotificationsController < ApplicationController
   end
 
   def read
-    Notification.where(:id => params[:notification_ids]).update_all(:read => true)
+    current_user.notifications.where(:id => params[:notification_ids]).update_all(:read => true)
     head :ok
   end
 

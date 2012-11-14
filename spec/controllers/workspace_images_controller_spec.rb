@@ -29,6 +29,12 @@ describe WorkspaceImagesController do
         decoded_response.original.should == workspace.image.url(:original)
         decoded_response.icon.should == workspace.image.url(:icon)
       end
+
+      it "authorizes on owner (or admin)" do
+        log_in users(:the_collaborator)
+        post :create, :workspace_id => workspace.id, :files => files
+        response.should be_forbidden
+      end
     end
   end
 
@@ -39,6 +45,11 @@ describe WorkspaceImagesController do
       mock(controller).send_file(workspace.image.path('original'), :type => workspace.image_content_type) {
         controller.head :ok
       }
+      get :show, :workspace_id => workspace.id
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :show, workspace
       get :show, :workspace_id => workspace.id
     end
   end
