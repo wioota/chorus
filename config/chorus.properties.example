@@ -99,10 +99,6 @@ kaggle.api_key = KAGGLE_API_KEY
 ldap.host = 10.32.88.212
 ldap.enable = false
 ldap.port = 389
-ldap.connect_timeout = 10000
-ldap.bind_timeout = 10000
-ldap.search.timeout = 20000
-ldap.search.size_limit = 200
 ldap.base = DC =greenplum,DC =com
 ldap.user_dn = greenplum\chorus
 ldap.password = secret
