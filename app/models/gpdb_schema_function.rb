@@ -7,7 +7,7 @@ class GpdbSchemaFunction
     @language = lang
     @return_type = return_type
     @arg_names = convert_to_array(arg_names)
-    @arg_types = convert_to_array(arg_type)
+    @arg_types = arg_type
     @definition = definition
     @description = description
   end
@@ -15,6 +15,6 @@ class GpdbSchemaFunction
   private
 
   def convert_to_array(s)
-    s ? s.gsub(/[{} ]/, "").split(",") : []
+    s ? s.gsub(/[{} ]/, '').gsub(/\"\"/, '').split(",") : []
   end
 end

@@ -11,34 +11,22 @@ class GpdbSchema < ActiveRecord::Base
   ORDER BY lower(schemas.nspname)
   SQL
 
-  ARRAY_AGG_QUERY = <<-SQL
-     DROP AGGREGATE IF EXISTS "%s".fake_array_agg(anyelement);
-      CREATE AGGREGATE "%s".fake_array_agg(anyelement) (
-        SFUNC=array_append,
-        STYPE=anyarray,
-        INITCOND='{}'
-      );
-  SQL
-
   SCHEMA_FUNCTION_QUERY = <<-SQL
-      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, "%s".FAKE_ARRAY_AGG((SELECT t2.typname ORDER BY inputtypeid)) AS proargtypes, t1.prosrc, d.description
-      FROM ( SELECT p.oid,p.proname,
-                CASE WHEN p.proargtypes='' THEN NULL
-                    ELSE unnest(p.proargtypes)
-                    END as inputtype,
-                now() AS inputtypeid, p.proargnames, p.prosrc, l.lanname, t.typname AS rettype
-              FROM pg_proc p, pg_namespace n, pg_type t, pg_language l
-              WHERE p.pronamespace=n.oid
-                AND p.prolang=l.oid
-                AND p.prorettype = t.oid
-                AND n.nspname= '%s') AS t1
+      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
+        FROM ( SELECT p.oid,p.proname,
+           CASE WHEN p.proargtypes='' THEN NULL
+               ELSE unnest(p.proargtypes)
+               END as inputtype,
+           now() AS inputtypeid, p.proargnames, p.prosrc, l.lanname, t.typname AS rettype
+         FROM pg_proc p, pg_namespace n, pg_type t, pg_language l
+         WHERE p.pronamespace=n.oid
+           AND p.prolang=l.oid
+           AND p.prorettype = t.oid
+           AND n.nspname= '%s') AS t1
       LEFT JOIN pg_type AS t2
       ON t1.inputtype=t2.oid
       LEFT JOIN pg_description AS d ON t1.oid=d.objoid
-      WHERE t1.proname != 'fake_array_agg'
-
-      GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.prosrc, t1.proargnames, d.description
-      ORDER BY t1.proname;
+      ORDER BY t1.oid;
   SQL
 
   SCHEMA_DISK_SPACE_QUERY = <<-SQL
@@ -109,19 +97,39 @@ class GpdbSchema < ActiveRecord::Base
 
   def verify_in_source(user)
     account = account_for_user!(user)
-    with_gpdb_connection(account) { |conn| }
+    with_gpdb_connection(account) { |conn|}
   end
 
   def stored_functions(account)
     results = database.with_gpdb_connection(account) do |conn|
-      conn.exec_query(ARRAY_AGG_QUERY % [name, name])
       conn.exec_query(SCHEMA_FUNCTION_QUERY % [name, name])
     end
 
-    results.map { |result|
-      result_array = result.values
-      GpdbSchemaFunction.new(name, *result_array[1..7])
-    }
+    #This would be a lot easiser if the schema_function_query could use ARRAY_AGG,
+    #but it is not available on GPDB 4.0
+
+    reduced_results = results.reduce [-1, []] do |last, result|
+      record = result.values
+      last_record_id = last[0]
+      functions = last[1]
+      current_function = functions.last
+      current_function_types = current_function[5] if current_function
+      arg_type = record[5]
+
+
+      if current_function and record[0] == last_record_id
+        current_function_types << arg_type
+      else
+        record[5] = [arg_type]
+        functions << record
+      end
+
+      [record[0], last[1]]
+    end
+
+    reduced_results.last.map do |record|
+      GpdbSchemaFunction.new(name, *record[1..7])
+    end
   end
 
   def disk_space_used(account)
