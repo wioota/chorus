@@ -19,8 +19,8 @@ describe InOrderEventMigrator do
         dataset_event_count = Legacy.connection.select_value(<<-SQL)
         SELECT count(ed.*)
         FROM legacy_migrate.edc_activity_stream ed
-        INNER JOIN legacy_migrate.edc_activity_stream_object as source_dataset_aso
-              ON ed.id = source_dataset_aso.activity_stream_id and source_dataset_aso.entity_type = 'databaseObject'
+        LEFT JOIN legacy_migrate.edc_activity_stream_object as source_dataset_aso
+              ON ed.id = source_dataset_aso.activity_stream_id and source_dataset_aso.entity_type IN ('databaseObject', 'chrousView')
         WHERE type = '#{event}' and indirect_verb = 'of dataset';
         SQL
         non_dataset_event_count = Legacy.connection.select_value(<<-SQL)

@@ -215,7 +215,7 @@ class ActivityMigrator < AbstractMigrator
         ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
       INNER JOIN edc_activity_stream_object source_dataset_aso
         ON streams.id = source_dataset_aso.activity_stream_id
-        AND source_dataset_aso.entity_type = 'databaseObject'
+        AND source_dataset_aso.entity_type IN ('databaseObject', 'chorusView')
       INNER JOIN datasets as source_dataset
         ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
       INNER JOIN workspaces
@@ -263,7 +263,7 @@ class ActivityMigrator < AbstractMigrator
         ON normalize_key(target_dataset.object_id) = datasets.legacy_id
       LEFT JOIN edc_activity_stream_object source_dataset_aso
         ON streams.id = source_dataset_aso.activity_stream_id
-        AND source_dataset_aso.entity_type = 'databaseObject'
+        AND source_dataset_aso.entity_type IN ('databaseObject', 'chorusView')
       LEFT JOIN datasets as source_dataset
         ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
       INNER JOIN workspaces
@@ -907,7 +907,7 @@ class ActivityMigrator < AbstractMigrator
       ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
     INNER JOIN edc_activity_stream_object source_dataset_aso
       ON streams.id = source_dataset_aso.activity_stream_id
-      AND source_dataset_aso.entity_type = 'databaseObject'
+      AND source_dataset_aso.entity_type IN ('databaseObject', 'chorusView')
     INNER JOIN datasets as source_dataset
       ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
     INNER JOIN workspaces
@@ -968,7 +968,7 @@ class ActivityMigrator < AbstractMigrator
             ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
           INNER JOIN edc_activity_stream_object source_dataset_aso
             ON streams.id = source_dataset_aso.activity_stream_id
-            AND source_dataset_aso.entity_type = 'databaseObject'
+            AND source_dataset_aso.entity_type IN ('databaseObject', 'chorusView')
           INNER JOIN datasets as source_dataset
             ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
           INNER JOIN workspaces
