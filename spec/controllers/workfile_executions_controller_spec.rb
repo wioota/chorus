@@ -8,7 +8,7 @@ describe WorkfileExecutionsController do
   let(:archived_workfile) { workfiles(:archived) }
   let(:sql) { "Select something from somewhere" }
   let(:check_id) { '12345' }
-  let(:row_limit) {2}
+  let(:default_row_limit) { 500 }
 
   describe "#create" do
     it_behaves_like "an action that requires authentication", :post, :create, :workfile_id => '-1'
@@ -16,26 +16,32 @@ describe WorkfileExecutionsController do
     context "as a member of the workspace" do
       before do
         log_in workspace_member
-
-        sandbox = workspace.sandbox
         stub.proxy(Chorus::Application.config.chorus).[](anything)
-        stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { row_limit }
-        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, :limit => row_limit) do
-          SqlResult.new
-        end
+        stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { default_row_limit }
       end
 
-      it "executes the sql, with the check_id with the mentioned row limit" do
+      it "executes the sql with the check_id and default row limit" do
+        sandbox = workspace.sandbox
+        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:limit => default_row_limit)) {
+          SqlResult.new
+        }
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
       end
 
-      it "sets the exeuction schema of the workfile" do
+      it "uses the specified row limit if one is given" do
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => 123)) { SqlResult.new }
+        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
+      end
+
+      it "sets the execution schema of the workfile" do
         workfile.execution_schema.should_not == workspace.sandbox
+        stub(SqlExecutor).execute_sql { SqlResult.new }
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
         workfile.reload.execution_schema.should == workspace.sandbox
       end
 
       it "uses the presenter for SqlResult" do
+        stub(SqlExecutor).execute_sql { SqlResult.new }
         mock_present { |model| model.should be_a SqlResult }
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
       end
