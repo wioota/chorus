@@ -1,0 +1,2 @@
+class GnipInstanceAccess < AdminFullAccess
+end

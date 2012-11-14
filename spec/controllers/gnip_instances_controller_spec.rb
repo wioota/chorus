@@ -85,6 +85,44 @@ describe GnipInstancesController do
     let(:gnip_instance) { gnip_instances(:default) }
     let(:params) { { :id => gnip_instance.id } }
 
+    describe "authorization" do
+      context "when user is the instance owner" do
+        before do
+          log_in gnip_instance.owner
+          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+        end
+
+        it "allows updating" do
+          put :update, params
+          response.should be_success
+        end
+      end
+
+      context "when the user is not the instance owner" do
+        before do
+          log_in users(:no_collaborators)
+          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+        end
+
+        it "prevents updating" do
+          put :update, params
+          response.should be_forbidden
+        end
+      end
+
+      context "when the user is an admin" do
+        before do
+          log_in users(:admin)
+          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+        end
+
+        it "allows updating" do
+          put :update, params
+          response.should be_success
+        end
+      end
+    end
+
     context "With valid credentials" do
       before do
         stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }

@@ -35,7 +35,7 @@ describe GpdbInstances::SharingController do
     it "rejects non-owners" do
       log_in user
       post :create, :gpdb_instance_id => gpdb_instance.to_param
-      response.code.should == "404"
+      response.should be_forbidden
     end
 
     it "rejects non-owners of shared accounts" do
@@ -43,7 +43,7 @@ describe GpdbInstances::SharingController do
       gpdb_instance.update_attributes(:shared => true)
 
       post :create, :gpdb_instance_id => gpdb_instance.to_param
-      response.code.should == "404"
+      response.should be_forbidden
     end
   end
 
@@ -67,7 +67,7 @@ describe GpdbInstances::SharingController do
     it "rejects non-owners" do
       log_in user
       delete :destroy, :gpdb_instance_id => gpdb_instance.to_param
-      response.code.should == "404"
+      response.should be_forbidden
     end
 
     it "rejects non-owners of shared accounts" do
@@ -75,7 +75,7 @@ describe GpdbInstances::SharingController do
       gpdb_instance.update_attributes(:shared => true)
 
       delete :destroy, :gpdb_instance_id => gpdb_instance.to_param
-      response.code.should == "404"
+      response.should be_forbidden
     end
   end
 end

@@ -15,6 +15,7 @@ class GnipInstancesController < ApplicationController
 
   def update
     gnip_params = params[:gnip_instance]
+    authorize! :owner, GnipInstance.find(params[:id])
     instance = Gnip::InstanceRegistrar.update!(params[:id], gnip_params)
 
     present instance

@@ -16,7 +16,6 @@ describe GpdbInstanceAccess do
 
       described_class.gpdb_instances_for(@user)
     end
-
   end
 
   describe "#edit?" do
