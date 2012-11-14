@@ -11,6 +11,14 @@ describe WorkspaceSearchController do
 
     it_behaves_like "an action that requires authentication", :get, :show, :workspace_id => '-1'
 
+    it "uses authorization" do
+      mock(WorkspaceSearch).new(user, anything) do |user, params|
+      end
+
+      mock(subject).authorize! :show, workspace
+      get :show, :query => 'marty', :workspace_id => workspace.id
+    end
+
     it "uses the workspace search object" do
       fake_search = Object.new
       mock(WorkspaceSearch).new(user, anything) do |user, params|
