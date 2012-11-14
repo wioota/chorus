@@ -4,6 +4,7 @@ describe "Instances", :database_integration do
   before do
     login(users(:admin))
     visit("#/instances")
+    wait_for_ajax
     click_button "Add instance"
   end
 
