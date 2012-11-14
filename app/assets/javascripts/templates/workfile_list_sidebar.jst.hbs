@@ -19,7 +19,7 @@
                 <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             {{/unless}}
             {{#ifAll activeWorkspace canUpdate}}
-                <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
+                <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-workfile-name="{{workfile.fileName}}">{{t "workfile.delete.button"}}</a></li>
             {{/ifAll}}
         </ul>
     </div>

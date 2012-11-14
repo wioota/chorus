@@ -15,7 +15,7 @@
             <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
         {{/unless}}
         {{#ifAll activeWorkspace canUpdate}}
-            <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "actions.delete"}}</a></li>
+            <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "workfile.delete.button"}}</a></li>
         {{/ifAll}}
         {{#unless hideDownloadLink}}
         <li><a class="download" href="{{downloadUrl}}">{{t "actions.download"}}</a></li>
