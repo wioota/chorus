@@ -26,8 +26,4 @@ class WorkspaceAccess < AdminFullAccess
     end
     workspace.owner == current_user || (workspace.changed - ['name', 'summary']).empty?
   end
-
-  def owner?(workspace)
-    workspace.owner == current_user
-  end
 end
