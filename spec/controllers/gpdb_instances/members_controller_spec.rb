@@ -146,7 +146,7 @@ describe GpdbInstances::MembersController do
       context "for an individual accounts instance" do
         it "fails" do
           post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
-          response.should be_not_found
+          response.should be_forbidden
         end
       end
     end
@@ -232,7 +232,7 @@ describe GpdbInstances::MembersController do
       context "someone else's account'" do
         it "fails" do
           put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
-          response.should be_not_found
+          response.should be_forbidden
         end
       end
 
@@ -244,7 +244,7 @@ describe GpdbInstances::MembersController do
 
         it "fails" do
           put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
-          response.should be_not_found
+          response.should be_forbidden
         end
       end
     end
@@ -296,9 +296,9 @@ describe GpdbInstances::MembersController do
         gpdb_instance.accounts.find_by_owner_id(joe.id).should_not be_nil
       end
 
-      it "responds with 'not found'" do
+      it "responds with 'forbidden'" do
         delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @joe_account.id
-        response.should be_not_found
+        response.should be_forbidden
       end
     end
   end

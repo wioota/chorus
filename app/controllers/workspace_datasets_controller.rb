@@ -1,10 +1,12 @@
 class WorkspaceDatasetsController < ApplicationController
 
   def index
+    authorize! :show, workspace
     present paginate(workspace.datasets(current_user, params[:type]).with_name_like(params[:name_pattern]).order("lower(name)")), :presenter_options => { :workspace => workspace }
   end
 
   def create
+    authorize! :can_edit_sub_objects, workspace
     datasets = Dataset.where(:id => params[:dataset_ids].split(","))
 
     datasets.each do |dataset|
@@ -20,6 +22,7 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def show
+    authorize! :show, workspace
     datasets = workspace.datasets(current_user)
 
     if params[:name]

@@ -29,6 +29,11 @@ describe WorkspaceDatasetsController do
   end
 
   describe "#index" do
+    it "uses authorization" do
+      mock(subject).authorize! :show, workspace
+      get :index, :workspace_id => workspace.to_param
+    end
+
     it "presents the workspace's datasets, ordered by name and paginated" do
       mock_present { |collection|
         collection.to_a.to_a.should =~ the_datasets.to_a
@@ -64,6 +69,11 @@ describe WorkspaceDatasetsController do
 
   describe "#create" do
     let(:other_view) { datasets(:other_view) }
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => other_table.to_param
+    end
 
     it "should associate one table to the workspace" do
       post :create, :workspace_id => workspace.to_param, :dataset_ids => other_table.to_param
@@ -103,6 +113,11 @@ describe WorkspaceDatasetsController do
     it "does not present datasets not associated with the workspace" do
       get :show, :id => other_table.to_param, :workspace_id => workspace.to_param
       response.should be_not_found
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :show, workspace
+      get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
     end
 
     context "when the specified dataset is associated with the workspace" do

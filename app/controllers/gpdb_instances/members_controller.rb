@@ -8,7 +8,8 @@ module GpdbInstances
     end
 
     def create
-      gpdb_instance = GpdbInstance.unshared.owned_by(current_user).find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.unshared.find(params[:gpdb_instance_id])
+      authorize! :edit, gpdb_instance
 
       account = gpdb_instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
       account.attributes = params[:account]
@@ -20,7 +21,8 @@ module GpdbInstances
     end
 
     def update
-      gpdb_instance = GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
+      authorize! :edit, gpdb_instance
 
       account = gpdb_instance.accounts.find(params[:id])
       account.attributes = params[:account]
@@ -31,7 +33,8 @@ module GpdbInstances
     end
 
     def destroy
-      gpdb_instance = GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
+      authorize! :edit, gpdb_instance
       account = gpdb_instance.accounts.find(params[:id])
 
       account.destroy
