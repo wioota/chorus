@@ -279,6 +279,15 @@ describe ActivityMigrator do
         Events::PrivateWorkspaceCreated.count.should == rows.count
       end
 
+      it "migrates the right number of total WORKSPACE CREATED events regardless of public/private status" do
+        expected_count = Legacy.connection.select_value("SELECT COUNT(*) FROM legacy_migrate.edc_activity_stream ed WHERE
+          type = 'WORKSPACE_CREATED' ;")
+
+        total_count = Events::PrivateWorkspaceCreated.count + Events::PublicWorkspaceCreated.count
+
+        total_count.should == expected_count
+      end
+
       it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
         rows = Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed  where
         type = 'WORKSPACE_ARCHIVED' ;")
