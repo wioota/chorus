@@ -241,7 +241,7 @@ describe ActivityMigrator do
         SELECT ed.*, aso.object_name as table_name,
           source_dataset_aso.object_name as source_table_name,
           aso.object_id, et.result as result from legacy_migrate.edc_activity_stream ed
-          INNER JOIN legacy_migrate.edc_activity_stream_object as source_dataset_aso
+          LEFT JOIN legacy_migrate.edc_activity_stream_object as source_dataset_aso
             ON ed.id = source_dataset_aso.activity_stream_id and source_dataset_aso.entity_type = 'databaseObject'
           INNER JOIN legacy_migrate.edc_activity_stream_object as aso  ON ed.id = aso.activity_stream_id and aso.entity_type = 'table'
           INNER JOIN legacy_migrate.edc_activity_stream_object aso2 ON aso2.activity_stream_id = aso.activity_stream_id AND aso2.entity_type = 'task'
@@ -256,7 +256,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.additional_data['destination_table'].should == row["table_name"]
           event.additional_data['error_message'].should == row["result"]
-          event.source_dataset.name.should == row["source_table_name"]
+          event.source_dataset.name.should == row['source_table_name'] if row['source_table_name']
         end
         rows.count.should > 0
         Events::DatasetImportFailed.count.should == rows.count
