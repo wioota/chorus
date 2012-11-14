@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe MembersController do
-  ignore_authorization!
-
   let(:member) { users(:no_collaborators) }
   let(:non_member) { users(:owner) }
   let(:admin) { users(:admin) }
@@ -15,11 +13,10 @@ describe MembersController do
         log_in non_member
       end
 
-      it "does not show all members for the workspace" do
+      it "fails" do
         get :index, :workspace_id => private_workspace.id
 
-        response.code.should == "200"
-        decoded_response.should have(0).items
+        response.should be_forbidden
       end
     end
 

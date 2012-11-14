@@ -1,6 +1,8 @@
 class MembersController < ApplicationController
   def index
     workspace = Workspace.find(params[:workspace_id])
+    authorize! :show, workspace
+
     present paginate WorkspaceAccess.members_for(current_user, workspace)
   end
 
