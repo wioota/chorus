@@ -30,7 +30,7 @@ class WorkfileMigrator < AbstractMigrator
       raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options['workfile_path']
       prerequisites
 
-      Legacy.connection.exec_query("
+      Legacy.connection.exec_query <<-SQL
         INSERT INTO public.workfiles(
           legacy_id,
           workspace_id,
@@ -58,9 +58,10 @@ class WorkfileMigrator < AbstractMigrator
           ON owner.username = edc_work_file.owner
         INNER JOIN workspaces workspace
           ON workspace.legacy_id = edc_work_file.workspace_id
-        WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);")
+        WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);
+      SQL
 
-      Legacy.connection.exec_query("
+      Legacy.connection.exec_query <<-SQL
         INSERT INTO public.workfile_versions(
           legacy_id,
           workfile_id,
@@ -87,9 +88,10 @@ class WorkfileMigrator < AbstractMigrator
           ON modifier.username = edc_workfile_version.modified_by
         INNER JOIN workfiles
           ON edc_workfile_version.workfile_id = workfiles.legacy_id
-        WHERE edc_workfile_version.id NOT IN (SELECT legacy_id FROM workfile_versions);")
+        WHERE edc_workfile_version.id NOT IN (SELECT legacy_id FROM workfile_versions);
+      SQL
 
-      Legacy.connection.exec_query("
+      Legacy.connection.exec_query <<-SQL
         INSERT INTO public.workfile_drafts(
           legacy_id,
           workfile_id,
@@ -111,20 +113,24 @@ class WorkfileMigrator < AbstractMigrator
         INNER JOIN workfiles
           ON edc_workfile_draft.workfile_id = workfiles.legacy_id
         WHERE is_deleted = 'f'
-        AND edc_workfile_draft.id NOT IN (SELECT legacy_id FROM workfile_drafts);")
+        AND edc_workfile_draft.id NOT IN (SELECT legacy_id FROM workfile_drafts);
+      SQL
 
-      Legacy.connection.exec_query("
+      Legacy.connection.exec_query <<-SQL
         UPDATE public.workfiles
           SET latest_workfile_version_id = (SELECT public.workfile_versions.id
             FROM public.workfile_versions
             JOIN edc_workfile_version on public.workfile_versions.legacy_id = edc_workfile_version.id
             JOIN edc_work_file on edc_work_file.latest_version_num = edc_workfile_version.version_num
                  AND edc_work_file.id = edc_workfile_version.workfile_id
-            WHERE edc_work_file.id = public.workfiles.legacy_id)")
+            WHERE edc_work_file.id = public.workfiles.legacy_id)
+      SQL
 
       silence_activerecord do
         WorkfileVersion.where("contents_file_name IS NULL").each do |workfile_version|
-          row = Legacy.connection.exec_query("
+          workfile = Workfile.find_with_destroyed(workfile_version.workfile_id)
+          workfile_updated_at = workfile.updated_at
+          row = Legacy.connection.exec_query(<<-SQL
             SELECT
               version_file_id,
               workspace_id,
@@ -135,7 +141,8 @@ class WorkfileMigrator < AbstractMigrator
               edc_work_file
               ON edc_workfile_version.workfile_id = edc_work_file.id
             WHERE edc_workfile_version.id = '#{workfile_version.legacy_id}';
-          ").first
+          SQL
+            ).first
           path =  LegacyFilePath.new(options['workfile_path'], "workfile", row["workspace_id"], row["version_file_id"])
           fake_file = FakeFileUpload.new(File.read(path.path))
           fake_file.original_filename = row['file_name']
@@ -143,6 +150,7 @@ class WorkfileMigrator < AbstractMigrator
           fake_file.content_type = 'text/plain' if fake_file.size == 0 # workaround for empty images
           workfile_version.contents = fake_file
           workfile_version.save!
+          workfile.update_column :updated_at, workfile_updated_at
         end
 
         WorkfileDraft.where("content IS NULL").each do |workfile_draft|
