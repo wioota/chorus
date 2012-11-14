@@ -1,7 +1,7 @@
 describe("chorus.models.SqlExecutionAndDownloadTask", function() {
     beforeEach(function() {
         this.model = new chorus.models.SqlExecutionAndDownloadTask({
-            workfileId: '1',
+            workfile: rspecFixtures.workfile.sql({id: '1', fileName: 'a_workfile'}),
             sql: 'select 2',
             schemaId: '5',
             numOfRows: '6'
@@ -14,6 +14,10 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             this.model.save();
             expect($.fileDownload).toHaveBeenCalled();
             expect($.fileDownload.mostRecentCall.args[0]).toBe('/workfiles/1/executions');
+            expect($.fileDownload.mostRecentCall.args[1].data['schema_id']).toBe('5');
+            expect($.fileDownload.mostRecentCall.args[1].data['sql']).toBe('select 2');
+            expect($.fileDownload.mostRecentCall.args[1].data['num_of_rows']).toBe('6');
+            expect($.fileDownload.mostRecentCall.args[1].data['file_name']).toBe('a_workfile');
         });
     });
 

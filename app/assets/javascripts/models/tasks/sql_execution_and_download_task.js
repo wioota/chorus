@@ -2,10 +2,13 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
     constructorName: "SqlExecutionAndDownloadTask",
 
     save: function() {
-        $.fileDownload('/workfiles/' + this.attributes.workfileId + '/executions', {
+        var paramsToSave = this.underscoreKeys(_.pick(this.attributes, ['checkId', 'schemaId', 'sql', 'numOfRows']));
+        paramsToSave['file_name'] = this.name();
+
+        $.fileDownload(this.url(), {
             data: _.extend({
                 download: true
-            }, this.underscoreKeys(this.attributes)),
+            }, paramsToSave),
             httpMethod: "post",
             successCallback: _.bind(this.saved, this),
             failCallback: _.bind(this.saveFailed, this),

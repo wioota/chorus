@@ -69,8 +69,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.executing = true;
         this.task.set({
             sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
-            workfileId: this.model.id,
-            fileName: this.model.get("fileName"),
+            workfile: this.model,
             schemaId: options.schemaId,
             checkId: (new Date().getTime().toString()),
             numOfRows: options.numOfRows

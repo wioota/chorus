@@ -1,10 +1,10 @@
 chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
-    urlTemplateBase: "workfiles/{{workfileId}}/executions",
+    urlTemplateBase: "workfiles/{{workfile.id}}/executions",
     constructorName: "",
     paramsToSave: ['checkId', 'schemaId', 'sql'],
 
     name: function() {
-        return this.get("workfile").get("fileName") || this.get("fileName");
+        return this.get("workfile").get("fileName");
     },
 
     executionSchema: function() {

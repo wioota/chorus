@@ -83,8 +83,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 it("creates a task with the right parameters", function() {
                     expect(this.view.task.get("sql")).toBe("select * from foos");
                     expect(this.view.task.get("schemaId")).toBe("6");
-                    expect(this.view.task.get("workfileId")).toBe(this.workfile.id);
-                    expect(this.view.task.get("fileName")).toBe(this.workfile.get("fileName"));
+                    expect(this.view.task.get("workfile").id).toBe(this.workfile.id);
                     expect(this.view.task.has("checkId")).toBeTruthy();
                 });
             });
@@ -108,8 +107,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     it("creates a task with the right parameters", function() {
                         expect(this.view.task.get("sql")).toBe("select * from foos");
                         expect(this.view.task.get("schemaId")).toBe("4");
-                        expect(this.view.task.get("workfileId")).toBe(this.workfile.id);
-                        expect(this.view.task.get("fileName")).toBe(this.workfile.get("fileName"));
+                        expect(this.view.task.get("workfile").id).toBe(this.workfile.id);
                         expect(this.view.task.has("checkId")).toBeTruthy();
                     });
 
