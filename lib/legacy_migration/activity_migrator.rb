@@ -230,11 +230,13 @@ class ActivityMigrator < AbstractMigrator
     end
 
     def migrate_dataset_import_failed
-      Legacy.connection.exec_query(%Q(
+      Legacy.connection.exec_query(<<-SQL
     INSERT INTO #{@@events_table_name}(
       legacy_id,
       legacy_type,
       action,
+      target1_id,
+      target1_type,
       target2_id,
       target2_type,
       created_at,
@@ -247,6 +249,8 @@ class ActivityMigrator < AbstractMigrator
       'Events::DatasetImportFailed',
       datasets.id,
       'Dataset',
+      source_dataset.id,
+      'Dataset',
       streams.created_tx_stamp,
       streams.last_updated_tx_stamp,
       workspaces.id,
@@ -257,6 +261,11 @@ class ActivityMigrator < AbstractMigrator
         AND target_dataset.entity_type = 'table'
       INNER JOIN datasets
         ON normalize_key(target_dataset.object_id) = datasets.legacy_id
+      INNER JOIN edc_activity_stream_object source_dataset_aso
+        ON streams.id = source_dataset_aso.activity_stream_id
+        AND source_dataset_aso.entity_type = 'databaseObject'
+      INNER JOIN datasets as source_dataset
+        ON normalize_key(source_dataset_aso.object_id) = source_dataset.legacy_id
       INNER JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
       INNER JOIN edc_activity_stream_object actor
@@ -265,7 +274,8 @@ class ActivityMigrator < AbstractMigrator
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_FAILED' AND streams.indirect_verb = 'of dataset'
     AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::DatasetImportFailed');
-    ))
+    SQL
+    )
 
       backfill_dataset_import_failed_additional_data
     end
