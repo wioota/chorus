@@ -122,6 +122,7 @@ describe("chorus.views.DatasetSidebar", function() {
         context("when user does not have credentials", function() {
             beforeEach(function() {
                 this.dataset.set({hasCredentials: false});
+                delete this.dataset.instance()._accountForCurrentUser;
                 this.view.render();
             });
 
@@ -339,76 +340,76 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
 
                 context("when the dataset has no import information", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.view.resource.getImports(), []);
+                        this.server.completeFetchFor(this.view.resource.getImportSchedules(), []);
+                    });
+
+                    context("and the current user has update permissions on the workspace", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(this.view.resource.getImports(), []);
-                            this.server.completeFetchFor(this.view.resource.getImportSchedules(), []);
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, permission: ["update"] });
+                            this.view.render();
                         });
 
-                        context("and the current user has update permissions on the workspace", function() {
-                            beforeEach(function() {
-                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, permission: ["update"] });
-                                this.view.render();
+                        context("and the workspace has a sandbox", function() {
+                            it("shows the 'import now' link", function() {
+                                expect(this.view.$("a.import_now")).toExist();
                             });
 
-                            context("and the workspace has a sandbox", function() {
-                                it("shows the 'import now' link", function() {
-                                    expect(this.view.$("a.import_now")).toExist();
-                                });
-
-                                it("has a 'create import schedule' link", function() {
-                                    var createScheduleLink = this.view.$("a.create_schedule");
-                                    expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
-                                });
-
-                                it("should have the dataset attached as data-dataset", function() {
-                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
-                                });
-
-                                it("should have the workspace attached as data-workspace", function() {
-                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.resource.workspace());
-                                });
+                            it("has a 'create import schedule' link", function() {
+                                var createScheduleLink = this.view.$("a.create_schedule");
+                                expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
                             });
 
-                            context("and the workspace does not have a sandbox", function() {
-                                beforeEach(function() {
-                                    delete this.view.resource.workspace()._sandbox;
-                                    this.view.resource.workspace().set({
-                                        "sandboxInfo": null
-                                    });
-                                    this.view.render();
-                                });
+                            it("should have the dataset attached as data-dataset", function() {
+                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                            });
 
-                                it("disables the 'import now' link", function() {
-                                    expect(this.view.$("a.import_now")).not.toExist();
-                                    expect(this.view.$("span.import_now")).toHaveClass('disabled');
-                                });
-
-                                it("disables 'create import schedule' link", function() {
-                                    expect(this.view.$("a.create_schedule")).not.toExist();
-                                    expect(this.view.$("span.create_schedule")).toHaveClass('disabled');
-                                });
+                            it("should have the workspace attached as data-workspace", function() {
+                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.resource.workspace());
                             });
                         });
 
-                        context("and the current user does not have update permissions on the workspace", function() {
+                        context("and the workspace does not have a sandbox", function() {
                             beforeEach(function() {
-                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] })
+                                delete this.view.resource.workspace()._sandbox;
+                                this.view.resource.workspace().set({
+                                    "sandboxInfo": null
+                                });
                                 this.view.render();
                             });
 
-                            it("does not have a 'create import schedule' link", function() {
+                            it("disables the 'import now' link", function() {
+                                expect(this.view.$("a.import_now")).not.toExist();
+                                expect(this.view.$("span.import_now")).toHaveClass('disabled');
+                            });
+
+                            it("disables 'create import schedule' link", function() {
                                 expect(this.view.$("a.create_schedule")).not.toExist();
+                                expect(this.view.$("span.create_schedule")).toHaveClass('disabled');
                             });
-
-                            it("does not have an 'import now' link", function() {
-                                expect(this.view.$("a.import_now.dialog")).not.toExist();
-                            });
-                        });
-
-                        it("doesn't have an 'edit import schedule' link'", function() {
-                            expect(this.view.$("a.edit_schedule")).not.toExist();
                         });
                     });
+
+                    context("and the current user does not have update permissions on the workspace", function() {
+                        beforeEach(function() {
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] })
+                            this.view.render();
+                        });
+
+                        it("does not have a 'create import schedule' link", function() {
+                            expect(this.view.$("a.create_schedule")).not.toExist();
+                        });
+
+                        it("does not have an 'import now' link", function() {
+                            expect(this.view.$("a.import_now.dialog")).not.toExist();
+                        });
+                    });
+
+                    it("doesn't have an 'edit import schedule' link'", function() {
+                        expect(this.view.$("a.edit_schedule")).not.toExist();
+                    });
+                });
 
                 context("when the dataset has an import schedule", function() {
                     beforeEach(function() {
@@ -520,48 +521,70 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when the dataset is a chorus view", function() {
                 beforeEach(function() {
-                    this.dataset = newFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
+                    this.dataset = rspecFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
-                itShowsTheAppropriateDeleteLink(true, "chorus view");
-
-                it("shows the 'duplicate' link'", function() {
-                    expect(this.view.$("a.duplicate").text()).toMatchTranslation("dataset.chorusview.duplicate");
+                it("fetches the instance account", function() {
+                    expect(this.dataset.instance().accountForCurrentUser()).toHaveBeenFetched();
                 });
 
-                describe("clicking the 'duplicate' link", function() {
+                it("renders the loading section if the instance account is not loaded", function() {
+                    expect(this.view.displayLoadingSection()).toBeTruthy();
+                });
+
+                context("current user has an instance account", function() {
                     beforeEach(function() {
-                        this.modalSpy.reset();
-                        this.view.$("a.duplicate").click();
+                        this.server.completeFetchFor(this.dataset.instance().accountForCurrentUser(), rspecFixtures.instanceAccount());
                     });
 
-                    it("launches the name chorus view dialog", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
+                    it("shows the 'Create as a database view' link", function() {
+                        expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
                     });
 
-                    it("passes the dialog a duplicate of the chorus view", function() {
-                        expect(this.modalSpy.lastModal().model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
+                    itShowsTheAppropriateDeleteLink(true, "chorus view");
+
+                    it("shows the 'duplicate' link'", function() {
+                        expect(this.view.$("a.duplicate").text()).toMatchTranslation("dataset.chorusview.duplicate");
+                    });
+
+                    describe("clicking the 'duplicate' link", function() {
+                        beforeEach(function() {
+                            this.modalSpy.reset();
+                            this.view.$("a.duplicate").click();
+                        });
+
+                        it("launches the name chorus view dialog", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
+                        });
+
+                        it("passes the dialog a duplicate of the chorus view", function() {
+                            expect(this.modalSpy.lastModal().model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
+                        });
                     });
                 });
 
-                it("shows the 'Create as a database view' link", function() {
-                    expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
+                context("current user does not have an instance account", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.dataset.instance().accountForCurrentUser(), {});
+                    });
+
+                    itDoesNotHaveACreateDatabaseViewLink();
                 });
             });
 
             context("when the dataset is a source table", function() {
                 _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                     beforeEach(function() {
-                        this.dataset = rspecFixtures.workspaceDataset.sourceTable({ objectType : type});
+                        this.dataset = rspecFixtures.workspaceDataset.sourceTable({ objectType: type});
                         chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                     });
 
                     itShowsTheAppropriateDeleteLink(true, type);
                     itDoesNotHaveACreateDatabaseViewLink();
                     itDoesNotShowTheDuplicateChorusViewLink();
-                })
-            })
+                });
+            });
 
             it("has an associate with another workspace link", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
@@ -585,13 +608,13 @@ describe("chorus.views.DatasetSidebar", function() {
             }
 
             function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
-                if (shouldBePresent) {
+                if(shouldBePresent) {
                     var keyPrefix, textKey;
 
-                    if (type == "chorus view") {
+                    if(type == "chorus view") {
                         keyPrefix = "delete";
                         textKey = "actions.delete";
-                    } else if (type == "view") {
+                    } else if(type == "view") {
                         keyPrefix = "disassociate_view";
                         textKey = "actions.delete_association";
                     } else {
@@ -739,7 +762,8 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when a dataset is selected", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:selected", rspecFixtures.workspaceDataset.datasetTable());
+                    this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
                 it("should still show the multiple selection section", function() {

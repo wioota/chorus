@@ -48,10 +48,14 @@ describe("chorus.models.Schema", function() {
     describe("#canonicalName", function() {
         beforeEach(function() {
             this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
-        })
+        });
 
         it("should create the canonical name", function() {
             expect(this.model.canonicalName()).toBe("instance.database.schema");
+        });
+
+        it("memoizes", function() {
+            expect(this.model.database()).toBe(this.model.database());
         });
     });
 

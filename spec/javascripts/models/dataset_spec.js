@@ -250,6 +250,11 @@ describe("chorus.models.Dataset", function() {
         it("returns a new schema with the right attributes", function() {
             expect(this.dataset.schema().name()).toBe(this.dataset.get("schema").name);
         });
+
+        it("memoizes", function() {
+            expect(this.dataset.schema()).toBe(this.dataset.schema());
+        });
+
     });
 
     describe("#setSchema", function() {

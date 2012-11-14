@@ -14,6 +14,10 @@ describe("chorus.models.Database", function() {
             expect(this.model.instance().id).toEqual('1');
             expect(this.model.instance().name()).toEqual('insta_whip');
         });
+
+        it("memoizes", function() {
+            expect(this.model.instance()).toBe(this.model.instance());
+        });
     });
 
     describe("#schemas", function() {

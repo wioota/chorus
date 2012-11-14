@@ -1,6 +1,7 @@
 chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     constructorName: "DatasetSidebarView",
     templateName: "dataset_sidebar",
+    useLoadingSection: true,
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
@@ -55,6 +56,11 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.tabs.statistics && this.tabs.statistics.teardown();
         this.tabs.activity && this.tabs.activity.teardown();
         if (dataset) {
+            if(dataset.isChorusView()) {
+                var accountForCurrentUser = dataset.instance().accountForCurrentUser();
+                this.requiredResources.add(accountForCurrentUser);
+                accountForCurrentUser.fetchIfNotLoaded();
+            }
 
             var activities = dataset.activities();
             activities.fetch();

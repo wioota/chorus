@@ -31,7 +31,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
                 deleteMsgKey: "disassociate_table",
                 deleteTextKey: "actions.delete_association"
             }
-        }
+        };
 
         var resourceType = this.resource && this.resource.get("type");
         var resourceObjectType = this.resource && this.resource.get("objectType");
@@ -168,6 +168,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     isChorusView: function() {
         return this.resource ? this.resource.isChorusView() : "";
+    },
+
+    hasInstanceAccount: function() {
+        return this.resource.instance().accountForCurrentUser().id;
     },
 
     displayEntityType: function() {

@@ -73,7 +73,7 @@
         },
 
         respondToErrors: function(status, options) {
-            options = options || {}
+            options = options || {};
 
             if (status === 401) {
                 chorus.session.trigger("needsLogin");

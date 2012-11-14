@@ -4,13 +4,18 @@ chorus.models.Database = chorus.models.Base.extend({
     urlTemplate: "databases/{{id}}",
 
     instance: function() {
-        return new chorus.models.GpdbInstance(this.get("instance"))
+        var instance = this._instance || new chorus.models.GpdbInstance(this.get("instance"))
+        if(this.loaded) {
+            this._instance = instance;
+        }
+        return instance;
     },
 
     schemas: function() {
-        if (!this._schemas) {
-            this._schemas = new chorus.collections.SchemaSet([], { databaseId: this.get('id') })
+        var schema = this._schemas || new chorus.collections.SchemaSet([], { databaseId: this.get('id') })
+        if(this.loaded) {
+            this._schemas = schema;
         }
-        return this._schemas;
+        return schema;
     }
 });
