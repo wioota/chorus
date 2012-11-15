@@ -72,20 +72,18 @@ describe WorkspaceDatasetsController do
 
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, workspace
-      post :create, :workspace_id => workspace.to_param, :dataset_ids => other_table.to_param
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
     end
 
     it "should associate one table to the workspace" do
-      post :create, :workspace_id => workspace.to_param, :dataset_ids => other_table.to_param
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
       response.code.should == "201"
       response.decoded_body.should_not be_nil
       workspace.bound_datasets.should include(other_table)
     end
 
     it "should associate multiple tables/views to the workspace for one table" do
-      table_ids = other_table.to_param + "," + other_view.to_param
-
-      post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param, other_view.to_param]
       response.code.should == "201"
 
       workspace.bound_datasets.should include(other_table)
@@ -93,8 +91,7 @@ describe WorkspaceDatasetsController do
     end
 
     it "should create event and activity" do
-      table_ids = [other_table.to_param, other_view.to_param]
-      post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param, other_view.to_param]
 
       events = Events::SourceTableCreated.by(user)
       events.count.should == 2
@@ -102,8 +99,7 @@ describe WorkspaceDatasetsController do
 
     context "when associating multiple datasets with a workspace" do
       it "shows an error if some datasets are already associated" do
-        table_ids = [gpdb_table.to_param, other_table.to_param]
-        post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
+        post :create, :workspace_id => workspace.to_param, :dataset_ids => [gpdb_table.to_param, other_table.to_param]
         response.code.should == "422"
       end
     end

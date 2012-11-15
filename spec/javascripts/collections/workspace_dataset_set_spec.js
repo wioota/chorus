@@ -41,29 +41,24 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
                 this.collection.attributes.databaseName = "dbName";
                 expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     type: "SOURCE_TABLE",
-                    objectType: "TABLE",
                     namePattern: "Foo",
                     databaseName: "dbName",
                     per_page: "10",
                     page: "1"
                 });
             });
+        });
+    });
 
-            it("includes the datasetId param for the create method", function() {
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234, objectName: 'second'}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
+    describe("save", function() {
+        it("includes the datasetId params", function() {
+            this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234, objectName: 'second'}));
+            this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
+            this.collection.save();
 
-                expect(this.collection.url({per_page: 10, page: 1, method: "create"})).toContainQueryParams({
-                    datasetIds: "5678,1234"
-                });
-            });
-
-            it("includes the datasetId param for the create method", function() {
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
-
-                expect(this.collection.url({per_page: 10, page: 1})).not.toContain("dataset_ids");
-            });
+            var bodyParams = decodeURIComponent(this.server.lastCreateFor(this.collection).requestBody).split("&");
+            expect(bodyParams).toContain("dataset_ids[]=5678");
+            expect(bodyParams).toContain("dataset_ids[]=1234");
         });
     });
 
@@ -94,29 +89,29 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
         });
     });
 
-    describe("#hasFilter", function () {
-        describe("when there is a name filter", function () {
-            beforeEach(function () {
+    describe("#hasFilter", function() {
+        describe("when there is a name filter", function() {
+            beforeEach(function() {
                 this.collection.attributes.namePattern = "foo";
             });
 
-            it("should be true", function () {
+            it("should be true", function() {
                 expect(this.collection.hasFilter()).toBeTruthy();
             });
         });
 
-        describe("when there is a type filter", function () {
-            beforeEach(function () {
+        describe("when there is a type filter", function() {
+            beforeEach(function() {
                 this.collection.attributes.type = "foo";
             });
 
-            it("should be true", function () {
+            it("should be true", function() {
                 expect(this.collection.hasFilter()).toBeTruthy();
             });
         });
 
-        describe("when there is not name or type filter", function () {
-            it("should be false", function () {
+        describe("when there is not name or type filter", function() {
+            it("should be false", function() {
                 expect(this.collection.hasFilter()).toBeFalsy();
             });
         });

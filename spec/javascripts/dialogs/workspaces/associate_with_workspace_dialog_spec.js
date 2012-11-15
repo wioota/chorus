@@ -73,7 +73,6 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 spyOn(this.dialog, "closeModal");
 
                 this.dialog.render();
-                spyOn(this.model.activities(), "fetch");
                 this.dialog.$('li:eq(1)').click();
                 this.dialog.$("button.submit").click();
             });
@@ -82,11 +81,6 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 var uri = new URI(this.server.lastCreate().url);
 
                 expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
-                expect(uri.query(true)).toEqual({
-                    'dataset_ids': this.model.id,
-                    page: '1',
-                    per_page: '50'
-                });
             });
 
             it("starts loading", function() {
@@ -112,12 +106,12 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                     expect(chorus.router.navigate).not.toHaveBeenCalled();
                 });
 
-                it("fetch the activities for the dataset", function() {
-                    expect(this.model.activities().fetch).toHaveBeenCalled();
+                it("fetches the activities for the dataset", function() {
+                    expect(this.model.activities()).toHaveBeenFetched();
                 });
 
-                it("broadcasts workspace:associated without arguments", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workspace:associated");
+                it("fetches the dataset", function() {
+                    expect(this.dialog.model).toHaveBeenFetched();
                 });
             });
 
@@ -149,7 +143,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.currentWorkspace = rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
-                this.model = newFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
+                this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.dialog.render();
@@ -161,7 +155,6 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 ]);
 
                 spyOn(chorus, "toast");
-                spyOn(this.model.activities(), "fetch");
                 spyOn(chorus.router, "navigate");
                 spyOn(this.dialog, "closeModal");
 
@@ -170,11 +163,12 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("calls the API for associating datasets with a workspace", function() {
-                var uri = new URI(this.server.lastCreate().url);
+                var lastCreate = this.server.lastCreate();
+                var uri = new URI(lastCreate.url);
 
+                expect(decodeURIComponent(lastCreate.requestBody)).toEqual("dataset_ids[]=" + this.model.id);
                 expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
                 expect(uri.query(true)).toEqual({
-                    'dataset_ids': this.model.id,
                     page: '1',
                     per_page: '50'
                 });

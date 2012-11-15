@@ -22,7 +22,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("dataset:checked", this.datasetChecked, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
-        chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
         chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this);
         chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this);
         chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this);
@@ -33,10 +32,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         if (!this.disabled) {
             this._super("render", arguments);
         }
-    },
-
-    refetchModel: function() {
-        this.resource && this.resource.fetch();
     },
 
     setColumn: function(column) {

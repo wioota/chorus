@@ -13,7 +13,7 @@ describe("chorus.dialogs.DatasetsPicker", function() {
     describe("#render", function() {
         var options;
         beforeEach(function() {
-            options = { order: "objectName", type: "SANDBOX_TABLE", objectType: "TABLE" };
+            options = { order: "objectName", type: "SANDBOX_TABLE" };
             dialog.launchModal();
         });
 

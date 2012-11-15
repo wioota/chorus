@@ -13,24 +13,16 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
     urlTemplate: "workspaces/{{workspaceId}}/datasets",
 
     save: function() {
-        new chorus.models.BulkSaver({collection: this}).save();
+        var ids = _.pluck(this.models, 'id');
+        new chorus.models.BulkSaver({collection: this}).save({datasetIds: ids});
     },
 
     urlParams: function(options) {
-
-        var params = {
+        return {
             namePattern: this.attributes.namePattern,
             databaseName: this.attributes.databaseName,
-            type: this.attributes.type,
-            objectType: this.attributes.objectType,
+            type: this.attributes.type
         };
-
-        if (options && options.method == "create") {
-            var ids = _.pluck(this.models, 'id');
-            params['datasetIds'] = ids.toString()
-        }
-
-        return params;
     },
 
     comparator: function(dataset) {

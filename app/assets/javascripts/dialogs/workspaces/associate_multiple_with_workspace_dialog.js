@@ -22,6 +22,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
     },
 
     saved: function() {
+        this.datasets.each(function(dataset) { dataset.fetch(); });
         chorus.toast("dataset.associate.toast.other", {
             workspaceNameTarget: this.selectedItem().get("name"),
             count: this.datasets.length

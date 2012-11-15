@@ -7,7 +7,7 @@ class WorkspaceDatasetsController < ApplicationController
 
   def create
     authorize! :can_edit_sub_objects, workspace
-    datasets = Dataset.where(:id => params[:dataset_ids].split(","))
+    datasets = Dataset.where(:id => params[:dataset_ids])
 
     datasets.each do |dataset|
       if workspace.has_dataset?(dataset)

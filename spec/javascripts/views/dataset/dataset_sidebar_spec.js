@@ -701,17 +701,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 it("lists only active workspaces", function() {
                     expect(chorus.modal.options.activeOnly).toBeTruthy();
                 });
-
-                describe("when the dialog successfully associates", function() {
-                    beforeEach(function() {
-                        this.server.reset();
-                        chorus.PageEvents.broadcast("workspace:associated");
-                    });
-
-                    it("re-fetches the resource", function() {
-                        expect(this.view.resource).toHaveBeenFetched();
-                    });
-                });
             });
         });
     });

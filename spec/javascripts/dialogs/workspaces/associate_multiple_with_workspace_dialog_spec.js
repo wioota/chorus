@@ -33,10 +33,10 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         });
 
         it("sends all of the datasets' ids", function() {
-            var datasetIdParams = this.server.lastCreate().params()['dataset_ids']
-            expect(datasetIdParams).toContain('123');
-            expect(datasetIdParams).toContain('456');
-            expect(datasetIdParams).toContain('789');
+            var requestBody = decodeURIComponent(this.server.lastCreate().requestBody);
+            expect(requestBody).toContain('dataset_ids[]=123');
+            expect(requestBody).toContain('dataset_ids[]=456');
+            expect(requestBody).toContain('dataset_ids[]=789');
         });
 
         it("display loading message on the button", function() {
@@ -58,6 +58,12 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
 
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("fetches the associated datasets", function() {
+                this.dialog.datasets.each(function(dataset) {
+                    expect(dataset).toHaveBeenFetched();
+                });
             });
         });
     });

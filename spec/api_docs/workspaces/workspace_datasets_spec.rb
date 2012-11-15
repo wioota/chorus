@@ -38,9 +38,9 @@ resource "Workspaces" do
 
   post "/workspaces/:workspace_id/datasets" do
     parameter :workspace_id, "Id of the workspace with which to associate the datasets"
-    parameter :dataset_ids, "Comma-delimited list of dataset Ids to associate with the workspace"
+    parameter :'dataset_ids[]', "Dataset Id to associate with the workspace, can be specified multiple times"
 
-    required_parameters :workspace_id, :dataset_ids
+    required_parameters :workspace_id, :'dataset_ids[]'
 
     before do
       workspace.sandbox = gpdb_schemas(:searchquery_schema)
@@ -49,9 +49,9 @@ resource "Workspaces" do
 
     let(:view) { datasets(:view) }
     let(:table) { datasets(:table) }
-    let(:dataset_ids) { view.to_param + "," + table.to_param }
 
-    example_request "Associate a list of non-sandbox datasets with the workspace" do
+    example "Associate a list of non-sandbox datasets with the workspace" do
+      do_request(:dataset_ids => [table.to_param, view.to_param])
       status.should == 201
     end
   end
