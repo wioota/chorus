@@ -95,11 +95,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".file-wrapper a").addClass("hidden");
         this.$(".import_controls input[type=radio]").prop("disabled", true);
         if (this.importTarget === "workfile") {
+            $(this.uploadObj.fileInput[0]).attr("name", "workfile[versions_attributes][0][contents]");
             this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/workfiles";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
-
         } else {
             this.csvOptions.tableName = this.importDestination();
 
