@@ -47,17 +47,14 @@ class Deployer
 
   def upload(package_file)
     write_install_answers
-
     remove_previous_chorusrails_install
+    copy_legacy_data
 
     # run upgrade script
     installer_dir = "~/chorusrails-installer"
     ssh.run("rm -rf #{installer_dir} && mkdir -p #{installer_dir}")
     ssh.copy_up([package_file, "install_answers.txt"], installer_dir)
-    if config['clean_install']
-      ssh.chorus_control("stop")
-      ssh.run "rm -rf #{install_path}/*"
-    end
+
     ssh.run "cat /dev/null > #{install_path}/install.log" unless legacy_path.present?
     install_success = ssh.run "cd #{installer_dir} && ./#{package_file} #{installer_dir}/install_answers.txt"
     ssh.copy_down("#{install_path}/install.log")
@@ -72,20 +69,23 @@ class Deployer
   end
 
   def remove_previous_chorusrails_install
-    if legacy_path.present?
+    if clean_install || legacy_path.present?
       ssh.chorus_control("stop")
       ssh.run("rm -fr #{install_path}")
-      if legacy_data_host
-        run "ssh #{legacy_data_host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/pg_dump -p 8543 chorus -O -f ~/legacy_database.sql'"
-        run "scp #{legacy_data_host}:~/legacy_database.sql ."
-        run "ssh #{legacy_data_host} 'rm legacy_database.sql'"
-        ssh.copy_up("legacy_database.sql", "~")
-        ssh.run_in_legacy("cd bin; ./edcsvrctl start")
-        ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c 'drop schema public cascade'")
-        ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c 'create schema public'")
-        ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus < ~/legacy_database.sql; rm ~/legacy_database.sql")
-        run "ssh #{host} 'rsync -avce ssh pivotal@#{legacy_data_host}:#{legacy_path}/chorus-apps/runtime/data/ #{legacy_path}/chorus-apps/runtime/data'"
-      end
+    end
+  end
+
+  def copy_legacy_data
+    if legacy_data_host
+      run "ssh #{legacy_data_host} 'cd #{legacy_path}; source edc_path.sh; PG_USER=edcadmin #{legacy_path}/postgresql/bin/pg_dump -p 8543 chorus -O -f ~/legacy_database.sql'"
+      run "scp #{legacy_data_host}:~/legacy_database.sql ."
+      run "ssh #{legacy_data_host} 'rm legacy_database.sql'"
+      ssh.copy_up("legacy_database.sql", "~")
+      ssh.run_in_legacy("cd bin; ./edcsvrctl start")
+      ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c 'drop schema public cascade'")
+      ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus -c 'create schema public'")
+      ssh.run_in_legacy("PG_USER=edcadmin #{legacy_path}/postgresql/bin/psql -p 8543 chorus < ~/legacy_database.sql; rm ~/legacy_database.sql")
+      ssh.run("rsync -avce ssh pivotal@#{legacy_data_host}:#{legacy_path}/chorus-apps/runtime/data/ #{legacy_path}/chorus-apps/runtime/data")
     end
   end
 
