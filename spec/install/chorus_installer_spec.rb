@@ -213,6 +213,17 @@ describe ChorusInstaller do
         end
       end
 
+      context "when Linux is CentOS/RHEL 5.7" do
+        before do
+          FileUtils.mkdir_p("/etc/")
+          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 5.7 (Final)" }
+        end
+
+        it "returns the RedHat 5.5 build" do
+          installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.1.tar.gz'
+        end
+      end
+
       context "when Linux is CentOS/RHEL 6.2" do
         before do
           FileUtils.mkdir_p("/etc/")

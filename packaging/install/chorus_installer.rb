@@ -112,6 +112,7 @@ class ChorusInstaller
 
     redhat_version = supported_redhat_version
     input = 1 if redhat_version == '5.5'
+    input = 1 if redhat_version == '5.7'
     input = 2 if redhat_version == '6.2'
 
     if @io.silent? && input.nil?
@@ -142,7 +143,7 @@ class ChorusInstaller
     version_string = File.open('/etc/redhat-release').read
     version_string =~ /release (\d\.\d)/
     found_version = $1
-    found_version if %w(5.5 6.2).include?(found_version)
+    found_version if %w(5.5 5.7 6.2).include?(found_version)
   end
 
   def is_supported_suse?
