@@ -98,6 +98,15 @@ class ChorusView < Dataset
   end
 
   def add_metadata!(account)
-    @statistics = DatasetStatistics.new(nil)
+    metadata = nil
+    with_gpdb_connection(account) do |connection|
+      jdbc_conn = connection.instance_variable_get(:"@connection").connection
+      s = jdbc_conn.prepareStatement(query)
+      flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
+      s.executeWithFlags(flag)
+      results = s.getResultSet
+      metadata = results.getMetaData
+    end
+    @statistics = DatasetStatistics.new('column_count' => metadata.getColumnCount)
   end
 end

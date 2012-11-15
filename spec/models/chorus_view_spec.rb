@@ -160,14 +160,9 @@ describe ChorusView do
   end
 
   describe "#convert_to_database_view", :database_integration => true do
-    let(:chorus_view) do
-      ChorusView.new({:name => "query",
-                      :schema => schema,
-                      :query => "select 1"},
-                     :without_protection => true)
-    end
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1") }
     let(:database) { InstanceIntegration.real_database }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:account) { gpdb_instance.owner_account }
     let(:user) { account.owner }
@@ -212,6 +207,19 @@ describe ChorusView do
       expect {
         chorus_view.convert_to_database_view("henry", user)
       }.to raise_error(Gpdb::CantCreateView)
+    end
+  end
+
+  describe '#add_metadata!(account)', :database_integration => true do
+    let(:schema) { database.schemas.find_by_name('test_schema') }
+    let(:database) { InstanceIntegration.real_database }
+    let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 2, 3, 4, 5") }
+    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:account) { gpdb_instance.owner_account }
+
+    it "retrieves the statistics" do
+      chorus_view.add_metadata!(account)
+      chorus_view.statistics.column_count.should == 5
     end
   end
 end
