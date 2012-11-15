@@ -6,6 +6,7 @@ class DatasetImportSchedulesController < ApplicationController
         :workspace_id => params[:workspace_id],
         :source_dataset_id => params[:dataset_id]
     )
+    authorize! :show, Workspace.find(params[:workspace_id])
     present import_schedules, :presenter_options => {:dataset_id => params[:dataset_id]}
   end
 

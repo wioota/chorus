@@ -2,6 +2,8 @@ class DatasetImportsController < ApplicationController
   wrap_parameters :dataset_import, :exclude => [:id]
   def index
     workspace = Workspace.find(params[:workspace_id])
+    authorize! :show, workspace
+
     table = Dataset.find(params[:dataset_id])
     imports = Import.where('source_dataset_id = ? OR (to_table = ? AND workspace_id = ?)',
                            table.id, table.name, workspace.id).order('created_at DESC')

@@ -53,6 +53,13 @@ describe DatasetImportSchedulesController do
         decoded_response.length.should == 0
       end
     end
+
+    it "authorizes" do
+      log_in users(:default)
+      get :index, :workspace_id => workspaces(:private).id, :dataset_id => dataset.id
+
+      response.should be_forbidden
+    end
   end
 
   describe "#create" do
