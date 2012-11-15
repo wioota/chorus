@@ -19,7 +19,7 @@ class GpTableCopier
     mark_import(true)
     create_success_event
 
-  rescue Exception => e
+  rescue => e
     mark_import(false)
     create_failed_event(e.message)
     raise e
@@ -109,14 +109,6 @@ class GpTableCopier
     source_table = Dataset.find_by_id!(source_table_id)
     workspace = Workspace.find_by_id!(attributes[:workspace_id])
     dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
-    import_created_event = Events::DatasetImportCreated.find_by_reference_id_and_reference_type(attributes[:import_id], "Import")
-    if !import_created_event
-      import = Import.find(attributes[:import_id])
-      import_created_event = Events::DatasetImportCreated.find_by_reference_id_and_reference_type(import.import_schedule_id, "ImportSchedule")
-    end
-
-    import_created_event.dataset = dst_table
-    import_created_event.save!
 
     event = Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
@@ -125,6 +117,30 @@ class GpTableCopier
     )
 
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
+
+    update_import_created_event
+  end
+
+  def update_import_created_event
+    import = Import.find(attributes[:import_id])
+    source_table = Dataset.find_by_id!(source_table_id)
+    workspace = Workspace.find_by_id!(attributes[:workspace_id])
+    dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
+
+    if import.import_schedule_id
+      reference_id = import.import_schedule_id
+      reference_type = "ImportSchedule"
+    else
+      reference_id = import.id
+      reference_type = "Import"
+    end
+
+    import_created_event = Events::DatasetImportCreated.find_by_source(source_table.id, workspace.id, reference_id, reference_type)
+
+    if import_created_event
+      import_created_event.dataset = dst_table
+      import_created_event.save!
+    end
   end
 
   def create_failed_event(error_message)

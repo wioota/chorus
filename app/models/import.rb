@@ -54,6 +54,7 @@ class Import < ActiveRecord::Base
     else
       GpTableCopier.run_import(source_dataset.id, user.id, import_attributes)
     end
+
     import_schedule.update_attribute(:destination_dataset_id, destination_dataset_id) if new_table? && import_schedule
     import_schedule.update_attribute(:new_table, false) if new_table? && import_schedule
   end

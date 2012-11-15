@@ -30,7 +30,7 @@ describe GpTableCopier, :database_integration => true do
   let(:copier) { GpTableCopier.new(source_dataset.id, user.id, attributes) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
-  let!(:dataset_import_created_event_id) do
+  let!(:dataset_import_created_event) do
     event = Events::DatasetImportCreated.by(user).add(
         :workspace => workspace,
         :dataset => nil,
@@ -38,7 +38,6 @@ describe GpTableCopier, :database_integration => true do
         :reference_id => import.id,
         :reference_type => "Import"
     )
-    event.id
   end
   let(:extra_attributes) { {} }
   let(:import) { imports(:two) }
@@ -59,6 +58,10 @@ describe GpTableCopier, :database_integration => true do
         call_sql("insert into \"#{source_table_name}\"(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
         call_sql("insert into \"#{source_table_name}\"(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
       end
+
+      # set this after doing the dataset refresh
+      dataset_import_created_event.source_dataset = source_dataset
+      dataset_import_created_event.save!
     end
 
     context ".run_import" do
@@ -70,11 +73,13 @@ describe GpTableCopier, :database_integration => true do
         end
 
         describe "on a successful import" do
-          before do
+
+          let(:run_import) {
             GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-          end
+          }
 
           it "creates a DatasetImportSuccess" do
+            run_import
             event = Events::DatasetImportSuccess.last
             event.actor.should == user
             event.dataset.name.should == destination_table_name
@@ -84,30 +89,62 @@ describe GpTableCopier, :database_integration => true do
           end
 
           it "creates a notification" do
+            run_import
             notification = Notification.last
             notification.recipient_id.should == user.id
             notification.event_id.should == Events::DatasetImportSuccess.last.id
           end
 
           it "marks the import as success" do
+            run_import
             import.reload
             import.success.should be_true
             import.finished_at.should_not be_nil
           end
 
           it "updates the destination dataset id" do
+            run_import
             import.reload
             import.success.should be_true
             import.destination_dataset_id.should_not be_nil
           end
 
           it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
-            event = Events::DatasetImportCreated.last
-            event.id = dataset_import_created_event_id
-            event.actor.should == user
+            run_import
+            event = dataset_import_created_event.reload
             event.dataset.name.should == destination_table_name
             event.dataset.schema.should == sandbox
-            event.workspace.should == workspace
+          end
+
+          context "when the import is a scheduled import" do
+            let(:import_schedule_id) { 1234 }
+
+            before do
+              dataset_import_created_event.reference_id = import_schedule_id
+              dataset_import_created_event.reference_type = 'ImportSchedule'
+              dataset_import_created_event.save!
+              import.import_schedule_id = import_schedule_id
+              import.save!
+            end
+
+            it "still sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
+              run_import
+              event = dataset_import_created_event.reload
+              event.dataset.name.should == destination_table_name
+              event.dataset.schema.should == sandbox
+            end
+          end
+
+          context "when the import created event cannot be found" do
+            before do
+              dataset_import_created_event.delete
+            end
+
+            it "doesn't blow up" do
+              expect {
+                run_import
+              }.not_to raise_error
+            end
           end
         end
 
@@ -136,12 +173,12 @@ describe GpTableCopier, :database_integration => true do
 
           it "marks the import as failed" do
             any_instance_of(GpTableCopier) do |copier|
-              stub(copier).run { raise Exception }
+              stub(copier).run { raise StandardError, "some crazy error" }
             end
 
             expect {
               GpTableCopier.run_import(source_dataset.id, user.id, attributes)
-            }.to raise_exception
+            }.to raise_error("some crazy error")
 
             import.reload
             import.success.should be_false

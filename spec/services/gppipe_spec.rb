@@ -112,6 +112,8 @@ describe Gppipe, :database_integration => true do
         before do
           extra_options.merge!("new_table" => true)
           setup_data
+          dataset_import_created_event.source_dataset = source_dataset
+          dataset_import_created_event.save!
         end
 
         it "creates a new pipe and runs it" do
@@ -121,11 +123,10 @@ describe Gppipe, :database_integration => true do
 
         it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
           Gppipe.run_import(source_dataset.id, user.id, options)
-          event = Events::DatasetImportCreated.last
-          event.actor.should == user
-          event.dataset.name.should == destination_table_name
-          event.dataset.schema.should == sandbox
-          event.workspace.should == workspace
+          dataset_import_created_event.reload.tap do |event|
+            event.dataset.name.should == destination_table_name
+            event.dataset.schema.should == sandbox
+          end
         end
 
         context "with a shorted timeout" do
