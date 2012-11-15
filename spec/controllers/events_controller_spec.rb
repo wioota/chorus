@@ -52,22 +52,42 @@ describe EventsController do
       end
 
       context "for a workfile" do
-        let(:object) { workfiles(:public) }
+        let(:object) { workfiles(:private) }
 
         it "presents the workfile's activities" do
+          log_in(users(:owner))
           mock_present { |models| models.should include(event) }
           get :index, :entity_type => "workfile", :entity_id => object.id
           response.code.should == "200"
         end
+
+        context "when you are not authorized to see a workfile" do
+          it "returns forbidden" do
+            log_in(users(:default))
+            get :index, :entity_type => "workfile", :entity_id => object.id
+
+            response.should be_forbidden
+          end
+        end
       end
 
       context "for a workspace" do
-        let(:object) { workspaces(:public_with_no_collaborators) }
+        let(:object) { workspaces(:private) }
 
         it "presents the workspace's activities" do
+          log_in(users(:owner))
           mock_present { |models| models.should include(event) }
           get :index, :entity_type => "workspace", :entity_id => object.id
           response.code.should == "200"
+        end
+
+        context "when you are not authorized to see a workspace" do
+          it "returns forbidden" do
+            log_in(users(:default))
+            get :index, :entity_type => "workspace", :entity_id => object.id
+
+            response.should be_forbidden
+          end
         end
       end
 
@@ -75,8 +95,10 @@ describe EventsController do
         let(:object) { datasets(:table) }
 
         it "presents the gpdb_table's activities" do
+          log_in(users(:owner))
           mock_present { |models| models.should include(event) }
           get :index, :entity_type => "dataset", :entity_id => object.id
+
           response.code.should == "200"
         end
       end

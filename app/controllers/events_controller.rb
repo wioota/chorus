@@ -5,7 +5,9 @@ class EventsController < ApplicationController
      elsif params[:entity_type] == "user"
        ModelMap.model_from_params(params[:entity_type], params[:entity_id]).accessible_events(current_user).includes(:actor, :target1, :target2)
      else
-       ModelMap.model_from_params(params[:entity_type], params[:entity_id]).events.includes(:actor, :target1, :target2)
+       model = ModelMap.model_from_params(params[:entity_type], params[:entity_id])
+       authorize! :show, model
+       model.events.includes(:actor, :target1, :target2)
      end
     present paginate(events.order("events.id DESC")), :presenter_options => {:activity_stream => true}
   end
