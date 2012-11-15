@@ -1,3 +1,5 @@
+require 'bulk_data'
+
 namespace :bulk_data do
   desc "Bulk load user data into Chorus"
   task :load_users, [:csv_file, :admin_username] => :environment do |t, args|
@@ -5,7 +7,7 @@ namespace :bulk_data do
   end
 
   unless Rails.env.production?
-    task :generate_fake_users, [:csv_file, :user_count] => :environment do |t, args|
+    task :generate_fake_users, [:csv_file, :user_count] do |t, args|
       BulkData.create_fake_users args[:csv_file], args[:user_count].to_i
     end
   end
