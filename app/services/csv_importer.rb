@@ -44,7 +44,7 @@ class CsvImporter
           connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
         end
 
-        copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
+        copy_manager = org.postgresql.copy.CopyManager.new(connection.raw_connection.connection)
         sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
         Dataset.refresh(account, schema)

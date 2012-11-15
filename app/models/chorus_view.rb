@@ -39,7 +39,7 @@ class ChorusView < Dataset
 
     account = account_for_user!(current_user)
     schema.with_gpdb_connection(account, true) do |connection|
-      jdbc_conn = connection.instance_variable_get(:"@connection").connection
+      jdbc_conn = connection.raw_connection.connection
       s = jdbc_conn.prepareStatement(query)
       begin
         flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
@@ -100,7 +100,7 @@ class ChorusView < Dataset
   def add_metadata!(account)
     metadata = nil
     with_gpdb_connection(account) do |connection|
-      jdbc_conn = connection.instance_variable_get(:"@connection").connection
+      jdbc_conn = connection.raw_connection.connection
       s = jdbc_conn.prepareStatement(query)
       flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
       s.executeWithFlags(flag)
