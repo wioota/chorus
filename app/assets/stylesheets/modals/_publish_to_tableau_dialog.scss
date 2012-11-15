@@ -19,11 +19,8 @@
   }
 
   .username, .password {
-    display: inline-block;
+    margin-left: 0px;
+    display: block;
     width: $account_width;
-  }
-
-  .password {
-    margin-left: 16px;
   }
 }
