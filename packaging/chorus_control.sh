@@ -118,13 +118,13 @@ function backup () {
   if [ -z "$BACKUP_DIR" ]; then
      read -p "Please enter the destination directory for your backup: " BACKUP_DIR
   fi
+  COMPLETION_MESSAGE=""
 
   echo "Backing up chorus data..."
-  run_in_root_dir_with_postgres "$RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]"
+  run_in_root_dir_with_postgres "$RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]" "$COMPLETION_MESSAGE"
 }
 
 function restore () {
-
   SILENT=""
 
   while getopts "s" OPTION
@@ -157,8 +157,15 @@ function restore () {
   BACKUP_ABSOLUTE_DIR=`cd $BACKUP_DIR && echo $PWD`
   BACKUP_ABSOLUTE_FILENAME="$BACKUP_ABSOLUTE_DIR/"`basename $BACKUP_FILENAME`
 
+  COMPLETION_MESSAGE="
+Restore of $BACKUP_ABSOLUTE_FILENAME completed.
+To start Chorus, run the following commands:
+
+    source $CHORUS_HOME/chorus_path.sh
+    chorus_control.sh start"
+
   echo "Restoring chorus data..."
-  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME,$SILENT] --trace"
+  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME,$SILENT] --trace" "$COMPLETION_MESSAGE"
 }
 
 function run_in_root_dir_with_postgres () {
@@ -169,10 +176,14 @@ function run_in_root_dir_with_postgres () {
       $bin/start-postgres.sh
   fi
 
-  RAILS_ENV=$RAILS_ENV CHORUS_HOME=$CHORUS_HOME ${@}
+  RAILS_ENV=$RAILS_ENV CHORUS_HOME=$CHORUS_HOME ${1}
 
   if [ -n "$postgres_started" ]; then
       $bin/stop-postgres.sh
+  fi
+
+  if [ -n "$2" ]; then
+    echo "$2"
   fi
 
   popd > /dev/null

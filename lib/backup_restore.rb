@@ -178,11 +178,6 @@ module BackupRestore
             restore_database
           end
         end
-        log "Restore of #{backup_filename} completed."
-        log "To start Chorus, run the following commands:"
-        log ""
-        log "  source chorus_path.sh"
-        log "  chorus_control.sh start"
         true
       end
     end
