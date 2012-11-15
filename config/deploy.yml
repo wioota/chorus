@@ -1,4 +1,4 @@
-stage:
+stage: &stage
   host: chorus-staging
   install_path: ~/chorusrails-deploy-new
   postgres_build: 2
@@ -15,3 +15,7 @@ fresh_install:
   postgres_build: 2
   install_path: ~/chorusrails_freshinstall
   clean_install: true
+
+load_test:
+  <<: *stage
+  host: chorus-load-test
