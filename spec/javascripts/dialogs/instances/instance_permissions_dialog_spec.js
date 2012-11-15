@@ -671,14 +671,14 @@ describe("chorus.dialogs.InstancePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        rspecFixtures.user({ firstName: "anna", lastName: "cannon" }),
+                        rspecFixtures.user({ firstName: "<script>alert('hi')</script>", lastName: "cannon" }),
                         rspecFixtures.user({ firstName: "ben", lastName: "maulden" })
                     ]);
                 });
 
-                it("adds an option in the user select for each chorus user", function() {
-                    expect(this.dialog.$("select.name option").eq(0)).toHaveText("anna cannon");
-                    expect(this.dialog.$("select.name option").eq(1)).toHaveText("ben maulden");
+                it("shows a select for each user with their names escaped", function() {
+                    expect(this.dialog.$("select.name option").eq(0)).toHaveText(Handlebars.Utils.escapeExpression("<script>alert('hi')</script> cannon"));
+                    expect(this.dialog.$("select.name option").eq(1)).toHaveText(Handlebars.Utils.escapeExpression("ben maulden"));
                 });
             });
         });

@@ -195,7 +195,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         if (select) {
             select.append(_.map(otherUsers,
                 function(user) {
-                    return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
+                    var escapedDisplayName = Handlebars.Utils.escapeExpression(user.displayName());
+                    return $("<option/>").text(escapedDisplayName).val(user.get("id")).outerHtml();
                 }).join(""));
         }
         this.updateUserSelect();
