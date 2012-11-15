@@ -3,7 +3,7 @@ require 'legacy_migration_spec_helper'
 describe ImportMigrator do
   describe ".migrate" do
     it "creates new instances for legacy imports and is idempotent" do
-      legacy_count = Legacy.connection.select_all("Select count(*) from legacy_migrate.edc_import").first["count"]
+      legacy_count = Legacy.connection.select_all("Select count(*) from legacy_migrate.edc_import where schedule_id is null").first["count"]
       expect(Import.count).to be > 0
       expect(Import.count).to eq(legacy_count)
     end
@@ -24,6 +24,7 @@ describe ImportMigrator do
           t.started_stamp
           FROM legacy_migrate.edc_import ei
           LEFT JOIN legacy_migrate.edc_task t ON t.id = ei.latest_task_id
+          WHERE ei.schedule_id IS NULL
       SQL
       ).each do |row|
         import = Import.find_by_legacy_id(row['id'])

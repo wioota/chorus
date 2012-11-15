@@ -10,7 +10,8 @@ class ImportMigrator < AbstractMigrator
 
     def migrate
       prerequisites
-
+      #Explanation for adding the check for schedule_id - For each scheduled import - there is one 'parent' row in import. For each run of schedule import - it creates another row
+      #import table which contains proper latest_task_id
       Legacy.connection.exec_query <<-SQL
         INSERT INTO public.imports(
           legacy_id,
@@ -54,7 +55,7 @@ class ImportMigrator < AbstractMigrator
           ON s.legacy_id = i.schedule_id
         LEFT JOIN datasets dest
           ON dest.name = i.to_table AND dest.schema_id = w.sandbox_id AND dest.type = 'GpdbTable'
-        WHERE i.id NOT IN (SELECT legacy_id FROM imports);
+        WHERE i.schedule_id IS NULL AND i.id NOT IN (SELECT legacy_id FROM imports);
       SQL
     end
   end
