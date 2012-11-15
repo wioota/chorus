@@ -35,6 +35,12 @@ describe GpdbInstanceAccess do
     end
   end
 
+  describe "#show?" do
+    it "allows everyone" do
+      instance_access.can?(:show, gpdb_instance).should be_true
+    end
+  end
+
   describe "show_contents?" do
     context "for public gpdb instances" do
       it "shows for everybody, including non-owner, non-admin users" do

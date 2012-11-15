@@ -2,13 +2,19 @@ require 'spec_helper'
 
 describe AttachmentDownloadsController do
 
-  let(:user) { users(:the_collaborator) }
+  let(:user) { users(:default) }
 
   before do
     log_in user
   end
 
   context "#show" do
+    it "authorizes" do
+      attachment = attachments(:attachment_private_workspace)
+      get :show, :attachment_id => attachment.id
+
+      response.should be_forbidden
+    end
 
     context "download" do
       it "the file" do

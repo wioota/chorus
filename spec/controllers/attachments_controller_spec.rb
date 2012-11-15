@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe AttachmentsController do
-  ignore_authorization!
   let(:user) { users(:owner) }
 
   before do
@@ -37,6 +36,17 @@ describe AttachmentsController do
         controller.head :ok
       }
       get :show, :note_id => attachment.note.to_param, :id => attachment.to_param, :style => 'icon'
+    end
+
+    context "when you don't have access" do
+      let(:attachment) { attachments(:attachment_private_workspace) }
+
+      it "authorizes" do
+        log_in(users(:default))
+        get :show, :note_id => attachment.note.to_param, :id => attachment.to_param, :style => 'icon'
+
+        response.should be_forbidden
+      end
     end
   end
 end

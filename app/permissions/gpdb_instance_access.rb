@@ -3,6 +3,10 @@ class GpdbInstanceAccess < DefaultAccess
     GpdbInstance.accessible_to(current_user)
   end
 
+  def show?(gpdb_instance)
+    true
+  end
+
   def edit?(gpdb_instance)
     gpdb_instance.owner == current_user || current_user.admin?
   end

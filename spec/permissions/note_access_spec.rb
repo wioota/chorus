@@ -5,6 +5,54 @@ describe Events::NoteAccess do
   let(:access) { Events::NoteAccess.new(fake_controller) }
   let(:note) { events(:note_on_greenplum) }
 
+  describe "#show?" do
+    context " when the current user is the note's actor" do
+      it "returns true" do
+        stub(fake_controller).current_user { users(:owner) }
+        access.show?(note).should be_true
+      end
+    end
+
+    context "when the current user is an admin" do
+      it "returns true" do
+        admin = users(:admin)
+        stub(fake_controller).current_user { admin }
+        access.show?(note).should be_true
+      end
+    end
+
+    context "when the note is on a workspace and the current user is the workspace owner" do
+      let!(:note) do
+        Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
+            :workspace => workspaces(:public),
+            :body => "hi"
+        )
+      end
+
+      it "returns true" do
+        stub(fake_controller).current_user { note.workspace.owner }
+        access.show?(note).should be_true
+      end
+    end
+
+    context "when the note is on a model not visible to the user" do
+      let!(:note) do
+        Events::NoteOnWorkspace.by(users(:owner)).create(
+            :workspace => workspaces(:private),
+            :body => "You can't see me"
+        )
+      end
+
+      it "fails" do
+        other_user = FactoryGirl.build(:user)
+        stub(fake_controller).current_user { other_user }
+
+        access.show?(note).should be_false
+      end
+    end
+  end
+
+
   describe "#destroy?" do
     context " when the current user is the note's actor" do
       it "returns true" do
