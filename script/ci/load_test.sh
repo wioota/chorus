@@ -6,7 +6,7 @@ for file in greenplum-chorus-*.sh
 do
     echo "Deploying $file"
     chmod +x $file
-    rake deploy["load-test","$file"]
+    rake deploy["load_test","$file"]
     break
 done
 
