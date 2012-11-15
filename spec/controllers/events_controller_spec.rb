@@ -71,6 +71,37 @@ describe EventsController do
         end
       end
 
+      context "for a chorus view" do
+        let(:object) { datasets(:private_chorus_view) }
+
+        it "presents the chorus_view's activities" do
+          log_in(users(:owner))
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "dataset", :entity_id => object.id
+          response.code.should == "200"
+        end
+
+        context "when you are not authorized to see a chorus_view" do
+          it "returns forbidden" do
+            log_in(users(:default))
+            get :index, :entity_type => "dataset", :entity_id => object.id
+
+            response.should be_forbidden
+          end
+        end
+      end
+
+      context "for a GPDB view" do
+        let(:object) { datasets(:view) }
+
+        it "presents the GPDB view's activities" do
+          log_in(users(:owner))
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "dataset", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
       context "for a workspace" do
         let(:object) { workspaces(:private) }
 
