@@ -30,15 +30,16 @@ Chorus::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # See everything in the log (default is :info)
-  # config.log_level = :debug
-
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
   local_chorus_config = ChorusConfig.new
+
+  # See everything in the log (default is :info)
+  config.log_level = local_chorus_config.log_level
+
   if local_chorus_config.syslog_configured?
     config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new('Chorus'))
   end

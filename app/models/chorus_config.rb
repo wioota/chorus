@@ -70,6 +70,18 @@ class ChorusConfig
     hash
   end
 
+  def log_level
+    return :info unless self['logging'] && self['logging']['loglevel']
+
+    level = self['logging']['loglevel'].to_sym
+
+    if [:debug, :info, :warn, :error, :fatal].include? level
+      level
+    else
+      :info
+    end
+  end
+
   private
 
   def set_root_dir(root_dir)

@@ -62,6 +62,14 @@ file_sizes_mb.attachment = 10
 
 # Log Settings
 
+# The valid logging.loglevel settings are:
+#  * debug
+#  * info
+#  * warn
+#  * error
+#  * fatal
+logging.loglevel = info
+
 logging.syslog.enabled = true
 
 # Gpfdist Settings

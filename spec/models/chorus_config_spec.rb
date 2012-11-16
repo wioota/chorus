@@ -145,6 +145,31 @@ describe ChorusConfig do
     end
   end
 
+  describe "#log_level" do
+    it 'returns info for invalid values of loglevel' do
+      config.config = {
+          'logging' => {
+              'loglevel' => 'pandemic'
+          }
+      }
+      config.log_level.should == :info
+    end
+
+    it 'returns info for undefined values of loglevel' do
+      config.config = {}
+      config.log_level.should == :info
+    end
+
+    it "symbolizes valid levels" do
+      config.config = {
+          'logging' => {
+              'loglevel' => 'debug'
+          }
+      }
+      config.log_level.should == :debug
+    end
+  end
+
   describe "#syslog_configured?" do
     it 'returns true if the logger.syslog.enabled key is there' do
       config.config = {
