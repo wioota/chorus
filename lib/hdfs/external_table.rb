@@ -48,7 +48,7 @@ class ExternalTable
   end
 
   def header_sql
-    has_header ? ' HEADER' : ''
+    has_header.to_s == 'true' ? ' HEADER' : ''
   end
 
   def map_columns

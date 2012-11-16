@@ -80,9 +80,15 @@
 #  end
 #
 #  it "can take a header argument" do
-#    e = ExternalTable.new(params.merge(:has_header => true))
+#    e = ExternalTable.new(params.merge(:has_header => "true"))
 #    e.save
 #    POSTGRES_DB.sqls.last.should == "CREATE EXTERNAL TABLE \"public\".\"foo\" (field1 text, field2 text) LOCATION ('gphdfs://foo') FORMAT 'TEXT' (DELIMITER ',' HEADER)"
+#  end
+#
+#  it "can take a header argument as false" do
+#    e = ExternalTable.new(params.merge(:has_header => "false"))
+#    e.save
+#    POSTGRES_DB.sqls.last.should == "CREATE EXTERNAL TABLE \"public\".\"foo\" (field1 text, field2 text) LOCATION ('gphdfs://foo') FORMAT 'TEXT' (DELIMITER ',')"
 #  end
 #
 #  it "should not save if invalid" do
