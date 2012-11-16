@@ -79,6 +79,15 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                 expect(dialog.$("ul li:eq(0) .column_count")).toContainTranslation("dataset.column_count", {count: 42});
                 expect(dialog.$("ul li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
             });
+
+            describe("selecting an item", function() {
+                beforeEach(function() {
+                    dialog.$("ul li:eq(0)").click();
+                });
+                it("should mark the item selected", function() {
+                    expect(dialog.$("ul li:eq(0)")).toHaveClass("selected");
+                });
+            });
         });
 
         context("when a dataset has no column count (or is undefined)", function() {
