@@ -53,6 +53,21 @@ describe("chorus.presenters.DatasetSidebar", function() {
             });
 
             describe("#nextImport", function(){
+                context("No next import", function() {
+                    beforeEach(function() {
+                        var schedule = rspecFixtures.datasetImportScheduleSet().last();
+                        schedule.set('nextImportAt', null);
+                        spyOn(resource, 'importSchedule').andReturn(schedule);
+                    });
+
+                    it("displays the tablename", function() {
+                        workspace_dataset_model = presenter.nextImport();
+                        this.nextImportLink = presenter.nextImport().string;
+                        expect(this.nextImportLink).toMatchTranslation('import.no_next_import');
+
+                    });
+                });
+
                 context("The destination dataset exists", function() {
                     beforeEach(function() {
                         var schedule = rspecFixtures.datasetImportScheduleSet().last();
@@ -62,18 +77,16 @@ describe("chorus.presenters.DatasetSidebar", function() {
                            destinationDatasetId: 234,
                            nextImportAt: "2013-09-07T06:00:00Z"
                         });
-                        spyOn(resource, "importSchedule").andReturn(
-                            schedule
-                        );
+                        spyOn(resource, "importSchedule").andReturn(schedule);
                     });
 
                     it("displays the tablename", function() {
                         workspace_dataset_model = presenter.nextImport();
                         this.nextImportLink = presenter.nextImport().string;
-                        expect(this.nextImportLink).toEqual(
-                            "Next import scheduled " + chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z") +
-                                " into <a href=\"#/workspaces/13/datasets/234\" title=\"My New Table\">My New Table</a>");
-
+                        expect(this.nextImportLink).toMatchTranslation('import.next_import', {
+                            nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
+                            tableRef: "<a href=\"#/workspaces/13/datasets/234\" title=\"My New Table\">My New Table</a>"
+                        });
                     });
                 });
                 context("The destination dataset does not yet exist", function() {
@@ -92,9 +105,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     it("displays the tablename without the link", function() {
                         workspace_dataset_model = presenter.nextImport();
                         this.nextImportLink = presenter.nextImport().string;
-                        expect(this.nextImportLink).toEqual(
-                            "Next import scheduled " + chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z") +
-                                " into My New Table");
+                        expect(this.nextImportLink).toMatchTranslation('import.next_import', {
+                            nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
+                            tableRef: "My New Table"
+                        });
                     });
                 });
             });

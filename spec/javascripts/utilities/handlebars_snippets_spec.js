@@ -253,7 +253,7 @@ describe("handlebars", function () {
             });
 
             it("tolerates bogus timestamps", function () {
-                expect(Handlebars.helpers.displayTimestamp("yo momma")).toBe("WHENEVER");
+                expect(Handlebars.helpers.displayTimestamp("invalid")).toBe("WHENEVER");
             });
 
             it("tolerates undefined", function () {
@@ -268,7 +268,7 @@ describe("handlebars", function () {
             });
 
             it("tolerates bogus timestamps", function () {
-                expect(Handlebars.helpers.relativeTimestamp("yo momma")).toBe("WHENEVER");
+                expect(Handlebars.helpers.relativeTimestamp("invalid")).toBe("WHENEVER");
             });
 
             it("tolerates undefined", function () {

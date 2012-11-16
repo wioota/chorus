@@ -75,18 +75,22 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         if(!this.hasSchedule()) return "";
 
         var importSchedule = this.resource.importSchedule();
-        var nextImportStart = chorus.helpers.relativeTimestamp(importSchedule.get('nextImportAt'));
-        if(importSchedule.get("destinationDatasetId") == null) {
-            return chorus.helpers.safeT("import.next_import", {
-                nextTime: nextImportStart,
-                tableRef: this.ellipsize(importSchedule.destination().name())
-            });
-        } else {
-            return chorus.helpers.safeT("import.next_import", {
-                nextTime: nextImportStart,
-                tableRef: this._linkToModel(importSchedule.destination())
-            });
+        var nextImportStartDate = importSchedule.get('nextImportAt');
+
+        if (!nextImportStartDate) {
+            return chorus.helpers.safeT("import.no_next_import");
         }
+
+        var nextTableRef;
+        if (importSchedule.get('destinationDatasetId')) {
+            var nextTableRef = this._linkToModel(importSchedule.destination());
+        } else {
+            var nextTableRef = this.ellipsize(importSchedule.destination().name());
+        }
+
+        return chorus.helpers.safeT("import.next_import", {
+            nextTime: chorus.helpers.relativeTimestamp(nextImportStartDate),
+            tableRef: nextTableRef });
     },
 
     inProgressText: function() {
