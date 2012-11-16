@@ -56,7 +56,7 @@ describe "Workfiles" do
       click_link "Delete"
 
       within_modal do
-        click_button "Delete Workfile"
+        click_button "Delete work file"
       end
       page.should_not have_content(workfile.file_name)
       Workfile.find_by_id(workfile.id).should be_nil
