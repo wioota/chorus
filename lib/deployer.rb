@@ -122,7 +122,7 @@ class Deployer
   end
 
   def remove_old_builds(builds_to_keep=5)
-    ssh.run "cd #{install_path}/releases && test `ls | wc -l` -gt 5 && find . -maxdepth 1 -not -newer \"`ls -t | head -6 | tail -1`\" -not -name \".\" -exec rm -rf {} \\;"
+    ssh.run %Q{cd #{install_path}/releases && test `ls | wc -l` -gt 5 && find . -maxdepth 1 -not -newer "`ls -t | head -6 | tail -1`" -not -name "." -exec rm -rf {} \\;}, :quote => "'"
   end
 
   class Ssh
@@ -144,8 +144,9 @@ class Deployer
       execute "scp #{host}:#{file_path} #{file_name}"
     end
 
-    def run(cmd)
-      execute %Q{ssh #{host} "PATH=#{install_path}/current/postgres/bin:$PATH && #{cmd}"}
+    def run(cmd, options={})
+      quote = options[:quote] || '"'
+      execute %Q{ssh #{host} #{quote}PATH=#{install_path}/current/postgres/bin:$PATH && #{cmd}#{quote}}
     end
 
     def run_rake(rake_task)
