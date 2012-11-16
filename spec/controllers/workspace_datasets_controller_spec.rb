@@ -98,9 +98,9 @@ describe WorkspaceDatasetsController do
     end
 
     context "when associating multiple datasets with a workspace" do
-      it "shows an error if some datasets are already associated" do
+      it "does not show an error if some datasets are already associated" do
         post :create, :workspace_id => workspace.to_param, :dataset_ids => [gpdb_table.to_param, other_table.to_param]
-        response.code.should == "422"
+        response.code.should == "201"
       end
     end
   end
