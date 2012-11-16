@@ -26,12 +26,6 @@ class Import < ActiveRecord::Base
   validates :file_name, :presence => true, :unless => :source_dataset
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
-  # Running an import must use this method to ensure the call is serializable
-  # and can be moved into a job
-  def self.run(import_id)
-    Import.find(import_id).run
-  end
-
   def create_import_event
     dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
     Events::DatasetImportCreated.by(user).add(
@@ -42,20 +36,5 @@ class Import < ActiveRecord::Base
         :reference_id => id,
         :reference_type => 'Import'
     )
-  end
-
-  def run
-    import_attributes = attributes.symbolize_keys
-    import_attributes.slice!(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
-
-    import_attributes[:import_id] = id
-    if workspace.sandbox.database != source_dataset.schema.database
-      Gppipe.run_import(source_dataset.id, user.id, import_attributes)
-    else
-      GpTableCopier.run_import(source_dataset.id, user.id, import_attributes)
-    end
-
-    import_schedule.update_attribute(:destination_dataset_id, destination_dataset_id) if new_table? && import_schedule
-    import_schedule.update_attribute(:new_table, false) if new_table? && import_schedule
   end
 end

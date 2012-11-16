@@ -14,6 +14,7 @@ module Gpdb
         :password => account.db_password,
         :adapter => "jdbcpostgresql"
       )
+      # TODO: this yield should really be after most of the exception handling [#39664445]
       yield connection if block_given?
     rescue ActiveRecord::JDBCError => e
       friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}"

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Gppipe, :database_integration => true do
+describe GpPipe, :database_integration => true do
 
   def setup_data
     gpdb1.exec_query("delete from #{source_table_name};")
@@ -82,24 +82,16 @@ describe Gppipe, :database_integration => true do
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:options) { {"workspace_id" => workspace.id, "to_table" => destination_table_name, "new_table" => "true", "import_id" => import.id }.merge(extra_options) }
   let(:extra_options) { {} }
-  let!(:dataset_import_created_event) {
-    Events::DatasetImportCreated.by(user).add(
-        :workspace => workspace,
-        :dataset => nil,
-        :destination_table => destination_table_name,
-        :reference_id => import.id,
-        :reference_type => "Import"
-    )
-  }
-  let(:gp_pipe) { Gppipe.new(source_dataset.id, user.id, options) }
+  let(:gp_table_copier) { GpTableCopier.new(source_dataset.id, user.id, options) }
+  let(:gp_pipe) { GpPipe.new(gp_table_copier) }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => schema }
   let(:sandbox) { workspace.sandbox }
 
   it 'uses gpfdist if the gpfdist.ssl.enabled configuration is false (no in the test environment)' do
-    Gppipe.protocol.should == 'gpfdist'
+    GpPipe.protocol.should == 'gpfdist'
   end
 
-  context "actually running the query" do
+  context "#run" do
 
     after do
       gpdb1.exec_query("delete from #{gp_pipe.source_table_fullname};")
@@ -112,8 +104,6 @@ describe Gppipe, :database_integration => true do
         before do
           extra_options.merge!("new_table" => true)
           setup_data
-          dataset_import_created_event.source_dataset = source_dataset
-          dataset_import_created_event.save!
         end
 
         it "creates a new pipe and runs it" do
@@ -121,17 +111,9 @@ describe Gppipe, :database_integration => true do
           gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
         end
 
-        it "sets the dataset attribute of the DATASET_IMPORT_CREATED event on a successful import" do
-          Gppipe.run_import(source_dataset.id, user.id, options)
-          dataset_import_created_event.reload.tap do |event|
-            event.dataset.name.should == destination_table_name
-            event.dataset.schema.should == sandbox
-          end
-        end
-
         context "with a shorted timeout" do
           before do
-            stub(Gppipe).grace_period_seconds { 1 }
+            stub(GpPipe).grace_period_seconds { 1 }
           end
 
           it "drops the newly created table when the write hangs" do
@@ -143,7 +125,7 @@ describe Gppipe, :database_integration => true do
             end
             stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
 
-            expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
             lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should raise_error
           end
 
@@ -153,7 +135,7 @@ describe Gppipe, :database_integration => true do
             end
             stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
 
-            expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
           end
         end
       end
@@ -172,7 +154,7 @@ describe Gppipe, :database_integration => true do
 
         context "with a shorted timeout" do
           before do
-            stub(Gppipe).grace_period_seconds { 1 }
+            stub(GpPipe).grace_period_seconds { 1 }
           end
 
           it "does not drop the table when there's an exception" do
@@ -185,7 +167,7 @@ describe Gppipe, :database_integration => true do
 
             setup_data
             gpdb1.exec_query("create table #{gp_pipe.destination_table_fullname}(#{table_def});")
-            expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
             lambda { gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}") }.should_not raise_error
           end
         end
@@ -272,7 +254,7 @@ describe Gppipe, :database_integration => true do
         let(:extra_options) { {"sample_count" => 0} }
 
         it "doesn't hang gpfdist, by treating the source like an empty table" do
-          stub(Gppipe).timeout_seconds { 10 }
+          stub(GpPipe).timeout_seconds { 10 }
           Timeout::timeout(5) do
             gp_pipe.run
           end
@@ -284,7 +266,7 @@ describe Gppipe, :database_integration => true do
 
     context "a sql query blocks forever" do
       before do
-        stub(Gppipe).timeout_seconds { 1 }
+        stub(GpPipe).timeout_seconds { 1 }
         stub(gp_pipe.src_conn).exec_query { sleep(10); raise Exception, "test failed - no timeout" }
       end
 
@@ -296,8 +278,8 @@ describe Gppipe, :database_integration => true do
     context "create external table does not succeed" do
       it "does not hang" do
         setup_data
-        stub(Gppipe).write_protocol { 'gpfdistinvalid' }
-        expect { gp_pipe.run }.to raise_error(Gppipe::ImportFailed)
+        stub(GpPipe).write_protocol { 'gpfdistinvalid' }
+        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
       end
     end
 
@@ -329,7 +311,7 @@ describe Gppipe, :database_integration => true do
 
     context "when #run failed" do
       before do
-        stub(Gppipe).grace_period_seconds { 1 }
+        stub(GpPipe).grace_period_seconds { 1 }
       end
 
       it "drops newly created the table when there's an exception" do
@@ -341,7 +323,7 @@ describe Gppipe, :database_integration => true do
         stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
 
         setup_data
-        lambda { gp_pipe.run }.should raise_error(Gppipe::ImportFailed)
+        lambda { gp_pipe.run }.should raise_error(GpPipe::ImportFailed)
       end
     end
   end

@@ -1,34 +1,29 @@
 class GpTableCopier
-  ImportFailed = Class.new(StandardError)
+  class ImportFailed < StandardError; end
 
   attr_accessor :user_id, :source_table_id, :attributes
 
   def self.run_import(source_table_id, user_id, attributes)
-    copier = new(source_table_id, user_id, attributes)
-    copier.start
-  end
-
-  def start
-    Dataset.refresh(destination_account, destination_schema)
-    dst_table = destination_schema.datasets.find_by_name(destination_table_name)
-    self.attributes["new_table"] = false if create_new_table? && dst_table
-    raise ActiveRecord::RecordNotFound, "Couldn't find destination table." if !create_new_table? && !dst_table
-
-    run
-
-    mark_import(true)
-    create_success_event
-
-  rescue => e
-    mark_import(false)
-    create_failed_event(e.message)
-    raise e
+    new(source_table_id, user_id, attributes).start
   end
 
   def initialize(source_table_id, user_id, attributes)
     self.source_table_id = source_table_id
     self.user_id = user_id
     self.attributes = HashWithIndifferentAccess.new(attributes)
+  end
+
+  def start
+    dst_table = destination_schema.datasets.find_by_name(destination_table_name)
+    self.attributes["new_table"] = false if create_new_table? && dst_table
+    raise ActiveRecord::RecordNotFound, "Couldn't find destination table." if !create_new_table? && !dst_table
+
+    # delegate cross-database copies to a GpPipe instance
+    if destination_schema.database != source_table.schema.database
+      GpPipe.new(self).run
+    else
+      run
+    end
   end
 
   def distribution_key_clause
@@ -51,111 +46,29 @@ class GpTableCopier
   end
 
   def run
-    create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
-    copy_command = "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{source_table_fullname} #{limit_clause});"
-    truncate_command = "TRUNCATE TABLE #{destination_table_fullname};"
-    internal_error_message = nil
-
-    begin
-      destination_schema.with_gpdb_connection(destination_account) do |connection|
-        connection.transaction do
-
-          begin
-            unless source_table.query_setup_sql.blank?
-              execute_sql(connection, source_table.query_setup_sql)
-            end
-
-            if create_new_table?
-              execute_sql(connection, create_command % [table_definition_with_keys(connection)])
-            elsif truncate?
-              execute_sql(connection, truncate_command)
-            end
-            execute_sql(connection, copy_command)
-          rescue => e
-            internal_error_message = e.message
-            raise
+    destination_schema.with_gpdb_connection(destination_account) do |connection|
+      connection.transaction do
+        record_internal_exception do
+          unless source_table.query_setup_sql.blank?
+            connection.execute(source_table.query_setup_sql)
           end
+
+          if create_new_table?
+            create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
+            connection.execute(create_command % [table_definition_with_keys(connection)])
+          elsif truncate?
+            truncate_command = "TRUNCATE TABLE #{destination_table_fullname};"
+            connection.execute(truncate_command)
+          end
+
+          copy_command = "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{source_table_fullname} #{limit_clause});"
+          connection.execute(copy_command)
         end
       end
-    rescue => e
-      if internal_error_message.present?
-        raise ImportFailed, internal_error_message
-      else
-        raise e
-      end
-    end
-  end
-
-  def execute_sql(connection, sql)
-    connection.execute(sql)
-  end
-
-  def mark_import(success)
-    import = Import.find(attributes[:import_id])
-    import.success = success
-    import.finished_at = Time.now
-
-    if success
-      Dataset.refresh(destination_account, destination_schema)
-      dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
-      import.destination_dataset_id = dst_table.id
     end
 
-    import.save!
-  end
-
-  def create_success_event
-    user = User.find_by_id!(user_id)
-    source_table = Dataset.find_by_id!(source_table_id)
-    workspace = Workspace.find_by_id!(attributes[:workspace_id])
-    dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
-
-    event = Events::DatasetImportSuccess.by(user).add(
-        :workspace => workspace,
-        :dataset => dst_table,
-        :source_dataset => source_table
-    )
-
-    Notification.create!(:recipient_id => user.id, :event_id => event.id)
-
-    update_import_created_event
-  end
-
-  def update_import_created_event
-    import = Import.find(attributes[:import_id])
-    source_table = Dataset.find_by_id!(source_table_id)
-    workspace = Workspace.find_by_id!(attributes[:workspace_id])
-    dst_table = destination_schema.datasets.find_by_name!(destination_table_name)
-
-    if import.import_schedule_id
-      reference_id = import.import_schedule_id
-      reference_type = "ImportSchedule"
-    else
-      reference_id = import.id
-      reference_type = "Import"
-    end
-
-    import_created_event = Events::DatasetImportCreated.find_by_source(source_table.id, workspace.id, reference_id, reference_type)
-
-    if import_created_event
-      import_created_event.dataset = dst_table
-      import_created_event.save!
-    end
-  end
-
-  def create_failed_event(error_message)
-    user = User.find_by_id(user_id)
-    source_table = Dataset.find_by_id(source_table_id)
-    workspace = Workspace.find_by_id(attributes[:workspace_id])
-    event = Events::DatasetImportFailed.by(user).add(
-        :workspace => workspace,
-        :destination_table => attributes[:to_table],
-        :error_message => error_message,
-        :source_dataset => source_table,
-        :dataset => destination_schema.datasets.find_by_name(destination_table_name)
-    )
-
-    Notification.create!(:recipient_id => user.id, :event_id => event.id)
+  rescue => e
+    raise ImportFailed, (@internal_exception || e).message
   end
 
   def create_new_table?
@@ -225,6 +138,14 @@ class GpTableCopier
   end
 
   private
+
+  # this is a workaround for jdbc postgres adapter hiding exceptions
+  def record_internal_exception
+    yield
+  rescue => e
+    @internal_exception = e
+    raise
+  end
 
   def distribution_key_sql
     <<-DISTRIBUTION_KEY_SQL

@@ -352,12 +352,12 @@ describe DatasetImportSchedulesController do
       log_in user
       create_source_table
 
-      stub(Gppipe).gpfdist_url { Socket.gethostname }
-      stub(Gppipe).grace_period_seconds { 1 }
+      stub(GpPipe).gpfdist_url { Socket.gethostname }
+      stub(GpPipe).grace_period_seconds { 1 }
       setup_data
       # synchronously run all queued import jobs
-      mock(QC.default_queue).enqueue("Import.run", anything) do |method, import_id|
-        Import.run import_id
+      mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |method, import_id|
+        ImportExecutor.run import_id
       end
     end
 

@@ -5,10 +5,10 @@ class ImportScheduler
         Import.transaction do
           import = schedule.create_import
           schedule.save! # Refresh next imported at time
-          QC.enqueue("Import.run", import.id)
+          QC.enqueue("ImportExecutor.run", import.id)
         end
       rescue => e
-        Rails.logger.error "Import schedule #{schedule} failed to run, error was #{e.message}."
+        Rails.logger.error "Import schedule #{schedule} failed with error '#{e}'."
       end
     end
   end
