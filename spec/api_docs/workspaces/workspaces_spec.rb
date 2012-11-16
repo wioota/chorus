@@ -172,8 +172,8 @@ resource "Workspaces" do
 
     before do
       workspace.update_attribute(:sandbox, sandbox)
-      any_instance_of(Hdfs::ExternalTableCreator) do |instance|
-        stub(instance).create_external_table {
+      any_instance_of(ExternalTable) do |instance|
+        stub(instance).save {
           sandbox.datasets << FactoryGirl.create(:gpdb_table, :schema => sandbox, :name => table_name)
         }
       end
