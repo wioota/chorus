@@ -13,15 +13,19 @@ describe AssociatedDataset do
   }
 
   describe "validations" do
-    it {should validate_presence_of(:dataset_id)}
-    it {should validate_presence_of(:workspace_id)}
+    it { should validate_presence_of(:dataset_id) }
+    it { should validate_presence_of(:workspace_id) }
 
-    it "should have uniq workspace_id + dataset_id" do
-      association = described_class.new
-      association.workspace = workspace
-      association.dataset = gpdb_table
+    it "doesnt have duplicate workspace_id + dataset_id" do
+      association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
       association.should_not be_valid
       association.errors[:dataset_id].should include [:taken, {:value => gpdb_table.id}]
+    end
+
+    it "doesnt validate against deleted associations" do
+      associated_dataset.destroy
+      association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
+      association.should be_valid
     end
   end
 
