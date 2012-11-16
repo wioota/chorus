@@ -93,27 +93,24 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         var tableName = this.$(".directions input:text").val();
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
-            var $type = $types.eq(i);
-            return chorus.Mixins.dbHelpers.safePGName($name.val()) + " " + $type.text();
+            return chorus.Mixins.dbHelpers.safePGName($name.val()) ;
         })
-
-        var statement = tableName + " (" + columns.join(", ") + ")";
-
 
         this.tableName = this.$(".directions input:text").val();
 
         var pathType = this.$("input[name='pathType']:checked").val();
-        var path = (pathType === "pattern") ? this.pathWithSlash() + this.$("input[name='expression']").val() : this.collection.attributes.path;
+        var path = (pathType === "pattern") ? this.$("input[name='expression']").val() : "*";
 
         this.model.set({
             fileType: "TEXT",
             pathType : pathType,
             workspaceId: this.options.workspaceId,
             workspaceName: this.options.workspaceName,
-            statement: statement,
+            columnNames: columns,
             tableName: chorus.utilities.CsvParser.normalizeForDatabase(tableName),
-            path: path,
-            delimiter: this.delimiter
+            delimiter: this.delimiter,
+            hdfs_entry_id : this.options.hdfs_entry_id,
+            file_expression: path
         }, {silent : true});
     },
 
@@ -138,6 +135,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.$(".data_table").startLoading();
 
         this.bindings.add(this.model, "loaded", function() {
+            this.contents = this.model.get('contents');
             this.$(".data_table").stopLoading();
             this.render();
             this.setupSelects();

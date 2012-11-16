@@ -28,7 +28,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             workspaceName: "workspace1",
             workspaceId: "22",
             directoryName: "test",
-            collection: this.collection
+            collection: this.collection,
+            hdfs_entry_id: "1"
         });
     });
 
@@ -95,7 +96,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             });
 
             it("should fetch the new sample", function() {
-                expect(this.server.lastFetch().url).toBe("/hadoop_instances/"+this.collection.attributes.hadoopInstance.id+"/files/"+
+                expect(this.server.lastFetch().url).toBe("/hadoop_instances/"+this.collection.attributes.hadoopInstance.id+"/files/?id="+
                     this.collection.at(1).id);
             });
 
@@ -124,6 +125,10 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 it("uses the custom styleSelect", function() {
                     expect(chorus.styleSelect).toHaveBeenCalled();
                 });
+
+                it("sets the csv contents to the model contents", function() {
+                    expect(this.dialog.contents).toEqual(this.dialog.model.contents);
+                })
             });
         });
 
@@ -175,14 +180,14 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("posts to the right URL", function() {
                     var request = this.server.lastCreate();
-                    var statement = "test (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
-
-                    expect(request.url).toMatchUrl("/workspace/22/externaltable");
-
-                    expect(request.params()['csv_hdfs[path]']).toBe("/data");
-                    expect(request.params()['csv_hdfs[hadoop_instance_id]']).toBe("234");
-                    expect(request.params()['csv_hdfs[statement]']).toBe(statement);
-                    expect(request.params()['csv_hdfs[path_type]']).toBe('directory');
+                    var statement = "test (column_1, column_2, column_3, column_4, column_5)";
+                    expect(request.url).toMatchUrl("/workspaces/22/external_tables");
+                    expect(request.params()['hdfs_external_table[file_expression]']).toBe("*");
+                    expect(request.params()['hdfs_external_table[hadoop_instance_id]']).toBe("234");
+                    expect(request.params()['hdfs_external_table[column_names][]'][0]).toBe("column_1");
+                    expect(request.params()['hdfs_external_table[column_names][]'][1]).toBe("column_2");
+                    expect(request.params()['hdfs_external_table[path_type]']).toBe('directory');
+                    expect(request.params()['hdfs_external_table[hdfs_entry_id]']).toBe('1');
                 });
 
                 context("when the post to import responds with success", function() {
@@ -215,9 +220,9 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 it("posts to the right URL", function() {
                     var request = this.server.lastCreate();
 
-                    expect(request.url).toMatchUrl("/workspace/22/externaltable");
-                    expect(request.params()['csv_hdfs[path_type]']).toBe('pattern');
-                    expect(request.params()['csv_hdfs[path]']).toBe("/data/*.csv");
+                    expect(request.url).toMatchUrl("/workspaces/22/external_tables");
+                    expect(request.params()['hdfs_external_table[path_type]']).toBe('pattern');
+                    expect(request.params()['hdfs_external_table[file_expression]']).toBe("*.csv");
                 });
             })
 

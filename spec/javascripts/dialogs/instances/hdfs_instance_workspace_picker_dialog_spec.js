@@ -7,7 +7,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
         this.dialog = new chorus.dialogs.HdfsInstanceWorkspacePicker({
             model: fixtures.hdfsEntryDir({
-                hadoopInstance : rspecFixtures.hadoopInstance({ id: 1234 }),
+                hadoopInstance: rspecFixtures.hadoopInstance({ id: 1234 }),
                 path: '/data',
                 name: 'foo'
             }),
@@ -46,101 +46,68 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                 expect("workspace:selected").toHaveBeenTriggeredOn(this.dialog, [this.dialog.collection.at(1)]);
             });
 
-            it("checks the sandbox version", function() {
-                expect(this.server.lastFetch().url).toBe("/workspace/"+this.dialog.collection.at(1).id+"/sandboxDbVersion")
-            });
-
-            context("when the fetch completes", function () {
+            context("when the fetch completes", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal");
                 });
-                context("when there's no sandbox", function () {
+
+                it("does not display the error message", function() {
+                    expect(this.dialog.$(".errors").text()).toBe("");
+                });
+
+                context("when the sandbox version is less than 4.2", function() {
+                    it("displays the errors message and does not proceed", function() {
+                        spyOnEvent(this.dialog, "workspace:selected");
+                        this.dialog.selectedItem().sandbox().instance().set('version', '4.1');
+                        this.dialog.$("button.submit").click();
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old");
+                        expect("workspace:selected").not.toHaveBeenTriggeredOn(this.dialog, [this.dialog.selectedItem()]);
+                    });
+                });
+
+                it("fetches the list of hdfs files", function() {
+                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/?id=1", {paramsToIgnore: ["page", "per_page"]})
+                });
+
+                context("when the hdfs entries fetch completes", function() {
                     beforeEach(function() {
-                        this.dialog.sandboxVersion.trigger("fetchFailed", {serverErrors: { fields: { a: { GENERIC: {message: "abc"} } } }});
+                        var hdfsFiles = [
+                            fixtures.hdfsEntryFileJson(),
+                            fixtures.hdfsEntryFileJson(),
+                            fixtures.hdfsEntryBinaryFileJson(),
+                            fixtures.hdfsEntryDirJson()
+                        ];
+                        this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles);
                     });
 
-                    it("displays the error message", function() {
-                        expect(this.dialog.$(".errors").text()).toContain("abc");
+
+                    it("filters out directories", function() {
+                        expect(this.dialog.externalTableDialog.collection.length).toBe(3);
                     });
 
-                    it("does not open the create external dialog", function() {
-                        expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
+                    it("opens the Create External Table dialog, passing the workspace information", function() {
+                        expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);
+                        expect(this.dialog.externalTableDialog.options.workspaceId).toEqual(this.workspace1.id);
+                        expect(this.dialog.externalTableDialog.options.workspaceName).toEqual("Foo");
+                    });
+                });
+
+                context("when the hdfs entries fetch completes with no text files", function() {
+                    beforeEach(function() {
+                        var hdfsFiles2 = [
+                            fixtures.hdfsEntryDirJson()
+                        ];
+                        this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles2);
+
+                    });
+                    it("displays error when the directory doesn't have any text files", function() {
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files")
                     })
-                });
 
-                context("when the gpdb version is less than 4.2", function () {
-                    beforeEach(function() {
-                        this.dialog.sandboxVersion.set({sandboxInstanceVersion: "4.1.1.1 build 1"})
-                        this.server.lastFetch().succeed(this.dialog.sandboxVersion);
-                    });
-                    it("displays the errors message", function() {
-                         expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old")
+                    it("does not open the Create External Table dialog", function() {
+                        expect(this.dialog.launchSubModal).not.toHaveBeenCalledWith(this.dialog.externalTableDialog);
                     });
                 });
-
-               context("when the gpdb version is more than 4.2", function () {
-                   beforeEach(function() {
-                       this.dialog.sandboxVersion.set({sandboxInstanceVersion: "4.2.1.1 build 1"})
-                       this.server.lastFetch().succeed(this.dialog.sandboxVersion);
-                   });
-
-                   it("does not display the error message", function() {
-                       expect(this.dialog.$(".errors").text()).toBe("");
-                   });
-
-                   it("fetches the list of hdfs files", function() {
-                        expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/", {paramsToIgnore: ["page", "per_page"]})
-                   });
-
-                   context("when the hdfs entries fetch completes", function() {
-                       beforeEach(function() {
-                           var hdfsFiles = [
-                               fixtures.hdfsEntryFileJson(),
-                               fixtures.hdfsEntryFileJson(),
-                               fixtures.hdfsEntryBinaryFileJson(),
-                               fixtures.hdfsEntryDirJson()
-                           ];
-                           this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles);
-                       });
-
-                       it("doesn't open the Create External Table dialog", function() {
-                           expect(this.dialog.launchSubModal).not.toHaveBeenCalledWith(this.dialog.externalTableDialog);
-                       });
-
-                       it("filters out directories", function() {
-                           expect(this.dialog.externalTableDialog.collection.length).toBe(3);
-                       });
-
-                       it("fetches the first item in the collection", function() {
-                           expect(this.dialog.externalTableDialog.model).toHaveBeenFetched();
-                       })
-
-                       context("when the fetch for hdfs file sample completes", function () {
-                           beforeEach(function() {
-                               this.server.completeFetchFor(this.dialog.externalTableDialog.model);
-                           });
-                           it("opens the Create External Table dialog, passing the workspace information", function() {
-                               expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);
-                               expect(this.dialog.externalTableDialog.options.workspaceId).toEqual(this.workspace1.id);
-                               expect(this.dialog.externalTableDialog.options.workspaceName).toEqual("Foo");
-                           });
-                       });
-                   });
-
-                   context("when the hdfs entries fetch completes with no text files", function () {
-                       beforeEach(function() {
-                            var hdfsFiles2 = [
-                               fixtures.hdfsEntryDirJson()
-                           ];
-                           this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles2);
-
-                       });
-                       it("displays error when the directory doesn't have a text files", function() {
-                           expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files")
-                       })
-                   });
-
-               });
 
             });
         });

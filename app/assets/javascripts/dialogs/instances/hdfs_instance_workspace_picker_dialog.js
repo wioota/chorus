@@ -19,41 +19,28 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
     },
 
     submit : function() {
-        this.sandboxVersion = new chorus.models.SandboxVersion({ workspaceId : this.selectedItem().id});
+        this.model.serverErrors = [];
 
-        this.bindings.add(this.sandboxVersion, "fetchFailed", this.showDialogError);
-        this.bindings.add(this.sandboxVersion, "loaded", this.checkVersion);
-        this.sandboxVersion.fetch();
+        if(this.selectedItem().sandbox().instance().version() < "4.2") {
+            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
+            return;
+        }
 
+        var path = this.model.get("path");
+        var separator = (path == "/") ? "" : "/";
+
+        this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
+            hadoopInstance : this.model.get("hadoopInstance"),
+            id: this.model.get("id")
+        });
+        this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this)
+        this.hdfsFiles.fetchAll();
         this.trigger("workspace:selected", this.selectedItem());
     },
 
     showDialogError : function(errorText) {
         this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
         this.render();
-    },
-
-    checkVersion : function() {
-        var dbVersion = this.sandboxVersion.get("sandboxInstanceVersion");
-        var dbCompare = parseFloat(dbVersion.substring(0,3));
-        if(dbCompare < 4.2) {
-            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
-        } else {
-
-            this.model.serverErrors = [];
-
-            var path = this.model.get("path");
-            var separator = (path == "/") ? "" : "/";
-
-            this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
-                hadoopInstance : this.model.get("hadoopInstance"),
-                path : path + separator + this.model.get("name")
-            });
-
-            this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this)
-            this.hdfsFiles.fetchAll();
-
-        }
     },
 
     launchCreateHdfsDialog: function() {
@@ -66,13 +53,13 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
                 collection: hdfsTextFiles || [],
                 directoryName: this.model.get("name"),
                 workspaceId: this.selectedItem().id,
-                workspaceName: this.selectedItem().get("name")
+                workspaceName: this.selectedItem().get("name"),
+                csvOptions: {
+                    contents: hdfsTextFiles.models[0].get('contents')
+                },
+                hdfs_entry_id: this.model.get('id')
             });
-
-            this.externalTableDialog.model.fetch();
-            this.bindings.add(this.externalTableDialog.model, "loaded", function() {
-                this.launchSubModal(this.externalTableDialog);
-            });
+            this.launchSubModal(this.externalTableDialog);
         }
     }
 });
