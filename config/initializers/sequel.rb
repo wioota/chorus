@@ -1,0 +1,1 @@
+#require 'sequel/no_core_ext'

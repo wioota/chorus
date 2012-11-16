@@ -5,9 +5,25 @@ describe ExternalTablesController do
   let(:sandbox) { gpdb_schemas(:default) }
   let(:workspace) { workspaces(:public) }
   let(:workspace_without_sandbox) { workspaces(:private) }
+  let(:hdfs_entry) { FactoryGirl.create(:hdfs_entry, :path => '/data.csv', :hadoop_instance => hadoop_instance)}
 
   let!(:instance_account) { sandbox.gpdb_instance.account_for_user!(user) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
+
+  let(:parameters) do
+    {
+        :column_names => ["field1", "field2"],
+        :delimiter => ',',
+        :file_expression => '*.txt',
+        :hadoop_instance_id => hadoop_instance.id,
+        :has_header => true,
+        :hdfs_entry_id => hdfs_entry,
+        :pathname => "foo_fighter/twisted_sisters/",
+        :table_name => "highway_to_heaven",
+        :types => ["text", "text"],
+        :workspace_id => workspace.id
+    }
+  end
 
   describe "#create" do
     before do
@@ -17,11 +33,7 @@ describe ExternalTablesController do
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
     context "without sandbox" do
-      let(:parameters) do
-        {
-            :workspace_id => workspace_without_sandbox.id
-        }
-      end
+      let(:workspace) { workspace_without_sandbox }
 
       it "fails and responds unprocessable entity" do
         post :create, parameters
@@ -33,66 +45,43 @@ describe ExternalTablesController do
     end
 
     context "with sandbox" do
-      let(:parameters) do
-        {
-            :hadoop_instance_id => hadoop_instance.id,
-            :pathname => "foo_fighter/twisted_sisters/",
-            :has_header => true,
-            :column_names => ["field1", "field2"],
-            :types => ["text", "text"],
-            :delimiter => ',',
-            :table_name => "highway_to_heaven",
-            :workspace_id => workspace.id
+      it "creates hdfs external table and responds with ok" do
+        mock(ExternalTable).build(anything) do |e|
+          e[:column_names].should == ['field1', 'field2']
+          e[:column_types].should == ["text", "text"]
+          e[:database].should == Gpdb::ConnectionBuilder.url(sandbox.database, instance_account)
+          e[:delimiter].should == ','
+          e[:file_expression].should == '*.txt'
+          e[:has_header].should == true
+          e[:location_url].should == hdfs_entry.url
+          e[:name].should == 'highway_to_heaven'
+          e[:schema_name].should == 'default'
+          mock(Object.new).save { true }
+        end
+
+        # Please get rid of me
+        stub(Dataset).refresh {
+          d = workspace.sandbox.datasets.build
+          d.name = 'highway_to_heaven'
+          d.save!
         }
-      end
 
-      it "creates hdfs external table for a workspace with sandbox amd responds with ok" do
-        mock(Hdfs::ExternalTableCreator).create(workspace, instance_account, anything, user)
-
-        post :create, parameters
+        expect {
+          post :create, parameters
+        }.to change(Events::WorkspaceAddHdfsAsExtTable, :count).by(1)
         response.code.should == "200"
       end
-    end
 
-    context "failure to connect to the sandbox" do
-      let(:parameters) do
-        {
-            :hadoop_instance_id => hadoop_instance.id,
-            :workspace_id => workspace.id
-        }
-      end
+      it "presents any errors that come from the model" do
+        mock(ExternalTable).build(anything) do |e|
+          o = ExternalTable.new
+          mock(o).save { o.errors.add(:name, :TAKEN); false }
+        end
 
-      before do
-        mock(Hdfs::ExternalTableCreator).create.with_any_args { raise Hdfs::ExternalTableCreator::CreationFailed }
-      end
-
-      it "responds with unprocessable entity and add specific errors" do
         post :create, parameters
         response.code.should == "422"
-
-        decoded = JSON.parse(response.body)
-        decoded['errors']['fields']['external_table'].should have_key('CONNECTION_REFUSED')
-      end
-    end
-
-    context "failure to create table in the sandbox" do
-      let(:parameters) do
-        {
-            :hadoop_instance_id => hadoop_instance.id,
-            :workspace_id => workspace.id
-        }
-      end
-
-      before do
-        mock(Hdfs::ExternalTableCreator).create.with_any_args { raise Hdfs::ExternalTableCreator::AlreadyExists }
-      end
-
-      it "responds with unprocessable entity and add specific errors" do
-        post :create, parameters
-        response.code.should == "422"
-
-        decoded = JSON.parse(response.body)
-        decoded['errors']['fields']['external_table'].should have_key('EXISTS')
+        decoded_response = JSON.parse(response.body)
+        decoded_response['errors']['fields']['name'].should have_key('TAKEN')
       end
     end
   end

@@ -34,5 +34,9 @@ module Gpdb
     ensure
       connection.try(:disconnect!)
     end
+
+    def self.url(database, account)
+      "jdbc:postgresql://#{database.gpdb_instance.host}:#{database.gpdb_instance.port}/#{database.name}?user=#{account.db_username}&password=#{account.db_password}"
+    end
   end
 end

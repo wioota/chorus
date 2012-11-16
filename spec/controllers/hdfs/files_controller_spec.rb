@@ -11,12 +11,8 @@ describe Hdfs::FilesController do
   end
 
   describe "index" do
-
-    before do
-      mock(HdfsEntry).list('/', hadoop_instance) { [entry] }
-    end
-
     it "renders the list of entries on root" do
+      mock(HdfsEntry).list('/', hadoop_instance) { [entry] }
       entry
       get :index, :hadoop_instance_id => hadoop_instance.id
 
@@ -24,11 +20,22 @@ describe Hdfs::FilesController do
       parsed_response = JSON.parse(response.body)
       parsed_response.should have(1).item
     end
+
+    it "takes an id and renders the list of entries inside that directory" do
+      parent_entry = HdfsEntry.create!({:is_directory => true, :path => '/data', :hadoop_instance => hadoop_instance}, :without_protection => true)
+      child_entry = HdfsEntry.create!({:is_directory => false, :path => '/data/test.csv', :parent_id => parent_entry.id, :hadoop_instance => hadoop_instance}, :without_protection => true)
+
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).show { ["a, b, c", "row1a, row1b, row1c"] }
+      end
+
+      get :index, :hadoop_instance_id => hadoop_instance.id, :id => parent_entry.id
+      decoded_response.length.should == 1
+    end
   end
 
   describe "show" do
     context "a directory" do
-
       before do
         mock(HdfsEntry).list('/data/', hadoop_instance) { [] }
       end
