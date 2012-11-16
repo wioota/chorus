@@ -26,6 +26,7 @@ module SolrIndexer
 
   def self.types_to_index(types)
     types = Array(types)
+    types = types.reject { |t| t.blank? }
 
     if types.include? "all"
       Sunspot.searchable

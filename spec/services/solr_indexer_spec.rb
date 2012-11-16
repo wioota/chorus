@@ -48,6 +48,16 @@ describe SolrIndexer do
         SolrIndexer.reindex('all')
       end
     end
+
+    context "when passes an empty string" do
+      it "should index nothing" do
+        mock.proxy(SolrIndexer).types_to_index("") do |results|
+          results.should be_empty
+          results
+        end
+        SolrIndexer.reindex('')
+      end
+    end
   end
 
   describe ".refresh_and_reindex" do
