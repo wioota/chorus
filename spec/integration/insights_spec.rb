@@ -12,6 +12,7 @@ describe "Insights" do
   it "creates an insight" do
     login(users(:owner))
     click_link workspaces(:public).name
+    wait_for_ajax
     click_link "Add an insight"
 
     within_modal(30) do
