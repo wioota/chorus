@@ -12,9 +12,12 @@ class Deployer
 
   def setup_load_test(user_csv_file)
     ssh.copy_up(user_csv_file)
-    ssh.run_rake("bulk_data:load_users_from_csv['#{user_csv_file}']")
+    ssh.chorus_control("stop")
+    ssh.chorus_control("start postgres")
     ssh.run_rake("db:reset")
+    ssh.run_rake("bulk_data:load_users['#{user_csv_file}','chorusadmin']")
     ssh.run_rake("bulk_data:fake_data:load_all['chorusadmin',10,'gpdb42',3]")
+    ssh.chorus_control("start")
   end
 
   private
@@ -131,7 +134,7 @@ class Deployer
       @legacy_path = deploy_config['legacy_path']
     end
 
-    def copy_up(files, destination_folder="#{install_path}")
+    def copy_up(files, destination_folder="#{install_path}/current")
       files = Array(files).map { |file| "'#{file}'" }
       execute "scp #{files.join(' ')} #{host}:#{destination_folder}"
     end

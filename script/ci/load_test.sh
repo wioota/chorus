@@ -11,4 +11,4 @@ do
 done
 
 rake bulk_data:generate_fake_users["load-test-users.csv",200]
- #setup_load_test["load-test","load-test-users.csv"]
+rake setup_load_test["load_test","load-test-users.csv"]
