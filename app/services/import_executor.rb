@@ -1,53 +1,52 @@
 class ImportExecutor < DelegateClass(Import)
   delegate :sandbox, :to => :workspace
-  
+
   def self.run(import_id)
     import = Import.find(import_id)
     ImportExecutor.new(import).run
   end
 
   def run
-    import_attributes = attributes.symbolize_keys
-    import_attributes.slice!(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
+    import_attributes = attributes.symbolize_keys.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
 
     GpTableCopier.run_import(source_dataset.id, user.id, import_attributes)
 
-    import_schedule.update_attribute(:destination_dataset_id, destination_dataset_id) if new_table? && import_schedule
-    import_schedule.update_attribute(:new_table, false) if new_table? && import_schedule
+    # update rails db for new dataset
+    Dataset.refresh(sandbox.gpdb_instance.account_for_user!(user), sandbox)
 
-    mark_import(true)
-    create_success_event
+    update_status :passed
+
   rescue => e
-    mark_import(false)
-    create_failed_event(e.message)
-    raise e
+    update_status :failed, e
+    raise
   end
 
-  def mark_import(success)
-    self.success = success
-    self.finished_at = Time.now
+  private
 
-    if success
-      Dataset.refresh(sandbox.gpdb_instance.account_for_user!(user), sandbox)
-      dst_table = sandbox.datasets.find_by_name!(to_table)
-      self.destination_dataset_id = dst_table.id
+  def update_status(status, exception = nil)
+    passed = (status == :passed)
+
+    touch(:finished_at)
+    self.success = passed
+    save! # this also updates destination_dataset_id
+
+    if passed
+      event = create_passed_event_and_notification
+      update_import_created_event
+      import_schedule.update_attributes({:new_table => false}) if import_schedule
+    else
+      event = create_failed_event exception.message
     end
 
-    save!
+    Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
 
-  def create_success_event
-    dst_table = sandbox.datasets.find_by_name!(to_table)
-
+  def create_passed_event_and_notification
     event = Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
-        :dataset => dst_table,
+        :dataset => destination_dataset,
         :source_dataset => source_dataset
     )
-
-    Notification.create!(:recipient_id => user.id, :event_id => event.id)
-
-    update_import_created_event
   end
 
   def update_import_created_event
@@ -79,14 +78,12 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def create_failed_event(error_message)
-    event = Events::DatasetImportFailed.by(user).add(
+    Events::DatasetImportFailed.by(user).add(
         :workspace => workspace,
         :destination_table => to_table,
         :error_message => error_message,
         :source_dataset => source_dataset,
         :dataset => sandbox.datasets.find_by_name(to_table)
     )
-
-    Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
 end

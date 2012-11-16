@@ -62,7 +62,10 @@ describe ImportExecutor do
         end
 
         it "creates a notification" do
-          run_import
+          expect {
+            run_import
+          }.to change(Notification, :count).by(1)
+
           notification = Notification.last
           notification.recipient_id.should == user.id
           notification.event_id.should == Events::DatasetImportSuccess.last.id

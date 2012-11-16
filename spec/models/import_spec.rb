@@ -65,6 +65,14 @@ describe Import, :database_integration => true do
       import.errors.messages[:base].select { |a,b| a == :table_not_consistent }.should_not be_empty
     end
 
+    it "validates the destination dataset for an existing table" do
+      import.new_table = false
+      import.destination_dataset = nil
+      import.should_not be_valid
+
+      import.errors.messages[:base].select { |a,b| a == :table_not_exists }.should_not be_empty
+    end
+
     it "sets the destination_dataset before validation" do
       stub(import.source_dataset).dataset_consistent? { true }
       import.to_table = 'master_table1'

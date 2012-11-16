@@ -9,17 +9,17 @@ module ImportMixins
 
   # should probably talk to the database to figure this out instead of use our local view
   def table_does_not_exist
-    table = workspace.sandbox.datasets.find_by_name(to_table)
+    table = sandbox.datasets.find_by_name(to_table)
     errors.add(:base, :table_exists, {:table_name => to_table}) if table
   end
 
   def table_does_exist
-    table = workspace.sandbox.datasets.find_by_name(to_table)
+    table = sandbox.datasets.find_by_name(to_table)
     errors.add(:base, :table_not_exists, {:table_name => to_table}) unless table
   end
 
   def tables_have_consistent_schema
-    dest = workspace.sandbox.datasets.find_by_name(self.to_table)
+    dest = sandbox.datasets.find_by_name(self.to_table)
     if dest && !self.source_dataset.dataset_consistent?(dest)
       errors.add(:base,
                  :table_not_consistent,
@@ -30,7 +30,7 @@ module ImportMixins
   end
 
   def set_destination_dataset_id
-    dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
+    dst_table = sandbox.datasets.find_by_name(to_table) unless destination_dataset
     self.destination_dataset = dst_table
   end
 
@@ -38,8 +38,11 @@ module ImportMixins
     belongs_to :workspace
 
     validates :workspace, :presence => true
+    validate :destination_dataset, :unless => :new_table
 
     belongs_to :destination_dataset, :class_name => 'Dataset'
-    before_validation :set_destination_dataset_id, :unless => :new_table
+    before_validation :set_destination_dataset_id
+
+    delegate :sandbox, :to => :workspace
   end
 end
