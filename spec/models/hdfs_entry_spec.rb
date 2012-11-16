@@ -374,6 +374,19 @@ describe HdfsEntry do
     it "retrieves file content from the query service" do
       entry.contents.should == ['content']
     end
+
+    context "corrupted file" do
+      before do
+        any_instance_of(Hdfs::QueryService) do |h|
+          stub(h).show('/file.txt') { raise FileNotFoundError, "File not found on HDFS: file.txt" }
+        end
+      end
+      it "raises ApiValidationError when not able to read the file" do
+        expect {
+          entry.contents
+        }.to raise_error(ApiValidationError)
+      end
+    end
   end
 
   describe "#highlighted_attributes" do
