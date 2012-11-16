@@ -116,7 +116,7 @@ describe Gpdb::ConnectionBuilder do
 
       it "does not catch the error" do
         Timecop.freeze(DateTime.now)
-        mock(Rails.logger).info("#{log_message} - #{adapter_exception.message}")
+        mock(Rails.logger).warn("#{log_message} - #{adapter_exception.message}")
         mock(fake_connection_adapter).query.with_any_args { raise ActiveRecord::StatementInvalid }
         expect {
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account) do |conn|
