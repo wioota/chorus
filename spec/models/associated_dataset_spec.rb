@@ -25,7 +25,7 @@ describe AssociatedDataset do
     it "doesnt validate against deleted associations" do
       associated_dataset.destroy
       association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
-      association.should be_valid
+      association.save.should be_true
     end
   end
 
