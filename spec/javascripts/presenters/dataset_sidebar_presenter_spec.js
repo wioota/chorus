@@ -113,17 +113,34 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     describe("unfinished import", function() {
                         beforeEach(function() {
                             delete this.import.attributes.completedStamp;
-                            spyOn(resource, 'lastImport').andReturn(
+                            this.spy = spyOn(resource, 'lastImport').andReturn(
                                 this.import
                             );
                         });
                         it("has inProgressText and lastImport", function() {
-                            expect(presenter.inProgressText()).toMatch("Import into");
+                            expect(presenter.inProgressText()).toMatch("Import into ");
                             expect(presenter.importInProgress()).toBeTruthy();
                             expect(presenter.importFailed()).toBeFalsy();
                             expect(presenter.lastImport()).toMatch("Import started");
-
                         });
+
+                        it("doesn't display the link in inProgressText when table does not exist yet ", function() {
+                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: this.import.destination().name()});
+                        });
+
+                        context("when importing to an existing table", function() {
+                            beforeEach(function() {
+                                delete this.import.attributes.completedStamp;
+                                this.import.set({destinationDatasetId: 2});
+                                this.spy.andReturn(
+                                    this.import
+                                );
+                            })
+                            it("display inProgressText with a link to the table", function() {
+                                expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: presenter._linkToModel(this.import.destination(), this.import.destination().name())});
+                            });
+
+                        })
                     });
 
                     describe("successfully finished import", function() {
@@ -174,11 +191,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             );
                         });
                         it("has inProgressText and lastImport", function() {
-                            expect(presenter.inProgressText()).toMatch("Import from");
+                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress_into", { tableLink: presenter._linkToModel(this.import.source(), this.import.source().name())});
                             expect(presenter.importInProgress()).toBeTruthy();
                             expect(presenter.importFailed()).toBeFalsy();
                             expect(presenter.lastImport()).toMatch("Import started");
-
                         });
                     });
 
