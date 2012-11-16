@@ -161,7 +161,7 @@ function restore () {
 Restore of $BACKUP_ABSOLUTE_FILENAME completed.
 To start Chorus, run the following commands:
 
-    source $CHORUS_HOME/chorus_path.sh
+    source $ORIGINAL_CHORUS_HOME/chorus_path.sh
     chorus_control.sh start"
 
   echo "Restoring chorus data..."

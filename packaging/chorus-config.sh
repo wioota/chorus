@@ -7,6 +7,7 @@ fi
 # remove trailing '/' from CHORUS_HOME
 CHORUS_HOME=`echo $CHORUS_HOME | sed 's/\/$//'`
 
+ORIGINAL_CHORUS_HOME=$CHORUS_HOME
 if [ -e $CHORUS_HOME/current ]; then
     CHORUS_HOME=$CHORUS_HOME/current
 fi
