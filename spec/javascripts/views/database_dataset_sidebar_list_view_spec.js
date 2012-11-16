@@ -126,8 +126,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
                     var datasetSet = new chorus.collections.WorkspaceDatasetSet([], { workspaceId:chorus.page.workspace.get("id") });
                     datasetSet.sortAsc("objectName");
                     datasetSet.urlParams = {
-                        databaseName:this.view.focusSchema.database().name()
+                        databaseId: this.view.focusSchema.database().get('id')
                     };
+
+                    datasetSet.fetch();
 
                     expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
                 });

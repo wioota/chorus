@@ -92,7 +92,10 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def datasets(current_user, type = nil)
+  def datasets(current_user, options = nil)
+    type = options[:type] if options
+    database_id = options[:database_id] if options
+
     if sandbox
       account = sandbox.database.account_for_user(current_user)
 
@@ -117,10 +120,15 @@ class Workspace < ActiveRecord::Base
         else
           datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids + chorus_view_ids))
       end
-      return datasets
     else
-      Dataset.where(:id => (bound_dataset_ids + chorus_view_ids))
+      datasets = Dataset.where(:id => (bound_dataset_ids + chorus_view_ids))
     end
+
+    if database_id
+      datasets = datasets.joins(:schema).where(:gpdb_schemas => { :database_id => database_id })
+    end
+
+    return datasets
   end
 
   def self.workspaces_for(user)

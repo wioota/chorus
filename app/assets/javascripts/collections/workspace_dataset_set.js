@@ -20,7 +20,7 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
     urlParams: function(options) {
         return {
             namePattern: this.attributes.namePattern,
-            databaseName: this.attributes.databaseName,
+            databaseId: this.attributes.database && this.attributes.database.id,
             type: this.attributes.type
         };
     },

@@ -8,6 +8,7 @@ class Dataset < ActiveRecord::Base
   include SoftDelete
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
+
   after_save :update_counter_cache
 
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy

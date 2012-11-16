@@ -63,7 +63,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     datasetsInDatabase: function(database) {
         return new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.id,
-            databaseName: database.get("name")
+            database: database
         });
     },
 

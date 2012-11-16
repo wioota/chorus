@@ -32,14 +32,14 @@ describe("chorus.models.Workspace", function() {
 
     describe("#datasetsInDatabase(database)", function() {
         beforeEach(function() {
-            var database = rspecFixtures.schema({ database: {name: "foo"} }).database();
+            var database = rspecFixtures.schema({ database: {name: "foo", id: '123'} }).database();
             this.datasets = this.model.datasetsInDatabase(database)
         });
 
         it("returns a dataset set with the right workspace and database", function() {
             expect(this.datasets).toBeA(chorus.collections.WorkspaceDatasetSet);
             expect(this.datasets.attributes.workspaceId).toBe(this.model.id);
-            expect(this.datasets.attributes.databaseName).toBe("foo");
+            expect(this.datasets.attributes.database.id).toBe("123");
         });
     });
 

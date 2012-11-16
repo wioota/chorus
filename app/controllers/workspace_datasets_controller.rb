@@ -2,7 +2,8 @@ class WorkspaceDatasetsController < ApplicationController
 
   def index
     authorize! :show, workspace
-    present paginate(workspace.datasets(current_user, params[:type]).with_name_like(params[:name_pattern]).order("lower(name)")), :presenter_options => { :workspace => workspace }
+    options = { :type => params[:type], :database_id => params[:database_id] }.reject { |k,v| v.nil? }
+    present paginate(workspace.datasets(current_user, options).with_name_like(params[:name_pattern]).order("lower(datasets.name)")), :presenter_options => { :workspace => workspace }
   end
 
   def create

@@ -38,11 +38,11 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
                 this.collection.attributes.objectType = "TABLE";
                 this.collection.attributes.namePattern = "Foo";
-                this.collection.attributes.databaseName = "dbName";
+                this.collection.attributes.database = rspecFixtures.database({id: "123"});
                 expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     type: "SOURCE_TABLE",
                     namePattern: "Foo",
-                    databaseName: "dbName",
+                    databaseId: "123",
                     per_page: "10",
                     page: "1"
                 });

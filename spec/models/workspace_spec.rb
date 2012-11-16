@@ -154,10 +154,10 @@ describe Workspace do
           end
 
           it "filters by type" do
-            workspace.datasets(user, "SANDBOX_TABLE").to_a.should =~ [sandbox_table]
-            workspace.datasets(user, "SANDBOX_DATASET").to_a.should =~ [sandbox_table, sandbox_view]
-            workspace.datasets(user, "CHORUS_VIEW").to_a.should =~ [chorus_view, chorus_view_from_source]
-            workspace.datasets(user, "SOURCE_TABLE").to_a.should =~ [source_table]
+            workspace.datasets(user, { :type => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
+            workspace.datasets(user, { :type => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
+            workspace.datasets(user, { :type => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
+            workspace.datasets(user, { :type => "SOURCE_TABLE" }).to_a.should =~ [source_table]
           end
         end
 
@@ -167,9 +167,20 @@ describe Workspace do
           end
 
           it "returns no results" do
-            workspace.datasets(user, "SANDBOX_TABLE").should =~ []
-            workspace.datasets(user, "SANDBOX_DATASET").should =~ []
+            workspace.datasets(user, { :type => "SANDBOX_TABLE" }).should =~ []
+            workspace.datasets(user, { :type => "SANDBOX_DATASET" }).should =~ []
           end
+        end
+      end
+
+      context "with associated datasets and options contain a database id" do
+        it "filters the datasets to specified database" do
+          dataset1 = datasets(:table)
+          dataset2 = datasets(:searchquery_table)
+          workspace.bound_datasets << dataset1
+          workspace.bound_datasets << dataset2
+
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
         end
       end
     end
@@ -192,6 +203,17 @@ describe Workspace do
 
       it "includes the workspace's chorus views" do
         workspace.datasets(user).to_a.should include(chorus_view)
+      end
+
+      context "when the workspace has associated datasets and a database_id is given" do
+        it "filters for given database" do
+          dataset1 = datasets(:table)
+          dataset2 = datasets(:searchquery_table)
+          workspace.bound_datasets << dataset1
+          workspace.bound_datasets << dataset2
+
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
+        end
       end
     end
 

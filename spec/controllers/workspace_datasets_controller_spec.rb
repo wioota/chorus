@@ -44,7 +44,7 @@ describe WorkspaceDatasetsController do
     end
 
     it "orders and paginates the datasets" do
-      mock(the_datasets).order("lower(name)") { the_datasets }
+      mock(the_datasets).order("lower(datasets.name)") { the_datasets }
       mock(the_datasets).paginate("page" => "2", "per_page" => "25") { the_datasets }
       get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
     end
@@ -56,14 +56,19 @@ describe WorkspaceDatasetsController do
 
     it "filter the list by the name_pattern value" do
       get :index, :workspace_id => workspace.to_param, :name_pattern => "view"
-      decoded_response.each do |response|
-        response.object_name.should =~ /view/
+      decoded_response.each do |dataset|
+        dataset.object_name.should =~ /view/
       end
     end
 
-    it "should filter db objects by type" do
-      mock(workspace).datasets(user, "SANDBOX_TABLE") { the_datasets }
+    it "filters db objects by type" do
+      mock(workspace).datasets(user, { :type => "SANDBOX_TABLE" }) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
+    end
+
+    it "asks for datasets only from the selected database" do
+      mock(workspace).datasets(user, { :database_id => workspace.sandbox.database.to_param }) { the_datasets }
+      get :index, :workspace_id => workspace.to_param, :database_id => workspace.sandbox.database.to_param
     end
   end
 
