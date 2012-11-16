@@ -1,5 +1,6 @@
 class CredentialsValidator
   include ActiveModel::Validations
+  include ChorusApiValidationFormat
 
   validates_presence_of :username, :password
 

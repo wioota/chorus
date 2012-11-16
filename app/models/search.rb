@@ -1,5 +1,6 @@
 class Search
   include ActiveModel::Validations
+  include ChorusApiValidationFormat
   attr_accessor :query, :page, :per_page, :workspace_id, :search_type
   attr_reader :models_to_search, :per_type, :current_user
 

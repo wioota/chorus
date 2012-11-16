@@ -5,10 +5,10 @@ class ApiValidationError < RuntimeError
   delegate :add, :to => :errors
 
   def initialize(*args)
-    if args[0].instance_of? ActiveModel::Validations::UnlocalizedErrors
+    if args[0].instance_of? ChorusApiValidationFormat::UnlocalizedErrors
       @errors = args[0]
     else
-      @errors = ActiveModel::Validations::UnlocalizedErrors.new(nil)
+      @errors = ChorusApiValidationFormat::UnlocalizedErrors.new(nil)
       add(*args) if args.any?
     end
   end
