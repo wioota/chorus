@@ -71,6 +71,26 @@ describe EventsController do
         end
       end
 
+      context "for a linked tableau workfile" do
+        let(:object) { workfiles(:private_tableau) }
+
+        it "presents the tableau workfile's activities" do
+          log_in(users(:owner))
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => "workfile", :entity_id => object.id
+          response.code.should == "200"
+        end
+
+        context "when you are not authorized to see a tableau workfile" do
+          it "returns forbidden" do
+            log_in(users(:default))
+            get :index, :entity_type => "workfile", :entity_id => object.id
+
+            response.should be_forbidden
+          end
+        end
+      end
+
       context "for a chorus view" do
         let(:object) { datasets(:private_chorus_view) }
 

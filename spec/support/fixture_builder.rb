@@ -213,6 +213,12 @@ FixtureBuilder.configure do |fbuilder|
                                   :tableau_workbook_publication => publication
                                  }, :without_protection => true)
 
+    private_tableau_workfile = LinkedTableauWorkfile.create({:file_name => 'private_tableau',
+                                                     :workspace => private_workspace,
+                                                     :owner => owner,
+                                                     :tableau_workbook_publication => nil
+                                                    }, :without_protection => true)
+
     fbuilder.name :owner_creates_tableau_workfile, Events::TableauWorkfileCreated.by(owner).add(
         :workbook_name => publication.name,
         :dataset => publication.dataset,
