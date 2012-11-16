@@ -29,7 +29,7 @@ module Gpdb
       end
     rescue ActiveRecord::StatementInvalid => e
       friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
-      Rails.logger.info(friendly_message + " - " + e.message)
+      Rails.logger.warn(friendly_message + " - " + e.message)
       raise e
     ensure
       connection.try(:disconnect!)
