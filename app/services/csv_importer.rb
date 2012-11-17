@@ -1,4 +1,6 @@
 class CsvImporter
+  class ImportFailed < StandardError; end
+
   attr_accessor :csv_file, :schema, :account, :import_created_event_id, :import_record
 
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
@@ -21,7 +23,7 @@ class CsvImporter
     import
     create_success_event
     import_record.update_attribute(:success, true)
-  rescue => e
+  rescue ImportFailed => e
     create_failure_event(e.message)
     import_record.try(:update_attribute, :success, false)
     raise e
@@ -57,7 +59,7 @@ class CsvImporter
     import_record.success = true
   rescue Exception => e
     import_record.success = false
-    raise e
+    raise ImportFailed.new(e.message)
   ensure
     import_record.finished_at = Time.now
     import_record.save!(:validate => false)
@@ -116,11 +118,11 @@ class CsvImporter
 
   # column_mapping is direct postgresql types
   def create_table_sql
-    csv_file.column_names.zip(csv_file.types).map{|a,b| "#{a} #{b}"}.join(", ")
+    csv_file.escaped_column_names.zip(csv_file.types).map{|a,b| "#{a} #{b}"}.join(", ")
   end
 
   def column_names_sql
-    csv_file.column_names.join(', ')
+    csv_file.escaped_column_names.join(', ')
   end
 
   def header_sql

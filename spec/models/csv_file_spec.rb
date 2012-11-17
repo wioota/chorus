@@ -91,6 +91,14 @@ describe CsvFile do
     end
   end
 
+  describe '#escaped_column_names' do
+    let(:csv_file) { FactoryGirl.build(:csv_file, :column_names => ['where', 'order', 'select'])}
+
+    it 'returns escaped column names' do
+      csv_file.escaped_column_names.should == %w{"where" "order" "select"}
+    end
+  end
+  
   describe "#table_already_exists", :database_integration => true do
     let(:csv_file) { CsvFile.first }
     let(:account) { InstanceIntegration.real_gpdb_account }

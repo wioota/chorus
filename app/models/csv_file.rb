@@ -18,6 +18,10 @@ class CsvFile < ActiveRecord::Base
   validates :user, :presence => true
   validates :workspace, :presence => true
 
+  def escaped_column_names
+    column_names.map { |column_name| %Q|"#{column_name}"| }
+  end
+
   def self.delete_old_files!
     age_limit = Chorus::Application.config.chorus['delete_unimported_csv_files_after_hours']
     return unless age_limit
@@ -39,8 +43,11 @@ class CsvFile < ActiveRecord::Base
 
   def check_table(table_name, account, schema)
     schema.with_gpdb_connection(account) do |connection|
-      check_results = connection.exec_query("select table_name FROM information_schema.tables
-        where table_name = '#{table_name}' AND table_schema = '#{schema.name}'")
+      check_results = connection.exec_query <<-SQL
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_name = '#{table_name}' AND table_schema = '#{schema.name}'
+      SQL
       check_results.count > 0
     end
   end

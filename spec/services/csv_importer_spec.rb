@@ -67,12 +67,10 @@ describe CsvImporter do
     end
 
     describe "#import" do
-      subject do
-        CsvImporter.new(csv_file.id, file_import_created_event.id).import
-      end
+      let(:csv_importer) { CsvImporter.new(csv_file.id, file_import_created_event.id) }
 
       it "imports the data" do
-        subject
+        csv_importer.import
       end
     end
 
@@ -83,9 +81,9 @@ describe CsvImporter do
 
           schema.with_gpdb_connection(account) do |connection|
             result = connection.exec_query("select * from #{table_name} order by ID asc;")
-            result[0].should == {"id" => 1, "name" => "foo"}
-            result[1].should == {"id" => 2, "name" => "bar"}
-            result[2].should == {"id" => 3, "name" => "baz"}
+            result[0].should == {"id" => 1, "where" => "foo"}
+            result[1].should == {"id" => 2, "where" => "bar"}
+            result[2].should == {"id" => 3, "where" => "baz"}
           end
         end
       end
@@ -141,8 +139,8 @@ describe CsvImporter do
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
           fetch_from_gpdb("select * from #{table_name} order by id asc;") do |result|
-            result[0]["name"].should == "larry"
-            result[1]["name"].should == "barry"
+            result[0]["where"].should == "larry"
+            result[1]["where"].should == "barry"
             result.count.should == 2
           end
         end
@@ -402,7 +400,7 @@ describe CsvImporter do
       subject do
         expect {
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-        }.to raise_error(ActiveRecord::StatementInvalid)
+        }.to raise_error(CsvImporter::ImportFailed)
       end
 
       it "makes a IMPORT_FAILED event" do
@@ -436,7 +434,7 @@ describe CsvImporter do
   def create_csv_file(options = {})
     defaults = {
         :contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
-        :column_names => [:id, :name],
+        :column_names => [:id, :where],
         :types => [:integer, :varchar],
         :delimiter => ',',
         :file_contains_header => false,
