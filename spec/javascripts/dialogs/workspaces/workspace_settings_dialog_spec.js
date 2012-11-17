@@ -502,6 +502,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
+                            spyOnEvent(this.dialog.model, "unprocessableEntity")
                             this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                         });
 
@@ -519,6 +520,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                         it("does not clear the form", function() {
                             expect(this.dialog.$("input[name=name]").val()).toBe("my modified name");
+                        });
+
+                        it("does not show the 422 page", function() {
+                            expect("unprocessableEntity").not.toHaveBeenTriggeredOn(this.dialog.model)
                         });
                     });
 
