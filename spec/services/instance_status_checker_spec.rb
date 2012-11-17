@@ -187,6 +187,21 @@ describe InstanceStatusChecker do
           gpdb_instance2.reload.version.should == "4.1.1.2"
           gpdb_instance3.reload.version.should == "random_version"
         end
+
+        context "with an invalid version string" do
+          before do
+            stub_gpdb(instance_account3,
+                      "select version()" => [{"version" => ""}]
+            )
+          end
+
+          it "handles itself gracefully" do
+            gpdb_instance3.update_attribute(:version, "random_version")
+            mock(Rails.logger).error.with_any_args
+            InstanceStatusChecker.check_gpdb_instances
+            gpdb_instance3.reload.version.should == "Error"
+          end
+        end
       end
 
       context "Exception occur while trying to connect to the database" do

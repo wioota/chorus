@@ -24,7 +24,7 @@ class InstanceStatusChecker
         check_gpdb_instance
       end
     rescue => e
-      Rails.logger.error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+      Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     ensure
       instance.touch
       instance.save!
@@ -61,7 +61,12 @@ class InstanceStatusChecker
         # if the version string looks like this:
         # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
         # then we just want "4.1.1.2"
-        instance.version = version_string.match(/Greenplum Database ([\d\.]*)/)[1]
+        begin
+          instance.version = version_string.match(/Greenplum Database ([\d\.]*)/)[1]
+        rescue => e
+          instance.version = "Error"
+          raise StandardError.new("Couldn't fetch instance version from '#{version_string}'")
+        end
       end
     end
   end
