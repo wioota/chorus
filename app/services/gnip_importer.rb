@@ -54,7 +54,7 @@ class GnipImporter
   end
 
   def max_file_size
-    Chorus::Application.config.chorus["gnip.csv_import_max_file_size_mb"] || 50
+    (Chorus::Application.config.chorus["gnip.csv_import_max_file_size_mb"] || 50).megabytes
   end
 
   def cleanup_table
@@ -102,7 +102,7 @@ class GnipImporter
         },
         :without_protection => true).tap do |csv_file|
       if csv_file.contents_file_size > max_file_size
-        raise GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit."
+        raise GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit. Filename: #{csv_file.contents_file_name} File size: #{csv_file.contents_file_size} Maximum file size: #{max_file_size}"
       end
     end
   end
