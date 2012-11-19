@@ -65,7 +65,10 @@ class GpPipe < DelegateClass(GpTableCopier)
     # p "CALLING RUN"
     Timeout::timeout(GpPipe.timeout_seconds) do
       pipe_file = File.join(gpfdist_data_dir, pipe_name)
-      count = src_conn.exec_query("SELECT count(*) from #{source_table_fullname};")[0]['count']
+      unless source_table.query_setup_sql.blank?
+        src_conn.exec_query("#{source_table.query_setup_sql};")
+      end
+      count = src_conn.exec_query(" SELECT count(*) from #{source_table_fullname};")[0]['count']
       no_rows_to_import = (count == 0) || row_limit == 0
       count = row_limit if row_limit && row_limit < count
 

@@ -196,6 +196,27 @@ describe GpPipe, :database_integration => true do
           end
         end
       end
+
+      context "from a chorus view" do
+        let(:source_dataset) do
+          cv = ChorusView.new({:name => "hello_view", :query => "select * from #{source_table_name}",
+                              :schema_id => schema.id,
+                              :workspace_id => workspace.id}, :without_protection => true)
+          cv.save!(:validate => false)
+          cv
+        end
+
+        before do
+          extra_options.merge!("new_table" => true)
+          setup_data
+          stub(gpdb1).exec_query("delete from #{gp_pipe.source_table_fullname};") {true}
+        end
+
+        it "works like a normal dataset import" do
+          gp_pipe.run
+          gpdb2.exec_query("SELECT * FROM #{gp_pipe.destination_table_fullname}").length.should == 2
+        end
+      end
     end
 
     context "with distribution key" do
