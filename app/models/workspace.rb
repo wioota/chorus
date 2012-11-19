@@ -61,7 +61,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def solr_reindex_later
-    QC.enqueue('Workspace.reindex_workspace', id)
+    QC.enqueue_if_not_queued('Workspace.reindex_workspace', id)
   end
 
   has_shared_search_fields [

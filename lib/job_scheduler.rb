@@ -6,7 +6,7 @@ class JobScheduler
 
   def initialize
     every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'InstanceStatusChecker.check') do
-      QC.enqueue("InstanceStatusChecker.check")
+      QC.enqueue_if_not_queued("InstanceStatusChecker.check")
     end
 
     every(Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
@@ -14,7 +14,7 @@ class JobScheduler
     end
 
     every(Chorus::Application.config.chorus['reindex_search_data_interval_hours'].hours, 'SolrIndexer.refresh_external_data') do
-      QC.enqueue("SolrIndexer.refresh_external_data")
+      QC.enqueue_if_not_queued("SolrIndexer.refresh_external_data")
     end
 
     every(1.minute, 'ImportScheduler.run') do

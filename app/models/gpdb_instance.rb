@@ -40,11 +40,11 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def solr_reindex_later
-    QC.enqueue('GpdbInstance.reindex_instance', id)
+    QC.enqueue_if_not_queued('GpdbInstance.reindex_instance', id)
   end
 
   def refresh_databases_later
-    QC.enqueue('GpdbInstance.refresh_databases', id)
+    QC.enqueue_if_not_queued('GpdbInstance.refresh_databases', id)
   end
 
   def self.owned_by(user)
@@ -85,7 +85,7 @@ class GpdbInstance < ActiveRecord::Base
       database_accounts = accounts.where(:db_username => db_usernames)
       if database.instance_accounts.sort != database_accounts.sort
         database.instance_accounts = database_accounts
-        QC.enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
+        QC.enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
       end
       found_databases << database
     end

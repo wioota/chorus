@@ -376,7 +376,7 @@ describe Workspace do
   describe "#solr_reindex_later" do
     let(:workspace) { workspaces(:public) }
     it "should enqueue a job" do
-      mock(QC.default_queue).enqueue("Workspace.reindex_workspace", workspace.id)
+      mock(QC.default_queue).enqueue_if_not_queued("Workspace.reindex_workspace", workspace.id)
       workspace.solr_reindex_later
     end
   end

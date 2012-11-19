@@ -295,8 +295,8 @@ describe GpdbInstance do
       let(:database) { gpdb_instance.databases.find_by_name(InstanceIntegration.database_name) }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
-        mock(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
-        stub(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", anything)
+        mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything)
         database.instance_accounts = []
         database.instance_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_instance.refresh_databases
@@ -304,7 +304,7 @@ describe GpdbInstance do
       end
 
       it "does not enqueue GpdbDatabase.reindexDatasetPermissions if the instance accounts for a database have not changed" do
-        dont_allow(QC.default_queue).enqueue("GpdbDatabase.reindexDatasetPermissions", database.id)
+        dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
         gpdb_instance.refresh_databases
       end
     end
@@ -443,7 +443,7 @@ describe GpdbInstance do
   describe "#solr_reindex_later" do
     let(:instance) { gpdb_instances(:owners) }
     it "should enqueue a job" do
-      mock(QC.default_queue).enqueue("GpdbInstance.reindex_instance", instance.id)
+      mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.reindex_instance", instance.id)
       instance.solr_reindex_later
     end
   end
@@ -451,7 +451,7 @@ describe GpdbInstance do
   describe "#refresh_databases_later" do
     let(:instance) { gpdb_instances(:owners) }
     it "should enqueue a job" do
-      mock(QC.default_queue).enqueue("GpdbInstance.refresh_databases", instance.id)
+      mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh_databases", instance.id)
       instance.refresh_databases_later
     end
   end

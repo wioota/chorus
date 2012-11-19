@@ -9,7 +9,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'InstanceStatusChecker.check' job in QC" do
-      mock(QC.default_queue).enqueue("InstanceStatusChecker.check")
+      mock(QC.default_queue).enqueue_if_not_queued("InstanceStatusChecker.check")
       job_scheduler.job_named('InstanceStatusChecker.check').run(Time.now)
     end
   end
@@ -31,7 +31,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'SolrIndexer.refresh_external_data' job in QC" do
-      mock(QC.default_queue).enqueue("SolrIndexer.refresh_external_data")
+      mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.refresh_external_data")
       job_scheduler.job_named('SolrIndexer.refresh_external_data').run(Time.now)
     end
   end

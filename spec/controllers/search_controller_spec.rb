@@ -169,13 +169,13 @@ describe SearchController do
       end
 
       it "should enqueue the refresh" do
-        mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_reindex", ['Dataset', 'GpdbInstance'])
+        mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.refresh_and_reindex", ['Dataset', 'GpdbInstance'])
         post :reindex, :types => ['Dataset', 'GpdbInstance']
         response.should be_success
       end
 
       it "should allow refresh of all searchable types" do
-        mock(QC.default_queue).enqueue("SolrIndexer.refresh_and_reindex", 'all')
+        mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.refresh_and_reindex", 'all')
         post :reindex
         response.should be_success
       end
