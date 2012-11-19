@@ -1,3 +1,5 @@
+require 'lib/logger'
+
 class ImportScheduler
   def self.run
     ImportSchedule.ready_to_run.each do |schedule|
@@ -8,7 +10,7 @@ class ImportScheduler
           QC.enqueue("ImportExecutor.run", import.id)
         end
       rescue => e
-        Rails.logger.error "Import schedule #{schedule} failed with error '#{e}'."
+        Chorus.log_error "Import schedule #{schedule} failed with error '#{e}'."
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'lib/logger'
+
 module Gpdb
   class InstanceStillProvisioning < StandardError; end
   class InstanceOverloaded < StandardError; end
@@ -17,8 +19,8 @@ module Gpdb
       # TODO: this yield should really be after most of the exception handling [#39664445]
       yield connection if block_given?
     rescue ActiveRecord::JDBCError => e
-      friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}"
-      Rails.logger.error(friendly_message + " - " + e.message)
+      friendly_message = "Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}"
+      Chorus.log_error(friendly_message + " - " + e.message)
 
       if e.message.include?("password")
         raise ActiveRecord::JDBCError.new("Password authentication failed for user '#{account.db_username}'")

@@ -1,3 +1,5 @@
+require 'lib/logger'
+
 class InstanceStatusChecker
   attr_accessor :instance
   delegate :last_online_at, :last_checked_at, :state, :touch, :to => :instance
@@ -24,7 +26,7 @@ class InstanceStatusChecker
         check_gpdb_instance
       end
     rescue => e
-      Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+      Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     ensure
       instance.touch
       instance.save!

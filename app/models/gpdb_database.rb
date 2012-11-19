@@ -40,7 +40,7 @@ class GpdbDatabase < ActiveRecord::Base
       begin
         dataset.solr_index
       rescue => e
-        Rails.logger.error("Error in GpdbDataset.reindexDatasetPermissions: #{e.message}")
+        Chorus.log_error "Error in GpdbDataset.reindexDatasetPermissions: #{e.message}"
       end
     end
     Sunspot.commit

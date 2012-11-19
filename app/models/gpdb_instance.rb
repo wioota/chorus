@@ -90,7 +90,7 @@ class GpdbInstance < ActiveRecord::Base
       found_databases << database
     end
   rescue ActiveRecord::JDBCError => e
-    Rails.logger.error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
+    Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   ensure
     if options[:mark_stale]
       (databases.not_stale - found_databases).each do |database|

@@ -1,8 +1,11 @@
 require 'timeout'
+require 'lib/logger'
 
 require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.1.jar')
 
 module Hdfs
+  include Chorus
+
   PREVIEW_LINE_COUNT = 200
   DirectoryNotFoundError = Class.new(StandardError)
   FileNotFoundError = Class.new(StandardError)
@@ -25,7 +28,7 @@ module Hdfs
     def version
       version = JavaHdfs.new(@host, @port, @username, @version).version
       unless version
-        Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
+        Chorus.log_error "Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
         raise ApiValidationError.new(:connection, :generic, {:message => "Unable to determine HDFS server version or unable to reach server at #{@host}:#{@port}. Check connection parameters."})
       end
       version.get_name
