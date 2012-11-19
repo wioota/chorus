@@ -65,9 +65,11 @@ class ChorusView < Dataset
     GpdbColumn.columns_for(account, self)
   end
 
-  def query_setup_sql
-    #set search_path to "#{schema.name}";
-    %Q{create temp view "#{name}" as #{query};}
+  def as_sequel
+    {
+        :query => %Q{create temp view "#{name}" as #{query}},
+        :identifier => Sequel.qualify(schema.name, name)
+    }
   end
 
   def scoped_name
