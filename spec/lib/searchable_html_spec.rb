@@ -3,18 +3,22 @@ require 'sunspot'
 
 describe SearchableHtml do
   describe ".searchable_html" do
-    class TestClass < ActiveRecord::Base
-      @columns = []
-      include SearchableHtml
-
-      attr_accessor :html_field, :id
-      attr_accessible :html_field
-
-      searchable_html :html_field
-    end
-
     before do
       Sunspot.session = Sunspot.session.original_session
+
+      class TestClass < ActiveRecord::Base
+        @columns = []
+        include SearchableHtml
+
+        attr_accessor :html_field, :id
+        attr_accessible :html_field
+
+        searchable_html :html_field
+      end
+    end
+
+    after do
+      Sunspot.searchable.instance_variable_get(:@name_to_klass).delete(TestClass.name.to_sym)
     end
 
     it "removes tags from the body" do
