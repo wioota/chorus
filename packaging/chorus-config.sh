@@ -115,7 +115,7 @@ function wait_for_stop () {
     while kill -0 `head -1 $pid_file 2>/dev/null` > /dev/null 2>&1
     do
         echo -n "."
-        sleep 5
+        sleep 1
     done
     echo " ( Stopped )"
 }
