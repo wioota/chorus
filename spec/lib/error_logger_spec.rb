@@ -1,4 +1,4 @@
-require 'lib/error_logger'
+require 'error_logger'
 require 'timecop'
 require 'spec/support/rr'
 
