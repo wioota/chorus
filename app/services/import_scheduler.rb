@@ -10,7 +10,7 @@ class ImportScheduler
           QC.enqueue("ImportExecutor.run", import.id)
         end
       rescue => e
-        Chorus.log_error "Import schedule #{schedule} failed with error '#{e}'."
+        Chorus.log_error "Import schedule with ID #{schedule.id} failed with error '#{e}'."
       end
     end
   end
