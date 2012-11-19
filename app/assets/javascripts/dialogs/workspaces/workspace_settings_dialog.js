@@ -93,7 +93,9 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         }
 
         this.$("button.submit").startLoading("actions.saving");
-        this.pageModel.save(attrs, {unprocessableEntity: function() {}});
+        this.pageModel.save(attrs, {unprocessableEntity: function() {
+            /* Bypass page level error handling for this save */
+        }});
     },
 
     saved:function () {
