@@ -73,3 +73,6 @@ GREENPLUM_IP
 # Ignore secret keys
 /config/secret.token
 /config/secret.key
+
+# Ignore .vagrant
+.vagrant
