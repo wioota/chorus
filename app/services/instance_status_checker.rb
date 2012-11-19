@@ -1,4 +1,4 @@
-require 'lib/logger'
+require 'lib/error_logger'
 
 class InstanceStatusChecker
   attr_accessor :instance

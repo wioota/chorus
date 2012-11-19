@@ -1,4 +1,4 @@
-require 'lib/logger'
+require 'lib/error_logger'
 
 class ImportScheduler
   def self.run

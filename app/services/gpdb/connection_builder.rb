@@ -1,4 +1,4 @@
-require 'lib/logger'
+require 'lib/error_logger'
 
 module Gpdb
   class InstanceStillProvisioning < StandardError; end
