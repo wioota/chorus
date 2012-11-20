@@ -151,5 +151,28 @@ describe WorkspaceCsvImportsController do
         end.to_not change(Events::FileImportCreated, :count)
       end
     end
+
+
+    context "when the columns Names are duplicate" do
+      let(:csv_import_params) do
+        {
+            :workspace_id => workspace.id,
+            :csv_id => csv_file.id,
+            :delimiter => ',',
+            :column_names => ['id', 'name', 'id', 'name', 'address'],
+            :types => ['integer', 'varchar', 'integer', 'varchar', 'text'],
+            :to_table => "table_importing_into",
+            :has_header => has_header,
+            :type => csv_import_type,
+            :columns_map => columns_map
+        }
+      end
+
+      it "returns an error" do
+        post :create, csv_import_params
+
+        response.body.should include "Duplicate column Names: id, name"
+      end
+    end
   end
 end

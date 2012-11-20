@@ -156,6 +156,17 @@ describe DatasetImportsController do
           post :create, attributes.merge(:dataset_id => 'missing_source_table')
           response.code.should == "404"
         end
+
+        context "when there's duplicate columns ( only in Chorus View )" do
+          before do
+            any_instance_of(Dataset) do |dataset|
+              mock(dataset).check_duplicate_column.with_any_args { }
+            end
+          end
+          it "should check for duplicate columns" do
+            post :create, attributes
+          end
+        end
       end
 
       context "when importing into an existing table" do

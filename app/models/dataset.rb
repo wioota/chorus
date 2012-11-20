@@ -137,6 +137,10 @@ class Dataset < ActiveRecord::Base
     schema_id != workspace.sandbox_id
   end
 
+  def check_duplicate_column(user)
+    true
+  end
+
   def add_metadata!(account)
     @statistics = DatasetStatistics.for_dataset(self, account)
   end

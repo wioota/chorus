@@ -60,6 +60,11 @@ class ChorusView < Dataset
   def column_name
   end
 
+  def check_duplicate_column(user)
+    account = gpdb_instance.account_for_user!(user)
+    GpdbColumn.columns_for(account, self)
+  end
+
   def query_setup_sql
     #set search_path to "#{schema.name}";
     %Q{create temp view "#{name}" as #{query};}

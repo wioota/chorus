@@ -208,6 +208,16 @@ describe ChorusView do
         chorus_view.convert_to_database_view("henry", user)
       }.to raise_error(Gpdb::CantCreateView)
     end
+
+    context "#check_duplicate_column" do
+      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 3;") }
+
+      it "should throws error when there's duplicate column names" do
+        expect {
+          chorus_view.check_duplicate_column(user)
+        }.to raise_error
+      end
+    end
   end
 
   describe '#add_metadata!(account)', :database_integration => true do
