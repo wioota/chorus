@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe KaggleUserPresenter, :type => :view do
-  let(:kaggle_user) { KaggleApi.users.first }
-  let(:presenter) { KaggleUserPresenter.new(kaggle_user, view) }
+describe Kaggle::UserPresenter, :type => :view do
+  let(:kaggle_user) { Kaggle::API.users.first }
+  let(:presenter) { Kaggle::UserPresenter.new(kaggle_user, view) }
 
   describe "#to_hash" do
     let(:hash) { presenter.to_hash }

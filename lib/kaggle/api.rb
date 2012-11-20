@@ -23,7 +23,38 @@ module Kaggle
       true
     end
 
+    def self.users(options = {})
+      users = JSON.parse(File.read(Rails.root + "kaggleSearchResults.json")).collect {|data| Kaggle::User.new(data)}
+      users.select {|user| search_through_filter(user, options[:filters])}
+    end
+
     private
+
+    def self.search_through_filter(user, filters)
+      return_val = true
+      return return_val if filters.nil?
+      filters.each { |filter|
+        key, comparator, value = filter.split("|")
+        next unless value
+        value = URI.decode(value)
+        value = value.to_i if value.try(:to_i).to_s == value.to_s
+        case comparator
+          when 'greater'
+            return_val = return_val && (user[key] > value)
+          when 'less'
+            return_val = return_val && (user[key] < value)
+          when 'includes'
+            return_val = return_val && (user[key] || '').downcase.include?(value.to_s.downcase)
+          else #'equal'
+            if key == 'past_competition_types'
+              return_val = return_val && (user[key].map(&:downcase).include?(value.downcase))
+            else
+              return_val = return_val && (user[key] == value)
+            end
+        end
+      }
+      return_val
+    end
 
     def self.send_to_kaggle(post_params)
       uri = URI.parse(API_URL)

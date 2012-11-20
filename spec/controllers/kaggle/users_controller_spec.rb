@@ -22,7 +22,7 @@ describe Kaggle::UsersController do
 
     it "presents the kaggle users" do
       mock_present { |kaggle_users|
-        kaggle_users.first.should be_a KaggleUser
+        kaggle_users.first.should be_a Kaggle::User
       }
 
       get :index, :workspace_id => '-1'
@@ -30,7 +30,7 @@ describe Kaggle::UsersController do
     end
 
     it "sorts by rank" do
-      stub.proxy(KaggleApi).users(anything) do |users|
+      stub.proxy(Kaggle::API).users(anything) do |users|
         users.sort_by { |user| -user['rank'] }
       end
 
@@ -43,7 +43,7 @@ describe Kaggle::UsersController do
 
     it "sends the filters to the KaggleApi.users method" do
       filters = ['i am a filter']
-      mock(KaggleApi).users(:filters => filters) { [] }
+      mock(Kaggle::API).users(:filters => filters) { [] }
       get :index, :workspace_id => '-1', :filters => filters
     end
 
