@@ -21,10 +21,10 @@ describe GpTableCopier, :database_integration => true do
   #dataset = database['select * from foo limit 1']
 
   let(:from_table) { source_dataset.as_sequel }
-  let(:attributes) { {"sandbox_name" => workspace.sandbox.name,
-                      "to_table" => destination_table_name,
-                      "from_table" => from_table,
-                      "new_table" => "true" } }
+  let(:attributes) { {:sandbox_name => workspace.sandbox.name,
+                      :to_table => destination_table_name,
+                      :from_table => from_table,
+                      :new_table => true } }
 
   let(:gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account), :logger => Rails.logger) }
   let(:test_gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account)) }
@@ -59,7 +59,7 @@ describe GpTableCopier, :database_integration => true do
 
     describe "when new_table is true" do
       before do
-        attributes.merge!("new_table" => true)
+        attributes.merge!(:new_table => true)
       end
 
       it "creates a new table copier and runs it" do
@@ -116,7 +116,7 @@ describe GpTableCopier, :database_integration => true do
 
         describe "when truncation is enabled" do
           before do
-            attributes.merge!("truncate" => true)
+            attributes.merge!(:truncate => true)
             execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
           end
 
@@ -131,7 +131,7 @@ describe GpTableCopier, :database_integration => true do
 
         describe "when truncation is disabled" do
           before do
-            attributes.merge!("truncate" => "false")
+            attributes.merge!(:truncate => "false")
             execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
           end
 
@@ -198,7 +198,7 @@ describe GpTableCopier, :database_integration => true do
         let(:add_rows) { false }
 
         before do
-          attributes.merge!("new_table" => false)
+          attributes.merge!(:new_table => false)
           execute("create table \"#{destination_table_name}\"(#{table_def}) DISTRIBUTED RANDOMLY;")
           Dataset.refresh(account, schema)
         end
@@ -248,7 +248,7 @@ describe GpTableCopier, :database_integration => true do
 
     context "when the rows are limited" do
       before do
-        attributes.merge!("sample_count" => 1)
+        attributes.merge!(:sample_count => 1)
         start_import
         GpdbTable.refresh(account, schema)
       end
@@ -261,7 +261,7 @@ describe GpTableCopier, :database_integration => true do
 
     describe "when the row limit value is 0" do
       before do
-        attributes.merge!("sample_count" => 0)
+        attributes.merge!(:sample_count => 0)
       end
 
       it "creates the table and copies 0 rows" do

@@ -16,15 +16,16 @@ class GpTableCopier
   end
 
   def start
-    if source_database == destination_database
-      run
-    else
-      GpPipe.new(self).run # delegate cross-database copies to a GpPipe instance
+    copier = self
+    if source_database != destination_database
+      copier = GpPipe.new(self)  # delegate cross-database copies to a GpPipe instance
     end
+
+    copier.run
   end
 
   def source_database
-    attributes["from_database"] || database
+    attributes[:from_database] || database
   end
 
   def destination_database
@@ -79,15 +80,15 @@ class GpTableCopier
   end
 
   def create_new_table?
-    attributes["new_table"].to_s == "true" # change this to check gpdb
+    attributes[:new_table].to_s == "true"
   end
 
   def row_limit
-    attributes["sample_count"]
+    attributes[:sample_count]
   end
 
   def destination_table_name
-    attributes["to_table"]
+    attributes[:to_table]
   end
 
   def qualified_table_name(table)
@@ -127,7 +128,7 @@ class GpTableCopier
   end
 
   def truncate?
-    attributes["truncate"].to_s == "true"
+    attributes[:truncate].to_s == "true"
   end
 
   def table_definition

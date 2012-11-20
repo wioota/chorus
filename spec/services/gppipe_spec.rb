@@ -38,12 +38,12 @@ describe GpPipe, :database_integration => true do
   let(:import) { imports(:two) }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:options) { {
-                   "from_database" => destination_database_url,
-                   "sandbox_name" => sandbox.name,
-                   "to_table" => destination_table_name,
-                   "from_table" => source_dataset.as_sequel,
-                   "new_table" => "true",
-                   "import_id" => import.id }.merge(extra_options) }
+                   :from_database => destination_database_url,
+                   :sandbox_name => sandbox.name,
+                   :to_table => destination_table_name,
+                   :from_table => source_dataset.as_sequel,
+                   :new_table => "true",
+                   :import_id => import.id }.merge(extra_options) }
   let(:extra_options) { {} }
   let(:gp_table_copier) { GpTableCopier.new(source_database, options) }
   let(:gp_pipe) { GpPipe.new(gp_table_copier) }
@@ -101,7 +101,7 @@ describe GpPipe, :database_integration => true do
 
       context "into a new table" do
         before do
-          extra_options.merge!("new_table" => true)
+          extra_options.merge!(:new_table => true)
           setup_data
         end
 
@@ -141,7 +141,7 @@ describe GpPipe, :database_integration => true do
 
       context "into an existing table" do
         before do
-          extra_options.merge!("new_table" => false)
+          extra_options.merge!(:new_table => false)
         end
 
         it "creates a new pipe and runs it" do
@@ -173,7 +173,7 @@ describe GpPipe, :database_integration => true do
 
         context "when truncate => true" do
           it "should truncate" do
-            extra_options.merge!("truncate" => 'true')
+            extra_options.merge!(:truncate => true)
             setup_data
             execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
             execute(source_database, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
@@ -185,7 +185,7 @@ describe GpPipe, :database_integration => true do
 
         context "when truncate => false" do
           it "does not truncate" do
-            extra_options.merge!("truncate" => 'false')
+            extra_options.merge!(:truncate => false)
             setup_data
             execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
             execute(source_database, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
@@ -263,7 +263,7 @@ describe GpPipe, :database_integration => true do
     end
 
     context "limiting the number of rows" do
-      let(:extra_options) { {"sample_count" => 1} }
+      let(:extra_options) { {:sample_count => 1} }
       before do
         setup_data
       end
@@ -276,7 +276,7 @@ describe GpPipe, :database_integration => true do
       end
 
       context "with a row limit of 0" do
-        let(:extra_options) { {"sample_count" => 0} }
+        let(:extra_options) { {:sample_count => 0} }
 
         it "doesn't hang gpfdist, by treating the source like an empty table" do
           stub(GpPipe).timeout_seconds { 10 }
