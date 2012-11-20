@@ -302,7 +302,7 @@ describe "Event types" do
     its(:targets) { should == { :workspace => workspace } }
 
     it_creates_activities_for { [actor, workspace] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "WorkspaceUnarchived" do
@@ -318,7 +318,7 @@ describe "Event types" do
     its(:targets) { should == { :workspace => workspace } }
 
     it_creates_activities_for { [actor, workspace] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "WorkfileCreated" do
@@ -354,7 +354,7 @@ describe "Event types" do
     its(:targets) { should == {:dataset => dataset, :workspace => workspace} }
 
     it_creates_activities_for { [actor, dataset, workspace] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "UserAdded" do
@@ -383,7 +383,7 @@ describe "Event types" do
     its(:targets) { should == {:workspace => workspace} }
 
     it_creates_activities_for { [actor, workspace] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "WorkspaceAddHdfsAsExtTable" do
@@ -402,7 +402,7 @@ describe "Event types" do
     its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace} }
 
     it_creates_activities_for { [actor, dataset, workspace, hdfs_entry] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "FileImportCreated" do
