@@ -126,6 +126,7 @@ class Workspace < ActiveRecord::Base
 
     if database_id
       datasets = datasets.joins(:schema).where(:gpdb_schemas => { :database_id => database_id })
+      datasets = datasets.where("type != ?", "ChorusView")
     end
 
     return datasets

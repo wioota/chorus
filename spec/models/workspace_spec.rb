@@ -174,13 +174,22 @@ describe Workspace do
       end
 
       context "with associated datasets and options contain a database id" do
-        it "filters the datasets to specified database" do
-          dataset1 = datasets(:table)
-          dataset2 = datasets(:searchquery_table)
+        let(:chorus_view) { datasets(:chorus_view) }
+        let(:dataset1) { datasets(:table) }
+        let(:dataset2) { datasets(:searchquery_table) }
+
+        before do
           workspace.bound_datasets << dataset1
           workspace.bound_datasets << dataset2
+          workspace.bound_datasets << chorus_view
+        end
 
+        it "filters the datasets to specified database" do
           workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
+        end
+
+        it "does not show chorus views" do
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should_not include(chorus_view)
         end
       end
     end
@@ -206,13 +215,22 @@ describe Workspace do
       end
 
       context "when the workspace has associated datasets and a database_id is given" do
-        it "filters for given database" do
-          dataset1 = datasets(:table)
-          dataset2 = datasets(:searchquery_table)
+        let(:chorus_view) { datasets(:chorus_view) }
+        let(:dataset1) { datasets(:table) }
+        let(:dataset2) { datasets(:searchquery_table) }
+
+        before do
           workspace.bound_datasets << dataset1
           workspace.bound_datasets << dataset2
+          workspace.bound_datasets << chorus_view
+        end
 
+        it "filters for given database" do
           workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
+        end
+
+        it "does not show chorus views" do
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should_not include(chorus_view)
         end
       end
     end
