@@ -313,7 +313,6 @@ describe DatasetImportsController do
       check_destination_table
     end
 
-
     after do
       gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
       gpdb1.try(:disconnect!)

@@ -6,12 +6,8 @@ describe ImportExecutor do
   let(:workspace) { workspaces(:public) }
   let(:sandbox) { workspace.sandbox }
   let(:destination_table_name) { "dst_table" }
-
-  let(:attributes) {
-    import.attributes.symbolize_keys.slice(:new_table, :truncate, :sample_count, :to_table, :workspace_id).merge(extra_attributes)
-  }
-
-  let(:extra_attributes) {{}}
+  let(:database_url) { Gpdb::ConnectionBuilder.url(sandbox.database, account) }
+  let(:account) { sandbox.gpdb_instance.account_for_user!(user) }
 
   let!(:dataset_import_created_event) do
     Events::DatasetImportCreated.by(user).add(
@@ -33,7 +29,7 @@ describe ImportExecutor do
 
   describe ".run" do
     let(:run_import) {
-      mock(GpTableCopier).run_import(source_dataset.id, user.id, attributes) do
+      mock(GpTableCopier).run_import(database_url, anything) do
         raise import_failure_message if import_failure_message.present?
       end
       stub(Dataset).refresh.with_any_args do

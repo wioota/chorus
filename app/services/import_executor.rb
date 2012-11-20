@@ -1,3 +1,5 @@
+require 'sequel/no_core_ext'
+
 class ImportExecutor < DelegateClass(Import)
   delegate :sandbox, :to => :workspace
 
@@ -7,12 +9,13 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def run
-    import_attributes = attributes.symbolize_keys.slice(:workspace_id, :to_table, :new_table, :sample_count, :truncate)
+    destination_database_url = get_database_url(sandbox.database)
 
-    GpTableCopier.run_import(source_dataset.id, user.id, import_attributes)
+    GpTableCopier.run_import(destination_database_url, import_attributes)
 
     # update rails db for new dataset
-    Dataset.refresh(sandbox.gpdb_instance.account_for_user!(user), sandbox)
+    destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
+    Dataset.refresh(destination_account, sandbox)
 
     update_status :passed
 
@@ -22,6 +25,21 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   private
+
+  def import_attributes
+    source_database_url = get_database_url(source_dataset.schema.database)
+
+    import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
+    import_attributes.merge!(
+        :from_database => source_database_url,
+        :from_table => source_dataset.as_sequel,
+        :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]))
+  end
+
+  def get_database_url(db)
+    account = db.gpdb_instance.account_for_user!(user)
+    Gpdb::ConnectionBuilder.url(db, account)
+  end
 
   def update_status(status, exception = nil)
     passed = (status == :passed)
