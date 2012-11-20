@@ -28,7 +28,7 @@ describe ImportScheduler do
     end
 
     def expect_qc_enqueue
-      mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |_, import_id|
+      mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |_, import_id|
         Import.find(import_id).tap do |import|
           import.import_schedule.should == import_schedule
           import.workspace.should == import_schedule.workspace
@@ -52,7 +52,7 @@ describe ImportScheduler do
         end
 
         Timecop.freeze(start_time + 2.hours) do
-          mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |_, import_id|
+          mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |_, import_id|
             Import.find(import_id).import_schedule.should == other_import_schedule
           end
 

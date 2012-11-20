@@ -102,7 +102,7 @@ describe DatasetImportsController do
         end
 
         it "enqueues a new ImportExecutor.run job for active workspaces and returns success" do
-          mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |method, import_id|
+          mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
             Import.find(import_id).tap do |import|
               import.workspace.should == active_workspace
               import.to_table.should == "the_new_table"
@@ -295,7 +295,7 @@ describe DatasetImportsController do
       stub(GpPipe).grace_period_seconds { 1 }
       setup_data
       # synchronously run all queued import jobs
-      mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |method, import_id|
+      mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
         ImportExecutor.run import_id
       end
     end

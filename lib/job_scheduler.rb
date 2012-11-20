@@ -10,7 +10,7 @@ class JobScheduler
     end
 
     every(Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
-      QC.enqueue("CsvFile.delete_old_files!")
+      QC.enqueue_if_not_queued("CsvFile.delete_old_files!")
     end
 
     every(Chorus::Application.config.chorus['reindex_search_data_interval_hours'].hours, 'SolrIndexer.refresh_external_data') do

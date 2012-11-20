@@ -19,7 +19,7 @@ class GnipInstanceImportsController < ApplicationController
     gnip_instance = GnipInstance.find(params['gnip_instance_id'])
     event = create_import_event(temp_csv_file, gnip_instance)
 
-    QC.enqueue("GnipImporter.import_to_table",
+    QC.enqueue_if_not_queued("GnipImporter.import_to_table",
                table_name,
                gnip_instance.id,
                workspace.id,

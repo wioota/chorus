@@ -27,7 +27,7 @@ describe HadoopInstancesController do
       end
 
       it "schedules a job to refresh the instance" do
-        mock(QC.default_queue).enqueue("HadoopInstance.full_refresh", numeric)
+        mock(QC.default_queue).enqueue_if_not_queued("HadoopInstance.full_refresh", numeric)
         post :create
       end
     end

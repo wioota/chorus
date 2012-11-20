@@ -356,7 +356,7 @@ describe DatasetImportSchedulesController do
       stub(GpPipe).grace_period_seconds { 1 }
       setup_data
       # synchronously run all queued import jobs
-      mock(QC.default_queue).enqueue("ImportExecutor.run", anything) do |method, import_id|
+      mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
         ImportExecutor.run import_id
       end
     end

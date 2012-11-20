@@ -4,7 +4,7 @@ require 'hadoop_instance_access'
 class HadoopInstancesController < ApplicationController
   def create
     instance = Hdfs::InstanceRegistrar.create!(params[:hadoop_instance], current_user)
-    QC.enqueue("HadoopInstance.full_refresh", instance.id)
+    QC.enqueue_if_not_queued("HadoopInstance.full_refresh", instance.id)
     present instance, :status => :created
   end
 

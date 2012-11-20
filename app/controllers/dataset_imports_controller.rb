@@ -23,7 +23,7 @@ class DatasetImportsController < ApplicationController
 
     if import.save
       import.create_import_event
-      QC.enqueue("ImportExecutor.run", import.id)
+      QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
       render :json => {}, :status => :created
     else
       raise ApiValidationError.new(import.errors)

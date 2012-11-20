@@ -37,7 +37,7 @@ describe WorkspaceCsvImportsController do
 
     context "when there's no table conflict" do
       before do
-        mock(QC.default_queue).enqueue.with("CsvImporter.import_file", csv_file.id, anything) do | method, file_id, event_id |
+        mock(QC.default_queue).enqueue_if_not_queued.with("CsvImporter.import_file", csv_file.id, anything) do | method, file_id, event_id |
           Events::FileImportCreated.by(user).last.id.should == event_id
         end
       end

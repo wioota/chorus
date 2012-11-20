@@ -20,7 +20,7 @@ describe JobScheduler do
     end
 
     it "enqueues the 'CsvFile.delete_old_files!' job in QC" do
-      mock(QC.default_queue).enqueue("CsvFile.delete_old_files!")
+      mock(QC.default_queue).enqueue_if_not_queued("CsvFile.delete_old_files!")
       job_scheduler.job_named('CsvFile.delete_old_files!').run(Time.now)
     end
   end

@@ -22,7 +22,7 @@ class WorkspaceCsvImportsController < ApplicationController
     csv_file.update_attributes(params[:csvimport])
 
     import_created_event = create_import_event(csv_file)
-    QC.enqueue("CsvImporter.import_file", csv_file.id, import_created_event.id)
+    QC.enqueue_if_not_queued("CsvImporter.import_file", csv_file.id, import_created_event.id)
 
     present [], :status => :created
   end
