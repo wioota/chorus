@@ -358,6 +358,20 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect('change').toHaveBeenTriggeredOn(this.dataset);
                     })
                 });
+
+                context("and the save is not successful", function () {
+                    beforeEach(function () {
+                        this.server.lastUpdate().failUnprocessableEntity({
+                            fields: {
+                                to_table: { SOME_FAKE_ERROR: {}}
+                            }
+                        });
+                    });
+
+                    it("should display the errors for the model", function() {
+                        expect(this.dialog.$(".errors li")).toExist();
+                    });
+                });
             });
         });
     });
