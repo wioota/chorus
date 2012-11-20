@@ -84,7 +84,9 @@
             } else if (status == 422) {
                 options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
             } else if (status == 500) {
-                chorus.toast("server_error");
+                var toastOpts = {};
+                if(window.INTEGRATION_MODE) { toastOpts.sticky = true; }
+                chorus.toast("server_error", {toastOpts: toastOpts});
             }
         }
     };
