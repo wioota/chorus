@@ -50,9 +50,8 @@ MIZUNO_PID_FILE=$CHORUS_HOME/tmp/pids/mizuno.pid
 
 POSTGRES_DATA_DIR=$CHORUS_HOME/postgres-db
 POSTGRES_PID_FILE=$POSTGRES_DATA_DIR/postmaster.pid
-POSTGRES_PORT=$($RUBY $CHORUS_HOME/packaging/get_postgres_port.rb)
 
-SOLR_PORT=$($RUBY $CHORUS_HOME/packaging/get_solr_port.rb)
+eval $($RUBY $CHORUS_HOME/packaging/get_chorus_env_params.rb)
 
 ##### Determine which nginx binary to use for this platform #####
 
