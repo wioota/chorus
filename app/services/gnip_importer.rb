@@ -102,7 +102,7 @@ class GnipImporter
         },
         :without_protection => true).tap do |csv_file|
       if csv_file.contents_file_size > max_file_size
-        raise GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit. Filename: #{csv_file.contents_file_name} File size: #{csv_file.contents_file_size} Maximum file size: #{max_file_size}"
+        raise GnipFileSizeExceeded, "Gnip download chunk exceeds maximum allowed file size for Gnip imports.  Consider increasing the system limit."
       end
     end
   end

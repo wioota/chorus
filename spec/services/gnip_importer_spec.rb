@@ -160,7 +160,7 @@ describe GnipImporter do
       before do
         stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { nil }
         any_instance_of (CsvFile) do |file|
-          stub(file).contents_file_size { 51 }
+          stub(file).contents_file_size { 51.megabytes }
         end
       end
 
@@ -173,9 +173,9 @@ describe GnipImporter do
 
     context "when individual chunk size exceeds the max file size allowed" do
       before do
-        stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { 70 }
+        stub(Chorus::Application.config).[]("gnip.csv_import_max_file_size_mb") { 50.megabytes }
         any_instance_of (CsvFile) do |file|
-          stub(file).contents_file_size { 60 }
+          stub(file).contents_file_size { 60.megabytes }
         end
       end
 
