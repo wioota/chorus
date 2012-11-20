@@ -11,9 +11,9 @@ resource "Kaggle", :kaggle_api => true do
 
   get "/workspaces/:workspace_id/kaggle/users" do
     parameter :workspace_id, "Workspace id"
-    parameter :'kaggle_user[]', "Array of filters, each with the pipe-separated format: 'filter|comparator|value'"
+    parameter :'filters[]', "Array of filters, each with the pipe-separated format: 'filter|comparator|value'"
 
-    let(:'kaggle_user[]') { "rank|greater|1" }
+    let(:'filters[]') { "rank|greater|1" }
 
     example_request "Get a list of Kaggle users" do
       status.should == 200

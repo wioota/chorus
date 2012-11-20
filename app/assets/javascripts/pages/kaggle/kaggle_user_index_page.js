@@ -36,7 +36,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         var paramArray = _.compact(filterCollection.map(function(model) {
             return model.filterParams();
         }));
-        this.collection.urlParams = {'kaggleUser[]': paramArray};
+        this.collection.urlParams = {'filters[]': paramArray};
         this.collection.fetch();
     }
 });

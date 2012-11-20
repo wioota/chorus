@@ -84,7 +84,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         it("send the params as format filter|comparator|value", function () {
             expect(this.page.collection).toHaveBeenFetched();
             var url = this.server.lastFetchFor(this.page.collection).url;
-            expect(url).toContainQueryParams({'kaggleUser[]':'someValue'});
+            expect(url).toContainQueryParams({'filters[]':'someValue'});
         });
     });
 });
