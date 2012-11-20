@@ -377,7 +377,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("responds to the errors", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("server_error");
+                    expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {}});
                 });
             });
         });
