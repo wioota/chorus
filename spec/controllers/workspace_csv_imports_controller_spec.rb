@@ -17,27 +17,25 @@ describe WorkspaceCsvImportsController do
   describe "#create" do
     let(:csv_file) { csv_files(:default) }
 
-    let(:csv_import_params) do
-      {
-          :workspace_id => workspace.id,
-          :csv_id => csv_file.id,
-          :delimiter => ',',
-          :column_names => ['id', 'name'],
-          :types => ['integer', 'varchar'],
-          :to_table => "table_importing_into",
-          :has_header => has_header,
-          :type => csv_import_type,
-          :columns_map => columns_map
-      }
-    end
-
     let(:csv_import_type) { "newTable" }
     let(:has_header) { false }
     let(:columns_map) { nil }
 
     context "when there's no table conflict" do
+      let(:csv_import_params) do
+        {
+            :workspace_id => workspace.id,
+            :csv_id => csv_file.id,
+            :delimiter => ',',
+            :to_table => "table_importing_into",
+            :has_header => has_header,
+            :type => csv_import_type,
+            :types => ['integer', 'varchar'],
+            :column_names => ['id', 'name']
+        }
+      end
       before do
-        mock(QC.default_queue).enqueue_if_not_queued.with("CsvImporter.import_file", csv_file.id, anything) do | method, file_id, event_id |
+        mock(QC.default_queue).enqueue_if_not_queued.with("CsvImporter.import_file", csv_file.id, anything) do |method, file_id, event_id|
           Events::FileImportCreated.by(user).last.id.should == event_id
         end
       end
@@ -59,7 +57,7 @@ describe WorkspaceCsvImportsController do
       end
 
       it "presents an empty array" do
-        mock_present {|model| model.should == []}
+        mock_present { |model| model.should == [] }
         post :create, csv_import_params
       end
 
@@ -76,9 +74,22 @@ describe WorkspaceCsvImportsController do
           csv_file.file_contains_header.should be_true
         end
       end
+    end
 
-      context "new or existing table" do
-        context "new table" do
+    context "new or existing table" do
+      context "new table" do
+        let(:csv_import_params) do
+          {
+              :workspace_id => workspace.id,
+              :csv_id => csv_file.id,
+              :delimiter => ',',
+              :to_table => "table_importing_into",
+              :has_header => has_header,
+              :type => csv_import_type,
+              :types => ['integer', 'varchar'],
+              :column_names => ['id', 'name']
+          }
+
           it "sets the new_table field to true" do
             any_instance_of(CsvFile) { |csv| stub(csv).table_already_exists.with_any_args { false } }
             post :create, csv_import_params
@@ -98,10 +109,43 @@ describe WorkspaceCsvImportsController do
             event.import_type.should == 'file'
             event.destination_table.should == 'table_importing_into'
           end
+
+          context "when the columns Names are duplicate" do
+            let(:csv_import_params) do
+              {
+                  :workspace_id => workspace.id,
+                  :csv_id => csv_file.id,
+                  :delimiter => ',',
+                  :column_names => ['id', 'name', 'id', 'name', 'address'],
+                  :types => ['integer', 'varchar', 'integer', 'varchar', 'text'],
+                  :to_table => "table_importing_into",
+                  :has_header => has_header,
+                  :type => csv_import_type,
+              }
+            end
+
+            it "returns an error" do
+              post :create, csv_import_params
+
+              response.body.should include "Duplicate column Names: id, name"
+            end
+          end
         end
 
         context "existing table" do
+          let(:csv_import_params) do
+            {
+                :workspace_id => workspace.id,
+                :csv_id => csv_file.id,
+                :delimiter => ',',
+                :columns_map => columns_map,
+                :to_table => "table_importing_into",
+                :has_header => has_header,
+                :type => csv_import_type,
+            }
+          end
           let(:csv_import_type) { "existingTable" }
+
           let(:columns_map) { [{:targetOrder => 'name'}, {:targetOrder => 'id'}].to_json }
 
           it "sets the new_table field to false" do
@@ -132,6 +176,18 @@ describe WorkspaceCsvImportsController do
     end
 
     context "new table, but a table with that name already exists" do
+      let(:csv_import_params) do
+        {
+            :workspace_id => workspace.id,
+            :csv_id => csv_file.id,
+            :delimiter => ',',
+            :column_names => ['id', 'name', 'address'],
+            :types => ['integer', 'varchar', 'text'],
+            :to_table => "table_importing_into",
+            :has_header => has_header,
+            :type => "newTable",
+        }
+      end
       before do
         any_instance_of(CsvFile) { |csv|
           stub(csv).table_already_exists("table_importing_into") { true }
@@ -149,29 +205,6 @@ describe WorkspaceCsvImportsController do
         expect do
           post :create, csv_import_params
         end.to_not change(Events::FileImportCreated, :count)
-      end
-    end
-
-
-    context "when the columns Names are duplicate" do
-      let(:csv_import_params) do
-        {
-            :workspace_id => workspace.id,
-            :csv_id => csv_file.id,
-            :delimiter => ',',
-            :column_names => ['id', 'name', 'id', 'name', 'address'],
-            :types => ['integer', 'varchar', 'integer', 'varchar', 'text'],
-            :to_table => "table_importing_into",
-            :has_header => has_header,
-            :type => csv_import_type,
-            :columns_map => columns_map
-        }
-      end
-
-      it "returns an error" do
-        post :create, csv_import_params
-
-        response.body.should include "Duplicate column Names: id, name"
       end
     end
   end

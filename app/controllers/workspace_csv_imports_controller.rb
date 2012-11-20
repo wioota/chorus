@@ -6,18 +6,19 @@ class WorkspaceCsvImportsController < ApplicationController
     csv_file = CsvFile.find params[:csv_id]
     authorize! :create, csv_file
 
-    column_names = params[:csvimport][:column_names]
-    dup = column_names.select { |column| column_names.count(column) > 1 }
-    if dup.size > 0
-      raise ApiValidationError.new(:base, :generic ,{:message => "Duplicate column Names: #{dup.uniq.join(", ")}"})
-    end
-
     if params[:csvimport][:type] == "existingTable"
       # Read and calculate correct column names
       column_names = JSON.parse(params[:csvimport][:columns_map]).map { |column| column["targetOrder"] }
       params[:csvimport] = params[:csvimport].merge(:column_names => column_names)
     else
       table_name = params[:csvimport][:to_table]
+
+      column_names = params[:csvimport][:column_names]
+      dup = column_names.select { |column| column_names.count(column) > 1 }
+      if dup.size > 0
+        raise ApiValidationError.new(:base, :generic ,{:message => "Duplicate column Names: #{dup.uniq.join(", ")}"})
+      end
+
       if csv_file.table_already_exists(table_name)
         raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name })
       end
