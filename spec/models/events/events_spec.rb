@@ -33,6 +33,7 @@ describe "Event types" do
     its(:targets) { should == {:dataset => chorus_view, :source_object => dataset, :workspace => workspace} }
 
     it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
+    it_does_not_create_a_global_activity
   end
 
   describe "ViewCreated" do
@@ -49,6 +50,7 @@ describe "Event types" do
     its(:targets) { should == {:dataset => dataset, :source_dataset => chorus_view, :workspace => workspace} }
 
     it_creates_activities_for { [actor, chorus_view, dataset, workspace] }
+    it_does_not_create_a_global_activity
   end
 
   describe "ChorusViewChanged" do
@@ -64,6 +66,7 @@ describe "Event types" do
     its(:targets) { should == {:dataset => chorus_view, :workspace => workspace} }
 
     it_creates_activities_for { [actor, workspace, chorus_view] }
+    it_does_not_create_a_global_activity
   end
 
   describe "GreenplumInstanceCreated" do
