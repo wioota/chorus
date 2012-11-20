@@ -6,12 +6,12 @@ class GpTableCopier
 
   attr_accessor :attributes
 
-  def self.run_import(database_path, attributes)
-    new(database_path, attributes).start
+  def self.run_import(database, attributes)
+    new(database, attributes).start
   end
 
-  def initialize(database_path, attributes)
-    self.database = database_path
+  def initialize(database, attributes)
+    self.database = database
     self.attributes = HashWithIndifferentAccess.new(attributes)
   end
 
@@ -100,7 +100,7 @@ class GpTableCopier
   end
 
   def destination_table
-    Sequel.qualify(attributes[:sandbox_name], attributes[:to_table])
+    attributes[:to_table]
   end
 
   def destination_schema_name

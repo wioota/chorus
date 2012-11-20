@@ -39,8 +39,7 @@ describe GpPipe, :database_integration => true do
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:options) { {
                    :from_database => destination_database_url,
-                   :sandbox_name => sandbox.name,
-                   :to_table => destination_table_name,
+                   :to_table => Sequel.qualify(sandbox.name, destination_table_name),
                    :from_table => source_dataset.as_sequel,
                    :new_table => "true",
                    :import_id => import.id }.merge(extra_options) }

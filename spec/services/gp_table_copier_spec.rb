@@ -13,7 +13,7 @@ describe GpTableCopier, :database_integration => true do
   let(:destination_table_fullname) { "\"#{sandbox.name}\".\"#{destination_table_name}\"" }
   let(:table_def) { '"id" integer, "name" text, "id2" integer, "id3" integer, PRIMARY KEY("id2", "id3", "id")' }
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
-
+  let(:to_table) { Sequel.qualify(sandbox.name, destination_table_name) }
   # To do an import:
   #database = Sequel.connect('jdbc:postgresql://local_greenplum:5432/gpdb_noe_tes?user=foo&password=bar')
   #
@@ -21,12 +21,14 @@ describe GpTableCopier, :database_integration => true do
   #dataset = database['select * from foo limit 1']
 
   let(:from_table) { source_dataset.as_sequel }
-  let(:attributes) { {:sandbox_name => workspace.sandbox.name,
-                      :to_table => destination_table_name,
+  let(:attributes) { {:to_table => to_table,
                       :from_table => from_table,
                       :new_table => true } }
 
-  let(:gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account), :logger => Rails.logger) }
+  # let(:log_options) { { :logger => Rails.logger } }
+  let(:log_options) { { nil } }
+  let(:gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account), log_options) }
+
   let(:test_gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account)) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
@@ -79,10 +81,6 @@ describe GpTableCopier, :database_integration => true do
       end
 
       context "when a nonempty destination table already exists" do
-
-
-
-
         before do
           execute("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
           execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
