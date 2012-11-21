@@ -106,5 +106,32 @@ describe ImportScheduler do
         end
       end
     end
+
+    context "when trying to schedule an invalid import schedule" do
+      before do
+        stub(ImportSchedule).ready_to_run { [import_schedule] }
+        stub(import_schedule).valid? {
+          false
+        }
+
+      end
+
+      it "updates the next import for the schedule" do
+        mock(import_schedule).set_next_import
+        ImportScheduler.run
+      end
+
+      it "creates an import failed event" do
+        import_schedule.errors.add(:base, "table_bad")
+
+        expect {
+          ImportScheduler.run
+        }.to change(Events::DatasetImportFailed, :count).by(1)
+
+        event = Events::DatasetImportFailed.last
+        event.source_dataset.should == import_schedule.source_dataset
+        event.error_objects["base"].should == import_schedule.errors.full_messages
+      end
+    end
   end
 end
