@@ -8,6 +8,7 @@ describe "Workspaces" do
   describe "Create workspaces" do
     it "creates a private workspace" do
       visit('#/workspaces')
+      wait_for_ajax
       click_button "Create Workspace"
       within_modal do
         fill_in 'name', :with => "New Workspace"
@@ -23,6 +24,7 @@ describe "Workspaces" do
 
     it "creates a public workspace" do
       visit('#/workspaces')
+      wait_for_ajax
       click_button "Create Workspace"
       within_modal do
         fill_in 'name', :with => "New Workspace"
@@ -38,6 +40,7 @@ describe "Workspaces" do
 
     it "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")
+      wait_for_ajax
       click_link "Delete this Workspace"
       wait_until { page.has_selector?(".submit") }
       find(".submit").click
