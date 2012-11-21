@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 resource "Kaggle", :kaggle_api => true do
+  include KaggleSpecHelpers
+
   let(:user) { users(:owner) }
   let(:workspace) { workspaces(:public) }
   let(:workspace_id) { workspace.id }
@@ -15,8 +17,14 @@ resource "Kaggle", :kaggle_api => true do
 
     let(:'filters[]') { "rank|greater|1" }
 
-    example_request "Get a list of Kaggle users" do
-      status.should == 200
+    example "Get a list of Kaggle users" do
+      stub(Kaggle::API).users(anything) do
+        kaggle_users_api_result
+      end
+
+      do_request(:'filters[]' => []) do
+        status.should == 200
+      end
     end
   end
 

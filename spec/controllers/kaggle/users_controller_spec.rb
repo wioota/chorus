@@ -11,7 +11,7 @@ describe Kaggle::UsersController do
     include KaggleSpecHelpers
 
     before do
-      stub(Kaggle::API).users(anything) do |param|
+      stub(Kaggle::API).users(anything) do
         kaggle_users_api_result
       end
     end
