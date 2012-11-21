@@ -16,3 +16,7 @@ puts '"'
 print 'CHORUS_JAVA_OPTIONS_WITHOUT_XMS="'
 load "#{script_dir}/get_java_options_without_xms.rb"
 puts '"'
+
+print 'JRUBY_OPTS="'
+load "#{script_dir}/get_jruby_options.rb"
+puts '"'

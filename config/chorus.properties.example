@@ -4,6 +4,8 @@ server_port = 8080
 postgres_port = 8543
 solr_port = 8983
 
+java_options = -Djava.library.path=$CHORUS_HOME/vendor/hadoop/lib/ -server -Xmx2048m -Xms512m -XX:MaxPermSize=128m
+
 # SSL Settings
 
 ssl.enabled = false

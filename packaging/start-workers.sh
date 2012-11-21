@@ -19,7 +19,7 @@ if [ -f $WORKER_PID_FILE ]; then
 fi
 
 RAILS_ENV=$RAILS_ENV $RUBY packaging/update_database_yml.rb
-RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT $RUBY script/rails runner "ChorusWorker.new.start" >> $CHORUS_HOME/log/worker.$RAILS_ENV.log 2>&1 &
+JRUBY_OPTS=$JRUBY_OPTS CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS_WITHOUT_XMS RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT $RUBY script/rails runner "ChorusWorker.new.start" >> $CHORUS_HOME/log/worker.$RAILS_ENV.log 2>&1 &
 worker_pid=$!
 echo $worker_pid > $WORKER_PID_FILE
 log "Worker started as pid $worker_pid"
