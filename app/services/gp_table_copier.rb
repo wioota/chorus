@@ -60,15 +60,15 @@ class GpTableCopier
     database.transaction do
       record_internal_exception do
         if chorus_view?
-          database.execute(attributes[:from_table][:query])
+          database << attributes[:from_table][:query]
         end
 
         if create_new_table? && !table_exists
           create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
-          database.execute(create_command % [table_definition_with_keys])
+          database << create_command % [table_definition_with_keys]
         elsif truncate?
           truncate_command = "TRUNCATE TABLE #{destination_table_fullname};"
-          database.execute(truncate_command)
+          database << truncate_command
         end
         copy_command = "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{source_table_path} #{limit_clause});"
         database.execute(copy_command)
@@ -92,12 +92,13 @@ class GpTableCopier
   end
 
   def qualified_table_name(table)
+    pa "Getting qualified table name of #{table.inspect}"
     %Q{"#{table.table}"."#{table.column}"}
   end
 
-  def destination_table_fullname
-    qualified_table_name(destination_table)
-  end
+    def destination_table_fullname
+      qualified_table_name(destination_table)
+    end
 
   def destination_table
     attributes[:to_table]
@@ -141,12 +142,19 @@ class GpTableCopier
 
   def table_definition_with_keys
     @table_definition_with_keys ||= begin
-      primary_key_rows = database.fetch(primary_key_sql)
+      if chorus_view?
+        primary_key_rows = []
+      else
+        primary_key_rows = database.fetch(primary_key_sql)
+      end
       primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
       table_definition + primary_key_clause
     end
   end
 
+  def source_table_path
+    chorus_view? ? %Q|"#{source_table_name}"| : source_table_fullname
+  end
   private
 
   # this is a workaround for jdbc postgres adapter hiding exceptions
@@ -155,10 +163,6 @@ class GpTableCopier
   rescue => e
     @internal_exception = e
     raise
-  end
- 
-  def source_table_path
-    chorus_view? ? %Q|"#{source_table_name}"| : source_table_fullname
   end
  
   def distribution_key_sql
@@ -196,7 +200,7 @@ class GpTableCopier
           FROM pg_catalog.pg_class c
             LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
           WHERE c.relname ~ '^(#{source_table_name})$'
-            #{chorus_view? ? '' : "AND n.nspname ~ '^(#{source_schema_name})$'"})
+            #{"AND n.nspname ~ '^(#{source_schema_name})$'" unless chorus_view?} LIMIT 1)
         AND a.attnum > 0
         AND NOT a.attisdropped
       ORDER BY a.attnum;

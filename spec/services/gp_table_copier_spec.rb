@@ -25,8 +25,8 @@ describe GpTableCopier, :database_integration => true do
                       :from_table => from_table,
                       :new_table => true } }
 
-  # let(:log_options) { { :logger => Rails.logger } } # Enable logging
-  let(:log_options) { {} } # Disable logging
+  let(:log_options) { { :logger => Rails.logger } } # Enable logging
+  # let(:log_options) { {} } # Disable logging
   let(:gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account), log_options) }
 
   let(:test_gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account)) }

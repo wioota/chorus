@@ -8,7 +8,11 @@ class GpPipe < DelegateClass(GpTableCopier)
 
   def run
     Timeout::timeout(GpPipe.timeout_seconds + 1) do
-      source_count = get_count(src_conn, source_table_fullname)
+      if chorus_view?
+        src_conn << attributes[:from_table][:query]
+      end
+
+      source_count = get_count(src_conn, source_table_path)
       count = [source_count, (row_limit || source_count)].min
 
       if create_new_table?
@@ -103,7 +107,7 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def write_pipe
-    src_conn << "INSERT INTO #{write_pipe_fullname} (SELECT * FROM #{source_table_fullname} #{limit_clause});"
+    src_conn << "INSERT INTO #{write_pipe_fullname} (SELECT * FROM #{source_table_path} #{limit_clause});"
   end
 
   def read_pipe(count)
@@ -163,7 +167,8 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def create_source_connection
-    Sequel.connect(attributes[:from_database])
+    connection = Sequel.connect(attributes[:from_database]) # :logger => Rails.logger
+    connection << %Q{set search_path to "#{source_schema_name}";};
   end
 
   def create_destination_connection
