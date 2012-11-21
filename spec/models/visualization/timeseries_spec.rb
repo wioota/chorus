@@ -15,6 +15,22 @@ describe Visualization::Timeseries, :database_integration => true do
     })
   end
 
+  context "blah" do
+    let(:test_schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
+    let(:filters) { [] }
+    let(:dataset) {
+      d = datasets(:executable_chorus_view)
+      d.update_attribute(:query, "select g as column1, (NOW() + '1 month'::INTERVAL * g) as time_value from (select generate_series(1,2000) as g) a;")
+      d
+    }
+
+    it "raises an error" do
+      expect {
+        visualization.fetch!(account, 12345)
+      }.to raise_error(ApiValidationError)
+    end
+  end
+
   describe "#fetch!" do
     before do
       visualization.fetch!(account, 12345)
