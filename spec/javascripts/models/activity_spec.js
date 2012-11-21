@@ -269,18 +269,18 @@ describe("chorus.models.Activity", function() {
                     hdfsEntry: {
                         id: 1234,
                         hadoopInstance: {id: 1},
-                        path : "/data/test/test.csv"
+                        path: "/data/test",
+                        name: "file.csv"
                     }
                 });
 
                 var hdfsEntry = activity.hdfsEntry();
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
-                expect(hdfsEntry.get("path")).toBe("/data/test")
-                expect(hdfsEntry.name()).toBe("test.csv")
+                expect(hdfsEntry.getPath()).toBe("/data/test")
+                expect(hdfsEntry.name()).toBe("file.csv")
                 expect(hdfsEntry.get("hadoopInstance").id).toBe(1)
                 expect(hdfsEntry.get("id")).toBe(1234)
             });
-
         });
     });
 

@@ -51,14 +51,9 @@
 
         hdfsEntry: makeAssociationMethod("hdfsEntry", function(model) {
             var hdfsEntry = this.get("hdfsEntry");
-            var pathArray = hdfsEntry.path.split("/");
-            var path = _.first(pathArray, pathArray.length - 1).join('/');
-            var name = _.last(pathArray);
             model.set({
                 id : hdfsEntry.id,
-                hadoopInstance: hdfsEntry.hadoopInstance,
-                path : path,
-                name : name
+                hadoopInstance: hdfsEntry.hadoopInstance
             })
         }),
 

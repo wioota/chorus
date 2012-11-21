@@ -76,9 +76,9 @@ describe ExternalTablesController do
       }.to change(Events::HdfsFileExtTableCreated, :count).by(1)
 
       e = Events::Base.last
-      e.workspace.should    == workspace
+      e.workspace.should == workspace
       e.dataset.name.should == 'tablefromhdfs'
-      e.hdfs_entry.should    == hdfs_entry
+      e.hdfs_entry.should == hdfs_entry
     end
 
     it 'creates an HdfsDirectoryExtTableCreated event for the directory' do

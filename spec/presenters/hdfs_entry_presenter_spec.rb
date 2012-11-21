@@ -19,6 +19,7 @@ describe HdfsEntryPresenter, :type => :view do
            :hadoop_instance => hadoop_instance
        }, :without_protection => true)
       end
+
       before do
         mock(entry).ancestors { [{:name => "foo", :id => 1}] }
         stub(entry).entries { [] }
@@ -52,7 +53,7 @@ describe HdfsEntryPresenter, :type => :view do
     context "for a file" do
       let(:entry) do
         hadoop_instance.hdfs_entries.create!({
-             :path => "/data",
+             :path => "/data.file",
              :modified_at => "2010-10-20 10:11:12",
              :size => '10',
              :is_directory => 'false',
@@ -68,8 +69,8 @@ describe HdfsEntryPresenter, :type => :view do
 
       it "includes the fields" do
         hash[:id].should == entry.id
-        hash[:name].should == "data"
-        hash[:path].should == "/data"
+        hash[:name].should == "data.file"
+        hash[:path].should == "/"
         hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
         hash[:size].should == 10
         hash[:is_dir].should be_false

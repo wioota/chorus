@@ -21,7 +21,7 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     getFullAbsolutePath: function() {
-        return this.getPath() + '/' + this.get('name');
+        return this.getPath() + '/' + this.name();
     },
 
     pathSegments: function() {
