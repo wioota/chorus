@@ -10,7 +10,8 @@ module Kaggle
           'gravatar_url' => model['gravatar_url'],
           'full_name' => model['full_name'],
           'favorite_technique' => model['favorite_technique'],
-          'favorite_software' => model['favorite_software']
+          'favorite_software' => model['favorite_software'],
+          'past_competition_types' => model['past_competition_types']
       }
     end
   end

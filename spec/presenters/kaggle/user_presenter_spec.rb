@@ -19,6 +19,7 @@ describe Kaggle::UserPresenter, :type => :view do
       hash.should have_key('full_name')
       hash.should have_key('favorite_technique')
       hash.should have_key('favorite_software')
+      hash['past_competition_types'].should be_a(Array)
     end
   end
 end
