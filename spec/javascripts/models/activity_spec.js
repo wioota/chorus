@@ -265,8 +265,8 @@ describe("chorus.models.Activity", function() {
 
         describe("#hdfsEntry", function() {
             it("returns hdfs entry with the right data", function() {
-                activity = rspecFixtures.activity.hdfsExternalTableCreated({
-                    hdfsFile: {
+                activity = rspecFixtures.activity.hdfsFileExtTableCreated({
+                    hdfsEntry: {
                         id: 1234,
                         hadoopInstance: {id: 1},
                         path : "/data/test/test.csv"

@@ -239,7 +239,7 @@ FactoryGirl.define do
       workspace
     end
 
-    factory :hdfs_external_table_created_event, :class => Events::WorkspaceAddHdfsAsExtTable do
+    factory :hdfs_external_table_created_event, :class => Events::HdfsFileExtTableCreated do
       association :dataset, :factory => :gpdb_table
       association :hdfs_file, :factory => :hdfs_entry
       workspace

@@ -47,7 +47,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
-        parentCtx.expression = this.pattern;
+        parentCtx.pattern = this.pattern;
         parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='tableName' value='" + Handlebars.Utils.escapeExpression(this.model.get('tableName')) + "'/>");
         return parentCtx;
     },
@@ -61,14 +61,14 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         var parent_dialog_valid = this._super("performValidation", arguments);
 
         if(this.$("input[name='pathType']:checked").val() == "pattern") {
-            var regexp_s = this.$("input[name='expression']").val();
+            var regexp_s = this.$("input[name='pattern']").val();
 
             regexp_s = regexp_s.replace(/\*/g, ".*");
             var regexp = new RegExp(regexp_s, "i");
             var result = regexp.test(this.model.get("name"));
 
             if (!result) {
-                this.markInputAsInvalid(this.$("input[name='expression']"), t("hdfs_instance.create_external.validation.expression"), true);
+                this.markInputAsInvalid(this.$("input[name='pattern']"), t("hdfs_instance.create_external.validation.pattern"), true);
             }
             return result && parent_dialog_valid;
         }
@@ -99,7 +99,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.tableName = this.$(".directions input:text").val();
 
         var pathType = this.$("input[name='pathType']:checked").val();
-        var path = (pathType === "pattern") ? this.$("input[name='expression']").val() : "*";
+        var path = (pathType === "pattern") ? this.$("input[name='pattern']").val() : "*";
 
         this.model.set({
             fileType: "TEXT",
@@ -110,14 +110,14 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
             tableName: chorus.utilities.CsvParser.normalizeForDatabase(tableName),
             delimiter: this.delimiter,
             hdfs_entry_id : this.options.hdfs_entry_id,
-            file_expression: path
+            file_pattern: path
         }, {silent : true});
     },
 
     fetchSample: function(e) {
         e && e.preventDefault();
         this.pathType = this.$("input[name='pathType']:checked").val();
-        this.pattern = this.$("input[name='expression']").val();
+        this.pattern = this.$("input[name='pattern']").val();
         this.resource = this.model = this.collection.find(function(modelSet) {
             return modelSet.get('name') == $(e.target).val()
         });

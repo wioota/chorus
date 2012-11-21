@@ -686,7 +686,7 @@ describe("chorus.presenters.Activity", function() {
         var hdfsEntry;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.hdfsExternalTableCreated();
+            model = rspecFixtures.activity.hdfsFileExtTableCreated();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -698,11 +698,64 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WorkspaceAddHdfsAsExtTable.default", {
+                "activity.header.HdfsFileExtTableCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name())
+                }
+            )
+        });
+    });
+
+    context("add a hdfs directory as external table", function() {
+        var hdfsEntry;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.hdfsDirectoryExtTableCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            hdfsEntry = model.hdfsEntry();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.HdfsDirectoryExtTableCreated.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name())
+                }
+            )
+        });
+    });
+
+    context("add a hdfs directory as external table with file pattern", function() {
+        var hdfsEntry;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.hdfsPatternExtTableCreated({filePattern: '*.csv'});
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            hdfsEntry = model.hdfsEntry();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.HdfsPatternExtTableCreated.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    filePattern: '*.csv'
                 }
             )
         });
@@ -1349,7 +1402,6 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-
     context("import schedule updated event", function() {
         var activity_data;
         beforeEach(function () {
@@ -1413,7 +1465,6 @@ describe("chorus.presenters.Activity", function() {
             });
         });
     });
-
 
     context("import schedule deleted event", function() {
         var activity_data;

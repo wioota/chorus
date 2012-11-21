@@ -82,14 +82,14 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             expect(this.dialog.$('input:radio[name=pathType]:checked').val()).toBe("directory");
         });
 
-        it("creates a textbox for the file expression", function() {
-            expect(this.dialog.$("[name=expression]")).toExist();
+        it("creates a textbox for the file pattern", function() {
+            expect(this.dialog.$("[name=pattern]")).toExist();
         });
 
         describe("changing the file", function () {
             beforeEach(function() {
                 spyOn(chorus, 'styleSelect');
-                this.dialog.$("input[name='expression']").val("*.csv");
+                this.dialog.$("input[name='pattern']").val("*.csv");
                 this.dialog.$("input#pattern").prop("checked", "checked").change();
                 var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"));
                 selElement.change();
@@ -117,7 +117,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("display the correct elements", function() {
-                    expect(this.dialog.$("input[name='expression']").val()).toBe("*.csv");
+                    expect(this.dialog.$("input[name='pattern']").val()).toBe("*.csv");
                     expect(this.dialog.$("input#pattern:checked")).toBeTruthy();
                     expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
                 });
@@ -144,26 +144,26 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
             });
 
-            context("with an invalid file name expression", function() {
-                it("succeeds when the pathType expression is not checked even if no match", function() {
-                    this.dialog.$("input[name='expression']").val(".*.txt");
+            context("with an invalid file name pattern", function() {
+                it("succeeds when the pathType pattern is not checked even if no match", function() {
+                    this.dialog.$("input[name='pattern']").val(".*.txt");
                     this.dialog.$("button.submit").click();
-                    expect(this.dialog.$("input[name='expression']")).not.toHaveClass("has_error");
+                    expect(this.dialog.$("input[name='pattern']")).not.toHaveClass("has_error");
                 });
 
-                it("fails validation when the current sample does not match the expression", function() {
+                it("fails validation when the current sample does not match the pattern", function() {
                     this.dialog.$("input#directory").removeAttr('checked');
                     this.dialog.$("input#pattern").attr('checked', 'checked').change();
-                    this.dialog.$("input[name='expression']").val(".*.txt");
+                    this.dialog.$("input[name='pattern']").val(".*.txt");
                     this.dialog.$("button.submit").click();
-                    expect(this.dialog.$("input[name='expression']")).toHaveClass("has_error");
+                    expect(this.dialog.$("input[name='pattern']")).toHaveClass("has_error");
                 });
 
-                it("fails validation when the current sample does match the expression", function() {
+                it("fails validation when the current sample does match the pattern", function() {
 
-                    this.dialog.$("input[name='expression']").val("*.csv");
+                    this.dialog.$("input[name='pattern']").val("*.csv");
                     this.dialog.$("button.submit").click();
-                    expect(this.dialog.$("input[name='expression']")).not.toHaveClass("has_error");
+                    expect(this.dialog.$("input[name='pattern']")).not.toHaveClass("has_error");
                 });
             });
 
@@ -182,7 +182,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     var request = this.server.lastCreate();
                     var statement = "test (column_1, column_2, column_3, column_4, column_5)";
                     expect(request.url).toMatchUrl("/workspaces/22/external_tables");
-                    expect(request.params()['hdfs_external_table[file_expression]']).toBe("*");
+                    expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*");
                     expect(request.params()['hdfs_external_table[hadoop_instance_id]']).toBe("234");
                     expect(request.params()['hdfs_external_table[column_names][]'][0]).toBe("column_1");
                     expect(request.params()['hdfs_external_table[column_names][]'][1]).toBe("column_2");
@@ -213,7 +213,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 beforeEach(function() {
                     this.dialog.$("input#directory").removeAttr('checked');
                     this.dialog.$("input#pattern").attr('checked', 'checked').change();
-                    this.dialog.$("input[name='expression']").val("*.csv");
+                    this.dialog.$("input[name='pattern']").val("*.csv");
                     this.dialog.$('button.submit').click();
                 });
 
@@ -222,7 +222,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                     expect(request.url).toMatchUrl("/workspaces/22/external_tables");
                     expect(request.params()['hdfs_external_table[path_type]']).toBe('pattern');
-                    expect(request.params()['hdfs_external_table[file_expression]']).toBe("*.csv");
+                    expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*.csv");
                 });
             })
 
@@ -281,7 +281,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         });
 
         it("renders a help text", function() {
-            expect(this.qtipCall.args[0].content).toMatchTranslation("hdfs_instance.create_external.specify_expression_help_text");
+            expect(this.qtipCall.args[0].content).toMatchTranslation("hdfs_instance.create_external.specify_pattern_help_text");
         });
     });
 });

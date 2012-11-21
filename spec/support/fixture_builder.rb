@@ -228,6 +228,7 @@ FixtureBuilder.configure do |fbuilder|
 
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
+    @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hadoop_instance => hadoop_instance, :is_directory => true)
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
@@ -410,7 +411,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceChangeName.by(admin).add(:workspace => public_workspace, :workspace_old_name => 'old_name')
-    Events::WorkspaceAddHdfsAsExtTable.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_file => @hdfs_file)
+    Events::HdfsFileExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @hdfs_file)
+    Events::HdfsDirectoryExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @directory)
+    Events::HdfsPatternExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @hdfs_file, :file_pattern => "*.csv")
     Events::FileImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'table')
     Events::FileImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => default_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FileImportFailed.by(owner).add(:workspace => public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
@@ -453,6 +456,10 @@ FixtureBuilder.configure do |fbuilder|
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
       fbuilder.name :real, real_workspace
+    end
+
+    if ENV['HADOOP_HOST']
+      @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => InstanceIntegration.instance_config_for_hadoop['host'], :port => InstanceIntegration.instance_config_for_hadoop['port'])
     end
 
     #Notification

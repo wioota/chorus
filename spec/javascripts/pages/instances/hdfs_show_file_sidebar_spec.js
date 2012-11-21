@@ -19,7 +19,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         });
 
         it("has the right title (the filename)", function() {
-            expect(this.view.$(".file_name")).toContainText("test.csv")
+            expect(this.view.$(".file_name")).toContainText(this.file.get('name'));
         })
 
         it("shows the correct last_updated value", function() {

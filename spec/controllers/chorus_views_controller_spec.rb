@@ -33,7 +33,9 @@ describe ChorusViewsController, :database_integration => true do
       end
 
       it "creates a chorus view" do
-        post :create, options
+        expect {
+          post :create, options
+        }.to change { Dataset.chorus_views.count}.by(1)
 
         chorus_view = Dataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"

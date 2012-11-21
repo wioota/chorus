@@ -14,11 +14,11 @@ describe Events::Base do
 
       Events::GreenplumInstanceCreated.by(user1).add(:gpdb_instance => gpdb_instance1)
       Events::GreenplumInstanceChangedOwner.by(user2).add(:gpdb_instance => gpdb_instance2, :new_owner => user3)
-      Events::WorkspaceAddHdfsAsExtTable.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
+      Events::HdfsFileExtTableCreated.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
       event1 = Events::GreenplumInstanceCreated.last
       event2 = Events::GreenplumInstanceChangedOwner.last
-      event3 = Events::WorkspaceAddHdfsAsExtTable.last
+      event3 = Events::HdfsFileExtTableCreated.last
 
       event1.actor.should == user1
       event1.gpdb_instance.should == gpdb_instance1

@@ -14,10 +14,10 @@
     <label  for="directory">{{t "hdfs_instance.create_external.include_all_files"}}</label>
 
     <input type="radio" id="pattern" name="pathType" value="pattern"/>
-    <label for="pattern">{{t "hdfs_instance.create_external.specify_expression"}}</label>
+    <label for="pattern">{{t "hdfs_instance.create_external.specify_pattern"}}</label>
 
-    <input type='text' class='hdfs' name='expression' value="{{expression}}"></input>
-    <img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_expression_help_text"}}'/>
+    <input type='text' class='hdfs' name='pattern' value="{{pattern}}"></input>
+    <img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_pattern_help_text"}}'/>
 </div>
 
 {{renderTemplate "csv_data_table" this}}

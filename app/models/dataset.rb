@@ -20,6 +20,7 @@ class Dataset < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
   attr_accessor :statistics
+  attr_accessible :name
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities

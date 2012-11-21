@@ -227,7 +227,6 @@ describe EventsController do
         "noteOnGnipInstanceCreated" => Events::NoteOnGnipInstance.where(:insight => false),
         "insightOnGnipInstanceCreated" => Events::NoteOnGnipInstance.where(:insight => true),
         "noteOnHadoopInstanceCreated" => Events::NoteOnHadoopInstance,
-        "hdfsExternalTableCreated" => Events::WorkspaceAddHdfsAsExtTable,
         "noteOnHdfsFileCreated" => Events::NoteOnHdfsFile,
         "noteOnWorkspaceCreated" => Events::NoteOnWorkspace,
         "noteOnWorkfileCreated" => Events::NoteOnWorkfile,
@@ -254,11 +253,13 @@ describe EventsController do
         "viewCreated" => Events::ViewCreated,
         "importScheduleUpdated" => Events::ImportScheduleUpdated,
         "importScheduleDeleted" => Events::ImportScheduleDeleted,
-        "workspaceDeleted" => Events::WorkspaceDeleted
+        "workspaceDeleted" => Events::WorkspaceDeleted,
+        "hdfsFileExtTableCreated" => Events::HdfsFileExtTableCreated,
+        "hdfsDirectoryExtTableCreated" => Events::HdfsDirectoryExtTableCreated,
+        "hdfsPatternExtTableCreated" => Events::HdfsPatternExtTableCreated
     }
 
     FIXTURE_FILES.each do |filename, event_relation|
-
       generate_fixture "activity/#{filename}.json" do
         event = event_relation.last
         Activity.global.create!(:event => event)

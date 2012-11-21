@@ -210,8 +210,17 @@
                 links: [ "newUser"]
             },
 
-            WorkspaceAddHdfsAsExtTable: {
+            HdfsFileExtTableCreated: {
                 links: [ "actor", "hdfsEntry", "workspace", "dataset"]
+            },
+
+            HdfsDirectoryExtTableCreated: {
+                links: [ "actor", "hdfsEntry", "workspace", "dataset"]
+            },
+
+            HdfsPatternExtTableCreated: {
+                links: [ "actor", "hdfsEntry", "workspace", "dataset"],
+                attrs: ['filePattern']
             },
 
             NOTE: {

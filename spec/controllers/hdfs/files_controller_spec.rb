@@ -2,9 +2,7 @@ require "spec_helper"
 
 describe Hdfs::FilesController do
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
-  let(:entry) do
-    HdfsEntry.create!({:is_directory => true, :path => '/data', :modified_at => Time.now.to_s, :hadoop_instance => hadoop_instance}, :without_protection => true)
-  end
+  let(:entry) { hdfs_entries(:directory) }
 
   before do
     log_in users(:owner)
@@ -54,14 +52,11 @@ describe Hdfs::FilesController do
     end
 
     context "a file" do
+      let(:entry){ hdfs_entries(:hdfs_file) }
 
-      let(:entry) do
-        HdfsEntry.create!({:is_directory => false, :path => '/data/test.csv', :modified_at => Time.now.to_s, :hadoop_instance => hadoop_instance}, :without_protection => true)
-      end
       before do
         any_instance_of(Hdfs::QueryService) do |h|
           stub(h).show { ["a, b, c", "row1a, row1b, row1c"] }
-          stub(h).list { [{'modified_at' => Time.now.to_s, 'path' => '/data/test.csv'}] }
         end
       end
 

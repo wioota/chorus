@@ -153,7 +153,8 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/external_tables" do
-    parameter :hdfs_entry_id, "Id of the source HDFS entry"
+    parameter :hdfs_entry_id, "Id of the source HDFS file or directory"
+    parameter :file_pattern, "Regular expression specifying file names to include (only when source is a directory)"
     parameter :has_header, "'true' if data contains a header column, 'false' otherwise"
     parameter :'column_names[]', "Array of column names"
     parameter :'types[]', "Array of column types"
@@ -163,7 +164,8 @@ resource "Workspaces" do
 
     required_parameters :hdfs_entry_id, :table_name, :workspace_id, :'column_names[]', :delimiter, :'types[]'
 
-    let(:hdfs_entry_id) { hdfs_entries(:hdfs_file).id }
+    let(:hdfs_entry_id) { hdfs_entries(:directory).id }
+    let(:file_pattern) { '*' }
     let(:has_header) { true }
     let(:'column_names[]') { ["field1", "field2"] }
     let(:'types[]') { ["text", "text"] }

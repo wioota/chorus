@@ -389,23 +389,46 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "WorkspaceAddHdfsAsExtTable" do
+  describe "HDFS file/directory as external table events" do
+    [Events::HdfsFileExtTableCreated,
+     Events::HdfsDirectoryExtTableCreated].each do |klass|
+      subject do
+        klass.add(
+            :actor => actor,
+            :workspace => workspace,
+            :hdfs_entry => hdfs_entry,
+            :dataset => dataset
+        )
+      end
+
+      its(:dataset) { should == dataset }
+      its(:hdfs_entry) { should == hdfs_entry }
+
+      its(:targets) { should == {:dataset => dataset, :hdfs_entry => hdfs_entry, :workspace => workspace} }
+
+      it_creates_activities_for { [actor, dataset, workspace, hdfs_entry] }
+    end
+  end
+
+  describe "HDFS as external table with file expression event" do
     subject do
-      Events::WorkspaceAddHdfsAsExtTable.add(
+      Events::HdfsPatternExtTableCreated.add(
           :actor => actor,
           :workspace => workspace,
-          :hdfs_file => hdfs_entry,
-          :dataset => dataset
+          :hdfs_entry => hdfs_entry,
+          :dataset => dataset,
+          :file_pattern => '*.csv'
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:hdfs_file) { should == hdfs_entry }
+    its(:hdfs_entry) { should == hdfs_entry }
 
-    its(:targets) { should == {:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace} }
+    its(:targets) { should == {:dataset => dataset, :hdfs_entry => hdfs_entry, :workspace => workspace} }
 
     it_creates_activities_for { [actor, dataset, workspace, hdfs_entry] }
-    it_does_not_create_a_global_activity
+
+    its(:additional_data) { should == {'file_pattern' => '*.csv'}}
   end
 
   describe "FileImportCreated" do
