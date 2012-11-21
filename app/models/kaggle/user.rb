@@ -14,8 +14,7 @@ module Kaggle
     end
 
     METHOD_MAP = {
-        :id => :UserId,
-        :username => :Username,
+        :id => :KaggleId,
         :location => :Location,
         :rank  => :KaggleRank,
         :points => :KagglePoints,

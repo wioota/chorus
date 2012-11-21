@@ -8,6 +8,14 @@ describe Kaggle::UsersController do
   end
 
   describe "#index" do
+    include KaggleSpecHelpers
+
+    before do
+      stub(Kaggle::API).users(anything) do |param|
+        kaggle_users_api_result
+      end
+    end
+
     it_behaves_like "an action that requires authentication", :get, :index, :workspace_id => '-1'
 
     it "succeeds" do
@@ -30,12 +38,8 @@ describe Kaggle::UsersController do
     end
 
     it "sorts by rank" do
-      stub.proxy(Kaggle::API).users(anything) do |users|
-        users.sort_by { |user| -user['rank'] }
-      end
-
       mock_present { | kaggle_users|
-       kaggle_users.first.rank.should <= kaggle_users.second.rank
+        kaggle_users.first.rank.should <= kaggle_users.second.rank
       }
 
       get :index, :workspace_id => '-1'
@@ -45,6 +49,22 @@ describe Kaggle::UsersController do
       filters = ['i am a filter']
       mock(Kaggle::API).users(:filters => filters) { [] }
       get :index, :workspace_id => '-1', :filters => filters
+    end
+
+    context "when user fetching fails" do
+      before do
+        mock(Kaggle::API).users(anything) {
+          raise Kaggle::API::NotReachable.new 'This is an arbitrary error message'
+        }
+      end
+
+      it "presents an error json" do
+        get :index, :workspace_id => -1
+        response.code.should == '422'
+        decoded_response = JSON.parse(response.body)
+        error_message = decoded_response['errors']['message']
+        error_message.should == 'This is an arbitrary error message'
+      end
     end
 
     generate_fixture "kaggleUserSet.json" do

@@ -119,8 +119,8 @@ describe("chorus.views.KaggleUserList", function() {
             expect(this.view.$("> li").length).toBe(this.collection.length);
         });
 
-        it("displays the usernames", function() {
-            expect(this.view.$(".name:contains("+ this.collection.at(0).get("username") +")")).toExist();
+        it("displays the names", function() {
+            expect(this.view.$(".name:contains("+ this.collection.at(0).get("fullName") +")")).toExist();
         });
 
         it("displays the location", function() {

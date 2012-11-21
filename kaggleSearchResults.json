@@ -1,13 +1,12 @@
-[
+{ "users": [
     {
-        "Username":"bbanner",
-        "UserId":47822,
-        "KaggleRank":9,
+        "KaggleId":47822,
+        "KaggleRank":17,
         "KagglePoints":298690.9,
-        "FavoriteTechnique":"",
+        "FavoriteTechnique":"gbm",
         "FavoriteSoftware":"R with a little SAS",
-        "LegalName":"Bruce Banner",
-        "Location":"San Francisco, United States",
+        "LegalName":"Bruce B.",
+        "Location":"Singapore",
         "Gravatar":"https://secure.gravatar.com/avatar/kaggleImage.jpg",
         "PastCompetitionTypes":[
             "Life Sciences",
@@ -38,13 +37,12 @@
         ]
     },
     {
-        "Username":"tstark",
-        "UserId":51196,
-        "KaggleRank":17,
+        "KaggleId":51196,
+        "KaggleRank":9,
         "KagglePoints":245095.8,
         "FavoriteTechnique":"SVM, PCA",
         "FavoriteSoftware":"R, ggplot2",
-        "LegalName":"Tony Stark",
+        "LegalName":"Tony S.",
         "Location":"San Francisco, United States",
         "Gravatar":"https://secure.gravatar.com/avatar/kaggleImage.jpg",
         "PastCompetitionTypes":[
@@ -73,4 +71,4 @@
             }
         ]
     }
-]
+]}

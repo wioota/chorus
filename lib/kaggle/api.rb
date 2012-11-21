@@ -5,8 +5,9 @@ require 'json'
 module Kaggle
   module API
     MessageFailed = Class.new(StandardError)
+    NotReachable = Class.new(StandardError)
 
-    API_URL = "https://www.kaggle.com/connect/chorus-beta/message"
+    API_URL = "https://www.kaggle.com/connect/chorus-beta/"
 
     def self.send_message(params)
       decoded_response = send_to_kaggle(params)
@@ -24,11 +25,47 @@ module Kaggle
     end
 
     def self.users(options = {})
-      users = JSON.parse(File.read(Rails.root + "kaggleSearchResults.json")).collect {|data| Kaggle::User.new(data)}
-      users.select {|user| search_through_filter(user, options[:filters])}
+      self.fetch_users.select {|user| search_through_filter(user, options[:filters])}
+    end
+
+    def self.enabled?
+      config = Chorus::Application.config.chorus
+      config['kaggle'] && (config['kaggle']['enabled'] == true)
     end
 
     private
+
+    def self.fetch_users
+      uri = uri_for("directory")
+      http = connection_for(uri)
+
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
+
+      JSON.parse(response.body)["users"].map do |user_data|
+        Kaggle::User.new(user_data)
+      end
+
+    rescue
+      raise Kaggle::API::NotReachable.new("Unable to get the list of Kaggle Contributors")
+    end
+
+    private
+
+    def self.send_to_kaggle(post_params)
+      uri = uri_for("message")
+      http = connection_for(uri)
+
+      request = Net::HTTP::Post.new(uri.request_uri)
+      request.set_form_data(post_params)
+      response = http.request(request)
+
+      JSON.parse(response.body)
+    rescue Timeout::Error
+      raise MessageFailed.new("Could not connect to the Kaggle server")
+    rescue => e
+      raise MessageFailed.new("Error: " + e.message)
+    end
 
     def self.search_through_filter(user, filters)
       return_val = true
@@ -56,23 +93,21 @@ module Kaggle
       return_val
     end
 
-    def self.send_to_kaggle(post_params)
-      uri = URI.parse(API_URL)
-
+    def self.connection_for(uri)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
       http.ca_file = Rails.root.join('config/certs/sf-class2-root.pem').to_s
 
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.set_form_data(post_params)
-      response = http.request(request)
+      http
+    end
 
-      JSON.parse(response.body)
-    rescue Timeout::Error
-      raise MessageFailed.new("Could not connect to the Kaggle server")
-    rescue Exception => e
-      raise MessageFailed.new("Error: " + e.message)
+    def self.uri_for(endpoint)
+      URI.parse(API_URL + endpoint + "?apiKey=#{self.api_key}")
+    end
+
+    def self.api_key
+      Chorus::Application.config.chorus['kaggle']['api_key']
     end
   end
 end

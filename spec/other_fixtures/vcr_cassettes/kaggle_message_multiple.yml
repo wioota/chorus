@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://www.kaggle.com/connect/chorus-beta/message
+    uri: https://www.kaggle.com/connect/chorus-beta/message?apiKey=<SUPPRESSED_KAGGLE_API_KEY>
     body:
       encoding: US-ASCII
-      string: <SUPPRESSED_KAGGLE_API_KEY>
+      string: subject=some+subject&replyTo=test%40fun.com&htmlBody=message+body&userId=63766&userId=63767
     headers:
       accept:
       - ! '*/*'
@@ -13,8 +13,6 @@ http_interactions:
       - Ruby
       content-type:
       - application/x-www-form-urlencoded
-      connection:
-      - close
   response:
     status:
       code: 200
@@ -27,7 +25,7 @@ http_interactions:
       server:
       - Microsoft-IIS/7.5
       date:
-      - Sat, 10 Nov 2012 00:41:01 GMT
+      - Wed, 21 Nov 2012 00:47:23 GMT
       connection:
       - close
       content-length:
@@ -37,5 +35,5 @@ http_interactions:
       string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
         \n  ],\r\n  \"failed\": []\r\n}"
     http_version: '1.1'
-  recorded_at: Sat, 10 Nov 2012 00:41:00 GMT
-recorded_with: VCR 2.1.1
+  recorded_at: Wed, 21 Nov 2012 00:47:21 GMT
+recorded_with: VCR 2.3.0

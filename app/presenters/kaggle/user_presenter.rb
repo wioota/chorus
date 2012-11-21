@@ -3,7 +3,6 @@ module Kaggle
     def to_hash
       {
           'id' => model['id'],
-          'username' => model['username'],
           'location' => model['location'],
           'rank' => model['rank'],
           'points' => model['points'],
