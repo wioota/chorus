@@ -53,17 +53,13 @@ describe Kaggle::UsersController do
 
     context "when user fetching fails" do
       before do
-        mock(Kaggle::API).users(anything) {
-          raise Kaggle::API::NotReachable.new 'This is an arbitrary error message'
-        }
+        mock(Kaggle::API).users(anything) { raise Kaggle::API::NotReachable }
       end
 
       it "presents an error json" do
         get :index, :workspace_id => -1
         response.code.should == '422'
-        decoded_response = JSON.parse(response.body)
-        error_message = decoded_response['errors']['message']
-        error_message.should == 'This is an arbitrary error message'
+        decoded_errors.record.should == 'KAGGLE_API_UNREACHABLE'
       end
     end
 

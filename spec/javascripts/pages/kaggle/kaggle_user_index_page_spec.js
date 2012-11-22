@@ -14,6 +14,21 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
             expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
         });
+
+        context("Kaggle user list is unreachable", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl");
+                this.server.lastFetchFor(this.kaggleUsers).failUnprocessableEntity({
+                    record: 'KAGGLE_API_UNREACHABLE'
+                });
+            });
+
+            it("redirects to the unprocessable entity page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
+                expect(chorus.pageOptions.title).toMatchTranslation('unprocessable_entity.kaggle_api_unreachable.title');
+                expect(chorus.pageOptions.text).toMatchTranslation('unprocessable_entity.kaggle_api_unreachable.text');
+            });
+        });
     });
 
     context("while the workspace is loading", function() {
@@ -27,9 +42,9 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
     });
 
     context("after the workspace has loaded successfully", function() {
-       beforeEach(function() {
-          this.server.completeFetchFor(this.workspace, this.workspace);
-       });
+        beforeEach(function() {
+            this.server.completeFetchFor(this.workspace, this.workspace);
+        });
 
         it("displays the breadcrumbs", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
@@ -45,7 +60,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         it("shows the kaggle header", function() {
-           expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary", {kaggleLink: 'Kaggle'});
+            expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary", {kaggleLink: 'Kaggle'});
         });
     });
 
@@ -55,7 +70,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             this.server.completeFetchFor(this.kaggleUsers);
         });
 
-        it("sets up the content details", function () {
+        it("sets up the content details", function() {
             expect(this.page.mainContent.contentDetails).toBeA(chorus.views.KaggleUserListContentDetails);
             expect(this.page.mainContent.contentDetails.collection).toBeA(chorus.collections.KaggleUserSet);
         });
@@ -69,8 +84,8 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
     });
 
-    describe("on filterKaggleUsers page event", function () {
-        beforeEach(function () {
+    describe("on filterKaggleUsers page event", function() {
+        beforeEach(function() {
             this.server.reset();
             var filterCollection = new chorus.collections.KaggleFilterSet([
                 new chorus.models.KaggleFilter(),
@@ -81,10 +96,10 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             chorus.PageEvents.broadcast("filterKaggleUsers", filterCollection);
         });
 
-        it("send the params as format filter|comparator|value", function () {
+        it("send the params as format filter|comparator|value", function() {
             expect(this.page.collection).toHaveBeenFetched();
             var url = this.server.lastFetchFor(this.page.collection).url;
-            expect(url).toContainQueryParams({'filters[]':'someValue'});
+            expect(url).toContainQueryParams({'filters[]': 'someValue'});
         });
     });
 });
