@@ -122,9 +122,9 @@ describe Kaggle::API, :kaggle_API => true do
       end
     end
   end
-  
+
   describe ".send_message" do
-    let(:user_ids) { [63766] }
+    let(:user_ids) { [63766,63767] }
     let(:api_key) { Chorus::Application.config.chorus['kaggle']['API_key'] }
     let(:params) { {
        "subject" => "some subject",
@@ -133,43 +133,20 @@ describe Kaggle::API, :kaggle_API => true do
        "userId" => user_ids
     } }
 
-    it "should send a message and return true" do
-      VCR.use_cassette('kaggle_message_single', :tag => :filter_kaggle_api_key_param) do
+    it "succeeds with two valid ids" do
+      VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key_param) do
         described_class.send_message(params).should be_true
       end
-
-      FakeWeb.last_request.path.should == "/connect/chorus-beta/message?apiKey=#{Chorus::Application.config.chorus['kaggle']['api_key']}"
     end
 
-    context "with multiple recipients as array" do
-      let(:user_ids) { [63766,63767] }
+    context "with an invalid user id" do
+      let(:user_ids) { [63766,99999999] }
 
-      it "succeeds with two valid ids" do
-        VCR.use_cassette('kaggle_message_multiple', :tag => :filter_kaggle_api_key_param) do
-          described_class.send_message(params).should be_true
-        end
-      end
-    end
-
-    context "when the send message fails" do
-      let(:user_ids) { [99999999] }
-      it "fails with an invalid id" do
-        VCR.use_cassette('kaggle_message_single_fail', :tag => :filter_kaggle_api_key_param) do
+      it "raises a MessageFailed exception" do
+        VCR.use_cassette('kaggle_message_fail', :tag => :filter_kaggle_api_key_param) do
           expect {
             described_class.send_message(params)
           }.to raise_exception(Kaggle::API::MessageFailed)
-        end
-      end
-
-      context "with multiple recipients as array" do
-        let(:user_ids) { [63766,99999999] }
-
-        it "fails with one invalid id" do
-          VCR.use_cassette('kaggle_message_multiple_fail', :tag => :filter_kaggle_api_key_param) do
-            expect {
-              described_class.send_message(params)
-            }.to raise_exception(Kaggle::API::MessageFailed)
-          end
         end
       end
     end
