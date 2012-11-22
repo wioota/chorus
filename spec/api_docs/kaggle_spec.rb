@@ -45,7 +45,7 @@ resource "Kaggle", :kaggle_api => true do
     example "Send a message to Kaggle users" do
       VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key) do
         do_request(:reply_to => reply_to, :subject => subject, :html_body => html_body, :recipient_ids => recipient_ids)
-        status.should == 200
+        status.should == 201
       end
     end
   end

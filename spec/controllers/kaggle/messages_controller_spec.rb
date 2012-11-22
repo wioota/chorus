@@ -17,7 +17,7 @@ describe Kaggle::MessagesController, :kaggle_api => true do
     } }
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
-    it "returns 200 when the message sends" do
+    it "returns 201 when the message sends" do
       mock(Kaggle::API).send_message(satisfy {|arg| arg.values.select{|v| !v.nil? }.length == 5})
 
       post :create, params

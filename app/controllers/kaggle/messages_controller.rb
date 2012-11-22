@@ -4,7 +4,7 @@ class Kaggle::MessagesController < ApplicationController
   def create
     kaggleParams = prepared_parameters(params[:kaggle_message])
     Kaggle::API.send_message(kaggleParams)
-    render :json => {}, :status => 200
+    render :json => {}, :status => :created
   rescue Kaggle::API::MessageFailed => e
     raise ModelNotCreated.new(e.message)
   end
