@@ -11,8 +11,7 @@ resource "Kaggle", :kaggle_api => true do
     log_in user
   end
 
-  get "/workspaces/:workspace_id/kaggle/users" do
-    parameter :workspace_id, "Workspace id"
+  get "/kaggle/users" do
     parameter :'filters[]', "Array of filters, each with the pipe-separated format: 'filter|comparator|value'"
 
     let(:'filters[]') { "rank|greater|1" }
@@ -22,14 +21,12 @@ resource "Kaggle", :kaggle_api => true do
         kaggle_users_api_result
       end
 
-      do_request(:'filters[]' => []) do
-        status.should == 200
-      end
+      do_request(:'filters[]' => [])
+      status.should == 200
     end
   end
 
-  post "/workspaces/:workspace_id/kaggle/messages" do
-    parameter :workspace_id, "Workspace id"
+  post "/kaggle/messages" do
     parameter :reply_to, "Email address of sender"
     parameter :subject, "Subject of message to Kaggle user"
     parameter :html_body, "Body of message to Kaggle user"

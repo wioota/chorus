@@ -71,8 +71,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
 
     makeModel: function (options) {
         this.model = new chorus.models.KaggleMessage({
-            recipients: options.recipients,
-            workspace: options.workspace
+            recipients: options.recipients
         });
         this.bindings.add(this.model, "saved", this.saved);
     },

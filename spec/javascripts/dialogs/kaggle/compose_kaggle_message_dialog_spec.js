@@ -12,10 +12,6 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
     });
 
     describe('#render', function () {
-        it("sets the workspace for the model", function () {
-            expect(this.dialog.model.get('workspace')).toBe(this.workspace);
-        });
-
         it("sets the default value of the from field to the users email", function () {
             expect(this.dialog.$('input[name=replyTo]').val()).toBe('user@chorus.com');
         });

@@ -6,15 +6,14 @@ describe("chorus.models.KaggleMessage", function() {
             recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),
             subject: 'This is a valid subject',
             replyTo: 'user@emc.com',
-            htmlBody: 'Please analyze my data',
-            workspace: rspecFixtures.workspace({id: 100})
+            htmlBody: 'Please analyze my data'
         };
         this.model = new chorus.models.KaggleMessage(this.attrs);
     });
 
     describe("url", function() {
-        it("equals /workspaces/:id/kaggle/messages", function() {
-            expect(this.model.url()).toEqual('/workspaces/100/kaggle/messages');
+        it("equals /kaggle/messages", function() {
+            expect(this.model.url()).toMatchUrl('/kaggle/messages');
         })
     });
 

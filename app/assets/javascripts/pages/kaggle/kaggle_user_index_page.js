@@ -8,7 +8,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         this.workspace = new chorus.models.Workspace({ id: workspaceId });
         this.dependOn(this.workspace);
         this.workspace.fetch();
-        this.collection = new chorus.collections.KaggleUserSet([], {workspace: this.workspace});
+        this.collection = new chorus.collections.KaggleUserSet([]);
         this.dependOn(this.collection);
         this.collection.fetch();
 
