@@ -6,6 +6,7 @@ class ActivityMigrator < AbstractMigrator
       WorkspaceMigrator.migrate
       WorkfileMigrator.migrate(options)
       SandboxMigrator.migrate #workaround for broken composite keys in DATASET_IMPORT activities
+      HdfsEntryMigrator.migrate
     end
 
     def classes_to_validate
@@ -38,7 +39,8 @@ class ActivityMigrator < AbstractMigrator
           Events::ImportScheduleUpdated,
           Events::ImportScheduleDeleted,
           Events::WorkspaceAddSandbox,
-          Events::WorkspaceDeleted
+          Events::WorkspaceDeleted,
+          Events::HdfsFileExtTableCreated
       ]
     end
 
@@ -226,6 +228,50 @@ class ActivityMigrator < AbstractMigrator
         ON users.legacy_id = actor.object_id
     WHERE streams.type = 'IMPORT_SUCCESS' AND streams.indirect_verb = 'of dataset'
     AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::DatasetImportSuccess');
+    ))
+    end
+
+    def migrate_hdfs_file_ext_table_created
+      Legacy.connection.exec_query(%Q(
+    INSERT INTO #{@@events_table_name}(
+      legacy_id,
+      legacy_type,
+      action,
+      target1_id,
+      target1_type,
+      target2_id,
+      target2_type,
+      created_at,
+      updated_at,
+      workspace_id,
+      actor_id)
+    SELECT
+      streams.id,
+      'edc_activity_stream',
+      'Events::HdfsFileExtTableCreated',
+      target_dataset.id,
+      'Dataset',
+      hdfs_entry.id,
+      'HdfsEntry',
+      streams.created_tx_stamp,
+      streams.last_updated_tx_stamp,
+      workspaces.id,
+      NULL
+    FROM edc_activity_stream streams
+      INNER JOIN edc_activity_stream_object target_dataset_aso
+        ON streams.id = target_dataset_aso.activity_stream_id
+        AND target_dataset_aso.entity_type = 'databaseObject'
+      INNER JOIN datasets as target_dataset
+        ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
+      INNER JOIN edc_activity_stream_object hdfs_entry_aso
+        ON streams.id = hdfs_entry_aso.activity_stream_id
+        AND hdfs_entry_aso.entity_type ='hdfs'
+      INNER JOIN hdfs_entries as hdfs_entry
+        ON normalize_key(hdfs_entry_aso.object_id) = hdfs_entry.legacy_id
+      INNER JOIN workspaces
+        ON workspaces.legacy_id = streams.workspace_id
+    WHERE streams.type = 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::HdfsFileExtTableCreated');
     ))
     end
 
@@ -1352,6 +1398,7 @@ class ActivityMigrator < AbstractMigrator
       migrate_file_import_failed
       migrate_dataset_import_created
       migrate_dataset_import_success
+      migrate_hdfs_file_ext_table_created
       migrate_dataset_import_failed
       migrate_public_workspace_created
       migrate_private_workspace_created

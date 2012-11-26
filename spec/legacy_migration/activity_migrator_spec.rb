@@ -76,10 +76,9 @@ describe ActivityMigrator do
           event.source_dataset.should be_a(ChorusView)
           event.created_at.should == row["created_tx_stamp"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::ViewCreated.count.should == rows.count
       end
-
 
       it "copies DATASET CHANGED QUERY events for when users edit chorus views" do
         rows = Legacy.connection.select_all("
@@ -100,19 +99,47 @@ describe ActivityMigrator do
         Events::ChorusViewChanged.count.should == rows.count
       end
 
-      #it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
-      #  #expect {
-      #  #  ActivityMigrator.migrate
-      #  #}.to change(Events::WorkspaceAddHdfsAsExtTable, :count).by(1)
-      #
-      #  event = Events::WorkspaceAddHdfsAsExtTable.find(event_id_for('10718'))
-      #  event.workspace.should be_instance_of(Workspace)
-      #  event.actor.should be_instance_of(User)
-      #  event.dataset.should be_a(Dataset)
-      #  event.hdfs_file.should be_a(HdfsEntry)
-      #  event.hdfs_file.hadoop_instance_id.should_not be_nil
-      #  event.hdfs_file.path.should == "/data/Top_1_000_Songs_To_Hear_Before_You_Die.csv"
-      #end
+      it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE data fields from the legacy activity" do
+        rows = Legacy.connection.select_all("
+          SELECT
+            event.*,
+            normalize_key(hdfs_entry.object_id) as hdfs_entry_id,
+            normalize_key(workspace.object_id) as workspace_id,
+            normalize_key(dataset.object_id) as dataset_id
+          FROM edc_activity_stream event
+
+          LEFT JOIN edc_activity_stream_object workspace
+            ON event.id = workspace.activity_stream_id
+              AND workspace.entity_type = 'workspace'
+
+          LEFT JOIN edc_activity_stream_object dataset
+            ON event.id = dataset.activity_stream_id
+              AND dataset.entity_type = 'databaseObject'
+
+          LEFT JOIN edc_activity_stream_object hdfs_entry
+            ON event.id = hdfs_entry.activity_stream_id
+              AND hdfs_entry.entity_type = 'hdfs'
+
+          WHERE type = 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE';
+          ")
+
+        rows.each do |row|
+          event = Events::HdfsFileExtTableCreated.find_by_legacy_id!(row["id"])
+
+          event.workspace.should be_instance_of(Workspace)
+          event.workspace.legacy_id.should == row["workspace_id"]
+
+          event.dataset.should be_a(Dataset)
+          event.dataset.legacy_id.should == row["dataset_id"]
+
+          event.hdfs_entry.should be_a(HdfsEntry)
+          event.hdfs_entry.legacy_id.should == row["hdfs_entry_id"]
+
+          event.created_at.should == row["created_tx_stamp"]
+        end
+        rows.count.should > 0
+        Events::HdfsFileExtTableCreated.count.should == rows.count
+      end
 
       it "copies FILE IMPORT CREATED events" do
         rows = Legacy.connection.select_all("SELECT ed.*, aso.object_name as table_name, aso.object_id  from legacy_migrate.edc_activity_stream ed LEFT JOIN
