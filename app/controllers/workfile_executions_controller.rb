@@ -2,6 +2,7 @@ class WorkfileExecutionsController < ApplicationController
   before_filter :find_schema, :find_workfile, :verify_workspace, :check_authorization
   require_params :check_id, :only => :create
   require_params :id, :only => :destroy, :field_name => :check_id
+  around_filter :timeout_execution, :only => :create
 
   def create
     account = @schema.account_for_user! current_user
@@ -10,8 +11,9 @@ class WorkfileExecutionsController < ApplicationController
     @workfile.execution_schema = @schema
     @workfile.save!
     if params[:download] && !result.canceled?
+      output = CsvWriter.to_csv(result.columns.map(&:name), result.rows)
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
-      send_data CsvWriter.to_csv(result.columns.map(&:name), result.rows), :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
+      send_data output, :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
     else
       present result
     end
@@ -43,5 +45,13 @@ class WorkfileExecutionsController < ApplicationController
   # TODO: DRY this out of this controller and the previews controller [#39410527]
   def row_limit
     (params[:num_of_rows] || Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
+  end
+
+  def timeout_execution
+    ::Timeout::timeout(Chorus::Application.config.chorus['execution_timeout_in_minutes']*60) do
+      yield
+    end
+  rescue ::Timeout::Error
+    raise ModelNotCreated.new("Workfile execution timed out")
   end
 end
