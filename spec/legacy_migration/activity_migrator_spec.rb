@@ -12,7 +12,7 @@ describe ActivityMigrator do
           event.dataset.should be_a(Dataset)
           event.created_at.should == row["created_tx_stamp"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::SourceTableCreated.count.should == rows.count
       end
 
@@ -33,7 +33,7 @@ describe ActivityMigrator do
           event.source_object.should == Workfile.find_by_legacy_id(row['workfile_id'])
           event.created_at.should == row["created_tx_stamp"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::ChorusViewCreated.where(:target2_type => 'Workfile').count.should == rows.count
       end
 
@@ -55,7 +55,7 @@ describe ActivityMigrator do
           event.source_object.should be_a(Dataset)
           event.created_at.should == row["created_tx_stamp"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::ChorusViewCreated.where(:target2_type => 'Dataset').count.should == rows.count
       end
 
@@ -92,7 +92,7 @@ describe ActivityMigrator do
         rows.each do |row|
           event = Events::ChorusViewChanged.find_by_legacy_id!(row["id"])
           event.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
-          event.actor.username == row['author']
+          event.actor.username.should == row['author']
           event.dataset.should == Dataset.unscoped.find_by_legacy_id(row['legacy_dataset_id'])
           event.created_at.should == row["created_tx_stamp"]
         end
@@ -100,7 +100,7 @@ describe ActivityMigrator do
       end
 
       it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE data fields from the legacy activity" do
-        rows = Legacy.connection.select_all("
+        rows = Legacy.connection.select_all(<<-SQL)
           SELECT
             event.*,
             normalize_key(hdfs_entry.object_id) as hdfs_entry_id,
@@ -121,10 +121,13 @@ describe ActivityMigrator do
               AND hdfs_entry.entity_type = 'hdfs'
 
           WHERE type = 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE';
-          ")
+        SQL
 
         rows.each do |row|
           event = Events::HdfsFileExtTableCreated.find_by_legacy_id!(row["id"])
+
+          event.actor.should be_instance_of(User)
+          event.actor.username.should == row['author']
 
           event.workspace.should be_instance_of(Workspace)
           event.workspace.legacy_id.should == row["workspace_id"]
@@ -302,7 +305,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::PrivateWorkspaceCreated.count.should == rows.count
       end
 
@@ -323,7 +326,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceArchived.count.should == rows.count
       end
 
@@ -335,7 +338,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceDeleted.count.should == rows.count
       end
 
@@ -347,7 +350,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceUnarchived.count.should == rows.count
       end
 
@@ -359,7 +362,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceMakePublic.count.should == rows.count
       end
 
@@ -371,7 +374,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceMakePrivate.count.should == rows.count
       end
 
@@ -385,7 +388,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           Workfile.unscoped.find_by_id(event.target1_id).legacy_id.should == row['workfile_id']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkfileCreated.count.should == rows.count
       end
 
@@ -399,7 +402,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.gpdb_instance.legacy_id.should == row['entity_id']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::GreenplumInstanceCreated.count.should == rows.count
       end
 
@@ -414,7 +417,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.hadoop_instance.legacy_id.should == row['entity_id']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::HadoopInstanceCreated.count.should == rows.count
       end
 
@@ -426,7 +429,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.new_user.legacy_id.should == row['entity_id']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::UserAdded.count.should == rows.count
       end
 
@@ -453,7 +456,7 @@ describe ActivityMigrator do
           event.gpdb_instance.legacy_id.should == row['entity_id']
           event.additional_data['error_message'].should == nil
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::ProvisioningFail.count.should == rows.count
       end
 
@@ -467,7 +470,7 @@ describe ActivityMigrator do
           event.gpdb_instance.legacy_id.should == row['entity_id']
           event.additional_data['error_message'].should == nil
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::ProvisioningSuccess.count.should == rows.count
       end
 
@@ -486,7 +489,7 @@ describe ActivityMigrator do
           event.additional_data['version_num'].should == row['version_num']
           event.additional_data['commit_message'].should == row['commit_message']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkfileUpgradedVersion.count.should == rows.count
       end
 
@@ -504,7 +507,7 @@ describe ActivityMigrator do
           Workfile.unscoped.find_by_id(event.target1_id).legacy_id.should == row['workfile_id']
           event.additional_data['version_num'].should == row['version_num']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkfileVersionDeleted.count.should == rows.count
       end
 
@@ -519,7 +522,7 @@ describe ActivityMigrator do
           event.actor.username.should == row["author"]
           event.additional_data['workspace_old_name'].should == row['workspace_old_name']
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceChangeName.count.should == rows.count
       end
 
@@ -533,7 +536,7 @@ describe ActivityMigrator do
           Workspace.unscoped.find(event.workspace_id).legacy_id.should == row['workspace_id']
           event.actor.username.should == row["author"]
         end
-        rows.count.should > 0 
+        rows.count.should > 0
         Events::WorkspaceAddSandbox.count.should == rows.count
       end
     end
