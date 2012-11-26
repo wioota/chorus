@@ -1,16 +1,13 @@
 require 'spec_helper'
 
-#Test Kaggle User 1
-#id: 47822
-#email: 2093j0qur890w3ur0@mailinator.com
-#Full name: Bruce Banner
+# We created these users to check emails.
 #username: bbanner
+#id: 63766
+#email: 2093j0qur890w3ur0@mailinator.com
 
-#Test Kaggle User 2
-#id: 51196
-#email: jg93904u9fhwe9ry@mailinator.com
-#Full name: Tony Stark
 #username: tstark
+#id: 63767
+#email: jg93904u9fhwe9ry@mailinator.com
 
 describe Kaggle::API, :kaggle_API => true do
   include KaggleSpecHelpers

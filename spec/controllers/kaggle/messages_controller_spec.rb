@@ -10,7 +10,7 @@ describe Kaggle::MessagesController, :kaggle_api => true do
   describe "#create" do
     let(:params) { {
         "reply_to" => "chorusadmin@example.com",
-        "html_body" => "Example Body",
+        "html_body" => "Example Body\nwith two lines",
         "subject" => "Example Subject",
         "recipient_ids" => ["6732"],
         "workspace_id" => "1"
@@ -22,6 +22,11 @@ describe Kaggle::MessagesController, :kaggle_api => true do
 
       post :create, params
       response.should be_success
+    end
+
+    it "formats the message to appear correctly in emails" do
+      mock(Kaggle::API).send_message(hash_including('htmlBody' => 'Example Body<br>with two lines'))
+      post :create, params
     end
 
     context 'when the message send fails' do

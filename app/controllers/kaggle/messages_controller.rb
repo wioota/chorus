@@ -16,7 +16,7 @@ class Kaggle::MessagesController < ApplicationController
     params["apiKey"] = kaggle_config['api_key'] if kaggle_config
     params["subject"] = input_params["subject"]
     params["userId"] = input_params["recipient_ids"]
-    params["htmlBody"] = input_params["html_body"]
+    params["htmlBody"] = input_params["html_body"].gsub(/\n/, '<br>')
     params["replyTo"] = input_params["reply_to"]
     params
   end
