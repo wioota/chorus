@@ -19,7 +19,6 @@ module PackageMaker
     config.ru
     version.rb
     version_build
-    kaggleSearchResults.json
     .bundle/
   }
 

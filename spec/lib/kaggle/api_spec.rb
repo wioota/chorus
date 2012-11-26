@@ -28,7 +28,7 @@ describe Kaggle::API, :kaggle_API => true do
 
     before do
       FakeWeb.register_uri(:get, kaggle_api_url,
-                           :body => File.read(Rails.root + "kaggleSearchResults.json"),
+                           :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
                            :status => ["200", "Success"])
     end
 
@@ -101,9 +101,9 @@ describe Kaggle::API, :kaggle_API => true do
         users.first['Location'].should include "Singapore"
 
         users.length.should == Kaggle::API.users.select do |user|
-          user["FavoriteTechnique"].downcase.include?("gbm") &&
-          user["FavoriteSoftware"].downcase.include?("r") &&
-          user["Location"].downcase.include?("singapore")
+          user["FavoriteTechnique"].match(/gbm/i) &&
+          user["FavoriteSoftware"].match(/r/i) &&
+          user["Location"].match(/singapore/i)
         end.count
       end
 
@@ -130,7 +130,7 @@ describe Kaggle::API, :kaggle_API => true do
        "userId" => user_ids
     } }
 
-    it "succeeds with two valid ids" do
+    it "succeeds with valid ids" do
       VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key_param) do
         described_class.send_message(params).should be_true
       end

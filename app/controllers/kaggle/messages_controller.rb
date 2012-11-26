@@ -12,8 +12,7 @@ class Kaggle::MessagesController < ApplicationController
   private
   def prepared_parameters(input_params)
     params = {}
-    kaggle_config = Chorus::Application.config.chorus['kaggle']
-    params["apiKey"] = kaggle_config['api_key'] if kaggle_config
+    params["apiKey"] =  Chorus::Application.config.chorus['kaggle.api_key']
     params["subject"] = input_params["subject"]
     params["userId"] = input_params["recipient_ids"]
     params["htmlBody"] = input_params["html_body"].gsub(/\n/, '<br>')
