@@ -37,7 +37,6 @@ describe GpPipe, :database_integration => true do
   let(:options) { {
                    :to_table => Sequel.qualify(sandbox.name, destination_table_name),
                    :from_table => source_dataset.as_sequel,
-                   :new_table => "true",
                    :import_id => import.id }.merge(extra_options) }
   let(:extra_options) { {} }
   let(:gp_table_copier) { GpTableCopier.new(source_database_url, destination_database_url, options) }
@@ -78,15 +77,8 @@ describe GpPipe, :database_integration => true do
   end
 
   context "#run" do
-    def destination_table_rows
-      get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}")
-    end
-
     def destination_table_exists?
-      destination_table_rows
-      true
-    rescue
-      false
+      destination_database.table_exists?(Sequel.qualify(sandbox.name, destination_table_name))
     end
 
     after do
@@ -96,7 +88,6 @@ describe GpPipe, :database_integration => true do
 
     context "into a new table" do
       before do
-        extra_options.merge!(:new_table => true)
         setup_data
       end
 
@@ -143,7 +134,6 @@ describe GpPipe, :database_integration => true do
 
     context "into an existing table" do
       before do
-        extra_options.merge!(:new_table => false)
         setup_data
         execute(source_database_url, "create table #{destination_table_fullname}(#{table_def});")
       end
@@ -179,8 +169,7 @@ describe GpPipe, :database_integration => true do
       end
 
       before do
-        extra_options.merge!(:new_table => true,
-                             :from_table => cv.as_sequel)
+        extra_options.merge!(:from_table => cv.as_sequel)
         setup_data
       end
 
@@ -239,21 +228,6 @@ describe GpPipe, :database_integration => true do
         setup_data
         stub(GpPipe).write_protocol { 'gpfdistinvalid' }
         expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
-      end
-    end
-
-    context "destination table already exists" do
-      before do
-        setup_data
-        execute(destination_database_url, "CREATE TABLE #{destination_table_fullname}(#{table_def})")
-      end
-
-      it "cleans up on an exception (in this case the dst table exists already)" do
-        expect { gp_pipe.run }.to raise_exception
-        count_result = get_rows(source_database_url, "SELECT count(*) from pg_tables where schemaname = '#{schema.name}' and tablename = '#{gp_pipe.pipe_name}';")
-        count_result[0][:count].should == 0
-        count_result = get_rows(destination_database_url, "SELECT count(*) from pg_tables where schemaname = '#{schema.name}' and tablename = '#{gp_pipe.pipe_name}';")
-        count_result[0][:count].should == 0
       end
     end
 

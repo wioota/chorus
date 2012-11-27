@@ -5,7 +5,6 @@ class GpPipe < DelegateClass(GpTableCopier)
   class ImportFailed < StandardError; end
 
   def run
-    pipe_file = nil
     if chorus_view?
       src_conn << attributes[:from_table][:query]
     end
@@ -13,8 +12,10 @@ class GpPipe < DelegateClass(GpTableCopier)
     source_count = get_count(src_conn, source_table_path)
     count = [source_count, (row_limit || source_count)].min
 
-    if create_new_table?
+    create_new_table = false
+    if !table_exists?
       dst_conn << "CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}"
+      create_new_table = true
     elsif truncate?
       dst_conn << "TRUNCATE TABLE #{destination_table_fullname}"
     end
@@ -59,7 +60,7 @@ class GpPipe < DelegateClass(GpTableCopier)
       t2.join
     end
   rescue Exception => e
-    if create_new_table?
+    if create_new_table
       dst_conn << "DROP TABLE IF EXISTS #{destination_table_fullname}"
     end
     raise ImportFailed, e.message

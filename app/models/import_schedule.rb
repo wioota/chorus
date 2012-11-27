@@ -45,7 +45,6 @@ class ImportSchedule < ActiveRecord::Base
       import.to_table = to_table
       import.source_dataset = source_dataset
       import.truncate = truncate
-      import.new_table = new_table
       import.sample_count = sample_count
     end
   end

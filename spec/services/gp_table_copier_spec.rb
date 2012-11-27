@@ -22,8 +22,7 @@ describe GpTableCopier, :database_integration => true do
 
   let(:from_table) { source_dataset.as_sequel }
   let(:attributes) { {:to_table => to_table,
-                      :from_table => from_table,
-                      :new_table => true } }
+                      :from_table => from_table } }
 
   let(:log_options) { { :logger => Rails.logger } } # Enable logging
   # let(:log_options) { {} } # Disable logging
@@ -59,96 +58,51 @@ describe GpTableCopier, :database_integration => true do
       (destination_table_name == source_table_name) || destination_table_name == "other_base_table")
     end
 
-    describe "when new_table is true" do
-      before do
-        attributes.merge!(:new_table => true)
-      end
-
+    context "when the destination table does not exist" do
       it "creates a new table copier and runs it" do
         start_import
         dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
         dest_rows.count.should == 2
       end
+    end
 
-      context "when the source table cannot be found" do
-        let(:from_table) { FactoryGirl.create(:gpdb_table, :name => "Im_not_a_real_table").as_sequel }
-
-        it "raises a record not found error" do
-          expect {
-            start_import
-          }.to raise_error(GpTableCopier::ImportFailed, /does not exist/)
-        end
+    context "when a nonempty destination table already exists" do
+      before do
+        execute("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
+        execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
+        Dataset.refresh(account, schema)
       end
 
-      context "when a nonempty destination table already exists" do
+      context "when truncate is false" do
         before do
-          execute("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
-          execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
-          Dataset.refresh(account, schema)
+          attributes.merge!(:truncate => false)
         end
-
         it "appends the data to the existing table" do
           start_import
           dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
           dest_rows.count.should == 3
         end
       end
-    end
 
-    describe "when new_table is false" do
-      before do
-        attributes.merge!(:new_table => false)
-      end
-
-      context "when the destination table exists" do
+      context "when truncate is true" do
         before do
-          execute("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
-          Dataset.refresh(account, schema)
+          attributes.merge!(:truncate => true)
         end
-
-        it "creates a existing table copier and runs it" do
+        it "overwrites the data in the existing table" do
           start_import
           dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
           dest_rows.count.should == 2
         end
-
-        describe "when truncation is enabled" do
-          before do
-            attributes.merge!(:truncate => true)
-            execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
-          end
-
-          it "it truncates the destination table and import fresh" do
-            dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
-            dest_rows.count.should == 1
-            start_import
-            dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
-            dest_rows.count.should == 2
-          end
-        end
-
-        describe "when truncation is disabled" do
-          before do
-            attributes.merge!(:truncate => "false")
-            execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
-          end
-
-          it "it truncates the destination table and import fresh" do
-            dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
-            dest_rows.count.should == 1
-            start_import
-            dest_rows = get_rows("SELECT * FROM #{destination_table_name}", sandbox)
-            dest_rows.count.should == 3
-          end
-        end
       end
+    end
 
-      context "when the destination table does not exist" do
-        xit "creates the table and inserts rows into it" do
-          expect {
-            start_import
-          }.not_to raise_error
-        end
+    context "when the source table cannot be found" do
+      let(:from_table) { FactoryGirl.create(:gpdb_table, :name => "Im_not_a_real_table").as_sequel }
+
+      it "raises a record not found error" do
+        expect {
+          start_import
+        }.to raise_error(GpTableCopier::ImportFailed, /does not exist/)
       end
     end
 

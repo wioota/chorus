@@ -59,15 +59,13 @@ class GpTableCopier
   end
 
   def run
-    table_exists = database.table_exists?(destination_table)
-
     database.transaction do
       record_internal_exception do
         if chorus_view?
           database << attributes[:from_table][:query]
         end
 
-        if create_new_table? && !table_exists
+        if !table_exists?
           create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
           database << create_command % [table_definition_with_keys]
         elsif truncate?
@@ -83,8 +81,8 @@ class GpTableCopier
     raise ImportFailed, (@internal_exception || e).message
   end
 
-  def create_new_table?
-    attributes[:new_table].to_s == "true"
+  def table_exists?
+    destination_database.table_exists?(destination_table)
   end
 
   def row_limit
