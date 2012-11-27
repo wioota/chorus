@@ -27,7 +27,7 @@ class WorkfileMigrator < AbstractMigrator
     end
 
     def migrate(options = {})
-      raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options['workfile_path']
+      raise RuntimeError, "Need to have workfile_path set to migrate workfiles" unless options[:workfile_path]
       prerequisites
 
       Legacy.connection.exec_query <<-SQL
@@ -143,7 +143,7 @@ class WorkfileMigrator < AbstractMigrator
             WHERE edc_workfile_version.id = '#{workfile_version.legacy_id}';
           SQL
             ).first
-          path =  LegacyFilePath.new(options['workfile_path'], "workfile", row["workspace_id"], row["version_file_id"])
+          path =  LegacyFilePath.new(options[:workfile_path], "workfile", row["workspace_id"], row["version_file_id"])
           fake_file = FakeFileUpload.new(File.read(path.path))
           fake_file.original_filename = row['file_name']
           fake_file.content_type = row['mime_type']
@@ -164,7 +164,7 @@ class WorkfileMigrator < AbstractMigrator
               ON edc_workfile_draft.workfile_id = edc_work_file.id
             WHERE edc_workfile_draft.id = '#{workfile_draft.legacy_id}';
           ").first
-          path = LegacyFilePath.new(options['workfile_path'], "workfile", row["workspace_id"], row["draft_file_id"])
+          path = LegacyFilePath.new(options[:workfile_path], "workfile", row["workspace_id"], row["draft_file_id"])
           workfile_draft.content = StringIO.new(File.read(path.path))
           workfile_draft.save!
         end

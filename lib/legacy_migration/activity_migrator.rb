@@ -40,7 +40,9 @@ class ActivityMigrator < AbstractMigrator
           Events::ImportScheduleDeleted,
           Events::WorkspaceAddSandbox,
           Events::WorkspaceDeleted,
-          Events::HdfsFileExtTableCreated
+          Events::HdfsFileExtTableCreated,
+          Events::HdfsDirectoryExtTableCreated,
+          Events::HdfsPatternExtTableCreated
       ]
     end
 
@@ -231,7 +233,7 @@ class ActivityMigrator < AbstractMigrator
     SQL
     end
 
-    def migrate_hdfs_file_ext_table_created
+    def migrate_hdfs_ext_table_created(legacy_event_name, event_class)
       Legacy.connection.exec_query(<<-SQL)
     INSERT INTO #{@@events_table_name}(
       legacy_id,
@@ -248,7 +250,7 @@ class ActivityMigrator < AbstractMigrator
     SELECT
       streams.id,
       'edc_activity_stream',
-      'Events::HdfsFileExtTableCreated',
+      '#{event_class}',
       target_dataset.id,
       'Dataset',
       hdfs_entry.id,
@@ -272,9 +274,31 @@ class ActivityMigrator < AbstractMigrator
         ON workspaces.legacy_id = streams.workspace_id
       LEFT JOIN users
         ON users.username = streams.author
-    WHERE streams.type = 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
-    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::HdfsFileExtTableCreated');
-    SQL
+    WHERE streams.type = '#{legacy_event_name}'
+    AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = '#{event_class}');
+      SQL
+
+      backfill_hdfs_pattern_ext_table_events if legacy_event_name == 'WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE'
+    end
+
+    def backfill_hdfs_pattern_ext_table_events
+      rows = Legacy.connection.exec_query(<<-SQL)
+        SELECT e.id as id, aso.object_id AS object_id
+        FROM edc_activity_stream eas
+        INNER JOIN edc_activity_stream_object aso
+          ON eas.id = aso.activity_stream_id
+        INNER JOIN #{@@events_table_name} e
+          ON e.legacy_id = eas.id
+        WHERE aso.entity_type = 'hdfs'
+          AND eas.type = 'WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE'
+          AND e.additional_data IS NULL
+      SQL
+
+      rows.each do |row|
+        event = Events::HdfsPatternExtTableCreated.find(row['id'])
+        event.additional_data[:file_pattern] = row['object_id'].split('/').last
+        event.save!
+      end
     end
 
     def migrate_dataset_import_failed
@@ -1398,7 +1422,9 @@ class ActivityMigrator < AbstractMigrator
       migrate_file_import_failed
       migrate_dataset_import_created
       migrate_dataset_import_success
-      migrate_hdfs_file_ext_table_created
+      migrate_hdfs_ext_table_created('WORKSPACE_ADD_HDFS_AS_EXT_TABLE', Events::HdfsFileExtTableCreated)
+      migrate_hdfs_ext_table_created('WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE', Events::HdfsDirectoryExtTableCreated)
+      migrate_hdfs_ext_table_created('WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE', Events::HdfsPatternExtTableCreated)
       migrate_dataset_import_failed
       migrate_public_workspace_created
       migrate_private_workspace_created
@@ -1429,19 +1455,6 @@ class ActivityMigrator < AbstractMigrator
       Events::Base.find_each { |event| event.create_activities }
 
       ActiveRecord::Base.record_timestamps = true
-    end
-
-    def find_actor(activity_stream)
-      user_id = activity_stream.user_id
-      actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
-
-      # ?????????? wat is this
-      if actor.nil? && activity_stream.type == 'WorkspaceAddHdfsAsExtTable'
-        user_id = activity_stream.author_id
-        actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
-      end
-
-      actor
     end
   end
 end

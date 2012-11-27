@@ -171,7 +171,7 @@ describe NoteMigrator do
 
     it "is idempotent" do
       count = Events::Note.unscoped.count
-      NoteMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH, :event_table => "events")
+      NoteMigrator.migrate(:workfile_path => SPEC_WORKFILE_PATH, :event_table => "events")
       Events::Note.unscoped.count.should == count
     end
 

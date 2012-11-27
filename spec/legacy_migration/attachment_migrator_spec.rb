@@ -56,7 +56,7 @@ describe AttachmentMigrator do
         @workfile_count = Legacy.connection.select_all("select count(*) from notes_workfiles").first["count"]
         @dataset_count = Legacy.connection.select_all("select count(*) from datasets_notes").first["count"]
         @attachment_count = Legacy.connection.select_all("select count(*) from attachments").first["count"]
-        AttachmentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+        AttachmentMigrator.migrate(:workfile_path => SPEC_WORKFILE_PATH)
       end
 
       it "is idempotent for workfiles" do

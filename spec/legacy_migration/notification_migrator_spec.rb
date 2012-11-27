@@ -36,7 +36,7 @@ describe NotificationMigrator do
       end
 
       Notification.unscoped.count.should == count
-      NotificationMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      NotificationMigrator.migrate(:workfile_path => SPEC_WORKFILE_PATH)
       Notification.unscoped.count.should == count
     end
 

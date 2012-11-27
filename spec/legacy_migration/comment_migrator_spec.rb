@@ -59,7 +59,7 @@ describe CommentMigrator do
 
     it "is idempotent" do
       count = Comment.unscoped.count
-      CommentMigrator.migrate('workfile_path' => SPEC_WORKFILE_PATH)
+      CommentMigrator.migrate(:workfile_path => SPEC_WORKFILE_PATH)
       Comment.unscoped.count.should == count
     end
   end

@@ -2,7 +2,7 @@ class DataMigrator
 
   # Only need to call the leaf nodes
   def self.migrate_all(workfile_path)
-    options = {'workfile_path' => workfile_path}
+    options = {:workfile_path => workfile_path}
 
     InstanceAccountMigrator.migrate
     ImageMigrator.migrate
