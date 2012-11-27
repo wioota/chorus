@@ -61,9 +61,7 @@ describe Kaggle::API, :kaggle_API => true do
       include FakeFS::SpecHelpers
 
       before :all do
-        FakeFS.deactivate!
         @kaggle_users = File.read(Rails.root + "lib/kaggle/userApi.json")
-        FakeFS.activate!
       end
 
       before do
