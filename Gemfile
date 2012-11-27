@@ -17,7 +17,7 @@ gem 'attr_encrypted'
 gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
 gem "logger-syslog", git: 'git@github.com:scambra/logger-syslog.git'
-gem 'sequel', :require => false # will require sequel/no_core_ext in an initializer
+gem 'sequel', :require => 'sequel/no_core_ext'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
