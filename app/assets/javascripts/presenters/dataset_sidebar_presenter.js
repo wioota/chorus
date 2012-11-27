@@ -139,7 +139,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         if(lastImport.get("sourceDatasetId") == this.resource.get("id")) {
             var destination = lastImport.destination();
-            tableLink = this._linkToModel(destination);
+            tableLink = destination.id ? this._linkToModel(destination) : this.ellipsize(destination.name());
+
             if(lastImport.get('success')) {
                 importStatusKey = "import.last_imported";
             } else {

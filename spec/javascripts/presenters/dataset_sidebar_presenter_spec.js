@@ -184,6 +184,28 @@ describe("chorus.presenters.DatasetSidebar", function() {
                             expect(presenter.importFailed()).toBeTruthy();
                             expect(presenter.lastImport()).toMatch("Import failed 1 month ago into");
                         });
+
+                        context("for an existing table", function() {
+                            beforeEach(function() {
+                                this.import.set({destinationDatasetId: 12345}, {silent: true});
+                            });
+
+                            it("should have a link to the destination table", function() {
+                               expect(presenter.lastImport()).toMatch("<a ");
+                               expect(presenter.lastImport()).toMatch(this.import.name());
+                            });
+                        });
+
+                        context("for a new table", function() {
+                            beforeEach(function() {
+                                this.import.set({destinationDatasetId: null}, {silent: true});
+                            });
+
+                            it("should not have a link to the destination table", function() {
+                                expect(presenter.lastImport()).not.toMatch("<a ");
+                                expect(presenter.lastImport()).toMatch(this.import.name());
+                            });
+                        });
                     });
                 });
 
