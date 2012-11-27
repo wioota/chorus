@@ -61,16 +61,7 @@ describe Import, :database_integration => true do
       import.new_table = false
       import.should_not be_valid
 
-
       import.errors.messages[:base].select { |a,b| a == :table_not_consistent }.should_not be_empty
-    end
-
-    it "validates the destination dataset for an existing table" do
-      import.new_table = false
-      import.destination_dataset = nil
-      import.should_not be_valid
-
-      import.errors.messages[:base].select { |a,b| a == :table_not_exists }.should_not be_empty
     end
 
     it "sets the destination_dataset before validation" do
@@ -86,14 +77,6 @@ describe Import, :database_integration => true do
       stub(import.source_dataset).dataset_consistent? { false }
 
       import.should be_valid
-    end
-
-    it "validates that to_table exists if new_table is false" do
-      import.new_table = false
-      import.to_table = 'hello12345'
-      import.should_not be_valid
-
-      import.errors.messages[:base].select { |a,b| a == :table_not_exists }.should_not be_empty
     end
   end
 end

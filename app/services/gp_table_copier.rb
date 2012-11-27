@@ -16,7 +16,6 @@ class GpTableCopier
   def start
     dst_table = destination_schema.datasets.find_by_name(destination_table_name)
     self.attributes["new_table"] = false if create_new_table? && dst_table
-    raise ActiveRecord::RecordNotFound, "Couldn't find destination table." if !create_new_table? && !dst_table
 
     # delegate cross-database copies to a GpPipe instance
     if destination_schema.database != source_table.schema.database
@@ -72,7 +71,7 @@ class GpTableCopier
   end
 
   def create_new_table?
-    attributes["new_table"].to_s == "true"
+    attributes["new_table"].to_s == "true" # change this to check gpdb
   end
 
   def row_limit

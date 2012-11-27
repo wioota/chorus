@@ -20,7 +20,6 @@ class Import < ActiveRecord::Base
   validate :workspace_is_not_archived
 
   validate :table_does_not_exist, :if => :new_table, :on => :create
-  validate :table_does_exist, :unless => :new_table, :on => :create
 
   validates :source_dataset, :presence => true, :unless => :file_name
   validates :file_name, :presence => true, :unless => :source_dataset

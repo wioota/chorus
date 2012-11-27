@@ -212,13 +212,6 @@ describe DatasetImportsController do
           end
         end
 
-        it "throws an error if table does not exist" do
-          attributes[:to_table] = "table_that_does_not_exist"
-          post :create, attributes
-          response.code.should == "422"
-          decoded_errors.fields.base.TABLE_NOT_EXISTS.should be_present
-        end
-
         it "throws an error if table structure is not consistent" do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { false }

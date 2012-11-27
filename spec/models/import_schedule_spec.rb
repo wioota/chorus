@@ -97,14 +97,21 @@ describe ImportSchedule do
     end
   end
 
-  describe ".create_import" do
-    it "creates an import with source/destination info" do
+  describe "#create_import" do
+    let(:import_schedule) { import_schedules(:default) }
+
+    before do
+      any_instance_of(Import) do |import|
+        stub(import).table_does_exist { raise 'bang!' }
+      end
+    end
+
+    it "creates an import with source/destination info without checking if destination table exists" do
       import = import_schedule.create_import
       import.workspace_id.should      == import_schedule.workspace_id
       import.to_table.should          == import_schedule.to_table
       import.source_dataset_id.should == import_schedule.source_dataset_id
       import.truncate.should          == import_schedule.truncate
-      import.new_table.should         == import_schedule.new_table
       import.user_id.should           == import_schedule.user_id
       import.sample_count.should      == import_schedule.sample_count
       import.should be_persisted

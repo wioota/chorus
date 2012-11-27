@@ -42,125 +42,123 @@ describe ImportExecutor do
       ImportExecutor.run(import.id)
     }
 
-    describe "when importing into new table" do
-      it "creates a new table copier and runs it" do
-        run_import
+    it "creates a new table copier and runs it" do
+      run_import
+    end
+
+    context "when import is successful" do
+      it "creates a DatasetImportSuccess" do
+        expect {
+          run_import
+        }.to change(Events::DatasetImportSuccess, :count).by(1)
+
+        event = Events::DatasetImportSuccess.last
+        event.actor.should == user
+        event.dataset.name.should == destination_table_name
+        event.dataset.schema.should == sandbox
+        event.workspace.should == workspace
+        event.source_dataset.should == source_dataset
       end
 
-      context "when import is successful" do
-        it "creates a DatasetImportSuccess" do
-          expect {
-            run_import
-          }.to change(Events::DatasetImportSuccess, :count).by(1)
-
-          event = Events::DatasetImportSuccess.last
-          event.actor.should == user
-          event.dataset.name.should == destination_table_name
-          event.dataset.schema.should == sandbox
-          event.workspace.should == workspace
-          event.source_dataset.should == source_dataset
-        end
-
-        it "creates a notification" do
-          expect {
-            run_import
-          }.to change(Notification, :count).by(1)
-
-          notification = Notification.last
-          notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportSuccess.last.id
-        end
-
-        it "marks the import as success" do
+      it "creates a notification" do
+        expect {
           run_import
-          import.reload
-          import.success.should be_true
-          import.finished_at.should_not be_nil
+        }.to change(Notification, :count).by(1)
+
+        notification = Notification.last
+        notification.recipient_id.should == user.id
+        notification.event_id.should == Events::DatasetImportSuccess.last.id
+      end
+
+      it "marks the import as success" do
+        run_import
+        import.reload
+        import.success.should be_true
+        import.finished_at.should_not be_nil
+      end
+
+      it "updates the destination dataset id" do
+        run_import
+        import.reload
+        import.success.should be_true
+        import.destination_dataset_id.should_not be_nil
+      end
+
+      it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
+        run_import
+        event = dataset_import_created_event.reload
+        event.dataset.name.should == destination_table_name
+        event.dataset.schema.should == sandbox
+      end
+
+      context "when the import is a scheduled import" do
+        let(:import_schedule_id) { 1234 }
+
+        before do
+          dataset_import_created_event.reference_id = import_schedule_id
+          dataset_import_created_event.reference_type = 'ImportSchedule'
+          dataset_import_created_event.save!
+          import.import_schedule_id = import_schedule_id
+          import.save!
         end
 
-        it "updates the destination dataset id" do
-          run_import
-          import.reload
-          import.success.should be_true
-          import.destination_dataset_id.should_not be_nil
-        end
-
-        it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
+        it "still sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
           run_import
           event = dataset_import_created_event.reload
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
         end
-
-        context "when the import is a scheduled import" do
-          let(:import_schedule_id) { 1234 }
-
-          before do
-            dataset_import_created_event.reference_id = import_schedule_id
-            dataset_import_created_event.reference_type = 'ImportSchedule'
-            dataset_import_created_event.save!
-            import.import_schedule_id = import_schedule_id
-            import.save!
-          end
-
-          it "still sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
-            run_import
-            event = dataset_import_created_event.reload
-            event.dataset.name.should == destination_table_name
-            event.dataset.schema.should == sandbox
-          end
-        end
-
-        context "when the import created event cannot be found" do
-          before do
-            dataset_import_created_event.delete
-          end
-
-          it "doesn't blow up" do
-            expect {
-              run_import
-            }.not_to raise_error
-          end
-        end
       end
 
-      context "when the import fails" do
-        let(:import_failure_message) { "some crazy error" }
-        let(:run_failed_import) {
+      context "when the import created event cannot be found" do
+        before do
+          dataset_import_created_event.delete
+        end
+
+        it "doesn't blow up" do
           expect {
             run_import
-          }.to raise_error import_failure_message
-        }
-
-        it "creates a DatasetImportFailed" do
-          expect {
-            run_failed_import
-          }.to change(Events::DatasetImportFailed, :count).by(1)
-
-          event = Events::DatasetImportFailed.last
-          event.actor.should == user
-          event.error_message.should == import_failure_message
-          event.workspace.should == workspace
-          event.source_dataset.should == source_dataset
-          event.destination_table.should == destination_table_name
+          }.not_to raise_error
         end
+      end
+    end
 
-        it "creates a notification" do
-          expect {
-            run_failed_import
-          }.to change(Notification, :count).by(1)
+    context "when the import fails" do
+      let(:import_failure_message) { "some crazy error" }
+      let(:run_failed_import) {
+        expect {
+          run_import
+        }.to raise_error import_failure_message
+      }
 
-          notification = Notification.last
-          notification.recipient_id.should == user.id
-          notification.event_id.should == Events::DatasetImportFailed.last.id
-        end
-
-        it "marks the import as failed" do
+      it "creates a DatasetImportFailed" do
+        expect {
           run_failed_import
-          import.reload
-          import.success.should be_false
-          import.finished_at.should_not be_nil
-        end
+        }.to change(Events::DatasetImportFailed, :count).by(1)
+
+        event = Events::DatasetImportFailed.last
+        event.actor.should == user
+        event.error_message.should == import_failure_message
+        event.workspace.should == workspace
+        event.source_dataset.should == source_dataset
+        event.destination_table.should == destination_table_name
+      end
+
+      it "creates a notification" do
+        expect {
+          run_failed_import
+        }.to change(Notification, :count).by(1)
+
+        notification = Notification.last
+        notification.recipient_id.should == user.id
+        notification.event_id.should == Events::DatasetImportFailed.last.id
+      end
+
+      it "marks the import as failed" do
+        run_failed_import
+        import.reload
+        import.success.should be_false
+        import.finished_at.should_not be_nil
       end
     end
   end
