@@ -35,6 +35,14 @@ describe ApplicationController do
       decoded_errors.record.should == "NOT_FOUND"
     end
 
+    it "renders 'not found' JSON when HDFS directory is not found" do
+      stub(controller).index { raise Hdfs::DirectoryNotFoundError }
+      get :index
+
+      response.code.should == "404"
+      decoded_errors.record.should == "NOT_FOUND"
+    end
+
     it "renders 'invalid' JSON when record is invalid" do
       invalid_record = User.new
       invalid_record.password = "1"

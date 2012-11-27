@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
   rescue_from 'Gpdb::ViewAlreadyExists', :with => :render_query_error
   rescue_from 'ModelNotCreated', :with => :render_model_error
+  rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
 
   helper_method :current_user
 
