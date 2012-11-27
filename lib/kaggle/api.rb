@@ -10,6 +10,7 @@ module Kaggle
     API_URL = "https://www.kaggle.com/connect/chorus-beta/"
 
     def self.send_message(params)
+      return unless self.enabled?
       decoded_response = send_to_kaggle(params)
       result_status = decoded_response["status"]
 

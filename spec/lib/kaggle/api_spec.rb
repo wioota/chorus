@@ -167,44 +167,66 @@ describe Kaggle::API, :kaggle_API => true do
 
   describe ".send_message" do
     let(:user_ids) { [63766,63767] }
-    let(:api_key) { Chorus::Application.config.chorus['kaggle']['API_key'] }
     let(:params) { {
-       "subject" => "some subject",
-       "replyTo" => "test@fun.com",
-       "htmlBody" => "message body",
-       "userId" => user_ids
+        "subject" => "some subject",
+        "replyTo" => "test@fun.com",
+        "htmlBody" => "message body",
+        "userId" => user_ids
     } }
 
-    it "succeeds with valid ids" do
-      VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key_param) do
-        described_class.send_message(params).should be_true
+    context "when kaggle is enabled" do
+      let(:api_key) { Chorus::Application.config.chorus['kaggle']['API_key'] }
+
+      before do
+        stub(Kaggle::API).enabled? { true }
       end
-    end
 
-    context "with an invalid user id" do
-      let(:user_ids) { [63766,99999999] }
+      it "succeeds with valid ids" do
+        VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key_param) do
+          described_class.send_message(params).should be_true
+        end
+      end
 
-      it "raises a MessageFailed exception" do
-        VCR.use_cassette('kaggle_message_fail', :tag => :filter_kaggle_api_key_param) do
+      context "with an invalid user id" do
+        let(:user_ids) { [63766,99999999] }
+
+        it "raises a MessageFailed exception" do
+          VCR.use_cassette('kaggle_message_fail', :tag => :filter_kaggle_api_key_param) do
+            expect {
+              described_class.send_message(params)
+            }.to raise_exception(Kaggle::API::MessageFailed)
+          end
+        end
+      end
+
+      context "when the API times out" do
+        it "raises a kaggle error" do
+          any_instance_of(Net::HTTP) do |http|
+            stub(http).request { raise Timeout::Error.new }
+          end
+
           expect {
             described_class.send_message(params)
-          }.to raise_exception(Kaggle::API::MessageFailed)
+          }.to raise_exception(Kaggle::API::MessageFailed,
+                               'Could not connect to the Kaggle server')
         end
       end
     end
 
-    context "when the API times out" do
-      it "raises a kaggle error" do
-        any_instance_of(Net::HTTP) do |http|
-          stub(http).request { raise Timeout::Error.new }
-        end
+    context "when kaggle api is not enabled" do
+      before do
+        stub(Kaggle::API).enabled? { false }
+      end
 
-        expect {
-          described_class.send_message(params)
-        }.to raise_exception(Kaggle::API::MessageFailed,
-                  'Could not connect to the Kaggle server')
+      it "doesn't do anything" do
+        dont_allow(JSON).parse(anything)
+
+        VCR.use_cassette('kaggle_message_success', :tag => :filter_kaggle_api_key_param) do
+          described_class.send_message(params).should be_nil
+        end
       end
     end
+
   end
 
   describe ".enabled?" do
