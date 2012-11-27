@@ -27,13 +27,13 @@ describe GpTableCopier, :database_integration => true do
 
   let(:log_options) { { :logger => Rails.logger } } # Enable logging
   # let(:log_options) { {} } # Disable logging
-  let(:gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account), log_options) }
-
+  let(:gpdb_database) { Sequel.connect(gpdb_database_url, log_options) }
+  let(:gpdb_database_url) { Gpdb::ConnectionBuilder.url(database, account) }
   let(:test_gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account)) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
   let(:import) { imports(:two) }
-  let(:copier) { GpTableCopier.new(gpdb_database, attributes) }
+  let(:copier) { GpTableCopier.new(gpdb_database_url, gpdb_database_url, attributes) }
   let(:start_import ) { copier.start }
 
   #after do
@@ -157,9 +157,7 @@ describe GpTableCopier, :database_integration => true do
         FactoryGirl.create :gpdb_table
       }
 
-      before do
-        attributes["from_database"] = "Fake database URL"
-      end
+      let(:copier) { GpTableCopier.new(gpdb_database_url, "fake url", attributes) }
 
       it "runs GpPipe.run instead of it's own run" do
         any_instance_of(GpTableCopier) do |copier|
@@ -339,7 +337,7 @@ describe GpTableCopier, :database_integration => true do
   end
 
   describe "#table_definition" do
-    let(:copier) { GpTableCopier.new(gpdb_database, attributes) }
+    let(:copier) { GpTableCopier.new(gpdb_database_url, gpdb_database_url, attributes) }
     let(:definition) do
       copier.table_definition
     end

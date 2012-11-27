@@ -29,7 +29,7 @@ describe ImportExecutor do
 
   describe ".run" do
     let(:run_import) {
-      mock(GpTableCopier).run_import(database_url, anything) do
+      mock(GpTableCopier).run_import(database_url, database_url, anything) do
         raise import_failure_message if import_failure_message.present?
       end
       stub(Dataset).refresh.with_any_args do

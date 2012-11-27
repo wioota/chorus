@@ -3,7 +3,7 @@ module DatabaseConnection
     if @database.is_a? Sequel::Database
       @database
     else
-      @database = Sequel.connect(@database.to_s)
+      @database = Sequel.connect(@database.to_s, :logger => Rails.logger)
     end
   end
 

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe GpPipe, :database_integration => true do
-
-  # In the test, use gpfdist to move data between tables in the same schema and database
   let(:instance_account) { InstanceIntegration.real_gpdb_account }
   let(:user) { instance_account.owner }
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
@@ -10,8 +8,7 @@ describe GpPipe, :database_integration => true do
   let(:schema) { database.schemas.find_by_name(schema_name) }
   let(:destination_table_fullname) { %Q{"#{sandbox.name}"."#{destination_table_name}"}}
 
-  let(:log_options) { { } } # disable logging
-  # let(:log_options) { {:logger => Rails.logger } } # enable logging
+  let(:log_options) { {:logger => Rails.logger } } # enable logging
 
   let(:source_database_url) { Gpdb::ConnectionBuilder.url(database, instance_account) }
   let(:source_database) { Sequel.connect(source_database_url, log_options) }
@@ -38,15 +35,14 @@ describe GpPipe, :database_integration => true do
   let(:import) { imports(:two) }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:options) { {
-                   :from_database => destination_database_url,
                    :to_table => Sequel.qualify(sandbox.name, destination_table_name),
                    :from_table => source_dataset.as_sequel,
                    :new_table => "true",
                    :import_id => import.id }.merge(extra_options) }
   let(:extra_options) { {} }
-  let(:gp_table_copier) { GpTableCopier.new(source_database, options) }
+  let(:gp_table_copier) { GpTableCopier.new(source_database_url, destination_database_url, options) }
   let(:gp_pipe) { GpPipe.new(gp_table_copier) }
-  let(:sandbox) {schema }
+  let(:sandbox) { schema }
 
   def setup_data
     with_database_connection(source_database_url) do |connection|
@@ -76,141 +72,121 @@ describe GpPipe, :database_integration => true do
       end
     end
   end
-
-  after :each do
-    #source_database.try(:disconnect!)
-    #destination_database.try(:disconnect!)
-    ## We call src_schema from the test, although it is only called from run outside of tests, so we need to clean up
-    #gp_pipe.src_conn.try(:disconnect!)
-    #gp_pipe.dst_conn.try(:disconnect!)
-  end
   
   it 'uses gpfdist if the gpfdist.ssl.enabled configuration is false (no in the test environment)' do
     GpPipe.protocol.should == 'gpfdist'
   end
 
   context "#run" do
+    def destination_table_rows
+      get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}")
+    end
+
+    def destination_table_exists?
+      destination_table_rows
+      true
+    rescue
+      false
+    end
 
     after do
       execute(source_database_url, "delete from #{source_table_fullname};")
       execute(destination_database_url, "drop table if exists #{destination_table_fullname};")
     end
 
-    describe ".run_import" do
+    context "into a new table" do
+      before do
+        extra_options.merge!(:new_table => true)
+        setup_data
+      end
 
-      context "into a new table" do
-        before do
-          extra_options.merge!(:new_table => true)
-          setup_data
-        end
+      it "creates a new pipe and runs it" do
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
+      end
 
-        it "creates a new pipe and runs it" do
+      context "can import from schemas that are named something different" do
+        let(:sandbox) { database.schemas.find_by_name('public') }
+
+        it "runs" do
           gp_pipe.run
-          get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
-        end
-
-        context "with a shorted timeout" do
-          before do
-            stub(GpPipe).grace_period_seconds { 1 }
-          end
-
-          it "drops the newly created table when the write hangs" do
-            lambda { get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}") }.should raise_error
-            stub(gp_pipe).write_pipe do
-              while(true) do
-                sleep(5)
-              end
-            end
-            stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
-
-            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
-            lambda { get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}") }.should raise_error
-          end
-
-          it "drops the newly created table when there's an exception" do
-            stub(gp_pipe).write_pipe do
-              raise RuntimeError, "custom error"
-            end
-            stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
-
-            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
-          end
+          get_rows(destination_database_url, "SELECT * FROM public.dst_candy").length.should == 2
         end
       end
 
-      context "into an existing table" do
-        before do
-          extra_options.merge!(:new_table => false)
-        end
-
-        it "creates a new pipe and runs it" do
-          setup_data
-          execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
-          gp_pipe.run
-          get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
-        end
-
-        context "with a shorted timeout" do
-          before do
-            stub(GpPipe).grace_period_seconds { 1 }
-          end
-
-          it "does not drop the table when there's an exception" do
-            stub(gp_pipe).write_pipe do
-              while(true) do
-                sleep(5)
-              end
-            end
-            stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
-
-            setup_data
-            execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
-            expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
-            lambda { get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}") }.should_not raise_error
-          end
-        end
-
-        context "when truncate => true" do
-          it "should truncate" do
-            extra_options.merge!(:truncate => true)
-            setup_data
-            execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
-            execute(source_database, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
-            get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
-            gp_pipe.run
-            get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
-          end
-        end
-
-        context "when truncate => false" do
-          it "does not truncate" do
-            extra_options.merge!(:truncate => false)
-            setup_data
-            execute(source_database, "create table #{destination_table_fullname}(#{table_def});")
-            execute(source_database, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
-            get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
-            gp_pipe.run
-            get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 3
-          end
-        end
+      it "should only have the first row when limiting rows to 1" do
+        extra_options.merge!(:sample_count => 1)
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
       end
 
-      context "from a chorus view" do
-        let(:cv) do
-          FactoryGirl.create :chorus_view, :name => "hello_view", :query => "select * from #{source_table}",
-                             :schema => schema, :workspace => workspaces(:public)
-        end
+      it "doesn't hang gpfdist with a row limit of 0, by treating the source like an empty table" do
+        extra_options.merge!(:sample_count => 0)
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 0
+      end
 
-        before do
-          extra_options.merge!(:new_table => true,
-                               :from_table => cv.as_sequel)
-          setup_data
-        end
+      it "drops the newly created table when the write does not complete" do
+        stub(gp_pipe).writer_sql { "select pg_sleep(1)" }
+        destination_table_exists?.should be_false
+        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        destination_table_exists?.should be_false
+      end
 
-        it "works like a normal dataset import" do
-          gp_pipe.run
-          get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
-        end
+      it "drops the newly created table when the read does not complete" do
+        stub(gp_pipe).reader_loop {  }
+        destination_table_exists?.should be_false
+        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        destination_table_exists?.should be_false
+      end
+    end
+
+    context "into an existing table" do
+      before do
+        extra_options.merge!(:new_table => false)
+        setup_data
+        execute(source_database_url, "create table #{destination_table_fullname}(#{table_def});")
+      end
+
+      it "should truncate the existing table if the truncate flag is set" do
+        extra_options.merge!(:truncate => true)
+        execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
+      end
+
+      it "does not truncate the data when truncate is false" do
+        extra_options.merge!(:truncate => false)
+        execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 3
+      end
+
+      it "does not drop the table when the import does not complete" do
+        stub(gp_pipe).writer_sql { "select pg_sleep(1)" }
+        destination_table_exists?.should be_true
+        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        destination_table_exists?.should be_true
+      end
+    end
+
+    context "from a chorus view" do
+      let(:cv) do
+        FactoryGirl.create :chorus_view, :name => "hello_view", :query => "select * from #{source_table}",
+                           :schema => schema, :workspace => workspaces(:public)
+      end
+
+      before do
+        extra_options.merge!(:new_table => true,
+                             :from_table => cv.as_sequel)
+        setup_data
+      end
+
+      it "works like a normal dataset import" do
+        gp_pipe.run
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
     end
 
@@ -258,44 +234,6 @@ describe GpPipe, :database_integration => true do
       end
     end
 
-    context "limiting the number of rows" do
-      let(:extra_options) { {:sample_count => 1} }
-      before do
-        setup_data
-      end
-
-      it "should only have the first row" do
-        gp_pipe.run
-
-        rows = get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}")
-        rows.length.should == 1
-      end
-
-      context "with a row limit of 0" do
-        let(:extra_options) { {:sample_count => 0} }
-
-        it "doesn't hang gpfdist, by treating the source like an empty table" do
-          stub(GpPipe).timeout_seconds { 10 }
-          Timeout::timeout(5) do
-            gp_pipe.run
-          end
-
-          get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 0
-        end
-      end
-    end
-
-    context "a sql query blocks forever" do
-      before do
-        stub(GpPipe).timeout_seconds { 1 }
-        stub(gp_pipe.src_conn).execute { sleep(10); raise Exception, "test failed - no timeout" }
-      end
-
-      it "times out the query and raises a Timeout exception" do
-        expect { gp_pipe.run }.to raise_exception(Timeout::Error)
-      end
-    end
-
     context "create external table does not succeed" do
       it "does not hang" do
         setup_data
@@ -307,7 +245,7 @@ describe GpPipe, :database_integration => true do
     context "destination table already exists" do
       before do
         setup_data
-        execute(destination_database, "CREATE TABLE #{destination_table_fullname}(#{table_def})")
+        execute(destination_database_url, "CREATE TABLE #{destination_table_fullname}(#{table_def})")
       end
 
       it "cleans up on an exception (in this case the dst table exists already)" do
@@ -329,35 +267,17 @@ describe GpPipe, :database_integration => true do
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
     end
-
-    context "when #run failed" do
-      before do
-        stub(GpPipe).grace_period_seconds { 1 }
-      end
-
-      it "drops newly created the table when there's an exception" do
-        stub(gp_pipe).write_pipe do
-          while (true) do
-            sleep(5)
-          end
-        end
-        stub(gp_pipe).read_pipe(anything) { sleep(0.1) }
-
-        setup_data
-        lambda { gp_pipe.run }.should raise_error(GpPipe::ImportFailed)
-      end
-    end
   end
 
   context "when the source table is empty" do
     before do
-      execute(source_database, "delete from #{source_table_fullname};")
-      execute(destination_database, "drop table if exists #{destination_table_fullname};")
+      execute(source_database_url, "delete from #{source_table_fullname};")
+      execute(destination_database_url, "drop table if exists #{destination_table_fullname};")
     end
 
     after do
-      execute(source_database, "delete from #{source_table_fullname};")
-      execute(destination_database, "drop table if exists #{destination_table_fullname};")
+      execute(source_database_url, "delete from #{source_table_fullname};")
+      execute(destination_database_url, "drop table if exists #{destination_table_fullname};")
     end
 
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do

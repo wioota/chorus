@@ -9,9 +9,9 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def run
+    source_database_url = get_database_url(source_dataset.schema.database)
     destination_database_url = get_database_url(sandbox.database)
-
-    GpTableCopier.run_import(destination_database_url, import_attributes)
+    GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)
 
     # update rails db for new dataset
     destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
@@ -27,11 +27,8 @@ class ImportExecutor < DelegateClass(Import)
   private
 
   def import_attributes
-    source_database_url = get_database_url(source_dataset.schema.database)
-
     import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
     import_attributes.merge!(
-        :from_database => source_database_url,
         :from_table => source_dataset.as_sequel,
         :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]))
   end

@@ -2,40 +2,44 @@ require "sequel/no_core_ext"
 
 class GpTableCopier
   class ImportFailed < StandardError; end
-  include DatabaseConnection
 
-  attr_accessor :attributes
+  attr_accessor :attributes, :source_database_url, :destination_database_url
 
-  def self.run_import(database, attributes)
-    new(database, attributes).start
+  def self.run_import(source_database_url, destination_database_url, attributes)
+    new(source_database_url, destination_database_url, attributes).start
   end
 
-  def initialize(database, attributes)
-    self.database = database
+  def initialize(source_database_url, destination_database_url, attributes)
+    self.source_database_url = source_database_url
+    self.destination_database_url = destination_database_url
     self.attributes = HashWithIndifferentAccess.new(attributes)
   end
 
   def start
     copier = self
-    if source_database != destination_database
+    if source_database_url != destination_database_url
       copier = GpPipe.new(self)  # delegate cross-database copies to a GpPipe instance
     end
 
     copier.run
   end
 
+  def database
+    source_database
+  end
+
   def source_database
-    attributes[:from_database] || database
+    @source_database ||= Sequel.connect(source_database_url)
   end
 
   def destination_database
-    database
+    @destination_database ||= Sequel.connect(destination_database_url)
   end
 
   def distribution_key_clause
     return 'DISTRIBUTED RANDOMLY' if chorus_view?
     @distribution_key_clause ||= begin
-      rows = database.fetch(distribution_key_sql)
+      rows = source_database.fetch(distribution_key_sql)
       rows.empty? ? 'DISTRIBUTED RANDOMLY' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
     end
   end
@@ -92,7 +96,6 @@ class GpTableCopier
   end
 
   def qualified_table_name(table)
-    pa "Getting qualified table name of #{table.inspect}"
     %Q{"#{table.table}"."#{table.column}"}
   end
 
@@ -135,7 +138,7 @@ class GpTableCopier
   def table_definition
     @table_definition || begin
       # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-      rows = database.fetch(describe_table)
+      rows = source_database.fetch(describe_table)
       rows.map { |col_def| "\"#{col_def[:column_name]}\" #{col_def[:data_type]}" }.join(", ")
     end
   end
@@ -145,7 +148,7 @@ class GpTableCopier
       if chorus_view?
         primary_key_rows = []
       else
-        primary_key_rows = database.fetch(primary_key_sql)
+        primary_key_rows = source_database.fetch(primary_key_sql)
       end
       primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
       table_definition + primary_key_clause
