@@ -99,6 +99,11 @@ describe WorkspaceAccess do
         workspace_access.can?(:update, workspace).should be_true
       end
 
+      it "allows the owner to change the owner" do
+        workspace.attributes = {:owner_id => member.id}
+        workspace_access.can?(:update, workspace).should be_true
+      end
+
       context "with an updated sandbox" do
         context "when user can show_contents? of the dataset instance" do
           it "allows update" do

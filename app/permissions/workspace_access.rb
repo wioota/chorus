@@ -24,6 +24,8 @@ class WorkspaceAccess < AdminFullAccess
     if workspace.sandbox_id_changed? && workspace.sandbox_id
       return false unless workspace.owner == current_user && context.can?(:show_contents, workspace.sandbox.gpdb_instance)
     end
-    workspace.owner == current_user || (workspace.changed - ['name', 'summary']).empty?
+
+    effective_owner_id = workspace.owner_id_changed? ? workspace.owner_id_was : workspace.owner_id
+    effective_owner_id == current_user.id || (workspace.changed - ['name', 'summary']).empty?
   end
 end
