@@ -76,17 +76,14 @@ describe WorkfileExecutionsController do
       before do
         log_in users(:owner)
         stub.proxy(Chorus::Application.config.chorus).[](anything)
-
         stub(Chorus::Application.config.chorus).[]('execution_timeout_in_minutes') { (1.0/600) }
-
         stub(SqlExecutor).execute_sql.with_any_args {
           SqlResult.new.tap{ |result|
             result.add_column("a", "string")
             result.add_row([1])
           }
         }
-
-        stub(CsvWriter).to_csv.with_any_args {
+        stub(CsvWriter).to_csv_as_stream.with_any_args {
           sleep 1
           "'a',1"
         }
@@ -97,7 +94,6 @@ describe WorkfileExecutionsController do
         decoded = JSON.parse(response.body)
         decoded['errors']['fields']['general']['GENERIC']['message'].should == "Workfile execution timed out"
       end
-
     end
 
     context "when downloading the results" do
@@ -120,11 +116,15 @@ describe WorkfileExecutionsController do
       end
 
       it "sets content disposition: attachment" do
-        mock(CsvWriter).to_csv(sql_result.columns.map(&:name), sql_result.rows)
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
         response.headers['Content-Disposition'].should include("attachment")
-        response.headers['Content-Disposition'].should include('filename="some.csv"')
+        response.headers['Content-Disposition'].should include('filename=some.csv')
         response.headers['Content-Type'].should == 'text/csv'
+      end
+
+      it "returns a CSV file" do
+        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
+        response.body.should == "a,b,c\n1,2,3\n4,5,6\n7,8,9\n"
       end
 
       context "when the query is cancelled" do
@@ -135,7 +135,7 @@ describe WorkfileExecutionsController do
         end
 
         it "should not present as an attachment" do
-          dont_allow(CsvWriter).to_csv.with_any_args
+          dont_allow(CsvWriter).to_csv_as_stream.with_any_args
           post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
           response.headers.should_not have_key('Content-Disposition')
           response.headers['Content-Type'].should =~ /application\/json/

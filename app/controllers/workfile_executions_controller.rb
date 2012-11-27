@@ -11,9 +11,12 @@ class WorkfileExecutionsController < ApplicationController
     @workfile.execution_schema = @schema
     @workfile.save!
     if params[:download] && !result.canceled?
-      output = CsvWriter.to_csv(result.columns.map(&:name), result.rows)
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
-      send_data output, :type => "text/csv", :filename => "#{params[:file_name]}.csv", :disposition => "attachment"
+      response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"
+      response.headers["Cache-Control"] = 'no-cache'
+      response.headers["Transfer-Encoding"] = 'chunked'
+      response.headers['Content-Type'] = 'text/csv'
+      self.response_body = CsvWriter.to_csv_as_stream(result.columns.map(&:name), result.rows)
     else
       present result
     end
