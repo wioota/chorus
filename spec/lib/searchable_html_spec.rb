@@ -6,7 +6,7 @@ describe SearchableHtml do
     before do
       Sunspot.session = Sunspot.session.original_session
 
-      class TestClass < ActiveRecord::Base
+      class SearchableHtmlTestClass < ActiveRecord::Base
         @columns = []
         include SearchableHtml
 
@@ -18,18 +18,18 @@ describe SearchableHtml do
     end
 
     after do
-      Sunspot.searchable.instance_variable_get(:@name_to_klass).delete(TestClass.name.to_sym)
+      Sunspot.searchable.instance_variable_get(:@name_to_klass).delete(SearchableHtmlTestClass.name.to_sym)
     end
 
     it "removes tags from the body" do
       VCR.use_cassette("searchable_html") do
         Sunspot.session.remove_all
-        obj = TestClass.new(:html_field => 'this <b>is text</b>')
+        obj = SearchableHtmlTestClass.new(:html_field => 'this <b>is text</b>')
         obj.id = 1
         obj.solr_index
         Sunspot.commit
 
-        results = TestClass.search { fulltext "text" }
+        results = SearchableHtmlTestClass.search { fulltext "text" }
         results.hits[0].stored('html_field')[0].should == 'this is text'
       end
     end

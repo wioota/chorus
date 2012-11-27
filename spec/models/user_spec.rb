@@ -317,6 +317,12 @@ describe User do
     end
 
     it "deletes associated import schedules" do
+      [Import, ImportSchedule].each do |type|
+        any_instance_of(type) do |o|
+          stub(o).table_exists? { false }
+        end
+      end
+
       FactoryGirl.create(:import_schedule, :user => user, :workspace => workspaces(:public))
 
       expect {

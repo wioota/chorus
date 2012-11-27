@@ -81,6 +81,8 @@ describe DatasetImportsController do
 
     before(:each) do
       log_in account.owner
+      archived_workspace.sandbox = schema
+      archived_workspace.save!
     end
 
     after(:each) do
@@ -183,6 +185,9 @@ describe DatasetImportsController do
             any_instance_of(Dataset) do |d|
               stub(d).dataset_consistent? { true }
             end
+            any_instance_of(Import) do |d|
+              stub(d).table_exists? { true }
+            end
           end
 
           it "creates an import for the correct dataset and returns success" do
@@ -215,6 +220,9 @@ describe DatasetImportsController do
         it "throws an error if table structure is not consistent" do
           any_instance_of(Dataset) do |d|
             stub(d).dataset_consistent? { false }
+          end
+          any_instance_of(Import) do |d|
+            stub(d).table_exists? { true }
           end
 
           post :create, attributes

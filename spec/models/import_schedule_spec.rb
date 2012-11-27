@@ -1,45 +1,120 @@
 require 'spec_helper'
 
-describe ImportSchedule do
+describe ImportSchedule, :database_integration => true do
   let(:import_schedule) { import_schedules(:default) }
+  let(:database) { InstanceIntegration.real_database }
+  let(:schema) { database.schemas.find_by_name('test_schema') }
+  let(:user) { schema.gpdb_instance.owner }
+  let(:account) { InstanceIntegration.real_gpdb_account }
+  let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+  let(:workspace) { workspaces(:public) }
+
+  before do
+    workspace.update_attributes :sandbox_id => schema.id
+    import_schedule.user = user
+    import_schedule.workspace = workspace
+  end
 
   describe "validations" do
-    it "should not be valid if the workspace is archived" do
-      schedule = FactoryGirl.build(:import_schedule, :workspace => workspaces(:archived))
-      schedule.should have_at_least(1).error_on(:workspace)
+    context "with an archived workspace" do
+      let(:workspace) { workspaces(:archived) }
+
+      it "is not valid if the workspace is archived" do
+        schedule = FactoryGirl.build(:import_schedule, :workspace => workspace, :user => user)
+
+        schedule.should have_at_least(1).error_on(:workspace)
+      end
+
+      it "is valid if the import schedule is deleted and the workspace is archived" do
+        schedule = FactoryGirl.build(:import_schedule, :workspace => workspace, :user => user,
+                                     :deleted_at => Time.current)
+
+        schedule.should be_valid
+      end
     end
 
-    it "should be valid if the import schedule is deleted and the workspace is archived" do
-      schedule = FactoryGirl.build(:import_schedule, :workspace => workspaces(:archived), :deleted_at => Time.current)
-      schedule.should be_valid
+    context "with a non-archived workspace" do
+      it "is not valid with unsupported frequencies" do
+        schedule = FactoryGirl.build(:import_schedule, :workspace => workspace, :user => user,
+                                     :frequency => 'tri-weekly',)
+
+        schedule.should have_at_least(1).error_on(:frequency)
+      end
+
+      it "sets the destination_dataset before validation" do
+        import_schedule.new_table = false
+        import_schedule.to_table = 'base_table1'
+        stub(import_schedule.source_dataset).dataset_consistent? { true }
+        import_schedule.should be_valid
+        import_schedule.destination_dataset.name.should == 'base_table1'
+      end
+
+      describe "with stale datasets" do
+        it "table_does_exist talks to greenplum" do
+          import_schedule.new_table = false
+
+          table = FactoryGirl.create(:gpdb_table, :name => "dropped_table", :schema => schema)
+          import_schedule.to_table = 'dropped_table'
+
+          import_schedule.table_does_exist.should be_false
+          import_schedule.table_does_not_exist.should be_true
+
+          import_schedule.should_not be_valid
+        end
+      end
     end
 
-    it "is not valid with unsupported frequencies" do
-      schedule = FactoryGirl.build(:import_schedule, :frequency => 'tri-weekly', :workspace => workspaces(:public))
-      schedule.should have_at_least(1).error_on(:frequency)
+    context "when new_table is true" do
+      before do
+        import_schedule.new_table = true
+        dont_allow(import_schedule).table_does_exist
+      end
+
+      it "validates table_does_not_exist if the to_table has changed" do
+        mock(import_schedule).table_does_not_exist
+        import_schedule.to_table = 'something_new'
+        import_schedule.valid?
+      end
+
+      it "does not validate table_does_not_exist if the to_table has not changed" do
+        dont_allow(import_schedule).table_does_not_exist
+        import_schedule.valid?
+      end
     end
 
-    it "sets the destination_dataset before validation" do
-      import_schedule.new_table = false
-      import_schedule.to_table = 'table'
-      stub(import_schedule.source_dataset).dataset_consistent? { true }
-      import_schedule.should be_valid
-      import_schedule.destination_dataset.name.should == 'table'
+    context "when new_table is false" do
+      before do
+        import_schedule.new_table = false
+        dont_allow(import_schedule).table_does_not_exist
+      end
+
+      it "validates table_does_exist if the to_table has changed" do
+        mock(import_schedule).table_does_exist
+        import_schedule.to_table = 'something_new'
+        import_schedule.valid?
+      end
+
+      it "does not validate table_does_exist if the to_table has not changed" do
+        dont_allow(import_schedule).table_does_exist
+        import_schedule.valid?
+      end
     end
   end
 
-  describe "callbacks:" do
+  describe "callbacks" do
     let(:start_day) { Time.now + 2.days }
     let(:next_year) { Time.now + 1.year }
-    describe "before saving, automatically updating the next_import_at attribute" do
 
+    describe "before saving, automatically updating the next_import_at attribute" do
       context "when the start date is changed to be sooner in the future" do
 
         let(:import_schedule) do
           FactoryGirl.create(:import_schedule,
-                              :start_datetime => next_year,
-                              :end_date => next_year + 1.year,
-                              :workspace => workspaces(:public))
+                             :start_datetime => next_year,
+                             :end_date => next_year + 1.year,
+                             :workspace => workspace,
+                             :user => user
+          )
         end
 
         it "updates the next_import_at attribute" do
@@ -52,6 +127,7 @@ describe ImportSchedule do
 
           import_schedule.next_import_at.should == start_day
         end
+
       end
     end
   end
@@ -65,8 +141,19 @@ describe ImportSchedule do
 
   describe "default scope" do
     it "does not show deleted schedules" do
-      active_schedule = FactoryGirl.create(:import_schedule, :workspace => workspaces(:public), :start_datetime => Time.now, :end_date => Time.now + 1.year, :frequency => 'monthly')
-      deleted_schedule = FactoryGirl.create(:import_schedule, :workspace => workspaces(:public), :deleted_at => Time.now, :start_datetime => Time.now, :end_date => Time.now + 1.year, :frequency => 'monthly')
+      active_schedule = FactoryGirl.create(:import_schedule,
+                                           :workspace => workspace,
+                                           :user => user,
+                                           :start_datetime => Time.now,
+                                           :end_date => Time.now + 1.year,
+                                           :frequency => 'monthly')
+      deleted_schedule = FactoryGirl.create(:import_schedule,
+                                            :workspace => workspace,
+                                            :user => user,
+                                            :deleted_at => Time.now,
+                                            :start_datetime => Time.now,
+                                            :end_date => Time.now + 1.year,
+                                            :frequency => 'monthly')
       ImportSchedule.all.should include(active_schedule)
       ImportSchedule.all.should_not include(deleted_schedule)
     end
@@ -74,19 +161,22 @@ describe ImportSchedule do
 
   describe ".ready_to_run scope" do
     it "shows import schedules that should be run" do
-      ready_schedule = FactoryGirl.create(:import_schedule, :workspace => workspaces(:public),
+      ready_schedule = FactoryGirl.create(:import_schedule, :workspace => workspace,
                                           :start_datetime => Time.now + 1.minute,
+                                          :user => user,
                                           :end_date => Time.now + 1.year,
                                           :frequency => 'monthly')
       deleted_schedule = FactoryGirl.create(:import_schedule,
-                                            :workspace => workspaces(:public),
+                                            :workspace => workspace,
+                                            :user => user,
                                             :deleted_at => Time.now,
                                             :start_datetime => Time.now + 1.minute,
                                             :end_date => Time.now + 1.year,
                                             :frequency => 'monthly')
       not_ready_schedule = FactoryGirl.create(:import_schedule,
-                                              :workspace => workspaces(:public),
+                                              :workspace => workspace,
                                               :start_datetime => Time.now + 1.year,
+                                              :user => user,
                                               :end_date => Time.now + 1.year,
                                               :frequency => 'monthly')
 
@@ -103,17 +193,19 @@ describe ImportSchedule do
     before do
       any_instance_of(Import) do |import|
         stub(import).table_does_exist { raise 'bang!' }
+        stub(import).tables_have_consistent_schema { true }
       end
     end
 
     it "creates an import with source/destination info without checking if destination table exists" do
       import = import_schedule.create_import
-      import.workspace_id.should      == import_schedule.workspace_id
-      import.to_table.should          == import_schedule.to_table
+
+      import.workspace_id.should == import_schedule.workspace_id
+      import.to_table.should == import_schedule.to_table
       import.source_dataset_id.should == import_schedule.source_dataset_id
-      import.truncate.should          == import_schedule.truncate
-      import.user_id.should           == import_schedule.user_id
-      import.sample_count.should      == import_schedule.sample_count
+      import.truncate.should == import_schedule.truncate
+      import.user_id.should == import_schedule.user_id
+      import.sample_count.should == import_schedule.sample_count
       import.should be_persisted
     end
   end

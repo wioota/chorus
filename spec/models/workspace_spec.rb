@@ -12,6 +12,15 @@ describe Workspace do
     it { should have_many(:comments).through(:owned_events) }
   end
 
+  before do
+    [Import, ImportSchedule].each do |stuff|
+      any_instance_of(stuff) do |import|
+        stub(import).tables_have_consistent_schema { true }
+        stub(import).table_exists? { true }
+      end
+    end
+  end
+
   describe "create" do
     it "creates a membership for the owner" do
       owner = users(:no_collaborators)
@@ -387,6 +396,12 @@ describe Workspace do
     end
 
     it "soft deletes import schedules" do
+      [Import, ImportSchedule].each do |stuff|
+        any_instance_of(stuff) do |import|
+          stub(import).valid? { true }
+        end
+      end
+
       import_schedule = FactoryGirl.create(:import_schedule, :workspace_id => workspace.id)
       workspace.destroy
       import_schedule.reload
@@ -552,6 +567,12 @@ describe Workspace do
         let(:workspace) { workspaces(:public) }
 
         it "are unscheduled after archiving" do
+          [Import, ImportSchedule].each do |stuff|
+            any_instance_of(stuff) do |import|
+              stub(import).valid? { true }
+            end
+          end
+
           expect {
             workspace.archiver = owner
             workspace.archived = 'true'

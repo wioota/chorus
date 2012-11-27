@@ -304,6 +304,7 @@ describe GpdbInstance do
       end
 
       it "does not enqueue GpdbDatabase.reindexDatasetPermissions if the instance accounts for a database have not changed" do
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything)
         dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
         gpdb_instance.refresh_databases
       end

@@ -100,9 +100,18 @@ describe DatasetPresenter, :type => :view do
       let(:schema) { FactoryGirl.create :gpdb_schema }
       let(:schema2) { FactoryGirl.create :gpdb_schema }
       let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
-      let!(:import_schedule) { FactoryGirl.create(:import_schedule, :source_dataset => dataset, :workspace => workspace, :start_datetime => Time.now(), :end_date => '2012-12-12', :frequency => "weekly", :workspace => workspace ) }
+      let(:import_schedule) { FactoryGirl.create(:import_schedule, :source_dataset => dataset, :workspace => workspace, :start_datetime => Time.now(), :end_date => '2012-12-12', :frequency => "weekly", :workspace => workspace ) }
 
-      it "has the correct type" do
+      before do
+        [Import, ImportSchedule].each do |type|
+          any_instance_of(type) do |o|
+            stub(o).table_exists? { false }
+          end
+        end
+        import_schedule
+      end
+
+      it "has the correct type and frequency" do
         hash[:type].should == 'SOURCE_TABLE'
         hash[:frequency].should == import_schedule.frequency
       end

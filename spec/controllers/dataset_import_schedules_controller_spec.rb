@@ -86,10 +86,15 @@ describe DatasetImportSchedulesController do
     let(:start) { DateTime.parse("Thu, 23 Aug 2012 23:00:00") }
 
     it "creates an import schedule" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).valid? { true }
+      end
+
       Timecop.freeze(start - 1.hour) do
         expect {
           post :create, attributes
         }.to change(ImportSchedule, :count).by(1)
+
         import_schedule = ImportSchedule.last
         import_schedule.start_datetime.should == start
         import_schedule.end_date.should == Date.parse("2012-8-24T00:00:00Z")
@@ -106,6 +111,10 @@ describe DatasetImportSchedulesController do
     end
 
     it "creates an Import scheduled event" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).valid? { true }
+      end
+
       expect {
         post :create, attributes
       }.to change(Events::DatasetImportCreated, :count).by(1)
@@ -120,6 +129,10 @@ describe DatasetImportSchedulesController do
     end
 
     it "presents an import schedule" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).valid? { true }
+      end
+
       mock_present do |schedule|
         schedule.should be_a(ImportSchedule)
         schedule.id.should_not be_nil
@@ -169,9 +182,15 @@ describe DatasetImportSchedulesController do
         any_instance_of(Dataset) do |d|
           stub(d).dataset_consistent?(anything) { true }
         end
+
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).valid? { true }
+        end
+
         expect {
           post :create, attributes
         }.to change(Events::DatasetImportCreated, :count).by(1)
+
         event = Events::DatasetImportCreated.last
         event.dataset.name.should == to_table
         event.destination_table.should == to_table
@@ -208,11 +227,19 @@ describe DatasetImportSchedulesController do
       let(:to_table) { import_schedule.workspace.sandbox.datasets.first }
 
       it "updates the start time for the import schedule" do
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).valid? { true }
+        end
+
         put :update, attributes.merge(:start_datetime => '2012-01-01T0:00:00')
         import_schedule.reload.start_datetime.should == DateTime.parse('2012-01-01T0:00:00')
       end
 
       it "updates the import's frequency only and returns success" do
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).table_exists? { false }
+        end
+
         put :update, attributes.merge(:frequency => frequency)
         response.code.should == "200"
         import_schedule.reload
@@ -223,12 +250,20 @@ describe DatasetImportSchedulesController do
       end
 
       it "returns an error when importing into a new table but name already exists" do
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).table_exists? { true }
+        end
+
         put :update, attributes.merge(:new_table => 'true', :to_table => to_table.name)
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
       end
 
       it "returns an error when importing into an existing table but name doesnt exist" do
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).table_exists? { false }
+        end
+
         put :update, attributes.merge(:new_table => 'false', :to_table => "non_existent")
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
@@ -242,9 +277,14 @@ describe DatasetImportSchedulesController do
 
 
     it "makes a IMPORT_SCHEDULE_UPDATED event" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).valid? { true }
+      end
+
       expect {
         put :update, attributes.merge(:new_table => 'true', :to_table => "new_table_non_existent")
       }.to change(Events::ImportScheduleUpdated, :count).by(1)
+
       event = Events::ImportScheduleUpdated.last
       event.workspace.should == import_schedule.workspace
       event.source_dataset.should == import_schedule.source_dataset
@@ -257,6 +297,10 @@ describe DatasetImportSchedulesController do
     let(:source_table) { Dataset.find(import_schedule[:source_dataset_id]) }
 
     it "deletes the import schedule and returns success" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).table_exists? { false }
+      end
+
       delete :destroy, :id => import_schedule.id, :workspace_id => 3482374324, :dataset_id => source_table.id
 
       response.code.should == "200"
@@ -376,6 +420,11 @@ describe DatasetImportSchedulesController do
             post :create, import_attributes
           }.to change(Events::DatasetImportCreated, :count).by(1)
         end
+
+        any_instance_of(Import) do |import|
+          stub(import).tables_have_consistent_schema { true }
+        end
+
         Timecop.freeze(DateTime.parse(start_time) + 1.day) do
           expect {
             ImportScheduler.run

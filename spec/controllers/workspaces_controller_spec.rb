@@ -245,9 +245,19 @@ describe WorkspacesController do
       describe "archiving the workspace" do
         let(:workspace) { workspaces(:public) }
 
+        before do
+          [Import, ImportSchedule].each do |stuff|
+            any_instance_of(stuff) do |import|
+              stub(import).tables_have_consistent_schema { true }
+              stub(import).table_exists? { true }
+            end
+          end
+        end
+
         it "archives the workspace" do
           put :update, params.merge(:archived => "true")
           workspace.reload
+
           workspace.archived_at.should be_within(1.minute).of(Time.now)
           workspace.archiver.should == owner
         end
@@ -265,9 +275,9 @@ describe WorkspacesController do
         expect_to_add_event(Events::WorkspaceAddSandbox, owner) do
            put :update, params.merge(:sandbox_id => sandbox.to_param)
         end
-        
+
         response.should be_success
-        
+
         workspace.reload
         workspace.sandbox_id.should == sandbox.id
         workspace.has_added_sandbox.should == true
@@ -394,6 +404,15 @@ describe WorkspacesController do
   describe "#destroy" do
     let(:workspace) { workspaces(:public) }
     let(:params) { {:id => workspace.id} }
+
+    before do
+      [Import, ImportSchedule].each do |stuff|
+        any_instance_of(stuff) do |import|
+          stub(import).tables_have_consistent_schema { true }
+          stub(import).table_exists? { true }
+        end
+      end
+    end
 
     it "uses authorization" do
       mock(subject).authorize!(:destroy, workspace)

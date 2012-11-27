@@ -77,6 +77,7 @@ CREATE SCHEMA test_schema;
   CREATE TABLE candy_empty();
 
   CREATE TABLE candy_one_column("2id" integer) DISTRIBUTED RANDOMLY;
+  CREATE TABLE second_candy_one_column("2id" integer) DISTRIBUTED RANDOMLY;
 
   CREATE TABLE candy_composite("id" integer, "id2" integer, PRIMARY KEY("id", "id2"));
 

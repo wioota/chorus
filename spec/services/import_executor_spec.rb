@@ -20,11 +20,13 @@ describe ImportExecutor do
     )
   end
 
-  let(:import) { FactoryGirl.create :import,
-                                    :user => user,
-                                    :workspace => workspace,
-                                    :to_table => destination_table_name,
-                                    :source_dataset => source_dataset }
+  let(:import) do
+    FactoryGirl.build(:import,
+                      :user => user,
+                      :workspace => workspace,
+                      :to_table => destination_table_name,
+                      :source_dataset => source_dataset).tap {|i| i.save(:validate => false)}
+  end
   let(:import_failure_message) { "" }
 
   describe ".run" do

@@ -22,15 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>168}}'
     http_version: '1.1'
-  recorded_at: Thu, 29 Nov 2012 00:48:14 GMT
+  recorded_at: Thu, 29 Nov 2012 00:58:52 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">TestClass 1</field><field name="type">TestClass</field><field name="type">ActiveRecord::Base</field><field name="class_name">TestClass</field><field name="html_field_texts">this is text</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">SearchableHtmlTestClass 1</field><field name="type">SearchableHtmlTestClass</field><field name="type">ActiveRecord::Base</field><field name="class_name">SearchableHtmlTestClass</field><field name="html_field_texts">this is text</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>38}}'
     http_version: '1.1'
-  recorded_at: Thu, 29 Nov 2012 00:48:14 GMT
+  recorded_at: Thu, 29 Nov 2012 00:58:52 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -72,15 +72,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>76}}'
     http_version: '1.1'
-  recorded_at: Thu, 29 Nov 2012 00:48:14 GMT
+  recorded_at: Thu, 29 Nov 2012 00:58:52 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3ATestClass&q=text&fl=%2A+score&qf=html_field_texts&defType=edismax&start=0&rows=30
+      string: fq=type%3ASearchableHtmlTestClass&q=text&fl=%2A+score&qf=html_field_texts&defType=edismax&start=0&rows=30
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -97,9 +97,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''fl''=>''*
-        score'',''start''=>''0'',''q''=>''text'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:TestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.15342641,''docs''=>[{''id''=>''TestClass
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21,''params''=>{''fl''=>''*
+        score'',''start''=>''0'',''q''=>''text'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:SearchableHtmlTestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.15342641,''docs''=>[{''id''=>''SearchableHtmlTestClass
         1'',''html_field_texts''=>[''this is text''],''score''=>0.15342641}]}}'
     http_version: '1.1'
-  recorded_at: Thu, 29 Nov 2012 00:48:14 GMT
+  recorded_at: Thu, 29 Nov 2012 00:58:52 GMT
 recorded_with: VCR 2.3.0

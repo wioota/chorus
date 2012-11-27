@@ -165,10 +165,19 @@ describe ChorusViewsController, :database_integration => true do
 
     context "when chorus View have import schedule" do
       before do
-        ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
-                                :frequency => 'weekly', :workspace => chorus_view.workspace,
-                                :to_table => "new_table_for_import", :source_dataset_id => chorus_view.id, :truncate => 't',
-                                :new_table => 't', :user_id => user.id}, {:without_protection => true})
+        any_instance_of(ImportSchedule) do |import_schedule|
+          stub(import_schedule).valid? { true }
+        end
+
+        ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07',
+                                :end_date => '2012-12-04',
+                                :frequency => 'weekly',
+                                :workspace => chorus_view.workspace,
+                                :to_table => "new_table_for_import",
+                                :source_dataset_id => chorus_view.id,
+                                :truncate => 't',
+                                :new_table => 't',
+                                :user_id => user.id}, {:without_protection => true})
 
       end
 
@@ -267,6 +276,10 @@ describe ChorusViewsController, :database_integration => true do
     end
 
     it "deletes any imports from that chorus view" do
+      any_instance_of(ImportSchedule) do |import_schedule|
+        stub(import_schedule).table_exists? { false }
+      end
+
       ImportSchedule.create!({
          :start_datetime => '2012-09-04 23:00:00-07',
          :end_date => '2012-12-04',

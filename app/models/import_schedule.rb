@@ -22,9 +22,9 @@ class ImportSchedule < ActiveRecord::Base
 
   validates :frequency, :inclusion => {:in => %w( daily weekly monthly )}
 
-  validate :table_does_not_exist, :if => :new_table
-  validate :table_does_exist, :if => Proc.new { |schedule| schedule.new_table == false }
-  validate :tables_have_consistent_schema, :if => Proc.new { |schedule| schedule.new_table == false }
+  validate :table_does_not_exist, :if => lambda { new_table? && to_table_changed? }
+  validate :table_does_exist, :if => lambda { !new_table? && to_table_changed? }
+  validate :tables_have_consistent_schema, :unless => :new_table
 
   def create_import_event
     dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table

@@ -8,7 +8,7 @@ module SoftDelete
   def destroy
     run_callbacks(:destroy) do
       self.deleted_at = Time.now.utc
-      save
+      save(:validate => false)
     end
     self
   end

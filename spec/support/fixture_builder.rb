@@ -1,4 +1,5 @@
 require_relative "./database_integration/instance_integration"
+require 'rr'
 
 def FixtureBuilder.password
   'password'
@@ -19,7 +20,15 @@ FixtureBuilder.configure do |fbuilder|
 
   # now declare objects
   fbuilder.factory do
+    extend RR::Adapters::RRMethods
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
+
+    [Import, ImportSchedule].each do |type|
+      any_instance_of(type) do |object|
+        stub(object).table_exists? {}
+        stub(object).tables_have_consistent_schema {}
+      end
+    end
 
     (ActiveRecord::Base.direct_descendants).each do |klass|
       ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{klass.table_name}_id_seq RESTART WITH 1000000;")
@@ -304,8 +313,7 @@ FixtureBuilder.configure do |fbuilder|
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
                                          :frequency => 'weekly', :workspace => public_workspace,
                                          :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
-                                         :new_table => 't', :user_id => owner.id
-    )
+                                         :new_table => 't', :user_id => owner.id)
     fbuilder.name :default, import_schedule
 
 
@@ -446,6 +454,8 @@ FixtureBuilder.configure do |fbuilder|
     @attachment_hdfs = note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
     @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
     @attachment_on_chorus_view = note_on_chorus_view_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'attachmentsearch')))
+
+    RR.reset
 
     if ENV['GPDB_HOST']
       InstanceIntegration.refresh_chorus

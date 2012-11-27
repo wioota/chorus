@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 describe Import, :database_integration => true do
+  let(:user)  { schema.gpdb_instance.owner }
+  let(:workspace) { workspaces(:real) }
+  let(:database) { InstanceIntegration.real_database }
+  let(:schema) { database.schemas.find_by_name('test_schema') }
+  let(:account) { InstanceIntegration.real_gpdb_account }
+  let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+
+  before do
+    workspace.update_attributes :sandbox_id => schema.id
+  end
+
   describe "associations" do
     it { should belong_to :workspace }
     it { should belong_to(:source_dataset).class_name('Dataset') }
@@ -11,34 +22,34 @@ describe Import, :database_integration => true do
   describe "validations" do
     let(:import) {
       i = Import.new
-      i.workspace = workspaces(:real)
+      i.workspace = workspace
       i.to_table = 'new_table1234'
       i.new_table = true
-      i.source_dataset = i.workspace.sandbox.datasets.first
-      i.user = users(:owner)
+      i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
+      i.user = user
       i
     }
 
     it "validates the presence of to_table" do
-      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :to_table => nil)
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :to_table => nil)
       import.valid?
       import.should have_at_least(1).errors_on(:to_table)
     end
 
     it "validates the presence of source_dataset if no file_name present" do
-      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil, :file_name => nil)
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source_dataset => nil, :file_name => nil)
       import.valid?
       import.should have_at_least(1).errors_on(:source_dataset)
       import.should have_at_least(1).errors_on(:file_name)
     end
 
     it "does not validate the presence of source_dataset if file_name present" do
-      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :source_dataset => nil, :file_name => "foo.csv")
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source_dataset => nil, :file_name => "foo.csv")
       import.should be_valid
     end
 
     it "validates the presence of user" do
-      import = FactoryGirl.build(:import, :workspace => workspaces(:real), :user => nil)
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => nil)
       import.valid?
       import.should have_at_least(1).errors_on(:user)
     end
@@ -50,8 +61,9 @@ describe Import, :database_integration => true do
     end
 
     it "is valid if an old import's to_table exists" do
-      import.save
-      import.to_table = 'master_table1'
+      import.to_table = 'second_candy_one_column'
+      import.save(:validate => false)
+      import.reload
       import.should be_valid
     end
 

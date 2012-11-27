@@ -16,15 +16,15 @@ describe ImportScheduler do
       }
     }
     let(:import_schedule) do
-      ImportSchedule.create!(
+      ImportSchedule.new(
           import_schedule_attrs.merge(:to_table => 'destination_table'),
-          :without_protection => true)
+          :without_protection => true).tap { |o| o.save!(:validate => false)}
     end
 
     let(:other_import_schedule) do
-      ImportSchedule.create!(
+      ImportSchedule.new(
           import_schedule_attrs.merge(:to_table => 'other_destination_table'),
-          :without_protection => true)
+          :without_protection => true).tap { |o| o.save!(:validate => false)}
     end
 
     def expect_qc_enqueue
@@ -43,12 +43,15 @@ describe ImportScheduler do
 
     context "with two import schedules" do
       it "schedules the second even if the first raises" do
+        any_instance_of(Import) do |o|
+          stub(o).table_exists? { false }
+        end
         Timecop.freeze(start_time - 2.hours) do # use 2.hours to avoid dst problems
           import_schedule.save!
           other_import_schedule.save!
 
           # make the first import schedule invalid
-          import_schedule.update_attribute(:user, nil)
+          import_schedule.update_attribute(:start_datetime, Date.parse("2012-08-28"))
         end
 
         Timecop.freeze(start_time + 2.hours) do
@@ -63,6 +66,9 @@ describe ImportScheduler do
 
     context "when next import time is set" do
       before do
+        any_instance_of(Import) do |o|
+          stub(o).table_exists? { false }
+        end
         ImportSchedule.delete_all # don't run import schedule on fixtures
         Timecop.freeze(start_time - 2.hours) do # use 2.hours to avoid dst problems
           import_schedule.save!

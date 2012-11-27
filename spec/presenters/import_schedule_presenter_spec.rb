@@ -2,12 +2,17 @@ require 'spec_helper'
 
 describe ImportSchedulePresenter, :type => :view do
   before do
+    any_instance_of(ImportSchedule) do |d|
+      stub(d).table_exists? { false }
+    end
+
     @presenter = ImportSchedulePresenter.new(import_schedule, view, {:dataset_id => dataset_id})
 
     any_instance_of(Dataset) do |d|
       stub(d).dataset_consistent?(anything) { true }
     end
   end
+
   let(:import_schedule) do
     schedule = import_schedules(:default)
     schedule.new_table = false

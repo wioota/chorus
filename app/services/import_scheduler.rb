@@ -4,22 +4,23 @@ class ImportScheduler
   def self.run
     ImportSchedule.ready_to_run.each do |schedule|
       begin
-        Import.transaction do
-          import = schedule.create_import
-          if schedule.save
-            QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
-          else
-            Events::DatasetImportFailed.by(import.user).add(
-                :workspace => import.workspace,
-                :destination_table => import.to_table,
-                :error_objects => schedule.errors,
-                :source_dataset => import.source_dataset,
-                :dataset => import.sandbox.datasets.find_by_name(import.to_table)
-            )
-            schedule.set_next_import
-          end
-        end
+        import = schedule.create_import
+        schedule.save! #update next_import_at
+        QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
       rescue => e
+        begin
+          schedule.save(:validate => false) #update next_import_at, and then fill errors
+        rescue => e
+          Chorus.log_error "Schedule could not be saved with error #{e}."
+        end
+
+        Events::DatasetImportFailed.by(schedule.user).add(
+            :workspace => schedule.workspace,
+            :destination_table => schedule.to_table,
+            :error_objects => schedule.errors,
+            :source_dataset => schedule.source_dataset,
+            :dataset => schedule.sandbox.datasets.find_by_name(schedule.to_table)
+        )
         Chorus.log_error "Import schedule with ID #{schedule.id} failed with error '#{e}'."
       end
     end
