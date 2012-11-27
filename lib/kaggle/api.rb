@@ -32,14 +32,20 @@ module Kaggle
     private
 
     def self.fetch_users
-      uri = uri_for("directory")
-      http = connection_for(uri)
+      if self.enabled?
+        uri = uri_for("directory")
+        http = connection_for(uri)
 
-      request = Net::HTTP::Get.new(uri.request_uri)
-      response = http.request(request)
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
 
-      JSON.parse(response.body)["users"].map do |user_data|
-        Kaggle::User.new(user_data)
+        JSON.parse(response.body)["users"].map do |user_data|
+          Kaggle::User.new(user_data)
+        end
+      else
+        JSON.parse(File.read(Rails.root.join('kaggleSearchResults.json').to_s))["users"].map do |user_data|
+          Kaggle::User.new(user_data)
+        end
       end
 
     rescue

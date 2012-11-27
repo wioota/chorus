@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 # We created these users to check emails.
 #username: bbanner
@@ -22,34 +23,78 @@ describe Kaggle::API, :kaggle_API => true do
   end
 
   describe ".users" do
-    let(:kaggle_api_url) {
-      "https://www.kaggle.com/connect/chorus-beta/directory?apiKey=#{Chorus::Application.config.chorus['kaggle']['api_key']}"
-    }
+    context "when kaggle api is enabled" do
+      let(:kaggle_api_url) {
+        "https://www.kaggle.com/connect/chorus-beta/directory?apiKey=#{Chorus::Application.config.chorus['kaggle']['api_key']}"
+      }
 
-    before do
-      FakeWeb.register_uri(:get, kaggle_api_url,
-                           :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
-                           :status => ["200", "Success"])
-    end
-
-    it "returns a list of Kaggle::Users" do
-      users = Kaggle::API.users
-
-      users.count.should > 0
-      users.first.should be_a Kaggle::User
-      users.first['id'].should_not be_nil
-    end
-
-    context "when fetching the users fails" do
       before do
+        stub(Kaggle::API).enabled? { true }
         FakeWeb.register_uri(:get, kaggle_api_url,
-                             :status => ["401", "Unauthorized"])
+                             :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
+                             :status => ["200", "Success"])
       end
 
-      it "raises a NotReachable error" do
-        expect {
-          users = Kaggle::API.users
-        }.to raise_error Kaggle::API::NotReachable
+      it "returns a list of Kaggle::Users" do
+        users = Kaggle::API.users
+
+        users.count.should > 0
+        users.first.should be_a Kaggle::User
+        users.first['id'].should_not be_nil
+      end
+
+      context "when fetching the users fails" do
+        before do
+          FakeWeb.register_uri(:get, kaggle_api_url,
+                               :status => ["401", "Unauthorized"])
+        end
+
+        it "raises a NotReachable error" do
+          expect {
+            users = Kaggle::API.users
+          }.to raise_error Kaggle::API::NotReachable
+        end
+      end
+    end
+
+    context "when kaggle api is disabled" do
+      include FakeFS::SpecHelpers
+
+      before :all do
+        FakeFS.deactivate!
+        @kaggle_users = File.read(Rails.root + "lib/kaggle/userApi.json")
+        FakeFS.activate!
+      end
+
+      before do
+        stub(Kaggle::API).enabled? { false }
+      end
+
+      context "when the kaggleSearchResult.json exists" do
+        before do
+          FileUtils.mkdir_p(Rails.root)
+          File.open(Rails.root.join('kaggleSearchResults.json').to_s, 'w') do |f|
+            f << @kaggle_users
+          end
+        end
+
+        it "gets the users from the file" do
+            users = Kaggle::API.users
+
+            users.count.should > 0
+            users.first.should be_a Kaggle::User
+            users.first['full_name'].should == JSON.parse(@kaggle_users)['users'].first['LegalName']
+        end
+      end
+
+      context "when the kaggleSearchResults.json does not exist" do
+        it "raises a NotReachable error" do
+          File.exist?(Rails.root.join('kaggleSearchResults.json')).should be_false
+
+          expect {
+            users = Kaggle::API.users
+          }.to raise_error Kaggle::API::NotReachable
+        end
       end
     end
 

@@ -94,29 +94,49 @@ describe ChorusConfig do
       }
     end
 
-    it 'returns true if the kaggle url/port and username/password are configured' do
-      config.config = {'kaggle' => kaggle_config}
-      config.kaggle_configured?.should be_true
-    end
+    context "when the kaggleSearchResults.json exists" do
+      before do
+        File.open(Rails.root.join('kaggleSearchResults.json').to_s, 'w') do |f|
+          f << "Hello, World!"
+        end
+      end
 
-    it 'returns false if the enabled flag is false but all the others are present' do
-      disabled_config = kaggle_config.merge({'enabled' => false})
-      config.config = {'kaggle' => disabled_config}
-      config.kaggle_configured?.should be_false
-    end
+      it "returns true" do
+        config.config.delete('kaggle')
+        config.kaggle_configured?.should be_true
+      end
 
-    it 'returns false if any of the keys are missing' do
-      kaggle_config.each do |key, _value|
-        invalid_config = kaggle_config.reject { |attr, _value| attr == key }
-        config.config = {'kaggle' => invalid_config}
-        config.should_not be_kaggle_configured
+      it "returns true even if the enabled flag is false" do
+        config.config = {'kaggle' => kaggle_config.merge('enabled' => false)}
+        config.kaggle_configured?.should be_true
       end
     end
 
-    it 'returns false if the enabled key is undefined' do
-      kaggle_config.delete('enabled')
-      config.config = {'kaggle' => kaggle_config}
-      config.kaggle_configured?.should be_false
+    context "when the kaggleSearchResults.json does not exist" do
+      it 'returns true if the kaggle url/port and username/password are configured' do
+        config.config = {'kaggle' => kaggle_config}
+        config.kaggle_configured?.should be_true
+      end
+
+      it 'returns false if the enabled flag is false' do
+        disabled_config = kaggle_config.merge({'enabled' => false})
+        config.config = {'kaggle' => disabled_config}
+        config.kaggle_configured?.should be_false
+      end
+
+      it 'returns false if either config is missing' do
+        kaggle_config.each do |key, _value|
+          invalid_config = kaggle_config.reject { |attr, _value| attr == key }
+          config.config = {'kaggle' => invalid_config}
+          config.should_not be_kaggle_configured
+        end
+      end
+
+      it 'returns false if the enabled key is undefined' do
+        kaggle_config.delete('enabled')
+        config.config = {'kaggle' => kaggle_config}
+        config.kaggle_configured?.should be_false
+      end
     end
   end
 
