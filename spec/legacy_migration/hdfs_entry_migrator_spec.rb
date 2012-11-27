@@ -2,7 +2,7 @@ require 'legacy_migration_spec_helper'
 
 describe HdfsEntryMigrator do
   describe ".migrate" do
-    it "should migrate the hdfs references found in the edc_comment table to the new database" do
+    it "should migrate the hdfs references found in the activity stream object table to the new database" do
       rows = Legacy.connection.select_all("
          SELECT DISTINCT normalize_key(object_id) AS entity_id
           FROM edc_activity_stream_object
@@ -13,8 +13,7 @@ describe HdfsEntryMigrator do
         entry = HdfsEntry.find_by_hadoop_instance_id_and_path(hadoop_instance.id, path)
         entry.should_not be_nil
         entry.legacy_id.should == legacy_row["entity_id"]
-        entry.parent.should_not be_nil
-        entry.parent.is_directory.should be_true
+        entry.parent.should_not be_nil unless entry.path == '/' # ensure we build a tree for garbage collection
       end
       rows.count.should > 0
       HdfsEntry.count.should > rows.count # creates some extra directories

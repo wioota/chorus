@@ -21,13 +21,13 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
 
     def legacy_sql_md5
-      '7f1c289ca0fc9c5645812d30fa7b0d7e'
+      '0b8638a9e2d4cb5ed9f3b1a35d25bb35'
     end
 
     unless File.exist?("db/legacy/legacy_#{legacy_sql_md5}.sql")
       p "Downloading legacy dump from server"
       FileUtils.mkdir_p('db/legacy')
-      `wget  -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci.sf.pivotallabs.com/~ci/legacy_#{legacy_sql_md5}.sql`
+      `wget -O db/legacy/legacy_#{legacy_sql_md5}.sql http://greenplum-ci.sf.pivotallabs.com/~ci/legacy_#{legacy_sql_md5}.sql`
     end
 
     Dir.chdir Rails.root do

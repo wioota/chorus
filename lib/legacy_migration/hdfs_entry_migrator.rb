@@ -27,11 +27,11 @@ class HdfsEntryMigrator < AbstractMigrator
         (legacy_hadoop_instance_id, path) = row["entity_id"].split("|")
         hadoop_instance = HadoopInstance.find_by_legacy_id!(legacy_hadoop_instance_id)
 
-        # use rails in order to split up path into several entries, including an entry with the basename of path
-        hadoop_instance.hdfs_entries.create({
-          :path => path,
-          :legacy_id => row["entity_id"]
-        }, :without_protection => true)
+        # use hdfs model to create entries so that they can be garbage collected later
+        hadoop_instance.hdfs_entries.find_or_initialize_by_path(path).tap do |entry|
+          entry.legacy_id = row["entity_id"]
+          entry.save!
+        end
       end
 
       Sunspot.session = Sunspot.session.original_session
