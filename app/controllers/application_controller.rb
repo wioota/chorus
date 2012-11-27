@@ -1,6 +1,6 @@
 require 'will_paginate/array'
 
-class ModelNotCreated < Exception
+class ModelNotCreated < StandardError
 end
 
 class ApplicationController < ActionController::Base
