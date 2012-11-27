@@ -12,7 +12,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
         this.schema.fetch();
         this.collection.sortAsc("objectName");
-        this.collection.fetchAll();
+        this.collection.fetch();
 
         this.sidebar = new chorus.views.DatasetSidebar({listMode: true});
 

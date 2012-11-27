@@ -304,7 +304,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             it("shows pagination controls", function () {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
                 expect(this.dialog.$(".list_content_details .count")).toContainText("4");
-                expect(this.server.lastFetchFor(this.schema.datasets()).url).toContain("per_page=7")
+                expect(this.server.lastFetchFor(this.schema.datasets()).params()['per_page']).toEqual("7");
             })
         });
     });

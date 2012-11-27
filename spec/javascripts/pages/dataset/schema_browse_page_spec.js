@@ -19,6 +19,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
     });
 
+    it("fetches the schema's datasets", function() {
+        expect(this.server.lastFetchFor(this.page.collection).params()['per_page']).toEqual("50");
+    });
+
     describe("when a fetch fails", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl")
