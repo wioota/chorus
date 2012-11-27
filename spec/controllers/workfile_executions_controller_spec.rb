@@ -72,30 +72,6 @@ describe WorkfileExecutionsController do
       end
     end
 
-    context "when the action exceeds the time out" do
-      before do
-        log_in users(:owner)
-        stub.proxy(Chorus::Application.config.chorus).[](anything)
-        stub(Chorus::Application.config.chorus).[]('execution_timeout_in_minutes') { (1.0/600) }
-        stub(SqlExecutor).execute_sql.with_any_args {
-          SqlResult.new.tap{ |result|
-            result.add_column("a", "string")
-            result.add_row([1])
-          }
-        }
-        stub(CsvWriter).to_csv_as_stream.with_any_args {
-          sleep 1
-          "'a',1"
-        }
-      end
-      it "returns a 422" do
-        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
-        response.code.should == '422'
-        decoded = JSON.parse(response.body)
-        decoded['errors']['fields']['general']['GENERIC']['message'].should == "Workfile execution timed out"
-      end
-    end
-
     context "when downloading the results" do
       let(:sql_result) {
         SqlResult.new.tap{ |result|
