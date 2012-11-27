@@ -1,16 +1,19 @@
 require "tempfile"
 require 'digest/md5'
+require 'yaml'
 
 module InstanceIntegration
   config_file = "test_instance_connection_config.yml"
 
-  REAL_GPDB_HOST = ENV['GPDB_HOST'] || 'local_greenplum'
+  REAL_GPDB_HOST = ENV['GPDB_HOST']
   REAL_HADOOP_HOST = ENV['HADOOP_HOST']
-  CONFIG          = YAML.load_file(Rails.root + "config/#{config_file}")
+  CONFIG = YAML.load_file(Rails.root + "config/#{config_file}")
   INSTANCE_CONFIG = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == REAL_GPDB_HOST }
-  ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
+  ACCOUNT_CONFIG = INSTANCE_CONFIG['account']
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
   REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
+  FILES_TO_TRACK_CHANGES_OF = %w(create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql)
+  GPDB_VERSIONS_FILE = (Rails.root + 'tmp/instance_integration_file_versions').to_s
 
   def self.real_gpdb_hostname
     if REAL_GPDB_HOST.match /^([0-9]{1,3}\.){3}[0-9]{1,3}$/
@@ -19,28 +22,20 @@ module InstanceIntegration
     REAL_GPDB_HOST.gsub('-', '_')
   end
 
-  def self.execute_sql(sql_file)
+  def self.execute_sql(sql_file, database = INSTANCE_CONFIG['maintenance_db'])
     puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 
     sql = sql_read.gsub('gpdb_test_database', InstanceIntegration.database_name)
-    puts "  Replacing gpdb_test_database with #{InstanceIntegration.database_name}"
 
-    connection_params = [
-        "-U #{ACCOUNT_CONFIG['db_username']}",
-        "-h #{INSTANCE_CONFIG['host']}",
-        "-p #{INSTANCE_CONFIG['port']}"
-    ].join(" ")
-
-    Tempfile.open("setup_gpdb") do |f|
-      f.write(sql)
-      f.flush
-
-      # silence stdout, remove hints and notices warnings from stderr
-      filter_stderr = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
-
-      system "PGPASSWORD=#{ACCOUNT_CONFIG['db_password']} psql #{INSTANCE_CONFIG['maintenance_db']} #{connection_params} < #{f.path} #{filter_stderr}"
+    database_string = "jdbc:postgresql://#{INSTANCE_CONFIG['host']}:#{INSTANCE_CONFIG['port']}/#{database}?user=#{ACCOUNT_CONFIG['db_username']}&password=#{ACCOUNT_CONFIG['db_password']}"
+    Sequel.connect(database_string) do |database_connection|
+      database_connection.run(sql)
     end
+    return true
+  rescue Exception => e
+    puts e.message
+    return false
   end
 
   def self.exec_sql_line(sql)
@@ -55,27 +50,45 @@ module InstanceIntegration
   end
 
   def self.setup_gpdb
-    execute_sql("setup_gpdb.sql")
-    record_sql_changes
-  end
-
-  def self.record_sql_changes
-    File.open(sql_file_hash_path, 'w') do |f|
-      f << sql_file_hash
+    if gpdb_changed?
+      puts "  Importing into #{InstanceIntegration.database_name}"
+      execute_sql("drop_and_create_gpdb_databases.sql")
+      execute_sql("create_test_schemas.sql", database_name)
+      execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
+      record_changes
     end
   end
 
-  def self.sql_changed?
-    return true unless File.exists?(sql_file_hash_path)
-    File.read(sql_file_hash_path) != sql_file_hash
+  def self.record_changes
+    results_hash = FILES_TO_TRACK_CHANGES_OF.inject({}) do |hash, file_name|
+      hash[file_name] = sql_file_hash(file_name)
+      hash
+    end
+    results_hash["GPDB_HOST"] = ENV['GPDB_HOST']
+    gpdb_versions_file.open('w') do |f|
+      YAML.dump(results_hash, f)
+    end
   end
 
-  def self.sql_file_hash_path
-    Rails.root + 'tmp/setup_gpdb_hash'
+  def self.gpdb_changed?
+    versions = gpdb_versions_hash
+    FILES_TO_TRACK_CHANGES_OF.any? do |file_name|
+      versions[file_name.to_s] != sql_file_hash(file_name)
+    end || versions["GPDB_HOST"] != ENV['GPDB_HOST']
   end
 
-  def self.sql_file_hash
-    Digest::MD5.hexdigest(File.read(Rails.root + 'spec/support/database_integration/setup_gpdb.sql'))
+  def self.gpdb_versions_hash
+    return {} unless gpdb_versions_file.exist?
+    YAML.load_file(gpdb_versions_file.to_s)
+  end
+
+  def self.gpdb_versions_file
+    Pathname.new(GPDB_VERSIONS_FILE + "_#{Rails.env}.yml")
+  end
+
+  def self.sql_file_hash(file_name)
+    full_path = File.expand_path("../#{file_name}",  __FILE__)
+    Digest::MD5.hexdigest(File.read(full_path))
   end
 
   def self.database_name
@@ -84,7 +97,7 @@ module InstanceIntegration
 
   def self.instance_config_for_gpdb(name)
     config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
-    config.reject { |k,v| k == "account"}
+    config.reject { |k, v| k == "account" }
   end
 
   def self.instance_config_for_hadoop(name = REAL_HADOOP_HOST)
@@ -97,9 +110,9 @@ module InstanceIntegration
   end
 
   def self.refresh_chorus
-    account = InstanceIntegration.real_gpdb_account
-
     InstanceIntegration.setup_gpdb
+
+    account = InstanceIntegration.real_gpdb_account
     GpdbDatabase.refresh(account)
 
     database = GpdbDatabase.find_by_name(InstanceIntegration.database_name)

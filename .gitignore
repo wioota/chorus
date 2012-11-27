@@ -76,3 +76,4 @@ GREENPLUM_IP
 
 # Ignore .vagrant
 .vagrant
+/chorus_appliance/*.tar.gz
