@@ -6,6 +6,10 @@ describe InOrderEventMigrator do
       Legacy.connection.select_all(sql).map{ |val| val[key.to_s] }
     end
 
+    def legacy_keys(ids, type)
+      ids.map { |id| {:legacy_id => id}.merge :legacy_type => type }
+    end
+
     it "inserts the event objects in created_at order" do
       #TODO: a large portion of this filtering should go away when we correctly migrate imports from chorus views story 38441081
       NOT_YET_IMPLEMENTED_EVENTS = %w(INSTANCE_DELETED WORKSPACE_ADD_TABLE)
@@ -41,9 +45,10 @@ describe InOrderEventMigrator do
       WHERE entity_type NOT IN ('comment', 'activitystream');
       SQL
 
-      all_events = comments + activities + import_events
+      all_events = legacy_keys(comments, 'edc_comment')
+      all_events += legacy_keys(activities + import_events, 'edc_activity_stream')
 
-      Events::Base.unscoped.pluck(:legacy_id).should =~ all_events
+      Events::Base.unscoped.map {|e| e.attributes.symbolize_keys.slice(:legacy_id, :legacy_type) }.should =~ all_events
 
       id_order = Events::Base.unscoped.order(:id).pluck(:id)
       created_order = Events::Base.unscoped.order("created_at, id").pluck(:id)

@@ -296,7 +296,7 @@ class ActivityMigrator < AbstractMigrator
 
       rows.each do |row|
         event = Events::HdfsPatternExtTableCreated.find(row['id'])
-        event.additional_data[:file_pattern] = row['object_id'].split('/').last
+        event.additional_data[:file_pattern] = File.basename(row['object_id'])
         event.save!
       end
     end

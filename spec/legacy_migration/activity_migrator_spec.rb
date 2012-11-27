@@ -152,7 +152,7 @@ describe ActivityMigrator do
       it_should_behave_like :an_hdfs_entry_event, 'WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE', Events::HdfsDirectoryExtTableCreated
       it_should_behave_like :an_hdfs_entry_event, 'WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE', Events::HdfsPatternExtTableCreated,
                             Proc.new { |event, row|
-                              event.file_pattern.should == row["hdfs_entry_id"].split('/').last
+                              event.file_pattern.should == File.basename(row["hdfs_entry_id"])
                             }
 
       it "copies FILE IMPORT CREATED events" do
