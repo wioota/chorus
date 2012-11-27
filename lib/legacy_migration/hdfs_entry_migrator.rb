@@ -15,31 +15,24 @@ class HdfsEntryMigrator < AbstractMigrator
 
       Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
 
-      Legacy.connection.exec_query(
-          %Q(
-          INSERT INTO hdfs_entries (
-              path,
-              hadoop_instance_id,
-              legacy_id,
-              created_at,
-              updated_at)
-            SELECT DISTINCT
-              path,
-              instance.id,
-              entity_id,
-              timestamp,
-              timestamp
-            FROM (SELECT *,
-                    normalize_key(object_id) AS entity_id,
-                    split_part(normalize_key(object_id), '|', 1) as hadoop_legacy_id,
-                    split_part(normalize_key(object_id), '|', 2) as path,
-                    now() as timestamp
-                  FROM edc_activity_stream_object) aso
-            LEFT JOIN hadoop_instances instance
-              ON hadoop_legacy_id = instance.legacy_id
-            WHERE entity_type = 'hdfs'
-              AND NOT entity_id IN (SELECT legacy_id FROM hdfs_entries))
-      )
+      rows = Legacy.connection.select_all(<<-SQL)
+          SELECT DISTINCT
+            normalize_key(object_id) AS entity_id
+          FROM edc_activity_stream_object
+          WHERE entity_type = 'hdfs'
+            AND NOT normalize_key(object_id) IN (SELECT legacy_id FROM hdfs_entries)
+      SQL
+
+      rows.each do |row|
+        (legacy_hadoop_instance_id, path) = row["entity_id"].split("|")
+        hadoop_instance = HadoopInstance.find_by_legacy_id!(legacy_hadoop_instance_id)
+
+        # use rails in order to split up path into several entries, including an entry with the basename of path
+        hadoop_instance.hdfs_entries.create({
+          :path => path,
+          :legacy_id => row["entity_id"]
+        }, :without_protection => true)
+      end
 
       Sunspot.session = Sunspot.session.original_session
     end

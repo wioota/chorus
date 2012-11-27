@@ -258,19 +258,19 @@ class ActivityMigrator < AbstractMigrator
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
-      INNER JOIN edc_activity_stream_object target_dataset_aso
+      LEFT JOIN edc_activity_stream_object target_dataset_aso
         ON streams.id = target_dataset_aso.activity_stream_id
         AND target_dataset_aso.entity_type = 'databaseObject'
-      INNER JOIN datasets as target_dataset
+      LEFT JOIN datasets as target_dataset
         ON normalize_key(target_dataset_aso.object_id) = target_dataset.legacy_id
-      INNER JOIN edc_activity_stream_object hdfs_entry_aso
+      LEFT JOIN edc_activity_stream_object hdfs_entry_aso
         ON streams.id = hdfs_entry_aso.activity_stream_id
         AND hdfs_entry_aso.entity_type ='hdfs'
-      INNER JOIN hdfs_entries as hdfs_entry
+      LEFT JOIN hdfs_entries as hdfs_entry
         ON normalize_key(hdfs_entry_aso.object_id) = hdfs_entry.legacy_id
-      INNER JOIN workspaces
+      LEFT JOIN workspaces
         ON workspaces.legacy_id = streams.workspace_id
-      INNER JOIN users
+      LEFT JOIN users
         ON users.username = streams.author
     WHERE streams.type = 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
     AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::HdfsFileExtTableCreated');
