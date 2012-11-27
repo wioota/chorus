@@ -78,7 +78,8 @@ Vagrant::Config.run do |config|
   #   chef.add_role "web"
   #
   #   # You may also specify custom JSON attributes:
-  #   chef.json = { :mysql_password => "foo" }
+     timezone = File.readlink("/etc/localtime")[/(?<=zoneinfo\/).*/]
+     chef.json = { :timezone => timezone }
    end
 
   # Enable provisioning with chef server, specifying the chef server URL,

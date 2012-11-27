@@ -10,6 +10,14 @@ execute "generate ssh key" do
            ssh-keyscan -t rsa localhost >> /home/vagrant/.ssh/known_hosts'
 end
 
+# Set timezone
+link "/etc/localtime" do
+  to "/usr/share/zoneinfo/#{node[:timezone]}"
+end
+clock = Chef::Util::FileEdit.new("/etc/sysconfig/clock")
+clock.search_file_replace_line(/^ZONE=.*$/, "ZONE=\"#{node[:timezone]}\"")
+clock.write_file
+
 ###################### Greenplum database provisioning
 
 execute "unpack_greenplum" do
