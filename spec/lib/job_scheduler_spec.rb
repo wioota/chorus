@@ -4,8 +4,8 @@ require 'job_scheduler'
 describe JobScheduler do
   let(:job_scheduler) { JobScheduler.new }
   describe "InstanceStatusChecker.check" do
-    it "runs every Chorus::Application.config.chorus['instance_poll_interval_minutes'] minutes" do
-      job_scheduler.job_named('InstanceStatusChecker.check').period.should == Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes
+    it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
+      job_scheduler.job_named('InstanceStatusChecker.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
     end
 
     it "enqueues the 'InstanceStatusChecker.check' job in QC" do
@@ -15,8 +15,8 @@ describe JobScheduler do
   end
 
   describe "CsvFile.delete_old_files!" do
-    it "runs every Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'] hours" do
-      job_scheduler.job_named('CsvFile.delete_old_files!').period.should == Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours
+    it "runs every ChorusConfig.instance['delete_unimported_csv_files_interval_hours'] hours" do
+      job_scheduler.job_named('CsvFile.delete_old_files!').period.should == ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours
     end
 
     it "enqueues the 'CsvFile.delete_old_files!' job in QC" do
@@ -26,8 +26,8 @@ describe JobScheduler do
   end
 
   describe "SolrIndexer.refresh_external_data" do
-    it "runs every Chorus::Application.config.chorus['reindex_search_data_interval_hours'] hours" do
-      job_scheduler.job_named('SolrIndexer.refresh_external_data').period.should == Chorus::Application.config.chorus['reindex_search_data_interval_hours'].hours
+    it "runs every ChorusConfig.instance['reindex_search_data_interval_hours'] hours" do
+      job_scheduler.job_named('SolrIndexer.refresh_external_data').period.should == ChorusConfig.instance['reindex_search_data_interval_hours'].hours
     end
 
     it "enqueues the 'SolrIndexer.refresh_external_data' job in QC" do

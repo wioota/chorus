@@ -87,11 +87,11 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def self.gpfdist_url
-    Chorus::Application.config.chorus['gpfdist.url']
+    ChorusConfig.instance['gpfdist.url']
   end
 
   def self.protocol
-    Chorus::Application.config.chorus['gpfdist.ssl.enabled'] ? 'gpfdists' : 'gpfdist'
+    ChorusConfig.instance['gpfdist.ssl.enabled'] ? 'gpfdists' : 'gpfdist'
   end
 
   def self.write_protocol
@@ -131,15 +131,15 @@ class GpPipe < DelegateClass(GpTableCopier)
   private
 
   def gpfdist_data_dir
-    Chorus::Application.config.chorus['gpfdist.data_dir']
+    ChorusConfig.instance['gpfdist.data_dir']
   end
 
   def gpfdist_write_port
-    Chorus::Application.config.chorus['gpfdist.write_port']
+    ChorusConfig.instance['gpfdist.write_port']
   end
 
   def gpfdist_read_port
-    Chorus::Application.config.chorus['gpfdist.read_port']
+    ChorusConfig.instance['gpfdist.read_port']
   end
 
   def create_source_connection

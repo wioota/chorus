@@ -2,20 +2,12 @@ require 'spec_helper'
 
 describe AuroraProvider do
   describe ".create_from_aurora_service" do
-    before do
-      @previous_config = Chorus::Application.config.chorus
-    end
-
-    after do
-      Chorus::Application.config.chorus = @previous_config
-    end
-
     context "aurora is configured" do
       before do
         mock(Aurora::JavaModules::AuroraService).get_instance(anything) { Object.new }
 
         aurora_config = Properties.load_file(Rails.root.join('config', 'chorus.properties.example'))['aurora']
-        Chorus::Application.config.chorus = {'aurora' => aurora_config}
+        mock(ChorusConfig).instance {{'aurora' => aurora_config}}
       end
 
       it "returns a valid provider" do
@@ -26,7 +18,7 @@ describe AuroraProvider do
 
     context "aurora is not configured" do
       before do
-        Chorus::Application.config.chorus = {'aurora' => nil}
+        mock(ChorusConfig).instance { {'aurora' => nil} }
 
         # stub out exception because java library caches service returned from get_instance
         mock(Aurora::JavaModules::AuroraService).get_instance(anything) { raise StandardError }

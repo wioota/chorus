@@ -2,7 +2,7 @@ class ChorusWorker < QC::Worker
   SLEEP_INCREMENT = 2
 
   def thread_pool_size
-    Chorus::Application.config.chorus['worker_threads'].to_i
+    ChorusConfig.instance['worker_threads'].to_i
   end
 
   def handle_failure(job, e)

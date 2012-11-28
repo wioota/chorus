@@ -7,18 +7,18 @@ class ConfigurationsController < ApplicationController
   def show
     render :json => { :response => {
       :external_auth_enabled => LdapClient.enabled?,
-      :gpfdist_configured => Chorus::Application.config.chorus.gpfdist_configured?,
-      :tableau_configured => Chorus::Application.config.chorus.tableau_configured?,
-      :file_sizes_mb_workfiles => Chorus::Application.config.chorus['file_sizes_mb.workfiles'],
-      :file_sizes_mb_csv_imports => Chorus::Application.config.chorus['file_sizes_mb.csv_imports'],
-      :file_sizes_mb_user_icon => Chorus::Application.config.chorus['file_sizes_mb.user_icon'],
-      :file_sizes_mb_workspace_icon => Chorus::Application.config.chorus['file_sizes_mb.workspace_icon'],
-      :file_sizes_mb_attachment => Chorus::Application.config.chorus['file_sizes_mb.attachment'],
-      :provision_max_size_in_gb => Chorus::Application.config.chorus['provision_max_size_in_gb'],
-      :kaggle_configured => Chorus::Application.config.chorus.kaggle_configured?,
-      :gnip_configured => Chorus::Application.config.chorus.gnip_configured?,
-      :execution_timeout_in_minutes => Chorus::Application.config.chorus['execution_timeout_in_minutes'],
-      :default_preview_row_limit => Chorus::Application.config.chorus['default_preview_row_limit'] || 100
+      :gpfdist_configured => ChorusConfig.instance.gpfdist_configured?,
+      :tableau_configured => ChorusConfig.instance.tableau_configured?,
+      :file_sizes_mb_workfiles => ChorusConfig.instance['file_sizes_mb.workfiles'],
+      :file_sizes_mb_csv_imports => ChorusConfig.instance['file_sizes_mb.csv_imports'],
+      :file_sizes_mb_user_icon => ChorusConfig.instance['file_sizes_mb.user_icon'],
+      :file_sizes_mb_workspace_icon => ChorusConfig.instance['file_sizes_mb.workspace_icon'],
+      :file_sizes_mb_attachment => ChorusConfig.instance['file_sizes_mb.attachment'],
+      :provision_max_size_in_gb => ChorusConfig.instance['provision_max_size_in_gb'],
+      :kaggle_configured => ChorusConfig.instance.kaggle_configured?,
+      :gnip_configured => ChorusConfig.instance.gnip_configured?,
+      :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
+      :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100
     } }
   end
 

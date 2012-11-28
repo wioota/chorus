@@ -78,8 +78,8 @@ describe PreviewsController do
     let(:row_limit) { 200 }
 
     before do
-      stub.proxy(Chorus::Application.config.chorus).[](anything)
-      stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { row_limit }
+      stub.proxy(ChorusConfig.instance).[](anything)
+      stub(ChorusConfig.instance).[]('default_preview_row_limit') { row_limit }
     end
 
     it "returns the results of the sql" do

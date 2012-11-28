@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def force_extend_expiration
-    session[:expires_at] = Chorus::Application.config.chorus['session_timeout_minutes'].minutes.from_now
+    session[:expires_at] = ChorusConfig.instance['session_timeout_minutes'].minutes.from_now
   end
 
   def require_login

@@ -16,8 +16,8 @@ describe WorkfileExecutionsController do
     context "as a member of the workspace" do
       before do
         log_in workspace_member
-        stub.proxy(Chorus::Application.config.chorus).[](anything)
-        stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { default_row_limit }
+        stub.proxy(ChorusConfig.instance).[](anything)
+        stub(ChorusConfig.instance).[]('default_preview_row_limit') { default_row_limit }
       end
 
       it "executes the sql with the check_id and default row limit" do

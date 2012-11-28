@@ -39,7 +39,7 @@ describe CsvFile do
 
     it "does not validate the size of the CSV file if the file is not user uploaded" do
       any_instance_of(Paperclip::StringioAdapter) do |a|
-        stub(a).size { Chorus::Application.config.chorus['file_sizes_mb']['csv_imports'].megabytes + 1.megabyte }
+        stub(a).size { ChorusConfig.instance['file_sizes_mb']['csv_imports'].megabytes + 1.megabyte }
       end
       c = CsvFile.new(default_params.merge(:user_uploaded => false), :without_protection => true)
       c.valid?.should be_true
@@ -56,7 +56,7 @@ describe CsvFile do
 
     describe "validations" do
       context "validate file sizes" do
-        let(:max_csv_import_size) {Chorus::Application.config.chorus['file_sizes_mb']['csv_imports']}
+        let(:max_csv_import_size) {ChorusConfig.instance['file_sizes_mb']['csv_imports']}
 
         it { should validate_attachment_size(:contents).less_than(max_csv_import_size.megabytes) }
       end
@@ -64,7 +64,7 @@ describe CsvFile do
 
     context "when config variable is set" do
       before do
-        stub(Chorus::Application.config.chorus).[]('delete_unimported_csv_files_after_hours') { hour_limit }
+        stub(ChorusConfig.instance).[]('delete_unimported_csv_files_after_hours') { hour_limit }
       end
 
       it "removes files older than delete_unimported_csv_files_after_hours from the app config" do
@@ -82,7 +82,7 @@ describe CsvFile do
 
     context "when config variable is not set" do
       before do
-        stub(Chorus::Application.config.chorus).[]('delete_unimported_csv_files_after_hours') { nil }
+        stub(ChorusConfig.instance).[]('delete_unimported_csv_files_after_hours') { nil }
       end
 
       it "does not remove any files" do

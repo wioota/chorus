@@ -55,8 +55,8 @@ describe GpPipe, :database_integration => true do
   end
 
   before do
-    stub.proxy(Chorus::Application.config.chorus).[](anything)
-    stub(Chorus::Application.config.chorus).[](/^gpfdist\./) do |key|
+    stub.proxy(ChorusConfig.instance).[](anything)
+    stub(ChorusConfig.instance).[](/^gpfdist\./) do |key|
       case key.sub(/^gpfdist\./, '')
         when "data_dir"
           '/tmp'

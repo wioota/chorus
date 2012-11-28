@@ -99,7 +99,7 @@ describe User do
       @user = FactoryGirl.create :user #, :username => 'aDmin'
     end
 
-    let(:max_user_icon_size) {Chorus::Application.config.chorus['file_sizes_mb']['user_icon']}
+    let(:max_user_icon_size) {ChorusConfig.instance['file_sizes_mb']['user_icon']}
 
     it { should validate_presence_of :first_name }
     it { should validate_presence_of :last_name }

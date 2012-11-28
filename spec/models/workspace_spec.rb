@@ -22,7 +22,7 @@ describe Workspace do
 
   describe "validations" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
-    let(:max_workspace_icon_size) { Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon'] }
+    let(:max_workspace_icon_size) { ChorusConfig.instance['file_sizes_mb']['workspace_icon'] }
 
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }

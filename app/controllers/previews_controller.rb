@@ -32,6 +32,6 @@ class PreviewsController < GpdbController
 
   # TODO: DRY this out of this controller and the workfile executions controller [#39410527]
   def limit_rows
-    (Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
+    (ChorusConfig.instance['default_preview_row_limit'] || 500).to_i
   end
 end

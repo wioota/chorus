@@ -6,7 +6,7 @@ VCR.configure do |c|
   c.default_cassette_options = { :record => :new_episodes }
 
   c.filter_sensitive_data('<SUPPRESSED_KAGGLE_API_KEY>', :filter_kaggle_api_key) do |interaction|
-    Chorus::Application.config.chorus['kaggle']['api_key']
+    ChorusConfig.instance['kaggle']['api_key']
   end
 end
 

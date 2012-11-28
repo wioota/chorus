@@ -4,7 +4,7 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
     account = model.account_for_user(current_user)
     return results_hash(nil, nil) unless account
 
-    recommended_gb = Chorus::Application.config.chorus['sandbox_recommended_size_in_gb']
+    recommended_gb = ChorusConfig.instance['sandbox_recommended_size_in_gb']
     recommended_bytes = recommended_gb * 1024 * 1024 * 1024
 
     workspaces = []

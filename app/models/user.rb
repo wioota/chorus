@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   validates_length_of :password, :minimum => 6, :maximum => 256, :if => :password
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
-  validates_attachment_size :image, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
+  validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do

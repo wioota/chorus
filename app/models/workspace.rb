@@ -31,7 +31,7 @@ class Workspace < ActiveRecord::Base
   validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update
   validate :archiver_is_set_when_archiving
-  validates_attachment_size :image, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
+  validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
   before_update :clear_assigned_datasets_on_sandbox_assignment, :create_name_change_event
   before_save :update_has_added_sandbox

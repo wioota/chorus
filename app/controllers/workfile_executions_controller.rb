@@ -46,6 +46,6 @@ class WorkfileExecutionsController < ApplicationController
 
   # TODO: DRY this out of this controller and the previews controller [#39410527]
   def row_limit
-    (params[:num_of_rows] || Chorus::Application.config.chorus['default_preview_row_limit'] || 500).to_i
+    (params[:num_of_rows] || ChorusConfig.instance['default_preview_row_limit'] || 500).to_i
   end
 end

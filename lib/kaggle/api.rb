@@ -1,6 +1,9 @@
 require "net/https"
 require "uri"
 require 'json'
+require 'app/models/chorus_config'
+require 'app/models/kaggle/user'
+
 
 module Kaggle
   module API
@@ -26,7 +29,7 @@ module Kaggle
     end
 
     def self.enabled?
-      config = Chorus::Application.config.chorus
+      config = ChorusConfig.instance
       config['kaggle'] && (config['kaggle']['enabled'] == true)
     end
 
@@ -110,7 +113,7 @@ module Kaggle
     end
 
     def self.api_key
-      Chorus::Application.config.chorus['kaggle']['api_key']
+      ChorusConfig.instance['kaggle']['api_key']
     end
   end
 end

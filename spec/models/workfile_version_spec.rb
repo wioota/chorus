@@ -56,7 +56,7 @@ describe WorkfileVersion do
   end
 
   describe "validations" do
-    let(:max_file_size) {  Chorus::Application.config.chorus['file_sizes_mb']['workfiles'] }
+    let(:max_file_size) {  ChorusConfig.instance['file_sizes_mb']['workfiles'] }
     it { should validate_attachment_size(:contents).less_than(max_file_size.megabytes) }
 
     # Workaround for paperclip's lack of proper I18n in error messages

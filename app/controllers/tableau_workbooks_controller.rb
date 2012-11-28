@@ -64,8 +64,8 @@ class TableauWorkbooksController < ApplicationController
   def create_new_workbook(dataset, workbook_name, username, password)
     login_params = {
         :name => workbook_name,
-        :server => Chorus::Application.config.chorus['tableau.url'],
-        :port => Chorus::Application.config.chorus['tableau.port'],
+        :server => ChorusConfig.instance['tableau.url'],
+        :port => ChorusConfig.instance['tableau.port'],
         :tableau_username => username,
         :tableau_password => password,
         :db_username => dataset.gpdb_instance.account_for_user!(current_user).db_username,

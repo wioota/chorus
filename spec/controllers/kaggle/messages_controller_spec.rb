@@ -22,7 +22,7 @@ describe Kaggle::MessagesController, :kaggle_api => true do
           hash_including('replyTo' => 'chorusadmin@example.com',
                          'userId' => ['6732'],
                          'subject' => 'Example Subject',
-                         'apiKey' => Chorus::Application.config.chorus['kaggle.api_key']
+                         'apiKey' => ChorusConfig.instance['kaggle.api_key']
        ))
 
       post :create, params

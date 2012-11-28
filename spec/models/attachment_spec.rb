@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Attachment do
   describe "validations" do
 
-    let(:max_attachment_size) { Chorus::Application.config.chorus['file_sizes_mb']['attachment'] }
+    let(:max_attachment_size) { ChorusConfig.instance['file_sizes_mb']['attachment'] }
     it { should belong_to :note }
     it { should validate_attachment_size(:contents).less_than(max_attachment_size.megabytes) }
   end

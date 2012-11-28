@@ -14,8 +14,8 @@ class TableauWorkbookPublication < ActiveRecord::Base
   end
 
   def base_url
-    base_url = Chorus::Application.config.chorus['tableau.url']
-    port = Chorus::Application.config.chorus['tableau.port']
+    base_url = ChorusConfig.instance['tableau.url']
+    port = ChorusConfig.instance['tableau.port']
     base_url += ":#{port}" if port && port != 80
     base_url
   end

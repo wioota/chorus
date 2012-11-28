@@ -53,8 +53,8 @@ describe SqlExecutor do
       context "with row limit" do
         let(:table) {database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
         before do
-          stub.proxy(Chorus::Application.config.chorus).[](anything)
-          stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { 2 }
+          stub.proxy(ChorusConfig.instance).[](anything)
+          stub(ChorusConfig.instance).[]('default_preview_row_limit') { 2 }
         end
 
         it "returns rows with limit defined" do
@@ -143,8 +143,8 @@ describe SqlExecutor do
 
     context "without live data" do
       it "limits the preview to 100 rows if no row limit mentioned in chorus properties file" do
-        stub.proxy(Chorus::Application.config.chorus).[](anything)
-        stub(Chorus::Application.config.chorus).[]('default_preview_row_limit') { nil }
+        stub.proxy(ChorusConfig.instance).[](anything)
+        stub(ChorusConfig.instance).[]('default_preview_row_limit') { nil }
         mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 500)
         SqlExecutor.preview_dataset(Dataset.first, Object.new, Object.new)
       end

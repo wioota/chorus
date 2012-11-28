@@ -29,7 +29,7 @@ class EncryptInstanceAccountPasswords < ActiveRecord::Migration
 
   def do_cipher(method, password)
     cipher = OpenSSL::Cipher::AES.new("128-CBC").send(method)
-    cipher.key = Chorus::Application.config.chorus['passphrase'] || 'secret0123456789'
+    cipher.key = ChorusConfig.instance['passphrase'] || 'secret0123456789'
     cipher.update(password) + cipher.final
   end
 end

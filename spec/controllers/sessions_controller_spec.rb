@@ -23,7 +23,7 @@ describe SessionsController do
       end
 
       it "sets session expiration" do
-        stub(Chorus::Application.config.chorus).[]('session_timeout_minutes') { 123 }
+        stub(ChorusConfig.instance).[]('session_timeout_minutes') { 123 }
         post :create, params
         response.should be_success
         session[:expires_at].should be_within(1.minute).of(123.minutes.from_now)

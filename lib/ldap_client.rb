@@ -42,6 +42,6 @@ module LdapClient
   end
 
   def config
-    Chorus::Application.config.chorus['ldap'] || {}
+    ChorusConfig.instance['ldap'] || {}
   end
 end

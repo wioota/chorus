@@ -5,15 +5,15 @@ class JobScheduler
   include Clockwork
 
   def initialize
-    every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'InstanceStatusChecker.check') do
+    every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'InstanceStatusChecker.check') do
       QC.enqueue_if_not_queued("InstanceStatusChecker.check")
     end
 
-    every(Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
+    every(ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
       QC.enqueue_if_not_queued("CsvFile.delete_old_files!")
     end
 
-    every(Chorus::Application.config.chorus['reindex_search_data_interval_hours'].hours, 'SolrIndexer.refresh_external_data') do
+    every(ChorusConfig.instance['reindex_search_data_interval_hours'].hours, 'SolrIndexer.refresh_external_data') do
       QC.enqueue_if_not_queued("SolrIndexer.refresh_external_data")
     end
 

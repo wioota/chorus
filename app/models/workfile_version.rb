@@ -14,7 +14,7 @@ class WorkfileVersion < ActiveRecord::Base
 
   after_validation :clean_content_errors
 
-  validates_attachment_size :contents, :less_than => Chorus::Application.config.chorus['file_sizes_mb']['workfiles'].megabytes, :message => :file_size_exceeded
+  validates_attachment_size :contents, :less_than => ChorusConfig.instance['file_sizes_mb']['workfiles'].megabytes, :message => :file_size_exceeded
 
   after_create do
     workfile.update_attributes!({:latest_workfile_version_id => id}, :without_protection => true)
