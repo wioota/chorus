@@ -126,7 +126,7 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("fetches only the chorus instances where the user has permissions", function() {
             expect(this.page.gpdbInstanceSet).toBeA(chorus.collections.GpdbInstanceSet);
-            expect(this.page.gpdbInstanceSet.attributes.hasCredentials).toBe(true);
+            expect(this.page.gpdbInstanceSet.attributes.accessible).toBe(true);
             expect(this.page.gpdbInstanceSet).toHaveBeenFetched();
         });
 

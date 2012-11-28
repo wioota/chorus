@@ -14,7 +14,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetchAll();
 
-        this.gpdbInstanceSet = new chorus.collections.GpdbInstanceSet([], { hasCredentials: true });
+        this.gpdbInstanceSet = new chorus.collections.GpdbInstanceSet([], { accessible: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
