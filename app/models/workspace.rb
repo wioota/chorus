@@ -117,6 +117,8 @@ class Workspace < ActiveRecord::Base
         when "SOURCE_TABLE" then
           associated_dataset_ids = associated_datasets.pluck(:dataset_id)
           datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids).where("type != 'ChorusView'")
+        when "NON_CHORUS_VIEW" then
+          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids))
         else
           datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids + chorus_view_ids))
       end
@@ -126,7 +128,6 @@ class Workspace < ActiveRecord::Base
 
     if database_id
       datasets = datasets.joins(:schema).where(:gpdb_schemas => { :database_id => database_id })
-      datasets = datasets.where("type != ?", "ChorusView")
     end
 
     return datasets

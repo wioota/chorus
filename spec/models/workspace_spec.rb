@@ -158,6 +158,7 @@ describe Workspace do
             workspace.datasets(user, { :type => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
             workspace.datasets(user, { :type => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
             workspace.datasets(user, { :type => "SOURCE_TABLE" }).to_a.should =~ [source_table]
+            workspace.datasets(user, { :type => "NON_CHORUS_VIEW" }).to_a.should =~ [sandbox_table, sandbox_view, source_table]
           end
         end
 
@@ -185,11 +186,8 @@ describe Workspace do
         end
 
         it "filters the datasets to specified database" do
-          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
-        end
-
-        it "does not show chorus views" do
-          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should_not include(chorus_view)
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should include(dataset1)
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should include(chorus_view)
         end
       end
     end

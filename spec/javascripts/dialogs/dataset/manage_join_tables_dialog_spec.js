@@ -194,6 +194,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                         it("fetches the datasets in the schema's database, associated with the workspace", function () {
                             var database = this.chorusView.schema().database();
                             var datasetsInDatabase = this.chorusView.workspace().datasetsInDatabase(database);
+                            datasetsInDatabase.attributes.type = "NON_CHORUS_VIEW";
                             expect(datasetsInDatabase).toHaveBeenFetched();
                         });
 

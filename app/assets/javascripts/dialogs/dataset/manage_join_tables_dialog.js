@@ -43,6 +43,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     joinableDatasetsSelected: function() {
         var workspace = this.pageModel.workspace();
         var datasets = workspace.datasetsInDatabase(this.pageModel.schema().database());
+        datasets.attributes.type = "NON_CHORUS_VIEW";
         this.fetchDatasets(datasets);
         this.displaySchemaName(t("dataset.manage_join_tables.this_workspace"));
     },
