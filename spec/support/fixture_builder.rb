@@ -382,6 +382,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
     note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
     fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
+    fbuilder.name :note_on_no_collaborators_public, Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_public_workspace, :body => 'some stuff')
 
     #Comments
     comment_on_note_on_greenplum = Comment.create!({:body => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})

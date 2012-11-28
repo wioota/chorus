@@ -203,6 +203,16 @@ describe EventsController do
       response.code.should == "404"
     end
 
+    context "when the workspace is public" do
+      let(:event) { events(:note_on_no_collaborators_public) }
+
+      it "should show the event" do
+        log_in users(:owner)
+        get :show, :id => event.to_param
+        response.code.should == "200"
+      end
+    end
+
     FIXTURE_FILES = {
         "greenplumInstanceCreated" => Events::GreenplumInstanceCreated,
         "gnipInstanceCreated" => Events::GnipInstanceCreated,
