@@ -35,7 +35,7 @@ Chorus::Application.configure do
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-  local_chorus_config = ChorusConfig.new
+  local_chorus_config = ChorusConfig.instance
 
   # See everything in the log (default is :info)
   config.log_level = local_chorus_config.log_level

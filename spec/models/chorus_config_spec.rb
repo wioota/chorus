@@ -5,7 +5,7 @@ RAILS_ROOT_DIR = Pathname.new(File.expand_path("../../..", __FILE__))
 describe ChorusConfig do
   include FakeFS::SpecHelpers
 
-  let(:config) { ChorusConfig.new }
+  let(:config) { ChorusConfig.new RAILS_ROOT_DIR }
   before do
     FileUtils.mkdir_p(RAILS_ROOT_DIR.join('config').to_s)
     File.open(RAILS_ROOT_DIR.join('config/chorus.properties').to_s, 'w') do |file|

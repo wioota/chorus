@@ -84,8 +84,8 @@ class ChorusConfig
     end
   end
 
-  def self.instance(root_dir=nil)
-    @instance ||= ChorusConfig.new root_dir
+  def self.instance
+    @instance ||= ChorusConfig.new
   end
 
   private
