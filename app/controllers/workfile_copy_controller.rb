@@ -2,7 +2,7 @@ class WorkfileCopyController < ApplicationController
 
   def create
     workfile = Workfile.find(params[:workfile_id])
-    authorize! :can_edit_sub_objects, workfile.workspace
+    authorize! :show, workfile
 
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace

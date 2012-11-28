@@ -30,7 +30,17 @@ describe WorkfileCopyController do
       File.read(workfile_version1.contents.path).should == File.read(copied_workfile.latest_workfile_version.contents.path)
     end
 
-    it "should not copy if user is not a member of source workspace" do
+    it "succeeds for a public source workspace" do
+      another_user = users(:no_collaborators)
+      log_in another_user
+      lambda {
+        post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
+      }.should change(target_workspace.workfiles, :count).by(1)
+      response.status.should == 201
+    end
+
+    it "fails for a private source workspace" do
+      workfile = workfiles(:private)
       another_user = users(:no_collaborators)
       log_in another_user
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
