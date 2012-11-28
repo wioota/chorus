@@ -270,6 +270,10 @@ describe("chorus.utilities.CsvParser", function() {
             expect(normalizer("file^$name*&22_+33")).toBe("filename22_33")
         });
 
+        it("converts uppercase to lowercase", function() {
+            expect(normalizer("ABC")).toBe("abc");
+        });
+
         it("trims the white spaces", function() {
             expect(normalizer(" file^$name* &22_+33 ")).toBe("filename_22_33")
         });
