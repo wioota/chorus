@@ -135,7 +135,6 @@ describe GpPipe, :database_integration => true do
         any_instance_of(GpPipe) do |pipe|
           stub(pipe).reader_loop { }
         end
-        stub_pipe_method(:reader_loop) {  }
         destination_table_exists?.should be_false
         expect { run_import }.to raise_error(GpTableCopier::ImportFailed)
         destination_table_exists?.should be_false
