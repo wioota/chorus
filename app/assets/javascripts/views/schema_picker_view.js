@@ -276,7 +276,7 @@
             _.each(this.sortModels(models), function(model) {
                 var option = $("<option/>")
                     .prop("value", model.get("id"))
-                    .text(model.get("name"));
+                    .text(Handlebars.Utils.escapeExpression(model.get("name")));
                 select.append(option);
             });
 

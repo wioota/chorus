@@ -115,7 +115,7 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the instance list fetch completes", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.instances, [
-                            rspecFixtures.gpdbInstance({ shared: true, id: 1 }),
+                            rspecFixtures.gpdbInstance({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
                             rspecFixtures.gpdbInstance({ shared: true, id: 2 }),
                             rspecFixtures.gpdbInstance({ shared: false, id: 3 })
                         ]);
@@ -707,7 +707,8 @@ describe("chorus.views.SchemaPicker", function() {
 
         function itPopulatesSelect(type) {
             it("populates the select for for " + type + "s", function() {
-                expect(this.view.$("." + type + " select option:eq(1)").text()).toBe(this.view[type + "s"].models[0].get('name'));
+                var escapedName = Handlebars.Utils.escapeExpression(this.view[type + "s"].models[0].get('name'));
+                expect(this.view.$("." + type + " select option:eq(1)").text()).toBe(escapedName);
             });
         }
 
