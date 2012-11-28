@@ -4,6 +4,7 @@ require 'timeout'
 class GpPipe < DelegateClass(GpTableCopier)
   def run
     source_count = get_count(src_conn, source_table_path)
+    @initial_destination_count = destination_count
     count = [source_count, (row_limit || source_count)].min
 
     pipe_file = File.join(gpfdist_data_dir, pipe_name)
@@ -52,7 +53,7 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def reader_loop(count)
-    while destination_count < count
+    while (destination_count - @initial_destination_count) < count
       dst_conn << "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{read_pipe_name});"
     end
   end

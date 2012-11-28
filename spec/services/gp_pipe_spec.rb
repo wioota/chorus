@@ -157,10 +157,10 @@ describe GpPipe, :database_integration => true do
 
       it "does not truncate the data when truncate is false" do
         extra_options.merge!(:truncate => false)
-        execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
-        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
+        execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61), (22, 'kitkat-2', 42, 62);")
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
         run_import
-        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 3
+        get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 4
       end
 
       it "does not drop the table when the import does not complete" do
