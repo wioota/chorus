@@ -13,12 +13,6 @@ class DataMigrator
     AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
-    # Note attachments
-    # Note comments
-
-    # Chorus Views
-    # Imports
-
     ActivityMigrator.validate
     AssociatedDatasetMigrator.validate
     DatabaseObjectMigrator.validate
