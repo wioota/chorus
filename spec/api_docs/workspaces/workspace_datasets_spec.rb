@@ -14,6 +14,8 @@ resource "Workspaces" do
 
   get "/workspaces/:workspace_id/datasets" do
     parameter :workspace_id, "Id of a workspace"
+    parameter :type, "Specific type of datasets (SANDBOX_TABLE, SANDBOX_DATASET, CHORUS_VIEW, SOURCE_TABLE, NON_CHORUS_VIEW)"
+    parameter :database_id, "Id of a database (Results will be scoped to this database)"
 
     required_parameters :workspace_id
     pagination
