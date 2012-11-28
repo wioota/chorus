@@ -31,11 +31,15 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     fetchResourceAfterSchemaSelected: function() {
         if (this.schema.get("id") == "workspaceSchema") {
-            this.collection = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: chorus.page.workspace.id, unsorted: true })
+            this.collection = new chorus.collections.WorkspaceDatasetSet([], {
+                workspaceId: chorus.page.workspace.id,
+                unsorted: true
+            })
             this.collection.sortAsc("objectName");
 
             if (this.focusSchema) {
-                this.collection.attributes.databaseName = this.focusSchema.database().name()
+                this.collection.attributes.database = this.focusSchema.database();
+                this.collection.attributes.databaseName = this.focusSchema.database().name();
             }
 
             this.collection.fetch();

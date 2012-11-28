@@ -224,11 +224,7 @@ describe Workspace do
         end
 
         it "filters for given database" do
-          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1]
-        end
-
-        it "does not show chorus views" do
-          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should_not include(chorus_view)
+          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1, chorus_view]
         end
       end
     end

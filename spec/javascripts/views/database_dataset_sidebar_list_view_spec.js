@@ -123,12 +123,11 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
                 });
 
                 it("fetches all the datasets in the workspace, scoped to the database of the focus schema", function () {
-                    var datasetSet = new chorus.collections.WorkspaceDatasetSet([], { workspaceId:chorus.page.workspace.get("id") });
+                    var datasetSet = new chorus.collections.WorkspaceDatasetSet([], {
+                        workspaceId:chorus.page.workspace.get("id"),
+                        database: this.view.focusSchema.database()
+                    });
                     datasetSet.sortAsc("objectName");
-                    datasetSet.urlParams = {
-                        databaseId: this.view.focusSchema.database().get('id')
-                    };
-
                     datasetSet.fetch();
 
                     expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
