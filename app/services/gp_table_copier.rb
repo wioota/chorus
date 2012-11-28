@@ -35,12 +35,12 @@ class GpTableCopier
 
     copier.run
   rescue Exception => e
-    dst_conn << "DROP TABLE IF EXISTS #{destination_table_fullname}" if table_created?
+    destination_connection << "DROP TABLE IF EXISTS #{destination_table_fullname}" if table_created?
     raise ImportFailed, e.message
   end
 
-  def src_conn
-    @raw_src_conn ||= use_gp_pipe? ? create_source_connection : dst_conn
+  def source_connection
+    @raw_source_connection ||= use_gp_pipe? ? create_source_connection : destination_connection
   end
 
   def create_source_connection
@@ -52,14 +52,14 @@ class GpTableCopier
     Sequel.connect(destination_database_url, logger_options)
   end
 
-  def dst_conn
-    @raw_dst_conn ||= create_destination_connection
+  def destination_connection
+    @raw_destination_connection ||= create_destination_connection
   end
 
   def distribution_key_clause
     return 'DISTRIBUTED RANDOMLY' if chorus_view?
     @distribution_key_clause ||= begin
-      rows = src_conn.fetch(distribution_key_sql)
+      rows = source_connection.fetch(distribution_key_sql)
       rows.empty? ? 'DISTRIBUTED RANDOMLY' : "DISTRIBUTED BY(#{quote_and_join(rows)})"
     end
   end
@@ -84,24 +84,24 @@ class GpTableCopier
 
   def initialize_table
     if chorus_view?
-      src_conn << attributes[:from_table][:query]
+      source_connection << attributes[:from_table][:query]
     end
 
     if !table_exists?
       create_command = "CREATE TABLE #{destination_table_fullname} (%s) #{distribution_key_clause};"
-      dst_conn << create_command % [table_definition_with_keys]
+      destination_connection << create_command % [table_definition_with_keys]
       @table_created = true
     elsif truncate?
       truncate_command = "TRUNCATE TABLE #{destination_table_fullname};"
-      dst_conn << truncate_command
+      destination_connection << truncate_command
     end
   end
 
   def run
-    dst_conn.transaction do
+    destination_connection.transaction do
       record_internal_exception do
         copy_command = "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{source_table_path} #{limit_clause});"
-        dst_conn.execute(copy_command)
+        destination_connection.execute(copy_command)
       end
     end
 
@@ -110,7 +110,7 @@ class GpTableCopier
   end
 
   def table_exists?
-    dst_conn.table_exists?(destination_table)
+    destination_connection.table_exists?(destination_table)
   end
 
   def row_limit
@@ -164,7 +164,7 @@ class GpTableCopier
   def table_definition
     @table_definition || begin
       # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-      rows = src_conn.fetch(describe_table)
+      rows = source_connection.fetch(describe_table)
       rows.map { |col_def| "\"#{col_def[:column_name]}\" #{col_def[:data_type]}" }.join(", ")
     end
   end
@@ -174,7 +174,7 @@ class GpTableCopier
       if chorus_view?
         primary_key_rows = []
       else
-        primary_key_rows = src_conn.fetch(primary_key_sql)
+        primary_key_rows = source_connection.fetch(primary_key_sql)
       end
       primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
       table_definition + primary_key_clause

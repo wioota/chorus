@@ -3,16 +3,16 @@ require 'timeout'
 
 class GpPipe < DelegateClass(GpTableCopier)
   def run
-    source_count = get_count(src_conn, source_table_path)
+    source_count = get_count(source_connection, source_table_path)
     @initial_destination_count = destination_count
     count = [source_count, (row_limit || source_count)].min
 
     pipe_file = File.join(gpfdist_data_dir, pipe_name)
     if count > 0
       system "mkfifo #{pipe_file}"
-      src_conn << "CREATE WRITABLE EXTERNAL TEMPORARY TABLE #{write_pipe_name} (#{table_definition})
+      source_connection << "CREATE WRITABLE EXTERNAL TEMPORARY TABLE #{write_pipe_name} (#{table_definition})
                              LOCATION ('#{GpPipe.write_protocol}://#{GpPipe.gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}') FORMAT 'TEXT'"
-      dst_conn << "CREATE EXTERNAL TEMPORARY TABLE #{read_pipe_name} (#{table_definition})
+      destination_connection << "CREATE EXTERNAL TEMPORARY TABLE #{read_pipe_name} (#{table_definition})
                            LOCATION ('#{GpPipe.read_protocol}://#{GpPipe.gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}') FORMAT 'TEXT'"
 
       semaphore = java.util.concurrent.Semaphore.new(0)
@@ -26,7 +26,7 @@ class GpPipe < DelegateClass(GpTableCopier)
                           semaphore.release
                         end }
       t2 = Thread.new { begin
-                          src_conn << writer_sql
+                          source_connection << writer_sql
                         ensure
                           writer_finished = true
                           semaphore.release
@@ -54,7 +54,7 @@ class GpPipe < DelegateClass(GpTableCopier)
 
   def reader_loop(count)
     while (destination_count - @initial_destination_count) < count
-      dst_conn << "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{read_pipe_name});"
+      destination_connection << "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{read_pipe_name});"
     end
   end
 
@@ -109,6 +109,6 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def destination_count
-    get_count(dst_conn, destination_table_fullname)
+    get_count(destination_connection, destination_table_fullname)
   end
 end
