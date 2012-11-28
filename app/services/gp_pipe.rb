@@ -2,23 +2,9 @@ require 'fileutils'
 require 'timeout'
 
 class GpPipe < DelegateClass(GpTableCopier)
-  class ImportFailed < StandardError; end
-
   def run
-    if chorus_view?
-      src_conn << attributes[:from_table][:query]
-    end
-
     source_count = get_count(src_conn, source_table_path)
     count = [source_count, (row_limit || source_count)].min
-
-    create_new_table = false
-    if !table_exists?
-      dst_conn << "CREATE TABLE #{destination_table_fullname}(#{table_definition_with_keys}) #{distribution_key_clause}"
-      create_new_table = true
-    elsif truncate?
-      dst_conn << "TRUNCATE TABLE #{destination_table_fullname}"
-    end
 
     pipe_file = File.join(gpfdist_data_dir, pipe_name)
     if count > 0
@@ -60,10 +46,7 @@ class GpPipe < DelegateClass(GpTableCopier)
       t2.join
     end
   rescue Exception => e
-    if create_new_table
-      dst_conn << "DROP TABLE IF EXISTS #{destination_table_fullname}"
-    end
-    raise ImportFailed, e.message
+    raise GpTableCopier::ImportFailed, e.message
   ensure
     FileUtils.rm pipe_file if pipe_file && File.exists?(pipe_file)
   end
@@ -106,28 +89,6 @@ class GpPipe < DelegateClass(GpTableCopier)
     @pipe_name ||= "pipe_#{Process.pid}_#{Time.now.to_i}"
   end
 
-  def src_conn
-    @raw_src_conn ||= create_source_connection
-  end
-
-  def with_src_connection
-    conn = create_source_connection
-    yield conn
-  rescue Exception => e
-    raise e.inspect
-  end
-
-  def dst_conn
-    @raw_dst_conn ||= create_destination_connection
-  end
-
-  def with_dst_connection
-    conn = create_destination_connection
-    yield conn
-  rescue Exception => e
-    raise e.inspect
-  end
-
   private
 
   def gpfdist_data_dir
@@ -140,15 +101,6 @@ class GpPipe < DelegateClass(GpTableCopier)
 
   def gpfdist_read_port
     ChorusConfig.instance['gpfdist.read_port']
-  end
-
-  def create_source_connection
-    connection = Sequel.connect(source_database_url, :logger => Rails.logger)
-    connection << %Q{set search_path to "#{source_schema_name}";}
-  end
-
-  def create_destination_connection
-    Sequel.connect(destination_database_url)
   end
 
   def get_count(connection, table_fullname)

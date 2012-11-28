@@ -35,11 +35,6 @@ describe GpTableCopier, :database_integration => true do
   let(:copier) { GpTableCopier.new(gpdb_database_url, gpdb_database_url, attributes) }
   let(:start_import ) { copier.start }
 
-  #after do
-  #  db.rollback(savepoint_name)
-  #end
-
-
   describe "#start" do
     before do
       execute("drop table if exists \"#{source_table_name}\";")
@@ -116,6 +111,7 @@ describe GpTableCopier, :database_integration => true do
       it "runs GpPipe.run instead of it's own run" do
         any_instance_of(GpTableCopier) do |copier|
           stub(copier).run { raise "wrong copier!" }
+          stub(copier).initialize_table
         end
         any_instance_of(GpPipe) do |copier|
           stub(copier).run.with_any_args { throw :right_copier }
@@ -148,7 +144,6 @@ describe GpTableCopier, :database_integration => true do
         let(:add_rows) { false }
 
         before do
-          attributes.merge!(:new_table => false)
           execute("create table \"#{destination_table_name}\"(#{table_def}) DISTRIBUTED RANDOMLY;")
           Dataset.refresh(account, schema)
         end
@@ -287,6 +282,16 @@ describe GpTableCopier, :database_integration => true do
           copier.run
         }.to raise_error(GpTableCopier::ImportFailed, "some crazy error")
       end
+
+      context "when the import created a new table" do
+        it "deletes the newly created table" do
+          destination_table_exists?.should be_false
+          expect {
+            start_import
+          }.to raise_error(GpTableCopier::ImportFailed, "some crazy error")
+          destination_table_exists?.should be_false
+        end
+      end
     end
   end
 
@@ -356,6 +361,10 @@ describe GpTableCopier, :database_integration => true do
       FROM   gp_distribution_policy where localoid = '#{schema_name}.#{table_name}'::regclass
       ) y, pg_attribute WHERE attrelid = '#{schema_name}.#{table_name}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
     DISTRIBUTION_KEY_SQL
+  end
+
+  def destination_table_exists?
+    test_gpdb_database.table_exists?(Sequel.qualify(sandbox.name, destination_table_name))
   end
 end
 

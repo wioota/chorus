@@ -43,6 +43,11 @@ describe GpPipe, :database_integration => true do
   let(:gp_pipe) { GpPipe.new(gp_table_copier) }
   let(:sandbox) { schema }
 
+  def run_import
+    stub(gp_table_copier).use_gp_pipe? { true }
+    gp_table_copier.start
+  end
+
   def setup_data
     with_database_connection(source_database_url) do |connection|
       execute(connection, "delete from #{source_table_fullname};")
@@ -92,7 +97,7 @@ describe GpPipe, :database_integration => true do
       end
 
       it "creates a new pipe and runs it" do
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
 
@@ -100,34 +105,39 @@ describe GpPipe, :database_integration => true do
         let(:sandbox) { database.schemas.find_by_name('public') }
 
         it "runs" do
-          gp_pipe.run
+          run_import
           get_rows(destination_database_url, "SELECT * FROM public.dst_candy").length.should == 2
         end
       end
 
       it "should only have the first row when limiting rows to 1" do
         extra_options.merge!(:sample_count => 1)
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
       end
 
       it "doesn't hang gpfdist with a row limit of 0, by treating the source like an empty table" do
         extra_options.merge!(:sample_count => 0)
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 0
       end
 
       it "drops the newly created table when the write does not complete" do
-        stub(gp_pipe).writer_sql { "select pg_sleep(1)" }
+        any_instance_of(GpPipe) do |pipe|
+          stub(pipe).writer_sql { "select pg_sleep(1)" }
+        end
         destination_table_exists?.should be_false
-        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        expect { run_import }.to raise_error(GpTableCopier::ImportFailed)
         destination_table_exists?.should be_false
       end
 
       it "drops the newly created table when the read does not complete" do
-        stub(gp_pipe).reader_loop {  }
+        any_instance_of(GpPipe) do |pipe|
+          stub(pipe).reader_loop { }
+        end
+        stub_pipe_method(:reader_loop) {  }
         destination_table_exists?.should be_false
-        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        expect { run_import }.to raise_error(GpTableCopier::ImportFailed)
         destination_table_exists?.should be_false
       end
     end
@@ -142,7 +152,7 @@ describe GpPipe, :database_integration => true do
         extra_options.merge!(:truncate => true)
         execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
 
@@ -150,14 +160,16 @@ describe GpPipe, :database_integration => true do
         extra_options.merge!(:truncate => false)
         execute(source_database_url, "insert into #{destination_table_fullname}(id, name, id2, id3) values (21, 'kitkat-1', 41, 61);")
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 1
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 3
       end
 
       it "does not drop the table when the import does not complete" do
-        stub(gp_pipe).writer_sql { "select pg_sleep(1)" }
+        any_instance_of(GpPipe) do |pipe|
+          stub(pipe).writer_sql { "select pg_sleep(1)" }
+        end
         destination_table_exists?.should be_true
-        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        expect { run_import }.to raise_error(GpTableCopier::ImportFailed)
         destination_table_exists?.should be_true
       end
     end
@@ -174,7 +186,7 @@ describe GpPipe, :database_integration => true do
       end
 
       it "works like a normal dataset import" do
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
     end
@@ -186,7 +198,7 @@ describe GpPipe, :database_integration => true do
         setup_data
       end
       it "should move data from candy to dst_candy and have the correct primary key and distribution key" do
-        gp_pipe.run
+        run_import
 
         with_database_connection(destination_database_url) do |connection|
           get_rows(connection, "SELECT * FROM #{destination_table_fullname}").length.should == 2
@@ -227,7 +239,7 @@ describe GpPipe, :database_integration => true do
       it "does not hang" do
         setup_data
         stub(GpPipe).write_protocol { 'gpfdistinvalid' }
-        expect { gp_pipe.run }.to raise_error(GpPipe::ImportFailed)
+        expect { run_import }.to raise_error(GpTableCopier::ImportFailed)
       end
     end
 
@@ -237,7 +249,7 @@ describe GpPipe, :database_integration => true do
 
       it "single quotes table and schema names if they have weird chars" do
         setup_data
-        gp_pipe.run
+        run_import
         get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
       end
     end
@@ -255,7 +267,7 @@ describe GpPipe, :database_integration => true do
     end
 
     it "simply creates the dst table if the source table is empty (no gpfdist used)" do
-      gp_pipe.run
+      run_import
 
       get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 0
     end
