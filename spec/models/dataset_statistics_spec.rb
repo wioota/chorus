@@ -22,4 +22,8 @@ describe DatasetStatistics do
       statistics.partition_count.should == 2
     end
   end
+
+  it "doesn't crash when it is being initialized with nil" do
+    fail = DatasetStatistics.new(nil)
+  end
 end
