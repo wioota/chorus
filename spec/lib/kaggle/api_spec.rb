@@ -1,7 +1,8 @@
-require 'kaggle/api'
 require 'spec/support/kaggle_spec_helpers'
 require 'spec/support/rr'
 require 'fakefs/spec_helpers'
+require 'kaggle/api'
+require 'chorus_config'
 
 # We created these users to check emails.
 #username: bbanner
@@ -15,8 +16,12 @@ require 'fakefs/spec_helpers'
 describe Kaggle::API, :kaggle_API => true do
   include KaggleSpecHelpers
 
-  before :all do
-    api_key = ChorusConfig.instance['kaggle.api_key']
+  let(:config) { ChorusConfig.instance }
+  let(:enabled) { true }
+  let(:api_key) { config['kaggle.api_key'] }
+
+  before :each do
+    Kaggle::API.setup(enabled, api_key)
     VCR.configure do |c|
       c.filter_sensitive_data('<SUPPRESSED_KAGGLE_API_KEY>', :filter_kaggle_api_key_param) do |interaction|
         api_key
@@ -155,16 +160,16 @@ describe Kaggle::API, :kaggle_API => true do
 
   describe ".send_message" do
     let(:user_ids) { [63766,63767] }
-    let(:api_key) { ChorusConfig.instance['kaggle']['API_key'] }
-    let(:params) { {
+    let(:api_key) { ChorusConfig.instance['kaggle']['api_key'] }
+    let(:params) do {
         "subject" => "some subject",
         "replyTo" => "test@fun.com",
         "htmlBody" => "message body",
         "userId" => user_ids
-    } }
+    } end
 
     context "when kaggle is enabled" do
-      let(:api_key) { Chorus::Application.config.chorus['kaggle']['API_key'] }
+      let(:api_key) { ChorusConfig.instance['kaggle']['api_key'] }
 
       before do
         stub(Kaggle::API).enabled? { true }
@@ -214,22 +219,6 @@ describe Kaggle::API, :kaggle_API => true do
           described_class.send_message(params).should be_nil
         end
       end
-    end
-
-  end
-
-  describe ".enabled?" do
-    it "is true if enabled is set to true in the config file" do
-      ChorusConfig.instance['kaggle']['enabled'] = true
-      Kaggle::API.enabled?.should be_true
-    end
-
-    it "is false if enabled is set to anything else in the config file" do
-      ChorusConfig.instance['kaggle']['enabled'] = false
-      Kaggle::API.enabled?.should be_false
-
-      ChorusConfig.instance['kaggle']['enabled'] = "HELLO"
-      Kaggle::API.enabled?.should be_false
     end
   end
 end
