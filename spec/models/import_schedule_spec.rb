@@ -64,39 +64,62 @@ describe ImportSchedule, :database_integration => true do
       end
     end
 
-    context "when new_table is true" do
-      before do
-        import_schedule.new_table = true
+    def it_validates_that_table_does status
+      if status == :exist
+        mock(import_schedule).table_does_exist
+        dont_allow(import_schedule).table_does_not_exist
+      end
+
+      if status == :not_exist
+        mock(import_schedule).table_does_not_exist
         dont_allow(import_schedule).table_does_exist
       end
 
+      import_schedule.valid?
+    end
+
+    def it_does_not_validate_table
+      dont_allow(import_schedule).table_does_exist
+      dont_allow(import_schedule).table_does_not_exist
+
+      import_schedule.valid?
+    end
+
+    context "when new_table is true" do
+      before do
+        import_schedule.new_table = true
+        import_schedule.save(:validate => false)
+      end
+
       it "validates table_does_not_exist if the to_table has changed" do
-        mock(import_schedule).table_does_not_exist
         import_schedule.to_table = 'something_new'
-        import_schedule.valid?
+        it_validates_that_table_does :not_exist
       end
 
       it "does not validate table_does_not_exist if the to_table has not changed" do
         dont_allow(import_schedule).table_does_not_exist
-        import_schedule.valid?
+        it_does_not_validate_table
       end
     end
 
     context "when new_table is false" do
       before do
         import_schedule.new_table = false
-        dont_allow(import_schedule).table_does_not_exist
+        import_schedule.save(:validate => false)
       end
 
       it "validates table_does_exist if the to_table has changed" do
-        mock(import_schedule).table_does_exist
         import_schedule.to_table = 'something_new'
-        import_schedule.valid?
+        it_validates_that_table_does :exist
       end
 
       it "does not validate table_does_exist if the to_table has not changed" do
-        dont_allow(import_schedule).table_does_exist
-        import_schedule.valid?
+        it_does_not_validate_table
+      end
+
+      it "validates table_does_not_exist when new_table is changed to true" do
+        import_schedule.new_table = true
+        it_validates_that_table_does :not_exist
       end
     end
   end
