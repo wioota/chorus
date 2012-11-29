@@ -117,7 +117,7 @@ describe Workspace do
     end
   end
 
-  describe "#datasets" do
+  describe "#datasets and #dataset_count" do
     let!(:schema) { FactoryGirl.create(:gpdb_schema) }
     let!(:other_schema) { FactoryGirl.create(:gpdb_schema) }
     let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, :schema => schema) }
@@ -138,6 +138,7 @@ describe Workspace do
       context "when the user does not have an instance account" do
         it "lets them see associated datasets and chorus views only" do
           workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
+          workspace.dataset_count(user).should == 3
         end
       end
 
@@ -146,30 +147,53 @@ describe Workspace do
 
         context "when the sandbox has tables" do
           before do
-            stub(Dataset).refresh(account, schema) { [sandbox_table, sandbox_view] }
+            stub(Dataset).refresh(account, schema, anything) { [sandbox_table, sandbox_view] }
+            stub(Dataset).total_entries(account, schema, anything) { 142 }
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
             workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
+            workspace.dataset_count(user).should == 1 + 2 + 142
           end
 
           it "filters by type" do
-            workspace.datasets(user, { :type => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
             workspace.datasets(user, { :type => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
+            workspace.dataset_count(user, { :type => "SANDBOX_DATASET" }).should == 142
             workspace.datasets(user, { :type => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
+            workspace.dataset_count(user, { :type => "CHORUS_VIEW" }).should == 2
             workspace.datasets(user, { :type => "SOURCE_TABLE" }).to_a.should =~ [source_table]
             workspace.datasets(user, { :type => "NON_CHORUS_VIEW" }).to_a.should =~ [sandbox_table, sandbox_view, source_table]
+            workspace.dataset_count(user, { :type => "SOURCE_TABLE" }).should == 1
+          end
+
+          describe "filtering by sandbox table" do
+            before do
+              options ={:type => "SANDBOX_TABLE",
+                        :filter => [{:relkind => "r"}] }
+              mock(Dataset).refresh(account, schema, options) {
+                [sandbox_table]
+              }
+              mock(Dataset).total_entries(account, schema, options) { 141 }
+
+            end
+
+            it "filters out views" do
+              workspace.datasets(user, { :type => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
+              workspace.dataset_count(user, { :type => "SANDBOX_TABLE" }).should == 141
+            end
           end
         end
 
         context "when there are no datasets for this workspace" do
           before do
-            stub(Dataset).refresh(account, schema) { [] }
+            stub(Dataset).refresh(account, schema, anything) { [] }
+            stub(Dataset).total_entries(account, schema, anything) { 0 }
           end
 
           it "returns no results" do
             workspace.datasets(user, { :type => "SANDBOX_TABLE" }).should =~ []
             workspace.datasets(user, { :type => "SANDBOX_DATASET" }).should =~ []
+            workspace.dataset_count(user, { :type => "SANDBOX_DATASET" }).should == 0
           end
         end
       end

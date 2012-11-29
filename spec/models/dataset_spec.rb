@@ -146,6 +146,20 @@ describe Dataset do
     end
   end
 
+  context ".total_entries" do
+    before do
+      stub_gpdb(account, dataset_count_sql => [3])
+    end
+
+    let(:dataset_count_sql) {
+      "select count(tables_and_views.*) from (#{Dataset::Query.new(schema).tables_and_views_in_schema({}).to_sql}) tables_and_views;"
+    }
+
+    it "returns the number of total entries" do
+      Dataset.total_entries(account, schema).should == 3
+    end
+  end
+
   context ".refresh" do
     context "refresh once, without mark_stale flag" do
       before do
@@ -169,6 +183,14 @@ describe Dataset do
       it "returns the list of datasets" do
         datasets = Dataset.refresh(account, schema)
         datasets.map(&:name).should match_array(['table', 'new_table', 'new_view'])
+      end
+
+      context "when a limit and sort are passed to refresh" do
+        let(:sort) { [{"lower(relname)" => "asc"}] }
+        let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema({:sort => sort, :limit => 2}).to_sql }
+        it "generates sql with limit and sort" do
+          Dataset.refresh(account, schema, { :limit => 2, :sort => sort })
+        end
       end
 
       context "when trying to create a duplicate record" do
@@ -497,9 +519,17 @@ describe Dataset::Query, :database_integration => true do
 
     context "with sort options" do
       let(:options) { {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]} }
-      it "returns a query whose result with proper filtering" do
+      it "returns a query whose result with proper sort" do
         names = rows.map { |row| row["name"] }
         names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1"]
+      end
+    end
+
+    context "with limit options" do
+      let(:options) { {:limit => 2} }
+      it "returns a query whose result with limit" do
+        names = rows.map { |row| row["name"] }
+        names.should == ["base_table1", "view1"]
       end
     end
   end

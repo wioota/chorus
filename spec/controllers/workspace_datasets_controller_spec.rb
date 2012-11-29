@@ -20,6 +20,7 @@ describe WorkspaceDatasetsController do
       find(workspace.to_param) { workspace }
 
     stub(workspace).datasets { the_datasets }
+    stub(workspace).dataset_count { 42 }
     any_instance_of(GpdbTable) do |table|
       stub(table).accessible_to(user) { true }
     end
@@ -45,14 +46,14 @@ describe WorkspaceDatasetsController do
 
     it "orders and paginates the datasets" do
       mock(the_datasets).order("lower(datasets.name)") { the_datasets }
-      mock(the_datasets).paginate("page" => "2", "per_page" => "25") { the_datasets }
+      mock(the_datasets).paginate("page" => "2", "per_page" => "25", "total_entries" => 42) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
     end
 
     it "passes the workspace to the presenter" do
       mock_present { |collection, _, options| options[:workspace].should be_true }
       get :index, :workspace_id => workspace.to_param
-      end
+    end
 
     it "filter the list by the name_pattern value" do
       get :index, :workspace_id => workspace.to_param, :name_pattern => "view"
@@ -62,13 +63,22 @@ describe WorkspaceDatasetsController do
     end
 
     it "filters db objects by type" do
-      mock(workspace).datasets(user, { :type => "SANDBOX_TABLE" }) { the_datasets }
+      options = { :type => "SANDBOX_TABLE", :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
+      mock(workspace).datasets(user, options) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
     end
 
     it "asks for datasets only from the selected database" do
-      mock(workspace).datasets(user, { :database_id => workspace.sandbox.database.to_param }) { the_datasets }
+      options = { :database_id => workspace.sandbox.database.to_param, :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
+      mock(workspace).datasets(user, options) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :database_id => workspace.sandbox.database.to_param
+    end
+
+    context "when requesting page 1" do
+      it "passes the limit parameter to workspace.datasets in the options hash and adds the sort option" do
+        mock(workspace).datasets(anything, { :limit => 5, :sort => [{"lower(relname)" => "asc"}] }) { the_datasets }
+        get :index, :workspace_id => workspace.to_param, :page => 1, :per_page => 5
+      end
     end
   end
 

@@ -92,45 +92,70 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def datasets(current_user, options = nil)
+  def scope_to_database(datasets, database_id = nil)
+    if database_id
+      datasets.joins(:schema).where(:gpdb_schemas => { :database_id => database_id })
+    else
+      datasets
+    end
+  end
+
+  def filtered_datasets(current_user, options = {})
     type = options[:type] if options
     database_id = options[:database_id] if options
 
-    if sandbox
-      account = sandbox.database.account_for_user(current_user)
+    scoped_bound_datasets = scope_to_database(bound_datasets, database_id)
+    scoped_chorus_views = scope_to_database(chorus_views, database_id)
 
-      if account
-        viewable_table_ids = Dataset.visible_to(account, sandbox).map(&:id)
-        datasets = Dataset.where(:id => viewable_table_ids)
+    datasets = []
+    case type
+      when "SANDBOX_TABLE", "SANDBOX_DATASET" then
+      when "CHORUS_VIEW" then
+        datasets << chorus_views
+      when "SOURCE_TABLE", "NON_CHORUS_VIEW" then
+        datasets << scoped_bound_datasets
       else
-        viewable_table_ids = []
-        datasets = Dataset.where(:id => [])
-      end
-
-      case type
-        when "SANDBOX_TABLE" then
-          datasets = datasets.tables
-        when "SANDBOX_DATASET" then
-          datasets = datasets.where(:schema_id => sandbox.id)
-        when "CHORUS_VIEW" then
-          datasets = chorus_views
-        when "SOURCE_TABLE" then
-          associated_dataset_ids = associated_datasets.pluck(:dataset_id)
-          datasets = Dataset.where("schema_id != ?", sandbox.id).where(:id => associated_dataset_ids).where("type != 'ChorusView'")
-        when "NON_CHORUS_VIEW" then
-          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids))
-        else
-          datasets = Dataset.where(:id => (bound_dataset_ids + viewable_table_ids + chorus_view_ids))
-      end
-    else
-      datasets = Dataset.where(:id => (bound_dataset_ids + chorus_view_ids))
+        datasets << scoped_bound_datasets << scoped_chorus_views
     end
 
-    if database_id
-      datasets = datasets.joins(:schema).where(:gpdb_schemas => { :database_id => database_id })
-    end
+    datasets
+  end
 
-    return datasets
+  def with_filtered_datasets(current_user, options = {})
+    type = options[:type]
+    database_id = options[:id]
+
+    extra_options = {}
+    extra_options.merge! :filter => [{:relkind => "r"}] if type == "SANDBOX_TABLE"
+
+    account = sandbox && sandbox.database.account_for_user(current_user)
+    skip_sandbox = !account ||
+        database_id && (database_id != sandbox.database_id) ||
+        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(type)
+
+    datasets = filtered_datasets(current_user, options)
+    yield datasets, options.merge(extra_options), account, skip_sandbox
+  end
+
+  def dataset_count(current_user, options = {})
+    unlimited_options = options.dup
+    unlimited_options.delete(:limit)
+    with_filtered_datasets(current_user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
+      count = datasets.map(&:count).reduce(0, :+)
+      count += Dataset.total_entries(account, sandbox, new_options) unless skip_sandbox
+      count
+    end
+  end
+
+  def datasets(current_user, options = {})
+    with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
+      datasets << Dataset.visible_to(account, sandbox, new_options) unless skip_sandbox
+      if datasets.count == 1 && !datasets.first.is_a?(Array) # return intact relations for optimization
+        datasets.first
+      else
+        Dataset.where(:id => datasets.flatten)
+      end
+    end
   end
 
   def self.workspaces_for(user)
