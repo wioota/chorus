@@ -91,7 +91,7 @@ class AttachmentMigrator < AbstractMigrator
 
         attachment.contents = fake_file
         attachment.legacy_id = attachment_legacy_id
-        attachment.save!
+        attachment.save(:validate => false)
       end
     end
 
