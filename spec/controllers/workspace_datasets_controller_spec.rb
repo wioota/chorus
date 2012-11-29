@@ -63,21 +63,26 @@ describe WorkspaceDatasetsController do
     end
 
     it "filters db objects by type" do
-      options = { :type => "SANDBOX_TABLE", :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
+      options = { :type => "SANDBOX_TABLE", :database_id => nil, :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
       mock(workspace).datasets(user, options) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
     end
 
     it "asks for datasets only from the selected database" do
-      options = { :database_id => workspace.sandbox.database.to_param, :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
+      options = { :database_id => workspace.sandbox.database.to_param, :type => nil, :limit=>50, :sort =>[{"lower(relname)" => "asc"}] }
       mock(workspace).datasets(user, options) { the_datasets }
       get :index, :workspace_id => workspace.to_param, :database_id => workspace.sandbox.database.to_param
     end
 
-    context "when requesting page 1" do
+    describe "limiting datasets to load" do
       it "passes the limit parameter to workspace.datasets in the options hash and adds the sort option" do
-        mock(workspace).datasets(anything, { :limit => 5, :sort => [{"lower(relname)" => "asc"}] }) { the_datasets }
+        mock(workspace).datasets(anything, { :type => nil, :database_id => nil, :limit => 5, :sort => [{"lower(relname)" => "asc"}] }) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :page => 1, :per_page => 5
+      end
+
+      it "sets the limit option to page * per_page" do
+        mock(workspace).datasets(anything, { :type => nil, :database_id => nil, :limit => 20, :sort => [{"lower(relname)" => "asc"}] }) { the_datasets }
+        get :index, :workspace_id => workspace.to_param, :page => 4, :per_page => 5
       end
     end
   end
