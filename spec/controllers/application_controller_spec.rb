@@ -99,6 +99,15 @@ describe ApplicationController do
       decoded_errors.record.should == "INSTANCE_STILL_PROVISIONING"
     end
 
+    it "returns error 422 when a SunspotError occurs" do
+      stub(controller).index { raise SunspotError.new("sunspot error") }
+
+      get :index
+
+      response.code.should == "422"
+      decoded_errors.message.should == "sunspot error"
+    end
+
     describe "when an access denied error is raised" do
       let(:object_to_present) { gpdb_instances(:default) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }

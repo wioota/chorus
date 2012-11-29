@@ -26,10 +26,14 @@ class Search
     return @search if @search
     raise ApiValidationError.new(errors) unless valid?
 
-    build_search
+    begin
+      build_search
 
-    @search.execute
-    @search
+      @search.execute
+      @search
+    rescue => e
+      raise SunspotError.new(e.message)
+    end
   end
 
   def build_search

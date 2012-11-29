@@ -96,6 +96,14 @@ describe Search do
         search.search
         Sunspot.session.should have_search_params(:paginate, :page => 1, :per_page => 100)
       end
+
+      it "raises an error if solr does not work properly" do
+        search = Search.new(user, :query => 'bob', :per_type => 3, :page => 2, :per_page => 5)
+        stub(search).build_search {
+          raise SunspotError.new("error")
+        }
+        expect { search.search }.to raise_error(SunspotError)
+      end
     end
 
     context "when limiting the type of model searched" do
