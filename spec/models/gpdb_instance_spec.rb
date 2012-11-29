@@ -292,7 +292,7 @@ describe GpdbInstance do
     context "with database integration", :database_integration => true do
       let(:account_with_access) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { account_with_access.gpdb_instance }
-      let(:database) { gpdb_instance.databases.find_by_name(InstanceIntegration.database_name) }
+      let(:database) { InstanceIntegration.real_database }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
         mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
@@ -325,8 +325,16 @@ describe GpdbInstance do
       end
 
       it "creates new databases" do
+        gpdb_instance.databases.where(:name => 'something_new').should_not exist
         gpdb_instance.refresh_databases
         gpdb_instance.databases.where(:name => 'something_new').should exist
+      end
+
+      it "should not index databases that were just created" do
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything) do |method, id|
+          GpdbDatabase.find(id).name.should_not == 'something_new'
+        end
+        gpdb_instance.refresh_databases
       end
 
       it "removes database_instance_accounts if they no longer exist" do
