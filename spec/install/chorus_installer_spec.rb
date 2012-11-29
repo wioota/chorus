@@ -690,7 +690,10 @@ describe ChorusInstaller do
     context "when installing fresh" do
       it "creates the database structure" do
         installer.setup_database
-        @call_order.should == [:create_database, :start_postgres, :create_user, :rake_db_create, :rake_db_migrate, :rake_db_seed, :stop_postgres]
+        @call_order.should == [:create_database, :start_postgres, :rake_db_create, :rake_db_migrate, :rake_db_seed, :stop_postgres]
+        File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").should == true
+        stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
+        sprintf("%o", stats).should == "100400"
       end
     end
 
@@ -954,7 +957,6 @@ describe ChorusInstaller do
       end
       @call_order << :start_postgres if cmd =~ /chorus_control\.sh start postgres/
       @call_order << :stop_postgres if cmd =~ /chorus_control\.sh stop postgres/
-      @call_order << :create_user if cmd =~ /CREATE ROLE/
       @call_order << :create_database if cmd =~ /initdb/
     end
   end
