@@ -24,76 +24,56 @@ describe ChorusView do
       let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
       let(:workspace) { workspaces(:public)}
       let(:user) { users(:the_collaborator) }
-
+      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => query, :workspace => workspace) }
       before do
         set_current_user(user)
       end
 
+      let(:query) { "selecT 1;" }
+
       it "runs as current_user" do
-        chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;", :workspace => workspace}, :without_protection => true)
         mock(schema).with_gpdb_connection(gpdb_instance.account_for_user!(user), true)
         chorus_view.valid?
       end
 
       it "can be valid" do
-        chorus_view = ChorusView.new({:name => "query", :schema => schema, :query => "selecT 1;", :workspace => workspace}, :without_protection => true)
         chorus_view.should be_valid
-        chorus_view.query.should == "selecT 1;"
       end
 
-      it "should return only one result set" do
-        described_class.new(
-            {
-                :name => 'multiple result sets',
-                :schema => schema,
-                :query => "select 1; select 2;"
-            },
-            :without_protection => true).should_not be_valid
-      end
+      describe 'with multiple statements' do
+        let(:query) {  "select 1; create table nonexistent();" }
 
-      it 'does not execute the query' do
-        chorus_view = described_class.new(
-            {
-                :name => 'multiple result sets',
-                :schema => schema,
-                :query => "select 1; drop table if exists bad_chorus_view_table; create table bad_chorus_view_table();"
-            },
-            :without_protection => true)
-        chorus_view.validate_query
-        schema.with_gpdb_connection(account) do |conn|
-          expect {
-            conn.exec_query("select * from bad_chorus_view_table")
-          }.to raise_error(ActiveRecord::StatementInvalid)
+        it 'is invalid' do
+          chorus_view.should_not be_valid
+          chorus_view.errors[:query][0][0].should == :multiple_result_sets
+        end
+
+        it 'cleans up' do
+          chorus_view.validate_query
+          schema.with_gpdb_connection(account) do |conn|
+            expect {
+              conn.exec_query("select * from nonexistent")
+            }.to raise_error(ActiveRecord::StatementInvalid)
+          end
         end
       end
 
-      it "returns the cause" do
-        chorus_view = described_class.new(
-            {
-                :name => 'multiple result sets',
-                :schema => schema,
-                :query => "select potato"
-            },
-            :without_protection => true)
-        chorus_view.validate_query
-        chorus_view.errors[:query][0][1][:message].should_not =~ /postgres/
+      it 'is invalid if it references a nonexistent table' do
+        chorus_view = FactoryGirl.build(:chorus_view,
+                                        :workspace => workspace,
+                                        :schema => schema,
+                                        :query => "select * from a_non_existent_table_aaa;")
+        chorus_view.should_not be_valid
+        chorus_view.errors[:query][0][0].should == :generic
       end
 
-      it "should be invalid if it references a nonexistent table" do
-        described_class.new({:name => "invalid_query",
-                             :schema => schema,
-                             :query => "select * from nonexistent_table;"},
-                            :without_protection => true).should_not be_valid
-      end
-
-      it "should start with select or with" do
-        chorus_view = described_class.new({:name => "invalid_query",
+      it 'is invalid if it doesnt start with select or with' do
+        chorus_view = FactoryGirl.build(:chorus_view,
                                            :schema => schema,
-                                           :query => "create table query_not_starting_with_keyword_table();"},
-                                          :without_protection => true)
+                                           :workspace => workspace,
+                                           :query => "create table query_not_starting_with_keyword_table();")
         chorus_view.should_not be_valid
         chorus_view.errors[:query][0][0].should == :start_with_keywords
-
       end
     end
   end

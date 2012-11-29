@@ -63,7 +63,8 @@ describe Dataset do
 
     describe "default scope" do
       it "does not contain deleted datasets" do
-        deleted_chorus_view = FactoryGirl.create(:chorus_view, :deleted_at => Time.now, :workspace => workspaces(:public))
+        deleted_chorus_view = ChorusView.first
+        deleted_chorus_view.update_attribute :deleted_at, Time.now
         Dataset.all.should_not include(deleted_chorus_view)
       end
     end

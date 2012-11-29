@@ -82,10 +82,12 @@ describe DatasetStreamer, :database_integration => true do
 
     context "when dataset is a chorus view" do
       let(:chorus_view) do
-        FactoryGirl.create(:chorus_view,
+        cv = FactoryGirl.build(:chorus_view,
                            :schema => dataset.schema,
                            :query => "select * from #{dataset.name};",
                            :workspace => workspaces(:public))
+        cv.save(:validate => false)
+        cv
       end
       let(:streamer) { DatasetStreamer.new(chorus_view, user) }
 

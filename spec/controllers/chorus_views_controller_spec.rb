@@ -127,9 +127,8 @@ describe ChorusViewsController, :database_integration => true do
   end
 
   context "#duplicate" do
-    let(:chorus_view) do
-      FactoryGirl.create(:chorus_view, :schema => schema, :workspace => workspace, :query => "select 1;")
-    end
+    let(:chorus_view) { datasets(:executable_chorus_view) }
+
     let(:options) { { :id => chorus_view.id, :object_name => 'duplicate_chorus_view' } }
 
     it "duplicate the chorus view" do
@@ -140,7 +139,7 @@ describe ChorusViewsController, :database_integration => true do
       chorus_view.workspace.bound_datasets.should include(new_chorus_view)
 
       response.code.should == "201"
-      decoded_response[:query].should == "select 1;"
+      decoded_response[:query].should == chorus_view.query
       decoded_response[:schema][:id].should == schema.id
       decoded_response[:object_name].should == "duplicate_chorus_view"
       decoded_response[:workspace][:id].should == workspace.id

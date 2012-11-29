@@ -175,8 +175,10 @@ describe GpPipe, :database_integration => true do
 
     context "from a chorus view" do
       let(:cv) do
-        FactoryGirl.create :chorus_view, :name => "hello_view", :query => "select * from #{source_table}",
+        cv = FactoryGirl.build :chorus_view, :name => "hello_view", :query => "select * from #{source_table}",
                            :schema => schema, :workspace => workspaces(:public)
+        cv.save(:validate => false)
+        cv
       end
 
       before do

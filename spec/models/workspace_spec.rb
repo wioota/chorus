@@ -124,8 +124,16 @@ describe Workspace do
     let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, :schema => schema) }
     let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
     let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
-    let!(:chorus_view) { FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => schema, :query => "select * from a_table", :workspace => workspace) }
-    let!(:chorus_view_from_source) { FactoryGirl.create(:chorus_view, :name => "chorus_view_from_source", :schema => other_schema, :query => "select 1", :workspace => workspace) }
+    let!(:chorus_view) {
+      cv = FactoryGirl.build(:chorus_view, :name => "chorus_view", :schema => schema, :query => "select * from a_table", :workspace => workspace)
+      cv.save(:validate => false)
+      cv
+    }
+    let!(:chorus_view_from_source) {
+      cv = FactoryGirl.build(:chorus_view, :name => "chorus_view_from_source", :schema => other_schema, :query => "select 1", :workspace => workspace)
+      cv.save(:validate => false)
+      cv
+    }
     let(:user) { users(:the_collaborator) }
 
     context "when the workspace has a sandbox" do
@@ -219,8 +227,13 @@ describe Workspace do
     context "when the workspace does not have a sandbox" do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
       let!(:chorus_view) {
-        FactoryGirl.create(:chorus_view, :name => "chorus_view", :query => "select 1",
-                           :schema => schema, :workspace => workspace)
+        cv = FactoryGirl.build(:chorus_view,
+                           :name => "chorus_view",
+                           :query => "select 1",
+                           :schema => schema,
+                           :workspace => workspace)
+        cv.save(:validate => false)
+        cv
       }
 
       before do

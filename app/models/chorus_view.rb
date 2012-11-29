@@ -16,8 +16,8 @@ class ChorusView < Dataset
 
   include_shared_search_fields :workspace, :workspace
 
-  validate :validate_query
   validates_presence_of :workspace_id, :query, :schema_id
+  validate :validate_query, :if => :query
 
   alias_attribute :object_name, :name
 
@@ -32,7 +32,7 @@ class ChorusView < Dataset
   end
 
   def validate_query
-    return unless changes.include?(:query)
+    return unless changes.include?(:query) || new_record?
     unless query.upcase.start_with?("SELECT", "WITH")
       errors.add(:query, :start_with_keywords)
     end
@@ -42,12 +42,15 @@ class ChorusView < Dataset
       jdbc_conn = connection.raw_connection.connection
       s = jdbc_conn.prepareStatement(query)
       begin
-        flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
-        s.executeWithFlags(flag)
+        jdbc_conn.setAutoCommit(false)
+
+        s.set_max_rows(0)
+        s.execute
+
       rescue java::sql::SQLException => e
         errors.add(:query, :generic, {:message => "Cannot execute SQL query. #{e.cause}"})
       end
-      if s.getMoreResults
+      if s.more_results(s.class::KEEP_CURRENT_RESULT) || s.update_count != -1
         errors.add(:query, :multiple_result_sets)
       end
     end
