@@ -223,6 +223,14 @@ describe Events::Base do
         it "does not include" do
           subject.should_not include(workspace_activity.event)
         end
+
+        context "when the user is an admin" do
+          let(:user) { users(:admin) }
+
+          it "should include the event" do
+            subject.should include(workspace_activity.event)
+          end
+        end
       end
 
       context "user is a member" do

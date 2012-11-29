@@ -183,7 +183,6 @@ describe EventsController do
     end
   end
 
-
   describe "#show" do
     let(:event) { events(:note_on_no_collaborators_private) }
 
@@ -208,6 +207,14 @@ describe EventsController do
 
       it "should show the event" do
         log_in users(:owner)
+        get :show, :id => event.to_param
+        response.code.should == "200"
+      end
+    end
+
+    context "when the user is an admin and the workspace is private" do
+      it "should show the event" do
+        log_in users(:admin)
         get :show, :id => event.to_param
         response.code.should == "200"
       end
