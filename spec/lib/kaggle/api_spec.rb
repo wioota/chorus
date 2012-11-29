@@ -1,8 +1,5 @@
-require 'spec/support/kaggle_spec_helpers'
-require 'spec/support/rr'
+require 'spec_helper'
 require 'fakefs/spec_helpers'
-require 'kaggle/api'
-require 'chorus_config'
 
 # We created these users to check emails.
 #username: bbanner
@@ -16,12 +13,8 @@ require 'chorus_config'
 describe Kaggle::API, :kaggle_API => true do
   include KaggleSpecHelpers
 
-  let(:config) { ChorusConfig.instance }
-  let(:enabled) { true }
-  let(:api_key) { config['kaggle.api_key'] }
-
-  before :each do
-    Kaggle::API.setup(enabled, api_key)
+  before :all do
+    api_key = ChorusConfig.instance['kaggle']['api_key']
     VCR.configure do |c|
       c.filter_sensitive_data('<SUPPRESSED_KAGGLE_API_KEY>', :filter_kaggle_api_key_param) do |interaction|
         api_key
@@ -30,35 +23,37 @@ describe Kaggle::API, :kaggle_API => true do
   end
 
   describe ".users" do
-    let(:kaggle_api_url) {
-      "https://www.kaggle.com/connect/chorus-beta/directory?apiKey=#{ChorusConfig.instance['kaggle']['api_key']}"
-    }
+    context "when kaggle api is enabled" do
+      let(:kaggle_api_url) {
+        "https://www.kaggle.com/connect/chorus-beta/directory?apiKey=#{ChorusConfig.instance['kaggle']['api_key']}"
+      }
 
-    before do
-      stub(Kaggle::API).enabled? { true }
-      FakeWeb.register_uri(:get, kaggle_api_url,
-                           :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
-                           :status => ["200", "Success"])
-    end
-
-    it "returns a list of Kaggle::Users" do
-      users = Kaggle::API.users
-
-      users.count.should > 0
-      users.first.should be_a Kaggle::User
-      users.first['id'].should_not be_nil
-    end
-
-    context "when fetching the users fails" do
       before do
+        stub(Kaggle::API).enabled? { true }
         FakeWeb.register_uri(:get, kaggle_api_url,
-                             :status => ["401", "Unauthorized"])
+                             :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
+                             :status => ["200", "Success"])
       end
 
-      it "raises a NotReachable error" do
-        expect {
-          users = Kaggle::API.users
-        }.to raise_error Kaggle::API::NotReachable
+      it "returns a list of Kaggle::Users" do
+        users = Kaggle::API.users
+
+        users.count.should > 0
+        users.first.should be_a Kaggle::User
+        users.first['id'].should_not be_nil
+      end
+
+      context "when fetching the users fails" do
+        before do
+          FakeWeb.register_uri(:get, kaggle_api_url,
+                               :status => ["401", "Unauthorized"])
+        end
+
+        it "raises a NotReachable error" do
+          expect {
+            users = Kaggle::API.users
+          }.to raise_error Kaggle::API::NotReachable
+        end
       end
     end
 
@@ -87,6 +82,16 @@ describe Kaggle::API, :kaggle_API => true do
             users.count.should > 0
             users.first.should be_a Kaggle::User
             users.first['full_name'].should == JSON.parse(@kaggle_users)['users'].first['LegalName']
+        end
+      end
+
+      context "when the kaggleSearchResults.json does not exist" do
+        it "raises a NotReachable error" do
+          File.exist?(Rails.root.join('kaggleSearchResults.json')).should be_false
+
+          expect {
+            users = Kaggle::API.users
+          }.to raise_error Kaggle::API::NotReachable
         end
       end
     end
@@ -160,16 +165,15 @@ describe Kaggle::API, :kaggle_API => true do
 
   describe ".send_message" do
     let(:user_ids) { [63766,63767] }
-    let(:api_key) { ChorusConfig.instance['kaggle']['api_key'] }
-    let(:params) do {
+    let(:params) { {
         "subject" => "some subject",
         "replyTo" => "test@fun.com",
         "htmlBody" => "message body",
         "userId" => user_ids
-    } end
+    } }
 
     context "when kaggle is enabled" do
-      let(:api_key) { ChorusConfig.instance['kaggle']['api_key'] }
+      let(:api_key) { ChorusConfig.instance['kaggle']['API_key'] }
 
       before do
         stub(Kaggle::API).enabled? { true }
@@ -219,6 +223,25 @@ describe Kaggle::API, :kaggle_API => true do
           described_class.send_message(params).should be_nil
         end
       end
+    end
+  end
+
+  describe ".enabled?" do
+    it "is true if enabled is set to true in the config file" do
+      stub(ChorusConfig.instance).[]('kaggle') { { 'enabled' => true } }
+      #ChorusConfig.instance['kaggle']['enabled'] = true
+      Kaggle::API.enabled?.should be_true
+    end
+
+    it "is false" do
+      #ChorusConfig.instance['kaggle']['enabled'] = false
+      stub(ChorusConfig.instance).[]('kaggle') { { 'enabled' => false } }
+      Kaggle::API.enabled?.should be_false
+    end
+
+    it "is an invalid value" do
+      stub(ChorusConfig.instance).[]('kaggle') { { 'enabled' => "HELLO" } }
+      Kaggle::API.enabled?.should be_false
     end
   end
 end

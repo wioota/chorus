@@ -4,10 +4,10 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
   let(:gpdb_instance) { gpdb_instances(:owners) }
   let(:user) { gpdb_instance.owner }
   let(:presenter) { GpdbInstanceWorkspaceDetailPresenter.new(gpdb_instance, view, {}) }
+  let(:config_instance) { { 'kaggle.enabled' => true } }
 
   before do
-    #TODO: stub these
-    ChorusConfig.instance.config['sandbox_recommended_size_in_gb'] = 1
+    stub(ChorusConfig.instance).[]('sandbox_recommended_size_in_gb') { 1 }
     set_current_user(user)
   end
 

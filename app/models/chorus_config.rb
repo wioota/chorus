@@ -1,7 +1,6 @@
 require 'erb'
 require 'pathname'
 require_relative '../../lib/properties'
-require_relative '../../config/application'
 
 class ChorusConfig
   attr_accessor :config
@@ -52,7 +51,7 @@ class ChorusConfig
   end
 
   def self.config_file_path(root_dir=nil)
-    root_dir = Chorus::Application.config.root unless root_dir
+    root_dir = Rails.root unless root_dir
     File.join root_dir, 'config/chorus.properties'
   end
 
@@ -91,6 +90,6 @@ class ChorusConfig
   private
 
   def set_root_dir(root_dir)
-    @root_dir = root_dir || Chorus::Application.config.root
+    @root_dir = root_dir || Rails.root
   end
 end
