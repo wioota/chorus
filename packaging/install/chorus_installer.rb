@@ -83,6 +83,13 @@ class ChorusInstaller
     end
   end
 
+  def validate_path(path)
+    FileUtils.mkdir_p(path)
+    true
+  rescue
+    raise InstallerErrors::InstallAborted, "You do not have write permission to #{path}"
+  end
+
   def prompt_for_passphrase
     @io.prompt_or_default(:passphrase, "")
   end
@@ -324,7 +331,9 @@ class ChorusInstaller
     prompt_for_eula
     validate_localhost
     get_destination_path
+    validate_path(destination_path)
     get_data_path
+    validate_path(data_path)
     determine_postgres_installer
 
     log "Installing Chorus version #{version} to #{destination_path}"

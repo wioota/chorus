@@ -154,6 +154,33 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#validate_path" do
+    let(:path) { '/user/example/path' }
+    before do
+      FileUtils.mkdir_p(path)
+    end
+    context "when the user has write permissions" do
+      before do
+        mock(FileUtils).mkdir_p(path) { [ path ] }
+      end
+
+      it "returns true" do
+        installer.validate_path(path).should == true
+      end
+    end
+    context "when the user does not have write permissions" do
+      before do
+        mock(FileUtils).mkdir_p(path) { raise Errno::EACCES }
+      end
+
+      it "raises an exception" do
+        expect {
+          installer.validate_path(path)
+        }.to raise_error(InstallerErrors::InstallAborted)
+      end
+    end
+  end
+
   describe "#prompt_for_legacy_upgrade" do
     subject { installer.prompt_for_legacy_upgrade }
     before do
