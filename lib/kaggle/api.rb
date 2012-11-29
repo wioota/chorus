@@ -49,9 +49,7 @@ module Kaggle
         end
       end
 
-    rescue Exception => e
-      puts e.message
-      puts e.backtrace
+    rescue
       raise Kaggle::API::NotReachable.new("Unable to get the list of Kaggle Contributors")
     end
 
