@@ -234,9 +234,7 @@ describe Dataset do
 
       it "does not reindex unmodified datasets" do
         Dataset.refresh(account, schema)
-        any_instance_of(Dataset) do |dataset|
-          dont_allow(dataset).solr_index
-        end
+        dont_allow(Sunspot).index.with_any_args
         Dataset.refresh(account, schema)
       end
     end
@@ -294,6 +292,22 @@ describe Dataset do
         Dataset.refresh(account, schema)
 
         dataset.should_not be_stale
+      end
+    end
+
+    context "with force_index option set" do
+      before do
+        stub_gpdb(account, datasets_sql => [
+            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
+            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
+            {'type' => "r", "name" => "new_table", "master_table" => 't'}
+        ])
+      end
+
+      it "reindexes unmodified datasets" do
+        Dataset.refresh(account, schema)
+        mock(Sunspot).index(is_a(Dataset)).times(3)
+        Dataset.refresh(account, schema, :force_index => true)
       end
     end
   end

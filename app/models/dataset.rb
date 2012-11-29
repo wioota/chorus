@@ -104,7 +104,11 @@ class Dataset < ActiveRecord::Base
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
-        dataset.save! if dataset.changed?
+        if dataset.changed?
+          dataset.save!
+        elsif options[:force_index]
+          dataset.index
+        end
         found_datasets << dataset
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, MultipleResultsetQuery::QueryError
       end

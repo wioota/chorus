@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe SolrIndexer do
-  describe ".refresh" do
+  describe ".refresh_external_data" do
     it "refreshes all gpdb instances, all their databases, and all hadoop instances" do
       gpdb_instance_count = 0
       any_instance_of(GpdbInstance) do |instance|
-        stub(instance).refresh_all(:mark_stale => true) { gpdb_instance_count += 1 }
+        stub(instance).refresh_all(:mark_stale => true, :force_index => true) { gpdb_instance_count += 1 }
       end
 
       hadoop_instance_count = 0
@@ -62,7 +62,7 @@ describe SolrIndexer do
 
   describe ".refresh_and_reindex" do
     it "calls refresh, and passes the given models to reindex" do
-      mock(SolrIndexer).refresh_external_data
+      mock(SolrIndexer).refresh_external_data(false)
       mock(SolrIndexer).reindex("Model")
       SolrIndexer.refresh_and_reindex("Model")
     end

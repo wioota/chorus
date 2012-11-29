@@ -1,6 +1,6 @@
 module SolrIndexer
   def self.refresh_and_reindex(types)
-    self.refresh_external_data
+    self.refresh_external_data false
     self.reindex(types)
   end
 
@@ -11,10 +11,10 @@ module SolrIndexer
     Rails.logger.info("Solr Re-Index Completed")
   end
 
-  def self.refresh_external_data
+  def self.refresh_external_data(force_index = true)
     Rails.logger.info("Starting Solr Refresh")
     GpdbInstance.find_each do |gpdb_instance|
-      gpdb_instance.refresh_all(:mark_stale => true)
+      gpdb_instance.refresh_all(:mark_stale => true, :force_index => force_index)
     end
     HadoopInstance.find_each do |hadoop_instance|
       hadoop_instance.refresh
