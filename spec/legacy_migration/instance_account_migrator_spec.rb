@@ -39,6 +39,8 @@ describe InstanceAccountMigrator do
           account.db_password.should == InstanceAccountMigrator.decrypt_password(legacy['db_password'], legacy['secret_key'])
           account.owner.legacy_id.should == legacy["legacy_user_id"]
           account.gpdb_instance.legacy_id.should == legacy["legacy_instance_id"]
+          account.created_at.should == legacy["created_tx_stamp"]
+          account.updated_at.should == legacy["last_updated_tx_stamp"]
         end
       end
 

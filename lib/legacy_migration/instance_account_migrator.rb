@@ -19,13 +19,17 @@ class InstanceAccountMigrator < AbstractMigrator
                                 legacy_id,
                                 db_username,
                                 owner_id,
-                                gpdb_instance_id
+                                gpdb_instance_id,
+                                created_at,
+                                updated_at
                               )
                               SELECT
                                 map.id,
                                 db_user_name,
                                 u.id,
-                                i.id
+                                i.id,
+                                map.created_tx_stamp,
+                                map.last_updated_tx_stamp
                               FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name
@@ -40,7 +44,9 @@ class InstanceAccountMigrator < AbstractMigrator
           result = Legacy.connection.exec_query("SELECT db_password, secret_key
                                                  FROM edc_account_map
                                                  WHERE id = '#{instance_account.legacy_id}'").first
-          instance_account.update_attribute(:db_password, decrypt_password(result['db_password'], result['secret_key']))
+          silence_activerecord do
+            instance_account.update_attribute(:db_password, decrypt_password(result['db_password'], result['secret_key']))
+          end
         end
       end
     end
