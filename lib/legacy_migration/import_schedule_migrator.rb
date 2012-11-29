@@ -9,7 +9,7 @@ class ImportScheduleMigrator < AbstractMigrator
     end
 
     def classes_to_validate
-      [ImportSchedule]
+      []
     end
 
     def migrate

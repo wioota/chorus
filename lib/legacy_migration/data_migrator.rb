@@ -21,7 +21,6 @@ class DataMigrator
     InstanceAccountMigrator.validate
     GpdbInstanceMigrator.validate
     MembershipMigrator.validate
-    ImportScheduleMigrator.validate
     AttachmentMigrator.validate
     NoteMigrator.validate
     NotificationMigrator.validate
