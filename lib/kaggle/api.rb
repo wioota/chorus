@@ -1,9 +1,7 @@
 require "net/https"
 require "uri"
 require 'json'
-require 'app/models/chorus_config'
-require 'app/models/kaggle/user'
-
+require 'kaggle/user'
 
 module Kaggle
   module API
@@ -11,6 +9,13 @@ module Kaggle
     NotReachable = Class.new(StandardError)
 
     API_URL = "https://www.kaggle.com/connect/chorus-beta/"
+
+    #attr_accessor :enabled, :api_key
+
+    def self.setup(enabled=false, api_key)
+      @enabled = enabled
+      @api_key = api_key
+    end
 
     def self.send_message(params)
       return unless self.enabled?
@@ -28,12 +33,15 @@ module Kaggle
       self.fetch_users.select {|user| search_through_filter(user, options[:filters])}
     end
 
+    private
+
     def self.enabled?
-      config = ChorusConfig.instance
-      config['kaggle'] && (config['kaggle']['enabled'] == true)
+      @enabled
     end
 
-    private
+    def self.api_key
+      @api_key
+    end
 
     def self.fetch_users
       if self.enabled?
@@ -52,7 +60,7 @@ module Kaggle
         end
       end
 
-    rescue
+    rescue Exception => e
       raise Kaggle::API::NotReachable.new("Unable to get the list of Kaggle Contributors")
     end
 
@@ -110,10 +118,6 @@ module Kaggle
 
     def self.uri_for(endpoint)
       URI.parse(API_URL + endpoint + "?apiKey=#{self.api_key}")
-    end
-
-    def self.api_key
-      ChorusConfig.instance['kaggle']['api_key']
     end
   end
 end

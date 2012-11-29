@@ -6,6 +6,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
   let(:presenter) { GpdbInstanceWorkspaceDetailPresenter.new(gpdb_instance, view, {}) }
 
   before do
+    #TODO: stub these
     ChorusConfig.instance.config['sandbox_recommended_size_in_gb'] = 1
     set_current_user(user)
   end

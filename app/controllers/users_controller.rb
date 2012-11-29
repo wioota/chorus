@@ -1,3 +1,5 @@
+require 'models/user'
+
 class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :update, :destroy]
   before_filter :require_admin, :only => [:create, :destroy, :ldap]
