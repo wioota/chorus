@@ -11,6 +11,14 @@ resource "Workspaces: imports" do
   before do
     log_in user
     stub(File).readlines.with_any_args { ["The river was there."] }
+    any_instance_of(Import) do |import|
+      stub(import).table_does_not_exist
+      stub(import).tables_have_consistent_schema
+    end
+    any_instance_of(ImportSchedule) do |import_schedule|
+      stub(import_schedule).table_exists?
+      stub(import_schedule).tables_have_consistent_schema
+    end
   end
 
   post "/workspaces/:workspace_id/datasets/:dataset_id/imports" do
