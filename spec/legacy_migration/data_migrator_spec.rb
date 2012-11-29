@@ -21,7 +21,6 @@ describe DataMigrator do
       mock(InstanceAccountMigrator).validate
       mock(GpdbInstanceMigrator).validate
       mock(MembershipMigrator).validate
-      mock(ImportScheduleMigrator).validate
       mock(AttachmentMigrator).validate
       mock(NoteMigrator).validate
       mock(NotificationMigrator).validate
