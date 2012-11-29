@@ -29,6 +29,7 @@ describe Kaggle::API, :kaggle_API => true do
       }
 
       before do
+
         stub(Kaggle::API).enabled? { true }
         FakeWeb.register_uri(:get, kaggle_api_url,
                              :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
