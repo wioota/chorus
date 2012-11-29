@@ -866,6 +866,21 @@ describe ChorusInstaller do
     end
   end
 
+  describe '#migrate_legacy_config' do
+    before do
+      installer.legacy_installation_path = '/opt/old_chorus'
+      installer.destination_path = '/usr/local/greenplum-chorus'
+      stub(installer).version { '2.2.0.0' }
+    end
+
+    it 'executes the config migrator' do
+      mock(ConfigMigrator).migrate(
+          hash_including(:input_path => "#{installer.legacy_installation_path}/applications/edcbase/src/chorus.properties",
+                         :output_path => "#{installer.destination_path}/shared/chorus.properties"))
+      installer.migrate_legacy_config
+    end
+  end
+
   describe "#migrate_legacy_data" do
     subject { installer.migrate_legacy_data }
 

@@ -6,6 +6,7 @@ require 'base64'
 require 'openssl'
 require 'pathname'
 require_relative '../../lib/properties'
+require_relative '../../lib/legacy_migration/config_migrator'
 
 class ChorusInstaller
   attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :legacy_installation_path, :log_stack
@@ -314,6 +315,15 @@ class ChorusInstaller
     end
   end
 
+  def migrate_legacy_config
+    log "Migrating configuration from previous version..." do
+      ConfigMigrator.migrate(
+          :input_path => File.join(legacy_installation_path, 'applications', 'edcbase', 'src', 'chorus.properties'),
+          :output_path => File.join(destination_path, 'shared', 'chorus.properties')
+      )
+    end
+  end
+
   def migrate_legacy_data
     log "Migrating data from previous version..." do
       log "Loading legacy data into postgres..." do
@@ -371,10 +381,7 @@ class ChorusInstaller
     end
 
     if upgrade_legacy?
-      #log "Migrating settings from previous version..."
-      #migrate_legacy_settings
-      #log "Done"
-
+      migrate_legacy_config
       migrate_legacy_data
     end
 
