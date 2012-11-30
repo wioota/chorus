@@ -324,7 +324,7 @@ class ChorusInstaller
   def migrate_legacy_config
     log "Migrating configuration from previous version..." do
       ConfigMigrator.migrate(
-          :input_path => File.join(legacy_installation_path, 'applications', 'edcbase', 'src', 'chorus.properties'),
+          :input_path => File.join(legacy_installation_path, 'chorus-apps', 'applications', 'edcbase', 'config', 'chorus.properties'),
           :output_path => File.join(destination_path, 'shared', 'chorus.properties')
       )
     end

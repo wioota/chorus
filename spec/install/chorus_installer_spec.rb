@@ -920,7 +920,7 @@ describe ChorusInstaller do
 
     it 'executes the config migrator' do
       mock(ConfigMigrator).migrate(
-          hash_including(:input_path => "#{installer.legacy_installation_path}/applications/edcbase/src/chorus.properties",
+          hash_including(:input_path => "#{installer.legacy_installation_path}/chorus-apps/applications/edcbase/config/chorus.properties",
                          :output_path => "#{installer.destination_path}/shared/chorus.properties"))
       installer.migrate_legacy_config
     end
