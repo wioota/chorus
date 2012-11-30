@@ -56,9 +56,13 @@ PGPASSWORD=$bin/database.pgpass
 # The database must exist
 log "Ensuring that application database exists..."
 RAILS_ENV=$RAILS_ENV $RAKE db:create
+DATABASE_NAME=chorus_rails_$RAILS_ENV
+if [ $RAILS_ENV -eq production ]; then
+  DATABASE_NAME=chorus
+fi
 
 PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
-PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus chorus_rails_$RAILS_ENV -c 'drop schema if exists legacy_migrate cascade'
+PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME -c 'drop schema if exists legacy_migrate cascade'
 
 # Create a temporary database so we can namespace legacy tables into their own schema
 PGPASSWORD=$PGPASSWORD createdb -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate
@@ -66,7 +70,7 @@ PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_
 PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
 
 # Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
-PGPASSWORD=$PGPASSWORD pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | psql -p $POSTGRES_PORT -U postgres_chorus chorus_rails_$RAILS_ENV > /dev/null
+PGPASSWORD=$PGPASSWORD pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | psql -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME > /dev/null
 
 # running the migration
 

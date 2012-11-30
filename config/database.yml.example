@@ -45,7 +45,7 @@ integration:
   <<: *default
 
 production:
-  database: chorus_rails_production
+  database: chorus
   <<: *default
   username: pivotal
 
