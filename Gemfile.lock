@@ -1,14 +1,4 @@
 GIT
-  remote: git://github.com/GreenplumChorus/activerecord-jdbc-adapter.git
-  revision: c56a234d3ac7bbf8bf9ae046f60e8cc04fd62e99
-  branch: dynamic-schema-search-path
-  specs:
-    activerecord-jdbc-adapter (1.2.2.chorus)
-    activerecord-jdbcpostgresql-adapter (1.2.2.chorus)
-      activerecord-jdbc-adapter (~> 1.2.2.chorus)
-      jdbc-postgres (>= 9.0, < 9.2)
-
-GIT
   remote: git://github.com/GreenplumChorus/gnip.git
   revision: 9fee8a2f5ae4059c90ef151df0cd082bbe5fcf70
   specs:
@@ -126,6 +116,10 @@ GEM
       activesupport (= 3.2.9.rc2)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-jdbc-adapter (1.2.2.1)
+    activerecord-jdbcpostgresql-adapter (1.2.2.1)
+      activerecord-jdbc-adapter (~> 1.2.2.1)
+      jdbc-postgres (>= 9.0, < 9.2)
     activeresource (3.2.9.rc2)
       activemodel (= 3.2.9.rc2)
       activesupport (= 3.2.9.rc2)
@@ -210,7 +204,7 @@ GEM
       rspec (>= 1.3.1)
       selenium-webdriver (>= 0.1.3)
     jasmine-core (1.2.0)
-    jdbc-postgres (9.0.801)
+    jdbc-postgres (9.1.901)
     journey (1.0.4)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
@@ -231,7 +225,7 @@ GEM
     multi_json (1.3.7)
     mustache (0.99.4)
     net-ldap (0.3.1)
-    newrelic_rpm (3.5.0.1)
+    newrelic_rpm (3.5.2.17)
     nokogiri (1.5.5)
     nokogiri (1.5.5-java)
     open4 (1.3.0)
@@ -348,7 +342,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-jdbcpostgresql-adapter!
+  activerecord-jdbcpostgresql-adapter
   allowy
   attr_encrypted
   capybara
