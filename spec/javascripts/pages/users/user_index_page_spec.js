@@ -90,19 +90,33 @@ describe("chorus.pages.UserIndexPage", function() {
             it("has options for sorting", function() {
                 expect(this.page.$("ul[data-event=sort] li[data-type=firstName]")).toExist();
                 expect(this.page.$("ul[data-event=sort] li[data-type=lastName]")).toExist();
-            })
+            });
 
             it("can sort the list by first name ascending", function() {
                 this.page.$("li[data-type=firstName] a").click();
                 expect(this.page.collection.order).toBe("firstName")
                 expect(this.page.collection.fetch).toHaveBeenCalled();
-            })
+            });
 
             it("can sort the list by last name ascending", function() {
                 this.page.$("li[data-type=lastName] a").click();
                 expect(this.page.collection.order).toBe("lastName")
-            })
-        })
-    })
+            });
+        });
+    });
 
+    describe("setting the model on a page event", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.UserIndexPage();
+            this.page.render();
+
+            this.user = rspecFixtures.user({ firstName: "Super", lastName: "Man" });
+        });
+
+        it("sets the model to user on a user:selected event", function() {
+            expect(this.page.model).toBeUndefined();
+            chorus.PageEvents.broadcast("user:selected", this.user);
+            expect(this.page.model).toBe(this.user);
+        });
+    });
 });
