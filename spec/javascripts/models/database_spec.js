@@ -34,4 +34,8 @@ describe("chorus.models.Database", function() {
             expect(this.schemas).toBe(this.model.schemas());
         });
     });
+
+    it("includes InstanceCredentials mixin", function() {
+        expect(this.model.instanceRequiringCredentials).toBeTruthy();
+    });
 });

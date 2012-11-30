@@ -1,4 +1,6 @@
-chorus.models.Database = chorus.models.Base.extend({
+chorus.models.Database = chorus.models.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     constructorName: "Database",
     showUrlTemplate: "databases/{{id}}",
     urlTemplate: "databases/{{id}}",
