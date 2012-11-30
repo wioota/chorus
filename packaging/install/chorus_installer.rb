@@ -86,8 +86,13 @@ class ChorusInstaller
 
   def validate_path(path)
     FileUtils.mkdir_p(path)
+
+    unless File.writable?(path)
+      raise Errno::EACCES
+    end
+
     true
-  rescue
+  rescue Errno::EACCES
     raise InstallerErrors::InstallAborted, "You do not have write permission to #{path}"
   end
 

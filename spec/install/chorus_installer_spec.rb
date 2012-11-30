@@ -156,21 +156,32 @@ describe ChorusInstaller do
 
   describe "#validate_path" do
     let(:path) { '/user/example/path' }
-    before do
-      FileUtils.mkdir_p(path)
-    end
-    context "when the user has write permissions" do
-      before do
-        mock(FileUtils).mkdir_p(path) { [path] }
-      end
 
-      it "returns true" do
+    context "when the user has write permissions" do
+      it "creates the path and returns true" do
+        installer.validate_path(path).should == true
+        File.exist?(path).should == true
+
         installer.validate_path(path).should == true
       end
     end
-    context "when the user does not have write permissions" do
+
+    context "when the path does not exist the user does not have permission to create it" do
       before do
         mock(FileUtils).mkdir_p(path) { raise Errno::EACCES }
+      end
+
+      it "raises an exception" do
+        expect {
+          installer.validate_path(path)
+        }.to raise_error(InstallerErrors::InstallAborted)
+      end
+    end
+
+    context "when the path exists, but the user does not have write access" do
+      before do
+        FileUtils.mkdir_p(path)
+        stub(File).writable?(path) { false }
       end
 
       it "raises an exception" do
