@@ -74,6 +74,7 @@ class ChorusInstaller
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
     @logger.logfile = File.join(@destination_path, 'install.log')
+    validate_path(destination_path)
   end
 
   def get_data_path
@@ -81,6 +82,7 @@ class ChorusInstaller
       relative_path = @io.prompt_or_default(:data_path, DEFAULT_DATA_PATH)
       self.data_path = File.expand_path(relative_path)
       log "Data path = #{@data_path}"
+      validate_path(data_path)
     end
   end
 
@@ -352,9 +354,8 @@ class ChorusInstaller
     prompt_for_eula
     validate_localhost
     get_destination_path
-    validate_path(destination_path)
     get_data_path
-    validate_path(data_path)
+
     determine_postgres_installer
 
     log "Installing Chorus version #{version} to #{destination_path}"
