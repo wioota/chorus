@@ -206,7 +206,20 @@ class ChorusInstaller
     File.open("#{destination_path}/chorus_path.sh", 'w') do |file|
       file.puts "export CHORUS_HOME=#{destination_path}"
       file.puts "export PATH=$PATH:$CHORUS_HOME"
+      file.puts "export PGPASSFILE=$CHORUS_HOME/.pgpass"
     end
+  end
+
+  def generate_chorus_psql_files
+    File.open("#{destination_path}/.pgpass", 'w') do |file|
+      file.puts "*:*:chorus:#{database_user}:#{database_password}"
+    end
+    FileUtils.chmod(0400, "#{destination_path}/.pgpass")
+
+    File.open("#{destination_path}/chorus_psql.sh", 'w') do |file|
+      file.puts CHORUS_PSQL
+    end
+    FileUtils.chmod(0500, "#{destination_path}/chorus_psql.sh")
   end
 
   def link_services
@@ -389,6 +402,7 @@ class ChorusInstaller
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       link_services
       generate_paths_file
+      generate_chorus_psql_files
       setup_database
     end
 
@@ -501,6 +515,14 @@ class ChorusInstaller
   def chorus_control(args)
     chorus_exec "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh #{args}"
   end
+
+  CHORUS_PSQL = <<-CHORUS_PSQL
+    if [ "$CHORUS_HOME" = "" ]; then
+      echo "CHORUS_HOME is not set.  Exiting..."
+    else
+      $CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;
+    fi
+  CHORUS_PSQL
 
   EULA = <<-EULA
                    SOFTWARE LICENSE AND MAINTENANCE AGREEMENT

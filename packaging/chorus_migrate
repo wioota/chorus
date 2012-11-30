@@ -50,7 +50,7 @@ fi
 
 $bin/start-postgres.sh
 
-PGPASSWORD=$bin/database.pgpass
+PGPASSWORD=$CHORUS_HOME/.pgpass
 
 # importing legacy sql
 # The database must exist

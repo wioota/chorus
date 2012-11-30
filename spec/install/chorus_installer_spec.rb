@@ -8,6 +8,13 @@ end
 describe ChorusInstaller do
   include FakeFS::SpecHelpers
 
+  def create_test_database_yml
+    FileUtils.mkdir_p '/usr/local/greenplum-chorus/shared/'
+    File.open('/usr/local/greenplum-chorus/shared/database.yml', 'w') do |f|
+      f.puts({'production' => {'password' => 'something', 'username' => 'the_user'}}.to_yaml)
+    end
+  end
+
   let(:installer) { described_class.new(options) }
   let(:options) do
     {
@@ -609,6 +616,33 @@ describe ChorusInstaller do
       lines = File.read("/usr/local/greenplum-chorus/chorus_path.sh").lines.to_a
       lines[0].chomp.should == "export CHORUS_HOME=#{installer.destination_path}"
       lines[1].chomp.should == "export PATH=$PATH:$CHORUS_HOME"
+      lines[2].chomp.should == "export PGPASSFILE=$CHORUS_HOME/.pgpass"
+    end
+  end
+
+  describe "#generate_chorus_psql_file and .pgpass file" do
+    before do
+      installer.destination_path = "/usr/local/greenplum-chorus"
+
+      create_test_database_yml
+
+      FileUtils.mkdir_p installer.destination_path
+      installer.create_database_config
+      installer.generate_chorus_psql_files
+    end
+
+    it "generates a .pgpass file" do
+      lines = File.read("/usr/local/greenplum-chorus/.pgpass").lines.to_a
+      lines[0].strip.should =~ /\*:\*:chorus:the_user:[a-z0-9]{32}/
+      stats = File.stat("/usr/local/greenplum-chorus/.pgpass").mode
+      sprintf("%o", stats).should == "100400"
+    end
+
+    it "generates a file for connecting to psql with password" do
+      lines = File.read("/usr/local/greenplum-chorus/chorus_psql.sh").lines.to_a
+      lines[3].strip.should == "$CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;"
+      stats = File.stat("/usr/local/greenplum-chorus/chorus_psql.sh").mode
+      sprintf("%o", stats).should == "100500"
     end
   end
 
@@ -730,10 +764,7 @@ describe ChorusInstaller do
   describe "#create_database_config" do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
-      FileUtils.mkdir_p '/usr/local/greenplum-chorus/shared/'
-      File.open('/usr/local/greenplum-chorus/shared/database.yml', 'w') do |f|
-        f.puts({'production' => {'password' => 'something', 'username' => 'the_user'}}.to_yaml)
-      end
+      create_test_database_yml
     end
 
     it "writes a new random password to the database.yml" do
@@ -774,7 +805,6 @@ describe ChorusInstaller do
       it "creates the database structure" do
         installer.setup_database
         @call_order.should == [:create_database, :start_postgres, :rake_db_create, :rake_db_migrate, :rake_db_seed, :stop_postgres]
-        File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").should == true
         stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
         sprintf("%o", stats).should == "100400"
       end
