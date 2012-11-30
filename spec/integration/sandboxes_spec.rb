@@ -13,6 +13,7 @@ describe "Sandbox", :database_integration do
 
   it "creates sandbox in workspace" do
     visit("#/workspaces/#{workspace.id}")
+    wait_for_ajax
     click_link "Add a sandbox"
     wait_for_ajax
 
