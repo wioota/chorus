@@ -11,7 +11,7 @@ class ImportSchedule < ActiveRecord::Base
 
   before_save :set_next_import
 
-  scope :ready_to_run, lambda { where('next_import_at <= ?', Time.current.utc) }
+  scope :ready_to_run, lambda { where('next_import_at <= ?', Time.current) }
 
   validates :to_table, :presence => true
   validates :source_dataset, :presence => true

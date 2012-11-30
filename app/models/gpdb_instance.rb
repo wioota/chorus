@@ -94,7 +94,7 @@ class GpdbInstance < ActiveRecord::Base
   ensure
     if options[:mark_stale]
       (databases.not_stale - found_databases).each do |database|
-        database.stale_at = Time.now
+        database.stale_at = Time.current
         database.save
       end
     end

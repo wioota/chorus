@@ -61,7 +61,7 @@ class CsvImporter
     import_record.success = false
     raise ImportFailed.new(e.message)
   ensure
-    import_record.finished_at = Time.now
+    import_record.finished_at = Time.current
     import_record.save!(:validate => false)
   end
 

@@ -258,7 +258,7 @@ describe WorkspacesController do
           put :update, params.merge(:archived => "true")
           workspace.reload
 
-          workspace.archived_at.should be_within(1.minute).of(Time.now)
+          workspace.archived_at.should be_within(1.minute).of(Time.current)
           workspace.archiver.should == owner
         end
 

@@ -253,7 +253,7 @@ describe InsightsController do
         :workspace => public_workspace,
         :body => 'Come see my awesome workspace!',
         :insight => true,
-        :promotion_time => Time.now(),
+        :promotion_time => Time.current(),
         :promoted_by => user) }
 
     it "presents the insights" do
@@ -287,7 +287,7 @@ describe InsightsController do
 
       before do
         private_insight.insight = true
-        private_insight.promotion_time = Time.now
+        private_insight.promotion_time = Time.current
         private_insight.promoted_by = private_insight.actor
         private_insight.save!
       end
@@ -354,7 +354,7 @@ describe InsightsController do
         :workspace => private_workspace,
         :body => 'You cant see my private workspace!',
         :insight => true,
-        :promotion_time => Time.now(),
+        :promotion_time => Time.current(),
         :promoted_by => user) }
 
     let(:all_insights) { Events::Base.where(insight: true) }

@@ -322,7 +322,7 @@ FixtureBuilder.configure do |fbuilder|
 
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                   :import_schedule => import_schedule,
-                  :created_at => Time.now,
+                  :created_at => Time.current,
                   :source_dataset_id => default_table.id)
     fbuilder.name :three, import
 

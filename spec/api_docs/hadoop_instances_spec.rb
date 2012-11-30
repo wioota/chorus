@@ -3,8 +3,8 @@ require 'spec_helper'
 resource "Hadoop" do
   let(:owner) { instance.owner }
   let!(:instance) { hadoop_instances(:hadoop) }
-  let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.now.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
-  let!(:file_entry) { HdfsEntry.create!({:path => '/test.txt', :modified_at => Time.now.to_s, :size => "1234kB", :hadoop_instance => instance}, :without_protection => true ) }
+  let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.current.to_s, :is_directory => "true", :content_count => "3", :hadoop_instance => instance}, :without_protection => true) }
+  let!(:file_entry) { HdfsEntry.create!({:path => '/test.txt', :modified_at => Time.current.to_s, :size => "1234kB", :hadoop_instance => instance}, :without_protection => true ) }
   let(:hadoop_instance_id) { instance.to_param }
 
   before do

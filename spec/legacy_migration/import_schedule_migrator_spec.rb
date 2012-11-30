@@ -2,7 +2,7 @@ require 'legacy_migration_spec_helper'
 
 describe ImportScheduleMigrator do
   def dt(s)
-    DateTime.parse(s + " " + Time.now.zone.to_s).utc
+    DateTime.parse(s + " " + Time.current.zone.to_s).utc
   end
 
   def d(s)

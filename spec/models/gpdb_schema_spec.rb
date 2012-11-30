@@ -70,7 +70,7 @@ describe GpdbSchema do
       missing_schema = database.schemas.where("id <> #{schema.id}").first
       GpdbSchema.refresh(account, database, :mark_stale => true)
       missing_schema.reload.should be_stale
-      missing_schema.stale_at.should be_within(5.seconds).of(Time.now)
+      missing_schema.stale_at.should be_within(5.seconds).of(Time.current)
     end
 
     it "does not mark schema as stale if flag is not set" do
@@ -87,7 +87,7 @@ describe GpdbSchema do
     end
 
     it "clears stale flag on schema if it is found again" do
-      schema.update_attributes({:stale_at => Time.now}, :without_protection => true)
+      schema.update_attributes({:stale_at => Time.current}, :without_protection => true)
       GpdbSchema.refresh(account, database)
       schema.reload.should_not be_stale
     end
@@ -224,10 +224,10 @@ describe GpdbSchema do
     describe "before_save" do
       describe "#mark_datasets_as_stale" do
         it "if the schema has become stale, datasets will also be marked as stale" do
-          schema.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+          schema.update_attributes!({:stale_at => Time.current}, :without_protection => true)
           dataset = schema.datasets.views_tables.first
           dataset.should be_stale
-          dataset.stale_at.should be_within(5.seconds).of(Time.now)
+          dataset.stale_at.should be_within(5.seconds).of(Time.current)
         end
       end
     end

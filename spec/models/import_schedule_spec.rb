@@ -125,8 +125,8 @@ describe ImportSchedule, :database_integration => true do
   end
 
   describe "callbacks" do
-    let(:start_day) { Time.now + 2.days }
-    let(:next_year) { Time.now + 1.year }
+    let(:start_day) { Time.current + 2.days }
+    let(:next_year) { Time.current + 1.year }
 
     describe "before saving, automatically updating the next_import_at attribute" do
       context "when the start date is changed to be sooner in the future" do
@@ -167,15 +167,15 @@ describe ImportSchedule, :database_integration => true do
       active_schedule = FactoryGirl.create(:import_schedule,
                                            :workspace => workspace,
                                            :user => user,
-                                           :start_datetime => Time.now,
-                                           :end_date => Time.now + 1.year,
+                                           :start_datetime => Time.current,
+                                           :end_date => Time.current + 1.year,
                                            :frequency => 'monthly')
       deleted_schedule = FactoryGirl.create(:import_schedule,
                                             :workspace => workspace,
                                             :user => user,
-                                            :deleted_at => Time.now,
-                                            :start_datetime => Time.now,
-                                            :end_date => Time.now + 1.year,
+                                            :deleted_at => Time.current,
+                                            :start_datetime => Time.current,
+                                            :end_date => Time.current + 1.year,
                                             :frequency => 'monthly')
       ImportSchedule.all.should include(active_schedule)
       ImportSchedule.all.should_not include(deleted_schedule)
@@ -185,25 +185,25 @@ describe ImportSchedule, :database_integration => true do
   describe ".ready_to_run scope" do
     it "shows import schedules that should be run" do
       ready_schedule = FactoryGirl.create(:import_schedule, :workspace => workspace,
-                                          :start_datetime => Time.now + 1.minute,
+                                          :start_datetime => Time.current + 1.minute,
                                           :user => user,
-                                          :end_date => Time.now + 1.year,
+                                          :end_date => Time.current + 1.year,
                                           :frequency => 'monthly')
       deleted_schedule = FactoryGirl.create(:import_schedule,
                                             :workspace => workspace,
                                             :user => user,
-                                            :deleted_at => Time.now,
-                                            :start_datetime => Time.now + 1.minute,
-                                            :end_date => Time.now + 1.year,
+                                            :deleted_at => Time.current,
+                                            :start_datetime => Time.current + 1.minute,
+                                            :end_date => Time.current + 1.year,
                                             :frequency => 'monthly')
       not_ready_schedule = FactoryGirl.create(:import_schedule,
                                               :workspace => workspace,
-                                              :start_datetime => Time.now + 1.year,
+                                              :start_datetime => Time.current + 1.year,
                                               :user => user,
-                                              :end_date => Time.now + 1.year,
+                                              :end_date => Time.current + 1.year,
                                               :frequency => 'monthly')
 
-      Timecop.freeze(Time.now + 1.day) do
+      Timecop.freeze(Time.current + 1.day) do
         ImportSchedule.ready_to_run.should include(ready_schedule)
         ImportSchedule.ready_to_run.should_not include(deleted_schedule, not_ready_schedule)
       end

@@ -259,7 +259,7 @@ describe Events::Note do
 
       it { should be_insight }
       its(:promoted_by) { should == actor }
-      its(:promotion_time) { should be_within(1.minute).of(Time.now) }
+      its(:promotion_time) { should be_within(1.minute).of(Time.current) }
     end
   end
 
@@ -344,7 +344,7 @@ describe Events::Note do
 
     context "workspace is archived" do
       it "does not create a note on a workspace" do
-        workspace.archived_at = DateTime.now
+        workspace.archived_at = Time.current
         workspace.archiver = user
         workspace.save!
         expect {

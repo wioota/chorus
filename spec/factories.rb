@@ -273,8 +273,8 @@ FactoryGirl.define do
   end
 
   factory :import_schedule do
-    start_datetime Time.now
-    end_date Time.now + 1.year
+    start_datetime Time.current
+    end_date Time.current + 1.year
     frequency 'monthly'
     truncate false
     new_table true
@@ -286,7 +286,7 @@ FactoryGirl.define do
   end
 
   factory :import do
-    created_at Time.now
+    created_at Time.current
     association :workspace, :factory => :workspace
     association :source_dataset, :factory => :gpdb_table
     user
@@ -302,7 +302,7 @@ FactoryGirl.define do
   end
 
   factory :csv_import, :class => Import do
-    created_at Time.now
+    created_at Time.current
     association :workspace, :factory => :workspace
     association :destination_dataset, :factory => :gpdb_table
     user

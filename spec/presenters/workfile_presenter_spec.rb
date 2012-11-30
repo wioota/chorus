@@ -63,7 +63,7 @@ describe WorkfilePresenter, :type => :view do
           end
         }
         let(:new_workfile_version_event) {
-          Timecop.freeze Time.now + 1.day do
+          Timecop.freeze Time.current + 1.day do
             Events::WorkfileUpgradedVersion.by(user).add(:workfile => workfile, :commit_message => "new version", :workspace => workspace, :version_id => latest_workfile_version.id)
           end
         }
@@ -102,7 +102,7 @@ describe WorkfilePresenter, :type => :view do
 
     context "when there are notes on a workfile" do
       let(:recent_comments) { hash[:recent_comments] }
-      let(:today) { Time.now }
+      let(:today) { Time.current }
       let(:yesterday) { today - 1.day }
 
       before do

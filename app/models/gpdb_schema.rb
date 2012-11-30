@@ -73,7 +73,7 @@ class GpdbSchema < ActiveRecord::Base
   ensure
     if options[:mark_stale]
       (database.schemas.not_stale - found_schemas).each do |schema|
-        schema.stale_at = Time.now
+        schema.stale_at = Time.current
         schema.save!
       end
     end

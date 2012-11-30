@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
   end
 
   def expired?
-    !session[:expires_at] || session[:expires_at] < Time.now
+    !session[:expires_at] || session[:expires_at] < Time.current
   end
 
   def extend_expiration

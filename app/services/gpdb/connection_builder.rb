@@ -30,7 +30,7 @@ module Gpdb
         raise ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment")
       end
     rescue ActiveRecord::StatementInvalid => e
-      friendly_message = "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
+      friendly_message = "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
       Rails.logger.warn(friendly_message + " - " + e.message)
       raise e
     ensure

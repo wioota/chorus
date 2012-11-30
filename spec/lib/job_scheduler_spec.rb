@@ -10,7 +10,7 @@ describe JobScheduler do
 
     it "enqueues the 'InstanceStatusChecker.check' job in QC" do
       mock(QC.default_queue).enqueue_if_not_queued("InstanceStatusChecker.check")
-      job_scheduler.job_named('InstanceStatusChecker.check').run(Time.now)
+      job_scheduler.job_named('InstanceStatusChecker.check').run(Time.current)
     end
   end
 
@@ -21,7 +21,7 @@ describe JobScheduler do
 
     it "enqueues the 'CsvFile.delete_old_files!' job in QC" do
       mock(QC.default_queue).enqueue_if_not_queued("CsvFile.delete_old_files!")
-      job_scheduler.job_named('CsvFile.delete_old_files!').run(Time.now)
+      job_scheduler.job_named('CsvFile.delete_old_files!').run(Time.current)
     end
   end
 
@@ -32,7 +32,7 @@ describe JobScheduler do
 
     it "enqueues the 'SolrIndexer.refresh_external_data' job in QC" do
       mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.refresh_external_data")
-      job_scheduler.job_named('SolrIndexer.refresh_external_data').run(Time.now)
+      job_scheduler.job_named('SolrIndexer.refresh_external_data').run(Time.current)
     end
   end
 
@@ -43,7 +43,7 @@ describe JobScheduler do
 
     it "runs the ImportScheduler in the same thread" do
       mock(ImportScheduler).run
-      job_scheduler.job_named('ImportScheduler.run').run(Time.now)
+      job_scheduler.job_named('ImportScheduler.run').run(Time.current)
     end
   end
 
@@ -62,8 +62,8 @@ end
 
 describe QC do
   it "adds a timestamps to the data" do
-    Timecop.freeze(Time.now) do
-      mock(Scrolls).log(hash_including({:timestamp => Time.now.to_s})).times(any_times)
+    Timecop.freeze(Time.current) do
+      mock(Scrolls).log(hash_including({:timestamp => Time.current.to_s})).times(any_times)
       QC.log(:message => "Rome is burning")
     end
   end

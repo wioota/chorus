@@ -12,7 +12,7 @@ module Rails
             request.request_method,
             request.filtered_path,
             request.remote_ip,
-            Time.now.to_default_s ]
+            Time.current.to_default_s ]
       end
     end
   end

@@ -347,7 +347,7 @@ describe GpdbInstance do
         missing_database.should_not be_stale
         gpdb_instance.refresh_databases(:mark_stale => true)
         missing_database.reload.should be_stale
-        missing_database.stale_at.should be_within(5.seconds).of(Time.now)
+        missing_database.stale_at.should be_within(5.seconds).of(Time.current)
       end
 
       it "does not mark databases as stale if flag not set" do
@@ -357,7 +357,7 @@ describe GpdbInstance do
       end
 
       it "clears the stale flag on databases if they are found again" do
-        database.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+        database.update_attributes!({:stale_at => Time.current}, :without_protection => true)
         gpdb_instance.refresh_databases
         database.reload.should_not be_stale
       end

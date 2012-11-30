@@ -102,7 +102,7 @@ describe CsvImporter do
       end
 
       it "persists an Import record with the details of the import" do
-        Timecop.freeze(Time.now) do
+        Timecop.freeze(Time.current) do
           expect {
             CsvImporter.import_file(csv_file.id, file_import_created_event.id)
           }.to change(Import, :count).by(1)
@@ -112,7 +112,7 @@ describe CsvImporter do
           import.workspace_id.should == csv_file.workspace_id
           import.to_table.should == csv_file.to_table
           import.success.should be_true
-          import.finished_at.should == Time.now
+          import.finished_at.should == Time.current
         end
       end
 
@@ -239,7 +239,7 @@ describe CsvImporter do
         end
 
         it "sets the import record success to false" do
-          Timecop.freeze(Time.now) do
+          Timecop.freeze(Time.current) do
             any_instance_of(CsvFile) do |file|
               stub(file).ready_to_import? { false }
             end
@@ -247,7 +247,7 @@ describe CsvImporter do
               CsvImporter.import_file(csv_file.id, file_import_created_event.id)
             }.to raise_error("CSV file cannot be imported")
             Import.last.success.should be_false
-            Import.last.finished_at.should == Time.now
+            Import.last.finished_at.should == Time.current
           end
         end
 

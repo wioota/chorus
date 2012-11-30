@@ -25,7 +25,7 @@ class CsvFile < ActiveRecord::Base
   def self.delete_old_files!
     age_limit = ChorusConfig.instance['delete_unimported_csv_files_after_hours']
     return unless age_limit
-    CsvFile.where("created_at < '#{Time.now - age_limit.hours}'").destroy_all
+    CsvFile.where("created_at < ?", Time.current - age_limit.hours).destroy_all
   end
 
   def table_already_exists(table_name)

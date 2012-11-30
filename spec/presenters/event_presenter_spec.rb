@@ -201,7 +201,7 @@ describe EventPresenter, :type => :view do
       before do
         event.insight = true
         event.promoted_by = user
-        event.promotion_time = Time.now()
+        event.promotion_time = Time.current()
       end
 
       it "has hash for insights" do

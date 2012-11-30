@@ -39,7 +39,7 @@ module Events
 
       if insight
         event_params["promoted_by"] = creator
-        event_params["promotion_time"] = Time.now
+        event_params["promotion_time"] = Time.current
       end
 
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id

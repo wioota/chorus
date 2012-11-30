@@ -41,7 +41,7 @@ describe Dataset do
       duplicate_dataset = GpdbTable.new
       duplicate_dataset.schema = dataset.schema
       duplicate_dataset.name = dataset.name
-      duplicate_dataset.deleted_at = Time.now
+      duplicate_dataset.deleted_at = Time.current
       duplicate_dataset.save(:validate => false).should be_true
     end
 
@@ -64,7 +64,7 @@ describe Dataset do
     describe "default scope" do
       it "does not contain deleted datasets" do
         deleted_chorus_view = ChorusView.first
-        deleted_chorus_view.update_attribute :deleted_at, Time.now
+        deleted_chorus_view.update_attribute :deleted_at, Time.current
         Dataset.all.should_not include(deleted_chorus_view)
       end
     end
@@ -74,7 +74,7 @@ describe Dataset do
       duplicate_dataset.name = dataset.name
       duplicate_dataset.schema = dataset.schema
       duplicate_dataset.should have_at_least(1).error_on(:name)
-      duplicate_dataset.deleted_at = Time.now
+      duplicate_dataset.deleted_at = Time.current
       duplicate_dataset.should have(:no).errors_on(:name)
     end
   end
@@ -241,7 +241,7 @@ describe Dataset do
 
     context "with stale records that now exist" do
       before do
-        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+        dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)
         stub_gpdb(account, datasets_sql => [
             {'type' => "r", "name" => dataset.name, "master_table" => 't'},
         ])
@@ -268,7 +268,7 @@ describe Dataset do
         Dataset.refresh(account, schema, :mark_stale => true)
 
         dataset.should be_stale
-        dataset.stale_at.should be_within(5.seconds).of(Time.now)
+        dataset.stale_at.should be_within(5.seconds).of(Time.current)
       end
 
       it "decrements the dataset counter on the schema" do
@@ -413,12 +413,12 @@ describe Dataset do
 
     it "un-indexes the dataset when it becomes stale" do
       mock(dataset).solr_remove_from_index
-      dataset.stale_at = Time.now
+      dataset.stale_at = Time.current
       dataset.save!
     end
 
     it "re-indexes the dataset when it becomes un stale" do
-      dataset.stale_at = Time.now
+      dataset.stale_at = Time.current
       dataset.save!
       mock(dataset).solr_index
       dataset.stale_at = nil

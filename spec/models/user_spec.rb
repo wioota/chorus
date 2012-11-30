@@ -138,7 +138,7 @@ describe User do
 
       context "when a deleted user with that username exists" do
         before(:each) do
-          FactoryGirl.build(:user, :username => "foo", :deleted_at => Time.now)
+          FactoryGirl.build(:user, :username => "foo", :deleted_at => Time.current)
         end
 
         it "validates" do

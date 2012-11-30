@@ -77,7 +77,7 @@ describe GpdbDatabase do
 
     it "does not call solr_index on stale datasets" do
       dataset = database.datasets.first
-      dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+      dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)
       stub(Sunspot).index(anything)
       dont_allow(Sunspot).index(dataset)
       GpdbDatabase.reindexDatasetPermissions(database.id)
@@ -111,10 +111,10 @@ describe GpdbDatabase do
     describe "before_save" do
       describe "#mark_schemas_as_stale" do
         it "if the database has become stale, schemas will also be marked as stale" do
-          database.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+          database.update_attributes!({:stale_at => Time.current}, :without_protection => true)
           schema = database.schemas.first
           schema.should be_stale
-          schema.stale_at.should be_within(5.seconds).of(Time.now)
+          schema.stale_at.should be_within(5.seconds).of(Time.current)
         end
       end
     end
