@@ -61,6 +61,8 @@ if [ $RAILS_ENV -eq production ]; then
   DATABASE_NAME=chorus
 fi
 
+set -e
+
 PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
 PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME -c 'drop schema if exists legacy_migrate cascade'
 
