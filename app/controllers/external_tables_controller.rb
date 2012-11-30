@@ -3,7 +3,8 @@ class ExternalTablesController < GpdbController
 
   def create
     workspace = Workspace.find(params[:workspace_id])
-    hdfs_entry = HdfsEntry.find(params[:hdfs_external_table][:hdfs_entry_id])
+    table_params = params[:hdfs_external_table]
+    hdfs_entry = HdfsEntry.find(table_params[:hdfs_entry_id])
 
     unless workspace.sandbox
       present_validation_error(:EMPTY_SANDBOX)
@@ -13,23 +14,29 @@ class ExternalTablesController < GpdbController
     account = authorized_gpdb_account(workspace.sandbox)
     url = Gpdb::ConnectionBuilder.url(workspace.sandbox.database, account)
 
-    file_pattern = params[:hdfs_external_table][:file_pattern]
+    file_pattern =
+        case table_params[:path_type]
+          when "directory" then
+            "*"
+          when "pattern" then
+            table_params[:file_pattern]
+        end
 
     e = ExternalTable.build(
-      :column_names => params[:hdfs_external_table][:column_names],
-      :column_types => params[:hdfs_external_table][:types],
+      :column_names => table_params[:column_names],
+      :column_types => table_params[:types],
       :database => url,
-      :delimiter => params[:hdfs_external_table][:delimiter],
+      :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
-      :has_header => params[:hdfs_external_table][:has_header],
+      :has_header => table_params[:has_header],
       :location_url => hdfs_entry.url,
-      :name => params[:hdfs_external_table][:table_name],
+      :name => table_params[:table_name],
       :schema_name => workspace.sandbox.name
     )
     if e.save
       Dataset.refresh(account, workspace.sandbox)
-      dataset = workspace.sandbox.reload.datasets.find_by_name!(params[:hdfs_external_table][:table_name])
-      create_event(dataset, workspace, hdfs_entry, file_pattern)
+      dataset = workspace.sandbox.reload.datasets.find_by_name!(table_params[:table_name])
+      create_event(dataset, workspace, hdfs_entry, table_params)
       render :json => {}, :status => :ok
     else
       raise ApiValidationError.new(e.errors)
@@ -43,15 +50,16 @@ class ExternalTablesController < GpdbController
                    :status => :unprocessable_entity)
   end
 
-  def create_event(dataset, workspace, hdfs_entry, file_pattern)
-    if hdfs_entry.is_directory?
-      if file_pattern
-        Events::HdfsPatternExtTableCreated.by(current_user).add(:workspace => workspace, :dataset => dataset, :hdfs_entry => hdfs_entry, :file_pattern => file_pattern)
+  def create_event(dataset, workspace, hdfs_entry, table_params)
+    event_params = {:workspace => workspace, :dataset => dataset, :hdfs_entry => hdfs_entry }
+
+    case table_params[:path_type]
+      when "directory" then
+        Events::HdfsDirectoryExtTableCreated.by(current_user).add(event_params)
+      when "pattern" then
+        Events::HdfsPatternExtTableCreated.by(current_user).add(event_params.merge :file_pattern => table_params[:file_pattern])
       else
-        Events::HdfsDirectoryExtTableCreated.by(current_user).add(:workspace => workspace, :dataset => dataset, :hdfs_entry => hdfs_entry)
-      end
-    else
-      Events::HdfsFileExtTableCreated.by(current_user).add(:workspace => workspace, :dataset => dataset, :hdfs_entry => hdfs_entry)
+        Events::HdfsFileExtTableCreated.by(current_user).add(event_params)
     end
   end
 end
