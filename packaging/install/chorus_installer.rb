@@ -172,6 +172,12 @@ class ChorusInstaller
   end
 
   def create_shared_structure
+    FileUtils.mkdir_p("#{destination_path}/shared")
+
+    if install_mode == :fresh_install && !(Dir.entries("#{destination_path}/shared") - ['.', '..']).empty?
+      raise InstallerErrors::InstallAborted, "#{destination_path}/shared must be empty!"
+    end
+
     FileUtils.mkdir_p("#{destination_path}/shared/tmp/pids")
     FileUtils.mkdir_p("#{destination_path}/shared/solr/data")
     FileUtils.mkdir_p("#{destination_path}/shared/log")

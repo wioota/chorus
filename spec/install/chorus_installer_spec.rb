@@ -161,7 +161,7 @@ describe ChorusInstaller do
     end
     context "when the user has write permissions" do
       before do
-        mock(FileUtils).mkdir_p(path) { [ path ] }
+        mock(FileUtils).mkdir_p(path) { [path] }
       end
 
       it "returns true" do
@@ -392,6 +392,51 @@ describe ChorusInstaller do
       installer.create_shared_structure
 
       File.directory?('/usr/local/greenplum-chorus/shared/system').should be_true
+    end
+
+    context "when shared directory is not empty" do
+      before do
+        FileUtils.mkdir_p("/usr/local/greenplum-chorus/shared/bad_folder")
+        installer.install_mode = install_mode
+      end
+
+      context "when doing a fresh install" do
+        let(:install_mode) { :fresh_install }
+        it "throws an error" do
+          expect {
+            installer.create_shared_structure
+          }.to raise_error(InstallerErrors::InstallAborted)
+        end
+      end
+
+      context "when doing a 2.1 upgrade" do
+        let(:install_mode) { :upgrade_legacy }
+        it "doesn't raise" do
+          expect {
+            installer.create_shared_structure
+          }.to_not raise_error(InstallerErrors::InstallAborted)
+        end
+      end
+
+      context "when doing a 2.2 upgrade" do
+        let(:install_mode) { :upgrade_existing }
+        it "doesn't raise" do
+          expect {
+            installer.create_shared_structure
+          }.to_not raise_error(InstallerErrors::InstallAborted)
+        end
+      end
+    end
+
+    context "when shared directory is empty" do
+      before do
+        installer.install_mode = :fresh_install
+      end
+      it "doesn't raise" do
+        expect {
+          installer.create_shared_structure
+        }.to_not raise_error(InstallerErrors::InstallAborted)
+      end
     end
   end
 
@@ -856,7 +901,7 @@ describe ChorusInstaller do
       stub(installer).version { '2.2.0.0' }
       stub_chorus_exec(installer)
       FileUtils.mkdir_p installer.legacy_installation_path
-      
+
       @call_order = []
     end
 
