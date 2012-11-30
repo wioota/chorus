@@ -57,7 +57,7 @@ PGPASSWORD=$CHORUS_HOME/.pgpass
 log "Ensuring that application database exists..."
 RAILS_ENV=$RAILS_ENV $RAKE db:create
 DATABASE_NAME=chorus_rails_$RAILS_ENV
-if [ $RAILS_ENV -eq production ]; then
+if [ "$RAILS_ENV" = "production" ]; then
   DATABASE_NAME=chorus
 fi
 
