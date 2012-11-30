@@ -75,7 +75,11 @@ class EventPresenter < Presenter
 
   def additional_data_hash
     pairs = model.additional_data.map do |key, value|
-      value = value.is_a?(String) ? sanitize(value) : value
+      if key == 'error_objects'
+        value = ErrorPresenter.new(value).as_json
+      else
+        value = value.is_a?(String) ? sanitize(value) : value
+      end
       [key, value]
     end
     Hash[pairs]

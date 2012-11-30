@@ -283,5 +283,11 @@ describe EventsController do
         get :show, :id => event.to_param
       end
     end
+
+    generate_fixture "activity/datasetImportFailedWithModelErrors.json" do
+      event = events(:import_failed_with_model_errors)
+      Activity.global.create!(:event => event)
+      get :show, :id => event.to_param
+    end
   end
 end

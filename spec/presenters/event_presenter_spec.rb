@@ -223,5 +223,15 @@ describe EventPresenter, :type => :view do
         end
       end
     end
+
+    context "events with errors" do
+      let(:event) { events(:import_failed_with_model_errors) }
+      let(:user) { users(:owner) }
+
+      it "presents the errors" do
+        hash = subject.to_hash
+        hash['error_objects'].should == ErrorPresenter.new(event.error_objects).as_json
+      end
+    end
   end
 end

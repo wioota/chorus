@@ -221,6 +221,10 @@ describe("chorus.Mixins.Fetching", function() {
             var arrayProperty = this.resource.camelizeKeys(params).twoWords.doubleNested;
             expect(_.isArray(arrayProperty)).toBeTruthy();
         });
+
+        it("does not camelize children of errorObjects", function() {
+            expect(this.resource.camelizeKeys({error_objects: {i_am_not_camelized: true}})).toEqual({errorObjects: {i_am_not_camelized: true}});
+        });
     });
 
     describe("#underscoreKeys", function() {

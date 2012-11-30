@@ -415,6 +415,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Events
     Timecop.travel(-1.day)
+
+    import_schedule.errors.add(:base, :table_not_consistent, {:src_table_name => default_table.name, :dest_table_name => other_table.name})
+    @import_failed_with_model_errors = Events::DatasetImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => other_table.name, :error_objects => import_schedule.errors, :dataset => other_table)
+
     Events::GreenplumInstanceChangedOwner.by(admin).add(:gpdb_instance => gpdb_instance, :new_owner => no_collaborators)
     Events::GreenplumInstanceChangedName.by(admin).add(:gpdb_instance => gpdb_instance, :old_name => 'mahna_mahna', :new_name => gpdb_instance.name)
     Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)

@@ -96,7 +96,7 @@
             var result = _.isArray(hash) ? [] : {};
             _.each(hash, function(val, key) {
                 var newKey = keyFn(key);
-                if (_.isObject(val)) {
+                if (_.isObject(val) && newKey != "errorObjects") {
                     result[newKey] = transformer(val);
                 } else {
                     result[newKey] = val;
