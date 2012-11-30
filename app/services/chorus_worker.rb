@@ -8,17 +8,17 @@ class ChorusWorker < QC::Worker
   def handle_failure(job, e)
     cleaner = ::ActiveSupport::BacktraceCleaner.new
     cleaner.add_filter { |line| line.gsub(Rails.root.to_s, '') }
-    timestamped_log :level => :error, :job => job_description(job), :exception => e.message, :backtrace => "\n" + cleaner.clean(e.backtrace).join("\n")
+    log :level => :error, :job => job_description(job), :exception => e.message, :backtrace => "\n" + cleaner.clean(e.backtrace).join("\n")
   end
 
   def lock_job
-    timestamped_log(:level => :debug, :action => "lock_job")
+    log(:level => :debug, :action => "lock_job")
     attempts = 0
     job = nil
     until job || !running?
       job = @queue.lock(@top_bound)
       if job.nil?
-        timestamped_log(:level => :debug, :action => "failed_lock", :attempts => attempts)
+        log(:level => :debug, :action => "failed_lock", :attempts => attempts)
         if attempts < @max_attempts
           seconds = 2**attempts
           wait(seconds)
@@ -28,23 +28,19 @@ class ChorusWorker < QC::Worker
           break
         end
       else
-        timestamped_log(:level => :debug, :action => "finished_lock", :job => job_description(job))
+        log(:level => :debug, :action => "finished_lock", :job => job_description(job))
       end
     end
-    timestamped_log(:level => :info, :action => "shutdown_workers") unless running?
+    log(:level => :info, :action => "shutdown_workers") unless running?
     job
   end
 
   def wait(seconds)
-    timestamped_log(:level => :debug, :action => "sleep_wait", :wait => seconds)
+    log(:level => :debug, :action => "sleep_wait", :wait => seconds)
     timer = 0
     while timer < seconds && running? do
       Kernel.sleep(SLEEP_INCREMENT)
       timer += SLEEP_INCREMENT
     end
-  end
-
-  def timestamped_log(data)
-    log(data.merge({ :timestamp => Time.now.to_s }))
   end
 end

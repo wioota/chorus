@@ -1,13 +1,11 @@
 require 'spec_helper'
 
-describe ChorusWorker do
-  let(:worker) { ChorusWorker.new }
-
-  describe "#timestamped_log" do
+describe "ChorusWorker" do
+  describe "monkey patch to QC.log" do
     it "adds a timestamps to the data" do
       Timecop.freeze(Time.now) do
-        mock(worker).log({ :data => "legit", :timestamp => Time.now.to_s })
-        worker.timestamped_log(:data => "legit")
+        mock(Scrolls).log(hash_including({:timestamp => Time.now.to_s})).times(any_times)
+        ChorusWorker.new.log(:data => "legit")
       end
     end
   end

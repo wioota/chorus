@@ -60,6 +60,15 @@ describe JobScheduler do
   end
 end
 
+describe QC do
+  it "adds a timestamps to the data" do
+    Timecop.freeze(Time.now) do
+      mock(Scrolls).log(hash_including({:timestamp => Time.now.to_s})).times(any_times)
+      QC.log(:message => "Rome is burning")
+    end
+  end
+end
+
 module Clockwork
   class Event
     attr_reader :period
