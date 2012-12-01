@@ -16,11 +16,11 @@ describe WorkspaceMigrator do
       end
 
       it "copies the correct data fields from the legacy workspace" do
-        Legacy.connection.select_all("SELECT * FROM edc_workspace where is_deleted is false").each do |legacy_workspace|
+        Legacy.connection.select_all("SELECT *, archived_timestamp AT TIME ZONE 'UTC' as archived_timestamp_utc FROM edc_workspace where is_deleted is false").each do |legacy_workspace|
           workspace = Workspace.find_by_legacy_id(legacy_workspace["id"])
           workspace.name.should == legacy_workspace["name"]
           workspace.public.should == (legacy_workspace["is_public"] == 't' ? true : false)
-          workspace.archived_at.should == legacy_workspace["archived_timestamp"]
+          workspace.archived_at.should == legacy_workspace["archived_timestamp_utc"]
           workspace.archiver.should == User.unscoped.find_by_username(legacy_workspace["archiver"])
 
           workspace.summary.should == legacy_workspace["summary"]

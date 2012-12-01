@@ -64,8 +64,8 @@ class ActivityMigrator < AbstractMigrator
         'Events::SourceTableCreated',
         datasets.id,
         'Dataset',
-        streams.created_tx_stamp,
-        streams.last_updated_tx_stamp,
+        streams.created_tx_stamp AT TIME ZONE 'UTC',
+        streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
         workspaces.id,
         users.id
       FROM edc_activity_stream streams
@@ -102,8 +102,8 @@ class ActivityMigrator < AbstractMigrator
         'Events::FileImportSuccess',
         datasets.id,
         'Dataset',
-        streams.created_tx_stamp,
-        streams.last_updated_tx_stamp,
+        streams.created_tx_stamp AT TIME ZONE 'UTC',
+        streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
         workspaces.id,
         users.id
       FROM edc_activity_stream streams
@@ -149,8 +149,8 @@ class ActivityMigrator < AbstractMigrator
         streams.id,
         'edc_activity_stream',
         'Events::FileImportFailed',
-        streams.created_tx_stamp,
-        streams.last_updated_tx_stamp,
+        streams.created_tx_stamp AT TIME ZONE 'UTC',
+        streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
         workspaces.id,
         users.id
       FROM edc_activity_stream streams
@@ -207,8 +207,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       target_dataset.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -255,8 +255,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       hdfs_entry.id,
       'HdfsEntry',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -323,8 +323,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       datasets.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -396,8 +396,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       workfiles.id,
       'Workfile',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -445,8 +445,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       datasets.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -494,8 +494,8 @@ class ActivityMigrator < AbstractMigrator
       'Dataset',
       chorus_view_dataset.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -539,8 +539,8 @@ class ActivityMigrator < AbstractMigrator
       'Events::ChorusViewChanged',
       chorus_view_dataset.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -575,8 +575,8 @@ class ActivityMigrator < AbstractMigrator
       streams.id,
       'edc_activity_stream',
       'Events::WorkspaceChangeName',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -622,8 +622,8 @@ class ActivityMigrator < AbstractMigrator
       streams.id,
       'edc_activity_stream',
       'Events::WorkspaceAddSandbox',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -659,8 +659,8 @@ class ActivityMigrator < AbstractMigrator
       'Events::FileImportCreated',
       datasets.id,
       'Dataset',
-      streams.created_tx_stamp,
-      streams.last_updated_tx_stamp,
+      streams.created_tx_stamp AT TIME ZONE 'UTC',
+      streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
       workspaces.id,
       users.id
     FROM edc_activity_stream streams
@@ -707,8 +707,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::PublicWorkspaceCreated',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -738,8 +738,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::PrivateWorkspaceCreated',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -769,8 +769,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::WorkspaceArchived',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -799,8 +799,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::WorkspaceUnarchived',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -829,8 +829,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::WorkspaceMakePublic',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -859,8 +859,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::WorkspaceDeleted',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -889,8 +889,8 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::WorkspaceMakePrivate',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -923,8 +923,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::WorkfileCreated',
           workfiles.id,
           'Workfile',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -965,8 +965,8 @@ class ActivityMigrator < AbstractMigrator
     'Dataset',
     target_dataset.id,
     'Dataset',
-    streams.created_tx_stamp,
-    streams.last_updated_tx_stamp,
+    streams.created_tx_stamp AT TIME ZONE 'UTC',
+    streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
     workspaces.id,
     users.id
   FROM edc_activity_stream streams
@@ -1026,8 +1026,8 @@ class ActivityMigrator < AbstractMigrator
           'Dataset',
           target_dataset.id,
           'Dataset',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -1081,8 +1081,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::GreenplumInstanceCreated',
           gpdb_instances.id,
           'GpdbInstance',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
@@ -1115,8 +1115,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::HadoopInstanceCreated',
           hadoop_instances.id,
           'HadoopInstance',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
@@ -1149,8 +1149,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::UserAdded',
           user_added.id,
           'User',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           actor_user.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_user
@@ -1185,8 +1185,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::MembersAdded',
           user_added.id,
           'User',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           actor_user.id
         FROM edc_activity_stream streams
@@ -1241,8 +1241,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::ProvisioningFail',
           gpdb_instances.id,
           'GpdbInstance',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
@@ -1276,8 +1276,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::ProvisioningSuccess',
           gpdb_instances.id,
           'GpdbInstance',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           users.id
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
@@ -1312,8 +1312,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::WorkfileUpgradedVersion',
           workfiles.id,
           'Workfile',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams
@@ -1352,8 +1352,8 @@ class ActivityMigrator < AbstractMigrator
           'Events::WorkfileVersionDeleted',
           workfiles.id,
           'Workfile',
-          streams.created_tx_stamp,
-          streams.last_updated_tx_stamp,
+          streams.created_tx_stamp AT TIME ZONE 'UTC',
+          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
           workspaces.id,
           users.id
         FROM edc_activity_stream streams

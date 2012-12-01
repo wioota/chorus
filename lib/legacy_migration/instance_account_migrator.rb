@@ -28,8 +28,8 @@ class InstanceAccountMigrator < AbstractMigrator
                                 db_user_name,
                                 u.id,
                                 i.id,
-                                map.created_tx_stamp,
-                                map.last_updated_tx_stamp
+                                map.created_tx_stamp AT TIME ZONE 'UTC',
+                                map.last_updated_tx_stamp AT TIME ZONE 'UTC'
                               FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name

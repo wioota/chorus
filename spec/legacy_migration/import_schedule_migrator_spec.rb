@@ -39,21 +39,23 @@ describe ImportScheduleMigrator do
       end
 
       it "copies the correct data fields from the legacy import schedule" do
-        Legacy.connection.select_all("Select eis.* , ei.sample_count, ei.truncate, ei.workspace_id, ei.to_table,
+        Legacy.connection.select_all("Select eis.*, eis.start_time AT TIME ZONE 'UTC' AS start_time_utc,
+          eis.end_time AT TIME ZONE 'UTC' AS end_time_utc, eis.last_updated_tx_stamp AT TIME ZONE 'UTC' AS last_updated_tx_stamp_utc,
+          eis.created_tx_stamp AT TIME ZONE 'UTC' AS created_tx_stamp_utc, ei.sample_count, ei.truncate, ei.workspace_id, ei.to_table,
           ei.owner_id,ei.source_id,d.id AS dataset_id from legacy_migrate.edc_import_schedule eis INNER JOIN
           legacy_migrate.edc_import ei ON ei.schedule_id = eis.id INNER JOIN datasets d ON d.legacy_id = normalize_key(ei.source_id)").each do |row|
           import_schedule = ImportSchedule.unscoped.find_by_legacy_id(row['id'])
-          import_schedule.start_datetime.should == dt(row["start_time"])
-          import_schedule.end_date.should == d(row["end_time"])
+          import_schedule.start_datetime.should == dt(row["start_time_utc"])
+          import_schedule.end_date.should == d(row["end_time_utc"])
           import_schedule.frequency.should == int_to_frequency(row['frequency'])
 
           if row['job_name'].nil?
-            import_schedule.deleted_at.should == dt(row['last_updated_tx_stamp'])
+            import_schedule.deleted_at.should == dt(row['last_updated_tx_stamp_utc'])
           else
             import_schedule.deleted_at.should be_nil
           end
-          import_schedule.updated_at.should == dt(row['last_updated_tx_stamp'])
-          import_schedule.created_at.should == dt(row['created_tx_stamp'])
+          import_schedule.updated_at.should == dt(row['last_updated_tx_stamp_utc'])
+          import_schedule.created_at.should == dt(row['created_tx_stamp_utc'])
           import_schedule.workspace.should == Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
           import_schedule.to_table.should == row['to_table']
           row['source_id'].should include(import_schedule.source_dataset.name)

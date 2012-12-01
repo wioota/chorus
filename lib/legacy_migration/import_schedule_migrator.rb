@@ -34,16 +34,16 @@ class ImportScheduleMigrator < AbstractMigrator
           )
         SELECT
           s.id,
-          s.start_time,
-          s.end_time,
+          s.start_time AT TIME ZONE 'UTC',
+          s.end_time AT TIME ZONE 'UTC',
           CASE frequency
             WHEN 4 THEN 'daily'
             WHEN 5 THEN 'weekly'
             WHEN 6 THEN 'monthly'
           END,
-          CASE WHEN s.job_name IS NULL THEN s.last_updated_tx_stamp ELSE NULL END,
-          s.created_tx_stamp,
-          s.last_updated_tx_stamp,
+          CASE WHEN s.job_name IS NULL THEN s.last_updated_tx_stamp AT TIME ZONE 'UTC' ELSE NULL END,
+          s.created_tx_stamp AT TIME ZONE 'UTC',
+          s.last_updated_tx_stamp AT TIME ZONE 'UTC',
           w.id,
           i.to_table,
           d.id,

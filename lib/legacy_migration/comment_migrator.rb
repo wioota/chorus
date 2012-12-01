@@ -27,10 +27,10 @@ class CommentMigrator < AbstractMigrator
         body,
         events.id,
         users.id,
-        edc_comment.created_stamp,
-        edc_comment.last_updated_stamp,
+        edc_comment.created_stamp AT TIME ZONE 'UTC',
+        edc_comment.last_updated_stamp AT TIME ZONE 'UTC',
         CASE edc_comment.is_deleted
-          WHEN 't' THEN edc_comment.last_updated_stamp
+          WHEN 't' THEN edc_comment.last_updated_stamp AT TIME ZONE 'UTC'
           ELSE null
         END
       FROM

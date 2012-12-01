@@ -38,8 +38,8 @@ class ImportMigrator < AbstractMigrator
           u.id,
           CASE WHEN t.state='success' THEN true ELSE false END,
           s.id,
-          t.started_stamp,
-          t.completed_stamp,
+          t.started_stamp AT TIME ZONE 'UTC',
+          t.completed_stamp AT TIME ZONE 'UTC',
           dest.id,
           CASE WHEN i.source_type='upload_file' THEN i.source_id ELSE null END
         FROM edc_import i

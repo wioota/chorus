@@ -46,11 +46,11 @@ class WorkfileMigrator < AbstractMigrator
           workspace.id,
           owner.id,
           description,
-          created_tx_stamp,
+          created_tx_stamp AT TIME ZONE 'UTC',
           file_name,
-          last_updated_tx_stamp,
+          last_updated_tx_stamp AT TIME ZONE 'UTC',
           CASE is_deleted
-            WHEN 't' THEN last_updated_tx_stamp
+            WHEN 't' THEN last_updated_tx_stamp AT TIME ZONE 'UTC'
             ELSE null
           END
         FROM edc_work_file
@@ -78,8 +78,8 @@ class WorkfileMigrator < AbstractMigrator
           version_num,
           owner.id,
           modifier.id,
-          created_tx_stamp,
-          last_updated_tx_stamp,
+          created_tx_stamp AT TIME ZONE 'UTC',
+          last_updated_tx_stamp AT TIME ZONE 'UTC',
           commit_message
         FROM edc_workfile_version
         INNER JOIN users owner
@@ -105,8 +105,8 @@ class WorkfileMigrator < AbstractMigrator
           workfiles.id,
           base_version_num,
           owner.id,
-          created_tx_stamp,
-          last_updated_tx_stamp
+          created_tx_stamp AT TIME ZONE 'UTC',
+          last_updated_tx_stamp AT TIME ZONE 'UTC'
         FROM edc_workfile_draft
         INNER JOIN users owner
           ON owner.username = edc_workfile_draft.draft_owner

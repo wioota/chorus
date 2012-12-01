@@ -18,8 +18,8 @@ class ChorusViewMigrator < AbstractMigrator
             workspace_id as edc_workspace_id,
             workspaces.id as workspace_id,
             query,
-            created_tx_stamp,
-            last_updated_tx_stamp,
+            created_tx_stamp AT TIME ZONE 'UTC' as created_tx_stamp,
+            last_updated_tx_stamp AT TIME ZONE 'UTC' as last_updated_tx_stamp,
             is_deleted
           FROM edc_dataset
           INNER JOIN workspaces

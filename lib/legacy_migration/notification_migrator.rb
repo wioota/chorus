@@ -27,11 +27,11 @@ class NotificationMigrator < AbstractMigrator
           ea.id,
           users.id,
           events.id,
-          ea.created_stamp,
-          ea.last_updated_stamp,
+          ea.created_stamp AT TIME ZONE 'UTC',
+          ea.last_updated_stamp AT TIME ZONE 'UTC',
           ea.is_read,
           CASE ea.is_deleted
-            WHEN 't' THEN ea.last_updated_tx_stamp
+            WHEN 't' THEN ea.last_updated_tx_stamp AT TIME ZONE 'UTC'
             ELSE null
           END
         FROM
@@ -61,11 +61,11 @@ class NotificationMigrator < AbstractMigrator
           users.id,
           events.id,
           comments.id,
-          ea.created_stamp,
-          ea.last_updated_stamp,
+          ea.created_stamp AT TIME ZONE 'UTC',
+          ea.last_updated_stamp AT TIME ZONE 'UTC',
           ea.is_read,
           CASE ea.is_deleted
-            WHEN 't' THEN ea.last_updated_tx_stamp
+            WHEN 't' THEN ea.last_updated_tx_stamp AT TIME ZONE 'UTC'
             ELSE null
           END
         FROM
@@ -95,11 +95,11 @@ class NotificationMigrator < AbstractMigrator
           ea.id,
           users.id,
           events.id,
-          ea.created_stamp,
-          ea.last_updated_stamp,
+          ea.created_stamp AT TIME ZONE 'UTC',
+          ea.last_updated_stamp AT TIME ZONE 'UTC',
           ea.is_read,
           CASE ea.is_deleted
-            WHEN 't' THEN ea.last_updated_tx_stamp
+            WHEN 't' THEN ea.last_updated_tx_stamp AT TIME ZONE 'UTC'
             ELSE null
           END
         FROM

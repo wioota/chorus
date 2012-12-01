@@ -37,7 +37,7 @@ class WorkspaceMigrator < AbstractMigrator
             WHEN 'f' THEN false
             ELSE true
           END,
-          archived_timestamp,
+          archived_timestamp AT TIME ZONE 'UTC',
           archivers.id,
           summary,
           owners.id,
@@ -46,11 +46,11 @@ class WorkspaceMigrator < AbstractMigrator
           true,
           true,
           CASE is_deleted
-            WHEN 't' THEN last_updated_tx_stamp
+            WHEN 't' THEN last_updated_tx_stamp AT TIME ZONE 'UTC'
             ELSE null
           END,
-          created_tx_stamp,
-          last_updated_tx_stamp
+          created_tx_stamp AT TIME ZONE 'UTC',
+          last_updated_tx_stamp AT TIME ZONE 'UTC'
         FROM edc_workspace
           LEFT JOIN users archivers ON archivers.username = archiver
           LEFT JOIN users owners ON owners.username = owner

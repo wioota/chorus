@@ -35,10 +35,10 @@ class UserMigrator < AbstractMigrator
                                 ou,
                                 notes,
                                 admin,
-                                created_tx_stamp,
-                                last_updated_tx_stamp,
+                                created_tx_stamp AT TIME ZONE 'UTC',
+                                last_updated_tx_stamp AT TIME ZONE 'UTC',
                                 CASE is_deleted
-                                    WHEN 't' THEN last_updated_tx_stamp
+                                    WHEN 't' THEN last_updated_tx_stamp AT TIME ZONE 'UTC'
                                     ELSE null
                                   END,
                                 substring(password, 6)
