@@ -419,7 +419,7 @@ describe ChorusInstaller do
       end
 
       context "when doing a fresh install" do
-        let(:install_mode) { :fresh_install }
+        let(:install_mode) { :fresh }
         it "throws an error" do
           expect {
             installer.create_shared_structure
@@ -448,7 +448,7 @@ describe ChorusInstaller do
 
     context "when shared directory is empty" do
       before do
-        installer.install_mode = :fresh_install
+        installer.install_mode = :fresh
       end
       it "doesn't raise" do
         expect {
