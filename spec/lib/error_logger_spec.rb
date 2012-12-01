@@ -1,7 +1,6 @@
 require 'error_logger'
 require 'timecop'
 require 'spec/support/rr'
-require 'active_support/core_ext'
 
 unless defined? Rails
   class Rails
