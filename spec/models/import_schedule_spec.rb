@@ -122,6 +122,12 @@ describe ImportSchedule, :database_integration => true do
         it_validates_that_table_does :not_exist
       end
     end
+
+    it "does not validate associated imports" do
+      import = import_schedule.imports.build
+      import.errors.add(:base, "something terrible")
+      import_schedule.should be_valid
+    end
   end
 
   describe "callbacks" do

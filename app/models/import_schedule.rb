@@ -4,7 +4,7 @@ class ImportSchedule < ActiveRecord::Base
 
   belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
-  has_many :imports
+  has_many :imports, :validate => false
 
   attr_accessible :to_table, :new_table, :sample_count,
                   :truncate, :start_datetime, :end_date, :frequency
