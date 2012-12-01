@@ -125,6 +125,12 @@ function backup () {
 }
 
 function restore () {
+
+  if kill -0 `head -1 $POSTGRES_PID_FILE 2>&1` >& /dev/null; then
+     echo "Chorus is already running.  Please shutdown Chorus prior to running a restore."
+     exit_control 1
+  fi
+
   SILENT=""
 
   while getopts "s" OPTION
