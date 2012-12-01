@@ -186,6 +186,12 @@ describe Dataset do
         datasets.map(&:name).should match_array(['table', 'new_table', 'new_view'])
       end
 
+      it "sets the refreshed_at timestamp" do
+        expect {
+          Dataset.refresh(account, schema)
+        }.to change(schema, :refreshed_at)
+      end
+
       context "when a limit and sort are passed to refresh" do
         let(:sort) { [{"lower(relname)" => "asc"}] }
         let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema({:sort => sort, :limit => 2}).to_sql }

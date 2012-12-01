@@ -55,6 +55,7 @@ FactoryGirl.define do
   factory :gpdb_schema do
     sequence(:name) { |n| "schema#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :database, :factory => :gpdb_database
+    refreshed_at Time.current
   end
 
   factory :gpdb_table do

@@ -2,15 +2,16 @@ describe("chorus.views.SchemaList", function() {
     beforeEach(function() {
         this.schema1 = rspecFixtures.schema({name: 'schema_first'});
         this.schema2 = rspecFixtures.schema({name: 'schema_last', datasetCount: 1});
+        this.schema3 = rspecFixtures.schema({name: 'schema_refreshing', refreshedAt: null});
         this.collection = new chorus.collections.SchemaSet([], {databaseId: 456});
-        this.collection.reset([this.schema1, this.schema2]);
+        this.collection.reset([this.schema1, this.schema2, this.schema3]);
 
         this.view = new chorus.views.SchemaList({collection: this.collection});
         this.view.render();
     });
 
     it("should render an li for each item in the collection", function() {
-        expect(this.view.$("li.schema").length).toBe(2);
+        expect(this.view.$("li.schema").length).toBe(3);
     });
 
     it("displays each schema's name with a link to the schema", function() {
@@ -19,16 +20,22 @@ describe("chorus.views.SchemaList", function() {
 
         expect(this.view.$("li.schema a.name").eq(1)).toContainText(this.schema2.get("name"));
         expect(this.view.$("li.schema a.name").eq(1)).toHaveHref(this.schema2.showUrl());
-    })
+    });
 
     it("displays the right icon for each schema", function() {
         expect(this.view.$("li.schema img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_schema.png")
-    })
+    });
 
     it("displays the dataset count for each schema", function() {
         expect(this.view.$("li.schema .description").eq(0)).toContainTranslation("entity.name.WorkspaceDataset", { count: this.schema1.get("datasetCount") });
         expect(this.view.$("li.schema .description").eq(1)).toContainTranslation("entity.name.WorkspaceDataset", { count: 1 });
-    })
+    });
+
+    describe("when the refreshed_at is null", function() {
+        it("displays a message", function() {
+            expect(this.view.$("li.schema .description").eq(2)).toContainTranslation("entity.name.WorkspaceDataset.refreshing");
+        })
+    });
 
     it("should broadcast a schema:selected event when itemSelected is called", function() {
         spyOn(chorus.PageEvents, "broadcast");

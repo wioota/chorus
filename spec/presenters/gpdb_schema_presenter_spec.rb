@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe GpdbSchemaPresenter, :type => :view do
+  let(:refreshed_time) { Time.parse("2012-12-12") }
+
   before(:each) do
     gpdb_instance = FactoryGirl.create(:gpdb_instance, :id => 123, :name => "instance1")
     database = FactoryGirl.create(:gpdb_database, :id => 789, :name => "db1", :gpdb_instance => gpdb_instance)
-    schema = FactoryGirl.create(:gpdb_schema, :id => 456, :name => "abc", :database => database)
+    schema = FactoryGirl.create(:gpdb_schema, :id => 456, :name => "abc", :database => database, :refreshed_at => refreshed_time)
     FactoryGirl.create(:gpdb_table, :id => 1, :name => "table1", :schema => schema)
     FactoryGirl.create(:gpdb_view, :id => 2, :name => "view1", :schema => schema)
     schema.reload
@@ -24,6 +26,8 @@ describe GpdbSchemaPresenter, :type => :view do
       @hash[:name].should == "abc"
       @hash[:has_credentials].should == false
       @hash[:dataset_count].should == 2
+      @hash[:refreshed_at].should == refreshed_time
+
       database = @hash[:database]
       database[:id].should == 789
       database[:name].should == "db1"
