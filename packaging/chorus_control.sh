@@ -184,11 +184,13 @@ function run_in_root_dir_with_postgres () {
 
   RAILS_ENV=$RAILS_ENV CHORUS_HOME=$CHORUS_HOME ${1}
 
+  EXIT_STATUS=$?
+
   if [ -n "$postgres_started" ]; then
       $bin/stop-postgres.sh
   fi
 
-  if [ -n "$2" ]; then
+  if [ -n "$2" ] && [ "$EXIT_STATUS" -eq 0 ]; then
     echo "$2"
   fi
 

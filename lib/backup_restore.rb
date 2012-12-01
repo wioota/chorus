@@ -200,7 +200,7 @@ PROMPT
           input.downcase!
 
           break if 'y' == input
-          exit if 'n' == input
+          exit(false) if 'n' == input
         end
       end
     end
