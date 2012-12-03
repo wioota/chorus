@@ -239,8 +239,7 @@ describe GpdbSchema do
     it 'does not include chorus views' do
       cv = nil
       expect {
-        cv = FactoryGirl.build(:chorus_view, :schema => schema)
-        cv.save(:validate => false)
+        cv = FactoryGirl.create(:chorus_view, :schema => schema)
       }.not_to change { schema.reload.active_tables_and_views.size }
       schema.active_tables_and_views.should_not include(cv)
     end

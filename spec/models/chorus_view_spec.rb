@@ -2,15 +2,12 @@ require "spec_helper"
 
 describe ChorusView do
   describe "validations" do
-    it "validates presence of workspace" do
-      chorus_view = ChorusView.new
-      chorus_view.should have_at_least(1).error_on(:workspace)
+    it 'has a valid factory' do
+      FactoryGirl.create(:chorus_view).should be_valid
     end
 
-    it "validates presence of query" do
-      chorus_view = ChorusView.new
-      chorus_view.should have_at_least(1).error_on(:query)
-    end
+    it { should validate_presence_of(:workspace) }
+    it { should validate_presence_of(:query) }
 
     describe "#validate_query", :database_integration => true do
       let(:database) { InstanceIntegration.real_database }
@@ -19,12 +16,13 @@ describe ChorusView do
       let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
       let(:workspace) { workspaces(:public)}
       let(:user) { users(:the_collaborator) }
-      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => query, :workspace => workspace) }
+      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :workspace => workspace) }
+      let(:query) { "selecT 1;" }
+
       before do
         set_current_user(user)
+        chorus_view.query = query # Factory by default represses validation
       end
-
-      let(:query) { "selecT 1;" }
 
       it "runs as current_user" do
         mock(schema).with_gpdb_connection(gpdb_instance.account_for_user!(user), true)
@@ -53,22 +51,21 @@ describe ChorusView do
         end
       end
 
-      it 'is invalid if it references a nonexistent table' do
-        chorus_view = FactoryGirl.build(:chorus_view,
-                                        :workspace => workspace,
-                                        :schema => schema,
-                                        :query => "select * from a_non_existent_table_aaa;")
-        chorus_view.should_not be_valid
-        chorus_view.errors[:query][0][0].should == :generic
+      describe 'when it references a nonexistent table' do
+        let(:query) { "select * from a_non_existent_table_aaa;" }
+
+        it 'is invalid' do
+          chorus_view.should_not be_valid
+          chorus_view.errors[:query][0][0].should == :generic
+        end
       end
 
-      it 'is invalid if it doesnt start with select or with' do
-        chorus_view = FactoryGirl.build(:chorus_view,
-                                           :schema => schema,
-                                           :workspace => workspace,
-                                           :query => "create table query_not_starting_with_keyword_table();")
-        chorus_view.should_not be_valid
-        chorus_view.errors[:query][0][0].should == :start_with_keywords
+      describe 'when it starts with not select or with' do
+        let(:query) { "create table query_not_starting_with_keyword_table();" }
+        it 'is invalid' do
+          chorus_view.should_not be_valid
+          chorus_view.errors[:query][0][0].should == :start_with_keywords
+        end
       end
     end
   end
@@ -135,10 +132,10 @@ describe ChorusView do
   end
 
   describe "#convert_to_database_view", :database_integration => true do
-    let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1") }
+    let(:chorus_view) { datasets(:executable_chorus_view) }
+    let(:schema) { chorus_view.schema }
     let(:database) { InstanceIntegration.real_database }
     let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
-    let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:account) { gpdb_instance.owner_account }
     let(:user) { account.owner }
 

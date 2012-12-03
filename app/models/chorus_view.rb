@@ -32,7 +32,7 @@ class ChorusView < Dataset
   end
 
   def validate_query
-    return unless changes.include?(:query) || new_record?
+    return unless changes.include?(:query)
     unless query.upcase.start_with?("SELECT", "WITH")
       errors.add(:query, :start_with_keywords)
     end
