@@ -16,7 +16,7 @@ class ChorusView < Dataset
 
   include_shared_search_fields :workspace, :workspace
 
-  validates_presence_of :workspace, :query, :schema
+  validates_presence_of :workspace, :query
   validate :validate_query, :if => :query
 
   alias_attribute :object_name, :name

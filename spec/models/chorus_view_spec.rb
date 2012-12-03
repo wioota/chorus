@@ -2,19 +2,14 @@ require "spec_helper"
 
 describe ChorusView do
   describe "validations" do
-    it "validates presence of workspace_id" do
+    it "validates presence of workspace" do
       chorus_view = ChorusView.new
-      chorus_view.should have_at_least(1).error_on(:workspace_id)
+      chorus_view.should have_at_least(1).error_on(:workspace)
     end
 
     it "validates presence of query" do
       chorus_view = ChorusView.new
       chorus_view.should have_at_least(1).error_on(:query)
-    end
-
-    it "validates presence of schema_id" do
-      chorus_view = ChorusView.new
-      chorus_view.should have_at_least(1).error_on(:schema_id)
     end
 
     describe "#validate_query", :database_integration => true do
