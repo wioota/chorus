@@ -29,10 +29,11 @@ describe WorkspaceMigrator do
         end
       end
 
-      it "copies deleted workspaces, and assigns their 'deleted_at' field" do
+      it "copies deleted workspaces, and properly marks them as deleted with cleaned up names" do
         Legacy.connection.select_all("SELECT * FROM edc_workspace where is_deleted is true").each do |legacy_workspace|
           workspace = Workspace.unscoped.find_by_legacy_id(legacy_workspace["id"])
           workspace.deleted_at.should == legacy_workspace["last_updated_tx_stamp"]
+          workspace.name.should_not =~ /_del_\d+$/
         end
       end
 

@@ -14,7 +14,7 @@ class WorkspaceMigrator < AbstractMigrator
     def migrate
       prerequisites
 
-      Legacy.connection.exec_query("
+      Legacy.connection.exec_query(<<-SQL)
         INSERT INTO public.workspaces(
           legacy_id,
           name,
@@ -32,7 +32,10 @@ class WorkspaceMigrator < AbstractMigrator
           updated_at)
         SELECT
           edc_workspace.id,
-          name,
+          CASE is_deleted
+            WHEN 't' THEN regexp_replace(name, '_del_\\\\d+$', '')
+            ELSE name
+          END,
           CASE is_public
             WHEN 'f' THEN false
             ELSE true
@@ -54,7 +57,8 @@ class WorkspaceMigrator < AbstractMigrator
         FROM edc_workspace
           LEFT JOIN users archivers ON archivers.username = archiver
           LEFT JOIN users owners ON owners.username = owner
-        WHERE edc_workspace.id NOT IN (SELECT legacy_id FROM workspaces);")
+        WHERE edc_workspace.id NOT IN (SELECT legacy_id FROM workspaces);
+      SQL
     end
   end
 end
