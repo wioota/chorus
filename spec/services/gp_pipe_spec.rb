@@ -1,5 +1,5 @@
 require 'spec_helper'
-if false
+
 describe GpPipe, :database_integration => true do
   let(:instance_account) { InstanceIntegration.real_gpdb_account }
   let(:user) { instance_account.owner }
@@ -298,6 +298,4 @@ describe GpPipe, :database_integration => true do
   rescue Exception
     raise
   end
-end
-
 end
