@@ -628,21 +628,43 @@ describe ChorusInstaller do
 
       FileUtils.mkdir_p installer.destination_path
       installer.create_database_config
-      installer.generate_chorus_psql_files
     end
 
-    it "generates a .pgpass file" do
-      lines = File.read("/usr/local/greenplum-chorus/.pgpass").lines.to_a
-      lines[0].strip.should =~ /\*:\*:chorus:the_user:[a-z0-9]{32}/
-      stats = File.stat("/usr/local/greenplum-chorus/.pgpass").mode
-      sprintf("%o", stats).should == "100400"
+    context "when new install" do
+      before do
+        installer.create_database_config
+        installer.generate_chorus_psql_files
+      end
+
+      it "generates a .pgpass file" do
+        lines = File.read("/usr/local/greenplum-chorus/.pgpass").lines.to_a
+        lines[0].strip.should =~ /\*:\*:chorus:the_user:[a-z0-9]{32}/
+        stats = File.stat("/usr/local/greenplum-chorus/.pgpass").mode
+        sprintf("%o", stats).should == "100400"
+      end
+
+      it "generates a file for connecting to psql with password" do
+        installer.generate_chorus_psql_files
+        lines = File.read("/usr/local/greenplum-chorus/chorus_psql.sh").lines.to_a
+        lines[3].strip.should == "$CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;"
+        stats = File.stat("/usr/local/greenplum-chorus/chorus_psql.sh").mode
+        sprintf("%o", stats).should == "100500"
+      end
     end
 
-    it "generates a file for connecting to psql with password" do
-      lines = File.read("/usr/local/greenplum-chorus/chorus_psql.sh").lines.to_a
-      lines[3].strip.should == "$CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;"
-      stats = File.stat("/usr/local/greenplum-chorus/chorus_psql.sh").mode
-      sprintf("%o", stats).should == "100500"
+    context "when upgrade" do
+      before do
+        installer.install_mode = :upgrade_existing
+        installer.generate_chorus_psql_files
+      end
+
+      it "does not generate .pgpass file" do
+        File.exists?("/usr/local/greenplum-chorus/.pgpass").should be_false
+      end
+
+      it "does not generate chorus_psql.sh file" do
+        File.exists?("/usr/local/greenplum-chorus/chorus_psql.sh").should be_false
+      end
     end
   end
 
@@ -1048,9 +1070,9 @@ describe ChorusInstaller do
     it "modifies the properties to be OS X specific" do
       mock(Properties).load_file(chorus_config_path) { {} }
       stub(Properties).dump_file(hash_including({
-       'worker_threads' => 5,
-       'webserver_threads' => 5,
-       'database_threads' => 15}), chorus_config_path)
+                                                    'worker_threads' => 5,
+                                                    'webserver_threads' => 5,
+                                                    'database_threads' => 15}), chorus_config_path)
       installer.warn_and_change_osx_properties
     end
   end

@@ -211,6 +211,7 @@ class ChorusInstaller
   end
 
   def generate_chorus_psql_files
+    return if upgrade_existing?
     File.open("#{destination_path}/.pgpass", 'w') do |file|
       file.puts "*:*:chorus:#{database_user}:#{database_password}"
     end
