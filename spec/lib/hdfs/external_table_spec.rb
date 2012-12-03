@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'sequel/no_core_ext'
 require 'shoulda-matchers'
 
@@ -9,14 +11,10 @@ class Sequel::Database
   end
 end
 
-# Defined in InstanceIntegration but redefined here so we don't have to require Rails
-require 'socket'
-def database_name
-  "gpdb_#{Socket.gethostname}_test".slice(0, 26)
-end
+REAL_DB_URL = "jdbc:postgresql://#{InstanceIntegration.real_gpdb_hostname}/#{InstanceIntegration.database_name}?user=#{InstanceIntegration.real_gpdb_account.db_username}"
+#REAL_HDFS_URL = 'gphdfs://192.168.33.10:8020'
 
-REAL_DB_URL = "jdbc:postgresql://192.168.33.10/#{database_name}?user=vagrant"
-REAL_HDFS_URL = 'gphdfs://192.168.33.10:8020'
+p REAL_DB_URL
 
 # The hdfs should have the following directory structure:
 
