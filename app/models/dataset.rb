@@ -7,9 +7,7 @@ class Dataset < ActiveRecord::Base
   include Stale
   include SoftDelete
 
-  belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
-
-  after_save :update_counter_cache
+  belongs_to :schema, :class_name => 'GpdbSchema'
 
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
@@ -375,12 +373,11 @@ class Dataset < ActiveRecord::Base
   def update_counter_cache
     if changed_attributes.include?('stale_at')
       if stale?
-        GpdbSchema.decrement_counter(:datasets_count, schema_id)
+        GpdbSchema.decrement_counter(:active_tables_and_views_count, schema_id)
       else
-        GpdbSchema.increment_counter(:datasets_count, schema_id)
+        GpdbSchema.increment_counter(:active_tables_and_views_count, schema_id)
       end
     end
   end
-
 end
 

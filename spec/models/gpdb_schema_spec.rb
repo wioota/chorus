@@ -232,4 +232,46 @@ describe GpdbSchema do
       end
     end
   end
+
+  describe '#active_tables_and_views' do
+    let(:schema) { gpdb_schemas(:default) }
+
+    it 'does not include chorus views' do
+      cv = nil
+      expect {
+        cv = FactoryGirl.build(:chorus_view, :schema => schema)
+        cv.save(:validate => false)
+      }.not_to change { schema.reload.active_tables_and_views.size }
+      schema.active_tables_and_views.should_not include(cv)
+    end
+
+    it 'includes tables' do
+      table = nil
+      expect {
+        table = FactoryGirl.create(:gpdb_table, :schema => schema)
+      }.to change { schema.reload.active_tables_and_views.size }.by(1)
+      schema.active_tables_and_views.should include(table)
+
+      expect {
+        table.stale_at = Time.now
+        table.save!
+      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
+      schema.active_tables_and_views.should_not include(table)
+    end
+
+    it 'includes views' do
+      view = nil
+
+      expect {
+        view = FactoryGirl.create(:gpdb_view, :schema => schema)
+      }.to change { schema.reload.active_tables_and_views.size }.by(1)
+      schema.active_tables_and_views.should include(view)
+
+      expect {
+        view.stale_at = Time.now
+        view.save!
+      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
+      schema.active_tables_and_views.should_not include(view)
+    end
+  end
 end

@@ -39,6 +39,9 @@ class GpdbSchema < ActiveRecord::Base
   has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id
+  has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
+           :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+
   delegate :with_gpdb_connection, :to => :database
   delegate :gpdb_instance, :account_for_user!, :to => :database
 

@@ -261,7 +261,7 @@ describe Dataset do
       it "increments the dataset counter on the schema" do
         expect do
           Dataset.refresh(account, schema)
-        end.to change { dataset.schema.reload.datasets_count }.by(1)
+        end.to change { dataset.schema.reload.active_tables_and_views.count }.by(1)
       end
     end
 
@@ -278,11 +278,11 @@ describe Dataset do
       end
 
       it "decrements the dataset counter on the schema" do
-        not_stale_before = schema.datasets.not_stale.count
-        cached_before = dataset.schema.datasets_count
+        cached_before = dataset.schema.active_tables_and_views_count
+        not_stale_before = schema.active_tables_and_views.not_stale.count
         Dataset.refresh(account, schema, :mark_stale => true)
-        not_stale_after = schema.datasets.not_stale.count
-        cached_after = dataset.schema.reload.datasets_count
+        cached_after = dataset.schema.reload.active_tables_and_views_count
+        not_stale_after = schema.active_tables_and_views.not_stale.count
 
         (not_stale_before - not_stale_after).should == cached_before - cached_after
       end
