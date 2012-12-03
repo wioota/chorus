@@ -156,7 +156,6 @@ resource "Workspaces" do
     parameter :hdfs_entry_id, "Id of the source HDFS file or directory"
     parameter :path_type, "Type of source for external table ['file' (default), 'pattern' or 'directory']"
     parameter :file_pattern, "Regular expression specifying file names to include (only when path_type is 'pattern')"
-    parameter :has_header, "'true' if data contains a header column, 'false' otherwise"
     parameter :'column_names[]', "Array of column names"
     parameter :'types[]', "Array of column types"
     parameter :delimiter, "Delimiter (i.e. , or ;)"
@@ -166,7 +165,6 @@ resource "Workspaces" do
     required_parameters :hdfs_entry_id, :table_name, :workspace_id, :'column_names[]', :delimiter, :'types[]'
 
     let(:hdfs_entry_id) { hdfs_entries(:directory).id }
-    let(:has_header) { true }
     let(:'column_names[]') { ["field1", "field2"] }
     let(:'types[]') { ["text", "text"] }
     let(:delimiter) { ',' }

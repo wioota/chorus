@@ -39,7 +39,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     it("fetches the list of workspaces for the logged in user", function() {
         var workspaces = new chorus.collections.WorkspaceSet([], {userId: "54321"});
         expect(workspaces).toHaveBeenFetched();
-    })
+    });
 
     context("when the workspace fetch completes and there are no workspaces", function() {
         beforeEach(function() {
@@ -54,7 +54,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             expect(this.dialog.$('button.submit')).toBeDisabled();
         });
 
-    })
+    });
 
     context("when the workspace fetch completes and there are workspaces", function() {
         beforeEach(function() {
@@ -73,7 +73,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
             expect(this.dialog.$(".directions option").eq(0).val()).toBe(this.workspace1.id);
             expect(this.dialog.$(".directions option").eq(1).val()).toBe(this.workspace3.id);
-        })
+        });
 
         it("styles the select", function() {
             expect(chorus.styleSelect).toHaveBeenCalled();

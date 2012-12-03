@@ -12,7 +12,7 @@ class ExternalTable
   end
 
   attr_accessor :schema_name, :column_names, :column_types, :name, :location_url,
-              :has_header, :delimiter, :file_pattern
+                :delimiter, :file_pattern
 
   validates_presence_of :schema_name, :column_names, :column_types, :name, :location_url
 
@@ -26,7 +26,6 @@ class ExternalTable
     @name = options[:name]
     @location_url = options[:location_url]
     @file_pattern = options[:file_pattern]
-    @has_header = options[:has_header]
     @delimiter = options[:delimiter]
   end
 
@@ -34,7 +33,7 @@ class ExternalTable
     return false unless valid?
     database.run("CREATE EXTERNAL TABLE \"#{schema_name}\".\"#{name}\"" +
                   " (#{map_columns}) LOCATION ('#{location_url}#{file_pattern_string}') FORMAT 'TEXT'" +
-                  " (DELIMITER '#{delimiter}'#{header_sql})")
+                  " (DELIMITER '#{delimiter}')")
     true
   rescue Sequel::DatabaseError => e
     errors.add(:name, :TAKEN)
@@ -45,10 +44,6 @@ class ExternalTable
 
   def file_pattern_string
     file_pattern ? "/#{file_pattern}" : ""
-  end
-
-  def header_sql
-    has_header.to_s == 'true' ? ' HEADER' : ''
   end
 
   def map_columns

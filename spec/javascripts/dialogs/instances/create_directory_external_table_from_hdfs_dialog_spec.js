@@ -76,7 +76,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         it("populates the select sample file with hdfs text files", function() {
             expect(this.dialog.$("select option").length).toBe(3);
-        })
+        });
 
         it("selects the all files option by default", function() {
             expect(this.dialog.$('input:radio[name=pathType]:checked').val()).toBe("directory");
@@ -180,7 +180,6 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("posts to the right URL", function() {
                     var request = this.server.lastCreate();
-                    var statement = "test (column_1, column_2, column_3, column_4, column_5)";
                     expect(request.url).toMatchUrl("/workspaces/22/external_tables");
                     expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*");
                     expect(request.params()['hdfs_external_table[hadoop_instance_id]']).toBe("234");
@@ -224,7 +223,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     expect(request.params()['hdfs_external_table[path_type]']).toBe('pattern');
                     expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*.csv");
                 });
-            })
+            });
 
             context("when the server responds with errors", function() {
                 beforeEach(function() {
@@ -262,7 +261,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
     describe("select styling", function() {
         it("uses custom styled select box", function() {
-            spyOn(chorus, 'styleSelect')
+            spyOn(chorus, 'styleSelect');
             $(document).trigger("reveal.facebox");
             expect(chorus.styleSelect).toHaveBeenCalled();
         });

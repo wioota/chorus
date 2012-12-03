@@ -28,7 +28,6 @@ class ExternalTablesController < GpdbController
       :database => url,
       :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
-      :has_header => table_params[:has_header],
       :location_url => hdfs_entry.url,
       :name => table_params[:table_name],
       :schema_name => workspace.sandbox.name

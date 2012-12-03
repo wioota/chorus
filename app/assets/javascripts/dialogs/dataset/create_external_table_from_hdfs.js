@@ -57,8 +57,6 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.workspaceName = this.$("option:selected").text();
         this.tableName = this.$(".directions input:text").val();
 
-        //this._super("updateModel", arguments);
-
         this.model.set({
             workspaceId: this.$("option:selected").val(),
             delimiter: this.delimiter,
