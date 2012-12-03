@@ -42,8 +42,7 @@ class DatabaseObjectMigrator < AbstractMigrator
       # Result should be a all dataset identifiers across the entire Chorus 2.1 app
       # We have to resolve different quoting (inconsistency in chorus 2.1)
 
-      dataset_rows = Legacy.connection.exec_query(
-        %Q(
+      dataset_rows = Legacy.connection.exec_query(<<-SQL)
         SELECT DISTINCT dataset_string FROM
           (
             (
@@ -84,7 +83,7 @@ class DatabaseObjectMigrator < AbstractMigrator
             )
           ) a
         WHERE dataset_string NOT IN (select legacy_id from datasets);
-      ))
+      SQL
       dataset_rows.each do |row_hash|
         dataset_string = row_hash['dataset_string']
         ids = dataset_string.split("|")
@@ -99,15 +98,10 @@ class DatabaseObjectMigrator < AbstractMigrator
         gpdb_instance = GpdbInstance.find_by_legacy_id!(legacy_instance_id)
         database = gpdb_instance.databases.find_or_create_by_name(database_name)
         schema = database.schemas.find_or_create_by_name(schema_name)
-        dataset = schema.datasets.new
+        dataset = legacy_dataset_type == 'VIEW' ? GpdbView.new : GpdbTable.new
+        dataset.schema = schema
         dataset.name = dataset_name
         dataset.legacy_id = dataset_string
-        dataset.type = case legacy_dataset_type
-                         when 'VIEW'
-                           'GpdbView'
-                         else
-                           'GpdbTable'
-                       end
         dataset.save!
       end
 

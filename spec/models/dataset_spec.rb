@@ -26,6 +26,7 @@ describe Dataset do
   end
 
   describe "validations" do
+    it { should validate_presence_of :schema }
     it { should validate_presence_of :name }
 
     it "validates uniqueness of name in the database" do

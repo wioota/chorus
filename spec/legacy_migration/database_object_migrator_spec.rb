@@ -9,12 +9,18 @@ describe DatabaseObjectMigrator do
     DatabaseObjectMigrator.normalize_key('"aaa"|"cc"dd"|"bbb"').should == 'aaa|cc"dd|bbb'
   end
 
-  it "should migrate datasets and schemas from edc_activity_stream_object and edc_sandbox, and be idempotent" do
+  it 'is idempotent' do
     dataset_count = Dataset.count
     schema_count = GpdbSchema.count
     DatabaseObjectMigrator.migrate
     Dataset.count.should == dataset_count
     GpdbSchema.count.should == schema_count
+  end
+
+  it 'instantiates the counter_cache for active_tables_and_views correctly' do
+    GpdbSchema.find_each do |schema|
+      schema.active_tables_and_views_count.should == schema.active_tables_and_views.length
+    end
   end
 
   it "should have a type for every migrated dataset" do

@@ -14,6 +14,7 @@ class Dataset < ActiveRecord::Base
   has_many :tableau_workbook_publications
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
+  validates_presence_of :schema
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
