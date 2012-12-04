@@ -42,7 +42,7 @@ module LdapClient
     if config['user_dn'].present?
       auth = {:method => :simple, :username => config['user_dn'], :password => config['password']}
     end
-    Net::LDAP.new :host => config['host'], :base => config['base'], :auth => auth
+    Net::LDAP.new :host => config['host'], :port => config['port'], :base => config['base'], :auth => auth
   end
 
   private

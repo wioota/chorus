@@ -305,5 +305,16 @@ describe LdapClient do
         LdapClient.client
       end
     end
+
+    context "with standard config" do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
+      end
+
+      it "uses host and port to connect" do
+        mock(Net::LDAP).new(hash_including(:host => '10.32.88.212', :port => 389))
+        LdapClient.client
+      end
+    end
   end
 end
