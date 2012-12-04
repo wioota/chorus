@@ -63,14 +63,14 @@ end
 describe QC do
   it "adds a timestamps to the data" do
     Timecop.freeze(Time.current) do
-      mock(Scrolls).log(hash_including({:timestamp => Time.current.to_s})).times(any_times)
+      mock(Scrolls).log(hash_including({:timestamp => Time.zone.now.to_s})).times(any_times)
       QC.log(:message => "Rome is burning")
     end
   end
 
   it "adds timestamps to clockwork logs" do
     Timecop.freeze(Time.current) do
-      mock(Clockwork.config[:logger]).info("#{Time.current.to_s}: hello")
+      mock(Clockwork.config[:logger]).info("#{Time.zone.now.to_s}: hello")
       Clockwork.log("hello")
     end
   end
