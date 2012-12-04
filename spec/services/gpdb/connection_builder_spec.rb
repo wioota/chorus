@@ -60,17 +60,16 @@ describe Gpdb::ConnectionBuilder do
 
     context "when the connection fails" do
       let(:adapter_exception) { ActiveRecord::JDBCError.new }
-      let(:nice_exception) { ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment") }
       let(:fake_connection_adapter) { raise adapter_exception }
       let(:raised_message) { "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
 
-      it "re-raises the error with a nice message" do
-        Timecop.freeze (Time.current)
-        mock(Rails.logger).error("#{raised_message} - #{adapter_exception.message}")
-        expect {
-          Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
-        }.to raise_error(ActiveRecord::JDBCError, nice_exception.message)
-        Timecop.return
+      it "raises an InstanceUnavailable error" do
+        Timecop.freeze(Time.current) do
+          mock(Rails.logger).error("#{raised_message} - #{adapter_exception.message}")
+          expect {
+            Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+          }.to raise_error(Gpdb::InstanceUnavailable)
+        end
       end
 
       context "when instance has not finished provisioning" do
