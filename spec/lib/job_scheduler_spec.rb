@@ -61,16 +61,18 @@ describe JobScheduler do
 end
 
 describe QC do
+  let(:timestamp) { Time.current }
+
   it "adds a timestamps to the data" do
-    Timecop.freeze(Time.current) do
-      mock(Scrolls).log(hash_including({:timestamp => Time.zone.now.to_s})).times(any_times)
+    Timecop.freeze(timestamp) do
+      mock(Scrolls).log(hash_including({:timestamp => timestamp.to_s})).times(any_times)
       QC.log(:message => "Rome is burning")
     end
   end
 
   it "adds timestamps to clockwork logs" do
-    Timecop.freeze(Time.current) do
-      mock(Clockwork.config[:logger]).info("#{Time.zone.now.to_s}: hello")
+    Timecop.freeze(timestamp) do
+      mock(Clockwork.config[:logger]).info("#{timestamp.to_s}: hello")
       Clockwork.log("hello")
     end
   end
