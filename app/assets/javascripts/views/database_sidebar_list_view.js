@@ -57,6 +57,15 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             container: $('#sidebar_wrapper'),
             contentEvents: {
                 'a.schema': _.bind(this.schemaSelected, this)
+            },
+
+            // Hard code this qtips tip length so it hides the underlying menu
+            style: {
+                tip: {
+                    mimic: "top center",
+                    width: 20,
+                    height: 10
+                }
             }
         });
 
@@ -91,7 +100,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 my: "right center",
                 at: "left center",
                 adjust: {
-                    x: -16
+                    x: -12
                 }
             },
             style: {
@@ -99,7 +108,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 tip: {
                     corner: "left center",
                     width: 16,
-                    height: 29
+                    height: 25
                 }
             }
         });
