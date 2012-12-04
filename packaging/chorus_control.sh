@@ -116,11 +116,14 @@ function backup () {
   done
 
   if [ -z "$BACKUP_DIR" ]; then
-     read -p "Please enter the destination directory for your backup: " BACKUP_DIR
+     read -p "Please enter the destination directory for your backup [/data/chorus/bak]: " BACKUP_DIR
+     if [ -z "$BACKUP_DIR" ]; then
+        BACKUP_DIR=/data/chorus/bak
+     fi
   fi
   COMPLETION_MESSAGE=""
 
-  echo "Backing up chorus data..."
+  echo "Backing up chorus data to $BACKUP_DIR..."
   run_in_root_dir_with_postgres "$RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]" "$COMPLETION_MESSAGE"
 }
 
