@@ -48,6 +48,8 @@ then
      exit 1
 fi
 
+set -e
+
 $bin/start-postgres.sh
 
 PGPASSFILE=$INSTALL_ROOT/.pgpass
@@ -60,8 +62,6 @@ DATABASE_NAME=chorus_rails_$RAILS_ENV
 if [ "$RAILS_ENV" = "production" ]; then
   DATABASE_NAME=chorus
 fi
-
-set -e
 
 PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
 PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME -c 'drop schema if exists legacy_migrate cascade'
@@ -76,7 +76,7 @@ PGPASSFILE=$PGPASSFILE pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_ch
 
 # running the migration
 
-cd $RELEASE_PATH
+cd $CHORUS_HOME
 log "Using Chorus 2.1 sql dump: $SQL_DUMP"
 log "Using Chorus 2.1 workfile directory: $WORKFILE_DIR"
 RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
