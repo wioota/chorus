@@ -213,7 +213,7 @@ class ChorusInstaller
   def generate_chorus_psql_files
     return if upgrade_existing?
     File.open("#{destination_path}/.pgpass", 'w') do |file|
-      file.puts "*:*:chorus:#{database_user}:#{database_password}"
+      file.puts "*:*:*:#{database_user}:#{database_password}"
     end
     FileUtils.chmod(0400, "#{destination_path}/.pgpass")
 
@@ -354,7 +354,7 @@ class ChorusInstaller
   def migrate_legacy_data
     log "Migrating data from previous version..." do
       log "Loading legacy data into postgres..." do
-        chorus_exec("cd #{release_path} && CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
+        chorus_exec("cd #{release_path} && CHORUS_HOME=#{destination_path} RELEASE_PATH=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
       end
     end
   end

@@ -50,7 +50,7 @@ fi
 
 $bin/start-postgres.sh
 
-PGPASSWORD=$CHORUS_HOME/.pgpass
+PGPASSFILE=$CHORUS_HOME/.pgpass
 
 # importing legacy sql
 # The database must exist
@@ -63,20 +63,20 @@ fi
 
 set -e
 
-PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
-PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME -c 'drop schema if exists legacy_migrate cascade'
+PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus postgres -c 'drop database if exists chorus_tmp_migrate;'
+PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME -c 'drop schema if exists legacy_migrate cascade'
 
 # Create a temporary database so we can namespace legacy tables into their own schema
-PGPASSWORD=$PGPASSWORD createdb -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate
-PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate < $SQL_DUMP > /dev/null
-PGPASSWORD=$PGPASSWORD psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
+PGPASSFILE=$PGPASSFILE createdb -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate
+PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate < $SQL_DUMP > /dev/null
+PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
 
 # Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
-PGPASSWORD=$PGPASSWORD pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | psql -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME > /dev/null
+PGPASSFILE=$PGPASSFILE pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | psql -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME > /dev/null
 
 # running the migration
 
-cd $CHORUS_HOME
+cd $RELEASE_PATH
 log "Using Chorus 2.1 sql dump: $SQL_DUMP"
 log "Using Chorus 2.1 workfile directory: $WORKFILE_DIR"
 RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "DataMigrator.migrate_all('$WORKFILE_DIR')"
