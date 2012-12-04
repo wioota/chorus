@@ -65,7 +65,7 @@ describe Gpdb::ConnectionBuilder do
       let(:raised_message) { "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
 
       it "re-raises the error with a nice message" do
-        Timecop.freeze(Time.current)
+        Timecop.freeze (Time.current)
         mock(Rails.logger).error("#{raised_message} - #{adapter_exception.message}")
         expect {
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)

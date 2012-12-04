@@ -13,7 +13,7 @@ class NotificationMigrator < AbstractMigrator
       prerequisites(options)
 
       #NOTE alerts -> notifications
-      Legacy.connection.exec_query(%Q(
+      Legacy.connection.exec_query(<<-SQL)
         INSERT INTO notifications(
           legacy_id,
           recipient_id,
@@ -42,10 +42,10 @@ class NotificationMigrator < AbstractMigrator
             ON events.legacy_id = ea.reference AND events.legacy_type = 'edc_comment'
           WHERE type = 'NOTE'
           AND ea.id NOT IN (SELECT legacy_id FROM notifications);
-        ))
+      SQL
 
       #NOTE_COMMENT alerts -> notifications
-      Legacy.connection.exec_query(%Q(
+      Legacy.connection.exec_query(<<-SQL)
         INSERT INTO notifications(
           legacy_id,
           recipient_id,
@@ -78,10 +78,10 @@ class NotificationMigrator < AbstractMigrator
             ON events.id = comments.event_id
           WHERE type = 'NOTE_COMMENT'
           AND ea.id NOT IN (SELECT legacy_id FROM notifications);
-        ))
+      SQL
 
       #MEMBERS_ADDED alerts -> notifications
-      Legacy.connection.exec_query(%Q(
+      Legacy.connection.exec_query(<<-SQL)
         INSERT INTO notifications(
           legacy_id,
           recipient_id,
@@ -116,8 +116,42 @@ class NotificationMigrator < AbstractMigrator
           ON events.legacy_id = eas.id AND events.legacy_type = 'edc_activity_stream'
         WHERE ea.type = 'MEMBERS_ADDED'
           AND ea.id NOT IN (SELECT legacy_id FROM notifications);
-        ))
+      SQL
 
+      #IMPORT_SUCCESS and IMPORT_FAILED alerts -> notifications
+      Legacy.connection.exec_query(<<-SQL)
+        INSERT INTO notifications(
+          legacy_id,
+          recipient_id,
+          event_id,
+          created_at,
+          updated_at,
+          read,
+          deleted_at
+        )
+        SELECT
+          ea.id,
+          users.id,
+          events.id,
+          ea.created_stamp AT TIME ZONE 'UTC',
+          ea.last_updated_stamp AT TIME ZONE 'UTC',
+          ea.is_read,
+          CASE ea.is_deleted
+            WHEN 't' THEN ea.last_updated_tx_stamp AT TIME ZONE 'UTC'
+            ELSE null
+          END
+        FROM
+        edc_alert ea
+        INNER JOIN edc_activity_stream_object aso
+          ON  aso.object_id = ea.reference AND aso.entity_type = 'import'
+        INNER JOIN edc_activity_stream eas
+          ON eas.id = aso.activity_stream_id AND eas.type = ea.type
+        INNER JOIN users
+          ON users.legacy_id = ea.recipient
+        INNER JOIN events
+          ON events.legacy_id = eas.id AND events.legacy_type = 'edc_activity_stream'
+        WHERE ea.id NOT IN (SELECT legacy_id FROM notifications);
+      SQL
     end
   end
 end
