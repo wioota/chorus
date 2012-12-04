@@ -2,6 +2,7 @@ require 'net/ldap'
 
 module LdapClient
   LdapNotEnabled = Class.new(StandardError)
+  LdapNotCorrectlyConfigured = Class.new(StandardError)
   extend self
 
   def enabled?
@@ -11,6 +12,11 @@ module LdapClient
   # used to prefill a user create form
   def search(username)
     results = client.search :filter => Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+    unless results
+      error = client.get_operation_result
+      Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
+      raise LdapNotCorrectlyConfigured.new(error.message)
+    end
     results.map do |result|
       {
         :username =>   result[config['attribute']['uid']].first,
@@ -30,15 +36,19 @@ module LdapClient
     ldap.bind
   end
 
+  def client
+    raise LdapNotEnabled.new unless enabled?
+    auth = {:method => :anonymous}
+    if config['user_dn'].present?
+      auth = {:method => :simple, :username => config['user_dn'], :password => config['password']}
+    end
+    Net::LDAP.new :host => config['host'], :base => config['base'], :auth => auth
+  end
+
   private
 
   def make_dn(username)
     config['dn_template'].gsub('{0}', username)
-  end
-
-  def client
-    raise LdapNotEnabled.new unless enabled?
-    Net::LDAP.new :host => config['host'], :base => config['base']
   end
 
   def config

@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   validates_presence_of :username, :first_name, :last_name, :email
   validates_uniqueness_of :username, :case_sensitive => false, :allow_blank => true, :scope => :deleted_at
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
-  validates_format_of :username, :with => /^\S+$/
+  validates_format_of :username, :with => /^\S+$/, :unless => lambda { LdapClient.enabled? }
   validates_presence_of :password, :unless => lambda { password_digest? || LdapClient.enabled? || legacy_password_digest? }
   validates_length_of :password, :minimum => 6, :maximum => 256, :if => :password
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256

@@ -97,6 +97,33 @@ ldap:
 
 YAML
 
+LDAP_WITH_AUTH_CHORUS_YML = <<YAML
+session_timeout_minutes: 120
+instance_poll_interval_minutes: 1
+ldap:
+  host: 10.32.88.212
+  enable: true
+  port: 389
+  connect_timeout: 10000
+  bind_timeout: 10000
+  search:
+    timeout: 20000
+    size_limit: 200
+  base: DC=greenplum,DC=com
+  user_dn: greenplum\\chorus
+  password: secret
+  dn_template: greenplum\\{0}
+  attribute:
+    uid: sAMAccountName
+    ou: department
+    gn: givenName
+    sn: sn
+    cn: cn
+    mail: userprincipalname
+    title: title
+
+YAML
+
 DISABLED_LDAP_CHORUS_YML = <<YAML
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 1
@@ -148,25 +175,24 @@ describe LdapClient do
   end
 
 
-  describe ".search" do
+  describe "search" do
     context "when the enable flag is true" do
       before do
         stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
-      end
-      before :each do
         any_instance_of(Net::LDAP) do |ldap|
           stub(ldap).search.with_any_args do |options|
             options[:filter].to_s.should == "(sAMAccountName=testguy)"
             entries
           end
+          stub(ldap).get_operation_result { OpenStruct.new(:code => 49, :message => 'Invalid Credentials') }
         end
+        stub(LdapClient).enabled? { true }
       end
 
       context "there are no results from the LDAP server" do
         let(:entries) { [] }
 
         it "should return an empty array" do
-          stub(LdapClient).enabled? { true }
           LdapClient.search("testguy").should be_empty
         end
       end
@@ -177,9 +203,7 @@ describe LdapClient do
 
         before { stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] } }
 
-
         it "maps the customized fields to our standardized fields" do
-          stub(LdapClient).enabled? { true }
           results = LdapClient.search("testguy")
           results.should be_a(Array)
           results.first.should be_a(Hash)
@@ -198,6 +222,16 @@ describe LdapClient do
                                   :username => "testguy"}
         end
       end
+
+      context "the LDAP server returns an error" do
+        let(:entries) { nil }
+
+        it "should throw an error" do
+          expect {
+            LdapClient.search("testguy")
+          }.to raise_error(LdapClient::LdapNotCorrectlyConfigured, "Invalid Credentials")
+        end
+      end
     end
 
     context "when LDAP is disabled" do
@@ -211,7 +245,7 @@ describe LdapClient do
     end
   end
 
-  describe ".authenticate" do
+  describe "authenticate" do
     context "when the enable flag is true" do
       before do
         stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
@@ -241,6 +275,34 @@ describe LdapClient do
 
       it "should raise an error" do
         expect { LdapClient.authenticate("testguy", "secret") }.to raise_error(LdapClient::LdapNotEnabled)
+      end
+    end
+  end
+
+  describe "client" do
+    context "when we user_dn and password are not specified" do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
+        LdapClient.config["user_dn"].should be_blank
+        LdapClient.config["password"].should be_blank
+      end
+
+      it "uses anonymous auth" do
+        mock(Net::LDAP).new(hash_including(:auth => {:method => :anonymous}))
+        LdapClient.client
+      end
+    end
+
+    context "when we user_dn and password are specified" do
+      before do
+        stub(LdapClient).config { YAML.load(LDAP_WITH_AUTH_CHORUS_YML)['ldap'] }
+        LdapClient.config["user_dn"].should_not be_blank
+        LdapClient.config["password"].should_not be_blank
+      end
+
+      it "uses simple auth" do
+        mock(Net::LDAP).new(hash_including(:auth => {:method => :simple, :username => LdapClient.config["user_dn"], :password => LdapClient.config["password"]}))
+        LdapClient.client
       end
     end
   end

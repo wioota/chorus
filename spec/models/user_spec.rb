@@ -150,6 +150,11 @@ describe User do
         FactoryGirl.build(:user, :username => "My Name Is Michael Cane").should_not be_valid
       end
 
+      it "does not validate usernames when ldap is enabled" do
+        stub(LdapClient).enabled? { true }
+        FactoryGirl.build(:user, :username => "Pivotal User").should be_valid
+      end
+
       it "allows a username of 256 characters" do
         expect { FactoryGirl.build(:user, :username => 'a' * 256).save! }.to change { User.count }.by(1)
       end
