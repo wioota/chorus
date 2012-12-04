@@ -20,7 +20,7 @@ describe("chorus.ValidationRegexes", function() {
     });
 
     itWorks("AllWhitespace", {
-        good: ['', '  ', "\x09", " \x09     ", " \n "],
+        good: ['', '  ', "\x09", " \x09     ", " \n ", "    &nbsp;   "],
         bad: ["             1", "1       ", "words"]
     });
 
