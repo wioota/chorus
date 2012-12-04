@@ -158,7 +158,7 @@ class Deployer
     end
 
     def chorus_control(action)
-      run "test -e #{install_path} && CHORUS_HOME=#{install_path}/current #{install_path}/chorus_control.sh #{action}"
+      run "test -e #{install_path} && . #{install_path}/chorus_path.sh && chorus_control.sh #{action}"
     end
 
     private
