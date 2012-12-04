@@ -14,7 +14,7 @@ describe HdfsEntry do
       duplicate_entry.hadoop_instance = existing_entry.hadoop_instance
       duplicate_entry.path = existing_entry.path
       duplicate_entry.should_not be_valid
-      duplicate_entry.errors.count.should == 1
+      duplicate_entry.should have_error_on(:path)
     end
 
     it "should require a path that starts with a slash" do

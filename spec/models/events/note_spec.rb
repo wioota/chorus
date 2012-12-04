@@ -23,8 +23,8 @@ describe Events::Note do
 
   it "requires an actor" do
     note = Events::Note.new
-    note.valid?
-    note.errors.messages[:actor_id].length.should == 1
+    note.should_not be_valid
+    note.should have_error_on(:actor_id)
   end
 
   describe ".insights" do
@@ -116,8 +116,8 @@ describe Events::Note do
 
     it "can not be created on an archived workspace" do
       note = Events::NoteOnWorkspace.new(:workspace => workspaces(:archived), :actor => actor, :body => 'WOO!')
-      note.valid?
-      note.should have_at_least(1).errors_on(:workspace)
+      note.should_not be_valid
+      note.should have_error_on(:workspace)
     end
 
     it "is valid if the workspace later becomes archived" do

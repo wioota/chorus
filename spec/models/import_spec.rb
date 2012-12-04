@@ -32,15 +32,15 @@ describe Import, :database_integration => true do
 
     it "validates the presence of to_table" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :to_table => nil)
-      import.valid?
-      import.should have_at_least(1).errors_on(:to_table)
+      import.should_not be_valid
+      import.should have_error_on(:to_table)
     end
 
     it "validates the presence of source_dataset if no file_name present" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source_dataset => nil, :file_name => nil)
-      import.valid?
-      import.should have_at_least(1).errors_on(:source_dataset)
-      import.should have_at_least(1).errors_on(:file_name)
+      import.should_not be_valid
+      import.should have_error_on(:source_dataset)
+      import.should have_error_on(:file_name)
     end
 
     it "does not validate the presence of source_dataset if file_name present" do
@@ -50,14 +50,14 @@ describe Import, :database_integration => true do
 
     it "validates the presence of user" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => nil)
-      import.valid?
-      import.should have_at_least(1).errors_on(:user)
+      import.should_not be_valid
+      import.should have_error_on(:user)
     end
 
     it "validates that the to_table does not exist already if it is a new table" do
       import.to_table = "master_table1"
       import.should_not be_valid
-      import.errors.messages[:base].select { |a,b| a == :table_exists }.should_not be_empty
+      import.should have_error_on(:base).with_message(:table_exists)
     end
 
     it "is valid if an old import's to_table exists" do
@@ -73,7 +73,7 @@ describe Import, :database_integration => true do
       import.new_table = false
       import.should_not be_valid
 
-      import.errors.messages[:base].select { |a,b| a == :table_not_consistent }.should_not be_empty
+      import.should have_error_on(:base, :table_not_consistent)
     end
 
     it "sets the destination_dataset before validation" do

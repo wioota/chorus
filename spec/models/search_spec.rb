@@ -15,7 +15,7 @@ describe Search do
     it "is not valid without a valid entity_type" do
       search = Search.new(user, :query => 'fries', :entity_type => 'potato')
       search.should_not be_valid
-      search.errors[:entity_type].should include [:invalid_entity_type, {}]
+      search.should have_error_on(:entity_type).with_message(:invalid_entity_type)
     end
 
     it "raises ApiValidationError when search is invalid" do

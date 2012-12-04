@@ -15,7 +15,7 @@ describe Workfile do
         workfile = Workfile.new :file_name => 'workfile?.sql'
 
         workfile.should_not be_valid
-        workfile.errors[:file_name].should_not be_empty
+        workfile.should have_error_on(:file_name)
       end
     end
 
@@ -60,14 +60,14 @@ describe Workfile do
       new_workfile = Workfile.new :file_name => 'workfile.sql'
       new_workfile.workspace = workspace
       new_workfile.validate_name_uniqueness.should be_false
-      new_workfile.errors[:file_name].should_not be_empty
+      new_workfile.should have_error_on(:file_name)
     end
 
     it "returns true if there are no conflicts in its own workspace" do
       new_workfile = Workfile.new :file_name => 'workfile.sql'
       new_workfile.workspace = other_workspace
       new_workfile.validate_name_uniqueness.should be_true
-      new_workfile.errors[:file_name].should be_empty
+      new_workfile.should be_valid
     end
   end
 

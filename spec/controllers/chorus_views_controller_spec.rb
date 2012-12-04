@@ -126,17 +126,17 @@ describe ChorusViewsController, :database_integration => true do
     end
   end
 
-  context "#duplicate" do
+  describe "#duplicate" do
     let(:chorus_view) { datasets(:executable_chorus_view) }
 
     let(:options) { { :id => chorus_view.id, :object_name => 'duplicate_chorus_view' } }
 
     it "duplicate the chorus view" do
-      post :duplicate, options
+      expect { post :duplicate, options }.to change(Dataset.chorus_views, :count).by(1)
 
       new_chorus_view = Dataset.chorus_views.last
       new_chorus_view.name.should == "duplicate_chorus_view"
-      chorus_view.workspace.bound_datasets.should include(new_chorus_view)
+      chorus_view.workspace.bound_datasets.should_not include(new_chorus_view)
 
       response.code.should == "201"
       decoded_response[:query].should == chorus_view.query

@@ -290,22 +290,14 @@ describe User do
 
     it "should not allow deleting a user who owns a gpdb instance" do
       user.gpdb_instances << FactoryGirl.build(:gpdb_instance, :owner => user)
-      begin
-        user.destroy
-        fail
-      rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.messages[:user].should == [[:nonempty_instance_list, {}]]
-      end
+      expect { user.destroy }.to raise_error(ActiveRecord::RecordInvalid)
+      user.should have_error_on(:user).with_message(:nonempty_instance_list)
     end
 
     it "does not allow deleting a user who owns a workspace" do
       workspace_owner = users(:no_collaborators)
-      begin
-        workspace_owner.destroy
-        fail
-      rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.messages[:workspace_count].should == [[:equal_to, {:count => 0}]]
-      end
+      expect { workspace_owner.destroy}.to raise_exception(ActiveRecord::RecordInvalid)
+      workspace_owner.should have_error_on(:workspace_count).with_message(:equal_to).with_options(:count => 0)
     end
 
     it "deletes associated memberships" do

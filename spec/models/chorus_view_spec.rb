@@ -38,7 +38,7 @@ describe ChorusView do
 
         it 'is invalid' do
           chorus_view.should_not be_valid
-          chorus_view.errors[:query][0][0].should == :multiple_result_sets
+          chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
         end
 
         it 'cleans up' do
@@ -56,7 +56,7 @@ describe ChorusView do
 
         it 'is invalid' do
           chorus_view.should_not be_valid
-          chorus_view.errors[:query][0][0].should == :generic
+          chorus_view.should have_error_on(:query).with_message(:generic)
         end
       end
 
@@ -64,7 +64,7 @@ describe ChorusView do
         let(:query) { "create table query_not_starting_with_keyword_table();" }
         it 'is invalid' do
           chorus_view.should_not be_valid
-          chorus_view.errors[:query][0][0].should == :start_with_keywords
+          chorus_view.should have_error_on(:query).with_message(:start_with_keywords)
         end
       end
     end

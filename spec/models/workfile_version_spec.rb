@@ -71,11 +71,9 @@ describe WorkfileVersion do
                                                })
 
         workfile_version.should_not be_valid
+        workfile_version.should have_error_on(:contents).with_message(:invalid)
 
-        flattened_messages = workfile_version.errors[:contents].flatten
-
-        flattened_messages.should include(:invalid)
-        flattened_messages.join.should_not match(/not recognized by the 'identify' command/)
+        workfile_version.errors[:contents].flatten.join.should_not match(/not recognized by the 'identify' command/)
       end
     end
   end
