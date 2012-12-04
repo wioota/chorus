@@ -59,8 +59,11 @@ class Deployer
     ssh.copy_up([package_file, "install_answers.txt"], installer_dir)
 
     ssh.run "cat /dev/null > #{install_path}/install.log" unless legacy_path.present?
-    install_success = ssh.run "cd #{installer_dir} && ./#{package_file} #{installer_dir}/install_answers.txt"
-    ssh.copy_down("#{install_path}/install.log")
+    begin
+      install_success = ssh.run "cd #{installer_dir} && ./#{package_file} #{installer_dir}/install_answers.txt"
+    ensure
+      ssh.copy_down("#{install_path}/install.log")
+    end
     ssh.run "cd #{installer_dir} && rm -f #{package_file}" # remove installer script from target
 
     if install_success
