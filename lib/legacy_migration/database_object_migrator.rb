@@ -105,12 +105,29 @@ class DatabaseObjectMigrator < AbstractMigrator
         dataset.save!
       end
 
-      # ensure that all referenced sandboxes have a schema.
-      schema_rows = Legacy.connection.exec_query("
-        SELECT DISTINCT instance_id,
-                        database_name,
-                        schema_name
-        FROM edc_sandbox")
+      # ensure that all referenced sandboxes and execution tasks have a schema.
+      schema_rows = Legacy.connection.exec_query( <<-SQL)
+              SELECT DISTINCT a.instance_id,
+                        a.database_name,
+                        a.schema_name
+              FROM
+              (
+                (
+                   SELECT instance_id, database_name, schema_name
+                   FROM edc_sandbox
+                )
+                UNION
+                (
+                  SELECT edc_task.instance_id, edc_database.name as database_name, edc_schema.name as schema_name
+                  FROM edc_task
+                  INNER JOIN edc_database ON
+                    edc_database.id=edc_task.database_id
+                  INNER JOIN edc_schema ON
+                    edc_schema.id=edc_task.schema_id
+                )
+              ) a
+      SQL
+
 
       schema_rows.each do |row|
         gpdb_instance = GpdbInstance.find_by_legacy_id!(row['instance_id'])

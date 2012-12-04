@@ -22,7 +22,8 @@ class HadoopInstanceMigrator < AbstractMigrator
           username,
           group_list,
           created_at,
-          updated_at
+          updated_at,
+          state
           )
         SELECT
           i.id,
@@ -34,7 +35,8 @@ class HadoopInstanceMigrator < AbstractMigrator
           split_part(map.db_user_name, ',', 1),
           substring(map.db_user_name, position(',' in map.db_user_name) + 1),
           i.created_tx_stamp,
-          i.last_updated_tx_stamp
+          i.last_updated_tx_stamp,
+          i.state
         FROM edc_instance i
           INNER JOIN users u
           ON u.username = i.owner

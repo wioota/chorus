@@ -56,6 +56,29 @@ describe WorkfileMigrator do
         end
       end
 
+      it 'sets the last workfile schema id' do
+        @legacy_workfiles.each do |legacy_workfile|
+          new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])
+          last_execution_task = Legacy.connection.select_one <<-SQL
+            SELECT edc_task.id AS task_id, edc_task.instance_id AS instance_id, edc_database.name AS database_name, edc_schema.name AS schema_name
+              FROM edc_task
+            INNER JOIN edc_database ON edc_database.id=edc_task.database_id
+            INNER JOIN edc_schema ON edc_schema.id=edc_task.schema_id
+            WHERE edc_task.task_type='WORKFILE_SQL_EXECUTION' AND edc_task.entity_id='#{legacy_workfile["id"]}'
+            ORDER BY edc_task.created_stamp DESC
+          SQL
+          if last_execution_task
+            last_execution_instance = GpdbInstance.find_by_legacy_id(last_execution_task['instance_id'])
+            last_execution_database = last_execution_instance.databases.find_by_name(last_execution_task['database_name'])
+            last_execution_schema = last_execution_database.schemas.find_by_name(last_execution_task['schema_name'])
+
+            new_workfile.execution_schema.should == last_execution_schema
+          else
+            new_workfile.execution_schema_id.should be_nil
+          end
+        end
+      end
+
       it "copies the deleted flag" do
         @legacy_workfiles.each do |legacy_workfile|
           new_workfile = Workfile.unscoped.find_by_legacy_id(legacy_workfile["id"])

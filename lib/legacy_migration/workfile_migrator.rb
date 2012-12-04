@@ -20,6 +20,7 @@ class WorkfileMigrator < AbstractMigrator
       UserMigrator.migrate
       WorkspaceMigrator.migrate
       MembershipMigrator.migrate
+      DatabaseObjectMigrator.migrate
     end
 
     def classes_to_validate
@@ -59,6 +60,25 @@ class WorkfileMigrator < AbstractMigrator
         INNER JOIN workspaces workspace
           ON workspace.legacy_id = edc_work_file.workspace_id
         WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);
+      SQL
+
+      Legacy.connection.exec_query <<-SQL
+        UPDATE workfiles
+          SET execution_schema_id = (SELECT gpdb_schemas.id FROM gpdb_schemas
+          INNER JOIN edc_task ON
+            edc_task.entity_id=workfiles.legacy_id
+          INNER JOIN gpdb_instances ON
+            edc_task.instance_id=gpdb_instances.legacy_id
+          INNER JOIN edc_database ON
+            edc_database.instance_id=edc_task.instance_id AND edc_database.id=edc_task.database_id
+          INNER JOIN gpdb_databases ON
+            gpdb_databases.name=edc_database.name AND gpdb_databases.gpdb_instance_id=gpdb_instances.id
+          INNER JOIN edc_schema ON
+            edc_schema.id=edc_task.schema_id
+          WHERE edc_task.task_type='WORKFILE_SQL_EXECUTION'
+            AND gpdb_schemas.name=edc_schema.name
+            AND gpdb_schemas.database_id=gpdb_databases.id
+            ORDER BY edc_task.created_stamp DESC LIMIT 1)
       SQL
 
       Legacy.connection.exec_query <<-SQL
