@@ -19,7 +19,7 @@ module InstanceIntegration
     if REAL_GPDB_HOST.match /^([0-9]{1,3}\.){3}[0-9]{1,3}$/
       return "local_greenplum"
     end
-    REAL_GPDB_HOST.gsub('-', '_')
+    REAL_GPDB_HOST
   end
 
   def self.execute_sql(sql_file, database = INSTANCE_CONFIG['maintenance_db'])
