@@ -163,11 +163,11 @@ describe ConfigMigrator do
         let(:properties) { 'chorus.workfile.max_file_size=1048576' }
 
         it 'sets the max workfile size in megabytes' do
-          workfile_max_size.should == 1
+          workfile_max_size.should be_equal 1
         end
 
         it 'sets the max CSV upload size in megabytes' do
-          csv_import_max_size.should == 1
+          csv_import_max_size.should be_equal 1
         end
       end
 
@@ -205,11 +205,11 @@ describe ConfigMigrator do
     end
 
     describe 'execution timeout' do
-      let(:properties) { 'chorus.workfile.execution.timeout= 30' } #0.5 minutes
+      let(:properties) { 'chorus.workfile.execution.timeout= 300' } #5 minutes
       let(:execution_timeout) { config_22['execution_timeout_in_minutes'] }
 
       it 'sets the execution timeout for visualizations and workfiles' do
-        execution_timeout.should == 0.5
+        execution_timeout.should == 5
       end
     end
   end

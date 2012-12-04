@@ -42,7 +42,7 @@ class ConfigMigrator
 
   def migrate_execution_timeout
     migrate_value('chorus.workfile.execution.timeout', 'execution_timeout_in_minutes') do |old_value|
-      old_value.to_f / 60
+      (old_value.to_f / 60).to_i
     end
   end
 
@@ -60,7 +60,7 @@ class ConfigMigrator
             old_value.to_f
           else
             old_value.to_f / (1024 * 1024)
-        end
+        end.to_i
       end
     end
   end
