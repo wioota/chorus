@@ -354,7 +354,7 @@ class ChorusInstaller
   def migrate_legacy_data
     log "Migrating data from previous version..." do
       log "Loading legacy data into postgres..." do
-        chorus_exec("cd #{release_path} && CHORUS_HOME=#{destination_path} RELEASE_PATH=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
+        chorus_exec("cd #{release_path} && INSTALL_ROOT=#{destination_path} CHORUS_HOME=#{destination_path} RELEASE_PATH=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
       end
     end
   end
@@ -407,12 +407,12 @@ class ChorusInstaller
       setup_database
     end
 
+    link_current_to_release
+
     if upgrade_legacy?
       migrate_legacy_config
       migrate_legacy_data
     end
-
-    link_current_to_release
 
     if is_supported_mac?
       warn_and_change_osx_properties

@@ -50,7 +50,7 @@ fi
 
 $bin/start-postgres.sh
 
-PGPASSFILE=$CHORUS_HOME/.pgpass
+PGPASSFILE=$INSTALL_ROOT/.pgpass
 
 # importing legacy sql
 # The database must exist
@@ -72,7 +72,7 @@ PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_
 PGPASSFILE=$PGPASSFILE psql     -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate -c 'alter schema public rename to legacy_migrate'
 
 # Pipe the output of pg_dump into the chorus_rails db, namespaced under legacy_migrate
-PGPASSFILE=$PGPASSFILE pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | psql -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME > /dev/null
+PGPASSFILE=$PGPASSFILE pg_dump --ignore-version -p $POSTGRES_PORT -U postgres_chorus chorus_tmp_migrate | PGPASSFILE=$PGPASSFILE psql -p $POSTGRES_PORT -U postgres_chorus $DATABASE_NAME > /dev/null
 
 # running the migration
 
