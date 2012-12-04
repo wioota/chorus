@@ -67,6 +67,13 @@ describe QC do
       QC.log(:message => "Rome is burning")
     end
   end
+
+  it "adds timestamps to clockwork logs" do
+    Timecop.freeze(Time.current) do
+      mock(Clockwork.config[:logger]).info("#{Time.current.to_s}: hello")
+      Clockwork.log("hello")
+    end
+  end
 end
 
 module Clockwork
