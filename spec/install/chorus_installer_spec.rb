@@ -638,7 +638,7 @@ describe ChorusInstaller do
 
       it "generates a .pgpass file" do
         lines = File.read("/usr/local/greenplum-chorus/.pgpass").lines.to_a
-        lines[0].strip.should =~ /\*:\*:chorus:the_user:[a-z0-9]{32}/
+        lines[0].strip.should =~ /\*:\*:\*:the_user:[a-z0-9]{32}/
         stats = File.stat("/usr/local/greenplum-chorus/.pgpass").mode
         sprintf("%o", stats).should == "100400"
       end
