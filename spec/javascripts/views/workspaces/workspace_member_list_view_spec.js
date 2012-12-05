@@ -9,9 +9,14 @@ describe("chorus.views.WorkspaceMemberList", function() {
             this.members = this.workspace.members();
 
             var members = this.workspace.members();
-            _.times(3, function() {
+            _.times(2, function() {
                 members.add(rspecFixtures.user());
             });
+
+            members.add(rspecFixtures.user({"image": {
+                "original": "/users/1000005/image?style=original&1353980459",
+                "icon": "/users/1000005/image?style=icon&1353980459"
+            }}));
             members.pagination = {records: 3};
 
             spyOn(this.members, "fetchAllIfNotLoaded");
@@ -25,9 +30,9 @@ describe("chorus.views.WorkspaceMemberList", function() {
         it("includes an image for each member", function() {
             var images = this.view.$(".members img");
             expect(images.length).toBe(3);
-            expect(images.eq(0).attr("src")).toBe(this.members.models[0].fetchImageUrl());
-            expect(images.eq(1).attr("src")).toBe(this.members.models[1].fetchImageUrl());
-            expect(images.eq(2).attr("src")).toBe(this.members.models[2].fetchImageUrl());
+            expect(images.eq(0).attr("src")).toBe(this.members.models[0].fetchImageUrl({ size: "icon" }));
+            expect(images.eq(1).attr("src")).toBe(this.members.models[1].fetchImageUrl({ size: "icon" }));
+            expect(images.eq(2).attr("src")).toBe(this.members.models[2].fetchImageUrl({ size: "icon" }));
         });
 
         it("has a title for each member that is their display Name", function() {
