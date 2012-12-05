@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'legacy_migration_spec_helper'
 require 'fakefs/spec_helpers'
 
 describe ConfigMigrator do
