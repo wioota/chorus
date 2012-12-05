@@ -93,7 +93,7 @@ describe GpdbInstancesController do
       let(:instance) { gpdb_instances(:default) }
 
       before do
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user, anything) { instance }
+        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user) { instance }
       end
 
       it "reports that the gpdb instance was created" do
@@ -112,46 +112,9 @@ describe GpdbInstancesController do
       end
     end
 
-    context "with create provision type" do
-      let(:params) do
-        {
-            :provision_type => 'create',
-            :name => 'instance_name',
-            :description => 'A description',
-            :db_username => 'gpadmin',
-            :db_password => 'secret'
-        }
-      end
-
-      it "returns 201" do
-        post :create, params
-        response.code.should == "201"
-      end
-
-      it "presents a newly created greenplum instance" do
-        mock_present do |gpdb_instance|
-          gpdb_instance.name.should == 'instance_name'
-          gpdb_instance.description.should == 'A description'
-          gpdb_instance.owner.should == user
-          gpdb_instance.should be_persisted
-        end
-        post :create, params
-      end
-
-      it "enqueues a request to provision a database for an instance" do
-        mock(Gpdb::InstanceRegistrar).create!.with_any_args do
-          gpdb_instance = gpdb_instances(:aurora)
-          gpdb_instance.id = 123
-          gpdb_instance
-        end
-        mock(QC.default_queue).enqueue_if_not_queued("AuroraProvider.provide!", 123, params.stringify_keys)
-        post :create, params
-      end
-    end
-
     context "with invalid attributes" do
       before do
-        stub(Gpdb::InstanceRegistrar).create!({}, user, anything) {
+        stub(Gpdb::InstanceRegistrar).create!({}, user) {
           raise(ActiveRecord::RecordInvalid.new(gpdb_instances(:default)))
         }
       end

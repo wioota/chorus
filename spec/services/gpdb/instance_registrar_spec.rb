@@ -104,36 +104,6 @@ describe Gpdb::InstanceRegistrar do
       event.gpdb_instance.should == instance
       event.actor.should == owner
     end
-
-    context "creating an aurora instance" do
-      before do
-        stub(Gpdb::ConnectionChecker).check! { raise "cannot check connection immediately" }
-      end
-
-      let(:attributes) do
-        {
-            :name => "instance_name",
-            :description => "Provisioned Instance",
-            :db_username => "gpadmin",
-            :db_password => "secret"
-        }
-      end
-
-      it "creates an instance" do
-        instance = Gpdb::InstanceRegistrar.create!(attributes, owner, :aurora => true)
-        instance.should be_persisted
-        instance.name.should == "instance_name"
-      end
-
-      it "sets aurora-specific defaults" do
-        instance = Gpdb::InstanceRegistrar.create!(attributes, owner, :aurora => true)
-        instance.port.should == 5432
-        instance.host.should == "provisioning_ip"
-        instance.maintenance_db.should == "postgres"
-        instance.provision_type.should == "create"
-        instance.state.should == "provisioning"
-      end
-    end
   end
 
   describe ".update!" do
