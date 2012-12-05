@@ -18,10 +18,10 @@ describe GpdbInstancesController do
 
     it_behaves_like "a paginated list"
 
-    it "returns online gpdb instances that the user can access when accessible is passed" do
+    it "returns all gpdb instances (online and offline) that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.map(&:id).should_not include(gpdb_instances(:offline).id)
+      decoded_response.map(&:id).should include(gpdb_instances(:offline).id)
     end
   end
 
