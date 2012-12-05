@@ -27,7 +27,7 @@ module Gpdb
       elsif e.message.include?("too many clients")
         raise InstanceOverloaded
       else
-        raise ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment")
+        raise
       end
     rescue ActiveRecord::StatementInvalid => e
       friendly_message = "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"
