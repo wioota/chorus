@@ -14,9 +14,9 @@ gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
 gem 'attr_encrypted'
-gem 'tabcmd_gem', :git => "git@github.com:GreenplumChorus/tableau.git"
+gem 'tabcmd_gem', :github => "GreenplumChorus/tableau"
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
-gem "logger-syslog", git: 'git@github.com:scambra/logger-syslog.git'
+gem "logger-syslog", :github => 'scambra/logger-syslog'
 gem 'sequel', :require => 'sequel/no_core_ext'
 
 platform :jruby do
