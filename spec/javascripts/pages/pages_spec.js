@@ -104,8 +104,23 @@ describe("chorus.pages.Base", function() {
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.pageOptions.title).toBe(t("unprocessable_entity.instance_still_provisioning.title"));
-                    expect(chorus.pageOptions.text).toBe(t("unprocessable_entity.instance_still_provisioning.text"));
+                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.instance_still_provisioning.title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("unprocessable_entity.instance_still_provisioning.text");
+                });
+            });
+
+            context("when given a generic error message", function() {
+                beforeEach(function() {
+                    this.page = new chorus.pages.Bare();
+                    chorus.pageOptions = {};
+                    this.model.serverErrors = { errors: "Bad things happened." }
+                    this.page.dependOn(this.model);
+                });
+
+                it("displays the error message it was given", function() {
+                    this.model.trigger("unprocessableEntity");
+                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.unidentified_error.title");
+                    expect(chorus.pageOptions.text).toBe("Bad things happened.");
                 });
             });
         });
