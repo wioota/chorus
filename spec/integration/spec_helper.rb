@@ -25,7 +25,7 @@ def current_route
   URI.parse(current_url).fragment
 end
 
-def wait_for_ajax(timeout = 15)
+def wait_for_ajax(timeout = 30)
   page.wait_until(timeout) do
     page.evaluate_script 'jQuery.active == 0'
   end
@@ -50,6 +50,14 @@ RSpec.configure do |config|
   unless ENV['GPDB_HOST']
     warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :database_integration => true
+  end
+
+  config.before(:each) do
+    Rails.logger.info "Started test: #{example.full_description}"
+  end
+
+  config.after(:each) do
+    Rails.logger.info "Finished test: #{example.full_description}"
   end
 
   config.treat_symbols_as_metadata_keys_with_true_values = true

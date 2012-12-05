@@ -73,6 +73,14 @@ RSpec.configure do |config|
     self.class.fixtures :all unless self.class.metadata[:legacy_migration]
   end
 
+  config.before(:each) do
+    Rails.logger.info "Started test: #{example.full_description}"
+  end
+
+  config.after(:each) do
+    Rails.logger.info "Finished test: #{example.full_description}"
+  end
+
   config.before :type => :controller do
     request.env['CONTENT_TYPE'] = "application/json"
   end
