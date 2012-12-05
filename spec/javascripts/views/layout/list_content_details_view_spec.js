@@ -5,10 +5,10 @@ describe("chorus.views.ListContentDetails", function() {
             "total": "2",
             "page": "1",
             "records": "22"
-        }
+        };
         this.collection.loaded = true;
         this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User" });
-    })
+    });
 
     describe("#render", function() {
         describe("buttons", function() {
@@ -94,26 +94,26 @@ describe("chorus.views.ListContentDetails", function() {
                 beforeEach(function() {
                     this.view.options.hideCounts = false;
                     this.view.render();
-                })
+                });
 
                 it("renders the total number of items in the collection", function() {
                     expect(this.view.$(".count")).toContainText("22");
-                })
-            })
+                });
+            });
 
             context("and the hideCounts option is truthy", function() {
                 beforeEach(function() {
                     this.view.options.hideCounts = true;
                     this.view.render();
-                })
+                });
 
                 it("does not render the total number of items in the collection", function() {
                     expect(this.view.$(".count")).not.toExist();
-                })
+                });
 
                 it("does not render the current page or total page count", function() {
                     expect(this.view.$(".pagination .page")).not.toExist();
-                })
+                });
             });
 
             context("and there is only one page of items", function() {
@@ -121,45 +121,45 @@ describe("chorus.views.ListContentDetails", function() {
                     this.collection.pagination.page = "1";
                     this.collection.pagination.total = "1";
                     this.view.render();
-                })
+                });
 
                 it("does not display the pagination controls", function() {
                     expect(this.view.$(".pagination")).toHaveClass("hidden");
-                })
+                });
 
                 context("and the hideIfNoPagination option is falsy", function() {
                     beforeEach(function() {
                         this.view.options.hideIfNoPagination = false;
                         this.view.render();
-                    })
+                    });
 
                     it("does not add the hidden class to the container", function() {
                         expect($(this.view.el)).not.toHaveClass("hidden")
-                    })
-                })
+                    });
+                });
 
                 context("and the hideIfNoPagination option is truthy", function() {
                     beforeEach(function() {
                         this.view.options.hideIfNoPagination = true;
                         this.view.render();
-                    })
+                    });
 
                     it("adds the hidden class to the container", function() {
                         expect($(this.view.el)).toHaveClass("hidden")
-                    })
-                })
-            })
+                    });
+                });
+            });
 
             context("and there is more than one page of items", function() {
                 beforeEach(function() {
                     this.collection.pagination.page = "1";
                     this.collection.pagination.total = "2";
                     this.view.render();
-                })
+                });
 
                 it("displays the pagination controls", function() {
                     expect(this.view.$(".pagination")).not.toHaveClass("hidden");
-                })
+                });
 
                 it("displays the page number of the collection", function() {
                     expect(this.view.$(".pagination .page .current").text().trim()).toBe(this.collection.pagination.page);
@@ -171,19 +171,19 @@ describe("chorus.views.ListContentDetails", function() {
 
                 it("does not add the hidden class to the container", function() {
                     expect($(this.view.el)).not.toHaveClass("hidden")
-                })
+                });
 
                 context("when there is a next page", function() {
                     beforeEach(function() {
                         this.collection.pagination.page = "1";
                         this.collection.pagination.total = "2";
                         this.view.render();
-                    })
+                    });
 
                     it("renders the next page link", function() {
                         expect(this.view.$(".pagination .links a.next")).not.toHaveClass("hidden");
                         expect(this.view.$(".pagination .links span.next")).toHaveClass("hidden");
-                    })
+                    });
                 });
 
                 context("when there is NO next page", function() {
@@ -191,7 +191,7 @@ describe("chorus.views.ListContentDetails", function() {
                         this.collection.pagination.page = "2";
                         this.collection.pagination.total = "2";
                         this.view.render();
-                    })
+                    });
 
                     it("renders the next page link, but not as a link", function() {
                         expect(this.view.$(".pagination .links a.next")).toHaveClass("hidden");
@@ -204,26 +204,26 @@ describe("chorus.views.ListContentDetails", function() {
                         this.collection.pagination.page = "2";
                         this.collection.pagination.total = "2";
                         this.view.render();
-                    })
+                    });
 
                     it("renders the previous page link", function() {
                         expect(this.view.$(".pagination .links a.previous")).not.toHaveClass("hidden");
                         expect(this.view.$(".pagination .links span.previous")).toHaveClass("hidden");
-                    })
-                })
+                    });
+                });
 
                 context("when there is NO previous page", function() {
                     beforeEach(function() {
                         this.collection.pagination.page = "1";
                         this.collection.pagination.total = "2";
                         this.view.render();
-                    })
+                    });
 
                     it("renders the previous page link, but not as a link", function() {
                         expect(this.view.$(".pagination .links a.previous")).toHaveClass("hidden");
                         expect(this.view.$(".pagination .links span.previous")).not.toHaveClass("hidden");
                     });
-                })
+                });
             });
 
             context("and the collection is empty", function() {
@@ -231,46 +231,46 @@ describe("chorus.views.ListContentDetails", function() {
                     this.view.collection = new chorus.collections.UserSet();
                     this.view.collection.loaded = true;
                     this.view.render();
-                })
+                });
 
                 it("does not display the pagination controls", function() {
                     expect(this.view.$(".pagination")).toHaveClass("hidden");
-                })
+                });
 
                 context("and the hideIfNoPagination option is falsy", function() {
                     beforeEach(function() {
                         this.view.options.hideIfNoPagination = false;
                         this.view.render();
-                    })
+                    });
 
                     it("does not add the hidden class to the container", function() {
                         expect($(this.view.el)).not.toHaveClass("hidden")
-                    })
-                })
+                    });
+                });
 
                 context("and the hideIfNoPagination option is truthy", function() {
                     beforeEach(function() {
                         this.view.options.hideIfNoPagination = true;
                         this.view.render();
-                    })
+                    });
 
                     it("adds the hidden class to the container", function() {
                         expect($(this.view.el)).toHaveClass("hidden")
-                    })
-                })
-            })
-        })
+                    });
+                });
+            });
+        });
 
         context("when the collection is not loaded", function() {
             beforeEach(function() {
                 this.collection.loaded = undefined;
                 this.view.render();
-            })
+            });
 
             it("displays 'loading'", function() {
                 expect(this.view.$(".loading")).toExist();
-            })
-        })
+            });
+        });
     });
 
     describe("clicking the pagination links", function() {
@@ -279,7 +279,7 @@ describe("chorus.views.ListContentDetails", function() {
             this.collection.pagination.total = "3";
             spyOn(window, 'scroll');
             this.view.render();
-        })
+        });
 
         describe("when the 'next' link is clicked", function() {
             beforeEach(function() {
@@ -289,12 +289,12 @@ describe("chorus.views.ListContentDetails", function() {
 
             it("fetches the next page of the collection", function() {
                 expect(this.collection.fetchPage).toHaveBeenCalledWith(3);
-            })
+            });
 
             it("scrolls the viewport to the top of the page", function() {
                 expect(window.scroll).toHaveBeenCalledWith(0, 0)
-            })
-        })
+            });
+        });
 
         describe("when the 'previous' link is clicked", function() {
             beforeEach(function() {
@@ -304,13 +304,13 @@ describe("chorus.views.ListContentDetails", function() {
 
             it("fetches the previous page of the collection", function() {
                 expect(this.collection.fetchPage).toHaveBeenCalledWith(1);
-            })
+            });
 
             it("scrolls the viewport to the top of the page", function() {
                 expect(window.scroll).toHaveBeenCalledWith(0, 0);
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("search", function() {
         beforeEach(function() {
@@ -341,6 +341,14 @@ describe("chorus.views.ListContentDetails", function() {
 
             expect(this.view.$("input.search:text")).not.toExist();
         });
+
+        it("sets the value of the search bar if the collection has a namePattern already", function() {
+            this.collection.attributes.namePattern = "foo";
+            this.view.render();
+
+            expect(this.view.$("input.search:text").val()).toEqual('foo');
+        });
+
     });
 
     describe("#startLoading", function() {
@@ -418,5 +426,5 @@ describe("chorus.views.ListContentDetails", function() {
                 });
             });
         });
-    })
+    });
 });
