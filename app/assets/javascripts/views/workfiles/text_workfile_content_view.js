@@ -61,11 +61,6 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     editText: function() {
         if (this.cursor) {
             this.editor.setCursor(this.cursor.line, this.cursor.ch);
-        } else {
-            var lineCount = this.editor.lineCount();
-            var lastLine = this.editor.getLine(lineCount - 1);
-            var charCount = lastLine.length;
-            this.editor.setCursor(lineCount - 1, charCount);
         }
 
         this.editor.setOption("readOnly", false);
@@ -117,10 +112,12 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     },
 
     replaceCurrentVersionWithSelection: function() {
+        this.saveCursorPosition();
         this.replaceCurrentVersionWithContent(this.editor.getSelection());
     },
 
     createNewVersionFromSelection: function() {
+        this.saveCursorPosition();
         this.createNewVersionWithContent(this.editor.getSelection());
     },
 

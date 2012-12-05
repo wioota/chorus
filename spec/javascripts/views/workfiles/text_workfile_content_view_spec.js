@@ -330,6 +330,10 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     expect(this.view.model.content()).toBe("big");
                 });
 
+                it("puts the cursor at the end of the file", function() {
+                    expect(this.view.editor.getCursor().ch).toBeGreaterThan("big".length-1);
+                });
+
                 it("launches save workfile as new version dialog", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
                 });
