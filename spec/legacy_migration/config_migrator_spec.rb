@@ -1,4 +1,4 @@
-require 'legacy_migration_spec_helper'
+require 'spec_helper'
 require 'fakefs/spec_helpers'
 
 describe ConfigMigrator do
@@ -84,9 +84,9 @@ describe ConfigMigrator do
         chorus.ldap.search.timeout = 20000
         chorus.ldap.search.sizeLimit = 200
         chorus.ldap.base = DC=greenplum,DC=com
-        chorus.ldap.userDn = greenplum\\chorus
+        chorus.ldap.userDn = greenplum\\\\chorus
         chorus.ldap.password = secret
-        chorus.ldap.dn.template = greenplum\\{0}
+        chorus.ldap.dn.template = greenplum\\\\{0}
         chorus.ldap.attribute.uid = sAMAccountName
         chorus.ldap.attribute.ou = department
         chorus.ldap.attribute.gn = givenName

@@ -89,9 +89,13 @@ class ConfigMigrator
     migrate_value('chorus.ldap.host', 'ldap.host')
     migrate_value('chorus.ldap.port', 'ldap.port')
     migrate_value('chorus.ldap.base', 'ldap.base')
-    migrate_value('chorus.ldap.userDn', 'ldap.user_dn')
+    migrate_value('chorus.ldap.userDn', 'ldap.user_dn') do |old_value|
+      old_value.gsub("\\\\", "\\")
+    end
     migrate_value('chorus.ldap.password', 'ldap.password')
-    migrate_value('chorus.ldap.dn.template', 'ldap.dn_template')
+    migrate_value('chorus.ldap.dn.template', 'ldap.dn_template') do |old_value|
+      old_value.gsub("\\\\", "\\")
+    end
 
     %w{uid ou gn sn cn mail title}.each do |property|
       migrate_value("chorus.ldap.attribute.#{property}", "ldap.attribute.#{property}")
