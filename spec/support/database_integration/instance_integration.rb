@@ -12,7 +12,7 @@ module InstanceIntegration
   ACCOUNT_CONFIG = INSTANCE_CONFIG['account']
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
   REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
-  FILES_TO_TRACK_CHANGES_OF = %w(create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql)
+  FILES_TO_TRACK_CHANGES_OF = %w(create_gpadmin.sql create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql)
   GPDB_VERSIONS_FILE = (Rails.root + 'tmp/instance_integration_file_versions').to_s
 
   def self.real_gpdb_hostname
@@ -52,6 +52,7 @@ module InstanceIntegration
   def self.setup_gpdb
     if gpdb_changed?
       puts "  Importing into #{InstanceIntegration.database_name}"
+      execute_sql("create_gpadmin.sql")
       execute_sql("drop_and_create_gpdb_databases.sql")
       execute_sql("create_test_schemas.sql", database_name)
       execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
