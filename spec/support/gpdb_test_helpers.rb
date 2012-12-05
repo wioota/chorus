@@ -5,7 +5,6 @@ module GpdbTestHelpers
       stub(fake_connection).execute(query).times(any_times) { clone_response(response) }
       stub(fake_connection).exec_query(query).times(any_times) { clone_response(response) }
       stub(fake_connection).select_all(query).times(any_times) { clone_response(response) }
-      stub(fake_connection).select_value(query).times(any_times) { response.empty? ? nil : response.first }
     end
     stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account) {|_, _, block| block.call(fake_connection) }
     stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account, anything) {|_, _, _, block| block.call(fake_connection) }

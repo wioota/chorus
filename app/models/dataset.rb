@@ -84,12 +84,6 @@ class Dataset < ActiveRecord::Base
     end
   end
 
-  def self.total_entries(account, schema, options = {})
-    schema.with_gpdb_connection(account, false) do |conn|
-      conn.select_value("select count(tables_and_views.*) from (#{Query.new(schema).tables_and_views_in_schema(options).to_sql}) tables_and_views;")
-    end
-  end
-
   def self.refresh(account, schema, options = {})
     found_datasets = []
     datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
@@ -116,7 +110,6 @@ class Dataset < ActiveRecord::Base
     schema.touch(:refreshed_at)
 
     if options[:mark_stale]
-      raise "You should not use mark_stale and limit at the same time" if options[:limit]
       (schema.datasets.not_stale - found_datasets).each do |dataset|
         dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true) unless dataset.is_a? ChorusView
       end
@@ -291,20 +284,21 @@ class Dataset < ActiveRecord::Base
           RELATIONS[:relhassubclass].as('master_table')
       )
 
-      (options[:filter] || []).each do |h|
-        h.each_pair do |filter_key,filter_value|
-          query.where(RELATIONS[filter_key.to_sym].matches("%#{filter_value}%"))
+      if options[:filter]
+        options[:filter].each do |h|
+          h.each_pair do |filter_key,filter_value|
+            query.where(RELATIONS[filter_key.to_sym].matches("%#{filter_value}%"))
+          end
         end
       end
 
-      (options[:sort] || []).each do |h|
-        h.each_pair do |sort_key,sort_value|
-          query.order("#{sort_key} #{sort_value}")
+      if options[:sort]
+        options[:sort].each do |h|
+          h.each_pair do |sort_key,sort_value|
+            query.order("#{sort_key} #{sort_value}")
+          end
         end
       end
-
-      query.take(options[:limit]) if options[:limit]
-
       query
     end
 

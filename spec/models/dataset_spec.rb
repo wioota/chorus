@@ -148,20 +148,6 @@ describe Dataset do
     end
   end
 
-  context ".total_entries" do
-    before do
-      stub_gpdb(account, dataset_count_sql => [3])
-    end
-
-    let(:dataset_count_sql) {
-      "select count(tables_and_views.*) from (#{Dataset::Query.new(schema).tables_and_views_in_schema({}).to_sql}) tables_and_views;"
-    }
-
-    it "returns the number of total entries" do
-      Dataset.total_entries(account, schema).should == 3
-    end
-  end
-
   context ".refresh" do
     context "refresh once, without mark_stale flag" do
       before do
@@ -541,17 +527,9 @@ describe Dataset::Query, :database_integration => true do
 
     context "with sort options" do
       let(:options) { {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]} }
-      it "returns a query whose result with proper sort" do
+      it "returns a query whose result with proper filtering" do
         names = rows.map { |row| row["name"] }
         names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1"]
-      end
-    end
-
-    context "with limit options" do
-      let(:options) { {:limit => 2} }
-      it "returns a query whose result with limit" do
-        names = rows.map { |row| row["name"] }
-        names.should == ["base_table1", "view1"]
       end
     end
   end
