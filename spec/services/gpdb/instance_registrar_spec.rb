@@ -53,15 +53,13 @@ describe Gpdb::InstanceRegistrar do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      stub(Gpdb::ConnectionChecker).check! { raise(ApiValidationError.new) }
+      stub(Gpdb::ConnectionChecker).check! { raise ApiValidationError.new }
 
-      expect { Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner) }.to raise_error
       expect {
-        begin
+        expect {
           Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-        rescue
-        end
-      }.not_to change(GpdbInstance, 'count')
+        }.to raise_error
+      }.not_to change(GpdbInstance, :count)
     end
 
     it "caches the db name, owner and connection params" do

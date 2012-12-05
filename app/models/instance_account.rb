@@ -1,6 +1,6 @@
 class InstanceAccount < ActiveRecord::Base
-  attr_accessible :db_username, :db_password
-  validates_presence_of :db_username, :db_password, :gpdb_instance_id, :owner_id
+  attr_accessible :db_username, :db_password, :owner
+  validates_presence_of :db_username, :db_password, :gpdb_instance, :owner
 
   attr_encrypted :db_password, :encryptor => ChorusEncryptor, :encrypt_method => :encrypt_password, :decrypt_method => :decrypt_password, :encode => false
 

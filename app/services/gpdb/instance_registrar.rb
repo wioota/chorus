@@ -7,15 +7,9 @@ module Gpdb
       gpdb_instance = owner.gpdb_instances.build(config)
       gpdb_instance.shared = config[:shared]
 
-      account = owner.instance_accounts.build(config)
-      ActiveRecord::Base.transaction do
-        gpdb_instance.save!
-        account.gpdb_instance = gpdb_instance
-        ConnectionChecker.check!(gpdb_instance, account)
-        gpdb_instance.save!
-        account.save!
-      end
-
+      account = gpdb_instance.accounts.build(config.merge(:owner => owner))
+      ConnectionChecker.check!(gpdb_instance, account)
+      gpdb_instance.save!
       Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => gpdb_instance)
 
       gpdb_instance
