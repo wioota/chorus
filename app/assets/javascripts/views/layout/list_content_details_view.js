@@ -71,7 +71,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
             this.options.search)
         );
         if (this.collection.attributes.namePattern) {
-            this.$("input.search:text").val(this.collection.attributes.namePattern);
+            this.$("input.search:text").val(this.collection.attributes.namePattern).trigger('keyup');
         }
     },
 
