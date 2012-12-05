@@ -436,6 +436,12 @@ describe("chorus.models.Abstract", function() {
                 expect(this.model.errors.foo).toBeDefined();
             });
 
+            it("sets an error if the attribute is present, is a String, and contains only whitespace and html tags", function() {
+                this.model.set({ foo: "   &nbsp;<br/> " });
+                this.model.require("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
             it("does not set an error if the attribute is present", function() {
                 this.model.set({ foo: "bar" });
                 this.model.require("foo");
