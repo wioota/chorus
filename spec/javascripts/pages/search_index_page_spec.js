@@ -117,7 +117,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows that workfile in the sidebar", function() {
-                        debugger;
                         expect(this.page.sidebar.$(".fileName")).toHaveText("Public");
                     });
 
