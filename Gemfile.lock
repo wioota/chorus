@@ -48,11 +48,26 @@ GIT
       webmock (>= 1.7.0)
 
 GIT
+  remote: git://github.com/GreenplumChorus/tableau.git
+  revision: 0d0fab114b3975daee66204578f46ac164b2500b
+  specs:
+    tabcmd_gem (0.0.1)
+      highline
+      hpricot
+      rchardet19
+
+GIT
   remote: git://github.com/pivotal/sunspot_matchers.git
   revision: e4488522e02da1f58c5117dbc38800deb32ffbd3
   branch: sunspot_2_pre
   specs:
     sunspot_matchers (2.0.0.pre.120417)
+
+GIT
+  remote: git://github.com/scambra/logger-syslog.git
+  revision: 008dbba80a59bc5d4bd0e810fe12d1debe01ab35
+  specs:
+    logger-syslog (1.7.1)
 
 GIT
   remote: git://github.com/taktsoft/sunspot.git
@@ -65,21 +80,6 @@ GIT
       nokogiri
       sunspot (= 2.0.0.pre.120720)
     sunspot_solr (2.0.0.pre.120720)
-
-GIT
-  remote: git@github.com:GreenplumChorus/tableau.git
-  revision: 0d0fab114b3975daee66204578f46ac164b2500b
-  specs:
-    tabcmd_gem (0.0.1)
-      highline
-      hpricot
-      rchardet19
-
-GIT
-  remote: git@github.com:scambra/logger-syslog.git
-  revision: 234ef81ebe5e9e8c7fe9d2ba46551a8786afc1ff
-  specs:
-    logger-syslog (1.7.0)
 
 GEM
   remote: http://rubygems.org/
