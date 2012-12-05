@@ -13,7 +13,12 @@ class InstanceAccountMigrator < AbstractMigrator
       prerequisites
 
       # Make sure gpdb_instances are flagged as shared if any legacy account maps are shared
-      Legacy.connection.exec_query("UPDATE gpdb_instances SET shared = true WHERE legacy_id IN (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');")
+      Legacy.connection.exec_query(<<-SQL)
+          UPDATE gpdb_instances
+          SET shared = true
+          WHERE legacy_id IN
+          (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');
+      SQL
 
       inserted = Legacy.connection.exec_query("INSERT INTO public.instance_accounts(
                                 legacy_id,
