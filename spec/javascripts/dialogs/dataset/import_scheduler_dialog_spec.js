@@ -120,15 +120,28 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.startDatetime = new Date(2012, 1, 29, 12, 9, 0, 0);
                     expect(this.dialog.$("button.submit")).toBeEnabled();
 
-                    this.dialog.$("button.submit").click();
                 });
 
                 it("should put the values in the correct API form fields", function() {
+                    this.dialog.$("button.submit").click();
+
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import_schedule[truncate]"]).toBe("false");
                     expect(params["dataset_import_schedule[sample_count]"]).toBe("123");
                     expect(params["dataset_import_schedule[start_datetime]"]).toBe(this.startDatetime.toISOString());
                     expect(params["dataset_import_schedule[end_date]"]).toBe("2012-03-21")
+                });
+
+                context("when the date is invalid", function() {
+                    beforeEach(function() {
+                        this.dialog.activeScheduleView.$(".start input[name='day']").val("32");
+                    });
+
+                    it("displays an 'invalid date' message", function() {
+                        this.dialog.$("button.submit").click();
+                        expect(this.dialog.$(".errors")).toContainText("32 is not a valid value for days.")
+                        expect(this.dialog.$('button.submit').isLoading()).toBeFalsy();
+                    });
                 });
             });
 

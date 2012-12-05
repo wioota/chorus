@@ -82,7 +82,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
         this.model.set({ workspaceId: this.workspace.get("id") });
 
         this.model.unset("sampleCount", {silent: true});
-        this.model.save(this.getNewModelAttrs());
+        try {
+            this.model.save(this.getNewModelAttrs());
+        } catch(e) {
+            var message = e && e.message || "Invalid schedule"
+            this.model.serverErrors = {fields: {date: {GENERIC: {message: message}}}};
+            this.showErrors(this.model)
+            this.$("button.submit").stopLoading();
+        }
     },
 
     modelSaved: function () {
