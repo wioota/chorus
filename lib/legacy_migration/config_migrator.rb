@@ -36,7 +36,12 @@ class ConfigMigrator
       hash.fetch(key)
     end
 
-    @config_22[new_key] = block_given? ? yield(old_value) : old_value
+    parent = @config_22
+    new_keys = new_key.split(".")
+    new_keys[0..-2].each do |key|
+      parent = parent[key] || parent[key] = {}
+    end
+    parent[new_keys.last] = block_given? ? yield(old_value) : old_value
   rescue IndexError
   end
 

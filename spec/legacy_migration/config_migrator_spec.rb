@@ -49,12 +49,22 @@ describe ConfigMigrator do
 
     context 'when there is an existing chorus config' do
       let(:output_path) do
-        File.open('/existing.properties', 'w') { |f| f << 'foo=bar' }
+        File.open('/existing.properties', 'w') { |f| f << <<-EOF
+          foo=bar
+          file_sizes_mb.workfiles = 10
+          EOF
+        }
         '/existing.properties'
       end
+      let(:properties) { 'chorus.workfile.max_file_size=5M' }
 
       it 'keeps the options from there' do
         config_22['foo'].should == 'bar'
+      end
+
+      it 'keeps the migrated options if both exist' do
+        config_22['file_sizes_mb']['workfiles'].should == 5
+        File.read(output_path).lines.grep(/file_sizes_mb.workfiles/).length.should == 1
       end
     end
 

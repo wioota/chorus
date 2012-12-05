@@ -3,9 +3,7 @@ module Properties
     result = {}
     compacted_lines(file_path).each do |line|
       match = line.match(/\s*(?<key>[^=\s]*)\s*=\s*(?<value>.*)/)
-      if !match
-        next
-       end
+      next unless match
       keys = match["key"].split(".")
       val = type_cast(match["value"])
 

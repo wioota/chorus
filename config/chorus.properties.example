@@ -112,11 +112,11 @@ ldap.port = 389
 ldap.base = DC =greenplum,DC =com
 ldap.user_dn = greenplum\chorus
 ldap.password = secret
+ldap.search.size_limit = 200
 ldap.dn_template = greenplum\{0}
 ldap.attribute.uid = sAMAccountName
 ldap.attribute.ou = department
 ldap.attribute.gn = givenName
 ldap.attribute.sn = sn
-ldap.attribute.cn = cn
 ldap.attribute.mail = mail
 ldap.attribute.title = title
