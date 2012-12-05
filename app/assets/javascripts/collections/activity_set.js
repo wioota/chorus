@@ -9,29 +9,27 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     reindexErrors: function() {
         _.each(this.models, function(activity) {
             activity.reindexError();
-        })
+        });
     },
 
-    url: function(options) {
+    urlTemplate: function() {
+        var url = this.attributes.insights ? 'insights' : this.attributes.url;
+        return url;
+    },
+
+    urlParams: function() {
         if (this.attributes.insights) {
-            return this.getInsightUrl();
-        } else {
-            var page = (options && options.page)|| 1;
-            return this.attributes.url + "&page=" + page;
+            if(this.attributes.workspace) {
+                return { entityType: 'workspace', workspaceId: this.attributes.workspace.id };
+            } else {
+                return { entityType: 'dashboard' };
+            }
         }
-    },
-
-    getInsightUrl: function() {
-        var workspace = this.attributes.workspace
-        var url_base = "/insights";
-        if (workspace) {
-            return (url_base + "?entity_type=workspace&workspace_id=" + workspace.id);
-        }
-        return (url_base + "?entity_type=dashboard");
     }
 }, {
+
     forDashboard: function() {
-        return new this([], { url: "/activities?entity_type=dashboard" });
+        return new this([], { url: "activities?entity_type=dashboard" });
     },
 
     forModel: function(model) {
@@ -40,6 +38,6 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
 
     urlForModel: function(model) {
         var entityId = model.get('id');
-        return "/activities?entity_type=" + model.entityType + "&entity_id=" + entityId;
+        return "activities?entity_type=" + model.entityType + "&entity_id=" + entityId;
     }
 });
