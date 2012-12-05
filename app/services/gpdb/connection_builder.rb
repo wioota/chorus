@@ -3,7 +3,6 @@ require 'error_logger'
 module Gpdb
   class InstanceStillProvisioning < StandardError; end
   class InstanceOverloaded < StandardError; end
-  class InstanceUnavailable < StandardError; end
 
   module ConnectionBuilder
     def self.connect!(gpdb_instance, account, database_name=nil)
@@ -28,7 +27,7 @@ module Gpdb
       elsif e.message.include?("too many clients")
         raise InstanceOverloaded
       else
-        raise InstanceUnavailable
+        raise ActiveRecord::JDBCError.new("The instance you have selected is unavailable at the moment")
       end
     rescue ActiveRecord::StatementInvalid => e
       friendly_message = "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: SQL Statement Invalid"

@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
   rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
-  rescue_from 'Gpdb::InstanceUnavailable', :with => :render_instance_unavailable_error
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
@@ -70,10 +69,6 @@ class ApplicationController < ActionController::Base
 
   def render_instance_overloaded_error(e)
     present_errors({:record => :INSTANCE_OVERLOADED}, :status => :unprocessable_entity)
-  end
-
-  def render_instance_unavailable_error(e)
-    present_errors({:record => :INSTANCE_UNAVAILABLE}, :status => :unprocessable_entity)
   end
 
   def render_not_found(e)
