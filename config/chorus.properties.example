@@ -91,8 +91,6 @@ gpfdist.data_dir = /tmp
 tableau.enabled = false
 tableau.url = 10.80.129.44
 tableau.port = 80
-tableau.username = chorusadmin
-tableau.password = secret
 
 # Gnip Settings
 

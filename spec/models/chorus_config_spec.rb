@@ -60,27 +60,27 @@ describe ChorusConfig do
 
     it 'returns true if the tableau url/port are configured' do
       config.config = {'tableau' => tableau_config}
-      config.tableau_configured?.should be_true
+      config.tableau_configured?.should == true
     end
 
     it 'returns false if the enabled flag is false but all the others are present' do
       disabled_config = tableau_config.merge({'enabled' => false})
       config.config = {'tableau' => disabled_config}
-      config.tableau_configured?.should be_false
+      config.tableau_configured?.should == false
     end
 
     it 'returns false if any of the keys are missing' do
       tableau_config.each do |key, _value|
         invalid_config = tableau_config.reject { |attr, _value| attr == key }
         config.config = {'tableau' => invalid_config}
-        config.should_not be_tableau_configured
+        config.tableau_configured?.should == false
       end
     end
 
     it 'returns false if the enabled key is undefined' do
       tableau_config.delete('enabled')
       config.config = {'tableau' => tableau_config}
-      config.tableau_configured?.should be_false
+      config.tableau_configured?.should == false
     end
   end
 
@@ -145,7 +145,7 @@ describe ChorusConfig do
           'enabled' => true
         }
       }
-      config.gnip_configured?.should be_true
+      config.gnip_configured?.should == true
     end
 
     it 'returns false if the gnip.enabled value is false' do
@@ -154,12 +154,12 @@ describe ChorusConfig do
           'enabled' => false
         }
       }
-      config.gnip_configured?.should be_false
+      config.gnip_configured?.should == false
     end
 
     it 'returns false if the enabled key is undefined' do
       config.config = {}
-      config.kaggle_configured?.should be_false
+      config.gnip_configured?.should == false
     end
   end
 
