@@ -12,7 +12,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         var options = {};
         if (this.modelIsWorkspace()) {
             options.urlParams = {
-                workspaceId: this.model.get("id"),
+                entityId: this.model.get("id"),
                 entityType: "workspace"
             };
         }
