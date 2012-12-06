@@ -40,8 +40,8 @@ class InstallerIO
   end
 
   MESSAGES = {
-      destination_path: "Please enter Chorus destination path",
-      data_path: "Please enter the data storage directory",
+      destination_path: "Please enter the full path to the Chorus installation directory",
+      data_path: "Please enter the full path to the Chorus data directory (recommended 500GB)",
       confirm_upgrade: "Existing version of Chorus detected. Upgrading will restart services.  Continue now?",
       passphrase: "Enter optional passphrase to generate a recoverable secret key for encrypting passwords.  By default, a random key will be generated.",
       confirm_legacy_upgrade: "Chorus 2.1 installation detected, do you want to upgrade to 2.2?",
