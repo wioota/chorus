@@ -11,12 +11,15 @@ module LdapClient
 
   # used to prefill a user create form
   def search(username)
-    results = client.search :filter => Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+    filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+    results = client.search :filter => filter, :size => search_limit
+
     unless results
       error = client.get_operation_result
       Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
       raise LdapNotCorrectlyConfigured.new(error.message)
     end
+
     results.map do |result|
       {
         :username =>   result[config['attribute']['uid']].first,
@@ -43,6 +46,10 @@ module LdapClient
       auth = {:method => :simple, :username => config['user_dn'], :password => config['password']}
     end
     Net::LDAP.new :host => config['host'], :port => config['port'], :base => config['base'], :auth => auth
+  end
+
+  def search_limit
+    config['search']['size_limit'] || 0
   end
 
   private
