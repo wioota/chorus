@@ -54,7 +54,7 @@ describe("chorus.views.ActivityListHeader", function() {
         });
 
         it("configures the insight count for that workspace", function() {
-            expect(this.view.insightCount.url()).toContainQueryParams({ workspaceId: this.view.model.get("id") })
+            expect(this.view.insightCount.url()).toContainQueryParams({ entityId: this.view.model.get("id") })
             expect(this.view.insightCount.url()).toContainQueryParams({ entityType: "workspace" })
         });
 
