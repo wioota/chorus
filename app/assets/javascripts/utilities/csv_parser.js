@@ -54,13 +54,16 @@ chorus.utilities.CsvParser = function(contents, options) {
         var types = this.options.types;
         if (!types) {
             types = _.map(columnNames, function(columnName, i) {
-                var type = "float";
+                var containsSomeText = false;
+                var allEmpty = true;
                 _.each(this.rows, function(row) {
-                    if (type == "float" && isNaN(+row[i])) {
-                        type = "text";
-                    }
+                    var contents = row[i];
+                    var isText = contents && isNaN(+contents);
+                    var isEmpty = !contents || contents.trim() == '';
+                    allEmpty = allEmpty && isEmpty;
+                    containsSomeText = containsSomeText || isText;
                 }, this);
-                return type;
+                return allEmpty || containsSomeText ? 'text' : 'float';
             }, this);
         }
 
