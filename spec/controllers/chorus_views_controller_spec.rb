@@ -162,57 +162,6 @@ describe ChorusViewsController, :database_integration => true do
       the_event.workspace.id.should == workspace.id
       the_event.dataset.id.should == new_chorus_view.id
     end
-
-    context "when chorus View have import schedule" do
-      before do
-        any_instance_of(ImportSchedule) do |import_schedule|
-          stub(import_schedule).valid? { true }
-        end
-
-        ImportSchedule.create!({:start_datetime => '2012-09-04 23:00:00-07',
-                                :end_date => '2012-12-04',
-                                :frequency => 'weekly',
-                                :workspace => chorus_view.workspace,
-                                :to_table => "new_table_for_import",
-                                :source_dataset_id => chorus_view.id,
-                                :truncate => 't',
-                                :new_table => 't',
-                                :user_id => user.id}, {:without_protection => true})
-
-      end
-
-      it "copies the import schedule" do
-        post :duplicate, options
-        new_chorus_view = Dataset.chorus_views.last
-
-        new_import_schedule = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first
-        old_import_schedule = chorus_view.import_schedules.where("workspace_id = #{chorus_view.workspace.id}").first
-
-        new_import_schedule[:frequency].should == old_import_schedule[:frequency]
-        new_import_schedule[:destination_dataset_id].should == old_import_schedule[:destination_dataset_id]
-        new_import_schedule[:to_table].should == old_import_schedule[:to_table]
-        new_import_schedule[:source_dataset_id] = new_chorus_view.id
-        new_import_schedule[:truncate].should == old_import_schedule[:truncate]
-        new_import_schedule[:sample_count].should ==  old_import_schedule[:sample_count]
-        new_import_schedule[:new_table].should ==     old_import_schedule[:new_table]
-        new_import_schedule[:user_id].should ==       old_import_schedule[:user_id]
-        new_import_schedule[:start_datetime].should ==old_import_schedule[:start_datetime]
-        new_import_schedule[:end_date].should ==      old_import_schedule[:end_date]
-        new_import_schedule[:workspace_id].should ==  old_import_schedule[:workspace_id]
-      end
-    end
-
-    context "when chorus View does not  import schedule" do
-
-      it "does not copy the import schedule" do
-        post :duplicate, options
-
-        new_chorus_view = Dataset.chorus_views.last
-        new_import = new_chorus_view.import_schedules.where("workspace_id = #{new_chorus_view.workspace.id}").first
-
-        new_import.should == nil
-      end
-    end
   end
 
   describe "#update" do

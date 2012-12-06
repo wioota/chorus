@@ -32,13 +32,6 @@ class ChorusViewsController < ApplicationController
     ChorusView.transaction do
       chorus_view.save!
 
-      old_import_schedule = ImportSchedule.find_by_workspace_id_and_source_dataset_id(old_chorus_view.workspace.id, old_chorus_view.id)
-      if old_import_schedule
-        new_import_schedule =  old_import_schedule.create_duplicate_import_schedule(chorus_view.id)
-
-        new_import_schedule.save!
-      end
-
       Events::ChorusViewCreated.by(current_user).add(
           :workspace => chorus_view.workspace,
           :source_object => old_chorus_view,
