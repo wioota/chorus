@@ -337,7 +337,7 @@ describe InsightsController do
           models.should include(workspace_insight)
           models.should_not include(insight)
         }
-        get :index, :entity_type => "workspace", :workspace_id => public_workspace.id
+        get :index, :entity_type => "workspace", :entity_id => public_workspace.id
         response.code.should == "200"
       end
     end
@@ -408,7 +408,7 @@ describe InsightsController do
 
       it "returns a count of all the insights visible to the current user" do
         log_in user
-        get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
+        get :count, :entity_type => "workspace", :entity_id => private_workspace.id
         response.code.should == "200"
         decoded_response[:number_of_insight].should == workspace_insights.count.keys.length
       end
@@ -419,7 +419,7 @@ describe InsightsController do
 
         it "returns all the insights if the workspace is public" do
           log_in user
-          get :count, :entity_type => "workspace", :workspace_id => workspace.id
+          get :count, :entity_type => "workspace", :entity_id => workspace.id
           response.code.should == "200"
           decoded_response[:number_of_insight].should == workspace_insights.count.keys.length
         end
@@ -430,7 +430,7 @@ describe InsightsController do
 
         it "returns a count of all the insights visible to the admin" do
           log_in user
-          get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
+          get :count, :entity_type => "workspace", :entity_id => private_workspace.id
           response.code.should == "200"
           decoded_response[:number_of_insight].should == all_insights.where(:workspace_id => private_workspace.id).count
         end
@@ -441,7 +441,7 @@ describe InsightsController do
 
         it "returns a count of zero for a user that can't see any insights on this workspace" do
           log_in user
-          get :count, :entity_type => "workspace", :workspace_id => private_workspace.id
+          get :count, :entity_type => "workspace", :entity_id => private_workspace.id
           response.code.should == "200"
           decoded_response[:number_of_insight].should == 0
         end

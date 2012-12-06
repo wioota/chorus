@@ -26,7 +26,7 @@ chorus.models = {
 
         activities: function() {
             if (!this._activities) {
-                this._activities = chorus.collections.ActivitySet.forModel(this);
+                this._activities = new chorus.collections.ActivitySet([], { entity: this } );
                 this.bind("invalidated", this._activities.fetch, this._activities);
             }
             return this._activities;

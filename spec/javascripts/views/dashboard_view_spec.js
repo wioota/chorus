@@ -7,7 +7,7 @@ describe("chorus.views.Dashboard", function(){
 
     describe("#setup", function() {
         it("fetches the dashboard activities", function() {
-            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
+            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
         });
 
         it("sets page size information on the activity list", function() {
@@ -17,13 +17,13 @@ describe("chorus.views.Dashboard", function(){
         it("will re-fetch the activity list if a comment is added", function() {
             this.server.reset();
             chorus.PageEvents.broadcast("comment:added");
-            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
+            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
         });
 
         it("will re-fetch the activity list if a comment is deleted", function() {
             this.server.reset();
             chorus.PageEvents.broadcast("comment:deleted");
-            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
+            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
         });
     });
 
