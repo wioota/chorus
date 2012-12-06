@@ -108,14 +108,25 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 });
             });
 
-            context("with a workspace with a sandbox that is not GPDB 4.2+", function() {
+            context("with a workspace with a sandbox that is not GPDB 4.1+", function() {
+                beforeEach(function() {
+                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().instance().set('version', '4.0');
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("shows an error about an unsupported version", function() {
+                    expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old_41");
+                });
+            });
+
+            context("with a workspace with a sandbox that is GPDB 4.1+", function() {
                 beforeEach(function() {
                     this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().instance().set('version', '4.1');
                     this.dialog.$("button.submit").click();
                 });
 
-                it("shows an error about an unsupported version", function() {
-                    expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old");
+                it("shows no error", function() {
+                    expect(this.dialog.$(".errors").text()).toBe("");
                 });
             });
 

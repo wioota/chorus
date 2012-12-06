@@ -69,8 +69,8 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         var allValid = true;
         var selectedWorkspace = this.workspaces.get(this.$("option:selected").val());
 
-        if(selectedWorkspace.sandbox().instance().version() < "4.2") {
-            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
+        if(selectedWorkspace.sandbox().instance().version() < "4.1") {
+            this.showDialogError(t("hdfs_instance.gpdb_version.too_old_41"));
             allValid = false;
         }
 
