@@ -26,7 +26,7 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
     },
 
     comparator: function(dataset) {
-        return dataset.get("objectName").toLowerCase();
+        return dataset.get("objectName").replace('_', '').toLowerCase();
     },
 
     search: function(term) {

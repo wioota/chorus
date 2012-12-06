@@ -467,6 +467,9 @@ FixtureBuilder.configure do |fbuilder|
       @gpdb_workspace = FactoryGirl.create(:workspace, :owner => owner, :sandbox => test_schema)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
 
+      test_schema2 = test_database.schemas.find_by_name('test_schema2')
+      @gpdb_workspace.bound_datasets << test_schema2.datasets.first
+
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
       fbuilder.name :real, real_workspace
     end

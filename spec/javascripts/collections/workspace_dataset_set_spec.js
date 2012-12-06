@@ -66,12 +66,14 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
         context("without a sorting override", function() {
             beforeEach(function() {
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'a_zTable'}));
                 this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
             });
 
-            it("sorts by objectName", function() {
+            it("sorts by objectName without _", function() {
                 expect(this.collection.at(0).get("objectName")).toBe("aTable");
-                expect(this.collection.at(1).get("objectName")).toBe("zTable");
+                expect(this.collection.at(1).get("objectName")).toBe("a_zTable");
+                expect(this.collection.at(2).get("objectName")).toBe("zTable");
             });
         });
 

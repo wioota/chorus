@@ -2,8 +2,21 @@ class WorkspaceDatasetsController < ApplicationController
 
   def index
     authorize! :show, workspace
-    options = { :type => params[:type], :database_id => params[:database_id] }.reject { |k,v| v.nil? }
-    present paginate(workspace.datasets(current_user, options).with_name_like(params[:name_pattern]).order("lower(datasets.name)")), :presenter_options => { :workspace => workspace }
+    options = {
+        :type => params[:type],
+        :database_id => params[:database_id],
+        :limit => params[:page].to_i * params[:per_page].to_i,
+        :sort => [{"lower(replace(relname,'_',''))" => "asc"}]
+    }.reject { |k,v| v.nil? }
+
+    if params[:name_pattern]
+      options.merge!(:filter => [{:relname => params[:name_pattern]}])
+    end
+
+    params.merge!(:total_entries => workspace.dataset_count(current_user, options))
+    datasets = workspace.datasets(current_user, options).order("lower(replace(datasets.name,'_',''))")
+
+    present paginate(datasets), :presenter_options => { :workspace => workspace }
   end
 
   def create

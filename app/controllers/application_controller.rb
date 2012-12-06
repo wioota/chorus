@@ -141,7 +141,7 @@ class ApplicationController < ActionController::Base
   end
 
   def paginate(collection)
-    collection.paginate(params.slice(:page, :per_page))
+    collection.paginate(params.slice(:page, :per_page, :total_entries))
   end
 
   def present_forbidden(model)
