@@ -1,16 +1,18 @@
 describe("chorus.BindingGroup", function() {
     beforeEach(function() {
-        this.view1 = new chorus.views.Base();
-        this.view2 = new chorus.views.Base();
+        var viewClass = chorus.views.Base.extend({
+            render: function() {
+                return "hello";
+            }
+        });
+
+        this.view1 = new viewClass();
+        this.view2 = new viewClass();
         this.model1 = new chorus.models.Base();
         this.model2 = new chorus.models.Base();
 
-        spyOn(this.view1, 'render').andCallFake(function() {
-            return "I do one thing";
-        });
-        spyOn(this.view2, 'render').andCallFake(function() {
-            return "I do something else";
-        });
+        spyOn(this.view1, 'render').andCallThrough();
+        spyOn(this.view2, 'render').andCallThrough();
 
         this.bindingGroup = new chorus.BindingGroup(this.view1);
 
@@ -217,6 +219,19 @@ describe("chorus.BindingGroup", function() {
 
                 expect(this.view1.render).not.toHaveBeenCalled();
                 expect(this.view2.render).not.toHaveBeenCalled();
+            });
+
+            it("doesn't unbind things from other binding groups (with different contexts)", function() {
+                //It turns out that multiple instances of the same class have identical callbacks as far as
+                //Backbone.unbind is concerned, so you could accidentally unbind all callbacks for an entire class
+                //of views when you only want to unbind one instance (using spies breaks this, so you can't test directly)
+
+                var differentContext = new chorus.views.Base();
+                this.bindingGroup2 = new chorus.BindingGroup(differentContext);
+                this.bindingGroup2.add(this.model1, 'change', this.view1.render);
+                this.bindingGroup.remove();
+                this.model1.trigger("change");
+                expect(this.view1.render).toHaveBeenCalled();
             });
         });
     });
