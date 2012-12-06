@@ -150,6 +150,10 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.$("button.submit").startLoading(this.loadingKey);
             this.model.save();
         }
+
+        if (this.model.serverErrors) {
+            this.showErrors();
+        }
     },
 
     performValidation: function() {
