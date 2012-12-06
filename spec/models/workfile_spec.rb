@@ -19,6 +19,15 @@ describe Workfile do
       end
     end
 
+    context "file name with a slash" do
+      it "is not valid" do
+        workfile = Workfile.new :file_name => 'a/file.sql'
+
+        workfile.should_not be_valid
+        workfile.should have_error_on(:file_name)
+      end
+    end
+
     context "normalize the file name" do
       let!(:another_workfile) { FactoryGirl.create(:workfile, :file_name => 'workfile.sql') }
 

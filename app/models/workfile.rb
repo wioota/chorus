@@ -62,8 +62,9 @@ class Workfile < ActiveRecord::Base
     workfile.owner = owner
     workfile.workspace = workspace
 
-    version = nil
+    raise ActiveRecord::RecordInvalid.new(workfile) if workfile.invalid?
 
+    version = nil
     if(workfile.versions.first)
       version = workfile.versions.first
     else

@@ -181,6 +181,13 @@ describe WorkfilesController do
         post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
         Workfile.last.file_name.should == 'some_vis.png'
       end
+
+      context "when sending an invalid file name" do
+        it "returns an unprocessable entity response code" do
+          post :create, :workspace_id => workspace.to_param, :file_name => 'a/file.sql'
+          response.code.should == "422"
+        end
+      end
     end
   end
 
