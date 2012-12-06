@@ -158,15 +158,18 @@ describe("chorus.utilities.CsvParser", function() {
         context("datatypes", function() {
             beforeEach(function() {
                 this.contents = [
-                    'col1,col2,col3,col4',
-                    'foo,2,3,1/2/3',
-                    'bar,2.1,sna,456'
+                    'col1,empty,col2,someText,col3,someFloat,col4',
+                    'foo,  ,2,abc,3, ,1/2/3',
+                    'bar, ,2.1, ,sna,1,456'
                 ];
 
                 this.expectedColumns = [
                     {name: 'col1', values: ['foo', 'bar'], type: 'text'},
+                    {name: 'empty', values: ['  ', ' '], type: 'text'},
                     {name: 'col2', values: ['2', '2.1'], type: 'float'},
+                    {name: 'someText', values: ['abc', ' '], type: 'text'},
                     {name: 'col3', values: ['3', 'sna'], type: 'text'},
+                    {name: 'someFloat', values: [' ', '1'], type: 'float'},
                     {name: 'col4', values: ['1/2/3', '456'], type: 'text'}
                 ]
             });
