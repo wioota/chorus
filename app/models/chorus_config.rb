@@ -33,8 +33,7 @@ class ChorusConfig
   end
 
   def tableau_configured?
-    (self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'] &&
-        self['tableau.username'] && self['tableau.password'])
+    (self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'])
   end
 
   def gnip_configured?

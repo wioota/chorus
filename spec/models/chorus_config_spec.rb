@@ -54,13 +54,11 @@ describe ChorusConfig do
       {
           'enabled' => true,
           'url' => 'localhost',
-          'port' => 1234,
-          'username' => 'user',
-          'password' => 'password'
+          'port' => 1234
       }
     end
 
-    it 'returns true if the tableau url/port and username/password are configured' do
+    it 'returns true if the tableau url/port are configured' do
       config.config = {'tableau' => tableau_config}
       config.tableau_configured?.should be_true
     end
