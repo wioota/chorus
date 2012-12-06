@@ -35,7 +35,7 @@ _.extend(chorus.BindingGroup.prototype, {
         }, this);
 
         _.each(matchingBindings, function(binding) {
-            binding.eventSource.unbind(binding.eventName, binding.callback);
+            binding.eventSource.unbind(binding.eventName, binding.callback, binding.context);
         });
 
         this.bindings = _.difference(this.bindings, matchingBindings);
