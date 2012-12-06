@@ -232,6 +232,18 @@ describe ChorusInstaller do
       installer.destination_path.should == "/home/chorus22"
     end
 
+    it "should not accept the legacy path" do
+      installer.legacy_installation_path = "/home/chorus21"
+      mock(io).prompt_until(:legacy_destination_path) do |symbol, proc|
+        proc.call('/home/chorus21').should be_false
+        proc.call('/home/../home/chorus21').should be_false
+        proc.call('/home/chorus22').should be_true
+        "/home/chorus22"
+      end
+      subject
+      installer.destination_path.should == "/home/chorus22"
+    end
+
     describe "when the user types a relative path" do
       it "returns the expanded path" do
         mock(io).prompt_until(:legacy_destination_path) { "~/chorus" }

@@ -111,7 +111,7 @@ class ChorusInstaller
   end
 
   def prompt_legacy_upgrade_destination
-    @destination_path = @io.prompt_until(:legacy_destination_path) { |input| !input.nil? }
+    @destination_path = @io.prompt_until(:legacy_destination_path) { |input| !input.nil? && File.expand_path(input) != legacy_installation_path }
     @destination_path = File.expand_path @destination_path
   end
 
