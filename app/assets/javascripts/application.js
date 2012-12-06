@@ -18,7 +18,7 @@
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse
-//= require vendor/codemirror-2.2
+//= require vendor/codemirror-2.36
 //= require vendor/es5-shim
 //= require vendor/d3
 //= require_tree ./vendor
