@@ -3,9 +3,11 @@ class DatasetsController < GpdbController
     schema = GpdbSchema.find(params[:schema_id])
     account = authorized_gpdb_account(schema)
 
-    options = {:sort => [ {:relname => 'asc' } ]}
+    options = {:sort => [ {"lower(replace(relname,'_',''))" => 'asc' } ]}
     options[:filter] = [:relname => params[:filter]] if params[:filter]
-    datasets = Dataset.visible_to(account, schema, options)
+
+    datasets = Dataset.visible_to(account, schema, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
+    params.merge!(:total_entries => Dataset.total_entries(account, schema, options))
 
     present paginate(datasets)
   end
