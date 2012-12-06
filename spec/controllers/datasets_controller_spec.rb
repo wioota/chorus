@@ -16,48 +16,76 @@ describe DatasetsController do
   end
 
   context "#index" do
-    before do
-      stub_gpdb(instance_account, datasets_sql => [
-          {'type' => "v", "name" => "new_view", "master_table" => 'f'},
-          {'type' => "r", "name" => "new_table", "master_table" => 't'},
-          {'type' => "r", "name" => dataset.name, "master_table" => 't'}
-      ])
-      stub(table).add_metadata!(instance_account)
+    context "with stubbed greenplum" do
+      before do
+        stub_gpdb(instance_account, datasets_sql => [
+            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
+            {'type' => "r", "name" => "new_table", "master_table" => 't'},
+            {'type' => "r", "name" => dataset.name, "master_table" => 't'}
+        ])
+        stub(Dataset).total_entries { 122 }
+        stub(table).add_metadata!(instance_account)
+      end
+
+      context "without any filter " do
+        let(:options) { {:sort => [{"lower(replace(relname,'_',''))" => 'asc'}], :limit => per_page} }
+        let(:per_page) { 50 }
+        it "should retrieve authorized db objects for a schema" do
+          get :index, :schema_id => schema.to_param
+
+          response.code.should == "200"
+          decoded_response.length.should == 3
+          decoded_response.map(&:object_name).should match_array(['table', 'new_table', 'new_view'])
+          schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
+        end
+
+        it "should not return db objects in another schema" do
+          different_table = datasets(:other_table)
+          get :index, :schema_id => schema.to_param
+          decoded_response.map(&:id).should_not include different_table.id
+        end
+
+        context "pagination" do
+          let(:per_page) { 1 }
+
+          it "should paginate results" do
+            get :index, :schema_id => schema.to_param, :per_page => per_page
+            decoded_response.length.should == 1
+          end
+        end
+
+        it "should sort db objects by name" do
+          get :index, :schema_id => schema.to_param
+          # stub checks for valid SQL with sorting
+        end
+      end
+
+      context "with filter" do
+        let(:options) { {:filter => [{:relname => 'view'}], :sort => [{"lower(replace(relname,'_',''))" => 'asc'}], :limit => 50} }
+        it "should filter db objects by name" do
+          get :index, :schema_id => schema.to_param, :filter => 'view'
+          # stub checks for valid SQL with sorting and filtering
+        end
+      end
     end
 
-    context "without any filter " do
-      let(:options) { {:sort => [{:relname => 'asc'}]} }
-      it "should retrieve authorized db objects for a schema" do
-        get :index, :schema_id => schema.to_param
+    context "with real greenplum", :database_integration do
+      let(:user) { users(:admin) }
+      let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
 
-        response.code.should == "200"
-        decoded_response.length.should == 3
-        decoded_response.map(&:object_name).should match_array(['table', 'new_table', 'new_view'])
-        schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
-      end
+      context "when searching" do
+        before do
+          get :index, :schema_id => schema.to_param, :filter => 'CANDY', :page => "1", :per_page => "5"
+        end
 
-      it "should not return db objects in another schema" do
-        different_table = datasets(:other_table)
-        get :index, :schema_id => schema.to_param
-        decoded_response.map(&:id).should_not include different_table.id
-      end
+        it "presents the correct count / pagination information" do
+          decoded_pagination.records.should == 7
+          decoded_pagination.total.should == 2
+        end
 
-      it "should paginate results" do
-        get :index, :schema_id => schema.to_param, :per_page => 1
-        decoded_response.length.should == 1
-      end
-
-      it "should sort db objects by name" do
-        get :index, :schema_id => schema.to_param
-        # stub checks for valid SQL with sorting
-      end
-    end
-
-    context "with filter" do
-      let(:options) { {:filter => [{:relname => 'view'}], :sort => [{:relname => 'asc'}]} }
-      it "should filter db objects by name" do
-        get :index, :schema_id => schema.to_param, :filter => 'view'
-        # stub checks for valid SQL with sorting and filtering
+        it "returns sandbox datasets that aren't on the first page of unfiltered results" do
+          decoded_response.map(&:object_name).should include('candy_empty')
+        end
       end
     end
   end
