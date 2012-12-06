@@ -42,7 +42,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 this.dialog.$("form").submit()
             })
 
-            it("doesn't freak out'", function() {
+            it("doesn't freak out", function() {
                 expect(this.dialog.model.get("fileName")).toBe("")
             })
         })
@@ -92,11 +92,23 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 beforeEach(function() {
                     this.dialog.model.serverErrors = { fields: { a: { BLANK: {} } } };
                     this.dialog.model.trigger("saveFailed")
-                })
+                });
 
                 it("displays the errors and does not leave the button in the loading state", function() {
                     expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
                     expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                });
+
+                context("with an invalid name error", function() {
+                    beforeEach(function() {
+                        this.dialog.model.serverErrors = { fields: { fileName: { INVALID: {} } } };
+                        this.dialog.model.trigger("saveFailed")
+                    });
+
+                    it("displays the errors and does not leave the button in the loading state", function() {
+                        expect(this.dialog.$(".errors").text()).toContain("File name is invalid");
+                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    });
                 });
             })
         })
