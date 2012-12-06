@@ -22,7 +22,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         this.model.serverErrors = [];
 
         if(this.selectedItem().sandbox().instance().version() < "4.2") {
-            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
+            this.showDialogError(t("hdfs_instance.gpdb_version.too_old_42"));
             return;
         }
 

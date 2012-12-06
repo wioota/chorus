@@ -60,7 +60,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                         spyOnEvent(this.dialog, "workspace:selected");
                         this.dialog.selectedItem().sandbox().instance().set('version', '4.1');
                         this.dialog.$("button.submit").click();
-                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old");
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old_42");
                         expect("workspace:selected").not.toHaveBeenTriggeredOn(this.dialog, [this.dialog.selectedItem()]);
                     });
                 });
