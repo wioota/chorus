@@ -63,7 +63,8 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             this.workspace2 = rspecFixtures.workspace();
             this.workspace2.unset("sandboxInfo");
             this.workspace3 = rspecFixtures.workspace();
-            this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}), [this.workspace1, this.workspace2, this.workspace3]);
+            this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}),
+                [this.workspace1, this.workspace2, this.workspace3]);
         });
 
         it("has a select with the workspaces containing sandboxes as options", function() {
@@ -104,6 +105,17 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
                 it("marks the table name as having an error", function() {
                     expect(this.dialog.$(".directions input:text")).toHaveClass("has_error");
+                });
+            });
+
+            context("with a workspace with a sandbox that is not GPDB 4.2+", function() {
+                beforeEach(function() {
+                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().instance().set('version', '4.1');
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("shows an error about an unsupported version", function() {
+                    expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old");
                 });
             });
 

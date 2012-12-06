@@ -65,6 +65,19 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         });
     },
 
+    performValidation: function() {
+        var allValid = true;
+        var selectedWorkspace = this.workspaces.get(this.$("option:selected").val());
+
+        if(selectedWorkspace.sandbox().instance().version() < "4.2") {
+            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
+            allValid = false;
+        }
+
+        var performedValidation = this._super("performValidation");
+        return allValid && performedValidation;
+    },
+
     selectWorkspace: function() {
         this.model.set({workspaceId: this.$("option:selected").val()});
     },
@@ -75,6 +88,10 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         });
 
         this.workspaces.reset(withSandboxes, {silent: true});
+    },
+
+    showDialogError : function(errorText) {
+        this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
     },
 
     additionalContext: function() {
