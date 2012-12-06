@@ -414,7 +414,7 @@ describe("chorus.views.Activity", function() {
 
         describe("when the promotion link is clicked", function() {
             beforeEach(function() {
-                this.model.collection = chorus.collections.ActivitySet.forDashboard([this.model]);
+                this.model.collection = new chorus.collections.ActivitySet([]);
                 this.view.render();
                 this.view.$("a.promote").click();
             });

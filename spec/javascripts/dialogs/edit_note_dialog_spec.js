@@ -4,7 +4,7 @@ describe("chorus.dialogs.EditNote", function() {
         this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
             body: this.text
         });
-        this.note.collection = chorus.collections.ActivitySet.forDashboard();
+        this.note.collection = new chorus.collections.ActivitySet([]);
         this.dialog = new chorus.dialogs.EditNote({ activity: this.note });
         $('#jasmine_content').append(this.dialog.el);
 

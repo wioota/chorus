@@ -371,7 +371,7 @@ describe("chorus.models.Activity", function() {
                 id: 101
             });
 
-            this.model.collection = chorus.collections.ActivitySet.forDashboard();
+            this.model.collection = new chorus.collections.ActivitySet([]);
         });
 
         it("returns a note with the right attributes", function() {
@@ -400,7 +400,7 @@ describe("chorus.models.Activity", function() {
     describe("#promoteToInsight", function() {
         beforeEach(function() {
             this.success = jasmine.createSpy("success");
-            this.model.collection = chorus.collections.ActivitySet.forDashboard();
+            this.model.collection = new chorus.collections.ActivitySet([]);
             this.model.promoteToInsight({ success: this.success });
         });
 

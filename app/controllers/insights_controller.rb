@@ -44,8 +44,8 @@ class InsightsController < ApplicationController
     insight_query = Events::Base.where(insight: true).order("events.id DESC")
 
     if params[:entity_type] == "workspace"
-      workspace = Workspace.find(params[:workspace_id])
-      insight_query = insight_query.where(workspace_id: params[:workspace_id])
+      workspace = Workspace.find(params[:entity_id])
+      insight_query = insight_query.where(workspace_id: workspace.id)
     end
 
     if (workspace && !workspace.public?) || params[:entity_type] != "workspace"

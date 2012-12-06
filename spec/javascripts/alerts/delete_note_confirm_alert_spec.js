@@ -2,7 +2,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
     describe("delete confirmation clicked from activity", function() {
         beforeEach(function() {
             this.activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-            this.collection = new chorus.collections.ActivitySet([this.activity], {entityType: "workspace", entityId: 10000});
+            this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
             this.pageModel = new chorus.models.Base();
             this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
             this.alert.render()
@@ -52,7 +52,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
         describe("when the activity is an INSIGHT", function() {
             beforeEach(function() {
                 this.activity = fixtures.activities.INSIGHT_CREATED();
-                this.collection = new chorus.collections.ActivitySet([this.activity], {entityType: "workspace", entityId: 10000});
+                this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
                 this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
                 this.alert.render()
                 this.alert.$('button.submit').click()

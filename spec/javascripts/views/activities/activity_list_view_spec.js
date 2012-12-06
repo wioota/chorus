@@ -1,6 +1,6 @@
 describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
-        this.collection = chorus.collections.ActivitySet.forDashboard();
+        this.collection = new chorus.collections.ActivitySet([]);
         this.collection.reset([
             rspecFixtures.activity.greenplumInstanceCreated(),
             rspecFixtures.activity.greenplumInstanceCreated()

@@ -47,14 +47,14 @@ resource "Notes" do
   end
 
   get "/insights" do
-    parameter :workspace_id, "For entity_type of 'workspace', the id of the workspace whose activities will be returned"
+    parameter :entity_id, "For entity_type of 'workspace', the id of the workspace whose activities will be returned"
     parameter :entity_type, "The type of entity whose activities will be returned, ('dashboard' or 'workspace')"
     pagination
 
     required_parameters :entity_type
 
     let(:entity_type) {"workspace"}
-    let(:workspace_id) { workspace.id }
+    let(:entity_id) { workspace.id }
 
     example_request "Get the list of notes that are insights" do
       status.should == 200
@@ -67,7 +67,9 @@ resource "Notes" do
 
     required_parameters :entity_type
 
-    let(:entity_type) {"dashboard"}
+    let(:entity_type) {"workspace"}
+    let(:entity_id) { workspace.id }
+
     example_request "Get the number of notes that are insights" do
       status.should == 200
     end

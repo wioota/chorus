@@ -83,6 +83,8 @@ describe("chorus.models.Abstract", function() {
             beforeEach(function() {
                 model = new chorus.models.User({ id: 24 });
                 activities = model.activities();
+                expect(activities).toBeA(chorus.collections.ActivitySet);
+                expect(activities.url()).toContainQueryParams({entityType: model.entityType, entityId: model.id})
             });
 
             describe("when the model is invalidated", function() {
