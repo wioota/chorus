@@ -51,7 +51,14 @@ chorus.views.PickItemsList = chorus.views.Base.extend({
             this.options.selectedItemIds = [selectedItemId];
         }
 
-        this.render();
+        _.each(this.$('li'), _.bind(function(item) {
+            item = $(item);
+            if(this.isSelected(item.data('id'))) {
+                item.addClass('selected');
+            } else {
+                item.removeClass('selected');
+            }
+        }, this));
         this.trigger("item:selected", this.selectedItem());
     },
 
