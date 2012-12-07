@@ -20,3 +20,5 @@ puts '"'
 print 'JRUBY_OPTS="'
 load "#{script_dir}/get_jruby_options.rb"
 puts '"'
+
+load "#{script_dir}/get_newrelic_options.rb"
