@@ -113,9 +113,9 @@
         },
 
         promoteToInsight: function(options) {
-            var insight = new chorus.models.InsightCount({
+            var insight = new chorus.models.Insight({
                 noteId: this.get("id"),
-                action: "promote"
+                action: "create"
             });
             insight.bind("saved", function() {
                 this.collection.fetch();
@@ -124,7 +124,7 @@
                 }
             }, this);
 
-            insight.save(null, { method: "create" });
+            insight.save({ promote: true }, {});
         },
 
         publish: function() {

@@ -12,8 +12,9 @@ resource "Notes" do
     note_on_workspace.save!
   end
 
-  post "/insights/promote" do
+  post "/insights" do
     parameter :note_id, "Id of the Note being promoted"
+    required_parameters :note_id
 
     let(:note_id) { note.id }
 

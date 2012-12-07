@@ -111,10 +111,9 @@ Chorus::Application.routes.draw do
 
   resource :provisioning, :only => [:show], :controller => 'provisioning'
 
-  resources :insights, :only => [:index] do
+  resources :insights, :only => [:index, :create] do
     collection do
       get :count
-      post :promote
       post :publish
       post :unpublish
     end
