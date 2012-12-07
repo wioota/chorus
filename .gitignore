@@ -77,3 +77,6 @@ GREENPLUM_IP
 # Ignore .vagrant
 .vagrant
 /chorus_appliance/*.tar.gz
+
+# Ignore load-test data
+/performance/load-test-users.csv
