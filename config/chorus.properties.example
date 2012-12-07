@@ -117,3 +117,6 @@ ldap.attribute.gn = givenName
 ldap.attribute.sn = sn
 ldap.attribute.mail = mail
 ldap.attribute.title = title
+
+newrelic.enabled = false
+newrelic.license_key = NEWRELIC_LICENSE_KEY

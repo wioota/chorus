@@ -15,8 +15,8 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: ''
-  
+  license_key: '<%= ENV["CHORUS_NEWRELIC_LICENSE_KEY"] %>'
+
   # Agent Enabled (Rails Only)
   # Use this setting to force the agent to run or not run.
   # Default is 'auto' which means the agent will install and run only
@@ -230,14 +230,15 @@ development:
   # 'enabled').
   # NOTE: for initial evaluation purposes, you may want to temporarily 
   # turn the agent on in development mode.
-  monitor_mode: false
+  monitor_mode: <%= (ENV["CHORUS_NEWRELIC_ENABLED"] == 'true').to_s %>
+  agent_enabled: <%= (ENV["CHORUS_NEWRELIC_ENABLED"] == 'true').to_s %>
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will 
   # present performance information on the last 100 transactions you have
   # executed since starting the mongrel.
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.  
-  developer_mode: true
+  developer_mode: false
   
   # Enable textmate links
   # textmate: true
@@ -254,7 +255,8 @@ test:
 # incurring any user-visible performance degradation.
 production:
   <<: *default_settings
-  monitor_mode: false
+  monitor_mode: <%= (ENV["CHORUS_NEWRELIC_ENABLED"] == 'true').to_s %>
+  agent_enabled: <%= (ENV["CHORUS_NEWRELIC_ENABLED"] == 'true').to_s %>
 
 # Many applications have a staging environment which behaves
 # identically to production.  Support for that environment is provided
