@@ -193,12 +193,15 @@ class ChorusInstaller
 
   def copy_config_files
     FileUtils.mkdir_p("#{destination_path}/shared")
-    unless File.exists? "#{destination_path}/shared/database.yml"
-      FileUtils.cp("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
-    end
+    copy_if_not_exist("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
+    copy_if_not_exist("#{chorus_installation_path}/packaging/sunspot.yml.example", "#{destination_path}/shared/sunspot.yml")
     FileUtils.cp("#{chorus_installation_path}/config/chorus.properties.example", "#{destination_path}/shared/chorus.properties.example")
-    unless File.exists? "#{destination_path}/shared/chorus.properties"
-      FileUtils.cp("#{chorus_installation_path}/config/chorus.defaults.properties", "#{destination_path}/shared/chorus.properties")
+    copy_if_not_exist("#{chorus_installation_path}/config/chorus.defaults.properties", "#{destination_path}/shared/chorus.properties")
+  end
+
+  def copy_if_not_exist(source, destination)
+    unless File.exists? destination
+      FileUtils.cp(source, destination)
     end
   end
 
@@ -230,6 +233,7 @@ class ChorusInstaller
   def link_shared_files
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
+    FileUtils.ln_sf("#{destination_path}/shared/sunspot.yml", "#{release_path}/config/sunspot.yml")
     FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
     FileUtils.ln_sf("#{destination_path}/shared/secret.token", "#{release_path}/config/secret.token")
 

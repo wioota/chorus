@@ -477,6 +477,7 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
       FileUtils.touch './chorus_installation/config/chorus.properties.example'
       FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
     end
@@ -531,6 +532,27 @@ describe ChorusInstaller do
         File.read('/usr/local/greenplum-chorus/shared/database.yml').strip.should == "some yaml stuff"
       end
     end
+
+    context "when sunspot.yml doesn't exist in shared path" do
+      it "creates sunspot.yml file in shared path" do
+        File.exists?('/usr/local/greenplum-chorus/shared/sunspot.yml').should be_false
+        installer.copy_config_files
+
+        File.exists?('/usr/local/greenplum-chorus/shared/sunspot.yml').should be_true
+      end
+    end
+
+    context "when sunspot.yml exists in the shared path" do
+      before do
+        FileUtils.mkdir_p('/usr/local/greenplum-chorus/shared')
+        File.open('/usr/local/greenplum-chorus/shared/sunspot.yml', 'w') { |f| f.puts "some yaml stuff" }
+      end
+
+      it "should not overwrite existing sunspot.yml" do
+        installer.copy_config_files
+        File.read('/usr/local/greenplum-chorus/shared/sunspot.yml').strip.should == "some yaml stuff"
+      end
+    end
   end
 
   describe "#configure_secret_key" do
@@ -540,6 +562,7 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
       FileUtils.touch './chorus_installation/config/chorus.properties.example'
       FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
       installer.copy_config_files
@@ -592,6 +615,7 @@ describe ChorusInstaller do
       FileUtils.mkdir_p './chorus_installation/config'
       FileUtils.mkdir_p './chorus_installation/packaging'
       FileUtils.touch './chorus_installation/packaging/database.yml.example'
+      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
       FileUtils.touch './chorus_installation/config/chorus.properties.example'
       FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
       installer.copy_config_files
@@ -716,6 +740,10 @@ describe ChorusInstaller do
 
     it "links the database.yml file" do
       File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/database.yml').should == '/usr/local/greenplum-chorus/shared/database.yml'
+    end
+
+    it "links the sunspot.yml file" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/sunspot.yml').should == '/usr/local/greenplum-chorus/shared/sunspot.yml'
     end
 
     it "links the secret.key file" do
