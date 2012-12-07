@@ -201,6 +201,26 @@ describe WorkfilePresenter, :type => :view do
         hash[:has_draft].should be_nil
       end
     end
+
+    describe "when the 'workfile_as_latest_version' option is set" do
+      let(:options) { {:workfile_as_latest_version => true} }
+
+      it "calls the presenter for the latest version of the workfile" do
+        mock(WorkfilePresenter).present(workfile.latest_workfile_version, anything, {})
+        hash
+      end
+
+      context "when there is no latest workfile version" do
+        before do
+          workfile.latest_workfile_version_id = nil
+        end
+
+        it "does not try to present the latest workfile version" do
+          dont_allow(Presenter).present
+          hash
+        end
+      end
+    end
   end
 
   describe "complete_json?" do

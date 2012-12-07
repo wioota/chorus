@@ -8,12 +8,7 @@ class LinkedTableauWorkfile < Workfile
     "tableau_workbook"
   end
 
-  def latest_workfile_version
-    self
-  end
-
   def self.type_name
     'Workfile'
   end
-
 end

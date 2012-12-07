@@ -109,7 +109,7 @@ class EventPresenter < Presenter
         end
       workfiles = model.workfiles
       workfiles.each do |workfile|
-        model_hash = present(workfile.latest_workfile_version, @options)
+        model_hash = present(workfile, @options.merge(:workfile_as_latest_version => true))
         model_hash.merge!({:entity_type => 'workfile'} )
         hash << model_hash
       end
