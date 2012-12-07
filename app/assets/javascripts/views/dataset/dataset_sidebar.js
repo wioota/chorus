@@ -18,14 +18,15 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         this.checkedDatasetsLength = 0;
-        chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this);
-        chorus.PageEvents.subscribe("dataset:checked", this.datasetChecked, this);
-        chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
-        chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
-        chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this);
-        chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this);
-        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:checked", this.datasetChecked, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("column:selected", this.setColumn, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
+        this.registerSubView(this.tabs);
     },
 
     render: function() {
@@ -66,11 +67,13 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
                 displayStyle: ['without_workspace'],
                 type: t("database_object." + dataset.get('objectType'))
             });
+            this.tabs.registerSubView(this.tabs.activity);
 
             this.tabs.statistics = new chorus.views.DatasetStatistics({
                 model: dataset,
                 column: this.selectedColumn
             });
+            this.tabs.registerSubView(this.tabs.statistics);
 
             var statistics = dataset.statistics();
             statistics.fetchIfNotLoaded();

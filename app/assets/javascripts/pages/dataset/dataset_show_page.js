@@ -49,7 +49,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         fetchColumnSet: function() {
             this.columnSet = this.dataset.columns();
-            this.columnSet.bind("loaded", this.drawColumns, this);
+            this.bindings.add(this.columnSet, "loaded", this.drawColumns);
             this.columnSet.fetchAll();
         },
 
@@ -77,6 +77,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                 imageTitle: Handlebars.helpers.humanizedDatasetType(this.dataset.attributes)
             });
 
+            this.mainContent && this.mainContent.teardown();
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
                 collection: this.columnSet,
@@ -88,6 +89,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
+            this.sidebar && this.sidebar.teardown();
             this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
             this.sidebar.setDataset(this.dataset);
 
