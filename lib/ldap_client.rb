@@ -12,7 +12,7 @@ module LdapClient
   # used to prefill a user create form
   def search(username)
     filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
-    results = client.search :filter => filter, :size => search_limit
+    results = client.search :filter => filter
 
     unless results
       error = client.get_operation_result
@@ -46,10 +46,6 @@ module LdapClient
       auth = {:method => :simple, :username => config['user_dn'], :password => config['password']}
     end
     Net::LDAP.new :host => config['host'], :port => config['port'], :base => config['base'], :auth => auth
-  end
-
-  def search_limit
-    config['search']['size_limit'] || 0
   end
 
   private

@@ -181,7 +181,6 @@ describe LdapClient do
     end
 
     context "when the enable flag is true" do
-      let(:search_limit) { 200 }
       let(:entries) { [] }
 
       before do
@@ -190,21 +189,8 @@ describe LdapClient do
         any_instance_of(Net::LDAP) do |ldap|
           stub(ldap).search.with_any_args do |options|
             options[:filter].to_s.should == "(sAMAccountName=testguy)"
-            options[:size].should == search_limit
             entries
           end
-        end
-      end
-
-      describe "searching without a set limit" do
-        let(:search_limit) { 0 }
-
-        before do
-          stub(LdapClient).search_limit { 0 }
-        end
-
-        it "passes the 0 limit" do
-          LdapClient.search("testguy")
         end
       end
 
@@ -300,30 +286,6 @@ describe LdapClient do
 
       it "should raise an error" do
         expect { LdapClient.authenticate("testguy", "secret") }.to raise_error(LdapClient::LdapNotEnabled)
-      end
-    end
-  end
-
-  describe "search_limit" do
-    context "when it is set in the configuration" do
-      before do
-        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
-      end
-
-      it "returns the value from the configuration" do
-        LdapClient.search_limit.should == 200
-      end
-    end
-
-    context "when it is not set in the configuration" do
-      before do
-        config = YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap']
-        config.merge!({ 'search' => { 'size_limit' => nil } })
-        stub(LdapClient).config { config }
-      end
-
-      it "returns 0" do
-        LdapClient.search_limit.should == 0
       end
     end
   end
