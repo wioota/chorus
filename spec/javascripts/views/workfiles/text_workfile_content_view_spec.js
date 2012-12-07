@@ -17,7 +17,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         stubDefer();
     })
 
-    xdescribe("hotkey options", function() {
+    describe("hotkey options", function() {
         beforeEach(function() {
             this.view = new chorus.views.TextWorkfileContent({model: this.textfile, hotkeys: {a: "whatever", b: "something_else"}});
             this.view.render();
