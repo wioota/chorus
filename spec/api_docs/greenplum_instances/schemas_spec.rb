@@ -12,12 +12,13 @@ resource "Greenplum DB: schemas" do
   let(:table) { datasets(:table) }
   let(:view) { datasets(:view) }
 
-  let(:default_dataset_refresh_options) { { :sort => [{:relname => 'asc'}] } }
+  let(:default_dataset_refresh_options) { { :sort=>[{"lower(replace(relname,'_',''))"=>"asc"}] } }
 
   before do
     log_in owner
     stub(GpdbSchema).refresh(owner_account, database) { [db_schema] }
-    stub(Dataset).refresh(owner_account, db_schema, default_dataset_refresh_options) { [table, view] }
+    stub(Dataset).refresh(owner_account, db_schema, default_dataset_refresh_options.merge(:limit=>50)) { [table, view] }
+    stub(Dataset).total_entries(owner_account, db_schema, default_dataset_refresh_options) { 13 }
     stub(Dataset).add_metadata!(anything, owner_account)
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).verify_in_source
