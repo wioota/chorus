@@ -6,14 +6,14 @@ class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
-    present workfile.latest_workfile_version, :presenter_options => { :contents => true }
+    present workfile, :presenter_options => { :contents => true, :workfile_as_latest_version => true }
   end
 
   def create
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
-    present create_workfile(workspace).latest_workfile_version
+    present create_workfile(workspace), :presenter_options => { :workfile_as_latest_version => true }
   end
 
   def index
@@ -28,9 +28,7 @@ class WorkfilesController < ApplicationController
       workfiles = finder.find_all_by_workspace_id(workspace)
     end
 
-    workfile_versions = workfiles.map(&:latest_workfile_version)
-
-    present paginate(workfile_versions)
+    present paginate(workfiles), :presenter_options => { :workfile_as_latest_version => true }
   end
 
   def destroy

@@ -99,10 +99,11 @@ describe WorkfilesController do
           response.should be_success
         end
 
-        it "presents the workfile" do
+        it "presents the latest version of a workfile" do
           mock_present do |model, _, options|
-            model.should == private_workfile.latest_workfile_version
+            model.should == private_workfile
             options[:contents].should be_present
+            options[:workfile_as_latest_version].should be_true
           end
 
           get :show, {:id => private_workfile}

@@ -32,8 +32,4 @@ describe LinkedTableauWorkfile do
   it "should have a content_type" do
     model.content_type.should == "tableau_workbook"
   end
-
-  it "should be it's own latest version" do
-    model.latest_workfile_version.should == model
-  end
 end

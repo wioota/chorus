@@ -1,6 +1,13 @@
 class WorkfilePresenter < Presenter
 
   def to_hash
+    if options[:workfile_as_latest_version] && model.latest_workfile_version
+      version_options = options.dup
+      version_options.delete :workfile_as_latest_version
+
+      return present(model.latest_workfile_version, version_options)
+    end
+
     notes = model.notes
     comments = model.comments
     commit_messages = model.commit_messages
