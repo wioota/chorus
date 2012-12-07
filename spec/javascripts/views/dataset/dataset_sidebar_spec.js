@@ -542,6 +542,10 @@ describe("chorus.views.DatasetSidebar", function() {
                         expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
                     });
 
+                    it("does not have an associate with another workspace link", function() {
+                        expect(this.view.$('.actions .associate')).not.toExist();
+                    });
+
                     itShowsTheAppropriateDeleteLink(true, "chorus view");
 
                     it("shows the 'duplicate' link'", function() {
