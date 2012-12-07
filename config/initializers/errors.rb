@@ -1,5 +1,3 @@
-SecurityTransgression = Class.new(RuntimeError)
-
 class ApiValidationError < RuntimeError
   attr_reader :errors
   delegate :add, :to => :errors
