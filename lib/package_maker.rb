@@ -8,7 +8,7 @@ module PackageMaker
     lib/
     packaging/
     public/
-    script/
+    script/rails
     solr/conf/
     vendor/
     WEB-INF/
@@ -26,6 +26,14 @@ module PackageMaker
     config/secret.key
     config/test.crt
     config/test.key
+    config/sunspot.yml
+    config/database.yml
+    config/database.yml.example
+    config/deploy.yml
+    config/jetpack.yml
+    config/jshint.yml
+    config/jshint_specs.yml
+    config/license_finder.yml
   }
 
   extend self
