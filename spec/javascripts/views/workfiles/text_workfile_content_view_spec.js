@@ -3,7 +3,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         chorus._navigated();
         this.textfile = rspecFixtures.workfile.text();
         spyOn(this.textfile.workspace(), 'isActive').andReturn(true);
-        this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
+        this.view = new chorus.views.TextWorkfileContent({model: this.textfile, hotkeys: { 'r': 'some:event' }});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
         this.clock = this.useFakeTimers();
@@ -63,13 +63,11 @@ describe("chorus.views.TextWorkfileContentView", function() {
             expect(this.view.editor.getOption("mode")).toBe("text/plain");
         });
 
-        xit("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
-            // Can't find a way to trigger keydown events to CodeMirror
-            // Can't even figure out how to properly trigger a normal key in CodeMirror in the browser - maybe start there?
+        it("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
             spyOn(chorus, "triggerHotKey");
-            $(this.view.$(".CodeMirror")[0].firstChild.firstChild).trigger(chorus.hotKeyEvent('r'));
+            this.view.editor.editor.triggerOnKeyDown( { ctrlKey: true, keyCode: 82 } );
             expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
-        })
+        });
 
         context("when the model is an SQL file", function() {
             beforeEach(function() {
