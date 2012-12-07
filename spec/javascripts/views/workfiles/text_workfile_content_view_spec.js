@@ -1,4 +1,5 @@
 describe("chorus.views.TextWorkfileContentView", function() {
+    stubKeyboardMetaKey();
     beforeEach(function() {
         chorus._navigated();
         this.textfile = rspecFixtures.workfile.text();

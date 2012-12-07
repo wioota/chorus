@@ -65,7 +65,7 @@ describe("chorus.views.Base", function() {
                 spyOn(this.view, 'template').andReturn("");
                 // render is bound on the view object before we can spy on it.
                 spyOn(this.view, "preRender");
-            })
+            });
 
             _.each(["reset", "change"], function(evt) {
                 it("re-renders on the " + evt + " event", function() {
@@ -73,11 +73,11 @@ describe("chorus.views.Base", function() {
                     expect(this.view.preRender).toHaveBeenCalled();
                 });
             });
-        })
+        });
 
         describe("with persistent:true", function() {
             beforeEach(function() {
-                chorus.views.Base.prototype.persistent = true
+                chorus.views.Base.prototype.persistent = true;
                 this.view = new chorus.views.Base({model: this.model});
                 spyOn(this.view, 'template').andReturn("");
                 // render is bound on the view object before we can spy on it.
@@ -156,35 +156,30 @@ describe("chorus.views.Base", function() {
     });
 
     describe("hotkey bindings", function() {
+        stubKeyboardMetaKey();
         beforeEach(function() {
             chorus._navigated();
-            this.oldHotKeyMeta = chorus.hotKeyMeta;
-            chorus.hotKeyMeta = 'ctrl';
 
             chorus.views.HotKeyTest = chorus.views.Base.extend({
                 hotkeys: {
                     'r': 'my:event'
                 }
-            })
+            });
 
             spyOn($.fn, "bind").andCallThrough();
             this.view = new chorus.views.HotKeyTest();
-        })
-
-        afterEach(function() {
-            chorus.hotKeyMeta = this.oldHotKeyMeta;
-        })
+        });
 
         it("binds hotkeys", function() {
             expect($(document).data("events").keydown).toBeDefined();
-        })
+        });
 
         it("broadcasts events on hotkeys", function() {
-            spyOn(chorus.PageEvents, "broadcast")
-            var ev = $.Event("keydown", { which: 82, ctrlKey: true })
+            spyOn(chorus.PageEvents, "broadcast");
+            var ev = $.Event("keydown", { which: 82, ctrlKey: true });
             $(document).trigger(ev);
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("my:event", ev)
-        })
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("my:event", ev);
+        });
 
         describe("navigating away", function() {
             beforeEach(function() {
@@ -196,7 +191,7 @@ describe("chorus.views.Base", function() {
                 expect(($(document).data("events").keydown || []).length).toBe(this.oldKeydownCount - 1);
             });
         });
-    })
+    });
     describe("#context", function() {
 
         describe("for a view with a model", function() {
@@ -207,7 +202,7 @@ describe("chorus.views.Base", function() {
 
             it("serializes the attributes of the model", function() {
                 expect(this.view.context()).toEqual({ bar: "foo", resource: this.model, view: this.view });
-            })
+            });
 
             describe("loaded:true", function() {
                 beforeEach(function() {
@@ -264,7 +259,7 @@ describe("chorus.views.Base", function() {
                     spyOn(this.view, "postRender").andCallThrough();
                     spyOn(this.view, "preRender").andCallFake(function() {
                         self.postRenderCallCountWhenPreRenderCalled = self.view.postRender.callCount;
-                    })
+                    });
 
                     this.view.render();
                 });
@@ -272,8 +267,8 @@ describe("chorus.views.Base", function() {
                 it("is called before postRender", function() {
                     expect(this.postRenderCallCountWhenPreRenderCalled).toBe(0);
                     expect(this.view.postRender.callCount).toBe(1);
-                })
-            })
+                });
+            });
 
             describe("#render", function() {
                 beforeEach(function() {
@@ -302,45 +297,45 @@ describe("chorus.views.Base", function() {
 
                         this.view.subviews = {".foo": "foo"};
                         spyOn(this.subview, "render");
-                    })
+                    });
 
                     context("when the subview does not have required resources", function() {
                         beforeEach(function() {
                             this.view.render();
-                        })
+                        });
 
                         it("renders the subview", function() {
                             expect(this.subview.render).toHaveBeenCalled();
-                        })
-                    })
+                        });
+                    });
 
                     context("when the subview has required resources", function() {
                         beforeEach(function() {
                             this.subviewModel = new chorus.models.User();
                             this.subview.requiredResources.add(this.subviewModel);
-                        })
+                        });
 
                         context("and the required resources are not loaded", function() {
                             beforeEach(function() {
                                 this.view.render();
-                            })
+                            });
 
                             it("does not render the subview", function() {
                                 expect(this.subview.render).not.toHaveBeenCalled();
-                            })
-                        })
+                            });
+                        });
 
                         context("and the required resources are loaded", function() {
                             beforeEach(function() {
                                 this.subviewModel.loaded = true;
                                 this.view.render();
-                            })
+                            });
 
                             it("renders the subview", function() {
                                 expect(this.subview.render).toHaveBeenCalled();
-                            })
-                        })
-                    })
+                            });
+                        });
+                    });
 
                     describe("renderSubview", function() {
                         beforeEach(function() {
@@ -364,7 +359,7 @@ describe("chorus.views.Base", function() {
 
                             this.view.renderSubview("foo");
                             expect(this.view.$(".foo")[0]).toBe(this.subview.el);
-                        })
+                        });
 
                         it("registers each subview", function() {
                            expect(_.indexOf(this.view.getSubViews(), this.view.foo)).toBeGreaterThan(-1);
@@ -385,12 +380,11 @@ describe("chorus.views.Base", function() {
                                 this.view.renderSubview("foo");
 
                                 expect(this.view.$(".foo")[0]).toBe(this.otherSubview.el);
-                            })
-                        })
+                            });
+                        });
                     });
-                })
-            })
-
+                });
+            });
         });
 
         describe("when an additionalContext is defined", function() {
@@ -417,7 +411,7 @@ describe("chorus.views.Base", function() {
 
             it("serializes the attributes of the collection", function() {
                 expect(this.view.context().custom).toBe("stuff");
-            })
+            });
 
             it("serializes the attributes of the collection objects into the 'models' key", function() {
                 var modelContext = this.view.context().models;
@@ -425,7 +419,7 @@ describe("chorus.views.Base", function() {
                 expect(modelContext.length).toBe(2);
                 expect(modelContext[0]).toEqual({ bar: "foo", model: this.collection.models[0] });
                 expect(modelContext[1]).toEqual({ bro: "baz", model: this.collection.models[1] });
-            })
+            });
 
             context("when a collectionModelContext is defined", function() {
                 beforeEach(function() {
@@ -479,13 +473,13 @@ describe("chorus.views.Base", function() {
                 this.model = new chorus.models.Base({ bar: "foo"});
                 this.actualResource = new chorus.models.Base({ bar: "bar"});
                 this.view = new chorus.views.Base({ model: this.model });
-            })
+            });
 
             it("uses the provided resource", function() {
                 var context = this.view.context(this.actualResource);
                 expect(context.bar).toBe('bar');
-            })
-        })
+            });
+        });
     });
 
     describe("validation", function() {
@@ -670,7 +664,7 @@ describe("chorus.views.Base", function() {
                 it("should have the hidden class on the content div", function() {
                     expect((this.view.$(".content"))).toHaveClass("hidden");
                 });
-            })
+            });
 
             context("without a supplied contentDetails", function() {
                 it("should have the hidden class on the content_details div", function() {
@@ -711,22 +705,22 @@ describe("chorus.views.Base", function() {
     describe("MainContentList", function() {
         beforeEach(function() {
             this.collection = rspecFixtures.workfileSet();
-        })
+        });
 
         describe("#setup", function() {
             context("when no title override is provided", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile" });
-                })
+                });
 
                 it("sets the title of the content header to the plural of the model class", function() {
                     expect(this.view.contentHeader.options.title).toBe("Workfiles")
-                })
+                });
 
                 context("emptyTitleBeforeFetch option set", function() {
                     beforeEach(function() {
                         this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", emptyTitleBeforeFetch: true });
-                    })
+                    });
 
                     it("should not display the title", function() {
                         expect(this.view.contentHeader.options.title).toBe(false);
@@ -737,12 +731,12 @@ describe("chorus.views.Base", function() {
             context("when a title override is provided", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", title: "YES!" });
-                })
+                });
 
                 it("sets the title of the content header to the override", function() {
-                    expect(this.view.contentHeader.options.title).toBe("YES!")
-                })
-            })
+                    expect(this.view.contentHeader.options.title).toBe("YES!");
+                });
+            });
 
             context("when a contentDetailsOptions hash is provided", function() {
                 beforeEach(function() {
@@ -757,7 +751,7 @@ describe("chorus.views.Base", function() {
             context("when a contentOptions hash is provided", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", contentOptions: {foo: "bar"} });
-                })
+                });
 
                 it("gets mixed in to the content's options", function() {
                     expect(this.view.content.options).toEqual({foo: "bar", collection: this.collection});
@@ -786,12 +780,12 @@ describe("chorus.views.Base", function() {
 
                 it("uses the custom contentDetails", function() {
                     expect(this.view.contentDetails).toBe(this.contentDetails);
-                })
+                });
 
                 it("does not construct a contentFooter", function() {
                     expect(this.view.contentFooter).toBeUndefined();
-                })
-            })
+                });
+            });
 
             context("when persistent is passed as an option", function() {
                 beforeEach(function() {
@@ -800,8 +794,8 @@ describe("chorus.views.Base", function() {
 
                 it("sets persistent as a property of the view", function() {
                     expect(this.view.persistent).toBeTruthy();
-                })
-            })
+                });
+            });
 
             context("when contentHeader is provided", function() {
                 beforeEach(function() {
@@ -811,8 +805,8 @@ describe("chorus.views.Base", function() {
 
                 it("uses the provided view", function() {
                     expect(this.view.contentHeader).toBe(this.contentHeader);
-                })
-            })
+                });
+            });
 
             context("search option", function() {
                 beforeEach(function() {
@@ -829,8 +823,8 @@ describe("chorus.views.Base", function() {
                     expect(this.view.contentDetails.options.search).toEqual({foo: "bar", list: $(this.view.content.el)});
                 });
             });
-        })
-    })
+        });
+    });
 
     describe("ListHeaderView", function() {
         beforeEach(function() {
@@ -852,20 +846,20 @@ describe("chorus.views.Base", function() {
         describe("#render", function() {
             beforeEach(function() {
                 this.view.render();
-            })
+            });
 
             it("renders link menus", function() {
                 expect(this.view.$(".menus ul[data-event=filter]")).toExist();
-            })
+            });
 
             it("renders the header title", function() {
                 expect(this.view.$("h1").text().trim()).toBe("Hi there");
                 expect(this.view.$("h1").attr("title")).toBe("Hi there");
-            })
+            });
 
             it("does not render an image", function() {
                 expect(this.view.$(".icon")).not.toExist();
-            })
+            });
 
             it("adds a class based on the key in the linkMenu's hash", function() {
                 expect(this.view.$('.menus > .my_menu')).toExist();
@@ -879,11 +873,11 @@ describe("chorus.views.Base", function() {
                 beforeEach(function() {
                     this.view.options.imageUrl = "image/foo/bar.png";
                     this.view.render();
-                })
+                });
 
                 it("renders the image", function() {
                     expect(this.view.$(".icon")).toHaveAttr("src", "image/foo/bar.png")
-                })
+                });
 
                 context("and an imageTitle is provided", function() {
                     beforeEach(function() {
@@ -924,22 +918,20 @@ describe("chorus.views.Base", function() {
                     expect(this.view.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
                 });
             });
-        })
+        });
 
         describe("event propagation", function() {
             beforeEach(function() {
                 this.view.render();
-            })
+            });
 
             it("propagates choice events as choice: events", function() {
-                this.choiceSpy = jasmine.createSpy("choice:filter")
+                this.choiceSpy = jasmine.createSpy("choice:filter");
                 this.view.bind("choice:filter", this.choiceSpy);
                 this.view.$("li[data-type=sql] a").click();
                 expect(this.choiceSpy).toHaveBeenCalledWith("sql");
-            })
-
-        })
-
+            });
+        });
     });
 
     describe("loading section", function() {
@@ -998,7 +990,7 @@ describe("chorus.views.Base", function() {
                     beforeEach(function() {
                         this.view.loadingSectionOptions = function() {
                             return {delay: 9000};
-                        }
+                        };
 
                         var origSection = chorus.views.LoadingSection;
                         spyOn(chorus.views, "LoadingSection").andReturn(new origSection());
@@ -1015,7 +1007,7 @@ describe("chorus.views.Base", function() {
                 beforeEach(function() {
                     this.view.displayLoadingSection = function() {
                         return false;
-                    }
+                    };
                 });
 
                 context("when required resources are loaded", function() {
@@ -1027,7 +1019,7 @@ describe("chorus.views.Base", function() {
                         expect($(this.view.el)).toContainText("Foo");
                         expect(this.view.$('.loading_section').length).toBe(0)
                     });
-                })
+                });
 
                 context("when required resources are not loaded", function() {
                     beforeEach(function() {
@@ -1039,8 +1031,7 @@ describe("chorus.views.Base", function() {
                     it("does not render", function() {
                         expect($(this.view.el).text()).toBe("Old");
                     });
-                })
-
+                });
             });
         });
     });
@@ -1066,18 +1057,18 @@ describe("chorus.views.Base", function() {
                         this.resource = rspecFixtures.user();
                         this.view.requiredResources.push(this.resource);
                         spyOn(this.view.requiredResources, 'allLoaded');
-                    })
+                    });
 
                     it("returns true if the resources are not yet loaded", function() {
                         this.view.requiredResources.allLoaded.andReturn(false);
                         expect(this.view.displayLoadingSection()).toBeTruthy();
-                    })
+                    });
 
                     it("returns false if the resources are loaded", function() {
                         this.view.requiredResources.allLoaded.andReturn(true);
                         expect(this.view.displayLoadingSection()).toBeFalsy();
-                    })
-                })
+                    });
+                });
 
                 context("when there are no requiredResources", function() {
                     it("returns the opposite of view.resource.loaded", function() {
@@ -1092,7 +1083,7 @@ describe("chorus.views.Base", function() {
                         delete this.view.resource;
                         expect(this.view.displayLoadingSection()).toBeFalsy();
                     });
-                })
+                });
             });
         });
 
@@ -1102,12 +1093,12 @@ describe("chorus.views.Base", function() {
                 this.view.templateName = "plain_text";
                 spyOn(chorus, 'placeholder');
                 this.view.render();
-            })
+            });
 
             it("sets up input placeholders for older browsers", function() {
                 expect(chorus.placeholder).toHaveBeenCalledWith(this.view.$("input[placeholder], textarea[placeholder]"));
             });
-        })
+        });
     });
 
     describe("chorus.views.Bare", function() {
@@ -1119,9 +1110,9 @@ describe("chorus.views.Base", function() {
                 this.view.template = function() {
                     return "<div class='foo'><div class='subfoo'/></div>"
                 };
-                this.view.subviews = { ".subfoo": "subfoo" }
+                this.view.subviews = { ".subfoo": "subfoo" };
                 this.view.subfoo = new chorus.views.Bare();
-                this.view.subfoo.templateName = "plain_text"
+                this.view.subfoo.templateName = "plain_text";
                 this.view.render();
                 stubDefer();
 
@@ -1135,29 +1126,29 @@ describe("chorus.views.Base", function() {
 
             it("defers the setup", function() {
                 expect(_.defer).toHaveBeenCalled();
-            })
+            });
 
             it("calls jScrollPane", function() {
                 expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
-            })
+            });
 
             it("adds the custom_scroll class to the element", function() {
-                expect($(this.view.$(".foo"))).toHaveClass("custom_scroll")
-            })
+                expect($(this.view.$(".foo"))).toHaveClass("custom_scroll");
+            });
 
             it("hides the scrollbars initially", function() {
                 expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
                 expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
-            })
+            });
 
             it("binds the view to resized events on the page", function() {
                 expect(this.page.bind).toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
-            })
+            });
 
             it("binds to the mousewheel event on the container", function() {
                 expect($.fn.bind).toHaveBeenCalledOnSelector(".foo .jspContainer");
                 expect($.fn.bind).toHaveBeenCalledWith("mousewheel", jasmine.any(Function));
-            })
+            });
 
             context("when called again", function() {
                 beforeEach(function() {
@@ -1166,7 +1157,7 @@ describe("chorus.views.Base", function() {
                     $.fn.jScrollPane.reset();
                     $.fn.bind.reset();
                     spyOn(this.view.subfoo, "bind").andCallThrough();
-                    this.view.setupScrolling(".foo")
+                    this.view.setupScrolling(".foo");
                 });
 
                 it("calls jScrollPane", function() {
@@ -1184,12 +1175,12 @@ describe("chorus.views.Base", function() {
 
                 it("does not re-bind to the mousewheel event on the container", function() {
                     expect($.fn.bind).not.toHaveBeenCalledOnSelector(".foo .jspContainer");
-                })
+                });
             });
 
             describe("when a resized event occurs", function() {
                 beforeEach(function() {
-                    spyOn(this.view.$(".foo").data("jsp"), "reinitialise")
+                    spyOn(this.view.$(".foo").data("jsp"), "reinitialise");
                     this.page.trigger("resized");
                 });
 
@@ -1201,7 +1192,7 @@ describe("chorus.views.Base", function() {
             describe("when a mousewheel event occurs", function() {
                 beforeEach(function() {
                     this.event = jQuery.Event("mousewheel");
-                    this.view.$(".jspContainer").trigger(this.event)
+                    this.view.$(".jspContainer").trigger(this.event);
                 });
 
                 it("prevents default", function() {
@@ -1212,11 +1203,11 @@ describe("chorus.views.Base", function() {
             describe("when a subview is re-rendered", function() {
                 beforeEach(function() {
                     this.view.recalculateScrolling.reset();
-                    this.view.subfoo.render()
+                    this.view.subfoo.render();
                 });
 
                 it("recalculates scrolling", function() {
-                    expect(this.view.recalculateScrolling).toHaveBeenCalled()
+                    expect(this.view.recalculateScrolling).toHaveBeenCalled();
                 });
             });
 
