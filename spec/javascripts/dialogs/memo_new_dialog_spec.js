@@ -601,25 +601,30 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
                             this.numFilesStart = this.dialog.model.files.length;
-                            this.fileList = [{ name: 'foo Bar Baz.csv', size: 999999999999999999 }];
-                            this.fakeFileUpload.add(this.fileList);
-                            this.dialog.desktopFileChosen({}, {files: this.fileList})
+                            this.fileList = [
+                                { name: 'foo Bar Baz.csv', size: 1 },
+                                { name: 'foo Bar Baz2.csv', size: 999999999999999999 }
+                            ];
+                            var self = this;
+                            _.each(this.fileList, function(file) {
+                                self.fakeFileUpload.add([file]);
+                            });
                         });
 
                         it("shows an error", function() {
                             expect(this.dialog.$('.errors')).toContainText("file exceeds");
-                            expect(this.dialog.$('button.submit')).not.toBeEnabled();
                         });
 
                         it("does not add the file to model or UI", function() {
-                            expect(this.dialog.model.files.length).toEqual(this.numFilesStart);
-                            expect(this.dialog.$(".row.desktopfile").length).toEqual(this.numFilesStart);
+                            expect(this.dialog.model.files.length).toEqual(this.numFilesStart + 1);
+                            expect(this.dialog.$(".row.desktopfile").length).toEqual(this.numFilesStart + 1);
                         });
 
                         it("removes the error when a valid file is then selected", function() {
                             this.fileList = [{ name: 'foo Bar Baz.csv', size: 10 * 1024 * 1024 - 1 }];
                             this.fakeFileUpload.add(this.fileList);
-                            this.dialog.desktopFileChosen({}, {files: this.fileList})
+                            this.dialog.launchDesktopFileDialog();
+                            this.dialog.desktopFileChosen({}, {files: this.fileList});
                             expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                             expect(this.dialog.$('button.submit')).toBeEnabled();
                         });

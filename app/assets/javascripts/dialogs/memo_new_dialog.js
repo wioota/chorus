@@ -11,7 +11,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         "click .remove": "removeAttachment",
         "click .add_workfile": "launchWorkfileDialog",
         "click .add_dataset": "launchDatasetDialog",
-        "click .cancel_upload": "cancelUpload"
+        "click .cancel_upload": "cancelUpload",
+        "click .file-wrapper": "launchDesktopFileDialog"
     },
 
     setup: function() {
@@ -188,6 +189,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.$(".options_area").removeClass("hidden");
     },
 
+    launchDesktopFileDialog: function(e) {
+        this.clearErrors();
+    },
+
     launchWorkfileDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
@@ -222,7 +227,6 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     },
 
     validateFileSize: function() {
-        this.clearErrors();
         this.$("button.submit").removeAttr("disabled");
         if (!this.model) return;
 
@@ -232,7 +236,6 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         _.each( this.model.files, function(file) {
             if (file.get("files")[0].size > (maxFileSize * 1024 * 1024) ) {
                 this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
-                this.$("button.submit").prop("disabled", true);
                 this.showErrors(this.model);
                 isValid = false;
             }
