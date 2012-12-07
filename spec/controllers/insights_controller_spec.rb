@@ -1,16 +1,18 @@
 require 'spec_helper'
 
 describe InsightsController do
-  describe "#promote (POST to /promote)" do
+  describe "#create" do
     before do
       log_in user
     end
 
     let(:user) { note.actor }
     let(:note) { Events::NoteOnGreenplumInstance.last }
+    let(:note_id) { note.id }
+    let(:post_params) { { :note => { :note_id => note_id } } }
 
     it "returns status 201" do
-      post :promote, :note_id => note.id
+      post :create, post_params
       response.code.should == "201"
     end
 
@@ -18,11 +20,11 @@ describe InsightsController do
       mock_present do |insight|
         insight.should == note
       end
-      post :promote, :note_id => note.id
+      post :create, post_params
     end
 
     it "marks the NOTE as an insight" do
-      post :promote, :note_id => note.id
+      post :create, post_params
       note.reload.should be_insight
       note.promoted_by.should == user
       note.promotion_time.should_not be_nil
@@ -33,7 +35,7 @@ describe InsightsController do
       let(:note) { events(:note_on_public_workfile) }
 
       it "should allow them to promote the note" do
-        post :promote, :note_id => note.id
+        post :create, post_params
         note.reload.should be_insight
         note.promoted_by.should == user
         note.promotion_time.should_not be_nil
@@ -47,7 +49,7 @@ describe InsightsController do
         let(:user) { users(:not_a_member) }
 
         it 'returns 404' do
-          post :promote, :note_id => note.id
+          post :create, post_params
 
           response.code.should == '404'
         end
@@ -57,15 +59,16 @@ describe InsightsController do
         let(:user) { users(:admin) }
 
         it "returns status 201" do
-          post :promote, :note_id => note.id
+          post :create, post_params
           response.code.should == "201"
         end
       end
     end
 
     context 'with an invalid id' do
+      let(:note_id) { -1 }
       it 'returns 404' do
-        post :promote, :note_id => -1
+        post :create, post_params
         response.code.should == "404"
       end
     end
