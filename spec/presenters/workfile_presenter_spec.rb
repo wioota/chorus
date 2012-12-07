@@ -41,65 +41,6 @@ describe WorkfilePresenter, :type => :view do
       hash[:file_name].should == workfile.file_name
     end
 
-    describe "it presents the commit message for a workfile" do
-      let(:recent_comments) { hash[:recent_comments] }
-      let(:workfile_created_event) {Events::WorkfileCreated.by(user).add(:workfile => workfile, :commit_message => "original version", :workspace => workspace)}
-
-      before do
-        workfile.events.clear
-        workfile_created_event
-      end
-
-      it "presents the commit message" do
-        recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
-        recent_comments[0][:body].should == "original version"
-        recent_comments[0][:timestamp].should == workfile_created_event.created_at
-      end
-
-      context "when there's a newer version of a workfile" do
-        let(:latest_workfile_version) {
-          workfile.versions.create!(:owner => user, :modifier => user).tap do |version|
-            workfile.latest_workfile_version = version
-          end
-        }
-        let(:new_workfile_version_event) {
-          Timecop.freeze Time.current + 1.day do
-            Events::WorkfileUpgradedVersion.by(user).add(:workfile => workfile, :commit_message => "new version", :workspace => workspace, :version_id => latest_workfile_version.id)
-          end
-        }
-
-        before do
-          latest_workfile_version
-          new_workfile_version_event
-        end
-
-        it "presents the commit message" do
-          recent_comments[0][:body].should == "new version"
-        end
-
-        context "when there is a note before the newer version" do
-          before do
-            Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note on old version')
-          end
-
-          it "still presents the commit message" do
-            recent_comments[0][:body].should == "new version"
-          end
-        end
-
-        context "when the new workfile version has been deleted" do
-          before do
-            latest_workfile_version.destroy
-            workfile.latest_workfile_version_id = nil
-          end
-
-          it "presents the original commit message for the workfile" do
-            recent_comments[0][:body].should == "original version"
-          end
-        end
-      end
-    end
-
     context "when there are notes on a workfile" do
       let(:recent_comments) { hash[:recent_comments] }
       let(:today) { Time.current }
