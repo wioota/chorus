@@ -46,10 +46,10 @@ describe InsightsController do
       context 'when the user does not have access' do
         let(:user) { users(:not_a_member) }
 
-        it "returns permission denied status code" do
+        it 'returns 404' do
           post :promote, :note_id => note.id
 
-          response.code.should == "403"
+          response.code.should == '404'
         end
       end
 
@@ -60,6 +60,13 @@ describe InsightsController do
           post :promote, :note_id => note.id
           response.code.should == "201"
         end
+      end
+    end
+
+    context 'with an invalid id' do
+      it 'returns 404' do
+        post :promote, :note_id => -1
+        response.code.should == "404"
       end
     end
   end
@@ -101,7 +108,7 @@ describe InsightsController do
         it "returns permission denied status code" do
           post :publish, :note_id => note.id
 
-          response.code.should == "403"
+          response.code.should == '404'
         end
       end
 

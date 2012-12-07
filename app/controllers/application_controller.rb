@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
   rescue_from 'ApiValidationError', :with => :render_not_valid
-  rescue_from 'SecurityTransgression', :with => :render_security_transgression
   rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
@@ -73,10 +72,6 @@ class ApplicationController < ActionController::Base
 
   def render_not_found(e)
     present_errors({:record => :NOT_FOUND}, :status => :not_found)
-  end
-
-  def render_security_transgression(e)
-    head :forbidden
   end
 
   def render_forbidden(e = nil)

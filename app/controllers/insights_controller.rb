@@ -4,15 +4,13 @@ class InsightsController < ApplicationController
   wrap_parameters :insight, :exclude => []
   
   def promote
-    note = get_note_if_visible(params[:insight][:note_id])
-    raise SecurityTransgression unless note
+    note = Events::Note.visible_to(current_user).find(params[:insight][:note_id])
     note.promote_to_insight current_user
     present note, :status => :created
   end
 
   def publish
-    note = get_note_if_visible(params[:insight][:note_id])
-    raise SecurityTransgression unless note
+    note = Events::Note.visible_to(current_user).find(params[:insight][:note_id])
     raise ApiValidationError.new(:base, :generic, {:message => "Note has to be an insight first"}) unless note.insight
     note.set_insight_published true
     present note, :status => :created
@@ -54,11 +52,5 @@ class InsightsController < ApplicationController
 
     insight_query = insight_query.includes(Events::Base.activity_stream_eager_load_associations)
     insight_query
-  end
-
-   def get_note_if_visible(note_id)
-    note_query = Events::Note.where(id: note_id)
-    note_query = note_query.visible_to(current_user) unless current_user.admin?
-    note_query.first
   end
 end
