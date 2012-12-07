@@ -8,6 +8,7 @@ chorus.views.Bare = Backbone.View.include(
             this.preInitialize.apply(this, arguments);
             chorus.viewsToTearDown.push(this);
             this.subViewObjects = [];
+            this.subscriptions = [];
 
             this.setup.apply(this, arguments);
             this.bindCallbacks();
@@ -58,6 +59,10 @@ chorus.views.Bare = Backbone.View.include(
                 var subViewObject = this.subViewObjects.pop();
                 subViewObject.teardown();
             }
+
+            _.each(this.subscriptions, function(handle) {
+                chorus.PageEvents.unsubscribe(handle)
+            });
 
             if(this.parentView) {
                 var subViewObjects = this.parentView.subViewObjects;

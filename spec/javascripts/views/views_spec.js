@@ -1314,7 +1314,9 @@ describe("chorus.views.Base", function() {
                 spyOn(this.view.bindings, "removeAll");
                 expect(this.view.requiredResources.models.length).toBe(1);
 
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "unsubscribe");
+                this.handle = chorus.PageEvents.subscribe("foo", this.view.render, this.view);
+                this.view.subscriptions.push(this.handle);
 
                 this.view.teardown();
             });
@@ -1331,6 +1333,10 @@ describe("chorus.views.Base", function() {
 
             it("should tear down registered subviews", function() {
                 expect(this.subViewObject.teardown).toHaveBeenCalled();
+            });
+
+            it("unsubscribe subscriptions", function(){
+               expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.handle);
             });
 
             describe("when the teardown function is told to preserve the container", function() {

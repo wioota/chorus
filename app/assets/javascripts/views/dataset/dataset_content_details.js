@@ -29,7 +29,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     setup: function() {
         this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
-
+        this.subscriptions.push(this.closePreviewHandle);
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({
             titleKey: "dataset.data_preview",
@@ -250,6 +250,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     displayPublishDialog: function() {
+      this.dialog && this.dialog.teardown();
       this.dialog = new chorus.dialogs.PublishToTableau({
           model: this.dataset.deriveTableauWorkbook(),
           dataset: this.dataset
