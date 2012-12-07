@@ -1,5 +1,7 @@
 script_dir = File.expand_path(File.dirname(__FILE__))
 
+# Exports seem to cause non-exported bash variables declared before the export to go away
+load "#{script_dir}/get_newrelic_options.rb"
 
 print 'POSTGRES_PORT="'
 load "#{script_dir}/get_postgres_port.rb"
@@ -20,5 +22,3 @@ puts '"'
 print 'JRUBY_OPTS="'
 load "#{script_dir}/get_jruby_options.rb"
 puts '"'
-
-load "#{script_dir}/get_newrelic_options.rb"
