@@ -426,7 +426,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 it("re-fetches the activities", function() {
-                    expect(this.model.collection).toHaveBeenFetched();
+                    expect(this.model).toHaveBeenFetched();
                 });
             });
         });

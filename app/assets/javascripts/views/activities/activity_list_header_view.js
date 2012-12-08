@@ -9,6 +9,8 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
+        chorus.PageEvents.subscribe("insight:promoted", this.updateInsightCount, this);
+
         var options = {};
         if (this.modelIsWorkspace()) {
             options.urlParams = {

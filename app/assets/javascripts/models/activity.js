@@ -118,7 +118,7 @@
                 action: "create"
             });
             insight.bind("saved", function() {
-                this.collection.fetch();
+                this.fetch();
                 if (options && options.success) {
                     options.success(this);
                 }
@@ -134,7 +134,7 @@
             });
 
             insight.bind("saved", function() {
-                this.collection.fetch();
+                this.fetch();
             }, this);
 
             insight.save(null, { method: "create" });
@@ -147,7 +147,7 @@
             });
 
             insight.bind("saved", function() {
-                this.collection.fetch();
+                this.fetch();
             }, this);
 
             insight.save(null, { method: "create" });
