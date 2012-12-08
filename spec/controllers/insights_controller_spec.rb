@@ -83,10 +83,12 @@ describe InsightsController do
 
     let(:user) { note.actor }
     let(:note) { Events::NoteOnWorkspace.last }
+    let(:note_id) { note.id }
+    let(:post_params) { { :note => { :note_id => note_id } } }
 
     it "returns status 201" do
 
-      post :publish, :note_id => note.id
+      post :publish, post_params
       response.code.should == "201"
     end
 
@@ -94,11 +96,11 @@ describe InsightsController do
       mock_present do |insight|
         insight.should == note
       end
-      post :publish, :note_id => note.id
+      post :publish, post_params
     end
 
     it "marks the NOTE as an published" do
-      post :publish, :note_id => note.id
+      post :publish, post_params
       note.reload.should be_published
     end
 
@@ -109,7 +111,7 @@ describe InsightsController do
         let(:user) { users(:not_a_member) }
 
         it "returns permission denied status code" do
-          post :publish, :note_id => note.id
+          post :publish, post_params
 
           response.code.should == '404'
         end
@@ -119,7 +121,7 @@ describe InsightsController do
         let(:user) { users(:admin) }
 
         it "returns status 201" do
-          post :publish, :note_id => note.id
+          post :publish, post_params
           response.code.should == "201"
         end
       end
@@ -129,7 +131,7 @@ describe InsightsController do
         let(:non_member_user) { users(:not_a_member) }
         before do
           log_in admin_user
-          post :publish, :note_id => note.id
+          post :publish, post_params
         end
 
         it "returns the note for user" do
@@ -144,6 +146,7 @@ describe InsightsController do
 
       context "checks the Note should be insight first" do
         let(:note_on_workfile) { Events::NoteOnWorkfile.last }
+        let(:note_id) { note_on_workfile.id }
         let(:user) { note_on_workfile.actor }
 
         before do
@@ -152,7 +155,7 @@ describe InsightsController do
         end
 
         it "returns an error " do
-          post :publish, :note_id => note_on_workfile.id
+          post :publish, post_params
 
           response.code.should == '422'
           response.body.should include "Note has to be an insight first"
@@ -171,9 +174,11 @@ describe InsightsController do
 
     let(:user) { note.actor }
     let(:note) { Events::NoteOnWorkspace.last }
+    let(:note_id) { note.id }
+    let(:post_params) { { :note => { :note_id => note_id } } }
 
     it "returns status 201" do
-      post :unpublish, :note_id => note.id
+      post :unpublish, post_params
       response.code.should == "201"
     end
 
@@ -181,11 +186,11 @@ describe InsightsController do
       mock_present do |insight|
         insight.should == note
       end
-      post :unpublish, :note_id => note.id
+      post :unpublish, post_params
     end
 
     it "marks the NOTE as unpublished" do
-      post :unpublish, :note_id => note.id
+      post :unpublish, post_params
       note.reload.should_not be_published
     end
 
@@ -196,7 +201,7 @@ describe InsightsController do
         let(:user) { users(:not_a_member) }
 
         it "returns permission denied status code" do
-          post :unpublish, :note_id => note.id
+          post :unpublish, post_params
 
           response.code.should == "403"
         end
@@ -206,7 +211,7 @@ describe InsightsController do
         let(:user) { users(:admin) }
 
         it "returns status 201" do
-          post :unpublish, :note_id => note.id
+          post :unpublish, post_params
           response.code.should == "201"
         end
       end
@@ -216,7 +221,7 @@ describe InsightsController do
         let(:non_member_user) { users(:not_a_member) }
         before do
           log_in admin_user
-          post :unpublish, :note_id => note.id
+          post :unpublish, post_params
         end
 
         it "does not return the note for user" do
@@ -231,6 +236,7 @@ describe InsightsController do
 
       context "checks the Note should be published first" do
         let(:note_on_workfile) { Events::NoteOnWorkfile.last }
+        let(:note_id) { note_on_workfile.id }
         let(:user) { note_on_workfile.actor }
 
         before do
@@ -240,7 +246,7 @@ describe InsightsController do
         end
 
         it "returns an error " do
-          post :unpublish, :note_id => note_on_workfile.id
+          post :unpublish, post_params
 
           response.code.should == '422'
           response.body.should include "Note has to be published first"

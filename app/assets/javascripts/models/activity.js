@@ -124,11 +124,11 @@
                 }
             }, this);
 
-            insight.save({ promote: true }, {});
+            insight.save({ validateBody: false });
         },
 
         publish: function() {
-            var insight = new chorus.models.InsightCount({
+            var insight = new chorus.models.Insight({
                 noteId: this.get("id"),
                 action: "publish"
             });
@@ -137,11 +137,11 @@
                 this.fetch();
             }, this);
 
-            insight.save(null, { method: "create" });
+            insight.save({ validateBody: false }, {method: 'create'});
         },
 
         unpublish: function() {
-            var insight = new chorus.models.InsightCount({
+            var insight = new chorus.models.Insight({
                 noteId: this.get("id"),
                 action: "unpublish"
             });
@@ -150,7 +150,7 @@
                 this.fetch();
             }, this);
 
-            insight.save(null, { method: "create" });
+            insight.save({ validateBody: false }, {method: 'create'});
         },
 
         toNote: function() {

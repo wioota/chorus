@@ -11,14 +11,14 @@ class InsightsController < ApplicationController
   end
 
   def publish
-    note = Events::Note.visible_to(current_user).find(params[:insight][:note_id])
+    note = Events::Note.visible_to(current_user).find(params[:note][:note_id])
     raise ApiValidationError.new(:base, :generic, {:message => "Note has to be an insight first"}) unless note.insight
     note.set_insight_published true
     present note, :status => :created
   end
 
   def unpublish
-    note = Events::Note.find(params[:insight][:note_id])
+    note = Events::Note.find(params[:note][:note_id])
     authorize! :update, note
     raise ApiValidationError.new(:base, :generic, {:message => "Note has to be published first"}) unless note.published
     note.set_insight_published false
