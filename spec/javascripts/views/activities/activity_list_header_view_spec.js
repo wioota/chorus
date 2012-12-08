@@ -49,6 +49,19 @@ describe("chorus.views.ActivityListHeader", function() {
     });
 
     describe("#setup", function() {
+
+        context("when the insight:promoted page event is received", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'updateInsightCount').andCallThrough();
+                chorus.PageEvents.broadcast("insight:promoted");
+            });
+
+            it("fetches the updated insight count", function() {
+                var fetch = this.server.lastFetch();
+                expect(fetch.url).toContain('/insights/count');
+            });
+        });
+
         it("fetches the number of insights", function() {
             expect(this.view.insightCount).toHaveBeenFetched();
         });
