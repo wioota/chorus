@@ -9,18 +9,21 @@
     width: $dialog-width;
     @include results-console-message;
     @include ellipsis;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
   }
 
   label {
-    margin-top: 15px;
-    margin-bottom: $padding-y;
+    margin-top: 10px;
     display: inline-block;
   }
 
   .username, .password {
     margin-left: 0px;
-    display: block;
-    width: $account_width;
+    width: $dialog-width/2 - 30px;
+    display: inline-block;
+  }
+
+  .password {
+    margin-left: 25px;
   }
 }
