@@ -59,15 +59,16 @@ describe("chorus.RequiredResources", function() {
 
     describe("#cleanUp", function() {
         beforeEach(function() {
+            this.viewContext = {};
             spyOn(this.model, "unbind");
             this.requiredResources.add(this.model);
 
             spyOn(this.requiredResources, "unbind");
-            this.requiredResources.cleanUp()
+            this.requiredResources.cleanUp(this.viewContext);
         });
 
-        it("unbinds the individual resources", function() {
-            expect(this.model.unbind).toHaveBeenCalled();
+        it("unbinds 'viewContext' events from the individual resources", function() {
+            expect(this.model.unbind).toHaveBeenCalledWith(null, null, this.viewContext);
         });
 
         it("empties the collection", function() {
@@ -78,6 +79,5 @@ describe("chorus.RequiredResources", function() {
             expect(this.requiredResources.unbind).toHaveBeenCalled();
         });
     });
-
 });
 

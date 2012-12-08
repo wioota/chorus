@@ -29,10 +29,5 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
             expect(chorus.toast).toHaveBeenCalledWith("import.schedule.delete.toast", undefined);
             expect(chorus.toast.callCount).toBe(1);
         });
-
-        it("deletes the id of the model and triggers change on the page model", function() {
-            expect(this.changeSpy).toHaveBeenCalled();
-            expect(this.alert.model.id).toBeUndefined();
-        });
     });
 });
