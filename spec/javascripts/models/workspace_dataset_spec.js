@@ -166,7 +166,22 @@ describe("chorus.models.WorkspaceDataset", function() {
 
         it("memoizes", function() {
             expect(this.dataset.getImportSchedules()).toBe(this.dataset.getImportSchedules());
-        })
+        });
+
+        describe("when removing the import", function() {
+            it("triggers change on the model", function() {
+                this.dataset.unset("frequency");
+                spyOnEvent(this.dataset, 'change');
+                this.dataset.getImportSchedules().trigger("remove");
+                expect("change").toHaveBeenTriggeredOn(this.dataset);
+            });
+
+            it("unsets frequency on the model", function() {
+                this.dataset.set("frequency", "weekly");
+                this.dataset.getImportSchedules().trigger("remove");
+                expect(this.dataset.get("frequency")).toBeFalsy();
+            });
+        });
     });
 
     describe("#getImports", function() {

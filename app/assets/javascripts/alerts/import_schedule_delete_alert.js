@@ -17,7 +17,5 @@ chorus.alerts.ImportScheduleDelete = chorus.alerts.ModelDelete.extend({
 
     modelDeleted: function() {
         this._super("modelDeleted", arguments);
-        this.model.unset("id");
-        this.pageModel.trigger("change");
     }
 });

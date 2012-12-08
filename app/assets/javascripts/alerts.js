@@ -30,7 +30,7 @@ chorus.alerts.Base = chorus.Modal.extend({
             cancelButton.focus();
         }
     }
-})
+});
 
 chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     events: _.extend({}, chorus.alerts.Base.prototype.events, {
@@ -68,5 +68,4 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
         }
         this.closeModal();
     }
-
-})
+});

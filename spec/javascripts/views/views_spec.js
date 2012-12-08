@@ -546,7 +546,7 @@ describe("chorus.views.Base", function() {
 
             it("removes its backbone event bindings", function() {
                 expect(this.view.unbind).toHaveBeenCalled();
-                expect(this.view.requiredResources.cleanUp).toHaveBeenCalled();
+                expect(this.view.requiredResources.cleanUp).toHaveBeenCalledWith(this.view);
                 expect(this.view.bindings.removeAll).toHaveBeenCalled();
             });
         });

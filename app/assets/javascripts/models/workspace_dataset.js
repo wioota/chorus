@@ -80,15 +80,20 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         return this._datasetImports
     },
 
-
     getImportSchedules: function() {
         if (!this._datasetImportSchedules) {
             this._datasetImportSchedules = new chorus.collections.DatasetImportScheduleSet([], {
                 datasetId: this.get("id"),
                 workspaceId: this.get("workspace").id
             });
+            this._datasetImportSchedules.on("remove", this.importScheduleRemoved, this);
         }
         return this._datasetImportSchedules
+    },
+
+    importScheduleRemoved: function() {
+        this.unset("frequency", {silent: true});
+        this.trigger('change');
     },
 
     importSchedule: function() {
