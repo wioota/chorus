@@ -54,6 +54,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
   gem 'fakefs',              :require => false
   gem 'chunky_png'
   gem 'database_cleaner',    :require => false
+  gem 'poltergeist'
 end
 
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do

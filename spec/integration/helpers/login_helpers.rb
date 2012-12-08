@@ -1,4 +1,8 @@
 module LoginHelpers
+  def current_route
+    URI.parse(current_url).fragment
+  end
+
   def login(userOrUsername, password = FixtureBuilder.password)
     username = userOrUsername.is_a?(String) ? userOrUsername : userOrUsername.username
     visit(WEBPATH['login_route'])
