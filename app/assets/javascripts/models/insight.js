@@ -9,6 +9,8 @@ chorus.models.Insight = chorus.models.Note.extend({
             return "notes/{{id}}/attachments"
         } else if (action == "create") {
             return "insights";
+        } else if (action == "publish" || action == "unpublish") {
+            return "insights/" + action;
         } else {
             return "notes/{{id}}";
         }
@@ -20,7 +22,7 @@ chorus.models.Insight = chorus.models.Note.extend({
     },
 
     declareValidations:function (newAttrs) {
-        if (!newAttrs['promote']) {
+        if ( !(newAttrs['validateBody'] == false) ) {
             this.require('body', newAttrs);
         }
     }
