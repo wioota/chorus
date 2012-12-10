@@ -5,7 +5,7 @@ describe Dataset do
   let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }
-  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
+  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions }
   let(:dataset) { datasets(:table) }
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
@@ -195,7 +195,7 @@ describe Dataset do
 
       context "when a limit and sort are passed to refresh" do
         let(:sort) { [{"lower(relname)" => "asc"}] }
-        let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema({:sort => sort, :limit => 2}).to_sql }
+        let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions({:sort => sort, :limit => 2}) }
         it "generates sql with limit and sort" do
           Dataset.refresh(account, schema, { :limit => 2, :sort => sort })
         end
@@ -552,6 +552,42 @@ describe Dataset::Query, :database_integration => true do
       it "returns a query whose result with limit" do
         names = rows.map { |row| row["name"] }
         names.should == ["base_table1", "view1"]
+      end
+    end
+  end
+
+  describe "#refresh" do
+    context "when user does not have access to schema" do
+      let(:account_without_permission) { InstanceAccount.create({ :db_password=> "secret", :db_username => "user_with_no_access", :gpdb_instance => database.gpdb_instance, :owner => account.owner }, :without_protection => true) }
+      let(:not_accessible_schema_name) { "not_accessible" }
+      let(:not_accessible_schema) { database.schemas.find_by_name(not_accessible_schema_name) }
+
+      before do
+        database.with_gpdb_connection(account) do |conn|
+          conn.exec_query("DROP OWNED BY #{account_without_permission.db_username};") rescue
+          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue
+          conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
+
+          conn.exec_query("CREATE USER #{account_without_permission.db_username} WITH PASSWORD '#{account_without_permission.db_password}';") rescue
+          conn.exec_query("GRANT ALL ON DATABASE #{database.name} TO #{account_without_permission.db_username};")
+          conn.exec_query("CREATE SCHEMA #{not_accessible_schema_name};")
+          conn.exec_query("CREATE TABLE #{not_accessible_schema_name}.a_table (id integer);")
+          conn.exec_query("REVOKE ALL ON SCHEMA #{not_accessible_schema_name} FROM #{account_without_permission.db_username};")
+        end
+        GpdbSchema.refresh(account, database)
+      end
+
+      after do
+        database.with_gpdb_connection(account) do |conn|
+          conn.exec_query("DROP OWNED BY #{not_accessible_schema_name};") rescue
+          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue
+          conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
+        end
+      end
+
+      it "raises an error" do
+        expect { Dataset.refresh(account_without_permission, not_accessible_schema) }.to raise_error(SqlPermissionDenied,
+                                                                /ActiveRecord::JDBCError: ERROR: permission denied for schema not_accessible/)
       end
     end
   end
