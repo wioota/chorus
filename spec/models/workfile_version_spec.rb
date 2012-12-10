@@ -57,12 +57,11 @@ describe WorkfileVersion do
 
   describe "validations" do
     let(:max_file_size) {  ChorusConfig.instance['file_sizes_mb']['workfiles'] }
+    let(:user) { users(:owner) }
     it { should validate_attachment_size(:contents).less_than(max_file_size.megabytes) }
 
     # Workaround for paperclip's lack of proper I18n in error messages
     context "when content has error message with exception message" do
-      let(:user) { users(:owner) }
-
       it "cleans the message" do
         workfile_version = described_class.new({
                                                    :contents => test_file('not_an_image.jpg'),
@@ -74,6 +73,16 @@ describe WorkfileVersion do
         workfile_version.should have_error_on(:contents).with_message(:invalid)
 
         workfile_version.errors[:contents].flatten.join.should_not match(/not recognized by the 'identify' command/)
+      end
+    end
+
+    context 'when the file name contains special characters' do
+      it 'doesnt escape them' do
+        workfile_version = described_class.new(:contents => test_file('@invalid'),
+                                               :owner => user,
+                                               :modifier => user)
+        workfile_version.valid? #paperclip callbacks
+        workfile_version.file_name.should == '@invalid'
       end
     end
   end

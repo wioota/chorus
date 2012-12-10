@@ -159,35 +159,46 @@ describe WorkfilesController do
 
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
-    context "as a member of the workspace" do
-      it "creates a workfile" do
-        post :create, params
-        Workfile.last.file_name.should == "workfile.sql"
-      end
+    it 'creates a workfile' do
+      post :create, params
+      Workfile.last.file_name.should == 'workfile.sql'
+    end
 
-      it "sets has_added_workfile on the workspace to true" do
-        post :create, params
-        workspace.reload.has_added_workfile.should be_true
-      end
+    it 'sets has_added_workfile on the workspace to true' do
+      post :create, params
+      workspace.reload.has_added_workfile.should be_true
+    end
 
-      it "makes a WorkfileCreated event" do
+    it 'makes a WorkfileCreated event' do
+      expect {
         post :create, params
-        event = Events::WorkfileCreated.by(user).last
-        event.workfile.description.should == params[:description]
-        event.additional_data["commit_message"].should == params[:description]
-        event.workspace.to_param.should == params[:workspace_id]
-      end
+      }.to change(Events::WorkfileCreated, :count).by(1)
+      event = Events::WorkfileCreated.by(user).last
+      event.workfile.description.should == params[:description]
+      event.additional_data['commit_message'].should == params[:description]
+      event.workspace.should == workspace
+    end
 
-      it "creates a workfile from an svg document" do
+    it 'creates a workfile from an svg document' do
+      expect {
         post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
-        Workfile.last.file_name.should == 'some_vis.png'
-      end
+      }.to change(Workfile, :count).by(1)
+      Workfile.last.file_name.should == 'some_vis.png'
+    end
 
-      context "when sending an invalid file name" do
-        it "returns an unprocessable entity response code" do
-          post :create, :workspace_id => workspace.to_param, :file_name => 'a/file.sql'
-          response.code.should == "422"
-        end
+    context 'when creating a new workfile with an invalid name' do
+      it 'returns an unprocessable entity response code' do
+        post :create, :workspace_id => workspace.to_param, :file_name => 'a/file.sql'
+        response.code.should == "422"
+      end
+    end
+
+    context 'when uploading a workfile with an invalid name' do
+      let(:file) { test_file '@invalid' }
+
+      it 'returns 422' do
+        post :create, params
+        response.code.should == '422'
       end
     end
   end
