@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
+  rescue_from 'SqlPermissionDenied', :with => :render_forbidden
   rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
   rescue_from 'Gpdb::ViewAlreadyExists', :with => :render_query_error
   rescue_from 'ModelNotCreated', :with => :render_model_error

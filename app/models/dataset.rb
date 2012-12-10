@@ -3,6 +3,9 @@ require 'stale'
 class SqlCommandFailed < Exception
 end
 
+class SqlPermissionDenied < StandardError
+end
+
 class Dataset < ActiveRecord::Base
   include Stale
   include SoftDelete
@@ -93,11 +96,17 @@ class Dataset < ActiveRecord::Base
   def self.refresh(account, schema, options = {})
     found_datasets = []
     datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
-      to_sql = Query.new(schema).tables_and_views_in_schema(options).to_sql
-      conn.select_all(to_sql)
+      sql = Query.new(schema).tables_and_views_in_schema_with_permissions(options)
+      begin
+        conn.select_all(sql)
+      rescue ActiveRecord::StatementInvalid => e
+        raise SqlPermissionDenied.new e.message if e.message =~ /Permission denied/i
+        raise e
+      end
     end
 
     datasets_in_gpdb.each do |attrs|
+      attrs.delete('regclass')
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
@@ -274,6 +283,11 @@ class Dataset < ActiveRecord::Base
     def relations_in_schema
       schema_ids = SCHEMAS.where(SCHEMAS[:nspname].eq(schema.name)).project(:oid)
       RELATIONS.where(RELATIONS[:relnamespace].in(schema_ids))
+    end
+
+    def tables_and_views_in_schema_with_permissions(options={})
+      datasets_query = tables_and_views_in_schema(options).to_sql
+      %Q{SELECT datasets.*, ('"#{schema.name}"."' || datasets.name || '"')::regclass FROM (#{datasets_query}) datasets;}
     end
 
     def tables_and_views_in_schema(options ={})
