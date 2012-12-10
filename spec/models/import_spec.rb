@@ -84,13 +84,13 @@ describe Import, :database_integration => true do
       import.destination_dataset.should == import.workspace.sandbox.datasets.find_by_name('master_table1')
     end
 
-    it "should not change a previously set destination dataset" do
+    it "should change a previously set destination dataset" do
       stub(import.source_dataset).dataset_consistent? { true }
       import.destination_dataset = import.source_dataset
       import.to_table = 'master_table1'
       import.new_table = false
       import.should be_valid
-      import.destination_dataset.should == import.source_dataset
+      import.destination_dataset.should == import.workspace.sandbox.datasets.find_by_name('master_table1')
     end
 
     it "is valid if an imports table become inconsistent after saving" do
