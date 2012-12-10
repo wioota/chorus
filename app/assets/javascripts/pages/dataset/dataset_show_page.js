@@ -44,13 +44,16 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         fetchResources: function() {
             this.dataset.fetch();
-            this.bindings.add(this.dataset, "change", this.fetchColumnSet);
+            this.bindings.add(this.dataset, "loaded", this.fetchColumnSet);
         },
 
         fetchColumnSet: function() {
             this.columnSet = this.dataset.columns();
-            this.bindings.add(this.columnSet, "loaded", this.drawColumns);
-            this.columnSet.fetchAll();
+
+            if(!this.columnSet.loaded) {
+                this.bindings.add(this.columnSet, "loaded", this.drawColumns);
+                this.columnSet.fetchAll();
+            }
         },
 
         postRender: function() {
@@ -92,6 +95,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             this.sidebar && this.sidebar.teardown();
             this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
             this.sidebar.setDataset(this.dataset);
+
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
 

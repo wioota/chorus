@@ -39,13 +39,18 @@ chorus.views.Bare = Backbone.View.include(
             return this.subViewObjects;
         },
 
+        torndown: false,
+
         teardown: function(preserveContainer) {
+            this.torndown = true;
+
             chorus.unregisterView(this);
             this.unbind();
             this.undelegateEvents();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
             this.requiredResources.cleanUp(this);
+            this.$el.unbind();
             if(preserveContainer) {
                 $(this.el).children().remove();
                 $(this.el).html("");
@@ -63,6 +68,7 @@ chorus.views.Bare = Backbone.View.include(
             _.each(this.subscriptions, function(handle) {
                 chorus.PageEvents.unsubscribe(handle)
             });
+            this.subscriptions = [];
 
             if(this.parentView) {
                 var subViewObjects = this.parentView.subViewObjects;
@@ -97,7 +103,9 @@ chorus.views.Bare = Backbone.View.include(
             this.requiredResources.bind('add', function(resources) {
                 resources = _.isArray(resources) ? resources.slice() : [resources];
                 _.each(resources, _.bind(function (resource) {
-                    resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+                    if(!resource.loaded) {
+                        resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+                    }
                 }, this));
             }, this);
             this.requiredResources.reset(options.requiredResources);
@@ -255,41 +263,46 @@ chorus.views.Bare = Backbone.View.include(
             return { delay: 125 };
         },
 
-        setupScrolling: function(selector_or_element, options) {
+        setupScrolling: function(selector, options) {
             _.defer(_.bind(function() {
-                var el = this.$(selector_or_element);
-                if (!el.length) {
-                    el = selector_or_element;
+                if(this.torndown) { return; }
+                var $el = this.$(selector);
+                if (!$el.length) {
+                    $el = $(selector);
                 }
 
-                if (el.length > 0) {
+                if ($el.length > 0) {
+                    var alreadyInitialized = $el.data("jsp");
 
-                    var alreadyInitialized = el.data("jsp");
+                    $el.jScrollPane(options);
+                    $el.find('.jspVerticalBar').hide();
+                    $el.find('.jspHorizontalBar').hide();
 
-                    el.jScrollPane(options);
-                    el.find('.jspVerticalBar').hide();
-                    el.find('.jspHorizontalBar').hide();
+                    $el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
-                    el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
-
-                    this.scrollHandle && chorus.PageEvents.unsubscribe(this.scrollHandle);
-                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling(el) }, this);
+                    if(this.scrollHandle) {
+                        chorus.PageEvents.unsubscribe(this.scrollHandle);
+                        var index = this.subscriptions.indexOf(this.scrollHandle);
+                        if(index > -1) this.subscriptions.splice(index, 1);
+                    }
+                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling($el) }, this);
+                    this.subscriptions.push(this.scrollHandle);
 
                     if (!alreadyInitialized) {
-                        el.addClass("custom_scroll");
-                        el.unbind('hover').hover(function() {
-                            el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+                        $el.addClass("custom_scroll");
+                        $el.unbind('hover').hover(function() {
+                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
                         }, function() {
-                            el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
                         });
 
-                        el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
+                        $el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
 
                         if (chorus.page && chorus.page.bind) {
                             if(this.resizeCallback) {
                                 this.bindings.remove(chorus.page, "resized", this.resizeCallback);
                             }
-                            this.resizeCallback = function() { this.recalculateScrolling(el) };
+                            this.resizeCallback = function() { this.recalculateScrolling($el) };
                             this.bindings.add(chorus.page, "resized", this.resizeCallback, this);
                         }
                     }
