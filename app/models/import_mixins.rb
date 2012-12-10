@@ -49,7 +49,7 @@ module ImportMixins
   end
 
   def set_destination_dataset_id
-    self.destination_dataset = sandbox.datasets.find_by_name(to_table) unless destination_dataset
+    self.destination_dataset = sandbox.datasets.find_by_name(to_table)
   end
 
   included do
