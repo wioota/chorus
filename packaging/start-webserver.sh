@@ -51,7 +51,7 @@ case $RAILS_ENV in
 
         log "starting jetty..."
         cd $CHORUS_HOME/vendor/jetty/
-        JETTY_PID=$JETTY_PID_FILE CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT ./jetty-init start &>/dev/null &
+        JETTY_PID=$JETTY_PID_FILE CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT ./jetty-init start 2>> $CHORUS_HOME/log/jetty.log >> $CHORUS_HOME/log/jetty.log &
         cd $CHORUS_HOME
         wait_for_start $JETTY_PID_FILE
         ;;
