@@ -556,7 +556,7 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#refresh" do
+  describe ".refresh" do
     context "when user does not have access to schema" do
       let(:account_without_permission) { InstanceAccount.create({ :db_password=> "secret", :db_username => "user_with_no_access", :gpdb_instance => database.gpdb_instance, :owner => account.owner }, :without_protection => true) }
       let(:not_accessible_schema_name) { "not_accessible" }
@@ -564,11 +564,11 @@ describe Dataset::Query, :database_integration => true do
 
       before do
         database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("REVOKE CONNECT ON DATABASE #{database.name} FROM #{account_without_permission.db_username};") rescue nil
+          conn.exec_query("REVOKE CONNECT ON DATABASE \"#{database.name}\" FROM #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
           conn.exec_query("CREATE USER #{account_without_permission.db_username} WITH PASSWORD '#{account_without_permission.db_password}';") rescue nil
-          conn.exec_query("GRANT CONNECT ON DATABASE #{database.name} TO #{account_without_permission.db_username};")
+          conn.exec_query("GRANT CONNECT ON DATABASE \"#{database.name}\" TO #{account_without_permission.db_username};")
           conn.exec_query("CREATE SCHEMA #{not_accessible_schema_name};")
           conn.exec_query("CREATE TABLE #{not_accessible_schema_name}.a_table (id integer);")
           conn.exec_query("REVOKE ALL ON SCHEMA #{not_accessible_schema_name} FROM #{account_without_permission.db_username};")
@@ -578,7 +578,7 @@ describe Dataset::Query, :database_integration => true do
 
       after do
         database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("REVOKE CONNECT ON DATABASE #{database.name} FROM #{account_without_permission.db_username};") rescue nil
+          conn.exec_query("REVOKE CONNECT ON DATABASE \"#{database.name}\" FROM #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
         end
