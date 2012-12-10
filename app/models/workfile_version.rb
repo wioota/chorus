@@ -3,7 +3,8 @@ class WorkfileVersion < ActiveRecord::Base
   has_attached_file :contents,
                     :styles => {:icon => "50x50>"},
                     :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
-                    :url => "/:class/:id/image?style=:style", :restricted_characters => /[&$+,\/:;=?@<>\[\]\{\}\|\\\^~%#]/
+                    :url => "/:class/:id/image?style=:style",
+                    :restricted_characters => nil #retain original filename
 
   belongs_to :workfile, :touch => true
   belongs_to :owner, :class_name => 'User'
