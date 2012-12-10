@@ -3,6 +3,7 @@ require 'capybara'
 require 'capybara/poltergeist'
 require 'capybara/dsl'
 require 'spec/integration/helpers/login_helpers'
+require 'csv'
 
 Capybara.run_server = false
 Capybara.default_driver = :poltergeist
@@ -17,8 +18,7 @@ module ChorusReader
   LoginHelpers::WEBPATH = {'login_route' => "/"}
 
   def username
-    "chorusadmin"
-    #CSV.read('load_test_users.csv').first[2]
+    CSV.read('load-test-users.csv').sample[2]
   end
 
   def read_event
@@ -36,7 +36,7 @@ module ChorusReader
   end
 
   def run(count = 10)
-    login username, "secret"
+    login username, "changeme"
     count.times do
       sleep(2)
       read_event
