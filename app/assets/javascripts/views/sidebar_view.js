@@ -21,9 +21,8 @@ chorus.views.Sidebar = chorus.views.Base.extend({
     postRender: function() {
         this._super('postRender');
 
-        var sidebar = $(this.el).closest("#sidebar");
-        this.setupScrolling(sidebar, {
-            contentWidth: sidebar.width()
+        this.setupScrolling("#sidebar", {
+            contentWidth: $("#sidebar").width()
         });
 
         $("#sidebar_wrapper .jump_to_top").bind("click", _.bind(this.jumpToTop, this));

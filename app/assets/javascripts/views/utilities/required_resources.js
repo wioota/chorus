@@ -20,7 +20,7 @@ chorus.RequiredResources = chorus.collections.Base.extend({
     },
 
     cleanUp: function(context) {
-        this.unbind();
+        this.unbind(null, null, context);
         this.each(function(resource) {
             resource.unbind(null, null, context);
         });

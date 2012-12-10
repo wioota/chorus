@@ -179,6 +179,8 @@ describe("chorus.views.WorkfileShowSidebar", function() {
     context("with an archived workspace", function() {
         beforeEach(function() {
             this.model = rspecFixtures.workfile.sql();
+            this.model.loaded = false;
+            this.model.workspace().loaded = false;
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.model });
 
             this.model.fetch();
