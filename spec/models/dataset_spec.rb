@@ -564,12 +564,11 @@ describe Dataset::Query, :database_integration => true do
 
       before do
         database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("DROP OWNED BY #{account_without_permission.db_username};") rescue
-          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue
+          conn.exec_query("REVOKE CONNECT ON DATABASE #{database.name} FROM #{account_without_permission.db_username};") rescue nil
+          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
-
-          conn.exec_query("CREATE USER #{account_without_permission.db_username} WITH PASSWORD '#{account_without_permission.db_password}';") rescue
-          conn.exec_query("GRANT ALL ON DATABASE #{database.name} TO #{account_without_permission.db_username};")
+          conn.exec_query("CREATE USER #{account_without_permission.db_username} WITH PASSWORD '#{account_without_permission.db_password}';") rescue nil
+          conn.exec_query("GRANT CONNECT ON DATABASE #{database.name} TO #{account_without_permission.db_username};")
           conn.exec_query("CREATE SCHEMA #{not_accessible_schema_name};")
           conn.exec_query("CREATE TABLE #{not_accessible_schema_name}.a_table (id integer);")
           conn.exec_query("REVOKE ALL ON SCHEMA #{not_accessible_schema_name} FROM #{account_without_permission.db_username};")
@@ -579,8 +578,8 @@ describe Dataset::Query, :database_integration => true do
 
       after do
         database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("DROP OWNED BY #{not_accessible_schema_name};") rescue
-          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue
+          conn.exec_query("REVOKE CONNECT ON DATABASE #{database.name} FROM #{account_without_permission.db_username};") rescue nil
+          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
           conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
         end
       end

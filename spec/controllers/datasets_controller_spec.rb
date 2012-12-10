@@ -4,7 +4,7 @@ describe DatasetsController do
   let(:user) { users(:the_collaborator) }
   let(:instance_account) { gpdb_instance.account_for_user!(user) }
   let(:gpdb_instance) { gpdb_instances(:owners) }
-  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema(options).to_sql }
+  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions(options) }
   let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:default) }
   let(:table) { schema.datasets.tables.first }
