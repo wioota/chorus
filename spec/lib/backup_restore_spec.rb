@@ -11,10 +11,16 @@ describe 'BackupRestore' do
         let(:backup_path) { Pathname.new "backup_path" }
         let(:rolling_days) { 3 }
         let(:assets) {["users/asset_file.icon"]}
+        let(:stub_database_dump) { false }
 
         before do
           any_instance_of(BackupRestore::Backup) do |instance|
             stub(instance).log.with_any_args
+            if stub_database_dump
+              stub(instance).dump_database  { # this is really slow so we stub it
+                system "echo 'im a database' | gzip > database.gz"
+              }
+            end
           end
         end
 
@@ -43,117 +49,126 @@ describe 'BackupRestore' do
           end
         end
 
-        it "creates the backup directory if it does not exist" do
-          backup_dir = @chorus_path.join backup_path
-          FileUtils.rm_rf backup_dir
-          Dir.exists?(backup_dir).should be_false
+        it "includes a zipped database dump in the backup" do
           run_backup
-          Dir.exists?(backup_dir).should be_true
+          system("tar xfO #{@expected_backup_file} database.gz | gunzip > /dev/null").should be_true
         end
 
-        it "creates a backup file with the correct timestamp" do
-          run_backup
-          @expected_backup_file.should exist
-        end
+        context "with the database dump disabled for speed" do
+          let(:stub_database_dump) { true }
 
-        it "creates only the backup file and leaves no other trace" do
-          new_files_created(@chorus_path.join backup_path) do
+          it "creates the backup directory if it does not exist" do
+            backup_dir = @chorus_path.join backup_path
+            FileUtils.rm_rf backup_dir
+            Dir.exists?(backup_dir).should be_false
             run_backup
-          end.should == [Pathname.new(@expected_backup_file)]
-        end
+            Dir.exists?(backup_dir).should be_true
+          end
 
-        it "works even if chorus.properties does not exist" do
-          config = Rails.root.join("config/chorus.properties")
-          FileUtils.rm config if File.exists?(config)
-          expect {
+          it "creates a backup file with the correct timestamp" do
             run_backup
-          }.to_not raise_error
-        end
+            @expected_backup_file.should exist
+          end
 
-        context "when a system command fails" do
-          it "cleans up all the files it created" do
-            any_instance_of(BackupRestore::Backup) do |instance|
-              stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
+          it "creates only the backup file and leaves no other trace" do
+            new_files_created(@chorus_path.join backup_path) do
+              run_backup
+            end.should == [Pathname.new(@expected_backup_file)]
+          end
+
+          it "works even if chorus.properties does not exist" do
+            config = Rails.root.join("config/chorus.properties")
+            FileUtils.rm config if File.exists?(config)
+            expect {
+              run_backup
+            }.to_not raise_error
+          end
+
+          context "when a system command fails" do
+            it "cleans up all the files it created" do
+              any_instance_of(BackupRestore::Backup) do |instance|
+                stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
+              end
+              new_files_created(@chorus_path) do
+                expect {
+                  run_backup
+                }.to raise_error("you can't do that!")
+              end.should == []
             end
-            new_files_created(@chorus_path) do
-              expect {
-                run_backup
-              }.to raise_error("you can't do that!")
-            end.should == []
           end
-        end
 
-        it "requires a positive integer for the number of rolling days" do
-          expect {
-            BackupRestore.backup backup_path, 0
-          }.to raise_error(/positive integer/)
-        end
+          it "requires a positive integer for the number of rolling days" do
+            expect {
+              BackupRestore.backup backup_path, 0
+            }.to raise_error(/positive integer/)
+          end
 
-        it "includes the assets in the backup" do
-          run_backup
-          asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar tz`
-          asset_list.split.should include(*assets)
-        end
-
-        context "when there are no assets in the asset folder" do
-          let(:assets) {[]}
-
-          it "doesn't create the assets file" do
+          it "includes the assets in the backup" do
             run_backup
-            @expected_backup_file.should exist
-            file_list = `tar tf #{@expected_backup_file}`
-            file_list.should_not include("assets_storage_path")
-          end
-        end
-
-        context "when the asset folder does not exist" do
-          let(:assets) { nil }
-
-          it "doesn't create the assets file" do
-            run_backup
-            @expected_backup_file.should exist
-            file_list = `tar tf #{@expected_backup_file}`
-            file_list.should_not include("assets_storage_path")
-          end
-        end
-
-        describe "rolling backups: " do
-          let(:old_backup) { @chorus_path.join backup_path.join(backup_filename(old_backup_time)) }
-          let(:rolling_days) { nil }
-
-          before do
-            FileUtils.touch old_backup
-            BackupRestore.backup *[backup_path, rolling_days].compact
+            asset_list = `tar xfO #{@expected_backup_file} assets_storage_path.tgz | tar tz`
+            asset_list.split.should include(*assets)
           end
 
-          context "when rolling days parameter is provided" do
+          context "when there are no assets in the asset folder" do
+            let(:assets) {[]}
 
-            let(:rolling_days) { 11 }
+            it "doesn't create the assets file" do
+              run_backup
+              @expected_backup_file.should exist
+              file_list = `tar tf #{@expected_backup_file}`
+              file_list.should_not include("assets_storage_path")
+            end
+          end
 
-            context "when the old backup was created more than the stated time ago" do
-              let(:old_backup_time) { rolling_days.days.ago - 1.hour }
+          context "when the asset folder does not exist" do
+            let(:assets) { nil }
 
-              it "deletes it" do
-                old_backup.should_not exist
+            it "doesn't create the assets file" do
+              run_backup
+              @expected_backup_file.should exist
+              file_list = `tar tf #{@expected_backup_file}`
+              file_list.should_not include("assets_storage_path")
+            end
+          end
+
+          describe "rolling backups: " do
+            let(:old_backup) { @chorus_path.join backup_path.join(backup_filename(old_backup_time)) }
+            let(:rolling_days) { nil }
+
+            before do
+              FileUtils.touch old_backup
+              BackupRestore.backup *[backup_path, rolling_days].compact
+            end
+
+            context "when rolling days parameter is provided" do
+
+              let(:rolling_days) { 11 }
+
+              context "when the old backup was created more than the stated time ago" do
+                let(:old_backup_time) { rolling_days.days.ago - 1.hour }
+
+                it "deletes it" do
+                  old_backup.should_not exist
+                end
+              end
+
+              context "when old backup was created within stated time" do
+                let(:old_backup_time) { rolling_days.days.ago + 1.hour }
+
+                it "keeps it" do
+                  old_backup.should exist
+                end
               end
             end
 
-            context "when old backup was created within stated time" do
-              let(:old_backup_time) { rolling_days.days.ago + 1.hour }
+            context "when rolling days parameter is not provided" do
 
-              it "keeps it" do
+              let(:rolling_days) { nil }
+              let(:old_backup_time) { 1.year.ago }
+
+              it "does not remove old backups" do
                 old_backup.should exist
               end
-            end
-          end
-
-          context "when rolling days parameter is not provided" do
-
-            let(:rolling_days) { nil }
-            let(:old_backup_time) { 1.year.ago }
-
-            it "does not remove old backups" do
-              old_backup.should exist
             end
           end
         end
