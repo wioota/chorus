@@ -50,6 +50,8 @@ module ChorusReader
     while ((start_time + length) > Time.now)
       thread_limit = (Time.now - start_time) / length * max
 
+      break if thread_limit >= 20
+
       puts "thread limit is #{thread_limit}"
 
       if threads.count < thread_limit || threads.count == 0
