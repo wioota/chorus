@@ -7,7 +7,7 @@ describe("chorus.views.SearchInstance", function() {
 
 
     it("includes the correct instance icon", function() {
-        expect(this.view.$("img.provider").attr("src")).toBe("/images/instances/hadoop_instance.png");
+        expect(this.view.$("img.provider").attr("src")).toBe("/images/instances/icon_datasource_hadoop.png");
     });
 
     it("includes the correct state icon", function() {

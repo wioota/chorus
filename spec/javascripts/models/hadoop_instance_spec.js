@@ -17,7 +17,7 @@ describe("chorus.models.HadoopInstance", function() {
     });
 
     it("has the right provider icon url", function() {
-        expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
+        expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_hadoop.png");
     });
 
     it("links to the root directory of the hadoop instance", function() {
@@ -44,7 +44,7 @@ describe("chorus.models.HadoopInstance", function() {
 
     describe("#providerIconUrl", function() {
         it("returns the right url for hadoop instances", function() {
-            expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
+            expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_hadoop.png");
         });
     });
 

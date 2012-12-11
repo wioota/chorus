@@ -7,7 +7,7 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
     parameterWrapper: "gnip_instance",
 
     providerIconUrl: function() {
-        return this._imagePrefix + "gnip.png"
+        return this._imagePrefix + "icon_datasource_gnip.png"
     },
 
     isShared: function() {

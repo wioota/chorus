@@ -23,7 +23,7 @@ describe("chorus.models.GnipInstance", function() {
     });
 
     it("has the right provider icon url", function() {
-        expect(this.model.providerIconUrl()).toBe("/images/instances/gnip.png");
+        expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_gnip.png");
     });
 
     it("has the correct entityType", function() {
