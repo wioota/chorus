@@ -17,6 +17,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     setup: function() {
         this.addCommentHandle = chorus.PageEvents.subscribe("comment:added", this.addComment, this);
+        this.deleteCommentHandle = chorus.PageEvents.subscribe("comment:deleted", this.deleteComment, this);
     },
 
     addComment: function(comment) {
@@ -25,6 +26,14 @@ chorus.views.Activity = chorus.views.Base.extend({
             if( !comments.get(comment.id)) {
                 comments.add(comment);
             }
+            this.render();
+        }
+    },
+
+    deleteComment: function(comment) {
+        var comments = this.model.comments();
+        if (comments.get(comment.id)) {
+            comments.remove(comment);
             this.render();
         }
     },

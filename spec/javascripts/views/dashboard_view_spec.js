@@ -3,27 +3,28 @@ describe("chorus.views.Dashboard", function(){
         var workspaceSet = new chorus.collections.WorkspaceSet();
         var gpdbInstanceSet = new chorus.collections.GpdbInstanceSet();
         this.view = new chorus.views.Dashboard({ collection: workspaceSet, gpdbInstanceSet: gpdbInstanceSet });
+        this.activities = new chorus.collections.ActivitySet([]);
     });
 
     describe("#setup", function() {
         it("fetches the dashboard activities", function() {
-            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
+            expect(this.activities).toHaveBeenFetched();
         });
 
         it("sets page size information on the activity list", function() {
             expect(this.view.activityList.collection.attributes.pageSize).toBe(50);
         });
 
-        it("will re-fetch the activity list if a comment is added", function() {
+        it("doesnt re-fetch the activity list if a comment is added", function() {
             this.server.reset();
             chorus.PageEvents.broadcast("comment:added");
-            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
+            expect(this.activities).not.toHaveBeenFetched();
         });
 
-        it("will re-fetch the activity list if a comment is deleted", function() {
+        it("doesnt re-fetch the activity list if a comment is deleted", function() {
             this.server.reset();
             chorus.PageEvents.broadcast("comment:deleted");
-            expect(new chorus.collections.ActivitySet([])).toHaveBeenFetched();
+            expect(this.activities).not.toHaveBeenFetched();
         });
     });
 

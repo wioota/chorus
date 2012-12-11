@@ -154,22 +154,44 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         });
     });
 
-    describe("event handling", function() {
+    describe("event bindings", function() {
         beforeEach(function() {
             this.view.render();
         });
 
-        describe("insight:promoted", function() {
+        describe("when an insight is promoted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
                 chorus.PageEvents.broadcast("insight:promoted");
             });
 
-            it("re-fetches all workspaces", function() {
-                expect(this.view.collection.fetchAll).toHaveBeenCalled();
-                expect(this.view.collection.attributes.active).toBe(true);
-                expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
+            itRefreshesWorkspaces();
+        });
+
+        describe("when a comment is added", function() {
+            beforeEach(function() {
+                spyOn(this.view.collection, "fetchAll").andCallThrough();
+                chorus.PageEvents.broadcast("comment:added");
             });
+
+            itRefreshesWorkspaces();
+        });
+
+        describe("when a comment is deleted", function() {
+            beforeEach(function() {
+                spyOn(this.view.collection, "fetchAll").andCallThrough();
+                chorus.PageEvents.broadcast("comment:deleted");
+            });
+
+            itRefreshesWorkspaces();
         });
     });
+
+    function itRefreshesWorkspaces() {
+        it('fetches all workspaces', function() {
+            expect(this.view.collection.fetchAll).toHaveBeenCalled();
+            expect(this.view.collection.attributes.active).toBe(true);
+            expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
+        });
+    };
 });
