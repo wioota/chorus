@@ -15,8 +15,21 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
     });
 
-    it("has the right showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
+    describe("show url", function() {
+
+        it("has the right showUrl", function() {
+          expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
+        });
+
+        context("when the dataset is a chorus view", function() {
+          beforeEach(function() {
+              this.dataset.set({type: "CHORUS_VIEW"});
+          });
+
+          it("has the right showUrl", function() {
+            expect(this.dataset.showUrl()).toMatchUrl("#/workspaces/44/chorus_views/1011");
+          });
+        });
     });
 
     it("has the right url", function() {
