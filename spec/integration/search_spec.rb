@@ -65,7 +65,7 @@ describe "Search" do
   describe "instance search" do
     let(:model_type) { "instance" }
     let(:found_model_text) { gpdb_instances(:default).name }
-    let(:model_link) { "Instances" }
+    let(:model_link) { "Data Sources" }
     it_behaves_like "model specific search"
   end
 
