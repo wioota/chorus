@@ -8,8 +8,15 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/invalidRoute");
     },
 
-    dependentResourceForbidden: function() {
+    dependentResourceForbidden: function(model) {
         chorus.pageOptions = this.failurePageOptions();
+
+        var error = model.serverErrors;
+        if(error && error.type) {
+            Backbone.history.loadUrl("/forbidden");
+            return;
+        }
+
         Backbone.history.loadUrl("/unauthorized");
     },
 

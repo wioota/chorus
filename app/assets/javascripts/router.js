@@ -11,6 +11,7 @@
             // (as long as `maps` is evaluated in order)
             ["*path", "InvalidRoute"],
             ["unauthorized", "Unauthorized"],
+            ["forbidden", "Forbidden"],
             ["invalidRoute", "InvalidRoute"],
             ["unprocessableEntity", "UnprocessableEntity"],
             ["", "Dashboard"],
