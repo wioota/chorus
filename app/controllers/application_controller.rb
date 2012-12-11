@@ -50,7 +50,9 @@ class ApplicationController < ActionController::Base
   end
 
   def render_unprocessable_entity(e)
-    present_errors({:message => e.message}, :status => :unprocessable_entity)
+    present_errors({:fields => {:general =>
+                                    { :GENERIC => {:message => e.message}}}},
+                   {:status => :unprocessable_entity})
   end
 
   def render_resource_forbidden(e)

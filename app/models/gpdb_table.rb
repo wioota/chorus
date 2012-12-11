@@ -12,5 +12,12 @@ class GpdbTable < Dataset
       conn.exec_query(query_string)
     end
     []
+  rescue ActiveRecord::ActiveRecordError => e
+    if e.message =~ /relation (.*) does not exist/
+      relation_name = $1
+      raise ActiveRecord::StatementInvalid.new("Dataset (#{relation_name}) does not exist anymore")
+    else
+      raise
+    end
   end
 end
