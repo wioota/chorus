@@ -69,7 +69,7 @@ describe ApplicationController do
       get :index
 
       response.code.should == "422"
-      decoded_errors.message.should == 'oops'
+      decoded_errors.fields.general.GENERIC.message.should == 'oops'
     end
 
     it "returns error 422 when a QueryError occurs" do
@@ -105,7 +105,7 @@ describe ApplicationController do
       get :index
 
       response.code.should == "422"
-      decoded_errors.message.should == "sunspot error"
+      decoded_errors.fields.general.GENERIC.message.should == "sunspot error"
     end
 
     it "returns error 403 when a SqlPermissionDenied occurs" do
