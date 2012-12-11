@@ -1,5 +1,3 @@
-require Rails.root + 'app/permissions/note_access'
-
 class NotesController < ApplicationController
   include ActionView::Helpers::SanitizeHelper
 

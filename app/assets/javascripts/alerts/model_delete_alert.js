@@ -1,37 +1,3 @@
-chorus.alerts.Base = chorus.Modal.extend({
-    constructorName: "Alert",
-    templateName: "alert",
-
-    events: {
-        "click button.cancel": "cancelAlert",
-        "click button.submit": "confirmAlert"
-    },
-
-    confirmAlert: $.noop,
-
-    cancelAlert: function() {
-        this.closeModal();
-    },
-
-    additionalContext: function(ctx) {
-        return {
-            title: this.title,
-            text: this.text,
-            body: this.body,
-            ok: this.ok,
-            cancel: this.cancel || t("actions.cancel")
-        }
-    },
-
-    revealed: function() {
-        $("#facebox").removeClass().addClass("alert_facebox");
-        var cancelButton = this.$("button.cancel");
-        if (cancelButton) {
-            cancelButton.focus();
-        }
-    }
-});
-
 chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     events: _.extend({}, chorus.alerts.Base.prototype.events, {
         "click button.submit": "deleteModel"
@@ -61,11 +27,11 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     deleteMessageParams: $.noop,
 
     modelDeleted: function() {
-        chorus.PageEvents.broadcast("comment:deleted", this.model);
+        this.closeModal();
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
+        chorus.PageEvents.broadcast(this.model.entityType + ":deleted", this.model);
         if (this.redirectUrl) {
             chorus.router.navigate(this.redirectUrl);
         }
-        this.closeModal();
     }
 });

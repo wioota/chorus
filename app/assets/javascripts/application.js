@@ -34,7 +34,9 @@
 //= require modals
 //= require presenters
 //= require dialogs
-//= require alerts
+//= require alerts/base
+//= require alerts/model_delete_alert
+//= require_tree ./alerts
 //= require views/sidebar_view
 //= require views/selectable_list_view
 //= require views/dataset/chart_configuration_view
