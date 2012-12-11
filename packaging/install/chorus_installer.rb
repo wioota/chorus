@@ -364,7 +364,7 @@ class ChorusInstaller
   end
 
   def prompt_for_eula
-    puts eula
+    @io.log eula
     @io.require_confirmation :accept_terms
   end
 
