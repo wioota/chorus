@@ -1,5 +1,6 @@
 chorus.models.Comment = chorus.models.Activity.extend({
     constructorName: "Comment",
+    entityType: 'comment',
 
     urlTemplate:function (options) {
         return "comments/{{id}}";
