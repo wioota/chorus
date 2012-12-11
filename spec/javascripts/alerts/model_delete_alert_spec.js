@@ -1,110 +1,3 @@
-describe("chorus.alerts", function() {
-    beforeEach(function() {
-        spyOn(chorus.alerts.Base.prototype, "cancelAlert").andCallThrough();
-        this.model = new chorus.models.Base({ id: "foo"});
-        this.alert = new chorus.alerts.Base({ model : this.model });
-        this.alert.title = "OH HAI";
-        this.alert.text = "How are you?";
-        this.alert.ok = "Do it!";
-    });
-
-    describe("#render", function() {
-        beforeEach(function() {
-            this.alert.render();
-        });
-
-        it("displays the title", function() {
-            expect(this.alert.$("h1").text()).toBe("OH HAI");
-        });
-
-        it("displays the text", function() {
-            expect(this.alert.$("p").text()).toBe("How are you?");
-        });
-
-        it("displays the icon", function() {
-            expect(this.alert.$("img")).toHaveAttr("src", "/images/message_icon.png");
-        });
-
-        it("displays the 'ok' text on the submit button", function() {
-            expect(this.alert.$("button.submit").text()).toBe("Do it!");
-        });
-
-        it("displays the default cancel text on the cancel button", function() {
-            expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.cancel");
-        });
-
-        it("should not render the body section", function() {
-            expect(this.alert.$(".body")).not.toExist();
-        });
-
-        context("when a message body is provided", function() {
-            beforeEach(function() {
-                this.alert.body = "Hello World!";
-                this.alert.render();
-            });
-
-            it("should show the body section", function() {
-                expect(this.alert.$(".body")).toExist();
-                expect(this.alert.$(".body").text().trim()).toBe("Hello World!");
-            });
-        });
-
-        context("when a custom cancel is provided", function() {
-            beforeEach(function() {
-                this.alert.cancel = "Don't do it!";
-                this.alert.render();
-            });
-
-            it("displays the 'cancel' text on the cancel button", function() {
-                expect(this.alert.$("button.cancel").text()).toBe("Don't do it!");
-            });
-        });
-
-        it("displays server errors", function() {
-            this.alert.resource.set({serverErrors : { fields: { connection: { INVALID: { message: "Couldn't find host/port to connect to" } } } }});
-            this.alert.render();
-
-            expect(this.alert.$(".errors").text()).toContain("Couldn't find host/port to connect to");
-        });
-    });
-
-    describe("#launchModal", function() {
-        beforeEach(function() {
-            delete chorus.modal;
-            spyOn($, "facebox");
-            spyOn(this.alert, "render");
-            spyOn(this.alert, "el");
-            this.alert.launchModal();
-        });
-
-        it("creates a facebox", function() {
-            expect($.facebox).toHaveBeenCalledWith(this.alert.el);
-        });
-
-        it("renders in the facebox", function() {
-            expect(this.alert.render).toHaveBeenCalled();
-        });
-    });
-
-    describe("Clicking the cancel button", function() {
-        beforeEach(function() {
-            this.alert.render();
-            spyOnEvent($(document), "close.facebox");
-            this.alert.$("button.cancel").click();
-        });
-
-        it("calls cancelAlert", function() {
-            expect(this.alert.cancelAlert).toHaveBeenCalled();
-        });
-
-        describe("the default cancelAlert", function() {
-            it("dismisses the alert", function() {
-                expect("close.facebox").toHaveBeenTriggeredOn($(document));
-            });
-        });
-    });
-});
-
 describe("chorus.alerts.ModelDelete", function() {
     beforeEach(function() {
         this.model = new chorus.models.User();
@@ -171,10 +64,10 @@ describe("chorus.alerts.ModelDelete", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, this.deleteParams);
             });
 
-            it("broadcasts a pageevent comment:deleted", function() {
+            it("broadcasts a pageevent <entityType>:deleted", function() {
                 spyOn(chorus.PageEvents, 'broadcast');
                 this.alert.model.trigger("destroy", this.alert.model);
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("comment:deleted", this.alert.model);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:deleted", this.alert.model);
             });
 
             context("when the alert does NOT have a redirect url", function() {
