@@ -13,7 +13,10 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
         }
     },
 
-    showUrlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
+    showUrlTemplate: function() {
+        var resource = this.isChorusView() ? "chorus_views" : "datasets";
+        return "workspaces/{{workspace.id}}/" + resource + "/{{id}}";
+    },
 
     isChorusView: function() {
         return this.get("type") === "CHORUS_VIEW";
