@@ -484,7 +484,7 @@
             var errorMessages = chorus.Mixins.ServerErrors.serverErrorMessages.call({serverErrors: serverErrors});
 
             _.each(errorMessages, function(message) {
-                output.push("<li>" + message + "</li>");
+                output.push("<li>" + Handlebars.Utils.escapeExpression(message) + "</li>");
             });
 
             output.push("</ul>");
