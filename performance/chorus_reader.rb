@@ -43,7 +43,7 @@ module ChorusReader
     end
   end
 
-  def run_test(length = 4 * 60 * 60, max = 200)
+  def run_test(length = 8 * 60 * 60, max = 200)
     threads = []
     start_time = Time.now
 
