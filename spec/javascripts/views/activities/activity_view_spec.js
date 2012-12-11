@@ -329,7 +329,7 @@ describe("chorus.views.Activity", function() {
 
             context('when deleting a comment', function() {
                 beforeEach(function() {
-                    this.deletedComment = this.model.comments().first;()
+                    this.deletedComment = this.model.comments().first();
                     expect(this.view.$(".comments li").length).toBe(2);
                     chorus.PageEvents.broadcast("comment:deleted", this.deletedComment);
                 });
