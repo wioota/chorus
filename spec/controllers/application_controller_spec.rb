@@ -108,6 +108,16 @@ describe ApplicationController do
       decoded_errors.message.should == "sunspot error"
     end
 
+    it "returns error 403 when a SqlPermissionDenied occurs" do
+      stub(controller).index { raise SqlPermissionDenied.new("SqlPermissionDenied error") }
+
+      get :index
+
+      response.code.should == "403"
+      decoded_errors.message.should == "SqlPermissionDenied error"
+      decoded_errors.type.should == "SqlPermissionDenied"
+    end
+
     describe "when an access denied error is raised" do
       let(:object_to_present) { gpdb_instances(:default) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }

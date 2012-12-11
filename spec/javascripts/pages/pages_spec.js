@@ -193,6 +193,20 @@ describe("chorus.pages.Base", function() {
                 })
             });
 
+            context("when the fetch returns forbidden and has a type", function() {
+                beforeEach(function() {
+                    spyOn(Backbone.history, "loadUrl");
+                    spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
+                    this.resource.serverErrors = {message: "error message", type: "SqlPermissionDenied" };
+                    this.resource.trigger("resourceForbidden");
+                });
+
+                it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
+                    expect(chorus.pageOptions).toEqual({ foo: "bar" });
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/forbidden");
+                })
+            });
+
             context("when the fetch returns unprocessableEntity", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
