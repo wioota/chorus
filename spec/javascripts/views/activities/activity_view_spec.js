@@ -214,6 +214,7 @@ describe("chorus.views.Activity", function() {
                         fullName:"John Commenter",
                         image:{icon:"foo"}
                     },
+                    id: 1,
                     text:'I love you all',
                     eventId: this.model.id
                 });
@@ -224,6 +225,7 @@ describe("chorus.views.Activity", function() {
                         fullName:"Jane Commenter",
                         image:{icon:"bar"}
                     },
+                    id: 2,
                     text:'I do too',
                     eventId: this.model.id
                 });
@@ -324,6 +326,18 @@ describe("chorus.views.Activity", function() {
                     expect(this.view.model.comments().length).toBe(3);
                 });
             });
+
+            context('when deleting a comment', function() {
+                beforeEach(function() {
+                    this.deletedComment = this.model.comments().first;()
+                    expect(this.view.$(".comments li").length).toBe(2);
+                    chorus.PageEvents.broadcast("comment:deleted", this.deletedComment);
+                });
+
+                it('updates the comment list', function() {
+                    expect(this.view.$(".comments li").length).toBe(1);
+                });
+            })
         });
 
         it("displays a comment link", function () {

@@ -174,7 +174,7 @@ describe("chorus.alerts.ModelDelete", function() {
             it("broadcasts a pageevent comment:deleted", function() {
                 spyOn(chorus.PageEvents, 'broadcast');
                 this.alert.model.trigger("destroy", this.alert.model);
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("comment:deleted");
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("comment:deleted", this.alert.model);
             });
 
             context("when the alert does NOT have a redirect url", function() {

@@ -61,8 +61,8 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     deleteMessageParams: $.noop,
 
     modelDeleted: function() {
+        chorus.PageEvents.broadcast("comment:deleted", this.model);
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
-        chorus.PageEvents.broadcast("comment:deleted");
         if (this.redirectUrl) {
             chorus.router.navigate(this.redirectUrl);
         }

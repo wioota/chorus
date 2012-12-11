@@ -26,8 +26,6 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         activities.attributes.pageSize = 50;
 
         activities.fetch();
-        chorus.PageEvents.subscribe("comment:added", function() {activities.fetch()});
-        chorus.PageEvents.subscribe("comment:deleted", function() {activities.fetch()});
         this.activityList = new chorus.views.ActivityList({ collection: activities, additionalClass: "dashboard" });
         this.dashboardMain = new chorus.views.MainContentView({
             content: this.activityList,
