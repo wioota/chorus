@@ -105,9 +105,10 @@ describe("chorus.dialogs.EditNote", function() {
             expect(update.params()["note[body]"]).toBe("Agile, meet big data. Let's pair.");
         });
 
-        describe("when the put completes successfully", function() {
+        describe("when the save completes successfully", function() {
             beforeEach(function() {
-                spyOn(this.dialog, "closeModal")
+                spyOn(this.dialog, "closeModal");
+                spyOn(chorus.PageEvents, "broadcast");
                 this.server.lastUpdate().succeed();
             });
 
@@ -118,6 +119,10 @@ describe("chorus.dialogs.EditNote", function() {
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
+
+            it('triggers the note:saved event', function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('note:saved', this.dialog.model);
+            })
         });
 
         context("when the save fails", function() {

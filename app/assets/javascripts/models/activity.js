@@ -159,14 +159,6 @@
                 body: this.get("body")
             });
 
-            comment.bind("destroy", function() {
-                this.collection.fetch();
-            }, this);
-
-            comment.bind("saved", function() {
-                this.collection.fetch();
-            }, this)
-
             return comment;
         },
 

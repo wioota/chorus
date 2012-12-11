@@ -380,21 +380,6 @@ describe("chorus.models.Activity", function() {
             expect(note.get("id")).toBe(101);
             expect(note.get("body")).toBe(this.model.get("body"));
         });
-
-        describe("when the note is saved", function() {
-            it("re-fetches the activity's collection", function() {
-                this.model.toNote().trigger("saved");
-                expect(this.model.collection).toHaveBeenFetched();
-            });
-        });
-
-        describe("when the note is destroyed", function() {
-            it("re-fetches the activity's collection", function() {
-                spyOn(chorus, "toast")
-                this.model.toNote().trigger("destroy");
-                expect(this.model.collection).toHaveBeenFetched();
-            });
-        });
     });
 
     describe("#promoteToInsight", function() {
