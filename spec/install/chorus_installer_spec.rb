@@ -1120,7 +1120,7 @@ describe ChorusInstaller do
   describe "#prompt_for_eula" do
     subject { installer.prompt_for_eula }
     before do
-      stub(installer).eula { "" }
+      mock(io).log(installer.eula)
       mock(io).require_confirmation(:accept_terms)
     end
 
