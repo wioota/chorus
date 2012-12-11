@@ -90,12 +90,13 @@
 
     .CodeMirror-scroll {
         height: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         width: 100%;
     }
 
     .CodeMirror.editable {
         background: white;
+        width: 100%;
     }
 }
 
