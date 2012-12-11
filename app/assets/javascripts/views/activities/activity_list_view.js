@@ -8,6 +8,26 @@ chorus.views.ActivityList = chorus.views.Base.extend({
         "click .more_activities a": "fetchMoreActivities"
     },
 
+    setup: function() {
+        chorus.PageEvents.subscribe('note:deleted', this.noteDeleted, this);
+        chorus.PageEvents.subscribe('note:saved', this.noteSaved, this);
+    },
+
+    noteDeleted: function(note) {
+        if (this.collection.get(note.id)) {
+            this.collection.remove(note);
+            this.render();
+        }
+    },
+
+    noteSaved: function(note) {
+        var collectionNote = this.collection.get(note.id);
+        if (collectionNote) {
+            collectionNote.set('body', note.get('body'));
+            this.render();
+        };
+    },
+
     toggleCommentList:function (event) {
         event.preventDefault();
         $(event.target).closest(".comments").toggleClass("more");

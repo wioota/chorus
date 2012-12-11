@@ -60,5 +60,6 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     submitSucceeds: function() {
         this.$("button.submit").stopLoading();
         this.closeModal();
+        chorus.PageEvents.broadcast('note:saved', this.model);
     }
 });

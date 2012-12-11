@@ -7,6 +7,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
 
     setup: function() {
         chorus.PageEvents.subscribe("insight:promoted", this.fetchWorkspaces, this);
+        chorus.PageEvents.subscribe("note:deleted", this.fetchWorkspaces, this);
         chorus.PageEvents.subscribe("comment:added", this.fetchWorkspaces, this);
         chorus.PageEvents.subscribe("comment:deleted", this.fetchWorkspaces, this);
     },

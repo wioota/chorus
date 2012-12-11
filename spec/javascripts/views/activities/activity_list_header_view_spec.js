@@ -49,16 +49,17 @@ describe("chorus.views.ActivityListHeader", function() {
     });
 
     describe("#setup", function() {
-
-        context("when the insight:promoted page event is received", function() {
-            beforeEach(function() {
-                spyOn(this.view, 'updateInsightCount').andCallThrough();
+        describe('keeping the insight count updated', function() {
+            it('updates when an insight is added', function() {
+                this.server.reset();
                 chorus.PageEvents.broadcast("insight:promoted");
+                expect(this.view.insightCount).toHaveBeenFetched();
             });
 
-            it("fetches the updated insight count", function() {
-                var fetch = this.server.lastFetch();
-                expect(fetch.url).toContain('/insights/count');
+            it("updates when a note is deleted", function() {
+                this.server.reset();
+                chorus.PageEvents.broadcast("note:deleted");
+                expect(this.view.insightCount).toHaveBeenFetched();
             });
         });
 

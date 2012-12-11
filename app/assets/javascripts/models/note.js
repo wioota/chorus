@@ -1,5 +1,7 @@
 chorus.models.Note = chorus.models.Activity.extend({
-   constructorName: "Note",
+    constructorName: "Note",
+    entityType: "note",
+
     urlTemplate:function (options) {
         if (options && options.isFile) {
             return "notes/{{id}}/attachments"

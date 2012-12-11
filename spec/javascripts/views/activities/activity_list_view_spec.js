@@ -9,6 +9,25 @@ describe("chorus.views.ActivityList", function() {
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
     });
 
+    describe("pageEvent subscriptions", function() {
+        beforeEach(function() {
+            this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+            this.collection.add(this.note);
+            this.view.render();
+        })
+
+        it("re-renders when 'note:deleted' is fired", function() {
+            chorus.PageEvents.broadcast('note:deleted', this.note);
+            expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).not.toExist();
+        });
+
+        it('re-renders when note:saved is fired', function() {
+            this.newNote = rspecFixtures.activity.noteOnGreenplumInstanceCreated({id: this.note.id, body: 'A New Note'});
+            chorus.PageEvents.broadcast('note:saved', this.newNote);
+            expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).toContainText("A New Note");
+        })
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
