@@ -60,7 +60,7 @@ class Deployer
 
     ssh.run "cat /dev/null > #{install_path}/install.log" unless legacy_path.present?
     begin
-      install_success = ssh.run "cd #{installer_dir} && ./#{package_file} --debug #{installer_dir}/install_answers.txt"
+      install_success = ssh.run "cd #{installer_dir} && ./#{package_file} -- --debug #{installer_dir}/install_answers.txt"
     ensure
       ssh.copy_down("#{install_path}/install.log")
     end
