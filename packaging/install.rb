@@ -8,8 +8,8 @@ require_relative 'chorus_installation/packaging/install/chorus_installer'
 
 if __FILE__ == $0
   begin
-    silent = ARGV.include?('-a')
-    debug = ARGV.include?('--debug')
+    silent = !!ARGV.delete('-a')
+    debug = !!ARGV.delete('--debug')
     logger = ChorusLogger.new({:debug => debug})
     installer = ChorusInstaller.new({
         installer_home: File.dirname(__FILE__),
