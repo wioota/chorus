@@ -7,6 +7,7 @@ require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'headless'
 require 'yaml'
+require 'factory_girl'
 
 headless = Headless.new
 headless.start
@@ -42,7 +43,7 @@ end
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
-require Rails.root.join('spec', 'factories.rb')
+FactoryGirl.find_definitions
 require "#{Rails.root}/spec/support/fixture_builder.rb"
 require "#{Rails.root}/spec/support/database_integration/instance_integration.rb"
 
