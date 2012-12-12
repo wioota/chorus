@@ -10,6 +10,7 @@ require 'rspec_api_documentation'
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
 require 'shoulda-matchers'
+require 'factory_girl'
 
 module Shoulda # :nodoc:
   module Matchers
@@ -32,7 +33,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f unless f.match
 # If this offset is not here and you have pre-built fixture_builder, the ids/usernames/etc of new
 # models from Factory Girl will clash with the fixtures
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
-require_relative "factories"
+FactoryGirl.find_definitions
 
 require 'support/fixture_builder'
 silence_warnings do
