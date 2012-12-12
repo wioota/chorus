@@ -1,4 +1,5 @@
 require_relative "../../packaging/install/chorus_installer"
+require_relative "stub_executor"
 require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
@@ -21,18 +22,19 @@ describe ChorusInstaller do
         installer_home: '.',
         version_detector: version_detector,
         logger: logger,
-        io: io
+        io: io,
+        executor: executor
     }
   end
 
   let(:version_detector) { Object.new }
   let(:logger) { Object.new }
   let(:io) { Object.new }
+  let(:executor) { StubExecutor.new }
 
   before do
     ENV['CHORUS_HOME'] = nil
     stub(logger).log(anything)
-    stub(installer).prompt(anything)
     stub(io).log(anything)
     stub(io).silent? { false }
   end
@@ -55,6 +57,8 @@ describe ChorusInstaller do
     it "should set relevant settings" do
       mock(version_detector).destination_path=('/somewhere/chorus')
       mock(logger).logfile=('/somewhere/chorus/install.log')
+      mock(executor).destination_path=('/somewhere/chorus')
+      mock(executor).version=("2.2.0.1-8840ae71c")
       installer.get_destination_path
       installer.destination_path.should == '/somewhere/chorus'
     end
@@ -84,7 +88,6 @@ describe ChorusInstaller do
     context "when not upgrading" do
       it "should do a non-upgrade install" do
         dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
-        stub_input nil
         installer.get_destination_path
         installer.upgrade_existing?.should be_false
       end
@@ -109,9 +112,6 @@ describe ChorusInstaller do
 
     describe "when the user specifies a directory that can be upgraded from a legacy install" do
       let(:upgrade_legacy) { true }
-      before do
-        stub_input nil
-      end
 
       it "should confirm legacy upgrade" do
         mock(installer).prompt_for_legacy_upgrade { installer.destination_path = 'foo' }
@@ -855,10 +855,7 @@ describe ChorusInstaller do
       installer.database_user = 'the_user'
       installer.database_password = 'secret'
       installer.data_path = "/data/chorus"
-      @call_order = []
-      stub_chorus_exec(installer)
       FileUtils.mkdir_p "#{installer.release_path}/postgres"
-      #stub(File).directory? { true }
     end
 
     let(:destination_path) { "/usr/local/greenplum-chorus" }
@@ -866,7 +863,26 @@ describe ChorusInstaller do
     context "when installing fresh" do
       it "creates the database structure" do
         installer.setup_database
-        @call_order.should == [:create_database, :start_postgres, :rake_db_create, :rake_db_migrate, :rake_db_seed, :stop_postgres]
+        executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
+        executor.calls[:initdb].should == [installer.data_path, installer.database_user]
+        executor.calls[:rake].should == ["db:create db:migrate db:seed"]
+
+        stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
+        sprintf("%o", stats).should == "100400"
+      end
+    end
+
+    context "when doing a legacy upgrade" do
+      before do
+        installer.install_mode = :upgrade_legacy
+      end
+
+      it "creates the database structure" do
+        installer.setup_database
+        executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
+        executor.calls[:initdb].should == [installer.data_path, installer.database_user]
+        executor.calls[:rake].should == ["db:create db:migrate"]
+
         stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
         sprintf("%o", stats).should == "100400"
       end
@@ -879,7 +895,8 @@ describe ChorusInstaller do
 
       it "migrates the existing database" do
         installer.setup_database
-        @call_order.should == [:start_postgres, :rake_db_migrate, :stop_postgres]
+        executor.call_order.should == [:start_postgres, :rake, :stop_postgres]
+        executor.calls[:rake].should == ["db:migrate"]
       end
     end
   end
@@ -900,7 +917,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/current/packaging/chorus_control.sh stop") { true }
+        mock(executor).stop_previous_release
       end
 
       it "should stop the previous version" do
@@ -925,7 +942,7 @@ describe ChorusInstaller do
         stub(installer).version { '2.2.0.0' }
         installer.install_mode = :upgrade_existing
         installer.destination_path = '/usr/local/greenplum-chorus'
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh start") { true }
+        mock(executor).start_chorus
       end
 
       it "should stop the previous version" do
@@ -964,20 +981,8 @@ describe ChorusInstaller do
 
     it "calls tar to unpack postgres" do
       installer.instance_variable_set(:@postgres_package, 'postgres-blahblah.tar.gz')
-      mock(installer).chorus_exec("tar xzf /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /usr/local/greenplum-chorus/releases/2.2.0.0/") { true }
+      mock(executor).extract_postgres('postgres-blahblah.tar.gz')
       installer.extract_postgres
-    end
-  end
-
-  describe "command execution" do
-    before do
-      installer.destination_path = '/usr/local/greenplum-chorus'
-      stub(installer).version { "2.2.0.0" }
-    end
-
-    it "raises an exception if exit code is different than zero" do
-      mock(logger).capture_output("PATH=/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/bin:$PATH && silly command") { false }
-      expect { installer.send(:chorus_exec, "silly command") }.to raise_error(InstallerErrors::CommandFailed)
     end
   end
 
@@ -996,21 +1001,16 @@ describe ChorusInstaller do
   end
 
   describe "#dump_and_shutdown_legacy" do
-    subject { installer.dump_and_shutdown_legacy }
-
     before do
       installer.legacy_installation_path = '/opt/old_chorus'
       installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
-      stub_chorus_exec(installer)
       FileUtils.mkdir_p installer.legacy_installation_path
-
-      @call_order = []
     end
 
     it "should dump the old database and shut it down" do
-      subject
-      @call_order.should == [:stop_old_app, :start_old_app, :pg_dump, :stop_old_app_or_fail]
+      installer.dump_and_shutdown_legacy
+      executor.call_order.should == [:stop_legacy_app, :start_legacy_postgres, :dump_legacy_data, :stop_legacy_app!]
     end
   end
 
@@ -1036,15 +1036,11 @@ describe ChorusInstaller do
       installer.legacy_installation_path = '/opt/old_chorus'
       installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
-
-      @call_order = []
-
-      stub_chorus_exec(installer)
+      mock(executor).import_legacy_schema
     end
 
     it "should execute the data migrator" do
       subject
-      @call_order.should == [:import_legacy_schema]
     end
   end
 
@@ -1058,7 +1054,7 @@ describe ChorusInstaller do
     context "when upgrading an existing 2.2 installation" do
       before do
         installer.install_mode = :upgrade_existing
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/current /usr/local/greenplum-chorus/chorus_control.sh start")
+        mock(executor).start_previous_release
       end
 
       it "starts up the old install" do
@@ -1076,25 +1072,9 @@ describe ChorusInstaller do
         installer.install_mode = :upgrade_legacy
       end
 
-      context "when postgres is started" do
-        it "stops postgres" do
-          mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
-          stub(File).directory? { true }
-          installer.remove_and_restart_previous!
-        end
-      end
-
-      context "when postgres is not started" do
-        it "does nothing" do
-          stub(File).directory? { false }
-          do_not_allow(installer).chorus_control.with_any_args
-          installer.remove_and_restart_previous!
-        end
-      end
-
-      it "removes the release folder" do
+      it "stops postgres and removes the release folder" do
         FileUtils.mkdir_p "#{installer.release_path}/postgres"
-        mock(installer).chorus_exec("CHORUS_HOME=/usr/local/greenplum-chorus/releases/2.2.0.0 /usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh stop postgres")
+        mock(executor).stop_postgres
         installer.remove_and_restart_previous!
         File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end
@@ -1133,26 +1113,6 @@ describe ChorusInstaller do
     it "contains the eula" do
       installer.eula.should match(/LIMITATION OF LIABILITY/)
     end
-  end
-
-  def stub_chorus_exec(installer)
-    stub(installer).chorus_exec.with_any_args do |cmd|
-      @call_order << :import_legacy_schema if cmd =~ /chorus_migrate/
-      @call_order << :stop_old_app if cmd =~ /edcsvrctl stop; true/
-      @call_order << :stop_old_app_or_fail if cmd =~ /edcsvrctl stop(?!; true)/
-      @call_order << :start_old_app if cmd =~ /edcsvrctl start/
-      @call_order << :pg_dump if cmd =~ /pg_dump/
-      cmd =~ /rake/ and cmd.scan /db:(\S+)/ do |targets|
-        @call_order << :"rake_db_#{targets[0]}"
-      end
-      @call_order << :start_postgres if cmd =~ /chorus_control\.sh start postgres/
-      @call_order << :stop_postgres if cmd =~ /chorus_control\.sh stop postgres/
-      @call_order << :create_database if cmd =~ /initdb/
-    end
-  end
-
-  def stub_input(input)
-    stub(installer).get_input() { input }
   end
 
   def stub_version

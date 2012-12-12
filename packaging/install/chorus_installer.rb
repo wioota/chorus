@@ -29,10 +29,7 @@ class ChorusInstaller
     @io = options[:io]
     @log_stack = []
     @install_mode = :fresh
-  end
-
-  def prompt(message)
-    print "\n#{message} "
+    @executor = options[:executor]
   end
 
   def log(message, &block)
@@ -59,10 +56,6 @@ class ChorusInstaller
     @postgres_package = get_postgres_build
   end
 
-  def silent?
-    @silent
-  end
-
   def get_destination_path
     default_path = ENV['CHORUS_HOME'] || DEFAULT_PATH
     default_path = default_path.sub(/\/current$/, '')
@@ -73,8 +66,12 @@ class ChorusInstaller
     @version_detector.destination_path = @destination_path
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
-    @logger.logfile = File.join(@destination_path, 'install.log')
+
     validate_path(destination_path)
+
+    @logger.logfile = File.join(@destination_path, 'install.log')
+    @executor.destination_path = @destination_path
+    @executor.version = version
   end
 
   def get_data_path
@@ -243,10 +240,10 @@ class ChorusInstaller
       ['db', 'system', 'solr/data', 'log'].each do |path|
         destination = Pathname.new("#{destination_path}/shared/#{path}")
         source = Pathname.new("#{data_path}/#{path}")
-        if(destination.exist? && !destination.symlink?)
+        if (destination.exist? && !destination.symlink?)
           destination.rmdir
         end
-        unless(source.exist?)
+        unless (source.exist?)
           source.mkpath
         end
         FileUtils.ln_sf(source.to_s, destination.to_s)
@@ -281,10 +278,10 @@ class ChorusInstaller
 
   def setup_database
     if upgrade_existing?
-      start_postgres
+      @executor.start_postgres
       log "Running database migrations..." do
-        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:migrate"
-        stop_postgres
+        @executor.rake "db:migrate"
+        @executor.stop_postgres
       end
     else
       log "Initializing database..." do
@@ -292,13 +289,13 @@ class ChorusInstaller
           f.puts database_password
         end
         FileUtils.chmod(0400, "#{release_path}/postgres/pwfile")
-        chorus_exec %Q{#{release_path}/postgres/bin/initdb --locale=en_US.UTF-8 -D #{data_path}/db --auth=md5 --pwfile=#{release_path}/postgres/pwfile --username=#{database_user}}
-        start_postgres
+        @executor.initdb data_path, database_user
+        @executor.start_postgres
         db_commands = "db:create db:migrate"
         db_commands += " db:seed" unless upgrade_legacy?
         log "Running rake #{db_commands}"
-        chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake #{db_commands}"
-        stop_postgres
+        @executor.rake db_commands
+        @executor.stop_postgres
       end
     end
   end
@@ -309,13 +306,13 @@ class ChorusInstaller
   end
 
   def extract_postgres
-    chorus_exec("tar xzf #{release_path}/packaging/postgres/#{@postgres_package} -C #{release_path}/")
+    @executor.extract_postgres @postgres_package
   end
 
   def stop_old_install
     return unless upgrade_existing?
     log "Stopping Chorus..." do
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/current/packaging/chorus_control.sh stop"
+      @executor.stop_previous_release
     end
   end
 
@@ -323,26 +320,22 @@ class ChorusInstaller
     return unless upgrade_existing?
 
     log "Starting up Chorus..." do
-      chorus_control "start"
+      @executor.start_chorus
     end
   end
 
   def dump_and_shutdown_legacy
-    Dir.chdir legacy_installation_path do
-      set_env = "source #{legacy_installation_path}/edc_path.sh"
-      log "Shutting down Chorus..." do
-        chorus_exec("#{set_env} && bin/edcsvrctl stop; true")
-      end
-      log "Starting legacy Chorus services (i.e. postgres)..." do
-      # run twice because sometimes this fails the first time
-        chorus_exec("(#{set_env} && bin/edcsvrctl start || #{set_env} && bin/edcsvrctl start)")
-      end
-      log "Dumping previous Chorus data..." do
-        chorus_exec("cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql")
-      end
-      log "Stopping legacy Chorus services (i.e. postgres)..." do
-        chorus_exec("#{set_env} && bin/edcsvrctl stop")
-      end
+    log "Shutting down Chorus..." do
+      @executor.stop_legacy_app legacy_installation_path
+    end
+    log "Starting legacy Chorus services (i.e. postgres)..." do
+      @executor.start_legacy_postgres legacy_installation_path
+    end
+    log "Dumping previous Chorus data..." do
+      @executor.dump_legacy_data
+    end
+    log "Stopping legacy Chorus services (i.e. postgres)..." do
+      @executor.stop_legacy_app! legacy_installation_path
     end
   end
 
@@ -358,7 +351,7 @@ class ChorusInstaller
   def migrate_legacy_data
     log "Migrating data from previous version..." do
       log "Loading legacy data into postgres..." do
-        chorus_exec("cd #{release_path} && INSTALL_ROOT=#{destination_path} CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data")
+        @executor.import_legacy_schema
       end
     end
   end
@@ -433,7 +426,7 @@ class ChorusInstaller
     raise
   rescue => e
     chorus_control "stop" if upgrade_legacy? rescue # rescue in case chorus_control blows up
-    log "#{e.class}: #{e.message}"
+        log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
   end
 
@@ -450,9 +443,9 @@ class ChorusInstaller
   def remove_and_restart_previous!
     if upgrade_existing?
       log "Restarting server..."
-      chorus_exec "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh start"
+      @executor.start_previous_release
     else
-      stop_postgres
+      @executor.stop_postgres
     end
     log "For Postgres errors check #{destination_path}/shared/db/server.log"
     FileUtils.rm_rf release_path
@@ -492,11 +485,6 @@ class ChorusInstaller
 
   private
 
-  def get_input
-    input = gets.strip
-    input.empty? ? nil : input
-  end
-
   def version
     @version ||= File.read("#{chorus_installation_path}/version_build").strip
   end
@@ -505,20 +493,8 @@ class ChorusInstaller
     @logger.capture_output("PATH=#{release_path}/postgres/bin:$PATH && #{command}") || raise(InstallerErrors::CommandFailed, command)
   end
 
-  def stop_postgres
-    if File.directory? "#{release_path}/postgres"
-      log "Stopping postgres..."
-      chorus_control "stop postgres"
-    end
-  end
-
-  def start_postgres
-    log "Starting postgres..."
-    chorus_control "start postgres"
-  end
-
   def chorus_control(args)
-    chorus_exec "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh #{args}"
+    @executor.chorus_control(args)
   end
 
   CHORUS_PSQL = <<-CHORUS_PSQL

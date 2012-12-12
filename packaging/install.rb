@@ -3,16 +3,19 @@
 require_relative 'chorus_installation/packaging/install/version_detector'
 require_relative 'chorus_installation/packaging/install/chorus_logger'
 require_relative 'chorus_installation/packaging/install/installer_io'
+require_relative 'chorus_installation/packaging/install/chorus_executor'
 require_relative 'chorus_installation/packaging/install/chorus_installer'
 
 if __FILE__ == $0
   begin
+    silent = ARGV.include?('-a')
+    logger = ChorusLogger.new
     installer = ChorusInstaller.new({
         installer_home: File.dirname(__FILE__),
-        silent: ARGV.include?('-a'),
         version_detector: VersionDetector.new,
-        logger: ChorusLogger.new,
-        io: InstallerIO.new(ARGV.include?('-a'))
+        logger: logger,
+        io: InstallerIO.new(silent),
+        executor: ChorusExecutor.new(logger)
     })
 
     installer.install
