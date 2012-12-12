@@ -1,5 +1,4 @@
-(function () {
-    chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
+chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         helpId: "workfile",
 
         setup: function(workspaceId, workfileId, versionId) {
@@ -55,13 +54,3 @@
         }
     });
 
-    chorus.views.WorkfileHeader = chorus.views.Base.extend({
-        templateName: "workfile_header",
-
-        additionalContext:function () {
-            return {
-                iconUrl: this.model.iconUrl()
-            };
-        }
-    });
-})();
