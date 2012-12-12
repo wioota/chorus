@@ -215,7 +215,8 @@ chorus.models = {
         },
 
         toJSON: function() {
-            var paramsToSave = this.paramsToSave
+            var paramsToSave = this.paramsToSave;
+            var paramsToIgnore = this.paramsToIgnore;
             var result = {};
             var attributes = this._super("toJSON", arguments);
             if(paramsToSave) {
@@ -233,6 +234,11 @@ chorus.models = {
                     newAttributes[functionParam] = this[functionParam]();
                 }, this);
                 attributes = newAttributes;
+            }
+            else if(paramsToIgnore) {
+                _.each(paramsToIgnore, function(rm_me) {
+                   delete attributes[rm_me];
+                });
             }
             attributes = this.underscoreKeys(attributes);
             if (this.parameterWrapper) {

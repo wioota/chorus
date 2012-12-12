@@ -359,7 +359,7 @@ describe("chorus.models.ChorusView", function() {
                 workspace_id: this.model.workspace().get('id'),
                 query: "SELECT potato FROM pants;"
             });
-        })
+        });
     });
 
     function addJoin(self, sourceColumn) {

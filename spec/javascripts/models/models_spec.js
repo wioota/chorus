@@ -896,6 +896,35 @@ describe("chorus.models.Abstract", function() {
                     });
                 });
 
+                context("when paramsToIgnore are defined", function() {
+                    beforeEach(function() {
+                    this.model.paramsToIgnore = ['firstName'];
+                    this.model.set({lastName: 'sandwich'})
+                    });
+
+                    it("should not remove attrs in the paramsToIgnore list", function() {
+                        var params = this.model.toJSON();
+                        expect(params.first_name).toBeDefined();
+                        expect(params.last_name).toBe("sandwich");
+                        expect(params.id).not.toBeDefined();
+                        expect(_.keys(params).length).toBe(2);
+                    });
+                });
+            });
+
+            context("when paramsToIgnore are defined", function() {
+                beforeEach(function() {
+                    this.model.paramsToIgnore = ['firstName'];
+                    this.model.set({lastName: 'sandwich'})
+                });
+
+                it("excludes the specified parameters from being returned", function() {
+                    var params = this.model.toJSON();
+                    expect(params.first_name).not.toBeDefined();
+                    expect(params.last_name).toBe("sandwich");
+                    expect(params.id).toBeDefined();
+                    expect(_.keys(params).length).toBe(2);
+                });
             });
         });
 

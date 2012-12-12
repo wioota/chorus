@@ -1,6 +1,7 @@
 chorus.models.InstanceAccount = chorus.models.Base.extend({
     constructorName: "InstanceAccount",
     parameterWrapper: "account",
+    paramsToIgnore: ['owner'],
 
     urlTemplate: function(options) {
         var method = options && options.method;
