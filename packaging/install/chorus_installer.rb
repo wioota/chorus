@@ -67,9 +67,9 @@ class ChorusInstaller
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
     prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
 
+    @logger.logfile = File.join(@destination_path, 'install.log')
     validate_path(destination_path)
 
-    @logger.logfile = File.join(@destination_path, 'install.log')
     @executor.destination_path = @destination_path
     @executor.version = version
   end
@@ -128,7 +128,7 @@ class ChorusInstaller
     input = 2 if redhat_version == '6.2'
 
     if @io.silent? && input.nil?
-      raise InstallerErrors::InstallAborted, "Version not supported."
+      raise InstallerErrors::InstallAborted, "Cannot detect OS version automatically. Unable to run in silent mode."
     end
 
     if input.nil?
@@ -145,7 +145,7 @@ class ChorusInstaller
       when 5
         "postgres-osx-9.2.1.tar.gz"
       else
-        raise InstallerErrors::InstallAborted, "Version not supported."
+        raise InstallerErrors::InstallAborted, "OS version not supported."
     end
   end
 
@@ -198,12 +198,15 @@ class ChorusInstaller
 
   def copy_if_not_exist(source, destination)
     unless File.exists? destination
+      @logger.debug("Copying #{source} to #{destination}")
       FileUtils.cp(source, destination)
     end
   end
 
   def generate_paths_file
-    File.open("#{destination_path}/chorus_path.sh", 'w') do |file|
+    file_path = "#{destination_path}/chorus_path.sh"
+    @logger.debug("Generating paths file: #{file_path}")
+    File.open(file_path, 'w') do |file|
       file.puts "export CHORUS_HOME=#{destination_path}"
       file.puts "export PATH=$PATH:$CHORUS_HOME"
       file.puts "export PGPASSFILE=$CHORUS_HOME/.pgpass"
@@ -212,6 +215,7 @@ class ChorusInstaller
 
   def generate_chorus_psql_files
     return if upgrade_existing?
+    @logger.debug("generating chorus_psql files")
     File.open("#{destination_path}/.pgpass", 'w') do |file|
       file.puts "*:*:*:#{database_user}:#{database_password}"
     end
@@ -224,10 +228,12 @@ class ChorusInstaller
   end
 
   def link_services
+    @logger.debug("Linking chorus_control.sh script")
     FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
   end
 
   def link_shared_files
+    @logger.debug("Linking shared configuration files")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/sunspot.yml", "#{release_path}/config/sunspot.yml")
@@ -250,10 +256,13 @@ class ChorusInstaller
       end
     end
 
+    @logger.debug("Linking shared data folders")
     FileUtils.ln_sf("#{destination_path}/shared/db", "#{release_path}/postgres-db")
     FileUtils.ln_sf("#{destination_path}/shared/tmp", "#{release_path}/tmp")
     FileUtils.ln_sf("#{destination_path}/shared/solr/data", "#{release_path}/solr/data")
     FileUtils.ln_sf("#{destination_path}/shared/log", "#{release_path}/log")
+
+    @logger.debug("Linking nginx logs")
     FileUtils.mkdir_p("#{destination_path}/shared/log/nginx")
     FileUtils.rm_rf("#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/log/nginx", "#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
@@ -271,6 +280,7 @@ class ChorusInstaller
 
     database_config['production']['password'] = database_password
 
+    @logger.debug("Writing new database configuration")
     File.open(database_config_path, 'w') do |file|
       YAML.dump(database_config, file)
     end

@@ -3,16 +3,21 @@ require_relative 'installer_errors'
 class ChorusExecutor
   attr_writer :destination_path, :version
 
-  def initialize(logger)
-    @logger = logger
+  def initialize(options = {})
+    @logger = options[:logger]
+    @debug = options[:debug] == true
+
+    raise InstallerErrors::InstallationFailed.new("Logger must be set") unless @logger
   end
 
   def exec(command)
-    @logger.capture_output("PATH=#{release_path}/postgres/bin:$PATH && #{command}") || raise(InstallerErrors::CommandFailed, command)
+    full_command = "PATH=#{release_path}/postgres/bin:$PATH && #{command}"
+    @logger.debug(full_command)
+    @logger.capture_output(full_command) || raise(InstallerErrors::CommandFailed, command)
   end
 
   def rake(command)
-    exec "cd #{release_path} && RAILS_ENV=production bin/rake #{command}"
+    exec "cd #{release_path} && RAILS_ENV=production bin/rake #{command}#{if_debug(' --trace')}"
   end
 
   def start_postgres
@@ -32,7 +37,7 @@ class ChorusExecutor
   end
 
   def extract_postgres(package_name)
-    exec "tar xzf #{release_path}/packaging/postgres/#{package_name} -C #{release_path}"
+    exec "tar xzf#{if_debug("v")} #{release_path}/packaging/postgres/#{package_name} -C #{release_path}"
   end
 
   def start_previous_release
@@ -79,5 +84,13 @@ class ChorusExecutor
 
   def previous_chorus_control(command)
     exec "CHORUS_HOME=#{@destination_path}/current #{@destination_path}/chorus_control.sh #{command}"
+  end
+
+  def if_debug(arg)
+    if @debug
+      arg
+    else
+      ""
+    end
   end
 end

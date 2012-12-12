@@ -9,13 +9,14 @@ require_relative 'chorus_installation/packaging/install/chorus_installer'
 if __FILE__ == $0
   begin
     silent = ARGV.include?('-a')
-    logger = ChorusLogger.new
+    debug = ARGV.include?('--debug')
+    logger = ChorusLogger.new({:debug => debug})
     installer = ChorusInstaller.new({
         installer_home: File.dirname(__FILE__),
         version_detector: VersionDetector.new,
         logger: logger,
         io: InstallerIO.new(silent),
-        executor: ChorusExecutor.new(logger)
+        executor: ChorusExecutor.new({:logger => logger, :debug => debug})
     })
 
     installer.install

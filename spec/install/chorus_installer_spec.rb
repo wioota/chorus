@@ -35,6 +35,7 @@ describe ChorusInstaller do
   before do
     ENV['CHORUS_HOME'] = nil
     stub(logger).log(anything)
+    stub(logger).debug(anything)
     stub(io).log(anything)
     stub(io).silent? { false }
   end
@@ -341,7 +342,7 @@ describe ChorusInstaller do
         end
 
         it "should fail" do
-          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /Version not supported/)
+          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /Cannot detect OS version automatically\. Unable to run in silent mode/)
         end
       end
 
@@ -373,7 +374,7 @@ describe ChorusInstaller do
         let(:result) { "4" }
 
         it "should fail" do
-          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /Version not supported/)
+          expect { installer.get_postgres_build }.to raise_error(InstallerErrors::InstallAborted, /OS version not supported/)
         end
       end
     end
