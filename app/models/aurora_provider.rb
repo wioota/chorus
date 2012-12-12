@@ -55,7 +55,7 @@ class AuroraProvider
 
   private
   def self.create_new_schema(account, database_name, schema_name)
-    Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, database_name ) do |conn|
+    Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, database_name) do |conn|
       conn.exec_query("CREATE SCHEMA #{schema_name}")
     end
   end

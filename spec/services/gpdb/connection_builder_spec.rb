@@ -4,6 +4,7 @@ describe Gpdb::ConnectionBuilder do
   let(:gpdb_instance) { FactoryGirl::create :gpdb_instance, :host => "hello" }
   let(:instance_account) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1111" }
   let(:fake_connection_adapter) { stub(Object.new).disconnect!.subject }
+  let(:connection_timeout) { Gpdb.gpdb_login_timeout }
 
   let(:expected_connection_params) do
     {
@@ -12,7 +13,8 @@ describe Gpdb::ConnectionBuilder do
       database: expected_database,
       username: instance_account.db_username,
       password: instance_account.db_password,
-      adapter: "jdbcpostgresql"
+      adapter: "jdbcpostgresql",
+      pg_params: "?loginTimeout=#{connection_timeout}"
     }
   end
 
@@ -80,6 +82,28 @@ describe Gpdb::ConnectionBuilder do
           expect {
             Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
           }.to raise_error(Gpdb::InstanceOverloaded)
+        end
+      end
+
+      context "when the instance is down" do
+        context "and times out" do
+          let(:adapter_exception) { ActiveRecord::JDBCError.new("Connection attempt timed out") }
+
+          it 'raises a Gpdb::InstanceUnreachable error' do
+            expect {
+              Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+            }.to raise_error(Gpdb::InstanceUnreachable)
+          end
+        end
+
+        context "and fails to connect" do
+          let(:adapter_exception) { ActiveRecord::JDBCError.new("The connection attempt failed") }
+
+          it 'raises a Gpdb::InstanceUnreachable error' do
+            expect {
+              Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
+            }.to raise_error(Gpdb::InstanceUnreachable)
+          end
         end
       end
 
