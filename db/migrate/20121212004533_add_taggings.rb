@@ -11,7 +11,7 @@ class AddTaggings < ActiveRecord::Migration
   end
 
   def down
-    drop_table :taggings
     remove_index :taggings, :column => [:entity_id, :entity_type, :tag_id]
+    drop_table :taggings
   end
 end

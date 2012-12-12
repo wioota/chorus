@@ -119,6 +119,8 @@ GEM
     activesupport (3.2.9.rc2)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    acts-as-taggable-on (2.3.3)
+      rails (~> 3.0)
     addressable (2.3.2)
     allowy (0.2.6)
       activesupport (~> 3.2)
@@ -352,6 +354,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
+  acts-as-taggable-on (~> 2.3.1)
   allowy
   attr_encrypted
   capybara

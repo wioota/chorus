@@ -18,6 +18,7 @@
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse
+//= require vendor/textext
 //= require vendor/codemirror-2.36
 //= require vendor/es5-shim
 //= require vendor/d3
