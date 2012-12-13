@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe GpdbSchema do
-
   describe "associations" do
     it { should belong_to(:database) }
     it { should have_many(:datasets) }
@@ -26,14 +25,26 @@ describe GpdbSchema do
   context ".refresh" do
     let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:account) { gpdb_instance.owner_account }
-    let(:database) { schema.database }
+    let(:database) do
+      stub(schema.database).connect_with(account) { connection }
+      schema.database
+    end
     let(:schema) { gpdb_schemas(:default) }
+    let(:settings) do
+      {
+          :host => gpdb_instance.host,
+          :port => gpdb_instance.port,
+          :username => account.db_username,
+          :password => account.db_password,
+          :database => database.name
+      }
+    end
+    let(:connection) { Object.new }
+
     before(:each) do
-      stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
-          {"schema_name" => "new_schema"},
-          {"schema_name" => schema.name},
-      ])
       stub(Dataset).refresh
+
+      stub(connection).schemas { ["new_schema",schema.name] }
     end
 
     it "creates new copies of the schemas in our db" do
@@ -94,7 +105,7 @@ describe GpdbSchema do
 
     context "when the database is not available" do
       before do
-        stub(Gpdb::ConnectionBuilder).connect! { raise ActiveRecord::JDBCError.new("Broken!") }
+        stub(connection).schemas { raise ActiveRecord::JDBCError.new("Broken!") }
       end
 
       it "marks all the associated schemas as stale if the flag is set" do

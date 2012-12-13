@@ -1,15 +1,5 @@
 class GpdbSchema < ActiveRecord::Base
   include Stale
-  SCHEMAS_SQL = <<-SQL
-  SELECT
-    schemas.nspname as schema_name
-  FROM
-    pg_namespace schemas
-  WHERE
-    schemas.nspname NOT LIKE 'pg_%'
-    AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
-  ORDER BY lower(schemas.nspname)
-  SQL
 
   SCHEMA_FUNCTION_QUERY = <<-SQL
       SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
@@ -50,13 +40,9 @@ class GpdbSchema < ActiveRecord::Base
   def self.refresh(account, database, options = {})
     found_schemas = []
 
-    schema_rows = database.with_gpdb_connection(account) do |conn|
-      conn.exec_query(SCHEMAS_SQL)
-    end
-
-    schema_rows.each do |row|
+    database.connect_with(account).schemas.each do |name|
       begin
-        schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
+        schema = database.schemas.find_or_initialize_by_name(name)
         found_schemas << schema
         schema_new = schema.new_record?
         if schema_new

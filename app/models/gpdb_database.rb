@@ -75,6 +75,18 @@ class GpdbDatabase < ActiveRecord::Base
     schemas.find_by_name(schema_name).datasets.find_by_name(dataset_name)
   end
 
+  def connect_with(account)
+    instance = gpdb_instance
+    options = {
+        :host => instance.host,
+        :port => instance.port,
+        :username => account.db_username,
+        :password => account.db_password,
+        :database => name
+    }
+    GreenplumConnection::InstanceConnection.new(options)
+  end
+
   private
 
   def create_schema_in_gpdb(name, current_user)
