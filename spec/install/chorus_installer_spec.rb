@@ -1037,7 +1037,7 @@ describe ChorusInstaller do
       installer.legacy_installation_path = '/opt/old_chorus'
       installer.destination_path = '/usr/local/greenplum-chorus'
       stub(installer).version { '2.2.0.0' }
-      mock(executor).import_legacy_schema
+      mock(executor).import_legacy_schema('/opt/old_chorus')
     end
 
     it "should execute the data migrator" do
