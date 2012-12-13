@@ -1,24 +1,24 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Instances", :database_integration do
-  before do
-    login(users(:admin))
-    visit("#/instances")
-    wait_for_ajax
-    click_button "Add Data Source"
-    wait_for_ajax
-  end
-
-  def select_and_do_within(class_name)
-    choose class_name
-    wait_until(1) { page.evaluate_script("!$('.#{class_name}').hasClass('collapsed');") }
-    within ".#{class_name}" do
-      yield
+  context "adding a data source" do
+    before do
+      login(users(:admin))
+      visit("#/instances")
+      wait_for_ajax
+      click_button "Add Data Source"
+      wait_for_ajax
     end
-  end
 
-  describe "add a gpdb instance" do
-    it "creates a instance" do
+    def select_and_do_within(class_name)
+      choose class_name
+      wait_until(1) { page.evaluate_script("!$('.#{class_name}').hasClass('collapsed');") }
+      within ".#{class_name}" do
+        yield
+      end
+    end
+
+    it "creates a gpdb instance" do
       within_modal do
         select_and_do_within "register_existing_greenplum" do
           fill_in 'name', :with => "new_gpdb_instance"
@@ -32,10 +32,8 @@ describe "Instances", :database_integration do
 
       find(".gpdb_instance ul").should have_content("new_gpdb_instance")
     end
-  end
 
-  describe "adding a hadoop instance" do
-    it "creates an instance" do
+    it "creates an hadoop instance" do
       within_modal do
         select_and_do_within "register_existing_hadoop" do
           fill_in 'name', :with => "new_hadoop_instance"
@@ -51,19 +49,24 @@ describe "Instances", :database_integration do
     end
   end
 
-  describe "importing a hadoop file into an external table" do
+  context "importing a hadoop file into an external table" do
     let(:hadoop_instance) { hadoop_instances(:real) }
 
     before do
       any_instance_of(ExternalTable) do |table|
         stub(table).save { true }
       end
+
+      login(users(:admin))
     end
 
     xit 'creates an external table', :hdfs_integration => true do
-      visit (%Q|#/hadoop_instances/#{hadoop_instance.to_param}/browse|)
-      click_link 'level1.txt'
+      visit "#/hadoop_instances/#{hadoop_instance.to_param}/browse"
+      sleep 1000
+      click_link 'big_file'
+      wait_for_ajax
       click_link 'Create as an external table'
+      wait_for_ajax
       within_modal do
         fill_in 'tableName', :with => 'new_external_table'
         click_button 'Create External Table'

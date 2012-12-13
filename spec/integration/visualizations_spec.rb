@@ -49,8 +49,7 @@ describe "Visualizations", :database_integration do
   describe "Create frequency plot" do
     let(:chart_type) { 'frequency' }
 
-    xit "figure out the flakiness on this test"
-    #it_behaves_like "a visualization"
+    it_behaves_like "a visualization"
   end
 
   describe "Create box plot" do
