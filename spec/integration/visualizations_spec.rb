@@ -72,7 +72,7 @@ describe "Visualizations", :database_integration do
     let(:chart_type) { 'timeseries' }
     let(:configure_chart) do
       click_link "year"
-      page.find(".ui-tooltip .limiter_menu.time").should be_visible
+      find(".ui-tooltip .limiter_menu.time").should be_visible
       page.execute_script("$('.ui-tooltip .limiter_menu.time li:eq(2)').click()")
     end
 

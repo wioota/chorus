@@ -20,13 +20,15 @@ describe "Search" do
 
   describe "global search" do
     it "searches all types of objects" do
-      find(".dataset_list").should have_content(datasets(:searchquery_table).name)
-      found_user = users(:owner)
-      find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
-      find(".hdfs_list").should have_content(hdfs_entries(:searchable).name)
-      find(".workspace_list").should have_content(workspaces(:search_public).name)
-      find(".workfile_list").should have_content(workfiles(:public).file_name)
-      find(".instance_list").should have_content(gpdb_instances(:default).name)
+      within "div.main_content" do
+        find("div.dataset_list").should have_content(datasets(:searchquery_table).name)
+        found_user = users(:owner)
+        find("div.user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
+        find("div.hdfs_list").should have_content(hdfs_entries(:searchable).name)
+        find("div.workspace_list").should have_content(workspaces(:search_public).name)
+        find("div.workfile_list").should have_content(workfiles(:public).file_name)
+        find("div.instance_list").should have_content(gpdb_instances(:default).name)
+      end
     end
   end
 
@@ -38,7 +40,9 @@ describe "Search" do
       end
       wait_for_ajax
       current_route.should == "search/all/#{model_type}/searchquery"
-      find(".#{model_type}_list").should have_content(found_model_text)
+      within "div.main_content" do
+        find("ul.#{model_type}_list").should have_content(found_model_text)
+      end
     end
   end
 

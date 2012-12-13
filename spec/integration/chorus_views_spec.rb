@@ -4,13 +4,13 @@ describe "Chorus Views", :database_integration do
   describe "Create" do
 
     let(:workspace) { workspaces(:gpdb_workspace) }
-    let(:dataset) { workspace.sandbox.datasets.first }
+    let(:dataset) { workspace.sandbox.datasets.where(:name => "base_table1" ).first }
 
     it "creates a new chorus view" do
       login(users(:admin))
       wait_for_ajax
       visit("#/workspaces/#{workspace.id}/datasets/#{dataset.id}")
-      wait_for_ajax
+      page.should have_button("Derive a Chorus View")
       click_button "Derive a Chorus View"
       click_button "Verify Chorus View"
       within_modal do

@@ -11,8 +11,8 @@ describe "Instances", :database_integration do
     end
 
     def select_and_do_within(class_name)
+      find(".instance_new.dialog").should have_content("Register an existing Gnip account ")
       choose class_name
-      wait_until(1) { page.evaluate_script("!$('.#{class_name}').hasClass('collapsed');") }
       within ".#{class_name}" do
         yield
       end

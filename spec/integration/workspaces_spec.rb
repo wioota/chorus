@@ -43,7 +43,7 @@ describe "Workspaces" do
       visit("#/workspaces/#{workspace.id}")
       wait_for_ajax
       click_link "Delete this Workspace"
-      wait_until { page.has_selector?(".submit") }
+      page.should have_selector(".submit")
       find(".submit").click
       wait_for_ajax
 

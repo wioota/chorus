@@ -62,12 +62,6 @@ module CapybaraHelpers
     find(locator).click
   end
 
-  def find(*args)
-    page.find(*args)
-  rescue Capybara::Ambiguous
-    page.all(*args).first
-  end
-
   def wait_for_ajax(timeout = 30)
     wait_until(timeout) do
       sleep 0.2

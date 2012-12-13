@@ -5,8 +5,7 @@ describe "Insights" do
     login(users(:owner))
     wait_for_ajax
     click_link "Insights"
-    wait_for_ajax
-    wait_until {page.find(".title h1").text == "Insights"}
+    find(".title h1").should have_content("Insights")
   end
 
   it "creates an insight" do
