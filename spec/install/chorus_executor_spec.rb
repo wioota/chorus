@@ -170,7 +170,7 @@ describe ChorusExecutor do
       end
 
       describe "#start_legacy_postgres" do
-        let(:command) { "#{edc_env} (bin/edcsrvctl start || bin/edcsrvctl start)" }
+        let(:command) { "#{edc_env} bin/edcsrvctl start || bin/edcsrvctl start" }
 
         it "should run twice since sometimes the first one fails" do
           executor.start_legacy_postgres legacy_installation_path
