@@ -34,6 +34,8 @@ class Workfile < ActiveRecord::Base
     string :security_type_name, :multiple => true
   end
 
+  acts_as_taggable
+
   def self.add_search_permissions(current_user, search)
     unless current_user.admin?
       search.build do
