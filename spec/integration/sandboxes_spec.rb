@@ -21,17 +21,20 @@ describe "Sandbox", :database_integration do
     page.execute_script("$('select[name=instance]').val('#{instance.id}')")
     page.execute_script("$('select[name=instance]').selectmenu('refresh')")
     page.execute_script("$('select[name=instance]').change()")
+    sleep 0.5
     wait_for_ajax
     #database
     page.execute_script("$('select[name=database]').val('#{database.id}')")
     page.execute_script("$('select[name=database]').selectmenu('refresh')")
     page.execute_script("$('select[name=database]').change()")
+    sleep 0.5
     wait_for_ajax
     #schema
     page.execute_script("$('select[name=schema]').val('#{schema.id}')")
     page.execute_script("$('select[name=schema]').selectmenu('refresh')")
     page.execute_script("$('select[name=schema]').change()")
     click_button "Add Sandbox"
+    sleep 0.5
     wait_for_ajax
 
     workspace.reload.sandbox.should == schema
