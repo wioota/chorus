@@ -1,4 +1,5 @@
 require_relative "../../packaging/install/chorus_executor"
+require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
   config.mock_with :rr
@@ -158,8 +159,12 @@ describe ChorusExecutor do
     end
 
     context "legacy app operations" do
+      include FakeFS::SpecHelpers
+      before do
+        FileUtils.mkdir_p(legacy_installation_path)
+      end
       let(:legacy_installation_path) { "/old/install" }
-      let(:edc_env) { "cd #{legacy_installation_path} && source #{legacy_installation_path}/edc_path.sh &&" }
+      let(:edc_env) { "source #{legacy_installation_path}/edc_path.sh &&" }
 
       describe "#import_legacy_schema" do
         let(:command) { "cd #{release_path} && INSTALL_ROOT=#{destination_path} CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data" }
@@ -170,25 +175,28 @@ describe ChorusExecutor do
       end
 
       describe "#stop_legacy_app" do
-        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl stop; true" }
+        let(:command) { "#{edc_env} bin/edcsrvctl stop; true" }
 
         it "should work" do
+          mock.proxy(Dir).chdir(legacy_installation_path)
           executor.stop_legacy_app legacy_installation_path
         end
       end
 
       describe "#start_legacy_postgres" do
-        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl start || /old/install/bin/edcsrvctl start" }
+        let(:command) { "#{edc_env} bin/edcsrvctl start || bin/edcsrvctl start" }
 
         it "should run twice since sometimes the first one fails" do
+          mock.proxy(Dir).chdir(legacy_installation_path)
           executor.start_legacy_postgres legacy_installation_path
         end
       end
 
       describe "#stop_legacy_app!" do
-        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl stop" }
+        let(:command) { "#{edc_env} bin/edcsrvctl stop" }
 
         it "should work" do
+          mock.proxy(Dir).chdir(legacy_installation_path)
           executor.stop_legacy_app! legacy_installation_path
         end
       end
