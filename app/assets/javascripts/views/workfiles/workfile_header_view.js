@@ -8,7 +8,7 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
     postRender: function() {
         this.$('textarea').textext({
             plugins: 'tags prompt focus autocomplete',
-            tagsItems: [],
+            tagsItems: this.model.get("tagNames"),
             prompt: t('tags.prompt')
         });
     },

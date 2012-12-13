@@ -12,12 +12,13 @@ describe("chorus.views.WorkfileHeader", function() {
 
     describe("render", function() {
         beforeEach(function() {
-            spyOn(this.view.$('textarea'), 'textext');
             this.view.render();
         });
 
-        xit('shows the tag names', function() {
-           expect(this.view.$('textarea').textext).toHaveBeenCalledWith();
+        it('shows the tag names', function() {
+           expect($(this.view.el)).toContainText("alpha");
+           expect($(this.view.el)).toContainText("beta");
+           expect($(this.view.el)).toContainText("gamma");
         });
     });
 
