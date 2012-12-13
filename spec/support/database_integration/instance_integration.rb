@@ -93,7 +93,7 @@ module InstanceIntegration
   end
 
   def self.database_name
-    "gpdb_#{Socket.gethostname}_#{Rails.env}".slice(0, 26) # needs to fit in 31 characters with _priv appended
+    "gpdb_#{Socket.gethostname.gsub('.', '_')}_#{Rails.env}".slice(0, 26) # needs to fit in 31 characters with _priv appended
   end
 
   def self.instance_config_for_gpdb(name)
