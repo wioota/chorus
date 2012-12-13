@@ -1,13 +1,21 @@
 class GpdbDatabase < ActiveRecord::Base
   include Stale
 
+  attr_accessible :name
+
+  validates :name,
+            :format => /^[a-zA-Z][a-zA-Z_0-9]*$/,
+            :presence => true,
+            :uniqueness => { :scope => :gpdb_instance_id }
+
   belongs_to :gpdb_instance
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
   has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
-  delegate :account_for_user!, :account_for_user, :to => :gpdb_instance
+
 
   before_save :mark_schemas_as_stale
+  delegate :account_for_user!, :account_for_user, :to => :gpdb_instance
 
   DATABASE_NAMES_SQL = <<-SQL
   SELECT
@@ -27,6 +35,8 @@ class GpdbDatabase < ActiveRecord::Base
     end.map { |row| row["datname"] }
 
     db_names.map do |name|
+      next if new(:name => name).invalid?
+
       db = gpdb_instance.databases.find_or_create_by_name!(name)
       results << db
       db.update_attributes!({:stale_at => nil}, :without_protection => true)

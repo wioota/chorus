@@ -80,7 +80,11 @@ class GpdbInstance < ActiveRecord::Base
     end
 
     database_account_groups.each do |database_name, db_usernames|
-      database = databases.find_or_create_by_name!(database_name)
+      database = databases.find_or_initialize_by_name(database_name)
+
+      # TODO: [#40454327] Don't just skip refreshing the database. Actually do something useful.
+      next if database.invalid?
+
       database.update_attributes!({:stale_at => nil}, :without_protection => true)
       database_accounts = accounts.where(:db_username => db_usernames)
       if database.instance_accounts.sort != database_accounts.sort
@@ -94,14 +98,15 @@ class GpdbInstance < ActiveRecord::Base
   ensure
     if options[:mark_stale]
       (databases.not_stale - found_databases).each do |database|
-        database.stale_at = Time.current
-        database.save
+        database.mark_stale!
       end
     end
   end
 
   def create_database(name, current_user)
-    raise ActiveRecord::StatementInvalid, "Database '#{name}' already exists." unless databases.where(:name => name).empty?
+    new_db = databases.build(:name => name)
+    raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
+
     create_database_in_instance(name, current_user)
     refresh_databases
     databases.find_by_name!(name)

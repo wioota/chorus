@@ -10,6 +10,6 @@ module Stale
   end
 
   def mark_stale!
-    update_attributes!({:stale_at => Time.current}, :without_protection => true) unless stale?
+    touch :stale_at unless stale?
   end
 end

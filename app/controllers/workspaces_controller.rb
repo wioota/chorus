@@ -56,6 +56,8 @@ class WorkspacesController < ApplicationController
           else
             workspace.sandbox = database.schemas.find_by_name(attributes[:schema_name])
           end
+        rescue ActiveRecord::RecordInvalid => e
+          raise
         rescue Exception => e
           raise ApiValidationError.new(database ? :schema : :database, :generic, {:message => e.message})
         end

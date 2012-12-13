@@ -1,7 +1,42 @@
 require 'spec_helper'
 
 describe GpdbDatabase do
-  context "#refresh" do
+  describe "validations" do
+    it 'has a valid factory' do
+      FactoryGirl.build(:gpdb_database).should be_valid
+    end
+
+    it { should validate_presence_of(:name) }
+
+    it 'does not allow strange characters in the name' do
+      new_database = FactoryGirl.build(:gpdb_database, :name => "database/name")
+      new_database.should_not be_valid
+      new_database.should have_error_on(:name)
+    end
+
+    describe 'name uniqueness' do
+      let(:existing) { gpdb_databases(:default) }
+
+      context 'in the same instance' do
+        it 'does not allow two databases with the same name' do
+          new_database = FactoryGirl.build(:gpdb_database,
+                                           :name => existing.name,
+                                           :gpdb_instance => existing.gpdb_instance)
+          new_database.should_not be_valid
+          new_database.should have_error_on(:name).with_message(:taken)
+        end
+      end
+
+      context 'in a different instance' do
+        it 'allows same names' do
+          new_database = FactoryGirl.build(:gpdb_database, :name => existing.name)
+          new_database.should be_valid
+        end
+      end
+    end
+  end
+
+  describe '#refresh' do
     let(:gpdb_instance) { FactoryGirl.build_stubbed(:gpdb_instance) }
     let(:account) { FactoryGirl.build_stubbed(:instance_account, :gpdb_instance => gpdb_instance) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
@@ -9,8 +44,7 @@ describe GpdbDatabase do
     before(:each) do
       stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
           {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
-      ]
-      )
+      ])
     end
 
     it "creates new copies of the databases in our db" do
