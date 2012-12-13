@@ -30,13 +30,12 @@
     }
 }
 
-input.has_error, textarea.has_error {
+input.has_error, textarea.has_error, .text-core .text-wrap textarea.has_error, .text-core .text-wrap input.has_error {
     border: 2px solid $error-background-color;
     background-image: url("/images/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
     padding-right: 20px;
-
 }
 
 .cleditorMain.has_error {
