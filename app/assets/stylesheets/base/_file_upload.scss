@@ -5,7 +5,8 @@
     position: relative;
     vertical-align: middle;
 
-    input {
+    // this is a class so it is easy to remove in integration tests to avoid selenium errors
+    .file-input {
         -moz-transform: translate(-500px, 0pt) scale(5);
         width: 200px;
         height: 200px;

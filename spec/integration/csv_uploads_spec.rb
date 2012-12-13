@@ -21,8 +21,11 @@ describe "CSV Uploads", :database_integration do
     wait_for_ajax(30)
     click_link "test"
     wait_for_ajax
+    within ".dataset_sidebar" do
+      find("li", :text => "Information").click()
+      csv_length = File.read(csv_file).split("\n").length - 1
+      page.should have_content("Rows #{csv_length}")
+    end
     current_route.should =~ /datasets\/(\d)+/
-    csv_length = File.read(csv_file).split("\n").length - 1
-    page.should have_content("Rows #{csv_length}")
   end
 end

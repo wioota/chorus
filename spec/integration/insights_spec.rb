@@ -11,7 +11,9 @@ describe "Insights" do
 
   it "creates an insight" do
     login(users(:owner))
-    click_link workspaces(:public).name
+    within ".dashboard_workspace_list.list" do
+      click_link workspaces(:public).name
+    end
     wait_for_ajax
     click_link "Add an insight"
 

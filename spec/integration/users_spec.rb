@@ -14,7 +14,7 @@ describe "Users" do
     it "Creates a user and saves their information" do
       visit "/#/users/new"
       wait_for_ajax
-
+      sleep 0.1
       fill_in 'firstName', :with => "new"
       fill_in 'lastName', :with => "person"
       fill_in 'username', :with => "new_user"
@@ -24,8 +24,10 @@ describe "Users" do
       click_button "Add This User"
       wait_for_ajax
 
-      click_link("new person")
-      page.find("h1").should have_content("new person")
+      within ".main_content" do
+        click_link "new person"
+        find("h1").should have_content("new person")
+      end
     end
 
     it "user can upload a user image" do
@@ -35,8 +37,8 @@ describe "Users" do
         click_link("#{user.first_name} #{user.last_name}")
       end
       wait_for_ajax
-
       click_link "Edit Profile"
+      wait_for_ajax
       attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
       click_button "Save Changes"
       wait_for_ajax

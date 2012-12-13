@@ -6,17 +6,27 @@ describe "Instances", :database_integration do
     visit("#/instances")
     wait_for_ajax
     click_button "Add Data Source"
+    wait_for_ajax
+  end
+
+  def select_and_do_within(class_name)
+    choose class_name
+    wait_until(1) { page.evaluate_script("!$('.#{class_name}').hasClass('collapsed');") }
+    within ".#{class_name}" do
+      yield
+    end
   end
 
   describe "add a gpdb instance" do
     it "creates a instance" do
       within_modal do
-        choose("register_existing_greenplum")
-        fill_in 'name', :with => "new_gpdb_instance"
-        fill_in 'host', :with => WEBPATH['gpdb_instance_db']['gpdb_host']
-        fill_in 'port', :with => WEBPATH['gpdb_instance_db']['gpdb_port']
-        fill_in 'dbUsername', :with => WEBPATH['gpdb_instance_db']['gpdb_user']
-        fill_in 'dbPassword', :with => WEBPATH['gpdb_instance_db']['gpdb_pass']
+        select_and_do_within "register_existing_greenplum" do
+          fill_in 'name', :with => "new_gpdb_instance"
+          fill_in 'host', :with => WEBPATH['gpdb_instance_db']['gpdb_host']
+          fill_in 'port', :with => WEBPATH['gpdb_instance_db']['gpdb_port']
+          fill_in 'dbUsername', :with => WEBPATH['gpdb_instance_db']['gpdb_user']
+          fill_in 'dbPassword', :with => WEBPATH['gpdb_instance_db']['gpdb_pass']
+        end
         click_button "Add Data Source"
       end
 
@@ -27,12 +37,13 @@ describe "Instances", :database_integration do
   describe "adding a hadoop instance" do
     it "creates an instance" do
       within_modal do
-        choose("register_existing_hadoop")
-        fill_in 'name', :with => "new_hadoop_instance"
-        fill_in 'host', :with => WEBPATH['hadoop_instance_db']['host']
-        fill_in 'port', :with => WEBPATH['hadoop_instance_db']['port']
-        fill_in 'username', :with => WEBPATH['hadoop_instance_db']['username']
-        fill_in 'groupList', :with => WEBPATH['hadoop_instance_db']['group_list']
+        select_and_do_within "register_existing_hadoop" do
+          fill_in 'name', :with => "new_hadoop_instance"
+          fill_in 'host', :with => WEBPATH['hadoop_instance_db']['host']
+          fill_in 'port', :with => WEBPATH['hadoop_instance_db']['port']
+          fill_in 'username', :with => WEBPATH['hadoop_instance_db']['username']
+          fill_in 'groupList', :with => WEBPATH['hadoop_instance_db']['group_list']
+        end
         click_button "Add Data Source"
       end
 

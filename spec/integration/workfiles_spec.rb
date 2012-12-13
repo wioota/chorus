@@ -50,10 +50,11 @@ describe "Workfiles" do
       visit("#/workspaces/#{workspace.id}")
       wait_for_ajax
 
-      click_link("Work Files")
+      click_link "Work Files"
       wait_for_ajax
       click_link workfile.file_name
-      click_link "Delete"
+      wait_for_ajax
+      click_link "Delete work file"
 
       within_modal do
         click_button "Delete work file"
@@ -75,11 +76,11 @@ describe "Workfiles" do
       end
 
       it "Lists the work files by updated date when selected" do
-        click_link("Alphabetically")
-        click_link("By Date")
+        click_link "Alphabetically"
+        click_link "By Date"
+        sleep 0.5
         wait_for_ajax
         workfiles = page.all("li.workfile")
-
         workfiles.first.text.should include workfile_first_by_date.file_name
         workfiles.last.text.should include workfile_last_by_date.file_name
       end

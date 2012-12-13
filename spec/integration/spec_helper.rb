@@ -7,6 +7,8 @@ require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'headless'
 require 'yaml'
+require 'timeout'
+require 'capybara/poltergeist'
 require 'factory_girl'
 
 headless = Headless.new
@@ -17,20 +19,9 @@ Capybara.app = Rails.application
 Capybara.default_driver = :selenium
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
-Capybara.server_boot_timeout = 100
 Capybara.save_and_open_page_path = ENV['WORKSPACE']
 
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
-
-def current_route
-  URI.parse(current_url).fragment
-end
-
-def wait_for_ajax(timeout = 30)
-  page.wait_until(timeout) do
-    page.evaluate_script 'jQuery.active == 0'
-  end
-end
 
 def run_jobs_synchronously
   stub(QC.default_queue).enqueue_if_not_queued.with_any_args do |class_and_message, *args|
@@ -58,7 +49,11 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    Rails.logger.info "Finished test: #{example.full_description}"
+    begin
+      Capybara.reset_sessions! # this should surface unhandled server errors
+    ensure
+      Rails.logger.info "Finished test: #{example.full_description}"
+    end
   end
 
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -72,6 +67,7 @@ RSpec.configure do |config|
   config.include LoginHelpers
   config.include CleditorHelpers
   config.include InstanceIntegration
+  config.include CapybaraHelpers
 
   Capybara.default_wait_time = 5
 end

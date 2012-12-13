@@ -17,7 +17,7 @@ describe "Chorus Views", :database_integration do
         click_button "Create Chorus View"
         fill_in 'objectName', :with => "New_Chorus_View"
         click_button "Create Chorus View"
-        wait_for_ajax(30)
+        wait_for_ajax
       end
       workspace.chorus_views.find_by_name("New_Chorus_View").should_not be_nil
     end

@@ -31,6 +31,7 @@ describe "Workspaces" do
         click_button "Create Workspace"
       end
       click_link "Dismiss the workspace quick start guide"
+      wait_for_ajax
       Workspace.find_by_name("New Workspace").should_not be_nil
     end
   end
@@ -48,9 +49,11 @@ describe "Workspaces" do
 
       visit('/#/workspaces')
       wait_for_ajax
-      page.execute_script("$('.popup').click()")
-      click_link("All Workspaces")
-      within(".workspace_list") { page.should_not have_link(workspace_url(workspace)) }
+      click_link "Active Workspaces"
+      click_link "All Workspaces"
+      within ".workspace_list" do
+        page.should_not have_link(workspace_url(workspace))
+      end
     end
   end
 end

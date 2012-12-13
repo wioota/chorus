@@ -20,23 +20,25 @@ describe "Search" do
 
   describe "global search" do
     it "searches all types of objects" do
-      page.find(".dataset_list").should have_content(datasets(:searchquery_table).name)
+      find(".dataset_list").should have_content(datasets(:searchquery_table).name)
       found_user = users(:owner)
-      page.find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
-      page.find(".hdfs_list").should have_content(hdfs_entries(:searchable).name)
-      page.find(".workspace_list").should have_content(workspaces(:search_public).name)
-      page.find(".workfile_list").should have_content(workfiles(:public).file_name)
-      page.find(".instance_list").should have_content(gpdb_instances(:default).name)
+      find(".user_list").should have_content("#{found_user.first_name} #{found_user.last_name}")
+      find(".hdfs_list").should have_content(hdfs_entries(:searchable).name)
+      find(".workspace_list").should have_content(workspaces(:search_public).name)
+      find(".workfile_list").should have_content(workfiles(:public).file_name)
+      find(".instance_list").should have_content(gpdb_instances(:default).name)
     end
   end
 
   shared_examples "model specific search" do
     it "searches for only one model" do
       click_link 'All Results'
-      click_link model_link
+      within ".link_menu.type .menu" do
+        click_link model_link
+      end
       wait_for_ajax
       current_route.should == "search/all/#{model_type}/searchquery"
-      page.find(".#{model_type}_list").should have_content(found_model_text)
+      find(".#{model_type}_list").should have_content(found_model_text)
     end
   end
 

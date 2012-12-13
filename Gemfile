@@ -37,7 +37,7 @@ group :assets do
 end
 
 group :integration do
-  gem 'capybara',            :require => false
+  gem 'capybara', "~> 2.0.0", :require => false
   gem 'headless'
   gem 'capybara-screenshot'
 end
@@ -55,7 +55,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
   gem 'fakefs',              :require => false
   gem 'chunky_png'
   gem 'database_cleaner',    :require => false
-  gem 'poltergeist'
+  gem 'poltergeist', :github => "brutuscat/poltergeist"
 end
 
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
