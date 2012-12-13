@@ -4,7 +4,7 @@ class GpdbDatabase < ActiveRecord::Base
   attr_accessible :name
 
   validates :name,
-            :format => /^[a-zA-Z][a-zA-Z_0-9]*$/,
+            :format => /^[a-zA-Z][a-zA-Z0-9_-]*$/,
             :presence => true,
             :uniqueness => { :scope => :gpdb_instance_id }
 
