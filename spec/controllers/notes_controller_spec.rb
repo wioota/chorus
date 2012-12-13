@@ -48,6 +48,17 @@ describe NotesController do
         Events::NoteOnWorkspace.last.workfiles.should =~ associated_workfiles
       end
 
+      context "when creator is not a workspace member" do
+        let(:user) { users(:no_collaborators) }
+        let(:workspace) { workspaces(:private) }
+
+        # TODO: [#41132931] fix the permissions for creating notes
+        it "returns a forbidden status" do
+          post :create, attributes
+          response.code.should == "403"
+        end
+      end
+
       context "when the workspace is archived" do
         let(:workspace) { workspaces(:archived) }
 
