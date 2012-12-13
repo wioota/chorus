@@ -175,7 +175,7 @@ describe ChorusExecutor do
       end
 
       describe "#stop_legacy_app" do
-        let(:command) { "#{edc_env} bin/edcsrvctl stop; true" }
+        let(:command) { "#{edc_env} bin/edcsvrctl stop; true" }
 
         it "should work" do
           mock.proxy(Dir).chdir(legacy_installation_path)
@@ -184,7 +184,7 @@ describe ChorusExecutor do
       end
 
       describe "#start_legacy_postgres" do
-        let(:command) { "#{edc_env} bin/edcsrvctl start || bin/edcsrvctl start" }
+        let(:command) { "#{edc_env} bin/edcsvrctl start || bin/edcsvrctl start" }
 
         it "should run twice since sometimes the first one fails" do
           mock.proxy(Dir).chdir(legacy_installation_path)
@@ -193,7 +193,7 @@ describe ChorusExecutor do
       end
 
       describe "#stop_legacy_app!" do
-        let(:command) { "#{edc_env} bin/edcsrvctl stop" }
+        let(:command) { "#{edc_env} bin/edcsvrctl stop" }
 
         it "should work" do
           mock.proxy(Dir).chdir(legacy_installation_path)

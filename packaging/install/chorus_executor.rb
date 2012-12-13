@@ -61,15 +61,15 @@ class ChorusExecutor
   end
 
   def stop_legacy_app(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsrvctl stop; true"
+    legacy_exec legacy_installation_path, "bin/edcsvrctl stop; true"
   end
 
   def stop_legacy_app!(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsrvctl stop"
+    legacy_exec legacy_installation_path, "bin/edcsvrctl stop"
   end
 
   def start_legacy_postgres(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsrvctl start || bin/edcsrvctl start"
+    legacy_exec legacy_installation_path, "bin/edcsvrctl start || bin/edcsvrctl start"
   end
 
   private
