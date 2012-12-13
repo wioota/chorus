@@ -25,6 +25,7 @@ describe WorkfilePresenter, :type => :view do
       hash.should have_key(:is_deleted)
       hash.should have_key(:recent_comments)
       hash.should have_key(:comment_count)
+      hash.should have_key(:tag_names)
 
       hash.should_not have_key(:execution_schema)
     end
@@ -39,6 +40,15 @@ describe WorkfilePresenter, :type => :view do
 
     it "uses the workfile file name" do
       hash[:file_name].should == workfile.file_name
+    end
+
+    context "when the workfile has tags" do
+      let(:workfile) {workfiles(:tagged)}
+
+      it 'includes the tags' do
+        hash[:tag_names].count.should be > 0
+        hash[:tag_names].should == workfile.tags.map(&:name)
+      end
     end
 
     context "when there are notes on a workfile" do

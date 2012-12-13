@@ -1,9 +1,24 @@
 describe("chorus.views.WorkfileHeader", function() {
     beforeEach(function() {
         this.view = new chorus.views.WorkfileHeader();
-        this.model = rspecFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
+        this.model = rspecFixtures.workfile.sql({
+            id: this.workfileId,
+            workspace: {id: this.workspaceId},
+            tagNames: ['alpha', 'beta', 'gamma']
+        });
         this.view.model = this.model;
         this.view.render();
+    });
+
+    describe("render", function() {
+        beforeEach(function() {
+            spyOn(this.view.$('textarea'), 'textext');
+            this.view.render();
+        });
+
+        xit('shows the tag names', function() {
+           expect(this.view.$('textarea').textext).toHaveBeenCalledWith();
+        });
     });
 
     describe("editing tags", function() {

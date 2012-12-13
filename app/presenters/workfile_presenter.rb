@@ -23,7 +23,8 @@ class WorkfilePresenter < Presenter
       :latest_version_id => model.latest_workfile_version_id,
       :is_deleted => model.deleted?,
       :recent_comments => present(recent_comments, :as_comment => true),
-      :comment_count => comments.count + notes.count
+      :comment_count => comments.count + notes.count,
+      :tag_names => model.tags.map(&:name),
     }
 
     unless rendering_activities?
