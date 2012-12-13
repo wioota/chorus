@@ -71,8 +71,9 @@ describe Kaggle::API, :kaggle_API => true do
 
       context "when the kaggleSearchResult.json exists" do
         before do
-          FileUtils.mkdir_p(Rails.root)
-          File.open(Rails.root.join('kaggleSearchResults.json').to_s, 'w') do |f|
+          dir = Rails.root.join("demo_data")
+          FileUtils.mkdir_p(dir.to_s)
+          File.open(dir.join('kaggleSearchResults.json').to_s, 'w') do |f|
             f << @kaggle_users
           end
         end
@@ -88,7 +89,7 @@ describe Kaggle::API, :kaggle_API => true do
 
       context "when the kaggleSearchResults.json does not exist" do
         it "raises a NotReachable error" do
-          File.exist?(Rails.root.join('kaggleSearchResults.json')).should be_false
+          File.exist?(Rails.root.join('demo_data', 'kaggleSearchResults.json')).should be_false
 
           expect {
             users = Kaggle::API.users

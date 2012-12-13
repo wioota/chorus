@@ -44,7 +44,7 @@ module Kaggle
           Kaggle::User.new(user_data)
         end
       else
-        JSON.parse(File.read(Rails.root.join('kaggleSearchResults.json').to_s))["users"].map do |user_data|
+        JSON.parse(File.read(Rails.root.join('demo_data', 'kaggleSearchResults.json').to_s))["users"].map do |user_data|
           Kaggle::User.new(user_data)
         end
       end

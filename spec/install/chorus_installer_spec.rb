@@ -413,10 +413,16 @@ describe ChorusInstaller do
       File.directory?('/usr/local/greenplum-chorus/shared/solr/data').should be_true
     end
 
-    it "create the logs path" do
+    it "creates the logs path" do
       installer.create_shared_structure
 
       File.directory?('/usr/local/greenplum-chorus/shared/log').should be_true
+    end
+
+    it "creates the demo data folder" do
+      installer.create_shared_structure
+
+      File.directory?('/usr/local/greenplum-chorus/shared/demo_data').should be_true
     end
 
     it "creates the system file uploads path" do
@@ -737,6 +743,10 @@ describe ChorusInstaller do
 
     it "links the chorus.properties file" do
       File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/config/chorus.properties').should == '/usr/local/greenplum-chorus/shared/chorus.properties'
+    end
+
+    it "links the demo data" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/demo_data').should == '/usr/local/greenplum-chorus/shared/demo_data'
     end
 
     it "links the database.yml file" do

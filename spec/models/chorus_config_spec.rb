@@ -94,7 +94,9 @@ describe ChorusConfig do
 
     context "when the kaggleSearchResults.json exists" do
       before do
-        File.open(Rails.root.join('kaggleSearchResults.json').to_s, 'w') do |f|
+        dir = Rails.root.join('demo_data')
+        FileUtils.mkdir_p(dir.to_s)
+        File.open(dir.join('kaggleSearchResults.json').to_s, 'w') do |f|
           f << "Hello, World!"
         end
       end

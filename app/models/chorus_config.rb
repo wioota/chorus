@@ -45,7 +45,7 @@ class ChorusConfig
   end
 
   def kaggle_configured?
-    return true if File.exist? Rails.root.join('kaggleSearchResults.json')
+    return true if File.exist? Rails.root.join('demo_data', 'kaggleSearchResults.json')
     (self['kaggle.enabled'] && self['kaggle.api_key'] && true)
   end
 

@@ -186,6 +186,7 @@ class ChorusInstaller
     FileUtils.mkdir_p("#{destination_path}/shared/solr/data")
     FileUtils.mkdir_p("#{destination_path}/shared/log")
     FileUtils.mkdir_p("#{destination_path}/shared/system")
+    FileUtils.mkdir_p("#{destination_path}/shared/demo_data")
   end
 
   def copy_config_files
@@ -239,6 +240,7 @@ class ChorusInstaller
     FileUtils.ln_sf("#{destination_path}/shared/sunspot.yml", "#{release_path}/config/sunspot.yml")
     FileUtils.ln_sf("#{destination_path}/shared/secret.key", "#{release_path}/config/secret.key")
     FileUtils.ln_sf("#{destination_path}/shared/secret.token", "#{release_path}/config/secret.token")
+    FileUtils.ln_sf("#{destination_path}/shared/demo_data", "#{release_path}/demo_data")
 
     #Symlink the data paths under shared to the actual data_path directory.  So the app actually
     #goes through two symlinks
