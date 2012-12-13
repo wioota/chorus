@@ -92,6 +92,14 @@ describe ChorusExecutor do
       end
     end
 
+    describe "#start_chorus" do
+      let(:command) { "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh start" }
+
+      it "should work" do
+        executor.start_chorus
+      end
+    end
+
     describe "#stop_postgres" do
       before do
         stub(File).directory?("#{release_path}/postgres") { postgres_extracted }
