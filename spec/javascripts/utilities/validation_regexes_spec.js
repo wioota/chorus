@@ -57,7 +57,12 @@ describe("chorus.ValidationRegexes", function() {
     itWorks("MaxLength64", {
         good: ["1 test$^", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
         bad: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
-    })
+    });
+
+    itWorks("PostgresIdentifier", {
+        good: ["test", "test_", "test_123"],
+        bad: ["_test", "1test", "test-"]
+    });
 
     function itWorks(functionName, options) {
         describe(functionName, function() {

@@ -52,6 +52,10 @@ chorus.ValidationRegexes = (function(){
             return safePgName;
         },
 
+        PostgresIdentifier: function(length) {
+            return this.ChorusIdentifier(length);
+        },
+
         AllWhitespace: function() {
             return allWhitespace;
         },

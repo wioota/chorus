@@ -10,6 +10,27 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("validation", function() {
+        it("should return a truthy value for a valid workspace", function() {
+            expect(this.model.performValidation()).toBeTruthy();
+        });
+
+        it('doesnt allow blank name', function() {
+            this.model.unset('name');
+            expect(this.model.performValidation()).toBeFalsy();
+        });
+
+        it('doesnt allow invalid database name', function() {
+            this.model.set('databaseName', 'invalid!');
+            expect(this.model.performValidation()).toBeFalsy();
+        });
+
+        it('doesnt allow invalid database name', function() {
+            this.model.set('schemaName', 'invalid!');
+            expect(this.model.performValidation()).toBeFalsy();
+        });
+    });
+
     it("has the correct urlTemplate", function() {
         expect(this.model.urlTemplate).toBe("workspaces/{{id}}");
     });
@@ -259,21 +280,6 @@ describe("chorus.models.Workspace", function() {
             expect(archiver.get("username")).toBe("jhenry");
         });
 
-    });
-
-    describe("validation", function() {
-        beforeEach(function() {
-            spyOn(this.model, "require").andCallThrough();
-        });
-
-        it("should return a truthy value for a valid workspace", function() {
-            expect(this.model.performValidation()).toBeTruthy();
-        });
-
-        it("requires name", function() {
-            this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("name", undefined);
-        });
     });
 
     describe("#displayName", function() {
