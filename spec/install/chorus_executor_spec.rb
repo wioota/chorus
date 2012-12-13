@@ -170,7 +170,7 @@ describe ChorusExecutor do
       end
 
       describe "#stop_legacy_app" do
-        let(:command) { "#{edc_env} bin/edcsrvctl stop; true" }
+        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl stop; true" }
 
         it "should work" do
           executor.stop_legacy_app legacy_installation_path
@@ -178,7 +178,7 @@ describe ChorusExecutor do
       end
 
       describe "#start_legacy_postgres" do
-        let(:command) { "#{edc_env} bin/edcsrvctl start || bin/edcsrvctl start" }
+        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl start || /old/install/bin/edcsrvctl start" }
 
         it "should run twice since sometimes the first one fails" do
           executor.start_legacy_postgres legacy_installation_path
@@ -186,7 +186,7 @@ describe ChorusExecutor do
       end
 
       describe "#stop_legacy_app!" do
-        let(:command) { "#{edc_env} bin/edcsrvctl stop" }
+        let(:command) { "#{edc_env} /old/install/bin/edcsrvctl stop" }
 
         it "should work" do
           executor.stop_legacy_app! legacy_installation_path
