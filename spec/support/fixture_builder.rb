@@ -478,10 +478,6 @@ FixtureBuilder.configure do |fbuilder|
       @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => InstanceIntegration.instance_config_for_hadoop['host'], :port => InstanceIntegration.instance_config_for_hadoop['port'])
     end
 
-    #Tags
-    tag = FactoryGirl.create(:tag, :name => 'default')
-    fbuilder.name :default, FactoryGirl.create(:tagging, :tag => tag, :entity => text_workfile)
-
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
