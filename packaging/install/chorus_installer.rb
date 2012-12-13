@@ -363,7 +363,7 @@ class ChorusInstaller
   def migrate_legacy_data
     log "Migrating data from previous version..." do
       log "Loading legacy data into postgres..." do
-        @executor.import_legacy_schema
+        @executor.import_legacy_schema legacy_installation_path
       end
     end
   end
