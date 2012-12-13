@@ -20,6 +20,10 @@ class ChorusExecutor
     exec "cd #{release_path} && RAILS_ENV=production bin/rake #{command}#{if_debug(' --trace')}"
   end
 
+  def start_chorus
+    chorus_control "start"
+  end
+
   def start_postgres
     @logger.log "starting postgres..."
     chorus_control "start postgres"
