@@ -23,17 +23,9 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
-        this.aurora = chorus.models.GpdbInstance.aurora();
-        this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
-
-//      TODO: when Aurora is done on the backend, comment this back in and un-xit all the specs in sandbox_new_dialog_spec.js (and fix them)
-//      this.aurora.fetch();
-        this.aurora.loaded = true;
-
         this.workspace.fetch();
 
         this.requiredResources.add(this.workspace);
-        this.requiredResources.add(this.aurora);
         this.requiredResources.add(chorus.models.Config.instance());
 
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
@@ -42,26 +34,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.workspace, "saved", this.saved);
         this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
         this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
-    },
-
-    fetchTemplates: function() {
-        if (this.aurora.isInstalled()) {
-            this.templates = chorus.models.GpdbInstance.auroraTemplates();
-            this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
-            this.templates.fetch();
-            this.render();
-        }
-    },
-
-    templatesLoaded: function() {
-        var $select = $("<select name='template' class='instance_size'></select>");
-        _.each(this.templates.models, function(template) {
-            var $option = $("<option></option>").val(template.name()).text(template.toText());
-            $select.append($option);
-        });
-
-        this.$(".instance_size_container").append($select);
-        chorus.styleSelect(this.$("select.instance_size"));
     },
 
     makeModel: function() {
@@ -73,10 +45,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     resourcesLoaded: function() {
         this.model.maximumSize = chorus.models.Config.instance().get("provisionMaxSizeInGB");
-    },
-
-    additionalContext: function() {
-        return { configured: this.aurora.isInstalled() };
     },
 
     save: function(e) {
