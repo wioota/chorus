@@ -20,15 +20,19 @@ module Events
 
     delegate :grouping_id, :type_name, :security_type_name, :to => :primary_target
 
-    def self.create_from_params(params, creator)
+    def self.create_on_model(model, params, creator)
       body = params[:body]
-      entity_id = params[:entity_id]
-      entity_type = params[:entity_type]
       workspace_id = params[:workspace_id]
       insight = params[:is_insight]
 
-      model = ModelMap.model_from_params(entity_type, entity_id)
-      raise ActiveRecord::RecordNotFound unless model
+      if model.kind_of?(Dataset)
+        entity_type = 'dataset'
+      elsif model.kind_of?(HdfsEntry)
+        entity_type = 'hdfs_file'
+      else
+        entity_type = model.class.name.underscore
+      end
+
       event_params = {
         entity_type => model,
         "body" => body,

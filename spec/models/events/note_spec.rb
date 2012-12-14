@@ -263,16 +263,16 @@ describe Events::Note do
     end
   end
 
-  describe "#create_from_params(entity_type, entity_id, body, creator)" do
+  describe "#create_on_model(model, body, creator)" do
     let(:user) { users(:owner) }
 
     it "creates a note on a greenplum instance" do
       gpdb_instance = gpdb_instances(:default)
-      Events::Note.create_from_params({
-        :entity_type => "gpdb_instance",
-        :entity_id => gpdb_instance.id,
-        :body => "Some crazy content",
-      }, user)
+      expect {
+        Events::Note.create_on_model(gpdb_instance, {
+          :body => "Some crazy content",
+        }, user)
+      }.to change(Events::Note, :count).by(1)
 
       last_note = Events::Note.last
       last_note.action.should == "NoteOnGreenplumInstance"
@@ -283,10 +283,8 @@ describe Events::Note do
 
     it "creates a note on a hadoop instance" do
       hadoop_instance = hadoop_instances(:hadoop)
-      Events::Note.create_from_params({
-        :entity_type => "hadoop_instance",
-        :entity_id => hadoop_instance.id,
-        :body => "Some crazy content",
+      Events::Note.create_on_model(hadoop_instance, {
+          :body => "Some crazy content"
       }, user)
 
       last_note = Events::Note.last
@@ -297,10 +295,8 @@ describe Events::Note do
     end
 
     it "creates a note on an hdfs file" do
-      Events::Note.create_from_params({
-        :entity_type => "hdfs_file",
-        :entity_id => hdfs_entry.id,
-        :body => "Some crazy content",
+      Events::Note.create_on_model(hdfs_entry, {
+        :body => "Some crazy content"
       }, user)
 
       last_note = Events::Note.last
@@ -312,10 +308,8 @@ describe Events::Note do
     end
 
     it "creates a note on a Gnip Instance" do
-      Events::Note.create_from_params({
-          :entity_type => "gnip_instance",
-          :entity_id => gnip_instance.id,
-          :body => "Some crazy content",
+      Events::Note.create_on_model(gnip_instance, {
+          :body => "Some crazy content"
       }, user)
 
       last_note = Events::Note.last
@@ -325,12 +319,9 @@ describe Events::Note do
       last_note.actor.should == user
     end
 
-
     context "workspace not archived" do
       it "creates a note on a workspace" do
-        Events::Note.create_from_params({
-          :entity_type => "workspace",
-          :entity_id => workspace.id,
+        Events::Note.create_on_model(workspace, {
           :body => "More crazy content",
         }, user)
 
@@ -348,9 +339,7 @@ describe Events::Note do
         workspace.archiver = user
         workspace.save!
         expect {
-          Events::Note.create_from_params({
-            :entity_type => "workspace",
-            :entity_id => workspace.id,
+          Events::Note.create_on_model(workspace, {
             :body => "More crazy content",
           }, user)
         }.to raise_error
@@ -358,9 +347,7 @@ describe Events::Note do
     end
 
     it "creates a note on a workfile" do
-      Events::Note.create_from_params({
-        :entity_type => "workfile",
-        :entity_id => workfile.id,
+      Events::Note.create_on_model(workfile, {
         :body => "Workfile content",
         :workspace_id => workspace.id
       }, user)
@@ -374,9 +361,7 @@ describe Events::Note do
     end
 
     it "creates a note on a dataset" do
-      Events::Note.create_from_params({
-        :entity_type => "dataset",
-        :entity_id => dataset.id,
+      Events::Note.create_on_model(dataset, {
         :body => "Crazy dataset content",
       }, user)
 
@@ -388,9 +373,7 @@ describe Events::Note do
     end
 
     it "creates a note on a dataset in a workspace" do
-      Events::Note.create_from_params({
-        :entity_type => "dataset",
-        :entity_id => dataset.id,
+      Events::Note.create_on_model(dataset, {
         :body => "Crazy workspace dataset content",
         :workspace_id => workspace.id
       }, user)
@@ -404,9 +387,7 @@ describe Events::Note do
     end
 
     it "doesn't always create insights" do
-      Events::Note.create_from_params({
-        :entity_type => "dataset",
-        :entity_id => dataset.id,
+      Events::Note.create_on_model(dataset, {
         :body => "Crazy workspace dataset content",
         :workspace_id => workspace.id
       }, user)
@@ -418,9 +399,7 @@ describe Events::Note do
     end
 
     it "creates an insight" do
-      Events::Note.create_from_params({
-        :entity_type => "dataset",
-        :entity_id => dataset.id,
+      Events::Note.create_on_model(dataset, {
         :body => "Crazy workspace dataset content",
         :workspace_id => workspace.id,
         :is_insight => true,
@@ -430,26 +409,6 @@ describe Events::Note do
       last_note.insight.should == true
       last_note.promoted_by.should == user
       last_note.promotion_time.should_not == nil
-    end
-
-    it "raises an exception if the entity type is unknown" do
-      expect {
-        Events::Note.create_from_params({
-          :entity_type => "bogus",
-          :entity_id => "wrong",
-          :body => "invalid"
-        }, user)
-      }.to raise_error(ModelMap::UnknownEntityType)
-    end
-
-    it "raises an exception if there is no model with the given entity id" do
-      expect {
-        Events::Note.create_from_params({
-          :entity_type => "dataset",
-          :entity_id => "-1",
-          :body => "ok wow"
-        }, user)
-      }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

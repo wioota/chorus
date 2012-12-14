@@ -15,6 +15,8 @@ class WorkspaceAccess < AdminFullAccess
     owner?(workspace)
   end
 
+  alias_method :create_note_on?, :show?
+
   def can_edit_sub_objects?(workspace)
     !workspace.archived? && workspace.member?(current_user)
   end
