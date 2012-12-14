@@ -44,7 +44,7 @@ describe WorkfileDownloadController do
 
     context "in the case of draft" do
       before do
-        workfile_drafts(:default).tap do |draft|
+        workfile_drafts(:draft_default).tap do |draft|
           draft.content = "Valid content goes here"
           draft.workfile_id = workfile.id
           draft.save!

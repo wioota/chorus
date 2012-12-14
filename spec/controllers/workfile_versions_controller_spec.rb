@@ -25,7 +25,7 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:default).update_attribute(:workfile_id, workfile.id)
+      workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
       draft_count(workfile, user).should == 1
 
       post :update, params
@@ -59,7 +59,7 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:default).update_attribute(:workfile_id, workfile.id)
+      workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
       draft_count(workfile, user).should == 1
 
       post :create, params

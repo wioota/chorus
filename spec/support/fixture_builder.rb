@@ -249,6 +249,8 @@ FixtureBuilder.configure do |fbuilder|
       tagged_workfile.tag_list = "alpha, beta"
       tagged_workfile.save!
 
+      @draft_default = FactoryGirl.create(:workfile_draft, :owner => owner)
+
       archived_workfile = FactoryGirl.create(:workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace)
 
       sql_workfile = FactoryGirl.create(:workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace)
@@ -264,6 +266,8 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => public_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => sql_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
       FactoryGirl.create(:workfile_version, :workfile => archived_workfile, :version_num => "1", :owner => no_collaborators, :modifier => no_collaborators, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => tagged_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      FactoryGirl.create(:workfile_version, :workfile => @draft_default.workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
 
       @no_collaborators_creates_private_workfile = Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace, :commit_message => "Fix all the bugs!")
       @public_workfile_created = Events::WorkfileCreated.by(owner).add(:workfile => public_workfile, :workspace => public_workspace, :commit_message => "There be dragons!")
@@ -299,8 +303,6 @@ FixtureBuilder.configure do |fbuilder|
     File.open Rails.root + 'spec/fixtures/test.cpp' do |file|
       FactoryGirl.create(:workfile_version, :workfile => code_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
-
-    fbuilder.name :default, FactoryGirl.create(:workfile_draft, :owner => owner)
 
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,
@@ -490,5 +492,10 @@ FixtureBuilder.configure do |fbuilder|
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
     #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.
+
+    bad_workfiles = Workfile.select { |x| x.versions.empty? && x.class.name != "LinkedTableauWorkfile" }
+    if !bad_workfiles.empty?
+      raise "OH NO!  A workfile has no versions!  Be more careful in the future." + bad_workfiles.map(&:file_name).inspect
+    end
   end
 end

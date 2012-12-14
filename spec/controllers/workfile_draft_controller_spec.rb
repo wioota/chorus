@@ -7,7 +7,7 @@ describe WorkfileDraftController do
                                       :owner => user, :workspace => workspace) }
   let(:valid_attributes) { { :content => "Valid content goes here", :workfile_id => workfile.id } }
   let!(:draft) do
-    workfile_drafts(:default).tap do |draft|
+    workfile_drafts(:draft_default).tap do |draft|
       draft.content = "Valid content goes here"
       draft.owner_id = user.id
       draft.workfile_id = workfile.id
