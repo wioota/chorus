@@ -40,11 +40,11 @@ describe GpdbDatabase do
     let(:gpdb_instance) { FactoryGirl.build_stubbed(:gpdb_instance) }
     let(:account) { FactoryGirl.build_stubbed(:instance_account, :gpdb_instance => gpdb_instance) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
+    let(:connection) { Object.new }
 
     before(:each) do
-      stub_gpdb(account, GpdbDatabase::DATABASE_NAMES_SQL => [
-          {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
-      ])
+      stub(gpdb_instance).connect_with(account) { connection }
+      stub(connection).databases { db_names }
     end
 
     it "creates new copies of the databases in our db" do
@@ -225,7 +225,7 @@ describe GpdbDatabase do
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
-      mock(GreenplumConnection::InstanceConnection).new({
+      mock(GreenplumConnection::DatabaseConnection).new({
                                                             :host => instance.host,
                                                             :port => instance.port,
                                                             :username => account.db_username,

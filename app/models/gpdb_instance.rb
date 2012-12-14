@@ -70,6 +70,16 @@ class GpdbInstance < ActiveRecord::Base
     GpdbInstance.accessible_to(user).include?(self)
   end
 
+  def connect_with(account)
+    GreenplumConnection::InstanceConnection.new(
+        :username => account.db_username,
+        :password => account.db_password,
+        :host => host,
+        :port => port,
+        :database => maintenance_db
+    )
+  end
+
   def refresh_databases(options ={})
     found_databases = []
     rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
@@ -102,6 +112,8 @@ class GpdbInstance < ActiveRecord::Base
       end
     end
   end
+
+
 
   def create_database(name, current_user)
     new_db = databases.build(:name => name)

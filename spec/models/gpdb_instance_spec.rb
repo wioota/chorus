@@ -391,6 +391,22 @@ describe GpdbInstance do
     end
   end
 
+  describe "#connect_with" do
+    let(:instance) { gpdb_instances(:default) }
+    let(:account) { instance_accounts(:unauthorized) }
+
+    it "should return a GreenplumConnection" do
+      mock(GreenplumConnection::InstanceConnection).new({
+                                                            :host => instance.host,
+                                                            :port => instance.port,
+                                                            :username => account.db_username,
+                                                            :password => account.db_password,
+                                                            :database => instance.maintenance_db
+                                                        }) { "this is my connection" }
+      instance.connect_with(account).should == "this is my connection"
+    end
+  end
+
   describe "#databases", :database_integration => true do
     let(:account) { InstanceIntegration.real_gpdb_account }
 

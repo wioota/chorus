@@ -2,7 +2,7 @@ require 'minimal_spec_helper'
 require 'greenplum_connection'
 require_relative '../../spec/support/database_integration/instance_integration'
 
-describe GreenplumConnection::InstanceConnection, :database_integration do
+describe GreenplumConnection::Base, :database_integration do
   let(:username) { InstanceIntegration::REAL_GPDB_USERNAME }
   let(:password) { InstanceIntegration::REAL_GPDB_PASSWORD }
   let(:database_name) { InstanceIntegration.database_name }
@@ -21,19 +21,7 @@ describe GreenplumConnection::InstanceConnection, :database_integration do
       :database => database_name
   } }
 
-  let(:instance) { GreenplumConnection::InstanceConnection.new(details) }
-
-  describe "#initialize" do
-    it "sets up the instance parameters" do
-      instance.settings.should == details
-    end
-
-    it "creates a accessor method for each setting" do
-      details.keys.each do |key|
-        instance.send(key).should == details[key]
-      end
-    end
-  end
+  let(:instance) { GreenplumConnection::Base.new(details) }
 
   describe "#connect!" do
     before do
@@ -58,31 +46,6 @@ describe GreenplumConnection::InstanceConnection, :database_integration do
     end
   end
 
-  describe "#databases" do
-  end
-
-  describe "#schemas" do
-    let(:schema_list_sql) do
-      <<-SQL
-      SELECT
-        schemas.nspname as schema_name
-      FROM
-        pg_namespace schemas
-      WHERE
-        schemas.nspname NOT LIKE 'pg_%'
-        AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
-      ORDER BY lower(schemas.nspname)
-      SQL
-    end
-
-    it "returns a list of all the schema names in the connected database" do
-      instance.should_not be_connected
-      db = Sequel.connect(db_url)
-      instance.schemas.should == db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] }
-      instance.should_not be_connected
-    end
-  end
-
   describe "#disconnect" do
     before do
       mock_conn = Object.new
@@ -97,6 +60,58 @@ describe GreenplumConnection::InstanceConnection, :database_integration do
       instance.should be_connected
       instance.disconnect
       instance.should_not be_connected
+    end
+  end
+
+  describe GreenplumConnection::DatabaseConnection do
+    describe "#schemas" do
+      let(:instance) { GreenplumConnection::DatabaseConnection.new(details) }
+
+      let(:schema_list_sql) do
+        <<-SQL
+      SELECT
+        schemas.nspname as schema_name
+      FROM
+        pg_namespace schemas
+      WHERE
+        schemas.nspname NOT LIKE 'pg_%'
+        AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
+      ORDER BY lower(schemas.nspname)
+        SQL
+      end
+
+      it "returns a list of all the schema names in the connected database" do
+        instance.should_not be_connected
+        db = Sequel.connect(db_url)
+        instance.schemas.should == db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] }
+        instance.should_not be_connected
+      end
+    end
+  end
+
+  describe GreenplumConnection::InstanceConnection do
+    let(:instance) { GreenplumConnection::InstanceConnection.new(details) }
+    let(:database_name) { 'postgres' }
+
+    describe "#databases" do
+      let(:database_list_sql) do
+        <<-SQL
+          SELECT
+            datname
+          FROM
+            pg_database
+          WHERE
+            datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
+            ORDER BY lower(datname) ASC
+        SQL
+      end
+
+      it "returns a list of all the database names in the connected instance" do
+        instance.should_not be_connected
+        db = Sequel.connect(db_url)
+        instance.databases.should == db.fetch(database_list_sql).all.collect { |row| row[:datname] }
+        instance.should_not be_connected
+      end
     end
   end
 end

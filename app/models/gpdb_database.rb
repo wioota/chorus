@@ -30,11 +30,7 @@ class GpdbDatabase < ActiveRecord::Base
   def self.refresh(account)
     gpdb_instance = account.gpdb_instance
     results = []
-    db_names = Gpdb::ConnectionBuilder.connect!(gpdb_instance, account) do |conn|
-      conn.exec_query(DATABASE_NAMES_SQL)
-    end.map { |row| row["datname"] }
-
-    db_names.map do |name|
+    gpdb_instance.connect_with(account).databases.map do |name|
       next if new(:name => name).invalid?
 
       db = gpdb_instance.databases.find_or_create_by_name!(name)
@@ -84,7 +80,7 @@ class GpdbDatabase < ActiveRecord::Base
         :password => account.db_password,
         :database => name
     }
-    GreenplumConnection::InstanceConnection.new(options)
+    GreenplumConnection::DatabaseConnection.new(options)
   end
 
   private
