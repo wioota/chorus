@@ -43,7 +43,7 @@ describe WorkfilesController do
       it "filters by file type: sql" do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "sql"
         response.code.should == "200"
-        decoded_response.length.should == 2
+        decoded_response.length.should == 3
       end
 
       it "filters by file type: code" do
