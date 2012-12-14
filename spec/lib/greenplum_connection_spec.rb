@@ -142,6 +142,7 @@ describe GreenplumConnection::Base, :database_integration do
 
   describe GreenplumConnection::SchemaConnection do
     let(:instance) { GreenplumConnection::SchemaConnection.new(details.merge(:schema => schema_name)) }
+    let(:schema_name) { "test_schema" }
 
     describe "#functions" do
       let(:schema_functions_sql) do
@@ -163,7 +164,6 @@ describe GreenplumConnection::Base, :database_integration do
           ORDER BY t1.oid;
         SQL
       end
-      let(:schema_name) { "test_schema" }
       let(:expected) { db.fetch(schema_functions_sql).all }
       let(:subject) { instance.functions }
 
@@ -184,6 +184,32 @@ describe GreenplumConnection::Base, :database_integration do
       let(:subject) { instance.disk_space_used }
 
       it_should_behave_like "a well behaved database query"
+    end
+
+    describe "#table_exists?" do
+      context "when the table exists" do
+        let(:table_name) { "different_names_table" }
+
+        it "should return true" do
+          instance.table_exists?(table_name).should == true
+        end
+      end
+
+      context "when the table doesn't exist" do
+        let(:table_name) { "please_dont_exist" }
+
+        it "should return false" do
+          instance.table_exists?(table_name).should == false
+        end
+      end
+
+      context "when the table name given is nil" do
+        let(:table_name) { nil }
+
+        it "should return false" do
+          instance.table_exists?(table_name).should == false
+        end
+      end
     end
   end
 end

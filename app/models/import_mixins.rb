@@ -9,6 +9,7 @@ module ImportMixins
 
   # should probably talk to the database to figure this out instead of use our local view
   def table_does_not_exist
+    return true unless to_table
     exists = table_exists?
     errors.add(:base, :table_exists, {:table_name => to_table}) if exists
     !exists
@@ -18,26 +19,18 @@ module ImportMixins
     return unless user
     return @_table_exists if instance_variable_defined?(:@_table_exists)
 
-    account = sandbox.gpdb_instance.account_for_user(user)
-    count = sandbox.with_gpdb_connection(account) do |conn|
-      count_result = conn.exec_query(<<-SQL)
-      SELECT COUNT(*)
-      FROM pg_tables
-      WHERE schemaname = '#{sandbox.name}' AND tablename = '#{to_table}'
-      SQL
-      count_result[0]['count']
-    end
-    @_table_exists = count > 0
+    @_table_exists = sandbox.connect_as(user).table_exists?(to_table)
   end
 
   def table_does_exist
+    return true unless to_table
     exists = table_exists?
     errors.add(:base, :table_not_exists, {:table_name => to_table}) unless exists
     exists
   end
 
   def tables_have_consistent_schema
-    return unless table_exists?
+    return unless to_table && table_exists?
     dest = sandbox.datasets.find_by_name(self.to_table)
     if dest && !self.source_dataset.dataset_consistent?(dest)
       errors.add(:base,

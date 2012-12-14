@@ -100,10 +100,22 @@ module GreenplumConnection
       with_connection { @connection.fetch(SCHEMA_DISK_SPACE_QUERY, :schema => schema_name).single_value }
     end
 
+    def table_exists?(table_name)
+      return false if table_name.nil?
+      with_schema_connection { @connection.table_exists?(table_name) }
+    end
+
     private
 
     def schema_name
       @settings[:schema]
+    end
+
+    def with_schema_connection
+      with_connection do
+        @connection.default_schema = schema_name
+        yield
+      end
     end
 
     SCHEMA_FUNCTIONS_SQL = <<-SQL

@@ -78,10 +78,9 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def connect_with(account)
-    instance = gpdb_instance
     options = {
-        :host => instance.host,
-        :port => instance.port,
+        :host => gpdb_instance.host,
+        :port => gpdb_instance.port,
         :username => account.db_username,
         :password => account.db_password,
         :database => name

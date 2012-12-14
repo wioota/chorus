@@ -113,6 +113,10 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
+  def connect_as(user)
+    connect_with(gpdb_instance.account_for_user!(user))
+  end
+
   def connect_with(account)
     GreenplumConnection::SchemaConnection.new(
         :host => gpdb_instance.host,
