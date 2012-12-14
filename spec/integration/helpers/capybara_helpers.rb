@@ -54,18 +54,4 @@ module CapybaraHelpers
     element.set(path)
   end
 
-  def click_link(locator)
-    page.click_link(locator)
-  rescue Capybara::Ambiguous
-    first(:xpath, ".//a[descendant-or-self::node()='#{locator}']").click
-  rescue Capybara::Ambiguous
-    find(locator).click
-  end
-
-  def wait_for_ajax(timeout = 30)
-    wait_until(timeout) do
-      sleep 0.2
-      page.evaluate_script 'jQuery.active == 0'
-    end
-  end
 end

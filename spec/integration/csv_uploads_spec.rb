@@ -10,17 +10,13 @@ describe "CSV Uploads", :database_integration do
 
   it "uploads a csv file into a new table" do
     login(users(:admin))
-    wait_for_ajax
     visit("#/workspaces/#{workspace.id}/datasets")
-    wait_for_ajax
     click_button "Import File"
     csv_file = File.join(File.dirname(__FILE__), '../fixtures/test.csv')
     attach_file("csv[contents]", csv_file)
     click_button "Upload File"
     click_button "Import Data"
-    wait_for_ajax(30)
-    click_link "test"
-    wait_for_ajax
+    find("a.name:contains('test')").click
     within ".dataset_sidebar" do
       first("li", :text => "Information").click()
       csv_length = File.read(csv_file).split("\n").length - 1

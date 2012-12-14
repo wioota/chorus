@@ -9,16 +9,14 @@ describe "Notes" do
     it "contains the note" do
       instance = gpdb_instances(:default)
       visit("#/instances")
-      wait_for_ajax
       within ".gpdb_instance ul" do
-        find("li:contains('#{instance.name}')").click
+        find("li", :text => instance.name).click
       end
       click_link "Add a note"
 
       within_modal do
         set_cleditor_value("body", "Note on the instance")
         click_button "Add Note"
-        wait_for_ajax
       end
 
       instance.events.last.body.should == "Note on the instance"
@@ -29,13 +27,11 @@ describe "Notes" do
     it "creates the note" do
       workspace = workspaces(:public_with_no_collaborators)
       visit("#/workspaces/#{workspace.id}")
-      wait_for_ajax
       click_link "Add a note"
 
       within_modal do
         set_cleditor_value("body", "Note on the workspace")
         click_button "Add Note"
-        wait_for_ajax
       end
       workspace.events.last.body.should == "Note on the workspace"
     end
@@ -46,17 +42,14 @@ describe "Notes" do
     it "creates the note" do
       hadoop_instance = hadoop_instances(:hadoop)
       visit("#/instances")
-      wait_for_ajax
       within ".hadoop_instance ul" do
-        find("li:contains('#{hadoop_instance.name}')").click
+        find("li", :text => hadoop_instance.name).click
       end
-      wait_for_ajax
       click_link "Add a note"
 
       within_modal do
         set_cleditor_value("body", "Note on the hadoop instance")
         click_button "Add Note"
-        wait_for_ajax
       end
 
       hadoop_instance.events.last.body.should == "Note on the hadoop instance"
@@ -69,15 +62,13 @@ describe "Notes" do
       workspace = workfile.workspace
       visit("#/workspaces/#{workspace.id}/workfiles")
       within ".workfile_list" do
-        find("li:contains('#{workfile.file_name}')").click
+        find("li", :text => workfile.file_name).click
       end
-      wait_for_ajax
       click_link "Add a note"
 
       within_modal do
         set_cleditor_value("body", "Note on a workfile")
         click_button "Add Note"
-        wait_for_ajax
       end
 
       workfile.events.last.body.should == "Note on a workfile"

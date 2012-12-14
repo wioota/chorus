@@ -8,7 +8,6 @@ describe "Workspaces" do
   describe "Create workspaces" do
     it "creates a private workspace" do
       visit('#/workspaces')
-      wait_for_ajax
       click_button "Create Workspace"
       within_modal do
         fill_in 'name', :with => "New Workspace"
@@ -24,14 +23,13 @@ describe "Workspaces" do
 
     it "creates a public workspace" do
       visit('#/workspaces')
-      wait_for_ajax
       click_button "Create Workspace"
       within_modal do
         fill_in 'name', :with => "New Workspace"
         click_button "Create Workspace"
       end
       click_link "Dismiss the workspace quick start guide"
-      wait_for_ajax
+      page.should have_content('All Activity')
       Workspace.find_by_name("New Workspace").should_not be_nil
     end
   end
@@ -41,16 +39,13 @@ describe "Workspaces" do
 
     it "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")
-      wait_for_ajax
       click_link "Delete this Workspace"
       page.should have_selector(".submit")
       find(".submit").click
-      wait_for_ajax
 
       visit('/#/workspaces')
-      wait_for_ajax
-      click_link "Active Workspaces"
-      click_link "All Workspaces"
+      find('a', :text => "Active Workspaces", :visible => true).click
+      find('a', :text => "All Workspaces", :visible => true).click
       within ".workspace_list" do
         page.should_not have_link(workspace_url(workspace))
       end

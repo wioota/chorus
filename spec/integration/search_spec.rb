@@ -15,7 +15,6 @@ describe "Search" do
     login(users(:owner))
     fill_in 'search_text', :with => 'searchquery'
     find('.chorus_search_container>input').native.send_keys(:return)
-    wait_for_ajax
   end
 
   describe "global search" do
@@ -34,11 +33,12 @@ describe "Search" do
 
   shared_examples "model specific search" do
     it "searches for only one model" do
-      click_link 'All Results'
+      find('a', :text => "All Results", :visible => true).click
       within ".link_menu.type .menu" do
         click_link model_link
       end
-      wait_for_ajax
+      puts "checking for Show #{model_link}"
+      page.should have_content("Show #{model_link}")
       current_route.should == "search/all/#{model_type}/searchquery"
       within "div.main_content" do
         find("ul.#{model_type}_list").should have_content(found_model_text)

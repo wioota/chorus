@@ -8,7 +8,6 @@ describe "Chorus Views", :database_integration do
 
     it "creates a new chorus view" do
       login(users(:admin))
-      wait_for_ajax
       visit("#/workspaces/#{workspace.id}/datasets/#{dataset.id}")
       page.should have_button("Derive a Chorus View")
       click_button "Derive a Chorus View"
@@ -17,7 +16,6 @@ describe "Chorus Views", :database_integration do
         click_button "Create Chorus View"
         fill_in 'objectName', :with => "New_Chorus_View"
         click_button "Create Chorus View"
-        wait_for_ajax
       end
       workspace.chorus_views.find_by_name("New_Chorus_View").should_not be_nil
     end

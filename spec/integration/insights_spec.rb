@@ -3,7 +3,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Insights" do
    it "clicks on the insights link on the home page" do
     login(users(:owner))
-    wait_for_ajax
     click_link "Insights"
     find(".title h1").should have_content("Insights")
   end
@@ -11,14 +10,13 @@ describe "Insights" do
   it "creates an insight" do
     login(users(:owner))
     within ".dashboard_workspace_list.list" do
-      click_link workspaces(:public).name
+      find("a", :text => /^#{workspaces(:public).name}$/).click()
     end
-    wait_for_ajax
     click_link "Add an insight"
 
-    within_modal(30) do
+    within_modal do
       set_cleditor_value("body", "This is adding an Insight")
-      click_on "Add Insight"
+      click_button "Add Insight"
     end
   end
 end

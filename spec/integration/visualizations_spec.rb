@@ -12,15 +12,10 @@ describe "Visualizations", :database_integration do
   before do
     login(users(:admin))
     visit("#/instances")
-    wait_for_ajax(15)
-    click_link instance.name
-    wait_for_ajax(15)
-    click_link database.name
-    wait_for_ajax(15)
-    click_link schema.name
-    wait_for_ajax(15)
-    click_link table.name
-    wait_for_ajax(15)
+    find("a", :text => /^#{instance.name}$/).click
+    find("a", :text => /^#{database.name}$/).click
+    find("a", :text => /^#{schema.name}$/).click
+    find("a", :text => /^#{table.name}$/).click
     click_button "Visualize"
   end
 
@@ -29,7 +24,6 @@ describe "Visualizations", :database_integration do
       find(".chart_icon.#{chart_type}").click
       configure_chart
       click_button "Create Chart"
-      wait_for_ajax
 
       within_modal do
         page.should have_content "Visualization: #{table.name}"
@@ -37,12 +31,12 @@ describe "Visualizations", :database_integration do
         page.should have_content "Results Console"
         click_link "Hide Data Table"
         click_button "Save As..."
+        find(:xpath, "//a[contains(., 'Desktop Image')]").click
+        #find('a', :text => "Desktop Image").click
+        # We would like to make an assertion about the content-type header or response code,
+        # but Selenium does not support this. Add assertion if we move to different driver.
+        click_button "Close"
       end
-
-      find('a[data-menu-name="save_to_desktop"]').click
-      # We would like to make an assertion about the content-type header or response code,
-      # but Selenium does not support this. Add assertion if we move to different driver.
-      within_modal { click_button "Close" }
     end
   end
 

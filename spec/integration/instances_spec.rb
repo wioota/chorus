@@ -5,9 +5,7 @@ describe "Instances", :database_integration do
     before do
       login(users(:admin))
       visit("#/instances")
-      wait_for_ajax
       click_button "Add Data Source"
-      wait_for_ajax
     end
 
     def select_and_do_within(class_name)
@@ -64,9 +62,7 @@ describe "Instances", :database_integration do
       visit "#/hadoop_instances/#{hadoop_instance.to_param}/browse"
       sleep 1000
       click_link 'big_file'
-      wait_for_ajax
       click_link 'Create as an external table'
-      wait_for_ajax
       within_modal do
         fill_in 'tableName', :with => 'new_external_table'
         click_button 'Create External Table'
