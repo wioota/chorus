@@ -64,9 +64,8 @@ describe GreenplumConnection::Base, :database_integration do
   end
 
   describe GreenplumConnection::DatabaseConnection do
+    let(:instance) { GreenplumConnection::DatabaseConnection.new(details) }
     describe "#schemas" do
-      let(:instance) { GreenplumConnection::DatabaseConnection.new(details) }
-
       let(:schema_list_sql) do
         <<-SQL
       SELECT
@@ -85,6 +84,23 @@ describe GreenplumConnection::Base, :database_integration do
         db = Sequel.connect(db_url)
         instance.schemas.should == db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] }
         instance.should_not be_connected
+        db.disconnect
+      end
+    end
+
+    describe "#create_schema" do
+      let(:new_schema_name) { "foobarbaz" }
+
+      after do
+        db = Sequel.connect(db_url)
+        db.drop_schema(new_schema_name, :if_exists => true)
+        db.disconnect
+      end
+
+      it "should adds a schema" do
+        expect {
+          instance.create_schema("foobarbaz")
+        }.to change { instance.schemas }
       end
     end
   end
@@ -111,6 +127,7 @@ describe GreenplumConnection::Base, :database_integration do
         db = Sequel.connect(db_url)
         instance.databases.should == db.fetch(database_list_sql).all.collect { |row| row[:datname] }
         instance.should_not be_connected
+        db.disconnect
       end
     end
   end

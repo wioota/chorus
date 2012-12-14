@@ -1,7 +1,8 @@
 require 'sequel'
 
 module GreenplumConnection
-  class InstanceUnreachable < StandardError; end
+  class InstanceUnreachable < StandardError;
+  end
 
   class Base
     def initialize(details)
@@ -34,6 +35,13 @@ module GreenplumConnection
 
     private
 
+    def with_connection
+      connect!
+      yield
+    ensure
+      disconnect
+    end
+
     def db_url
       query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => 3)
       "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
@@ -42,10 +50,11 @@ module GreenplumConnection
 
   class DatabaseConnection < Base
     def schemas
-      connect!
-      @connection.fetch(SCHEMAS_SQL).map { |row| row[:schema_name] }
-    ensure
-      disconnect
+      with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:schema_name] } }
+    end
+
+    def create_schema(name)
+      with_connection { @connection.create_schema(name) }
     end
 
     private
@@ -64,10 +73,7 @@ module GreenplumConnection
 
   class InstanceConnection < Base
     def databases
-      connect!
-      @connection.fetch(DATABASES_SQL).map { |row| row[:database_name] }
-    ensure
-      disconnect
+      with_connection { @connection.fetch(DATABASES_SQL).map { |row| row[:database_name] } }
     end
 
     private

@@ -198,22 +198,10 @@ describe GpdbDatabase do
       let(:database) { gpdb_databases(:default) }
       let(:user) { users(:owner) }
 
-      before do
-        stub(Gpdb::ConnectionBuilder).connect!.with_any_args { raise ActiveRecord::JDBCError.new('quack') }
-      end
-
-      it "raises an error" do
-        expect {
-          database.create_schema("test_schema", user)
-        }.to raise_error(ActiveRecord::JDBCError) { |exception|
-          exception.message.should match("quack")
-        }
-      end
-
       it "does not create a local database" do
         expect {
           database.create_schema("my_new_schema", user)
-        }.to raise_error(ActiveRecord::JDBCError)
+        }.to raise_error(GreenplumConnection::InstanceUnreachable)
         database.schemas.find_by_name("my_new_schema").should be_nil
       end
     end

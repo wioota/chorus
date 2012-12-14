@@ -58,7 +58,7 @@ class GpdbDatabase < ActiveRecord::Base
 
   def create_schema(name, current_user)
     raise ActiveRecord::StatementInvalid, "Schema '#{name}' already exists." unless schemas.where(:name => name).empty?
-    create_schema_in_gpdb(name, current_user)
+    connect_as(current_user).create_schema(name)
     GpdbSchema.refresh(account_for_user!(current_user), self)
     schemas.find_by_name!(name)
   end
@@ -69,6 +69,10 @@ class GpdbDatabase < ActiveRecord::Base
 
   def find_dataset_in_schema(dataset_name, schema_name)
     schemas.find_by_name(schema_name).datasets.find_by_name(dataset_name)
+  end
+
+  def connect_as(user)
+    connect_with(gpdb_instance.account_for_user!(user))
   end
 
   def connect_with(account)
@@ -84,13 +88,6 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   private
-
-  def create_schema_in_gpdb(name, current_user)
-    with_gpdb_connection(gpdb_instance.account_for_user!(current_user)) do |conn|
-      sql = "CREATE SCHEMA #{conn.quote_column_name(name)}"
-      conn.exec_query(sql)
-    end
-  end
 
   def mark_schemas_as_stale
     if stale? && stale_at_changed?
