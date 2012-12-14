@@ -69,5 +69,5 @@ RSpec.configure do |config|
   config.include InstanceIntegration
   config.include CapybaraHelpers
 
-  Capybara.default_wait_time = 5
+  Capybara.default_wait_time = 10
 end
