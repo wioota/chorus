@@ -6,11 +6,7 @@ class DatabaseObjectMigrator < AbstractMigrator
     end
 
     def classes_to_validate
-      [
-          Dataset,
-          GpdbSchema,
-          GpdbDatabase
-      ]
+      [ Dataset ] # schema and db names could contain non-alphanumeric in 2.1
     end
 
     def normalize_key(str)
@@ -96,8 +92,10 @@ class DatabaseObjectMigrator < AbstractMigrator
         dataset_name = ids[4]
 
         gpdb_instance = GpdbInstance.find_by_legacy_id!(legacy_instance_id)
-        database = gpdb_instance.databases.find_or_create_by_name(database_name)
-        schema = database.schemas.find_or_create_by_name(schema_name)
+        database = gpdb_instance.databases.find_or_initialize_by_name(database_name)
+        database.save(:validate => false)
+        schema = database.schemas.find_or_initialize_by_name(schema_name)
+        schema.save(:validate => false)
         dataset = legacy_dataset_type == 'VIEW' ? GpdbView.new : GpdbTable.new
         dataset.schema = schema
         dataset.name = dataset_name
@@ -131,8 +129,10 @@ class DatabaseObjectMigrator < AbstractMigrator
 
       schema_rows.each do |row|
         gpdb_instance = GpdbInstance.find_by_legacy_id!(row['instance_id'])
-        database = gpdb_instance.databases.find_or_create_by_name(row['database_name'])
-        database.schemas.find_or_create_by_name(row['schema_name'])
+        database = gpdb_instance.databases.find_or_initialize_by_name(row['database_name'])
+        database.save(:validate => false)
+        schema = database.schemas.find_or_initialize_by_name(row['schema_name'])
+        schema.save(:validate => false)
       end
 
       Sunspot.session = Sunspot.session.original_session
