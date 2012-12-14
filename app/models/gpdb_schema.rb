@@ -1,13 +1,6 @@
 class GpdbSchema < ActiveRecord::Base
   include Stale
 
-  SCHEMA_DISK_SPACE_QUERY = <<-SQL
-    SELECT sum(pg_total_relation_size(pg_catalog.pg_class.oid))::bigint AS size
-    FROM   pg_catalog.pg_class
-    LEFT JOIN pg_catalog.pg_namespace ON relnamespace = pg_catalog.pg_namespace.oid
-    WHERE  pg_catalog.pg_namespace.nspname = %s
-  SQL
-
   attr_accessible :name
   has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
   belongs_to :database, :class_name => 'GpdbDatabase'
@@ -104,13 +97,7 @@ class GpdbSchema < ActiveRecord::Base
   end
 
   def disk_space_used(account)
-    if @disk_space_used.nil?
-      results = database.with_gpdb_connection(account) do |conn|
-        conn.exec_query(SCHEMA_DISK_SPACE_QUERY % [conn.quote(name)])
-      end
-
-      @disk_space_used = results.first['size']
-    end
+    @disk_space_used ||= connect_with(account).disk_space_used
     @disk_space_used == :error ? nil : @disk_space_used
   rescue Exception
     @disk_space_used = :error

@@ -17,7 +17,7 @@ module GreenplumConnection
     end
 
     def connect!
-      @connection = Sequel.connect(db_url)
+      @connection = Sequel.connect db_url
 
       begin
         @connection.test_connection
@@ -93,10 +93,18 @@ module GreenplumConnection
 
   class SchemaConnection < Base
     def functions
-      with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => @settings[:schema]).all }
+      with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
+    end
+
+    def disk_space_used
+      with_connection { @connection.fetch(SCHEMA_DISK_SPACE_QUERY, :schema => schema_name).single_value }
     end
 
     private
+
+    def schema_name
+      @settings[:schema]
+    end
 
     SCHEMA_FUNCTIONS_SQL = <<-SQL
       SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
@@ -114,6 +122,13 @@ module GreenplumConnection
       ON t1.inputtype = t2.oid
       LEFT JOIN pg_description AS d ON t1.oid = d.objoid
       ORDER BY t1.oid;
+    SQL
+
+    SCHEMA_DISK_SPACE_QUERY = <<-SQL
+      SELECT sum(pg_total_relation_size(pg_catalog.pg_class.oid))::bigint AS size
+      FROM   pg_catalog.pg_class
+      LEFT JOIN pg_catalog.pg_namespace ON relnamespace = pg_catalog.pg_namespace.oid
+      WHERE  pg_catalog.pg_namespace.nspname = :schema
     SQL
   end
 end

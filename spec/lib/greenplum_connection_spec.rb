@@ -27,6 +27,17 @@ describe GreenplumConnection::Base, :database_integration do
 
   let(:instance) { GreenplumConnection::Base.new(details) }
 
+  shared_examples "a well behaved database query" do
+    let(:db) { Sequel.connect(db_url) }
+
+    it "should match" do
+      instance.should_not be_connected
+      subject.should == expected
+      instance.should_not be_connected
+      db.disconnect
+    end
+  end
+
   describe "#connect!" do
     before do
       mock.proxy(Sequel).connect(db_url)
@@ -82,14 +93,10 @@ describe GreenplumConnection::Base, :database_integration do
       ORDER BY lower(schemas.nspname)
         SQL
       end
+      let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] } }
+      let(:subject) { instance.schemas }
 
-      it "returns a list of all the schema names in the connected database" do
-        instance.should_not be_connected
-        db = Sequel.connect(db_url)
-        instance.schemas.should == db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] }
-        instance.should_not be_connected
-        db.disconnect
-      end
+      it_should_behave_like "a well behaved database query"
     end
 
     describe "#create_schema" do
@@ -126,19 +133,15 @@ describe GreenplumConnection::Base, :database_integration do
         SQL
       end
 
-      it "returns a list of all the database names in the connected instance" do
-        instance.should_not be_connected
-        db = Sequel.connect(db_url)
-        instance.databases.should == db.fetch(database_list_sql).all.collect { |row| row[:datname] }
-        instance.should_not be_connected
-        db.disconnect
-      end
+      let(:expected) { db.fetch(database_list_sql).all.collect { |row| row[:datname] } }
+      let(:subject) { instance.databases }
+
+      it_should_behave_like "a well behaved database query"
     end
   end
 
   describe GreenplumConnection::SchemaConnection do
     let(:instance) { GreenplumConnection::SchemaConnection.new(details.merge(:schema => schema_name)) }
-    let(:schema_name) { "test_schema" }
 
     describe "#functions" do
       let(:schema_functions_sql) do
@@ -160,14 +163,27 @@ describe GreenplumConnection::Base, :database_integration do
           ORDER BY t1.oid;
         SQL
       end
+      let(:schema_name) { "test_schema" }
+      let(:expected) { db.fetch(schema_functions_sql).all }
+      let(:subject) { instance.functions }
 
-      it "should return a list of functions in the schema" do
-        instance.should_not be_connected
-        db = Sequel.connect(db_url)
-        instance.functions.should == db.fetch(schema_functions_sql).all
-        instance.should_not be_connected
-        db.disconnect
+      it_should_behave_like "a well behaved database query"
+    end
+
+    describe "#disk_space_used" do
+      let(:disk_space_sql) do
+        <<-SQL
+          SELECT sum(pg_total_relation_size(pg_catalog.pg_class.oid))::bigint AS size
+          FROM   pg_catalog.pg_class
+          LEFT JOIN pg_catalog.pg_namespace ON relnamespace = pg_catalog.pg_namespace.oid
+          WHERE  pg_catalog.pg_namespace.nspname = '#{schema_name}'
+        SQL
       end
+      let(:schema_name) { 'test_schema3' }
+      let(:expected) { db.fetch(disk_space_sql).single_value }
+      let(:subject) { instance.disk_space_used }
+
+      it_should_behave_like "a well behaved database query"
     end
   end
 end
