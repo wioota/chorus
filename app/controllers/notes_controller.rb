@@ -5,15 +5,16 @@ class NotesController < ApplicationController
     note_params = params[:note]
     entity_type = note_params[:entity_type]
     entity_id = note_params[:entity_id]
-    authorize! :create, Events::Note, entity_type, entity_id
+    model = ModelMap.model_from_params(entity_type, entity_id)
+    raise ActiveRecord::RecordNotFound unless model
+
+    authorize! :create_note_on, model
     note_params[:body] = sanitize(note_params[:body])
 
-    note = Events::Note.create_from_params(note_params, current_user)
+    note = Events::Note.create_on_model(model, note_params, current_user)
 
-    if note_params[:recipients]
-      note_params[:recipients].each do |recipient_id|
-        Notification.create!(:recipient_id => recipient_id, :event_id => note.id)
-      end
+    (note_params[:recipients] || []).each do |recipient_id|
+      Notification.create!(:recipient_id => recipient_id, :event_id => note.id)
     end
 
     present note, :status => :created

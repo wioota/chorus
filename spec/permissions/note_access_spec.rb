@@ -105,32 +105,6 @@ describe Events::NoteAccess do
     end
   end
 
-  describe "#create?(params)" do
-    before do
-      stub(fake_controller).current_user { users(:the_collaborator) }
-    end
-
-    context "when there is an access class for the specified model" do
-      it "delegates to that access class's :create_note_on? method" do
-        workspace = workspaces(:public)
-        any_instance_of(WorkspaceAccess) do |workspace_access|
-          mock(workspace_access).create_note_on?(workspace) { "delegated_return_value" }
-        end
-        access.create?(Events::Note, "workspace", workspace.id).should == "delegated_return_value"
-      end
-    end
-
-    context "when there is no access class for the model" do
-      it "delegates to the default access for creating notes" do
-        user = users(:owner)
-        any_instance_of(DefaultAccess) do |workspace_access|
-          mock(workspace_access).create_note_on?(user) { "delegated_return_value" }
-        end
-        access.create?(Events::Note, "user", user.id).should == "delegated_return_value"
-      end
-    end
-  end
-
   describe "classes for individual note types" do
     it "has a class for each type of note" do
       Events::NoteOnWorkspaceAccess.new(fake_controller).should be_a Events::NoteAccess
