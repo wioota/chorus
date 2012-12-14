@@ -6,7 +6,7 @@ module Gpdb
   class InstanceUnreachable < StandardError; end
 
   mattr_accessor :gpdb_login_timeout
-  self.gpdb_login_timeout = 3
+  self.gpdb_login_timeout = 10
 
   module ConnectionBuilder
     def self.connect!(gpdb_instance, account, database_name=nil)

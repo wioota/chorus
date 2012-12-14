@@ -4,7 +4,14 @@ module GreenplumConnection
   class InstanceUnreachable < StandardError;
   end
 
+  @@gpdb_login_timeout = 10
+
+  def self.gpdb_login_timeout
+    @@gpdb_login_timeout
+  end
+
   class Base
+
     def initialize(details)
       @settings = details
     end
@@ -43,7 +50,7 @@ module GreenplumConnection
     end
 
     def db_url
-      query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => 3)
+      query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
       "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
     end
   end

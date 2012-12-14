@@ -9,7 +9,7 @@ describe GreenplumConnection::Base, :database_integration do
   let(:the_host) { InstanceIntegration.real_gpdb_hostname }
   let(:port) { InstanceIntegration::INSTANCE_CONFIG['port'] }
   let(:db_url) {
-    query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => 3)
+    query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params
   }
 
