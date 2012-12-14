@@ -187,6 +187,16 @@ CREATE SCHEMA test_schema;
           '1999-01-08 04:05:06-08'
        );
 
+  CREATE FUNCTION funky_town(i integer) RETURNS text
+    AS $$ SELECT CAST($1 AS text) || ' is text' $$
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+  COMMENT ON FUNCTION funky_town(integer) IS 'comment on funky_town';
+
+  CREATE FUNCTION towny_funk(i integer, out foo integer, out bar text)
+    AS $$ SELECT $1, CAST($1 AS text) || ' is text' $$
+    LANGUAGE SQL;
 
 CREATE SCHEMA test_schema2;
   SET search_path TO 'test_schema2';

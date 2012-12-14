@@ -44,7 +44,7 @@ describe GpdbSchema do
     before(:each) do
       stub(Dataset).refresh
 
-      stub(connection).schemas { ["new_schema",schema.name] }
+      stub(connection).schemas { ["new_schema", schema.name] }
     end
 
     it "creates new copies of the schemas in our db" do
@@ -169,17 +169,18 @@ describe GpdbSchema do
 
   describe "#stored_functions" do
     let(:schema) { gpdb_schemas(:public) }
-    let(:database) { schema.database }
-    let(:account) { database.gpdb_instance.owner_account }
+    let(:account) { schema.database.gpdb_instance.owner_account }
+    let(:connection) { Object.new }
 
     before do
-      stub_gpdb(account,
-                GpdbSchema::SCHEMA_FUNCTION_QUERY % schema.name => [
-                    {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => '{"", num2}', "arg_types" => "int4", "prosrc" => "SELECT 'HI!'", "description" => "awesome!"},
-                    {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => '{"", num2}', "arg_types" => "int4", "prosrc" => "SELECT 'HI!'", "description" => "awesome!"},
-                    {"oid" => "1091844", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => nil, "arg_types" => "text", "prosrc" => "SELECT admin_password", "description" => "HAHA"},
-                ]
-      )
+      stub(schema).connect_with(account) { connection }
+      stub(connection).functions do
+        [
+            {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => '{"", num2}', "arg_types" => "int4", "prosrc" => "SELECT 'HI!'", "description" => "awesome!"},
+            {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => '{"", num2}', "arg_types" => "int4", "prosrc" => "SELECT 'HI!'", "description" => "awesome!"},
+            {"oid" => "1091844", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => nil, "arg_types" => "text", "prosrc" => "SELECT admin_password", "description" => "HAHA"},
+        ]
+      end
     end
 
     it "returns the GpdbSchemaFunctions" do
@@ -241,6 +242,23 @@ describe GpdbSchema do
           dataset.stale_at.should be_within(5.seconds).of(Time.current)
         end
       end
+    end
+  end
+
+  describe "#connect_with" do
+    let(:schema) { gpdb_schemas(:public) }
+    let(:account) { instance_accounts(:unauthorized) }
+
+    it "should create a Greenplum SchemaConnection" do
+      mock(GreenplumConnection::SchemaConnection).new({
+          :host => schema.gpdb_instance.host,
+          :port => schema.gpdb_instance.port,
+          :username => account.db_username,
+          :password => account.db_password,
+          :database => schema.database.name,
+          :schema => schema.name
+                                                      })
+      schema.connect_with(account)
     end
   end
 

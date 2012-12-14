@@ -1,33 +1,5 @@
 class GpdbSchema < ActiveRecord::Base
   include Stale
-  SCHEMAS_SQL = <<-SQL
-  SELECT
-    schemas.nspname as schema_name
-  FROM
-    pg_namespace schemas
-  WHERE
-    schemas.nspname NOT LIKE 'pg_%'
-    AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
-  ORDER BY lower(schemas.nspname)
-  SQL
-
-  SCHEMA_FUNCTION_QUERY = <<-SQL
-      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
-        FROM ( SELECT p.oid,p.proname,
-           CASE WHEN p.proargtypes='' THEN NULL
-               ELSE unnest(p.proargtypes)
-               END as inputtype,
-           now() AS inputtypeid, p.proargnames, p.prosrc, l.lanname, t.typname AS rettype
-         FROM pg_proc p, pg_namespace n, pg_type t, pg_language l
-         WHERE p.pronamespace=n.oid
-           AND p.prolang=l.oid
-           AND p.prorettype = t.oid
-           AND n.nspname= '%s') AS t1
-      LEFT JOIN pg_type AS t2
-      ON t1.inputtype=t2.oid
-      LEFT JOIN pg_description AS d ON t1.oid=d.objoid
-      ORDER BY t1.oid;
-  SQL
 
   SCHEMA_DISK_SPACE_QUERY = <<-SQL
     SELECT sum(pg_total_relation_size(pg_catalog.pg_class.oid))::bigint AS size
@@ -48,7 +20,6 @@ class GpdbSchema < ActiveRecord::Base
             :uniqueness => { :scope => :database_id },
             :format => /^[a-zA-Z][a-zA-Z0-9_-]*$/
 
-  delegate :with_gpdb_connection, :to => :database
   delegate :gpdb_instance, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
@@ -104,11 +75,9 @@ class GpdbSchema < ActiveRecord::Base
   end
 
   def stored_functions(account)
-    results = database.with_gpdb_connection(account) do |conn|
-      conn.exec_query(SCHEMA_FUNCTION_QUERY % [name, name])
-    end
+    results = connect_with(account).functions
 
-    #This would be a lot easiser if the schema_function_query could use ARRAY_AGG,
+    #This would be a lot easier if the schema_function_query could use ARRAY_AGG,
     #but it is not available on GPDB 4.0
 
     reduced_results = results.reduce [-1, []] do |last, result|
@@ -118,7 +87,6 @@ class GpdbSchema < ActiveRecord::Base
       current_function = functions.last
       current_function_types = current_function[5] if current_function
       arg_type = record[5]
-
 
       if current_function and record[0] == last_record_id
         current_function_types << arg_type
@@ -156,6 +124,17 @@ class GpdbSchema < ActiveRecord::Base
       end
       yield conn
     end
+  end
+
+  def connect_with(account)
+    GreenplumConnection::SchemaConnection.new(
+        :host => gpdb_instance.host,
+        :port => gpdb_instance.port,
+        :username => account.db_username,
+        :password => account.db_password,
+        :database => database.name,
+        :schema => name
+    )
   end
 
   private

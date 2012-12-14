@@ -31,11 +31,6 @@ module GreenplumConnection
       @connection = nil
     end
 
-    METHODS = [:username, :password, :host, :port, :database]
-    METHODS.each do |meth|
-      define_method(meth) { @settings[meth.to_sym] }
-    end
-
     def connected?
       !!@connection
     end
@@ -93,6 +88,32 @@ module GreenplumConnection
       WHERE
         datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
         ORDER BY lower(datname) ASC
+    SQL
+  end
+
+  class SchemaConnection < Base
+    def functions
+      with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => @settings[:schema]).all }
+    end
+
+    private
+
+    SCHEMA_FUNCTIONS_SQL = <<-SQL
+      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
+        FROM ( SELECT p.oid,p.proname,
+           CASE WHEN p.proargtypes = '' THEN NULL
+               ELSE unnest(p.proargtypes)
+               END as inputtype,
+           now() AS inputtypeid, p.proargnames, p.prosrc, l.lanname, t.typname AS rettype
+         FROM pg_proc p, pg_namespace n, pg_type t, pg_language l
+         WHERE p.pronamespace = n.oid
+           AND p.prolang = l.oid
+           AND p.prorettype = t.oid
+           AND n.nspname = :schema) AS t1
+      LEFT JOIN pg_type AS t2
+      ON t1.inputtype = t2.oid
+      LEFT JOIN pg_description AS d ON t1.oid = d.objoid
+      ORDER BY t1.oid;
     SQL
   end
 end
