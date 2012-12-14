@@ -37,6 +37,16 @@ describe TaggingsController do
       end
     end
 
+    context 'when tags are more than 100 characters' do
+      let(:tag_names) { ["a" * 101] }
+
+      it 'raise a validation error' do
+        post :create, params
+        response.should_not be_success
+        decoded_errors.fields.base.should have_key :TOO_LONG
+      end
+    end
+
     describe 'when tags differ only in case' do
       let(:params) { { :entity_id => workfile.id, :entity_type => 'workfile', :tag_names => ['AlphaNotInFixtures', 'alphaNotInFixtures'] } }
 
