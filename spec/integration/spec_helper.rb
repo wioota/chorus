@@ -1,10 +1,10 @@
 ENV["RAILS_ENV"] = 'integration'
 ENV["LOG_LEVEL"] = '3'
+
 require File.expand_path("../../../config/environment", __FILE__)
 
 require 'rspec/rails'
 require 'capybara/rspec'
-require 'capybara-screenshot/rspec'
 require 'headless'
 require 'yaml'
 require 'timeout'
@@ -13,7 +13,6 @@ require 'factory_girl'
 
 headless = Headless.new
 headless.start
-
 
 Capybara.app = Rails.application
 Capybara.default_driver = :selenium
@@ -71,3 +70,7 @@ RSpec.configure do |config|
 
   Capybara.default_wait_time = 10
 end
+
+# capybara-screenshot must be included after the rspec after hook calling Capybara.reset_sessions! (see above)
+# because rspec runs the hooks in reversed order and cannot take a screenshot after resetting the session
+require 'capybara-screenshot/rspec'
