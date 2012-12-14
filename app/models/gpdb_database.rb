@@ -57,7 +57,9 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def create_schema(name, current_user)
-    raise ActiveRecord::StatementInvalid, "Schema '#{name}' already exists." unless schemas.where(:name => name).empty?
+    new_schema = schemas.build(:name => name)
+    raise ActiveRecord::RecordInvalid.new(new_schema) if new_schema.invalid?
+
     connect_as(current_user).create_schema(name)
     GpdbSchema.refresh(account_for_user!(current_user), self)
     schemas.find_by_name!(name)

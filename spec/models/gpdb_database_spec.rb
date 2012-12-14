@@ -162,6 +162,7 @@ describe GpdbDatabase do
 
       after do
         exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
+        exec_on_gpdb('DROP SCHEMA IF EXISTS "invalid!"')
       end
 
       it "creates the schema" do
@@ -178,14 +179,17 @@ describe GpdbDatabase do
         end
       end
 
-      it "raises an error if a schema with the same name already exists" do
+      it 'raises an error if a schema with the same name already exists' do
         expect {
           database.create_schema(database.schemas.last.name, account.owner)
-        }.to raise_error(ActiveRecord::StatementInvalid) { |exception|
-          exception.message.should match("already exists")
-        }
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
+      it 'raises an error if the schema name is invalid' do
+        expect {
+          database.create_schema('invalid!', account.owner)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
       def exec_on_gpdb(sql)
         Gpdb::ConnectionBuilder.connect!(instance, account, database.name) do |connection|
           result = connection.exec_query(sql)

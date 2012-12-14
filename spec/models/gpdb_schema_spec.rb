@@ -98,7 +98,7 @@ describe GpdbSchema do
     end
 
     it "clears stale flag on schema if it is found again" do
-      schema.update_attributes({:stale_at => Time.current}, :without_protection => true)
+      schema.mark_stale!
       GpdbSchema.refresh(account, database)
       schema.reload.should_not be_stale
     end

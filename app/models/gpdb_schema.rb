@@ -1,5 +1,15 @@
 class GpdbSchema < ActiveRecord::Base
   include Stale
+  SCHEMAS_SQL = <<-SQL
+  SELECT
+    schemas.nspname as schema_name
+  FROM
+    pg_namespace schemas
+  WHERE
+    schemas.nspname NOT LIKE 'pg_%'
+    AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
+  ORDER BY lower(schemas.nspname)
+  SQL
 
   SCHEMA_FUNCTION_QUERY = <<-SQL
       SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
@@ -26,11 +36,17 @@ class GpdbSchema < ActiveRecord::Base
     WHERE  pg_catalog.pg_namespace.nspname = %s
   SQL
 
+  attr_accessible :name
   has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+
+  validates :name,
+            :presence => true,
+            :uniqueness => { :scope => :database_id },
+            :format => /^[a-zA-Z][a-zA-Z0-9_-]*$/
 
   delegate :with_gpdb_connection, :to => :database
   delegate :gpdb_instance, :account_for_user!, :to => :database
@@ -42,19 +58,17 @@ class GpdbSchema < ActiveRecord::Base
 
     database.connect_with(account).schemas.each do |name|
       begin
-        schema = database.schemas.find_or_initialize_by_name(name)
-        found_schemas << schema
-        schema_new = schema.new_record?
-        if schema_new
-          schema.save!
-        else
-          schema.update_attributes!({:stale_at => nil}, :without_protection => true)
-        end
-        Dataset.refresh(account, schema, options) if options[:refresh_all]
-
+      schema = database.schemas.find_or_initialize_by_name(name)
+      next if schema.invalid?
+      schema.stale_at = nil
+      schema.save!
+      Dataset.refresh(account, schema, options) if options[:refresh_all]
+      found_schemas << schema
       rescue ActiveRecord::StatementInvalid => e
+        Chorus.log_error "Could not refresh schema #{row['schema_name']}: #{e.message} on #{e.backtrace[0]}"
       end
     end
+
     found_schemas
   rescue ActiveRecord::JDBCError, ActiveRecord::StatementInvalid => e
     Chorus.log_error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
