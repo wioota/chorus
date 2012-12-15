@@ -57,13 +57,13 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:id/sandbox", :database_integration do
-    parameter :id, "Id of a workspace"
+  post "/workspaces/:workspace_id/sandbox", :database_integration do
+    parameter :workspace_id, "Id of a workspace"
     parameter :instance_id, "Id of an instance to create new database in"
     parameter :database_name, "Name of a new database"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id, :database_name, :schema_name, :id
+    required_parameters :instance_id, :database_name, :schema_name, :workspace_id
 
     let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
     let(:database_name) { "a_new_database_name" }
@@ -81,13 +81,13 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:id/sandbox", :database_integration do
-    parameter :id, "Id of a workspace"
+  post "/workspaces/:workspace_id/sandbox", :database_integration do
+    parameter :workspace_id, "Id of a workspace"
     parameter :instance_id, "Id of the instance to create a schema in"
     parameter :database_id, "Id of the database to create a schema in"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id, :database_id, :schema_name, :id
+    required_parameters :instance_id, :database_id, :schema_name, :workspace_id
 
     let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
     let(:database) { InstanceIntegration.real_database }
@@ -105,11 +105,11 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:id/sandbox" do
-    parameter :id, "Id of a workspace"
+  post "/workspaces/:workspace_id/sandbox" do
+    parameter :workspace_id, "Id of a workspace"
     parameter :schema_id, "Id of the schema to add as a sandbox"
 
-    required_parameters :schema_id, :id
+    required_parameters :schema_id, :workspace_id
 
     example_request "Add a sandbox schema that already exists" do
       status.should == 201

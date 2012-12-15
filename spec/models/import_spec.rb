@@ -9,7 +9,7 @@ describe Import, :database_integration => true do
   let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
 
   before do
-    workspace.update_attributes :sandbox_id => schema.id
+    workspace.update_attribute :sandbox_id, schema.id
   end
 
   describe "associations" do
