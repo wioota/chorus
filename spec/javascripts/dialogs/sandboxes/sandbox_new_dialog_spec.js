@@ -53,124 +53,84 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        it("sets the summary to empty string when it's null", function() {
-            this.dialog.workspace.set({summary: null});
-            spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
-                instance: "4",
-                database: "5",
-                schema: "6"
-            });
-            this.dialog.instanceMode.trigger("change", "6");
-            this.dialog.$(".modal_controls button.submit").click();
-            expect(this.server.lastUpdate().params()["workspace[summary]"]).toBe("");
-        });
-
-        it("retains the summary", function() {
-            this.dialog.workspace.set({summary: "test"});
-            spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
-                instance: "4",
-                database: "5",
-                schema: "6"
-            });
-            this.dialog.instanceMode.trigger("change", "6");
-            this.dialog.$(".modal_controls button.submit").click();
-            expect(this.server.lastUpdate().params()["workspace[summary]"]).toBe("test");
-        });
-
         context("with a instance id, database id, and schema id", function() {
-            context("with a schemaName, instanceId, databaseName in the model", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, 'closeModal');
+                spyOn(this.dialog.instanceMode, 'schemaId').andReturn("6");
+                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                    instance: "4",
+                    database: "5",
+                    schema: "6"
+                });
+
+                this.dialog.instanceMode.trigger("change", "6");
+                this.dialog.$("button.submit").click();
+            });
+
+            it("posts to the sandbox endpoint with the correct params", function() {
+                expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
+                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBe('6');
+                expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
+                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
+            });
+
+            it("doesn't yet display a toast", function() {
+                expect(chorus.toast).not.toHaveBeenCalled();
+            });
+
+            it("changes the button text to 'Adding...'", function() {
+                expect(this.dialog.$(".modal_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
+            });
+
+            it("sets the button to a loading state", function() {
+                expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeTruthy();
+            });
+
+            it("saves the workspace with the new sandbox id", function() {
+                expect(this.server.lastCreate().url).toBe("/workspaces/45/sandbox");
+                expect(this.server.lastCreate().params()["sandbox[schema_id]"]).toBe('6');
+            });
+
+            describe("when save fails", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog, 'closeModal');
-                    spyOn(this.dialog.instanceMode, 'schemaId').andReturn("6");
-                    this.dialog.workspace.set({
-                        schemaName: "test_schema",
-                        databaseName: "test_database",
-                        instanceId: 1,
-                        databaseId: 2
-                    })
-                    this.dialog.instanceMode.trigger("change", "6");
-                    this.dialog.$(".modal_controls button.submit").click();
+                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
 
-                it("unsets the instanceId, schemaName, databaseName and databaseId on the sandbox", function() {
-                    expect(this.dialog.workspace.get("schemaName")).toBeUndefined();
-                    expect(this.dialog.workspace.get("databaseName")).toBeUndefined();
-                    expect(this.dialog.workspace.get("databaseId")).toBeUndefined();
-                    expect(this.dialog.workspace.get("instanceId")).toBeUndefined();
-                    expect(this.dialog.workspace.get("summary")).toBeDefined();
+                it("takes the button out of the loading state", function() {
+                    expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
                 });
 
-            })
+                it("displays the error message", function() {
+                    expect(this.dialog.$(".errors")).toContainText("A can't be blank");
+                });
+            });
 
-            context("without a schemaName, instanceId, databaseName in the model", function() {
+            describe("when the model is saved successfully", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog, 'closeModal');
-                    spyOn(this.dialog.instanceMode, 'schemaId').andReturn("6");
-                    this.dialog.instanceMode.trigger("change", "6");
-                    this.dialog.$(".modal_controls button.submit").click();
+                    spyOnEvent(this.dialog.workspace, 'invalidated');
+                    spyOn(this.dialog.workspace, 'fetch');
+                    this.dialog.model.trigger("saved");
                 });
 
-                it("doesn't yet display a toast", function() {
-                    expect(chorus.toast).not.toHaveBeenCalled();
-                });
-
-                it("changes the button text to 'Adding...'", function() {
-                    expect(this.dialog.$(".modal_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
-                });
-
-                it("sets the button to a loading state", function() {
-                    expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeTruthy();
-                });
-
-                it("saves the workspace with the new sandbox id", function() {
-                    expect(this.server.lastUpdate().params()["workspace[sandbox_id]"]).toBe("6");
-                });
-
-                it("sets the instance, schema and database on the sandbox", function() {
-                    expect(this.dialog.workspace.get("sandboxId")).toBe('6');
-                });
-
-                describe("when save fails", function() {
-                    beforeEach(function() {
-                        this.server.lastUpdateFor(this.dialog.workspace).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
-                    });
-
-                    it("takes the button out of the loading state", function() {
-                        expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
-                    });
-
-                    it("displays the error message", function() {
-                        expect(this.dialog.$(".errors")).toContainText("A can't be blank");
+                context("when the 'noReload' option is set", function() {
+                    it("does not reload the page", function() {
+                        chorus.router.reload.reset();
+                        this.dialog.options.noReload = true;
+                        this.sandbox.trigger("saved");
+                        expect(chorus.router.reload).not.toHaveBeenCalled();
                     });
                 });
 
-                describe("when the model is saved successfully", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.dialog.workspace, 'invalidated');
-                        spyOn(this.dialog.workspace, 'fetch');
-                        this.dialog.workspace.trigger("saved");
-                    });
-
-                    context("when the 'noReload' option is set", function() {
-                        it("does not reload the page", function() {
-                            chorus.router.reload.reset();
-                            this.dialog.options.noReload = true;
-                            this.sandbox.trigger("saved");
-                            expect(chorus.router.reload).not.toHaveBeenCalled();
-                        });
-                    });
-
-                    context("when the 'noReload' option is falsy", function() {
-                        it("reloads the page", function() {
-                            expect(chorus.router.reload).toHaveBeenCalled();
-                        });
-                    });
-
-                    it("shows a toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
+                context("when the 'noReload' option is falsy", function() {
+                    it("reloads the page", function() {
+                        expect(chorus.router.reload).toHaveBeenCalled();
                     });
                 });
-            })
+
+                it("shows a toast message", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
+                });
+            });
 
         });
 
@@ -186,16 +146,20 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("should set schema name on the model", function() {
-                expect(this.dialog.workspace.get("schemaName")).toBe("new_schema");
+            it("sets schema name on the sandbox", function() {
+                expect(this.dialog.model.get("schemaName")).toBe("new_schema");
             });
 
-            it("saves the workspace with the new sandbox id", function() {
-                expect(this.server.lastUpdate().params()["workspace[schema_name]"]).toBe("new_schema");
+            it("saves the workspace with the new sandbox name", function() {
+                expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
+                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
+                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
+                expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
+                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
             });
         });
 
-        context("with a database name and schema name", function() {
+        context("with an instance id, database name and schema name", function() {
             beforeEach(function() {
                 spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                     instance: "4",
@@ -207,16 +171,18 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("should set the database name and schema name on the model", function() {
-                expect(this.dialog.workspace.get("databaseName")).toBe("new_database");
-                expect(this.dialog.workspace.get("schemaName")).toBe("new_schema");
-                expect(this.dialog.workspace.get("instanceId")).toBe("4");
+            it("sets the database name and schema name on the schema", function() {
+                expect(this.dialog.model.get("databaseName")).toBe("new_database");
+                expect(this.dialog.model.get("schemaName")).toBe("new_schema");
+                expect(this.dialog.model.get("instanceId")).toBe("4");
             });
 
-            it("saves the workspace with the new sandbox id", function() {
-                expect(this.server.lastUpdate().params()["workspace[schema_name]"]).toBe("new_schema");
-                expect(this.server.lastUpdate().params()["workspace[database_name]"]).toBe("new_database");
-                expect(this.server.lastUpdate().params()["workspace[instance_id]"]).toBe("4");
+            it("saves the workspace with the new database and sandbox names", function() {
+                expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
+                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
+                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
+                expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
+                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
             });
         });
     });

@@ -19,16 +19,6 @@ describe("chorus.models.Workspace", function() {
             this.model.unset('name');
             expect(this.model.performValidation()).toBeFalsy();
         });
-
-        it('doesnt allow invalid database name', function() {
-            this.model.set('databaseName', 'invalid!');
-            expect(this.model.performValidation()).toBeFalsy();
-        });
-
-        it('doesnt allow invalid database name', function() {
-            this.model.set('schemaName', 'invalid!');
-            expect(this.model.performValidation()).toBeFalsy();
-        });
     });
 
     it("has the correct urlTemplate", function() {
@@ -63,7 +53,6 @@ describe("chorus.models.Workspace", function() {
             expect(this.datasets.attributes.database.id).toBe("123");
         });
     });
-
 
     describe("#isPublic", function() {
         it("return true when public: true", function() {

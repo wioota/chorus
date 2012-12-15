@@ -31,9 +31,9 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
         this.activeForm = this.instanceMode;
 
-        this.bindings.add(this.workspace, "saved", this.saved);
-        this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
-        this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     makeModel: function() {
@@ -49,30 +49,22 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
+
         var sandboxId  = this.activeForm.schemaId();
-        var summary = !!this.workspace.get("summary") ? this.workspace.get("summary") : ""; // Necessary because backend treats null as string "null"
-        this.workspace.set({ summary: summary }, {silent: true})
+        var schemaName = sandboxId ? undefined : this.activeForm.fieldValues().schemaName;
+        var databaseId = this.activeForm.fieldValues().database;
+        var databaseName = databaseId ? undefined : this.activeForm.fieldValues().databaseName;
+        var instanceId = this.activeForm.fieldValues().instance;
 
-        if(sandboxId) {
-            this.workspace.unset("schemaName",  {silent : true});
-            this.workspace.unset("databaseId",  {silent : true});
-            this.workspace.unset("databaseName",  {silent : true});
-            this.workspace.unset("instanceId",  {silent : true});
-            this.workspace.set({ sandboxId: sandboxId }, {silent : true});
-            this.workspace.save();
-        } else {
-            // Create new schema / database
-            var schemaName = this.activeForm.fieldValues().schemaName;
-            var databaseName = this.activeForm.fieldValues().databaseName;
-            var instanceId = this.activeForm.fieldValues().instance;
-            var databaseId = this.activeForm.fieldValues().database;
-            this.workspace.set({schemaName: schemaName,
-                                databaseId: databaseId,
-                                databaseName: databaseName,
-                                instanceId: instanceId}, {silent : true});
-            this.workspace.save();
-        }
+        this.model.set({
+            schemaId: sandboxId,
+            schemaName: schemaName,
+            databaseId: databaseId,
+            databaseName: databaseName,
+            instanceId: instanceId
+        });
 
+        this.model.save();
     },
 
     saved: function() {
@@ -87,7 +79,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
-        this.showErrors(this.workspace);
+        this.showErrors(this.model);
     },
 
     enableOrDisableSaveButton: function(schemaVal) {

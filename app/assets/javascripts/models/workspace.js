@@ -93,8 +93,6 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     declareValidations:function (newAttrs) {
         this.require("name", newAttrs);
-        this.requirePattern("databaseName", chorus.ValidationRegexes.PostgresIdentifier(), newAttrs, 'workspace.sandbox.validation.databaseName', true);
-        this.requirePattern("schemaName", chorus.ValidationRegexes.PostgresIdentifier(), newAttrs, 'workspace.sandbox.validation.schemaName', true);
     },
 
     archiver:function () {

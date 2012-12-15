@@ -44,7 +44,6 @@ resource "Workspaces" do
     parameter :id, "Id of a workspace"
     parameter :name, "Name of workspace"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
-    parameter :sandbox_id, "Id of the schema to be used as the workspace's sandbox"
     parameter :summary, "Notes about the workspace"
 
     required_parameters :id
@@ -58,7 +57,7 @@ resource "Workspaces" do
     end
   end
 
-  put "/workspaces/:id", :database_integration do
+  post "/workspaces/:id/sandbox", :database_integration do
     parameter :id, "Id of a workspace"
     parameter :instance_id, "Id of an instance to create new database in"
     parameter :database_name, "Name of a new database"
@@ -78,11 +77,11 @@ resource "Workspaces" do
     end
 
     example_request "Add a sandbox by creating a new schema in a new database" do
-      status.should == 200
+      status.should == 201
     end
   end
 
-  put "/workspaces/:id", :database_integration do
+  post "/workspaces/:id/sandbox", :database_integration do
     parameter :id, "Id of a workspace"
     parameter :instance_id, "Id of the instance to create a schema in"
     parameter :database_id, "Id of the database to create a schema in"
@@ -102,18 +101,18 @@ resource "Workspaces" do
     end
 
     example_request "Add a sandbox by creating a new schema in an existing database" do
-      status.should == 200
+      status.should == 201
     end
   end
 
-  put "/workspaces/:id" do
+  post "/workspaces/:id/sandbox" do
     parameter :id, "Id of a workspace"
-    parameter :sandbox_id, "Id of the schema to add as a sandbox"
+    parameter :schema_id, "Id of the schema to add as a sandbox"
 
-    required_parameters :sandbox_id, :id
+    required_parameters :schema_id, :id
 
     example_request "Add a sandbox schema that already exists" do
-      status.should == 200
+      status.should == 201
     end
   end
 

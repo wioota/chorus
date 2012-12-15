@@ -2,7 +2,7 @@ class Workspace < ActiveRecord::Base
   include SoftDelete
 
   attr_accessor :archived
-  attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings
+  attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
