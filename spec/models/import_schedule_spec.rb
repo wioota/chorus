@@ -10,7 +10,7 @@ describe ImportSchedule, :database_integration => true do
   let(:workspace) { workspaces(:public) }
 
   before do
-    workspace.update_attributes :sandbox_id => schema.id
+    workspace.update_attribute :sandbox_id, schema.id
     import_schedule.user = user
     import_schedule.workspace = workspace
   end
