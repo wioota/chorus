@@ -59,7 +59,7 @@ describe GpdbInstance do
 
       after do
         exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
-        exec_on_gpdb('DROP DATABASE IF EXISTS "invalid!!name"')
+        exec_on_gpdb('DROP DATABASE IF EXISTS "invalid/"')
       end
 
       it "creates the database" do
@@ -80,7 +80,7 @@ describe GpdbInstance do
 
       it 'raises an error if the database name is invalid' do
         expect {
-          gpdb_instance.create_database('invalid!!name', account.owner)
+          gpdb_instance.create_database('invalid/', account.owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 

@@ -11,7 +11,7 @@ class GpdbSchema < ActiveRecord::Base
   validates :name,
             :presence => true,
             :uniqueness => { :scope => :database_id },
-            :format => /^[a-zA-Z][a-zA-Z0-9_-]*$/
+            :format => /^[^\/?&]*$/
 
   delegate :gpdb_instance, :account_for_user!, :to => :database
 

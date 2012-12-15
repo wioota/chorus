@@ -115,8 +115,6 @@ class GpdbInstance < ActiveRecord::Base
     end
   end
 
-
-
   def create_database(name, current_user)
     new_db = databases.build(:name => name)
     raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?

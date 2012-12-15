@@ -9,9 +9,11 @@ describe GpdbDatabase do
     it { should validate_presence_of(:name) }
 
     it 'does not allow strange characters in the name' do
-      new_database = FactoryGirl.build(:gpdb_database, :name => "database/name")
-      new_database.should_not be_valid
-      new_database.should have_error_on(:name)
+      ['/', '&', '?'].each do |char|
+        new_database = FactoryGirl.build(:gpdb_database, :name =>"schema#{char}name")
+        new_database.should_not be_valid
+        new_database.should have_error_on(:name)
+      end
     end
 
     describe 'name uniqueness' do
@@ -187,7 +189,7 @@ describe GpdbDatabase do
 
       it 'raises an error if the schema name is invalid' do
         expect {
-          database.create_schema('invalid!', account.owner)
+          database.create_schema('invalid/', account.owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
       def exec_on_gpdb(sql)

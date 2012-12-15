@@ -5,6 +5,44 @@ describe GpdbSchema do
     it { should belong_to(:database) }
     it { should have_many(:datasets) }
     it { should have_many(:workspaces) }
+
+    describe 'validations' do
+      it 'has a valid factory' do
+        FactoryGirl.build(:gpdb_schema).should be_valid
+      end
+
+      it { should validate_presence_of(:name) }
+
+      it 'does not allow slashes, ampersands and question marks' do
+        ['/', '&', '?'].each do |char|
+          new_schema = FactoryGirl.build(:gpdb_schema, :name => "schema#{char}name")
+          new_schema.should_not be_valid
+          new_schema.should have_error_on(:name)
+        end
+      end
+
+      describe 'name uniqueness' do
+        let(:existing) { gpdb_schemas(:default) }
+
+        context 'in the same db' do
+          it 'does not allow two databases with the same name' do
+            new_schema = FactoryGirl.build(:gpdb_schema,
+                                           :name => existing.name,
+                                           :database => existing.database)
+            new_schema.should_not be_valid
+            new_schema.should have_error_on(:name).with_message(:taken)
+          end
+        end
+
+        context 'in a different db' do
+          it 'allows same names' do
+            new_schema = FactoryGirl.build(:gpdb_schema,
+                                           :name => existing.name)
+            new_schema.should be_valid
+          end
+        end
+      end
+    end
   end
 
   describe '#accessible_to' do
