@@ -528,7 +528,7 @@ describe("chorus.views.SchemaPicker", function() {
         });
 
         describe("#schemaId", function() {
-            it("returns the selected schema id", function() {
+            beforeEach(function() {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                 $('#jasmine_content').append(this.view.el);
                 this.view.render();
@@ -538,8 +538,20 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view.$(".database select").val("5").change();
                 this.server.completeFetchAllFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                 this.view.$(".schema select").val("6").change();
+            });
 
+            it("returns the selected schema id", function() {
                 expect(this.view.schemaId()).toBe('6');
+            });
+
+            context("when you select a schema and then change your mind and choose 'new schema'", function() {
+                beforeEach(function() {
+                    this.view.$(".schema a.new").click();
+                });
+
+                it("returns undefined", function() {
+                    expect(this.view.schemaId()).toBeUndefined();
+                });
             });
         });
 
@@ -677,7 +689,7 @@ describe("chorus.views.SchemaPicker", function() {
                 expect(this.view.$('.' + type + ' .unavailable')).toHaveClass("hidden")
 
                 // Remove when adding "register a new instance" story
-                if (type != "instance") {
+                if(type != "instance") {
                     expect(this.view.$('.' + type + ' a')).not.toHaveClass("hidden")
                 }
             });
@@ -731,7 +743,7 @@ describe("chorus.views.SchemaPicker", function() {
         function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
             context("when the response is empty for " + type, function() {
                 beforeEach(function() {
-                    if (type == 'instance') {
+                    if(type == 'instance') {
                         this.server.completeFetchAllFor(this.view[type + 's'], []);
                     } else {
                         this.server.completeFetchFor(this.view[type + 's'], []);
@@ -753,7 +765,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         function itTriggersTheChangeEvent(expectedArg) {
             it("triggers the 'change' event on itself", function() {
-                if (expectedArg === undefined) {
+                if(expectedArg === undefined) {
                     expect("change").toHaveBeenTriggeredOn(this.view);
                 } else {
                     expect("change").toHaveBeenTriggeredOn(this.view, [expectedArg]);
@@ -764,7 +776,7 @@ describe("chorus.views.SchemaPicker", function() {
         function itSortsTheSelectOptionsAlphabetically(type) {
             it("sorts the select options alphabetically for " + type, function() {
 
-                if (type == "instance") {
+                if(type == "instance") {
                     this.server.completeFetchAllFor(this.view.instances, [
                         rspecFixtures.gpdbInstance({name: "Zoo"}),
                         rspecFixtures.gpdbInstance({name: "Aardvark"}),

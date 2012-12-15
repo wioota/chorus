@@ -7,29 +7,23 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     persistent: true,
 
     events: {
-        "click input[value='within_instance']": "showInstanceMode",
-        "click input[value='as_standalone']": "showStandaloneMode",
         "click button.submit": "save"
     },
 
     subviews: {
-        "form > .instance_mode": "instanceMode",
-        "form > .standalone_mode": "standaloneMode"
+        "form > .instance_mode": "schemaPicker"
     },
 
     setup: function() {
-        this.instanceMode = new chorus.views.SchemaPicker({allowCreate: true});
-        this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
-        this.bindings.add(this.instanceMode, "error", this.showErrors);
-        this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
+        this.schemaPicker = new chorus.views.SchemaPicker({allowCreate: true});
+        this.bindings.add(this.schemaPicker, "change", this.enableOrDisableSaveButton);
+        this.bindings.add(this.schemaPicker, "error", this.showErrors);
+        this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);
 
         this.workspace.fetch();
 
         this.requiredResources.add(this.workspace);
         this.requiredResources.add(chorus.models.Config.instance());
-
-        this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
-        this.activeForm = this.instanceMode;
 
         this.bindings.add(this.model, "saved", this.saved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
@@ -50,11 +44,11 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
 
-        var sandboxId  = this.activeForm.schemaId();
-        var schemaName = sandboxId ? undefined : this.activeForm.fieldValues().schemaName;
-        var databaseId = this.activeForm.fieldValues().database;
-        var databaseName = databaseId ? undefined : this.activeForm.fieldValues().databaseName;
-        var instanceId = this.activeForm.fieldValues().instance;
+        var sandboxId  = this.schemaPicker.schemaId();
+        var schemaName = sandboxId ? undefined : this.schemaPicker.fieldValues().schemaName;
+        var databaseId = this.schemaPicker.fieldValues().database;
+        var databaseName = databaseId ? undefined : this.schemaPicker.fieldValues().databaseName;
+        var instanceId = this.schemaPicker.fieldValues().instance;
 
         this.model.set({
             schemaId: sandboxId,
@@ -68,9 +62,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     },
 
     saved: function() {
-        if (this.activeForm != this.standaloneMode) {
-            chorus.toast("sandbox.create.toast");
-        }
+        chorus.toast("sandbox.create.toast");
         if (!this.options.noReload) {
             chorus.router.reload();
         }
@@ -84,21 +76,5 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     enableOrDisableSaveButton: function(schemaVal) {
         this.$("button.submit").prop("disabled", !schemaVal);
-    },
-
-    showInstanceMode: function() {
-        this.$(".instance_mode").removeClass("hidden");
-        this.$(".standalone_mode").addClass("hidden");
-
-        this.activeForm = this.instanceMode;
-        this.enableOrDisableSaveButton(this.instanceMode.ready())
-    },
-
-    showStandaloneMode: function() {
-        this.$(".instance_mode").addClass("hidden");
-        this.$(".standalone_mode").removeClass("hidden");
-
-        this.activeForm = this.standaloneMode;
-        this.enableOrDisableSaveButton(true);
     }
 });

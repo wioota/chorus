@@ -17,7 +17,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         beforeEach(function() {
             var modelWithError = rspecFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
-            this.dialog.instanceMode.trigger("error", modelWithError);
+            this.dialog.schemaPicker.trigger("error", modelWithError);
         });
 
         it("shows the error", function() {
@@ -26,7 +26,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         context("and then the schemaPicker triggers clearErrors", function() {
             it("clears the errors", function() {
-                this.dialog.instanceMode.trigger("clearErrors");
+                this.dialog.schemaPicker.trigger("clearErrors");
                 expect(this.dialog.$('.errors')).toBeEmpty();
             });
         })
@@ -40,12 +40,12 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         context("without schema selected yet", function() {
             beforeEach(function() {
-                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",
                     database: "5",
                     schemaName: ""
                 });
-                this.dialog.instanceMode.trigger("change", "");
+                this.dialog.schemaPicker.trigger("change", "");
             });
 
             it("disables the submit button", function() {
@@ -56,14 +56,14 @@ describe("chorus.dialogs.SandboxNew", function() {
         context("with a instance id, database id, and schema id", function() {
             beforeEach(function() {
                 spyOn(this.dialog, 'closeModal');
-                spyOn(this.dialog.instanceMode, 'schemaId').andReturn("6");
-                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                spyOn(this.dialog.schemaPicker, 'schemaId').andReturn("6");
+                spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",
                     database: "5",
                     schema: "6"
                 });
 
-                this.dialog.instanceMode.trigger("change", "6");
+                this.dialog.schemaPicker.trigger("change", "6");
                 this.dialog.$("button.submit").click();
             });
 
@@ -136,13 +136,13 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         context("with a instance id, database id, and schema name", function() {
             beforeEach(function() {
-                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",
                     database: "5",
                     schemaName: "new_schema"
                 });
 
-                this.dialog.instanceMode.trigger("change", "new_schema");
+                this.dialog.schemaPicker.trigger("change", "new_schema");
                 this.dialog.$("button.submit").click();
             });
 
@@ -161,13 +161,13 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         context("with an instance id, database name and schema name", function() {
             beforeEach(function() {
-                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",
                     databaseName: "new_database",
                     schemaName: "new_schema"
                 });
 
-                this.dialog.instanceMode.trigger("change", "new_schema");
+                this.dialog.schemaPicker.trigger("change", "new_schema");
                 this.dialog.$("button.submit").click();
             });
 
