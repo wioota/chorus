@@ -17,6 +17,7 @@ describe "CSV Uploads", :database_integration do
     click_button "Upload File"
     click_button "Import Data"
     find("a.name:contains('test')").click
+    page.should have_selector("h1", :text => "test")
     within ".dataset_sidebar" do
       first("li", :text => "Information").click()
       csv_length = File.read(csv_file).split("\n").length - 1

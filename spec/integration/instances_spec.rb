@@ -51,17 +51,19 @@ describe "Instances", :database_integration do
     let(:hadoop_instance) { hadoop_instances(:real) }
 
     before do
+      admin = users(:admin)
+      admin.owned_workspaces.create!({:name => "integration_with_sandbox", :sandbox => InstanceIntegration.real_database.schemas.first, :public => true}, :without_protection => true)
+
       any_instance_of(ExternalTable) do |table|
         stub(table).save { true }
       end
 
-      login(users(:admin))
+      login(admin)
     end
 
     xit 'creates an external table', :hdfs_integration => true do
       visit "#/hadoop_instances/#{hadoop_instance.to_param}/browse"
-      sleep 1000
-      click_link 'big_file'
+      click_link '2_lines.csv'
       click_link 'Create as an external table'
       within_modal do
         fill_in 'tableName', :with => 'new_external_table'

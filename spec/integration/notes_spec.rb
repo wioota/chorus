@@ -33,6 +33,7 @@ describe "Notes" do
         set_cleditor_value("body", "Note on the workspace")
         click_button "Add Note"
       end
+
       workspace.events.last.body.should == "Note on the workspace"
     end
   end
