@@ -27,24 +27,6 @@ module CapybaraHelpers
     URI.parse(current_url).fragment
   end
 
-  def wait_until(timeout = 30)
-    Timeout.timeout(timeout) do
-      loop do
-        begin
-          yield
-          break
-        rescue Timeout::Error
-          message = last_error.message if last_error
-          raise "CapybaraHelper timeout: Last Error was '#{message}'"
-        rescue => e
-          raise e unless e.class.name =~ /Capybara/
-          last_error = e
-          sleep 0.1
-        end
-      end
-    end
-  end
-
   def attach_file(locator, path)
     element = find(:file_field, locator)
     id = element['id']
@@ -53,5 +35,4 @@ module CapybaraHelpers
     page.execute_script("$('#{jquery_locator}').removeClass('file-input');")
     element.set(path)
   end
-
 end

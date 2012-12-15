@@ -11,7 +11,6 @@ module LoginHelpers
     click_button "Login"
 
     page.should have_content("Recent Activity")
-    wait_until { current_route == '' || page.all('.has_error').size > 0 || page.all('.errors li').size > 0 }
   end
 
   def logout
