@@ -58,9 +58,7 @@ class GnipImporter
   end
 
   def cleanup_table
-    workspace.sandbox.with_gpdb_connection(account) do |connection|
-      connection.exec_query("DROP TABLE IF EXISTS #{table_name}")
-    end
+    workspace.sandbox.connect_with(account).drop_table(table_name)
   end
 
   def create_success_event

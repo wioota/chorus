@@ -109,6 +109,11 @@ module GreenplumConnection
       with_connection { @connection.execute %Q{ANALYZE "#{schema_name}"."#{table_name}"} }
     end
 
+    def drop_table(table_name)
+      with_schema_connection { @connection.drop_table(table_name) }
+    rescue Sequel::DatabaseError
+    end
+
     private
 
     def schema_name

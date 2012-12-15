@@ -1,20 +1,27 @@
 require 'spec_helper'
 
 describe GnipImporter do
-  let(:gnip_import_created_event) { events(:gnip_stream_import_created) }
+  let(:user) { users(:owner) }
+  let(:workspace) { workspaces(:public) }
+  let(:instance) { gnip_instances(:default) }
+  let(:import_created_event) { events(:gnip_stream_import_created) }
+  let(:connection) { Object.new }
+
+  before do
+    # We need to stub the find method as unfortunately without this it doesn't
+    # return an object with our mocks on.
+    stub(Workspace).find(workspace.id) { workspace }
+    stub(workspace.sandbox).connect_with(anything) { connection }
+    stub(connection).drop_table(anything)
+  end
 
   describe "#import_to_table" do
-    let(:user) { users(:owner) }
     let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
-    let(:gnip_instance) { gnip_instances(:default) }
-    let(:workspace) { workspaces(:public) }
     let(:resource_urls) { ["url1"] }
     let(:raise_error_message) { "" }
 
     before do
-      mock(ChorusGnip).from_stream(gnip_instance.stream_url,
-                                   gnip_instance.username,
-                                   gnip_instance.password) do |c|
+      mock(ChorusGnip).from_stream(instance.stream_url, instance.username, instance.password) do |c|
         raise raise_error_message unless raise_error_message.blank?
         stub(c).to_result_in_batches(is_a(Array)) {
           gnip_csv_result_mock
@@ -22,19 +29,14 @@ describe GnipImporter do
         mock(c).fetch { resource_urls }
       end
 
-      stub_gpdb(workspace.sandbox.gpdb_instance.owner_account,
-                "DROP TABLE IF EXISTS foobar" => lambda {
-                  throw :dropped_table if @throw_on_dropped_table
-                  []
-                })
       stub(Dataset).refresh(anything, workspace.sandbox) do
         FactoryGirl.create(:gpdb_table, :name => "foobar", :schema => workspace.sandbox)
       end
     end
 
     def do_import
-      GnipImporter.import_to_table('foobar', gnip_instance.id,
-                                   workspace.id, user.id, gnip_import_created_event.id)
+      GnipImporter.import_to_table('foobar', instance.id,
+                                   workspace.id, user.id, import_created_event.id)
     end
 
     context "when the gnip stream is split into multiple csv files" do
@@ -65,12 +67,12 @@ describe GnipImporter do
         }.to change(Events::GnipStreamImportSuccess, :count).by(1)
 
         event = Events::GnipStreamImportSuccess.last
-        event.actor.should == gnip_import_created_event.actor
+        event.actor.should == import_created_event.actor
 
-        gnip_import_created_event.reload.dataset.should_not be_nil
+        import_created_event.reload.dataset.should_not be_nil
 
-        event.dataset.should == gnip_import_created_event.dataset
-        event.workspace.should == gnip_import_created_event.workspace
+        event.dataset.should == import_created_event.dataset
+        event.workspace.should == import_created_event.workspace
       end
 
       it "creates notification for actor on import success" do
@@ -78,7 +80,7 @@ describe GnipImporter do
           do_import
         }.to change(Notification, :count).by(1)
         notification = Notification.last
-        notification.recipient_id.should == gnip_import_created_event.actor.id
+        notification.recipient_id.should == import_created_event.actor.id
         notification.event_id.should == Events::GnipStreamImportSuccess.last.id
       end
     end
@@ -113,10 +115,10 @@ describe GnipImporter do
           }.to raise_error("mock exception from test")
         }.to change(Events::GnipStreamImportFailed, :count).by(1)
         event = Events::GnipStreamImportFailed.last
-        event.actor.should == gnip_import_created_event.actor
+        event.actor.should == import_created_event.actor
         event.destination_table.should == 'foobar'
         event.error_message.should == raise_error_message
-        event.workspace.should == gnip_import_created_event.workspace
+        event.workspace.should == import_created_event.workspace
       end
 
       it "creates notification for actor on import failure" do
@@ -126,7 +128,7 @@ describe GnipImporter do
           }.to raise_error("mock exception from test")
         }.to change(Notification, :count).by(1)
         notification = Notification.last
-        notification.recipient_id.should == gnip_import_created_event.actor.id
+        notification.recipient_id.should == import_created_event.actor.id
         notification.event_id.should == Events::GnipStreamImportFailed.last.id
       end
     end
@@ -149,7 +151,8 @@ describe GnipImporter do
       end
 
       it "drops the new table" do
-        @throw_on_dropped_table = true
+        stub(connection).drop_table(anything) { throw :dropped_table }
+
         expect {
           do_import
         }.to throw_symbol(:dropped_table)

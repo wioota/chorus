@@ -237,5 +237,38 @@ describe GreenplumConnection::Base, :database_integration do
         end
       end
     end
+
+    describe "#drop_table" do
+      context "if the table exists" do
+        let(:table_to_drop) { "hopefully_unused_table" }
+
+        around do |example|
+          db = Sequel.connect(db_url)
+          db.default_schema = schema_name
+          db.create_table(table_to_drop)
+
+          example.run
+
+          db.drop_table(table_to_drop, :if_exists => true)
+          db.disconnect
+        end
+
+        it "should drop a table" do
+          instance.table_exists?(table_to_drop).should == true
+          instance.drop_table(table_to_drop)
+          instance.table_exists?(table_to_drop).should == false
+        end
+      end
+
+      context "if the table does not exist" do
+        let(:table_to_drop) { "never_existed" }
+
+        it "should not raise an error" do
+          expect {
+            instance.drop_table(table_to_drop)
+          }.to_not raise_error
+        end
+      end
+    end
   end
 end
