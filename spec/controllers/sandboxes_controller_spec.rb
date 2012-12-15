@@ -30,8 +30,8 @@ describe SandboxesController do
       end
     end
 
-    context 'with an invalid schema' do
-      it 'fails' do
+    context 'with a schema that does not exist' do
+      it 'returns an error' do
         post :create, :workspace_id => workspace.id, :schema_id => -1
 
         response.code.should == '422'
