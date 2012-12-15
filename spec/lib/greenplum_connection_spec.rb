@@ -211,5 +211,31 @@ describe GreenplumConnection::Base, :database_integration do
         end
       end
     end
+
+    describe "#analyze_table" do
+      context "when the table exists" do
+        let(:table_name) { "table_to_analyze" }
+
+        before do
+          stub.proxy(Sequel).connect do |connection|
+            mock(connection).execute(%Q{ANALYZE "#{schema_name}"."#{table_name}"})
+          end
+        end
+
+        it "analyzes the table" do
+          instance.analyze_table(table_name)
+        end
+      end
+
+      context "when the table does not exist" do
+        let(:table_name) { "this_table_does_not_exist" }
+
+        it "throws an error to the layer above" do
+          expect do
+            instance.analyze_table(table_name)
+          end.to raise_error(Sequel::DatabaseError)
+        end
+      end
+    end
   end
 end

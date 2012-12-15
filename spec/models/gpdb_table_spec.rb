@@ -2,28 +2,28 @@ require "spec_helper"
 
 describe GpdbTable do
   let(:table) { datasets(:table) }
-  let(:account) { table.schema.database.gpdb_instance.owner_account }
+  let(:account) { table.gpdb_instance.owner_account }
+  let(:connection) { Object.new }
+
+  before do
+    stub(table.schema).connect_with(account) { connection }
+  end
 
   describe "#analyze" do
-    it "generates the correct sql" do
-      fake_connection = Object.new
-      mock(fake_connection).exec_query("analyze \"#{table.schema.name}\".\"#{table.name}\"")
-      stub(table.schema).with_gpdb_connection(account) { |_, block| block.call(fake_connection) }
-
+    it "calls out to the connection" do
+      mock(connection).analyze_table(table.name)
       table.analyze(account)
     end
 
     context "when an error happens" do
       before do
-        fake_connection = Object.new
-        mock(fake_connection).exec_query.with_any_args { raise sql_exception }
-        stub(table.schema).with_gpdb_connection(account) { |_, block| block.call(fake_connection) }
+        stub(connection).analyze_table(table.name) { raise sql_exception }
       end
 
-      context "when the dataset is stale" do
-        let(:sql_exception) { ActiveRecord::StatementInvalid.new('ActiveRecord::JDBCError: ERROR: relation "public.deleted1" does not exist: analyze "public"."deleted1"') }
+      context "when the dataset is does not exist" do
+        let(:sql_exception) { Sequel::DatabaseError.new('ERROR: relation "public.deleted1" does not exist: analyze "public"."deleted1"') }
 
-        it 'raises a ActiveRecord::JDBCError' do
+        it "raises a ActiveRecord::StatementInvalid" do
           expect {
             table.analyze(account)
           }.to raise_error(ActiveRecord::StatementInvalid, 'Dataset ("public.deleted1") does not exist anymore')

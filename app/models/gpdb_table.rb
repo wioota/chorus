@@ -6,18 +6,13 @@ class GpdbTable < Dataset
   after_update :update_counter_cache
 
   def analyze(account)
-    table_name = '"' + schema.name + '"."'  + name + '"';
-    query_string = "analyze #{table_name}"
-    schema.with_gpdb_connection(account) do |conn|
-      conn.exec_query(query_string)
-    end
-    []
-  rescue ActiveRecord::ActiveRecordError => e
+    schema.connect_with(account).analyze_table(name)
+  rescue Sequel::DatabaseError => e
     if e.message =~ /relation (.*) does not exist/
       relation_name = $1
       raise ActiveRecord::StatementInvalid.new("Dataset (#{relation_name}) does not exist anymore")
     else
-      raise
+      raise ActiveRecord::ActiveRecordError.new(e.message)
     end
   end
 end

@@ -105,6 +105,10 @@ module GreenplumConnection
       with_schema_connection { @connection.table_exists?(table_name) }
     end
 
+    def analyze_table(table_name)
+      with_connection { @connection.execute %Q{ANALYZE "#{schema_name}"."#{table_name}"} }
+    end
+
     private
 
     def schema_name
