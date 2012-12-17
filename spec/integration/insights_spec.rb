@@ -12,6 +12,8 @@ describe "Insights" do
     within ".dashboard_workspace_list.list" do
       find("a", :text => /^#{workspaces(:public).name}$/).click()
     end
+
+    page.should have_no_selector(".loading_section")
     click_link "Add an insight"
 
     within_modal do

@@ -4,7 +4,7 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
     submitButton: t("insight.button.create"),
 
     events: {
-        "click button.submit": "save",
+        "click button.submit": "save"
     },
 
     makeModel:function () {

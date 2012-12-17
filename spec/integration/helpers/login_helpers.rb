@@ -10,6 +10,7 @@ module LoginHelpers
     fill_in 'password', :with => password
     click_button "Login"
 
+    page.should have_no_selector(".loading_section")
     page.should have_content("Recent Activity")
   end
 
