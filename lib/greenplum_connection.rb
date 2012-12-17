@@ -110,8 +110,7 @@ module GreenplumConnection
     end
 
     def drop_table(table_name)
-      with_schema_connection { @connection.drop_table(table_name) }
-    rescue Sequel::DatabaseError
+      with_schema_connection { @connection.drop_table(table_name, :if_exists => true) }
     end
 
     private
