@@ -1,0 +1,14 @@
+<table>
+<tr>
+  <% Import.columns.each do |column| %>
+    <th><%= column.name %></th>
+  <% end %>
+</tr>
+<% @imports.each do |import| %>
+<tr>
+  <% import.attributes.values.each do |value| %>
+    <td><%= value %></td>
+  <% end %>
+</tr>
+<% end %>
+</table>
