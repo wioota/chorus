@@ -134,6 +134,11 @@ Chorus::Application.routes.draw do
 
   resource :status, :only => [:show], :controller => 'status'
 
+  namespace :import_console do
+    match '/' =>  'imports#index'
+    resources :imports, :only => :index
+  end
+
   post 'download_chart', :controller => 'image_downloads'
 
   post 'download_data', :controller => 'data_downloads'

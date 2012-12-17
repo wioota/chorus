@@ -472,6 +472,12 @@ FixtureBuilder.configure do |fbuilder|
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
       fbuilder.name :real, real_workspace
+
+      forever_chorus_view = FactoryGirl.create(:chorus_view,
+                                               :name => "forever_chorus_view",
+                                               :schema => test_schema,
+                                               :query => "select 1 from test_schema.#{test_schema.active_tables_and_views.first.name} cross join pg_sleep(60)",
+                                               :workspace => real_workspace)
     end
 
     if ENV['HADOOP_HOST']
