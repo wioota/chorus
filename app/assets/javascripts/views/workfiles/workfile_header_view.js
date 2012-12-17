@@ -2,19 +2,24 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
     templateName: "workfile_header",
     constructorName: "WorkfileHeaderView",
     events: {
-        "click .save_tags": "saveTags"
+        "click .save_tags": "saveTags",
+        "click .edit_tags": "editTags"
     },
 
     postRender: function() {
         var textarea = this.$('textarea');
+        var tagNames = this.model.get("tagNames");
         this.textext = textarea.textext({
             plugins: 'tags prompt focus autocomplete',
-            tagsItems: this.model.get("tagNames"),
+            tagsItems: tagNames,
             prompt: t('tags.prompt')
         });
 
         textarea.bind('isTagAllowed', _.bind(this.validateTag, this));
         textarea.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+
+        this.textext_elem = this.$('.text-core');
+        if(!tagNames || !tagNames.length) this.textext_elem.addClass("hidden");
     },
 
     validateTag: function(e, data) {
@@ -36,7 +41,8 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            iconUrl: this.model.iconUrl()
+            iconUrl: this.model.iconUrl(),
+            hasTags: (this.model.get("tagNames") && this.model.get("tagNames").length)
         };
     },
 
@@ -50,5 +56,26 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
             entity_type: 'workfile',
             tag_names: tagNames
         });
+
+        this.$(".save_tags").toggleClass("hidden");
+        this.$(".edit_tags").toggleClass("hidden");
+        if(this.model.get("tagNames") && this.model.get("tagNames").length){}
+        else {
+            this.textext_elem.toggleClass("hidden");
+        }
+        this.$("textarea").prop("disabled","true");
+        this.$("textarea").addClass("borderless");
+    },
+
+    editTags: function(e){
+        e.preventDefault();
+        if(this.model.get("tagNames") && this.model.get("tagNames").length){}
+        else {
+            this.textext_elem.toggleClass("hidden");
+        }
+        this.$(".save_tags").toggleClass("hidden");
+        this.$(".edit_tags").toggleClass("hidden");
+        this.$("textarea").removeAttr("disabled");
+        this.$("textarea").removeClass("borderless");
     }
 });

@@ -1,5 +1,11 @@
 <img src="{{iconUrl}}" class="icon"/>
 <h1 title="{{fileName}}">{{fileName}}</h1>
-<textarea id="tag_editor" class='tag_editor'></textarea>
-<!--<a href="#" class='edit_tags'>{{t "tags.add_tags"}}</a>-->
-<a href="#" class='save_tags'>{{t "tags.save_tags"}}</a>
+<textarea id="tag_editor" class='tag_editor borderless' disabled="true"></textarea>
+<a href="#" class='edit_tags'>
+    {{#if hasTags}}
+        {{t "tags.edit_tags"}}
+    {{else}}
+        {{t "tags.add_tags"}}
+    {{/if}}
+</a>
+<a href="#" class='save_tags hidden'>{{t "tags.save_tags"}}</a>

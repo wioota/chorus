@@ -1,33 +1,87 @@
 describe("chorus.views.WorkfileHeader", function() {
+    var view, model;
+    
     beforeEach(function() {
-        this.view = new chorus.views.WorkfileHeader();
-        this.model = rspecFixtures.workfile.sql({
-            id: this.workfileId,
-            workspace: {id: this.workspaceId},
-            tagNames: ['alpha', 'beta', 'gamma']
+        view = new chorus.views.WorkfileHeader();
+        model = rspecFixtures.workfile.sql({
+            tagNames: []
         });
-        this.view.model = this.model;
-        this.view.render();
+        view.model = model;
     });
-
-    describe("render", function() {
-        it('shows the tag names', function() {
-           expect($(this.view.el)).toContainText("alpha");
-           expect($(this.view.el)).toContainText("beta");
-           expect($(this.view.el)).toContainText("gamma");
-        });
-    });
-
-    describe("editing tags", function() {
-        var textarea;
+        
+    describe("#render", function() {
         beforeEach(function() {
-            textarea = this.view.$('textarea');
+            view.render();
         });
 
-        xit('shows the add tags link', function() {
-            expect(this.view.$('a')).toContainTranslation('tags.add_tags');
-            this.view.$('a.edit_tags').click();
-            expect(this.view.$('textarea')).toExist();
+        context("when there are no tags", function() {
+            it('shows the add tags link, textarea is hidden', function() {
+                expect(view.$('a')).toContainTranslation('tags.add_tags');
+                expect(view.$('.text-core')).toHaveClass("hidden");
+                expect(view.$(".save_tags")).toHaveClass("hidden");
+                expect(view.$("textarea")).toBeDisabled();
+            });
+        });
+
+        context("when there are already tags", function() {
+            beforeEach(function() {
+                model = rspecFixtures.workfile.sql({
+                    tagNames: ["alpha"]
+                });
+                view.model = model;
+                view.render();
+            });
+
+            it("should show the tags without border", function() {
+                expect(view.$('.text-core')).not.toHaveClass("hidden");
+                expect(view.$('.text-tag').eq(0).text()).toBe("alpha");
+                expect(view.$('textarea')).toHaveClass("borderless");
+                expect(view.$("textarea")).toBeDisabled();
+            });
+
+            it("only shows the edit tags link", function() {
+                expect(view.$(".save_tags")).toHaveClass("hidden");
+                expect(view.$(".edit_tags")).not.toHaveClass("hidden");
+                expect(view.$('a')).toContainTranslation('tags.edit_tags');
+            });
+        });
+
+    });
+
+    describe("when there are no tags", function() {
+        beforeEach(function() {
+            view.render();
+        });
+        context("clicking on add tags", function() {
+            it('shows the textarea' , function() {
+                expect(view.$('.save_tags')).toHaveClass("hidden");
+                expect(view.$('.edit_tags')).not.toHaveClass("hidden");
+                view.$('a.edit_tags').click();
+                expect(view.$('.text-core')).not.toHaveClass("hidden");
+                expect(view.$('.save_tags')).not.toHaveClass("hidden");
+                expect(view.$('.edit_tags')).toHaveClass("hidden");
+                expect(view.$("textarea")).not.toBeDisabled();
+                expect(view.$('textarea')).not.toHaveClass("borderless");
+            });
+        });
+    });
+
+    describe("adding tags", function() {
+        var textarea;
+
+        beforeEach(function() {
+            model = rspecFixtures.workfile.sql({
+                tagNames: ['alpha', 'beta', 'gamma']
+            });
+            view.model = model;
+            view.render();
+            textarea = view.$('textarea');
+        });
+
+        it('shows the tag names', function() {
+            expect($(view.el)).toContainText("alpha");
+            expect($(view.el)).toContainText("beta");
+            expect($(view.el)).toContainText("gamma");
         });
 
         function enterTag(tagName) {
@@ -39,7 +93,6 @@ describe("chorus.views.WorkfileHeader", function() {
             textarea.focus();
             textarea.trigger(enter);
             textarea.trigger(keyup);
-
         }
 
         describe("when a valid tag is entered", function() {
@@ -49,7 +102,7 @@ describe("chorus.views.WorkfileHeader", function() {
             });
 
             it("creates a new tag", function() {
-                expect(this.view.$(".text-tag").length).toBe(4);
+                expect(view.$(".text-tag").length).toBe(4);
             });
 
             it("removes the text from the textarea", function() {
@@ -65,7 +118,7 @@ describe("chorus.views.WorkfileHeader", function() {
             });
 
             it("does not create a new tag", function() {
-                expect(this.view.$(".text-tag").length).toBe(3);
+                expect(view.$(".text-tag").length).toBe(3);
             });
 
             it("does not remove the text from the textarea", function() {
@@ -85,27 +138,35 @@ describe("chorus.views.WorkfileHeader", function() {
 
         describe("when the done button is clicked", function() {
             beforeEach(function() {
-                this.view.$('input[type=hidden]').val('["alpha", "beta", "gamma"]');
-                this.view.$('a.save_tags').click();
+                view.$('a.edit_tags').click();
+                view.$('input[type=hidden]').val('["alpha", "beta", "gamma"]');
+                view.$('a.save_tags').click();
             });
 
-            xit("closes the text box", function() {
-                expect(this.view.$('textarea')).not.toExist();
+            it("closes the text box", function() {
+                expect(view.$('.save_tags')).toHaveClass("hidden");
+                expect(view.$('.edit_tags')).not.toHaveClass("hidden");
+                expect(view.$("textarea")).toBeDisabled();
+                expect(view.$("textarea")).toHaveClass("borderless");
             });
 
             it('saves the tags', function() {
                 var tagSave = this.server.lastCreate();
                 var requestBody = decodeURIComponent(tagSave.requestBody);
                 expect(tagSave.url).toBe('/taggings');
-                expect(requestBody).toContain("entity_id="+this.model.id);
+                expect(requestBody).toContain("entity_id="+model.id);
                 expect(requestBody).toContain("entity_type=workfile");
                 expect(requestBody).toContain("tag_names[]=alpha");
                 expect(requestBody).toContain("tag_names[]=beta");
                 expect(requestBody).toContain("tag_names[]=gamma");
             });
 
+            it('hides the x character on the tag', function() {
+
+            });
+
             xit("displays the new tags", function() {
-              expect(this.view.$('a')).toContainTranslation('tags.edit_tags');
+              expect(view.$('a')).toContainTranslation('tags.edit_tags');
             });
         })
     });
