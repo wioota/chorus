@@ -75,7 +75,8 @@ describe "Instances", :database_integration do
     end
 
     after do
-      Dataset.find_by_name('new_external_table').destroy
+      dataset = Dataset.find_by_name('new_external_table')
+      dataset.destroy if dataset
     end
   end
 end

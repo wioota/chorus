@@ -19,6 +19,8 @@ describe "CSV Uploads", :database_integration do
     find("a.name:contains('test')").click
     page_title_should_be("test")
     within ".dataset_sidebar" do
+      page.should have_no_selector(".loading_section")
+      page.should have_no_text("loading...")
       first("li", :text => "Information").click()
       csv_length = File.read(csv_file).split("\n").length - 1
       page.should have_content("Rows #{csv_length}")
