@@ -131,64 +131,67 @@ describe ChorusView do
     end
   end
 
-  describe "#convert_to_database_view", :database_integration => true do
+  describe "#convert_to_database_view" do
     let(:chorus_view) { datasets(:executable_chorus_view) }
     let(:schema) { chorus_view.schema }
-    let(:database) { InstanceIntegration.real_database }
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:database) { schema.database }
+    let(:gpdb_instance) { database.gpdb_instance }
     let(:account) { gpdb_instance.owner_account }
     let(:user) { account.owner }
+    let(:connection) { Object.new }
+    let(:view_name) { 'a_new_database_view' }
 
     before do
-      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
-        connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"henry\"")
-      end
+      stub(schema).connect_as(user) { connection }
+      stub(connection).view_exists?(anything) { false }
+      stub(connection).create_view(anything, anything)
     end
 
-    it "creates a database view" do
+    it 'creates a database view' do
       expect {
-        chorus_view.convert_to_database_view("henry", user)
+        chorus_view.convert_to_database_view(view_name, user)
       }.to change(GpdbView, :count).by(1)
-    end
 
-    it "sets the right query" do
-      chorus_view.convert_to_database_view("henry", user)
       GpdbView.last.query.should == chorus_view.query
-      GpdbView.last.name.should == "henry"
+      GpdbView.last.name.should == view_name
     end
 
-    it "creates the view in greenplum db" do
-      chorus_view.convert_to_database_view("henry", user)
-      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
-        connection.exec_query("SELECT viewname FROM pg_views WHERE viewname = 'henry'").should_not be_empty
-      end
+    it 'creates the view in greenplum db' do
+      mock(connection).create_view(view_name, chorus_view.query)
+
+      chorus_view.convert_to_database_view(view_name, user)
     end
 
-    it "doesn't create the view twice" do
-      chorus_view.convert_to_database_view("henry", user)
-      expect {
-        chorus_view.convert_to_database_view("henry", user)
-      }.to raise_error(Gpdb::ViewAlreadyExists)
-    end
-
-    it "throws an exception if it can't create the view" do
-      any_instance_of(::ActiveRecord::ConnectionAdapters::JdbcAdapter) do |conn|
-        stub(conn).exec_query { raise ActiveRecord::StatementInvalid }
-      end
+    it "raises if a view with the same name already exists" do
+      stub(connection).view_exists?(anything) { true }
 
       expect {
-        chorus_view.convert_to_database_view("henry", user)
-      }.to raise_error(Gpdb::CantCreateView)
+        chorus_view.convert_to_database_view(view_name, user)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    context "#check_duplicate_column" do
-      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 3;") }
+    it "raises if it cant create the view" do
+      stub(connection).create_view(view_name, anything) { raise GreenplumConnection::SchemaConnection::CannotCreateView }
 
-      it "should throws error when there's duplicate column names" do
-        expect {
-          chorus_view.check_duplicate_column(user)
-        }.to raise_error
-      end
+      expect {
+        chorus_view.convert_to_database_view(view_name, user)
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
+
+  describe '#check_duplicate_column' do
+    let(:user) { users(:admin) }
+    let(:chorus_view) { datasets(:executable_chorus_view) }
+
+    it 'raises with duplicate column names' do
+      chorus_view.update_attribute :query, 'select 1, 2, 3;'
+      expect {
+        chorus_view.check_duplicate_column(user)
+      }.to raise_error
+    end
+
+    it 'returns true when the column names are unique' do
+      chorus_view.check_duplicate_column(user).should be_true
     end
   end
 

@@ -98,6 +98,8 @@ module GreenplumConnection
   end
 
   class SchemaConnection < Base
+    class CannotCreateView < StandardError; end
+
     def functions
       with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
     end
@@ -106,9 +108,18 @@ module GreenplumConnection
       with_connection { @connection.fetch(SCHEMA_DISK_SPACE_QUERY, :schema => schema_name).single_value }
     end
 
+    def create_view(view_name, query)
+      with_schema_connection { @connection.create_view(view_name, query) }
+    rescue Sequel::DatabaseError => e
+      raise CannotCreateView, e.message
+    end
+
     def table_exists?(table_name)
-      return false if table_name.nil?
-      with_schema_connection { @connection.table_exists?(table_name) }
+      with_schema_connection { @connection.table_exists?(table_name.to_s) }
+    end
+
+    def view_exists?(view_name)
+      with_schema_connection { @connection.views.map(&:to_s).include? view_name }
     end
 
     def analyze_table(table_name)

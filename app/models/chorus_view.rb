@@ -1,11 +1,5 @@
 require 'dataset'
 
-class Gpdb::CantCreateView < Exception
-end
-
-class Gpdb::ViewAlreadyExists < Exception
-end
-
 class ChorusView < Dataset
   include SharedSearch
 
@@ -91,25 +85,22 @@ class ChorusView < Dataset
   end
 
   def convert_to_database_view(name, user)
-    account = account_for_user!(user)
-    with_gpdb_connection(account) do |conn|
-      begin
-        result = conn.exec_query("SELECT viewname FROM pg_views WHERE viewname = '#{name}'")
-        unless result.empty?
-          raise Gpdb::ViewAlreadyExists, "Database View #{name} already exists in schema"
-        end
-        conn.exec_query("CREATE VIEW \"#{schema.name}\".\"#{name}\" AS #{query}")
-      rescue ActiveRecord::StatementInvalid => e
-        raise Gpdb::CantCreateView , e.message
-      end
+    view = schema.datasets.views.build(:name => name)
+    view.query = query
+
+    if schema.connect_as(user).view_exists?(name)
+      view.errors.add(:name, :taken)
+      raise ActiveRecord::RecordInvalid.new(view)
     end
 
-    view = GpdbView.new
-    view.name = name
-    view.query = query
-    view.schema = schema
-    view.save!
-    view
+    begin
+      schema.connect_as(user).create_view(name, query)
+      view.save!
+      view
+    rescue GreenplumConnection::SchemaConnection::CannotCreateView => e
+      view.errors.add(:base, :generic, {:message => e.message})
+      raise ActiveRecord::RecordInvalid.new(view)
+    end
   end
 
   def add_metadata!(account)

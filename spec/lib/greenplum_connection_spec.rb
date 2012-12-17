@@ -136,7 +136,7 @@ describe GreenplumConnection::Base, :database_integration do
         db.disconnect
       end
 
-      it "should adds a schema" do
+      it "adds a schema" do
         expect {
           connection.create_schema("foobarbaz")
         }.to change { connection.schemas }
@@ -246,11 +246,36 @@ describe GreenplumConnection::Base, :database_integration do
       it_should_behave_like "a well behaved database query"
     end
 
+    describe '#create_view' do
+      context 'when a view with that name does not exist' do
+        before do
+          db = Sequel.connect(db_url)
+          db.default_schema = schema_name
+          db.drop_view('a_new_view') if connection.view_exists?('a_new_view')
+          db.disconnect
+        end
+
+        it 'creates a view' do
+          expect {
+            connection.create_view('a_new_view', 'select 1;')
+          }.to change { Sequel.connect(db_url).views }
+        end
+      end
+
+      context 'when a view with that name already exists' do
+        it 'raises an error' do
+          expect {
+            connection.create_view('view1', 'select 1;')
+          }.to raise_error(GreenplumConnection::SchemaConnection::CannotCreateView, /already exists/)
+        end
+      end
+    end
+
     describe "#table_exists?" do
       context "when the table exists" do
         let(:table_name) { "different_names_table" }
 
-        it "should return true" do
+        it "returns true" do
           connection.table_exists?(table_name).should == true
         end
       end
@@ -258,7 +283,7 @@ describe GreenplumConnection::Base, :database_integration do
       context "when the table doesn't exist" do
         let(:table_name) { "please_dont_exist" }
 
-        it "should return false" do
+        it "returns false" do
           connection.table_exists?(table_name).should == false
         end
       end
@@ -266,8 +291,34 @@ describe GreenplumConnection::Base, :database_integration do
       context "when the table name given is nil" do
         let(:table_name) { nil }
 
-        it "should return false" do
+        it "returns false" do
           connection.table_exists?(table_name).should == false
+        end
+      end
+    end
+
+    describe "#view_exists?" do
+      context "when the view exists" do
+        let(:view_name) { "view1" }
+
+        it "returns true" do
+          connection.view_exists?(view_name).should == true
+        end
+      end
+
+      context "when the view doesn't exist" do
+        let(:view_name) { "please_dont_exist" }
+
+        it "returns false" do
+          connection.view_exists?(view_name).should == false
+        end
+      end
+
+      context "when the table name given is nil" do
+        let(:view_name) { nil }
+
+        it "returns false" do
+          connection.view_exists?(view_name).should == false
         end
       end
     end

@@ -23,8 +23,6 @@ class ApplicationController < ActionController::Base
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'SqlPermissionDenied', :with => :render_resource_forbidden
-  rescue_from 'Gpdb::CantCreateView', :with => :render_query_error
-  rescue_from 'Gpdb::ViewAlreadyExists', :with => :render_query_error
   rescue_from 'ModelNotCreated', :with => :render_model_error
   rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
   rescue_from 'SunspotError', :with => :render_unprocessable_entity
