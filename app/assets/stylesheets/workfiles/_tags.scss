@@ -1,7 +1,33 @@
-.tag_editor {
-    width: 400px;
+.text-core {
+    width: 100% !important;
+    display: inline-block;
+    height: 20px;
+
+    margin-right: 30px;
+
+    .text-wrap {
+        width: 100% !important;
+
+        textarea.borderless {
+            border: none;
+        }
+
+        #tag_editor {
+            width: 100% !important;
+            line-height: 8px;
+        }
+
+        .text-tags .text-tag .text-button.disabled {
+            padding-right: 3px;
+            .text-remove {
+                display: none !important;
+            }
+        }
+    }
 }
 
-.text-core .text-wrap textarea.borderless {
-    border: none;
+.save_tags {
+    position: absolute;
+    right: 13px;
+    bottom: 14px;
 }

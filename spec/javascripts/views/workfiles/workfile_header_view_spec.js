@@ -39,6 +39,10 @@ describe("chorus.views.WorkfileHeader", function() {
                 expect(view.$("textarea")).toBeDisabled();
             });
 
+            it("should show tags without the x's", function() {
+                expect(view.$(".text-button:eq(0)")).toHaveClass("disabled");
+            });
+
             it("only shows the edit tags link", function() {
                 expect(view.$(".save_tags")).toHaveClass("hidden");
                 expect(view.$(".edit_tags")).not.toHaveClass("hidden");
@@ -66,8 +70,7 @@ describe("chorus.views.WorkfileHeader", function() {
         });
     });
 
-    describe("adding tags", function() {
-        var textarea;
+    describe("When there are some existing tags", function() {
 
         beforeEach(function() {
             model = rspecFixtures.workfile.sql({
@@ -75,7 +78,6 @@ describe("chorus.views.WorkfileHeader", function() {
             });
             view.model = model;
             view.render();
-            textarea = view.$('textarea');
         });
 
         it('shows the tag names', function() {
@@ -84,90 +86,107 @@ describe("chorus.views.WorkfileHeader", function() {
             expect($(view.el)).toContainText("gamma");
         });
 
-        function enterTag(tagName) {
-            var keyup = $.Event('keyup');
-            keyup.keyCode = $.ui.keyCode.ENTER;
-            var enter = $.Event('enterKeyPress');
-            enter.keyCode = $.ui.keyCode.ENTER;
-            textarea.val(tagName);
-            textarea.focus();
-            textarea.trigger(enter);
-            textarea.trigger(keyup);
-        }
+        describe("When edit is clicked", function() {
+            var textarea;
 
-        describe("when a valid tag is entered", function() {
             beforeEach(function() {
-                var tagName = _.repeat("a", 100);
-                enterTag(tagName);
-            });
-
-            it("creates a new tag", function() {
-                expect(view.$(".text-tag").length).toBe(4);
-            });
-
-            it("removes the text from the textarea", function() {
-                expect(textarea.val()).toBe("");
-            });
-        });
-
-        describe("when an invalid tag is entered", function() {
-            var longString;
-            beforeEach(function() {
-                longString = _.repeat("a", 101);
-                enterTag(longString);
-            });
-
-            it("does not create a new tag", function() {
-                expect(view.$(".text-tag").length).toBe(3);
-            });
-
-            it("does not remove the text from the textarea", function() {
-                expect(textarea.val()).toBe(longString);
-            });
-
-            it("shows an error message", function() {
-                expect(textarea).toHaveClass("has_error");
-                expect(textarea.hasQtip()).toBeTruthy();
-            });
-
-            it("entering a valid tag clears the error class", function () {
-                enterTag("new-tag");
-                expect(textarea).not.toHaveClass("has_error");
-            });
-        });
-
-        describe("when the done button is clicked", function() {
-            beforeEach(function() {
+                textarea = view.$('textarea');
                 view.$('a.edit_tags').click();
-                view.$('input[type=hidden]').val('["alpha", "beta", "gamma"]');
-                view.$('a.save_tags').click();
             });
 
-            it("closes the text box", function() {
-                expect(view.$('.save_tags')).toHaveClass("hidden");
-                expect(view.$('.edit_tags')).not.toHaveClass("hidden");
-                expect(view.$("textarea")).toBeDisabled();
-                expect(view.$("textarea")).toHaveClass("borderless");
+            function enterTag(tagName) {
+                var keyup = $.Event('keyup');
+                keyup.keyCode = $.ui.keyCode.ENTER;
+                var enter = $.Event('enterKeyPress');
+                enter.keyCode = $.ui.keyCode.ENTER;
+                textarea.val(tagName);
+                textarea.focus();
+                textarea.trigger(enter);
+                textarea.trigger(keyup);
+            }
+
+            it('shows the x character on the tags', function() {
+                expect(view.$(".text-button").eq(0)).not.toHaveClass("disabled");
             });
 
-            it('saves the tags', function() {
-                var tagSave = this.server.lastCreate();
-                var requestBody = decodeURIComponent(tagSave.requestBody);
-                expect(tagSave.url).toBe('/taggings');
-                expect(requestBody).toContain("entity_id="+model.id);
-                expect(requestBody).toContain("entity_type=workfile");
-                expect(requestBody).toContain("tag_names[]=alpha");
-                expect(requestBody).toContain("tag_names[]=beta");
-                expect(requestBody).toContain("tag_names[]=gamma");
+            describe("when a valid tag is entered", function() {
+                beforeEach(function() {
+                    var tagName = _.repeat("a", 100);
+                    enterTag(tagName);
+                });
+
+                it("creates a new tag", function() {
+                    expect(view.$(".text-tag").length).toBe(4);
+                });
+
+                it("removes the text from the textarea", function() {
+                    expect(textarea.val()).toBe("");
+                });
             });
 
-            it('hides the x character on the tag', function() {
+            describe("when an invalid tag is entered", function() {
+                var longString;
+                beforeEach(function() {
+                    longString = _.repeat("a", 101);
+                    enterTag(longString);
+                });
 
+                it("does not create a new tag", function() {
+                    expect(view.$(".text-tag").length).toBe(3);
+                    expect(view.model.get("tagNames").length).toBe(3);
+                });
+
+                it("does not remove the text from the textarea", function() {
+                    expect(textarea.val()).toBe(longString);
+                });
+
+                it("shows an error message", function() {
+                    expect(textarea).toHaveClass("has_error");
+                    expect(textarea.hasQtip()).toBeTruthy();
+                });
+
+                it("entering a valid tag clears the error class", function () {
+                    enterTag("new-tag");
+                    expect(textarea).not.toHaveClass("has_error");
+                });
             });
 
-            xit("displays the new tags", function() {
-              expect(view.$('a')).toContainTranslation('tags.edit_tags');
+            describe("click done", function() {
+                beforeEach(function() {
+                    view.$('input[type=hidden]').val('["alpha", "beta", "delta"]');
+                    view.$('a.save_tags').click();
+                });
+
+                it("closes the text box", function() {
+                    expect(view.$('.save_tags')).toHaveClass("hidden");
+                    expect(view.$('.edit_tags')).not.toHaveClass("hidden");
+                    expect(view.$("textarea")).toBeDisabled();
+                    expect(view.$("textarea")).toHaveClass("borderless");
+                });
+
+                it("sets the updated tags on the currect backbone model", function() {
+                    expect(view.model.get("tagNames")).toEqual(["alpha", "beta", "delta"]);
+                });
+
+                it('saves the tags', function() {
+                    var tagSave = this.server.lastCreate();
+                    var requestBody = decodeURIComponent(tagSave.requestBody);
+                    expect(tagSave.url).toBe('/taggings');
+                    expect(requestBody).toContain("entity_id="+model.id);
+                    expect(requestBody).toContain("entity_type=workfile");
+                    expect(requestBody).toContain("tag_names[]=alpha");
+                    expect(requestBody).toContain("tag_names[]=beta");
+                    expect(requestBody).toContain("tag_names[]=delta");
+                });
+
+                it('hides the x character on the tag', function() {
+                    expect(view.$(".text-button").eq(0)).toHaveClass("disabled");
+                });
+
+                xit("displays the new tags", function() {
+                    expect(view.$('a')).toContainTranslation('tags.edit_tags');
+                });
             });
-        })
+        });
     });
 });

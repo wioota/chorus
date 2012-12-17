@@ -12,7 +12,7 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
         this.textext = textarea.textext({
             plugins: 'tags prompt focus autocomplete',
             tagsItems: tagNames,
-            prompt: t('tags.prompt')
+            prompt: ""
         });
 
         textarea.bind('isTagAllowed', _.bind(this.validateTag, this));
@@ -20,6 +20,7 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
 
         this.textext_elem = this.$('.text-core');
         if(!tagNames || !tagNames.length) this.textext_elem.addClass("hidden");
+        this.$(".text-button").addClass("disabled");
     },
 
     validateTag: function(e, data) {
@@ -51,6 +52,8 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
         e.preventDefault();
         var tagNames = JSON.parse(this.$('input[type=hidden]').val());
 
+        this.model.set('tagNames', tagNames, {silent: true});
+
         $.post('/taggings', {
             entity_id: this.model.id,
             entity_type: 'workfile',
@@ -65,6 +68,7 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
         }
         this.$("textarea").prop("disabled","true");
         this.$("textarea").addClass("borderless");
+        this.$(".text-button").addClass("disabled");
     },
 
     editTags: function(e){
@@ -77,5 +81,6 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
         this.$(".edit_tags").toggleClass("hidden");
         this.$("textarea").removeAttr("disabled");
         this.$("textarea").removeClass("borderless");
+        this.$(".text-button").removeClass("disabled");
     }
 });
