@@ -173,34 +173,36 @@ describe GpdbSchema do
     end
   end
 
-  describe ".find_and_verify_in_source", :database_integration => true do
-    let(:schema) { GpdbSchema.find_by_name('test_schema') }
-    let(:rails_only_schema) { GpdbSchema.find_by_name('rails_only_schema') }
-    let(:database) { GpdbDatabase.find_by_name(InstanceIntegration.database_name) }
-    let(:user) { InstanceIntegration.real_gpdb_account.owner }
-    let(:restricted_user) { users(:restricted_user) }
+  describe ".find_and_verify_in_source" do
+    let(:schema) { gpdb_schemas(:public) }
+    let(:database) { schema.database }
+    let(:user) { users(:owner) }
+    let(:connection) { Object.new }
+
+    before do
+      mock(database).connect_as(anything) { connection }
+      stub(GpdbSchema).find(schema.id) { schema }
+    end
 
     context "when it exists in the source database" do
-      context "when the user has access" do
-        it "should return the schema" do
-          described_class.find_and_verify_in_source(schema.id, user).should == schema
-        end
+      before do
+        mock(connection).schema_exists?(anything) { true }
       end
 
-      context "when the user does not have access to the schema" do
-        it "should raise ActiveRecord::RecordNotFound exception" do
-          expect { described_class.find_and_verify_in_source(schema.id, restricted_user) }.to raise_error(ActiveRecord::RecordNotFound)
-        end
+      it "returns the schema" do
+        described_class.find_and_verify_in_source(schema.id, user).should == schema
       end
     end
 
     context "when it does not exist in the source database" do
       before do
-        GpdbSchema.create!({:name => 'rails_only_schema', :database => database}, :without_protection => true)
+        mock(connection).schema_exists?(anything) { false }
       end
 
       it "should raise ActiveRecord::RecordNotFound exception" do
-        expect { described_class.find_and_verify_in_source(rails_only_schema.id, user) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect {
+          described_class.find_and_verify_in_source(schema.id, user)
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

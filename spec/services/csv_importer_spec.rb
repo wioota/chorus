@@ -23,9 +23,7 @@ describe CsvImporter do
     end
 
     after do
-      schema.with_gpdb_connection(account) do |connection|
-        connection.exec_query("DROP TABLE IF EXISTS #{table_name}")
-      end
+      schema.connect_with(account).drop_table(table_name)
     end
 
     describe ".import_file" do

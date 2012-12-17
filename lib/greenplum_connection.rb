@@ -17,10 +17,8 @@ module GreenplumConnection
     end
 
     def connect!
-      @connection = Sequel.connect db_url
-
       begin
-        @connection.test_connection
+        @connection = Sequel.connect db_url, :test => true
       rescue Sequel::DatabaseConnectionError => e
         raise InstanceUnreachable
       end
@@ -57,6 +55,14 @@ module GreenplumConnection
 
     def create_schema(name)
       with_connection { @connection.create_schema(name) }
+    end
+
+    def drop_schema(name)
+      with_connection { @connection.drop_schema(name, :if_exists => true) }
+    end
+
+    def schema_exists?(name)
+      schemas.include? name
     end
 
     private

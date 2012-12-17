@@ -25,28 +25,39 @@ describe GreenplumConnection::Base, :database_integration do
       :database => database_name
   } }
 
-  let(:instance) { GreenplumConnection::Base.new(details) }
+  let(:connection) { GreenplumConnection::Base.new(details) }
 
   shared_examples "a well behaved database query" do
     let(:db) { Sequel.connect(db_url) }
 
     it "should match" do
-      instance.should_not be_connected
+      connection.should_not be_connected
       subject.should == expected
-      instance.should_not be_connected
+      connection.should_not be_connected
       db.disconnect
     end
   end
 
   describe "#connect!" do
     before do
-      mock.proxy(Sequel).connect(db_url)
+      mock.proxy(Sequel).connect(db_url, hash_including(:test => true))
     end
 
-    context "successfully" do
-      it "with the correct jdbc connection string" do
-        instance.connect!
-        instance.should be_connected
+    context "with valid credentials" do
+      it "connects successfully" do
+        connection.connect!
+        connection.should be_connected
+      end
+    end
+
+    context "with incorrect credentials" do
+      let(:username) { "not_a_user" }
+      let(:password) { "not_a_password" }
+
+      it "raises a GreenplumConnection::InstanceUnreachable error" do
+        expect {
+          connection.connect!
+        }.to raise_error(GreenplumConnection::InstanceUnreachable)
       end
     end
 
@@ -55,7 +66,7 @@ describe GreenplumConnection::Base, :database_integration do
 
       it "raises a GreenplumConnection::InstanceUnreachable error" do
         expect {
-          instance.connect!
+          connection.connect!
         }.to raise_error(GreenplumConnection::InstanceUnreachable)
       end
     end
@@ -64,22 +75,21 @@ describe GreenplumConnection::Base, :database_integration do
   describe "#disconnect" do
     before do
       mock_conn = Object.new
-      mock(mock_conn).test_connection { true }
 
-      mock(Sequel).connect(anything) { mock_conn }
+      mock(Sequel).connect(anything, anything) { mock_conn }
       mock(mock_conn).disconnect
-      instance.connect!
+      connection.connect!
     end
 
     it "disconnects Sequel connection" do
-      instance.should be_connected
-      instance.disconnect
-      instance.should_not be_connected
+      connection.should be_connected
+      connection.disconnect
+      connection.should_not be_connected
     end
   end
 
   describe GreenplumConnection::DatabaseConnection do
-    let(:instance) { GreenplumConnection::DatabaseConnection.new(details) }
+    let(:connection) { GreenplumConnection::DatabaseConnection.new(details) }
     describe "#schemas" do
       let(:schema_list_sql) do
         <<-SQL
@@ -94,9 +104,27 @@ describe GreenplumConnection::Base, :database_integration do
         SQL
       end
       let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] } }
-      let(:subject) { instance.schemas }
+      let(:subject) { connection.schemas }
 
       it_should_behave_like "a well behaved database query"
+    end
+
+    describe '#schema_exists?' do
+      context 'when the schema exists' do
+        let(:schema_name) { 'test_schema' }
+
+        it 'returns true' do
+          connection.schema_exists?(schema_name).should be_true
+        end
+      end
+
+      context "when the schema doesn't exist" do
+        let(:schema_name) { "does_not_exist" }
+
+        it 'returns false' do
+          connection.schema_exists?(schema_name).should be_false
+        end
+      end
     end
 
     describe "#create_schema" do
@@ -110,14 +138,46 @@ describe GreenplumConnection::Base, :database_integration do
 
       it "should adds a schema" do
         expect {
-          instance.create_schema("foobarbaz")
-        }.to change { instance.schemas }
+          connection.create_schema("foobarbaz")
+        }.to change { connection.schemas }
+      end
+    end
+
+    describe "#drop_schema" do
+      context "if the schema exists" do
+        let(:schema_to_drop) { "hopefully_unused_schema" }
+
+        around do |example|
+          db = Sequel.connect(db_url)
+          db.create_schema(schema_to_drop)
+
+          example.run
+
+          db.drop_schema(schema_to_drop, :if_exists => true)
+          db.disconnect
+        end
+
+        it "drops it" do
+          connection.schema_exists?(schema_to_drop).should == true
+          connection.drop_schema(schema_to_drop)
+          connection.schema_exists?(schema_to_drop).should == false
+        end
+      end
+
+      context "if the schema does not exist" do
+        let(:schema_to_drop) { "never_existed" }
+
+        it "doesnt raise an error" do
+          expect {
+            connection.drop_schema(schema_to_drop)
+          }.to_not raise_error
+        end
       end
     end
   end
 
   describe GreenplumConnection::InstanceConnection do
-    let(:instance) { GreenplumConnection::InstanceConnection.new(details) }
+    let(:connection) { GreenplumConnection::InstanceConnection.new(details) }
     let(:database_name) { 'postgres' }
 
     describe "#databases" do
@@ -134,14 +194,14 @@ describe GreenplumConnection::Base, :database_integration do
       end
 
       let(:expected) { db.fetch(database_list_sql).all.collect { |row| row[:datname] } }
-      let(:subject) { instance.databases }
+      let(:subject) { connection.databases }
 
       it_should_behave_like "a well behaved database query"
     end
   end
 
   describe GreenplumConnection::SchemaConnection do
-    let(:instance) { GreenplumConnection::SchemaConnection.new(details.merge(:schema => schema_name)) }
+    let(:connection) { GreenplumConnection::SchemaConnection.new(details.merge(:schema => schema_name)) }
     let(:schema_name) { "test_schema" }
 
     describe "#functions" do
@@ -165,7 +225,7 @@ describe GreenplumConnection::Base, :database_integration do
         SQL
       end
       let(:expected) { db.fetch(schema_functions_sql).all }
-      let(:subject) { instance.functions }
+      let(:subject) { connection.functions }
 
       it_should_behave_like "a well behaved database query"
     end
@@ -181,7 +241,7 @@ describe GreenplumConnection::Base, :database_integration do
       end
       let(:schema_name) { 'test_schema3' }
       let(:expected) { db.fetch(disk_space_sql).single_value }
-      let(:subject) { instance.disk_space_used }
+      let(:subject) { connection.disk_space_used }
 
       it_should_behave_like "a well behaved database query"
     end
@@ -191,7 +251,7 @@ describe GreenplumConnection::Base, :database_integration do
         let(:table_name) { "different_names_table" }
 
         it "should return true" do
-          instance.table_exists?(table_name).should == true
+          connection.table_exists?(table_name).should == true
         end
       end
 
@@ -199,7 +259,7 @@ describe GreenplumConnection::Base, :database_integration do
         let(:table_name) { "please_dont_exist" }
 
         it "should return false" do
-          instance.table_exists?(table_name).should == false
+          connection.table_exists?(table_name).should == false
         end
       end
 
@@ -207,7 +267,7 @@ describe GreenplumConnection::Base, :database_integration do
         let(:table_name) { nil }
 
         it "should return false" do
-          instance.table_exists?(table_name).should == false
+          connection.table_exists?(table_name).should == false
         end
       end
     end
@@ -223,7 +283,7 @@ describe GreenplumConnection::Base, :database_integration do
         end
 
         it "analyzes the table" do
-          instance.analyze_table(table_name)
+          connection.analyze_table(table_name)
         end
       end
 
@@ -232,7 +292,7 @@ describe GreenplumConnection::Base, :database_integration do
 
         it "throws an error to the layer above" do
           expect do
-            instance.analyze_table(table_name)
+            connection.analyze_table(table_name)
           end.to raise_error(Sequel::DatabaseError)
         end
       end
@@ -254,18 +314,18 @@ describe GreenplumConnection::Base, :database_integration do
         end
 
         it "should drop a table" do
-          instance.table_exists?(table_to_drop).should == true
-          instance.drop_table(table_to_drop)
-          instance.table_exists?(table_to_drop).should == false
+          connection.table_exists?(table_to_drop).should == true
+          connection.drop_table(table_to_drop)
+          connection.table_exists?(table_to_drop).should == false
         end
       end
 
       context "if the table does not exist" do
         let(:table_to_drop) { "never_existed" }
 
-        it "should not raise an error" do
+        it "raises an error" do
           expect {
-            instance.drop_table(table_to_drop)
+            connection.drop_table(table_to_drop)
           }.to_not raise_error
         end
       end

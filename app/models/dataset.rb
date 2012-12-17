@@ -147,7 +147,7 @@ class Dataset < ActiveRecord::Base
 
   def verify_in_source(user)
     account = account_for_user!(user)
-    with_gpdb_connection(account) do |conn|
+    schema.with_gpdb_connection(account) do |conn|
       begin
         conn.exec_query("EXPLAIN SELECT 1 FROM \"#{schema.name}\".\"#{name}\"")
       rescue ActiveRecord::StatementInvalid

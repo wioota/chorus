@@ -9,7 +9,7 @@ describe SchemasController do
     log_in user
   end
 
-  context "#index" do
+  describe "#index" do
     let(:gpdb_instance) { gpdb_instances(:owners) }
     let(:database) { gpdb_databases(:default) }
     let(:schema1) { database.schemas[0] }
@@ -19,12 +19,12 @@ describe SchemasController do
       stub(GpdbSchema).refresh(gpdb_instance.account_for_user!(user), database) { [schema1, schema2] }
     end
 
-    it "uses authorization" do
+    it 'uses authorization' do
       mock(subject).authorize!(:show_contents, gpdb_instance)
       get :index, :database_id => database.to_param
     end
 
-    it "should retrieve all schemas for a database" do
+    it 'retrieves all schemas for a database' do
       get :index, :database_id => database.to_param
 
       response.code.should == "200"
@@ -50,10 +50,12 @@ describe SchemasController do
     end
   end
 
-  context "#show" do
+  describe "#show" do
     let(:schema) { gpdb_schemas(:default) }
     before do
-      any_instance_of(GpdbSchema) { |schema| stub(schema).verify_in_source }
+      any_instance_of(GpdbSchema) do |schema|
+        stub(schema).verify_in_source { true }
+      end
     end
 
     it "uses authorization" do

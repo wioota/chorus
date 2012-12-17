@@ -56,15 +56,12 @@ class GpdbSchema < ActiveRecord::Base
 
   def self.find_and_verify_in_source(schema_id, user)
     schema = GpdbSchema.find(schema_id)
-    schema.verify_in_source(user)
+    raise ActiveRecord::RecordNotFound unless schema.verify_in_source(user)
     schema
-  rescue
-    raise ActiveRecord::RecordNotFound
   end
 
   def verify_in_source(user)
-    account = account_for_user!(user)
-    with_gpdb_connection(account) { |conn|}
+    database.connect_as(user).schema_exists?(name)
   end
 
   def stored_functions(account)
