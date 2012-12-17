@@ -34,7 +34,7 @@ describe "Notes" do
         click_button "Add Note"
       end
 
-      workspace.events.last.body.should == "Note on the workspace"
+      workspace.reload.events.last.body.should == "Note on the workspace"
     end
   end
 
