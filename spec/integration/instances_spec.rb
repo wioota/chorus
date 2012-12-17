@@ -61,7 +61,8 @@ describe "Instances", :database_integration do
       login(admin)
     end
 
-    xit 'creates an external table', :hdfs_integration => true do
+    it 'creates an external table', :hdfs_integration => true do
+      pending "there seems to be some kind of backend error in the test setup"
       visit "#/hadoop_instances/#{hadoop_instance.to_param}/browse"
       click_link '2_lines.csv'
       click_link 'Create as an external table'

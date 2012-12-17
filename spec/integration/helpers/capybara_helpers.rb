@@ -35,4 +35,10 @@ module CapybaraHelpers
     page.execute_script("$('#{jquery_locator}').removeClass('file-input');")
     element.set(path)
   end
+
+  def page_title_should_be(title)
+    within(".content_header") do
+      page.should have_selector("h1", :text => title)
+    end
+  end
 end
