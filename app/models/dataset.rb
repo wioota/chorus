@@ -141,19 +141,10 @@ class Dataset < ActiveRecord::Base
 
   def self.find_and_verify_in_source(dataset_id, user)
     dataset = Dataset.find(dataset_id)
-    dataset.verify_in_source(user)
-    dataset
-  end
-
-  def verify_in_source(user)
-    account = account_for_user!(user)
-    schema.with_gpdb_connection(account) do |conn|
-      begin
-        conn.exec_query("EXPLAIN SELECT 1 FROM \"#{schema.name}\".\"#{name}\"")
-      rescue ActiveRecord::StatementInvalid
-        raise ActiveRecord::RecordNotFound
-      end
+    unless dataset.verify_in_source(user)
+      raise ActiveRecord::RecordNotFound
     end
+    dataset
   end
 
   def source_dataset_for(workspace)

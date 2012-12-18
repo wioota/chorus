@@ -73,18 +73,14 @@ describe DatasetImportsController do
       )
     }
 
-    def call_sql(schema, account, sql_command)
-      schema.connect_with(account).execute(sql_command)
-    end
-
-    before(:each) do
+    before do
       log_in account.owner
       archived_workspace.sandbox = schema
       archived_workspace.save!
     end
 
-    after(:each) do
-      call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
+    after do
+      schema.connect_with(account).drop_table('the_new_table')
     end
 
     context "when importing a dataset immediately" do

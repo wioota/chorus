@@ -338,6 +338,14 @@ describe GreenplumConnection::Base, :database_integration do
         it "returns true" do
           connection.table_exists?(table_name).should == true
         end
+
+        context 'when the table has weird chars in the name' do
+          let(:table_name) { %Q(7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?) }
+
+          it 'works (regression)' do
+            connection.table_exists?(table_name).should == true
+          end
+        end
       end
 
       context "when the table doesn't exist" do

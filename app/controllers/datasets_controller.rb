@@ -14,7 +14,7 @@ class DatasetsController < GpdbController
 
   def show
     authorize_gpdb_instance_access(Dataset.find(params[:id]))
-    table = Dataset.find_and_verify_in_source(params[:id], current_user)
+    table = Dataset.find_and_verify_in_source(params[:id].to_i, current_user)
     present table
   end
 

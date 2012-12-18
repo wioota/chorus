@@ -80,37 +80,33 @@ describe Dataset do
     end
   end
 
-  describe ".find_and_verify_in_source", :database_integration => true do
-    let(:account) { InstanceIntegration.real_gpdb_account }
-    let(:schema) { GpdbSchema.find_by_name('test_schema') }
-    let(:rails_only_table) { GpdbTable.find_by_name('rails_only_table') }
-    let(:dataset) { GpdbTable.find_by_name('base_table1') }
+  describe ".find_and_verify_in_source" do
+    let(:user) { users(:owner) }
+    let(:dataset) { datasets(:table) }
 
-    context "when it exists in the source database" do
-      it "should return the dataset" do
-        described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
-      end
+    before do
+      stub(Dataset).find(dataset.id) { dataset }
     end
 
-    context "when the dataset has weird characters" do
-      let(:dataset) { GpdbTable.find_by_name(%q{7_`~!@#$%^&*()+=[]{}|\;:',<.>/?}) }
-
-      it "still works" do
-        described_class.find_and_verify_in_source(dataset.id, account.owner).should == dataset
-      end
-    end
-
-    context "when it does not exist in the source database" do
+    context 'when it exists in the source database' do
       before do
-        GpdbTable.create!({:name => 'rails_only_table', :schema => schema}, :without_protection => true)
+        mock(dataset).verify_in_source(user) { true }
       end
 
-      it "should raise ActiveRecord::RecordNotFound exception" do
-        expect { described_class.find_and_verify_in_source(rails_only_table.id, account.owner) }.to raise_error(ActiveRecord::RecordNotFound)
+      it 'returns the dataset' do
+        described_class.find_and_verify_in_source(dataset.id, user).should == dataset
+      end
+    end
+
+    context 'when it does not exist in Greenplum' do
+      before do
+        mock(dataset).verify_in_source(user) { false }
       end
 
-      after do
-        GpdbTable.find_by_name(rails_only_table.name).destroy
+      it 'raises ActiveRecord::RecordNotFound' do
+        expect {
+          described_class.find_and_verify_in_source(dataset.id, user)
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
