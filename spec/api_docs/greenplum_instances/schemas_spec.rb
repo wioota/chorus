@@ -21,7 +21,7 @@ resource "Greenplum DB: schemas" do
     stub(Dataset).total_entries(owner_account, db_schema, default_dataset_refresh_options) { 13 }
     stub(Dataset).add_metadata!(anything, owner_account)
     any_instance_of(GpdbSchema) do |schema|
-      stub(schema).verify_in_source
+      stub(schema).verify_in_source { true }
       stub(schema).stored_functions(owner_account) {
         [ GpdbSchemaFunction.new(
           db_schema.name,
