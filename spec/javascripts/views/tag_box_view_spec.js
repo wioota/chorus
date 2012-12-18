@@ -56,7 +56,7 @@ describe("chorus.views.TagBox", function() {
             view.render();
         });
         context("clicking on add tags", function() {
-            it('shows the textarea' , function() {
+            it('shows the textarea', function() {
                 expect(view.$('.save_tags')).toHaveClass("hidden");
                 expect(view.$('.edit_tags')).not.toHaveClass("hidden");
                 view.$('a.edit_tags').click();
@@ -141,12 +141,22 @@ describe("chorus.views.TagBox", function() {
                     expect(textarea.hasQtip()).toBeTruthy();
                 });
 
-                it("entering a valid tag clears the error class", function () {
+                it("entering a valid tag clears the error class", function() {
                     enterTag("new-tag");
                     expect(textarea).not.toHaveClass("has_error");
                 });
             });
 
+            describe("when a duplicate tag is entered", function() {
+                beforeEach(function() {
+                    enterTag("alpha");
+                });
+
+                it("does not create the duplicate tag", function() {
+                    expect(view.$(".text-tag").length).toBe(3);
+                    expect(view.model.get("tagNames").length).toBe(3);
+                });
+            });
 
             describe("click done", function() {
                 beforeEach(function() {
@@ -169,7 +179,7 @@ describe("chorus.views.TagBox", function() {
                     var tagSave = this.server.lastCreate();
                     var requestBody = decodeURIComponent(tagSave.requestBody);
                     expect(tagSave.url).toBe('/taggings');
-                    expect(requestBody).toContain("entity_id="+model.id);
+                    expect(requestBody).toContain("entity_id=" + model.id);
                     expect(requestBody).toContain("entity_type=workfile");
                     expect(requestBody).toContain("tag_names[]=alpha");
                     expect(requestBody).toContain("tag_names[]=beta");
@@ -193,6 +203,51 @@ describe("chorus.views.TagBox", function() {
 
                 it("updates the 'edit_tags' text", function() {
                     expect(view.$(".edit_tags")).toContainTranslation("tags.add_tags");
+                });
+            });
+
+            describe("typing a tag without hitting enter and then clicking done", function() {
+                context("when the last tag is valid", function() {
+                    beforeEach(function() {
+                        view.$("textarea").val("hello");
+                        view.$(".save_tags").click();
+                    });
+
+                    it("includes that last tag", function() {
+                        expect(view.$el).toContainText("hello");
+                        expect(_.indexOf(view.model.get("tagNames"), "hello")).toBeGreaterThan(-1);
+                    });
+
+                    it("posts", function() {
+                        expect(this.server.lastCreate()).toBeDefined();
+                    });
+
+                    it("does not update the model", function() {
+                        expect(model.get("tagNames").length).toBe(4);
+                    });
+                });
+
+                context("when the last tag is invalid", function() {
+                    beforeEach(function() {
+                        this.server.reset();
+                        view.$("textarea").val("alpha");
+                        view.$(".save_tags").click();
+                    });
+
+                    it("should not do post", function() {
+                        expect(this.server.lastCreate()).toBeUndefined();
+                    });
+
+                    it("does not update the model", function() {
+                       expect(model.get("tagNames").length).toBe(3);
+                    });
+
+                    it("doesn't reset the last tag on the next keyup", function() {
+                        view.$("textarea").val("alpha2");
+                        var keyup = $.Event("keyup")
+                        view.$("textarea").trigger(keyup);
+                        expect(view.$('textarea').val()).toBe("alpha2");
+                    });
                 });
             });
         });

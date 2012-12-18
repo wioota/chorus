@@ -15,7 +15,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             prompt: ""
         });
 
-        textarea.bind('isTagAllowed', _.bind(this.validateTag, this));
+        textarea.bind('isTagAllowed', _.bind(this.textExtValidate, this));
         textarea.bind('setInputData', _.bind(this.restoreInvalidTag, this));
 
         this.textext_elem = this.$('.text-core');
@@ -23,14 +23,29 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.$(".text-button").addClass("disabled");
     },
 
-    validateTag: function(e, data) {
-        this.clearErrors();
+    textExtValidate: function(e, data) {
         this.invalidTag = "";
-        if(data.tag.length > 100) {
+        if (!this.validateTag(data.tag)) {
             data.result = false;
-            this.markInputAsInvalid(this.$('textarea'), t("field_error.TOO_LONG", {field: "Tag", count : 100}), false);
             this.invalidTag = data.tag;
         }
+    },
+
+    validateTag: function(tagName) {
+        this.clearErrors();
+
+        var valid = true;
+        if(tagName.length > 100) {
+            valid = false;
+            this.markInputAsInvalid(this.$('textarea'), t("field_error.TOO_LONG", {field: "Tag", count : 100}), false);
+        }
+
+        var tagNames = JSON.parse(this.$('input[type=hidden]').val());
+        if(_.indexOf(tagNames, tagName) >= 0 ) {
+            valid = false;
+        }
+
+        return valid;
     },
 
     restoreInvalidTag: function(e) {
@@ -50,16 +65,24 @@ chorus.views.TagBox = chorus.views.Base.extend({
     saveTags: function(e) {
         e.preventDefault();
         var tagNames = JSON.parse(this.$('input[type=hidden]').val());
+        var textareaText = this.$("textarea").val().trim();
 
-        this.model.set('tagNames', tagNames, {silent: true});
+        if(textareaText) {
+            tagNames.push(textareaText);
+            var tagsInvalid = !this.validateTag(textareaText)
+        }
 
-        $.post('/taggings', {
-            entity_id: this.model.id,
-            entity_type: this.model.entityType,
-            tag_names: tagNames
-        });
+        if(!tagsInvalid) {
+            this.model.set('tagNames', tagNames, {silent: true});
 
-        this.render();
+            $.post('/taggings', {
+                entity_id: this.model.id,
+                entity_type: this.model.entityType,
+                tag_names: tagNames
+            });
+
+            this.render();
+        }
     },
 
     editTags: function(e){
