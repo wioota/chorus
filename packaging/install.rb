@@ -10,6 +10,7 @@ if __FILE__ == $0
   begin
     silent = !!ARGV.delete('-a')
     debug = !!ARGV.delete('--debug')
+    keep = !!ARGV.delete('--keep')
     logger = ChorusLogger.new({:debug => debug})
     installer = ChorusInstaller.new({
         installer_home: File.dirname(__FILE__),
@@ -30,7 +31,7 @@ if __FILE__ == $0
     end
   rescue InstallerErrors::InstallationFailed => e
     puts "An error has occurred. Trying to back out and restore previous state.."
-    installer.remove_and_restart_previous!
+    installer.remove_and_restart_previous! unless keep
     exit 1
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }

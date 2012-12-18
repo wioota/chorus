@@ -228,11 +228,6 @@ class ChorusInstaller
     FileUtils.chmod(0500, "#{destination_path}/chorus_psql.sh")
   end
 
-  def link_services
-    @logger.debug("Linking chorus_control.sh script")
-    FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
-  end
-
   def link_shared_files
     @logger.debug("Linking shared configuration files")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
@@ -315,6 +310,7 @@ class ChorusInstaller
   def link_current_to_release
     File.delete("#{destination_path}/current") if File.exists?("#{destination_path}/current")
     FileUtils.ln_sf("#{release_path}", "#{destination_path}/current")
+    FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
   end
 
   def extract_postgres
@@ -416,7 +412,6 @@ class ChorusInstaller
       setup_database
     end
 
-    link_current_to_release
 
     if upgrade_legacy?
       migrate_legacy_config
@@ -426,6 +421,8 @@ class ChorusInstaller
     if is_supported_mac?
       warn_and_change_osx_properties
     end
+
+    link_current_to_release
 
   rescue InstallerErrors::InstallAborted => e
     puts e.message
