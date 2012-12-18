@@ -33,6 +33,14 @@ module GreenplumConnection
       !!@connection
     end
 
+    def fetch(sql, parameters = {})
+      with_connection { @connection.fetch(sql, parameters).all }
+    end
+
+    def execute(sql)
+      with_connection { @connection.execute(sql) }
+    end
+
     private
 
     def with_connection
@@ -128,6 +136,14 @@ module GreenplumConnection
 
     def drop_table(table_name)
       with_schema_connection { @connection.drop_table(table_name, :if_exists => true) }
+    end
+
+    def fetch(sql, parameters = {})
+      with_schema_connection { @connection.fetch(sql, parameters).all }
+    end
+
+    def execute(sql)
+      with_schema_connection { @connection.execute(sql) }
     end
 
     private

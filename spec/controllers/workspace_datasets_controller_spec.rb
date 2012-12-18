@@ -247,7 +247,7 @@ describe WorkspaceDatasetsController do
 
       context "sandbox datasets" do
         let(:type) { "SANDBOX_DATASET" }
-        
+
         it "presents the correct count / pagination information" do
           decoded_pagination.records.should == workspace.sandbox.active_tables_and_views.size
           decoded_pagination.total.should == (workspace.sandbox.active_tables_and_views.size/5.0).ceil

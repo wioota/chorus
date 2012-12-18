@@ -74,9 +74,7 @@ describe DatasetImportsController do
     }
 
     def call_sql(schema, account, sql_command)
-      schema.with_gpdb_connection(account) do |connection|
-        connection.exec_query(sql_command)
-      end
+      schema.connect_with(account).execute(sql_command)
     end
 
     before(:each) do

@@ -174,6 +174,36 @@ describe GreenplumConnection::Base, :database_integration do
         end
       end
     end
+
+
+    describe "#fetch" do
+      let(:sql) { "SELECT 1 AS answer" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        connection.fetch(sql).should == [{ :answer => 1 }]
+      end
+
+      context "with SQL parameters" do
+        let(:sql) { "SELECT :num AS answer" }
+        let(:parameters) {{:num => 3}}
+
+        it "succeeds" do
+          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+        end
+      end
+    end
+
+    describe "#execute" do
+      let(:sql) { "SET search_path TO 'public'" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        expect {
+          connection.execute(sql)
+        }.to_not raise_error
+      end
+    end
   end
 
   describe GreenplumConnection::InstanceConnection do
@@ -197,6 +227,36 @@ describe GreenplumConnection::Base, :database_integration do
       let(:subject) { connection.databases }
 
       it_should_behave_like "a well behaved database query"
+    end
+
+
+    describe "#fetch" do
+      let(:sql) { "SELECT 1 AS answer" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        connection.fetch(sql).should == [{ :answer => 1 }]
+      end
+
+      context "with SQL parameters" do
+        let(:sql) { "SELECT :num AS answer" }
+        let(:parameters) {{:num => 3}}
+
+        it "succeeds" do
+          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+        end
+      end
+    end
+
+    describe "#execute" do
+      let(:sql) { "SET search_path TO 'public'" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        expect {
+          connection.execute(sql)
+        }.to_not raise_error
+      end
     end
   end
 
@@ -379,6 +439,35 @@ describe GreenplumConnection::Base, :database_integration do
             connection.drop_table(table_to_drop)
           }.to_not raise_error
         end
+      end
+    end
+
+    describe "#fetch" do
+      let(:sql) { "SELECT 1 AS answer" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        connection.fetch(sql).should == [{ :answer => 1 }]
+      end
+
+      context "with SQL parameters" do
+        let(:sql) { "SELECT :num AS answer" }
+        let(:parameters) {{:num => 3}}
+
+        it "succeeds" do
+          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+        end
+      end
+    end
+
+    describe "#execute" do
+      let(:sql) { "SET search_path TO 'public'" }
+      let(:parameters) {{}}
+
+      it "succeeds" do
+        expect {
+          connection.execute(sql)
+        }.to_not raise_error
       end
     end
   end
