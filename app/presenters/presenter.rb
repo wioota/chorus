@@ -13,7 +13,7 @@ class Presenter
   end
 
   def self.present_collection(collection, view_context, options)
-    collection.map { |model| present_model(model, view_context, options) }
+    collection.map { |model| present_model(model, view_context, options.dup) }
   end
 
   def present(model, options={})

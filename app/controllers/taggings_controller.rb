@@ -1,6 +1,16 @@
 class TaggingsController < ApplicationController
   MAXIMUM_TAG_LENGTH=100
 
+  def index
+    tags = if params[:query].present?
+      ActsAsTaggableOn::Tag.named_like(params[:query])
+    else
+      ActsAsTaggableOn::Tag.all
+    end
+
+    present tags, :presenter_options => { :presenter_class => 'TagPresenter' }
+  end
+
   def create
     model = Workfile.find(params[:entity_id])
     authorize! :update, model

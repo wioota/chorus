@@ -2,7 +2,7 @@ Chorus::Application.routes.draw do
   resource :sessions, :only => [:create, :destroy, :show]
   resource :config, :only => [:show], :controller => 'configurations'
   resources :activities, :only => [:index, :show], :controller => 'events'
-  resources :taggings, :only => :create
+  resources :taggings, :only => [:index, :create]
   resources :users, :only => [:index, :show, :create, :update, :destroy] do
     collection do
       get :ldap

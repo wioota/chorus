@@ -57,4 +57,20 @@ describe TaggingsController do
       end
     end
   end
+
+  describe 'index' do
+    context "with no query" do
+      it "should show all tags" do
+        get :index
+        decoded_response.should == ActsAsTaggableOn::Tag.all.map { |tag| {'name' => tag.name} }
+      end
+    end
+
+    context "with a search query" do
+      it "should show only tags that contain the search text" do
+        get :index, :query => "ET"
+        decoded_response.should == [{'name' => 'beta'}]
+      end
+    end
+  end
 end

@@ -16,6 +16,10 @@ describe Presenter, :type => :view do
     it "serializes an array" do
       Presenter.present_collection([@model], view, {}).should be_a(Array)
     end
+
+    it "should handle multiple models with custom presenter class" do
+      Presenter.present_collection([ActsAsTaggableOn::Tag.new(:name => 'foo'), ActsAsTaggableOn::Tag.new(:name => 'foo')], view, {:presenter_class => 'TagPresenter'}).should be_a(Array)
+    end
   end
 
   describe ".present" do
