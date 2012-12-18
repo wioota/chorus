@@ -87,7 +87,7 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def pipe_name
-    @pipe_name ||= "pipe_#{Process.pid}_#{Time.current.to_i}"
+    @pipe_name ||= "pipe_#{Process.pid}_#{Time.current.to_i}_#{attributes[:pipe_name]}"
   end
 
   private

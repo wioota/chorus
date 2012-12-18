@@ -27,7 +27,7 @@ describe ImportConsole::ImportsController do
 
       it "fetches a list of pending imports" do
         get :index
-        assigns(:imports).should == [pending_import]
+        assigns(:imports).map(&:id).should == [pending_import.id]
       end
     end
 

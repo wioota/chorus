@@ -30,18 +30,33 @@ describe ImportExecutor do
   let(:import_failure_message) { "" }
 
   describe ".run" do
-    let(:run_import) {
-      mock(GpTableCopier).run_import(database_url, database_url, anything) do
+    def mock_import
+      mock(GpTableCopier).run_import(database_url, database_url, anything) do | *args |
         raise import_failure_message if import_failure_message.present?
+        yield *args if block_given?
       end
+    end
+
+    before do
       stub(Dataset).refresh.with_any_args do
         FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
       end
+    end
+
+    let(:run_import) do
+      mock_import
       ImportExecutor.run(import.id)
-    }
+    end
 
     it "creates a new table copier and runs it" do
       run_import
+    end
+
+    it "passes the import id as the pipe_name attribute to GpTableCopier.run_import" do
+      mock_import do | src_url, dst_url, attributes |
+        attributes[:pipe_name].should == import.id.to_s
+      end
+      ImportExecutor.run(import.id)
     end
 
     context "when import is successful" do
