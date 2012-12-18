@@ -189,7 +189,7 @@ describe("chorus.models.GpdbInstance", function() {
                 it("requires name with valid length", function() {
                     this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "Instance name"})
+                    expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')})
                 })
 
                 it("requires valid port", function() {
@@ -225,8 +225,8 @@ describe("chorus.models.GpdbInstance", function() {
             it("requires name with valid length", function() {
                 this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "Instance name"})
-            })
+                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')})
+            });
 
             it("requires size", function() {
                 this.attrs.size = "";
