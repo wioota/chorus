@@ -37,6 +37,7 @@ describe GpPipe, :database_integration => true do
   let(:options) { {
                    :to_table => Sequel.qualify(sandbox.name, destination_table_name),
                    :from_table => source_dataset.as_sequel,
+                   :pipe_name => "pipe_id",
                    :import_id => import.id }.merge(extra_options) }
   let(:extra_options) { {} }
   let(:gp_table_copier) { GpTableCopier.new(source_database_url, destination_database_url, options) }
@@ -275,7 +276,11 @@ describe GpPipe, :database_integration => true do
   end
 
   it "does not use special characters in the pipe names" do
-    gp_pipe.pipe_name.should match(/^pipe_\d+_\d+$/)
+    gp_pipe.pipe_name.should match(/^[_a-zA-Z\d]+$/)
+  end
+
+  it "includes the pipe_name attribute in the pipe_name" do
+    gp_pipe.pipe_name.should match(/pipe_\d+_\d+_pipe_id$/)
   end
 
   def execute(database, sql_command, schema = schema, method = :run)

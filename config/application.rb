@@ -82,6 +82,8 @@ module Chorus
     # To facilitate support staff tracking web requests.
     config.log_tags = [:uuid]
 
+    config.action_controller.include_all_helpers = true
+
     config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
     config.middleware.use Rack::Sendfile
     config.middleware.delete(::ActionDispatch::RemoteIp)

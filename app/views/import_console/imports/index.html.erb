@@ -1,14 +1,28 @@
 <table>
-<tr>
-  <% Import.columns.each do |column| %>
-    <th><%= column.name %></th>
+    <tr>
+      <th>Started?</th>
+      <th>Named Pipe</th>
+      <th>Source DB Process</th>
+      <th>Destination DB Process</th>
+
+      <th>Source Instance</th>
+      <th>Source Table Name</th>
+
+      <th>Destination Instance</th>
+      <th>Destination Table Name</th>
+    </tr>
+  <% @imports.each do |import| %>
+    <tr>
+      <td><%= import.started? %></td>
+      <td><%= import.named_pipe || "Not found" %></td>
+      <td><%= show_process { import.writer_procpid } %></td>
+      <td><%= show_process { import.reader_procpid } %></td>
+
+      <td><%= instance_description(import.source_dataset.schema.database.gpdb_instance) %></td>
+      <td><%= link_to(table_description(import.source_dataset.schema, import.source_dataset.name), link_to_table(import.workspace, import.source_dataset))%></td>
+
+      <td><%= instance_description(import.workspace.sandbox.database.gpdb_instance) %></td>
+      <td><%= link_to_destination(import.workspace, import.to_table) %></td>
+    </tr>
   <% end %>
-</tr>
-<% @imports.each do |import| %>
-<tr>
-  <% import.attributes.values.each do |value| %>
-    <td><%= value %></td>
-  <% end %>
-</tr>
-<% end %>
 </table>

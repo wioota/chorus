@@ -30,7 +30,8 @@ class ImportExecutor < DelegateClass(Import)
     import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
     import_attributes.merge!(
         :from_table => source_dataset.as_sequel,
-        :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]))
+        :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]),
+        :pipe_name => id.to_s)
   end
 
   def get_database_url(db)
