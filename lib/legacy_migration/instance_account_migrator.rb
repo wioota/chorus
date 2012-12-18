@@ -57,7 +57,7 @@ class InstanceAccountMigrator < AbstractMigrator
     end
 
     def decrypt_password(password, key)
-      cipher = OpenSSL::Cipher::AES.new("128-CBC")
+      cipher = OpenSSL::Cipher::AES.new("128-ECB")
 
       cipher.decrypt
       cipher.iv = "\0" * 16
