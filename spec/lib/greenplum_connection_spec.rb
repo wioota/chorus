@@ -248,7 +248,7 @@ describe GreenplumConnection::Base, :database_integration do
 
     describe '#create_view' do
       context 'when a view with that name does not exist' do
-        before do
+        after do
           db = Sequel.connect(db_url)
           db.default_schema = schema_name
           db.drop_view('a_new_view') if connection.view_exists?('a_new_view')
