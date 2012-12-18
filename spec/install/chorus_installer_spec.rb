@@ -705,22 +705,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#link_services" do
-    before do
-      installer.destination_path = "/usr/local/greenplum-chorus"
-      stub_version
-      FileUtils.mkdir_p('/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/')
-      FileUtils.touch('/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_path.sh')
-      FileUtils.mkdir_p(installer.destination_path)
-    end
-
-    it "creates a symlink to chorus_control.sh" do
-      installer.link_services
-
-      File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
-    end
-  end
-
   describe "#link_shared_files" do
     before do
       installer.destination_path = destination_path
@@ -965,12 +949,25 @@ describe ChorusInstaller do
       File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
     end
 
-    it "should overwrite an existing link" do
+    it "should overwrite an existing link to current" do
       FileUtils.ln_s("/usr/local/greenplum-chorus/releases/1.2.2.2", "/usr/local/greenplum-chorus/current")
       mock(File).delete("/usr/local/greenplum-chorus/current") # FakeFS workaround
       installer.link_current_to_release
 
       File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
+    end
+
+    it "should create a symlink for chorus_control" do
+      installer.link_current_to_release
+
+      File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
+    end
+
+    it "should replace an existing link to chorus_control" do
+      FileUtils.ln_s("/usr/local/greenplum-chorus/releases/1.2.2.2", "/usr/local/greenplum-chorus/chorus_control.sh")
+      installer.link_current_to_release
+
+      File.readlink('/usr/local/greenplum-chorus/chorus_control.sh').should == '/usr/local/greenplum-chorus/releases/2.2.0.0/packaging/chorus_control.sh'
     end
   end
 
