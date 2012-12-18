@@ -1018,6 +1018,36 @@ describe("chorus.models.Abstract", function() {
            });
         });
 
+        describe("#hasTags", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Base();
+            });
+
+            context("the model has tags", function() {
+                beforeEach(function() {
+                    this.model.set("tagNames", ['super_tag']);
+                });
+                it("returns true", function() {
+                    expect(this.model.hasTags()).toBeTruthy();
+                });
+            });
+
+            context("the model has no tags", function() {
+                beforeEach(function() {
+                    this.model.set("tagNames", []);
+                });
+                it("returns false", function() {
+                    expect(this.model.hasTags()).toBeFalsy();
+                });
+            });
+
+            context("the model does not support tags", function() {
+                it("returns false", function() {
+                    expect(this.model.hasTags()).toBeFalsy();
+                });
+            });
+        });
+
         describe("#shouldTriggerImmediately", function() {
             context("when the argument is 'loaded'", function() {
                 it("returns true if the model is loaded", function() {

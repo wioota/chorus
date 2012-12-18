@@ -2,15 +2,5 @@
 
 <div class="right_of_image">
     <h1 title="{{fileName}}">{{fileName}}</h1>
-    <textarea id="tag_editor" class='tag_editor borderless' disabled="true"></textarea>
+    <div class="tag_box"></div>
 </div>
-
-<a href="#" class='edit_tags'>
-    {{#if hasTags}}
-    {{t "tags.edit_tags"}}
-    {{else}}
-    {{t "tags.add_tags"}}
-    {{/if}}
-</a>
-
-<a href="#" class='save_tags hidden'>{{t "tags.save_tags"}}</a>

@@ -276,6 +276,11 @@ chorus.models = {
                 this.loaded = true;
             }
             return result
+        },
+
+        hasTags: function() {
+            var tags = this.get("tagNames");
+            return tags && tags.length > 0;
         }
     })
 };
