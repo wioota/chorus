@@ -23,8 +23,8 @@ resource "Greenplum DB: datasets" do
     log_in owner
     stub(SqlExecutor).preview_dataset { result }
     stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
-    any_instance_of(Dataset) do |dataset|
-      stub(dataset).verify_in_source
+    any_instance_of(GpdbTable) do |dataset|
+      stub(dataset).verify_in_source(anything) { true }
       stub(dataset).add_metadata!.with_any_args { statistics }
       stub(dataset).statistics.with_any_args { statistics }
     end
