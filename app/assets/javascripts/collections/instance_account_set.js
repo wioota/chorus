@@ -19,5 +19,9 @@ chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
         var name = account.user() && (account.user().get("lastName") + account.user().get("firstName"));
         name = name ? name.toLowerCase() : '\uFFFF'  //'FFFF' should be the last possible unicode character
         return name;
+    },
+
+    persistedAccountCount: function() {
+        return _.compact(this.pluck('id')).length;
     }
 });

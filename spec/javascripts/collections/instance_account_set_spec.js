@@ -60,4 +60,47 @@ describe("chorus.collections.InstanceAccountSet", function() {
             expect(userNames).toEqual(['sammy', 'barnie', 'fred']);
         })
     });
+
+    describe("persistedAccountCount", function() {
+        context("when all of the accounts are persisted", function() {
+            beforeEach(function() {
+                this.accountSet.reset([
+                    rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                ]);
+            });
+
+            it("should be the full length", function() {
+                expect(this.accountSet.persistedAccountCount()).toEqual(2);
+            });
+        });
+
+        context("when some of the accounts are not persisted", function() {
+            beforeEach(function() {
+                this.accountSet.reset([
+                    rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    rspecFixtures.instanceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                ]);
+            });
+
+            it("should not include non-persisted accounts", function() {
+                expect(this.accountSet.persistedAccountCount()).toEqual(2);
+            });
+        });
+
+        context("when none of the accounts are persisted", function() {
+            beforeEach(function() {
+                this.accountSet.reset([
+                    rspecFixtures.instanceAccount({ id: null, owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.instanceAccount({ id: null, owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    rspecFixtures.instanceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                ]);
+            });
+
+            it("should not include non-persisted accounts", function() {
+                expect(this.accountSet.persistedAccountCount()).toEqual(0);
+            });
+        });
+    });
 });

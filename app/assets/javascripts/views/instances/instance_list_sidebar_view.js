@@ -17,12 +17,15 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             return {};
         }
 
+        var instanceAccounts = this.instance.accounts();
+        var instanceAccountsCount = instanceAccounts.persistedAccountCount ? instanceAccounts.persistedAccountCount() : instanceAccounts.length;
+
         return {
             isGreenplum: this.model.isGreenplum(),
             userHasAccount: this.model.accountForCurrentUser() && this.model.accountForCurrentUser().has("id"),
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditInstance: this.canEditInstance(),
-            instanceAccountsCount: this.instance.accounts().length,
+            instanceAccountsCount: instanceAccountsCount,
             editable: !this.instance.provisioningFailed() && !this.instance.isProvisioning(),
             deleteable: this.instance.provisioningFailed() && this.instance.get("provision_type") === "create",
             isProvisioning: this.instance.isProvisioning(),

@@ -397,7 +397,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         var account = rspecFixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount()]);
+                        this.instance.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.view.render();
                     });
