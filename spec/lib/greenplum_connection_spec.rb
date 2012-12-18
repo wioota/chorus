@@ -251,13 +251,13 @@ describe GreenplumConnection::Base, :database_integration do
         after do
           db = Sequel.connect(db_url)
           db.default_schema = schema_name
-          db.drop_view('a_new_view') if connection.view_exists?('a_new_view')
+          db.drop_view('a_new_db_view') if connection.view_exists?('a_new_db_view')
           db.disconnect
         end
 
         it 'creates a view' do
           expect {
-            connection.create_view('a_new_view', 'select 1;')
+            connection.create_view('a_new_db_view', 'select 1;')
           }.to change { Sequel.connect(db_url).views }
         end
       end

@@ -247,17 +247,18 @@ describe WorkspaceDatasetsController do
 
       context "sandbox datasets" do
         let(:type) { "SANDBOX_DATASET" }
+        
         it "presents the correct count / pagination information" do
-          decoded_pagination.records.should == 15
-          decoded_pagination.total.should == 3
+          decoded_pagination.records.should == workspace.sandbox.active_tables_and_views.size
+          decoded_pagination.total.should == (workspace.sandbox.active_tables_and_views.size/5.0).ceil
         end
       end
 
       context "chorus views" do
         let(:type) { "CHORUS_VIEW" }
         it "presents the correct count / pagination information" do
-          decoded_pagination.records.should == 1
-          decoded_pagination.total.should == 1
+          decoded_pagination.records.should == workspace.chorus_views.size
+          decoded_pagination.total.should == (workspace.chorus_views.size/5.0).ceil
         end
       end
 
