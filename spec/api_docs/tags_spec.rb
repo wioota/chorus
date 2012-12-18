@@ -23,4 +23,15 @@ resource 'Tags' do
       status.should == 201
     end
   end
+
+  get '/taggings' do
+    parameter :query, 'String to search tags for'
+    pagination
+
+    let(:query) { "something" }
+
+    example_request 'Search tags' do
+      status.should == 200
+    end
+  end
 end
