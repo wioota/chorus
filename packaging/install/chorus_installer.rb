@@ -404,7 +404,6 @@ class ChorusInstaller
     end
 
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
-      link_services
       generate_paths_file
       generate_chorus_psql_files
       setup_database
