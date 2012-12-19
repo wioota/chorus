@@ -1,7 +1,7 @@
 describe("chorus.views.WorkfileHeader", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.sql({
-            tagNames: ["alpha"]
+            tags: [{name: "alpha"}]
         });
         this.view = new chorus.views.WorkfileHeader({model: this.model});
     });

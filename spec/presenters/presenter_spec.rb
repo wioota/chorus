@@ -18,7 +18,8 @@ describe Presenter, :type => :view do
     end
 
     it "should handle multiple models with custom presenter class" do
-      Presenter.present_collection([ActsAsTaggableOn::Tag.new(:name => 'foo'), ActsAsTaggableOn::Tag.new(:name => 'foo')], view, {:presenter_class => 'TagPresenter'}).should be_a(Array)
+      hash = Presenter.present_collection([GpdbTable.new(:name => 'foo'), GpdbView.new(:name => 'bar')], view, {:presenter_class => 'TagPresenter'})
+      hash.should == [{:name => 'foo'}, {:name => 'bar'}]
     end
   end
 
@@ -69,6 +70,14 @@ describe Presenter, :type => :view do
       it "creates an EventPresenter" do
         event = FactoryGirl.build(:greenplum_instance_created_event)
         mock.proxy(EventPresenter).new(event, view, {})
+        Presenter.present(event, view)
+      end
+    end
+
+    context "with an acts as taggble on tag" do
+      it "should create a TagPresenter" do
+        event = ActsAsTaggableOn::Tag.new(:name => 'bar')
+        mock.proxy(TagPresenter).new(event, view, {})
         Presenter.present(event, view)
       end
     end

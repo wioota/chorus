@@ -48,7 +48,7 @@ describe TaggingsController do
     end
 
     describe 'when tags differ only in case' do
-      let(:params) { { :entity_id => workfile.id, :entity_type => 'workfile', :tag_names => ['AlphaNotInFixtures', 'alphaNotInFixtures'] } }
+      let(:tag_names) { ['AlphaNotInFixtures', 'alphaNotInFixtures'] }
 
       it "sets a single tag on the workfile using the first tag's case" do
         post :create, params
@@ -68,7 +68,7 @@ describe TaggingsController do
 
     context "with a search query" do
       it "should show only tags that contain the search text" do
-        get :index, :query => "ET"
+        get :index, :q => "ET"
         decoded_response.should == [{'name' => 'beta'}]
       end
     end

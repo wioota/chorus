@@ -3,7 +3,7 @@
     <a href="#" class='save_tags'>{{t "tags.save_tags"}}</a>
 {{else}}
     <div class="tag-list">
-        {{#each tagNames}}<div><span class="arrow_left"></span><span class="text-label">{{this}}</span></div>{{/each}}
+        {{#each tags}}<div><span class="arrow_left"></span><span class="text-label">{{name}}</span></div>{{/each}}
         <a href="#" class='edit_tags'>
             {{#if hasTags}}
             {{t "tags.edit_tags"}}

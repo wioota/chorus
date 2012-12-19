@@ -2,13 +2,13 @@ class TaggingsController < ApplicationController
   MAXIMUM_TAG_LENGTH=100
 
   def index
-    tags = if params[:query].present?
-      ActsAsTaggableOn::Tag.named_like(params[:query])
+    tags = if params[:q].present?
+      ActsAsTaggableOn::Tag.named_like(params[:q])
     else
       ActsAsTaggableOn::Tag.all
     end
 
-    present tags, :presenter_options => { :presenter_class => 'TagPresenter' }
+    present tags
   end
 
   def create
@@ -16,7 +16,6 @@ class TaggingsController < ApplicationController
     authorize! :update, model
 
     tag_names = params[:tag_names] || []
-
     tag_names.each do |tagname|
       raise_validation_error if tagname.length > MAXIMUM_TAG_LENGTH
     end

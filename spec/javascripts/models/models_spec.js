@@ -1021,11 +1021,12 @@ describe("chorus.models.Abstract", function() {
         describe("#hasTags", function() {
             beforeEach(function() {
                 this.model = new chorus.models.Base();
+                this.model.loaded = true;
             });
 
             context("the model has tags", function() {
                 beforeEach(function() {
-                    this.model.set("tagNames", ['super_tag']);
+                    this.model.tags().reset([{name: 'super_tag'}]);
                 });
                 it("returns true", function() {
                     expect(this.model.hasTags()).toBeTruthy();
@@ -1034,7 +1035,7 @@ describe("chorus.models.Abstract", function() {
 
             context("the model has no tags", function() {
                 beforeEach(function() {
-                    this.model.set("tagNames", []);
+                    this.model.tags().reset([]);
                 });
                 it("returns false", function() {
                     expect(this.model.hasTags()).toBeFalsy();

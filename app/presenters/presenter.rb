@@ -55,6 +55,8 @@ class Presenter
         ImagePresenter
       when Events::Base
         EventPresenter
+      when ActsAsTaggableOn::Tag
+        TagPresenter
       else
         "#{model.class.name}Presenter".constantize
     end

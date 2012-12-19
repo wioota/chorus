@@ -26,7 +26,6 @@ resource 'Tags' do
 
   get '/taggings' do
     parameter :query, 'String to search tags for'
-    pagination
 
     let(:query) { "something" }
 

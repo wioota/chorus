@@ -4,7 +4,7 @@ describe("chorus.views.TagBox", function() {
     beforeEach(function() {
         view = new chorus.views.TagBox();
         model = rspecFixtures.workfile.sql({
-            tagNames: []
+            tags: []
         });
         view.model = model;
     });
@@ -24,7 +24,7 @@ describe("chorus.views.TagBox", function() {
         context("when there are already tags", function() {
             beforeEach(function() {
                 model = rspecFixtures.workfile.sql({
-                    tagNames: ["alpha"]
+                    tags: [{name: "alpha"}]
                 });
                 view.model = model;
                 view.render();
@@ -66,7 +66,7 @@ describe("chorus.views.TagBox", function() {
     describe("When there are some existing tags", function() {
 
         beforeEach(function() {
-            view.model.set('tagNames', ['alpha', 'beta', 'gamma']);
+            view.model.tags().reset([{name: 'alpha'}, {name: 'beta'}, {name: 'gamma'}]);
             view.render();
         });
 
@@ -123,7 +123,7 @@ describe("chorus.views.TagBox", function() {
 
                 it("does not create a new tag", function() {
                     expect(view.$(".text-tag").length).toBe(3);
-                    expect(view.model.get("tagNames").length).toBe(3);
+                    expect(view.model.tags().length).toBe(3);
                 });
 
                 it("does not remove the text from the textarea", function() {
@@ -148,13 +148,15 @@ describe("chorus.views.TagBox", function() {
 
                 it("does not create the duplicate tag", function() {
                     expect(view.$(".text-tag").length).toBe(3);
-                    expect(view.model.get("tagNames").length).toBe(3);
+                    expect(view.model.tags().length).toBe(3);
                 });
             });
 
             describe("click done", function() {
                 beforeEach(function() {
-                    view.$('input[type=hidden]').val('["alpha", "beta", "delta"]');
+                    spyOn(model.tags(), "save");
+                    var tags = '[{"name": "alpha"}, {"name": "beta"}, {"name": "delta"}]';
+                    view.$('input[type=hidden]').val(tags);
                     view.$('a.save_tags').click();
                 });
 
@@ -165,18 +167,12 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it("sets the updated tags on the currect backbone model", function() {
-                    expect(view.model.get("tagNames")).toEqual(["alpha", "beta", "delta"]);
+                    expect(view.model.tags().map(function(tag){return tag.name()})).
+                        toEqual(["alpha", "beta", "delta"]);
                 });
 
                 it('saves the tags', function() {
-                    var tagSave = this.server.lastCreate();
-                    var requestBody = decodeURIComponent(tagSave.requestBody);
-                    expect(tagSave.url).toBe('/taggings');
-                    expect(requestBody).toContain("entity_id=" + model.id);
-                    expect(requestBody).toContain("entity_type=workfile");
-                    expect(requestBody).toContain("tag_names[]=alpha");
-                    expect(requestBody).toContain("tag_names[]=beta");
-                    expect(requestBody).toContain("tag_names[]=delta");
+                    expect(model.tags().save).toHaveBeenCalled();
                 });
 
                 it('hides the x character on the tag', function() {
@@ -208,7 +204,7 @@ describe("chorus.views.TagBox", function() {
 
                     it("includes that last tag", function() {
                         expect(view.$el).toContainText("hello");
-                        expect(_.indexOf(view.model.get("tagNames"), "hello")).toBeGreaterThan(-1);
+                        expect(view.model.tags().containsTag("hello")).toBe(true);
                     });
 
                     it("posts", function() {
@@ -216,7 +212,7 @@ describe("chorus.views.TagBox", function() {
                     });
 
                     it("does not update the model", function() {
-                        expect(model.get("tagNames").length).toBe(4);
+                        expect(model.tags().length).toBe(4);
                     });
                 });
 
@@ -232,12 +228,12 @@ describe("chorus.views.TagBox", function() {
                     });
 
                     it("does not update the model", function() {
-                       expect(model.get("tagNames").length).toBe(3);
+                       expect(model.tags().length).toBe(3);
                     });
 
                     it("doesn't reset the last tag on the next keyup", function() {
                         view.$("textarea").val("alpha2");
-                        var keyup = $.Event("keyup")
+                        var keyup = $.Event("keyup");
                         view.$("textarea").trigger(keyup);
                         expect(view.$('textarea').val()).toBe("alpha2");
                     });

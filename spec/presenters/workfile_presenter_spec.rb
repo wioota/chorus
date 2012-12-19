@@ -25,7 +25,7 @@ describe WorkfilePresenter, :type => :view do
       hash.should have_key(:is_deleted)
       hash.should have_key(:recent_comments)
       hash.should have_key(:comment_count)
-      hash.should have_key(:tag_names)
+      hash.should have_key(:tags)
 
       hash.should_not have_key(:execution_schema)
     end
@@ -46,8 +46,8 @@ describe WorkfilePresenter, :type => :view do
       let(:workfile) {workfiles(:tagged)}
 
       it 'includes the tags' do
-        hash[:tag_names].count.should be > 0
-        hash[:tag_names].should == workfile.tags.map(&:name)
+        hash[:tags].count.should be > 0
+        hash[:tags].should == Presenter.present(workfile.tags, @view)
       end
     end
 

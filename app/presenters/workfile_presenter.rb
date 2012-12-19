@@ -24,7 +24,7 @@ class WorkfilePresenter < Presenter
       :is_deleted => model.deleted?,
       :recent_comments => present(recent_comments, :as_comment => true),
       :comment_count => comments.count + notes.count,
-      :tag_names => model.tags.map(&:name),
+      :tags => present(model.tags, @options)
     }
 
     unless rendering_activities?

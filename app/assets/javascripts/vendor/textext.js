@@ -1870,6 +1870,7 @@
 	p.onComplete = function(data, query)
 	{
 		var self   = this,
+            data = data.response,
 			result = data
 			;
 		

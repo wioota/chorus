@@ -8,11 +8,17 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
     postRender: function() {
         var textarea = this.$('textarea.tag_editor');
-        var tagNames = this.model.get("tagNames");
+        var tags = this.model.tags().map(function (tag) { return tag.attributes; });
         this.textext = textarea.textext({
-            plugins: 'tags prompt focus autocomplete',
-            tagsItems: tagNames,
-            prompt: ""
+            plugins: 'tags prompt focus autocomplete ajax',
+            tagsItems: tags,
+            prompt: "",
+            itemManager: chorus.utilities.TagItemManager,
+            ajax: {
+                url: '/taggings',
+                dataType: 'json',
+                cacheResults: false
+            }
         });
 
         textarea.bind('isTagAllowed', _.bind(this.textExtValidate, this));
@@ -28,10 +34,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
     },
 
     textExtValidate: function(e, data) {
-        this.invalidTag = "";
-        if (!this.validateTag(data.tag)) {
+        this.invalidTagName = "";
+        if (!this.validateTag(data.tag.name)) {
             data.result = false;
-            this.invalidTag = data.tag;
+            this.invalidTagName = data.tag.name;
         }
     },
 
@@ -44,8 +50,8 @@ chorus.views.TagBox = chorus.views.Base.extend({
             this.markInputAsInvalid(this.$('textarea'), t("field_error.TOO_LONG", {field: "Tag", count : 100}), false);
         }
 
-        var tagNames = JSON.parse(this.$('input[type=hidden]').val());
-        if(_.contains(tagNames, tagName)) {
+        var tags = JSON.parse(this.$('input[type=hidden]').val());
+        if(_.any(tags, function(tag) { return tag.name === tagName })) {
             valid = false;
         }
 
@@ -53,38 +59,34 @@ chorus.views.TagBox = chorus.views.Base.extend({
     },
 
     restoreInvalidTag: function(e) {
-        if (this.invalidTag) {
-            this.$('textarea').val(this.invalidTag);
-            this.invalidTag = "";
+        if (this.invalidTagName) {
+            this.$('textarea').val(this.invalidTagName);
+            this.invalidTagName = "";
         }
     },
 
     additionalContext: function() {
         return {
             hasTags: this.model.hasTags(),
-            tagNames: this.model.get("tagNames")
+            tags: this.model.tags().models
         };
     },
 
 
     saveTags: function(e) {
         e.preventDefault();
-        var tagNames = JSON.parse(this.$('input[type=hidden]').val());
+        var tags = JSON.parse(this.$('input[type=hidden]').val());
         var textareaText = this.$("textarea").val().trim();
 
         if(textareaText) {
-            tagNames.push(textareaText);
+            tags.push({name: textareaText});
             var tagsInvalid = !this.validateTag(textareaText)
         }
 
         if(!tagsInvalid) {
-            this.model.set('tagNames', tagNames, {silent: true});
+            this.model.tags().reset(tags, {silent: true});
 
-            $.post('/taggings', {
-                entity_id: this.model.id,
-                entity_type: this.model.entityType,
-                tag_names: tagNames
-            });
+            this.model.tags().save();
 
             this.editing = false;
             this.render();
