@@ -84,6 +84,10 @@ describe "Workfiles" do
       login(users(:admin))
       visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
 
+      within '.content' do
+        page.should have_no_selector(".loading_section")
+      end
+
       within '.content_header' do
         click_link 'Add tags'
         fill_in 'tag_editor', :with => 'new_tag'
@@ -91,7 +95,6 @@ describe "Workfiles" do
         click_link 'Done'
       end
 
-      visit('#')
       visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
 
       within '.content_header' do

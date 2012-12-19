@@ -44,6 +44,10 @@ describe "Workspaces" do
       find(".submit").click
 
       visit('/#/workspaces')
+      within '.content' do
+        page.should have_no_selector(".loading_section")
+      end
+
       find('a', :text => "Active Workspaces", :visible => true).click
       find('a', :text => "All Workspaces", :visible => true).click
       within ".workspace_list" do
