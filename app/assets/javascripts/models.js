@@ -4,7 +4,8 @@ chorus.models = {
         chorus.Mixins.Events,
         chorus.Mixins.dbHelpers,
         chorus.Mixins.Fetching,
-        chorus.Mixins.ServerErrors
+        chorus.Mixins.ServerErrors,
+        chorus.Mixins.Tags
     ).extend({
         constructorName: "Model",
 
@@ -276,21 +277,6 @@ chorus.models = {
                 this.loaded = true;
             }
             return result
-        },
-
-        hasTags: function() {
-            return this.tags().length > 0;
-        },
-
-        tags: function () {
-            if(!this.loaded) {
-                return new chorus.collections.TagSet([], {entity: this})
-            }
-
-            if(!this._tags) {
-                this._tags = new chorus.collections.TagSet(this.get('tags'), {entity: this});
-            }
-            return this._tags;
         }
     })
 };
