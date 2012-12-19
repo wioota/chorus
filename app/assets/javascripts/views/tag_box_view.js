@@ -10,7 +10,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
         var textarea = this.$('textarea.tag_editor');
         var tags = this.model.tags().map(function (tag) { return tag.attributes; });
         this.textext = textarea.textext({
-            plugins: 'tags prompt focus autocomplete ajax',
+            plugins: 'tags prompt focus autocomplete ajax arrow',
             tagsItems: tags,
             prompt: "",
             itemManager: chorus.utilities.TagItemManager,
