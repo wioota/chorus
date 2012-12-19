@@ -4252,7 +4252,7 @@
 
 			html : {
 				tags : '<div class="text-tags"/>',
-				tag  : '<div class="text-tag"><div class="text-button"><span class="text-label"/><a class="text-remove"/></div></div>'
+				tag  : '<div class="text-tag"><div class="text-button"><span class="arrow_left"/><span class="text-label"/><span class="transition-border"></span><a class="text-remove">x</a></div></div>'
 			}
 		}
 		;
