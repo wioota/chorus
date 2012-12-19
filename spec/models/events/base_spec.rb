@@ -121,11 +121,64 @@ describe Events::Base do
     end
   end
 
-  it "destroys all of its associated activities when it is destroyed" do
-    event = Events::SourceTableCreated.last
-    Activity.where(:event_id => event.id).size.should > 0
-    event.destroy
-    Activity.where(:event_id => event.id).size.should == 0
+  describe "cascading deletes" do
+    it "destroys all of its associated activities when it is destroyed" do
+      event = Events::SourceTableCreated.last
+
+      expect {
+        event.destroy
+      }.to change { Activity.where(:event_id => event.id).size }.to(0)
+    end
+
+    it "deletes its notification when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      user = users(:owner)
+
+      comment = Comment.create!({:body => "comment", :event_id => event.id, :author_id => user.id})
+      Notification.create!({:recipient => user, :event => event, :comment => comment}, :without_protection => true)
+
+      expect {
+        event.destroy
+      }.to change(event.notifications, :count).to(0)
+    end
+
+    it "deletes its comments when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      user = users(:owner)
+
+      Comment.create!({:body => "comment", :event_id => event.id, :author_id => user.id})
+
+      expect {
+        event.destroy
+      }.to change(event.comments, :count).to(0)
+    end
+
+    it "deletes its attachments when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      event.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql')))
+
+      expect {
+        event.destroy
+      }.to change(event.attachments, :count).to(0)
+    end
+
+    it "deletes its notes_workfiles when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      event.notes_workfiles.create
+
+      expect {
+        event.destroy
+      }.to change(event.notes_workfiles, :count).to(0)
+    end
+
+    it "deletes its datasets_notes when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      event.datasets_notes.create
+
+      expect {
+        event.destroy
+      }.to change(event.datasets_notes, :count).to(0)
+    end
   end
 
   describe "with deleted" do

@@ -2,9 +2,9 @@ class GpdbSchema < ActiveRecord::Base
   include Stale
 
   attr_accessible :name
-  has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
+  has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
   belongs_to :database, :class_name => 'GpdbDatabase'
-  has_many :datasets, :foreign_key => :schema_id
+  has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
 

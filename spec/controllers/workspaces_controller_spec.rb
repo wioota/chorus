@@ -309,9 +309,7 @@ describe WorkspacesController do
 
   def expect_to_add_event(event_class, owner)
     expect {
-      expect {
-        yield
-      }.to change(Events::Base, :count).by(1) # generates a single event
+      yield
     }.to change(event_class.by(owner), :count).by(1)
   end
 end

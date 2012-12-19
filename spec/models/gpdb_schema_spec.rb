@@ -43,6 +43,27 @@ describe GpdbSchema do
         end
       end
     end
+
+    describe "cascading deletes" do
+      it "deletes its datasets when it is destroyed" do
+        schema = gpdb_schemas(:default)
+
+        expect {
+          schema.destroy
+        }.to change(schema.datasets, :count).to(0)
+      end
+
+      it "nullifies its sandbox association in workspaces" do
+        schema = gpdb_schemas(:searchquery_schema)
+        workspace = FactoryGirl.create(:workspace, :sandbox => schema)
+
+        expect {
+          expect {
+            schema.destroy
+          }.to change(Workspace, :count).by(0)
+        }.to change{ workspace.reload.sandbox }.from(schema).to(nil)
+      end
+    end
   end
 
   describe '#accessible_to' do

@@ -139,6 +139,16 @@ describe GpdbDatabase do
     it "has many datasets" do
       gpdb_databases(:default).datasets.should include(datasets(:table))
     end
+
+    describe "cascading deletes" do
+      it "deletes its schemas when it is destroyed" do
+        database = gpdb_databases(:default)
+
+        expect {
+          database.destroy
+        }.to change(database.schemas, :count).to(0)
+      end
+    end
   end
 
   describe "callbacks" do

@@ -10,11 +10,13 @@ class GpdbInstance < ActiveRecord::Base
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :gpdb_instance
-  has_many :databases, :class_name => 'GpdbDatabase'
+  has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
   after_update :solr_reindex_later, :if => :shared_changed?
+
+  has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do

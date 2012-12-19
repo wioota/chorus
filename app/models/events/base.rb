@@ -27,18 +27,18 @@ module Events
     attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data, :insight, :promotion_time, :promoted_by
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
-    has_many :notifications
+    has_many :notifications, :foreign_key => :event_id, :dependent => :destroy
     has_one :notification_for_current_user, :class_name => 'Notification', :conditions => proc {
       "recipient_id = #{current_user.id}"
     }, :foreign_key => :event_id
 
-    has_many :comments, :foreign_key => :event_id
+    has_many :comments, :foreign_key => :event_id, :dependent => :destroy
 
     # subclass associations on parent to facilitate .includes
-    has_many :attachments, :class_name => 'Attachment', :foreign_key => 'note_id'
-    has_many :notes_workfiles, :foreign_key => 'note_id'
+    has_many :attachments, :class_name => 'Attachment', :foreign_key => 'note_id', :dependent => :destroy
+    has_many :notes_workfiles, :foreign_key => 'note_id', :dependent => :destroy
     has_many :workfiles, :through => :notes_workfiles
-    has_many :datasets_notes, :foreign_key => 'note_id'
+    has_many :datasets_notes, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets, :through => :datasets_notes
     belongs_to :promoted_by, :class_name => 'User'
 

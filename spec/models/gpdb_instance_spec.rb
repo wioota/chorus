@@ -42,6 +42,27 @@ describe GpdbInstance do
     it { should have_many :databases }
     it { should have_many :activities }
     it { should have_many :events }
+
+    describe "cascading deletes" do
+      it "deletes its databases when it is destroyed" do
+        instance = gpdb_instances(:owners)
+
+        expect {
+          instance.destroy
+        }.to change(instance.databases, :count).to(0)
+      end
+
+      it "deletes all events with target1 set to the schema when it is destroyed" do
+        instance = gpdb_instances(:owners)
+        user = users(:owner)
+
+        Events::GreenplumInstanceChangedName.by(user).add(:gpdb_instance => instance, :old_name => 'old', :new_name => instance.name)
+
+        expect {
+          instance.destroy
+        }.to change(instance.events_where_target1, :count).to(0)
+      end
+    end
   end
 
   it "should not allow changing inaccessible attributes" do

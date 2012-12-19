@@ -9,7 +9,7 @@ class GpdbDatabase < ActiveRecord::Base
             :uniqueness => { :scope => :gpdb_instance_id }
 
   belongs_to :gpdb_instance
-  has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
+  has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id, :dependent => :destroy
   has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
 

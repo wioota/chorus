@@ -13,8 +13,8 @@ class Dataset < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema'
 
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
-  has_many :imports, :foreign_key => 'source_dataset_id'
-  has_many :tableau_workbook_publications
+  has_many :imports, :foreign_key => 'source_dataset_id', :dependent => :destroy
+  has_many :tableau_workbook_publications, :dependent => :destroy
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :schema
@@ -25,8 +25,8 @@ class Dataset < ActiveRecord::Base
   attr_accessible :name
 
   has_many :activities, :as => :entity
-  has_many :events, :through => :activities
-  has_many :associated_datasets
+  has_many :events, :through => :activities, :dependent => :destroy
+  has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
   has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
   has_many :comments, :through => :events
@@ -40,6 +40,9 @@ class Dataset < ActiveRecord::Base
   delegate :gpdb_instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
+
+  has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
+  has_many :events_where_target2, :class_name => "Events::Base", :as => :target2, :dependent => :destroy
 
   searchable :unless => :stale? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
