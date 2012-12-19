@@ -34,7 +34,7 @@ describe("chorus.views.TagBox", function() {
 
             it("should show the tags without border", function() {
                 expect(view.$('.text-core')).not.toHaveClass("hidden");
-                expect(view.$('.text-tag').eq(0).text()).toBe("alpha");
+                expect(view.$('.text-tag').eq(0)).toContainText("alpha");
                 expect(view.$('textarea')).toHaveClass("borderless");
                 expect(view.$("textarea")).toBeDisabled();
             });
