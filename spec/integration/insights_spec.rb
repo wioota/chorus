@@ -9,11 +9,13 @@ describe "Insights" do
 
   it "creates an insight" do
     login(users(:owner))
+
+    workspace_name = workspaces(:public).name
     within ".dashboard_workspace_list.list" do
-      find("a", :text => /^#{workspaces(:public).name}$/).click()
+      find("a", :text => /^#{workspace_name}$/).click()
     end
 
-    page.should have_no_selector(".loading_section")
+    find("div.sidebar_content.primary").should have_content(workspace_name)
     click_link "Add an insight"
 
     within_modal do
