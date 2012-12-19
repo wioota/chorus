@@ -1,11 +1,16 @@
-<textarea id="tag_editor" class='tag_editor borderless' disabled="true"></textarea>
+{{#if view.editing}}
+    <textarea id="tag_editor" class='tag_editor'></textarea>
+    <a href="#" class='save_tags'>{{t "tags.save_tags"}}</a>
+{{else}}
+    <div class="tag-list">
+        {{#each tagNames}}<div><span class="arrow_left"></span><span class="text-label">{{this}}</span></div>{{/each}}
+        <a href="#" class='edit_tags'>
+            {{#if hasTags}}
+            {{t "tags.edit_tags"}}
+            {{else}}
+            {{t "tags.add_tags"}}
+            {{/if}}
+        </a>
+    </div>
+{{/if}}
 
-<a href="#" class='edit_tags'>
-    {{#if hasTags}}
-    {{t "tags.edit_tags"}}
-    {{else}}
-    {{t "tags.add_tags"}}
-    {{/if}}
-</a>
-
-<a href="#" class='save_tags hidden'>{{t "tags.save_tags"}}</a>

@@ -20,7 +20,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
         this.textext_elem = this.$('.text-core');
         if(!this.model.hasTags()) this.textext_elem.addClass("hidden");
-        this.$(".text-button").addClass("disabled");
+        if(this.editing) {
+            this.$el.addClass('editing')
+        } else {
+            this.$el.removeClass('editing')
+        }
     },
 
     textExtValidate: function(e, data) {
@@ -41,7 +45,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
         }
 
         var tagNames = JSON.parse(this.$('input[type=hidden]').val());
-        if(_.indexOf(tagNames, tagName) >= 0 ) {
+        if(_.contains(tagNames, tagName)) {
             valid = false;
         }
 
@@ -57,7 +61,8 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            hasTags: this.model.hasTags()
+            hasTags: this.model.hasTags(),
+            tagNames: this.model.get("tagNames")
         };
     },
 
@@ -81,19 +86,14 @@ chorus.views.TagBox = chorus.views.Base.extend({
                 tag_names: tagNames
             });
 
+            this.editing = false;
             this.render();
         }
     },
 
     editTags: function(e){
         e.preventDefault();
-        if(!this.model.hasTags()) {
-            this.textext_elem.toggleClass("hidden");
-        }
-        this.$(".save_tags").toggleClass("hidden");
-        this.$(".edit_tags").toggleClass("hidden");
-        this.$("textarea").removeAttr("disabled");
-        this.$("textarea").removeClass("borderless");
-        this.$(".text-button").removeClass("disabled");
+        this.editing = true;
+        this.render();
     }
 });

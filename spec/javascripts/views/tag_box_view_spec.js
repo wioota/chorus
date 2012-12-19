@@ -17,9 +17,7 @@ describe("chorus.views.TagBox", function() {
         context("when there are no tags", function() {
             it('shows the add tags link, textarea is hidden', function() {
                 expect(view.$('a')).toContainTranslation('tags.add_tags');
-                expect(view.$('.text-core')).toHaveClass("hidden");
-                expect(view.$(".save_tags")).toHaveClass("hidden");
-                expect(view.$("textarea")).toBeDisabled();
+                expect(view.$(".save_tags")).not.toExist();
             });
         });
 
@@ -32,20 +30,18 @@ describe("chorus.views.TagBox", function() {
                 view.render();
             });
 
-            it("should show the tags without border", function() {
-                expect(view.$('.text-core')).not.toHaveClass("hidden");
-                expect(view.$('.text-tag').eq(0)).toContainText("alpha");
-                expect(view.$('textarea')).toHaveClass("borderless");
-                expect(view.$("textarea")).toBeDisabled();
+            it("should show the tags", function() {
+                expect(view.$(".tag-list span")).toContainText("alpha");
+                expect(view.$("textarea")).not.toExist();
             });
 
             it("should show tags without the x's", function() {
-                expect(view.$(".text-button:eq(0)")).toHaveClass("disabled");
+                expect(view.$(".text-remove")).not.toExist();
             });
 
             it("only shows the edit tags link", function() {
-                expect(view.$(".save_tags")).toHaveClass("hidden");
-                expect(view.$(".edit_tags")).not.toHaveClass("hidden");
+                expect(view.$(".save_tags")).not.toExist();
+                expect(view.$(".edit_tags")).toExist();
                 expect(view.$('a')).toContainTranslation('tags.edit_tags');
             });
         });
@@ -57,14 +53,12 @@ describe("chorus.views.TagBox", function() {
         });
         context("clicking on add tags", function() {
             it('shows the textarea', function() {
-                expect(view.$('.save_tags')).toHaveClass("hidden");
-                expect(view.$('.edit_tags')).not.toHaveClass("hidden");
+                expect(view.$('.save_tags')).not.toExist();
+                expect(view.$('.edit_tags')).toExist();
                 view.$('a.edit_tags').click();
-                expect(view.$('.text-core')).not.toHaveClass("hidden");
-                expect(view.$('.save_tags')).not.toHaveClass("hidden");
-                expect(view.$('.edit_tags')).toHaveClass("hidden");
-                expect(view.$("textarea")).not.toBeDisabled();
-                expect(view.$('textarea')).not.toHaveClass("borderless");
+                expect(view.$('.save_tags')).toExist();
+                expect(view.$('.edit_tags')).not.toExist();
+                expect(view.$("textarea")).toExist();
             });
         });
     });
@@ -86,8 +80,8 @@ describe("chorus.views.TagBox", function() {
             var textarea;
 
             beforeEach(function() {
-                textarea = view.$('textarea');
                 view.$('a.edit_tags').click();
+                textarea = view.$('textarea');
             });
 
             function enterTag(tagName) {
@@ -102,7 +96,7 @@ describe("chorus.views.TagBox", function() {
             }
 
             it('shows the x character on the tags', function() {
-                expect(view.$(".text-button").eq(0)).not.toHaveClass("disabled");
+                expect(view.$(".text-remove").eq(0)).toExist();
             });
 
             describe("when a valid tag is entered", function() {
@@ -165,10 +159,9 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it("closes the text box", function() {
-                    expect(view.$('.save_tags')).toHaveClass("hidden");
-                    expect(view.$('.edit_tags')).not.toHaveClass("hidden");
-                    expect(view.$("textarea")).toBeDisabled();
-                    expect(view.$("textarea")).toHaveClass("borderless");
+                    expect(view.$('.save_tags')).not.toExist();
+                    expect(view.$('.edit_tags')).toExist();
+                    expect(view.$("textarea")).not.toExist();
                 });
 
                 it("sets the updated tags on the currect backbone model", function() {
@@ -187,7 +180,7 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it('hides the x character on the tag', function() {
-                    expect(view.$(".text-button").eq(0)).toHaveClass("disabled");
+                    expect(view.$(".text-remove")).not.toExist();
                 });
 
                 xit("displays the new tags", function() {

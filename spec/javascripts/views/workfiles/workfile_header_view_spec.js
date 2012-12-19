@@ -12,7 +12,7 @@ describe("chorus.views.WorkfileHeader", function() {
         });
 
         it("has tags", function() {
-            expect(this.view.$('.text-tag').eq(0)).toContainText("alpha");
+            expect(this.view.$('.tag-list')).toContainText("alpha");
         });
     });
 });
