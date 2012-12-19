@@ -450,6 +450,33 @@ describe GreenplumConnection::Base, :database_integration do
       end
     end
 
+    describe "#truncate_table" do
+      context "if the table exists" do
+        let(:table_to_truncate) { "trunc_table" }
+
+        before do
+          connection.execute(<<-SQL)
+            CREATE TABLE "test_schema"."trunc_table" (num integer);
+            INSERT INTO "test_schema"."trunc_table" (num) VALUES (2)
+          SQL
+        end
+
+        after do
+          connection.execute(<<-SQL)
+            DROP TABLE IF EXISTS "test_schema"."trunc_table"
+          SQL
+        end
+
+        it "should truncate a table" do
+          expect {
+            connection.truncate_table(table_to_truncate)
+          }.to change { connection.fetch(<<-SQL)[0][:num] }.from(1).to(0)
+            SELECT COUNT(*) AS num FROM "test_schema"."trunc_table"
+          SQL
+        end
+      end
+    end
+
     describe "#fetch" do
       let(:sql) { "SELECT 1 AS answer" }
       let(:parameters) {{}}

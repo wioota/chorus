@@ -43,7 +43,7 @@ class CsvImporter
         end
 
         if csv_file.truncate
-          connection.exec_query("TRUNCATE TABLE #{csv_file.to_table};")
+          schema.connect_with(account).truncate_table(csv_file.to_table)
         end
 
         copy_manager = org.postgresql.copy.CopyManager.new(connection.raw_connection.connection)
@@ -51,7 +51,7 @@ class CsvImporter
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
         Dataset.refresh(account, schema)
       rescue Exception => e
-        connection.exec_query("DROP TABLE IF EXISTS #{csv_file.to_table}") if csv_file.new_table && it_exists == false
+        schema.connect_with(account).drop_table(csv_file.to_table) if csv_file.new_table && it_exists == false
         raise e
       end
     end

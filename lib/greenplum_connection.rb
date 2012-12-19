@@ -131,7 +131,11 @@ module GreenplumConnection
     end
 
     def analyze_table(table_name)
-      with_connection { @connection.execute %Q{ANALYZE "#{schema_name}"."#{table_name}"} }
+      execute(%Q{ANALYZE "#{schema_name}"."#{table_name}"})
+    end
+
+    def truncate_table(table_name)
+      execute(%Q{TRUNCATE TABLE "#{schema_name}"."#{table_name}"})
     end
 
     def drop_table(table_name)
