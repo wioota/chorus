@@ -8,30 +8,46 @@ class ImportExecutor < DelegateClass(Import)
     ImportExecutor.new(import).run
   end
 
+  def self.cancel(import, success, message = nil)
+    ImportExecutor.new(import).cancel(success, message)
+  end
+
   def run
     source_database_url = get_database_url(source_dataset.schema.database)
     destination_database_url = get_database_url(sandbox.database)
     GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)
 
-    # update rails db for new dataset
-    destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
-    Dataset.refresh(destination_account, sandbox)
-
-    update_status :passed
-
+    refresh_and_update_status :passed
   rescue => e
-    update_status :failed, e
+    refresh_and_update_status :failed, e.message
     raise
   end
 
+  def cancel(success, message = nil)
+    refresh_and_update_status(success ? :passed : :failed, message)
+    ImportTerminator.terminate(__getobj__)
+  end
+
   private
+
+  def refresh_and_update_status(status, message = nil)
+    return unless reload.success.nil?
+
+    if status == :passed
+      # update rails db for new dataset
+      destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
+      Dataset.refresh(destination_account, sandbox)
+    end
+
+    update_status status, message
+  end
 
   def import_attributes
     import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
     import_attributes.merge!(
         :from_table => source_dataset.as_sequel,
         :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]),
-        :pipe_name => id.to_s)
+        :pipe_name => created_at.to_i.to_s + "_" + id.to_s)
   end
 
   def get_database_url(db)
@@ -39,7 +55,7 @@ class ImportExecutor < DelegateClass(Import)
     Gpdb::ConnectionBuilder.url(db, account)
   end
 
-  def update_status(status, exception = nil)
+  def update_status(status, message = nil)
     passed = (status == :passed)
 
     touch(:finished_at)
@@ -51,7 +67,7 @@ class ImportExecutor < DelegateClass(Import)
       update_import_created_event
       import_schedule.update_attributes({:new_table => false}) if import_schedule
     else
-      event = create_failed_event exception.message
+      event = create_failed_event message
     end
 
     Notification.create!(:recipient_id => user.id, :event_id => event.id)

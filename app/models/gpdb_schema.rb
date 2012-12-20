@@ -1,3 +1,5 @@
+require 'greenplum_connection'
+
 class GpdbSchema < ActiveRecord::Base
   include Stale
 
@@ -115,7 +117,7 @@ class GpdbSchema < ActiveRecord::Base
   end
 
   def connect_with(account)
-    GreenplumConnection::SchemaConnection.new(
+    ::GreenplumConnection::SchemaConnection.new(
         :host => gpdb_instance.host,
         :port => gpdb_instance.port,
         :username => account.db_username,

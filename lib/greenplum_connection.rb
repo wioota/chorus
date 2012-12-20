@@ -12,13 +12,16 @@ module GreenplumConnection
 
   class Base
 
+    USE_LOGGER = false
+    LOGGER_OPTIONS = USE_LOGGER ? { :logger => Rails.logger } : {}
+
     def initialize(details)
       @settings = details
     end
 
     def connect!
       begin
-        @connection = Sequel.connect db_url, :test => true
+        @connection = Sequel.connect db_url, LOGGER_OPTIONS.merge(:test => true)
       rescue Sequel::DatabaseConnectionError => e
         raise InstanceUnreachable
       end
