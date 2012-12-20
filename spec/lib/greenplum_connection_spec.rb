@@ -397,6 +397,7 @@ describe GreenplumConnection::Base, :database_integration do
 
         before do
           stub.proxy(Sequel).connect do |connection|
+            stub(connection).execute(anything)
             mock(connection).execute(%Q{ANALYZE "#{schema_name}"."#{table_name}"})
           end
         end

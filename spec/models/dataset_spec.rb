@@ -541,7 +541,7 @@ describe Dataset::Query, :database_integration => true do
   end
 
   let(:rows) do
-    schema.with_gpdb_connection(account) { |conn| conn.select_all(sql) }
+    schema.connect_with(account).fetch(sql)
   end
 
   describe "queries" do
@@ -572,28 +572,29 @@ describe Dataset::Query, :database_integration => true do
 
       it "returns a query whose result includes the names of all tables and views in the schema," +
              "but does not include sub-partition tables, indexes, or relations in other schemas" do
-        names = rows.map { |row| row["name"] }
+        names = rows.map { |row| row[:name] }
         names.should include(*["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table", "7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?", "2candy", "candy", "candy_composite", "candy_empty", "candy_one_column", "second_candy_one_column", "allcaps_candy"])
       end
 
       it "includes the relations' types ('r' for table, 'v' for view)" do
-        view_row = rows.find { |row| row['name'] == "view1" }
-        view_row["type"].should == "v"
+        view_row = rows.find { |row| row[:name] == "view1" }
+        view_row[:type].should == "v"
 
-        rows.each { |row| ['v', 'r'].should include row["type"] }
+        rows.each { |row| ['v', 'r'].should include row[:type] }
       end
 
       it "includes whether or not each relation is a master table" do
-        master_row = rows.find { |row| row['name'] == "master_table1" }
-        master_row["master_table"].should == "t"
+        master_row = rows.find { |row| row[:name] == "master_table1" }
+        master_row[:master_table].should == true
 
-        rows.each { |row| ['t', 'f'].should include row["master_table"] }
+        rows.each { |row| [true, false].should include row[:master_table] }
       end
     end
+
     context "with filter options" do
       let(:options) { {:filter => [{:relname => "Table"}]} }
       it "returns a query whose result with proper filtering" do
-        names = rows.map { |row| row["name"] }
+        names = rows.map { |row| row[:name] }
         names.should =~ ["base_table1", "external_web_table1", "master_table1", "different_names_table", "different_types_table"]
       end
     end
@@ -601,7 +602,7 @@ describe Dataset::Query, :database_integration => true do
     context "with sort options" do
       let(:options) { {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]} }
       it "returns a query whose result with proper sort" do
-        names = rows.map { |row| row["name"] }
+        names = rows.map { |row| row[:name] }
         names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1"]
       end
     end
@@ -609,7 +610,7 @@ describe Dataset::Query, :database_integration => true do
     context "with limit options" do
       let(:options) { {:limit => 2} }
       it "returns a query whose result with limit" do
-        names = rows.map { |row| row["name"] }
+        names = rows.map { |row| row[:name] }
         names.should == ["base_table1", "view1"]
       end
     end
@@ -657,15 +658,15 @@ describe Dataset::Query, :database_integration => true do
       it "returns a query whose result for a base table is correct" do
         row = rows.first
 
-        row['name'].should == "base_table1"
-        row['description'].should == "comment on base_table1"
-        row['definition'].should be_nil
-        row['column_count'].should == 5
-        row['row_count'].should == 9
-        row['table_type'].should == "BASE_TABLE"
-        row['last_analyzed'].should_not be_nil
-        row['disk_size'].to_i.should > 0
-        row['partition_count'].should == 0
+        row[:name].should == "base_table1"
+        row[:description].should == "comment on base_table1"
+        row[:definition].should be_nil
+        row[:column_count].should == 5
+        row[:row_count].should == 9
+        row[:table_type].should == "BASE_TABLE"
+        row[:last_analyzed].should_not be_nil
+        row[:disk_size].to_i.should > 0
+        row[:partition_count].should == 0
       end
     end
 
@@ -675,15 +676,15 @@ describe Dataset::Query, :database_integration => true do
       it "returns a query whose result for a master table is correct" do
         row = rows.first
 
-        row['name'].should == 'master_table1'
-        row['description'].should == 'comment on master_table1'
-        row['definition'].should be_nil
-        row['column_count'].should == 2
-        row['row_count'].should == 0 # will always be zero for a master table
-        row['table_type'].should == 'MASTER_TABLE'
-        row['last_analyzed'].should_not be_nil
-        row['disk_size'].should == '0'
-        row['partition_count'].should == 7
+        row[:name].should == 'master_table1'
+        row[:description].should == 'comment on master_table1'
+        row[:definition].should be_nil
+        row[:column_count].should == 2
+        row[:row_count].should == 0 # will always be zero for a master table
+        row[:table_type].should == 'MASTER_TABLE'
+        row[:last_analyzed].should_not be_nil
+        row[:disk_size].should == '0'
+        row[:partition_count].should == 7
       end
     end
 
@@ -693,15 +694,15 @@ describe Dataset::Query, :database_integration => true do
       it "returns a query whose result for an external table is correct" do
         row = rows.first
 
-        row['name'].should == 'external_web_table1'
-        row['description'].should be_nil
-        row['definition'].should be_nil
-        row['column_count'].should == 5
-        row['row_count'].should == 0 # will always be zero for an external table
-        row['table_type'].should == 'EXT_TABLE'
-        row['last_analyzed'].should_not be_nil
-        row['disk_size'].should == '0'
-        row['partition_count'].should == 0
+        row[:name].should == 'external_web_table1'
+        row[:description].should be_nil
+        row[:definition].should be_nil
+        row[:column_count].should == 5
+        row[:row_count].should == 0 # will always be zero for an external table
+        row[:table_type].should == 'EXT_TABLE'
+        row[:last_analyzed].should_not be_nil
+        row[:disk_size].should == '0'
+        row[:partition_count].should == 0
       end
     end
 
@@ -710,13 +711,13 @@ describe Dataset::Query, :database_integration => true do
 
       it "returns a query whose result for a view is correct" do
         row = rows.first
-        row['name'].should == 'view1'
-        row['description'].should == "comment on view1"
-        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category, base_table1.time_value FROM base_table1;"
-        row['column_count'].should == 5
-        row['row_count'].should == 0
-        row['disk_size'].should == '0'
-        row['partition_count'].should == 0
+        row[:name].should == 'view1'
+        row[:description].should == "comment on view1"
+        row[:definition].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category, base_table1.time_value FROM base_table1;"
+        row[:column_count].should == 5
+        row[:row_count].should == 0
+        row[:disk_size].should == '0'
+        row[:partition_count].should == 0
       end
     end
   end

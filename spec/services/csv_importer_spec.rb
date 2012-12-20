@@ -77,12 +77,15 @@ describe CsvImporter do
         it "creates a new table with data from the csv file" do
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
-          schema.with_gpdb_connection(account) do |connection|
-            result = connection.exec_query("select * from #{table_name} order by ID asc;")
-            result[0].should == {"id" => 1, "where" => "foo"}
-            result[1].should == {"id" => 2, "where" => "bar"}
-            result[2].should == {"id" => 3, "where" => "baz"}
-          end
+          result = schema.connect_with(account).fetch(<<-SQL)
+            SELECT *
+            FROM #{table_name}
+            ORDER BY id ASC;
+          SQL
+
+          result[0].should == {:id => 1, :where => "foo"}
+          result[1].should == {:id => 2, :where => "bar"}
+          result[2].should == {:id => 3, :where => "baz"}
         end
       end
 
@@ -255,10 +258,12 @@ describe CsvImporter do
           }
           expect {
             CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-          }.to raise_error
-          schema.with_gpdb_connection(account) do |connection|
-            expect { connection.exec_query("select * from #{table_name}") }.to raise_error(ActiveRecord::StatementInvalid)
-          end
+          }.to raise_error(CsvImporter::ImportFailed)
+
+
+          expect {
+            schema.connect_with(account).fetch("SELECT * FROM #{table_name}")
+          }.to raise_error(Sequel::DatabaseError)
         end
 
         it "does not remove import table when new_table is false" do
@@ -279,9 +284,10 @@ describe CsvImporter do
             CsvImporter.import_file(second_csv_file.id, file_import_created_event.id)
           }.to raise_error
 
-          schema.with_gpdb_connection(account) do |connection|
-            expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error
-          end
+          expect {
+            schema.connect_with(account).fetch("SELECT * FROM #{table_name}")
+          }.not_to raise_error
+
         end
 
         it "does not remove the table if new_table is true, but the table already existed" do
@@ -291,18 +297,16 @@ describe CsvImporter do
 
           expect {
             CsvImporter.import_file(csv_file.id, file_import_created_event.id)
-          }.to raise_error
-          schema.with_gpdb_connection(account) do |connection|
-            expect { connection.exec_query("select * from #{table_name}") }.not_to raise_error(ActiveRecord::StatementInvalid)
-          end
+          }.to raise_error(CsvImporter::ImportFailed)
+
+          expect {
+            schema.connect_with(account).fetch("SELECT * FROM #{table_name}")
+          }.not_to raise_error
         end
       end
 
       def fetch_from_gpdb(sql)
-        schema.with_gpdb_connection(account) do |connection|
-          result = connection.exec_query(sql)
-          yield result
-        end
+        schema.connect_with(account).fetch(sql)
       end
     end
   end

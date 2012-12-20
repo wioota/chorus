@@ -159,6 +159,7 @@ module GreenplumConnection
     def with_schema_connection
       with_connection do
         @connection.default_schema = schema_name
+        @connection.execute("SET search_path TO '#{schema_name}'")
         yield
       end
     end

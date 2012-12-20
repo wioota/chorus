@@ -143,10 +143,8 @@ describe WorkfileExecutionsController do
       end
 
       after do
-        account = schema.account_for_user!(users(:admin))
-        schema.with_gpdb_connection(account) do |connection|
-          connection.exec_query("DROP TABLE IF EXISTS table_with_warnings")
-        end
+        admin = users(:admin)
+        schema.connect_as(admin).drop_table("table_with_warnings")
       end
     end
   end
