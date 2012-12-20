@@ -36,7 +36,7 @@ app/assets/javascripts/environment.js
 /spec/javascripts/fixtures/rspec
 
 # Ignore ctags file
-tags
+/tags
 
 # Bundler binstub dir
 /b
