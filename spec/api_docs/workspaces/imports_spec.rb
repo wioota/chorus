@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Workspaces: imports" do
+resource "Imports" do
   let(:workspace) { workspaces(:public) }
   let(:workspace_id) { workspace.to_param }
   let(:id) { workspace_id }
@@ -66,7 +66,6 @@ resource "Workspaces: imports" do
   end
 
   put "/workspaces/:workspace_id/datasets/:dataset_id/import_schedules/:id" do
-
     parameter :dataset_id, "Id of the source dataset"
     parameter :id, "id of the import schedule"
     parameter :to_table, "Table name of the destination table"
@@ -162,6 +161,27 @@ resource "Workspaces: imports" do
 
     example_request "Complete import of a CSV file" do
       status.should == 201
+    end
+  end
+
+  put "/imports" do
+    parameter :'id[]', "Ids of imports to cancel"
+    parameter :success, "'true' to mark imports as succeeded, 'false' to mark them as failed"
+    parameter :message, "Error message to display (only if marking them as failed)"
+
+    required_parameters :'id[]', :success
+
+    let(:user) { users(:admin) }
+    let(:'id[]') { [imports(:one).to_param] }
+    let(:success) { 'false' }
+    let(:message) { 'Import cancelled.'}
+
+    before do
+      stub(ImportExecutor).cancel.with_any_args
+    end
+
+    example_request 'Mark imports as completed (admin only)', { :format => :json } do
+      status.should == 200
     end
   end
 end
