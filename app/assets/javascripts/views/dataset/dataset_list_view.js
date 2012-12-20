@@ -36,7 +36,7 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
     postRender: function() {
         var $list = $(this.el);
         if(this.collection.length === 0 && this.collection.loaded) {
-            var linkText = Handlebars.helpers.linkTo("#/instances", "browse your instances");
+            var linkText = Handlebars.helpers.linkTo("#/instances", t("datasource.browse"));
             var noDatasetEl = $("<div class='browse_more'></div>");
 
             var hintText;

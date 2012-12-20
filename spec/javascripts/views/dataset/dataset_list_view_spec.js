@@ -155,7 +155,7 @@ describe("chorus.views.DatasetList", function() {
             });
 
             it("renders the no datasets in this workspace message", function() {
-                expect($(this.view.el)).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your instances"});
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
                 expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
             });
         });

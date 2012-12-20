@@ -440,11 +440,9 @@
             var actionType = self.model.get("actionType");
             switch (actionType) {
                 case "NoteOnGreenplumInstance":
-                    return "Greenplum instance";
                 case "NoteOnHadoopInstance":
-                    return "Hadoop instance";
                 case "NoteOnGnipInstance":
-                    return "Gnip instance";
+                    return "data source";
                 case "NoteOnHdfsFile":
                     return "file";
                 case "NoteOnWorkspace":

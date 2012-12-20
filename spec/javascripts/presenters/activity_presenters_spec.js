@@ -63,7 +63,7 @@ describe("chorus.presenters.Activity", function() {
                         "activity.header.NOTE.without_workspace", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             noteObjectLink: linkTo(noteObject.showUrl(), noteObject.name()),
-                            noteObjectType: "Greenplum instance"
+                            noteObjectType: "data source"
                         }
                     );
                 });
@@ -913,7 +913,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.NOTE.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
-                    noteObjectType: "Greenplum instance"
+                    noteObjectType: "data source"
                 }
             )
         });
@@ -940,7 +940,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.NOTE.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
-                    noteObjectType: "Gnip instance"
+                    noteObjectType: "data source"
                 }
             )
         });
@@ -994,7 +994,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.NOTE.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
-                    noteObjectType: "Hadoop instance"
+                    noteObjectType: "data source"
                 }
             )
         });
