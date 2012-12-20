@@ -1,9 +1,9 @@
 {{#if view.editing}}
-    <textarea id="tag_editor" class='tag_editor'></textarea>
+    <input type="text" id="tag_editor" class='tag_editor'/>
     <a href="#" class='save_tags'>{{t "tags.save_tags"}}</a>
 {{else}}
     <div class="tag-list">
-        {{#each tags}}<div><span class="arrow_left"></span><span class="text-label">{{name}}</span></div>{{/each}}
+        {{#each tags}}<div><img src="/images/tags/blue_tag_triangle.png" class="arrow_left"/><span class="text-label">{{name}}</span></div>{{/each}}
         <a href="#" class='edit_tags'>
             {{#if hasTags}}
             {{t "tags.edit_tags"}}

@@ -1872,7 +1872,7 @@
 		var self   = this,
 			result = data
 			;
-		
+
 		self.dontShowLoading();
 
 		// If results are expected to be cached, then we store the original
@@ -1957,7 +1957,7 @@
 
 		if(suggestions && self.opts(OPT_CACHE_RESULTS) === true)
 			return self.onComplete(suggestions, query);
-		
+
 		self.startTimer(
 			'ajax',
 			self.opts(OPT_TYPE_DELAY),
@@ -1995,7 +1995,7 @@
 
 	var p = TextExtArrow.prototype,
 		/**
-		 * Arrow plugin only has one option and that is its HTML template. It could be 
+		 * Arrow plugin only has one option and that is its HTML template. It could be
 		 * changed when passed to the `$().textext()` function. For example:
 		 *
 		 *     $('textarea').textext({
@@ -2009,7 +2009,7 @@
 		 * @date 2011/12/27
 		 * @id TextExtArrow.options
 		 */
-		
+
 		/**
 		 * HTML source that is used to generate markup required for the arrow.
 		 *
@@ -2054,7 +2054,7 @@
 
 	//--------------------------------------------------------------------------------
 	// Event handlers
-	
+
 	/**
 	 * Reacts to the `click` event whenever user clicks the arrow.
 	 *
@@ -2070,7 +2070,7 @@
 		this.trigger('toggleDropdown');
 		this.core().focusInput();
 	};
-	
+
 	//--------------------------------------------------------------------------------
 	// Core functionality
 
@@ -2100,7 +2100,7 @@
 	$.fn.textext.addPlugin('autocomplete', TextExtAutocomplete);
 
 	var p = TextExtAutocomplete.prototype,
-		
+
 		CSS_DOT            = '.',
 		CSS_SELECTED       = 'text-selected',
 		CSS_DOT_SELECTED   = CSS_DOT + CSS_SELECTED,
@@ -2110,7 +2110,7 @@
 		CSS_DOT_LABEL      = CSS_DOT + CSS_LABEL,
 
 		/**
-		 * Autocomplete plugin options are grouped under `autocomplete` when passed to the 
+		 * Autocomplete plugin options are grouped under `autocomplete` when passed to the
 		 * `$().textext()` function. For example:
 		 *
 		 *     $('textarea').textext({
@@ -2165,7 +2165,7 @@
 		/**
 		 * This option allows to override how a suggestion item is rendered. The value should be
 		 * a function, the first argument of which is suggestion to be rendered and `this` context
-		 * is the current instance of `TextExtAutocomplete`. 
+		 * is the current instance of `TextExtAutocomplete`.
 		 *
 		 * [Click here](/manual/examples/autocomplete-with-custom-render.html) to see a demo.
 		 *
@@ -2219,9 +2219,9 @@
 		 * @date 2011/08/17
 		 * @id TextExtAutocomplete.events
 		 */
-	
+
 		/**
-		 * Autocomplete plugin triggers and reacts to the `hideDropdown` to hide the dropdown if it's 
+		 * Autocomplete plugin triggers and reacts to the `hideDropdown` to hide the dropdown if it's
 		 * already visible.
 		 *
 		 * @name hideDropdown
@@ -2232,11 +2232,11 @@
 		EVENT_HIDE_DROPDOWN = 'hideDropdown',
 
 		/**
-		 * Autocomplete plugin triggers and reacts to the `showDropdown` to show the dropdown if it's 
+		 * Autocomplete plugin triggers and reacts to the `showDropdown` to show the dropdown if it's
 		 * not already visible.
 		 *
 		 * It's possible to pass a render callback function which will be called instead of the
-		 * default `TextExtAutocomplete.renderSuggestions()`. 
+		 * default `TextExtAutocomplete.renderSuggestions()`.
 		 *
 		 * Here's how another plugin should trigger this event with the optional render callback:
 		 *
@@ -2256,8 +2256,8 @@
 
 		/**
 		 * Autocomplete plugin reacts to the `setSuggestions` event triggered by other plugins which
-		 * wish to populate the suggestion items. Suggestions should be passed as event argument in the 
-		 * following format: `{ data : [ ... ] }`. 
+		 * wish to populate the suggestion items. Suggestions should be passed as event argument in the
+		 * following format: `{ data : [ ... ] }`.
 		 *
 		 * Here's how another plugin should trigger this event:
 		 *
@@ -2283,7 +2283,7 @@
 		/**
 		 * Autocomplete plugin triggers `getFormData` event with the current suggestion so that the the core
 		 * will be updated with serialized data to be submitted with the HTML form.
-		 * 
+		 *
 		 * @name getFormData
 		 * @author agorbatchev
 		 * @date 2011/08/18
@@ -2294,7 +2294,7 @@
 		/**
 		 * Autocomplete plugin reacts to `toggleDropdown` event and either shows or hides the dropdown
 		 * depending if it's currently hidden or visible.
-		 * 
+		 *
 		 * @name toggleDropdown
 		 * @author agorbatchev
 		 * @date 2011/12/27
@@ -2305,7 +2305,7 @@
 
 		POSITION_ABOVE = 'above',
 		POSITION_BELOW = 'below',
-		
+
 		DATA_MOUSEDOWN_ON_AUTOCOMPLETE = 'mousedownOnAutocomplete',
 
 		DEFAULT_OPTS = {
@@ -2382,8 +2382,8 @@
 				;
 
 			$(self).data('container', container);
-			
-			$(document.body).click(function(e) 
+
+			$(document.body).click(function(e)
 			{
 				if (self.isDropdownVisible() && !self.withinWrapElement(e.target))
 					self.trigger(EVENT_HIDE_DROPDOWN);
@@ -2395,9 +2395,9 @@
 
 	/**
 	 * Returns top level dropdown container HTML element.
-	 * 
+	 *
 	 * @signature TextExtAutocomplete.containerElement()
-	 * 
+	 *
 	 * @author agorbatchev
 	 * @date 2011/08/15
 	 * @id TextExtAutocomplete.containerElement
@@ -2409,7 +2409,7 @@
 
 	//--------------------------------------------------------------------------------
 	// User mouse/keyboard input
-	
+
 	/**
 	 * Reacts to the `mouseOver` event triggered by the TextExt core.
 	 *
@@ -2433,7 +2433,7 @@
 			target.addClass(CSS_SELECTED);
 		}
 	};
-	
+
 	/**
 	 * Reacts to the `mouseDown` event triggered by the TextExt core.
 	 *
@@ -2449,7 +2449,7 @@
 	{
 		this.containerElement().data(DATA_MOUSEDOWN_ON_AUTOCOMPLETE, true);
 	};
-	
+
 	/**
 	 * Reacts to the `click` event triggered by the TextExt core.
 	 *
@@ -2469,7 +2469,7 @@
 
 		if(target.is(CSS_DOT_SUGGESTION) || target.is(CSS_DOT_LABEL))
 			self.trigger('enterKeyPress');
-		
+
 		if (self.core().hasPlugin('tags'))
 			self.val('');
 	};
@@ -2492,17 +2492,17 @@
 			isBlurByMousedown = container.data(DATA_MOUSEDOWN_ON_AUTOCOMPLETE) === true
 			;
 
-		// only trigger a close event if the blur event was 
+		// only trigger a close event if the blur event was
 		// not triggered by a mousedown event on the autocomplete
 		// otherwise set focus back back on the input
 		if(self.isDropdownVisible())
 			isBlurByMousedown ? self.core().focusInput() : self.trigger(EVENT_HIDE_DROPDOWN);
-				
+
 		container.removeData(DATA_MOUSEDOWN_ON_AUTOCOMPLETE);
 	};
 
 	/**
-	 * Reacts to the `backspaceKeyPress` event triggered by the TextExt core. 
+	 * Reacts to the `backspaceKeyPress` event triggered by the TextExt core.
 	 *
 	 * @signature TextExtAutocomplete.onBackspaceKeyPress(e)
 	 *
@@ -2559,7 +2559,7 @@
 		var self = this;
 
 		self.isDropdownVisible()
-			? self.toggleNextSuggestion() 
+			? self.toggleNextSuggestion()
 			: self.getSuggestions()
 			;
 	};
@@ -2824,8 +2824,8 @@
 	 * @signature TextExtAutocomplete.onShowDropdown(e, renderCallback)
 	 *
 	 * @param e {Object} jQuery event.
-	 * @param renderCallback {Function} Optional callback function which would be used to 
-	 * render dropdown items. As a first argument, reference to the current instance of 
+	 * @param renderCallback {Function} Optional callback function which would be used to
+	 * render dropdown items. As a first argument, reference to the current instance of
 	 * Autocomplete plugin will be supplied. It's assumed, that if this callback is provided
 	 * rendering will be handled completely manually.
 	 *
@@ -2852,7 +2852,7 @@
 			self.renderSuggestions(self._suggestions);
 			self.toggleNextSuggestion();
 		}
-		
+
 		self.showDropdown(self.containerElement());
 		self.setSelectedSuggestion(current);
 	};
@@ -2866,7 +2866,7 @@
 	 *         showHideDropdown : false
 	 *     }
 	 *
-	 * Notice the optional `showHideDropdown` option. By default, ie without the `showHideDropdown` 
+	 * Notice the optional `showHideDropdown` option. By default, ie without the `showHideDropdown`
 	 * value the method will trigger either `showDropdown` or `hideDropdown` depending if there are
 	 * suggestions. If set to `false`, no event is triggered.
 	 *
@@ -3162,12 +3162,12 @@
 		if(suggestion)
 		{
 			self.val(self.itemManager().itemToString(suggestion));
-			self.core().getFormData();	
+			self.core().getFormData();
 		}
 
 		self.trigger(EVENT_HIDE_DROPDOWN);
 	};
-	
+
 	/**
 	 * Determines if the specified HTML element is within the TextExt core wrap HTML element.
 	 *
@@ -3180,7 +3180,7 @@
 	 * @date 2012/01/15
 	 * @id TextExtAutocomplete.withinWrapElement
 	 */
-	p.withinWrapElement = function(element) 
+	p.withinWrapElement = function(element)
 	{
 		return this.core().wrapElement().find(element).size() > 0;
 	}
@@ -3201,10 +3201,10 @@
 	 * tags it's possible to add.
 	 *
 	 * The list of allowed items can be either specified through the
-	 * options, can come from the Suggestions plugin or be loaded by the Ajax 
-	 * plugin. All these plugins have one thing in common -- they 
+	 * options, can come from the Suggestions plugin or be loaded by the Ajax
+	 * plugin. All these plugins have one thing in common -- they
 	 * trigger `setSuggestions` event which the Filter plugin is expecting.
-	 * 
+	 *
 	 * @author agorbatchev
 	 * @date 2011/08/18
 	 * @id TextExtFilter
@@ -3217,7 +3217,7 @@
 	var p = TextExtFilter.prototype,
 
 		/**
-		 * Filter plugin options are grouped under `filter` when passed to the 
+		 * Filter plugin options are grouped under `filter` when passed to the
 		 * `$().textext()` function. For example:
 		 *
 		 *     $('textarea').textext({
@@ -3231,7 +3231,7 @@
 		 * @date 2011/08/18
 		 * @id TextExtFilter.options
 		 */
-		
+
 		/**
 		 * This is a toggle switch to enable or disable the Filter plugin. The value is checked
 		 * each time at the top level which allows you to toggle this setting on the fly.
@@ -3277,7 +3277,7 @@
 		 */
 
 		/**
-		 * Filter plugin reacts to the `setSuggestions` event triggered by other plugins like 
+		 * Filter plugin reacts to the `setSuggestions` event triggered by other plugins like
 		 * Suggestions and Ajax.
 		 *
 		 * However, event if this event is handled and items are passed with it and stored, if `items`
@@ -3327,8 +3327,8 @@
 
 	/**
 	 * Reacts to the [`getFormData`][1] event triggered by the core. Returns data with the
-	 * weight of 200 to be *greater than the Autocomplete plugins* data weights. 
-	 * The weights system is covered in greater detail in the [`getFormData`][1] event 
+	 * weight of 200 to be *greater than the Autocomplete plugins* data weights.
+	 * The weights system is covered in greater detail in the [`getFormData`][1] event
 	 * documentation.
 	 *
 	 * This method does nothing if Tags tag is also present.
@@ -3413,7 +3413,7 @@
 
 	/**
 	 * Reacts to the `setSuggestions` events and stores supplied suggestions for future use.
-	 * 
+	 *
 	 * @signature TextExtFilter.onSetSuggestions(e, data)
 	 *
 	 * @param e {Object} jQuery event.
@@ -3452,7 +3452,7 @@
 
 	var p = TextExtFocus.prototype,
 		/**
-		 * Focus plugin only has one option and that is its HTML template. It could be 
+		 * Focus plugin only has one option and that is its HTML template. It could be
 		 * changed when passed to the `$().textext()` function. For example:
 		 *
 		 *     $('textarea').textext({
@@ -3466,7 +3466,7 @@
 		 * @date 2011/08/18
 		 * @id TextExtFocus.options
 		 */
-		
+
 		/**
 		 * HTML source that is used to generate markup required for the focus effect.
 		 *
@@ -3539,9 +3539,9 @@
 
 	//--------------------------------------------------------------------------------
 	// Event handlers
-	
+
 	/**
-	 * Reacts to the `blur` event and hides the focus effect with a slight delay which 
+	 * Reacts to the `blur` event and hides the focus effect with a slight delay which
 	 * allows quick refocusing without effect blinking in and out.
 	 *
 	 * @signature TextExtFocus.onBlur(e)
@@ -3580,10 +3580,10 @@
 		var self = this;
 
 		clearTimeout(self._timeoutId);
-		
+
 		self.getFocus().show();
 	};
-	
+
 	//--------------------------------------------------------------------------------
 	// Core functionality
 
@@ -3689,7 +3689,7 @@
 		 * @date 2011/08/18
 		 * @id TextExtPrompt.events.blur
 		 */
-	
+
 		DEFAULT_OPTS = {
 			prompt : 'Awaiting input...',
 
@@ -3719,13 +3719,13 @@
 			;
 
 		self.baseInit(core, DEFAULT_OPTS);
-		
+
 		container = $(self.opts(OPT_HTML_PROMPT));
 		$(self).data('container', container);
 
 		self.core().wrapElement().append(container);
 		self.setPrompt(self.opts(OPT_PROMPT));
-		
+
 		prompt = core.input().attr(placeholderKey);
 
 		if(!prompt)
@@ -3750,7 +3750,7 @@
 
 	//--------------------------------------------------------------------------------
 	// Event handlers
-	
+
 	/**
 	 * Reacts to the `postInit` and configures the plugin for initial display.
 	 *
@@ -3805,7 +3805,7 @@
 	};
 
 	/**
-	 * Reacts to the `blur` event and shows the prompt effect with a slight delay which 
+	 * Reacts to the `blur` event and shows the prompt effect with a slight delay which
 	 * allows quick refocusing without effect blinking in and out.
 	 *
 	 * The prompt is restored if the text box has no value.
@@ -3842,7 +3842,7 @@
 		var self     = this,
 			input    = self.input()
 			;
-		
+
 		if($.trim(self.val()).length === 0 && !input.is(':focus'))
 			self.containerElement().removeClass(CSS_HIDE_PROMPT);
 	};
@@ -3876,7 +3876,7 @@
 	{
 		this.hidePrompt();
 	};
-	
+
 	//--------------------------------------------------------------------------------
 	// Core functionality
 
@@ -3935,7 +3935,7 @@
 
 	var p = TextExtSuggestions.prototype,
 		/**
-		 * Suggestions plugin only has one option and that is to set suggestion items. It could be 
+		 * Suggestions plugin only has one option and that is to set suggestion items. It could be
 		 * changed when passed to the `$().textext()` function. For example:
 		 *
 		 *     $('textarea').textext({
@@ -4045,7 +4045,7 @@
 	};
 
 	/**
-	 * Reacts to the `postInit` event and triggers `setSuggestions` event to set suggestions list 
+	 * Reacts to the `postInit` event and triggers `setSuggestions` event to set suggestions list
 	 * right after initialization.
 	 *
 	 * @signature TextExtSuggestions.onPostInit(e)
@@ -4252,7 +4252,7 @@
 
 			html : {
 				tags : '<div class="text-tags"/>',
-				tag  : '<div class="text-tag"><div class="text-button"><span class="arrow_left"/><span class="text-label"/><span class="transition-border"></span><a class="text-remove">x</a></div></div>'
+				tag  : '<div class="text-tag"><div class="text-button"><img src="/images/tags/blue_tag_triangle.png" class="arrow_left"/><span class="text-label"/><span class="transition-border"></span><a class="text-remove">x</a></div></div>'
 			}
 		}
 		;

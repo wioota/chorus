@@ -7,11 +7,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.textarea = this.$('textarea.tag_editor');
+        this.input = this.$('input');
         var tags = this.model.tags().map(function(tag) {
             return tag.attributes;
         });
-        this.textarea.textext({
+        this.input.textext({
             plugins: 'tags focus autocomplete ajax',
             tagsItems: tags,
             itemManager: chorus.utilities.TagItemManager,
@@ -27,13 +27,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
             }
         });
 
-        this.textext = this.textarea.textext()[0];
-        this.textarea.on("setFormData", _.bind(this.updateTags, this));
-        this.textarea.bind('isTagAllowed', _.bind(this.textExtValidate, this));
-        this.textarea.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+        this.textext = this.input.textext()[0];
+        this.input.on("setFormData", _.bind(this.updateTags, this));
+        this.input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
+        this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
 
-        this.textext_elem = this.$('.text-core');
-        if(!this.model.hasTags()) this.textext_elem.addClass("hidden");
         if(this.editing) {
             this.$el.addClass('editing')
         } else {
@@ -59,7 +57,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
         var valid = true;
         if(tagName.length > 100) {
             valid = false;
-            this.markInputAsInvalid(this.textarea, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
+            this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
         }
 
         if (this.model.tags().containsTag(tagName)) {
@@ -71,7 +69,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
     restoreInvalidTag: function(e) {
         if(this.invalidTagName) {
-            this.textarea.val(this.invalidTagName);
+            this.input.val(this.invalidTagName);
             this.invalidTagName = "";
         }
     },
@@ -86,12 +84,12 @@ chorus.views.TagBox = chorus.views.Base.extend({
     saveTags: function(e) {
         e.preventDefault();
 
-        var textareaText = this.textarea.val().trim();
-        if(textareaText) {
-            if(!this.validateTag(textareaText)) {
+        var inputText = this.input.val().trim();
+        if(inputText) {
+            if(!this.validateTag(inputText)) {
                 return;
             }
-            this.textext.tags().addTags([{name: textareaText}]);
+            this.textext.tags().addTags([{name: inputText}]);
         }
 
         this.model.tags().save();

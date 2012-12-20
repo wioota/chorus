@@ -1,9 +1,7 @@
 .text-core {
-    width: 100% !important;
+    width: 100%;
     display: inline-block;
     height: 20px;
-
-    margin-right: 30px;
 
     .text-wrap {
         width: 100% !important;
@@ -13,64 +11,47 @@
         }
 
         #tag_editor {
-            width: 100% !important;
             line-height: 16px;
         }
 
         .text-tags .text-tag {
-            margin-bottom: 4px;
-            vertical-align: middle;
+            display: inline-block;
+            max-width: 100%;
 
             div.text-button {
                 background-color: #3096DE;
-                border-radius: 0;
-                padding: 0;
-                border: none;
-                height: 20px;
-
-                .text-label, .text-remove {
-                    color: #FFF;
-                    padding: 0;
-                    margin: 0;
-                }
+                padding-left: 10px;
+                padding-right: 17px;
+                min-height: 20px;
+                max-width: 100%;
+                color: #FFF;
 
                 .text-label {
-                    top: 2px;
-                    margin: 0;
-                    position: static;
-                    padding: 0 5px;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    word-wrap: break-word;
+                    max-width: 100%;
                 }
 
                 .transition-border {
                     border-left: 1px solid #1174B7;
                     border-right: 1px solid #59B1F1;
-                    height: 20px;
-                    vertical-align: middle;
-                    display: inline-block;
+                    position: absolute;
+                    width: 0;
+                    right: 15px;
+                    top: 0;
+                    bottom: 0;
                 }
 
                 .text-remove {
-                    background-color: #3096DE;
-                    background-image: none !important;
-                    display: inline-block !important;
-                    height: 20px !important;
+                    color: #FFF;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    right: 1px;
                     line-height: 19px;
-                    padding-left: 4px;
+                    padding: 0 4px;
                     font-size: 10px;
-                    position: static !important;
-                }
-
-                &.disabled {
-                    .text-label {
-                        border: none;
-                    }
-                    .text-remove {
-                        display: none !important;
-                    }
-
-                    .transition-border {
-                        display: none;
-                    }
                 }
             }
         }
@@ -95,22 +76,21 @@
 }
 
 .arrow_left {
-    background-color: #FFF;
     display: inline-block;
-    width:0px;
-    height:0px;
-    border-bottom:10px solid transparent;  /* left arrow slant */
-    border-top:10px solid transparent; /* right arrow slant */
-    border-right: 10px solid #3096DE;
-    font-size:0px;
-    line-height:0px;
-    vertical-align: middle;
-    position: static;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 7px;
 }
 
 .tag-list {
     div {
         display: inline-block;
+        position: relative;
+        margin: 2px 2px;
+        max-width: 100%;
 
         span.text-label {
             display: inline-block;
@@ -118,14 +98,12 @@
             font-size: 11px;
             color: #FFF;
             background-color: #3096DE;
-            margin: 2px 3px 2px 0;
-            padding: 0 5px;
+            padding: 0 10px;
             line-height: 20px;
-            text-wrap: unrestricted;
             word-wrap: break-word;
+            max-width: 100%;
         }
     }
-
 }
 
 .save_tags {
@@ -133,9 +111,11 @@
     position: absolute;
     right: 13px;
     bottom: 14px;
+    z-index: 10;
 }
 
 .edit_tags {
+    white-space:nowrap;
     font-size: 10px;
     color: $color-text3;
 
