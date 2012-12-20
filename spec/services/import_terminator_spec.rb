@@ -84,11 +84,10 @@ describe ImportTerminator, :database_integration do
           stub_reader_sql
           @runner = Thread.new do
             begin
+            # stub reload in new thread because import isn't really persisted due to transactional rspec
+            stub(import).reload { import }
             ImportExecutor.new(import).run
             rescue Sequel::DatabaseError
-            rescue => e
-              p e
-              raise
             end
           end
           while import_manager.writer_procpid.nil? || import_manager.reader_procpid.nil?
