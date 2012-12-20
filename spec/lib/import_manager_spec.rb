@@ -16,7 +16,7 @@ describe ImportManager do
 
     context "when the import is in the worker queue" do
       it "should not mark the import as started" do
-        pending_import.started?.should_not be_true
+        expect(pending_import).not_to be_started
       end
     end
 
@@ -28,7 +28,7 @@ describe ImportManager do
           stub(ImportExecutor).run { throw :running! }
           chorus_worker.start
         end
-        pending_import.reload.started?.should be_true
+        expect(pending_import).to be_started
       end
     end
   end
