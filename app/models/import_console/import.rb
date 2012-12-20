@@ -7,9 +7,13 @@ class ImportConsole::Import < DelegateClass(Import)
   def get_procpid(db, type)
     matcher = "%pipe%_#{id}" + (type == :writer ? "_w" : "_r")
     account = db.gpdb_instance.account_for_user!(user)
-    db.with_gpdb_connection(account) do |conn|
-      conn.select_value("select procpid from pg_stat_activity where current_query LIKE '#{matcher}%' ORDER BY query_start LIMIT 1")
-    end
+
+    db.connect_with(account).fetch_value(<<-SQL)
+      SELECT procpid
+      FROM pg_stat_activity
+      WHERE current_query LIKE '#{matcher}%'
+      ORDER BY query_start
+    SQL
   end
 
   def reader_procpid

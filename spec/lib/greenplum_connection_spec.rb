@@ -194,6 +194,19 @@ describe GreenplumConnection::Base, :database_integration do
       end
     end
 
+    describe "#fetch_value" do
+      let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
+
+      it "selects just the first value" do
+        connection.fetch_value(sql).should == 1
+      end
+
+      it "returns nil for an empty set" do
+        sql = "SELECT * FROM (SELECT * FROM (SELECT 1 as column1) AS set1 WHERE column1 = 2) AS empty"
+        connection.fetch_value(sql).should == nil
+      end
+    end
+
     describe "#execute" do
       let(:sql) { "SET search_path TO 'public'" }
       let(:parameters) {{}}
@@ -486,6 +499,15 @@ describe GreenplumConnection::Base, :database_integration do
         connection.fetch(sql).should == [{ :answer => 1 }]
       end
 
+      it "sets the search path before any query" do
+        stub.proxy(Sequel).connect do |connection|
+          stub(connection).execute(anything, anything)
+          mock(connection).execute("SET search_path TO '#{schema_name}'")
+        end
+
+        connection.fetch(sql)
+      end
+
       context "with SQL parameters" do
         let(:sql) { "SELECT :num AS answer" }
         let(:parameters) {{:num => 3}}
@@ -493,6 +515,23 @@ describe GreenplumConnection::Base, :database_integration do
         it "succeeds" do
           connection.fetch(sql, parameters).should == [{ :answer => 3 }]
         end
+      end
+    end
+
+    describe "#fetch_value" do
+      let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
+
+      it "fetches the first value" do
+        connection.fetch_value(sql).should == 1
+      end
+
+      it "sets the search path before any query" do
+        stub.proxy(Sequel).connect do |connection|
+          stub(connection).execute(anything, anything)
+          mock(connection).execute("SET search_path TO '#{schema_name}'")
+        end
+
+        connection.fetch_value(sql)
       end
     end
 

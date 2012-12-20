@@ -37,6 +37,11 @@ module GreenplumConnection
       with_connection { @connection.fetch(sql, parameters).all }
     end
 
+    def fetch_value(sql)
+      result = with_connection { @connection.fetch(sql).first }
+      result && result.first[1]
+    end
+
     def execute(sql)
       with_connection { @connection.execute(sql) }
     end
@@ -144,6 +149,11 @@ module GreenplumConnection
 
     def fetch(sql, parameters = {})
       with_schema_connection { @connection.fetch(sql, parameters).all }
+    end
+
+    def fetch_value(sql)
+      result = with_schema_connection { @connection.fetch(sql).first }
+      result && result.first[1]
     end
 
     def execute(sql)
