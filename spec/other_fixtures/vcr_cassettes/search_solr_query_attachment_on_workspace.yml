@@ -9,8 +9,6 @@ http_interactions:
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
-      connection:
-      - close
   response:
     status:
       code: 200
@@ -24,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts table_description_texts schema_name_texts
         column_name_texts column_description_texts query_texts parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -40,12 +38,12 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''Attachment
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3344201.0,''docs''=>[{''id''=>''Attachment
-        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>3344201.0}]}},{''groupValue''=>''Attachment
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2675360.8,''docs''=>[{''id''=>''Attachment
-        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>2675360.8}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Attachment
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3395995.5,''docs''=>[{''id''=>''Attachment
+        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>3395995.5}]}},{''groupValue''=>''Attachment
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2716796.5,''docs''=>[{''id''=>''Attachment
+        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>2716796.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Attachment
         1000004''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@'']},''Attachment
         1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@_dataset'']}}}'
     http_version: '1.1'
-  recorded_at: Sat, 10 Nov 2012 00:36:25 GMT
-recorded_with: VCR 2.1.1
+  recorded_at: Thu, 20 Dec 2012 22:56:09 GMT
+recorded_with: VCR 2.3.0

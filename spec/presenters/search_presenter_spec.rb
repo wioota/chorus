@@ -59,7 +59,7 @@ describe SearchPresenter, :type => :view do
         workfile_hash.should have_key(:results)
         workfile_hash[:results][0].should have_key(:highlighted_attributes)
         workfile_hash[:results][0].should have_key(:version_info)
-        workfile_hash[:results][0][:entity_type].should == 'workfile'
+        workfile_hash[:results].each { |wf| %w(workfile linked_tableau_workfile).should include(wf[:entity_type]) }
       end
 
       it "includes the comments" do
