@@ -58,7 +58,7 @@ describe("chorus.views.TagBox", function() {
                 view.$('a.edit_tags').click();
                 expect(view.$('.save_tags')).toExist();
                 expect(view.$('.edit_tags')).not.toExist();
-                expect(view.$("textarea")).toExist();
+                expect(view.$("input")).toExist();
             });
         });
     });
@@ -77,11 +77,11 @@ describe("chorus.views.TagBox", function() {
         });
 
         describe("When edit is clicked", function() {
-            var textarea;
+            var input;
 
             beforeEach(function() {
                 view.$('a.edit_tags').click();
-                textarea = view.$('textarea');
+                input = view.$('input.tag_editor');
             });
 
             function enterTag(tagName) {
@@ -89,10 +89,10 @@ describe("chorus.views.TagBox", function() {
                 keyup.keyCode = $.ui.keyCode.ENTER;
                 var enter = $.Event('enterKeyPress');
                 enter.keyCode = $.ui.keyCode.ENTER;
-                textarea.val(tagName);
-                textarea.focus();
-                textarea.trigger(enter);
-                textarea.trigger(keyup);
+                input.val(tagName);
+                input.focus();
+                input.trigger(enter);
+                input.trigger(keyup);
             }
 
             it('shows the x character on the tags', function() {
@@ -109,8 +109,8 @@ describe("chorus.views.TagBox", function() {
                     expect(view.$(".text-tag").length).toBe(4);
                 });
 
-                it("removes the text from the textarea", function() {
-                    expect(textarea.val()).toBe("");
+                it("removes the text from the input", function() {
+                    expect(input.val()).toBe("");
                 });
 
                 it("adds the tag to the model's tagset", function() {
@@ -130,18 +130,18 @@ describe("chorus.views.TagBox", function() {
                     expect(view.model.tags().length).toBe(3);
                 });
 
-                it("does not remove the text from the textarea", function() {
-                    expect(textarea.val()).toBe(longString);
+                it("does not remove the text from the input", function() {
+                    expect(input.val()).toBe(longString);
                 });
 
                 it("shows an error message", function() {
-                    expect(textarea).toHaveClass("has_error");
-                    expect(textarea.hasQtip()).toBeTruthy();
+                    expect(input).toHaveClass("has_error");
+                    expect(input.hasQtip()).toBeTruthy();
                 });
 
                 it("entering a valid tag clears the error class", function() {
                     enterTag("new-tag");
-                    expect(textarea).not.toHaveClass("has_error");
+                    expect(input).not.toHaveClass("has_error");
                 });
             });
 
@@ -165,7 +165,7 @@ describe("chorus.views.TagBox", function() {
                 it("closes the text box", function() {
                     expect(view.$('.save_tags')).not.toExist();
                     expect(view.$('.edit_tags')).toExist();
-                    expect(view.$("textarea")).not.toExist();
+                    expect(view.$("input")).not.toExist();
                 });
 
                 it('saves the tags', function() {
@@ -195,7 +195,7 @@ describe("chorus.views.TagBox", function() {
             describe("typing a tag without hitting enter and then clicking done", function() {
                 context("when the last tag is valid", function() {
                     beforeEach(function() {
-                        view.$("textarea").val("hello");
+                        view.$("input").val("hello");
                         view.$(".save_tags").click();
                     });
 
@@ -216,7 +216,7 @@ describe("chorus.views.TagBox", function() {
                 context("when the last tag is invalid", function() {
                     beforeEach(function() {
                         this.server.reset();
-                        view.$("textarea").val("alpha");
+                        view.$("input").val("alpha");
                         view.$(".save_tags").click();
                     });
 
@@ -229,10 +229,10 @@ describe("chorus.views.TagBox", function() {
                     });
 
                     it("doesn't reset the last tag on the next keyup", function() {
-                        view.$("textarea").val("alpha2");
+                        view.$("input").val("alpha2");
                         var keyup = $.Event("keyup");
-                        view.$("textarea").trigger(keyup);
-                        expect(view.$('textarea').val()).toBe("alpha2");
+                        view.$("input").trigger(keyup);
+                        expect(view.$('input').val()).toBe("alpha2");
                     });
                 });
             });
