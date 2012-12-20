@@ -74,6 +74,23 @@
                 }
             }
         }
+
+        .text-dropdown {
+            border: 1px solid #A5A6A8;
+            font: inherit;
+            font-size: 12px;
+            font-weight: bold;
+
+            .text-list {
+                .text-suggestion {
+                    padding: 6px 10px;
+
+                    &.text-selected {
+                        background: $picklist-selected-background-color;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -126,5 +143,3 @@
         color: $link-color
     }
 }
-
-

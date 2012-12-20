@@ -1,5 +1,3 @@
-//typeahead css
-
 chorus.views.TagBox = chorus.views.Base.extend({
     templateName: "tag_box",
     constructorName: "TagBoxView",
@@ -21,6 +19,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
                 url: '/taggings',
                 dataType: 'json',
                 cacheResults: false
+            },
+            autocomplete: {
+                dropdown: {
+                    maxHeight: '200px'
+                }
             }
         });
 
