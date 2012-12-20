@@ -1,3 +1,5 @@
+//typeahead css
+
 chorus.views.TagBox = chorus.views.Base.extend({
     templateName: "tag_box",
     constructorName: "TagBoxView",
@@ -7,12 +9,13 @@ chorus.views.TagBox = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var textarea = this.$('textarea.tag_editor');
-        var tags = this.model.tags().map(function (tag) { return tag.attributes; });
-        this.textext = textarea.textext({
-            plugins: 'tags prompt focus autocomplete ajax arrow',
+        this.textarea = this.$('textarea.tag_editor');
+        var tags = this.model.tags().map(function(tag) {
+            return tag.attributes;
+        });
+        this.textarea.textext({
+            plugins: 'tags focus autocomplete ajax',
             tagsItems: tags,
-            prompt: "",
             itemManager: chorus.utilities.TagItemManager,
             ajax: {
                 url: '/taggings',
@@ -21,8 +24,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
             }
         });
 
-        textarea.bind('isTagAllowed', _.bind(this.textExtValidate, this));
-        textarea.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+        this.textext = this.textarea.textext()[0];
+        this.textarea.on("setFormData", _.bind(this.updateTags, this));
+        this.textarea.bind('isTagAllowed', _.bind(this.textExtValidate, this));
+        this.textarea.bind('setInputData', _.bind(this.restoreInvalidTag, this));
 
         this.textext_elem = this.$('.text-core');
         if(!this.model.hasTags()) this.textext_elem.addClass("hidden");
@@ -33,9 +38,13 @@ chorus.views.TagBox = chorus.views.Base.extend({
         }
     },
 
+    updateTags: function(e, data) {
+        this.model.tags().reset(data);
+    },
+
     textExtValidate: function(e, data) {
         this.invalidTagName = "";
-        if (!this.validateTag(data.tag.name)) {
+        if(!this.validateTag(data.tag.name)) {
             data.result = false;
             this.invalidTagName = data.tag.name;
         }
@@ -47,11 +56,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
         var valid = true;
         if(tagName.length > 100) {
             valid = false;
-            this.markInputAsInvalid(this.$('textarea'), t("field_error.TOO_LONG", {field: "Tag", count : 100}), false);
+            this.markInputAsInvalid(this.textarea, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
         }
 
-        var tags = JSON.parse(this.$('input[type=hidden]').val());
-        if(_.any(tags, function(tag) { return tag.name === tagName })) {
+        if (this.model.tags().containsTag(tagName)) {
             valid = false;
         }
 
@@ -59,8 +67,8 @@ chorus.views.TagBox = chorus.views.Base.extend({
     },
 
     restoreInvalidTag: function(e) {
-        if (this.invalidTagName) {
-            this.$('textarea').val(this.invalidTagName);
+        if(this.invalidTagName) {
+            this.textarea.val(this.invalidTagName);
             this.invalidTagName = "";
         }
     },
@@ -72,28 +80,24 @@ chorus.views.TagBox = chorus.views.Base.extend({
         };
     },
 
-
     saveTags: function(e) {
         e.preventDefault();
-        var tags = JSON.parse(this.$('input[type=hidden]').val());
-        var textareaText = this.$("textarea").val().trim();
 
+        var textareaText = this.textarea.val().trim();
         if(textareaText) {
-            tags.push({name: textareaText});
-            var tagsInvalid = !this.validateTag(textareaText)
+            if(!this.validateTag(textareaText)) {
+                return;
+            }
+            this.textext.tags().addTags([{name: textareaText}]);
         }
 
-        if(!tagsInvalid) {
-            this.model.tags().reset(tags, {silent: true});
+        this.model.tags().save();
 
-            this.model.tags().save();
-
-            this.editing = false;
-            this.render();
-        }
+        this.editing = false;
+        this.render();
     },
 
-    editTags: function(e){
+    editTags: function(e) {
         e.preventDefault();
         this.editing = true;
         this.render();

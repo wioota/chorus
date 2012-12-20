@@ -112,6 +112,10 @@ describe("chorus.views.TagBox", function() {
                 it("removes the text from the textarea", function() {
                     expect(textarea.val()).toBe("");
                 });
+
+                it("adds the tag to the model's tagset", function() {
+                    expect(view.model.tags().at(3).name()).toEqual(_.repeat("a", 100));
+                });
             });
 
             describe("when an invalid tag is entered", function() {
@@ -155,8 +159,6 @@ describe("chorus.views.TagBox", function() {
             describe("click done", function() {
                 beforeEach(function() {
                     spyOn(model.tags(), "save");
-                    var tags = '[{"name": "alpha"}, {"name": "beta"}, {"name": "delta"}]';
-                    view.$('input[type=hidden]').val(tags);
                     view.$('a.save_tags').click();
                 });
 
@@ -164,11 +166,6 @@ describe("chorus.views.TagBox", function() {
                     expect(view.$('.save_tags')).not.toExist();
                     expect(view.$('.edit_tags')).toExist();
                     expect(view.$("textarea")).not.toExist();
-                });
-
-                it("sets the updated tags on the currect backbone model", function() {
-                    expect(view.model.tags().map(function(tag){return tag.name()})).
-                        toEqual(["alpha", "beta", "delta"]);
                 });
 
                 it('saves the tags', function() {
