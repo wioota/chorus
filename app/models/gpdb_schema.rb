@@ -1,3 +1,5 @@
+require 'greenplum_connection'
+
 class GpdbSchema < ActiveRecord::Base
   include Stale
   SCHEMAS_SQL = <<-SQL

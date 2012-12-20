@@ -1,5 +1,7 @@
-<table>
+<%= form_tag("/imports", :method => :put) do %>
+  <table>
     <tr>
+      <th>Select</th>
       <th>Started?</th>
       <th>Named Pipe</th>
       <th>Source DB Process</th>
@@ -13,6 +15,7 @@
     </tr>
   <% @imports.each do |import| %>
     <tr>
+      <td><input type="checkbox" name="id[]" value="<%= import.id %>" /></td>
       <td><%= import.started? %></td>
       <td><%= import.named_pipe || "Not found" %></td>
       <td><%= show_process { import.writer_procpid } %></td>
@@ -23,6 +26,11 @@
 
       <td><%= instance_description(import.workspace.sandbox.database.gpdb_instance) %></td>
       <td><%= link_to_destination(import.workspace, import.to_table) %></td>
-    </tr>
+</tr>
   <% end %>
-</table>
+    </table>
+    <button type="submit" name="success" value="true">Pass</button>
+    <button type="submit" name="success" value="false">Fail</button>
+    <label>Failure message:</label>
+    <input type="text" name="message">
+<% end %>

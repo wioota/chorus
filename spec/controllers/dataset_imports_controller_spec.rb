@@ -16,7 +16,7 @@ describe DatasetImportsController do
     it "uses authorization based on the visible datasets"
 
     it_behaves_like "a paginated list" do
-      let(:params) {{:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id}}
+      let(:params) { {:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id} }
     end
 
     it "shows the latest imports for a dataset as the source dataset" do
@@ -52,6 +52,120 @@ describe DatasetImportsController do
     generate_fixture 'csvImportSet.json' do
       get :index, :workspace_id => imports(:csv).workspace_id, :dataset_id => datasets(:csv_import_table).id
       response.should be_success
+    end
+  end
+
+  describe "#update" do
+    let(:user) { users(:admin) }
+    let(:import) { imports(:one) }
+    let(:success) { false }
+
+    let(:params) { {
+        :id => import.id,
+        :success => success.to_s,
+        :format => :json
+    } }
+
+    before do
+      log_in user
+    end
+
+    context "for an import that has not finished" do
+      before do
+        import.finished_at = nil
+        import.save!
+        stub(ImportTerminator).terminate(import)
+      end
+
+      it "responds with success" do
+        put :update, params
+        response.should be_success
+      end
+
+      it "calls terminate on a running import and sets the success attribute" do
+        mock(ImportTerminator).terminate(import)
+        put :update, params
+        import.reload
+        import.finished_at.should be_within(1.minute).of(Time.current)
+        import.success.should == success
+      end
+
+      it "generates an event and a notification" do
+        expect {
+          expect {
+            put :update, params.merge({:message => "this was canceled because it was bad"})
+          }.to change(Events::DatasetImportFailed, :count).by(1)
+        }.to change(Notification, :count).by(1)
+        Events::DatasetImportFailed.last.error_message.should == "this was canceled because it was bad"
+      end
+
+      it "redirects html requests back to the import console" do
+        put :update, params.merge(:format => :html)
+        response.should redirect_to ":#{ChorusConfig.instance['server_port']}/import_console/imports"
+      end
+
+      describe "when the user marks an import as successfully completed" do
+        let(:success) { true }
+
+        it "generates an event and a notification" do
+          pending "this would require a bunch of nasty stubbing of Dataset.refresh"
+          expect {
+            expect {
+              put :update, params
+            }.to change(Events::DatasetImportSuccess, :count).by(1)
+          }.to change(Notification, :count).by(1)
+        end
+      end
+    end
+
+    it "authorizes only the admin" do
+      log_out
+      log_in(users(:owner))
+      mock(ImportTerminator).terminate(import).times(0)
+      put :update, params
+
+      response.should be_forbidden
+    end
+
+    context "for a set of imports that have not finished" do
+      let(:params) { {
+          :id => Import.all.map(&:to_param),
+          :success => success,
+          :format => :json
+      } }
+
+      before do
+        Import.find_each do |import|
+          import.finished_at = nil
+          import.save!
+        end
+      end
+
+      it "cancels all running imports and sets the success attribute" do
+        stub(ImportTerminator).terminate.with_any_args
+        put :update, params
+        response.should be_success
+        Import.find_each do |import|
+          import.finished_at.should be_within(1.minute).of(Time.current)
+          import.success.should == success
+        end
+      end
+    end
+
+    context "for an import that has already finished" do
+      let(:finished_at) { 1.day.ago }
+      before do
+        import.finished_at = finished_at
+        import.success = true
+        import.save!
+      end
+
+      it "does nothing" do
+        put :update, params
+        import.reload.finished_at.should == finished_at
+        import.success.should == true
+        response.should be_success
+      end
     end
   end
 
@@ -162,7 +276,7 @@ describe DatasetImportsController do
         context "when there's duplicate columns ( only in Chorus View )" do
           before do
             any_instance_of(Dataset) do |dataset|
-              mock(dataset).check_duplicate_column.with_any_args { }
+              mock(dataset).check_duplicate_column.with_any_args {}
             end
           end
           it "should check for duplicate columns" do

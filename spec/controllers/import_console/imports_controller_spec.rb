@@ -39,6 +39,17 @@ describe ImportConsole::ImportsController do
         response.code.should == "403"
       end
     end
+
+    context "when the user is not logged in" do
+      before do
+        log_out
+      end
+
+      it "redirects to the application root" do
+        get :index
+        response.should redirect_to ":#{ChorusConfig.instance['server_port']}/"
+      end
+    end
   end
 end
 
