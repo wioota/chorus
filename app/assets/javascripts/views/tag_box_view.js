@@ -18,7 +18,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             ajax: {
                 url: '/taggings',
                 dataType: 'json',
-                cacheResults: false
+                existingTagCollection: this.model.tags()
             },
             autocomplete: {
                 dropdown: {
