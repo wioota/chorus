@@ -842,7 +842,6 @@
     // collection when they arrive. If `add: true` is passed, appends the
     // models to the collection instead of resetting.
     fetch:function (options) {
-        debugger;
       options = options ? _.clone(options) : {};
       if (options.parse === void 0) options.parse = true;
       var collection = this;

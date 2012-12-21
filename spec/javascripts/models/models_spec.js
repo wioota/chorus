@@ -1002,6 +1002,22 @@ describe("chorus.models.Abstract", function() {
         });
 
         describe("#set", function() {
+          context("when we pass a model to the constructor of an model", function () {
+            it("creates a new model with the attributes of the parameter", function() {
+              var parameterModel = rspecFixtures.user({ firstName: "Santa", lastName: "Claus" });
+              this.model = new chorus.models.Base(parameterModel);
+
+              expect(this.model.get("firstName")).toBe(parameterModel.get("firstName"));
+            });
+
+            it ("does not create the functions of a parameter model on the new model", function () {
+              var parameterModel = rspecFixtures.user({ firstName: "Santa", lastName: "Claus" });
+              this.model = new chorus.models.Base(parameterModel);
+
+              expect(this.model.workspaces).toBeUndefined();
+            });
+          });
+
            context("when the attributes has completeJson set to true", function() {
                it("sets the model as loaded", function() {
                    this.model = new chorus.models.Base();
@@ -1009,6 +1025,7 @@ describe("chorus.models.Abstract", function() {
                    expect(this.model.loaded).toBeTruthy();
                });
            });
+
            context("when the attributes do not have completeJson set to true", function() {
                it("does not set the model as loaded", function() {
                    this.model = new chorus.models.Base();
