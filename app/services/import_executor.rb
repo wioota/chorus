@@ -5,7 +5,7 @@ class ImportExecutor < DelegateClass(Import)
 
   def self.run(import_id)
     import = Import.find(import_id)
-    ImportExecutor.new(import).run
+    ImportExecutor.new(import).run if import.success.nil?
   end
 
   def self.cancel(import, success, message = nil)

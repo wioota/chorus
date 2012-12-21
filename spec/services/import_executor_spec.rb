@@ -194,6 +194,22 @@ describe ImportExecutor do
   end
 
   describe ".run" do
+    context "when the import has already been run" do
+      before do
+        import.success = true
+        import.save!
+      end
+
+      it "skips the import" do
+        any_instance_of ImportExecutor do |executor|
+          mock(executor).run.with_any_args.times(0)
+        end
+        ImportExecutor.run(import.id)
+      end
+    end
+  end
+
+  describe "#run" do
     def mock_import
       mock(GpTableCopier).run_import(database_url, database_url, anything) do | *args |
         raise import_failure_message if import_failure_message.present?
@@ -209,7 +225,7 @@ describe ImportExecutor do
 
     let(:run_import) do
       mock_import
-      ImportExecutor.run(import.id)
+      ImportExecutor.new(import).run
     end
 
     it "creates a new table copier and runs it" do
