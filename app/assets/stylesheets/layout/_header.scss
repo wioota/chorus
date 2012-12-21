@@ -168,15 +168,18 @@ $header-item-spacing: 2*$padding-x;
                 border-right: 1px solid $color-text3;
 
                 .notifications {
-                    @include font-menu;
-                    vertical-align: baseline;
-                    @include border-radius(2px);
+                    display: inline-block;
                     height: 17px;
-                    padding: 0 7px 0 7px;
+                    @include font-menu;
+                    vertical-align: middle;
+                    @include border-radius(2px);
+                    height: 19px;
+                    padding: 1px 7px 0 7px;
                     background: $alert-background-color;
                     text-align: center;
-                    min-width: 7px;
+                    min-width: 8px;
                     color: white;
+                    line-height: 20px;
 
                     &.empty {
                         background: $color-text2;
