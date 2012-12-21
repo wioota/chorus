@@ -97,13 +97,12 @@ chorus.views.Bare = Backbone.View.include(
         subviews: {},
 
         _configure: function(options) {
-            var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
-//            this._super('_configure', options || []);
-            if (this.options) options = _.extend({}, _.result(this, 'options'), options);
-            for (var i = 0, l = viewOptions.length; i < l; i++) {
-                var attr = viewOptions[i];
-                if (options[attr]) this[attr] = options[attr];
+            var backboneOptions = [{}];
+            if (arguments.length > 0 && typeof(arguments[0]) == "object") {
+                backboneOptions = [arguments[0]];
             }
+            this._super('_configure', backboneOptions);
+
             this.options = options;
 
             this.requiredResources = new chorus.RequiredResources();
