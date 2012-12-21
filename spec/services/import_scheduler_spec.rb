@@ -138,6 +138,23 @@ describe ImportScheduler do
         event.source_dataset.should == import_schedule.source_dataset
         event.error_objects["base"].should == import_schedule.errors.full_messages
       end
+
+      context "when creating the import raises an exception" do
+        before do
+          stub(import_schedule).create_import { raise StandardError, "oops!" }
+        end
+
+        it "should set the error_message, but not the error_objects" do
+          expect {
+            ImportScheduler.run
+          }.to change(Events::DatasetImportFailed, :count).by(1)
+
+          event = Events::DatasetImportFailed.last
+          event.source_dataset.should == import_schedule.source_dataset
+          event.error_objects.should be_nil
+          event.error_message.should == "oops!"
+        end
+      end
     end
   end
 end

@@ -14,13 +14,18 @@ class ImportScheduler
           Chorus.log_error "Schedule could not be saved with error #{e}."
         end
 
-        Events::DatasetImportFailed.by(schedule.user).add(
+        event_args = {
             :workspace => schedule.workspace,
             :destination_table => schedule.to_table,
-            :error_objects => schedule.errors,
             :source_dataset => schedule.source_dataset,
             :dataset => schedule.sandbox.datasets.find_by_name(schedule.to_table)
-        )
+        }
+        if schedule.errors.blank?
+          event_args.merge! :error_message => e.message
+        else
+          event_args.merge! :error_objects => schedule.errors
+        end
+        Events::DatasetImportFailed.by(schedule.user).add(event_args)
         Chorus.log_error "Import schedule with ID #{schedule.id} failed with error '#{e}'."
       end
     end

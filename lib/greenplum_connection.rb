@@ -23,7 +23,7 @@ module GreenplumConnection
       begin
         @connection = Sequel.connect db_url, LOGGER_OPTIONS.merge(:test => true)
       rescue Sequel::DatabaseConnectionError => e
-        raise InstanceUnreachable
+        raise InstanceUnreachable, e.message
       end
     end
 
