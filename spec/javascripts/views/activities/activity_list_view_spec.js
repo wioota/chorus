@@ -227,7 +227,7 @@ describe("chorus.views.ActivityList", function() {
 
                     it("fetches the next page of the activity stream", function() {
                         expect(this.view.$('li[data-activity-id]').length).toBe(this.originalActivityCount + 3);
-                    })
+                    });
 
                     it("only re-renders the page once", function() {
                         expect(this.view.postRender.callCount).toBe(1);

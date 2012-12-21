@@ -283,7 +283,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                 var link = this.dialog.$("a.join").eq(3);
                 link.trigger("click");
                 var clickedId = link.closest('li').data('cid');
-                this.selectedDataset = this.dialog.collection.getByCid(clickedId);
+                this.selectedDataset = this.dialog.collection.get(clickedId);
             });
 
             it("launches the 'join configuration' sub-dialog", function () {

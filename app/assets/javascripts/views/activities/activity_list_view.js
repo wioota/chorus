@@ -37,7 +37,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     fetchMoreActivities:function (ev) {
         ev.preventDefault();
         var pageToFetch = parseInt(this.collection.pagination.page, 10) + 1;
-        this.collection.fetchPage(pageToFetch, { add: true, success: _.bind(this.render, this) });
+        this.collection.fetchPage(pageToFetch, { update: true, remove: false, success: _.bind(this.render, this) });
     },
 
     additionalContext:function () {

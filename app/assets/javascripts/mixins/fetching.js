@@ -40,7 +40,7 @@
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});
-            options.parse = false;
+            options.parse = true;
             var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
             options.error = function(collection_or_model, xhr) {
@@ -57,7 +57,8 @@
             this.loaded = true;
             this.pagination = data.pagination;
             delete this.serverErrors;
-            return this.camelizeKeys(data.response);
+            var response = data.hasOwnProperty('response') ? data.response : data;
+            return this.camelizeKeys(response);
         },
 
         handleRequestFailure: function(failureEvent, xhr, options) {

@@ -9,7 +9,7 @@ chorus.dialogs.ImportStreamWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         this._super("makeModel", arguments);
     },
 
-    submit : function() {
+    submit: function() {
         this.trigger("workspace:selected", this.selectedItem());
         this.closeModal();
     }

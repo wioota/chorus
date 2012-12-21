@@ -64,7 +64,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         var next = parseInt(this.collection.pagination.page) + 1;
-        this.collection.fetchPage(next, { add: true , success: _.bind(this.datasetsAdded, this) });
+        this.collection.fetchPage(next, { update: true, remove: false , success: _.bind(this.datasetsAdded, this) });
     },
 
     datasetsAdded: function() {

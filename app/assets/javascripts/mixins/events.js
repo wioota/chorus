@@ -8,26 +8,15 @@ chorus.Mixins.Events = {
     },
 
     bindOnce: function(eventName, callback, context) {
-        var callbacksForThisEvent = this._callbacks && this._callbacks[eventName];
-        var callbackAlreadyBound = false;
+        var callbacksForThisEvent = this._events && this._events[eventName];
         if (callbacksForThisEvent){
-            var tail = callbacksForThisEvent.tail;
-            while ((callbacksForThisEvent = callbacksForThisEvent.next) !== tail) {
-                if (callbacksForThisEvent.callback === callback && callbacksForThisEvent.context === context) {
-                    callbackAlreadyBound = true;
-                    break;
-                }
-            }
-        }
-        if (callbackAlreadyBound) return;
+            var found = _.any (callbacksForThisEvent, function(binding) {
+                return binding.callback._callback === callback && binding.context === context;
+            });
 
-        this.bind(eventName, callback, context);
-        this.bind(eventName, unbinder, this);
-
-        function unbinder() {
-            this.unbind(eventName, callback, context);
-            this.unbind(eventName, unbinder, this);
+            if(found) { return true; }
         }
+        this.once(eventName, callback, context);
     },
 
     shouldTriggerImmediately: function(eventName) {

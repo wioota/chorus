@@ -1,6 +1,5 @@
 describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
     beforeEach(function() {
-
         this.collection = fixtures.csvHdfsFileSet(null, {hadoopInstance: {id: "234"}}).filesOnly();
         this.csvOptions = {
             contents: [
@@ -11,10 +10,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             ]
         };
 
-        this.model = new (chorus.models.Base.extend({
-            constructorName: 'FakeModel',
-            urlTemplate: "workspaces/{{workspaceId}}/external_tables"
-        }))();
+        this.model = this.collection.at(0);
 
         this.model.set({
             hadoopInstanceId: '234',
@@ -22,7 +18,6 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             name: 'bar.csv'
         });
 
-        this.collection.at(0).set(this.model);
         this.dialog = new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
             csvOptions: this.csvOptions,
             workspaceName: "workspace1",
@@ -106,7 +101,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
             context("when the fetch completes", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.dialog.model, {tableName: 'new_test_name'});
+                    this.server.completeFetchFor(this.dialog.model, {tableName: 'new_test_name', contents: 'Undefined!'});
                 });
 
                 it("stops the spinner", function() {
@@ -127,7 +122,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("sets the csv contents to the model contents", function() {
-                    expect(this.dialog.contents).toEqual(this.dialog.model.contents);
+                    expect(this.dialog.contents).toEqual(this.dialog.model.get("contents"));
                 })
             });
         });

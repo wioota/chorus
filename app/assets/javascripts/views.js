@@ -97,7 +97,14 @@ chorus.views.Bare = Backbone.View.include(
         subviews: {},
 
         _configure: function(options) {
-            this._super('_configure', arguments);
+            var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+//            this._super('_configure', arguments);
+            if (this.options) options = _.extend({}, this.options, options);
+            for (var i = 0, l = viewOptions.length; i < l; i++) {
+                var attr = viewOptions[i];
+                if (options[attr]) this[attr] = options[attr];
+            }
+            this.options = options;
 
             this.requiredResources = new chorus.RequiredResources();
             this.requiredResources.bind('add', function(resources) {
@@ -364,7 +371,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
             this.bindings.add(this.resource, "validated", this.clearErrors);
             if (!this.persistent) {
-                this.bindings.add(this.resource, "change reset", this.render);
+                this.bindings.add(this.resource, "change reset sort", this.render);
             }
         }
     },

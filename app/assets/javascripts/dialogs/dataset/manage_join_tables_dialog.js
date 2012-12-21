@@ -94,7 +94,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     joinLinkClicked: function(e) {
         e.preventDefault();
         var clickedId = $(e.target).closest("li").data("cid");
-        var dataset = this.collection.getByCid(clickedId);
+        var dataset = this.collection.get(clickedId);
 
         var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
             model: this.model,
@@ -107,7 +107,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         e.preventDefault();
 
         var clickedId = $(e.target).closest("li").data("cid");
-        var dataset = this.collection.getByCid(clickedId);
+        var dataset = this.collection.get(clickedId);
 
         var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: dataset});
         this.launchSubModal(previewColumnsDialog);

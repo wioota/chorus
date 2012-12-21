@@ -146,7 +146,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     insertText: function(cid, e) {
         e && e.preventDefault();
-        var model = this.collection.getByCid(cid)
+        var model = this.collection.get(cid);
         chorus.PageEvents.broadcast("file:insertText", model.toText());
     },
 

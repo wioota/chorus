@@ -38,7 +38,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
 
     getSelectedColumn: function() {
         var selectedCid = this.$('select option:selected').data('cid');
-        return this.collection.getByCid(selectedCid);
+        return this.collection.get(selectedCid);
     },
 
     selectColumn: function(column) {

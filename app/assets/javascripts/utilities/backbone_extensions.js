@@ -21,20 +21,22 @@ Backbone.sync = function(method, model, options) {
 
     var type = methodMap[method];
 
+    // Default options, unless specified.
+    _.defaults(options || (options = {}), {
+        emulateHTTP: Backbone.emulateHTTP,
+        emulateJSON: Backbone.emulateJSON
+    });
+
     // Default JSON-request options.
-    var params = _.extend({
-        type:         type,
-        dataType:     'json',
-        processData:  false
-    }, options);
+    var params = { type:type, dataType: 'json'};
 
     // Ensure that we have a URL.
-    if (!params.url) {
+    if (!options.url) {
         params.url = model.url({ method: method }) || urlError();
     }
 
     // Ensure that we have the appropriate request data.
-    if (!params.data && model && (method == 'create' || method == 'update')) {
+    if (options.data == null && model && (method == 'create' || method == 'update' || method === 'patch')) {
         params.contentType = 'application/json';
 
         // Let the model specify its own params
@@ -47,24 +49,41 @@ Backbone.sync = function(method, model, options) {
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
-    if (Backbone.emulateJSON) {
+    if (options.emulateJSON) {
         params.contentType = 'application/x-www-form-urlencoded';
-        params.processData = true;
+        params.data = params.data || {};
     }
 
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
     // And an `X-HTTP-Method-Override` header.
-    if (Backbone.emulateHTTP) {
-        if (type === 'PUT' || type === 'DELETE') {
-            if (Backbone.emulateJSON) params.data._method = type;
-            params.type = 'POST';
-            params.beforeSend = function(xhr) {
-                xhr.setRequestHeader('X-HTTP-Method-Override', type);
-            };
-        }
+    if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
+        params.type = 'POST';
+        if (options.emulateJSON) params.data._method = type;
+        var beforeSend = options.beforeSend;
+        options.beforeSend = function(xhr) {
+            xhr.setRequestHeader('X-HTTP-Method-Override', type);
+            if (beforeSend) return beforeSend.apply(this, arguments);
+        };
     }
 
-    // Make the request.
+    // Don't process data on a non-GET request.
+    if (params.type !== 'GET' && !options.emulateJSON) {
+        params.processData = false;
+    }
+
+    var success = options.success;
+    options.success = function(resp, status, xhr) {
+        if (success) success(resp, status, xhr);
+        model.trigger('sync', model, resp, options);
+    };
+
+    var error = options.error;
+    options.error = function(xhr, status, thrown) {
+        if (error) error(model, xhr, options);
+        model.trigger('error', model, xhr, options);
+    };
+
+    // Make the request, allowing the user to override any Ajax options.
     if (this.uploadObj && method == "create") {
         var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
         _.each(['success', 'error', 'url', 'type', 'dataType'], function(fieldName) {
@@ -73,7 +92,9 @@ Backbone.sync = function(method, model, options) {
         uploadOptions.formData = json;
         return this.uploadObj.submit();
     } else {
-        return $.ajax(params);
+        var xhr = Backbone.ajax(_.extend(params, options));
+        model.trigger('request', model, xhr, options);
+        return xhr;
     }
 };
 

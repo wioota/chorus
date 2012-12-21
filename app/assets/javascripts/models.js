@@ -66,19 +66,14 @@ chorus.models = {
 
         destroy: function(options) {
             options || (options = {});
-            if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
+            options.wait = true;
+            var error = options.error;
             var model = this;
-            var success = options.success, error = options.error;
-            options.success = function(data, status, xhr) {
-                if (!model.set(model.parse(data, xhr), options)) return false;
-                model.trigger("destroy", model, model.collection, options);
-                if (success) success(model, data);
-            };
-            options.error = function(xhr) {
-                model.handleRequestFailure("destroyFailed", xhr)
+            options.error = function(model, xhr) {
+                model.handleRequestFailure("destroyFailed", xhr);
                 if (error) error(model);
             };
-            return (this.sync || Backbone.sync).call(this, 'delete', this, options);
+            return Backbone.Model.prototype.destroy.call(this, options);
         },
 
         declareValidations: $.noop,
@@ -270,9 +265,22 @@ chorus.models = {
             return changes;
         },
 
-        set: function(attrs) {
+        set: function(key, val, options) {
+            var attrs;
+            if (key == null) return this;
+
+            // Handle both `"key", value` and `{key: value}` -style arguments.
+            if (_.isObject(key)) {
+                attrs = key;
+                options = val;
+            } else {
+                (attrs = {})[key] = val;
+            }
+
+            if (attrs instanceof Backbone.Model) attrs = attrs.attributes;
+
             //Can't use _super because we end up nesting set calls which _super doesn't handle
-            var result = Backbone.Model.prototype.set.apply(this, arguments);
+            var result = Backbone.Model.prototype.set.apply(this, [attrs, options]);
             if(attrs && attrs.completeJson) {
                 this.loaded = true;
             }
@@ -374,7 +382,8 @@ chorus.collections = {
                 this.fetch({
                     url: this.url({ page: page, per_page: 1000 }),
                     silent: true,
-                    add: page != 1,
+                    update: page != 1,
+                    remove: false,
                     success: function(collection, data, xhr) {
                         var total = data.pagination ? parseInt(data.pagination.total) : 1;
                         var page = data.pagination ? parseInt(data.pagination.page) : 1;

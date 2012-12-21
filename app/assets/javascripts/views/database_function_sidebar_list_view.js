@@ -17,7 +17,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
                     e.preventDefault();
                     e.stopPropagation();
                     var cid = $(api.elements.target).parent().data('cid');
-                    var model = this.collection.getByCid(cid);
+                    var model = this.collection.get(cid);
                     var content = this.tooltipContent(model);
                     $(api.elements.content).html(content)
                 }, this),

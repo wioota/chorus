@@ -1225,8 +1225,8 @@ describe("chorus.models.Abstract", function() {
                     this.collection.bind("loaded", this.loadedListener);
 
                     this.server.fetches()[0].succeed([
-                        { foo: "hi" },
-                        { foo: "there" }
+                        { foo: "first" },
+                        { foo: "second" }
                     ],
                         {
                             "total": "2",
@@ -1236,8 +1236,7 @@ describe("chorus.models.Abstract", function() {
                     );
 
                     this.server.fetches()[1].succeed([
-                        { foo: "hi" },
-                        { foo: "there" }
+                        { foo: "third" }
                     ],
                         {
                             "total": "2",
@@ -1252,19 +1251,19 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("triggers the reset event once", function() {
-                    expect(this.resetListener.callCount).toBe(1)
+                    expect(this.resetListener.callCount).toBe(1);
                 });
 
                 it("triggers the reset event after all models are in the collection", function() {
-                    expect(this.collectionLengthOnReset).toBe(4)
+                    expect(this.collectionLengthOnReset).toBe(3);
                 });
 
                 it("triggers the loaded event once", function() {
-                    expect(this.loadedListener.callCount).toBe(1)
+                    expect(this.loadedListener.callCount).toBe(1);
                 });
 
                 it("triggers the loaded event after all models are in the collection", function() {
-                    expect(this.collectionLengthOnLoaded).toBe(4)
+                    expect(this.collectionLengthOnLoaded).toBe(3);
                 })
             });
 
