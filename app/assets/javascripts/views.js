@@ -97,14 +97,34 @@ chorus.views.Bare = Backbone.View.include(
         subviews: {},
 
         _configure: function(options) {
-            var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
-//            this._super('_configure', arguments);
-            if (this.options) options = _.extend({}, this.options, options);
-            for (var i = 0, l = viewOptions.length; i < l; i++) {
-                var attr = viewOptions[i];
-                if (options[attr]) this[attr] = options[attr];
-            }
-            this.options = options;
+            var argsAsArray = Array.prototype.slice.apply(arguments).slice(1);
+////            console.log(argsAsArray);
+//
+//            var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+//            if (this.options) options = _.extend({}, _.result(this, 'options'), options);
+//
+//
+//
+//            for (var i = 0, l = viewOptions.length; i < l; i++) {
+//                var attr = viewOptions[i];
+//                if (options[attr]) this[attr] = options[attr];
+//            }
+//
+//            options =
+////
+//            var pick = function(obj) {
+//                var result = {};
+//                _.each(_.flatten(Array.prototype.slice.call(arguments, 1)), function(key) {
+//                    if (key in obj) result[key] = obj[key];
+//                });
+//                return result;
+//            }
+//
+//            _.extend(this, pick(options, viewOptions));
+//
+
+//            var newOptions = argsAsArray.filter(function(option) { return typeof(option) === "object" } )[0] || [];
+            this._super('_configure', {});
 
             this.requiredResources = new chorus.RequiredResources();
             this.requiredResources.bind('add', function(resources) {
