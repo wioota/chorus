@@ -9,12 +9,13 @@ describe("chorus.views.Header", function() {
         chorus.user = chorus.session;
         chorus._navigated();
         this.view = new chorus.views.Header();
+        spyOn(this.view, "render").andCallThrough();
         this.view.session.loaded = true;
     });
 
     describe("initialization", function() {
         it("has required resources", function() {
-            expect(this.view.requiredResources.length).toBe(2);
+            expect(this.view.requiredResources.length).toBe(0);
         });
 
         it("does not have a model", function() {
@@ -50,6 +51,9 @@ describe("chorus.views.Header", function() {
 
     describe("the notifications", function() {
         beforeEach(function() {
+            this.view.render();
+            this.view.render.reset();
+
             this.server.completeFetchFor(this.view.notifications, [
                 fixtures.notification({ id: '1' }),
                 fixtures.notification({ id: '2' }),
@@ -71,6 +75,10 @@ describe("chorus.views.Header", function() {
                     fixtures.notification(),
                     fixtures.notification()
                 ]);
+            });
+
+            it("calls render after read and unread notifications are complete", function() {
+                expect(this.view.render.callCount).toEqual(1);
             });
 
             it("shows all of the unread notifications in the notification popup", function() {

@@ -23,13 +23,15 @@ chorus.views.Header = chorus.views.Base.extend({
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
         this.notifications.per_page = 5;
-        this.requiredResources.add([this.unreadNotifications, this.notifications]);
 
         this.typeAheadView = new chorus.views.TypeAheadSearch();
 
         this.notificationList = new chorus.views.NotificationList({
             collection: new chorus.collections.NotificationSet()
         });
+
+        this.listenTo(this.unreadNotifications, "loaded", this.updateNotifications);
+        this.listenTo(this.notifications, "loaded", this.updateNotifications);
 
         this.unreadNotifications.fetchAll();
         this.notifications.fetch();
@@ -42,18 +44,20 @@ chorus.views.Header = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
     },
 
-    resourcesLoaded: function() {
-        this.notificationList.collection.reset(this.unreadNotifications.models, { silent: true });
-        var numberToAdd = (5 - this.unreadNotifications.length);
-        if (numberToAdd > 0) {
-            this.notificationList.collection.add(this.notifications.chain().reject(
-                function(model) {
-                    return !!this.unreadNotifications.get(model.get("id"));
-                }, this).first(numberToAdd).value());
-        }
+    updateNotifications: function() {
+        if (this.notifications.loaded && this.unreadNotifications.loaded) {
+            this.notificationList.collection.reset(this.unreadNotifications.models, { silent: true });
+            var numberToAdd = (5 - this.unreadNotifications.length);
+            if (numberToAdd > 0) {
+                this.notificationList.collection.add(this.notifications.chain().reject(
+                    function(model) {
+                        return !!this.unreadNotifications.get(model.get("id"));
+                    }, this).first(numberToAdd).value());
+            }
 
-        this.notificationList.collection.loaded = true;
-        this.render();
+            this.notificationList.collection.loaded = true;
+            this.render();
+        }
     },
 
     postRender: function() {
