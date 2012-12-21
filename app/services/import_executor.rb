@@ -16,31 +16,18 @@ class ImportExecutor < DelegateClass(Import)
     source_database_url = get_database_url(source_dataset.schema.database)
     destination_database_url = get_database_url(sandbox.database)
     GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)
-
-    refresh_and_update_status :passed
+    update_status :passed
   rescue => e
-    refresh_and_update_status :failed, e.message
+    update_status :failed, e.message
     raise
   end
 
   def cancel(success, message = nil)
-    refresh_and_update_status(success ? :passed : :failed, message)
+    update_status(success ? :passed : :failed, message)
     ImportTerminator.terminate(__getobj__)
   end
 
   private
-
-  def refresh_and_update_status(status, message = nil)
-    return unless reload.success.nil?
-
-    if status == :passed
-      # update rails db for new dataset
-      destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
-      Dataset.refresh(destination_account, sandbox)
-    end
-
-    update_status status, message
-  end
 
   def import_attributes
     import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
@@ -55,14 +42,26 @@ class ImportExecutor < DelegateClass(Import)
     Gpdb::ConnectionBuilder.url(db, account)
   end
 
+  def refresh_schema
+    # update rails db for new dataset
+    destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
+    Dataset.refresh(destination_account, sandbox) rescue ActiveRecord::JDBCError
+  end
+
   def update_status(status, message = nil)
+    return unless reload.success.nil?
+
     passed = (status == :passed)
 
     touch(:finished_at)
     self.success = passed
-    save! # this also updates destination_dataset_id
+    save!
 
     if passed
+      # this updates destination_dataset_id
+      refresh_schema
+      save!
+
       event = create_passed_event_and_notification
       update_import_created_event
       import_schedule.update_attributes({:new_table => false}) if import_schedule
@@ -93,7 +92,7 @@ class ImportExecutor < DelegateClass(Import)
     import_created_event = find_dataset_import_created_event(source_dataset_id, workspace_id, reference_id, reference_type)
 
     if import_created_event
-      import_created_event.dataset = sandbox.datasets.find_by_name!(to_table)
+      import_created_event.dataset = sandbox.datasets.find_by_name(to_table)
       import_created_event.save!
     end
   end

@@ -89,6 +89,11 @@ describe ImportExecutor do
         import.finished_at.should_not be_nil
       end
 
+      it "refreshes the schema" do
+        mock(Dataset).refresh(sandbox.database.gpdb_instance.account_for_user!(user), sandbox)
+        send(trigger)
+      end
+
       it "updates the destination dataset id" do
         send(trigger)
         import.reload
@@ -126,13 +131,28 @@ describe ImportExecutor do
 
       context "when dataset refresh fails" do
         before do
-          stub(Dataset).refresh.with_any_args do
-            raise "refresh failed -- oh no!"
+          mock(Dataset).refresh.with_any_args do
+            raise ActiveRecord::JDBCError, "refresh failed -- oh no!"
           end
         end
 
-        xit "still creates a DatasetImportSuccess event with an empty dataset link" do
-          pending "if the dataset refresh fails, we should still generate an event"
+        it "still creates a DatasetImportSuccess event with an empty dataset link" do
+          expect {
+            expect {
+              send(trigger)
+            }.not_to raise_error
+          }.to change(Events::DatasetImportSuccess, :count).by(1)
+          event = Events::DatasetImportSuccess.last
+          event.dataset.should be_nil
+        end
+      end
+
+      context "when new table cannot be found" do
+        before do
+          stub(Dataset).refresh.with_any_args { [] }
+        end
+
+        it "still creates a DatasetImportSuccess event with an empty dataset link" do
           expect {
             send(trigger)
           }.to change(Events::DatasetImportSuccess, :count).by(1)

@@ -28,7 +28,7 @@
         @include font-normal-alpha;
     }
 
-    input {
+    input[type=text] {
         width: 400px;
         display: inline;
     }
