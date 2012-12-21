@@ -19,8 +19,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     setup: function() {
         var searchParams = _.toArray(arguments);
         this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
-        this.requiredResources.add(this.model);
-        this.bindings.add(this.model, "unprocessableEntity", this.unprocessableEntity);
+        this.listenTo(this.model, "loaded", this.resourcesLoaded);
+        this.listenTo(this.model, "unprocessableEntity", this.unprocessableEntity);
         this.model.fetch();
     },
 
@@ -103,6 +103,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
         chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
+
+        this.render();
     },
 
     hdfsSelected: function() {
