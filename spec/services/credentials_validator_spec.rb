@@ -2,15 +2,6 @@ require 'spec_helper'
 
 describe CredentialsValidator do
   describe ".user" do
-    around do |example|
-      original = I18n.load_path
-      I18n.load_path = ['config/locales/en.yml']
-
-      example.run
-
-      I18n.load_path = original
-    end
-
     it "returns the user" do
       user = stub
       stub(User).authenticate('a_username', 'a_password') { user }
