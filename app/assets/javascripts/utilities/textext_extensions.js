@@ -14,4 +14,39 @@
 
         self.trigger('setSuggestions', { result : result });
     };
+
+    $.fn.textext.TextExt.prototype.invalidateBounds = function() {
+        this.trigger('preInvalidate');
+        this.trigger('postInvalidate');
+    };
+
+    var TextExtTags = $.fn.textext.TextExtTags;
+
+    TextExtTags.prototype.onPreInvalidate = $.noop;
+
+    TextExtTags.prototype.addTags = function(tags)
+    {
+        if(!tags || tags.length == 0)
+            return;
+
+        var self      = this,
+            core      = self.core(),
+            container = self.containerElement(),
+            i, tag
+            ;
+
+        for(i = 0; i < tags.length; i++)
+        {
+            tag = tags[i];
+
+            if(tag && self.isTagAllowed(tag))
+                container.append(self.renderTag(tag));
+        }
+
+        container.append(self.input().detach());
+
+        self.updateFormCache();
+        core.getFormData();
+        core.invalidateBounds();
+    };
 })();

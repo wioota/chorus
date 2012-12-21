@@ -982,7 +982,7 @@
 		// https://github.com/alexgorbatchev/jquery-textext/issues/74
 		input.css({ 'width' : width });
 		wrap.css({ 'width' : width, 'height' : height });
-		container.css({ 'height' : height }); 
+		container.css({ 'height' : height });
 
 		self.trigger(EVENT_POST_INVALIDATE);
 	};

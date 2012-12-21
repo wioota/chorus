@@ -12,7 +12,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             return tag.attributes;
         });
         this.input.textext({
-            plugins: 'tags focus autocomplete ajax',
+            plugins: 'tags autocomplete ajax',
             tagsItems: tags,
             itemManager: chorus.utilities.TagItemManager,
             ajax: {
@@ -33,9 +33,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
 
         if(this.editing) {
-            this.$el.addClass('editing')
+            this.$el.addClass('editing');
+            this.input.focus();
         } else {
-            this.$el.removeClass('editing')
+            this.$el.removeClass('editing');
         }
     },
 
