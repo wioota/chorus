@@ -17,7 +17,7 @@
 }
 
 #guts {
-    padding: 0 0 0 $guts-padding;
+    padding: 0 0 $guts-padding-bottom $guts-padding;
     @include after-clearfix;
     z-index: $guts-z-index;
 }
@@ -42,7 +42,7 @@
         position: fixed;
         right: 0;
         top: $header-height;
-        bottom: 0;
+        bottom: $guts-padding-bottom;
         padding: 0;
         width: $sidebar-width + ($sidebar-padding-x);
 
