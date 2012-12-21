@@ -4,6 +4,10 @@ describe("chorus.views.NotificationList", function() {
         var brokenNotification = new chorus.models.Notification();
         brokenNotification.set({ action: "IMPORT_SUCCESS" });
         this.collection.add(brokenNotification);
+        this.collection.comparator = function(notification) {
+            notification.get("id");
+        };
+        this.collection.sort();
         this.view = new chorus.views.NotificationList({ collection: this.collection });
     });
 
