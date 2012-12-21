@@ -161,6 +161,7 @@ body .ui-draggable-dragging {
     }
 
     .sidebar_content {
+        margin-bottom: $guts-padding-bottom;
         .tabbed_area {
             .context {
                 @include font-content-details;
