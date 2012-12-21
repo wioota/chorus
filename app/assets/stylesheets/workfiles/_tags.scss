@@ -4,138 +4,138 @@
         padding: 3px;
         padding-bottom: 0;
     }
-}
 
-.text-core {
-    width: 100%;
-
-    .text-wrap {
+    .text-core {
         width: 100%;
 
-        input {
-            display: inline-block;
-            width: 200px;
-            border: 0;
-            margin: 0 0 0 5px;
-            padding: 0;
-            vertical-align: top;
-            min-height: 20px;
-        }
+        .text-wrap {
+            width: 100%;
 
-        textarea.borderless {
-            border: none;
-        }
-
-        .tag_editor {
-            line-height: 16px;
-        }
-
-        .text-tags .text-tag {
-            display: inline-block;
-            max-width: 100%;
-
-            div.text-button {
-                background-color: #3096DE;
-                padding-left: 10px;
-                padding-right: 17px;
+            input {
+                display: inline-block;
+                width: 200px;
+                border: 0;
+                margin: 0 0 0 5px;
+                padding: 0;
+                vertical-align: top;
                 min-height: 20px;
+            }
+
+            textarea.borderless {
+                border: none;
+            }
+
+            .tag_editor {
+                line-height: 16px;
+            }
+
+            .text-tags .text-tag {
+                display: inline-block;
                 max-width: 100%;
-                color: #FFF;
 
-                .text-label {
-                    vertical-align: middle;
-                    padding-right: 5px;
-                    word-wrap: break-word;
+                div.text-button {
+                    background-color: #3096DE;
+                    padding-left: 10px;
+                    padding-right: 17px;
+                    min-height: 20px;
                     max-width: 100%;
-                }
-
-                .transition-border {
-                    border-left: 1px solid #1174B7;
-                    border-right: 1px solid #59B1F1;
-                    position: absolute;
-                    width: 0;
-                    right: 15px;
-                    top: 0;
-                    bottom: 0;
-                }
-
-                .text-remove {
                     color: #FFF;
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    right: 1px;
-                    line-height: 19px;
-                    padding: 0 4px;
-                    font-size: 10px;
+
+                    .text-label {
+                        vertical-align: middle;
+                        padding-right: 5px;
+                        word-wrap: break-word;
+                        max-width: 100%;
+                    }
+
+                    .transition-border {
+                        border-left: 1px solid #1174B7;
+                        border-right: 1px solid #59B1F1;
+                        position: absolute;
+                        width: 0;
+                        right: 15px;
+                        top: 0;
+                        bottom: 0;
+                    }
+
+                    .text-remove {
+                        color: #FFF;
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        right: 1px;
+                        line-height: 19px;
+                        padding: 0 4px;
+                        font-size: 10px;
+                    }
                 }
             }
-        }
 
-        .text-dropdown {
-            border: 1px solid #A5A6A8;
-            font: inherit;
-            font-size: 12px;
-            font-weight: bold;
+            .text-dropdown {
+                border: 1px solid #A5A6A8;
+                font: inherit;
+                font-size: 12px;
+                font-weight: bold;
 
-            .text-list {
-                .text-suggestion {
-                    padding: 6px 10px;
+                .text-list {
+                    .text-suggestion {
+                        padding: 6px 10px;
 
-                    &.text-selected {
-                        background: $picklist-selected-background-color;
+                        &.text-selected {
+                            background: $picklist-selected-background-color;
+                        }
                     }
                 }
             }
         }
     }
-}
 
-.arrow_left {
-    display: inline-block;
-    background-color: #fff;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 7px;
-}
-
-.tag-list {
-    div {
+    .arrow_left {
         display: inline-block;
-        position: relative;
-        margin: 2px 2px;
-        max-width: 100%;
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 7px;
+    }
 
-        span.text-label {
+    .tag-list {
+        div {
             display: inline-block;
-            font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-            font-size: 11px;
-            color: #FFF;
-            background-color: #3096DE;
-            padding: 0 10px;
-            line-height: 20px;
-            word-wrap: break-word;
+            position: relative;
+            margin: 2px 2px;
             max-width: 100%;
+
+            span.text-label {
+                display: inline-block;
+                font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+                font-size: 11px;
+                color: #FFF;
+                background-color: #3096DE;
+                padding: 0 10px;
+                line-height: 20px;
+                word-wrap: break-word;
+                max-width: 100%;
+            }
         }
     }
-}
 
-.save_tags {
-    font-size: 12px;
-    position: absolute;
-    right: 13px;
-    bottom: 14px;
-    z-index: 10;
-}
+    .save_tags {
+        font-size: 12px;
+        position: absolute;
+        right: 13px;
+        bottom: 14px;
+        z-index: 10;
+    }
 
-.edit_tags {
-    white-space:nowrap;
-    font-size: 10px;
-    color: $color-text3;
+    .edit_tags {
+        white-space: nowrap;
+        font-size: 10px;
+        color: $color-text3;
 
-    &:hover {
-        color: $link-color
+        &:hover {
+            color: $link-color
+        }
     }
 }
