@@ -30,11 +30,21 @@ describe GreenplumConnection::Base, :database_integration do
   shared_examples "a well behaved database query" do
     let(:db) { Sequel.connect(db_url) }
 
-    it "should match" do
+    it "returns the expected result and manages its connection" do
       connection.should_not be_connected
       subject.should == expected
       connection.should_not be_connected
       db.disconnect
+    end
+
+    it "masks sequel errors" do
+      mock(GreenplumConnection).connect_to_sequel(anything, anything).once do
+        raise Sequel::DatabaseError
+      end
+
+      expect {
+        subject
+      }.to raise_error(GreenplumConnection::DatabaseError)
     end
   end
 
@@ -88,6 +98,46 @@ describe GreenplumConnection::Base, :database_integration do
     end
   end
 
+  describe "#fetch" do
+    let(:sql) { "SELECT 1 AS answer" }
+    let(:parameters) {{}}
+    let(:subject) { connection.fetch(sql) }
+    let(:expected) { [{ :answer => 1 }] }
+
+    it_should_behave_like "a well behaved database query"
+
+    context "with SQL parameters" do
+      let(:sql) { "SELECT :num AS answer" }
+      let(:parameters) {{:num => 3}}
+
+      it "succeeds" do
+        connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+      end
+    end
+  end
+
+  describe "#fetch_value" do
+    let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
+    let(:subject) { connection.fetch_value(sql) }
+    let(:expected) { 1 }
+
+    it_should_behave_like "a well behaved database query"
+
+    it "returns nil for an empty set" do
+      sql = "SELECT * FROM (SELECT * FROM (SELECT 1 as column1) AS set1 WHERE column1 = 2) AS empty"
+      connection.fetch_value(sql).should == nil
+    end
+  end
+
+  describe "#execute" do
+    let(:sql) { "SET search_path TO 'public'" }
+    let(:parameters) {{}}
+    let(:subject) { connection.execute(sql) }
+    let(:expected) { true }
+
+    it_should_behave_like "a well behaved database query"
+  end
+
   describe GreenplumConnection::DatabaseConnection do
     let(:connection) { GreenplumConnection::DatabaseConnection.new(details) }
     describe "#schemas" do
@@ -109,14 +159,12 @@ describe GreenplumConnection::Base, :database_integration do
       it_should_behave_like "a well behaved database query"
     end
 
-    describe '#schema_exists?' do
-      context 'when the schema exists' do
-        let(:schema_name) { 'test_schema' }
+    describe "#schema_exists?" do
+      let(:schema_name) { 'test_schema' }
+      let(:subject) { connection.schema_exists?(schema_name) }
+      let(:expected) { true }
 
-        it 'returns true' do
-          connection.schema_exists?(schema_name).should be_true
-        end
-      end
+      it_should_behave_like "a well behaved database query"
 
       context "when the schema doesn't exist" do
         let(:schema_name) { "does_not_exist" }
@@ -129,12 +177,16 @@ describe GreenplumConnection::Base, :database_integration do
 
     describe "#create_schema" do
       let(:new_schema_name) { "foobarbaz" }
+      let(:subject) { connection.create_schema("foobarbaz") }
+      let(:expected) { true }
 
       after do
         db = Sequel.connect(db_url)
         db.drop_schema(new_schema_name, :if_exists => true)
         db.disconnect
       end
+
+      it_should_behave_like "a well behaved database query"
 
       it "adds a schema" do
         expect {
@@ -146,6 +198,8 @@ describe GreenplumConnection::Base, :database_integration do
     describe "#drop_schema" do
       context "if the schema exists" do
         let(:schema_to_drop) { "hopefully_unused_schema" }
+        let(:subject) { connection.drop_schema(schema_to_drop) }
+        let(:expected) { true }
 
         around do |example|
           db = Sequel.connect(db_url)
@@ -156,6 +210,8 @@ describe GreenplumConnection::Base, :database_integration do
           db.drop_schema(schema_to_drop, :if_exists => true)
           db.disconnect
         end
+
+        it_should_behave_like "a well behaved database query"
 
         it "drops it" do
           connection.schema_exists?(schema_to_drop).should == true
@@ -172,49 +228,6 @@ describe GreenplumConnection::Base, :database_integration do
             connection.drop_schema(schema_to_drop)
           }.to_not raise_error
         end
-      end
-    end
-
-
-    describe "#fetch" do
-      let(:sql) { "SELECT 1 AS answer" }
-      let(:parameters) {{}}
-
-      it "succeeds" do
-        connection.fetch(sql).should == [{ :answer => 1 }]
-      end
-
-      context "with SQL parameters" do
-        let(:sql) { "SELECT :num AS answer" }
-        let(:parameters) {{:num => 3}}
-
-        it "succeeds" do
-          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
-        end
-      end
-    end
-
-    describe "#fetch_value" do
-      let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
-
-      it "selects just the first value" do
-        connection.fetch_value(sql).should == 1
-      end
-
-      it "returns nil for an empty set" do
-        sql = "SELECT * FROM (SELECT * FROM (SELECT 1 as column1) AS set1 WHERE column1 = 2) AS empty"
-        connection.fetch_value(sql).should == nil
-      end
-    end
-
-    describe "#execute" do
-      let(:sql) { "SET search_path TO 'public'" }
-      let(:parameters) {{}}
-
-      it "succeeds" do
-        expect {
-          connection.execute(sql)
-        }.to_not raise_error
       end
     end
   end
@@ -240,36 +253,6 @@ describe GreenplumConnection::Base, :database_integration do
       let(:subject) { connection.databases }
 
       it_should_behave_like "a well behaved database query"
-    end
-
-
-    describe "#fetch" do
-      let(:sql) { "SELECT 1 AS answer" }
-      let(:parameters) {{}}
-
-      it "succeeds" do
-        connection.fetch(sql).should == [{ :answer => 1 }]
-      end
-
-      context "with SQL parameters" do
-        let(:sql) { "SELECT :num AS answer" }
-        let(:parameters) {{:num => 3}}
-
-        it "succeeds" do
-          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
-        end
-      end
-    end
-
-    describe "#execute" do
-      let(:sql) { "SET search_path TO 'public'" }
-      let(:parameters) {{}}
-
-      it "succeeds" do
-        expect {
-          connection.execute(sql)
-        }.to_not raise_error
-      end
     end
   end
 
@@ -320,87 +303,85 @@ describe GreenplumConnection::Base, :database_integration do
     end
 
     describe '#create_view' do
-      context 'when a view with that name does not exist' do
-        after do
-          db = Sequel.connect(db_url)
-          db.default_schema = schema_name
-          db.drop_view('a_new_db_view') if connection.view_exists?('a_new_db_view')
-          db.disconnect
-        end
+      after do
+        db = Sequel.connect(db_url)
+        db.default_schema = schema_name
+        db.drop_view('a_new_db_view') if db.views.map(&:to_s).include? 'a_new_db_view'
+        db.disconnect
+      end
 
-        it 'creates a view' do
-          expect {
-            connection.create_view('a_new_db_view', 'select 1;')
-          }.to change { Sequel.connect(db_url).views }
-        end
+      let(:subject) { connection.create_view('a_new_db_view', 'select 1;') }
+      let(:expected) { true }
+
+      it_should_behave_like "a well behaved database query"
+
+      it 'creates a view' do
+        expect {
+          connection.create_view('a_new_db_view', 'select 1;')
+        }.to change { Sequel.connect(db_url).views }
       end
 
       context 'when a view with that name already exists' do
         it 'raises an error' do
           expect {
             connection.create_view('view1', 'select 1;')
-          }.to raise_error(GreenplumConnection::SchemaConnection::CannotCreateView, /already exists/)
+          }.to raise_error(GreenplumConnection::DatabaseError)
         end
       end
     end
 
     describe "#table_exists?" do
+      let(:subject) { connection.table_exists?(table_name) }
+      let(:expected) { true }
+
       context "when the table exists" do
         let(:table_name) { "different_names_table" }
 
-        it "returns true" do
-          connection.table_exists?(table_name).should == true
-        end
+        it_should_behave_like "a well behaved database query"
 
         context 'when the table has weird chars in the name' do
           let(:table_name) { %Q(7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?) }
 
-          it 'works (regression)' do
-            connection.table_exists?(table_name).should == true
-          end
+          it_should_behave_like "a well behaved database query" #regression
         end
       end
 
       context "when the table doesn't exist" do
         let(:table_name) { "please_dont_exist" }
+        let(:expected) { false }
 
-        it "returns false" do
-          connection.table_exists?(table_name).should == false
-        end
+        it_should_behave_like "a well behaved database query"
       end
 
       context "when the table name given is nil" do
         let(:table_name) { nil }
+        let(:expected) { false }
 
-        it "returns false" do
-          connection.table_exists?(table_name).should == false
-        end
+        it_should_behave_like "a well behaved database query"
       end
     end
 
     describe "#view_exists?" do
+      let(:subject) { connection.view_exists?(view_name) }
       context "when the view exists" do
+        let(:expected) { true }
         let(:view_name) { "view1" }
 
-        it "returns true" do
-          connection.view_exists?(view_name).should == true
-        end
+        it_behaves_like 'a well behaved database query'
       end
 
       context "when the view doesn't exist" do
         let(:view_name) { "please_dont_exist" }
+        let(:expected) { false }
 
-        it "returns false" do
-          connection.view_exists?(view_name).should == false
-        end
+        it_behaves_like 'a well behaved database query'
       end
 
-      context "when the table name given is nil" do
+      context "when the view name given is nil" do
         let(:view_name) { nil }
+        let(:expected) { false }
 
-        it "returns false" do
-          connection.view_exists?(view_name).should == false
-        end
+        it_behaves_like 'a well behaved database query'
       end
     end
 
@@ -423,10 +404,10 @@ describe GreenplumConnection::Base, :database_integration do
       context "when the table does not exist" do
         let(:table_name) { "this_table_does_not_exist" }
 
-        it "throws an error to the layer above" do
+        it "raises an error" do
           expect do
             connection.analyze_table(table_name)
-          end.to raise_error(Sequel::DatabaseError)
+          end.to raise_error(GreenplumConnection::DatabaseError)
         end
       end
     end
@@ -434,6 +415,8 @@ describe GreenplumConnection::Base, :database_integration do
     describe "#drop_table" do
       context "if the table exists" do
         let(:table_to_drop) { "hopefully_unused_table" }
+        let(:subject) { connection.drop_table(table_to_drop) }
+        let(:expected) { true }
 
         around do |example|
           db = Sequel.connect(db_url)
@@ -446,6 +429,8 @@ describe GreenplumConnection::Base, :database_integration do
           db.disconnect
         end
 
+        it_behaves_like "a well behaved database query"
+
         it "should drop a table" do
           connection.table_exists?(table_to_drop).should == true
           connection.drop_table(table_to_drop)
@@ -456,30 +441,39 @@ describe GreenplumConnection::Base, :database_integration do
       context "if the table does not exist" do
         let(:table_to_drop) { "never_existed" }
 
-        it "raises an error" do
+        it "doesn't raise an error" do
           expect {
             connection.drop_table(table_to_drop)
-          }.to_not raise_error
+          }.not_to raise_error
         end
       end
     end
 
     describe "#truncate_table" do
+      let(:subject) { connection.truncate_table(table_to_truncate) }
+      let(:expected) { true }
+
       context "if the table exists" do
         let(:table_to_truncate) { "trunc_table" }
 
         before do
-          connection.execute(<<-SQL)
+          db = Sequel.connect(db_url)
+          db.execute(<<-SQL)
             CREATE TABLE "test_schema"."trunc_table" (num integer);
             INSERT INTO "test_schema"."trunc_table" (num) VALUES (2)
           SQL
+          db.disconnect
         end
 
         after do
-          connection.execute(<<-SQL)
+          db = Sequel.connect(db_url)
+          db.execute(<<-SQL)
             DROP TABLE IF EXISTS "test_schema"."trunc_table"
           SQL
+          db.disconnect
         end
+
+        it_behaves_like "a well behaved database query"
 
         it "should truncate a table" do
           expect {
@@ -494,10 +488,10 @@ describe GreenplumConnection::Base, :database_integration do
     describe "#fetch" do
       let(:sql) { "SELECT 1 AS answer" }
       let(:parameters) {{}}
+      let(:subject) { connection.fetch(sql) }
+      let(:expected) { [{ :answer => 1 }] }
 
-      it "succeeds" do
-        connection.fetch(sql).should == [{ :answer => 1 }]
-      end
+      it_behaves_like "a well behaved database query"
 
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
@@ -520,10 +514,10 @@ describe GreenplumConnection::Base, :database_integration do
 
     describe "#fetch_value" do
       let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
+      let(:subject) { connection.fetch_value(sql) }
+      let(:expected) { 1 }
 
-      it "fetches the first value" do
-        connection.fetch_value(sql).should == 1
-      end
+      it_behaves_like "a well behaved database query"
 
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
@@ -536,7 +530,7 @@ describe GreenplumConnection::Base, :database_integration do
     end
 
     describe "#stream_table" do
-      before :all do
+      before do
         @db = Sequel.connect(db_url)
         @db.execute("SET search_path TO '#{schema_name}'")
         @db.execute("CREATE TABLE thing (one integer, two integer)")
@@ -544,9 +538,19 @@ describe GreenplumConnection::Base, :database_integration do
         @db.execute("INSERT INTO thing VALUES (3, 4)")
       end
 
-      after :all do
+      after do
         @db.execute("DROP TABLE thing")
+        @db.disconnect
       end
+
+      let(:subject) {
+        connection.stream_table('thing') do |row|
+          true
+        end
+      }
+      let(:expected) { true }
+
+      it_behaves_like "a well behaved database query"
 
       it "streams all rows of the database" do
         bucket = []
@@ -572,12 +576,10 @@ describe GreenplumConnection::Base, :database_integration do
     describe "#execute" do
       let(:sql) { "SET search_path TO 'public'" }
       let(:parameters) {{}}
+      let(:subject) { connection.execute(sql) }
+      let(:expected) { true }
 
-      it "succeeds" do
-        expect {
-          connection.execute(sql)
-        }.to_not raise_error
-      end
+      it_behaves_like "a well behaved database query"
     end
   end
 end

@@ -63,6 +63,15 @@ describe ApplicationController do
       decoded_errors.fields.username.GENERIC.message.should == "some error"
     end
 
+    it "returns error 422 when a Greenplum Connection error occurs" do
+      stub(controller).index { raise GreenplumConnection::DatabaseError.new("oops") }
+
+      get :index
+
+      response.code.should == '422'
+      decoded_errors.fields.general.GENERIC.message.should == 'oops'
+    end
+
     it "returns error 422 when a Postgres error occurs" do
       stub(controller).index { raise ActiveRecord::JDBCError.new("oops") }
 

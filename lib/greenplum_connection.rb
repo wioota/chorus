@@ -1,13 +1,17 @@
 require 'sequel'
 
 module GreenplumConnection
-  class InstanceUnreachable < StandardError;
-  end
+  class InstanceUnreachable < StandardError; end
+  class DatabaseError < Sequel::DatabaseError; end
 
   @@gpdb_login_timeout = 10
 
   def self.gpdb_login_timeout
     @@gpdb_login_timeout
+  end
+
+  def self.connect_to_sequel(url, opts)
+    Sequel.connect(url, opts)
   end
 
   class Base
@@ -21,7 +25,7 @@ module GreenplumConnection
 
     def connect!
       begin
-        @connection = Sequel.connect db_url, LOGGER_OPTIONS.merge(:test => true)
+        @connection = GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
       rescue Sequel::DatabaseConnectionError => e
         raise InstanceUnreachable, e.message
       end
@@ -47,6 +51,7 @@ module GreenplumConnection
 
     def execute(sql)
       with_connection { @connection.execute(sql) }
+      true
     end
 
     private
@@ -54,6 +59,9 @@ module GreenplumConnection
     def with_connection
       connect!
       yield
+
+    rescue Sequel::DatabaseError => e
+      raise DatabaseError.new(e.message)
     ensure
       disconnect
     end
@@ -71,10 +79,12 @@ module GreenplumConnection
 
     def create_schema(name)
       with_connection { @connection.create_schema(name) }
+      true
     end
 
     def drop_schema(name)
       with_connection { @connection.drop_schema(name, :if_exists => true) }
+      true
     end
 
     def schema_exists?(name)
@@ -114,8 +124,6 @@ module GreenplumConnection
   end
 
   class SchemaConnection < Base
-    class CannotCreateView < StandardError; end
-
     def functions
       with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
     end
@@ -126,8 +134,7 @@ module GreenplumConnection
 
     def create_view(view_name, query)
       with_schema_connection { @connection.create_view(view_name, query) }
-    rescue Sequel::DatabaseError => e
-      raise CannotCreateView, e.message
+      true
     end
 
     def table_exists?(table_name)
@@ -144,10 +151,12 @@ module GreenplumConnection
 
     def truncate_table(table_name)
       execute(%Q{TRUNCATE TABLE "#{schema_name}"."#{table_name}"})
+      true
     end
 
     def drop_table(table_name)
       with_schema_connection { @connection.drop_table(table_name, :if_exists => true) }
+      true
     end
 
     def fetch(sql, parameters = {})
@@ -163,10 +172,12 @@ module GreenplumConnection
       sql = "SELECT * FROM \"#{table_name}\""
       sql = sql + " LIMIT #{limit}" if limit
       with_schema_connection { @connection.fetch(sql).each(&block) }
+      true
     end
 
     def execute(sql)
       with_schema_connection { @connection.execute(sql) }
+      true
     end
 
     private

@@ -97,7 +97,8 @@ class ChorusView < Dataset
       schema.connect_as(user).create_view(name, query)
       view.save!
       view
-    rescue GreenplumConnection::SchemaConnection::CannotCreateView => e
+      # TODO
+    rescue GreenplumConnection::DatabaseError => e
       view.errors.add(:base, :generic, {:message => e.message})
       raise ActiveRecord::RecordInvalid.new(view)
     end
