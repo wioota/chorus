@@ -1,5 +1,18 @@
-<%= form_tag("/imports", :method => :put) do %>
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="chrome=IE8">
+
+  <title>Greenplum Chorus</title>
+  <%= stylesheet_link_tag "import_console/import_console" %>
+</head>
+<body>
+
+  <%= form_tag("/imports", :method => :put, :class => :imports) do %>
   <table>
+    <thead>
     <tr>
       <th>Select</th>
       <th>Started?</th>
@@ -13,6 +26,8 @@
       <th>Destination Instance</th>
       <th>Destination Table Name</th>
     </tr>
+  </thead>
+    <tbody>
   <% @imports.each do |import| %>
     <tr>
       <td><input type="checkbox" name="id[]" value="<%= import.id %>" /></td>
@@ -28,9 +43,13 @@
       <td><%= link_to_destination(import.workspace, import.to_table) %></td>
 </tr>
   <% end %>
-    </table>
+</tbody>
+</table>
     <button type="submit" name="success" value="true">Pass</button>
     <button type="submit" name="success" value="false">Fail</button>
     <label>Failure message:</label>
     <input type="text" name="message">
 <% end %>
+
+</body>
+</html>
