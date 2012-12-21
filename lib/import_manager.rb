@@ -1,24 +1,25 @@
 class ImportManager < DelegateClass(Import)
   def started?
-    enqueued = QC.default_queue.job_count("ImportExecutor.run", id) >= 1
-    finished_at.nil? && !enqueued
+    started_at.present?
   end
 
-  def get_procpid(db, type)
+  def procpid_sql(type)
     matcher = "%pipe%_#{created_at.to_i}_#{id}" + (type == :writer ? "_w" : "_r")
-    result = db.connect_as(user).fetch("select procpid, current_query from pg_stat_activity where current_query LIKE '#{matcher}%' AND current_query NOT LIKE '%procpid%'")
-    if result.count > 1
-      raise "Unexpected multiple procpids: #{result.inspect}"
-    end
-    (result.last || {})[:procpid]
+
+    <<-SQL
+      SELECT procpid
+      FROM pg_stat_activity
+      WHERE current_query LIKE '#{matcher}%'
+      AND current_query NOT LIKE '%procpid%'
+    SQL
   end
 
-  def reader_procpid
-    get_procpid(workspace.sandbox.database, :reader)
+  def database(type)
+    type == :reader ? workspace.sandbox.database : source_dataset.schema.database
   end
 
-  def writer_procpid
-    get_procpid(source_dataset.schema.database, :writer)
+  def busy?(type)
+    database(type).connect_as(user).fetch(procpid_sql(type)).any?
   end
 
   def named_pipe

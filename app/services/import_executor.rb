@@ -13,6 +13,7 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def run
+    touch(:started_at)
     source_database_url = get_database_url(source_dataset.schema.database)
     destination_database_url = get_database_url(sandbox.database)
     GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)

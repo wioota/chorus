@@ -252,6 +252,13 @@ describe ImportExecutor do
       run_import
     end
 
+    it "sets the started_at time" do
+      expect {
+        run_import
+      }.to change(import, :started_at).from(nil)
+      import.started_at.should be_within(1.hour).of(Time.current)
+    end
+
     it "passes the import id and created_at time as the pipe_name attribute to GpTableCopier.run_import" do
       mock_import do | src_url, dst_url, attributes |
         attributes[:pipe_name].should == "#{import.created_at.to_i}_#{import.id}"

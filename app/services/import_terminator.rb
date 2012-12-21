@@ -10,31 +10,10 @@ class ImportTerminator < DelegateClass(Import)
 
   delegate :log, :to => name.to_sym
 
-  def manager
-    @manager ||= ImportManager.new(__getobj__)
-  end
-
-  def terminate_process(database, type)
-    method = "#{type}_procpid"
-    procpid = manager.send(method)
-    database_description = "database #{database.name} on instance #{database.gpdb_instance.name}"
-
-    if procpid
-      log "Found running #{type} with procpid #{procpid} running on #{database_description}"
-      success = database.connect_as(user).fetch("select pg_terminate_backend(#{procpid})")
-      log success.first[:pg_terminate_backend] ? "Successfully killed #{type} process" : "Failed to kill #{type} process"
-    else
-      log "Could not find running #{type} process on database #{database_description}"
-    end
-
-    queue_classic_job_unstarted = QC.default_queue.job_count("ImportExecuter.run", id) > 0
-    log "Removing unstarted queue classic job" if queue_classic_job_unstarted
-  end
-
   def terminate
     log "Terminating import: #{__getobj__.inspect}"
-    terminate_process(source_dataset.schema.database, :writer)
-    terminate_process(workspace.sandbox.database, :reader)
+    terminate_process(:writer)
+    terminate_process(:reader)
     if manager.named_pipe
       log "Removing named pipe #{manager.named_pipe}"
       FileUtils.rm_f manager.named_pipe if manager.named_pipe
@@ -42,4 +21,35 @@ class ImportTerminator < DelegateClass(Import)
       log "No named pipe was found."
     end
   end
+
+  private
+
+  def manager
+    @manager ||= ImportManager.new(__getobj__)
+  end
+
+  def terminate_process(type)
+    database = manager.database(type)
+    database_description = "database #{database.name} on instance #{database.gpdb_instance.name}"
+
+    if manager.busy?(type)
+      log "Found running #{type} running on #{database_description}"
+      kills = kill(type)
+
+      log "Killed #{kills.count(true)} of #{kills.length} procpids for #{type}"
+    else
+      log "Could not find running #{type} process on database #{database_description}"
+    end
+  end
+
+  def kill(type)
+    procpids = manager.procpid_sql(type)
+
+    kills = manager.database(type).connect_as(user).fetch(<<-SQL)
+      SELECT pg_terminate_backend(procpid)
+      FROM (#{procpids}) AS procpids
+    SQL
+    kills.map {|row| row[:pg_terminate_backend]}
+    end
+
 end

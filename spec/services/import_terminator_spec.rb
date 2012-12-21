@@ -36,24 +36,13 @@ describe ImportTerminator, :database_integration do
       }
     end
 
-    def expect_to_log(regex)
-      found = false
+    def log_for
+      log_text = ""
       stub(ImportTerminator).log.with_any_args do |text|
-        found = true if text =~ regex
+        log_text << text << "\n"
       end
       yield
-      found.should be_true, "#{regex} not found in log"
-    end
-
-    context "when the import hasn't been started" do
-      it "removes the import from the work queue" do
-        expect_to_log /unstarted/ do
-          QC.default_queue.enqueue("ImportExecuter.run", import.id)
-          ImportTerminator.terminate(import)
-          # TODO #41244423: figure out how to remove job from queue classic
-          #QC.default_queue.job_count("ImportExecuter.run", import.id).should be_zero
-        end
-      end
+      log_text
     end
 
     context "with a real GpPipe job" do
@@ -90,7 +79,7 @@ describe ImportTerminator, :database_integration do
             rescue Sequel::DatabaseError
             end
           end
-          while import_manager.writer_procpid.nil? || import_manager.reader_procpid.nil?
+          while !import_manager.busy?(:writer) && !import_manager.busy?(:reader)
             sleep 0.1
           end
         end
@@ -102,22 +91,22 @@ describe ImportTerminator, :database_integration do
 
         it "removes the named pipe" do
           import_manager.named_pipe.should_not be_nil
-          expect_to_log /named pipe/ do
+          expect(log_for {
             ImportTerminator.terminate(import)
-          end
+          }).to match /named pipe/
           import_manager.named_pipe.should be_nil
         end
 
         it "kills the reader" do
-          expect_to_log /Found running reader/ do
+          expect(log_for {
             ImportTerminator.terminate(import)
-          end
+          }).to match /Found running reader/
         end
 
         it "kills the writer" do
-          expect_to_log /Found running writer/ do
+          expect(log_for {
             ImportTerminator.terminate(import)
-          end
+          }).to match /Found running writer/
         end
 
         it "allows the chorus worker to finish" do
@@ -135,10 +124,6 @@ describe ImportTerminator, :database_integration do
         connection.send(method, sql_command)
       end
     end
-    #
-    #def get_rows(database, sql_command, schema = schema)
-    #  execute(database, sql_command, schema, :fetch).all
-    #end
 
     def with_database_connection(database, &block)
       if database.is_a?(String)

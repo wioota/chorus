@@ -16,9 +16,12 @@
     <tr>
       <th>Select</th>
       <th>Started?</th>
+      <th>Duration</th>
+      <th>Started At</th>
+      <th>Enqueued At</th>
       <th>Named Pipe</th>
-      <th>Source DB Process</th>
-      <th>Destination DB Process</th>
+      <th>Source DB Process Busy</th>
+      <th>Destination DB Process Busy</th>
 
       <th>Source Instance</th>
       <th>Source Table Name</th>
@@ -32,9 +35,12 @@
     <tr>
       <td><input type="checkbox" name="id[]" value="<%= import.id %>" /></td>
       <td><%= import.started? %></td>
+      <td><%= distance_of_time_in_words_to_now(import.started_at) if import.started_at %></td>
+      <td><%= import.started_at %></td>
+      <td><%= import.created_at %></td>
       <td><%= import.named_pipe || "Not found" %></td>
-      <td><%= show_process { import.writer_procpid } %></td>
-      <td><%= show_process { import.reader_procpid } %></td>
+      <td><%= show_process { import.busy?(:writer) } %></td>
+      <td><%= show_process { import.busy?(:reader) } %></td>
 
       <td><%= instance_description(import.source_dataset.schema.database.gpdb_instance) %></td>
       <td><%= link_to(table_description(import.source_dataset.schema, import.source_dataset.name), link_to_table(import.workspace, import.source_dataset))%></td>
