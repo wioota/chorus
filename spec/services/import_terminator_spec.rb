@@ -79,7 +79,7 @@ describe ImportTerminator, :database_integration do
             rescue Sequel::DatabaseError
             end
           end
-          while !import_manager.busy?(:writer) && !import_manager.busy?(:reader)
+          until import_manager.busy?(:writer) && import_manager.busy?(:reader)
             sleep 0.1
           end
         end
