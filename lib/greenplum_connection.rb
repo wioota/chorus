@@ -159,6 +159,12 @@ module GreenplumConnection
       result && result.first[1]
     end
 
+    def stream_table(table_name, limit = nil, &block)
+      sql = "SELECT * FROM \"#{table_name}\""
+      sql = sql + " LIMIT #{limit}" if limit
+      with_schema_connection { @connection.fetch(sql).each(&block) }
+    end
+
     def execute(sql)
       with_schema_connection { @connection.execute(sql) }
     end

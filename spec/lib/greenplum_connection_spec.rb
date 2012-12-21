@@ -535,6 +535,40 @@ describe GreenplumConnection::Base, :database_integration do
       end
     end
 
+    describe "#stream_table" do
+      before :all do
+        @db = Sequel.connect(db_url)
+        @db.execute("SET search_path TO '#{schema_name}'")
+        @db.execute("CREATE TABLE thing (one integer, two integer)")
+        @db.execute("INSERT INTO thing VALUES (1, 2)")
+        @db.execute("INSERT INTO thing VALUES (3, 4)")
+      end
+
+      after :all do
+        @db.execute("DROP TABLE thing")
+      end
+
+      it "streams all rows of the database" do
+        bucket = []
+        connection.stream_table('thing') do |row|
+          bucket << row
+        end
+
+        bucket.should == @db.fetch('SELECT * FROM thing').all
+      end
+
+      context "when a limit is provided" do
+        it "only processes part of the table" do
+          bucket = []
+          connection.stream_table('thing', 1) do |row|
+            bucket << row
+          end
+
+          bucket.should == @db.fetch('SELECT * FROM thing LIMIT 1').all
+        end
+      end
+    end
+
     describe "#execute" do
       let(:sql) { "SET search_path TO 'public'" }
       let(:parameters) {{}}
