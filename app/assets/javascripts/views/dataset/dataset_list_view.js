@@ -23,13 +23,13 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
     },
 
     selectAllFetched: function() {
-        this.$("> li input[type=checkbox]").prop("checked", true);
+        this.$("> li input[type=checkbox]").prop("checked", true).change();
         chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
     },
 
     selectNone: function() {
         this.selectedDatasets.reset([]);
-        this.$("> li input[type=checkbox]").prop("checked", false);
+        this.$("> li input[type=checkbox]").prop("checked", false).change();
         chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
     },
 
@@ -79,9 +79,12 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
 
     checkboxChanged: function(e) {
         var clickedBox = $(e.currentTarget);
+        var clickedLi = $(e.currentTarget.parentElement);
         var index = this.$("> li input[type=checkbox]").index(clickedBox);
         var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
+
+        clickedLi.toggleClass("checked", isChecked);
 
         if (isChecked) {
             if (!this.selectedDatasets.contains(model)) {

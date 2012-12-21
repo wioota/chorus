@@ -32,6 +32,10 @@ describe("chorus.views.DatasetList", function() {
                 expect(this.view.$("li").eq(1)).not.toBe(".selected");
             });
 
+            it("add class checked", function() {
+                expect(this.view.$("li").eq(1)).toHaveClass('checked');
+            });
+
             it("broadcasts the 'dataset:checked' event with the collection of currently-checked datasets", function() {
                 expectDatasetChecked([ this.collection.at(1) ]);
             });
@@ -93,6 +97,7 @@ describe("chorus.views.DatasetList", function() {
 
                     it("checks all of the datasets", function() {
                         expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
+                        expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
                     });
 
                     it("broadcasts the 'dataset:checked' page event with a collection of all datasets", function() {
@@ -107,6 +112,8 @@ describe("chorus.views.DatasetList", function() {
 
                     it("un-checks all of the datasets", function() {
                         expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
+                        expect(this.view.$("li.checked").length).toBe(0);
+
                     });
 
                     it("broadcasts the 'dataset:checked' page event with an empty collection", function() {

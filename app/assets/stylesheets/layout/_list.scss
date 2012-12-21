@@ -124,6 +124,27 @@
 
     &.selectable {
         li {
+            a {
+                color: $color-text2;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            &.checked {
+                background-color: $list-checked-color;
+
+                .spacer_left {
+                    background: $list-checked-color;
+                    bottom: -1px;
+                }
+
+                a {
+                    color: $link-color;
+                }
+            }
+
             &:hover {
                 background: $list-hover-color;
 
@@ -131,7 +152,12 @@
                     background: $list-hover-color;
                     bottom: -1px;
                 }
+
+                a {
+                    color: $link-color;
+                }
             }
+
 
             &.selected {
                 $border-width: 2px;
@@ -139,6 +165,10 @@
                 background: white;
                 padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
                 border-bottom: $border-width solid $border-color;
+
+                a {
+                    color: $link-color;
+                }
 
                 .spacer_left {
                     background: white;
