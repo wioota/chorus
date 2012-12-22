@@ -4,4 +4,4 @@ Date.parseFromApi = function(str) {
     if(str) {
         return Date.formatForApi.parse(str);
     }
-}
+};

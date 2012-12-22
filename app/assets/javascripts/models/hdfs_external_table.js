@@ -5,7 +5,7 @@ chorus.models.HdfsExternalTable = chorus.models.Base.extend({
         var postUrl = "workspaces/{{workspaceId}}/external_tables";
 
         var method = options && options.method;
-        return (method == "create" ? postUrl : defaultUrl);
+        return (method === "create" ? postUrl : defaultUrl);
     },
 
     save: function(options) {

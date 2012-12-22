@@ -8,15 +8,15 @@ chorus.models.AlpineFlowImage = Backbone.Model.extend(_.extend({}, chorus.Mixins
         if (resp !== '') {
             return {found: true, imageFilePath: '/alpine' + resp};
         } else {
-            return {found: false}
+            return {found: false};
         }
     },
 
     fetch: function(options) {
         var changeAnyway = function () {
             this.loaded = true;
-            this.trigger('change')
-        }
+            this.trigger('change');
+        };
         return this._super('fetch', [_.extend({dataType: 'text', error: _.bind(changeAnyway, this)}, options)]);
     }
 }));

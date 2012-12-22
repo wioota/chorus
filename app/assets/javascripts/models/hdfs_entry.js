@@ -16,7 +16,7 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     getPath: function() {
-        var encodedPath = encodeURIComponent((this.get("path") == "/") ? "" : this.get("path"));
+        var encodedPath = encodeURIComponent((this.get("path") === "/") ? "" : this.get("path"));
         return encodedPath.replace(/%2F/g, "/");
     },
 
@@ -36,11 +36,11 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     getHadoopInstance: function() {
-        return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
+        return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" });
     },
 
     iconUrl: function() {
-        var name = this.get("name") || ""
+        var name = this.get("name") || "";
         return chorus.urlHelpers.fileIconUrl(_.last(name.split(".")));
     }
 

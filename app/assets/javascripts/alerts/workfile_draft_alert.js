@@ -9,7 +9,7 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
 
     postRender:function () {
         _.delay(_.bind(function () {
-            this.$("button.submit").focus()
+            this.$("button.submit").focus();
         }, this), 250);
     },
 
@@ -33,7 +33,7 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
 
         this.bindings.add(draft, "destroy", function () {
             this.closeModal();
-            this.model.set({ hasDraft:false })
+            this.model.set({ hasDraft:false });
 
         });
 

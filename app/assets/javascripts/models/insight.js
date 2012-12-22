@@ -6,10 +6,10 @@ chorus.models.Insight = chorus.models.Note.extend({
         var action = this.get('action');
 
         if (options && options.isFile) {
-            return "notes/{{id}}/attachments"
-        } else if (action == "create") {
+            return "notes/{{id}}/attachments";
+        } else if (action === "create") {
             return "insights";
-        } else if (action == "publish" || action == "unpublish") {
+        } else if (action === "publish" || action === "unpublish") {
             return "insights/" + action;
         } else {
             return "notes/{{id}}";
@@ -22,7 +22,7 @@ chorus.models.Insight = chorus.models.Note.extend({
     },
 
     declareValidations:function (newAttrs) {
-        if ( !(newAttrs['validateBody'] == false) ) {
+        if (newAttrs['validateBody'] !== false) {
             this.require('body', newAttrs);
         }
     }

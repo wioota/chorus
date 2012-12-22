@@ -7,7 +7,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
             return this._super("urlTemplate", arguments);
         } else if(this.isChorusView() &&
             (_.indexOf(["create", "update", "delete"], options.method) > -1)) {
-            return "chorus_views/{{id}}"
+            return "chorus_views/{{id}}";
         } else {
             return "workspaces/{{workspace.id}}/datasets/{{id}}";
         }
@@ -35,7 +35,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     isSandbox: function() {
-        return this.get("type") == "SANDBOX_TABLE";
+        return this.get("type") === "SANDBOX_TABLE";
     },
 
     deriveChorusView: function() {
@@ -80,7 +80,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
                 workspaceId: this.get("workspace").id
             });
         }
-        return this._datasetImports
+        return this._datasetImports;
     },
 
     getImportSchedules: function() {
@@ -91,7 +91,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
             });
             this._datasetImportSchedules.on("remove", this.importScheduleRemoved, this);
         }
-        return this._datasetImportSchedules
+        return this._datasetImportSchedules;
     },
 
     importScheduleRemoved: function() {

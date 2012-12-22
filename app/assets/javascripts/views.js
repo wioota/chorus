@@ -66,7 +66,7 @@ chorus.views.Bare = Backbone.View.include(
             }
 
             _.each(this.subscriptions, function(handle) {
-                chorus.PageEvents.unsubscribe(handle)
+                chorus.PageEvents.unsubscribe(handle);
             });
             this.subscriptions = [];
 
@@ -74,7 +74,7 @@ chorus.views.Bare = Backbone.View.include(
                 var subViewObjects = this.parentView.subViewObjects;
                 var index = subViewObjects.indexOf(this);
                 if(index > -1) subViewObjects.splice(index, 1);
-                delete this.parentView
+                delete this.parentView;
             }
         },
 
@@ -135,7 +135,7 @@ chorus.views.Bare = Backbone.View.include(
         },
 
         verifyResourcesLoaded: function(preventRender) {
-            if (this.requiredResources.length == 0) {
+            if (this.requiredResources.length === 0) {
                 return;
             }
             if (this.requiredResources.allLoaded()) {
@@ -176,7 +176,7 @@ chorus.views.Bare = Backbone.View.include(
             if (this.displayLoadingSection()) {
                 subviews = {".loading_section": "makeLoadingSectionView"};
             } else {
-                subviews = this.subviews
+                subviews = this.subviews;
             }
 
             _.each(subviews, function(property, selector) {
@@ -191,10 +191,10 @@ chorus.views.Bare = Backbone.View.include(
             if (view) {
                 if (!selector) {
                     _.each(this.subviews, function(value, key) {
-                        if (value == property) {
+                        if (value === property) {
                             selector = key;
                         }
-                    })
+                    });
                 }
                 var element = this.$(selector);
                 if (element.length) {
@@ -206,7 +206,7 @@ chorus.views.Bare = Backbone.View.include(
                     }
 
                     if (!view.requiredResources || view.requiredResources.allLoaded()) {
-                        view.render()
+                        view.render();
                     }
                     view.delegateEvents();
                 }
@@ -291,15 +291,15 @@ chorus.views.Bare = Backbone.View.include(
                         var index = this.subscriptions.indexOf(this.scrollHandle);
                         if(index > -1) this.subscriptions.splice(index, 1);
                     }
-                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling($el) }, this);
+                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling($el); }, this);
                     this.subscriptions.push(this.scrollHandle);
 
                     if (!alreadyInitialized) {
                         $el.addClass("custom_scroll");
                         $el.unbind('hover').hover(function() {
-                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150);
                         }, function() {
-                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150);
                         });
 
                         $el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
@@ -308,7 +308,7 @@ chorus.views.Bare = Backbone.View.include(
                             if(this.resizeCallback) {
                                 this.bindings.remove(chorus.page, "resized", this.resizeCallback);
                             }
-                            this.resizeCallback = function() { this.recalculateScrolling($el) };
+                            this.resizeCallback = function() { this.recalculateScrolling($el); };
                             this.bindings.add(chorus.page, "resized", this.resizeCallback, this);
                         }
                     }
@@ -329,16 +329,16 @@ chorus.views.Bare = Backbone.View.include(
                     _.defer(_.bind(function() {
                         api.reinitialise();
                         if (!api.getIsScrollableH() && api.getContentPositionX() > 0) {
-                            el.find(".jspPane").css("left", 0)
+                            el.find(".jspPane").css("left", 0);
                         }
                         if (!api.getIsScrollableV() && api.getContentPositionY() > 0) {
-                            el.find(".jspPane").css("top", 0)
+                            el.find(".jspPane").css("top", 0);
                         }
                         el.find('.jspVerticalBar').hide();
                         el.find('.jspHorizontalBar').hide();
                     }, this));
                 }
-            })
+            });
         }
     }, {
         extended: function(subclass) {
@@ -357,7 +357,7 @@ chorus.views.Base = chorus.views.Bare.extend({
     makeModel: $.noop,
     collectionModelContext: $.noop,
     additionalContext: function() {
-        return {}
+        return {};
     },
 
     preInitialize: function() {
@@ -402,7 +402,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             if (resource.serverErrors) ctx.serverErrors = resource.serverErrors;
             $.extend(ctx, this.additionalContext(ctx));
         } else {
-            ctx = this.additionalContext({})
+            ctx = this.additionalContext({});
         }
 
         ctx.view = self;
@@ -434,7 +434,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         this.clearErrors();
 
         if (!model) {
-            model = this.resource
+            model = this.resource;
         }
         _.each(model.errors, function(val, key) {
             var $input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
@@ -533,7 +533,7 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
                 menu.bind("choice", function(eventType, choice) {
                     self.trigger("choice:" + eventType, choice);
                 });
-            })
+            });
         }
     }
 });

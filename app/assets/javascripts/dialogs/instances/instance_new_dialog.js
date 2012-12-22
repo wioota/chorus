@@ -48,20 +48,20 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
             auroraInstalled: chorus.models.GpdbInstance.aurora().isInstalled(),
             provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGb"),
             gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured')
-        }
+        };
     },
 
     showFieldset:function (e) {
         this.$("fieldset").addClass("collapsed");
         $(e.currentTarget).closest("fieldset").removeClass("collapsed");
         this.clearErrors();
-        this.$("button.submit").prop("disabled", false)
+        this.$("button.submit").prop("disabled", false);
     },
 
     createInstance:function (e) {
         e && e.preventDefault();
 
-        this.resource = this.model = new (this.instanceClass());
+        this.resource = this.model = new (this.instanceClass())();
         this.bindings.add(this.model, "saved", this.saveSuccess);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
@@ -101,7 +101,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model);
 
-        if (this.model.get("provision_type") == "create") {
+        if (this.model.get("provision_type") === "create") {
             this.provisioning = true;
             chorus.toast("instances.new_dialog.provisioning");
             chorus.router.navigate("/instances", { selectId: this.model.get("id") });

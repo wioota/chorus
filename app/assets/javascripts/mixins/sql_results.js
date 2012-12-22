@@ -35,6 +35,6 @@ chorus.Mixins.SQLResults = {
     },
 
     hasResults: function() {
-        return !!this.getRows().length
+        return !!this.getRows().length;
     }
 };

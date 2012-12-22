@@ -3,7 +3,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     urlTemplate: "workspaces/{{workspaceId}}/datasets/{{datasetId}}/imports",
 
     declareValidations: function(newAttrs) {
-        if (newAttrs.newTable == "true") {
+        if (newAttrs.newTable === "true") {
             this.requirePattern("toTable", chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, 'import.validation.toTable.required');
         }
 

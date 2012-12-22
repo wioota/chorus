@@ -20,6 +20,6 @@ chorus.models.Comment = chorus.models.Activity.extend({
     },
 
     note: function() {
-        return this.get('type') && this.get("type") == "NOTE";
+        return this.get('type') && this.get("type") === "NOTE";
     }
 });

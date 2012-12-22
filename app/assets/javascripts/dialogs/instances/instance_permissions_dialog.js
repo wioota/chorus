@@ -44,14 +44,14 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             sharedAccount: this.instance.isShared(),
             accountCount: this.collection.reject(
                 function(account) {
-                    return account.isNew()
+                    return account.isNew();
                 }).length
         };
     },
 
     collectionModelContext: function(account) {
         var context = {};
-        var user = account.user()
+        var user = account.user();
         if (user) {
             _.extend(context, {
                 fullName: user.displayName(),
@@ -67,7 +67,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        this.populateSelect()
+        this.populateSelect();
         this.$("form").bind("submit", _.bind(this.save, this));
     },
 
@@ -129,7 +129,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     saveOwner: function(user) {
-        var newOwnerId = user.get("id")
+        var newOwnerId = user.get("id");
         this.bindings.add(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
         this.bindings.add(this.ownership, "saved", function() {
             chorus.toast("instances.confirm_change_owner.toast");
@@ -139,7 +139,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
                     this.instance.set({ owner: { id: newOwnerId } });
                     this.instance.trigger("invalidated");
                 }, this)
-            })
+            });
         });
 
         this.ownership.save({ id: newOwnerId });
@@ -186,8 +186,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     populateNewAccountSelect: function() {
         var collectionUserSet = new chorus.collections.UserSet(this.collection.users());
         var otherUsers = this.users.select(function(user) {
-            return !collectionUserSet.get(user.get("id"))
-        })
+            return !collectionUserSet.get(user.get("id"));
+        });
 
         var select = this.$("li.new select.name");
         select.attr('id', 'select_new_instance_account_owner'); // need handle for Selenium to interact with JQ Select
@@ -214,13 +214,13 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         event.stopPropagation();
         event.preventDefault();
         var li = $(event.target).closest("li");
-        li.find("a.save").startLoading("instances.permissions.saving")
+        li.find("a.save").startLoading("instances.permissions.saving");
 
         this.bindings.add(this.account, "validationFailed", function() {
-            this.showErrors(this.account)
+            this.showErrors(this.account);
         });
         this.bindings.add(this.account, "saveFailed", function() {
-            this.showErrors(this.account)
+            this.showErrors(this.account);
         });
         this.account.save({
             ownerId: li.find("select").val(),

@@ -5,7 +5,7 @@ chorus.models.Task = chorus.models.Base.include(
 
     urlTemplate: function(options) {
         if (options && options.method === "delete") {
-            return this.urlTemplateBase + "/{{checkId}}"
+            return this.urlTemplateBase + "/{{checkId}}";
         } else {
             return this.urlTemplateBase;
         }

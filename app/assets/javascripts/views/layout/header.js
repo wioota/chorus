@@ -70,6 +70,18 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     addFastUserToggle: function() {
+        var self = this;
+        var session = chorus.session;
+
+        function switchUser(username) {
+            session.requestLogout(function() {
+                // log back in as new user
+                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router));
+                self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
+                session.save({username: username, password: "secret"});
+            });
+        }
+
         function addDropdown() {
             $('select.switch_user').remove();
             var $select = $("<select class='switch_user'></select>");
@@ -83,18 +95,6 @@ chorus.views.Header = chorus.views.Base.extend({
             $("body").append($select);
             $select.unbind("change").bind("change", function() {
                 switchUser($(this).val());
-            });
-        }
-
-        var self = this;
-        var session = chorus.session;
-
-        function switchUser(username) {
-            session.requestLogout(function() {
-                // log back in as new user
-                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router));
-                self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
-                session.save({username: username, password: "secret"});
             });
         }
 

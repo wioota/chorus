@@ -33,9 +33,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         });
 
 
-        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
-
-
+        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this);
     },
 
     crumbs: function() {
@@ -104,14 +102,14 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         if (this.hdfsEntry.name() === "/") {
           dir = "";
         } else if (!dir.match(/\/$/)) {
-            dir += '/'
+            dir += '/';
         }
         var path = dir + this.hdfsEntry.name();
         var folders = path.split('/');
         if (folders.length > 3) {
-            return "/" + folders[1] + "/.../" + folders[folders.length-1]
+            return "/" + folders[1] + "/.../" + folders[folders.length-1];
         } else {
-            return path
+            return path;
         }
     },
 

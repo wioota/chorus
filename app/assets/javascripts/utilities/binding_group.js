@@ -23,7 +23,7 @@ _.extend(chorus.BindingGroup.prototype, {
 
         if(eventSource.shouldTriggerImmediately &&
             eventSource.shouldTriggerImmediately(eventNameString)) {
-            _.defer(function(){eventSource.trigger(eventNameString)});
+            _.defer(function(){eventSource.trigger(eventNameString);});
         }
     },
 
@@ -50,7 +50,7 @@ _.extend(chorus.BindingGroup.prototype, {
             return binding.eventName === eventName &&
                 binding.eventSource === eventSource &&
                 binding.callback === callback &&
-                binding.context === context
+                binding.context === context;
         });
     }
 });

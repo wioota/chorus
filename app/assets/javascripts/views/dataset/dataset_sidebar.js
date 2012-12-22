@@ -162,7 +162,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         if(!this.resource)
             return;
 
-        this.resource.getImportSchedules().reset([importSchedule])
+        this.resource.getImportSchedules().reset([importSchedule]);
         this.render();
     },
 

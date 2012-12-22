@@ -9,7 +9,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     urlTemplate: function(options) {
         if(options && options.download) {
-            return "datasets/{{id}}/download.csv"
+            return "datasets/{{id}}/download.csv";
         } else {
             return "datasets/{{id}}";
         }
@@ -31,7 +31,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     isDeleteable: function() {
         var type = this.get("type");
-        return type && (type == "SOURCE_TABLE" || type == "CHORUS_VIEW");
+        return type && (type === "SOURCE_TABLE" || type === "CHORUS_VIEW");
     },
 
     columns: function(options) {
@@ -43,7 +43,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
             this._columns.dataset = this;
             var objectNameField = this.metaType() + "Name";
-            this._columns.attributes[objectNameField] = (this.metaType() == "query") ? this.get("id") : this.name();
+            this._columns.attributes[objectNameField] = (this.metaType() === "query") ? this.get("id") : this.name();
         }
         return this._columns;
     },
@@ -54,10 +54,6 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     database: function() {
         return this.schema().database();
-    },
-
-    importSchedule: function() {
-        return false;
     },
 
     getImports: $.noop,
@@ -73,10 +69,10 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     canExport:function () {
-        return this.workspace() && this.workspace().canUpdate()
-            && this.hasCredentials()
-            && this.canBeImportSource()
-            && this.isImportConfigLoaded()
+        return this.workspace() && this.workspace().canUpdate() &&
+            this.hasCredentials() &&
+            this.canBeImportSource() &&
+            this.isImportConfigLoaded();
     },
 
     schema: function() {
@@ -124,11 +120,11 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     invalidateWorkspacesAssociated: function() {
-        delete this._workspaceAssociated
+        delete this._workspaceAssociated;
     },
 
     invalidateTableauWorkbooks: function() {
-        delete this._tableauWorkbooks
+        delete this._tableauWorkbooks;
     },
 
     statistics: function() {
@@ -188,7 +184,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     refetchAfterInvalidated: function() {
-        this.collection && this.fetch()
+        this.collection && this.fetch();
     },
 
     quotedName: function() {
@@ -260,7 +256,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     hasCredentials: function() {
-        return this.get('hasCredentials') !== false
+        return this.get('hasCredentials') !== false;
     },
 
     analyzableObjectType: function() {

@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     var collectionMap = {
         hdfs_entries: "HdfsEntrySet",
         datasets: "DynamicDatasetSet",
@@ -138,19 +138,14 @@
             switch(this.entityType()) {
                 case "user":
                     return this.users();
-                    break;
                 case "workspace":
                     return this.workspaces();
-                    break;
                 case "workfile":
                     return this.workfiles();
-                    break;
                 case "dataset":
                     return this.datasets();
-                    break;
                 case "instance":
                     return this.instances();
-                    break;
                 case "hdfs_entry":
                     return this.hdfs_entries();
                 case "attachment":
@@ -165,11 +160,11 @@
         total: function() {
             return _.reduce(_.values(this.attributes), function(sum, results) {
                 if (results && results.numFound) {
-                    return sum + results.numFound
+                    return sum + results.numFound;
                 } else {
                     return sum;
                 }
-            }, 0)
+            }, 0);
         }
     });
 

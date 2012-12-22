@@ -54,13 +54,13 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
     pathWithSlash: function() {
         var path = this.collection.attributes.path;
-        return (path == "/") ? path : path + "/";
+        return (path === "/") ? path : path + "/";
     },
 
     performValidation: function() {
         var parent_dialog_valid = this._super("performValidation", arguments);
 
-        if(this.$("input[name='pathType']:checked").val() == "pattern") {
+        if(this.$("input[name='pathType']:checked").val() === "pattern") {
             var regexp_s = this.$("input[name='pattern']").val();
 
             regexp_s = regexp_s.replace(/\*/g, ".*");
@@ -119,7 +119,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.pathType = this.$("input[name='pathType']:checked").val();
         this.pattern = this.$("input[name='pattern']").val();
         this.resource = this.model = this.collection.find(function(modelSet) {
-            return modelSet.get('name') == $(e.target).val()
+            return modelSet.get('name') === $(e.target).val();
         });
 
         this.setupCsvOptions();

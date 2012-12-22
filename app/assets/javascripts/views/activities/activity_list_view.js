@@ -25,7 +25,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
         if (collectionNote) {
             collectionNote.set('body', note.get('body'));
             this.render();
-        };
+        }
     },
 
     toggleCommentList:function (event) {
@@ -84,7 +84,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                 chorus.log("error", err, "processing activity", model);
                 if (chorus.isDevMode()) {
                     var action, id;
-                    try {action = model.get("action");  id = model.id;} catch(err) {}
+                    try {action = model.get("action");  id = model.id;} catch(err2) {}
                     chorus.toast("bad_activity", {type: action, id: id, toastOpts: {theme: "bad_activity"}});
                 }
             }

@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     var CLASS_MAP = {
         "actor": "User",
         "dataset": "WorkspaceDataset",
@@ -54,7 +54,7 @@
             model.set({
                 id : hdfsEntry.id,
                 hadoopInstance: hdfsEntry.hadoopInstance
-            })
+            });
         }),
 
         noteObject: function() {
@@ -201,9 +201,9 @@
         },
 
         hasCommitMessage: function() {
-            return (this.get("action") === "WorkfileUpgradedVersion"
-                || this.get("action") == "WorkfileCreated" )
-                && this.get("commitMessage")
+            return (this.get("action") === "WorkfileUpgradedVersion" ||
+                this.get("action") === "WorkfileCreated" ) &&
+                this.get("commitMessage");
         },
 
         isUserGenerated: function () {
@@ -236,7 +236,7 @@
         },
 
         promotionTimestamp:function() {
-            return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : nil
+            return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : null;
         },
 
         reindexError: function() {

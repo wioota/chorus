@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     chorus.presenters.Activity = chorus.presenters.Base.extend({
 
         headerHtml: function() {
@@ -59,7 +59,7 @@
         },
 
         isNote: function() {
-            return this.model.get("action") == "NOTE";
+            return this.model.get("action") === "NOTE";
         },
 
         canDelete: function() {
@@ -115,7 +115,7 @@
             model.set({workspace: workspace});
         }
         return model;
-    };
+    }
 
     function chorusViewModel(self) {
         var object = self.model.get("sourceDataset");
@@ -125,7 +125,7 @@
             var workspace = self.model.workspace();
             model.set({workspace: workspace});
         return model;
-    };
+    }
 
     var hidden = {
 
@@ -364,8 +364,8 @@
         },
 
         defaultStyle: function(self, isNotification) {
-            if (self.get("action") == "MembersAdded") {
-                if (isNotification == true) return "notification.default";
+            if (self.get("action") === "MembersAdded") {
+                if (isNotification === true) return "notification.default";
 
                 switch(self.get("numAdded")) {
                     case "1":
@@ -375,7 +375,7 @@
                     default:
                         return 'many.default';
                 }
-            } else if (self.workspace().id && self.get("actionType") != "NoteOnWorkspace") {
+            } else if (self.workspace().id && self.get("actionType") !== "NoteOnWorkspace") {
                 return 'default';
             } else {
                 return 'without_workspace';
@@ -383,8 +383,8 @@
         },
 
         displayStyle: function(self, style, isNotification) {
-            if (self.get("action") == "MembersAdded") {
-                if (isNotification == true) return ("notification." + style);
+            if (self.get("action") === "MembersAdded") {
+                if (isNotification === true) return ("notification." + style);
 
                 switch(self.get("numAdded")) {
                     case "1":
@@ -460,7 +460,7 @@
         },
 
         importSourceDatasetLink: function(self) {
-            var workspace = self.model.get("workspace")
+            var workspace = self.model.get("workspace");
             var dataset = self.model.get("sourceDataset");
             dataset.workspace = workspace;
             var dataset_model = new chorus.models.WorkspaceDataset(dataset);
@@ -509,15 +509,15 @@
         },
 
         instanceAddress: function(self) {
-            return self.model.gpdbInstance().get("host")
+            return self.model.gpdbInstance().get("host");
         },
 
         gpdbInstanceName: function(self) {
-            return self.model.gpdbInstance().get("name")
+            return self.model.gpdbInstance().get("name");
         },
 
         workspaceOldName: function(self) {
-            return self.model.get("workspaceOldName")
+            return self.model.get("workspaceOldName");
         }
     };
 })();

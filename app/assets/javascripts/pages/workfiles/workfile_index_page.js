@@ -53,13 +53,13 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
             this.collection.attributes.fileType = choice;
             this.collection.fetchAll();
-        }, this)
+        }, this);
 
         this.mainContent.contentHeader.bind("choice:sort", function(choice) {
-            var field = choice == "alpha" ? "fileName" : "lastUpdatedStamp";
-            this.collection.sortAsc(field)
+            var field = choice === "alpha" ? "fileName" : "lastUpdatedStamp";
+            this.collection.sortAsc(field);
             this.collection.fetchAll();
-        }, this)
+        }, this);
     },
 
     crumbs: function() {

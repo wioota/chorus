@@ -16,7 +16,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
                     url:"#/users/new",
                     text:t("actions.add_user")
                 }
-            )
+            );
         }
 
         this.mainContent = new chorus.views.MainContentList({
@@ -35,10 +35,10 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
 
             },
             buttons:buttons
-        })
+        });
 
         this.mainContent.contentHeader.bind("choice:sort", function (choice) {
-            this.collection.sortAsc(choice)
+            this.collection.sortAsc(choice);
             this.collection.fetch();
         }, this);
 

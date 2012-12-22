@@ -10,7 +10,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
 
     declareValidations: function(attrs) {
         var missingDb = !this.get('databaseId') && !attrs["databaseId"];
-        var missingSchema = !this.get('schemaId') && !attrs["schemaId"]
+        var missingSchema = !this.get('schemaId') && !attrs["schemaId"];
         if(missingSchema || missingDb) {
             this.require("schemaName", attrs);
             this.requirePattern("schemaName", chorus.ValidationRegexes.PostgresIdentifier(63), attrs);

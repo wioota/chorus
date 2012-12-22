@@ -8,7 +8,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         this.dependOn(this.model);
         this.model.fetch();
 
-        this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"})
+        this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"});
         this.sidebar = new chorus.views.WorkspaceShowSidebar({model: this.model});
 
         this.mainContent = new chorus.views.MainContentView({
@@ -21,10 +21,10 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     decideIfQuickstart: function() {
         if (this.model.owner().get("id") === chorus.session.user().get("id")){
             if (!this.quickstartNavigated && (
-                this.model.get("hasAddedMember") == false ||
-                this.model.get("hasAddedWorkfile") == false ||
-                this.model.get("hasAddedSandbox") == false ||
-                this.model.get("hasChangedSettings") == false)) {
+                this.model.get("hasAddedMember") === false ||
+                this.model.get("hasAddedWorkfile") === false ||
+                this.model.get("hasAddedSandbox") === false ||
+                this.model.get("hasChangedSettings") === false)) {
 
                 chorus.router.navigate("/workspaces/" + this.workspaceId + "/quickstart");
                 return;

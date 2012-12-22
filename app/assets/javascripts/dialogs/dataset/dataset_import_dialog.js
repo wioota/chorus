@@ -37,7 +37,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".existing_table .options input").prop("disabled", true);
 
         this.importTarget = $(e.currentTarget).val();
-        if (this.importTarget == "new") {
+        if (this.importTarget === "new") {
             this.$(".new_table input:text").prop("disabled", false);
             this.$("button.submit").prop("disabled", false);
             this.$("a.dataset_picked").addClass("hidden");
@@ -46,7 +46,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 this.$("span.dataset_picked").removeClass("hidden");
             }
 
-        } else if (this.importTarget == "existing") {
+        } else if (this.importTarget === "existing") {
             this.$("a.dataset_picked").removeClass("hidden");
             this.$("span.dataset_picked").addClass("hidden");
 
@@ -161,7 +161,15 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     displayNginxError: function(status, statusText) {
-        this.model.serverErrors = {"fields":{"base":{GENERIC:{message: status + ": " + statusText }}}}
+        this.model.serverErrors = {
+            "fields": {
+                "base": {
+                    GENERIC: {
+                        message: status + ": " + statusText
+                    }
+                }
+            }
+        };
     },
 
     uploadFinished: function(e, data) {
@@ -236,8 +244,16 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         var maxFileSize = this.config.get("fileSizesMbCsvImports");
 
         _.each( this.uploadObj.files, function(file) {
-            if (file.size > (maxFileSize * 1024 * 1024) ) {
-                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
+            if (file.size > (maxFileSize * 1024 * 1024)) {
+                this.model.serverErrors = {
+                    "fields": {
+                        "base": {
+                            "FILE_SIZE_EXCEEDED": {
+                                "count": maxFileSize
+                            }
+                        }
+                    }
+                };
                 this.$("button.submit").prop("disabled", true);
                 this.showErrors(this.model);
             }

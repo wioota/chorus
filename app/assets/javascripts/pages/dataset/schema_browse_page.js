@@ -30,7 +30,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             this.mainContent.content.render();
             this.mainContent.contentFooter.render();
             this.mainContent.contentDetails.updatePagination();
-        })
+        });
     },
 
     crumbs: function() {

@@ -10,4 +10,4 @@ chorus.alerts.UserDelete = chorus.alerts.ModelDelete.extend({
     makeModel:function () {
         this.model = this.model || new chorus.models.User({ id: this.options.id });
     }
-})
+});

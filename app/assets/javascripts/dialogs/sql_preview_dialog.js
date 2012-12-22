@@ -26,7 +26,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     },
 
     makeCodeMirrorOptions: function() {
-        return opts = {
+        return {
             readOnly: "nocursor",
             lineNumbers: true,
             mode: "text/x-sql",
@@ -49,7 +49,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     hidePreviewData: function() {
         this.$(".results_console").addClass("hidden");
-        this.$("button.preview").removeClass("hidden")
+        this.$("button.preview").removeClass("hidden");
     },
 
     previewData: function(e) {

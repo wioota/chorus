@@ -27,13 +27,13 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         }
 
         var path = this.model.get("path");
-        var separator = (path == "/") ? "" : "/";
+        var separator = (path === "/") ? "" : "/";
 
         this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
             hadoopInstance : this.model.get("hadoopInstance"),
             id: this.model.get("id")
         });
-        this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this)
+        this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this);
         this.hdfsFiles.fetchAll();
         this.trigger("workspace:selected", this.selectedItem());
     },
@@ -46,8 +46,8 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
     launchCreateHdfsDialog: function() {
         var hdfsTextFiles = this.hdfsFiles.filesOnly();
 
-        if (hdfsTextFiles.length == 0) {
-            this.showDialogError(t("hdfs_instance.no_text_files"))
+        if (hdfsTextFiles.length === 0) {
+            this.showDialogError(t("hdfs_instance.no_text_files"));
         } else {
             this.externalTableDialog = new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
                 collection: hdfsTextFiles || [],

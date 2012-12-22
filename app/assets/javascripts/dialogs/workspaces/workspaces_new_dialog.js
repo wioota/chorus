@@ -13,12 +13,12 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
     },
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.Workspace()
+        this.model = this.model || new chorus.models.Workspace();
     },
 
     setup:function () {
         this.bindings.add(this.resource, "saved", this.workspaceSaved);
-        this.bindings.add(this.resource, "saveFailed", function() { this.$("button.submit").stopLoading() });
+        this.bindings.add(this.resource, "saveFailed", function() { this.$("button.submit").stopLoading(); });
     },
 
     createWorkspace:function createWorkspace(e) {
@@ -27,9 +27,9 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
         this.resource.set({
             name:this.$("input[name=name]").val().trim(),
             public:!!this.$("input[name=public]").is(":checked")
-        })
+        });
 
-        this.$("button.submit").startLoading("actions.creating")
+        this.$("button.submit").startLoading("actions.creating");
         this.resource.save();
     },
 

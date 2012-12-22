@@ -7,8 +7,8 @@ chorus.Mixins.Urls = {
         }
 
         var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate.apply(this, arguments) : this.showUrlTemplate;
-        var prefix = "#/"
-        var encodedFragment = new URI(Handlebars.compile(template, {noEscape: true})(this.attributes)).normalize().toString()
+        var prefix = "#/";
+        var encodedFragment = new URI(Handlebars.compile(template, {noEscape: true})(this.attributes)).normalize().toString();
         return prefix + encodedFragment;
     },
 

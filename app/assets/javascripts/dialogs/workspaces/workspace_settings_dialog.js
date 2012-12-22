@@ -27,7 +27,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             ownerUrl: owner.showUrl(),
             sandboxLocation: sandboxLocation,
             active: this.pageModel.isActive()
-        }
+        };
     },
 
     setup: function() {
@@ -70,8 +70,8 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         this.$("select.owner").val(this.pageModel.owner().get("id"));
 
         _.defer(_.bind(function() {
-            var clEditor = this.makeEditor($(this.el), ".toolbar", "summary")
-            if (!canUpdateName) { clEditor.disable(true) }
+            var clEditor = this.makeEditor($(this.el), ".toolbar", "summary");
+            if (!canUpdateName) { clEditor.disable(true); }
         }, this));
     },
 

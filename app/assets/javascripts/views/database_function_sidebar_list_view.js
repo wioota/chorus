@@ -19,7 +19,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
                     var cid = $(api.elements.target).parent().data('cid');
                     var model = this.collection.get(cid);
                     var content = this.tooltipContent(model);
-                    $(api.elements.content).html(content)
+                    $(api.elements.content).html(content);
                 }, this),
                 show: function(e, api) {
                     $(api.elements.target).addClass('hover');
@@ -73,7 +73,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
             cid: model.cid,
             name: model.get("name"),
             fullName: model.toText()
-        }
+        };
     },
 
     additionalContext: function() {

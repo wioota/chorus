@@ -15,7 +15,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
             workspace: { id: this.options.workspaceId }
-        })
+        });
     },
 
     setup:function () {
@@ -30,9 +30,9 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
 
         this.resource.set({
             fileName:fileName ? fileName + ".sql" : ""
-        })
+        });
 
-        this.$("button.submit").startLoading("actions.adding")
+        this.$("button.submit").startLoading("actions.adding");
         this.resource.save({source:"empty"});
     },
 

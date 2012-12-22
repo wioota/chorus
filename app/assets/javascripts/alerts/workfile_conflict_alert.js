@@ -14,10 +14,10 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
     postRender:function () {
         this.$("button.cancel").click(_.bind(function () {
             this.discardChanges();
-        }, this))
+        }, this));
 
         _.delay(_.bind(function () {
-            this.$("button.submit").focus()
+            this.$("button.submit").focus();
         }, this), 250);
     },
 

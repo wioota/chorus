@@ -9,19 +9,19 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     isProvisioning: function() {
-        return this.get("state") == "provisioning";
+        return this.get("state") === "provisioning";
     },
 
     provisioningFailed: function() {
-        return this.get("state") == "fault";
+        return this.get("state") === "fault";
     },
 
     isOnline: function() {
-        return this.get("state") == "online";
+        return this.get("state") === "online";
     },
 
     isOffline: function() {
-        return this.get("state") == "offline";
+        return this.get("state") === "offline";
     },
 
     stateText: function() {
@@ -40,11 +40,11 @@ chorus.models.Instance = chorus.models.Base.extend({
     owner: function() {
         return new chorus.models.User(
             this.get("owner")
-        )
+        );
     },
 
     isOwner: function(user) {
-        return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
+        return this.owner().get("id") === user.get('id') && user instanceof chorus.models.User;
     },
 
     isGreenplum: function() {

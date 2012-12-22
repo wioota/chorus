@@ -124,7 +124,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         }
         this.$(".truncate").prop("checked", !!model.get("truncate"));
 
-        if (model.get("sampleCount") && model.get("sampleCount") != '0') {
+        if (model.get("sampleCount") && model.get("sampleCount") !== '0') {
             this.$("input[name='limit_num_rows']").prop("checked", true);
             this.$("input[name='sampleCount']").prop("disabled", false);
             this.$("input[name='sampleCount']").val(model.get("sampleCount"));
@@ -174,8 +174,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     updateSubmitButton: function() {
         var import_into_existing = this.$('.existing_table input:radio').attr("checked");
-        if ((this.$('input.name').val().trim().length > 0 && !import_into_existing )
-            || (this.existingTableSelected() && import_into_existing)) {
+        if ((this.$('input.name').val().trim().length > 0 && !import_into_existing) || (this.existingTableSelected() && import_into_existing)) {
             this.$('button.submit').removeAttr('disabled');
         } else {
             this.$('button.submit').attr('disabled', 'disabled');
@@ -228,6 +227,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     },
 
     existingTableSelected: function() {
-        return this.$("a.dataset_picked").text() != t("dataset.import.select_dataset");
+        return this.$("a.dataset_picked").text() !== t("dataset.import.select_dataset");
     }
 });

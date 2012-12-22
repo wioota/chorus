@@ -77,7 +77,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     drawChart: function() {
         if (this.isValidData()) {
-            if ((this.type == "timeseries") && !this.isSufficientDataForTimeseries()) {
+            if ((this.type === "timeseries") && !this.isSufficientDataForTimeseries()) {
                 this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning({ message: t("visualization.insufficient_data") });
                 this.subviews[".chart_area"] = "emptyDataWarning";
                 this.renderSubview("emptyDataWarning");
@@ -90,7 +90,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
                 this.renderSubview("chart");
             }
         } else {
-            this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning({ message: t("visualization.empty_data") })
+            this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning({ message: t("visualization.empty_data") });
             this.subviews[".chart_area"] = "emptyDataWarning";
             this.renderSubview("emptyDataWarning");
         }
@@ -153,7 +153,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     makeSvgData: function() {
         var svg = this.$(".chart_area.visualization svg")[0];
-        if (BrowserDetect.browser != "Explorer") {
+        if (BrowserDetect.browser !== "Explorer") {
             svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         }
         return new XMLSerializer().serializeToString(svg);
@@ -176,7 +176,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     onWorkfileSaved: function() {
         this.$('button.save').stopLoading();
-        chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")})
+        chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")});
     },
 
     additionalContext: function() {
@@ -187,7 +187,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             hasChart: !!this.chart,
             entityName: this.model.get("objectName"),
             serverErrors: this.task.serverErrors
-        }
+        };
     },
 
     showFilterOptions: function(e) {
@@ -211,7 +211,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     filtersChanged: function() {
-        if (this.filters.whereClause() == this.lastSavedFilters.whereClause()) {
+        if (this.filters.whereClause() === this.lastSavedFilters.whereClause()) {
             this.chartUpToDate();
         } else {
             this.$(".overlay").removeClass("hidden");
@@ -238,7 +238,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     hideDataset: function(e) {
         e && e.preventDefault();
-        this.$('.results_console').addClass("hidden")
+        this.$('.results_console').addClass("hidden");
         this.$(".modal_controls a.show").removeClass("hidden");
         this.$(".modal_controls a.hide").addClass("hidden");
     },
@@ -248,7 +248,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             data: {
                 svg: this.makeSvgData(),
                 "chart-name": this.options.chartOptions.name,
-                "chart-type": this.options.chartOptions.type   
+                "chart-type": this.options.chartOptions.type
             },
             httpMethod: "post"
         });
@@ -266,7 +266,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
                 fileName: this.makeFilename(),
                 svgData: this.makeSvgData()
             }
-        })
+        });
         this.launchSubModal(this.notesNewDialog);
     },
 
@@ -281,6 +281,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     sanitizeFilename: function(fileName) {
-        return fileName.replace(/[^A-Z0-9_\-.]/gi, '')
+        return fileName.replace(/[^A-Z0-9_\-.]/gi, '');
     }
 });

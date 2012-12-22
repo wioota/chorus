@@ -55,6 +55,6 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
         return {
             cid: model.cid,
             fullName: model.toText()
-        }
+        };
     }
 });

@@ -1,4 +1,8 @@
 (function () {
+    function userSuccessfullySaved() {
+        chorus.router.navigate(this.model.showUrl());
+    }
+
     chorus.views.UserEdit = chorus.views.Base.extend({
         templateName:"user/edit",
 
@@ -45,9 +49,4 @@
             window.history.back();
         }
     });
-
-    function userSuccessfullySaved() {
-        chorus.router.navigate(this.model.showUrl());
-    }
-
 })();

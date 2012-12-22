@@ -3,7 +3,7 @@ chorus.models.DatasetImportSchedule = chorus.models.Base.extend({
     constructorName: 'DatasetImportSchedule',
 
     declareValidations: function(newAttrs) {
-        if (newAttrs.newTable == "true") {
+        if (newAttrs.newTable === "true") {
             this.requirePattern("toTable", chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, 'import.validation.toTable.required');
         }
 

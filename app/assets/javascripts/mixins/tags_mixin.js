@@ -6,7 +6,7 @@ chorus.Mixins.Tags = {
 
     tags: function() {
         if(!this.loaded) {
-            return new chorus.collections.TagSet([], {entity: this})
+            return new chorus.collections.TagSet([], {entity: this});
         }
 
         if(!this._tags) {

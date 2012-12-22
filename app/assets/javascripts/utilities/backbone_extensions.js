@@ -36,14 +36,14 @@ Backbone.sync = function(method, model, options) {
     }
 
     // Ensure that we have the appropriate request data.
-    if (options.data == null && model && (method == 'create' || method == 'update' || method === 'patch')) {
+    if (!options.data && model && (method === 'create' || method === 'update' || method === 'patch')) {
         params.contentType = 'application/json';
 
         // Let the model specify its own params
         var string = JSON.stringify(model.toJSON());
         var json = $.parseJSON(string);
         _.each(json, function(property, key) {
-            if (property === null) delete json[key]
+            if (property === null) delete json[key];
         });
         params.data = $.param(json);
     }
@@ -84,7 +84,7 @@ Backbone.sync = function(method, model, options) {
     };
 
     // Make the request, allowing the user to override any Ajax options.
-    if (this.uploadObj && method == "create") {
+    if (this.uploadObj && method === "create") {
         var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
         _.each(['success', 'error', 'url', 'type', 'dataType'], function(fieldName) {
             uploadOptions[fieldName] = params[fieldName];
@@ -106,7 +106,7 @@ Backbone.sync = function(method, model, options) {
 //
 Backbone.History.prototype.loadUrl = function(fragmentOverride) {
     var fragment = this.fragment = this.getFragment(fragmentOverride);
-    if (fragment[fragment.length - 1] == '/') {
+    if (fragment[fragment.length - 1] === '/') {
         fragment = fragment.substr(0,fragment.length-1);
     }
     var matched = _.any(this.handlers, function(handler) {
@@ -122,48 +122,50 @@ Backbone.History.prototype.loadUrl = function(fragmentOverride) {
 // -- https://gist.github.com/1542120
 ;(function(Backbone) {
 
-  // The super method takes two parameters: a method name
-  // and an array of arguments to pass to the overridden method.
-  // This is to optimize for the common case of passing 'arguments'.
-  function _super(methodName, args) {
-
-    // Keep track of how far up the prototype chain we have traversed,
-    // in order to handle nested calls to _super.
-    this._superCallObjects || (this._superCallObjects = {});
-    var currentObject = this._superCallObjects[methodName] || this,
-        parentObject  = findSuper(methodName, currentObject);
-    this._superCallObjects[methodName] = parentObject;
-
-    var result;
-    if (_.isFunction(parentObject[methodName])) {
-        result = parentObject[methodName].apply(this, args || []);
-    } else {
-        result = parentObject[methodName];
+    // Find the next object up the prototype chain that has a
+    // different implementation of the method.
+    function findSuper(attributeName, childObject) {
+        var object = childObject;
+        while(object && (object[attributeName] === childObject[attributeName])) {
+            object = object.constructor.__super__;
+        }
+        return object;
     }
-    delete this._superCallObjects[methodName];
-    return result;
-  }
 
-  // Find the next object up the prototype chain that has a
-  // different implementation of the method.
-  function findSuper(attributeName, childObject) {
-    var object = childObject;
-    while (object && (object[attributeName] === childObject[attributeName])) {
-      object = object.constructor.__super__;
+    // The super method takes two parameters: a method name
+    // and an array of arguments to pass to the overridden method.
+    // This is to optimize for the common case of passing 'arguments'.
+    function _super(methodName, args) {
+
+        // Keep track of how far up the prototype chain we have traversed,
+        // in order to handle nested calls to _super.
+        this._superCallObjects || (this._superCallObjects = {});
+        var currentObject = this._superCallObjects[methodName] || this,
+            parentObject = findSuper(methodName, currentObject);
+        this._superCallObjects[methodName] = parentObject;
+
+        var result;
+        if(_.isFunction(parentObject[methodName])) {
+            result = parentObject[methodName].apply(this, args || []);
+        } else {
+            result = parentObject[methodName];
+        }
+        delete this._superCallObjects[methodName];
+        return result;
     }
-    return object;
-  }
 
-  function include(/* *modules */) {
-    var modules = _.toArray(arguments);
-    var mergedModules = _.extend.apply(_, [{}].concat(modules));
-    return this.extend(mergedModules);
-  }
+    function include(/* *modules */) {
+        var modules = _.toArray(arguments);
+        var mergedModules = _.extend.apply(_, [
+            {}
+        ].concat(modules));
+        return this.extend(mergedModules);
+    }
 
-  _.each(["Model", "Collection", "View", "Router"], function(klass) {
-    Backbone[klass].prototype._super = _super;
-    Backbone[klass].include = include;
-  });
+    _.each(["Model", "Collection", "View", "Router"], function(klass) {
+        Backbone[klass].prototype._super = _super;
+        Backbone[klass].include = include;
+    });
 
 })(Backbone);
 

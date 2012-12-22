@@ -24,7 +24,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     isActive: function() {
-        return (this.get("archivedAt") == null)
+        return (this.get("archivedAt") === null);
     },
 
     isPublic: function() {
@@ -55,8 +55,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
                 {},
                 sandboxInfo,
                 { id: sandboxInfo.id, workspaceId: this.get('id') }
-            )
-            return this._sandbox = new chorus.models.Sandbox(attrs);
+            );
+            this._sandbox = new chorus.models.Sandbox(attrs);
+            return this._sandbox;
         }
     },
 
@@ -83,9 +84,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     members:function () {
         if (!this._members) {
-            this._members = new chorus.collections.MemberSet([], {workspaceId:this.get("id")})
+            this._members = new chorus.collections.MemberSet([], {workspaceId:this.get("id")});
             this._members.bind("saved", function () {
-                this.trigger("change")
+                this.trigger("change");
             }, this);
         }
         return this._members;
@@ -114,7 +115,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     fetchImageUrl:function (options) {
         var size = (options && options.size) || "original";
-        url = this.get("image") && this.get("image")[size];
+        var url = this.get("image") && this.get("image")[size];
         return url && new URI(url)
             .addSearch({ iebuster: chorus.cachebuster() })
             .toString();
@@ -139,7 +140,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     hasImage:function () {
-        return this.get("image") && this.get("image")["original"]
+        return this.get("image") && this.get("image")["original"];
     },
 
     canRead:function () {

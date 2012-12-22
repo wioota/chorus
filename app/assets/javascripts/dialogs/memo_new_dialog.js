@@ -20,12 +20,12 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.subviews = {
             '.notification_recipients': 'notifications',
             '.recipients_menu': 'recipients'
-        }
+        };
         this.config = chorus.models.Config.instance();
     },
 
     onSelectRecipients: function(selection) {
-        var shouldHide = (selection == "none");
+        var shouldHide = (selection === "none");
         this.$(".notification_recipients").toggleClass("hidden", shouldHide);
 
         if (!shouldHide) {
@@ -76,7 +76,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     cancelUpload: function() {
         _.each(this.model.files, function(fileModel) {
             fileModel.cancelUpload();
-        })
+        });
     },
 
     modelSaved: function() {
@@ -111,12 +111,12 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     },
 
     updateProgressBar: function(e, data) {
-        if (data.total != data.loaded) {
+        if (data.total !== data.loaded) {
             data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
         } else {
-            data.fileDetailsElement.find(".progress_bar").addClass("hidden")
-            data.fileDetailsElement.find(".progress_text").addClass("hidden")
-            data.fileDetailsElement.find(".upload_finished").removeClass("hidden")
+            data.fileDetailsElement.find(".progress_bar").addClass("hidden");
+            data.fileDetailsElement.find(".progress_text").addClass("hidden");
+            data.fileDetailsElement.find(".upload_finished").removeClass("hidden");
         }
     },
 
@@ -235,7 +235,15 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         var isValid = true;
         _.each( this.model.files, function(file) {
             if (file.get("files")[0].size > (maxFileSize * 1024 * 1024) ) {
-                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count": maxFileSize }}}}
+                this.model.serverErrors = {
+                    "fields": {
+                        "base": {
+                            "FILE_SIZE_EXCEEDED": {
+                                "count": maxFileSize
+                            }
+                        }
+                    }
+                };
                 this.showErrors(this.model);
                 isValid = false;
             }

@@ -36,7 +36,7 @@
         showUrlTemplate: function(options) {
             options || (options = {});
             if ((this.isLatestVersion() && !options.version) || options.baseOnly) {
-                return "workspaces/{{workspace.id}}/workfiles/{{id}}"
+                return "workspaces/{{workspace.id}}/workfiles/{{id}}";
             } else {
                 var version = options.version || this.get('versionInfo').id;
                 return "workspaces/{{workspace.id}}/workfiles/{{id}}/versions/" + version;
@@ -59,11 +59,11 @@
         },
 
         sandbox: function() {
-            return this.workspace().sandbox()
+            return this.workspace().sandbox();
         },
 
         schema: function() {
-            return this.executionSchema()
+            return this.executionSchema();
         },
 
         executionSchema: function() {
@@ -126,11 +126,11 @@
         },
 
         isImage: function() {
-            return this.get("fileType") == IMAGE;
+            return this.get("fileType") === IMAGE;
         },
 
         isSql: function() {
-            return this.get("fileType") == SQL;
+            return this.get("fileType") === SQL;
         },
 
         isText: function() {
@@ -138,15 +138,15 @@
         },
 
         isAlpine: function() {
-            return this.get("fileType") == ALPINE;
+            return this.get("fileType") === ALPINE;
         },
 
         isTableau: function() {
-            return this.get("fileType") == TABLEAU;
+            return this.get("fileType") === TABLEAU;
         },
 
         isBinary: function() {
-            return this.get("fileType") == OTHER;
+            return this.get("fileType") === OTHER;
         },
 
         extension: function() {
@@ -173,7 +173,7 @@
 
         isLatestVersion: function() {
             var versionNum = this.get('versionInfo') && this.get('versionInfo').id;
-            return (!versionNum || versionNum === this.get("latestVersionId"))
+            return (!versionNum || versionNum === this.get("latestVersionId"));
         },
 
         save: function(attrs, options) {
@@ -199,7 +199,7 @@
                 url: "/workfiles/" + this.get("id") + "/versions"
             };
 
-            return this._super("save", [attrs, _.extend(options, overrides)])
+            return this._super("save", [attrs, _.extend(options, overrides)]);
         },
 
         iconUrl: function(options) {

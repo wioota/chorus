@@ -24,7 +24,7 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
         this.sortMenu.bind("choice:sort", function (choice) {
             this.choice = choice;
             this.render();
-        }, this)
+        }, this);
     },
 
     subviews:{
@@ -32,7 +32,7 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
-        var self = this
+        var self = this;
         var sortedMembers = _.sortBy(self.members.models, function (member) {
             return member.get(self.choice);
         });
@@ -44,6 +44,6 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
                     showUrl:member.showUrl()
                 };
             })
-        }
+        };
     }
-})
+});

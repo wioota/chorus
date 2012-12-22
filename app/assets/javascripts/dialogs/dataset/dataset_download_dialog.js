@@ -21,7 +21,7 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             submitText: this.submitText
-        }
+        };
     },
 
     submitDownload: function(e) {
@@ -39,7 +39,7 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     validateInput: function() {
         this.model.set({ rowLimit: this.rowLimit() }, { silent: true });
         if (this.model.performValidation()) {
-            return true
+            return true;
         }
         this.showErrors();
     },

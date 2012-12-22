@@ -36,6 +36,6 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
     },
 
     hasFilter: function() {
-        return !this.attributes.namePattern == "" || !this.attributes.type == "";
+        return !_.isEmpty(this.attributes.namePattern) || !_.isEmpty(this.attributes.type);
     }
 });

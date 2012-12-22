@@ -20,7 +20,7 @@ chorus.alerts.Base = chorus.Modal.extend({
             body: this.body,
             ok: this.ok,
             cancel: this.cancel || t("actions.cancel")
-        }
+        };
     },
 
     revealed: function() {

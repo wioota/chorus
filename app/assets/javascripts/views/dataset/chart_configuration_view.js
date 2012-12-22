@@ -1,4 +1,12 @@
 (function() {
+    function nameGetter(prop) {
+        return function() {
+            return _.map(this[prop], function(col) {
+                return col.get('name');
+            });
+        };
+    }
+
     chorus.views.ChartConfiguration = chorus.views.Base.extend({
         additionalClass: "chart_configuration",
 
@@ -165,12 +173,4 @@
             return new chorus.views[className](options);
         }
     });
-
-    function nameGetter(prop) {
-        return function() {
-            return _.map(this[prop], function(col) {
-                return col.get('name');
-            });
-        };
-    }
 })();

@@ -26,7 +26,7 @@
 
     TextExtTags.prototype.addTags = function(tags)
     {
-        if(!tags || tags.length == 0)
+        if(!tags || tags.length === 0)
             return;
 
         var self      = this,

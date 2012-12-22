@@ -50,7 +50,7 @@ chorus.Modal = chorus.views.Base.extend({
 
     postRender: function() {
         this._super("postRender");
-        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2))
+        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2));
     },
 
     makeModel:function (options) {
@@ -66,7 +66,7 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     keydownHandler:function (e) {
-        if (e.keyCode == 27) {
+        if (e.keyCode === 27) {
             this.escapePressed();
         }
     },
@@ -76,7 +76,7 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     modalClosed:function () {
-        if (this == chorus.modal) {
+        if (this === chorus.modal) {
             this.bindings.removeAll();
             this.close();
             $("#facebox").remove();

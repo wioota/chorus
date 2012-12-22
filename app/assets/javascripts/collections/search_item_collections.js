@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     chorus.collections.Search = {};
 
     var searchCollectionMixins = {

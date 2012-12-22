@@ -20,10 +20,10 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            registeredInstance: this.model.get("provisionType") == "register",
-            provisionedInstance: this.model.get("provisionType") == "create",
-            hadoopInstance: this.model.constructorName == "HadoopInstance",
-            gnipInstance: this.model.constructorName == "GnipInstance"
+            registeredInstance: this.model.get("provisionType") === "register",
+            provisionedInstance: this.model.get("provisionType") === "create",
+            hadoopInstance: this.model.constructorName === "HadoopInstance",
+            gnipInstance: this.model.constructorName === "GnipInstance"
         };
     },
 

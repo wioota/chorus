@@ -7,7 +7,7 @@ chorus.models.DynamicInstance = function(instanceJson) {
     };
 
     if (!chorus.models[typeMap[instanceJson.entityType]]) {
-        console.error("constructing dynamic instance", instanceJson.entityType, instanceJson)
+        window.console.error("constructing dynamic instance", instanceJson.entityType, instanceJson);
     }
 
     return new chorus.models[typeMap[instanceJson.entityType]](instanceJson);

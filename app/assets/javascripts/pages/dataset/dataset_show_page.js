@@ -15,11 +15,11 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         title: function() {
-            return this.dataset.get('objectName')
+            return this.dataset.get('objectName');
         },
 
         setup: function() {
-            this.makeModel.apply(this, arguments)
+            this.makeModel.apply(this, arguments);
             this.dependOn(this.dataset);
             this.fetchResources();
             this.mainContent = new chorus.views.LoadingSection();
@@ -68,7 +68,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         drawColumns: function() {
-            var serverErrors = this.columnSet.serverErrors
+            var serverErrors = this.columnSet.serverErrors;
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
             this.columnSet.serverErrors = serverErrors;
             this.columnSet.loaded = true;

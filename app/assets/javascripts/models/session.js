@@ -3,7 +3,7 @@ chorus.models.Session = chorus.models.Base.extend({
     urlTemplate: "sessions",
 
     initialize: function() {
-        this.sandboxPermissionsCreated = {}
+        this.sandboxPermissionsCreated = {};
         _.bindAll(this, ['logout']);
     },
 
@@ -12,7 +12,7 @@ chorus.models.Session = chorus.models.Base.extend({
             this._user = new chorus.models.User(this.attributes);
         }
 
-        return this._user
+        return this._user;
     },
 
     loggedIn: function() {
@@ -49,10 +49,10 @@ chorus.models.Session = chorus.models.Base.extend({
 
         if (this.get("errors")) {
             this.rememberPathBeforeLoggedOut();
-            this.trigger("needsLogin")
+            this.trigger("needsLogin");
         } else {
             this.requestLogout(function() {
-                self.trigger("needsLogin")
+                self.trigger("needsLogin");
             });
         }
     },

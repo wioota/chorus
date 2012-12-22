@@ -8,7 +8,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     collectionModelContext: function(model) {
         return {
             cid: model.cid
-        }
+        };
     },
 
     setup: function() {
@@ -20,9 +20,9 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         if (!this.schema) {
             return {
                 schemaAssociated: false
-            }
+            };
         } else {
-            var errorMessage = this.collection && this.collection.serverErrors && this.collection.serverErrors[0] && this.collection.serverErrors[0].message
+            var errorMessage = this.collection && this.collection.serverErrors && this.collection.serverErrors[0] && this.collection.serverErrors[0].message;
             return {
                 schemaAssociated: true,
                 schemaName: this.schema && this.schema.get("name"),
@@ -131,13 +131,13 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     schemaSelected: function(e) {
-        var schemaId = $(e.target).data("id")
+        var schemaId = $(e.target).data("id");
         if (schemaId === "workspaceSchema") {
             this.setSchemaToCurrentWorkspace();
             this.fetchResourceAfterSchemaSelected();
 
         } else {
-            this.schema = this.schemas.get(schemaId)
+            this.schema = this.schemas.get(schemaId);
             this.fetchResourceAfterSchemaSelected();
         }
 
@@ -160,15 +160,15 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     workfileExecuted: function(workfile, executionSchema) {
-        if (!this.schema || (executionSchema.id && executionSchema.id != this.schema.id)) {
-            this.setSchema(new chorus.models.Schema(executionSchema))
+        if (!this.schema || (executionSchema.id && executionSchema.id !== this.schema.id)) {
+            this.setSchema(new chorus.models.Schema(executionSchema));
         }
     },
 
     setSchema: function(schema) {
         var oldSchema = this.schema;
         this.schema = schema;
-        if (this.schema && (!oldSchema || oldSchema.database().id != this.schema.database().id)) {
+        if (this.schema && (!oldSchema || oldSchema.database().id !== this.schema.database().id)) {
             this.schemas = this.schema.database().schemas();
             this.requiredResources.add(this.schemas);
             this.schemas.fetchAll();

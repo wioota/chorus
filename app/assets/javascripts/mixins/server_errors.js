@@ -18,8 +18,8 @@ chorus.Mixins.ServerErrors = {
                     }
 
                     output.push(message);
-                })
-            })
+                });
+            });
         } else if (this.serverErrors.record) {
             var fullKey = "record_error." + this.serverErrors.record;
 

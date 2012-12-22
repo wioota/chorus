@@ -65,7 +65,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         return {
             replyTo: chorus.session.user().get('email'),
             recipientNames: combinedNames,
-            hasMoreRecipients: (combinedNames.full.length != combinedNames.short.length)
+            hasMoreRecipients: (combinedNames.full.length !== combinedNames.short.length)
         };
     },
 
@@ -83,7 +83,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
        var recipientNames = _.reduce(recipients, function(result, recipient) {
            var fullNamesList = result + recipient.get("fullName") + ", ";
            if(fullNamesList.length <= maxChars + 2) {
-               short = fullNamesList
+               short = fullNamesList;
            }
            else {
                moreCount += 1;

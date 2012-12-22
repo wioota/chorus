@@ -64,16 +64,27 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     postRender: function() {
         var self = this;
 
-        // dataType: 'text' is necessary for FF3.6
-        // see https://github.com/blueimp/jQuery-File-Upload/issues/422
-        // see https://github.com/blueimp/jQuery-File-Upload/blob/master/jquery.iframe-transport.js
-        this.$("input[type=file]").fileupload({
-            change: fileChosen,
-            add: fileChosen,
-            done: uploadFinished,
-            fail: uploadFailed,
-            dataType: "text"
-        });
+        function validateFile(files) {
+            self.clearErrors();
+            if (!self.model) return;
+
+            var maxFileSize = self.config.get("fileSizesMbWorkfiles");
+
+            _.each(files, function(file) {
+                if (file.size > (maxFileSize * 1024 * 1024)) {
+                    self.model.serverErrors = {
+                        "fields": {
+                            "base": {
+                                "FILE_SIZE_EXCEEDED": {
+                                    "count": maxFileSize
+                                }
+                            }
+                        }
+                    };
+                    self.showErrorAndDisableButton();
+                }
+            }, self);
+        }
 
         function fileChosen(e, data) {
             if (data.files.length > 0) {
@@ -91,20 +102,6 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
         }
 
-        function validateFile(files) {
-            self.clearErrors();
-            if (!self.model) return;
-
-            var maxFileSize = self.config.get("fileSizesMbWorkfiles");
-
-            _.each(files, function(file) {
-                if (file.size > (maxFileSize * 1024 * 1024)) {
-                    self.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":maxFileSize}}}}
-                    self.showErrorAndDisableButton();
-                }
-            }, self);
-        }
-
         function uploadFinished(e, json) {
             self.model = new chorus.models.Workfile();
             self.model.set(self.model.parse(JSON.parse(json.result)));
@@ -115,7 +112,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
         function uploadFailed(e, response) {
             e.preventDefault();
-            if (response.jqXHR.status == '413') {
+            if (response.jqXHR.status && response.jqXHR.status.toString() === '413') {
                 self.displayNginxError();
             } else {
                 if (response.jqXHR.responseText)  {
@@ -129,6 +126,17 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
             self.showErrorAndDisableButton();
         }
+
+        // dataType: 'text' is necessary for FF3.6
+        // see https://github.com/blueimp/jQuery-File-Upload/issues/422
+        // see https://github.com/blueimp/jQuery-File-Upload/blob/master/jquery.iframe-transport.js
+        this.$("input[type=file]").fileupload({
+            change: fileChosen,
+            add: fileChosen,
+            done: uploadFinished,
+            fail: uploadFailed,
+            dataType: "text"
+        });
     },
 
     showErrorAndDisableButton: function() {

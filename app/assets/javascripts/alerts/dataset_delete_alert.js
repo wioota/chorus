@@ -2,7 +2,7 @@ chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
     constructorName: "DatasetDelete",
 
     setup: function() {
-        this._super("setup")
+        this._super("setup");
 
         var keyPrefix = this.options.keyPrefix;
         this.text = t("dataset." + keyPrefix + ".text");
@@ -14,7 +14,7 @@ chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
     deleteMessageParams:function () {
         return {
             datasetName:this.datasetName
-        }
+        };
     },
 
     makeModel:function () {

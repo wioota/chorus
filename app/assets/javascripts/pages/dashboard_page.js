@@ -18,7 +18,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
-        chorus.PageEvents.subscribe("instance:added", function() { this.fetchInstances() }, this);
+        chorus.PageEvents.subscribe("instance:added", function() { this.fetchInstances(); }, this);
 
         this.fetchInstances();
         this.model = chorus.session.user();
@@ -26,7 +26,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.userSet = new chorus.collections.UserSet();
         this.userSet.bindOnce("loaded", function() {
             this.userCount = this.userSet.pagination.records;
-            this.showUserCount()
+            this.showUserCount();
         }, this);
         this.userSet.fetchAll();
     },
@@ -50,15 +50,15 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     mergeInstances: function() {
         if(this.instancesLoaded()) {
-            var package = function(set) {
+            var wrapInstances = function(set) {
                 return _.map(set, function(instance) {
-                    return new chorus.models.Base({ theInstance: instance })
+                    return new chorus.models.Base({ theInstance: instance });
                 });
             };
 
-            var proxyInstances = package(this.gpdbInstanceSet.models);
-            var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
-            var proxyGnipInstances = package(this.gnipInstanceSet.models);
+            var proxyInstances = wrapInstances(this.gpdbInstanceSet.models);
+            var proxyHadoopInstances = wrapInstances(this.hadoopInstanceSet.models);
+            var proxyGnipInstances = wrapInstances(this.gnipInstanceSet.models);
 
             this.arraySet = new chorus.collections.Base();
             this.arraySet.comparator = function(instanceWrapper) {

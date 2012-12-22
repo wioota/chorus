@@ -12,11 +12,11 @@ chorus.views.CommentList = chorus.views.Base.extend({
 
     collectionModelContext:function (comment) {
         if (comment.note()) {
-            return new chorus.presenters.Activity(comment, {displayStyle:this.options.displayStyle})
+            return new chorus.presenters.Activity(comment, {displayStyle:this.options.displayStyle});
         } else {
             var author = comment.author();
             return  {
-                isOwner: (author.id == chorus.session.user().id) || this.options.currentUserOwnsWorkspace,
+                isOwner: (author.id === chorus.session.user().id) || this.options.currentUserOwnsWorkspace,
                 iconSrc: author.fetchImageUrl({ size:"icon" }),
                 iconHref: author.showUrl(),
                 displayName: author.displayName(),

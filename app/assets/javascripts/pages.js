@@ -24,19 +24,19 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         var prefix = "unprocessable_entity.";
         if (model.serverErrors) {
             _.each(model.serverErrors, function(error, key) {
-                if(key == 'record') {
+                if(key === 'record') {
                     var code = prefix + _.underscored(error);
                     chorus.pageOptions = {
                         title: t(code + ".title"),
                         text: t(code + ".text")
-                    }
+                    };
                 } else {
                     chorus.pageOptions = {
                         title: t(prefix + "unidentified_error.title"),
                         text: error
-                    }
+                    };
                 }
-            })
+            });
         }
 
         Backbone.history.loadUrl("/unprocessableEntity");
@@ -83,4 +83,4 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         e.preventDefault();
         chorus.help();
     }
-})
+});

@@ -5,7 +5,7 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
 
     urlTemplate: function(options) {
         var method = options && options.method;
-        var isEditingOwnAccount = this.get("userId") == chorus.session.user().id;
+        var isEditingOwnAccount = this.get("userId") === chorus.session.user().id;
 
         if (isEditingOwnAccount) {
             return "gpdb_instances/{{instanceId}}/account";

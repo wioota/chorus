@@ -3,4 +3,4 @@ chorus.models.ImportTask = chorus.models.Task.extend({
         this._super("initialize", arguments);
         this.set({sourceType:  "dataset"});
     }
-})
+});

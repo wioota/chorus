@@ -7,10 +7,10 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
             { label:t("breadcrumbs.users"), url:"#/users" },
             { label:t("breadcrumbs.user_profile"), url:this.model.showUrl() },
             { label:t("breadcrumbs.user_edit") }
-        ]
+        ];
     },
     setup:function (userId) {
-        var self = this
+        var self = this;
         this.model = new chorus.models.User({id:userId});
         this.model.fetch();
         this.dependOn(this.model);

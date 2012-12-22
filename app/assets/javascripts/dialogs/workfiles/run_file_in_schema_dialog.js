@@ -29,7 +29,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     additionalContext : function(ctx) {
         return {
             hasSandbox : !!this.workspace.sandbox()
-        }
+        };
     },
 
     postRender:function () {

@@ -36,7 +36,7 @@ chorus.views.PickItemsList = chorus.views.Base.extend({
         return {
             pagination: this.options.pagination,
             emptyListTranslationKey: this.options.emptyListTranslationKey || "pickitem.dialog.empty"
-        }
+        };
     },
 
     itemClicked: function(e) {

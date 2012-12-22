@@ -9,7 +9,7 @@ chorus.ValidationRegexes = (function(){
     var month = /^(0?[1-9]|1[0-2])$/;
     var day = /^(0?[1-9]|[12][0-9]|3[01])$/;
     var boolean = /^(true|false)$/;
-    var onlyDigits = /^\d+$/
+    var onlyDigits = /^\d+$/;
 
     return {
         ChorusIdentifier64: function() {
@@ -83,5 +83,5 @@ chorus.ValidationRegexes = (function(){
         OnlyDigits: function() {
             return onlyDigits;
         }
-    }
+    };
 })();

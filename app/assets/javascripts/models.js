@@ -10,7 +10,7 @@ chorus.models = {
         constructorName: "Model",
 
         isDeleted: function() {
-            return this.get("isDeleted") && (this.get("isDeleted") == true || this.get("isDeleted") == "true");
+            return this.get("isDeleted") && (this.get("isDeleted") === true || this.get("isDeleted") === "true");
         },
 
         url: function(options) {
@@ -44,7 +44,7 @@ chorus.models = {
             };
 
             options.error = function(model, xhr) {
-                model.handleRequestFailure("saveFailed", xhr, options)
+                model.handleRequestFailure("saveFailed", xhr, options);
                 if (error) error(model, xhr);
             };
 
@@ -134,7 +134,7 @@ chorus.models = {
             value = value && value.toString();
 
             if (allowBlank && !value) {
-                return
+                return;
             }
 
             if (!value || !value.match(regex)) {
@@ -143,7 +143,7 @@ chorus.models = {
         },
 
         requireValidEmailAddress:function (name, newAttrs, messageKey) {
-            this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs, messageKey);
+            this.requirePattern(name, /[\w\.\-]+(\+[\w\-]*)?@([\w\-]+\.)+[\w\-]+/, newAttrs, messageKey);
         },
 
         requireConfirmation: function(attr, newAttrs, messageKey) {
@@ -162,7 +162,7 @@ chorus.models = {
                 conf = this.get(confAttrName);
             }
 
-            if (!value || !conf || value != conf) {
+            if (!value || !conf || value !== conf) {
                 this.setValidationError(attr, "validation.confirmation", messageKey);
             }
         },
@@ -239,7 +239,7 @@ chorus.models = {
             attributes = this.underscoreKeys(attributes);
             if (this.parameterWrapper) {
                 result[this.parameterWrapper] = attributes;
-            } else if (this.constructorName && this.constructorName != "Model") {
+            } else if (this.constructorName && this.constructorName !== "Model") {
                 result[_.underscored(this.constructorName)] = attributes;
             } else {
                 result = attributes;
@@ -258,8 +258,8 @@ chorus.models = {
             _.each(allKeys, function(key) {
                 var oldValue = this._savedAttributes[key];
                 var newValue = this.attributes[key];
-                if(oldValue != newValue) {
-                    changes[key] = {old: oldValue, new: newValue}
+                if(oldValue !== newValue) {
+                    changes[key] = {old: oldValue, new: newValue};
                 }
             }, this);
             return changes;
@@ -267,7 +267,7 @@ chorus.models = {
 
         set: function(key, val, options) {
             var attrs;
-            if (key == null) return this;
+            if (key === null) return this;
 
             // Handle both `"key", value` and `{key: value}` -style arguments.
             if (_.isObject(key)) {
@@ -284,7 +284,7 @@ chorus.models = {
             if(attrs && attrs.completeJson) {
                 this.loaded = true;
             }
-            return result
+            return result;
         }
     })
 };
@@ -382,11 +382,11 @@ chorus.collections = {
                 this.fetch({
                     url: this.url({ page: page, per_page: 1000 }),
                     silent: true,
-                    update: page != 1,
+                    update: page !== 1,
                     remove: false,
                     success: function(collection, data, xhr) {
-                        var total = data.pagination ? parseInt(data.pagination.total) : 1;
-                        var page = data.pagination ? parseInt(data.pagination.page) : 1;
+                        var total = data.pagination ? parseInt(data.pagination.total, 10) : 1;
+                        var page = data.pagination ? parseInt(data.pagination.page, 10) : 1;
                         if (page >= total) {
                             collection.trigger("reset", collection);
                             collection.trigger("loaded");
@@ -404,7 +404,7 @@ chorus.collections = {
 
             return function() {
                 fetchPage.call(this, 1);
-            }
+            };
         })(),
 
         totalRecordCount: function() {
@@ -413,15 +413,15 @@ chorus.collections = {
 
         sortDesc: function(idx) {
             // Not used. We only do ascending sort for now.
-            this._sort(idx, "desc")
+            this._sort(idx, "desc");
         },
 
         sortAsc: function(idx) {
             // We only support ascending sort at the moment.
-            this._sort(idx, "asc")
+            this._sort(idx, "asc");
         },
 
-        _prepareModel: function(model, options) {
+        _prepareModel: function() {
             var model = this._super("_prepareModel", arguments);
             this.attributes || (this.attributes = {});
             if (_.isFunction(this.modelAdded)) this.modelAdded(model);
@@ -430,7 +430,7 @@ chorus.collections = {
 
         _sort: function(idx, order) {
             // order argument not used at this time. We only support ascending sort for now.
-            this.order = idx
+            this.order = idx;
         }
     })
 };
@@ -442,7 +442,7 @@ chorus.collections.LastFetchWins = chorus.collections.Base.extend({
     makeSuccessFunction: function(options, success) {
         var fetchId = ++this.lastFetchId;
         return _.bind(function(collection, data) {
-            if (fetchId != this.lastFetchId) return;
+            if (fetchId !== this.lastFetchId) return;
             var parentFunction = this._super("makeSuccessFunction", [options || {}, success]);
             return parentFunction(collection, data);
         }, this);

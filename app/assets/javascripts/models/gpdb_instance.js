@@ -67,7 +67,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
     accountForOwner: function() {
         var ownerId = this.get("owner").id;
         return _.find(this.accounts().models, function(account) {
-            return account.get("owner").id == ownerId
+            return account.get("owner").id === ownerId;
         });
     },
 
@@ -93,7 +93,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
         if (!this.instanceUsage) {
             this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id')});
         }
-        return this.instanceUsage
+        return this.instanceUsage;
     },
 
     isGreenplum: function() {
@@ -106,7 +106,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
 
     sharing: function() {
         if (!this._sharing) {
-            this._sharing = new chorus.models.InstanceSharing({instanceId: this.get("id")})
+            this._sharing = new chorus.models.InstanceSharing({instanceId: this.get("id")});
         }
         return this._sharing;
     },

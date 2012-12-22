@@ -26,8 +26,8 @@ chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
             value;
         return _.map(rows, function(row) {
             return _.inject(_.zip(columns, row), function(memo, columnValuePair) {
-                column = columnValuePair[0],
-                    value = columnValuePair[1];
+                column = columnValuePair[0];
+                value = columnValuePair[1];
                 memo[column.name] = value;
                 return memo;
             }, {});

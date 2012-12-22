@@ -21,7 +21,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     database: function() {
         var database = this._database || new chorus.models.Database(this.get("database"));
         if(this.loaded) {
-            this._database = database
+            this._database = database;
         }
         return database;
     },

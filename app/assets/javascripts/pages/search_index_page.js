@@ -49,7 +49,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             {data: "instance", text: t("search.type.instance")},
             {data: "workspace", text: t("search.type.workspace")},
             {data: "user", text: t("search.type.user")}
-        ]
+        ];
     },
 
     resourcesLoaded: function() {
@@ -79,7 +79,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
         if (this.search.isPaginated()) {
             this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult"});
-            this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true })
+            this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true });
         }
 
         this.sidebars = {
@@ -120,7 +120,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     workfileSelected: function() {
-        this.renderSidebar(this.sidebars.workfile)
+        this.renderSidebar(this.sidebars.workfile);
     },
 
     userSelected: function(user) {
@@ -146,7 +146,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        this.$('li.result_item').eq(0).click()
+        this.$('li.result_item').eq(0).click();
     },
 
     scopeSearchResults: function(data) {

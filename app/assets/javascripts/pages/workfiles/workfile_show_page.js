@@ -5,7 +5,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
             this.workspaceId = workspaceId;
             this.model = new chorus.models.Workfile({id:workfileId, workspace: {id: workspaceId}});
             if (versionId) {
-                this.model.set({ versionInfo : { id: versionId } }, { silent:true })
+                this.model.set({ versionInfo : { id: versionId } }, { silent:true });
             }
 
             this.model.fetch();

@@ -36,7 +36,7 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
             id: model.get("id"),
             name: model.get("objectName"),
             imageUrl: model.iconUrl({size: 'medium'})
-        }
+        };
     },
 
     clickPreviewColumns: function(e) {

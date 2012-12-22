@@ -7,6 +7,6 @@ chorus.alerts.InstanceDelete = chorus.alerts.ModelDelete.extend({
     deleteMessage:"instances.delete.toast",
 
     makeModel:function () {
-        this.model = this.options.pageModel
+        this.model = this.options.pageModel;
     }
-})
+});

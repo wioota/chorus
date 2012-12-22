@@ -7,7 +7,7 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     urlParams: function() {
         return {
             filter: this.get("name")
-        }
+        };
     },
 
     initialize: function() {

@@ -13,7 +13,7 @@ chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
         this.model.save({
             password:this.$("input[name=password]").val(),
             passwordConfirmation:this.$("input[name=passwordConfirmation]").val()
-        })
+        });
     },
 
     saved:function () {

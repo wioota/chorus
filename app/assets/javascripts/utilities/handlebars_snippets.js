@@ -24,7 +24,7 @@
 
         ifCurrentUserNameIs: function(username, block) {
             var user = chorus && chorus.session && chorus.session.user();
-            if (user && user.get("username") == username) {
+            if (user && user.get("username") === username) {
                 return block(this);
             } else if (block.inverse) {
                 return block.inverse(this);
@@ -34,11 +34,11 @@
         ifAll: function() {
             var args = _.toArray(arguments);
             var block = args.pop();
-            if (block.length == 0) {
+            if (block.length === 0) {
                 throw "ifAll expects arguments";
             }
             if (_.all(args, function(arg) {
-                return !!arg
+                return !!arg;
             })) {
                 return block(this);
             } else {
@@ -49,11 +49,11 @@
         ifAny: function() {
             var args = _.toArray(arguments);
             var block = args.pop();
-            if (block.length == 0) {
+            if (block.length === 0) {
                 throw "ifAny expects arguments";
             }
             if (_.any(args, function(arg) {
-                return !!arg
+                return !!arg;
             })) {
                 return block(this);
             } else {
@@ -77,17 +77,17 @@
         },
 
         displayNameFromPerson: function(person) {
-            return [person.firstName, person.lastName].join(' ')
+            return [person.firstName, person.lastName].join(' ');
         },
 
         displayTimestamp: function(timestamp) {
             var date = Date.parseFromApi(timestamp);
-            return date ? date.toString("MMMM d") : "WHENEVER"
+            return date ? date.toString("MMMM d") : "WHENEVER";
         },
 
         relativeTimestamp: function(timestamp) {
             var date = Date.parseFromApi(timestamp);
-            return date ? date.toRelativeTime(60000) : "WHENEVER"
+            return date ? date.toRelativeTime(60000) : "WHENEVER";
         },
 
         moreLink: function(collection, max, more_key, less_key) {
@@ -186,21 +186,21 @@
                     '<span class="size_text">' + sizeText + '</span>' +
                     '<span class="percentage_text">' + percentageUsed + '%</span>' +
                     '</div>' +
-                    '</div>'
+                    '</div>';
             } else {
                 if (percentageUsed >= 50) {
                     markup = '<div class="usage_bar">' +
                         '<div class="used" style="width: ' + percentageUsed + '%;">' +
                         '<span class="size_text">' + sizeText + '</span></div>' +
-                        '</div>'
+                        '</div>';
                 } else {
                     markup = '<div class="usage_bar">' +
                         '<div class="used" style="width: ' + percentageUsed + '%;"></div>' +
                         '<span class="size_text">' + sizeText + '</span>' +
-                        '</div>'
+                        '</div>';
                 }
             }
-            return new Handlebars.SafeString(markup)
+            return new Handlebars.SafeString(markup);
         },
 
         chooserMenu: function(choices, options) {
@@ -230,11 +230,11 @@
         },
 
         renderTableData: function(tableData) {
-            if (tableData && typeof(tableData) =='string') {
-                tableData = tableData.trim()
+            if (tableData && typeof(tableData) === 'string') {
+                tableData = tableData.trim();
             }
             if (tableData || tableData === 0 || isNaN(tableData)) {
-                return tableData
+                return tableData;
             } else if (tableData === false) {
                 return "false";
             } else {
@@ -253,7 +253,7 @@
         },
 
         round: function(value) {
-            if (value > .1) {
+            if (value > 0.1) {
                 var number = Math.pow(10, 2);
                 return Math.round(value * number) / number;
             }
@@ -267,7 +267,7 @@
 
         usedInWorkspaces: function(workspaceSet, contextObject) {
             contextObject = contextObject.clone();
-            if (!workspaceSet || workspaceSet.length == 0) { return ""; }
+            if (!workspaceSet || workspaceSet.length === 0) { return ""; }
 
             if (!(workspaceSet instanceof chorus.collections.WorkspaceSet)) {
                 workspaceSet = new chorus.collections.WorkspaceSet(workspaceSet);
@@ -278,7 +278,7 @@
                 contextObject.setWorkspace(workspace);
                 return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'), {
                     title: workspace.get('name')
-                }).toString()
+                }).toString();
             }
 
             var workspaceLink = linkToContextObject(workspaceSet.at(0));
@@ -299,7 +299,7 @@
         },
 
         usedInTableau: function(tableauWorkbookSet) {
-            if (!tableauWorkbookSet || tableauWorkbookSet.length == 0) { return ""; }
+            if (!tableauWorkbookSet || tableauWorkbookSet.length === 0) { return ""; }
 
             if (!(tableauWorkbookSet instanceof chorus.collections.TableauWorkbookSet)) {
                 tableauWorkbookSet = new chorus.collections.TableauWorkbookSet(tableauWorkbookSet);
@@ -310,7 +310,7 @@
                 return chorus.helpers.linkTo(workbook.get("url"), workbook.get('name'), {
                     title: workbook.get('name'),
                     target: "_blank"
-                }).toString()
+                }).toString();
             }
 
             var workbookLink = linkToContextObject(tableauWorkbookSet.at(0));
@@ -354,10 +354,10 @@
             if (model.workspace()) {
                 var workspaceLink = model.workspace().showLink();
                 datasetLink = model.dataset().showLink();
-                return t("attachment.found_in.dataset_in_workspace", { workspaceLink: workspaceLink, datasetLink: datasetLink })
+                return t("attachment.found_in.dataset_in_workspace", { workspaceLink: workspaceLink, datasetLink: datasetLink });
             } else {
                 datasetLink = model.dataset().showLink();
-                return t("attachment.found_in.dataset_not_in_workspace", { datasetLink: datasetLink })
+                return t("attachment.found_in.dataset_not_in_workspace", { datasetLink: datasetLink });
             }
         },
 
@@ -380,7 +380,7 @@
             } else {
                 schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instanceName, {"class": "instance"}).toString());
                 schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
-                schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString())
+                schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString());
             }
             return new Handlebars.SafeString($("<span></span>").html(t(label, {location: schemaPieces.join('.')})).outerHtml());
         },
@@ -402,7 +402,7 @@
         },
 
         withSearchResults: function(modelOrAttributes) {
-            getReal = modelOrAttributes.get || function(attributeName) { return modelOrAttributes[attributeName]; };
+            var getReal = modelOrAttributes.get || function(attributeName) { return modelOrAttributes[attributeName]; };
             modelOrAttributes = Object.create(modelOrAttributes);
 
             modelOrAttributes.get =
@@ -448,9 +448,9 @@
         },
 
         importFrequencyForModel: function(model) {
-                return model.importFrequency
-                && model.importFrequency()
-                && t("import.frequency." + model.importFrequency().toLowerCase())
+                return model.importFrequency &&
+                    model.importFrequency() &&
+                    t("import.frequency." + model.importFrequency().toLowerCase());
         },
 
         safeT: function() {

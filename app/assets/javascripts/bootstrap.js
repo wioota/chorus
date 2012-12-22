@@ -28,6 +28,6 @@
     if (!_.isFunction(String.prototype.trim)) {
         String.prototype.trim = function() {
             return _.trim(this);
-        }
+        };
     }
 })();

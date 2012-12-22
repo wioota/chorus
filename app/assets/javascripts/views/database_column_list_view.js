@@ -25,7 +25,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
         return {
             typeClass:model.get("typeClass"),
             typeString: model.get("dataType")
-        }
+        };
     },
 
     selectNone: function() {
@@ -50,8 +50,8 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
 
     toggleColumnSelection:function ($selectedColumn, forceState) {
         if (this.selectMulti) {
-            var turnOn = (arguments.length == 2) ? forceState : !$selectedColumn.is(".selected");
-            var column = this.collection.get($selectedColumn.data('cid'))
+            var turnOn = (arguments.length === 2) ? forceState : !$selectedColumn.is(".selected");
+            var column = this.collection.get($selectedColumn.data('cid'));
             if (turnOn) {
                 $selectedColumn.addClass("selected");
                 chorus.PageEvents.broadcast("column:selected", column);

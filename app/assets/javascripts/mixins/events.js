@@ -20,6 +20,6 @@ chorus.Mixins.Events = {
     },
 
     shouldTriggerImmediately: function(eventName) {
-        return false
+        return false;
     }
 };

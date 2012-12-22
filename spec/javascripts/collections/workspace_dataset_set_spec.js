@@ -116,6 +116,28 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
             it("should be false", function() {
                 expect(this.collection.hasFilter()).toBeFalsy();
             });
+
+            context("when null", function() {
+                beforeEach(function() {
+                    this.collection.attributes.namePattern = null;
+                    this.collection.attributes.type= null;
+                });
+
+                it("should be false", function() {
+                    expect(this.collection.hasFilter()).toBeFalsy();
+                });
+            });
+
+            context("when blank", function() {
+                beforeEach(function() {
+                    this.collection.attributes.namePattern = '';
+                    this.collection.attributes.type= '';
+                });
+
+                it("should be false", function() {
+                    expect(this.collection.hasFilter()).toBeFalsy();
+                });
+            });
         });
     });
 });

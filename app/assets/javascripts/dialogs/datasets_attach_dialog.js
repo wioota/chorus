@@ -22,6 +22,6 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
         return {
             name: model.get("objectName"),
             imageUrl: model.iconUrl({size: 'medium'})
-        }
+        };
     }
 });

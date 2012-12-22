@@ -40,9 +40,9 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
         chorus.toast("create_database_view.toast_success", {
             canonicalName: this.canonicalName(),
             viewName: this.model.get("objectName")
-        })
+        });
 
-        var databaseView = this.model.databaseView()
+        var databaseView = this.model.databaseView();
         if (!databaseView.has("workspace")) {
             databaseView.set({"workspace": this.dataset.get("workspace")});
         }
@@ -54,6 +54,6 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
     },
 
     canonicalName: function() {
-        return this.dataset.schema().canonicalName()
+        return this.dataset.schema().canonicalName();
     }
 });

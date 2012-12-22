@@ -6,18 +6,14 @@ chorus.models.KaggleFilter = chorus.models.Filter.extend({
             case "Favorite Technique":
             case "Location":
             case "Favorite Software":
-                return new chorus.models.KaggleFilterMaps.String
-                break;
+                return new chorus.models.KaggleFilterMaps.String();
             case "Rank":
             case "Number of Entered Competitions":
-                return new chorus.models.KaggleFilterMaps.Numeric
-                break;
+                return new chorus.models.KaggleFilterMaps.Numeric();
             case "Past Competition Types":
-                return new chorus.models.KaggleFilterMaps.CompetitionType
-                break;
+                return new chorus.models.KaggleFilterMaps.CompetitionType();
             default:
-                return new chorus.models.KaggleFilterMaps.Other
-                break;
+                return new chorus.models.KaggleFilterMaps.Other();
         }
     },
 

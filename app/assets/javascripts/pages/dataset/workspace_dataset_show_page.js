@@ -32,7 +32,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.requiredResources.add(this.workspace);
         this.workspace.fetch();
-        this.model = this.dataset = new chorus.models.WorkspaceDataset({ workspace: { id: workspaceId }, id: datasetId })
+        this.model = this.dataset = new chorus.models.WorkspaceDataset({ workspace: { id: workspaceId }, id: datasetId });
     },
 
     bindCallbacks: function() {
@@ -41,24 +41,22 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
     },
 
     constructSidebarForType: function(type) {
-        switch (type) {
-            case 'chorus_view':
-                this.dataset.setDatasetNumber(1);
-                this.sidebar.disabled = true;
-                this.mainContent.content.selectMulti = true;
-                this.mainContent.content.showDatasetName = true;
-                this.mainContent.content.render();
-                this.mainContent.content.selectNone();
-                this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
-                break;
-            default:
-                this._super('constructSidebarForType', arguments);
+        if (type === 'chorus_view') {
+            this.dataset.setDatasetNumber(1);
+            this.sidebar.disabled = true;
+            this.mainContent.content.selectMulti = true;
+            this.mainContent.content.showDatasetName = true;
+            this.mainContent.content.render();
+            this.mainContent.content.selectNone();
+            this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
+        } else {
+            this._super('constructSidebarForType', arguments);
         }
     },
 
     showSidebar: function(type) {
-        this.$('.sidebar_content.primary').addClass("hidden")
-        this.$('.sidebar_content.secondary').removeClass("hidden")
+        this.$('.sidebar_content.primary').addClass("hidden");
+        this.$('.sidebar_content.secondary').removeClass("hidden");
 
         if (this.secondarySidebar) {
             this.secondarySidebar.teardown();

@@ -57,7 +57,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         return {
             name: model.name(),
             imageUrl: ""
-        }
+        };
     },
 
     collectionComparator: function(model) {
@@ -68,7 +68,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         return {
             placeholderTranslation: this.searchPlaceholderKey || "pickitem.dialog.search.placeholder",
             submitButtonTranslationKey: this.submitButtonTranslationKey || "pickitem.dialog.submit"
-        }
+        };
     },
 
     enableOrDisableSubmitButton: function() {

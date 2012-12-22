@@ -20,7 +20,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.resource = this.model = this.options.model;
         this.csvOptions = this.options.csvOptions;
         this.tableName = this.csvOptions.tableName;
-        this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.model.get("workspaceId")}, id: this.options.datasetId })
+        this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.model.get("workspaceId")}, id: this.options.datasetId });
 
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
@@ -32,7 +32,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
         var columns = parser.getColumnOrientedData();
         this.numberOfColumns = columns.length;
-        this.columnMapping = _.map(columns, function() { return null });
+        this.columnMapping = _.map(columns, function() { return null; });
         this.destinationMenus = [];
 
         this.initializeModel(columns);
@@ -152,7 +152,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
             launchLink.find(".column_name").text(columnName || t("dataset.import.table.existing.select_one"));
             launchLink.toggleClass("selected", (frequency === 1));
-            launchLink.toggleClass("selection_conflict", (frequency != 1));
+            launchLink.toggleClass("selection_conflict", (frequency !== 1));
         }, this);
     },
 
@@ -209,7 +209,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             return {
                 sourceOrder: destination,
                 targetOrder: column ? column.name : ''
-            }
+            };
         });
 
         this.model.set({
@@ -250,7 +250,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setDelimiter: function(e) {
-        if (e.target.value == "other") {
+        if (e.target.value === "other") {
             this.delimiter = this.$("input[name=custom_delimiter]").val();
             this.other_delimiter = true;
         } else {
@@ -271,7 +271,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     setOtherDelimiter: function() {
         this.$("input.delimiter[type=radio]").prop("checked", false);
         var otherRadio = this.$("input#delimiter_other");
-        otherRadio.prop("checked", true)
+        otherRadio.prop("checked", true);
         otherRadio.click();
     },
 
@@ -284,7 +284,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var $tbody = this.$(".tbody");
         $tbody.unbind("scroll.follow_header");
         $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
-        $tbody.scrollTop(this.scrollPosY)
+        $tbody.scrollTop(this.scrollPosY);
         $tbody.scrollLeft(this.scrollPosX);
         this.$(".thead").css({ "left": -this.scrollPosX });
 
@@ -294,7 +294,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     validateColumns: function() {
         this.clearErrors();
         var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
-        var columnData = parser.getColumnOrientedData()
+        var columnData = parser.getColumnOrientedData();
         var sourceColumnsNum = columnData.length;
 
         this.model.serverErrors = parser.serverErrors;

@@ -7,9 +7,9 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.include(
 
     urlParams: function() {
         if (this.attributes && this.attributes.filter) {
-            return {type: "meta", filter: this.attributes.filter}
+            return {type: "meta", filter: this.attributes.filter};
         } else {
-            return {type: "meta"}
+            return {type: "meta"};
         }
     },
 

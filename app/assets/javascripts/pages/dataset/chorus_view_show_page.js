@@ -6,7 +6,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.requiredResources.add(this.workspace);
         this.workspace.fetch();
-        this.model = this.dataset = new chorus.models.ChorusView({ workspace: { id: workspaceId }, id: datasetId })
+        this.model = this.dataset = new chorus.models.ChorusView({ workspace: { id: workspaceId }, id: datasetId });
     },
 
     drawColumns: function() {
@@ -29,12 +29,10 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     },
 
     constructSidebarForType: function(type) {
-        switch (type) {
-            case 'edit_chorus_view':
-                this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
-                break;
-            default:
-                this._super('constructSidebarForType', arguments);
+        if(type === 'edit_chorus_view') {
+            this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
+        } else {
+            this._super('constructSidebarForType', arguments);
         }
     }
 });

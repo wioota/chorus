@@ -7,18 +7,18 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
         });
 
         //sidebar is optional
-        this.sidebar = new chorus.views.StaticTemplate("plain_text", {text: "sidebar is 250px wide"})
+        this.sidebar = new chorus.views.StaticTemplate("plain_text", {text: "sidebar is 250px wide"});
 
         //subnavs require a workspace and are optional
-        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"})
+        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
         this.workspace.loaded = true;
-        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"})
+        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"});
 
     },
 
     postRender: function() {
-        var siteElements = new chorus.pages.StyleGuidePage.SiteElementsView()
-        $(this.el).append(siteElements.render().el)
+        var siteElements = new chorus.pages.StyleGuidePage.SiteElementsView();
+        $(this.el).append(siteElements.render().el);
     }
 });
 
@@ -28,9 +28,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     initialize: function() {
         _.defer(_.bind(this.render, this));
-        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"})
+        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
         this.workspace.loaded = true;
-        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"})
+        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"});
 
         //ChartTask require a dataset
         this.dataset = new chorus.models.Dataset({ id : 1});
@@ -58,7 +58,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     id: i,
                     value: Math.round(100 * Math.random(), 0),
                     animal: _.shuffle(animals)[0]
-                }
+                };
             });
 
             return new chorus.models.WorkfileExecutionTask({
@@ -301,20 +301,20 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 })
             })
 
-        }
+        };
     },
 
     render: function() {
-        $(this.el).empty()
+        $(this.el).empty();
 
         var self = this;
         _.each(this.views, function(view, name) {
-            $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>")
+            $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>");
             view.el = self.$(".view_guts:last")[0];
             view.delegateEvents();
             view.render();
-        })
+        });
 
-        return this
+        return this;
     }
 });

@@ -11,31 +11,22 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
             switch (result.entityType) {
                 case "user":
                     return new chorus.models.User(result);
-                    break;
                 case "workspace":
                     return new chorus.models.Workspace(result);
-                    break;
                 case "workfile":
                     return new chorus.models.Workfile(result);
-                    break;
                 case "hdfs_file":
                     return new chorus.models.HdfsEntry(result);
-                    break;
                 case "dataset":
                     return new chorus.models.Dataset(result);
-                    break;
                 case "chorus_view":
                     return new chorus.models.ChorusView(result);
-                    break;
                 case "gpdb_instance":
                     return new chorus.models.GpdbInstance(result);
-                    break;
                 case "hadoop_instance":
                     return new chorus.models.HadoopInstance(result);
-                    break;
                 case "gnip_instance":
                     return new chorus.models.GnipInstance(result);
-                    break;
                 case "attachment":
                     return new chorus.models.Attachment(result);
                 default:

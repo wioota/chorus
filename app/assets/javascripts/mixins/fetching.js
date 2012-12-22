@@ -1,4 +1,3 @@
-;
 (function() {
     chorus.Mixins.Fetching = {
         fetchIfNotLoaded: function(options) {
@@ -76,15 +75,16 @@
         respondToErrors: function(status, options) {
             options = options || {};
 
+            status = parseInt(status, 10);
             if (status === 401) {
                 chorus.session.trigger("needsLogin");
-            } else if (status == 403) {
+            } else if (status === 403) {
                 this.trigger("resourceForbidden");
-            } else if (status == 404) {
+            } else if (status === 404) {
                 options.notFound ? options.notFound() : this.trigger("resourceNotFound");
-            } else if (status == 422) {
+            } else if (status === 422) {
                 options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
-            } else if (status == 500) {
+            } else if (status === 500) {
                 var toastOpts = {};
                 if(window.INTEGRATION_MODE) { toastOpts.sticky = true; }
                 chorus.toast("server_error", {toastOpts: toastOpts});
@@ -97,7 +97,7 @@
             var result = _.isArray(hash) ? [] : {};
             _.each(hash, function(val, key) {
                 var newKey = keyFn(key);
-                if (_.isObject(val) && newKey != "errorObjects") {
+                if (_.isObject(val) && newKey !== "errorObjects") {
                     result[newKey] = transformer(val);
                 } else {
                     result[newKey] = val;

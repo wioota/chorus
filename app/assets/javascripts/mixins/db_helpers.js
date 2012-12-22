@@ -6,8 +6,8 @@ chorus.Mixins.dbHelpers = {
         }
 
         return _.map(arguments, function(arg) {
-            return encode(arg)
-        }).join('.')
+            return encode(arg);
+        }).join('.');
     },
 
     sqlEscapeString: function(string) {

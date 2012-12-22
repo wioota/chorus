@@ -18,11 +18,11 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("hdfs.read_only")})
         });
 
-        this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model })
+        this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
     },
 
     crumbs: function() {
-        var pathLength = _.compact(this.model.getPath().split("/")).length - 1
+        var pathLength = _.compact(this.model.getPath().split("/")).length - 1;
 
         var instanceCrumb = this.hadoopInstance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
         var fileNameCrumb = this.model.get("name");
@@ -36,7 +36,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        var hadoopInstanceId = this.hadoopInstance.get("id")
+        var hadoopInstanceId = this.hadoopInstance.get("id");
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
@@ -59,11 +59,11 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     },
 
     ellipsizePath: function() {
-        var folders = this.path.split('/')
+        var folders = this.path.split('/');
         if (folders.length > 3) {
-            return "/" + folders[1] + "/.../" + folders[folders.length - 1]
+            return "/" + folders[1] + "/.../" + folders[folders.length - 1];
         } else {
-            return this.path
+            return this.path;
         }
     }
-})
+});

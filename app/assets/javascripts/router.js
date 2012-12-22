@@ -64,8 +64,8 @@
         navigate:function (fragment, pageOptions) {
             this.app.pageOptions = pageOptions;
             fragment = fragment.match(/#?(.*)/)[1];
-            var fragComparison = fragment.match(/\/?(.*)/)[1]
-            if (Backbone.history.fragment == fragComparison || Backbone.history.fragment == decodeURIComponent(fragComparison)) {
+            var fragComparison = fragment.match(/\/?(.*)/)[1];
+            if (Backbone.history.fragment === fragComparison || Backbone.history.fragment === decodeURIComponent(fragComparison)) {
                 Backbone.history.loadUrl(fragment);
             } else {
                 Backbone.Router.prototype.navigate.call(this, fragment, true);
@@ -88,7 +88,7 @@
                 });
                 var navFunction = function() {
                     chorus.PageEvents.reset();
-                    if (className == "Login" && self.app.session.loggedIn()) {
+                    if (className === "Login" && self.app.session.loggedIn()) {
                         self.navigate("");
                     } else {
                         self.trigger("leaving");
@@ -129,7 +129,7 @@
         }
 
         chorus$Page.prototype = constructor.prototype;
-        return new chorus$Page;
+        return new chorus$Page();
     }
 })();
 

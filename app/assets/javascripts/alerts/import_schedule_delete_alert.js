@@ -7,7 +7,7 @@ chorus.alerts.ImportScheduleDelete = chorus.alerts.ModelDelete.extend({
     deleteMessage: "import.schedule.delete.toast",
 
     setup: function() {
-        this.title = t("import.schedule.delete.title", {destinationTableName: this.model.get("toTable")})
+        this.title = t("import.schedule.delete.title", {destinationTableName: this.model.get("toTable")});
     },
 
     makeModel: function() {

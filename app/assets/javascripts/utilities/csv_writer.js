@@ -12,9 +12,9 @@ chorus.utilities.CsvWriter = function(columnNames, rows, options) {
             var orderedRow = _.map(columnNames, function(name){
                return '"' + row[name] + '"';
             });
-            csvData += orderedRow.join(this.delimiter) + "\n"
+            csvData += orderedRow.join(this.delimiter) + "\n";
         }, this);
 
         return csvData;
-    }
+    };
 };

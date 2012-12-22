@@ -1,4 +1,8 @@
 (function() {
+    function userSuccessfullySaved() {
+        chorus.router.navigate("/users");
+    }
+
     chorus.views.UserNewLdap = chorus.views.Base.extend({
         templateName: "user/new_ldap",
         additionalClass: "user_new",
@@ -89,9 +93,5 @@
             this.saving = false;
         }
     });
-
-    function userSuccessfullySaved() {
-        chorus.router.navigate("/users");
-    }
 })();
 

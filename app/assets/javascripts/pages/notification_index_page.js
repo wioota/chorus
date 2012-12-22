@@ -20,11 +20,11 @@ chorus.pages.NotificationIndexPage = chorus.pages.Base.extend({
     },
 
     notificationsFetched: function() {
-        this.collection.markAllRead({})
+        this.collection.markAllRead({});
         this.render();
     },
 
     refreshNotifications: function() {
-        this.collection.fetch()
+        this.collection.fetch();
     }
 });

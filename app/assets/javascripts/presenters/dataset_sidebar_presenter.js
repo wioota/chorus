@@ -38,7 +38,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         var rescue = {};
         rescue[target] = "";
-        var deleteMsgKey = (keyTable[resourceType + "_" + resourceObjectType] || keyTable[resourceType] || rescue)[target]
+        var deleteMsgKey = (keyTable[resourceType + "_" + resourceObjectType] || keyTable[resourceType] || rescue)[target];
 
         return deleteMsgKey || "";
     },
@@ -83,9 +83,9 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         var nextTableRef;
         if (importSchedule.get('destinationDatasetId')) {
-            var nextTableRef = this._linkToModel(importSchedule.destination());
+            nextTableRef = this._linkToModel(importSchedule.destination());
         } else {
-            var nextTableRef = this.ellipsize(importSchedule.destination().name());
+            nextTableRef = this.ellipsize(importSchedule.destination().name());
         }
 
         return chorus.helpers.safeT("import.next_import", {
@@ -102,7 +102,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var tableLink = this._linkToModel(source);
         var lastImport = this.resource.lastImport();
 
-        if(lastImport.get('sourceDatasetId') == this.resource.get('id')) {
+        if(lastImport.get('sourceDatasetId') === this.resource.get('id')) {
             importStringKey = "import.in_progress";
             tableLink = destination.id ? this._linkToModel(destination) : destination.name();
         } else {
@@ -137,7 +137,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             return chorus.helpers.safeT("import.began", { timeAgo: startedAt });
         }
 
-        if(lastImport.get("sourceDatasetId") == this.resource.get("id")) {
+        if(lastImport.get("sourceDatasetId") === this.resource.get("id")) {
             var destination = lastImport.destination();
             tableLink = destination.id ? this._linkToModel(destination) : this.ellipsize(destination.name());
 
@@ -164,7 +164,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     noCredentialsWarning: function() {
         if(!this.resource) {
-            return ""
+            return "";
         }
 
         var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});

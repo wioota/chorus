@@ -27,7 +27,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
 
         var params = {
             workspace_id: this.selectedItem().get("id")
-        }
+        };
 
         var description = workfile.get("description");
         if (description) {

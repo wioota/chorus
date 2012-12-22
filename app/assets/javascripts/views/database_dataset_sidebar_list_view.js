@@ -30,11 +30,11 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     },
 
     fetchResourceAfterSchemaSelected: function() {
-        if (this.schema.get("id") == "workspaceSchema") {
+        if (this.schema.get("id") === "workspaceSchema") {
             this.collection = new chorus.collections.WorkspaceDatasetSet([], {
                 workspaceId: chorus.page.workspace.id,
                 unsorted: true
-            })
+            });
             this.collection.sortAsc("objectName");
 
             if (this.focusSchema) {
@@ -63,7 +63,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
-        var next = parseInt(this.collection.pagination.page) + 1;
+        var next = parseInt(this.collection.pagination.page, 10) + 1;
         this.collection.fetchPage(next, { update: true, remove: false , success: _.bind(this.datasetsAdded, this) });
     },
 

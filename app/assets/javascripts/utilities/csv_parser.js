@@ -59,7 +59,7 @@ chorus.utilities.CsvParser = function(contents, options) {
                 _.each(this.rows, function(row) {
                     var contents = row[i];
                     var isText = contents && isNaN(+contents);
-                    var isEmpty = !contents || contents.trim() == '';
+                    var isEmpty = !contents || contents.trim() === '';
                     allEmpty = allEmpty && isEmpty;
                     containsSomeText = containsSomeText || isText;
                 }, this);
@@ -70,20 +70,20 @@ chorus.utilities.CsvParser = function(contents, options) {
         return _.map(columnNames, function(columnName, i) {
             var columnValues = [];
             _.each(this.rows, function(row) {
-                columnValues.push(row[i] || "")
+                columnValues.push(row[i] || "");
             });
             return {values: columnValues, name: columnName, type: types[i]};
         }, this);
-    }
+    };
 
     return this;
-}
+};
 
 chorus.utilities.CsvParser.normalizeForDatabase = function(str) {
     return str.trim().toLowerCase().replace(/[\s.]/g, "_").replace(/[^a-z0-9_]/g, '').substring(0, 64);
-}
+};
 
 chorus.utilities.CsvParser.normalizeColumnName = function(str) {
     return chorus.utilities.CsvParser.normalizeForDatabase(str.toLowerCase());
-}
+};
 

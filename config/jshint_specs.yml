@@ -73,7 +73,11 @@ predef:             # Names of predefined global variables - comma-separated str
   - datePickerController
   - FMCOpenHelp
   - chorus
-  - jasmine
+  - naturalSort
+  - Spinner
+  - XMLSerializer
+  - CSV
+  - jasmine     # start spec specific globals
   - describe
   - xdescribe
   - context

@@ -63,7 +63,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
         this._super("setFieldValues", arguments);
 
         var newTable = model.get("newTable");
-        this.activeScheduleView = newTable ? this.scheduleViewNew : this.scheduleViewExisting
+        this.activeScheduleView = newTable ? this.scheduleViewNew : this.scheduleViewExisting;
 
 
         this.scheduleViewExisting.setFieldValues(model);
@@ -85,9 +85,9 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
         try {
             this.model.save(this.getNewModelAttrs());
         } catch(e) {
-            var message = e && e.message || "Invalid schedule"
+            var message = e && e.message || "Invalid schedule";
             this.model.serverErrors = {fields: {date: {GENERIC: {message: message}}}};
-            this.showErrors(this.model)
+            this.showErrors(this.model);
             this.$("button.submit").stopLoading();
         }
     },

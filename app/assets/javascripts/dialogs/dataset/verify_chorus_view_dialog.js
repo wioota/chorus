@@ -22,7 +22,7 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
     nameChorusView: function(e) {
         e.preventDefault();
 
-        this.model.set({ query: this.sql() })
+        this.model.set({ query: this.sql() });
 
         var assignNameDialog = new chorus.dialogs.NameChorusView({
             model: this.model

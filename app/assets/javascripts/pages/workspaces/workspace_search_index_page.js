@@ -10,7 +10,7 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: this.search.workspace().get("name"), url: this.search.workspace().showUrl() },
             { label: t("breadcrumbs.search_results") }
-        ]
+        ];
     },
 
     searchInMenuOptions: function() {

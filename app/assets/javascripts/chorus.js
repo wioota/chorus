@@ -17,7 +17,7 @@ window.Chorus = function chorus$Global() {
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
-        if (!window.jasmine && BrowserDetect.browser == "Explorer" && BrowserDetect.version <= "8") {
+        if (!window.jasmine && BrowserDetect.browser === "Explorer" && BrowserDetect.version <= "8") {
             CFInstall.check({
                 mode: "overlay"
             });
@@ -147,7 +147,7 @@ window.Chorus = function chorus$Global() {
         _.extend(qtipArgs, options.qtipArgs);
 
         if(options.position) {
-            _.extend(qtipArgs.position, options.position)
+            _.extend(qtipArgs.position, options.position);
         }
 
         if (options.orientation === "right") {
@@ -169,7 +169,7 @@ window.Chorus = function chorus$Global() {
                         api.hide();
                     };
                     $(api.elements.content).find(selector).click(wrappedCallback);
-                })
+                });
             };
         }
 
@@ -221,10 +221,10 @@ window.Chorus = function chorus$Global() {
                     "dateset": [
                         function() {
                             _.defer(function() {
-                                for (formElement in formElementParams) {
+                                for (var formElement in formElementParams) {
                                     $("#" + formElement).trigger("paste");
                                 }
-                            })
+                            });
                         }
                     ]
                 }
@@ -301,13 +301,13 @@ window.Chorus = function chorus$Global() {
         container.append($input).append(clearLink);
     };
 
-    self.hotKeyMeta = BrowserDetect.OS == "Mac" ? "ctrl" : "alt";
+    self.hotKeyMeta = BrowserDetect.OS === "Mac" ? "ctrl" : "alt";
 
     self.hotKeyEvent = function(keyChar) {
         var ev = $.Event("keydown", { which: keyChar.toUpperCase().charCodeAt(0)});
-        if (chorus.hotKeyMeta == "ctrl") {
+        if (chorus.hotKeyMeta === "ctrl") {
             ev.ctrlKey = true;
-        } else if (chorus.hotKeyMeta == "alt") {
+        } else if (chorus.hotKeyMeta === "alt") {
             ev.altKey = true;
         }
 
@@ -315,7 +315,7 @@ window.Chorus = function chorus$Global() {
     };
 
     self.triggerHotKey = function(keyChar) {
-        $(document).trigger(chorus.hotKeyEvent(keyChar))
+        $(document).trigger(chorus.hotKeyEvent(keyChar));
     };
 
     self.help = function() {
@@ -324,9 +324,11 @@ window.Chorus = function chorus$Global() {
     };
 
     self.namedConstructor = function(ctor, name) {
+        /*evil: true */
         return eval("(function " + name + "() { " +
             "return ctor.apply(this, arguments); " +
         "})");
+        /*evil: true */
     };
 
     self.classExtend = function(protoProps, classProps) {
@@ -368,5 +370,5 @@ window.Chorus = function chorus$Global() {
     };
 };
 
-window.chorus = window.chorus || new Chorus();
+window.chorus = window.chorus || new window.Chorus();
 

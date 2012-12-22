@@ -12,7 +12,7 @@ chorus.views.SchemaList = chorus.views.SelectableList.extend({
     datasetMessage: function(model) {
         var datasetCount = model.get('datasetCount');
 
-        if(model.get('refreshedAt') != null) {
+        if(model.get('refreshedAt') !== null) {
             return I18n.t("entity.name.WorkspaceDataset", {count: datasetCount});
         } else {
             return I18n.t("entity.name.WorkspaceDataset.refreshing");

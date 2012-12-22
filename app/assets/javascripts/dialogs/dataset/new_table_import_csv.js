@@ -125,7 +125,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     getColumnNames: function() {
-        return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames
+        return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames;
     },
 
     additionalContext: function() {
@@ -139,7 +139,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
                 tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
             }),
             ok: this.ok
-        }
+        };
     },
 
     startImport: function() {
@@ -202,7 +202,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setDelimiter: function(e) {
-        if (e.target.value == "other") {
+        if (e.target.value === "other") {
             this.delimiter = this.$("input[name=custom_delimiter]").val();
             this.other_delimiter = true;
         } else {
@@ -227,7 +227,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     setOtherDelimiter: function() {
         this.$("input.delimiter[type=radio]").prop("checked", false);
         var otherRadio = this.$("input#delimiter_other");
-        otherRadio.prop("checked", true)
+        otherRadio.prop("checked", true);
         otherRadio.click();
     }
 });
