@@ -581,5 +581,25 @@ describe GreenplumConnection::Base, :database_integration do
 
       it_behaves_like "a well behaved database query"
     end
+
+    describe "#transaction" do
+      let(:subject) {
+        connection.test_transaction do |conn|
+          conn.fetch_value('SELECT 1')
+        end
+      }
+
+      let(:expected) { 1 }
+
+      it_behaves_like "a well behaved database query"
+
+      it 'rolls back all database operations' do
+        connection.test_transaction do |conn|
+          conn.execute('create table test_transaction()')
+        end
+
+        connection.table_exists?('test_transaction').should_not be_true
+      end
+    end
   end
 end

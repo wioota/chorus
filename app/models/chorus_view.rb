@@ -31,24 +31,20 @@ class ChorusView < Dataset
       errors.add(:query, :start_with_keywords)
     end
 
-    account = account_for_user!(current_user)
-    schema.with_gpdb_connection(account, true) do |connection|
-      jdbc_conn = connection.raw_connection.connection
-      s = jdbc_conn.prepareStatement(query)
+    schema.connect_as(current_user).transaction(:rollback => :always) do |conn|
       begin
-        jdbc_conn.setAutoCommit(false)
-
-        s.set_max_rows(0)
-        s.execute
-
-      rescue java::sql::SQLException => e
-        errors.add(:query, :generic, {:message => "Cannot execute SQL query. #{e.cause}"})
-      end
-      if s.more_results(s.class::KEEP_CURRENT_RESULT) || s.update_count != -1
-        errors.add(:query, :multiple_result_sets)
+        conn.fetch(query).all
+      rescue Sequel::DatabaseError => e
+        case e.message
+          when /Multiple ResultSets/
+            errors.add(:query, :multiple_result_sets)
+          else
+            errors.add(:query, :generic, {:message => e.message})
+        end
       end
     end
   end
+
 
   def preview_sql
     query

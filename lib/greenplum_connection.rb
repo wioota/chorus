@@ -25,7 +25,7 @@ module GreenplumConnection
 
     def connect!
       begin
-        @connection = GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
+        @connection ||= GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
       rescue Sequel::DatabaseConnectionError => e
         raise InstanceUnreachable, e.message
       end
@@ -178,6 +178,21 @@ module GreenplumConnection
     def execute(sql)
       with_schema_connection { @connection.execute(sql) }
       true
+    end
+
+    def test_transaction
+      connect!
+      result = nil
+
+      @connection.transaction(:rollback => :always) do
+        result = yield self
+      end
+
+      disconnect
+      result
+
+    rescue Sequel::DatabaseError => e
+      raise GreenplumConnection::DatabaseError.new(e.message)
     end
 
     private

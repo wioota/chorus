@@ -24,17 +24,12 @@ describe ChorusView do
         chorus_view.query = query # Factory by default represses validation
       end
 
-      it "runs as current_user" do
-        mock(schema).with_gpdb_connection(gpdb_instance.account_for_user!(user), true)
-        chorus_view.valid?
-      end
-
       it "can be valid" do
         chorus_view.should be_valid
       end
 
       describe 'with multiple statements' do
-        let(:query) {  "select 1; create table nonexistent();" }
+        let(:query) {  "select 1; create table a_new_table()" }
 
         it 'is invalid' do
           chorus_view.should_not be_valid
@@ -43,11 +38,7 @@ describe ChorusView do
 
         it 'cleans up' do
           chorus_view.validate_query
-          schema.with_gpdb_connection(account) do |conn|
-            expect {
-              conn.exec_query("select * from nonexistent")
-            }.to raise_error(ActiveRecord::StatementInvalid)
-          end
+          schema.connect_with(account).table_exists?('a_new_table').should be_false
         end
       end
 
