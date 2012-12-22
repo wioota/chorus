@@ -31,9 +31,9 @@ class ChorusView < Dataset
       errors.add(:query, :start_with_keywords)
     end
 
-    schema.connect_as(current_user).transaction(:rollback => :always) do |conn|
+    schema.connect_as(current_user).test_transaction do |conn|
       begin
-        conn.fetch(query).all
+        conn.fetch(query)
       rescue Sequel::DatabaseError => e
         case e.message
           when /Multiple ResultSets/

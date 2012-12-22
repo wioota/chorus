@@ -12,8 +12,8 @@ resource "Chorus Views" do
 
   post "/chorus_views" do
     before do
-      any_instance_of(GpdbSchema) do |schema|
-        mock(schema).with_gpdb_connection.with_any_args
+      any_instance_of(ChorusView) do |view|
+        mock(view).validate_query
       end
     end
 
@@ -40,8 +40,8 @@ resource "Chorus Views" do
 
   put "/chorus_views/:id" do
     before do
-      any_instance_of(GpdbSchema) do |schema|
-        mock(schema).with_gpdb_connection.with_any_args
+      any_instance_of(ChorusView) do |view|
+        mock(view).validate_query
       end
     end
 
@@ -128,8 +128,8 @@ resource "Chorus Views" do
     let(:owner) {chorus_view.workspace.owner}
 
     before do
-      any_instance_of(GpdbSchema) do |schema|
-        mock(schema).with_gpdb_connection.with_any_args
+      any_instance_of(ChorusView) do |view|
+        mock(view).validate_query
       end
     end
 
