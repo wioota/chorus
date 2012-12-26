@@ -1,4 +1,4 @@
-if Rails.env.development?
+unless Rails.env.production?
   namespace :jshint do
     task :specs do
       include_paths = JSHint::Utils.paths_from_command_line('paths')

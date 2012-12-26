@@ -70,10 +70,10 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_mig
   gem 'ci_reporter', '>= 1.8.1'
   gem 'faker'
   gem 'fakeweb'
+  gem 'jshint_on_rails'
 end
 
 group :development do
   gem 'license_finder'
-  gem 'jshint_on_rails'
   gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
 end
