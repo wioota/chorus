@@ -26,7 +26,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
 
         this.resource.set({
             name:this.$("input[name=name]").val().trim(),
-            public:!!this.$("input[name=public]").is(":checked")
+            "public": !!this.$("input[name=public]").is(":checked")
         });
 
         this.$("button.submit").startLoading("actions.creating");

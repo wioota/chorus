@@ -948,10 +948,10 @@ describe("chorus.models.Abstract", function() {
 
                 it("returns a hash with the new values and old values as undefined", function() {
                     var changes = this.model.unsavedChanges();
-                    expect(changes.attr1.old).toBe(undefined);
-                    expect(changes.attr1.new).toBe('new value');
-                    expect(changes.attr2.old).toBe(undefined);
-                    expect(changes.attr2.new).toBe('other new value');
+                    expect(changes.attr1.oldValue).toBe(undefined);
+                    expect(changes.attr1.newValue).toBe('new value');
+                    expect(changes.attr2.oldValue).toBe(undefined);
+                    expect(changes.attr2.newValue).toBe('other new value');
                 });
 
                 context("after fetching data", function() {
@@ -962,8 +962,8 @@ describe("chorus.models.Abstract", function() {
 
                     it("has unfetched changes still", function() {
                         var changes = this.model.unsavedChanges();
-                        expect(changes.attr1.old).toBe(undefined);
-                        expect(changes.attr1.new).toBe('new value');
+                        expect(changes.attr1.oldValue).toBe(undefined);
+                        expect(changes.attr1.newValue).toBe('new value');
                         expect(changes.attr2).toBeFalsy();
                         expect(changes.attr3).toBeFalsy();
                     });
@@ -976,10 +976,10 @@ describe("chorus.models.Abstract", function() {
 
                         it("returns a hash with the new and old values included", function() {
                             var changes = this.model.unsavedChanges();
-                            expect(changes.attr1.old).toBe(undefined);
-                            expect(changes.attr1.new).toBe('newer value');
-                            expect(changes.attr2.old).toBe('something different');
-                            expect(changes.attr2.new).toBe('other new value');
+                            expect(changes.attr1.oldValue).toBe(undefined);
+                            expect(changes.attr1.newValue).toBe('newer value');
+                            expect(changes.attr2.oldValue).toBe('something different');
+                            expect(changes.attr2.newValue).toBe('other new value');
                         });
                     });
                 });
@@ -992,8 +992,8 @@ describe("chorus.models.Abstract", function() {
 
                     it("has unsaved changes still", function() {
                         var changes = this.model.unsavedChanges();
-                        expect(changes.attr1.old).toBe(undefined);
-                        expect(changes.attr1.new).toBe('new value');
+                        expect(changes.attr1.oldValue).toBe(undefined);
+                        expect(changes.attr1.newValue).toBe('new value');
                         expect(changes.attr2).toBeFalsy();
                         expect(changes.attr3).toBeFalsy();
                     });

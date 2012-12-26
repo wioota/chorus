@@ -28,7 +28,7 @@ chorus.alerts.FunctionInfo = chorus.alerts.Base.extend({
         return chorus.helpers.renderTemplate("function_info_text", {
             returnType: this.model.get('returnType'),
             name: this.model.get("name"),
-            arguments: this.model.formattedArgumentList()
+            functionArguments: this.model.formattedArgumentList()
         });
     }
 });

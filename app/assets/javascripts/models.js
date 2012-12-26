@@ -259,7 +259,7 @@ chorus.models = {
                 var oldValue = this._savedAttributes[key];
                 var newValue = this.attributes[key];
                 if(oldValue !== newValue) {
-                    changes[key] = {old: oldValue, new: newValue};
+                    changes[key] = {oldValue: oldValue, newValue: newValue};
                 }
             }, this);
             return changes;

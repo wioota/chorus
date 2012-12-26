@@ -82,7 +82,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         var attrs = {
             name: this.$("input[name=name]").val().trim(),
             summary: this.getNormalizedText(this.$("textarea[name=summary]")),
-            public: !!this.$("input[name=public]").is(":checked"),
+            "public": !!this.$("input[name=public]").is(":checked"),
             active: active,
             hasChangedSettings: true,
             archived: !active
