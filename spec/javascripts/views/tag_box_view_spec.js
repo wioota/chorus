@@ -47,6 +47,28 @@ describe("chorus.views.TagBox", function() {
         });
     });
 
+    describe("escaping the tags", function() {
+        beforeEach(function() {
+            view.model.tags().reset();
+            view.render();
+            view.$('a.edit_tags').click();
+            var input = view.$('input.tag_editor');
+            input.val("s");
+            var event = $.Event('keyup');
+            event.keyCode = 115; // s
+            input.trigger(event);
+            waitsFor(_.bind(function() {
+                return this.server.requests.length > 0;
+            }, this));
+        });
+
+        it("should escape malicious tags", function() {
+            this.server.lastFetch().succeed([{name: '<script>foo</script>'}]);
+            expect($(view.el).html()).toContain("&lt;script&gt;foo&lt;/script&gt;");
+            expect($(view.el).html()).not.toContain('<script>foo</script>');
+        });
+    });
+
     describe("when there are no tags", function() {
         beforeEach(function() {
             view.render();

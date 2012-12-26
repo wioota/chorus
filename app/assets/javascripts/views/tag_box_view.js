@@ -21,6 +21,9 @@ chorus.views.TagBox = chorus.views.Base.extend({
                 existingTagCollection: this.model.tags()
             },
             autocomplete: {
+                render: function(suggestion) {
+                    return Handlebars.Utils.escapeExpression(suggestion.name);
+                },
                 dropdown: {
                     maxHeight: '200px'
                 }
