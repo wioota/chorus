@@ -24,7 +24,7 @@ module ImportConsole::ImportsHelper
 
   def show_process
     yield || "Not found"
-  rescue ActiveRecord::JDBCError => e
-    "Instance unreachable"
+  rescue Exception => e
+    "#{e}"
   end
 end
