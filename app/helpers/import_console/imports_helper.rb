@@ -17,8 +17,8 @@ module ImportConsole::ImportsHelper
   end
 
   def link_to_table(workspace, dataset)
-    type = dataset.type == "CHORUS_VIEW" ? "chorus_views" : "dataset"
-    "/#/workspace/#{workspace.id}/#{type}/#{dataset.id}"
+    type = dataset.type == "CHORUS_VIEW" ? "chorus_views" : "datasets"
+    "/#/workspaces/#{workspace.id}/#{type}/#{dataset.id}"
   end
 
   def link_to_destination(workspace, to_table)
