@@ -76,8 +76,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
             content: new chorus.views.SearchResults({ model: this.model })
         });
-
-        if (this.search.isPaginated()) {
+        if (this.search.isPaginated() && !this.search.workspace()) {
             this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult"});
             this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true });
         }
