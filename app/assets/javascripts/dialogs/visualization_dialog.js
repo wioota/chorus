@@ -66,7 +66,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             });
         }
 
-        new chorus.views.Menu({
+        var menu = new chorus.views.Menu({
             launchElement: this.$('button.save'),
             orientation: "right",
             items: menuItems

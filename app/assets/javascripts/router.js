@@ -1,4 +1,15 @@
 (function() {
+    // apply arbitrary number of arguments to constructor (for routes with parameters)
+    // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
+    function applyConstructor(constructor, args) {
+        function chorus$Page() {
+            return constructor.apply(this, args);
+        }
+
+        chorus$Page.prototype = constructor.prototype;
+        return new chorus$Page();
+    }
+
     chorus.Router = Backbone.Router.include(
         chorus.Mixins.Events
     ).extend({
@@ -119,17 +130,5 @@
             };
         }
     });
-
-
-    // apply arbitrary number of arguments to constructor (for routes with parameters)
-    // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
-    function applyConstructor(constructor, args) {
-        function chorus$Page() {
-            return constructor.apply(this, args);
-        }
-
-        chorus$Page.prototype = constructor.prototype;
-        return new chorus$Page();
-    }
 })();
 

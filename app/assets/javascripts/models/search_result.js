@@ -10,6 +10,26 @@
         attachments: "AttachmentSet"
     };
 
+    function makeCollectionMethod(methodName) {
+        var constructorName = collectionMap[methodName];
+        var collection, memoizedName = "_" + methodName;
+
+        return function() {
+            var ctor = chorus.collections.Search[constructorName];
+            var searchKey = ctor.prototype.searchKey;
+
+            if (!this[memoizedName]) {
+                collection = this[memoizedName] = new ctor([], { search: this });
+                collection.loaded = true;
+                if (this.get(searchKey)){
+                    collection.refreshFromSearch();
+                }
+            }
+
+            return this[memoizedName];
+        };
+    }
+
     chorus.models.SearchResult = chorus.models.Base.extend({
         constructorName: "SearchResult",
         numResultsPerPage: 50,
@@ -167,24 +187,4 @@
             }, 0);
         }
     });
-
-    function makeCollectionMethod(methodName) {
-        var constructorName = collectionMap[methodName];
-        var collection, memoizedName = "_" + methodName;
-
-        return function() {
-            var ctor = chorus.collections.Search[constructorName];
-            var searchKey = ctor.prototype.searchKey;
-
-            if (!this[memoizedName]) {
-                collection = this[memoizedName] = new ctor([], { search: this });
-                collection.loaded = true;
-                if (this.get(searchKey)){
-                    collection.refreshFromSearch();
-                }
-            }
-
-            return this[memoizedName];
-        };
-    }
 })();

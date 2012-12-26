@@ -1,4 +1,21 @@
 (function() {
+    function transformKeys(keyFn) {
+        var transformer = function(hash) {
+            var result = _.isArray(hash) ? [] : {};
+            _.each(hash, function(val, key) {
+                var newKey = keyFn(key);
+                if (_.isObject(val) && newKey !== "errorObjects") {
+                    result[newKey] = transformer(val);
+                } else {
+                    result[newKey] = val;
+                }
+            }, this);
+            return result;
+        };
+
+        return transformer;
+    }
+
     chorus.Mixins.Fetching = {
         fetchIfNotLoaded: function(options) {
             if (this.loaded) {
@@ -91,22 +108,5 @@
             }
         }
     };
-
-    function transformKeys(keyFn) {
-        var transformer = function(hash) {
-            var result = _.isArray(hash) ? [] : {};
-            _.each(hash, function(val, key) {
-                var newKey = keyFn(key);
-                if (_.isObject(val) && newKey !== "errorObjects") {
-                    result[newKey] = transformer(val);
-                } else {
-                    result[newKey] = val;
-                }
-            }, this);
-            return result;
-        };
-
-        return transformer;
-    }
 })();
 

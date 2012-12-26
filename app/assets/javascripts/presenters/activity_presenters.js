@@ -1,4 +1,5 @@
 (function() {
+    var hidden;
     chorus.presenters.Activity = chorus.presenters.Base.extend({
 
         headerHtml: function() {
@@ -127,7 +128,7 @@
         return model;
     }
 
-    var hidden = {
+    hidden = {
 
         headerParamOptions: {
             GreenplumInstanceChangedName: {

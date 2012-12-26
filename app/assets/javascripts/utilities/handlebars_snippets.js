@@ -93,10 +93,10 @@
         moreLink: function(collection, max, more_key, less_key) {
             if (collection && collection.length > max) {
                 templates.moreLinks = templates.moreLinks || Handlebars.compile(
-                    "<ul class='morelinks'>\
-                    <li><a class='more' href='#'>{{t more_key count=more_count}}</a></li>\
-                    <li><a class='less' href='#'>{{t less_key count=more_count}}</a></li>\
-                    </ul>"
+                    ["<ul class='morelinks'>",
+                    "<li><a class='more' href='#'>{{t more_key count=more_count}}</a></li>",
+                    "<li><a class='less' href='#'>{{t less_key count=more_count}}</a></li>",
+                    "</ul>"].join('')
                 );
 
                 return templates.moreLinks({

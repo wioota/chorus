@@ -98,7 +98,7 @@ chorus.views.Bare = Backbone.View.include(
 
         _configure: function(options) {
             var backboneOptions = [{}];
-            if (arguments.length > 0 && typeof(arguments[0]) == "object") {
+            if (arguments.length > 0 && _.isObject(arguments[0])) {
                 backboneOptions = [arguments[0]];
             }
             this._super('_configure', backboneOptions);

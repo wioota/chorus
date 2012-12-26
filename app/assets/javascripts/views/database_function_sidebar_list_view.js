@@ -55,7 +55,6 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     },
 
     tooltipContent: function(model) {
-        var arguments = model.getFunctionArguments();
         var html = chorus.helpers.renderTemplate("database_function_sidebar_tooltip", {
             description:_.prune(model.get("description") || '', 100),
             returnType: model.get("returnType"),

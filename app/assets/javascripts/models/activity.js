@@ -15,6 +15,16 @@
         "sourceDataset": "WorkspaceDataset"
     };
 
+    function makeAssociationMethod(name, setupFunction) {
+        return function() {
+            var className = CLASS_MAP[name];
+            var modelClass = chorus.models[className];
+            var model = new modelClass(this.get(name));
+            if (setupFunction) setupFunction.call(this, model);
+            return model;
+        };
+    }
+
     chorus.models.Activity = chorus.models.Base.extend({
         constructorName: "Activity",
         urlTemplate: "activities/{{id}}",
@@ -245,14 +255,4 @@
             }
         }
     });
-
-    function makeAssociationMethod(name, setupFunction) {
-        return function() {
-            var className = CLASS_MAP[name];
-            var modelClass = chorus.models[className];
-            var model = new modelClass(this.get(name));
-            if (setupFunction) setupFunction.call(this, model);
-            return model;
-        };
-    }
 })();

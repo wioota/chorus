@@ -266,12 +266,6 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     confirmRemoveSharedAccount: function() {
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(this.instance.sharing(), "destroy", displaySuccessToast);
-        localGroup.add(this.instance.sharing(), "destroyFailed", displayFailureToast);
-
-        this.instance.sharing().set({id: -1}); // so that model isNew() is false, and destroy sends message to server
-        this.instance.sharing().destroy();
-
         function displaySuccessToast() {
             this.instance.set({shared: false});
             chorus.toast("instances.shared_account_removed");
@@ -283,6 +277,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             chorus.toast("instances.shared_account_remove_failed");
             localGroup.removeAll();
         }
+
+        localGroup.add(this.instance.sharing(), "destroy", displaySuccessToast);
+        localGroup.add(this.instance.sharing(), "destroyFailed", displayFailureToast);
+
+        this.instance.sharing().set({id: -1}); // so that model isNew() is false, and destroy sends message to server
+        this.instance.sharing().destroy();
     },
 
     addSharedAccountAlert: function(e) {
@@ -294,12 +294,6 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     confirmAddSharedAccount: function() {
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(this.instance.sharing(), "saved", success);
-        localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
-
-        this.instance.sharing().unset("id"); // so that model isNew() is true, and server sees a create
-        this.instance.sharing().save();
-
         function success() {
             this.instance.set({shared: true});
             chorus.toast("instances.shared_account_added");
@@ -313,6 +307,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             chorus.toast("instances.shared_account_add_failed");
             localGroup.removeAll();
         }
+
+        localGroup.add(this.instance.sharing(), "saved", success);
+        localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
+
+        this.instance.sharing().unset("id"); // so that model isNew() is true, and server sees a create
+        this.instance.sharing().save();
     },
 
     confirmRemoveCredentials: function(e) {

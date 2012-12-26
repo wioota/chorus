@@ -242,17 +242,6 @@ window.Chorus = function chorus$Global() {
         $(element).placeholder();
     };
 
-    self.search = function(options) {
-        var input = options.input;
-        var textChangeFunction = options.onTextChange || _.bind(onTextChange, this, options);
-
-        input.unbind("textchange.filter").bind("textchange.filter", textChangeFunction);
-        input.addClass("chorus_search");
-        input.each(function(i, el) {
-            self.addClearButton(el);
-        });
-    };
-
     function onTextChange(options, e) {
         var list = options.list,
             selector = options.selector,
@@ -279,6 +268,17 @@ window.Chorus = function chorus$Global() {
             chorus.PageEvents.broadcast(eventName);
         }
     }
+
+    self.search = function(options) {
+        var input = options.input;
+        var textChangeFunction = options.onTextChange || _.bind(onTextChange, this, options);
+
+        input.unbind("textchange.filter").bind("textchange.filter", textChangeFunction);
+        input.addClass("chorus_search");
+        input.each(function(i, el) {
+            self.addClearButton(el);
+        });
+    };
 
     self.addClearButton = function(input) {
         if ($(input).parent().is(".chorus_search_container")) return;
@@ -324,11 +324,12 @@ window.Chorus = function chorus$Global() {
     };
 
     self.namedConstructor = function(ctor, name) {
-        /*evil: true */
-        return eval("(function " + name + "() { " +
+        /*jshint evil: true */
+        var result = eval("(function " + name + "() { " +
             "return ctor.apply(this, arguments); " +
         "})");
-        /*evil: true */
+        /*jshint evil: false */
+        return result;
     };
 
     self.classExtend = function(protoProps, classProps) {

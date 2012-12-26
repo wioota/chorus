@@ -32,16 +32,20 @@ Backbone.sync = function(method, model, options) {
 
     // Ensure that we have a URL.
     if (!options.url) {
+        // urlError is in scope in the actual backbone file
+        /*global urlError:true */
         params.url = model.url({ method: method }) || urlError();
+        /*global urlError:false */
     }
 
     // Ensure that we have the appropriate request data.
+    var json;
     if (!options.data && model && (method === 'create' || method === 'update' || method === 'patch')) {
         params.contentType = 'application/json';
 
         // Let the model specify its own params
         var string = JSON.stringify(model.toJSON());
-        var json = $.parseJSON(string);
+        json = $.parseJSON(string);
         _.each(json, function(property, key) {
             if (property === null) delete json[key];
         });

@@ -42,7 +42,7 @@ chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
             type: model.get("type"),
             fullName: model.toText(),
             iconUrl: model.iconUrl({size: "medium"})
-        }
+        };
     },
 
     displayLoadingSection: function () {

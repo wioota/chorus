@@ -43,7 +43,7 @@ chorus.utilities.PageEvents.prototype.hasSubscription = function(eventName, call
 
     return eventMatches && _.find(eventMatches, function(eventMatch) {
         return eventMatch.callback === callback && eventMatch.context === context;
-    })
+    });
 };
 
 chorus.utilities.PageEvents.prototype.broadcast = function(eventName) {

@@ -14,7 +14,7 @@ chorus.translation = {
                 return hash[key] || (hash[key] = {});
             }, result);
             if (!_.isUndefined(innerHash[_.last(keys)]) || !_.isObject(innerHash)) {
-                alert("Translation: " + line + " is a collision with an existing translation");
+                window.alert("Translation: " + line + " is a collision with an existing translation");
             }
             innerHash[_.last(keys)] = val;
         });
