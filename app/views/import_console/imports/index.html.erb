@@ -42,10 +42,10 @@
       <td><%= show_process { import.busy?(:writer) } %></td>
       <td><%= show_process { import.busy?(:reader) } %></td>
 
-      <td><%= instance_description(import.source_dataset.schema.database.gpdb_instance) %></td>
+      <td><%= instance_description_for_schema(import.source_dataset.schema) %></td>
       <td><%= link_to(table_description(import.source_dataset.schema, import.source_dataset.name), link_to_table(import.workspace, import.source_dataset))%></td>
 
-      <td><%= instance_description(import.workspace.sandbox.database.gpdb_instance) %></td>
+      <td><%= instance_description_for_schema(import.workspace.sandbox) %></td>
       <td><%= link_to_destination(import.workspace, import.to_table) %></td>
 </tr>
   <% end %>
