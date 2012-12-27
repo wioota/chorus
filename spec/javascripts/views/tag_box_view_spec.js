@@ -140,6 +140,28 @@ describe("chorus.views.TagBox", function() {
                 });
             });
 
+            describe("when an empty tag is entered", function() {
+                beforeEach(function() {
+                    enterTag("");
+                });
+
+                it("should not create a new tag", function() {
+                    expect(view.$(".text-tag").length).toBe(3);
+                    expect(view.model.tags().length).toBe(3);
+                });
+            });
+
+            describe("when a tag with only white spaces is entered", function() {
+                beforeEach(function() {
+                    enterTag("       ");
+                });
+
+                it("should not create a new tag", function() {
+                    expect(view.$(".text-tag").length).toBe(3);
+                    expect(view.model.tags().length).toBe(3);
+                });
+            });
+
             describe("when an invalid tag is entered", function() {
                 var longString;
                 beforeEach(function() {

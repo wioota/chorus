@@ -58,10 +58,14 @@ chorus.views.TagBox = chorus.views.Base.extend({
     validateTag: function(tagName) {
         this.clearErrors();
 
+        tagName = tagName.trim();
+
         var valid = true;
         if(tagName.length > 100) {
             valid = false;
             this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
+        } else if (tagName.length == 0) {
+            valid = false;
         }
 
         if (this.model.tags().containsTag(tagName)) {
