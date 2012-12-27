@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ModelNotCreated', :with => :render_model_error
   rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
   rescue_from 'SunspotError', :with => :render_unprocessable_entity
+  rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
 
   helper_method :current_user
 
@@ -80,6 +81,10 @@ class ApplicationController < ActionController::Base
 
   def render_instance_unreachable_error(e)
     present_errors({:record => :INSTANCE_UNREACHABLE}, :status => :unprocessable_entity)
+  end
+
+  def render_solr_unreachable_error(e)
+    present_errors({:service => :SOLR_UNREACHABLE}, :status => :service_unavailable)
   end
 
   def render_not_found(e)

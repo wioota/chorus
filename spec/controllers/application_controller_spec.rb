@@ -108,6 +108,15 @@ describe ApplicationController do
       decoded_errors.record.should == "INSTANCE_UNREACHABLE"
     end
 
+    it "returns error 503 when an SearchExtensions::SolrUnreachable error is raised" do
+      stub(controller).index { raise SearchExtensions::SolrUnreachable }
+
+      get :index
+
+      response.code.should == "503"
+      decoded_errors.service.should == "SOLR_UNREACHABLE"
+    end
+
     it "returns error 422 when an Gpdb::InstanceStillProvisioning error is raised" do
       stub(controller).index { raise Gpdb::InstanceStillProvisioning }
 

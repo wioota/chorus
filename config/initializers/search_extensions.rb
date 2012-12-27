@@ -5,6 +5,8 @@ module SearchExtensions
     class_attribute :shared_search_fields
   end
 
+  class SolrUnreachable < StandardError; end
+
   module ClassMethods
     def type_name
       name
@@ -163,6 +165,8 @@ module Sunspot
       else
         add_documents(documents)
       end
+    rescue Errno::ECONNREFUSED => e
+      raise SearchExtensions::SolrUnreachable
     end
 
     def prepare_with_rescue(model)

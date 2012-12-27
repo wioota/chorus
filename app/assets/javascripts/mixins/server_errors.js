@@ -26,6 +26,12 @@ chorus.Mixins.ServerErrors = {
             if (I18n.lookup(fullKey)) {
                 output = [t(fullKey)];
             }
+        } else if (this.serverErrors.service) {
+            var fullKey = "service_error." + this.serverErrors.service;
+
+            if (I18n.lookup(fullKey)) {
+                output = [t(fullKey)];
+            }
         }
 
         return output;

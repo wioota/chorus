@@ -30,6 +30,11 @@ describe("chorus.Mixins.ServerErrors", function() {
                 this.host.serverErrors = {"record":"NOT_FOUND"};
                 expect(_.first(this.host.serverErrorMessages())).toBe("The record you requested could not be found");
             });
+
+            it("catches errors for external services", function() {
+                this.host.serverErrors = {"service": "SOLR_UNREACHABLE"};
+                expect(_.first(this.host.serverErrorMessages())).toMatchTranslation("service_error.SOLR_UNREACHABLE");
+            });
         });
 
         context("when the model does not have serverErrors", function() {
