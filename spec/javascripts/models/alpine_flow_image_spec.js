@@ -1,13 +1,13 @@
 describe("chorus.models.AlpineFlowImage", function() {
     beforeEach(function() {
-        this.model = new chorus.models.AlpineFlowImage({workfileDiskPath: "/a/b/c.afm"})
+        this.model = new chorus.models.AlpineFlowImage({workfileDiskPath: "/a/b/c.afm"});
         this.changeSpy = jasmine.createSpy();
         this.model.bind('change', this.changeSpy);
         this.model.fetch();
     });
 
     it("fetches from the AlpineIlluminator API", function() {
-        expect(this.server.lastFetch().url).toBe("/AlpineIlluminator/main/flow.do?method=getFlowImage&flowFilePath=%2Fa%2Fb%2Fc.afm")
+        expect(this.server.lastFetch().url).toBe("/AlpineIlluminator/main/flow.do?method=getFlowImage&flowFilePath=%2Fa%2Fb%2Fc.afm");
     });
 
     context("when fetch completes successfully", function() {
@@ -23,7 +23,7 @@ describe("chorus.models.AlpineFlowImage", function() {
         });
 
         it("has an imageFilePath", function() {
-            expect(this.model.get("imageFilePath")).toBe('/alpine/p/q.png')
+            expect(this.model.get("imageFilePath")).toBe('/alpine/p/q.png');
         });
 
         it("reports it was found", function() {

@@ -6,7 +6,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
     });
 
     it("does not re-render when the model changes", function () {
-        expect(this.dialog.persistent).toBeTruthy()
+        expect(this.dialog.persistent).toBeTruthy();
     });
 
     describe("#render", function () {
@@ -32,11 +32,11 @@ describe("chorus.dialogs.RunFileInSchema", function () {
         });
 
         it("has a Run File button", function () {
-            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("workfile.run_in_schema.run_file")
+            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("workfile.run_in_schema.run_file");
         });
 
         it("has a Cancel button", function () {
-            expect(this.dialog.$("button.cancel").text().trim()).toMatchTranslation("actions.cancel")
+            expect(this.dialog.$("button.cancel").text().trim()).toMatchTranslation("actions.cancel");
         });
 
         it("disables the Run File button", function () {
@@ -49,7 +49,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
         context("when the workspace has a sandbox", function () {
             it("displays the canonical name for the sandbox schema", function () {
-                expect(this.dialog.$(".name").text().trim()).toBe(this.dialog.workspace.sandbox().schema().canonicalName())
+                expect(this.dialog.$(".name").text().trim()).toBe(this.dialog.workspace.sandbox().schema().canonicalName());
             });
 
             it("enables the 'within the workspace sandbox' radio button", function () {
@@ -63,7 +63,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 });
 
                 it("collapses 'within another schema", function () {
-                    expect(this.dialog.$(".another_schema")).toHaveClass("collapsed")
+                    expect(this.dialog.$(".another_schema")).toHaveClass("collapsed");
                 });
 
                 describe("clicking on 'within another schema'", function () {

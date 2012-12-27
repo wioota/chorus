@@ -183,7 +183,7 @@ describe("chorus.dialogs.ImportNow", function () {
                     });
 
                     it("should show the selected dataset in the link, ellipsized", function () {
-                        expect(this.dialog.datasetsChosen).toHaveBeenCalled()
+                        expect(this.dialog.datasetsChosen).toHaveBeenCalled();
                         expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDatasetWithAReally...");
                     });
 

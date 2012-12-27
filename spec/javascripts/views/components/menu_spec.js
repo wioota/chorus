@@ -1,6 +1,6 @@
 describe("chorus.views.Menu", function() {
     var menuContainer, launchElement, models, menu,
-        onSelectSpy, onChangeSpy;
+        onSelectSpy, onChangeSpy, onSelectSpies;
 
     beforeEach(function() {
         launchElement = $("<a/>");
@@ -53,6 +53,11 @@ describe("chorus.views.Menu", function() {
     });
 
     describe("the menu content", function() {
+        function expectSelectedItem(i) {
+            expect(menu.$("li.selected").length).toBe(1);
+            expect(menu.$("li").eq(i)).toHaveClass("selected");
+        }
+
         beforeEach(function() {
             $("#jasmine_content").append(menu.el);
         });
@@ -184,10 +189,5 @@ describe("chorus.views.Menu", function() {
                 expect($(menu.el)).toHaveClass("foo");
             });
         });
-
-        function expectSelectedItem(i) {
-            expect(menu.$("li.selected").length).toBe(1);
-            expect(menu.$("li").eq(i)).toHaveClass("selected");
-        }
     });
 });

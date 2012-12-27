@@ -77,13 +77,13 @@ describe("chorus.models.WorkspaceDataset", function() {
 
             it("should return true", function() {
                 expect(this.dataset.isChorusView()).toBeTruthy();
-            })
+            });
         });
 
         context("when the dataset is not a chorus view", function() {
             it("should return false", function() {
                 expect(this.dataset.isChorusView()).toBeFalsy();
-            })
+            });
         });
     });
 
@@ -115,15 +115,15 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#statistics", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "CHORUS_VIEW" })
+                this.dataset.set({ type: "CHORUS_VIEW" });
             });
 
             it("sets the workspace info into the statistics object", function() {
-                expect(this.dataset.statistics().get("workspace")).toEqual(this.dataset.get("workspace"))
+                expect(this.dataset.statistics().get("workspace")).toEqual(this.dataset.get("workspace"));
             });
 
             it("sets the dataset id onto the statistics object as 'datasetId'", function() {
-                expect(this.dataset.statistics().datasetId).toBe(this.dataset.get("id"))
+                expect(this.dataset.statistics().datasetId).toBe(this.dataset.get("id"));
             });
         });
     });
@@ -131,7 +131,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#activities", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "CHORUS_VIEW" })
+                this.dataset.set({ type: "CHORUS_VIEW" });
             });
 
             it("sets the workspace info into the ActivitySet object", function() {
@@ -141,12 +141,12 @@ describe("chorus.models.WorkspaceDataset", function() {
 
         context("for a non-chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "SANDBOX_TABLE" })
+                this.dataset.set({ type: "SANDBOX_TABLE" });
             });
 
             it("does not set the workspace info into the ActivitySet object", function() {
                 expect(this.dataset.activities().attributes.workspace).toBeUndefined();
-            })
+            });
         });
     });
 
@@ -205,7 +205,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
         it("memoizes", function() {
             expect(this.dataset.getImports()).toBe(this.dataset.getImports());
-        })
+        });
     });
 
     describe("#hasImport", function() {
@@ -267,7 +267,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#hasOwnPage", function() {
         it("returns true", function() {
             expect(this.dataset.hasOwnPage()).toBeTruthy();
-        })
+        });
     });
 
     describe("#lastImportSource", function() {
@@ -331,7 +331,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it("should set the workspace object properly", function() {
-            expect(this.dataset.get("workspace").id).toBe(this.newWorkspace.get("id"))
-        })
-    })
+            expect(this.dataset.get("workspace").id).toBe(this.newWorkspace.get("id"));
+        });
+    });
 });

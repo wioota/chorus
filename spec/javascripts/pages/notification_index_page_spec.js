@@ -44,7 +44,7 @@ describe("chorus.pages.NotificationIndexPage", function() {
 
         it("has NotificationList as the main content view", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.NotificationList);
-        })
+        });
 
         it("should mark all notifications read", function() {
             expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();

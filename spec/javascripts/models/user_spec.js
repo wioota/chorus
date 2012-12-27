@@ -208,9 +208,9 @@ describe("chorus.models.User", function() {
                     email: "bob@bob.com"
                 });
                 expect(this.model.performValidation()).toBeFalsy();
-            })
+            });
 
-        })
+        });
 
         context("when the user is already saved", function() {
             beforeEach(function() {
@@ -246,7 +246,7 @@ describe("chorus.models.User", function() {
         var user;
 
         beforeEach(function() {
-            spyOn(chorus, "cachebuster").andReturn(12345)
+            spyOn(chorus, "cachebuster").andReturn(12345);
             user = rspecFixtures.user({
                 username: 'foo',
                 id: "bar",
@@ -279,9 +279,9 @@ describe("chorus.models.User", function() {
         it("gives the right url back", function() {
             var user = rspecFixtures.user({
                 username: 'elephant',
-                id: "55",
+                id: "55"
             });
-            expect(user.createImageUrl()).toHaveUrlPath("/users/55/image")
+            expect(user.createImageUrl()).toHaveUrlPath("/users/55/image");
             expect(user.createImageUrl()).toBeA("string");
         });
     });
@@ -311,7 +311,7 @@ describe("chorus.models.User", function() {
                 user.set({fullName: "SomeGuy"});
                 expect(user.displayName()).toBe('SomeGuy');
             });
-        })
+        });
     });
 
     describe("#displayShortName", function() {

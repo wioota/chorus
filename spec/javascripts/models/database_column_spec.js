@@ -15,7 +15,7 @@ describe("chorus.models.DatabaseColumn", function() {
 
             it("sets the typeClass property on the model", function() {
                 expect(this.model.get("typeClass")).toBe("numeric");
-            })
+            });
         });
 
         context("when there is dataset", function() {
@@ -34,21 +34,21 @@ describe("chorus.models.DatabaseColumn", function() {
             describe("#toText", function() {
                 context("with lowercase names", function() {
                     beforeEach(function() {
-                        this.model.set({name: "col"})
-                    })
+                        this.model.set({name: "col"});
+                    });
                     it("formats the string to put into the sql editor", function() {
                         expect(this.model.toText()).toBe('col');
-                    })
-                })
+                    });
+                });
                 context("with uppercase names", function() {
                     beforeEach(function() {
                         this.model.set({name: "Col", schemaName: "PartyMAN", parentName: "TAAAB"});
-                    })
+                    });
                     it("puts quotes around the uppercase names", function() {
                         expect(this.model.toText()).toBe('"Col"');
-                    })
-                })
-            })
+                    });
+                });
+            });
 
             describe("#typeClass", function() {
                 var expectedTypeMap = {
@@ -62,14 +62,14 @@ describe("chorus.models.DatabaseColumn", function() {
                     "TIME" : "time",
                     "DATETIME" : "date_time",
                     "OTHER" : "other"
-                }
+                };
 
                 _.each(expectedTypeMap, function(str, type) {
                     it("works for " + type, function() {
                         expect(new chorus.models.DatabaseColumn({ typeCategory : type }).get("typeClass")).toBe(str);
                     });
-                })
-            })
+                });
+            });
 
         });
     });

@@ -268,7 +268,7 @@ describe("chorus.dialogs.PickItems", function() {
                 it("calls #selectionFinished", function() {
                     expect(this.dialog.selectionFinished).toHaveBeenCalled();
                 });
-            })
+            });
         });
     });
 
@@ -373,7 +373,7 @@ describe("chorus.dialogs.PickItems", function() {
                 });
 
                 it("keeps the search term around", function() {
-                    expect(this.dialog.$(".sub_header input").val()).toBe("a query")
+                    expect(this.dialog.$(".sub_header input").val()).toBe("a query");
                 });
 
                 it("disables the submit button", function() {

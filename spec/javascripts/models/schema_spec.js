@@ -2,7 +2,7 @@ describe("chorus.models.Schema", function() {
     describe("#showUrl", function() {
         beforeEach(function() {
             this.model = rspecFixtures.schema({id: 1234, name: "b/a/r", database: {id: "42", instance: {id: 10000}}});
-        })
+        });
         it("should encode the url", function() {
             expect(this.model.showUrl()).toContain("schemas/1234");
         });

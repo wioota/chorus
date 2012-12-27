@@ -2,7 +2,7 @@ describe("chorus.models.KaggleFilterMaps", function() {
     describe("Numeric", function() {
         beforeEach(function() {
             this.kaggleFilterMap = new chorus.models.KaggleFilterMaps.Numeric();
-        })
+        });
 
         it("should return the correct comparator symbols", function() {
             expect(this.kaggleFilterMap.comparators["greater"].usesInput).toBeTruthy();

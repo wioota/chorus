@@ -39,14 +39,14 @@ describe("chorus.models.GnipInstance", function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
             expect(this.model.errors[attr]).toBeTruthy();
-        })
+        });
     });
 
     it("requires name with valid length", function() {
-        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
-        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"})
-    })
+        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"});
+    });
 
     it("doesn't require a password if already saved", function () {
         this.attrs.password = "";

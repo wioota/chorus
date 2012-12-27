@@ -18,7 +18,7 @@ describe("chorus.views.SelectableList", function() {
     it("preselects the first item", function() {
         expect(this.view.$("> li").eq(0)).toHaveClass("selected");
         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(0));
-    })
+    });
 
     describe("clicking on the same entry again", function() {
         beforeEach(function() {
@@ -39,7 +39,7 @@ describe("chorus.views.SelectableList", function() {
         it("selects only that entry", function() {
             expect(this.view.$("> li").eq(0)).not.toHaveClass("selected");
             expect(this.view.$("> li").eq(1)).toHaveClass("selected");
-        })
+        });
 
         it("should call itemSelected with the selected model", function() {
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(1));
@@ -92,6 +92,6 @@ describe("chorus.views.SelectableList", function() {
 
         it("should select the first visible item in the list", function() {
             expect(this.view.$("li").eq(1)).toHaveClass("selected");
-        })
-    })
-})
+        });
+    });
+});

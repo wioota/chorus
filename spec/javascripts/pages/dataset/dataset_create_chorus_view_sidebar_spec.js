@@ -15,7 +15,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         });
 
         it("displays correct title", function() {
-            expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title")
+            expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title");
         });
 
         it("adds a reference to the parent to the preview SQL link's data", function() {
@@ -58,7 +58,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".no_columns_selected")).not.toHaveClass("hidden");
                 expect(this.view.$(".no_columns_selected")).toContainTranslation('dataset.chorusview.sidebar.no_columns_selected');
             });
-        })
+        });
 
         context("when a join is added to the chorus view", function() {
             beforeEach(function() {
@@ -71,7 +71,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("shows up in the sidebar", function() {
                 expect(this.view.$(".dataset").length).toBe(2);
                 expect(this.view.$(".dataset:eq(1) .name")).toContainText(this.otherDataset.get("objectName"));
-            })
+            });
 
             it("displays the correct aliasedName for source and destination columns", function() {
                 expect(this.view.$(".joins .letter:eq(0)")).toContainText(this.chorusView.joins[0].sourceColumn.dataset.aliasedName);
@@ -82,24 +82,24 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 beforeEach(function() {
                     spyOn(this.chorusView, "removeJoin");
                     this.view.$(".join .delete").click();
-                })
+                });
 
                 it("pops up an alert", function() {
                     expect(chorus.modal).toBeA(chorus.alerts.RemoveJoinConfirmAlert);
                     expect(chorus.modal.options.dataset).toBe(this.otherDataset);
                     expect(chorus.modal.options.chorusView).toBe(this.chorusView);
-                })
+                });
 
                 context("confirming the dialog", function() {
                     beforeEach(function() {
                         chorus.modal.$('button.submit').click();
-                    })
+                    });
 
                     it("removes the join", function() {
-                        expect(this.chorusView.removeJoin).toHaveBeenCalledWith(this.otherDataset)
-                    })
-                })
-            })
+                        expect(this.chorusView.removeJoin).toHaveBeenCalledWith(this.otherDataset);
+                    });
+                });
+            });
         });
 
         describe("column:selected event", function() {
@@ -109,14 +109,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("displays the name of that column", function() {
-                expect(this.view.$(".columns li").length).toBe(1)
+                expect(this.view.$(".columns li").length).toBe(1);
                 expect(this.view.$(".columns li")).toContainText(this.databaseColumn.get("name"));
             });
 
             it("includes a remove link in the li", function() {
                 expect(this.view.$(".columns li a.remove")).toExist();
                 expect(this.view.$(".columns li a.remove").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.remove");
-            })
+            });
 
             describe("selecting another column", function() {
                 beforeEach(function(){
@@ -125,7 +125,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 });
 
                 it("adds that column too", function() {
-                    expect(this.view.$(".columns li").length).toBe(2)
+                    expect(this.view.$(".columns li").length).toBe(2);
                     expect(this.view.$(".columns li")).toContainText(this.databaseColumn.get("name"));
                     expect(this.view.$(".columns li")).toContainText(this.databaseColumn2.get("name"));
                 });
@@ -136,7 +136,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                     });
 
                     it("removes the name of that column", function() {
-                        expect(this.view.$(".columns li").length).toBe(1)
+                        expect(this.view.$(".columns li").length).toBe(1);
                     });
 
                     describe("deselecting the other column", function() {
@@ -146,7 +146,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                         it("removes the name of that column, and displays the no columns div", function() {
                             expect(this.view.$(".no_columns_selected")).not.toHaveClass("hidden");
-                            expect(this.view.$(".columns li").length).toBe(0)
+                            expect(this.view.$(".columns li").length).toBe(0);
                         });
                     });
                 });
@@ -161,7 +161,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("should not show duplicate columns", function() {
-                expect(this.view.$(".columns li").length).toBe(1)
+                expect(this.view.$(".columns li").length).toBe(1);
             });
         });
 
@@ -181,11 +181,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 chorus.PageEvents.broadcast("column:selected", this.column2);
                 this.view.render();
                 this.view.$("a.remove").eq(0).click();
-            })
+            });
 
             it("should trigger the column:removed event", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:removed", this.column1);
-            })
+            });
 
             it("displays only the one remaining column", function() {
                 expect(this.view.$(".columns li").length).toBe(1);
@@ -194,18 +194,18 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             context("clicking the 'Remove' link for a joined column", function() {
                 beforeEach(function() {
                     this.view.$("a.remove").eq(0).click();
-                })
+                });
 
                 it("removes the column", function() {
                     expect(this.view.$(".columns li").length).toBe(0);
                 });
-            })
-        })
+            });
+        });
 
         describe("#whereClause", function() {
             beforeEach(function() {
-                this.view.filters = { whereClause: function() {return "FOO"} }
-            })
+                this.view.filters = { whereClause: function() {return "FOO";} };
+            });
 
             it("creates a where clause from the supplied filters", function() {
                 expect(this.view.whereClause()).toBe("FOO");
@@ -217,11 +217,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 spyOn(this.view.chorusView, "generateSelectClause").andReturn("foo");
                 spyOn(this.view.chorusView, "generateFromClause").andReturn("bar");
                 spyOn(this.view, "whereClause").andReturn("baz");
-            })
+            });
 
             it("should return the concatenated sql string", function() {
                 expect(this.view.sql()).toBe("foo\nbar\nbaz");
-            })
+            });
         });
 
         it("displays the preview SQL link", function() {
@@ -250,12 +250,12 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             beforeEach(function() {
                 chorus.PageEvents.broadcast("column:selected", this.dataset.columns().models[0]);
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
-                this.launchModalSpy = jasmine.createSpy("launchModal")
+                this.launchModalSpy = jasmine.createSpy("launchModal");
                 spyOn(chorus.dialogs, "VerifyChorusView").andCallFake(_.bind(function(options) {
                     this.chorusView = options.model;
                     return {
                         launchModal: this.launchModalSpy
-                    }
+                    };
                 }, this));
                 this.view.$("button.create").click();
             });
@@ -268,7 +268,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.chorusView.get("schemaId")).toBe(this.dataset.get("schema").id);
                 expect(this.chorusView.get("objectType")).toBe("CHORUS_VIEW");
             });
-        })
+        });
     });
 
     describe("#teardown", function() {
@@ -278,7 +278,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         });
 
         it("unselects all columns", function() {
-            expect(this.view.options.aggregateColumnSet.all(function(column) {return !column.selected})).toBeTruthy();
+            expect(this.view.options.aggregateColumnSet.all(function(column) {return !column.selected;})).toBeTruthy();
         });
     });
 });

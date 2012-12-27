@@ -92,7 +92,7 @@ describe("chorus.models.Workfile", function() {
             it("returns undefined", function() {
                 expect(this.model.sandbox()).toBeFalsy();
             });
-        })
+        });
     });
 
     describe("#lastComment", function() {
@@ -110,7 +110,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("has the right creator", function() {
-            var creator = this.comment.author()
+            var creator = this.comment.author();
             expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
             expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
             expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
@@ -155,8 +155,8 @@ describe("chorus.models.Workfile", function() {
             context("when the workfile is the most recent version", function() {
                 it("does not include a version", function() {
                     this.model.get('versionInfo').id = 1;
-                    this.model.set({ latestVersionId: 1 })
-                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5")
+                    this.model.set({ latestVersionId: 1 });
+                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5");
                 });
 
                 it("has the right download URL", function() {
@@ -171,7 +171,7 @@ describe("chorus.models.Workfile", function() {
                 });
 
                 it("includes its version number", function() {
-                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5/versions/6")
+                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5/versions/6");
                 });
 
                 it("has the right download URL", function() {
@@ -181,21 +181,21 @@ describe("chorus.models.Workfile", function() {
 
             context("when a 'version' option is passed", function() {
                 it("uses that version", function() {
-                    expect(this.model.showUrl({ version: 72 })).toBe("#/workspaces/10/workfiles/5/versions/72")
+                    expect(this.model.showUrl({ version: 72 })).toBe("#/workspaces/10/workfiles/5/versions/72");
                 });
             });
         });
 
         context("when the workfile is a draft", function() {
             beforeEach(function() {
-                this.model.set({ hasDraft: true })
+                this.model.set({ hasDraft: true });
                 spyOn(chorus, "cachebuster").andReturn(12345);
             });
 
             it("has the right download URL", function() {
                 expect(this.model.downloadUrl()).toBe("workfiles/5/download");
             });
-        })
+        });
     });
 
     describe("isImage", function() {
@@ -218,43 +218,43 @@ describe("chorus.models.Workfile", function() {
         it("returns true when the workfile is a sql file", function() {
             var workfile = rspecFixtures.workfile.sql();
             expect(workfile.isSql()).toBeTruthy();
-        })
+        });
 
         it("returns false when the workfile is NOT a sql file", function() {
             var workfile = rspecFixtures.workfile.binary();
             expect(workfile.isSql()).toBeFalsy();
-        })
+        });
     });
 
     describe("isAlpine", function() {
         it("returns true when the workfile is a afm file", function() {
             var workfile = rspecFixtures.workfile.binary({ fileType: "alpine" });
             expect(workfile.isAlpine()).toBeTruthy();
-        })
+        });
 
         it("returns false when the workfile is NOT an afm file", function() {
             var workfile = rspecFixtures.workfile.sql();
             expect(workfile.isAlpine()).toBeFalsy();
-        })
+        });
     });
 
     describe("isTableau", function() {
         it("returns true when the workfile is a tableau file", function() {
             var workfile = rspecFixtures.workfile.tableau();
             expect(workfile.isTableau()).toBeTruthy();
-        })
+        });
     });
 
     describe("isBinary", function() {
         it("returns true when the workfile is a binary file", function() {
             var workfile = rspecFixtures.workfile.binary();
             expect(workfile.isBinary()).toBeTruthy();
-        })
+        });
 
         it("returns false when the workfile is NOT a binary file", function() {
             var workfile = rspecFixtures.workfile.sql();
             expect(workfile.isBinary()).toBeFalsy();
-        })
+        });
     });
 
     describe("#extension", function() {
@@ -296,7 +296,7 @@ describe("chorus.models.Workfile", function() {
         describe("when the draft is saved", function() {
             beforeEach(function() {
                 var draft = this.workfile.createDraft();
-                spyOnEvent(this.workfile, "change")
+                spyOnEvent(this.workfile, "change");
                 draft.trigger("saved");
             });
 
@@ -306,11 +306,11 @@ describe("chorus.models.Workfile", function() {
 
             it("sets the isDraft property on the workfile", function() {
                 expect(this.workfile.isDraft).toBeTruthy();
-            })
+            });
 
             it("does not trigger change on the workfile", function() {
                 expect("change").not.toHaveBeenTriggeredOn(this.workfile);
-            })
+            });
         });
     });
 
@@ -329,33 +329,33 @@ describe("chorus.models.Workfile", function() {
 
         it("returns false when its version is not the current version", function() {
             this.model.set({latestVersionId: 6});
-            this.model.get('versionInfo').id = 3
+            this.model.get('versionInfo').id = 3;
             expect(this.model.canEdit()).toBeFalsy();
         });
 
         it("returns false when its workspace is archived", function() {
             this.model.workspace().isActive.andReturn(false);
             this.model.set({latestVersionId: 6});
-            this.model.get('versionInfo').id = 6
+            this.model.get('versionInfo').id = 6;
             expect(this.model.canEdit()).toBeFalsy();
         });
 
         it("returns false when user does not have admin/update permissions", function() {
             this.model.workspace().set({permission: ["read", "commenting"]});
             this.model.set({latestVersionId: 6});
-            this.model.get('versionInfo').id = 6
+            this.model.get('versionInfo').id = 6;
             expect(this.model.canEdit()).toBeFalsy();
         });
 
         it("returns true when its version is the current version and has update permission", function() {
             this.model.set({latestVersionId: 6, permission: ["update"]});
-            this.model.get('versionInfo').id = 6
+            this.model.get('versionInfo').id = 6;
             expect(this.model.canEdit()).toBeTruthy();
         });
 
         it("returns true when its version is the current version and has admin permission", function() {
             this.model.set({latestVersionId: 6, permission: ["admin"]});
-            this.model.get('versionInfo').id = 6
+            this.model.get('versionInfo').id = 6;
             expect(this.model.canEdit()).toBeTruthy();
         });
 
@@ -394,28 +394,28 @@ describe("chorus.models.Workfile", function() {
     describe("#fetch", function() {
         context("when the versionNum equals the latestVersionNum", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').id = 99
+                this.model.get('versionInfo').id = 99;
                 this.model.set({ latestVersionId: 99 });
                 this.model.fetch();
-            })
+            });
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/workfiles/10020")
-            })
-        })
+                expect(this.server.lastFetch().url).toBe("/workfiles/10020");
+            });
+        });
 
         context("when the versionNum is not equal to the latestVersionNum", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').id = 123;
                 this.model.set({ latestVersionId: 99 });
                 this.model.fetch();
-            })
+            });
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/workfiles/10020/versions/123")
-            })
-        })
-    })
+                expect(this.server.lastFetch().url).toBe("/workfiles/10020/versions/123");
+            });
+        });
+    });
 
     describe("#save", function() {
         beforeEach(function() {
@@ -424,100 +424,100 @@ describe("chorus.models.Workfile", function() {
 
         context("with an old version", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').id = 88
+                this.model.get('versionInfo').id = 88;
                 this.model.set({ latestVersionId: 99 });
                 this.model.save();
-            })
+            });
 
             it("does not save", function() {
                 expect(this.server.lastUpdate()).toBeUndefined();
-            })
-        })
+            });
+        });
 
         context("with the latest version", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').id = 99
-//                this.model.get('versionInfo').id = 213
-                this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP"
+                this.model.get('versionInfo').id = 99;
+//                this.model.get('versionInfo').id = 213;
+                this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP";
                 this.model.set({ latestVersionId: 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
-            })
+            });
 
             context("replacing the current version", function() {
                 beforeEach(function() {
                     this.model.save();
-                })
+                });
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99")
+                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99");
                 });
 
                 it("saves with the versionInfo lastUpdatedStamp", function() {
                     expect(this.server.lastUpdate().requestBody).toContain("THEVERSIONSTAMP");
                     expect(this.server.lastUpdate().requestBody).not.toContain("THEWORKFILESTAMP");
                 });
-            })
+            });
 
             context("saving as a new version", function() {
                 beforeEach(function() {
                     this.model.saveAsNewVersion();
-                })
+                });
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastCreate().url).toBe("/workfiles/10020/versions")
-                })
-            })
-        })
-    })
+                    expect(this.server.lastCreate().url).toBe("/workfiles/10020/versions");
+                });
+            });
+        });
+    });
 
     describe("#content", function() {
         context("with an argument", function() {
             beforeEach(function() {
                 spyOnEvent(this.model, "change");
-                this.model.content("i am not old content")
+                this.model.content("i am not old content");
             });
 
             it("sets the content", function() {
                 expect(this.model.get("versionInfo").content).toBe('i am not old content');
-            })
+            });
 
             it("triggers change", function() {
                 expect("change").toHaveBeenTriggeredOn(this.model);
             });
             it("sets the content in the model", function() {
                 expect(this.model.get("content")).toBe('i am not old content');
-            })
+            });
         });
 
         context("with silent: true", function() {
             beforeEach(function() {
                 spyOnEvent(this.model, "change");
-                this.model.content("i am not old content", {silent: true})
+                this.model.content("i am not old content", {silent: true});
             });
 
             it("sets the content", function() {
                 expect(this.model.get("versionInfo").content).toBe('i am not old content');
-            })
+            });
 
             it("does not trigger change", function() {
                 expect("change").not.toHaveBeenTriggeredOn(this.model);
             });
             it("sets the content in the model", function() {
                 expect(this.model.get("content")).toBe('i am not old content');
-            })
+            });
         });
 
         context("without an argument", function() {
             it("returns the content", function() {
                 expect(this.model.content()).toBe(this.model.get('versionInfo').content);
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("#hasOwnPage", function() {
         it("returns true", function() {
             expect(this.model.hasOwnPage()).toBeTruthy();
-        })
-    })
+        });
+    });
 
     describe("#iconUrl", function() {
         context("when the workfile is an image", function() {
@@ -537,10 +537,10 @@ describe("chorus.models.Workfile", function() {
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'large'));
                 expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'medium'));
 
-                var workfile = rspecFixtures.workfile.text({ fileName: "foo.java" });
+                var workfile = rspecFixtures.workfile.text({ fileName: "foo.java"; });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('java', 'large'));
                 expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'medium'));
-            })
+            });
         });
     });
 });

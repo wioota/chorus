@@ -22,13 +22,13 @@ jasmine.sharedExamples.DatabaseSidebarList = function() {
     it("should make the list elements draggable", function() {
         spyOn($.fn, "draggable");
         this.view.render();
-        expect($.fn.draggable).toHaveBeenCalledOnSelector("ul.list li")
+        expect($.fn.draggable).toHaveBeenCalledOnSelector("ul.list li");
     });
 
     it("the draggable helper has the name of the table", function() {
-        var $li = this.view.$("ul.list li:eq(0)")
+        var $li = this.view.$("ul.list li:eq(0)");
         var helper = this.view.dragHelper({currentTarget: $li});
         expect(helper).toHaveClass("drag_helper");
         expect(helper).toContainText($li.data("name"));
     });
-}
+};

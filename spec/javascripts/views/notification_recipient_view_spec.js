@@ -61,6 +61,18 @@ describe("chorus.views.NotificationRecipient", function() {
             });
 
             context("when a user is selected", function() {
+                function itHasOnlyTheFirstUser() {
+                    it("has an entry with that user in the picked_users list", function() {
+                        expect(this.view.$(".picked_users li").length).toBe(1);
+                        expect(this.view.$(".picked_users li:eq(0) .name")).toContainText(this.user1.displayName());
+                    });
+
+                    it("returns an array containing only that user's ID", function() {
+                        expect(this.view.getPickedUsers().length).toBe(1);
+                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
+                    });
+                }
+
                 beforeEach(function() {
                     this.oldSelectableUserCount = this.view.$("select option").length - 1;
                     spyOn(chorus, "styleSelect");
@@ -140,7 +152,7 @@ describe("chorus.views.NotificationRecipient", function() {
                             });
 
                             it("shows the select control", function() {
-                                expect(this.view.$(".ui-selectmenu.users")).not.toHaveClass("hidden")
+                                expect(this.view.$(".ui-selectmenu.users")).not.toHaveClass("hidden");
                             });
                         });
                     });
@@ -159,18 +171,6 @@ describe("chorus.views.NotificationRecipient", function() {
                         expect(this.view.getPickedUsers().length).toBe(0);
                     });
                 });
-
-                function itHasOnlyTheFirstUser() {
-                    it("has an entry with that user in the picked_users list", function() {
-                        expect(this.view.$(".picked_users li").length).toBe(1);
-                        expect(this.view.$(".picked_users li:eq(0) .name")).toContainText(this.user1.displayName());
-                    });
-
-                    it("returns an array containing only that user's ID", function() {
-                        expect(this.view.getPickedUsers().length).toBe(1);
-                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
-                    });
-                }
             });
         });
     });

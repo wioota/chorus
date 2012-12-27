@@ -16,7 +16,7 @@ describe("chorus.models.InsightCount", function() {
         });
 
         it("includes urlParams, if provided", function() {
-            expect(this.insightCount.url()).toContainQueryParams({ foo: "bar"})
-        })
+            expect(this.insightCount.url()).toContainQueryParams({ foo: "bar"});
+        });
     });
 });

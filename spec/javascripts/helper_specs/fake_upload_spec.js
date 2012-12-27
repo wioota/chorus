@@ -95,8 +95,8 @@ describe("FakeFileUpload", function() {
                     });
 
                     it("passes the given data in a format mimicking the upload plugin", function() {
-                        var data = doneSpy.mostRecentCall.args[1]
-                        expect(data.result).toBe('{"response":{"foo":"bar"}}')
+                        var data = doneSpy.mostRecentCall.args[1];
+                        expect(data.result).toBe('{"response":{"foo":"bar"}}');
                     });
                 });
 

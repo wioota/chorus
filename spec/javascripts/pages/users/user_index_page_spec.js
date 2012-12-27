@@ -10,31 +10,31 @@ describe("chorus.pages.UserIndexPage", function() {
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.UserIndexPage();
-        })
+        });
 
         it("defaults to first name sorting ascending", function() {
-            expect(this.page.collection.order).toBe("firstName")
-        })
+            expect(this.page.collection.order).toBe("firstName");
+        });
 
         it("has a helpId", function() {
-            expect(this.page.helpId).toBe("users")
-        })
-    })
+            expect(this.page.helpId).toBe("users");
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.pages.UserIndexPage();
             this.view.render();
-        })
+        });
 
         it("has the right header title", function() {
             expect(this.view.$(".content_header h1").text()).toBe("Users");
-        })
+        });
 
         it("defaults to first name sorting", function() {
             expect(this.view.$("li[data-type=lastName] .check")).toHaveClass("hidden");
             expect(this.view.$("li[data-type=firstName] .check")).not.toHaveClass("hidden");
-        })
+        });
 
         describe("when the collection is loading", function() {
             it("should have a loading element", function() {
@@ -43,7 +43,7 @@ describe("chorus.pages.UserIndexPage", function() {
 
             it("has a header", function() {
                 expect(this.view.$("h1")).toExist();
-            })
+            });
         });
 
         it("creates a UserList view", function() {
@@ -55,11 +55,11 @@ describe("chorus.pages.UserIndexPage", function() {
                 setLoggedInUser({ admin: true});
                 this.view = new chorus.pages.UserIndexPage();
                 this.view.render();
-            })
+            });
 
             it("displays an 'add user' button", function() {
                 expect(this.view.$("a.button[href=#/users/new]")).toExist();
-            })
+            });
         });
 
         describe("when the authenticated user is not an admin", function() {
@@ -67,19 +67,19 @@ describe("chorus.pages.UserIndexPage", function() {
                 chorus.user.set({ admin: false });
                 this.view = new chorus.pages.UserIndexPage();
                 this.view.render();
-            })
+            });
 
             it("does not display an 'add user' button", function() {
                 expect(this.view.$("a[href=#/users/new] button")).not.toExist();
-            })
+            });
         });
-    })
+    });
 
     describe("menus", function() {
         beforeEach(function() {
             this.page = new chorus.pages.UserIndexPage();
             this.page.render();
-        })
+        });
 
         describe("sorting", function() {
             beforeEach(function() {
@@ -94,13 +94,13 @@ describe("chorus.pages.UserIndexPage", function() {
 
             it("can sort the list by first name ascending", function() {
                 this.page.$("li[data-type=firstName] a").click();
-                expect(this.page.collection.order).toBe("firstName")
+                expect(this.page.collection.order).toBe("firstName");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can sort the list by last name ascending", function() {
                 this.page.$("li[data-type=lastName] a").click();
-                expect(this.page.collection.order).toBe("lastName")
+                expect(this.page.collection.order).toBe("lastName");
             });
         });
     });

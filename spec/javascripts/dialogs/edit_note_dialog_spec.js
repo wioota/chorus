@@ -64,7 +64,7 @@ describe("chorus.dialogs.EditNote", function() {
             this.dialog.$("textarea").val("<br>");
             this.dialog.$("button.submit").click();
 
-            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.model.errors.body).toEqual("Note is required");
             expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
 
@@ -72,7 +72,7 @@ describe("chorus.dialogs.EditNote", function() {
             this.dialog.$("textarea").val("&nbsp;&nbsp;");
             this.dialog.$("button.submit").click();
 
-            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.model.errors.body).toEqual("Note is required");
             expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
 
@@ -81,7 +81,7 @@ describe("chorus.dialogs.EditNote", function() {
             this.dialog.$("textarea").val("                     ");
             this.dialog.$("button.submit").click();
 
-            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.model.errors.body).toEqual("Note is required");
             expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
     });
@@ -96,7 +96,7 @@ describe("chorus.dialogs.EditNote", function() {
         it("starts a spinner", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
             expect(this.dialog.$("button.submit").text()).toContainTranslation("actions.saving");
-        })
+        });
 
         it("updates the note correctly", function() {
             var note = this.note.toNote();
@@ -113,7 +113,7 @@ describe("chorus.dialogs.EditNote", function() {
             });
 
             it("removes the spinner from the button", function() {
-                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
             });
 
             it("closes the dialog", function() {
@@ -122,7 +122,7 @@ describe("chorus.dialogs.EditNote", function() {
 
             it('triggers the note:saved event', function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('note:saved', this.dialog.model);
-            })
+            });
         });
 
         context("when the save fails", function() {
@@ -134,10 +134,10 @@ describe("chorus.dialogs.EditNote", function() {
 
             it("does not close the dialog box", function() {
                 expect(this.dialog.closeModal).not.toHaveBeenCalled();
-            })
+            });
 
             it("removes the spinner from the button", function() {
-                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
             });
         });
     });

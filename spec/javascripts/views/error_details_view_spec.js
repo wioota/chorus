@@ -9,7 +9,7 @@ describe("chorus.views.ErrorDetails", function() {
             this.view.render();
             expect(this.view.$(".details .alert").html()).toMatchTranslation(
                 "activity.view_error_details");
-            expect(this.view.$(".details .alert").attr("data-alert")).toContainText("ImportFailed")
+            expect(this.view.$(".details .alert").attr("data-alert")).toContainText("ImportFailed");
 
         });
     });

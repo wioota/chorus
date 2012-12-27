@@ -8,7 +8,7 @@ describe("chorus.dialogs.RunAndDownload", function() {
     });
 
     it("does not re-render when the model changes", function() {
-        expect(this.dialog.persistent).toBeTruthy()
+        expect(this.dialog.persistent).toBeTruthy();
     });
 
     describe("#render", function() {
@@ -29,7 +29,7 @@ describe("chorus.dialogs.RunAndDownload", function() {
         });
 
         it("has a Run button", function() {
-            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("workfile.run_and_download_dialog.run")
+            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("workfile.run_and_download_dialog.run");
         });
 
         context("for all rows", function() {

@@ -66,7 +66,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                 });
 
                 it("fetches the list of hdfs files", function() {
-                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/?id=1", {paramsToIgnore: ["page", "per_page"]})
+                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/?id=1", {paramsToIgnore: ["page", "per_page"]});
                 });
 
                 context("when the hdfs entries fetch completes", function() {
@@ -101,8 +101,8 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
                     });
                     it("displays error when the directory doesn't have any text files", function() {
-                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files")
-                    })
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files");
+                    });
 
                     it("does not open the Create External Table dialog", function() {
                         expect(this.dialog.launchSubModal).not.toHaveBeenCalledWith(this.dialog.externalTableDialog);
@@ -115,7 +115,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
     context("when csv_import:started event is triggered", function() {
         beforeEach(function() {
-            spyOn(this.dialog, "closeModal")
+            spyOn(this.dialog, "closeModal");
             chorus.PageEvents.broadcast("csv_import:started");
         });
         it("closes the modal", function() {

@@ -11,13 +11,13 @@ describe("chorus.pages.UserEditPage", function() {
         });
 
         it("has a helpId", function() {
-            expect(this.view.helpId).toBe("user_edit")
-        })
+            expect(this.view.helpId).toBe("user_edit");
+        });
     });
 
     describe("#render", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user()
+            this.user = rspecFixtures.user();
             setLoggedInUser(this.user.attributes);
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));

@@ -39,6 +39,6 @@ describe("chorus.models.FrequencyTask", function() {
         it("renames the 'bins' field as required by the api", function() {
             var request = this.server.lastCreate();
             expect(request.params()['chart_task[bins]']).toBe("23");
-        })
+        });
     });
-})
+});

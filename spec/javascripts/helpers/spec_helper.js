@@ -3,7 +3,7 @@
         var allFixturesLoaded = false;
 
         // Code that only needs to be run once before all the tests run
-        _.debounce = function(func, timeout) { return func; }
+        _.debounce = function(func, timeout) { return func; };
 
         $(window).focus(function(){
             jasmine.getEnv().updateInterval = jasmine.DEFAULT_UPDATE_INTERVAL;
@@ -15,11 +15,6 @@
         });
 
         $('.jasmine_reporter .title').after('<span class="product_version">Greenplum Chorus 2.2</span>');
-
-        runs(loadAllFixtures);
-        waitsFor(function() {
-            return allFixturesLoaded;
-        }, "all templates and fixtures to be loaded", 5000);
 
         function loadAllFixtures() {
             var fixtureContainer = $("<div id='fixtures'/>");
@@ -34,11 +29,16 @@
                     allFixturesLoaded = true;
                 },
                 error: function(data) {
-                    alert("Sorry but I couldn't load the fixtures! Things will go REALLY poorly from here...");
+                    window.alert("Sorry but I couldn't load the fixtures! Things will go REALLY poorly from here...");
                     allFixturesLoaded = true;
                 }
             });
         }
+
+        runs(loadAllFixtures);
+        waitsFor(function() {
+            return allFixturesLoaded;
+        }, "all templates and fixtures to be loaded", 5000);
     });
 
     beforeEach(function() {
@@ -48,7 +48,7 @@
             if(a instanceof RegExp && b instanceof RegExp) {
                 return a.toString() === b.toString();
             }
-        }
+        };
         jasmine.getEnv().addEqualityTester(regexEqualityTester);
 
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
@@ -70,7 +70,7 @@
                 this.after(function() {
                     $j.css("right", originalRight);
                 });
-            }
+            };
 
             clearRenderedDOM();
 
@@ -117,13 +117,13 @@
                 toHaveBeenCalledOnSelector: function(selector) {
                     return _.any(this.actual.calls, function(call) {
                         return call.object.selector === selector;
-                    })
+                    });
                 },
 
                 toHaveBeenCalledOn: function(object) {
                     return _.any(this.actual.calls, function(call) {
-                        return call.object === object
-                    })
+                        return call.object === object;
+                    });
                 },
 
                 toHaveBeenCalledWithSorta: function(object, exceptions) { // only works with 1-argument calls
@@ -159,7 +159,7 @@
                             'Expected "' + actualText + '" to contain "' + text + '"',
                             'Expected "' + actualText + '" not to contain "' + text + '"'
                         ];
-                    }
+                    };
                     return this.env.contains_(actualText, text);
                 },
 
@@ -168,9 +168,9 @@
                         return [
                             'Expected "' + this.actual.selector + '" to have a spinner',
                             'Expected "' + this.actual.selector + '" not to have a spinner'
-                        ]
-                    }
-                    return this.actual.find("div[aria-role=progressbar]").length
+                        ];
+                    };
+                    return this.actual.find("div[aria-role=progressbar]").length;
                 },
 
                 toHaveModal: function(modalClass) {
@@ -179,11 +179,11 @@
                         return [
                             "Expected modal '" + modalClass.prototype.constructorName + "' to have been launched",
                             "Expected modal '" + modalClass.prototype.constructorName + "' not to have been launched"
-                        ]
-                    }
+                        ];
+                    };
                     return _.any(this.actual.modals(), function(modal) {
                         return modal instanceof modalClass;
-                    })
+                    });
                 },
 
                 toHaveBeenTriggeredOn: function(target, args) {
@@ -202,14 +202,14 @@
                                     "Expected event " + eventName + " not to have been triggered on " + target + " with " + args + " but it was"
                                 ];
                             }
-                        }
+                        };
                     } else {
                         this.message = function() {
                             return [
                                 "Expected event " + eventName + " to have been triggered on " + target,
                                 "Expected event " + eventName + " not to have been triggered on " + target
                             ];
-                        }
+                        };
                     }
 
                     if (_.isString(target) || target instanceof jQuery) {
@@ -230,7 +230,7 @@
                             "Expected url " + this.actual + " to be equivalent to url " + target,
                             "Expected url " + this.actual + " not to be equivalent to url " + target
                         ];
-                    }
+                    };
 
                     var paramsToIgnore = (options && options.paramsToIgnore) || [];
                     var targetURI = new URI(decodeURI(target)).removeSearch(paramsToIgnore);
@@ -253,18 +253,18 @@
                 },
 
                 toHaveHref: function(expectedHref) {
-                    var actualHref = this.actual.attr("href")
+                    var actualHref = this.actual.attr("href");
                     this.message = function() {
                         return [
                             "Expected href " + actualHref + " to be an `a` and equivalent to href " + expectedHref,
                             "Expected href " + actualHref + " to be an `a` and not to be equivalent to href " + expectedHref
                         ];
-                    }
+                    };
                     return this.actual.is("a") && decodeURI(actualHref) === decodeURI(expectedHref);
                 },
 
                 toHaveVisibleQtip: function() {
-                    return this.actual.find('.qtip').attr('aria-hidden') == 'false'
+                    return this.actual.find('.qtip').attr('aria-hidden') === 'false';
                 },
 
                 toBeBetween: function(lowerBound, upperBound) {
@@ -289,7 +289,7 @@
 
                 toHaveAttrs: function(args) {
                     return _.all(args, function(val, key) {
-                        return this.actual.attributes[key] == val;
+                        return this.actual.attributes[key] === val;
                     }, this);
                 }
             });
@@ -309,7 +309,7 @@
             };
 
             window.Spinner = jasmine.createSpy('MockSpinner').andCallFake(function() {
-                return fakeSpinner
+                return fakeSpinner;
             });
 
             $.fx.off = true;
@@ -336,12 +336,12 @@
     };
 
     afterEach(function() {
-        chorus.router.trigger("leaving")
+        chorus.router.trigger("leaving");
 
         delete chorus.models.Config._instance;
         delete chorus.models.GpdbInstance._aurora;
 
-        $.cookie("userId", null)
+        $.cookie("userId", null);
         if (this instanceof jasmine.Spec) {
             _.each(this, function(_value, key) {
                 if (this.hasOwnProperty(key) && !(key in specWhitelist)) {
@@ -359,7 +359,7 @@
     window.xspecify = window.xit;
 
     window.xitBehavesLike = {};
-    _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop });
+    _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop; });
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
@@ -381,13 +381,13 @@
         } else {
             return jquerySpyOnEvent.apply(this, arguments);
         }
-    }
+    };
 
     window.resetBackboneEventSpies = function(object) {
         if (object._chorusEventSpies) {
             _.each(object._chorusEventSpies, function(spy) {
                 spy.reset();
-            })
+            });
         }
     };
 
@@ -412,19 +412,19 @@
             className: options.className,
 
             initialize: function() {
-                _.bindAll(this, "render")
+                _.bindAll(this, "render");
             },
 
             render: function() {
-                this.$el.html(html)
+                this.$el.html(html);
                 return this;
             },
 
             teardown: $.noop
         });
 
-        return new stubClass
-    }
+        return new stubClass();
+    };
 
     window.stubModals = function() {
         spyOn($, "facebox");
@@ -452,19 +452,19 @@
         spyOn(_, 'delay').andCallFake(function(func) {
             func();
         });
-    }
+    };
 
     window.stubSetTimeout = function() {
         spyOn(window, 'setTimeout').andCallFake(function(func) {
             func();
         });
-    }
+    };
 
     window.stubDefer = function() {
         spyOn(_, 'defer').andCallFake(function(func) {
             func();
         });
-    }
+    };
 
     window.stubHotkeys = function() {
         spyOn(chorus.views.Bare.prototype, "bindHotkeys");
@@ -503,7 +503,7 @@
 
         qtipElements[selector].$ = qtipElements[selector].find;
         return qtipElements[selector];
-    }
+    };
 
     window.stubSelectMenu = function() {
         var stubContainer = $('<div class="selectMenuStub"></div>');
@@ -520,11 +520,11 @@
         });
 
         return stubContainer;
-    }
+    };
 
     window.stubClEditor = function() {
-        spyOn($.fn, "cleditor").andReturn([0])
-    }
+        spyOn($.fn, "cleditor").andReturn([0]);
+    };
 
     if ($.browser.msie && !window['con' + 'sole']) {
         (function(F, i, r, e, b, u, g, L, I, T, E) {
@@ -535,7 +535,7 @@
             E[r]('src', I + g + T);
             E[r](b, u);
             (F[e]('head')[0] || F[e]('body')[0]).appendChild(E);
-            E = new Image;
+            E = new Image();
             E[r]('src', I + L);
         })(document, 'createElement', 'setAttribute', 'getElementsByTagName', 'FirebugLite', '4', 'firebug-lite.js', 'releases/lite/latest/skin/xp/sprite.png', '/firebug-lite/build/', '#startOpened');
     }
@@ -581,7 +581,7 @@
         return translatedText;
     }
 
-    if (window.location.search.indexOf("profile=") != -1) {
-        jasmine.getEnv().addReporter(new jasmine.ProfileReporter())
+    if (window.location.search.indexOf("profile=") !== -1) {
+        jasmine.getEnv().addReporter(new jasmine.ProfileReporter());
     }
 })();

@@ -71,7 +71,7 @@ describe("chorus.views.TabControl", function() {
         beforeEach(function() {
             chorus.page = new chorus.pages.Base();
             spyOnEvent(chorus.page, 'resized');
-            this.tab1Spy.reset()
+            this.tab1Spy.reset();
             this.view.$('li').eq(1).click();
         });
 

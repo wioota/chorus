@@ -32,11 +32,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("does not have the 'chosen' class on the form", function() {
-            expect(this.dialog.$("form")).not.toHaveClass("chosen")
+            expect(this.dialog.$("form")).not.toHaveClass("chosen");
         });
 
         it("shows no file selected text", function() {
-            expect(this.dialog.$(".file .defaultText")).not.toHaveClass("hidden")
+            expect(this.dialog.$(".file .defaultText")).not.toHaveClass("hidden");
         });
     });
 
@@ -112,11 +112,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("adds the 'chosen' class to the form", function() {
-            expect(this.dialog.$("form")).toHaveClass("chosen")
-        })
+            expect(this.dialog.$("form")).toHaveClass("chosen");
+        });
 
         it("hides the 'no file selected' text", function() {
-            expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden")
+            expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden");
         });
 
         describe("validating file size", function(){
@@ -169,7 +169,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             context("when nginx returns a 413 (body too large) error", function() {
                 it("shows the file too large error message", function() {
                     this.fakeUpload.add([{ name: "invalid.bar", size: 10 * 1024 * 1024 - 1 }]);
-                    html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
+                    var html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
                     this.fakeUpload.HTTPResponseFail(html_response, 413, "Request Entity Too Large", {});
                     expect(this.dialog.$(".errors")).toContainText("file exceeds");
                     expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
@@ -248,7 +248,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("displays the correct error", function() {
-                    expect(this.dialog.$(".errors ul").text()).toBe("A can't be blank")
+                    expect(this.dialog.$(".errors ul").text()).toBe("A can't be blank");
                 });
 
                 it("sets the button text back to 'Upload File'", function() {
@@ -281,4 +281,4 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             });
         });
     });
-})
+});

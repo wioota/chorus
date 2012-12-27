@@ -12,7 +12,7 @@ describe("chorus.models.Comment", function() {
 
     describe("#urlTemplate", function() {
         it("is just comments", function() {
-           expect(this.model.url()).toContain("/comments/41")
+           expect(this.model.url()).toContain("/comments/41");
         });
     });
 

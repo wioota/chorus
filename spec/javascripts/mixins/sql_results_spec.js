@@ -107,7 +107,7 @@ describe("chorus.Mixins.SQLResults", function() {
                 expect(val[1].values.length).toBe(2);
                 expect(val[1].values[0]).toBe(4);
                 expect(val[1].values[1]).toBe(3);
-            })
+            });
         });
 
         context("when the host does not provide custom functions", function() {
@@ -152,8 +152,8 @@ describe("chorus.Mixins.SQLResults", function() {
                 expect(val[1].values.length).toBe(2);
                 expect(val[1].values[0]).toBe(3);
                 expect(val[1].values[1]).toBe(4);
-            })
-        })
-    })
+            });
+        });
+    });
 });
 

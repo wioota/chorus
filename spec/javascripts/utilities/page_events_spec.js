@@ -134,9 +134,9 @@ describe("chorus.PageEvents", function() {
 
         it("returns false when the callback doesn't match", function() {
             this.subscriber.otherMethod = function() {
-            }
+            };
             chorus.PageEvents.subscribe("foo", this.subscriber.method, this.subscriber);
             expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.otherMethod, this.subscriber)).toBeFalsy();
         });
-    })
+    });
 });

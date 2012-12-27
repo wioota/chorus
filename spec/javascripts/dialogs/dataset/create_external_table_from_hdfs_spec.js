@@ -58,7 +58,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
     context("when the workspace fetch completes and there are workspaces", function() {
         beforeEach(function() {
-            spyOn(chorus, "styleSelect")
+            spyOn(chorus, "styleSelect");
             this.workspace1 = rspecFixtures.workspace();
             this.workspace2 = rspecFixtures.workspace();
             this.workspace2.unset("sandboxInfo");
@@ -185,7 +185,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 });
 
                 it("has no validation errors", function() {
-                    expect(this.dialog.$(".has_error").length).toBe(0)
+                    expect(this.dialog.$(".has_error").length).toBe(0);
                 });
 
                 it("retains column names", function() {

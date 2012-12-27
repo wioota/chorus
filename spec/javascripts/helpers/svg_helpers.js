@@ -1,4 +1,14 @@
 (function() {
+    function coordsX(el) {
+        var box = $(el)[0].getBBox();
+        return [box.x, box.x + box.width];
+    }
+
+    function coordsY(el) {
+        var box = $(el)[0].getBBox();
+        return [box.y, box.y + box.height];
+    }
+
     chorus.svgHelpers = {
         topY: function(el) {
             return _.min(coordsY(el));
@@ -17,11 +27,11 @@
         },
 
         width: function(el) {
-            return $(el)[0].getBBox().width
+            return $(el)[0].getBBox().width;
         },
 
         height: function(el) {
-            return $(el)[0].getBBox().height
+            return $(el)[0].getBBox().height;
         },
 
         centerY: function(el) {
@@ -67,7 +77,7 @@
             if (!margin) margin = 0;
             var lowerBound = value - margin;
             var upperBound = value + margin;
-            return (this.actual >= lowerBound) && (this.actual <= upperBound)
+            return (this.actual >= lowerBound) && (this.actual <= upperBound);
         },
 
         toBeLessThanOrEqualTo: function(upperBound) {
@@ -94,14 +104,4 @@
             });
         }
     };
-
-    function coordsX(el) {
-        var box = $(el)[0].getBBox();
-        return [box.x, box.x + box.width];
-    }
-
-    function coordsY(el) {
-        var box = $(el)[0].getBBox();
-        return [box.y, box.y + box.height];
-    }
 })();

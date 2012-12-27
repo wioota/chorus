@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     window.newFixtures = {
         definitions: window.fixtureDefinitions,
         parsedJson: {},
@@ -31,7 +31,7 @@
         function initializeChildDefinitions(definition) {
             _.each(definition.children, function(childDef) {
                 _.each(definition, function(value, property) {
-                    if (property === "children") { return };
+                    if (property === "children") { return; }
                     childDef[property] || (childDef[property] = definition[property]);
                 });
             });

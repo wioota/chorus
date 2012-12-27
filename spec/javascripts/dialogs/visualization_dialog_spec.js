@@ -24,7 +24,7 @@ describe("chorus.dialogs.Visualization", function() {
         this.filters = new chorus.collections.DatasetFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
-        task = rspecFixtures.boxplotTask();
+        var task = rspecFixtures.boxplotTask();
         task.loaded = false;
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
 
@@ -35,8 +35,8 @@ describe("chorus.dialogs.Visualization", function() {
     describe("#initialization", function() {
         describe("when the save completes", function() {
             beforeEach(function() {
-                spyOn(chorus.views.visualizations, "Boxplot").andReturn(stubView())
-                spyOn(this.dialog, "drawChart").andCallThrough()
+                spyOn(chorus.views.visualizations, "Boxplot").andReturn(stubView());
+                spyOn(this.dialog, "drawChart").andCallThrough();
             });
 
             describe("when the task data is valid", function() {
@@ -137,7 +137,7 @@ describe("chorus.dialogs.Visualization", function() {
                     this.dialog.render();
                     this.dialog.launchModal();
                     this.dialog.drawChart();
-                })
+                });
 
                 it("does not enable the save chart button", function() {
                     expect(this.dialog.$("button.save")).toBeDisabled();
@@ -169,12 +169,12 @@ describe("chorus.dialogs.Visualization", function() {
                     filters: this.filters,
                     columnSet: this.columns
                 });
-            })
+            });
 
             it("should be valid", function() {
-                expect(this.dialog.isValidData()).toBeTruthy()
-            })
-        })
+                expect(this.dialog.isValidData()).toBeTruthy();
+            });
+        });
 
         describe("it has no rows", function() {
             beforeEach(function() {
@@ -186,13 +186,13 @@ describe("chorus.dialogs.Visualization", function() {
                     columnSet: this.columns,
                     task: rspecFixtures.boxplotTask({ rows: [] })
                 });
-            })
+            });
 
             it("should not be valid", function() {
-                expect(this.dialog.isValidData()).toBeFalsy()
-            })
-        })
-    })
+                expect(this.dialog.isValidData()).toBeFalsy();
+            });
+        });
+    });
 
     describe("#isSufficientDataForTimeseries", function () {
         beforeEach(function () {
@@ -206,7 +206,7 @@ describe("chorus.dialogs.Visualization", function() {
                 filters:this.filters,
                 columnSet:this.columns
             });
-        })
+        });
 
         describe("has more than 1 row", function () {
             it("should be valid", function () {
@@ -269,18 +269,18 @@ describe("chorus.dialogs.Visualization", function() {
             context("adding filters", function() {
                 context("empty filters", function() {
                     beforeEach(function() {
-                        this.dialog.filterWizard.addFilter()
+                        this.dialog.filterWizard.addFilter();
                         this.dialog.filterWizard.render();
                     });
 
-                    itDoesNotShowRefreshOverlay()
+                    itDoesNotShowRefreshOverlay();
                 });
 
                 context("real filters", function() {
                     beforeEach(function() {
                         // Really add filters to dialog - not a stub
-                        this.dialog.filterWizard.addFilter()
-                        this.dialog.filterWizard.addFilter()
+                        this.dialog.filterWizard.addFilter();
+                        this.dialog.filterWizard.addFilter();
                         this.dialog.filterWizard.render();
                         this.dialog.filterWizard.$(".default input").val("AA").keyup();
                     });
@@ -305,7 +305,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 context("in a meaningful way", function() {
-                    var originalFilterVal
+                    var originalFilterVal;
                     beforeEach(function() {
                         originalFilterVal = this.dialog.filterWizard.$(".filter input:eq(0)").val();
                         this.dialog.filterWizard.$(".filter input:eq(0)").val("AA").trigger("keyup");
@@ -370,7 +370,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         context("when the rows are empty", function() {
             beforeEach(function() {
-                spyOn(this.dialog, "isValidData").andReturn(false)
+                spyOn(this.dialog, "isValidData").andReturn(false);
                 this.dialog.launchModal();
                 this.dialog.drawChart();
             });
@@ -384,7 +384,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("displays the correct message", function () {
-                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.empty_data")
+                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.empty_data");
             });
 
         });
@@ -406,7 +406,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("displays the correct message", function () {
-                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.insufficient_data")
+                expect(this.dialog.$(".empty_data").text()).toContainTranslation("visualization.insufficient_data");
             });
         });
 
@@ -421,7 +421,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("should have a 'Save' button", function() {
-                expect(this.dialog.$("button.save")).toContainTranslation("actions.save")
+                expect(this.dialog.$("button.save")).toContainTranslation("actions.save");
             });
 
             context("clicking the save button", function() {
@@ -430,7 +430,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should have a 'Save Chart Image as Workfile' link", function() {
-                    var menu = this.qtip.find("a[data-menu-name='save_as_workfile']")
+                    var menu = this.qtip.find("a[data-menu-name='save_as_workfile']");
                     expect(menu).toContainTranslation("visualization.save_as_workfile");
                 });
 
@@ -440,13 +440,13 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should have a 'Save Chart Image to Desktop' link", function() {
-                    var menu = this.qtip.find("a[data-menu-name='save_to_desktop']")
+                    var menu = this.qtip.find("a[data-menu-name='save_to_desktop']");
                     expect(menu).toContainTranslation("visualization.save_to_desktop");
                 });
             });
 
             it("should have a 'Show Data Table' link", function() {
-                expect(this.dialog.$(".modal_controls a.show")).toContainTranslation("visualization.show_table")
+                expect(this.dialog.$(".modal_controls a.show")).toContainTranslation("visualization.show_table");
             });
 
             it("should have a 'Hide Data Table' link", function() {
@@ -490,7 +490,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                 it("actually has columns", function() {
                     expect(this.dialog.$(".data_table .column").length).toBeGreaterThan(1);
-                })
+                });
             });
 
             describe("the close button", function() {
@@ -579,9 +579,9 @@ describe("chorus.dialogs.Visualization", function() {
                             });
 
                             it("strips the offending characters", function() {
-                                expect(this.dialog.workfile.get("fileName")).toBe("thisthatthe_other-boxplot.png")
+                                expect(this.dialog.workfile.get("fileName")).toBe("thisthatthe_other-boxplot.png");
                             });
-                        })
+                        });
 
                         it("saves the workfile", function() {
                             expect(this.dialog.workfile.save).toHaveBeenCalled();
@@ -655,7 +655,7 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.notesNewDialog.pageModel).toBe(this.dialog.model);
                     expect(this.dialog.notesNewDialog.options.allowWorkspaceAttachments).toBeTruthy();
                     expect(this.dialog.notesNewDialog.options.attachVisualization.fileName).toBe(this.dialog.makeFilename());
-                    expect(this.dialog.notesNewDialog.options.attachVisualization.svgData).toBe(this.dialog.makeSvgData())
+                    expect(this.dialog.notesNewDialog.options.attachVisualization.svgData).toBe(this.dialog.makeSvgData());
                 });
 
                 context("when the dialog is launched outside workspace context", function() {
@@ -697,7 +697,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("passes task into ResultsConsole", function() {
-                expect(this.dialog.tableData.model).toBe(this.dialog.task)
+                expect(this.dialog.tableData.model).toBe(this.dialog.task);
             });
 
             it("should enable the table resize area", function() {
@@ -706,15 +706,15 @@ describe("chorus.dialogs.Visualization", function() {
 
             it("should show the data table", function() {
                 expect(this.dialog.$(".results_console")).not.toHaveClass("hidden");
-            })
+            });
 
             it("should hide the show table link", function() {
                 expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
-            })
+            });
 
             it("should show the hide table link", function() {
                 expect(this.dialog.$(".modal_controls a.hide")).not.toHaveClass("hidden");
-            })
+            });
 
             describe("clicking on the 'Hide Chart Data' link", function() {
                 beforeEach(function() {
@@ -866,7 +866,7 @@ describe("chorus.dialogs.Visualization", function() {
                         this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
                         this.dialog.$("button.revert").click();
                         expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
-                    })
+                    });
                 });
             });
         });
@@ -898,13 +898,13 @@ describe("chorus.dialogs.Visualization", function() {
 
             it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
                 expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
-                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh")
+                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh");
                 expect(this.dialog.$('button.save')).toHaveClass('hidden');
             });
 
             it("swaps out the 'Close' button for a 'Revert' button", function() {
                 expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
-                expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert")
+                expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert");
                 expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
             });
         }

@@ -26,5 +26,5 @@ describe("chorus.models.HistogramTask", function() {
             expect(request.params()['chart_task[bins]']).toBe('5');
         });
     });
-})
+});
 

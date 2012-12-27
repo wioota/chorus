@@ -17,7 +17,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         this.fakeFileUpload = stubFileUpload();
         spyOn(this.dialog, "launchSubModal");
         spyOn(this.dialog, "makeEditor").andCallThrough();
-        this.qtip = stubQtip()
+        this.qtip = stubQtip();
         stubDefer();
         this.dialog.render();
     });
@@ -25,17 +25,17 @@ describe("chorus.dialogs.MemoNewDialog", function() {
     afterEach(function() {
         //prevent submodal test pollution
         $(document).unbind("close.facebox");
-    })
+    });
 
     it("does not re-render when the model changes", function() {
-        expect(this.dialog.persistent).toBeTruthy()
-    })
+        expect(this.dialog.persistent).toBeTruthy();
+    });
 
     describe("#render", function() {
         it("renders the body", function() {
-            this.dialog.model.set({body : "cats"})
+            this.dialog.model.set({body : "cats"});
             this.dialog.render();
-            expect(this.dialog.$("textarea[name=body]").val()).toBe("cats")
+            expect(this.dialog.$("textarea[name=body]").val()).toBe("cats");
         });
 
         it("has the 'Show options' link", function() {
@@ -217,22 +217,22 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 describe("when a workfile remove link is clicked", function() {
                     it("removes only that workfile", function() {
-                        var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
-                        var cppRow = this.dialog.$(".file_details:contains('cpp')")
+                        var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')");
+                        var cppRow = this.dialog.$(".file_details:contains('cpp')");
 
                         expect(sqlRow).toExist();
                         expect(cppRow).toExist();
 
                         sqlRow.find("a.remove").click();
 
-                        sqlRow = this.dialog.$(".file_details:contains('sql')")
-                        cppRow = this.dialog.$(".file_details:contains('cpp')")
+                        sqlRow = this.dialog.$(".file_details:contains('sql')");
+                        cppRow = this.dialog.$(".file_details:contains('cpp')");
                         expect(sqlRow).not.toExist();
                         expect(cppRow).toExist();
                     });
 
                     it("removes only that workfile from the collection", function() {
-                        var sqlRow = this.dialog.$(".file_details:contains('sql')")
+                        var sqlRow = this.dialog.$(".file_details:contains('sql')");
                         sqlRow.find("a.remove").click();
                         expect(this.dialog.model.workfiles.get("1")).toBeUndefined();
                         expect(this.dialog.model.workfiles.get("2")).not.toBeUndefined();
@@ -245,7 +245,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
 
                         it("does not remove the desktop file", function() {
-                            var sqlRow = this.dialog.$(".file_details:contains('sql')")
+                            var sqlRow = this.dialog.$(".file_details:contains('sql')");
                             sqlRow.find("a.remove").click();
 
                             expect(this.dialog.model.uploadObj).toBe(this.uploadObj);
@@ -323,22 +323,22 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 describe("when a dataset remove link is clicked", function() {
                     it("removes only that dataset", function() {
-                        var table1Row = this.dialog.$(".dataset_details:contains('table1')")
-                        var table2Row = this.dialog.$(".dataset_details:contains('table2')")
+                        var table1Row = this.dialog.$(".dataset_details:contains('table1')");
+                        var table2Row = this.dialog.$(".dataset_details:contains('table2')");
 
                         expect(table1Row).toExist();
                         expect(table2Row).toExist();
 
                         table2Row.find("a.remove").click();
 
-                        table1Row = this.dialog.$(".dataset_details:contains('table1')")
-                        table2Row = this.dialog.$(".dataset_details:contains('table2')")
+                        table1Row = this.dialog.$(".dataset_details:contains('table1')");
+                        table2Row = this.dialog.$(".dataset_details:contains('table2')");
                         expect(table1Row).toExist();
                         expect(table2Row).not.toExist();
                     });
 
                     it("removes only that dataset from the collection", function() {
-                        var table1Row = this.dialog.$(".dataset_details:contains('table1')")
+                        var table1Row = this.dialog.$(".dataset_details:contains('table1')");
                         table1Row.find("a.remove").click();
                         expect(this.dialog.model.datasets.get("1")).toBeUndefined();
                         expect(this.dialog.model.datasets.get("2")).not.toBeUndefined();
@@ -382,7 +382,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("points the dropzone to the file input to avoid insanity", function() {
-                expect(this.fakeFileUpload.dropZone).toBe(this.dialog.$("input[type=file]"))
+                expect(this.fakeFileUpload.dropZone).toBe(this.dialog.$("input[type=file]"));
             });
 
             it("unhides the file_details area", function() {
@@ -413,7 +413,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         fileDetailsElement: this.dialog.$('.file_details:eq(0)'),
                         total: 100,
                         loaded: 25
-                    }
+                    };
                     this.dialog.initProgressBars();
                     this.dialog.updateProgressBar("", data);
                 });
@@ -437,7 +437,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         var fileRow = this.dialog.$('.file_details:eq(0)');
                         expect(fileRow.find('.progress_bar span')).not.toBeVisible();
                         expect(fileRow.find('.upload_finished')).toBeVisible();
-                    })
+                    });
                 });
             });
 
@@ -483,7 +483,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                                 expect($(this).find('.progress_text')).not.toBeVisible();
                                 expect($(this).find('.remove')).not.toBeVisible();
                                 expect($(this).find('.upload_finished')).not.toBeVisible();
-                            })
+                            });
                         });
 
                         it("shows the upload_finished for workfiles", function() {
@@ -491,9 +491,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                                 expect($(this).find('.progress_bar')).not.toBeVisible();
                                 expect($(this).find('.remove')).not.toBeVisible();
                                 expect($(this).find('.upload_finished')).toBeVisible();
-                            })
+                            });
                         });
-                    })
+                    });
                     context("without fileProgress support", function() {
                         beforeEach(function() {
                             chorus.features.fileProgress = false;
@@ -501,18 +501,18 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
                         afterEach(function() {
                             chorus.features.fileProgress = true;
-                        })
+                        });
                         it("shows the progress text for desktopfiles", function() {
                             this.dialog.$(".file_details.desktopfile").each(function() {
                                 expect($(this).find('.progress_text')).toBeVisible();
                                 expect($(this).find('.progress_bar')).not.toBeVisible();
                                 expect($(this).find('.remove')).not.toBeVisible();
                                 expect($(this).find('.upload_finished')).not.toBeVisible();
-                            })
+                            });
                         });
-                    })
+                    });
 
-                })
+                });
             });
 
             describe("submit", function() {
@@ -553,7 +553,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
 
                         it("removes the spinner from the button", function() {
-                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
                         });
                     });
 
@@ -576,7 +576,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
 
                         it("removes the spinner from the button", function() {
-                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
                         });
 
                         it("displays the remove button and hides progress bar", function() {
@@ -584,17 +584,17 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                                 expect($(this).find('.progress_bar')).not.toBeVisible();
                                 expect($(this).find('.upload_finished')).not.toBeVisible();
                                 expect($(this).find('.remove')).toBeVisible();
-                            })
+                            });
                         });
 
                         it("enables the attachment_links", function() {
                             expect(this.dialog.$('.attachment_links')).not.toHaveClass('disabled');
-                        })
+                        });
 
                         it("enables the workfile attachment", function() {
                             this.dialog.$(".add_workfile").click();
                             expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                        })
+                        });
                     });
 
                     context("when the file size exceeds the maximum allowed size", function() {
@@ -634,43 +634,43 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         beforeEach(function() {
                             _.each(this.dialog.model.files, function(fileModel) {
                                 spyOn(fileModel, 'cancelUpload');
-                            })
+                            });
                             this.dialog.$('.cancel_upload').click();
-                        })
+                        });
 
                         it("calls cancelUpload on the file models", function() {
                             _.each(this.dialog.model.files, function(fileModel) {
                                 expect(fileModel.cancelUpload).toHaveBeenCalled();
-                            })
-                        })
+                            });
+                        });
                     });
 
                     context("when the upload is cancelled by pressing escape key", function() {
                         beforeEach(function() {
                             spyOn(this.dialog, 'cancelUpload');
                             this.dialog.escapePressed();
-                        })
+                        });
 
                         it("calls cancelUpload on the file models", function() {
                             expect(this.dialog.cancelUpload).toHaveBeenCalled();
-                        })
+                        });
                     });
                 });
                 describe("when the model save fails", function() {
                     beforeEach(function() {
                         this.dialog.model.trigger("saveFailed");
-                    })
+                    });
 
                     it("does not close the dialog box", function() {
                         expect(this.dialog.closeModal).not.toHaveBeenCalled();
-                    })
+                    });
 
                     it("does not trigger the 'invalidated' event on the model", function() {
                         expect("invalidated").not.toHaveBeenTriggeredOn(this.dialog.pageModel);
                     });
 
                     it("removes the spinner from the button", function() {
-                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
                     });
 
                     it("does not trigger a file upload", function() {
@@ -682,15 +682,15 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     beforeEach(function() {
                         this.dialog.$("textarea[name=body]").val("");
                         this.dialog.$('button.submit').click();
-                    })
+                    });
 
                     it("removes the spinner from the button", function() {
                         expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                    })
+                    });
 
                     it("shows the error at the correct position", function() {
                         expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
-                    })
+                    });
                 });
             });
         });
@@ -706,14 +706,14 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
 
         it("saves the data", function() {
-            expect(this.dialog.model.get("body")).toBe("The body of a note")
+            expect(this.dialog.model.get("body")).toBe("The body of a note");
             expect(this.dialog.model.get("workspaceId")).toBe(22);
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
         it("starts a spinner", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-        })
+        });
 
         it("closes the dialog box if saved successfully", function() {
             this.dialog.model.trigger("saved");
@@ -729,21 +729,21 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             spyOnEvent(this.dialog.pageModel, "invalidated");
             this.dialog.model.trigger("saved");
             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
-        })
+        });
 
         it("disables the attachment_links", function() {
             expect(this.dialog.$('.attachment_links')).toHaveClass('disabled');
-        })
+        });
 
         it("prevents workfiles from being selected", function() {
             this.dialog.$(".add_workfile").click();
             expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
-        })
+        });
 
         it("prevents datasets from being selected", function() {
             this.dialog.$(".add_dataset").click();
             expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
-        })
+        });
     });
 
     describe("saveFailed", function() {
@@ -808,9 +808,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 it("should hide the cancel upload button again", function() {
                     expect(this.dialog.$('.modal_controls .cancel')).toBeVisible();
                     expect(this.dialog.$('.modal_controls .cancel_upload')).not.toBeVisible();
-                })
+                });
 
             });
-        })
-    })
+        });
+    });
 });

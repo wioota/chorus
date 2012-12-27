@@ -58,7 +58,7 @@ describe("chorus.views.Sidebar", function() {
         });
 
         it("should scroll to the top", function() {
-            expect(this.fakeApi.scrollTo).toHaveBeenCalledWith(0, 0)
+            expect(this.fakeApi.scrollTo).toHaveBeenCalledWith(0, 0);
         });
     });
 });

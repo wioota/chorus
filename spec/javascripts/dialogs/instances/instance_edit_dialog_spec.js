@@ -302,6 +302,16 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
+        function itRecoversFromError() {
+            it("takes the button out of 'loading' mode", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
+
+            it("sets the button text back to 'Uploading'", function() {
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.edit_dialog.save");
+            });
+        }
+
         context("when the upload gives a server error", function() {
             beforeEach(function() {
                 this.dialog.model.set({serverErrors: { fields: { a: { BLANK: {} } } }});
@@ -322,15 +332,5 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
             itRecoversFromError();
         });
-
-        function itRecoversFromError() {
-            it("takes the button out of 'loading' mode", function() {
-                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-            });
-
-            it("sets the button text back to 'Uploading'", function() {
-                expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.edit_dialog.save");
-            });
-        }
     });
 });

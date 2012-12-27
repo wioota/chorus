@@ -81,7 +81,7 @@ describe("chorus.models.DatasetFilter", function() {
     describe("#sqlString", function() {
         beforeEach(function() {
             this.column.set({typeCategory: "STRING"});
-            this.model.set({comparator: "not_equal", input: {value: "test"}})
+            this.model.set({comparator: "not_equal", input: {value: "test"}});
             spyOn(this.model.getFilterMap().comparators.not_equal, "generate");
             this.model.sqlString();
         });

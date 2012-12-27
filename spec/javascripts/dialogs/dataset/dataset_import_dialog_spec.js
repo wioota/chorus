@@ -345,7 +345,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                         context("and the workfile is showable", function() {
                             beforeEach(function() {
-                                this.fakeFileUpload.done(null, this.data)
+                                this.fakeFileUpload.done(null, this.data);
                             });
 
                             it("presents a toast message", function() {

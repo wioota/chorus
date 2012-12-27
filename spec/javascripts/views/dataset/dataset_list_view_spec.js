@@ -12,6 +12,16 @@ describe("chorus.views.DatasetList", function() {
     });
 
     context("when the checkable flag is enabled", function() {
+        function expectDatasetChecked(expectedModels) {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+            var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
+            expect(eventName).toBe("dataset:checked");
+
+            var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
+            expect(collection).toBeA(chorus.collections.DatasetSet);
+            expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
+        }
+
         beforeEach(function() {
             spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
             this.view.options.checkable = true;
@@ -122,16 +132,6 @@ describe("chorus.views.DatasetList", function() {
                 });
             });
         });
-
-        function expectDatasetChecked(expectedModels) {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-            var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
-            expect(eventName).toBe("dataset:checked");
-
-            var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
-            expect(collection).toBeA(chorus.collections.DatasetSet);
-            expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
-        }
     });
 
     context("when the checkable flag is falsy", function() {

@@ -13,6 +13,7 @@ exclude_paths:
   - spec/javascripts/vendor/**/*.js
   - spec/javascripts/support/old-jasmine-core/**/*.js
   - spec/javascripts/helpers/sinon*.js
+  - spec/javascripts/helpers/jquery.color.js
 
 # ------------ jshint options ------------
 # visit http://jshint.com/ for complete documentation
@@ -117,6 +118,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - stubSelectMenu
   - stubClEditor
   - stubFileUpload
+  - stubKeyboardMetaKey
 browser:  true      # true if the standard browser globals should be predefined
 rhino:    false     # true if the Rhino environment globals should be predefined
 windows:  false     # true if Windows-specific globals should be predefined

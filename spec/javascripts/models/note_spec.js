@@ -1,4 +1,14 @@
 describe("chorus.models.Note", function() {
+    function createSubmitSpy() {
+        var fakePromise = jasmine.createSpyObj('submitResult', ['done', 'fail']);
+        fakePromise.done.andReturn(fakePromise);
+        fakePromise.fail.andReturn(fakePromise);
+
+        var spy = jasmine.createSpy('submit').andReturn(fakePromise);
+        spy.promise = fakePromise;
+        return spy;
+    }
+
     beforeEach(function() {
         var activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
             id: '41',
@@ -41,7 +51,7 @@ describe("chorus.models.Note", function() {
             this.fileUpload2 = new chorus.models.CommentFileUpload({submit: this.submitObject2});
             this.model.addFileUpload(this.fileUpload1);
             expect(this.model.files.length).toBe(1);
-        })
+        });
 
         describe("removeFileUpload", function() {
             beforeEach(function() {
@@ -51,17 +61,17 @@ describe("chorus.models.Note", function() {
 
             it("removes the object from the list of files", function() {
                 expect(this.model.files.length).toBe(0);
-            })
+            });
         });
 
         describe("addFileUpload", function() {
             beforeEach(function() {
                 this.model.addFileUpload(this.fileUpload2);
-            })
+            });
 
             it("adds the object from the list of files", function() {
                 expect(this.model.files.length).toBe(2);
-            })
+            });
         });
 
         describe("saving the dataset attachments", function() {
@@ -215,15 +225,5 @@ describe("chorus.models.Note", function() {
                 });
             });
         });
-    })
-
-    function createSubmitSpy() {
-        var fakePromise = jasmine.createSpyObj('submitResult', ['done', 'fail']);
-        fakePromise.done.andReturn(fakePromise);
-        fakePromise.fail.andReturn(fakePromise);
-
-        var spy = jasmine.createSpy('submit').andReturn(fakePromise);
-        spy.promise = fakePromise;
-        return spy;
-    }
+    });
 });

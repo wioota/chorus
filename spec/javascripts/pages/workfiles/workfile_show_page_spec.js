@@ -16,8 +16,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
         });
 
         it("has a helpId", function() {
-            expect(this.page.helpId).toBe("workfile")
-        })
+            expect(this.page.helpId).toBe("workfile");
+        });
 
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe(4);
@@ -31,7 +31,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         it("does not configure a version number into the workfile model", function() {
             expect(this.page.model.isLatestVersion()).toBeTruthy();
-        })
+        });
 
         it("fetches the workfile's workspace", function() {
             expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
@@ -49,8 +49,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             it("configures the version number into the workfile model", function() {
                 expect(this.page.model.isLatestVersion()).toBeFalsy();
-            })
-        })
+            });
+        });
 
         describe("fetch failure", function() {
             beforeEach(function() {
@@ -121,9 +121,9 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
                     it("does not show an alert", function() {
                         expect(this.modalSpy).not.toHaveModal(chorus.alerts.WorkfileDraft);
-                    })
-                })
-            })
+                    });
+                });
+            });
         });
     });
 
@@ -187,7 +187,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
                     expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
                 });
-            })
+            });
         });
     });
 });

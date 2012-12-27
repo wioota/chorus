@@ -30,5 +30,5 @@ describe("chorus.models.HeatmapTask", function() {
             expect(this.model.getColumnLabel("foo")).toBe("foo");
         });
     });
-})
+});
 

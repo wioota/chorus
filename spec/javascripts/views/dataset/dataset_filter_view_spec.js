@@ -65,15 +65,15 @@ describe("chorus.views.DatasetFilter", function() {
                     beforeEach(function() {
                         this.collection.at(0).set({typeCategory: "DATE"});
                         this.view.columnFilter.selectColumn(this.collection.at(0));
-                        inputs = {day: "1", month: "02", year: "3333", value: "in the future"}
+                        inputs = {day: "1", month: "02", year: "3333", value: "in the future"};
                         this.model.set({input: inputs});
                     });
 
                     it("fills in the values", function() {
                         this.view.$("select.comparator option[value=before]").prop('selected', true).change();
-                        expect(this.view.$(".filter.date input[name='day']").val()).toBe("1")
-                        expect(this.view.$(".filter.date input[name='month']").val()).toBe("02")
-                        expect(this.view.$(".filter.date input[name='year']").val()).toBe("3333")
+                        expect(this.view.$(".filter.date input[name='day']").val()).toBe("1");
+                        expect(this.view.$(".filter.date input[name='month']").val()).toBe("02");
+                        expect(this.view.$(".filter.date input[name='year']").val()).toBe("3333");
                     });
 
                     context("when a user types in the input field", function() {
@@ -131,7 +131,7 @@ describe("chorus.views.DatasetFilter", function() {
                 expect(this.selectMenuStub.find(".aliased_name")).toExist();
                 expect(this.selectMenuStub.find(".aliased_name .letter")).toContainText(this.dataset.aliasedName);
             });
-        })
+        });
 
         context("when the dataset has a datasetNumber and the datasetNumbers option is disabled", function() {
             beforeEach(function() {
@@ -141,8 +141,8 @@ describe("chorus.views.DatasetFilter", function() {
 
             it("does not have the aliased_name", function() {
                 expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
-            })
-        })
+            });
+        });
 
 
         describe("#validateInput", function() {
@@ -292,12 +292,12 @@ describe("chorus.views.DatasetFilter", function() {
             describe("when the input is hidden and a new column is chosen and the default option should show the input", function() {
                 beforeEach(function() {
                     this.view.$('select.comparator').prop("selectedIndex", 3).change();
-                    expect(this.view.$('.filter.default')).toHaveClass('hidden')
+                    expect(this.view.$('.filter.default')).toHaveClass('hidden');
                     this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                })
+                });
 
                 it("should show the input box", function() {
-                    expect(this.view.$('.filter.default')).not.toHaveClass('hidden')
+                    expect(this.view.$('.filter.default')).not.toHaveClass('hidden');
                 });
             });
         });
@@ -431,7 +431,7 @@ describe("chorus.views.DatasetFilter", function() {
             beforeEach(function() {
                 this.collection.models[0].set({ typeCategory: "DATETIME" });
                 this.view.render();
-            })
+            });
 
             it("uses the Timestamp type", function() {
                 expect(this.view.map).toBeA(chorus.models.DatasetFilterMaps.Timestamp);
@@ -449,28 +449,28 @@ describe("chorus.views.DatasetFilter", function() {
 
             describe("with a string column", function() {
                 it("returns the value of the default filter input", function() {
-                    this.view.map = new chorus.models.DatasetFilterMaps.String;
+                    this.view.map = new chorus.models.DatasetFilterMaps.String();
                     expect(this.view.fieldValues()).toEqual({ value: "123" });
                 });
             });
 
             describe("with a numeric column", function() {
                 it("returns the value of the default filter input", function() {
-                    this.view.map = new chorus.models.DatasetFilterMaps.Numeric;
+                    this.view.map = new chorus.models.DatasetFilterMaps.Numeric();
                     expect(this.view.fieldValues()).toEqual({ value: "123" });
                 });
             });
 
             describe("with a time column", function() {
                 it("returns the value of the time filter input", function() {
-                    this.view.map = new chorus.models.DatasetFilterMaps.Time;
+                    this.view.map = new chorus.models.DatasetFilterMaps.Time();
                     expect(this.view.fieldValues()).toEqual({ value: "12:34" });
                 });
             });
 
             describe("with a date column", function() {
                 beforeEach(function() {
-                    this.view.map = new chorus.models.DatasetFilterMaps.Date;
+                    this.view.map = new chorus.models.DatasetFilterMaps.Date();
                 });
 
                 it("returns the values of the date filter inputs", function() {

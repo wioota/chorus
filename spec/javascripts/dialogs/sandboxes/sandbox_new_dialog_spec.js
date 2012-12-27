@@ -29,7 +29,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.schemaPicker.trigger("clearErrors");
                 expect(this.dialog.$('.errors')).toBeEmpty();
             });
-        })
+        });
     });
 
     context("clicking the submit button", function() {

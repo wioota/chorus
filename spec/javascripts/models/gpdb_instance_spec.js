@@ -93,10 +93,10 @@ describe("chorus.models.GpdbInstance", function() {
     describe("#accounts", function() {
         beforeEach(function() {
             this.instanceAccounts = this.instance.accounts();
-        })
+        });
 
         it("returns an InstanceAccountSet", function() {
-            expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet)
+            expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet);
         });
 
         it("sets the instance id", function() {
@@ -111,10 +111,10 @@ describe("chorus.models.GpdbInstance", function() {
     describe("#databases", function() {
         beforeEach(function() {
             this.databases = this.instance.databases();
-        })
+        });
 
         it("returns an DatabaseSet", function() {
-            expect(this.databases).toBeA(chorus.collections.DatabaseSet)
+            expect(this.databases).toBeA(chorus.collections.DatabaseSet);
         });
 
         it("sets the instance id", function() {
@@ -129,7 +129,7 @@ describe("chorus.models.GpdbInstance", function() {
     describe("#usage", function() {
         beforeEach(function() {
             this.instanceUsage = this.instance.usage();
-        })
+        });
 
         it("returns an InstanceUsage object", function() {
             expect(this.instanceUsage).toBeA(chorus.models.InstanceUsage);
@@ -142,7 +142,7 @@ describe("chorus.models.GpdbInstance", function() {
         it("memoizes", function() {
             expect(this.instanceUsage).toBe(this.instance.usage());
         });
-    })
+    });
 
     describe("#isGreenplum", function() {
         it("returns true for gpdb instances", function() {
@@ -161,7 +161,7 @@ describe("chorus.models.GpdbInstance", function() {
                     port: "1234",
                     maintenanceDb: "postgres",
                     provision_type: "register"
-                }
+                };
             });
 
             context("when the instance is new", function() {
@@ -171,29 +171,29 @@ describe("chorus.models.GpdbInstance", function() {
 
                 it("returns true when the model is valid", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
-                })
+                });
 
                 _.each(["name", "host", "dbUsername", "dbPassword", "port", "maintenanceDb"], function(attr) {
                     it("requires " + attr, function() {
                         this.attrs[attr] = "";
                         expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                         expect(this.instance.errors[attr]).toBeTruthy();
-                    })
+                    });
                 });
 
                 it("allows name with spaces", function() {
-                    this.attrs.name = "foo bar"
+                    this.attrs.name = "foo bar";
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
-                })
+                });
 
                 it("requires name with valid length", function() {
-                    this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+                    this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')})
-                })
+                    expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')});
+                });
 
                 it("requires valid port", function() {
-                    this.attrs.port = "z123"
+                    this.attrs.port = "z123";
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                     expect(this.instance.errors.port).toBeTruthy();
                 });
@@ -218,21 +218,21 @@ describe("chorus.models.GpdbInstance", function() {
                     schemaName: "thisSchema",
                     dbUsername: "foo",
                     dbPassword: "bar123"
-                }
+                };
                 spyOn(this.instance, "isNew").andReturn("true");
             });
 
             it("requires name with valid length", function() {
-                this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+                this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')})
+                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')});
             });
 
             it("requires size", function() {
                 this.attrs.size = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();
-            })
+            });
 
             it("requires database name", function() {
                 this.attrs.databaseName = "";
@@ -287,7 +287,7 @@ describe("chorus.models.GpdbInstance", function() {
                     schemaName: "thisSchema",
                     dbUsername: "foo",
                     dbPassword: "bar123"
-                }
+                };
                 spyOn(this.instance, "isNew").andReturn("false");
             });
 
@@ -295,7 +295,7 @@ describe("chorus.models.GpdbInstance", function() {
                 this.attrs.size = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();
-            })
+            });
 
             it("requires name", function() {
                 this.attrs.name = "";
@@ -304,7 +304,7 @@ describe("chorus.models.GpdbInstance", function() {
             });
 
             it("requires nothing else", function() {
-                this.attrs = {name: "foo", size: "1"}
+                this.attrs = {name: "foo", size: "1"};
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
             });
 
@@ -320,7 +320,7 @@ describe("chorus.models.GpdbInstance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             });
         });
-    })
+    });
 
     describe("#hasWorkspaceUsageInfo", function() {
         it("returns true when the instance's usage is loaded", function() {

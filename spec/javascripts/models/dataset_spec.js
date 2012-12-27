@@ -73,28 +73,28 @@ describe("chorus.models.Dataset", function() {
 
     describe("#initialize", function() {
         it("doesn't override type when type already exists", function() {
-            var model = new chorus.models.Dataset({ type: "foo"})
-            expect(model.get("type")).toBe("foo")
+            var model = new chorus.models.Dataset({ type: "foo"});
+            expect(model.get("type")).toBe("foo");
         });
 
         it("sets type to datasetType if datasetType exists", function() {
-            var model = new chorus.models.Dataset({ datasetType: "foo"})
-            expect(model.get("type")).toBe("foo")
+            var model = new chorus.models.Dataset({ datasetType: "foo"});
+            expect(model.get("type")).toBe("foo");
         });
 
         it("sets type to SOURCE_TABLE if neither type nor datasetType exists", function() {
-            var model = new chorus.models.Dataset({})
-            expect(model.get("type")).toBe("SOURCE_TABLE")
+            var model = new chorus.models.Dataset({});
+            expect(model.get("type")).toBe("SOURCE_TABLE");
         });
     });
 
     describe("#statistics", function() {
         beforeEach(function() {
-            this.statistics = this.dataset.statistics()
+            this.statistics = this.dataset.statistics();
         });
 
         it("returns an instance of DatasetStatistics", function() {
-            expect(this.statistics).toBeA(chorus.models.DatasetStatistics)
+            expect(this.statistics).toBeA(chorus.models.DatasetStatistics);
         });
 
         it("should memoize the result", function() {
@@ -102,7 +102,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("sets the properties correctly", function() {
-            expect(this.statistics.get("datasetId")).toBe(this.dataset.id)
+            expect(this.statistics.get("datasetId")).toBe(this.dataset.id);
         });
     });
 
@@ -187,7 +187,7 @@ describe("chorus.models.Dataset", function() {
                 });
             });
         });
-    })
+    });
 
     describe("#canBeImportSource", function() {
         it("returns true if the object is a Dataset (with a workspace id) but not a Sandbox Dataset", function() {
@@ -277,7 +277,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the right creator", function() {
-            var creator = this.comment.author()
+            var creator = this.comment.author();
             expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
             expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
             expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
@@ -301,16 +301,27 @@ describe("chorus.models.Dataset", function() {
             "EXTERNAL_TABLE": "table",
             "MASTER_TABLE": "table",
             "CHORUS_VIEW": "query"
-        }
+        };
 
         _.each(expectedTypeMap, function(str, type) {
             it("works for " + type, function() {
-                expect(rspecFixtures.dataset({ objectType: type }).metaType()).toBe(str)
+                expect(rspecFixtures.dataset({ objectType: type }).metaType()).toBe(str);
             });
-        })
+        });
     });
 
     describe("#preview", function() {
+        function checkPreview() {
+            it("should return a Task", function() {
+                expect(this.preview).toBeA(chorus.models.Task);
+                expect(this.preview.get("checkId")).not.toBeUndefined();
+            });
+
+            it("should not memoize the database preview", function() {
+                expect(this.preview).not.toBe(this.dataset.preview());
+            });
+        }
+
         context("with a table", function() {
             beforeEach(function() {
                 this.dataset.set({objectType: "TABLE", objectName: "foo"});
@@ -391,17 +402,6 @@ describe("chorus.models.Dataset", function() {
             });
 
         });
-
-        function checkPreview() {
-            it("should return a Task", function() {
-                expect(this.preview).toBeA(chorus.models.Task);
-                expect(this.preview.get("checkId")).not.toBeUndefined();
-            });
-
-            it("should not memoize the database preview", function() {
-                expect(this.preview).not.toBe(this.dataset.preview());
-            });
-        }
     });
 
     describe("#download", function() {
@@ -431,7 +431,7 @@ describe("chorus.models.Dataset", function() {
 
         it("should return a DatabaseColumnSet", function() {
             expect(this.dataset.columns()).toBeA(chorus.collections.DatabaseColumnSet);
-        })
+        });
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.dataset.columns();
@@ -493,7 +493,7 @@ describe("chorus.models.Dataset", function() {
     describe("#toText", function() {
         context("with lowercase names", function() {
             beforeEach(function() {
-                this.dataset.set({objectName: "tabler", schema: {name: "party_schema"} })
+                this.dataset.set({objectName: "tabler", schema: {name: "party_schema"} });
             });
 
             it("formats the string to put into the sql editor", function() {
@@ -560,7 +560,7 @@ describe("chorus.models.Dataset", function() {
         context("when the model has a 'query'", function() {
             beforeEach(function() {
                 this.dataset = rspecFixtures.workspaceDataset.chorusView();
-            })
+            });
 
             context("when a datasetNumber is not set", function() {
                 it("returns the query aliased as the objectName", function() {
@@ -674,7 +674,7 @@ describe("chorus.models.Dataset", function() {
         context("when there are no workbooks associated", function () {
             beforeEach(function () {
                 this.dataset.unset("tableauWorkbooks");
-                delete this.dataset._tableauWorkbooks
+                delete this.dataset._tableauWorkbooks;
             });
             it("returns an empty workspace set", function() {
                 var workbooks = this.dataset.tableauWorkbooks();
@@ -704,32 +704,32 @@ describe("chorus.models.Dataset", function() {
 
     describe("#setDatasetNumber", function() {
         beforeEach(function() {
-            this.dataset.setDatasetNumber(4)
-        })
+            this.dataset.setDatasetNumber(4);
+        });
 
         it("sets the datasetNumber", function() {
             expect(this.dataset.datasetNumber).toBe(4);
-        })
+        });
 
         it("sets the aliasedName", function() {
             expect(this.dataset.aliasedName).toBe('d');
-        })
+        });
     });
 
     describe("#clearDatasetNumber", function() {
         beforeEach(function() {
-            this.dataset.setDatasetNumber(4)
-            this.dataset.clearDatasetNumber()
-        })
+            this.dataset.setDatasetNumber(4);
+            this.dataset.clearDatasetNumber();
+        });
 
         it("unsets the datasetNumber", function() {
             expect(this.dataset.datasetNumber).toBeUndefined();
-        })
+        });
 
         it("unsets the aliasedName", function() {
             expect(this.dataset.aliasedName).toBeUndefined();
-        })
-    })
+        });
+    });
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
@@ -820,7 +820,7 @@ describe("chorus.models.Dataset", function() {
                 yAxis: "blindness_rate",
                 bins: "12"
             });
-        })
+        });
 
         it("returns a FrequencyTask model", function() {
             expect(this.task).toBeA(chorus.models.FrequencyTask);
@@ -832,9 +832,9 @@ describe("chorus.models.Dataset", function() {
 
         it("has the dataset and bins", function() {
             expect(this.task.dataset).toBe(this.dataset);
-            expect(this.task.get("bins")).toBe("12")
+            expect(this.task.get("bins")).toBe("12");
         });
-    })
+    });
 
     describe("#makeTimeseriesTask", function() {
         beforeEach(function() {
@@ -866,8 +866,8 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the right timeType", function() {
-            expect(this.task.get("timeType")).toBe('datetime')
-        })
+            expect(this.task.get("timeType")).toBe('datetime');
+        });
     });
 
     describe("#deriveTableauWorkbook", function() {
@@ -1008,22 +1008,22 @@ describe("chorus.models.Dataset", function() {
 
     describe("#analyzableObjectType", function() {
         it("returns true when user has credentials, object type is table and workspace is not archived", function() {
-            this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
+            this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
             expect(this.dataset.canAnalyze()).toBeTruthy();
         });
 
         it("returns false when hasCredentials is falsy", function() {
-            this.dataset.set({ hasCredentials: false, objectType: "TABLE" })
+            this.dataset.set({ hasCredentials: false, objectType: "TABLE" });
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
         it("returns false when analyzableObjectType is falsy", function() {
-            this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" })
+            this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" });
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
         it("returns false when workspaceArchived is not falsy", function() {
-            this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
+            this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
             this.dataset._workspace = rspecFixtures.workspace({ archivedAt: "2012-12-12"});
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
@@ -1045,7 +1045,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("returns an analyze model with the right url", function() {
-            expect(this.dataset.analyze().url()).toBe("/tables/543/analyze")
+            expect(this.dataset.analyze().url()).toBe("/tables/543/analyze");
         });
     });
 });

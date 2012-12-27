@@ -48,7 +48,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("the image is hidden", function() {
-                expect(this.view.$("img")).toHaveClass('hidden')
+                expect(this.view.$("img")).toHaveClass('hidden')''
             });
         });
 
@@ -67,7 +67,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("the image is not hidden", function() {
-                expect(this.view.$("img")).not.toHaveClass('hidden')
+                expect(this.view.$("img")).not.toHaveClass('hidden');
             });
         });
 
@@ -121,7 +121,7 @@ describe("chorus.views.ImageUpload", function() {
                     });
 
                     it("removes the hidden class from the image", function() {
-                        expect(this.view.$("img")).not.toHaveClass('hidden')
+                        expect(this.view.$("img")).not.toHaveClass('hidden');
                     });
 
                     it("updates the cachebuster", function() {
@@ -220,7 +220,7 @@ describe("chorus.views.ImageUpload", function() {
 
                 it("shows an error", function () {
                     var maxFileSize = chorus.models.Config.instance().get("fileSizesMbUserIcon");
-                    expect(this.user.serverErrors["fields"]["base"]["FILE_SIZE_EXCEEDED"]["count"]).toEqual(maxFileSize)
+                    expect(this.user.serverErrors["fields"]["base"]["FILE_SIZE_EXCEEDED"]["count"]).toEqual(maxFileSize);
                 });
 
                 it("triggers validationFailed", function() {

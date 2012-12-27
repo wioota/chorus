@@ -41,4 +41,4 @@ describe("chorus.models.TimeseriesTask", function() {
             expect(request.params()['chart_task[time_interval]']).toBe("minute");
         });
     });
-})
+});

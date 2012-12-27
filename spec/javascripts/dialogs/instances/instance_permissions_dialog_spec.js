@@ -40,7 +40,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
 
             it("displays the shared account subheader", function() {
-                expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account")
+                expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account");
             });
 
             it("displays the account owner information", function() {
@@ -142,7 +142,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("populates the dbUsername text field from the account map", function() {
                 expect(this.dialog.$("input[name=dbUsername]").val()).toBe('some_db_username');
-            })
+            });
 
             it("displays a 'switch to individual account' link", function() {
                 expect(this.dialog.$("a.remove_shared_account").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
@@ -173,7 +173,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
                             expect(this.dialog.instance.isShared()).toBeTruthy();
-                            this.server.lastDestroy().succeed()
+                            this.server.lastDestroy().succeed();
                         });
 
                         it("displays a toast message", function() {
@@ -182,11 +182,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                         it("clears shared account information from the instance model in the dialog", function() {
                             expect(this.dialog.instance.isShared()).toBeFalsy();
-                        })
+                        });
 
                         it("re-renders the dialog in the new individual account state", function() {
                             expect(this.dialog.postRender).toHaveBeenCalled();
-                        })
+                        });
 
                         context("if the user replaces the sharing", function() {
                             beforeEach(function() {
@@ -203,16 +203,16 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the destroy fails", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.server.lastDestroy().failUnprocessableEntity({a: {BLANK: {}}})
+                            this.server.lastDestroy().failUnprocessableEntity({a: {BLANK: {}}});
                         });
 
                         it("displays a save failed toast message", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_remove_failed");
                         });
-                    })
+                    });
                 });
             });
-        })
+        });
     });
 
     context("when the instance has individual accounts", function() {
@@ -253,12 +253,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
         it("only shows the 'make owner' links for users that aren't already the owner", function() {
             expect(this.ownerLi).not.toContain("a.make_owner");
-            expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner").length })).toBeTruthy();
+            expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner").length; })).toBeTruthy();
         });
 
         it("only shows the 'remove credentials' links for users that aren't already the owner", function() {
             expect(this.ownerLi).not.toContain("a.remove_credentials");
-            expect(_.all(this.otherLis, function(li) { return $(li).find("a.remove_credentials").length })).toBeTruthy();
+            expect(_.all(this.otherLis, function(li) { return $(li).find("a.remove_credentials").length; })).toBeTruthy();
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
@@ -296,67 +296,67 @@ describe("chorus.dialogs.InstancePermissions", function() {
             it("adds the 'editing' class to the parent li", function() {
                 expect(this.liBeingEdited).toHaveClass("editing");
                 expect(this.dialog.$('li.editing').length).toBe(1);
-            })
+            });
 
             describe("saving the credentials with valid data", function() {
                 beforeEach(function() {
                     spyOn(this.otherAccount, "save");
                     spyOn(this.accountBeingEdited, "save").andCallThrough();
                     this.liBeingEdited.find("a.save").click();
-                })
+                });
 
                 it("populates the account map from the form", function() {
                     expect(this.accountBeingEdited.get("dbUsername")).toBe("jughead");
                     expect(this.accountBeingEdited.get("dbPassword")).toBe("gogogo");
-                })
+                });
 
                 it("saves the acccount map", function() {
                     expect(this.accountBeingEdited.save).toHaveBeenCalled();
                     expect(this.otherAccount.save).not.toHaveBeenCalled();
-                })
+                });
 
                 it("shows a spinner", function() {
                     expect(this.liBeingEdited.find("a.save").isLoading()).toBeTruthy();
                     expect(this.otherLi.find("a.save").isLoading()).toBeFalsy();
-                })
+                });
 
                 describe("when the save succeeds", function() {
                     beforeEach(function() {
                         spyOn(this.dialog.instance, "fetch");
                         this.accountBeingEdited.trigger('saved');
-                    })
+                    });
 
                     it("removes the 'editing' class from the parent li", function() {
                         expect(this.dialog.$('li[data-id=2]')).not.toHaveClass("editing");
-                    })
+                    });
 
                     it("stops the spinner", function() {
                         expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
-                    })
+                    });
 
                     it("re-fetches the instance", function() {
                         expect(this.dialog.instance.fetch).toHaveBeenCalled();
-                    })
-                })
+                    });
+                });
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
                         this.accountBeingEdited.serverErrors = { fields: { a: { BLANK: {} } } };
                         this.accountBeingEdited.trigger('saveFailed');
-                    })
+                    });
 
                     it("does not remove the 'editing' class from the parent li", function() {
                         expect(this.liBeingEdited).toHaveClass("editing");
-                    })
+                    });
 
                     it("displays error messages", function() {
                         expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A can't be blank");
-                    })
+                    });
 
                     it("stops the spinner", function() {
                         expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
-                    })
-                })
+                    });
+                });
 
                 describe("when validation fails", function() {
                     beforeEach(function() {
@@ -373,20 +373,20 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 beforeEach(function() {
                     spyOn(this.accountBeingEdited, "save");
                     this.liBeingEdited.find("a.cancel").click();
-                })
+                });
 
                 it("does not populate the account from the form", function() {
                     expect(this.accountBeingEdited.get("dbUsername")).not.toBe("jughead");
                     expect(this.accountBeingEdited.get("dbPassword")).not.toBe("gogogo");
-                })
+                });
 
                 it("does not save the account", function() {
                     expect(this.accountBeingEdited.save).not.toHaveBeenCalled();
-                })
+                });
 
                 it("removes the 'editing' class from the parent li", function() {
                     expect(this.liBeingEdited).not.toHaveClass("editing");
-                })
+                });
             });
 
             describe("when clicking edit for another user", function() {
@@ -402,7 +402,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 it("clears the errors", function() {
                     expect(this.dialog.clearErrors).toHaveBeenCalled();
-                })
+                });
             });
         });
 
@@ -529,13 +529,13 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     beforeEach(function() {
                         this.dialog.$('select').val('444');
                         this.dialog.$('select').trigger("change");
-                    })
+                    });
 
                     it("updates the image for that user", function() {
                         var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
                         expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.fetchImageUrl());
                     });
-                })
+                });
 
                 describe("cancelling the new account", function() {
                     beforeEach(function() {
@@ -606,7 +606,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                                 it("re-renders the dialog", function() {
                                     expect(this.dialog.render).toHaveBeenCalled();
                                 });
-                            })
+                            });
 
                             describe("when the save fails", function() {
                                 beforeEach(function() {
@@ -618,7 +618,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                                     expect(this.dialog.$(".errors li").length).toBe(1);
                                 });
                             });
-                        })
+                        });
 
                         context("pressing enter", function() {
                             beforeEach(function() {
@@ -636,7 +636,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     beforeEach(function() {
                         this.otherLi = this.dialog.$("li[data-id=1]");
                         this.otherLi.find('a.edit').click();
-                    })
+                    });
                     it("enables the 'add account' button", function() {
                         expect(this.dialog.$("button.add_account")).not.toBeDisabled();
                     });
@@ -648,7 +648,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     it("removes the model from the collection", function() {
                         expect(this.dialog.collection.length).toBe(3);
                     });
-                })
+                });
 
                 describe("when the modal is closed", function() {
                     beforeEach(function() {
@@ -700,7 +700,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("asks the server to add sharing", function() {
-                    expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing")
+                    expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing");
                 });
 
                 context("when the create succeeds", function() {
@@ -712,7 +712,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         spyOn(this.dialog, "postRender").andCallThrough();
                         this.instance.sharing().bind("saved", this.otherSavedSpy);
                         expect(this.dialog.instance.isShared()).toBeFalsy();
-                        this.server.lastCreate().succeed()
+                        this.server.lastCreate().succeed();
                     });
 
                     it("displays a toast message", function() {
@@ -722,7 +722,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("clears shared account information from the instance model in the dialog", function() {
                         expect(this.dialog.instance.isShared()).toBeTruthy();
-                    })
+                    });
 
                     it("re-renders the dialog in the new individual account state", function() {
                         expect(this.dialog.postRender).toHaveBeenCalled();
@@ -761,7 +761,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 context("when the create fails", function() {
                     beforeEach(function() {
                         spyOn(chorus, 'toast');
-                        this.server.lastCreate().failUnprocessableEntity({a: {BLANK: {}}})
+                        this.server.lastCreate().failUnprocessableEntity({a: {BLANK: {}}});
                     });
 
                     it("displays a save failed toast message", function() {
@@ -777,8 +777,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         it("doesn't display the saved toast message", function() {
                             expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_added");
                         });
-                    })
-                })
+                    });
+                });
             });
         });
     });
@@ -827,7 +827,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("after re-fetching the accounts", function() {
                     beforeEach(function() {
-                        this.instanceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})
+                        this.instanceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}});
                         this.server.completeFetchFor(this.dialog.collection, [this.instanceAccount]);
                     });
 
@@ -844,7 +844,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("can render the instance's shared db username", function() {
-                        expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"))
+                        expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"));
                     });
                 });
             });

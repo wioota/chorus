@@ -9,7 +9,7 @@ describe("chorus.views.LinkMenu", function() {
                     ],
                     title: "Link Menu",
                     event : "name"
-                })
+                });
                 this.view.render();
             });
 
@@ -24,7 +24,7 @@ describe("chorus.views.LinkMenu", function() {
                         ],
                         title: "Link Menu",
                         event : "name"
-                    })
+                    });
                     this.view.render();
                 });
 
@@ -45,28 +45,28 @@ describe("chorus.views.LinkMenu", function() {
             });
 
             it("should have the correct popup options", function() {
-                expect(this.view.$("li[data-type=male] a")).toHaveText("bob")
-                expect(this.view.$("li[data-type=female] a")).toHaveText("alice")
-            })
+                expect(this.view.$("li[data-type=male] a")).toHaveText("bob");
+                expect(this.view.$("li[data-type=female] a")).toHaveText("alice");
+            });
 
             describe("chosen option", function() {
                 it("defaults to the first option", function() {
-                    expect(this.view.$(".chosen")).toHaveText("bob")
+                    expect(this.view.$(".chosen")).toHaveText("bob");
                     expect(this.view.$(".menu li[data-type=male] .check")).not.toHaveClass("hidden");
-                    expect(this.view.$(".menu li[data-type=female] .check")).toHaveClass("hidden")
+                    expect(this.view.$(".menu li[data-type=female] .check")).toHaveClass("hidden");
 
-                })
+                });
 
                 it("renders the chosen option", function() {
-                    this.view.options.chosen = "female"
+                    this.view.options.chosen = "female";
                     this.view.render();
-                    expect(this.view.$(".chosen")).toHaveText("alice")
-                })
-            })
+                    expect(this.view.$(".chosen")).toHaveText("alice");
+                });
+            });
 
             it("should have a hidden menu", function() {
                 expect(this.view.$(".menu")).toHaveClass("hidden");
-            })
+            });
 
             describe("clicking the chosen option", function() {
                 beforeEach(function() {
@@ -91,12 +91,12 @@ describe("chorus.views.LinkMenu", function() {
 
                 it("triggers chorus:menu:popup on the document", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
-                })
+                });
 
                 describe("clicking on the link again", function() {
                     beforeEach(function() {
                         this.view.$("a.popup").click();
-                    })
+                    });
 
                     it("closes the popup menu", function() {
                         expect(this.view.$(".menu")).toHaveClass("hidden");
@@ -120,32 +120,32 @@ describe("chorus.views.LinkMenu", function() {
                     });
 
                     it("should set the chosen property", function() {
-                        expect(this.view.options.chosen).toBe("female")
+                        expect(this.view.options.chosen).toBe("female");
                     });
 
                     it("should display the new choice", function() {
-                        expect(this.view.$(".popup .chosen")).toHaveText("alice")
-                    })
+                        expect(this.view.$(".popup .chosen")).toHaveText("alice");
+                    });
 
                     it("shows change what is checked", function() {
-                        expect(this.view.$(".menu li[data-type=male] .check")).toHaveClass("hidden")
-                        expect(this.view.$(".menu li[data-type=female] .check")).not.toHaveClass("hidden")
+                        expect(this.view.$(".menu li[data-type=male] .check")).toHaveClass("hidden");
+                        expect(this.view.$(".menu li[data-type=female] .check")).not.toHaveClass("hidden");
                     });
                 });
-            })
+            });
 
             describe("chorus:menu:popup handling", function() {
                 beforeEach(function() {
                     this.view.$("a.popup").click();
                     expect(this.view.$(".menu")).not.toHaveClass("hidden");
                     $(document).trigger("chorus:menu:popup", $(""));
-                })
+                });
 
                 it("dismisses the popup", function() {
                     expect(this.view.$(".menu")).toHaveClass("hidden");
-                })
-            })
-        })
+                });
+            });
+        });
     });
 
     describe("document binding", function() {

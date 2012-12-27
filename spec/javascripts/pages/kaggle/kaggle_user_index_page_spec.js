@@ -1,7 +1,7 @@
 describe("chorus.pages.KaggleUserIndexPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({name: "kagSpace"});
-        this.kaggleUsers = new chorus.collections.KaggleUserSet([])
+        this.kaggleUsers = new chorus.collections.KaggleUserSet([]);
         this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 
@@ -37,7 +37,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         it("displays some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home")
+            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
         });
     });
 

@@ -44,7 +44,7 @@ describe("chorus.models.Workspace", function() {
     describe("#datasetsInDatabase(database)", function() {
         beforeEach(function() {
             var database = rspecFixtures.schema({ database: {name: "foo", id: '123'} }).database();
-            this.datasets = this.model.datasetsInDatabase(database)
+            this.datasets = this.model.datasetsInDatabase(database);
         });
 
         it("returns a dataset set with the right workspace and database", function() {
@@ -56,34 +56,34 @@ describe("chorus.models.Workspace", function() {
 
     describe("#isPublic", function() {
         it("return true when public: true", function() {
-            this.model.set({public: true});
+            this.model.set({"public": true});
             expect(this.model.isPublic()).toBeTruthy();
         });
 
         it("returns false otherwise", function() {
-            this.model.set({ public: false });
+            this.model.set({ "public": false });
             expect(this.model.isPublic()).toBeFalsy();
         });
     });
 
     describe("#defaultIconUrl", function() {
         it("links to the active url when workspace is active", function() {
-            this.model.set({archivedAt: null, public: true});
+            this.model.set({archivedAt: null, "public": true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
         it("links to the archive url when workspace is not active  ", function() {
-            this.model.set({archivedAt: "2012-05-08 21:40:14",   public: true});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", "public": true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
         });
 
         it("links to the private active url when workspace is active and public:false", function() {
-            this.model.set({archivedAt: null, public: false});
+            this.model.set({archivedAt: null, "public": false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
         });
 
         it("links to the private archive url otherwise", function() {
-            this.model.set({archivedAt: "2012-05-08 21:40:14", public: false});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", "public": false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_archived_large.png");
         });
     });
@@ -137,7 +137,7 @@ describe("chorus.models.Workspace", function() {
 
         context('when owner data is nested', function() {
             beforeEach(function() {
-                this.model.set({ owner: { id: '47' } })
+                this.model.set({ owner: { id: '47' } });
             });
 
             it("has the right userId", function() {
@@ -209,7 +209,7 @@ describe("chorus.models.Workspace", function() {
 
         it("initially contains the workspace's latestCommentList", function() {
             var serializedComments = this.model.get("latestCommentList");
-            expect(_.first(serializedComments).text).toBeTruthy() //assert it exists first
+            expect(_.first(serializedComments).text).toBeTruthy(); //assert it exists first
             expect(_.first(this.comments.models).attributes).toEqual(_.first(serializedComments));
         });
     });
@@ -230,7 +230,7 @@ describe("chorus.models.Workspace", function() {
         var workspace;
 
         beforeEach(function() {
-            spyOn(chorus, "cachebuster").andReturn(12345)
+            spyOn(chorus, "cachebuster").andReturn(12345);
             workspace = rspecFixtures.workspace({
                 archivedAt: null,
                 image: {
@@ -260,7 +260,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#archiver", function() {
         beforeEach(function() {
-            this.model.set({archiver: {firstName: "John", lastName: "Henry", username: "jhenry"}})
+            this.model.set({archiver: {firstName: "John", lastName: "Henry", username: "jhenry"}});
         });
 
         it("returns a new User with the right username and fullName", function() {
@@ -278,7 +278,7 @@ describe("chorus.models.Workspace", function() {
 
         it("returns the name", function() {
             expect(this.model.displayName()).toBe(this.model.get("name"));
-        })
+        });
     });
 
     describe("#displayShortName", function() {
@@ -315,22 +315,22 @@ describe("chorus.models.Workspace", function() {
 
     describe("picklistImageUrl", function() {
         it("returns the correct URL when the workspace is archived and is public", function() {
-            this.model.set({archivedAt: "2012-05-08 21:40:14", public: true});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", "public": true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is public", function() {
-            this.model.set({archivedAt: null, public: true});
+            this.model.set({archivedAt: null, "public": true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_small.png');
         });
 
         it("returns the correct URL when the workspace is archived and is private", function() {
-            this.model.set({archivedAt: "2012-05-08 21:40:14", public: false});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", "public": false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is private", function() {
-            this.model.set({archivedAt: null, public: false});
+            this.model.set({archivedAt: null, "public": false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_small.png');
         });
     });
@@ -343,7 +343,7 @@ describe("chorus.models.Workspace", function() {
                         id: 6, name: "schema",
                         database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
                     }
-                })
+                });
             });
 
             it("returns a Sandbox model", function() {
@@ -358,7 +358,7 @@ describe("chorus.models.Workspace", function() {
             it("memoizes", function() {
                 expect(this.model.sandbox()).toBe(this.model.sandbox());
             });
-        })
+        });
 
         context("when the workspace does not have a sandbox", function() {
             beforeEach(function() {
@@ -370,7 +370,7 @@ describe("chorus.models.Workspace", function() {
                 expect(this.model.sandbox()).toBeFalsy();
             });
 
-        })
+        });
     });
 
     describe("permissions checking", function() {

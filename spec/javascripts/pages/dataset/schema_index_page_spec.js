@@ -1,6 +1,6 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
-        this.database = rspecFixtures.database({id: "5678", name: "Foo", instance: {id: "1234", name: "Foo"}})
+        this.database = rspecFixtures.database({id: "5678", name: "Foo", instance: {id: "1234", name: "Foo"}});
         this.page = new chorus.pages.SchemaIndexPage("5678");
         this.page.render();
     });
@@ -10,7 +10,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("instances")
+        expect(this.page.helpId).toBe("instances");
     });
 
     it("fetches the database", function() {
@@ -24,7 +24,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
 
     describe("before the fetches complete", function() {
         it("has some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home")
+            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home");
         });
     });
 
@@ -74,6 +74,6 @@ describe("chorus.pages.SchemaIndexPage", function() {
         it("has a sidebar", function() {
             expect(this.page.sidebar).toBeA(chorus.views.SchemaListSidebar);
             expect(this.page.$(this.page.sidebar.el)).toExist();
-        })
-    })
-})
+        });
+    });
+});

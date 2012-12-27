@@ -10,7 +10,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
         });
 
         it("displays some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home")
+            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
         });
     });
 
@@ -40,7 +40,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
             expect(sidebar).toBeA(chorus.views.InstanceListSidebar);
             expect(sidebar.model.id).toBe(this.model.id);
             expect(this.page.$('.sidebar_content')).toContainText('Import Stream');
-        })
+        });
 
     });
 });

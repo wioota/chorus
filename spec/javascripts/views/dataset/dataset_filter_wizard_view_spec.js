@@ -54,7 +54,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
                 it("resets back to the default filter", function() {
                     this.view.resetFilters();
                     expect(this.view.$('li.dataset_filter').length).toBe(1);
-                })
+                });
             });
 
             describe("removing the filter", function() {

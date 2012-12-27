@@ -21,7 +21,7 @@ describe("chorus.views.DashboardInstanceList", function() {
             _.map(this.collection.models, function(model) {
                 return new chorus.models.Base({ theInstance: model });
             })
-        )
+        );
 
         this.collection.loaded = true;
         proxySet.loaded = true;

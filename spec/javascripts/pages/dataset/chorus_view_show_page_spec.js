@@ -61,11 +61,11 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
                             it("re-draws the page", function() {
                                 expect(this.page.drawColumns).toHaveBeenCalled();
-                            })
-                        })
+                            });
+                        });
                     });
-                })
-            })
+                });
+            });
         });
     });
 
@@ -115,7 +115,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                 });
 
                 it("should swap out the sidebar for the chorus view sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar);
                 });
 
                 it("removes the current selection from the column list", function() {
@@ -207,7 +207,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                 });
 
                 it("swaps out the sidebar for the dataset edit chorus view sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetEditChorusViewSidebar)
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetEditChorusViewSidebar);
                 });
             });
 
@@ -231,7 +231,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
                 it("removes all classes added when transform:sidebar is triggered", function() {
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("chart_configuration");
-                })
+                });
             });
         });
     });

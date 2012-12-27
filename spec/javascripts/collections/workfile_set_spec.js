@@ -8,23 +8,23 @@ describe("chorus.collections.WorkfileSet", function() {
             it("creates the right URL", function() {
                 expect(this.collection.url()).toBe("/workspaces/1234/workfiles?page=1&per_page=50");
             });
-        })
+        });
         describe("with filtering", function() {
             beforeEach(function() {
                 this.collection.attributes.fileType = "sql"
-            })
+            });
             it("it has correct Url", function() {
                 expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=50");
-            })
-        })
+            });
+        });
         describe("with sorting", function() {
             beforeEach(function() {
-                this.collection.attributes.fileType = "sql"
-                this.collection.sortAsc("name")
-            })
+                this.collection.attributes.fileType = "sql";
+                this.collection.sortAsc("name");
+            });
             it("it has correct Url", function() {
                 expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=50&order=name");
-            })
-        })
+            });
+        });
     });
 });

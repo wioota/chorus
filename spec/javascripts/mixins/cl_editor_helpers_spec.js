@@ -33,7 +33,7 @@ describe("chorus.mixins.clEditor", function() {
                 });
 
                 it("should bind clicking on the " + control + " link to onClickToolBar" + _.capitalize(control), function() {
-                    var methodName = "onClickToolbar" + _.capitalize(control)
+                    var methodName = "onClickToolbar" + _.capitalize(control);
                     $('.toolbar a.' + control).click();
                     expect(chorus.Mixins.ClEditor[methodName]).toHaveBeenCalled();
                 });
@@ -42,12 +42,12 @@ describe("chorus.mixins.clEditor", function() {
 
         context("with options", function() {
             beforeEach(function() {
-                var options = { width: 200 }
+                var options = { width: 200 };
                 this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "toolbar", "summary", options);
             });
 
             it("should make an editor with the passed options", function() {
-                expect(this.editor.options.width).toBe(200)
+                expect(this.editor.options.width).toBe(200);
             });
         });
     });
@@ -113,7 +113,7 @@ describe("chorus.mixins.clEditor", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Numbering']", "click");
                     $('a.numbers').click();
-                    expect("click").toHaveBeenTriggeredOn(".cleditorButton[title='Numbering']")
+                    expect("click").toHaveBeenTriggeredOn(".cleditorButton[title='Numbering']");
                 });
             });
 

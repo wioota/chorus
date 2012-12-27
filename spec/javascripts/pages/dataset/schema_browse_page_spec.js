@@ -7,7 +7,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("schema")
+        expect(this.page.helpId).toBe("schema");
     });
 
     it("does not show a title before the fetch completes", function() {
@@ -25,18 +25,18 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
     describe("when a fetch fails", function() {
         beforeEach(function() {
-            spyOn(Backbone.history, "loadUrl")
-        })
+            spyOn(Backbone.history, "loadUrl");
+        });
 
         it("navigates to the 404 page when the schema fetch fails", function() {
             this.page.schema.trigger('resourceNotFound', this.page.schema);
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-        })
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+        });
 
         it("navigates to the 404 page when the collection fetch fails", function() {
             this.page.collection.trigger('resourceNotFound', this.page.collection);
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-        })
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+        });
     });
 
     context("when only the schema has been fetched", function() {

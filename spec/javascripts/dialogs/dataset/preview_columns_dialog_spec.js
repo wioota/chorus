@@ -83,12 +83,12 @@ describe("chorus.dialogs.PreviewColumns", function() {
             spyOn(this.dialog, "closeModal");
             this.dialog.previousModal = {
                 showErrors: jasmine.createSpy("showErrors")
-            }
+            };
             this.server.lastFetch().failUnprocessableEntity();
         });
 
         it("copies the serverErrors to the dialog model", function() {
-            expect(this.dialog.model.serverErrors).toEqual(this.dataset.columns().serverErrors)
+            expect(this.dialog.model.serverErrors).toEqual(this.dataset.columns().serverErrors);
         });
 
         it("closes itself", function() {

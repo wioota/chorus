@@ -78,7 +78,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
                     spyOnEvent(this.dialog.pageModel, "invalidated");
                     spyOn(this.dialog, 'closeModal');
                     this.dialog.members.trigger("saved");
-                })
+                });
 
                 it("closes the dialog", function() {
                     expect(this.dialog.closeModal).toHaveBeenCalled();
@@ -86,8 +86,8 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
 
                 it("triggers the 'invalidated' event on the model", function() {
                     expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
-                })
-            })
+                });
+            });
 
             context("when some of the selected users are already members", function() {
                 beforeEach(function() {
@@ -102,5 +102,5 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
                 });
             });
         });
-    })
+    });
 });

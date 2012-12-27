@@ -57,40 +57,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$('.new_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
         });
 
-        context("when 'Import into New Table' is checked", function() {
-            beforeEach(function() {
-                this.dialog.$(".new_table input:radio").prop("checked", true).change();
-            });
-
-            itShouldHaveAllTheFields(".new_table");
-
-            it("doesn't show 'Select a table' menu/link", function() {
-                expect(this.dialog.$("span.dataset_picked")).toHaveClass("hidden");
-            });
-        });
-
-        context("when 'Import into Existing Table' is checked", function() {
-            beforeEach(function() {
-                this.dialog.activeScheduleView.enable.reset();
-                this.dialog.$(".new_table input:radio").prop("checked", false);
-                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-            });
-
-            itShouldHaveAllTheFields(".existing_table");
-        });
-
-        context("when the dialog has errors", function() {
-            beforeEach(function() {
-                spyOn(this.dialog.model, "clearErrors");
-            });
-
-            it("clears any errors on the model when the dialog is closed", function() {
-                this.dialog.model.errors = { name: "wrong name" };
-                this.dialog.$("button.cancel").click();
-                expect(this.dialog.model.clearErrors).toHaveBeenCalled();
-            });
-        });
-
         function itShouldHaveAllTheFields(selector) {
             it("should enable the schedule view", function() {
                 expect(chorus.views.ImportSchedule.prototype.enable).toHaveBeenCalled();
@@ -139,7 +105,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     it("displays an 'invalid date' message", function() {
                         this.dialog.$("button.submit").click();
-                        expect(this.dialog.$(".errors")).toContainText("32 is not a valid value for days.")
+                        expect(this.dialog.$(".errors")).toContainText("32 is not a valid value for days.");
                         expect(this.dialog.$('button.submit').isLoading()).toBeFalsy();
                     });
                 });
@@ -153,7 +119,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     this.dialog.$(".existing_table a.dataset_picked").text("a");
 
-                    this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
+                    this.dialog.$("input[name='limit_num_rows']").prop("checked", false);
 
                     this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
                     this.dialog.activeScheduleView.$(".start input[name='month']").val("02");
@@ -186,6 +152,40 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
         }
 
+        context("when 'Import into New Table' is checked", function() {
+            beforeEach(function() {
+                this.dialog.$(".new_table input:radio").prop("checked", true).change();
+            });
+
+            itShouldHaveAllTheFields(".new_table");
+
+            it("doesn't show 'Select a table' menu/link", function() {
+                expect(this.dialog.$("span.dataset_picked")).toHaveClass("hidden");
+            });
+        });
+
+        context("when 'Import into Existing Table' is checked", function() {
+            beforeEach(function() {
+                this.dialog.activeScheduleView.enable.reset();
+                this.dialog.$(".new_table input:radio").prop("checked", false);
+                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+            });
+
+            itShouldHaveAllTheFields(".existing_table");
+        });
+
+        context("when the dialog has errors", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, "clearErrors");
+            });
+
+            it("clears any errors on the model when the dialog is closed", function() {
+                this.dialog.model.errors = { name: "wrong name" };
+                this.dialog.$("button.cancel").click();
+                expect(this.dialog.model.clearErrors).toHaveBeenCalled();
+            });
+        });
+
         describe("switching between new table and existing table", function() {
             context("switching from new to existing", function() {
                 beforeEach(function() {
@@ -194,16 +194,16 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     spyOn(this.dialog, 'clearErrors');
                     this.dialog.$(".new_table input:radio").prop("checked", false);
                     this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                })
+                });
 
                 it("clears the errors", function() {
                     expect(this.dialog.clearErrors).toHaveBeenCalled();
-                })
+                });
 
                 it("sets the time fields to the model defaults", function() {
                     expect(this.dialog.$('.existing_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
                 });
-            })
+            });
             context("switching from existing to new", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table input:radio").prop("checked", false);
@@ -211,11 +211,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     spyOn(this.dialog, 'clearErrors');
                     this.dialog.$(".new_table input:radio").prop("checked", true).change();
                     this.dialog.$(".existing_table input:radio").prop("checked", false);
-                })
+                });
 
                 it("clears the errors", function() {
                     expect(this.dialog.clearErrors).toHaveBeenCalled();
-                })
+                });
             });
         });
     });
@@ -337,7 +337,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             describe("submitting the form", function () {
                 beforeEach(function () {
-                    this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
+                    this.dialog.$("input[name='limit_num_rows']").prop("checked", false);
                     this.dialog.$("input[name='sampleCount']").val("201");
                     this.dialog.$("button.submit").click();
                 });
@@ -369,7 +369,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     it("triggers change on the dataset", function () {
                         expect('change').toHaveBeenTriggeredOn(this.dataset);
-                    })
+                    });
                 });
 
                 context("and the save is not successful", function () {

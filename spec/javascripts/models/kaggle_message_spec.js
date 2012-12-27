@@ -14,7 +14,7 @@ describe("chorus.models.KaggleMessage", function() {
     describe("url", function() {
         it("equals /kaggle/messages", function() {
             expect(this.model.url()).toMatchUrl('/kaggle/messages');
-        })
+        });
     });
 
     describe("params", function() {

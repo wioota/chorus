@@ -6,8 +6,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("workfiles")
-    })
+        expect(this.page.helpId).toBe("workfiles");
+    });
 
     describe("breadcrumbs", function() {
         beforeEach(function() {
@@ -67,7 +67,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         it("goes to 404 when the workspace fetch fails", function() {
             spyOn(Backbone.history, "loadUrl");
             this.server.lastFetchFor(this.page.workspace).failNotFound();
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
     });
 
@@ -116,7 +116,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             beforeEach(function() {
                 this.page.collection.fileType = undefined;
                 spyOn(this.page.collection, "fetchAll");
-            })
+            });
 
             it("has options for filtering", function() {
                 expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
@@ -125,80 +125,80 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.$("ul[data-event=filter] li[data-type=TEXT]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=IMAGE]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=OTHER]")).toExist();
-            })
+            });
 
             it("can filter the list by 'all'", function() {
                 this.page.$("li[data-type=] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can filter the list by 'SQL'", function() {
                 this.page.$("li[data-type=SQL] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("SQL");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can filter the list by 'CODE'", function() {
                 this.page.$("li[data-type=CODE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("CODE");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can filter the list by 'TEXT'", function() {
                 this.page.$("li[data-type=TEXT] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("TEXT");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can filter the list by 'IMAGE'", function() {
                 this.page.$("li[data-type=IMAGE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("IMAGE");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can filter the list by 'OTHER'", function() {
                 this.page.$("li[data-type=OTHER] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("OTHER");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
-        })
+        });
 
         describe("sorting", function() {
             beforeEach(function() {
                 this.page.collection.order = undefined;
                 spyOn(this.page.collection, "fetchAll");
-            })
+            });
 
             it("has options for sorting", function() {
                 expect(this.page.$("ul[data-event=sort] li[data-type=alpha]")).toExist();
                 expect(this.page.$("ul[data-event=sort] li[data-type=date]")).toExist();
-            })
+            });
 
             it("can sort the list alphabetically ascending", function() {
                 this.page.$("li[data-type=alpha] a").click();
                 expect(this.page.collection.order).toBe("fileName")
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
+            });
 
             it("can sort the list bu date ascending", function() {
                 this.page.$("li[data-type=date] a").click();
                 expect(this.page.collection.order).toBe("lastUpdatedStamp")
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("buttons", function() {
         context("before the workspace is fetched", function() {
             beforeEach(function() {
                 this.page.render();
-            })
+            });
 
             it("does not render any buttons", function() {
                 expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
-            })
-        })
+            });
+        });
 
         context("after the workspace is fetched", function() {
             context("and the user can update the workspace", function() {
@@ -206,17 +206,17 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                     spyOn(this.page.mainContent.model, 'canUpdate').andReturn(true);
                     this.server.completeFetchFor(this.workspace);
                     this.server.completeFetchFor(this.page.collection);
-                })
+                });
 
                 it("renders buttons", function() {
                     expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesImport]")).toExist();
                     expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesSqlNew]")).toExist();
-                })
+                });
 
                 it("shows the page title", function() {
                     expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
-                })
-            })
+                });
+            });
 
             context("and the user cannot update the workspace", function() {
                 beforeEach(function() {

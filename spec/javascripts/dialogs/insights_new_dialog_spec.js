@@ -40,7 +40,7 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
             it("saves the insight model with the text", function() {
                 expect(this.dialog.model.save).toHaveBeenCalled();
                 expect(this.dialog.model.get("body")).toBe("a fine selection of text, especially considering the price point");
-                expect(this.server.lastCreate().url).toBe('/notes/')
+                expect(this.server.lastCreate().url).toBe('/notes/');
             });
         });
     });

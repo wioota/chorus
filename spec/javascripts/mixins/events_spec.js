@@ -18,11 +18,11 @@ describe("chorus.Mixins.Events", function() {
         });
 
         it("triggers the event on the target, when the source is triggered, retaining arguments", function() {
-            var obj = {}
+            var obj = {};
             var spy = function(arg1, arg2) {
-                obj.arg1 = arg1
-                obj.arg2 = arg2
-            }
+                obj.arg1 = arg1;
+                obj.arg2 = arg2;
+            };
 
             this.target.bind("my_event", spy);
             this.source.trigger("my_event", 1, 2);
@@ -33,7 +33,7 @@ describe("chorus.Mixins.Events", function() {
     });
 
     describe("bindOnce", function() {
-        var fakeContext = function(name) {this.name = name};
+        var fakeContext = function(name) {this.name = name;};
         beforeEach(function() {
             this.source = {};
             _.extend(this.source, Backbone.Events, chorus.Mixins.Events);

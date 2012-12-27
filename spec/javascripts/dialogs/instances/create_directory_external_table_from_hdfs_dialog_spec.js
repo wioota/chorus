@@ -34,7 +34,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
     describe("#setup", function() {
         it("sets csv to be the first models in the collection", function() {
-            expect(this.dialog.model).toEqual(this.collection.at(0))
+            expect(this.dialog.model).toEqual(this.collection.at(0));
         });
     });
 
@@ -66,7 +66,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         });
 
         it("populates the table name with the directory name", function() {
-            expect(this.dialog.$("input[name=tableName]").val()).toBe("test")
+            expect(this.dialog.$("input[name=tableName]").val()).toBe("test");
         });
 
         it("populates the select sample file with hdfs text files", function() {
@@ -108,7 +108,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     expect(this.dialog.$(".data_table").isLoading()).toBeFalsy();
                 });
                 it("display the correct tableName name", function() {
-                    expect(this.dialog.$("input[name=tableName]").val()).toBe("new_test_name")
+                    expect(this.dialog.$("input[name=tableName]").val()).toBe("new_test_name");
                 });
 
                 it("display the correct elements", function() {
@@ -123,7 +123,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("sets the csv contents to the model contents", function() {
                     expect(this.dialog.contents).toEqual(this.dialog.model.get("contents"));
-                })
+                });
             });
         });
 
@@ -170,7 +170,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("starts the loading spinner", function() {
                     expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-                    expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating")
+                    expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating");
                 });
 
                 it("posts to the right URL", function() {
@@ -200,7 +200,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     it("triggers csv_import:started", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
                     });
-                })
+                });
             });
 
             context("when importing only files that match a pattern", function() {
@@ -234,7 +234,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("has no validation errors", function() {
-                    expect(this.dialog.$(".has_error").length).toBe(0)
+                    expect(this.dialog.$(".has_error").length).toBe(0);
                 });
 
                 it("retains column names", function() {

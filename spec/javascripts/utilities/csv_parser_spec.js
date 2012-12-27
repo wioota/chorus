@@ -24,6 +24,35 @@ describe("chorus.utilities.CsvParser", function() {
     });
 
     context("#getColumnOrientedData", function() {
+        function itParsesCorrectly() {
+            describe("getColumnOrientedData", function() {
+                beforeEach(function() {
+                    this.csvParser = new chorus.utilities.CsvParser(this.contents, this.options);
+
+                    this.columns = this.csvParser.getColumnOrientedData();
+                    this.types = _.pluck(this.columns, "type");
+                });
+
+                it("has the correct number of columns", function() {
+                    expect(this.columns.length).toBe(this.expectedColumns.length);
+                });
+
+                it("has the column name", function() {
+                    expect(this.columns[0].name).toBe(this.expectedColumns[0].name);
+                });
+
+                it("has the correct number of data types", function() {
+                    expect(this.types).toEqual(_.pluck(this.expectedColumns, "type"));
+                });
+
+                it("has the rows", function() {
+                    _.each(this.columns, _.bind(function(column, i) {
+                        expect(column.values).toEqual(this.expectedColumns[i].values);
+                    }, this));
+                });
+            });
+        }
+
         context("with comma delimiters", function() {
             beforeEach(function() {
                 this.contents = [
@@ -36,11 +65,11 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
                     {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
-                ]
-            })
+                ];
+            });
 
             itParsesCorrectly();
-        })
+        });
 
         context("with space delimiters", function() {
             beforeEach(function() {
@@ -54,12 +83,12 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1 val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', 'row2 val2'], type: 'text'},
                     {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
-                ]
+                ];
                 this.options.delimiter = ' ';
-            })
+            });
 
             itParsesCorrectly();
-        })
+        });
 
         context("with tab delimiters", function() {
             beforeEach(function() {
@@ -73,12 +102,12 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
                     {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
-                ]
+                ];
                 this.options.delimiter = '\t';
-            })
+            });
 
             itParsesCorrectly();
-        })
+        });
 
         context("with quoted comma", function() {
             beforeEach(function() {
@@ -92,11 +121,11 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1,val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', 'row2,val2'], type: 'text'},
                     {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
-                ]
-            })
+                ];
+            });
 
             itParsesCorrectly();
-        })
+        });
 
         context("with escaped quote", function() {
             beforeEach(function() {
@@ -110,11 +139,11 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1"val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
                     {name: 'col3', values: ['"', 'row2val3'], type: 'text'}
-                ]
-            })
+                ];
+            });
 
             itParsesCorrectly();
-        })
+        });
 
         context("with empty values", function() {
             beforeEach(function() {
@@ -129,11 +158,11 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col1', values: ['row1"val1', 'row2val1'], type: 'text'},
                     {name: 'col2', values: ['row1val2', ''], type: 'text'},
                     {name: 'col3', values: ['', 'row2val3'], type: 'text'}
-                ]
+                ];
             });
 
-            itParsesCorrectly()
-        })
+            itParsesCorrectly();
+        });
 
         context("with unparseable values (for current delimiter)", function() {
             beforeEach(function() {
@@ -171,11 +200,11 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'col3', values: ['3', 'sna'], type: 'text'},
                     {name: 'someFloat', values: [' ', '1'], type: 'float'},
                     {name: 'col4', values: ['1/2/3', '456'], type: 'text'}
-                ]
+                ];
             });
 
             itParsesCorrectly();
-        }) 
+        });
         context("no header row", function() {
             beforeEach(function() {
                 this.contents = [
@@ -188,13 +217,13 @@ describe("chorus.utilities.CsvParser", function() {
                     {name: 'column_2', values: ['2', '2.1'], type: 'float'},
                     {name: 'column_3', values: ['3', 'sna'], type: 'text'},
                     {name: 'column_4', values: ['1/2/3', '456'], type: 'text'}
-                ]
+                ];
 
                 this.options.hasHeader = false;
             });
 
             itParsesCorrectly();
-        })
+        });
 
         describe("it retains values the user has overridden", function() {
             beforeEach(function() {
@@ -203,7 +232,7 @@ describe("chorus.utilities.CsvParser", function() {
                     'foo,2,3,1/2/3',
                     'bar,2.1,sna,456'
                 ];
-            })
+            });
 
             it("stores changes to the generated column names", function() {
                 this.options.hasHeader = false;
@@ -225,52 +254,23 @@ describe("chorus.utilities.CsvParser", function() {
                 var columnData = csvParser.getColumnOrientedData();
                 var columnNames = _.pluck(columnData, "name");
 
-                expect(columnNames).toEqual(["f", "d", "s", "a"])
+                expect(columnNames).toEqual(["f", "d", "s", "a"]);
                 expect(columnData[0].values.length).toBe(2);
             });
         });
-
-        function itParsesCorrectly() {
-            describe("getColumnOrientedData", function() {
-                beforeEach(function() {
-                    this.csvParser = new chorus.utilities.CsvParser(this.contents, this.options);
-
-                    this.columns = this.csvParser.getColumnOrientedData();
-                    this.types = _.pluck(this.columns, "type")
-                })
-
-                it("has the correct number of columns", function() {
-                    expect(this.columns.length).toBe(this.expectedColumns.length);
-                })
-
-                it("has the column name", function() {
-                    expect(this.columns[0].name).toBe(this.expectedColumns[0].name);
-                })
-
-                it("has the correct number of data types", function() {
-                    expect(this.types).toEqual(_.pluck(this.expectedColumns, "type"));
-                });
-
-                it("has the rows", function() {
-                    _.each(this.columns, _.bind(function(column, i) {
-                        expect(column.values).toEqual(this.expectedColumns[i].values)
-                    }, this))
-                })
-            })
-        }
     });
 
     var itNormalizesNames = function(normalizer) {
         it("converts spaces to underscores", function() {
-            expect(normalizer("file name")).toBe("file_name")
+            expect(normalizer("file name")).toBe("file_name");
         });
 
         it("converts periods to underscores", function() {
-            expect(normalizer("file.name")).toBe("file_name")
+            expect(normalizer("file.name")).toBe("file_name");
         });
 
         it("discards invalid characters", function() {
-            expect(normalizer("file^$name*&22_+33")).toBe("filename22_33")
+            expect(normalizer("file^$name*&22_+33")).toBe("filename22_33");
         });
 
         it("converts uppercase to lowercase", function() {
@@ -278,24 +278,24 @@ describe("chorus.utilities.CsvParser", function() {
         });
 
         it("trims the white spaces", function() {
-            expect(normalizer(" file^$name* &22_+33 ")).toBe("filename_22_33")
+            expect(normalizer(" file^$name* &22_+33 ")).toBe("filename_22_33");
         });
 
         it("truncates at 64 characters", function() {
-            expect(normalizer("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
+            expect(normalizer("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123");
         });
-    }
+    };
 
     describe("#normalizeForDatabase", function() {
         itNormalizesNames(chorus.utilities.CsvParser.normalizeForDatabase);
-    })
+    });
 
     describe("#normalizeColumnName", function() {
 
         it("converts to lower case", function() {
-            expect(chorus.utilities.CsvParser.normalizeColumnName("FILENAME")).toBe("filename")
+            expect(chorus.utilities.CsvParser.normalizeColumnName("FILENAME")).toBe("filename");
         });
 
         itNormalizesNames(chorus.utilities.CsvParser.normalizeColumnName);
-    })
+    });
 });

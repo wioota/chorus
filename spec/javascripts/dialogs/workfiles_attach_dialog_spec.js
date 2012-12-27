@@ -23,7 +23,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
     });
 
     it("has the correct submit button text", function() {
-        expect(this.dialog.$('button.submit')).toContainTranslation("workfiles.button.attach_file")
+        expect(this.dialog.$('button.submit')).toContainTranslation("workfiles.button.attach_file");
     });
 
     it("has the correct search placeholder text", function() {

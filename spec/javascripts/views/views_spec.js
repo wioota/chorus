@@ -424,7 +424,7 @@ describe("chorus.views.Base", function() {
             context("when a collectionModelContext is defined", function() {
                 beforeEach(function() {
                     this.view.collectionModelContext = function(model) {
-                        return {my_cid: model.cid}
+                        return {my_cid: model.cid};
                     };
                 });
 
@@ -714,7 +714,7 @@ describe("chorus.views.Base", function() {
                 });
 
                 it("sets the title of the content header to the plural of the model class", function() {
-                    expect(this.view.contentHeader.options.title).toBe("Workfiles")
+                    expect(this.view.contentHeader.options.title).toBe("Workfiles");
                 });
 
                 context("emptyTitleBeforeFetch option set", function() {
@@ -755,7 +755,7 @@ describe("chorus.views.Base", function() {
 
                 it("gets mixed in to the content's options", function() {
                     expect(this.view.content.options).toEqual({foo: "bar", collection: this.collection});
-                })
+                });
             });
 
             context("when no contentDetails is provided", function() {
@@ -876,7 +876,7 @@ describe("chorus.views.Base", function() {
                 });
 
                 it("renders the image", function() {
-                    expect(this.view.$(".icon")).toHaveAttr("src", "image/foo/bar.png")
+                    expect(this.view.$(".icon")).toHaveAttr("src", "image/foo/bar.png");
                 });
 
                 context("and an imageTitle is provided", function() {
@@ -886,7 +886,7 @@ describe("chorus.views.Base", function() {
                     });
 
                     it("sets the title on the image", function() {
-                        expect(this.view.$(".icon")).toHaveAttr("title", "a title")
+                        expect(this.view.$(".icon")).toHaveAttr("title", "a title");
                     });
                 });
             });
@@ -940,7 +940,7 @@ describe("chorus.views.Base", function() {
             this.view.templateName = "plain_text";
             this.view.context = function() {
                 return { text: "Foo" };
-            }
+            };
         });
 
         describe("rendering the loading section", function() {
@@ -951,7 +951,7 @@ describe("chorus.views.Base", function() {
                     spyOn(this.view, 'getSubview').andCallThrough();
                     this.view.displayLoadingSection = function() {
                         return true;
-                    }
+                    };
                 });
 
                 it("does not call context", function() {
@@ -967,7 +967,7 @@ describe("chorus.views.Base", function() {
 
                 it("renders the loading template", function() {
                     this.view.render();
-                    expect(this.view.$('.loading_section').length).toBe(1)
+                    expect(this.view.$('.loading_section').length).toBe(1);
                 });
 
                 context("when makeLoadingSectionView is overridden", function() {
@@ -977,7 +977,7 @@ describe("chorus.views.Base", function() {
 
                         this.view.makeLoadingSectionView = function() {
                             return otherView;
-                        }
+                        };
                     });
 
                     it("renders what is returned by makeLoadingSectionView", function() {
@@ -1017,7 +1017,7 @@ describe("chorus.views.Base", function() {
 
                     it("renders the 'normal' template", function() {
                         expect($(this.view.el)).toContainText("Foo");
-                        expect(this.view.$('.loading_section').length).toBe(0)
+                        expect(this.view.$('.loading_section').length).toBe(0);
                     });
                 });
 
@@ -1222,7 +1222,7 @@ describe("chorus.views.Base", function() {
                     });
 
                     it("recalculates scrolling", function() {
-                        expect(this.view.recalculateScrolling).toHaveBeenCalled()
+                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
                     });
                 });
 

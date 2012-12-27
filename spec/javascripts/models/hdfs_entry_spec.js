@@ -14,7 +14,7 @@ describe("chorus.models.HdfsEntry", function() {
                     path: "/data/a%pct",
                     name: "%foo%",
                     isDir: true
-                })
+                });
             });
 
             it("is correct", function() {
@@ -106,7 +106,7 @@ describe("chorus.models.HdfsEntry", function() {
                    name: "obscene"
                },
                path: "/"
-           })
+           });
 
             this.hadoopInstance = this.model.getHadoopInstance();
         });
@@ -122,7 +122,7 @@ describe("chorus.models.HdfsEntry", function() {
 
         it("should have an instanceProvider of Hadoop", function() {
             expect(this.hadoopInstance.get('instanceProvider')).toBe('Hadoop');
-        })
+        });
     });
 
     describe("getFullAbsolutePath", function() {
@@ -134,7 +134,7 @@ describe("chorus.models.HdfsEntry", function() {
                    },
                     path: "/",
                     name: "file.sql"
-               })
+               });
 
                 expect(model.getFullAbsolutePath()).toEqual("/file.sql");
             });
@@ -148,7 +148,7 @@ describe("chorus.models.HdfsEntry", function() {
                     },
                     path: "/workfiles",
                     name: "file.sql"
-                })
+                });
 
                 expect(model.getFullAbsolutePath()).toEqual("/workfiles/file.sql");
             });
@@ -164,6 +164,6 @@ describe("chorus.models.HdfsEntry", function() {
             path: "/workfiles/file.txt",
             name: "file.txt"
         });
-        expect(model.iconUrl()).toBe("/images/workfiles/large/txt.png")
+        expect(model.iconUrl()).toBe("/images/workfiles/large/txt.png");
     });
 });

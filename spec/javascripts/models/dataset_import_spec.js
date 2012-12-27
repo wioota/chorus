@@ -13,7 +13,7 @@ describe("chorus.models.DatasetImport", function() {
 
     describe("#isInProgress", function() {
         it("returns true when the import has a startedStamp but no completedStamp", function() {
-            this.model.set({ success: true, startedStamp: "something", completedStamp: null })
+            this.model.set({ success: true, startedStamp: "something", completedStamp: null });
             expect(this.model.isInProgress()).toBeTruthy();
         });
 
@@ -74,7 +74,7 @@ describe("chorus.models.DatasetImport", function() {
 
             context("with a non-conforming toTable name", function() {
                 beforeEach(function() {
-                    this.attrs.toTable = "__foo"
+                    this.attrs.toTable = "__foo";
                 });
 
                 it("fails validations", function() {
@@ -123,7 +123,7 @@ describe("chorus.models.DatasetImport", function() {
 
             context("with a toTable name that does not conform to the new table regex constraints", function() {
                 beforeEach(function() {
-                    this.attrs.toTable = "__foo"
+                    this.attrs.toTable = "__foo";
                 });
 
                 it("validates", function() {
@@ -135,7 +135,7 @@ describe("chorus.models.DatasetImport", function() {
 
     describe("#source", function() {
         it("sets the model correctly", function() {
-            this.model.set({workspaceId: 123, sourceDatasetId: 567, sourceDatasetName: 'source'})
+            this.model.set({workspaceId: 123, sourceDatasetId: 567, sourceDatasetName: 'source'});
             expect(this.model.source().url()).toContain("/workspaces/123/datasets/567");
             expect(this.model.source().name()).toBe('source');
         });

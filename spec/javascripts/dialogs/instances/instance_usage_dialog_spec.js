@@ -34,7 +34,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
             });
 
             it("renders a li for each workspace", function() {
-                expect(this.dialog.$("li").length).toBe(this.workspaces.length)
+                expect(this.dialog.$("li").length).toBe(this.workspaces.length);
             });
 
             it("renders the workspace_small.png image for each workspace", function() {
@@ -42,7 +42,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
             });
 
             it("displays a link to each workspace", function() {
-                expect(this.dialog.$("li a.workspace_link").length).toBe(this.workspaces.length)
+                expect(this.dialog.$("li a.workspace_link").length).toBe(this.workspaces.length);
             });
 
             it("sets the width of the 'used' bar to be the percentage of the workspace size vs the recommended size", function() {

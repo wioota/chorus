@@ -1,4 +1,20 @@
 describe("sinon extensions", function() {
+    function itReturnsStatus(code) {
+        it("returns a status code of " + code, function() {
+            expect(this.fakeRequest.status).toBe(code);
+        });
+    }
+
+    function itIncludesErrorAndResponse() {
+        it("returns an error message in the 'message' field", function() {
+            expect(JSON.parse(this.fakeRequest.responseText).errors).toEqual(this.errors);
+        });
+
+        it("includes the response if one is given", function() {
+            expect(JSON.parse(this.fakeRequest.responseText).response).toEqual(this.response);
+        });
+    }
+
     beforeEach(function() {
         this.errors = { record: "not accessible" };
         this.response = { instanceId: 1 };
@@ -14,7 +30,7 @@ describe("sinon extensions", function() {
 
         context("when given a model", function() {
             beforeEach(function() {
-                this.model = new chorus.models.Base({ foo: "bar" })
+                this.model = new chorus.models.Base({ foo: "bar" });
                 this.xhr.succeed(this.model);
             });
 
@@ -83,7 +99,7 @@ describe("sinon extensions", function() {
             this.collection = new chorus.collections.UserSet();
 
             this.model.fetch();
-            this.collection.fetch()
+            this.collection.fetch();
         });
 
         context("it is called with a specified result", function() {
@@ -117,7 +133,7 @@ describe("sinon extensions", function() {
                 });
 
                 it("uses an empty model set", function() {
-                    expect(this.collection.models.length).toBe(0)
+                    expect(this.collection.models.length).toBe(0);
                     expect(this.collection.get('group')).toBeUndefined();
                     expect(this.collection.loaded).toBeTruthy();
                 });
@@ -150,7 +166,7 @@ describe("sinon extensions", function() {
 
             context("it is called with a collection", function() {
                 it("uses an empty model set", function() {
-                    var collection = new chorus.collections.UserSet([], { group: "Agents" })
+                    var collection = new chorus.collections.UserSet([], { group: "Agents" });
                     expect(this.server.makeFakeResponse(collection)).toEqual([]);
                 });
             });
@@ -159,7 +175,7 @@ describe("sinon extensions", function() {
 
     describe("#respondJson", function() {
         beforeEach(function() {
-            this.fakeRequest.respondJson(403, { response: { foo: "bar" } })
+            this.fakeRequest.respondJson(403, { response: { foo: "bar" } });
         });
 
         itReturnsStatus(403);
@@ -177,7 +193,7 @@ describe("sinon extensions", function() {
 
     describe("#fail", function() {
         beforeEach(function() {
-            this.fakeRequest.fail()
+            this.fakeRequest.fail();
         });
 
         itReturnsStatus(200);
@@ -193,7 +209,7 @@ describe("sinon extensions", function() {
 
     describe("#failForbidden", function() {
         beforeEach(function() {
-            this.fakeRequest.failForbidden(this.errors, this.response)
+            this.fakeRequest.failForbidden(this.errors, this.response);
         });
 
         itReturnsStatus(403);
@@ -227,20 +243,4 @@ describe("sinon extensions", function() {
         itReturnsStatus(422);
         itIncludesErrorAndResponse();
     });
-
-    function itReturnsStatus(code) {
-        it("returns a status code of " + code, function() {
-            expect(this.fakeRequest.status).toBe(code);
-        });
-    }
-
-    function itIncludesErrorAndResponse() {
-        it("returns an error message in the 'message' field", function() {
-            expect(JSON.parse(this.fakeRequest.responseText).errors).toEqual(this.errors);
-        });
-
-        it("includes the response if one is given", function() {
-            expect(JSON.parse(this.fakeRequest.responseText).response).toEqual(this.response);
-        });
-    }
 });

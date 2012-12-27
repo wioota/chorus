@@ -69,7 +69,7 @@ describe("chorus.views.NotificationList", function() {
             chorus.isDevMode.andReturn(false);
             this.view.render();
             expect(chorus.toast).not.toHaveBeenCalled();
-        })
+        });
     });
 
     describe("more link", function() {

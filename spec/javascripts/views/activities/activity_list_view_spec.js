@@ -14,7 +14,7 @@ describe("chorus.views.ActivityList", function() {
             this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
             this.collection.add(this.note);
             this.view.render();
-        })
+        });
 
         it("re-renders when 'note:deleted' is fired", function() {
             chorus.PageEvents.broadcast('note:deleted', this.note);
@@ -25,7 +25,7 @@ describe("chorus.views.ActivityList", function() {
             this.newNote = rspecFixtures.activity.noteOnGreenplumInstanceCreated({id: this.note.id, body: 'A New Note'});
             chorus.PageEvents.broadcast('note:saved', this.newNote);
             expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).toContainText("A New Note");
-        })
+        });
     });
 
     describe("#render", function() {
@@ -43,7 +43,7 @@ describe("chorus.views.ActivityList", function() {
 
         it("cleans up old activity views", function() {
             var tornDown = false;
-            spyOn(this.view.activities[0], "teardown").andCallFake(function() {tornDown = true});
+            spyOn(this.view.activities[0], "teardown").andCallFake(function() {tornDown = true;});
             this.view.render();
             expect(tornDown).toBeTruthy();
         });
@@ -143,6 +143,40 @@ describe("chorus.views.ActivityList", function() {
         });
 
         describe("pagination", function() {
+            function itDoesNotShowAMoreLink() {
+                it("does not render a 'more' link", function() {
+                    expect(this.view.$("a.more_activities")).not.toExist();
+                });
+            }
+
+            function itShowsAMoreLink(nextPage) {
+                it("renders a 'more' link", function() {
+                    expect(this.view.$(".more_activities a")).toExist();
+                });
+
+                describe("when the 'more' link is clicked", function() {
+                    beforeEach(function() {
+                        this.originalActivityCount = this.view.$('li[data-activity-id]').length;
+                        spyOn(this.view, 'postRender').andCallThrough();
+                        this.view.$(".more_activities a").click();
+
+                        this.server.completeFetchFor(this.collection, [
+                            rspecFixtures.activity.greenplumInstanceCreated(),
+                            rspecFixtures.activity.greenplumInstanceCreated(),
+                            rspecFixtures.activity.greenplumInstanceCreated()
+                        ], { page: nextPage });
+                    });
+
+                    it("fetches the next page of the activity stream", function() {
+                        expect(this.view.$('li[data-activity-id]').length).toBe(this.originalActivityCount + 3);
+                    });
+
+                    it("only re-renders the page once", function() {
+                        expect(this.view.postRender.callCount).toBe(1);
+                    });
+                });
+            }
+
             context("with full pagination information in the response", function() {
                 beforeEach(function() {
                     this.collection.pagination = {};
@@ -188,7 +222,7 @@ describe("chorus.views.ActivityList", function() {
                     });
 
                     itDoesNotShowAMoreLink();
-                })
+                });
 
                 context("when there might be more activities", function() {
                     beforeEach(function() {
@@ -198,50 +232,16 @@ describe("chorus.views.ActivityList", function() {
                     });
 
                     itShowsAMoreLink(3);
-                })
-            })
-
-            function itDoesNotShowAMoreLink() {
-                it("does not render a 'more' link", function() {
-                    expect(this.view.$("a.more_activities")).not.toExist();
-                })
-            }
-
-            function itShowsAMoreLink(nextPage) {
-                it("renders a 'more' link", function() {
-                    expect(this.view.$(".more_activities a")).toExist();
-                })
-
-                describe("when the 'more' link is clicked", function() {
-                    beforeEach(function() {
-                        this.originalActivityCount = this.view.$('li[data-activity-id]').length;
-                        spyOn(this.view, 'postRender').andCallThrough();
-                        this.view.$(".more_activities a").click();
-
-                        this.server.completeFetchFor(this.collection, [
-                            rspecFixtures.activity.greenplumInstanceCreated(),
-                            rspecFixtures.activity.greenplumInstanceCreated(),
-                            rspecFixtures.activity.greenplumInstanceCreated()
-                        ], { page: nextPage });
-                    });
-
-                    it("fetches the next page of the activity stream", function() {
-                        expect(this.view.$('li[data-activity-id]').length).toBe(this.originalActivityCount + 3);
-                    });
-
-                    it("only re-renders the page once", function() {
-                        expect(this.view.postRender.callCount).toBe(1);
-                    });
                 });
-            }
-        })
+            });
+        });
 
     });
 
     describe("error handling", function() {
         beforeEach(function() {
             spyOn(chorus, "log");
-            spyOn(this.collection.at(0), 'get').andCallFake(function() {throw 'an error during rendering'})
+            spyOn(this.collection.at(0), 'get').andCallFake(function() {throw 'an error during rendering';});
         });
 
         it("does not raise an exception", function() {
@@ -265,7 +265,7 @@ describe("chorus.views.ActivityList", function() {
             chorus.isDevMode.andReturn(false);
             this.view.render();
             expect(chorus.toast).not.toHaveBeenCalled();
-        })
+        });
     });
 
     describe("#show", function() {

@@ -1,4 +1,20 @@
 describe("chorus.ValidationRegexes", function() {
+    function itWorks(functionName, options) {
+        describe(functionName, function() {
+            _.each(options.good, function(value) {
+                it("passes for " + value, function() {
+                    expect(value.match(chorus.ValidationRegexes[functionName]())).toBeTruthy();
+                });
+            });
+
+            _.each(options.bad, function(value) {
+                it("does not pass for " + value, function() {
+                    expect(value.match(chorus.ValidationRegexes[functionName]())).toBeFalsy();
+                });
+            });
+        });
+    }
+
     itWorks("ChorusIdentifier64", {
         good: [ "a_valid_name", new Array(65).join("a"), "a2", "A2" ],
         bad: [ "some invalid name", new Array(66).join("a"), "123", "okay_until_$^#$%#$", "_leading_underscore" ]
@@ -63,22 +79,6 @@ describe("chorus.ValidationRegexes", function() {
         good: ["test", "test_", "test_123"],
         bad: ["_test", "1test", "test-"]
     });
-
-    function itWorks(functionName, options) {
-        describe(functionName, function() {
-            _.each(options.good, function(value) {
-                it("passes for " + value, function() {
-                    expect(value.match(chorus.ValidationRegexes[functionName]())).toBeTruthy();
-                });
-            });
-
-            _.each(options.bad, function(value) {
-                it("does not pass for " + value, function() {
-                    expect(value.match(chorus.ValidationRegexes[functionName]())).toBeFalsy();
-                });
-            });
-        });
-    }
 
     describe("ChorusIdentifer (when given a length argument)", function() {
         it("returns a Chorus Identifier matcher with the supplied max length", function() {

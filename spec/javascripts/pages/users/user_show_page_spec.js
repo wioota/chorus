@@ -13,19 +13,19 @@ describe("chorus.pages.UserShow", function() {
         });
 
         it("has a helpId", function() {
-            expect(this.view.helpId).toBe("user")
-        })
+            expect(this.view.helpId).toBe("user");
+        });
 
         context("when the model fails to load properly", function() {
             beforeEach(function() {
-                spyOn(Backbone.history, "loadUrl")
-                this.view.model.trigger('resourceNotFound')
-            })
+                spyOn(Backbone.history, "loadUrl");
+                this.view.model.trigger('resourceNotFound');
+            });
 
             it("navigates to the 404 page", function() {
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-            })
-        })
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
     });
 
     describe("#render", function() {
@@ -64,17 +64,17 @@ describe("chorus.pages.UserShow", function() {
         context("sidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});
-                this.view.model.set({id: "42"})
+                this.view.model.set({id: "42"});
                 this.view.render();
             });
 
             it("puts a UserSidebar in the sidebar", function() {
                 expect(this.view.sidebar instanceof chorus.views.UserSidebar).toBeTruthy();
-            })
+            });
 
             it("sets the sidebar's model to the user", function() {
                 expect(this.view.sidebar.model).toBe(this.view.model);
-            })
-        })
+            });
+        });
     });
 });

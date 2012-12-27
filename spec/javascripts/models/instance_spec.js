@@ -1,6 +1,6 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = new chorus.models.Instance({id : 1, version: "1234", owner:{firstName: "John", lastName: "Doe", id: 2}})
+        this.instance = new chorus.models.Instance({id : 1, version: "1234", owner:{firstName: "John", lastName: "Doe", id: 2}});
     });
 
     describe("#stateIconUrl and #stateText", function() {

@@ -15,7 +15,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     });
 
     it("fetches the results sorted by objectName ascending", function() {
-        var url = this.server.lastFetch().url
+        var url = this.server.lastFetch().url;
         expect(url).toHaveUrlPath("/workspaces/33/datasets");
         expect(url).toContainQueryParams({ order: "object_name"});
     });
@@ -34,7 +34,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         });
 
         it("has the correct submit button text", function() {
-            expect(this.dialog.$('button.submit')).toContainTranslation("actions.dataset_attach")
+            expect(this.dialog.$('button.submit')).toContainTranslation("actions.dataset_attach");
         });
 
         it("has the correct iconUrl", function() {

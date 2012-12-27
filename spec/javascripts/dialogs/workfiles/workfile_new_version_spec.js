@@ -12,7 +12,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
 
     describe("#render", function() {
         it("has the right title based on the launch element", function() {
-            expect(this.dialog.title).toMatchTranslation("workfile.new_version_dialog.title")
+            expect(this.dialog.title).toMatchTranslation("workfile.new_version_dialog.title");
         });
     });
 
@@ -20,7 +20,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         beforeEach(function() {
             spyOn(Backbone.Model.prototype, "save").andCallThrough();
             this.workfile.set({"content": "new blood"});
-            this.dialog.$("[name=commitMessage]").val("new commit")
+            this.dialog.$("[name=commitMessage]").val("new commit");
             this.dialog.$("form").submit();
         });
 
@@ -33,7 +33,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         });
 
         it("saves the model with the fields from the form with the correct post url", function() {
-            expect(Backbone.Model.prototype.save).toHaveBeenCalled()
+            expect(Backbone.Model.prototype.save).toHaveBeenCalled();
             expect(this.server.lastCreate().url).toBe("/workfiles/55/versions");
         });
 
@@ -56,10 +56,10 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
 
             it("invalidates the page model", function() {
               expect(this.invalidatedSpy).toHaveBeenCalled();
-            })
+            });
 
             it("sets the versionNum and versionFileId to the page model", function() {
-                this.dialog.model.set({ "versionNum": 1000, "versionFileId" : "ID1"})
+                this.dialog.model.set({ "versionNum": 1000, "versionFileId" : "ID1"});
                 this.server.lastCreate().succeed(this.dialog.model);
                 expect(this.dialog.pageModel.get("versionNum")).toBe(this.dialog.model.get("versionNum"));
                 expect(this.dialog.pageModel.get("versionFileId")).toBe(this.dialog.model.get("versionFileId"));

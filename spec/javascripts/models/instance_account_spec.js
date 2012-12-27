@@ -4,7 +4,7 @@ describe("chorus.models.InstanceAccount", function() {
     });
 
     it("wraps parameters in 'account'", function() {
-        expect(this.model.parameterWrapper).toBe("account")
+        expect(this.model.parameterWrapper).toBe("account");
     });
 
     describe("#url", function() {
@@ -30,7 +30,7 @@ describe("chorus.models.InstanceAccount", function() {
                 lastName: "Henderson",
                 id: "45",
                 userId: "45"
-            }})
+            }});
         });
 
         it("returns a user", function() {
@@ -58,14 +58,14 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(this.server.requests[0].url).toMatchUrl("/gpdb_instances/4/members")
-        })
+            expect(this.server.requests[0].url).toMatchUrl("/gpdb_instances/4/members");
+        });
 
         it("returns an InstanceAccount", function() {
             var model = chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(model instanceof chorus.models.InstanceAccount).toBeTruthy()
-        })
-    })
+            expect(model instanceof chorus.models.InstanceAccount).toBeTruthy();
+        });
+    });
 
     describe("validations", function() {
         beforeEach(function() {

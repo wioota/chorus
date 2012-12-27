@@ -5,7 +5,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
     it("has a helpId", function() {
         this.page = new chorus.pages.SearchIndexPage(this.query);
-        expect(this.page.helpId).toBe("search")
+        expect(this.page.helpId).toBe("search");
     });
 
     context("when the search returns with unprocessableEntity", function() {
@@ -54,8 +54,8 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
 
             it("has a 'Show All Results' link", function() {
-                expect(this.page.$('.default_content_header .type .title')).toContainTranslation("search.show")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.all")
+                expect(this.page.$('.default_content_header .type .title')).toContainTranslation("search.show");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.all");
             });
 
             it("has filtered result links", function() {
@@ -153,12 +153,12 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("show the 'add a note' link in the sidebar", function() {
-                        expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).toExist()
+                        expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).toExist();
                     });
 
                     it("show the 'add an insight' link in the sidebar", function() {
-                        expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist()
-                    })
+                        expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist();
+                    });
                 });
             });
 
@@ -196,7 +196,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.instanceLIs.length).toBe(3)
+                    expect(this.instanceLIs.length).toBe(3);
                 });
 
                 describe("clicking on an instance search result", function() {

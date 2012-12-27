@@ -58,7 +58,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
                 it("calls the submit callback", function() {
                     expect(this.dialog.submit).toHaveBeenCalled();
-                })
+                });
             });
 
             describe("double-clicking a workspace", function() {

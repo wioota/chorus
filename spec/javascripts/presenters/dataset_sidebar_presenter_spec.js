@@ -61,7 +61,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     });
 
                     it("displays the tablename", function() {
-                        workspace_dataset_model = presenter.nextImport();
+                        var workspace_dataset_model = presenter.nextImport();
                         this.nextImportLink = presenter.nextImport().string;
                         expect(this.nextImportLink).toMatchTranslation('import.no_next_import');
 
@@ -81,7 +81,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     });
 
                     it("displays the tablename", function() {
-                        workspace_dataset_model = presenter.nextImport();
+                        var workspace_dataset_model = presenter.nextImport();
                         this.nextImportLink = presenter.nextImport().string;
                         expect(this.nextImportLink).toMatchTranslation('import.next_import', {
                             nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
@@ -103,7 +103,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     });
 
                     it("displays the tablename without the link", function() {
-                        workspace_dataset_model = presenter.nextImport();
+                        var workspace_dataset_model = presenter.nextImport();
                         this.nextImportLink = presenter.nextImport().string;
                         expect(this.nextImportLink).toMatchTranslation('import.next_import', {
                             nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
@@ -116,8 +116,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
             describe("#lastImport", function() {
                 context("for a source table", function() {
                     beforeEach(function() {
-                        this.import = rspecFixtures.datasetImportSet().last();
-                        this.import.set({
+                        this.datasetImport = rspecFixtures.datasetImportSet().last();
+                        this.datasetImport.set({
                             sourceDatasetId: resource.get('id'),
                             completedStamp: Date.parse("Today - 33 days").toJSONString(),
                             success: true
@@ -126,9 +126,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("unfinished import", function() {
                         beforeEach(function() {
-                            delete this.import.attributes.completedStamp;
+                            delete this.datasetImport.attributes.completedStamp;
                             this.spy = spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
                         it("has inProgressText and lastImport", function() {
@@ -139,28 +139,28 @@ describe("chorus.presenters.DatasetSidebar", function() {
                         });
 
                         it("doesn't display the link in inProgressText when table does not exist yet ", function() {
-                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: this.import.destination().name()});
+                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: this.datasetImport.destination().name()});
                         });
 
                         context("when importing to an existing table", function() {
                             beforeEach(function() {
-                                delete this.import.attributes.completedStamp;
-                                this.import.set({destinationDatasetId: 2});
+                                delete this.datasetImport.attributes.completedStamp;
+                                this.datasetImport.set({destinationDatasetId: 2});
                                 this.spy.andReturn(
-                                    this.import
+                                    this.datasetImport
                                 );
-                            })
+                            });
                             it("display inProgressText with a link to the table", function() {
-                                expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: presenter._linkToModel(this.import.destination(), this.import.destination().name())});
+                                expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress", { tableLink: presenter._linkToModel(this.datasetImport.destination(), this.datasetImport.destination().name())});
                             });
 
-                        })
+                        });
                     });
 
                     describe("successfully finished import", function() {
                         beforeEach(function() {
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
 
@@ -173,9 +173,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.import.attributes.success = false;
+                            this.datasetImport.attributes.success = false;
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
 
@@ -187,23 +187,23 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                         context("for an existing table", function() {
                             beforeEach(function() {
-                                this.import.set({destinationDatasetId: 12345}, {silent: true});
+                                this.datasetImport.set({destinationDatasetId: 12345}, {silent: true});
                             });
 
                             it("should have a link to the destination table", function() {
                                expect(presenter.lastImport()).toMatch("<a ");
-                               expect(presenter.lastImport()).toMatch(this.import.name());
+                               expect(presenter.lastImport()).toMatch(this.datasetImport.name());
                             });
                         });
 
                         context("for a new table", function() {
                             beforeEach(function() {
-                                this.import.set({destinationDatasetId: null}, {silent: true});
+                                this.datasetImport.set({destinationDatasetId: null}, {silent: true});
                             });
 
                             it("should not have a link to the destination table", function() {
                                 expect(presenter.lastImport()).not.toMatch("<a ");
-                                expect(presenter.lastImport()).toMatch(this.import.name());
+                                expect(presenter.lastImport()).toMatch(this.datasetImport.name());
                             });
                         });
                     });
@@ -211,8 +211,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                 context("for a sandbox table", function() {
                     beforeEach(function () {
-                        this.import = rspecFixtures.datasetImportSet().first();
-                        this.import.set({
+                        this.datasetImport = rspecFixtures.datasetImportSet().first();
+                        this.datasetImport.set({
                             sourceDatasetId: resource.get('id') + 1,
                             completedStamp: Date.parse("Today - 33 days").toJSONString(),
                             success: true
@@ -221,13 +221,13 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("unfinished import", function() {
                         beforeEach(function() {
-                            delete this.import.attributes.completedStamp;
+                            delete this.datasetImport.attributes.completedStamp;
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
                         it("has inProgressText and lastImport", function() {
-                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress_into", { tableLink: presenter._linkToModel(this.import.source(), this.import.source().name())});
+                            expect(presenter.inProgressText().toString()).toMatchTranslation("import.in_progress_into", { tableLink: presenter._linkToModel(this.datasetImport.source(), this.datasetImport.source().name())});
                             expect(presenter.importInProgress()).toBeTruthy();
                             expect(presenter.importFailed()).toBeFalsy();
                             expect(presenter.lastImport()).toMatch("Import started");
@@ -237,7 +237,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     describe("successfully finished import", function() {
                         beforeEach(function() {
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
 
@@ -250,11 +250,11 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("import from a file", function() {
                         beforeEach(function () {
-                            this.import.unset("sourceDatasetId");
-                            this.import.unset("sourceDatasetName");
-                            this.import.set("fileName", "foo.csv");
+                            this.datasetImport.unset("sourceDatasetId");
+                            this.datasetImport.unset("sourceDatasetName");
+                            this.datasetImport.set("fileName", "foo.csv");
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
 
@@ -268,9 +268,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     describe("failed import", function() {
                         beforeEach(function() {
-                            this.import.attributes.success = false;
+                            this.datasetImport.attributes.success = false;
                             spyOn(resource, 'lastImport').andReturn(
-                                this.import
+                                this.datasetImport
                             );
                         });
 
@@ -281,14 +281,14 @@ describe("chorus.presenters.DatasetSidebar", function() {
                         });
                     });
                 });
-            })
+            });
         });
 
         context("with a workspace table", function() {
             var presenter, sidebar, resource;
             beforeEach(function() {
                 resource = rspecFixtures.workspaceDataset.datasetTable();
-                resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 })
+                resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 });
                 presenter = new chorus.presenters.DatasetSidebar(resource);
             });
 

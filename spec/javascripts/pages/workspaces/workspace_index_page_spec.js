@@ -6,13 +6,13 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
     describe("#initialize", function() {
         it("has a helpId", function() {
-            expect(this.page.helpId).toBe("workspaces")
-        })
+            expect(this.page.helpId).toBe("workspaces");
+        });
 
         it("has a sidebar", function() {
             expect(this.page.sidebar).toBeA(chorus.views.WorkspaceListSidebar);
         });
-    })
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -26,13 +26,13 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
             it("has a header", function() {
                 expect(this.page.$("h1")).toExist();
-            })
+            });
         });
 
         describe("when the collection is loaded", function() {
             beforeEach(function() {
                 chorus.bindModalLaunchingClicks(this.page);
-                this.server.completeFetchFor(this.page.collection)
+                this.server.completeFetchFor(this.page.collection);
             });
 
             it("creates a WorkspaceList view", function() {
@@ -51,7 +51,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
                 it("sets the model of the page", function() {
                     expect(this.page.model).toBe(this.page.collection.at(0));
-                })
+                });
             });
         });
     });

@@ -12,7 +12,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("instances")
+        expect(this.page.helpId).toBe("instances");
     });
 
     it("does not show a title before the fetch completes", function() {
@@ -29,7 +29,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
 
     describe("before the fetches complete", function() {
         it("has some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home")
+            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home");
         });
 
         it("displays a loading section", function() {
@@ -77,6 +77,6 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         it("has a sidebar", function() {
             expect(this.page.sidebar).toBeA(chorus.views.DatabaseListSidebar);
             expect(this.page.$(this.page.sidebar.el)).toExist();
-        })
+        });
     });
 });

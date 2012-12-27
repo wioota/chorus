@@ -105,7 +105,7 @@ describe("chorus.views.CommentList", function() {
 
                 it("displays a delete link", function() {
                     expect(this.view.$(".delete_link")).toExist();
-                })
+                });
             });
 
             context("and is not the author of the note", function() {

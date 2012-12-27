@@ -17,7 +17,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'workfile',
                 'dataset'
             ].sort();
-            expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes)
+            expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes);
         });
     });
 
@@ -39,7 +39,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
         it("returns objects of the appropriate type, excluding artifacts", function() {
             var expectToContainClass = function(list, entityClass) {
                 expect(!!_.find(list, function(element) {
-                    return element instanceof entityClass
+                    return element instanceof entityClass;
                 })).toBeTruthy();
             };
             expectToContainClass(this.searchResults, chorus.models.HdfsEntry);
@@ -63,7 +63,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 } else {
                     expect(typeof result.showUrl()).toBe('string');
                 }
-            })
+            });
         });
     });
 

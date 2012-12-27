@@ -3,7 +3,7 @@ describe("chorus.pages.UserNewPage", function() {
         this.config = chorus.models.Config.instance();
         spyOn(this.config, "fetch");
 
-        this.page = new chorus.pages.UserNewPage()
+        this.page = new chorus.pages.UserNewPage();
     });
 
     it("has a helpId", function() {
@@ -69,7 +69,7 @@ describe("chorus.pages.UserNewPage", function() {
         it("goes to 404 when the instance fetch fails", function() {
             spyOn(Backbone.history, "loadUrl");
             this.server.lastFetchFor(this.config).failNotFound();
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
     });
 });

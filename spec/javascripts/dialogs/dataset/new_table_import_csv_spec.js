@@ -50,22 +50,6 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         expect(this.dialog.$(".errors")).not.toBeEmpty();
     });
 
-    describe("click the 'tab' separator", hasRightSeparator('\t'));
-    describe("click the 'comma' separator", hasRightSeparator(','));
-    describe("click the 'semicolon' separator", hasRightSeparator(';'));
-    describe("click the 'space' separator", hasRightSeparator(' '));
-
-    describe("changing the separator", function() {
-        beforeEach(function() {
-            expect(this.dialog.model.get("types").length).toBe(5);
-            this.dialog.$("input.delimiter[value=';']").click();
-        });
-
-        it("recalculates the column types", function() {
-            expect(this.dialog.model.get("types").length).toBe(1);
-        });
-    });
-
     function hasRightSeparator(separator) {
         return function() {
             beforeEach(function() {
@@ -93,6 +77,22 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
         };
     }
+
+    describe("click the 'tab' separator", hasRightSeparator('\t'));
+    describe("click the 'comma' separator", hasRightSeparator(','));
+    describe("click the 'semicolon' separator", hasRightSeparator(';'));
+    describe("click the 'space' separator", hasRightSeparator(' '));
+
+    describe("changing the separator", function() {
+        beforeEach(function() {
+            expect(this.dialog.model.get("types").length).toBe(5);
+            this.dialog.$("input.delimiter[value=';']").click();
+        });
+
+        it("recalculates the column types", function() {
+            expect(this.dialog.model.get("types").length).toBe(1);
+        });
+    });
 
     describe("other delimiter input field", function() {
         beforeEach(function() {
@@ -142,7 +142,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
                     this.dialog.$("input#delimiter_other").click();
                     this.dialog.$('input[name=custom_delimiter]').val("z");
-                    this.dialog.$('input[name=custom_delimiter]').trigger('keyup')
+                    this.dialog.$('input[name=custom_delimiter]').trigger('keyup');
                 });
 
                 it("has z as separator", function() {
@@ -153,7 +153,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                     expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
                 });
             });
-        })
+        });
     });
 
     it("has directions", function() {
@@ -177,7 +177,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             this.dialog = new Subclass({ model: this.model, csvOptions: this.csvOptions });
             this.dialog.render();
 
-            var checkbox = this.dialog.$("#hasHeader")
+            var checkbox = this.dialog.$("#hasHeader");
             expect(checkbox).not.toExist();
         });
     });
@@ -185,30 +185,30 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     describe("the data table", function() {
         it("has the right number of column names", function() {
             expect(this.dialog.$(".data_table .thead .column_names .th input:text").length).toEqual(5);
-        })
+        });
 
         it("converts the column names into db friendly format", function() {
             var $inputs = this.dialog.$(".data_table .thead .column_names .th input:text");
-            expect($inputs.eq(0).val()).toBe("col1")
-            expect($inputs.eq(1).val()).toBe("col2")
-            expect($inputs.eq(2).val()).toBe("col3")
-            expect($inputs.eq(3).val()).toBe("col_4")
-            expect($inputs.eq(4).val()).toBe("col_5")
-        })
+            expect($inputs.eq(0).val()).toBe("col1");
+            expect($inputs.eq(1).val()).toBe("col2");
+            expect($inputs.eq(2).val()).toBe("col3");
+            expect($inputs.eq(3).val()).toBe("col_4");
+            expect($inputs.eq(4).val()).toBe("col_5");
+        });
 
         it("has the right number of column data types", function() {
             expect(this.dialog.$(".data_table .thead .data_types .th").length).toEqual(5);
-        })
+        });
 
         it("does not memoize the data types", function() {
-            this.oldLinkMenus = this.dialog.linkMenus
+            this.oldLinkMenus = this.dialog.linkMenus;
             this.dialog.render();
             expect(this.oldLinkMenus === this.dialog.linkMenus).toBeFalsy();
-        })
+        });
 
         it("has the right number of data columns", function() {
             expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
-        })
+        });
 
         it("displays the provided types", function() {
             var csvParser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
@@ -221,27 +221,27 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
         it("has the right data in each cell", function() {
             _.each(this.dialog.$(".data_table .tbody .column"), function(column, i) {
-                var cells = $(column).find(".td")
+                var cells = $(column).find(".td");
                 expect(cells.length).toEqual(3);
                 _.each(cells, function(cell, j) {
                     expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
-                })
+                });
             });
         });
 
         describe("selecting a new data type", function() {
             beforeEach(function() {
-                this.$type = this.dialog.$(".th .type").eq(1)
+                this.$type = this.dialog.$(".th .type").eq(1);
                 this.$type.find(".chosen").click();
 
                 this.$type.find(".popup_filter li").eq(1).find("a").click();
-            })
+            });
 
             it("changes the type of the column", function() {
                 expect(this.$type.find(".chosen")).toHaveText("float");
                 expect(this.$type).toHaveClass("float");
-            })
-        })
+            });
+        });
     });
 
     describe("unchecking the include header box", function() {
@@ -250,7 +250,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
             this.dialog.$("#hasHeader").prop("checked", false);
             this.dialog.$("#hasHeader").change();
-        })
+        });
 
         it("sets header on the csv model", function() {
             expect(this.dialog.model.get("hasHeader")).toBeFalsy();
@@ -311,7 +311,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.$("#hasHeader").prop("checked", true).change();
                 expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat");
             });
-        })
+        });
     });
 
     describe("scrolling the data", function() {
@@ -323,7 +323,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         it("sets the header position", function() {
             expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
         });
-    })
+    });
 
     describe("with invalid column names", function() {
         beforeEach(function() {
@@ -338,7 +338,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
         it("does not put the button in the loading state", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-        })
+        });
 
         it("marks that inputs invalid", function() {
             expect(this.$input).toHaveClass("has_error");
@@ -444,7 +444,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             it("triggers csv_import:started", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
             });
-        })
+        });
 
         context("when the import fails", function() {
             beforeEach(function() {
@@ -457,13 +457,13 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
             it("re-enables the submit button", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-            })
+            });
             it("retains column names", function() {
                 this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
                 this.dialog.$("button.submit").click();
                 this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
-            })
+            });
             it("retains the table name", function() {
                 this.dialog.$("input[name=tableName]").val("testisgreat").change();
                 this.dialog.$("button.submit").click();
@@ -485,7 +485,6 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                     expect(this.dialog.model.get("tableName")).toBe("the_wizard_of_oz");
                 });
             });
-        })
-    })
-})
-;
+        });
+    });
+});

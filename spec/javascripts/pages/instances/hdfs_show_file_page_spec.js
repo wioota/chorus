@@ -12,7 +12,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("hadoop_instances")
+        expect(this.page.helpId).toBe("hadoop_instances");
     });
 
     it("constructs an HDFS file model with the right instance id", function() {
@@ -56,7 +56,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("has the file is read-only indicator", function() {
-            expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only")
+            expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only");
         });
 
         it("has the correct sidebar", function() {
@@ -66,14 +66,14 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         it("has a header file", function() {
             expect(this.page.mainContent.contentHeader).toBeA(chorus.views.HdfsShowFileHeader);
             expect(this.page.mainContent.contentHeader.model.get('contents').length).toBe(2);
-        })
+        });
 
         it("shows the hdfs file", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.HdfsShowFileView);
             expect(this.page.mainContent.content.model.get('content')).toBe(this.file.get('content'));
-            expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));            
+            expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));
             expect(this.page.mainContent.content.model.get('contents').length).toBe(2);
-        })
+        });
     });
 
     describe("when the path is long", function() {
@@ -116,5 +116,5 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect($content.find("a").eq(3).text()).toBe("m3");
             expect($content.find("a").eq(4).text()).toBe("end");
         });
-    })
+    });
 });

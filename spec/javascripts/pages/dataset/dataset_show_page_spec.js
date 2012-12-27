@@ -15,7 +15,7 @@ describe("chorus.pages.DatasetShowPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("dataset")
+        expect(this.page.helpId).toBe("dataset");
     });
 
     it("has the right #failurePageOptions (for populating the content of a 404 page)", function() {
@@ -62,10 +62,10 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("puts the errors on the new column set", function() {
                         expect(this.page.columnSet.serverErrors).toEqual({message: "No permission"});
-                    })
-                })
-            })
-        })
+                    });
+                });
+            });
+        });
     });
 
     describe("#render", function() {
@@ -100,7 +100,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("navigates to the 404 page", function() {
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-                })
+                });
             });
 
             describe("workspace usage", function() {

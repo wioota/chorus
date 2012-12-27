@@ -7,7 +7,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("#downloadUrl", function() {
         it("with id of attachment", function() { // because search results are not consistent with "regular" attachments
-            this.model.set({id: "123"})
+            this.model.set({id: "123"});
             expect(this.model.downloadUrl()).toBe("/attachments/123/download/");
         });
     });
@@ -34,7 +34,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("#thumbnailUrl", function() {
         it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
-            this.model.set({fileId: "123"})
+            this.model.set({fileId: "123"});
             expect(this.model.thumbnailUrl()).toBe("/file/123/thumbnail");
         });
 
@@ -92,7 +92,7 @@ describe("chorus.models.Attachment", function() {
             var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
             var model = search.attachments().at(0);
             var hdfs = model.hdfsFile();
-            var hadoop = model.hadoopInstance()
+            var hadoop = model.hadoopInstance();
             expect(model.showUrl()).toBe("#/hadoop_instances/" + hadoop.id + "/browseFile/" + hdfs.id);
         });
     });
@@ -121,7 +121,7 @@ describe("chorus.models.Attachment", function() {
 
         it("memoizes", function() {
             expect(this.model.workspace()).toBe(this.model.workspace());
-        })
+        });
     });
 
     describe("workfile", function() {
@@ -144,7 +144,7 @@ describe("chorus.models.Attachment", function() {
 
         it("memoizes", function() {
             expect(this.model.workfile()).toBe(this.model.workfile());
-        })
+        });
     });
 
     describe("hdfs", function() {
@@ -166,7 +166,7 @@ describe("chorus.models.Attachment", function() {
 
         it("memoizes", function() {
             expect(this.model.hdfsFile()).toBe(this.model.hdfsFile());
-        })
+        });
     });
 
     describe("instance", function() {
@@ -195,7 +195,7 @@ describe("chorus.models.Attachment", function() {
 
         it("memoizes", function() {
             expect(this.model.instance()).toBe(this.model.instance());
-        })
+        });
     });
 
     describe("dataset", function() {

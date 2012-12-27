@@ -10,7 +10,7 @@ describe("chorus.models.ChorusView", function() {
         _.each(['create', 'update', 'delete'], function(method) {
             this.model.attributes.sourceObjectId = "100";
             expect(this.model.url({method: method})).toMatchUrl('/chorus_views/');
-        }, this)
+        }, this);
     });
 
     it("has the right url when duplicate is true", function() {
@@ -50,7 +50,7 @@ describe("chorus.models.ChorusView", function() {
         it("enforces object name constraints", function() {
             this.model.performValidation();
             expect(this.model.requirePattern).toHaveBeenCalledWith("objectName", chorus.ValidationRegexes.ChorusIdentifier(), undefined, "dataset.chorusview.validation.object_name_pattern");
-        })
+        });
     });
 
     describe("addJoin", function() {
@@ -103,7 +103,7 @@ describe("chorus.models.ChorusView", function() {
             it("reorders existing joins", function() {
                 _.each(this.model.joins, function(join, index) {
                     expect(join.destinationColumn.dataset.datasetNumber).toBe(index + 2);
-                })
+                });
             });
 
             it("removes the join", function() {
@@ -131,14 +131,14 @@ describe("chorus.models.ChorusView", function() {
 
             it("keeps unrelated joins", function() {
                 expect(_.any(this.model.joins, _.bind(function(join) {
-                    return join.destinationColumn == this.siblingJoinColumn;
+                    return join.destinationColumn === this.siblingJoinColumn;
                 }, this))).toBeTruthy();
             });
 
             it("removes joins dependent on the removed join", function() {
                 expect(_.any(this.model.joins, _.bind(function(join) {
-                    return join.destinationColumn == this.secondNestedJoinColumn ||
-                        join.destinationColumn == this.thirdNestedJoinColumn;
+                    return join.destinationColumn === this.secondNestedJoinColumn ||
+                        join.destinationColumn === this.thirdNestedJoinColumn;
                 }, this))).toBeFalsy();
             });
         })
@@ -201,7 +201,7 @@ describe("chorus.models.ChorusView", function() {
                 });
 
                 it("removes the column", function() {
-                    expect(this.join.columns.length).toBe(0)
+                    expect(this.join.columns.length).toBe(0);
                 });
 
                 it("triggers change on the model", function() {
@@ -270,10 +270,10 @@ describe("chorus.models.ChorusView", function() {
             it("has the second table joined in", function() {
                 var lines = this.model.generateFromClause().split('\n');
                 expect(lines[0]).toBe('FROM ' + this.sourceDataset.get("schema").name + '.' + this.sourceDataset.quotedName());
-                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.dataset.fromClause() + ' ON '
-                    + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
+                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.dataset.fromClause() + ' ON ' +
+                    this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
             });
-        })
+        });
     });
 
     describe("valid", function() {

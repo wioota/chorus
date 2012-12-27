@@ -3,7 +3,7 @@ describe("newFixtures", function() {
         var definition, model;
 
         beforeEach(function() {
-            definition = fixtureDefinitions.test;
+            definition = window.fixtureDefinitions.test;
         });
 
         it("gets the right data", function() {
@@ -60,7 +60,7 @@ describe("newFixtures", function() {
         });
 
         it("does not allow overrides for non-existant attributes", function() {
-            expect(function() { rspecFixtures.user({ foo: "Bar" }) }).toThrow();
+            expect(function() { rspecFixtures.user({ foo: "Bar" }); }).toThrow();
         });
 
         it("gives each user a unique id", function() {
@@ -231,8 +231,8 @@ describe("newFixtures", function() {
                     attributes2 = { name: "foo" };
                     newFixtures.addUniqueDefaults(attributes1, [ "workspace.sandbox.id" ]);
                     newFixtures.addUniqueDefaults(attributes2, [ "workspace.sandbox.id" ]);
-                    expect(attributes1.workspace.sandbox.id).toBeA("string")
-                    expect(attributes2.workspace.sandbox.id).toBeA("string")
+                    expect(attributes1.workspace.sandbox.id).toBeA("string");
+                    expect(attributes2.workspace.sandbox.id).toBeA("string");
                     expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);
                 });
             });
@@ -364,7 +364,7 @@ describe("newFixtures", function() {
             context("when the overrides contain a key that is not present in the nested object", function() {
                 it("throws an exception containing the specified name", function() {
                     expect(function() {
-                        newFixtures.safeExtend(original, { nestedObject: { hamburger: "double" }}, "user")
+                        newFixtures.safeExtend(original, { nestedObject: { hamburger: "double" }}, "user");
                     }).toThrow("The fixture 'user.nestedObject' has no key 'hamburger'");
                 });
             });

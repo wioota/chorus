@@ -27,8 +27,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     });
 
     it("does not re-render when the model changes", function() {
-        expect(this.dialog.persistent).toBeTruthy()
-    })
+        expect(this.dialog.persistent).toBeTruthy();
+    });
 
     describe("#setup", function() {
         beforeEach(function() {
@@ -50,13 +50,13 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         beforeEach(function() {
             dialog = this.dialog;
             stubDefer();
-            disableSpy = jasmine.createSpy("disable")
+            disableSpy = jasmine.createSpy("disable");
             spyOn(this.dialog, "makeEditor").andCallThrough();
             spyOn($.fn, "cleditor").andReturn([
                 {
                     disable: disableSpy
                 }
-            ])
+            ]);
             setLoggedInUser({ id: 11 });
             this.dialog.render();
         });
@@ -66,7 +66,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         });
 
         it("has an input for workspace name", function() {
-            expect(this.dialog.$("input[name=name]").val()).toBe(this.dialog.pageModel.get("name"))
+            expect(this.dialog.$("input[name=name]").val()).toBe(this.dialog.pageModel.get("name"));
         });
 
         it("has a text area for summary", function() {
@@ -91,35 +91,35 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("without a sandbox", function() {
                 it("shows sandbox info", function() {
                     var workspace = rspecFixtures.workspace();
-                    workspace.unset("sandboxInfo")
+                    workspace.unset("sandboxInfo");
                     this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: workspace });
                     this.dialog.render();
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
                 });
             });
-        })
+        });
 
         context("when the workspace is public", function() {
             beforeEach(function() {
-                this.workspace.set({ public: true })
+                this.workspace.set({ public: true });
                 this.dialog.render();
-            })
+            });
 
             it("checks the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=public]")).toBeChecked();
-            })
-        })
+            });
+        });
 
         context("when the workspace is not public", function() {
             beforeEach(function() {
-                this.workspace.set({ public: false })
+                this.workspace.set({ "public": false });
                 this.dialog.render();
-            })
+            });
 
             it("does not check the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=public]")).not.toBeChecked();
-            })
-        })
+            });
+        });
 
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
@@ -161,13 +161,13 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 it("defaults to the current owner", function() {
                     expect(this.dialog.$("select.owner").val()).toBe("12");
                 });
-            })
+            });
 
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archivedAt: null })
+                    this.workspace.set({ archivedAt: null });
                     this.dialog.render();
-                })
+                });
 
                 it("displays enabled radio buttons with 'active' selected", function() {
                     var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
@@ -176,19 +176,19 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(activeRadio).toBeChecked();
                     expect(archivedRadio).not.toBeDisabled();
                     expect(archivedRadio).not.toBeChecked();
-                })
+                });
 
                 it("shows the save button and cancel buttons", function() {
                     expect(this.dialog.$("button.submit")).toExist();
                     expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
-                })
-            })
+                });
+            });
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archivedAt: "2012-01-01 12:34:56" })
+                    this.workspace.set({ archivedAt: "2012-01-01 12:34:56" });
                     this.dialog.render();
-                })
+                });
 
                 it("displays enabled radio buttons with 'archived' selected", function() {
                     var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
@@ -197,8 +197,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(activeRadio).not.toBeChecked();
                     expect(archivedRadio).not.toBeDisabled();
                     expect(archivedRadio).toBeChecked();
-                })
-            })
+                });
+            });
         });
 
         context("when the user is not the owner, but is a member of the workspace", function() {
@@ -228,7 +228,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
                     this.dialog.render();
-                })
+                });
 
                 it("disables the workspace name input", function() {
                     expect(this.dialog.$("input[name=name]")).toBeDisabled();
@@ -236,7 +236,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 it("disables the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=public]")).toBeDisabled();
-                })
+                });
 
                 it("disables the workspace summary", function() {
                     expect(this.dialog.$("textarea[name=summary]")).toBeDisabled();
@@ -250,11 +250,11 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 it("removes the save button and changes the cancel text to close window", function() {
                     expect(this.dialog.$("button.submit")).not.toExist();
                     expect(this.dialog.$("button.cancel")).toContainTranslation("actions.close_window");
-                })
+                });
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: null })
+                        this.workspace.set({ archivedAt: null });
                         this.dialog.render();
                     });
 
@@ -268,7 +268,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: "2012-02-02 22:22:22" })
+                        this.workspace.set({ archivedAt: "2012-02-02 22:22:22" });
                         this.dialog.render();
                     });
 
@@ -330,16 +330,16 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: null })
+                        this.workspace.set({ archivedAt: null });
                         this.dialog.render();
-                    })
+                    });
 
                     it("displays radio buttons with 'active' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
                         expect(activeRadio).toBeChecked();
                         expect(archivedRadio).not.toBeChecked();
-                    })
+                    });
 
                     it("shows the save button and cancel buttons", function() {
                         expect(this.dialog.$("button.submit")).toExist();
@@ -349,7 +349,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: "2013-03-03 11:11:11" })
+                        this.workspace.set({ archivedAt: "2013-03-03 11:11:11" });
                         this.dialog.render();
                     });
 
@@ -402,7 +402,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         this.dialog.$("textarea[name=summary]").val("my modified summary");
                         this.dialog.$("select.owner").val('13');
                         this.dialog.$('form').submit();
-                    })
+                    });
 
                     it("saves the workspace", function() {
                         expect(this.dialog.pageModel.save).toHaveBeenCalled();
@@ -502,7 +502,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.dialog.model, "unprocessableEntity")
+                            spyOnEvent(this.dialog.model, "unprocessableEntity");
                             this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                         });
 
@@ -523,7 +523,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         });
 
                         it("does not show the 422 page", function() {
-                            expect("unprocessableEntity").not.toHaveBeenTriggeredOn(this.dialog.model)
+                            expect("unprocessableEntity").not.toHaveBeenTriggeredOn(this.dialog.model);
                         });
                     });
 
@@ -534,7 +534,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                             this.dialog.$("input[name=name]").val("my modified name");
                             this.dialog.$("textarea[name=summary]").val("my modified summary");
                             this.dialog.$('form').submit();
-                        })
+                        });
 
                         it("saves the workspace", function() {
                             expect(this.dialog.pageModel.save).toHaveBeenCalled();
@@ -542,8 +542,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                         it("does not provide ownerId in the API call", function() {
                             expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("ownerId")).toBeFalsy();
-                        })
-                    })
+                        });
+                    });
                 });
 
                 context("submitting the form with invalid data", function() {
@@ -556,7 +556,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     it("triggers validation Failed", function() {
                         expect("validationFailed").toHaveBeenTriggeredOn(this.dialog.pageModel);
-                    })
+                    });
 
                     it("stops the spinner", function() {
                         expect(this.dialog.$("button.submit")).not.toHaveSpinner();
@@ -568,7 +568,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     it("does not set the name on the workspace", function() {
                         expect(this.dialog.pageModel.get("summary")).toBe("my summary");
-                    })
+                    });
                 });
             });
         });
@@ -606,13 +606,13 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 expect(this.dialog.$("div.owner a").attr("href")).toBe(this.workspace.owner().showUrl());
             });
         }
-    })
+    });
 
     describe("select styling", function() {
         it("uses custom styled select box", function() {
-            spyOn(chorus, 'styleSelect')
+            spyOn(chorus, 'styleSelect');
             $(document).trigger("reveal.facebox");
             expect(chorus.styleSelect).toHaveBeenCalled();
-        })
-    })
-})
+        });
+    });
+});

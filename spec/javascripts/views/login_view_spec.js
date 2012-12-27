@@ -12,7 +12,7 @@ describe("chorus.views.Login", function() {
 
     it("requests the version string from the server", function() {
         expect(this.server.requests[0].url).toHaveUrlPath("/VERSION");
-    })
+    });
 
     it("uses a cache buster when requesting the version string", function() {
         expect(this.server.requests[0].url.match(/buster=/)).toBeTruthy();
@@ -41,12 +41,12 @@ describe("chorus.views.Login", function() {
         it("sets the version title to the full version", function() {
             expect(this.view.$(".legal .version").attr('title')).toBe("Version " + this.version);
         });
-    })
+    });
 
     describe("attempting to login", function() {
         beforeEach(function() {
-            this.view.model.set({ foo: "bar" })
-            this.view.model.id = "foo"
+            this.view.model.set({ foo: "bar" });
+            this.view.model.id = "foo";
             this.saveSpy = spyOn(this.view.model, "save");
             this.view.$("input[name=username]").val("johnjohn");
             this.view.$("input[name=password]").val("partytime");
@@ -60,11 +60,11 @@ describe("chorus.views.Login", function() {
 
         it("clears other attributes on the model", function() {
             expect(_.size(this.view.model.attributes)).toBe(2);
-        })
+        });
 
         it("configures the model for POST, not PUT", function() {
             expect(this.view.model.isNew()).toBeTruthy();
-        })
+        });
 
         it("attempts to save the model", function() {
             expect(this.saveSpy).toHaveBeenCalled();
@@ -73,13 +73,13 @@ describe("chorus.views.Login", function() {
 
     describe("when the login fails", function() {
         beforeEach(function() {
-            this.view.model.serverErrors = { fields: { a: { BLANK: {} } } }
+            this.view.model.serverErrors = { fields: { a: { BLANK: {} } } };
             this.view.render();
         });
 
         it("displays the error message", function() {
-            expect(this.view.$(".errors").text()).toContain("A can't be blank")
-        })
+            expect(this.view.$(".errors").text()).toContain("A can't be blank");
+        });
     });
 
     describe("when the login succeeds", function() {
@@ -125,8 +125,8 @@ describe("chorus.views.Login", function() {
                 it("navigates to the page before forced logout", function() {
                     expect(this.navigationSpy).toHaveBeenCalledWith("/foo");
                 });
-            })
+            });
         });
 
-    })
-})
+    });
+});

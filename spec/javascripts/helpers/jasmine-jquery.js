@@ -16,10 +16,11 @@ var sandbox = function(attributes) {
 
 var spyOnEvent = function(selector, eventName) {
   jasmine.JQuery.events.spyOn(selector, eventName);
-}
+};
 
 jasmine.getFixtures = function() {
-  return jasmine.currentFixtures_ = jasmine.currentFixtures_ || new jasmine.Fixtures();
+  jasmine.currentFixtures_ = jasmine.currentFixtures_ || new jasmine.Fixtures();
+  return jasmine.currentFixtures_;
 };
 
 jasmine.Fixtures = function() {

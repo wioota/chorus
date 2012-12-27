@@ -1,12 +1,12 @@
 describe("chorus.pages.ErrorPage", function() {
     beforeEach(function() {
-        spyOn(chorus.router, "navigate")
+        spyOn(chorus.router, "navigate");
         this.page = new chorus.pages.Error();
         this.page.pageOptions = {
             title: "this is the title",
             text: "this is the page body"
         };
-        this.page.render()
+        this.page.render();
     });
 
     it("has the translations for the title", function() {
@@ -18,11 +18,11 @@ describe("chorus.pages.ErrorPage", function() {
     });
 
     it("has the translations for the button", function() {
-        expect(this.page.$('button.submit')).toContainTranslation("actions.home")
+        expect(this.page.$('button.submit')).toContainTranslation("actions.home");
     });
 
     it("navigates to the homepage on clicking the button", function() {
         this.page.$('button.submit').click();
-        expect(chorus.router.navigate).toHaveBeenCalledWith("#")
+        expect(chorus.router.navigate).toHaveBeenCalledWith("#");
     });
 });

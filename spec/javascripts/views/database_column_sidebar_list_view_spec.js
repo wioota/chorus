@@ -2,13 +2,13 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
     describe("initialization", function() {
         context("when there is no sandbox", function() {
             beforeEach(function() {
-                this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: undefined })
-            })
+                this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: undefined });
+            });
 
             it("should not crash", function() {
-                expect(this.view).toBeDefined()
-            })
-        })
+                expect(this.view).toBeDefined();
+            });
+        });
     });
 
     describe("#render", function() {
@@ -31,7 +31,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             it("renders successfully", function() {
                 expect(this.view.$('li')).toExist();
             });
-        })
+        });
 
         describe("when rendered with a chorus view", function() {
             var chorusView;

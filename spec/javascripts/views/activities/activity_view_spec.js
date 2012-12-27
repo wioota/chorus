@@ -1,4 +1,157 @@
 describe("chorus.views.Activity", function() {
+    function itDisplaysDeleteLink() {
+        it("displays a delete link", function () {
+            var deleteLink = this.view.$(".activity_content .delete_link");
+            expect(editLink).toHaveClass("dialog");
+            expect(editLink).toHaveData("dialog", "DeleteNoteConfirmAlert");
+            expect(deleteLink).toHaveData("activity", this.view.model);
+        });
+    }
+
+    function itDoesNotDisplayDeleteLink() {
+        it("does not display a delete link", function () {
+            expect(this.view.$(".activity_content .delete_link")).not.toExist();
+        });
+    }
+
+    function itRendersEditLink() {
+        it("displays an edit link", function () {
+            var editLink = this.view.$(".activity_content .edit_link");
+            expect(editLink.text()).toMatchTranslation("actions.edit");
+            expect(editLink).toHaveClass("dialog");
+            expect(editLink).toHaveData("dialog", "EditNote");
+            expect(editLink).toHaveData("activity", this.view.model);
+        });
+    }
+
+    function itDoesNotDisplayEditLink() {
+        it("does not display an edit link", function () {
+            expect(this.view.$(".activity_content .edit_link")).not.toExist();
+        });
+    }
+
+    function itShouldRenderVersionDetails(options) {
+        options || (options = {});
+
+        it("contains the version's name", function () {
+            expect(this.view.$(".activity_header")).toContainText(this.presenter.versionName);
+        });
+
+        if (options.checkLink) {
+            it("contains the version's url", function () {
+                expect(this.view.$('.activity_header a[href="' + this.presenter.versionUrl + '"]')).toExist();
+            });
+        }
+    }
+
+    function itShouldNotRenderAPromoteLink() {
+        it("does *not* have a link to promote the activity to a comment", function () {
+            this.view.render();
+            expect(this.view.$(".links a.promote")).not.toExist();
+        });
+    }
+
+    function itShouldRenderAPromoteLink() {
+        it("does have a link to promote the activity to a comment", function () {
+            this.view.render();
+            expect(this.view.$(".links a.promote")).toExist();
+        });
+
+        describe("when the promotion link is clicked", function() {
+            beforeEach(function() {
+                this.model.collection = new chorus.collections.ActivitySet([]);
+                this.view.render();
+                this.view.$("a.promote").click();
+            });
+
+            context("when the promotion completes", function() {
+                beforeEach(function() {
+                    this.view.$("a.promote").click();
+                    this.server.lastCreate().succeed();
+                });
+
+                it("re-fetches the activities", function() {
+                    expect(this.model).toHaveBeenFetched();
+                });
+            });
+        });
+    }
+
+    function itShouldRenderACommentLink(entityType, entityTitle) {
+        it("sets the correct entityType on the comment dialog link", function () {
+            expect(this.view.$("a.comment").data("entity-type")).toBe(entityType);
+        });
+
+        it("sets the correct entityTitle on the comment dialog link", function () {
+            expect(this.view.$("a.comment").data("entity-title")).toBe(entityTitle);
+        });
+    }
+
+    function itShouldRenderPublishOrUnpublishLinks() {
+        context("when it is published", function () {
+            beforeEach(function () {
+                this.view.model.set({isPublished:true});
+                this.view.render();
+            });
+
+            it("should have a link to unpublish", function () {
+                expect(this.view.$("a.unpublish")).toExist();
+                expect(this.view.$("a.unpublish").text()).toMatchTranslation("insight.unpublish.link");
+            });
+
+            context("when the unpublish link is clicked", function () {
+                beforeEach(function () {
+                    this.modalSpy = stubModals();
+                    this.view.$("a.unpublish").click();
+                });
+
+                it("launches the confirmation alert", function () {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
+                });
+
+                context("when the unpublish completes", function () {
+                    beforeEach(function () {
+                        this.view.model.unpublish();
+                        this.server.lastCreate().succeed();
+                    });
+
+                    it("re-fetches the activity's collection", function () {
+                        expect(this.collection).toHaveBeenFetched();
+                    });
+                });
+            });
+        });
+
+        context("when it is unpublished", function () {
+            it("should have a link to publish", function () {
+                expect(this.view.$("a.publish")).toExist();
+                expect(this.view.$("a.publish").text()).toMatchTranslation("insight.publish.link");
+            });
+
+            context("when the publish link is clicked", function () {
+                beforeEach(function () {
+                    this.modalSpy = stubModals();
+                    this.view.$("a.publish").click();
+                });
+
+                it("launches the confirmation alert", function () {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
+                });
+
+                context("when the publish completes", function () {
+                    beforeEach(function () {
+                        this.view.model.publish();
+                        this.server.lastCreate().succeed();
+                    });
+
+                    it("re-fetches the activity's collection", function () {
+                        expect(this.collection).toHaveBeenFetched();
+                    });
+                });
+            });
+        });
+    }
+
     beforeEach(function () {
         stubDefer();
         this.model = rspecFixtures.activity.greenplumInstanceCreated();
@@ -194,13 +347,13 @@ describe("chorus.views.Activity", function() {
                 var attachmentLis = this.view.$("ul.attachments li");
                 expect(attachmentLis.length).toBe(2);
 
-                expect(attachmentLis.eq(0).find('a')).toHaveAttr('href', '/file/10101')
-                expect(attachmentLis.eq(0).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
-                expect(attachmentLis.eq(0).find('.name').text().trim()).toBe("something.sql")
+                expect(attachmentLis.eq(0).find('a')).toHaveAttr('href', '/file/10101');
+                expect(attachmentLis.eq(0).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"));
+                expect(attachmentLis.eq(0).find('.name').text().trim()).toBe("something.sql");
 
-                expect(attachmentLis.eq(1).find('a')).toHaveAttr('href', '/file/10102')
-                expect(attachmentLis.eq(1).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
-                expect(attachmentLis.eq(1).find('.name').text().trim()).toBe("something.txt")
+                expect(attachmentLis.eq(1).find('a')).toHaveAttr('href', '/file/10102');
+                expect(attachmentLis.eq(1).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"));
+                expect(attachmentLis.eq(1).find('.name').text().trim()).toBe("something.txt");
             });
         });
 
@@ -258,7 +411,7 @@ describe("chorus.views.Activity", function() {
             context("when there are less than three comments", function () {
                 it("does not render a 'more comments' link", function () {
                     expect(this.view.$(".morelinks a.more")).not.toExist();
-                })
+                });
 
                 it("does not apply the 'more' class to any comments", function () {
                     expect(this.view.$(".comments li.more")).not.toExist();
@@ -337,7 +490,7 @@ describe("chorus.views.Activity", function() {
                 it('updates the comment list', function() {
                     expect(this.view.$(".comments li").length).toBe(1);
                 });
-            })
+            });
         });
 
         it("displays a comment link", function () {
@@ -348,7 +501,7 @@ describe("chorus.views.Activity", function() {
 
         xcontext("isReadOnly", function () {
             beforeEach(function () {
-                setLoggedInUser({ id:this.view.model.author().id })
+                setLoggedInUser({ id:this.view.model.author().id });
                 this.presenter = new chorus.presenters.Activity(this.view.model);
                 this.view.model = rspecFixtures.activity.noteOnWorkspaceCreated();
                 this.view.options.isReadOnly = true;
@@ -367,157 +520,4 @@ describe("chorus.views.Activity", function() {
             itDoesNotDisplayEditLink();
         });
     });
-
-    function itDisplaysDeleteLink() {
-        it("displays a delete link", function () {
-            var deleteLink = this.view.$(".activity_content .delete_link");
-            expect(editLink).toHaveClass("dialog");
-            expect(editLink).toHaveData("dialog", "DeleteNoteConfirmAlert");
-            expect(deleteLink).toHaveData("activity", this.view.model);
-        });
-    }
-
-    function itDoesNotDisplayDeleteLink() {
-        it("does not display a delete link", function () {
-            expect(this.view.$(".activity_content .delete_link")).not.toExist();
-        });
-    }
-
-    function itRendersEditLink() {
-        it("displays an edit link", function () {
-            var editLink = this.view.$(".activity_content .edit_link");
-            expect(editLink.text()).toMatchTranslation("actions.edit");
-            expect(editLink).toHaveClass("dialog");
-            expect(editLink).toHaveData("dialog", "EditNote");
-            expect(editLink).toHaveData("activity", this.view.model);
-        });
-    }
-
-    function itDoesNotDisplayEditLink() {
-        it("does not display an edit link", function () {
-            expect(this.view.$(".activity_content .edit_link")).not.toExist();
-        });
-    }
-
-    function itShouldRenderVersionDetails(options) {
-        options || (options = {});
-
-        it("contains the version's name", function () {
-            expect(this.view.$(".activity_header")).toContainText(this.presenter.versionName);
-        });
-
-        if (options.checkLink) {
-            it("contains the version's url", function () {
-                expect(this.view.$('.activity_header a[href="' + this.presenter.versionUrl + '"]')).toExist();
-            });
-        }
-    }
-
-    function itShouldNotRenderAPromoteLink() {
-        it("does *not* have a link to promote the activity to a comment", function () {
-            this.view.render();
-            expect(this.view.$(".links a.promote")).not.toExist();
-        });
-    }
-
-    function itShouldRenderAPromoteLink() {
-        it("does have a link to promote the activity to a comment", function () {
-            this.view.render();
-            expect(this.view.$(".links a.promote")).toExist();
-        });
-
-        describe("when the promotion link is clicked", function() {
-            beforeEach(function() {
-                this.model.collection = new chorus.collections.ActivitySet([]);
-                this.view.render();
-                this.view.$("a.promote").click();
-            });
-
-            context("when the promotion completes", function() {
-                beforeEach(function() {
-                    this.view.$("a.promote").click();
-                    this.server.lastCreate().succeed();
-                });
-
-                it("re-fetches the activities", function() {
-                    expect(this.model).toHaveBeenFetched();
-                });
-            });
-        });
-    }
-
-    function itShouldRenderACommentLink(entityType, entityTitle) {
-        it("sets the correct entityType on the comment dialog link", function () {
-            expect(this.view.$("a.comment").data("entity-type")).toBe(entityType);
-        })
-
-        it("sets the correct entityTitle on the comment dialog link", function () {
-            expect(this.view.$("a.comment").data("entity-title")).toBe(entityTitle)
-        })
-    }
-
-    function itShouldRenderPublishOrUnpublishLinks() {
-        context("when it is published", function () {
-            beforeEach(function () {
-                this.view.model.set({isPublished:true});
-                this.view.render();
-            });
-
-            it("should have a link to unpublish", function () {
-                expect(this.view.$("a.unpublish")).toExist();
-                expect(this.view.$("a.unpublish").text()).toMatchTranslation("insight.unpublish.link");
-            });
-
-            context("when the unpublish link is clicked", function () {
-                beforeEach(function () {
-                    this.modalSpy = stubModals();
-                    this.view.$("a.unpublish").click();
-                });
-
-                it("launches the confirmation alert", function () {
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
-                });
-
-                context("when the unpublish completes", function () {
-                    beforeEach(function () {
-                        this.view.model.unpublish();
-                        this.server.lastCreate().succeed();
-                    });
-
-                    it("re-fetches the activity's collection", function () {
-                        expect(this.collection).toHaveBeenFetched();
-                    });
-                });
-            });
-        });
-
-        context("when it is unpublished", function () {
-            it("should have a link to publish", function () {
-                expect(this.view.$("a.publish")).toExist();
-                expect(this.view.$("a.publish").text()).toMatchTranslation("insight.publish.link");
-            });
-
-            context("when the publish link is clicked", function () {
-                beforeEach(function () {
-                    this.modalSpy = stubModals();
-                    this.view.$("a.publish").click();
-                });
-
-                it("launches the confirmation alert", function () {
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
-                });
-
-                context("when the publish completes", function () {
-                    beforeEach(function () {
-                        this.view.model.publish();
-                        this.server.lastCreate().succeed();
-                    });
-
-                    it("re-fetches the activity's collection", function () {
-                        expect(this.collection).toHaveBeenFetched();
-                    });
-                });
-            });
-        });
-    }
 });

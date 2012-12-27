@@ -133,7 +133,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                 });
 
                 it("keeps the search term around", function () {
-                    expect(this.dialog.$(".search input").val()).toBe("a query")
+                    expect(this.dialog.$(".search input").val()).toBe("a query");
                 });
             });
         });
@@ -306,7 +306,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
                 expect(this.dialog.$(".list_content_details .count")).toContainText("4");
                 expect(this.server.lastFetchFor(this.schema.datasets()).params()['per_page']).toEqual("7");
-            })
+            });
         });
     });
 });

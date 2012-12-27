@@ -154,7 +154,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
                 it("does not sort the datasets on the client side", function () {
                     expect(this.view.collection.attributes.unsorted).toBeTruthy();
                 });
-            })
+            });
         });
     });
 
@@ -308,11 +308,11 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
     describe("after workfile execution", function () {
         beforeEach(function () {
             this.executionSchema = rspecFixtures.workspace().sandbox().schema();
-            chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.text(), this.executionSchema.attributes)
+            chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.text(), this.executionSchema.attributes);
         });
 
         it("updates focusSchema", function () {
-            expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName())
+            expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName());
         });
     });
 });

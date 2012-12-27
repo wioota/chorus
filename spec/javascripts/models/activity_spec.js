@@ -214,7 +214,7 @@ describe("chorus.models.Activity", function() {
                     var hdfsFile = activity.noteObject();
                     expect(hdfsFile).toBeA(chorus.models.HdfsEntry);
                     expect(hdfsFile.get("name")).toBe("path.txt");
-                    expect(hdfsFile.get("hadoopInstance").id).toBe(331)
+                    expect(hdfsFile.get("hadoopInstance").id).toBe(331);
                 });
             });
 
@@ -225,7 +225,7 @@ describe("chorus.models.Activity", function() {
                     });
                     var workspace = activity.noteObject();
                     expect(workspace).toBeA(chorus.models.Workspace);
-                    expect(workspace.get("id")).toBe(123)
+                    expect(workspace.get("id")).toBe(123);
                 });
             });
 
@@ -236,7 +236,7 @@ describe("chorus.models.Activity", function() {
                     });
                     var dataset = activity.noteObject();
                     expect(dataset).toBeA(chorus.models.Dataset);
-                    expect(dataset.get("id")).toBe(123)
+                    expect(dataset.get("id")).toBe(123);
                 });
             });
 
@@ -247,7 +247,7 @@ describe("chorus.models.Activity", function() {
                     });
                     var ws_dataset = activity.noteObject();
                     expect(ws_dataset).toBeA(chorus.models.WorkspaceDataset);
-                    expect(ws_dataset.get("id")).toBe(123)
+                    expect(ws_dataset.get("id")).toBe(123);
                 });
             });
 
@@ -258,7 +258,7 @@ describe("chorus.models.Activity", function() {
                     });
                     var workfile = activity.noteObject();
                     expect(workfile).toBeA(chorus.models.Workfile);
-                    expect(workfile.get("id")).toBe(123)
+                    expect(workfile.get("id")).toBe(123);
                 });
             });
         });
@@ -276,10 +276,10 @@ describe("chorus.models.Activity", function() {
 
                 var hdfsEntry = activity.hdfsEntry();
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
-                expect(hdfsEntry.getPath()).toBe("/data/test")
-                expect(hdfsEntry.name()).toBe("file.csv")
-                expect(hdfsEntry.get("hadoopInstance").id).toBe(1)
-                expect(hdfsEntry.get("id")).toBe(1234)
+                expect(hdfsEntry.getPath()).toBe("/data/test");
+                expect(hdfsEntry.name()).toBe("file.csv");
+                expect(hdfsEntry.get("hadoopInstance").id).toBe(1);
+                expect(hdfsEntry.get("id")).toBe(1234);
             });
         });
     });
@@ -347,20 +347,20 @@ describe("chorus.models.Activity", function() {
     describe("#isOwner", function() {
 
         it("returns true for notes is current user is the owner of note", function() {
-            activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+            this.activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
                 gpdbInstance: { id: 13 },
                 actor: {id: chorus.session.user().id}
 
             });
-            expect(activity2.isOwner()).toBeTruthy();
+            expect(this.activity2.isOwner()).toBeTruthy();
         });
         it("returns false for notes is current user is not the owner of note", function() {
-            activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+            this.activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
                 gpdbInstance: { id: 13 },
                 actor: {id: 1}
 
             });
-            expect(activity2.isOwner()).toBeFalsy();
+            expect(this.activity2.isOwner()).toBeFalsy();
         });
 
     });
@@ -517,7 +517,7 @@ describe("chorus.models.Activity", function() {
 
         context("when actor information is present", function () {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnWorkspaceCreated()
+                this.model = rspecFixtures.activity.noteOnWorkspaceCreated();
             });
             it("creates a user", function() {
                 expect(this.model.author()).toBeA(chorus.models.User);
@@ -609,10 +609,10 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns an array of file models (Workfiles, Attachments Datasets)", function() {
-            expect(this.attachments[0]).toBeA(chorus.models.Workfile)
-            expect(this.attachments[1]).toBeA(chorus.models.Attachment)
-            expect(this.attachments[2]).toBeA(chorus.models.WorkspaceDataset)
-            expect(this.attachments[3]).toBeA(chorus.models.WorkspaceDataset)
+            expect(this.attachments[0]).toBeA(chorus.models.Workfile);
+            expect(this.attachments[1]).toBeA(chorus.models.Attachment);
+            expect(this.attachments[2]).toBeA(chorus.models.WorkspaceDataset);
+            expect(this.attachments[3]).toBeA(chorus.models.WorkspaceDataset);
         });
 
         it("memoizes", function() {

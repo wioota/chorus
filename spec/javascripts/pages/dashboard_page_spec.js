@@ -5,7 +5,7 @@ describe("chorus.pages.DashboardPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("dashboard")
+        expect(this.page.helpId).toBe("dashboard");
     });
 
     it("uses fetch all for the collections", function() {
@@ -97,7 +97,7 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("sets chorus.session.user as the model", function() {
-            expect(this.page.model).toBe(chorus.session.user())
+            expect(this.page.model).toBe(chorus.session.user());
         });
 
         it("gets the number of users", function() {
@@ -172,5 +172,5 @@ describe("chorus.pages.DashboardPage", function() {
                 expect(this.page.fetchInstances).toHaveBeenCalled();
             });
         });
-    })
+    });
 });

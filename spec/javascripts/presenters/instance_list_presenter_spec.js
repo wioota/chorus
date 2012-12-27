@@ -19,7 +19,7 @@ describe("chorus.presenters.InstanceList", function() {
             rspecFixtures.gnipInstance({ name: "Gnip3", description: "I am a turnip" })
         ]);
         
-        presenter = new chorus.presenters.InstanceList({ 
+        presenter = new chorus.presenters.InstanceList({
             greenplum: gpdbInstances,
             hadoop: hadoopInstances,
             gnip: gnipInstances
@@ -56,17 +56,6 @@ describe("chorus.presenters.InstanceList", function() {
         });
     });
 
-    itPresentsModelMethod("stateIconUrl", "stateUrl");
-    itPresentsModelMethod("showUrl");
-    itPresentsModelMethod("providerIconUrl", "providerUrl");
-    itPresentsModelMethod("isProvisioning");
-    itPresentsModelMethod("provisioningFailed");
-    itPresentsModelMethod("stateText");
-
-    itPresentsModelAttribute("id");
-    itPresentsModelAttribute("name");
-    itPresentsModelAttribute("description");
-
     function itPresentsModelAttribute(name) {
         it("presents each model's " + name + " attribute", function() {
             gpdbInstances.each(function(model, i) {
@@ -100,4 +89,15 @@ describe("chorus.presenters.InstanceList", function() {
             });
         });
     }
+
+    itPresentsModelMethod("stateIconUrl", "stateUrl");
+    itPresentsModelMethod("showUrl");
+    itPresentsModelMethod("providerIconUrl", "providerUrl");
+    itPresentsModelMethod("isProvisioning");
+    itPresentsModelMethod("provisioningFailed");
+    itPresentsModelMethod("stateText");
+
+    itPresentsModelAttribute("id");
+    itPresentsModelAttribute("name");
+    itPresentsModelAttribute("description");
 });

@@ -1,4 +1,18 @@
 describe("chorus.models.Sandbox", function() {
+    function expectValid(attrs, model) {
+        model.performValidation(attrs);
+        expect(model.isValid()).toBeTruthy();
+    }
+
+    function expectInvalid(attrs, model, invalid_attrs) {
+        invalid_attrs || (invalid_attrs = []);
+        model.performValidation(attrs);
+        expect(model.isValid()).toBeFalsy();
+        _.each(invalid_attrs, function(invalid_attr) {
+            expect(model.errors);
+        });
+    }
+
     beforeEach(function() {
         this.model = rspecFixtures.workspace().sandbox();
     });
@@ -21,7 +35,7 @@ describe("chorus.models.Sandbox", function() {
 
         it("should memoize the schema", function() {
             expect(this.schema).toBe(this.model.schema());
-        })
+        });
     });
 
     describe("#database", function() {
@@ -79,7 +93,7 @@ describe("chorus.models.Sandbox", function() {
 
                 it("requires a schema name", function() {
                     expectInvalid({ }, this.model, [ "schemaName" ]);
-                    expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") })
+                    expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") });
                 });
 
                 it("requires that the schema name not start with a number", function() {
@@ -101,9 +115,9 @@ describe("chorus.models.Sandbox", function() {
             });
 
             it("requires a database name", function() {
-                this.model.unset("databaseName")
+                this.model.unset("databaseName");
                 expectInvalid({ }, this.model, [ "databaseName" ]);
-                expect(this.model.errors["databaseName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("databaseName") })
+                expect(this.model.errors["databaseName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("databaseName") });
             });
 
             it("requires that the database name not start with a number", function() {
@@ -115,9 +129,9 @@ describe("chorus.models.Sandbox", function() {
             });
 
             it("requires a schema name", function() {
-                this.model.unset("schemaName")
+                this.model.unset("schemaName");
                 expectInvalid({ }, this.model, [ "schemaName" ]);
-                expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") })
+                expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") });
             });
 
             context("when a schema name is specified", function() {
@@ -131,18 +145,4 @@ describe("chorus.models.Sandbox", function() {
             });
         });
     });
-
-    function expectValid(attrs, model) {
-        model.performValidation(attrs);
-        expect(model.isValid()).toBeTruthy();
-    }
-
-    function expectInvalid(attrs, model, invalid_attrs) {
-        invalid_attrs || (invalid_attrs = [])
-        model.performValidation(attrs);
-        expect(model.isValid()).toBeFalsy();
-        _.each(invalid_attrs, function(invalid_attr) {
-            expect(model.errors)
-        })
-    }
 });

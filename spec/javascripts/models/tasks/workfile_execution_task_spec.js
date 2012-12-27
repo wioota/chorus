@@ -53,7 +53,7 @@ describe("chorus.models.WorkfileExecutionTask", function() {
             this.model = rspecFixtures.workfileExecutionResults({
                 columns : this.columns,
                 rows : this.rows
-            })
+            });
             this.model.set({columns: this.columns});
         });
 
@@ -62,14 +62,14 @@ describe("chorus.models.WorkfileExecutionTask", function() {
                 expect(this.model.getRows()).toEqual([
                     {id: "1", title: "president"},
                     {id: "2", title: "vice president"}
-                ])
+                ]);
             });
         });
 
         describe("#getColumns", function(){
             it("returns the columns", function() {
                 expect(this.model.getColumns()).toEqual(this.columns);
-            })
+            });
         });
     });
 });

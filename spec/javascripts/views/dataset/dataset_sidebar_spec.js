@@ -79,7 +79,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         describe("analyze table", function() {
             it("displays the analyze table action", function() {
-                expect(this.view.$(".actions a.analyze")).toContainTranslation("dataset.actions.analyze")
+                expect(this.view.$(".actions a.analyze")).toContainTranslation("dataset.actions.analyze");
             });
 
             it("does not display for a view", function() {
@@ -227,6 +227,64 @@ describe("chorus.views.DatasetSidebar", function() {
         });
 
         context("when there is a workspace", function() {
+            function itDoesNotHaveACreateDatabaseViewLink() {
+                it("does not have a create database view link", function() {
+                    expect(this.view.$("a.create_database_view")).not.toExist();
+                });
+            }
+
+            function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
+                if(shouldBePresent) {
+                    var keyPrefix, textKey;
+
+                    if(type === "chorus view") {
+                        keyPrefix = "delete";
+                        textKey = "actions.delete";
+                    } else if(type === "view") {
+                        keyPrefix = "disassociate_view";
+                        textKey = "actions.delete_association";
+                    } else {
+                        keyPrefix = "disassociate_table";
+                        textKey = "actions.delete_association";
+                    }
+
+                    context("and the logged-in user has update permission on the workspace", function() {
+                        beforeEach(function() {
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6004, permission: ["update"] });
+                            this.view.render();
+                        });
+
+                        it("displays a delete link", function() {
+                            var el = this.view.$("a.alert[data-alert=DatasetDelete][data-key-prefix=" + keyPrefix + "]");
+                            expect(el).toExist();
+                            expect(el).toHaveText(t(textKey));
+                        });
+                    });
+
+                    context("and the logged-in user does not have update permission on the workspace", function() {
+                        beforeEach(function() {
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6005, permission: ["read"] });
+                            this.view.render();
+                        });
+
+                        it("does not display a delete link", function() {
+                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                        });
+                    });
+                } else {
+                    it("does not display a delete link", function() {
+                        this.view.render();
+                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                    });
+                }
+            }
+
+            function itDoesNotShowTheDuplicateChorusViewLink() {
+                it("does not show the 'duplicate' link", function() {
+                    expect(this.view.$("a.duplicate")).not.toExist();
+                });
+            }
+
             beforeEach(function() {
                 this.view.resource._workspace = rspecFixtures.workspace();
                 this.view.render();
@@ -237,7 +295,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     chorus.PageEvents.broadcast("dataset:selected");
                 });
 
-                itShowsTheAppropriateDeleteLink(false)
+                itShowsTheAppropriateDeleteLink(false);
                 itDoesNotHaveACreateDatabaseViewLink();
             });
 
@@ -248,7 +306,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a sandbox table or view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-                    this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] })
+                    this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] });
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
@@ -286,7 +344,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     it("has an 'imported xx ago' description", function() {
                         var sourceTable = this.lastImport.source();
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {timeAgo: chorus.helpers.relativeTimestamp(this.lastImport.get('completedStamp')), tableLink: "sourcey"});
-                        expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
+                        expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl());
                     });
 
                     it("doesn't display a 'import now' link", function() {
@@ -317,7 +375,7 @@ describe("chorus.views.DatasetSidebar", function() {
                         expect(this.view.$(".last_import a")).not.toExist();
                         expect(this.view.$(".last_import .source_file")).toBe("span");
                         expect(this.view.$(".last_import .source_file")).toHaveText("some_source_...");
-                        expect(this.view.$(".last_import .source_file")).toHaveAttr("title", "some_source_file.csv")
+                        expect(this.view.$(".last_import .source_file")).toHaveAttr("title", "some_source_file.csv");
                     });
 
                     it("doesn't display a 'import now' link", function() {
@@ -393,7 +451,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the current user does not have update permissions on the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] })
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] });
                             this.view.render();
                         });
 
@@ -423,7 +481,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             startDatetime: "2012-02-29T14:23:58Z",
                             nextImportAt: Date.formatForApi(Date.today().add(1).year())
                         });
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, permission: ["update"] })
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, permission: ["update"] });
                         this.server.completeFetchFor(this.dataset.getImportSchedules(), importSchedules.models);
                     });
 
@@ -457,8 +515,8 @@ describe("chorus.views.DatasetSidebar", function() {
                     it("has an 'imported xx ago' description", function() {
                         var lastImport = this.view.imports.last();
                         var destTable = lastImport.destination();
-                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."})
-                        expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."});
+                        expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
                     });
                 });
 
@@ -468,21 +526,21 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the user has permission to update in the workspace", function() {
                     beforeEach(function() {
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] })
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] });
                         this.view.render();
                     });
 
                     _.each(linkClasses, function(linkClass) {
                         it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
-                            var link = this.view.$("a." + linkClass)
+                            var link = this.view.$("a." + linkClass);
                             expect(link).toExist();
                             expect(link.text()).toMatchTranslation("actions." + linkClass);
-                            var dialog = linkClass == "import_now" ? "ImportNow" : "ImportScheduler"
+                            var dialog = linkClass == "import_now" ? "ImportNow" : "ImportScheduler";
                             expect(link.data("dialog")).toBe(dialog);
                         });
 
                         it("attaches the dataset to the '" + linkClass + "' link", function() {
-                            var link = this.view.$("a." + linkClass)
+                            var link = this.view.$("a." + linkClass);
                             expect(link.data("dataset")).toBe(this.dataset);
                         });
                     });
@@ -496,7 +554,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the user does not have permission to update things in the workspace", function() {
                     beforeEach(function() {
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] })
+                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] });
                         this.view.render();
                     });
 
@@ -604,64 +662,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(notesNew).toHaveData("displayEntityType", this.dataset.metaType());
                 expect(notesNew).toHaveData("allowWorkspaceAttachments", true);
             });
-
-            function itDoesNotHaveACreateDatabaseViewLink() {
-                it("does not have a create database view link", function() {
-                    expect(this.view.$("a.create_database_view")).not.toExist();
-                });
-            }
-
-            function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
-                if(shouldBePresent) {
-                    var keyPrefix, textKey;
-
-                    if(type == "chorus view") {
-                        keyPrefix = "delete";
-                        textKey = "actions.delete";
-                    } else if(type == "view") {
-                        keyPrefix = "disassociate_view";
-                        textKey = "actions.delete_association";
-                    } else {
-                        keyPrefix = "disassociate_table";
-                        textKey = "actions.delete_association";
-                    }
-
-                    context("and the logged-in user has update permission on the workspace", function() {
-                        beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6004, permission: ["update"] });
-                            this.view.render();
-                        });
-
-                        it("displays a delete link", function() {
-                            var el = this.view.$("a.alert[data-alert=DatasetDelete][data-key-prefix=" + keyPrefix + "]");
-                            expect(el).toExist();
-                            expect(el).toHaveText(t(textKey));
-                        });
-                    });
-
-                    context("and the logged-in user does not have update permission on the workspace", function() {
-                        beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6005, permission: ["read"] });
-                            this.view.render();
-                        });
-
-                        it("does not display a delete link", function() {
-                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
-                        });
-                    });
-                } else {
-                    it("does not display a delete link", function() {
-                        this.view.render();
-                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
-                    });
-                }
-            }
-
-            function itDoesNotShowTheDuplicateChorusViewLink() {
-                it("does not show the 'duplicate' link", function() {
-                    expect(this.view.$("a.duplicate")).not.toExist();
-                });
-            }
         });
 
         context("when there is not a workspace", function() {
@@ -939,8 +939,8 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.tabs.activity.options.type).not.toContain("missing");
-            })
-        }, this)
+            });
+        }, this);
     });
 
     describe("event handing", function() {
@@ -956,13 +956,13 @@ describe("chorus.views.DatasetSidebar", function() {
         });
         describe("cancel:visualization", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("start:visualization")
-                expect($(this.view.el)).toHaveClass("visualizing")
-                chorus.PageEvents.broadcast("cancel:visualization")
+                chorus.PageEvents.broadcast("start:visualization");
+                expect($(this.view.el)).toHaveClass("visualizing");
+                chorus.PageEvents.broadcast("cancel:visualization");
             });
 
             it("removes the 'visualizing' class from sidebar_content", function() {
-                expect($(this.view.el)).not.toHaveClass("visualizing")
+                expect($(this.view.el)).not.toHaveClass("visualizing");
             });
         });
     });

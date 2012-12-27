@@ -6,8 +6,8 @@ describe("chorus.models.SchemaFunction", function() {
             returnType: "void",
             language: "sql",
             argNames: ["elephant", ""],
-            argTypes: ["Int", "Bool"]})
-    })
+            argTypes: ["Int", "Bool"]});
+    });
     describe("#toText", function() {
         context("with lowercase names", function() {
             it("formats the string to put into the sql editor", function() {
@@ -17,18 +17,18 @@ describe("chorus.models.SchemaFunction", function() {
         context("with uppercase letters in the names", function() {
             beforeEach(function() {
                 this.model.set({schemaName: "Aa", name: "fuN"});
-            })
+            });
             it("puts quotes around the uppercase names", function() {
                 expect(this.model.toText()).toBe('"Aa"."fuN"(Int elephant, Bool arg2)');
             });
-        })
+        });
 
     });
 
     describe("#toHintText", function() {
         it("formats the string correctly", function() {
-            expect(this.model.toHintText()).toBe("void fun(Int elephant, Bool arg2)")
-        })
+            expect(this.model.toHintText()).toBe("void fun(Int elephant, Bool arg2)");
+        });
     });
 
     describe("#formattedArgumentList(ensureParams)", function () {
@@ -52,4 +52,4 @@ describe("chorus.models.SchemaFunction", function() {
             });
         });
     });
-})
+});

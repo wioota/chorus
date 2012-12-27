@@ -5,7 +5,7 @@ describe("chorus.models.Provisioning", function () {
 
     it("has the appropriate #downloadUrl", function () {
         expect(this.model.url()).toBe("/provisioning");
-    })
+    });
 
     describe("#isInstalled", function () {
         it("returns true when the 'installationStatus' property is set appropriately", function () {

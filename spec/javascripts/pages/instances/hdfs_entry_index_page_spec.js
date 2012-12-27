@@ -11,7 +11,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("instances")
+        expect(this.page.helpId).toBe("instances");
     });
 
     it("fetches the Hdfs entries for that directory", function() {
@@ -93,8 +93,8 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             });
             it("sets the entry as the model", function() {
                 expect(this.page.model).toEqual(this.entry);
-            })
-        })
+            });
+        });
     });
 
     describe("when the entry is the root directory", function () {
@@ -113,7 +113,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         it("shows just '/' for root", function () {
             expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.name() + ": /");
         });
-    })
+    });
 
     describe("when the path is long", function () {
         beforeEach(function () {

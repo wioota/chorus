@@ -89,7 +89,9 @@ describe('chorus.models.DatasetImportSchedule', function () {
                 });
             });
 
-            itReturnsTheCorrectTimes();
+            it("returns the import's end time", function() {
+                expect(this.model.endTime().compareTo(Date.parse('2012-08-28'))).toBe(0);
+            });
             it("returns the import's scheduled start time, without the milliseconds", function () {
                 expect(this.model.startTime().compareTo(Date.parseFromApi("2012-05-27T14:30:00Z"))).toBe(0);
             });
@@ -109,14 +111,5 @@ describe('chorus.models.DatasetImportSchedule', function () {
             });
 
         });
-
-
-        function itReturnsTheCorrectTimes() {
-
-            it("returns the import's end time", function () {
-                expect(this.model.endTime().compareTo(Date.parse('2012-08-28'))).toBe(0);
-            });
-        }
     });
-
 });

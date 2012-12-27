@@ -5,5 +5,5 @@ describe("chorus.models.ImportTask", function() {
 
     it("has the sourceType set to dataset", function() {
         expect(this.model.get('sourceType')).toBe("dataset");
-    })
+    });
 });

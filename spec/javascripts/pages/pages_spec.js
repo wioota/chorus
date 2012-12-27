@@ -60,7 +60,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     expect(this.page.foo).toBeUndefined();
                     this.model.loaded = true;
-                    this.page.dependOn(this.model, function() {this.foo = true});
+                    this.page.dependOn(this.model, function() {this.foo = true;});
                 });
 
                 it("calls the function immediately", function() {
@@ -70,7 +70,7 @@ describe("chorus.pages.Base", function() {
 
             context("once the dependency is loaded", function() {
                 beforeEach(function() {
-                    this.page.dependOn(this.model, function() {this.foo = true});
+                    this.page.dependOn(this.model, function() {this.foo = true;});
                 });
 
                 it("calls the function ", function() {
@@ -98,7 +98,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { record: "INSTANCE_STILL_PROVISIONING" }
+                    this.model.serverErrors = { record: "INSTANCE_STILL_PROVISIONING" };
                     this.page.dependOn(this.model);
                 });
 
@@ -113,7 +113,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { errors: "Bad things happened." }
+                    this.model.serverErrors = { errors: "Bad things happened." };
                     this.page.dependOn(this.model);
                 });
 
@@ -131,14 +131,14 @@ describe("chorus.pages.Base", function() {
             this.view = new chorus.pages.Base();
 
             this.view.mainContent = stubView();
-        })
+        });
 
         context("when the page already has a header", function() {
             it("uses the cached header", function() {
-                var header = stubView("I is yr header")
-                this.view.header = header
+                var header = stubView("I is yr header");
+                this.view.header = header;
                 this.view.render();
-                expect(this.view.$("#header").text()).toBe("I is yr header")
+                expect(this.view.$("#header").text()).toBe("I is yr header");
             });
         });
 
@@ -177,7 +177,7 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-                })
+                });
             });
 
             context("when the fetch returns forbidden", function() {
@@ -190,7 +190,7 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
-                })
+                });
             });
 
             context("when the fetch returns forbidden and has a type", function() {
@@ -204,7 +204,7 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/forbidden");
-                })
+                });
             });
 
             context("when the fetch returns unprocessableEntity", function() {
@@ -217,7 +217,7 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the UnprocessableEntityPage if requiredResource fetch returns 422", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unprocessableEntity");
-                })
+                });
             });
         });
 
@@ -226,14 +226,14 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.view.crumbs = [
                         {label: "Home"}
-                    ]
+                    ];
                     this.view.render();
-                })
+                });
 
                 it("creates a BreadcrumbsView with the static breadcrumbs", function() {
                     expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs);
                 });
-            })
+            });
 
             context("with dynamic breadcrumbs", function() {
                 beforeEach(function() {
@@ -241,10 +241,10 @@ describe("chorus.pages.Base", function() {
                     this.view.crumbs = jasmine.createSpy("crumbs").andCallFake(function() {
                         return [
                             {label: "There"}
-                        ]
+                        ];
                     });
                     this.view.render();
-                })
+                });
 
                 it("creates a BreadcrumbsView with the dynamic breadcrumbs", function() {
                     expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs());
@@ -256,13 +256,13 @@ describe("chorus.pages.Base", function() {
                     this.view.render();
                     expect(this.view.crumbs).toHaveBeenCalled();
                 });
-            })
-        })
+            });
+        });
 
         it("renders the breadcrumbs", function() {
             this.view.crumbs = [
                 {label: "Home"}
-            ]
+            ];
             this.view.render();
             expect(this.view.$("#breadcrumbs.breadcrumbs .breadcrumb")).toExist();
         });
@@ -278,18 +278,38 @@ describe("chorus.pages.Base", function() {
         it("creates a Sidebar view", function() {
             this.view.sidebar = stubView("VROOOOOOOOOM");
             this.view.render();
-            expect(this.view.$("#sidebar .sidebar_content.primary").text()).toBe("VROOOOOOOOOM")
+            expect(this.view.$("#sidebar .sidebar_content.primary").text()).toBe("VROOOOOOOOOM");
         });
 
         it("makes an empty sidebar when not provided with a sideBarContent function", function() {
             this.view.render();
             delete this.view.sidebar;
             this.view.render();
-            expect(this.view.$("#sidebar.sidebar_content.primary").text().length).toBe(0)
+            expect(this.view.$("#sidebar.sidebar_content.primary").text().length).toBe(0);
         });
     });
 
     context("dialogs and alerts", function() {
+        function itLaunchesTheModalCorrectly(modalClass) {
+            it("instantiates modals from buttons", function() {
+                this.elementToClick.click();
+                expect(this.modalSpy).toHaveModal(modalClass);
+            });
+
+            it("passes the data attributes on the clicked element to the modal as options", function() {
+                this.elementToClick.data({ foo: 5, bar: 8 });
+                this.elementToClick.click();
+                expect(this.modalSpy.lastModal().options.foo).toBe(5);
+                expect(this.modalSpy.lastModal().options.bar).toBe(8);
+            });
+
+            it("passes the pageModel to the modal", function() {
+                this.view.model = new chorus.models.User();
+                this.elementToClick.click();
+                expect(this.modalSpy.lastModal().options.pageModel).toBe(this.view.model);
+            });
+        }
+
         beforeEach(function() {
             this.modalSpy = stubModals();
 
@@ -318,26 +338,6 @@ describe("chorus.pages.Base", function() {
 
             itLaunchesTheModalCorrectly(chorus.dialogs.WorkfilesSqlNew);
         });
-
-        function itLaunchesTheModalCorrectly(modalClass) {
-            it("instantiates modals from buttons", function() {
-                this.elementToClick.click();
-                expect(this.modalSpy).toHaveModal(modalClass);
-            })
-
-            it("passes the data attributes on the clicked element to the modal as options", function() {
-                this.elementToClick.data({ foo: 5, bar: 8 });
-                this.elementToClick.click();
-                expect(this.modalSpy.lastModal().options.foo).toBe(5);
-                expect(this.modalSpy.lastModal().options.bar).toBe(8);
-            });
-
-            it("passes the pageModel to the modal", function() {
-                this.view.model = new chorus.models.User();
-                this.elementToClick.click();
-                expect(this.modalSpy.lastModal().options.pageModel).toBe(this.view.model);
-            });
-        }
     });
 
     describe("help", function() {
@@ -351,6 +351,6 @@ describe("chorus.pages.Base", function() {
 
         it("shows the help system", function() {
             expect(chorus.help).toHaveBeenCalled();
-        })
-    })
-})
+        });
+    });
+});

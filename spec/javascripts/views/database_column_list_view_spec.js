@@ -31,7 +31,7 @@ describe("chorus.views.DatabaseColumnList", function() {
 
         it("shows the comment for each column", function() {
             expect(this.view.$("li:eq(0) .summary")).toHaveText("column comment");
-        })
+        });
 
         it("shows the type for each column", function() {
             expect(this.view.$("li:eq(0) .type")).toHaveClass("boolean");
@@ -39,12 +39,12 @@ describe("chorus.views.DatabaseColumnList", function() {
 
             expect(this.view.$("li:eq(1) .type")).toHaveClass("numeric");
             expect(this.view.$("li:eq(1) .type_name").text().trim()).toBe("int4");
-        })
+        });
 
         it("sorts the columns by ordinalPosition", function() {
             expect(this.view.$("li:eq(0) .name")).toHaveText("column_name_1");
             expect(this.view.$("li:eq(1) .name")).toHaveText("column_name_2");
-        })
+        });
 
         it("subscribes to column:select_all", function() {
             expect(chorus.PageEvents.hasSubscription("column:select_all", this.view.selectAll, this.view)).toBeTruthy();
@@ -106,37 +106,37 @@ describe("chorus.views.DatabaseColumnList", function() {
                         it("should remove class selected from all list items and select the first item", function() {
                             expect(this.view.$("li.selected").length).toBe(1);
                             expect(this.view.$("li:eq(0)")).toHaveClass("selected");
-                        })
-                    })
-                })
+                        });
+                    });
+                });
             });
 
             context("with selectMulti true", function() {
                 beforeEach(function() {
                     this.view.selectMulti = true;
                     this.view.render();
-                })
+                });
 
                 it("has nothing selected by default", function() {
                     expect(this.view.$("li.selected")).not.toExist();
-                })
+                });
 
                 context("with a column selected", function() {
                     beforeEach(function() {
                         this.column2.selected = true;
                         this.view.render();
-                    })
+                    });
 
                     it("renders a selected column as selected", function() {
                         expect(this.view.$('.selected').length).toBe(1);
-                    })
-                })
+                    });
+                });
 
                 context("selecting multiple", function() {
                     beforeEach(function() {
                         this.view.$("li:eq(0)").click();
                         this.view.$("li:eq(1)").click();
-                    })
+                    });
 
                     it("selects both", function() {
                         expect(this.view.$("li:eq(0)")).toHaveClass("selected");
@@ -165,34 +165,34 @@ describe("chorus.views.DatabaseColumnList", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(1));
                         });
                     });
-                })
+                });
 
 
             });
-        })
+        });
 
         describe("showDatasetName", function() {
             context("when enabled", function() {
                 beforeEach(function() {
                     this.view.showDatasetName = true;
                     this.view.render();
-                })
+                });
 
                 it("shows the dataset name", function() {
                     expect(this.view.$("li:eq(0) .aliased_name .letter")).toContainText(this.column1.dataset.aliasedName);
-                })
-            })
+                });
+            });
 
             context("when disabled", function() {
                 beforeEach(function() {
                     this.view.showDatasetName = false;
                     this.view.render();
-                })
+                });
 
                 it("does not show the dataset name", function() {
                     expect(this.view.$("li:eq(0) .aliased_name")).not.toExist();
-                })
-            })
-        })
+                });
+            });
+        });
     });
 });

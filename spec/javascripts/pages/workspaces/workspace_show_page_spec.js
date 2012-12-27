@@ -2,19 +2,19 @@ describe("chorus.pages.WorkspaceShowPage", function() {
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceShowPage('4');
-        })
+        });
 
         it("sets up the model properly", function() {
             expect(this.page.model.get("id")).toBe('4');
-        })
+        });
 
         it("fetches the model", function() {
             expect(this.server.requests[0].url).toBe("/workspaces/4");
-        })
+        });
 
         it("has a helpId", function() {
-            expect(this.page.helpId).toBe("workspace_summary")
-        })
+            expect(this.page.helpId).toBe("workspace_summary");
+        });
 
         it("sets the workspaceId, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe('4');
@@ -29,7 +29,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                         hasAddedWorkfile: false,
                         hasAddedSandbox: false,
                         hasChangedSettings: false
-                    })
+                    });
                     spyOn(chorus.router, "navigate");
 
                     this.page = new chorus.pages.WorkspaceShowPage('4');
@@ -48,7 +48,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
                     it("doesn't break the breadcrumbs", function() {
                         var page = this.page;
-                        expect(function(){ page.crumbs() }).not.toThrow();
+                        expect(function(){ page.crumbs(); }).not.toThrow();
                     });
                 });
             });
@@ -60,7 +60,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                         hasAddedWorkfile: false,
                         hasAddedSandbox: false,
                         hasChangedSettings: false
-                    })
+                    });
                     spyOn(chorus.router, "navigate");
                     this.page = new chorus.pages.WorkspaceShowPage('4');
                     this.page.model._owner = { id: 9877 };
@@ -81,7 +81,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                     hasAddedWorkfile: true,
                     hasAddedSandbox: true,
                     hasChangedSettings: true
-                })
+                });
                 spyOn(chorus.router, "navigate");
                 this.page = new chorus.pages.WorkspaceShowPage('4');
                 this.page.model._owner = { id: 4 };
@@ -112,20 +112,20 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             });
 
             it("displays some breadcrumbs", function() {
-                expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home")
+                expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
             });
         });
 
         context("when the model fails to load properly", function() {
             beforeEach(function() {
-                spyOn(Backbone.history, "loadUrl")
-                this.page.model.trigger('resourceNotFound')
-            })
+                spyOn(Backbone.history, "loadUrl");
+                this.page.model.trigger('resourceNotFound');
+            });
 
             it("navigates to the 404 page", function() {
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-            })
-        })
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
 
         context("when the model has loaded", function() {
             beforeEach(function() {
@@ -166,7 +166,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             context("when the model changes", function() {
                 beforeEach(function() {
-                    this.page.model.set({name: "bar", public: false});
+                    this.page.model.set({name: "bar", "public": false});
                 });
 
                 it("displays the new breadcrumb automatically", function() {

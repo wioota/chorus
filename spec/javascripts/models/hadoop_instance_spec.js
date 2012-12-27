@@ -1,6 +1,6 @@
 describe("chorus.models.HadoopInstance", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.hadoopInstance({id : 123, username: "hadoop", groupList: "hadoop"})
+        this.model = rspecFixtures.hadoopInstance({id : 123, username: "hadoop", groupList: "hadoop"});
         this.attrs = {};
     });
 
@@ -33,13 +33,13 @@ describe("chorus.models.HadoopInstance", function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
             expect(this.model.errors[attr]).toBeTruthy();
-        })
+        });
     });
 
     it("requires name with valid length", function() {
-        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+        this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
-        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"})
+        expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"});
     });
 
     describe("#providerIconUrl", function() {

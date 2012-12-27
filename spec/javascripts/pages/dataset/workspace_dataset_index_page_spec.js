@@ -13,7 +13,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("datasets")
+        expect(this.page.helpId).toBe("datasets");
     });
 
     describe("#initialize", function() {
@@ -67,21 +67,71 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
     describe("when a fetch fails", function() {
         beforeEach(function() {
-            spyOn(Backbone.history, "loadUrl")
+            spyOn(Backbone.history, "loadUrl");
         });
 
         it("navigates to the 404 page when the workspace fetch fails", function() {
             this.page.workspace.trigger('resourceNotFound', this.page.workspace);
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
 
         it("navigates to the 404 page when the collection fetch fails", function() {
             this.page.collection.trigger('resourceNotFound', this.page.collection);
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
     });
 
     context("it does not have a sandbox", function() {
+        function itHandlesTheWorkspaceResponse(helpText) {
+            it("fetches the dataset collection", function() {
+                expect(this.workspace.sandbox()).toBeUndefined();
+                expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
+            });
+
+            describe("when the fetch returns no items", function() {
+                beforeEach(function() {
+                    this.datasets = [];
+                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
+                });
+
+                it("has no items", function() {
+                    expect(this.page.collection.length).toBe(0);
+                });
+            });
+
+            describe("when the fetch returns two items", function() {
+                beforeEach(function() {
+                    this.datasets = [
+                        rspecFixtures.workspaceDataset.datasetTable(),
+                        rspecFixtures.workspaceDataset.datasetTable()
+                    ];
+                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
+                });
+
+                it("has two items", function() {
+                    expect(this.page.collection.length).toBe(2);
+                });
+            });
+
+            describe("the import file button", function() {
+                beforeEach(function() {
+                    this.page.render();
+                });
+
+                it("is disabled", function() {
+                    expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
+                });
+
+                it("has a help icon", function() {
+                    expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
+                });
+
+                it("has the correct help text", function() {
+                    expect(this.page.mainContent.contentDetails.$("img.help").attr("data-text")).toBe(helpText);
+                });
+            });
+        }
+
         beforeEach(function() {
             this.workspace.attributes.sandboxInfo = null;
         });
@@ -95,7 +145,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
                 hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
-            }))
+            }));
         });
 
         context("and the user is the workspace owner", function() {
@@ -106,7 +156,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
                 hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
-            }))
+            }));
         });
 
         context("and the user is neither an admin nor the workspace owner", function() {
@@ -115,59 +165,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 this.server.completeFetchFor(this.workspace);
             });
 
-            itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox_no_permissions"))
+            itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox_no_permissions"));
         });
-
-        function itHandlesTheWorkspaceResponse(helpText) {
-            it("fetches the dataset collection", function() {
-                expect(this.workspace.sandbox()).toBeUndefined();
-                expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
-            })
-
-            describe("when the fetch returns no items", function() {
-                beforeEach(function() {
-                    this.datasets = [
-                    ];
-                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-                })
-
-                it("has no items", function() {
-                    expect(this.page.collection.length).toBe(0)
-                })
-            });
-
-            describe("when the fetch returns two items", function() {
-                beforeEach(function() {
-                    this.datasets = [
-                        rspecFixtures.workspaceDataset.datasetTable(),
-                        rspecFixtures.workspaceDataset.datasetTable()
-                    ];
-                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-                })
-
-                it("has two items", function() {
-                    expect(this.page.collection.length).toBe(2)
-                })
-            });
-
-            describe("the import file button", function() {
-                beforeEach(function() {
-                    this.page.render();
-                })
-
-                it("is disabled", function() {
-                    expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
-                })
-
-                it("has a help icon", function() {
-                    expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
-                })
-
-                it("has the correct help text", function() {
-                    expect(this.page.mainContent.contentDetails.$("img.help").attr("data-text")).toBe(helpText);
-                })
-            })
-        }
     });
 
     context("after the workspace and collection have loaded", function() {
@@ -274,7 +273,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
                         it("fetches the datasets", function() {
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                        })
+                        });
                     });
 
                     context('navigating to the page a second time', function() {
@@ -307,7 +306,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
                 context("when the account loads and is valid", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount())
+                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount());
                     });
 
                     it("does not pop up the WorkspaceInstanceAccountDialog", function() {
@@ -404,7 +403,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
         context("and the user does not have update permission on the workspace", function() {
             beforeEach(function() {
-                this.workspace.set({ permission: ["read"]})
+                this.workspace.set({ permission: ["read"]});
                 this.server.completeFetchFor(this.workspace);
             });
 
@@ -432,7 +431,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
-        })
+        });
 
         it("sets the selected dataset as its own model", function() {
             expect(this.page.model).toBe(this.dataset);

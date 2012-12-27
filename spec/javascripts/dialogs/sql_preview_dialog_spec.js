@@ -25,7 +25,7 @@ describe("chorus.dialogs.SqlPreview", function() {
         });
 
         it("hides the data preview area", function() {
-            expect(this.dialog.$(".results_console")).toHaveClass("hidden")
+            expect(this.dialog.$(".results_console")).toHaveClass("hidden");
         });
 
         describe("preview bar", function() {
@@ -44,11 +44,11 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                 describe("when the data preview succeeds", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.dialog.resultsConsole.model, rspecFixtures.dataPreviewTaskResults())
+                        this.server.completeSaveFor(this.dialog.resultsConsole.model, rspecFixtures.dataPreviewTaskResults());
                     });
 
                     it("shows the result table", function() {
-                        expect(this.dialog.$(".result_table")).not.toHaveClass("hidden")
+                        expect(this.dialog.$(".result_table")).not.toHaveClass("hidden");
                     });
 
                     it("hides the preview button", function() {
@@ -61,7 +61,7 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                     describe("closing the Data Preview", function() {
                         beforeEach(function() {
-                            this.dialog.$(".results_console .close").click()
+                            this.dialog.$(".results_console .close").click();
                         });
 
                         it("does not show the Data Preview any longer", function() {
@@ -79,11 +79,11 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                             it("shows the result console", function() {
                                 expect(this.dialog.$(".results_console")).not.toHaveClass("hidden");
-                            })
-                        })
+                            });
+                        });
                     });
                 });
-            })
+            });
         });
 
         describe("generated sql", function() {
@@ -99,7 +99,7 @@ describe("chorus.dialogs.SqlPreview", function() {
             });
 
             it("cancels the task", function() {
-                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled()
+                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled();
             });
         });
 
@@ -111,7 +111,7 @@ describe("chorus.dialogs.SqlPreview", function() {
             });
 
             it("cancels the task", function() {
-                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled()
+                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled();
             });
 
             it("unsubscribes from the modal:closed event", function() {

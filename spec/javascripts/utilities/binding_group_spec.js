@@ -56,7 +56,7 @@ describe("chorus.BindingGroup", function() {
                 this.changeSpy = jasmine.createSpy("change");
                 this.model1.shouldTriggerImmediately = function(eventName) {
                     if(eventName === "change") {
-                        return true
+                        return true;
                     }
                 };
                 this.model1.bind("change", this.changeSpy);
@@ -77,7 +77,7 @@ describe("chorus.BindingGroup", function() {
             it("treats them as separate bindings", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.callCount).toBe(2);
-            })
+            });
         });
 
         context("when no context parameter is passed", function() {
@@ -94,7 +94,7 @@ describe("chorus.BindingGroup", function() {
             it("only binds once", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.callCount).toBe(1);
-            })
+            });
         });
 
         context("when a space-separated string of event names is passed", function() {
@@ -116,7 +116,7 @@ describe("chorus.BindingGroup", function() {
                 this.view1.render.reset();
                 this.model1.trigger("saved");
                 expect(this.view1.render.callCount).toBe(1);
-            })
+            });
         });
     });
 

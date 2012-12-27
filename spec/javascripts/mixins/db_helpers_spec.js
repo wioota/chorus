@@ -6,14 +6,14 @@ describe("chorus.Mixins.dbHelpers", function() {
 
         afterEach(function() {
             chorus.ValidationRegexes = this.originalValidationRegexes;
-        })
+        });
 
         context("with one argument", function() {
             context("when the name matches chorus.ValidationRegexes.SafePgName", function() {
                 beforeEach(function() {
                     chorus.ValidationRegexes = {
-                        SafePgName: function() { return /.*/ }
-                    }
+                        SafePgName: function() { return /.*/; }
+                    };
                 });
 
                 it("does not quote the name", function() {
@@ -24,22 +24,22 @@ describe("chorus.Mixins.dbHelpers", function() {
             context("when the name does not match chorus.ValidationRegexes.SafePgName", function() {
                 beforeEach(function() {
                     chorus.ValidationRegexes = {
-                        SafePgName: function() { return /no match/ }
-                    }
+                        SafePgName: function() { return /no match/; }
+                    };
                 });
 
                 it("quotes the name", function() {
                     expect(chorus.Mixins.dbHelpers.safePGName("foo")).toBe('"foo"');
                 });
             });
-        })
+        });
 
         context("with two arguments", function() {
             it("encodes each argument separately, then concatenates them with '.'", function() {
-                expect(chorus.Mixins.dbHelpers.safePGName("Foo", "bar")).toBe('"Foo".bar')
-            })
-        })
-    })
+                expect(chorus.Mixins.dbHelpers.safePGName("Foo", "bar")).toBe('"Foo".bar');
+            });
+        });
+    });
 
     describe("pgsqlRealEscapeString", function() {
         it("replaces single quotes with two single quotes", function() {

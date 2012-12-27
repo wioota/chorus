@@ -47,7 +47,7 @@ describe("chorus.presenters.visualizations", function() {
                 });
                 this.presenter = new chorus.presenters.visualizations.Timeseries(this.model);
                 this.data = this.presenter.present();
-            })
+            });
 
             it("should return a time that can be parsed by 'Date'", function() {
                 expect(Date.parse(this.data[0].time)).toBeTruthy();

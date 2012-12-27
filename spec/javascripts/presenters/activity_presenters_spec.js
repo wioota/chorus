@@ -1,4 +1,56 @@
 describe("chorus.presenters.Activity", function() {
+    function linkTo(url, text) {
+        return chorus.helpers.linkTo(url, text);
+    }
+
+    function itHasTheActorIcon() {
+        describe("the icon", function() {
+            it("shows the user's icon", function() {
+                expect(presenter.iconSrc()).toBe(actor.fetchImageUrl({ size: "icon" }));
+            });
+
+            it("links to the user's profile", function() {
+                expect(presenter.iconHref()).toBe(actor.showUrl());
+            });
+
+            it("has the class 'profile'", function() {
+                expect(presenter.iconClass()).toBe("profile");
+            });
+        });
+    }
+
+    function itHasTheErrorIcon() {
+        describe("the icon", function() {
+            it("shows the error icon", function() {
+                expect(presenter.iconSrc()).toBe("/images/message_error.png");
+            });
+
+            it("links to the user's profile", function() {
+                expect(presenter.iconHref()).toBeNull();
+            });
+
+            it("has the class 'profile'", function() {
+                expect(presenter.iconClass()).toBe("error");
+            });
+        });
+    }
+
+    function itHasTheImportIcon() {
+        describe("the icon", function() {
+            it("shows the error icon", function() {
+                expect(presenter.iconSrc()).toBe("/images/import_icon.png");
+            });
+
+            it("links to dataset", function() {
+                expect(presenter.iconHref()).toBe(dataset.showUrl());
+            });
+
+            it("has the class 'profile'", function() {
+                expect(presenter.iconClass()).toBe("icon");
+            });
+        });
+    }
+
     var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset;
 
     describe("common aspects", function() {
@@ -146,7 +198,7 @@ describe("chorus.presenters.Activity", function() {
         describe("isNotification and isReadOnly", function() {
             beforeEach(function() {
                 model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-                presenter_options = {
+                var presenter_options = {
                     isNotification: true,
                     isReadOnly: true
                 };
@@ -164,7 +216,7 @@ describe("chorus.presenters.Activity", function() {
     describe("#promotionDetails", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.insightOnGreenplumInstance();
-            presenter_options = {
+            var presenter_options = {
             };
             presenter = new chorus.presenters.Activity(model, presenter_options);
         });
@@ -185,7 +237,7 @@ describe("chorus.presenters.Activity", function() {
                 model = rspecFixtures.activity.insightOnGreenplumInstance({
                     isPublished:true
                 });
-                presenter_options = {
+                var presenter_options = {
 
                 };
                 presenter = new chorus.presenters.Activity(model, presenter_options);
@@ -202,16 +254,16 @@ describe("chorus.presenters.Activity", function() {
                 model = rspecFixtures.activity.insightOnGreenplumInstance({
                     isPublished:false
                 });
-                presenter_options = {
+                var presenter_options = {
                 };
                 presenter = new chorus.presenters.Activity(model, presenter_options);
-            })
+            });
 
             it('when isPublished is false', function () {
                 expect(presenter.isPublished()).toBeFalsy();
 
             });
-        })
+        });
     });
 
     context("gpdb instance created", function() {
@@ -704,7 +756,7 @@ describe("chorus.presenters.Activity", function() {
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name())
                 }
-            )
+            );
         });
     });
 
@@ -730,7 +782,7 @@ describe("chorus.presenters.Activity", function() {
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name())
                 }
-            )
+            );
         });
     });
 
@@ -757,7 +809,7 @@ describe("chorus.presenters.Activity", function() {
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     filePattern: '*.csv'
                 }
-            )
+            );
         });
     });
 
@@ -782,7 +834,7 @@ describe("chorus.presenters.Activity", function() {
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
-            )
+            );
         });
     });
 
@@ -807,7 +859,7 @@ describe("chorus.presenters.Activity", function() {
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
-            )
+            );
         });
     });
 
@@ -830,7 +882,7 @@ describe("chorus.presenters.Activity", function() {
                     destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
-            )
+            );
         });
 
         it("has the error link", function() {
@@ -857,7 +909,7 @@ describe("chorus.presenters.Activity", function() {
                     destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
-            )
+            );
         });
     });
 
@@ -887,7 +939,7 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(hdfsFile.showUrl(), hdfsFile.name()),
                     noteObjectType: "file"
                 }
-            )
+            );
         });
     });
 
@@ -915,7 +967,7 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
                     noteObjectType: "data source"
                 }
-            )
+            );
         });
     });
 
@@ -942,7 +994,7 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
                     noteObjectType: "data source"
                 }
-            )
+            );
         });
     });
 
@@ -968,7 +1020,7 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(workspace.showUrl(), workspace.name()),
                     noteObjectType: "workspace"
                 }
-            )
+            );
         });
     });
 
@@ -996,7 +1048,7 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(instance.showUrl(), instance.name()),
                     noteObjectType: "data source"
                 }
-            )
+            );
         });
     });
 
@@ -1369,7 +1421,7 @@ describe("chorus.presenters.Activity", function() {
                     model = rspecFixtures.activity.datasetImportCreated();
                     dataset = model.dataset();
                     presenter = new chorus.presenters.Activity(model);
-                    activity_data["destObjectOrName"] =  "other_table"
+                    activity_data["destObjectOrName"] =  "other_table";
                 });
                 it("displays the destination table name without link", function () {
                     rspecFixtures.activity.datasetImportCreated();
@@ -1434,7 +1486,7 @@ describe("chorus.presenters.Activity", function() {
                     model = rspecFixtures.activity.importScheduleUpdated();
                     dataset = model.dataset();
                     presenter = new chorus.presenters.Activity(model);
-                    activity_data["destObjectOrName"] =  "other_table"
+                    activity_data["destObjectOrName"] =  "other_table";
                 });
                 it("displays the destination table name without link", function () {
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -1498,7 +1550,7 @@ describe("chorus.presenters.Activity", function() {
                     model = rspecFixtures.activity.importScheduleDeleted();
                     dataset = model.dataset();
                     presenter = new chorus.presenters.Activity(model);
-                    activity_data["destObjectOrName"] =  "other_table_deleted"
+                    activity_data["destObjectOrName"] =  "other_table_deleted";
                 });
                 it("displays the destination table name without link", function () {
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -1542,7 +1594,7 @@ describe("chorus.presenters.Activity", function() {
                 sourceObject.set({workspace: workspace});
                 model.set({sourceObject: sourceObject});
 
-                translation_params = {
+                this.translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
                     chorusViewSourceType: t("dataset.types.table"),
@@ -1555,7 +1607,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["without_workspace"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.without_workspace", translation_params
+                        "activity.header.ChorusViewCreated.without_workspace", this.translation_params
                     );
                 });
             });
@@ -1564,7 +1616,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["default"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.default", translation_params
+                        "activity.header.ChorusViewCreated.default", this.translation_params
                     );
                 });
             });
@@ -1783,58 +1835,6 @@ describe("chorus.presenters.Activity", function() {
             );
         });
     });
-
-    function linkTo(url, text) {
-        return chorus.helpers.linkTo(url, text);
-    }
-
-    function itHasTheActorIcon() {
-        describe("the icon", function() {
-            it("shows the user's icon", function() {
-                expect(presenter.iconSrc()).toBe(actor.fetchImageUrl({ size: "icon" }));
-            });
-
-            it("links to the user's profile", function() {
-                expect(presenter.iconHref()).toBe(actor.showUrl());
-            });
-
-            it("has the class 'profile'", function() {
-                expect(presenter.iconClass()).toBe("profile");
-            });
-        });
-    }
-
-    function itHasTheErrorIcon() {
-        describe("the icon", function() {
-            it("shows the error icon", function() {
-                expect(presenter.iconSrc()).toBe("/images/message_error.png");
-            });
-
-            it("links to the user's profile", function() {
-                expect(presenter.iconHref()).toBeNull();
-            });
-
-            it("has the class 'profile'", function() {
-                expect(presenter.iconClass()).toBe("error");
-            });
-        });
-    }
-
-    function itHasTheImportIcon() {
-        describe("the icon", function() {
-            it("shows the error icon", function() {
-                expect(presenter.iconSrc()).toBe("/images/import_icon.png");
-            });
-
-            it("links to dataset", function() {
-                expect(presenter.iconHref()).toBe(dataset.showUrl());
-            });
-
-            it("has the class 'profile'", function() {
-                expect(presenter.iconClass()).toBe("icon");
-            });
-        });
-    }
 });
 
 

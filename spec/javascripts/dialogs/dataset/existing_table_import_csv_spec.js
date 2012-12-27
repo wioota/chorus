@@ -37,7 +37,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             {name: "col3", typeCategory: "WHOLE_NUMBER", ordinalPosition: "1"},
             {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
             {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"}
-        ]
+        ];
         this.dataset = newFixtures.workspaceDataset.sandboxTable({
             id: "dat-id",
             workspace: {id: this.model.get("workspaceId")},
@@ -59,7 +59,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     it("has the import button disabled by default", function() {
         expect(this.dialog.$('button.submit')).toBeDisabled();
-    })
+    });
 
     it("has comma as the default separator", function() {
         expect(this.dialog.$('input[name=delimiter]:checked').val()).toBe(',');
@@ -83,22 +83,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         it("still imports and passes client side validation", function() {
             expect(this.server.lastCreateFor(this.dialog.model).url.length).toBeGreaterThan(0);
-        });
-    });
-
-    describe("click the 'tab' separator", hasRightSeparator('\t'));
-    describe("click the 'comma' separator", hasRightSeparator(','));
-    describe("click the 'semicolon' separator", hasRightSeparator(';'));
-    describe("click the 'space' separator", hasRightSeparator(' '));
-
-    describe("changing the separator", function() {
-        beforeEach(function() {
-            expect(this.dialog.model.get("types").length).toBe(5);
-            this.dialog.$("input.delimiter[value=';']").click();
-        });
-
-        it("recalculates the column types", function() {
-            expect(this.dialog.model.get("types").length).toBe(1);
         });
     });
 
@@ -135,6 +119,22 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
         };
     }
+
+    describe("click the 'tab' separator", hasRightSeparator('\t'));
+    describe("click the 'comma' separator", hasRightSeparator(','));
+    describe("click the 'semicolon' separator", hasRightSeparator(';'));
+    describe("click the 'space' separator", hasRightSeparator(' '));
+
+    describe("changing the separator", function() {
+        beforeEach(function() {
+            expect(this.dialog.model.get("types").length).toBe(5);
+            this.dialog.$("input.delimiter[value=';']").click();
+        });
+
+        it("recalculates the column types", function() {
+            expect(this.dialog.model.get("types").length).toBe(1);
+        });
+    });
 
     describe("other delimiter input field", function() {
         beforeEach(function() {
@@ -187,7 +187,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                     this.dialog.$("input#delimiter_other").click();
                     this.dialog.$('input[name=custom_delimiter]').val("z");
-                    this.dialog.$('input[name=custom_delimiter]').trigger('keyup')
+                    this.dialog.$('input[name=custom_delimiter]').trigger('keyup');
                 });
 
                 it("has z as separator", function() {
@@ -198,7 +198,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
                 });
             });
-        })
+        });
     });
 
     it("has directions", function() {
@@ -210,10 +210,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     it("has a progress tracker", function() {
         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
-    })
+    });
 
     it("has an auto-map link", function() {
-        expect(this.dialog.$("a.automap")).toContainTranslation("dataset.import.table.automap")
+        expect(this.dialog.$("a.automap")).toContainTranslation("dataset.import.table.automap");
     });
 
     describe("clicking the 'automap' link", function() {
@@ -274,24 +274,24 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("the data table", function() {
         it("has the right number of column names", function() {
             expect(this.dialog.$(".data_table .thead .column_names .th").length).toEqual(5);
-        })
+        });
 
         it("converts the column names into db friendly format", function() {
             var $columnNames = this.dialog.$(".data_table .thead .column_names .th");
-            expect($columnNames.eq(0).text()).toBe("col1")
-            expect($columnNames.eq(1).text()).toBe("col2")
-            expect($columnNames.eq(2).text()).toBe("col3")
-            expect($columnNames.eq(3).text()).toBe("col_4")
-            expect($columnNames.eq(4).text()).toBe("col_5")
-        })
+            expect($columnNames.eq(0).text()).toBe("col1");
+            expect($columnNames.eq(1).text()).toBe("col2");
+            expect($columnNames.eq(2).text()).toBe("col3");
+            expect($columnNames.eq(3).text()).toBe("col_4");
+            expect($columnNames.eq(4).text()).toBe("col_5");
+        });
 
         it("has the right number of column column mapping headers", function() {
             expect(this.dialog.$(".data_table .thead .column_mapping .th").length).toEqual(5);
-        })
+        });
 
         it("has the right number of data columns", function() {
             expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
-        })
+        });
 
         it("displays the provided types", function() {
             _.each(this.dialog.$(".th .type"), function(th, index) {
@@ -301,11 +301,11 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         it("has the right data in each cell", function() {
             _.each(this.dialog.$(".data_table .tbody .column"), function(column, i) {
-                var cells = $(column).find(".td")
+                var cells = $(column).find(".td");
                 expect(cells.length).toEqual(4);
                 _.each(cells, function(cell, j) {
                     expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
-                })
+                });
             });
         });
 
@@ -316,7 +316,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
                 expect($(el).find("a")).toHaveClass("selection_conflict");
             });
-        })
+        });
 
         describe("clicking a destination column menu link", function() {
             var menuLinks, menus;
@@ -341,6 +341,44 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 beforeEach(function() {
                     menus.eq(0).find("li:eq(1) a").click();
                 });
+
+                function itSelectsDestinationColumn(sourceIndex, destinationIndex, destinationName, options) {
+                    it("shows the right destination column as selected", function() {
+                        expect(menuLinks.eq(sourceIndex)).toHaveText(destinationName);
+
+                        var menu = menus.eq(sourceIndex);
+                        expect(menu.find(".check").not(".hidden").length).toBe(1);
+                        expect(menu.find(".name.selected").length).toBe(1);
+                        var selectedLi = menu.find("li[name=" + destinationName + "]");
+                        expect(selectedLi.find(".check")).not.toHaveClass("hidden");
+                        expect(selectedLi.find(".name")).toHaveClass("selected");
+                    });
+
+                    if (options && options.conflict) {
+                        it("marks that source column as having a selection conflict", function() {
+                            expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selected");
+                            expect(menuLinks.eq(sourceIndex)).toHaveClass("selection_conflict");
+                        });
+                    } else {
+                        it("marks that source column as having been mapped", function() {
+                            expect(menuLinks.eq(sourceIndex)).toHaveClass("selected");
+                            expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selection_conflict");
+                        });
+                    }
+                }
+
+                function itHasSelectedCounts(counts) {
+                    it("updates the counts in all of the menus", function() {
+                        _.each(menus, function(menu) {
+                            _.each($(menu).find(".count"), function(el, index) {
+                                var count = counts[index];
+                                if (count > 0) {
+                                    expect($(el).text()).toContainText("(" + count + ")");
+                                }
+                            });
+                        });
+                    });
+                }
 
                 itSelectsDestinationColumn(0, 1, "col2");
                 itHasSelectedCounts([0, 1, 0, 0, 0]);
@@ -393,7 +431,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                     it("updates the progress tracker", function() {
                         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 2, total: 5});
-                    })
+                    });
                 });
 
                 context("when all source columns but one are mapped", function() {
@@ -414,44 +452,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     });
                 });
             });
-
-            function itSelectsDestinationColumn(sourceIndex, destinationIndex, destinationName, options) {
-                it("shows the right destination column as selected", function() {
-                    expect(menuLinks.eq(sourceIndex)).toHaveText(destinationName);
-
-                    var menu = menus.eq(sourceIndex);
-                    expect(menu.find(".check").not(".hidden").length).toBe(1);
-                    expect(menu.find(".name.selected").length).toBe(1);
-                    var selectedLi = menu.find("li[name=" + destinationName + "]");
-                    expect(selectedLi.find(".check")).not.toHaveClass("hidden");
-                    expect(selectedLi.find(".name")).toHaveClass("selected");
-                });
-
-                if (options && options.conflict) {
-                    it("marks that source column as having a selection conflict", function() {
-                        expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selected");
-                        expect(menuLinks.eq(sourceIndex)).toHaveClass("selection_conflict");
-                    });
-                } else {
-                    it("marks that source column as having been mapped", function() {
-                        expect(menuLinks.eq(sourceIndex)).toHaveClass("selected");
-                        expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selection_conflict");
-                    });
-                }
-            }
-
-            function itHasSelectedCounts(counts) {
-                it("updates the counts in all of the menus", function() {
-                    _.each(menus, function(menu) {
-                        _.each($(menu).find(".count"), function(el, index) {
-                            var count = counts[index];
-                            if (count > 0) {
-                                expect($(el).text()).toContainText("(" + count + ")");
-                            }
-                        });
-                    });
-                });
-            }
         });
     });
 
@@ -460,7 +460,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             spyOn(this.dialog, "postRender").andCallThrough();
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
             this.dialog.$("#hasHeader").prop("checked", false).change();
-        })
+        });
 
         it("sets header on the csv model", function() {
             expect(this.dialog.model.get("hasHeader")).toBeFalsy();
@@ -483,17 +483,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 this.dialog.postRender.reset();
                 this.dialog.$("#hasHeader").prop("checked", true);
                 this.dialog.$("#hasHeader").change();
-            })
+            });
             it("sets header on the csv model", function() {
                 expect(this.dialog.model.get("hasHeader")).toBeTruthy();
-            })
+            });
             it("re-renders", function() {
                 expect(this.dialog.postRender).toHaveBeenCalled();
-            })
+            });
             it("the box is checked", function() {
                 expect(this.dialog.$("#hasHeader").prop("checked")).toBeTruthy();
-            })
-        })
+            });
+        });
     });
 
     describe("scrolling the data", function() {
@@ -521,24 +521,24 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 var api = this.dialog.$(".tbody").data("jsp");
                 expect(api.getContentPositionX()).toBeWithinDeltaOf(7, 2);
                 expect(api.getContentPositionY()).toBeWithinDeltaOf(4, 2);
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("mapping all columns", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
-            this.expectedColumnsMap = []
+            this.expectedColumnsMap = [];
             for (var i = 0; i < 5; i++) {
                 this.dialog.$(".column_mapping .map a:eq(" + i + ")").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
-                this.expectedColumnsMap.push({sourceOrder: "col" + (i+1), targetOrder: this.columns[i].name})
+                this.expectedColumnsMap.push({sourceOrder: "col" + (i+1), targetOrder: this.columns[i].name});
             }
         });
 
         it("enables the import button", function() {
             expect(this.dialog.$('button.submit')).toBeEnabled();
-        })
+        });
 
         context("clicking import button with invalid fields", function() {
             beforeEach(function() {
@@ -593,9 +593,9 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("should navigate to the destination sandbox table", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl())
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl());
                 });
-            })
+            });
 
             context("when the import fails", function() {
                 beforeEach(function() {
@@ -608,19 +608,19 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                 it("re-enables the submit button", function() {
                     expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                })
-            })
-        })
+                });
+            });
+        });
 
         describe("and then double mapping a destination column", function() {
             beforeEach(function() {
                 this.dialog.$(".column_mapping .map:eq(0)").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) a").click();
-            })
+            });
             it("disables the import button", function() {
                 expect(this.dialog.$('button.submit')).toBeDisabled();
-            })
-        })
+            });
+        });
     });
 
     describe("more source columns than destination columns", function() {
@@ -638,7 +638,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             it("displays the error message", function() {
                 expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO");
-            })
+            });
         });
 
         context("when there are fewer destination columns", function() {
@@ -652,7 +652,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 this.server.completeFetchFor(this.dialog.dataset);
                 this.columns = [
                     {name: "a", typeCategory: "WHOLE_NUMBER"}
-                ]
+                ];
                 this.server.completeFetchFor(this.dialog.columnSet, this.columns);
             });
 
@@ -668,8 +668,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                 it("still shows the errors", function() {
                     expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO");
-                })
-            })
+                });
+            });
 
             context("and then changing the delimiter", function() {
                 beforeEach(function() {
@@ -680,6 +680,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     expect(this.dialog.$(".errors").text()).toBe("");
                 });
             });
-        })
-    })
+        });
+    });
 });

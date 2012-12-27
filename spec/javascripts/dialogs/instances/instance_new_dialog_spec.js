@@ -211,6 +211,75 @@ describe("chorus.dialogs.InstancesNew", function() {
             this.server.completeFetchFor(chorus.models.GpdbInstance.aurora(), rspecFixtures.provisioning().attributes);
         });
 
+        function testUpload() {
+            context("#upload", function() {
+                beforeEach(function() {
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("puts the button in 'loading' mode", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                });
+
+                it("changes the text on the upload button to 'saving'", function() {
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
+                });
+
+                it("does not disable the cancel button", function() {
+                    expect(this.dialog.$("button.cancel")).not.toBeDisabled();
+                });
+
+                context("when save completes", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.PageEvents, 'broadcast');
+                        spyOn(this.dialog, "closeModal");
+
+                        this.dialog.model.set({id: "123"});
+                        this.dialog.model.trigger("saved");
+                    });
+
+                    it("closes the dialog", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+
+                    it("publishes the 'instance:added' page event with the new instance's id", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added", this.dialog.model);
+                    });
+                });
+
+                function itRecoversFromError() {
+                    it("takes the button out of 'loading' mode", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    });
+
+                    it("sets the button text back to 'Uploading'", function() {
+                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.save");
+                    });
+                }
+
+                context("when the upload gives a server error", function() {
+                    beforeEach(function() {
+                        this.dialog.model.set({serverErrors: { fields: { a: { BLANK: {} } } }});
+                        this.dialog.model.trigger("saveFailed");
+                    });
+
+                    it("display the correct error", function() {
+                        expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
+                    });
+
+                    itRecoversFromError();
+                });
+
+                context("when the validation fails", function() {
+                    beforeEach(function() {
+                        this.dialog.model.trigger("validationFailed");
+                    });
+
+                    itRecoversFromError();
+                });
+            });
+        }
+
         context("when registering a hadoop instance", function() {
             beforeEach(function() {
                 var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop");
@@ -242,7 +311,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("using register existing greenplum database", function() {
             beforeEach(function() {
-                section = this.dialog.$(".register_existing_greenplum");
+                var section = this.dialog.$(".register_existing_greenplum");
                 section.find("input[type=radio]").attr('checked', true).change();
                 section.find("input[name=name]").val("Instance_Name");
                 section.find("textarea[name=description]").val("Instance Description");
@@ -367,7 +436,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("using register existing gnip instance", function() {
             beforeEach(function() {
-                section = this.dialog.$(".register_existing_gnip");
+                var section = this.dialog.$(".register_existing_gnip");
                 section.find("input[type=radio]").attr('checked', true).change();
                 section.find("input[name=name]").val("Gnip_Name");
                 section.find("textarea[name=description]").val("Gnip Description");
@@ -394,75 +463,6 @@ describe("chorus.dialogs.InstancesNew", function() {
 
             testUpload();
         });
-
-        function testUpload() {
-            context("#upload", function() {
-                beforeEach(function() {
-                    this.dialog.$("button.submit").click();
-                });
-
-                it("puts the button in 'loading' mode", function() {
-                    expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-                });
-
-                it("changes the text on the upload button to 'saving'", function() {
-                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
-                });
-
-                it("does not disable the cancel button", function() {
-                    expect(this.dialog.$("button.cancel")).not.toBeDisabled();
-                });
-
-                context("when save completes", function() {
-                    beforeEach(function() {
-                        spyOn(chorus.PageEvents, 'broadcast');
-                        spyOn(this.dialog, "closeModal");
-
-                        this.dialog.model.set({id: "123"});
-                        this.dialog.model.trigger("saved");
-                    });
-
-                    it("closes the dialog", function() {
-                        expect(this.dialog.closeModal).toHaveBeenCalled();
-                    });
-
-                    it("publishes the 'instance:added' page event with the new instance's id", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added", this.dialog.model);
-                    });
-                });
-
-                context("when the upload gives a server error", function() {
-                    beforeEach(function() {
-                        this.dialog.model.set({serverErrors: { fields: { a: { BLANK: {} } } }});
-                        this.dialog.model.trigger("saveFailed");
-                    });
-
-                    it("display the correct error", function() {
-                        expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
-                    });
-
-                    itRecoversFromError();
-                });
-
-                context("when the validation fails", function() {
-                    beforeEach(function() {
-                        this.dialog.model.trigger("validationFailed");
-                    });
-
-                    itRecoversFromError();
-                });
-
-                function itRecoversFromError() {
-                    it("takes the button out of 'loading' mode", function() {
-                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                    });
-
-                    it("sets the button text back to 'Uploading'", function() {
-                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.save");
-                    });
-                }
-            });
-        }
     });
 
     describe("the help text tooltip", function() {

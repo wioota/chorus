@@ -14,17 +14,17 @@ describe("chorus.views.DatasetEditChorusView", function() {
         var originalFromTextArea = CodeMirror.fromTextArea;
         spyOn(CodeMirror, "fromTextArea").andCallFake(_.bind(function(textarea, opts) {
             this.codeMirrorOptions = opts;
-            return originalFromTextArea(textarea, opts)
-        }, this))
+            return originalFromTextArea(textarea, opts);
+        }, this));
 
-        stubDefer()
+        stubDefer();
     });
 
     context("#setup", function() {
         it("saves the initial query value", function() {
             expect(this.view.model.initialQuery).toBe(this.view.model.get("query"));
-        })
-    })
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -49,17 +49,17 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
         it("provides CodeMirror with an onBlur function", function() {
             expect(this.codeMirrorOptions.onBlur).toBeDefined();
-        })
+        });
 
         context("when blur is received by the editor", function() {
             beforeEach(function() {
                 spyOn(this.view, "postRender");
-                this.view.editor.setValue("select * from hello;")
+                this.view.editor.setValue("select * from hello;");
                 this.codeMirrorOptions.onBlur();
             });
 
             it("sets the query in the model", function() {
-                expect(this.view.model.get("query")).toBe("select * from hello;")
+                expect(this.view.model.get("query")).toBe("select * from hello;");
             });
 
             it("does not re-render", function() {
@@ -92,20 +92,20 @@ describe("chorus.views.DatasetEditChorusView", function() {
             });
 
             it("should return the user to the standard page view", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl())
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl());
             });
         });
 
         context("when save fails", function() {
             beforeEach(function() {
-                this.view.model.set({serverErrors: { fields: { a: { BLANK: {} } } }})
+                this.view.model.set({serverErrors: { fields: { a: { BLANK: {} } } }});
                 this.view.model.trigger("saveFailed");
                 this.view.render();
             });
             it("displays the error message", function() {
                 expect(this.view.$(".errors ul li").text()).toBe("A can't be blank");
-            })
-        })
+            });
+        });
     });
 
     describe("cancel", function() {

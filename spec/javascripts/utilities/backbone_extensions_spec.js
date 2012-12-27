@@ -4,7 +4,7 @@ describe("backbone_extensions", function() {
             spyOn($, "ajax").andCallThrough();
             this.model = new chorus.models.Base();
             this.model.urlTemplate = "my_items/{{id}}";
-        })
+        });
 
         it("passes the method to the model's url method", function() {
             spyOn(this.model, 'url').andReturn("foo");
@@ -30,16 +30,16 @@ describe("backbone_extensions", function() {
             expect(this.server.lastUpdate()).toBeUndefined();
             this.model.save({}, { method : 'update' });
             expect(this.server.lastUpdate().method).toBe("PUT");
-        })
+        });
 
         context("with a non-file upload model", function() {
             describe("#save", function() {
                 it("uses AJAX", function() {
                     this.model.save();
                     expect($.ajax).toHaveBeenCalled();
-                })
-            })
-        })
+                });
+            });
+        });
 
         context("with a file upload model", function() {
             beforeEach(function() {
@@ -155,11 +155,35 @@ describe("backbone_extensions", function() {
                     expect(child.testFunction()).toEqual('grandParent');
                     expect(grandParentClass.prototype.testFunction.callCount).toEqual(1);
                 });
-            })
+            });
         });
     });
 
     describe("_super", function() {
+        function itCallsTheOverriddenMethodCorrectly() {
+            it("passes the given arguments to the overridden method", function() {
+                var greeting = this.friend.greet("Barbara", "morning");
+                expect(greeting).toContain("Good morning, Barbara.");
+            });
+
+            it("calls the overridden method on the recieving object", function() {
+                var greeting = this.friend.greet("Barbara", "morning");
+                expect(greeting).toContain("My name is Benjie.");
+            });
+
+            it("calls the overridden method only once", function() {
+                this.friend.greet("Barbara", "morning");
+                expect(Friend.prototype.greet.callCount).toBe(1);
+                expect(Mammal.prototype.greet.callCount).toBe(1);
+            });
+
+            it("can be called multiple times with the same results", function() {
+                var greeting = this.friend.greet("Barbara", "morning");
+                expect(this.friend.greet("Barbara", "morning")).toBe(greeting);
+                expect(this.friend.greet("Barbara", "morning")).toBe(greeting);
+            });
+        }
+
         var Friend, Animal, Mammal, Pet, Dog, CockerSpaniel;
 
         beforeEach(function() {
@@ -262,7 +286,7 @@ describe("backbone_extensions", function() {
             beforeEach(function() {
                 Mammal.prototype.greet = function(personName, timeOfDay) {
                     return Mammal.__super__.greet.apply(this, arguments) + " I'm a mammal.";
-                }
+                };
                 spyOn(Mammal.prototype, 'greet').andCallThrough();
 
                 this.friend = new CockerSpaniel({ name: "Benjie" });
@@ -270,34 +294,10 @@ describe("backbone_extensions", function() {
 
             itCallsTheOverriddenMethodCorrectly();
         });
-
-        function itCallsTheOverriddenMethodCorrectly() {
-            it("passes the given arguments to the overridden method", function() {
-                var greeting = this.friend.greet("Barbara", "morning");
-                expect(greeting).toContain("Good morning, Barbara.");
-            });
-
-            it("calls the overridden method on the recieving object", function() {
-                var greeting = this.friend.greet("Barbara", "morning");
-                expect(greeting).toContain("My name is Benjie.");
-            });
-
-            it("calls the overridden method only once", function() {
-                this.friend.greet("Barbara", "morning");
-                expect(Friend.prototype.greet.callCount).toBe(1);
-                expect(Mammal.prototype.greet.callCount).toBe(1);
-            });
-
-            it("can be called multiple times with the same results", function() {
-                var greeting = this.friend.greet("Barbara", "morning");
-                expect(this.friend.greet("Barbara", "morning")).toBe(greeting);
-                expect(this.friend.greet("Barbara", "morning")).toBe(greeting);
-            });
-        }
     });
 
     describe("unbind", function() {
-        var fakeContext = function(name) { this.name = name };
+        var fakeContext = function(name) { this.name = name; };
         beforeEach(function() {
             this.callback = jasmine.createSpy();
             this.context1 = new fakeContext("1");
@@ -347,7 +347,7 @@ describe("backbone_extensions", function() {
 
         it("removes the trailing slash from the end of a URL", function() {
             Backbone.history.loadUrl("#/users/");
-            expect(this.newHandler.callback).toHaveBeenCalledWith("/users")
+            expect(this.newHandler.callback).toHaveBeenCalledWith("/users");
         });
     });
 
@@ -355,9 +355,9 @@ describe("backbone_extensions", function() {
         var Klass, module1, module2, module3;
 
         beforeEach(function() {
-            module1 = { foo1: function() { return "bar1" } };
-            module2 = { foo2: function() { return "bar2" } };
-            module3 = { foo3: function() { return "bar3" } };
+            module1 = { foo1: function() { return "bar1"; } };
+            module2 = { foo2: function() { return "bar2"; } };
+            module3 = { foo3: function() { return "bar3"; } };
             Klass = chorus.models.Base.include(module1, module2, module3);
         });
 
@@ -389,7 +389,7 @@ describe("backbone_extensions", function() {
             it("makes the included module methods accessible via 'super'", function() {
                 var instance = new SubKlass();
                 expect(instance.foo1()).toBe("bar1baz");
-                expect(new (SubKlass.include({}))).toBeA(SubKlass);
+                expect(new (SubKlass.include({}))()).toBeA(SubKlass);
             });
         });
     });

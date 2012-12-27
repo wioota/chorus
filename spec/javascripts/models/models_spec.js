@@ -9,7 +9,7 @@ describe("chorus.models.Abstract", function() {
             context("when the model's urlTemplate is a function", function() {
                 beforeEach(function() {
                     this.model.urlTemplate = function() {
-                        return "my_other_items/{{id}}"
+                        return "my_other_items/{{id}}";
                     };
                 });
 
@@ -57,7 +57,7 @@ describe("chorus.models.Abstract", function() {
 
                 context("when the url params are a property", function() {
                     beforeEach(function() {
-                        this.model.urlParams = { danceDance: "the thizzle" }
+                        this.model.urlParams = { danceDance: "the thizzle" };
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
@@ -84,7 +84,7 @@ describe("chorus.models.Abstract", function() {
                 model = new chorus.models.User({ id: 24 });
                 activities = model.activities();
                 expect(activities).toBeA(chorus.collections.ActivitySet);
-                expect(activities.url()).toContainQueryParams({entityType: model.entityType, entityId: model.id})
+                expect(activities.url()).toContainQueryParams({entityType: model.entityType, entityId: model.id});
             });
 
             describe("when the model is invalidated", function() {
@@ -232,7 +232,7 @@ describe("chorus.models.Abstract", function() {
 
                 context("when the attrs are valid", function() {
                     beforeEach(function() {
-                        this.model.save({requiredAttr: "bar"})
+                        this.model.save({requiredAttr: "bar"});
                     });
 
                     it("saves the model", function() {
@@ -246,11 +246,11 @@ describe("chorus.models.Abstract", function() {
                     describe("and beforeSave makes a change to the attrs", function() {
                         beforeEach(function() {
                             spyOn(this.model, "beforeSave").andCallFake(function(attrs, options) {
-                                attrs.otherAttr = "foo"
+                                attrs.otherAttr = "foo";
                             });
 
                             Backbone.Model.prototype.save.reset();
-                            this.model.save({ requiredAttr: "bar" })
+                            this.model.save({ requiredAttr: "bar" });
                         });
 
                         it("saves the changed attrs", function() {
@@ -258,20 +258,20 @@ describe("chorus.models.Abstract", function() {
                                 requiredAttr: "bar",
                                 otherAttr: "foo"
                             }, jasmine.any(Object));
-                        })
+                        });
                     });
 
                     describe("and beforeSave does not make any changes to the attrs", function() {
                         it("saves the unchanged attrs", function() {
                             expect(Backbone.Model.prototype.save).toHaveBeenCalledWith(
                                 { requiredAttr: "bar" }, jasmine.any(Object));
-                        })
-                    })
+                        });
+                    });
                 });
 
                 context("when the attrs are invalid", function() {
                     beforeEach(function() {
-                        this.model.save({requiredAttr: ""})
+                        this.model.save({requiredAttr: ""});
                     });
 
                     it("does not save the model", function() {
@@ -280,7 +280,7 @@ describe("chorus.models.Abstract", function() {
 
                     it("triggers validationFailed", function() {
                         expect(this.validationFailedSpy).toHaveBeenCalled();
-                    })
+                    });
                 });
             });
 
@@ -293,17 +293,17 @@ describe("chorus.models.Abstract", function() {
                 describe("and beforeSave makes a change to the attrs", function() {
                     beforeEach(function() {
                         spyOn(this.model, "beforeSave").andCallFake(function(attrs, options) {
-                            attrs.otherAttr = "foo"
+                            attrs.otherAttr = "foo";
                         });
 
-                        this.model.save()
+                        this.model.save();
                     });
 
                     it("saves the changed attrs", function() {
                         expect(Backbone.Model.prototype.save).toHaveBeenCalledWith({
                             otherAttr: "foo"
                         }, jasmine.any(Object));
-                    })
+                    });
                 });
 
                 describe("and beforeSave does not make any changes to the attrs", function() {
@@ -313,8 +313,8 @@ describe("chorus.models.Abstract", function() {
 
                     it("saves the unchanged attrs", function() {
                         expect(Backbone.Model.prototype.save).toHaveBeenCalledWith(undefined, jasmine.any(Object));
-                    })
-                })
+                    });
+                });
             });
 
             it("calls the 'beforeSave' hook", function() {
@@ -471,7 +471,7 @@ describe("chorus.models.Abstract", function() {
 
             it("uses a custom error message, if provided", function() {
                 this.model.require("foo", {foo: ""}, "test.mouse");
-                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse");
             });
 
 
@@ -479,7 +479,7 @@ describe("chorus.models.Abstract", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo": "users.first_name"
-                    }
+                    };
                 });
 
                 it("includes the translation in the error message", function() {
@@ -537,14 +537,14 @@ describe("chorus.models.Abstract", function() {
 
             it("uses a custom error message, if provided", function() {
                 this.model.requirePattern("foo", /hello/, {}, "test.mouse");
-                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse");
             });
 
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo": "users.first_name"
-                    }
+                    };
                 });
 
                 it("includes the translation in the error message", function() {
@@ -622,14 +622,14 @@ describe("chorus.models.Abstract", function() {
             it("uses a custom error message, if provided", function() {
                 this.model.set({foo: "bar", fooConfirmation: "bar"});
                 this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"}, "test.mouse");
-                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse");
             });
 
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo": "users.first_name"
-                    }
+                    };
                 });
 
                 it("includes the translation in the error message", function() {
@@ -684,15 +684,15 @@ describe("chorus.models.Abstract", function() {
             it("uses a custom error message, if provided", function() {
                 this.model.set({ foo: 11});
                 this.model.requireIntegerRange("foo", 5, 10, {}, "test.mouse");
-                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
-            })
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse");
+            });
         });
 
         describe("hasOwnPage", function() {
             it("returns false", function() {
                 var model = new chorus.models.Base();
                 expect(model.hasOwnPage()).toBeFalsy();
-            })
+            });
         });
 
         describe("highlightedAttribute", function() {
@@ -771,7 +771,7 @@ describe("chorus.models.Abstract", function() {
             });
 
             it("ellipsizes long names", function() {
-               expect(this.model.shortName(3)).toBe("Som...")
+               expect(this.model.shortName(3)).toBe("Som...");
             });
         });
 
@@ -869,7 +869,7 @@ describe("chorus.models.Abstract", function() {
             context("when paramsToSave are defined", function() {
                 beforeEach(function() {
                     this.model.paramsToSave = ['firstName', 'lastName'];
-                    this.model.set({lastName: 'sandwich'})
+                    this.model.set({lastName: 'sandwich'});
                 });
 
                 it("only returns the specified parameters", function() {
@@ -898,8 +898,8 @@ describe("chorus.models.Abstract", function() {
 
                 context("when paramsToIgnore are defined", function() {
                     beforeEach(function() {
-                    this.model.paramsToIgnore = ['firstName'];
-                    this.model.set({lastName: 'sandwich'})
+                        this.model.paramsToIgnore = ['firstName'];
+                        this.model.set({lastName: 'sandwich'});
                     });
 
                     it("should not remove attrs in the paramsToIgnore list", function() {
@@ -915,7 +915,7 @@ describe("chorus.models.Abstract", function() {
             context("when paramsToIgnore are defined", function() {
                 beforeEach(function() {
                     this.model.paramsToIgnore = ['firstName'];
-                    this.model.set({lastName: 'sandwich'})
+                    this.model.set({lastName: 'sandwich'});
                 });
 
                 it("excludes the specified parameters from being returned", function() {
@@ -1079,7 +1079,7 @@ describe("chorus.models.Abstract", function() {
             context("when the urlTemplate is a function", function() {
                 beforeEach(function() {
                     this.collection.urlTemplate = function() {
-                        return "my_other_items/{{foo}}"
+                        return "my_other_items/{{foo}}";
                     };
                 });
 
@@ -1115,7 +1115,7 @@ describe("chorus.models.Abstract", function() {
 
             it("mixes in order from collection ascending", function() {
                 this.collection.sortAsc("fooBar");
-                expect(this.collection.url()).toBe("/bar/bar?page=1&per_page=50&order=foo_bar")
+                expect(this.collection.url()).toBe("/bar/bar?page=1&per_page=50&order=foo_bar");
             });
 
             it("plays nicely with existing parameters in the url template", function() {
@@ -1140,7 +1140,7 @@ describe("chorus.models.Abstract", function() {
 
                 context("when the url params are a property", function() {
                     beforeEach(function() {
-                        this.collection.urlParams = { danceDance: "the thizzle" }
+                        this.collection.urlParams = { danceDance: "the thizzle" };
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
@@ -1164,7 +1164,7 @@ describe("chorus.models.Abstract", function() {
         describe("before parsing", function() {
             it("is not loaded", function() {
                 expect(this.collection.loaded).toBeFalsy();
-            })
+            });
         });
 
         describe("#parse", function() {
@@ -1281,7 +1281,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("triggers the loaded event after all models are in the collection", function() {
                     expect(this.collectionLengthOnLoaded).toBe(3);
-                })
+                });
             });
 
             describe("and the server responds with an error", function() {
@@ -1304,7 +1304,7 @@ describe("chorus.models.Abstract", function() {
                         }
                     );
 
-                    this.server.fetches()[1].failUnprocessableEntity()
+                    this.server.fetches()[1].failUnprocessableEntity();
                 });
 
                 it("requests subsequent pages", function() {
@@ -1312,9 +1312,9 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("triggers the reset event when the error occurs", function() {
-                    expect(this.collectionLengthOnReset).toBe(2)
+                    expect(this.collectionLengthOnReset).toBe(2);
                 });
-            })
+            });
         });
 
         describe("#fetchPage", function() {

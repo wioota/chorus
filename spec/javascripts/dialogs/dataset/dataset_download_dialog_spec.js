@@ -15,7 +15,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
         });
 
         it("has the right title", function(){
-            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: this.dataset.name()})
+            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: this.dataset.name()});
         });
 
         it("has two radio buttons", function(){
@@ -120,13 +120,13 @@ describe("chorus.dialogs.DatasetDownload", function() {
         beforeEach(function() {
             var searchResult = rspecFixtures.searchResult();
             this.selectedItem = searchResult.selectedItem = searchResult.datasets().at(0);
-            this.selectedItem.set({"objectName" : "test_dataset"})
+            this.selectedItem.set({"objectName" : "test_dataset"});
             this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: searchResult });
             this.dialog.render();
         });
 
         it("has the right title", function(){
-            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: "test_dataset"})
+            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: "test_dataset"});
         });
     });
 });

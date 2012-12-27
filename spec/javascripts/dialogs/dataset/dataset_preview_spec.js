@@ -52,7 +52,7 @@ describe("chorus.dialogs.DatasetPreview", function() {
             });
 
             it("cancels the task", function() {
-                expect(this.view.task.cancel).toHaveBeenCalled()
+                expect(this.view.task.cancel).toHaveBeenCalled();
             });
         });
 

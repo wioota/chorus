@@ -35,7 +35,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("dataset")
+        expect(this.page.helpId).toBe("dataset");
     });
 
     describe("#initialize", function() {
@@ -44,7 +44,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         });
 
         it("sets requiredResources in the sidebar", function() {
-            expect(this.page.sidebarOptions.requiredResources[0].id).toBe(this.page.workspace.id)
+            expect(this.page.sidebarOptions.requiredResources[0].id).toBe(this.page.workspace.id);
         });
 
         it("sets the workspace to pass into contentDetails", function() {
@@ -53,7 +53,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         it("marks the workspace as a required resource", function() {
             expect(this.page.requiredResources.find(function(resource) {
-                return resource instanceof chorus.models.Workspace && resource.get("id") == '100'
+                return resource instanceof chorus.models.Workspace && resource.get("id") === '100';
             }, this)).toBeTruthy();
         });
 
@@ -97,8 +97,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                     it("sets the contentDetail's workspace", function() {
                         expect(this.page.mainContent.contentDetails.options.workspace.id).toBe(this.workspace.id);
                     });
-                })
-            })
+                });
+            });
         });
     });
 
@@ -114,7 +114,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         describe("sidebar", function() {
             it("sets workspace", function() {
                 expect(this.page.sidebar.options.workspace).toBeTruthy();
-            })
+            });
         });
 
         describe("breadcrumbs", function() {
@@ -140,13 +140,13 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             it("displays the object name for the fifth crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.columnSet.attributes.tableName);
-            })
+            });
         });
 
         describe("#contentDetails", function() {
             it("has a Derive Chorus View button", function() {
                 expect(this.page.$(".derive")).toExist();
-            })
+            });
         });
 
         describe("#contentHeader", function() {
@@ -176,12 +176,12 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 });
 
                 it("shows the icon for import frequency", function() {
-                    expect(this.page.$(".tag.import_frequency")).toContainText("Weekly")
+                    expect(this.page.$(".tag.import_frequency")).toContainText("Weekly");
                 });
 
                 it("sets a has_import class on the content_header", function() {
                     expect(this.page.$(".content_header .has_import")).toExist();
-                })
+                });
             });
 
             context("when the dataset does not have an import schedule", function() {
@@ -197,9 +197,9 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
                 it("does not set a has_import class on the content_header", function() {
                     expect(this.page.$(".content_header.has_import")).not.toExist();
-                })
+                });
             });
         });
-    })
+    });
 
 });

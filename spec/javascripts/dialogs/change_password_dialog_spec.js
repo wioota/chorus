@@ -47,8 +47,8 @@ describe("chorus.dialogs.ChangePassword", function() {
             });
 
             it("closes the dialog box", function() {
-                expect("close.facebox").toHaveBeenTriggeredOn($(document))
+                expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
         });
-    })
+    });
 });

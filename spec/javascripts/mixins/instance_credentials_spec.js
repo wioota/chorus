@@ -24,7 +24,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
     describe("page", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.Base()
+            this.page = new chorus.pages.Base();
             this.model = new chorus.models.Base();
             this.otherModel = new chorus.models.Base();
 
@@ -42,7 +42,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
             this.model.fetch();
             this.otherModel.fetch();
-        })
+        });
 
         describe("when a fetch fails for one of the page's required resources", function() {
             context("when credentials are missing", function() {
@@ -50,10 +50,10 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     this.instance = rspecFixtures.gpdbInstance();
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
                     this.server.lastFetchFor(this.model).failForbidden();
-                })
+                });
 
                 it("does not go to the 403 page", function() {
-                    expect(Backbone.history.loadUrl).not.toHaveBeenCalled()
+                    expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
                 });
 
                 it("launches the 'add credentials' dialog, and reloads after the credentials have been added", function() {
@@ -68,13 +68,23 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     expect(dialog.options.reload).toBeTruthy();
                     expect(dialog.options.goBack).toBeTruthy();
                 });
-            })
+            });
+
+            function itGoesToThe404Page() {
+                it("does go to the 404 page", function() {
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+                });
+
+                it("does not launch any dialog", function() {
+                    expect(this.modalSpy.lastModal()).not.toBeDefined();
+                });
+            }
 
             context("fetch failed for some other reason", function() {
                 beforeEach(function() {
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(undefined);
                     this.server.lastFetchFor(this.model).failNotFound();
-                })
+                });
 
                 itGoesToThe404Page();
             });
@@ -88,16 +98,6 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
                 itGoesToThe404Page();
             });
-
-            function itGoesToThe404Page() {
-                it("does go to the 404 page", function() {
-                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-                });
-
-                it("does not launch any dialog", function() {
-                    expect(this.modalSpy.lastModal()).not.toBeDefined();
-                });
-            }
         });
     });
 });

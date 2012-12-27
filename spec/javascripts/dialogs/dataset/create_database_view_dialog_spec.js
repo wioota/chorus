@@ -47,21 +47,6 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
     });
 
     describe("input", function() {
-        describe("invalid input", function() {
-            beforeEach(function() {
-                this.view.$("input#create_database_view_name").val("0123");
-                this.view.$("button.submit").click();
-            });
-
-            it("rejects names that don't match the ChorusIdentifier64 rules", function() {
-                expect(this.view.$("input#create_database_view_name")).toHaveClass("has_error");
-            });
-
-            itAcceptsValidInput();
-        });
-
-        itAcceptsValidInput();
-
         function itAcceptsValidInput() {
             describe("valid input", function() {
                 beforeEach(function() {
@@ -114,5 +99,20 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 });
             });
         }
+
+        describe("invalid input", function() {
+            beforeEach(function() {
+                this.view.$("input#create_database_view_name").val("0123");
+                this.view.$("button.submit").click();
+            });
+
+            it("rejects names that don't match the ChorusIdentifier64 rules", function() {
+                expect(this.view.$("input#create_database_view_name")).toHaveClass("has_error");
+            });
+
+            itAcceptsValidInput();
+        });
+
+        itAcceptsValidInput();
     });
 });

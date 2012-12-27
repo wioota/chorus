@@ -27,7 +27,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
 
             it("should not display the loading section", function () {
                 expect(this.view.$(".loading_section")).not.toExist();
-            })
+            });
         });
 
         context("when schema is associated", function () {
@@ -141,8 +141,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                     });
 
                     it("shows a check mark next to the current schema", function () {
-                        expect(this.view.$("li:contains('righteous_tables')")).toContain('.check')
-                        expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check')
+                        expect(this.view.$("li:contains('righteous_tables')")).toContain('.check');
+                        expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check');
                     });
 
                     it("shows the names of all of the workspace's database's schemas", function () {
@@ -154,12 +154,12 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
 
                     describe("when a schema is clicked", function () {
                         beforeEach(function () {
-                            this.menu.find("a[data-id=5]").click()
+                            this.menu.find("a[data-id=5]").click();
                             this.otherSchema = this.view.schemas.get("5");
-                        })
+                        });
 
                         it("should fetch the functions for the new schema", function () {
-                            expect(this.server.lastFetchFor(this.otherSchema.functions())).not.toBeUndefined()
+                            expect(this.server.lastFetchFor(this.otherSchema.functions())).not.toBeUndefined();
                         });
 
                         it("should show the loading spinner", function () {
@@ -173,23 +173,23 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
 
                             it("removes the loading spinner", function () {
                                 expect(this.view.$('.loading_section')).not.toExist();
-                                expect(this.view.$(".none_found")).not.toExist()
+                                expect(this.view.$(".none_found")).not.toExist();
                             });
 
                             it("shows the new schema name as context", function () {
-                                expect(this.view.$(".context")).toContainText("awesome_tables")
-                            })
+                                expect(this.view.$(".context")).toContainText("awesome_tables");
+                            });
 
                             it("shows the new functions in the sidebar", function () {
-                                expect(this.view.$("ul")).toExist()
+                                expect(this.view.$("ul")).toExist();
 
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(0).name());
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(1).name());
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(2).name());
                                 expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.collection.models[0].toHintText())
                             });
-                        })
-                    })
+                        });
+                    });
                 });
             });
 
@@ -255,7 +255,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                     expect(this.view.$('.none_found')).toContainTranslation("schema.functions.none_found");
                 });
             });
-        })
+        });
 
-    })
+    });
 });

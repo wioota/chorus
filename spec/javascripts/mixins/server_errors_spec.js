@@ -12,17 +12,17 @@ describe("chorus.Mixins.ServerErrors", function() {
             });
 
             it("returns a default error message", function() {
-                this.host.serverErrors = {fields: {a: {BLANK: {}}}}
+                this.host.serverErrors = {fields: {a: {BLANK: {}}}};
                 expect(_.first(this.host.serverErrorMessages())).toBe("A can't be blank");
             });
 
             it("returns a custom error message", function() {
-                this.host.serverErrors = {fields: {workspaces: {EMPTY: {}}}}
+                this.host.serverErrors = {fields: {workspaces: {EMPTY: {}}}};
                 expect(_.first(this.host.serverErrorMessages())).toBe("You must have access to a workspace with a sandbox to create an hdfs external table for this file");
             });
 
             it("interpolates extra arguments", function() {
-                this.host.serverErrors = {fields: {a: {EQUAL_TO: {count: 5}}}}
+                this.host.serverErrors = {fields: {a: {EQUAL_TO: {count: 5}}}};
                 expect(_.first(this.host.serverErrorMessages())).toBe("A must be equal to 5");
             });
 

@@ -13,7 +13,7 @@ describe("chorus.models.Session", function() {
 
     describe("#logout", function() {
         beforeEach(function() {
-            Backbone.history.fragment = "foo"
+            Backbone.history.fragment = "foo";
             this.model = new models.Session();
             spyOnEvent(this.model, "needsLogin");
             spyOn(chorus.router, "navigate").andCallThrough();
@@ -60,8 +60,8 @@ describe("chorus.models.Session", function() {
                     expect(this.model._user).toBeUndefined();
                     expect(this.model.sandboxPermissionsCreated).toEqual({});
                 });
-            })
-        })
+            });
+        });
     });
 
     describe("loggedIn", function() {
@@ -153,7 +153,7 @@ describe("chorus.models.Session", function() {
 
     describe("#user", function() {
         beforeEach(function() {
-            this.session = new models.Session()
+            this.session = new models.Session();
         });
 
         context("when a user has been fetched", function() {
@@ -166,7 +166,7 @@ describe("chorus.models.Session", function() {
             });
 
             it("returns the same user object", function() {
-                expect(this.session.user()).toBe(this.session.user())
+                expect(this.session.user()).toBe(this.session.user());
             });
         });
 
@@ -190,7 +190,7 @@ describe("chorus.models.Session", function() {
             context("when navigating to logout", function() {
                 beforeEach(function() {
                     Backbone.history.fragment = "logout";
-                    this.session.rememberPathBeforeLoggedOut()
+                    this.session.rememberPathBeforeLoggedOut();
                 });
 
                 it("ignores the path", function() {
@@ -201,7 +201,7 @@ describe("chorus.models.Session", function() {
             context("when navigating to login", function() {
                 beforeEach(function() {
                     Backbone.history.fragment = "login";
-                    this.session.rememberPathBeforeLoggedOut()
+                    this.session.rememberPathBeforeLoggedOut();
                 });
 
                 it("ignores the path", function() {

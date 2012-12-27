@@ -71,7 +71,7 @@ describe("ImportGnipStream", function () {
                             this.server.completeSaveFor(this.dialog.model);
                         });
                         it("closes the dialog", function() {
-                            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+                            expect("close.facebox").toHaveBeenTriggeredOn($(document));
                         });
 
                         it("display a toast message", function () {

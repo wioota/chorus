@@ -44,7 +44,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
                 it("displays only the number of recent comments", function() {
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.recent_comments", {count: 4})
+                        "dashboard.workspaces.recent_comments", {count: 4});
                 });
 
                 it("doesn't display the badge", function() {
@@ -60,7 +60,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
                 it("displays only the number of recent insights", function() {
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.recent_insights", {count: 4})
+                        "dashboard.workspaces.recent_insights", {count: 4});
                 });
 
                 it("displays the badge", function() {
@@ -79,7 +79,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                         "dashboard.workspaces.recent_comments_and_insights", {
                             recent_comments: t("dashboard.workspaces.recent_comments", {count: 3}),
                             recent_insights: t("dashboard.workspaces.recent_insights", {count: 4})
-                        })
+                        });
                 });
 
                 it("displays the badge", function() {
@@ -92,14 +92,14 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     this.workspace1.set({numberOfComments: 0, numberOfInsights: 0});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.no_recent_comments_or_insights")
+                        "dashboard.workspaces.no_recent_comments_or_insights");
                 });
 
                 it("displays no insights or comments when null", function() {
                     this.workspace1.set({numberOfComments: null, numberOfInsights: null});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.no_recent_comments_or_insights")
+                        "dashboard.workspaces.no_recent_comments_or_insights");
                 });
 
                 it("doesn't display the badge", function() {
@@ -108,7 +108,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             });
 
             it("displays the relative time of the most recent comment", function() {
-                expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("2 days ago")
+                expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("2 days ago");
             });
 
             it("displays the name of the most recent commenter", function() {
@@ -146,7 +146,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     var commentsCollection = this.workspace1.comments();
                     var timestamps = [];
                     this.qtipElement.find("li.activity").each(function() {
-                        timestamps.push(commentsCollection.get($(this).data('activityId')).get("timestamp"))
+                        timestamps.push(commentsCollection.get($(this).data('activityId')).get("timestamp"));
                     });
                     expect(timestamps).toEqual(_.clone(timestamps).sort().reverse());
                 });
@@ -155,6 +155,14 @@ describe("chorus.views.DashboardWorkspaceList", function() {
     });
 
     describe("event bindings", function() {
+        function itRefreshesWorkspaces() {
+            it('fetches all workspaces', function() {
+                expect(this.view.collection.fetchAll).toHaveBeenCalled();
+                expect(this.view.collection.attributes.active).toBe(true);
+                expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
+            });
+        }
+
         beforeEach(function() {
             this.view.render();
         });
@@ -195,12 +203,4 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             itRefreshesWorkspaces();
         });
     });
-
-    function itRefreshesWorkspaces() {
-        it('fetches all workspaces', function() {
-            expect(this.view.collection.fetchAll).toHaveBeenCalled();
-            expect(this.view.collection.attributes.active).toBe(true);
-            expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
-        });
-    };
 });

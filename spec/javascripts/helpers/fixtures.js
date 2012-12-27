@@ -108,7 +108,7 @@ beforeEach(function() {
                 id: id,
                 name: "something" + id + ".sql",
                 type: "SQL"
-            }
+            };
         },
 
         authorJson: function() {
@@ -117,7 +117,7 @@ beforeEach(function() {
                 id: "1234",
                 lastName: "Smith",
                 firstName: "Bob"
-            }
+            };
         },
 
         commentJson: function(overrides) {
@@ -146,7 +146,7 @@ beforeEach(function() {
                 name: "file" + id + ".sql",
                 mimeType: 'text/something',
                 type: 'SQL'
-            }
+            };
         },
 
         nestedWorkspaceJson: function() {
@@ -208,7 +208,7 @@ beforeEach(function() {
                 entityId: this.nextId().toString(),
                 type: "NOTE",
                 workspace: rspecFixtures.workspace()
-            }, overrides)
+            }, overrides);
             return fixtures.comment(commentOverrides);
         },
 
@@ -223,13 +223,13 @@ beforeEach(function() {
         },
 
         databaseColumnSet: function(models, overrides) {
-            var id = this.nextId().toString()
+            var id = this.nextId().toString();
             models = (models && (models.length > 0)) ? models : [this.databaseColumn(overrides), this.databaseColumn(overrides)];
             var attributes = _.extend({
                 tableName: "Table" + id
             }, overrides);
             var collection = new chorus.collections.DatabaseColumnSet([], attributes);
-            collection.reset(models)
+            collection.reset(models);
             return collection;
         },
 
@@ -283,7 +283,7 @@ beforeEach(function() {
                 attributes.objectType,
                 attributes.objectName
             ],
-                function(piece) {return '"' + piece + '"'}).join("|");
+                function(piece) {return '"' + piece + '"';}).join("|");
             return attributes;
         },
 
@@ -500,7 +500,7 @@ beforeEach(function() {
                     "second line"
                 ],
                 path: "%2Fdata%2FfixtureFile.sql"
-            }, overrides)
+            }, overrides);
         },
 
         attachmentOnWorkfileInWorkspaceSearchResult: function(overrides) {
@@ -722,7 +722,7 @@ beforeEach(function() {
                             entityType: "workspace",
                             id: "10000",
                             isDeleted: false,
-                            public: false,
+                            "public": false,
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "ws",
                             owner: {
@@ -739,7 +739,7 @@ beforeEach(function() {
                             entityType: "workspace",
                             id: "10001",
                             isDeleted: false,
-                            public: false,
+                            "public": false,
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "other_ws",
                             owner: {
@@ -1173,7 +1173,7 @@ beforeEach(function() {
                     ],
                     numFound: 2
                 }
-            }, overrides)
+            }, overrides);
         },
 
         searchResultDatasetJson: function(overrides) {
@@ -1335,7 +1335,7 @@ beforeEach(function() {
                 },
                 id: "10011",
                 isDeleted: false,
-                public: true,
+                "public": true,
                 lastUpdatedStamp: "2012-03-12 10:11:47",
                 name: "three",
                 owner: {
@@ -1348,7 +1348,7 @@ beforeEach(function() {
         },
 
         searchResult: function(overrides) {
-            return new chorus.models.SearchResult(this.searchResultJson(overrides))
+            return new chorus.models.SearchResult(this.searchResultJson(overrides));
         },
 
         emptySearchResult: function(overrides) {
@@ -1583,7 +1583,7 @@ beforeEach(function() {
                     ],
                     "numFound": 3
                 }
-            }, overrides)
+            }, overrides);
         },
 
         typeAheadSearchResult: function(overrides) {
