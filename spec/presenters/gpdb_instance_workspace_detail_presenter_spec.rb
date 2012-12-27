@@ -22,12 +22,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
 
     it "includes the right keys" do
       hash.should have_key(:workspaces)
-      hash.should have_key(:sandboxes_size)
       hash.should have_key(:sandboxes_size_in_bytes)
-    end
-
-    it "has a human text for size" do
-      hash[:sandboxes_size].should == view.number_to_human_size(hash[:sandboxes_size_in_bytes])
     end
 
     context "with several workspaces using the same sandbox" do
@@ -48,16 +43,11 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
       it "has the right keys" do
         workspace_hash.should have_key(:id)
         workspace_hash.should have_key(:name)
-        workspace_hash.should have_key(:size)
+        workspace_hash.should have_key(:size_in_bytes)
         workspace_hash.should have_key(:percentage_used)
         workspace_hash.should have_key(:schema_name)
         workspace_hash.should have_key(:database_name)
         workspace_hash.should have_key(:owner_full_name)
-      end
-
-      it "has a human text for size and a numerical value for size_in_bytes" do
-        workspace_hash[:size_in_bytes].should == 10
-        workspace_hash[:size].should == view.number_to_human_size(10)
       end
 
       it "uses recommended sandbox size to calculate percentage_used" do
@@ -67,8 +57,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
       context "when size cannot be calculated" do
         let(:size) { nil }
 
-        it "returns nil for size and percentage" do
-          hash[:size].should == nil
+        it "returns nil for size_in_bytes and percentage" do
           hash[:size_in_bytes].should == nil
           hash[:percentage_used].should == nil
         end
@@ -80,7 +69,6 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
 
       it "should have nil for values" do
         hash[:workspaces].should be_nil
-        hash[:sandboxes_size].should be_nil
         hash[:sandboxes_size_in_bytes].should be_nil
       end
     end
@@ -88,7 +76,6 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
     context "when disk space for a schema can't be retrieved" do
       it "skips those schemas" do
         any_instance_of(GpdbSchema) {|schema| stub(schema).disk_space_used(anything) {nil} }
-        hash[:sandboxes_size].should == "0 Bytes"
         hash[:sandboxes_size_in_bytes].should == 0
       end
     end

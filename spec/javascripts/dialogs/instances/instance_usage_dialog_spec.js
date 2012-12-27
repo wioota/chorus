@@ -30,7 +30,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
             });
 
             it("displays the estimated total usage", function() {
-                expect(this.dialog.$(".total_usage").text().trim()).toMatchTranslation("instances.usage.total", {size: this.dialog.usage.get("sandboxesSize")});
+                expect(this.dialog.$(".total_usage").text().trim()).toMatchTranslation("instances.usage.total", {size: '286 MB'});
             });
 
             it("renders a li for each workspace", function() {
@@ -55,6 +55,15 @@ describe("chorus.dialogs.InstanceUsage", function() {
                 });
             });
 
+            it("displays the size of each workspace", function() {
+                var zipped = _.zip(this.dialog.$("li"), this.workspaces);
+                _.each(zipped, function(z) {
+                    var el = $(z[0]);
+                    var workspace = z[1];
+                    expect(el.find('.size_text')).toContainText("95 MB");
+                });
+            });
+
             it("displays the 'location'", function() {
                 expect(this.dialog.$("li:eq(0) .location .value").text().trim()).
                     toBe(this.workspaces[0].databaseName + "/" + this.workspaces[0].schemaName);
@@ -63,6 +72,32 @@ describe("chorus.dialogs.InstanceUsage", function() {
             it("displays the owner", function() {
                 expect(this.dialog.$("li:eq(0) .owner .value").text().trim()).
                     toBe(this.workspaces[0].ownerFullName);
+            });
+
+            context("when the instance is offline", function() {
+                beforeEach(function() {
+                    this.instance.set("state", "offline");
+                    this.dialog.render();
+                });
+
+                it("displays the total usage as offline", function() {
+                    expect(this.dialog.$(".total_usage")).toContainTranslation("instances.usage.offline");
+                });
+
+                it("sets the size text of the workspaces to be 'Offline'", function() {
+                    this.dialog.$("li").each(function() {
+                        expect($(this).find(".size_text")).toContainTranslation('instances.usage.offline');
+                    });
+                });
+
+                it("sets the width of the usage bar to be near zero", function() {
+                    var zipped = _.zip(this.dialog.$("li"), this.workspaces);
+                    _.each(zipped, function(z) {
+                        var el = $(z[0]);
+                        var workspace = z[1];
+                        expect(el.find(".used").width()).toBeLessThan(3);
+                    });
+                });
             });
         });
     });

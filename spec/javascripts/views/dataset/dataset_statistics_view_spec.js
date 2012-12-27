@@ -16,7 +16,7 @@ describe("chorus.views.DatasetStatistics", function() {
                 rows: 0,
                 columns: 0,
                 lastAnalyzedTime: "2011-12-12 12:34:56",
-                onDiskSize: "1 GB",
+                onDiskSize: "1300000000",
                 description: "foo",
                 objectType: "BASE_TABLE",
                 partitions: 0

@@ -32,6 +32,8 @@ chorus.views.DatasetStatistics = chorus.views.Base.extend({
             ctx.statistics.columns = "0";
         }
 
+        ctx.statistics.formattedDiskSize = I18n.toHumanSize(this.statistics.get("onDiskSize"), {precision: 0, format: "%n %u"});
+
         return ctx;
     }
 });

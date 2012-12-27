@@ -18,7 +18,6 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
           :id => workspace.id,
           :name => workspace.name,
           :size_in_bytes => sandbox_size,
-          :size => format_size(sandbox_size),
           :percentage_used => sandbox_size ? (sandbox_size / recommended_bytes.to_f * 100).round : nil,
           :owner_full_name => workspace.owner.full_name,
           :schema_name => workspace.sandbox.name,
@@ -34,15 +33,10 @@ class GpdbInstanceWorkspaceDetailPresenter < Presenter
 
   private
 
-  def format_size(size)
-    @view_context.number_to_human_size(size)
-  end
-
   def results_hash(workspaces, sandbox_size)
     {
         :workspaces => workspaces,
-        :sandboxes_size_in_bytes => sandbox_size,
-        :sandboxes_size => format_size(sandbox_size)
+        :sandboxes_size_in_bytes => sandbox_size
     }
   end
 end

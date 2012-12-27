@@ -1,5 +1,5 @@
 <div class='sub_header'>
-    <div class="total_usage">{{t "instances.usage.total" size=sandboxesSize}}</div>
+    <div class="total_usage">{{t "instances.usage.total" size=formattedSandboxesSize}}</div>
 </div>
 
 <div class="sub_content">
@@ -11,7 +11,7 @@
             </div>
             <div class="details">
                 <a class="workspace_link" href="{{workspacePath id}}">{{name}}</a>
-                {{workspaceUsage percentageUsed size}}
+                {{workspaceUsage percentageUsed formattedSize}}
                 <div class="pair location">
                     <div class="value">{{databaseName}}/{{schemaName}}</div>
                     <div class="key">{{t "instances.usage.location"}}</div>

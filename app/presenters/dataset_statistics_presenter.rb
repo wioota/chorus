@@ -7,7 +7,7 @@ class DatasetStatisticsPresenter < Presenter
         :columns => model.column_count,
         :description => model.description,
         :last_analyzed_time => model.last_analyzed,
-        :on_disk_size => @view_context.number_to_human_size(model.disk_size),
+        :on_disk_size => model.disk_size,
         :partitions => model.partition_count,
         :definition => model.definition
     }
