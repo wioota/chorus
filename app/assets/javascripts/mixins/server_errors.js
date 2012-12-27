@@ -1,6 +1,7 @@
 chorus.Mixins.ServerErrors = {
    serverErrorMessages: function() {
         var output = [];
+        var fullKey;
         if (!this.serverErrors) { return output; }
 
         if (this.serverErrors.fields) {
@@ -21,13 +22,13 @@ chorus.Mixins.ServerErrors = {
                 });
             });
         } else if (this.serverErrors.record) {
-            var fullKey = "record_error." + this.serverErrors.record;
+            fullKey = "record_error." + this.serverErrors.record;
 
             if (I18n.lookup(fullKey)) {
                 output = [t(fullKey)];
             }
         } else if (this.serverErrors.service) {
-            var fullKey = "service_error." + this.serverErrors.service;
+            fullKey = "service_error." + this.serverErrors.service;
 
             if (I18n.lookup(fullKey)) {
                 output = [t(fullKey)];
