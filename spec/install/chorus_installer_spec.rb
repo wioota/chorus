@@ -659,15 +659,15 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
       FileUtils.mkdir_p '/usr/local/greenplum-chorus/shared'
-      files.each do |f|
-        FileUtils.touch f
+      files.each do |file|
+        FileUtils.touch file
       end
       installer.secure_sensitive_files
     end
 
     it "makes changes permissions to 600" do
-      files.each do |f|
-        File.new(f).stat.mode.should == 0100600
+      files.each do |file|
+        File.stat(file).mode.should == 0100600
       end
     end
   end
