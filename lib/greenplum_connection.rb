@@ -59,7 +59,6 @@ module GreenplumConnection
     def with_connection
       connect!
       yield
-
     rescue Sequel::DatabaseError => e
       raise DatabaseError.new(e.message)
     ensure
@@ -190,9 +189,10 @@ module GreenplumConnection
 
       disconnect
       result
-
     rescue Sequel::DatabaseError => e
-      raise GreenplumConnection::DatabaseError.new(e.message)
+      raise GreenplumConnection::DatabaseError.new(e.message) unless e.message =~ /transaction is aborted/
+    ensure
+      disconnect
     end
 
     private
