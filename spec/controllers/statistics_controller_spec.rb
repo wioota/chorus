@@ -57,7 +57,6 @@ describe StatisticsController do
       decoded_response.rows.should == 5
       decoded_response.description.should == 'a description'
       decoded_response.last_analyzed_time.to_s.should == "2012-06-06T23:02:42Z"
-      decoded_response.on_disk_size.should == '118 KB'
       decoded_response.partitions.should == 6
     end
 
