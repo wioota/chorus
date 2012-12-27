@@ -18,7 +18,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             entityType: this.entityType,
             shown: this.collection.models.length,
             total: this.collection.pagination.records,
-            hideHeaders: this.search && this.search.isPaginated() && !this.search.workspace(),
+            filteredSearch: this.search && this.search.isPaginated(),
             moreResults: (this.collection.models.length < this.collection.pagination.records),
             title: this.title()
         };

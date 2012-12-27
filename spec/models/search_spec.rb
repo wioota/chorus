@@ -182,16 +182,6 @@ describe Search do
         search.num_found
         Sunspot.session.searches.length.should == 2
       end
-
-      context "when filtering by some entity type" do
-        let(:search) { Search.new(user, :query => 'view', :workspace_id => 7, :entity_type => 'dataset') }
-
-        it "limits the results to a specific entity_type" do
-          last_search = Sunspot.session.searches.last
-          last_search.should be_a_search_for(Dataset)
-          last_search.should_not be_a_search_for(Workspace)
-        end
-      end
     end
   end
 

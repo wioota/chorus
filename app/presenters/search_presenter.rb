@@ -5,37 +5,37 @@ class SearchPresenter < SearchPresenterBase
     {
         :users => {
             :results => present_models_with_highlights(model.users),
-            :numFound => model.users.length
+            :numFound => model.num_found[:users]
         },
 
         :instances => {
             :results => present_models_with_highlights(model.instances),
-            :numFound => model.instances.length
+            :numFound => model.num_found[:instances]
         },
 
         :workspaces => {
             :results => present_models_with_highlights(model.workspaces),
-            :numFound => model.workspaces.length
+            :numFound => model.num_found[:workspaces]
         },
 
         :workfiles => {
             :results => present_models_with_highlights(model.workfiles),
-            :numFound => model.workfiles.length
+            :numFound => model.num_found[:workfiles]
         },
 
         :datasets => {
             :results => present_models_with_highlights(model.datasets),
-            :numFound => model.datasets.length
+            :numFound => model.num_found[:datasets]
         },
 
         :hdfs_entries => {
             :results => present_models_with_highlights(model.hdfs_entries),
-            :numFound => model.hdfs_entries.length
+            :numFound => model.num_found[:hdfs_entries]
         },
 
         :attachment => {
             :results => present_models_with_highlights(model.attachments),
-            :numFound => model.attachments.length
+            :numFound => model.num_found[:attachments]
         }
     }.merge(workspace_specific_results)
   end
@@ -47,7 +47,7 @@ class SearchPresenter < SearchPresenterBase
       {
           :this_workspace => {
               :results => present_workspace_models_with_highlights(model.this_workspace),
-              :numFound => model.this_workspace.length
+              :numFound => model.num_found[:this_workspace]
           }
       }
     else

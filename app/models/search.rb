@@ -134,7 +134,6 @@ class Search
 
   def entity_type=(new_type)
     return unless new_type
-    @entity_type_set = true
     models_to_search.select! do |model|
       class_name_to_key(model.type_name) == class_name_to_key(new_type)
     end
@@ -174,10 +173,7 @@ class Search
   def populate_workspace_specific_results
     return unless workspace_id.present?
     return if models.has_key? :this_workspace
-    type_name = type_names_to_search.first
-    options = { :workspace_id => workspace_id, :per_page => per_type, :query => query }
-    options.merge!({:entity_type => type_name}) if @entity_type_set
-    workspace_search = WorkspaceSearch.new(current_user, options)
+    workspace_search = WorkspaceSearch.new(current_user, :workspace_id => workspace_id, :per_page => per_type, :query => query)
     models[:this_workspace] = workspace_search.results
     num_found[:this_workspace] = workspace_search.num_found
   end

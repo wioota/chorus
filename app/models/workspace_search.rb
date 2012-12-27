@@ -4,7 +4,7 @@ class WorkspaceSearch < Search
   validates_presence_of :workspace_id
 
   def initialize(current_user, params = {})
-    @models_to_search = [Workspace, Workfile, Dataset] unless params[:entity_type]
+    @models_to_search = [Workspace, Workfile, Dataset]
     super
     @workspace_id = params[:workspace_id]
   end

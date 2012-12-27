@@ -38,10 +38,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                 this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
             });
 
-            it("doesn't display the list content details", function() {
-                expect(this.page.mainContent.contentDetails).toBeUndefined();
-            });
-
             it("has breadcrumbs", function() {
                 expect(this.page.$(".breadcrumbs li:eq(0)")).toContainTranslation('breadcrumbs.home');
                 expect((this.page.$(".breadcrumbs li:eq(0) a")).attr("href")).toBe("#/");
@@ -210,8 +206,8 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the instance in the sidebar", function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
-                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0));
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
+                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0))
                     });
                 });
             });
@@ -386,7 +382,6 @@ describe("chorus.pages.SearchIndexPage", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage("my_workspaces", "workfile", this.query);
             this.search = this.page.search;
-            spyOn(this.search, "workspace").andReturn(rspecFixtures.workspace());
         });
 
         it("fetches the right search result", function() {
@@ -406,10 +401,6 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             it("selects the search result type in the menu", function() {
                 expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workfile");
-            });
-
-            it("doesn't display the list content details", function() {
-                expect(this.page.mainContent.contentDetails).toBeUndefined();
             });
         });
     });

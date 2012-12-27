@@ -131,21 +131,8 @@ describe("chorus.views.SearchResultList", function() {
                 this.view.render();
             });
 
-            context("when it's outside of workspace context", function() {
-                it("does not display a header", function() {
-                    expect(this.view.$(".search_result_header")).not.toExist();
-                });
-            });
-
-            context("when it's inside of workspace context", function() {
-                beforeEach(function() {
-                    spyOn(this.result, 'workspace').andReturn(rspecFixtures.workspace());
-                    this.view.render();
-                });
-
-                it("displays a header", function() {
-                    expect(this.view.$(".search_result_header")).toExist();
-                });
+            it("does not display a header", function() {
+                expect(this.view.$(".search_result_header")).not.toExist();
             });
         });
     });
