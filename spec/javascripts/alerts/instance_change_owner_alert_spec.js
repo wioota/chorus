@@ -3,7 +3,7 @@ describe("chorus.alerts.InstanceChangeOwner", function() {
         this.user = rspecFixtures.user({ firstName: "Boxiong", lastName: "Ding" });
         this.alert = new chorus.alerts.InstanceChangeOwner({ model: this.user });
         this.alert.render();
-    })
+    });
 
     it("displays the confirmation message", function() {
         var title = this.alert.$("h1").text().trim();
@@ -24,6 +24,6 @@ describe("chorus.alerts.InstanceChangeOwner", function() {
     it("closes when the submit button is clicked", function() {
         spyOnEvent($(document), "close.facebox");
         this.alert.$("button.submit").click();
-        expect("close.facebox").toHaveBeenTriggeredOn($(document))
+        expect("close.facebox").toHaveBeenTriggeredOn($(document));
     });
-})
+});

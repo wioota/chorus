@@ -1,6 +1,6 @@
 describe("chorus.pages.InvalidRoutePage", function() {
     beforeEach(function() {
-        this.page = new chorus.pages.InvalidRoutePage()
+        this.page = new chorus.pages.InvalidRoutePage();
         this.page.render();
     });
 

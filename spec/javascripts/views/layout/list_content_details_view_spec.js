@@ -134,7 +134,7 @@ describe("chorus.views.ListContentDetails", function() {
                     });
 
                     it("does not add the hidden class to the container", function() {
-                        expect($(this.view.el)).not.toHaveClass("hidden")
+                        expect($(this.view.el)).not.toHaveClass("hidden");
                     });
                 });
 
@@ -145,7 +145,7 @@ describe("chorus.views.ListContentDetails", function() {
                     });
 
                     it("adds the hidden class to the container", function() {
-                        expect($(this.view.el)).toHaveClass("hidden")
+                        expect($(this.view.el)).toHaveClass("hidden");
                     });
                 });
             });
@@ -170,7 +170,7 @@ describe("chorus.views.ListContentDetails", function() {
                 });
 
                 it("does not add the hidden class to the container", function() {
-                    expect($(this.view.el)).not.toHaveClass("hidden")
+                    expect($(this.view.el)).not.toHaveClass("hidden");
                 });
 
                 context("when there is a next page", function() {
@@ -244,7 +244,7 @@ describe("chorus.views.ListContentDetails", function() {
                     });
 
                     it("does not add the hidden class to the container", function() {
-                        expect($(this.view.el)).not.toHaveClass("hidden")
+                        expect($(this.view.el)).not.toHaveClass("hidden");
                     });
                 });
 
@@ -255,7 +255,7 @@ describe("chorus.views.ListContentDetails", function() {
                     });
 
                     it("adds the hidden class to the container", function() {
-                        expect($(this.view.el)).toHaveClass("hidden")
+                        expect($(this.view.el)).toHaveClass("hidden");
                     });
                 });
             });
@@ -292,7 +292,7 @@ describe("chorus.views.ListContentDetails", function() {
             });
 
             it("scrolls the viewport to the top of the page", function() {
-                expect(window.scroll).toHaveBeenCalledWith(0, 0)
+                expect(window.scroll).toHaveBeenCalledWith(0, 0);
             });
         });
 

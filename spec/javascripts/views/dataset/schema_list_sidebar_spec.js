@@ -14,7 +14,7 @@ describe("chorus.views.SchemaListSidebar", function() {
         var schema = rspecFixtures.schema();
         chorus.PageEvents.broadcast("schema:selected", schema);
         expect(this.view.$(".name")).toContainText(schema.get("name"));
-    })
+    });
 
     it("displays the schema type", function() {
         expect(this.view.$(".details")).toContainTranslation("schema_list.sidebar.type");

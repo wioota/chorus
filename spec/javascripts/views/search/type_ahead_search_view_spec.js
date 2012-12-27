@@ -16,10 +16,16 @@ describe("chorus.views.TypeAheadSearch", function() {
     });
 
     describe("when the fetch completes with results", function() {
+        function resultForEntityType(results, type) {
+            return _.find(results, function(result) {
+                return result.get("entityType") === type;
+            });
+        }
+
         beforeEach(function() {
             this.view.resultLimit = 100;
             this.server.completeFetchFor(this.result);
-            this.results = this.result.results()
+            this.results = this.result.results();
         });
 
         it("should have one entry for each item in the result", function() {
@@ -41,7 +47,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should display nothing for hdfs binary file", function(){
-            _.each(this.result.get("typeAhead").results, function(entry) { if(entry.entityType == "hdfs_file") {entry.isBinary = true; } });
+            _.each(this.result.get("typeAhead").results, function(entry) { if(entry.entityType === "hdfs_file") {entry.isBinary = true; } });
             this.view.model = this.result;
             this.view.render();
             expect(this.view.$("span.type")).not.toContainTranslation("type_ahead.entity.hdfs_file");
@@ -103,7 +109,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for chorusView", function() {
             var chorusView = _.find(this.results, function(result) {
-                return result.get("entityType") == 'dataset' && result.get("type") == 'CHORUS_VIEW';
+                return result.get("entityType") === 'dataset' && result.get("type") === 'CHORUS_VIEW';
             });
             var resultIndex = this.results.indexOf(chorusView);
             var result = this.view.$("li.result:eq("+ resultIndex +")");
@@ -121,14 +127,17 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.attachment");
         });
 
-        function resultForEntityType(results, type) {
-            return _.find(results, function(result) {
-                return result.get("entityType") == type;
-            });
-        }
-
         describe("keyboard navigation", function() {
             var view;
+
+            function expectSelectedIndex(index) {
+                expect(view.$("li").eq(index)).toHaveClass("selected");
+                expect(view.$("li.selected").length).toBe(1);
+            }
+
+            function expectNothingSelected() {
+                expect(view.$("li.selected").length).toBe(0);
+            }
 
             beforeEach(function() {
                 view = this.view;
@@ -167,7 +176,7 @@ describe("chorus.views.TypeAheadSearch", function() {
                         this.view.downArrow();
                         expectSelectedIndex(7);
                     });
-                })
+                });
             });
 
             describe("#upArrow", function() {
@@ -220,21 +229,12 @@ describe("chorus.views.TypeAheadSearch", function() {
                     expect(chorus.router.navigate).toHaveBeenCalledWith(href);
                 });
             });
-
-            function expectSelectedIndex(index) {
-                expect(view.$("li").eq(index)).toHaveClass("selected");
-                expect(view.$("li.selected").length).toBe(1);
-            }
-
-            function expectNothingSelected() {
-                expect(view.$("li.selected").length).toBe(0);
-            }
         });
 
         describe("#handleKeyEvent", function() {
             describe("when down arrow key is pressed", function() {
                 beforeEach(function() {
-                    spyOn(this.view, "downArrow")
+                    spyOn(this.view, "downArrow");
                     var event = jQuery.Event("keydown", { keyCode: 40 });
                     this.view.handleKeyEvent(event);
                 });
@@ -246,7 +246,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
             describe("when up arrow key is pressed", function() {
                 beforeEach(function() {
-                    spyOn(this.view, "upArrow")
+                    spyOn(this.view, "upArrow");
                     var event = jQuery.Event("keydown", { keyCode: 38 });
                     this.view.handleKeyEvent(event);
                 });
@@ -258,7 +258,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
             describe("when the enter key is pressed", function() {
                 beforeEach(function() {
-                    spyOn(this.view, "enterKey")
+                    spyOn(this.view, "enterKey");
                     this.event = jQuery.Event("keydown", { keyCode: 13 });
                 });
 
@@ -295,7 +295,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
             it("should only display maximum 5 rows", function() {
                 expect(this.view.$('li.result').length).toBe(5);
-            })
+            });
         });
 
         context("when a second search happens", function() {
@@ -313,7 +313,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
             it("should be empty", function() {
                 expect(this.view.$("li.result").length).toBe(0);
-            })
+            });
         });
     });
 

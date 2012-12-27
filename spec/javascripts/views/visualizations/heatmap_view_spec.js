@@ -1,4 +1,8 @@
 describe("chorus.views.visualizations.Heatmap", function() {
+    function relativeLightness(color) {
+        return color.r + color.g + color.b;
+    }
+
     var leftX   = chorus.svgHelpers.leftX,
         rightX  = chorus.svgHelpers.rightX,
         width   = chorus.svgHelpers.width,
@@ -155,10 +159,6 @@ describe("chorus.views.visualizations.Heatmap", function() {
             });
         });
     });
-
-    function relativeLightness(color) {
-        return color.r + color.g + color.b;
-    }
 });
 
 

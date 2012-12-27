@@ -22,8 +22,8 @@ describe("chorus.collections.SchemaSet", function() {
         });
 
         it("sorts by name, case insensitive", function() {
-            var names = this.collection.pluck('name')
+            var names = this.collection.pluck('name');
             expect(names).toEqual(['a', 'G', 'z']);
-        })
+        });
     });
 });

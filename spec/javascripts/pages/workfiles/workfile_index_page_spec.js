@@ -177,13 +177,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             it("can sort the list alphabetically ascending", function() {
                 this.page.$("li[data-type=alpha] a").click();
-                expect(this.page.collection.order).toBe("fileName")
+                expect(this.page.collection.order).toBe("fileName");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
 
             it("can sort the list bu date ascending", function() {
                 this.page.$("li[data-type=date] a").click();
-                expect(this.page.collection.order).toBe("lastUpdatedStamp")
+                expect(this.page.collection.order).toBe("lastUpdatedStamp");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
         });

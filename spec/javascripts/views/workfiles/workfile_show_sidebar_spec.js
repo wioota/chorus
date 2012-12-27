@@ -52,10 +52,10 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("displays a link to copy the workfile to another workspace", function() {
             var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
             expect(copyLink).toExist();
-            expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.workspace().id)
-            expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
-            expect(copyLink).toHaveAttr("data-active-only", 'true')
-        })
+            expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.workspace().id);
+            expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"));
+            expect(copyLink).toHaveAttr("data-active-only", 'true');
+        });
 
         it("has an activities tab", function() {
             expect(this.view.$('.tab_control .activity_list')).toExist();
@@ -73,7 +73,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         });
 
         it("renders selected version", function() {
-            expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
+            expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum});
         });
 
         it("should show the data tab by default", function() {
@@ -88,7 +88,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             it("should scroll to the top", function() {
                 expect(this.view.jumpToTop).toHaveBeenCalled();
             });
-        })
+        });
     });
 
     context("with a non-sql workfile", function() {
@@ -119,12 +119,12 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("displays a link to copy the workfile to another workspace", function() {
             var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
             expect(copyLink).toExist();
-            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-            expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-        })
+            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
+            expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
+        });
 
         it("displays the filename", function() {
-            expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
+            expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"));
         });
 
         it("displays the workfile's date", function() {
@@ -137,13 +137,13 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
         it("links to the profile page of the modifier", function() {
             expect(this.view.$("a.updated_by").attr("href")).toBe(this.workfile.modifier().showUrl());
-        })
+        });
 
         it("displays a link to delete the workfile", function() {
             var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
             expect(deleteLink).toExist();
-            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-            expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
+            expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
         });
 
         it("displays a link to add a note", function() {
@@ -205,25 +205,25 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
     describe("when the model is invalidated", function() {
         it("fetches the activity set", function() {
-            this.view.model.trigger("invalidated")
-            expect(this.server.requests[0].url).toBe(this.view.collection.url())
+            this.view.model.trigger("invalidated");
+            expect(this.server.requests[0].url).toBe(this.view.collection.url());
         });
 
         it("fetches the versions set", function() {
             this.view.model.trigger("invalidated");
-            expect(this.server.lastFetch().url).toBe(this.view.allVersions.url())
+            expect(this.server.lastFetch().url).toBe(this.view.allVersions.url());
         });
     });
 
     describe("when the activity list collection is changed", function() {
         beforeEach(function() {
             spyOn(this.view, "postRender"); // check for #postRender because #render is bound
-            this.view.collection.trigger("changed")
-        })
+            this.view.collection.trigger("changed");
+        });
 
         it("re-renders", function() {
             expect(this.view.postRender).toHaveBeenCalled();
-        })
+        });
     });
 
     describe("when the version list collection is changed", function() {
@@ -234,7 +234,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
         it("re-renders", function() {
             expect(this.view.postRender).toHaveBeenCalled();
-        })
+        });
     });
 
     describe("when the user is not a workspace member", function() {

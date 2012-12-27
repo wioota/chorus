@@ -10,13 +10,13 @@ describe("chorus.collections.FilteringCollection", function() {
     it("should throw an error if constructed with models", function () {
         var childCollection = this.childCollection;
         expect(function () {
-            new chorus.collections.FilteringCollection([], {collection : childCollection});
+            return new chorus.collections.FilteringCollection([], {collection : childCollection});
         }).toThrow("Must initialize FilteringCollection with null");
     });
 
     it("should throw an error if constructed without a child collection", function () {
         expect(function () {
-            new chorus.collections.FilteringCollection(null);
+            return new chorus.collections.FilteringCollection(null);
         }).toThrow("Must initialize FilteringCollection with a child collection");
     });
 

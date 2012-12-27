@@ -72,7 +72,7 @@ jasmine.Fixtures.prototype.createContainer_ = function(html) {
 };
 
 jasmine.Fixtures.prototype.getFixtureHtml_ = function(url) {
-  if (typeof this.fixturesCache_[url] == 'undefined') {
+  if (_.isUndefined(this.fixturesCache_[url])) {
     this.loadFixtureIntoCache_(url);
   }
   return this.fixturesCache_[url];
@@ -132,10 +132,22 @@ jasmine.JQuery.matchersClass = {};
       data.spiedEvents = {};
       data.handlers    = [];
     }
-  }
+  };
 })(jasmine.JQuery);
 
 (function(){
+  var hasProperty = function(actualValue, expectedValue) {
+      if (expectedValue === undefined) {
+          return actualValue !== undefined;
+      }
+      if (actualValue === undefined) {
+          return false;
+      }
+      actualValue = actualValue.toString();
+      expectedValue = expectedValue.toString();
+      return actualValue === expectedValue;
+  };
+
   var jQueryMatchers = {
     toHaveClass: function(className) {
       return this.actual.hasClass(className);
@@ -170,23 +182,23 @@ jasmine.JQuery.matchersClass = {};
     },
 
     toHaveId: function(id) {
-      return this.actual.attr('id') == id;
+      return this.actual.attr('id') === id;
     },
 
     toHaveHtml: function(html) {
-      return this.actual.html() == jasmine.JQuery.browserTagCaseIndependentHtml(html);
+      return this.actual.html() === jasmine.JQuery.browserTagCaseIndependentHtml(html);
     },
 
     toHaveText: function(text) {
       if (text && jQuery.isFunction(text.test)) {
         return text.test(this.actual.text());
       } else {
-        return this.actual.text() == text;
+        return this.actual.text() === text;
       }
     },
 
     toHaveValue: function(value) {
-      return this.actual.val() == value;
+      return this.actual.val() === value;
     },
 
     toHaveData: function(key, expectedValue) {
@@ -216,19 +228,12 @@ jasmine.JQuery.matchersClass = {};
       var stack = this.actual.data("events")[eventName];
       var i;
       for (i = 0; i < stack.length; i++) {
-        if (stack[i].handler == eventHandler) {
+        if (stack[i].handler === eventHandler) {
           return true;
         }
       }
       return false;
     }
-  };
-
-  var hasProperty = function(actualValue, expectedValue) {
-    if (expectedValue === undefined) {
-      return actualValue !== undefined;
-    }
-    return actualValue == expectedValue;
   };
 
   var bindMatcher = function(methodName) {
@@ -266,7 +271,7 @@ beforeEach(function() {
       };
       return jasmine.JQuery.events.wasTriggered(selector, this.actual);
     }
-  })
+  });
 });
 
 afterEach(function() {

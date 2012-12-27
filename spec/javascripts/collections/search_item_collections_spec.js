@@ -13,7 +13,7 @@ describe("chorus.collections.Search", function() {
             }
         });
 
-        this.collection = new chorus.collections.Search.InstanceSet([], {search: this.search})
+        this.collection = new chorus.collections.Search.InstanceSet([], {search: this.search});
     });
 
     describe("#refreshFromSearch", function() {

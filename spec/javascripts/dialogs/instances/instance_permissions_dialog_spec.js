@@ -1,4 +1,83 @@
 describe("chorus.dialogs.InstancePermissions", function() {
+    // this shared example assumes that
+    // - #launchSubModal is spied on
+    // - this.newOwner is set
+    function itLaunchesTheConfirmChangeOwnerDialog(options) {
+        beforeEach(function() {
+            expect(this.dialog.launchSubModal).toHaveBeenCalled();
+            this.submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+        });
+
+        it("launches the change owner confirmation dialog", function() {
+            expect(this.submodal).toBeA(chorus.alerts.InstanceChangeOwner);
+        });
+
+        it("passes the selected user to the confirmation dialog, as the model", function() {
+            expect(this.submodal.model.get("id")).toBe(this.newOwner.get("id"));
+            expect(this.submodal.model.displayName()).toBe(this.newOwner.displayName());
+        });
+
+        describe("confirming the new owner", function() {
+            beforeEach(function() {
+                expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+                spyOn(this.dialog.ownership, 'save').andCallThrough();
+                submodal.trigger("confirmChangeOwner", this.newOwner);
+            });
+
+            it("saves the instance", function() {
+                expect(this.dialog.ownership.save).toHaveBeenCalled();
+            });
+
+            describe("when the save succeeds", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    spyOn(this.dialog, 'closeModal').andCallThrough();
+                    spyOnEvent(this.instance, 'invalidated');
+                    this.dialog.ownership.trigger("saved");
+                });
+
+                it("shows a toast message", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
+                });
+
+                describe("after re-fetching the accounts", function() {
+                    beforeEach(function() {
+                        this.instanceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}});
+                        this.server.completeFetchFor(this.dialog.collection, [this.instanceAccount]);
+                    });
+
+                    it("closes the dialog", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+
+                    it("triggers the 'invalidated' event on the instance", function() {
+                        expect('invalidated').toHaveBeenTriggeredOn(this.instance);
+                    });
+
+                    it("sets the owner id on the instance", function() {
+                        expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
+                    });
+
+                    it("can render the instance's shared db username", function() {
+                        expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"));
+                    });
+                });
+            });
+
+            describe("when the save fails", function() {
+                beforeEach(function() {
+                    this.dialog.ownership.serverErrors = { fields: { a: { BLANK: {} } } };
+                    this.dialog.ownership.trigger("saveFailed");
+                });
+
+                it("displays the server errors in the errors div", function() {
+                    expect(this.dialog.$(".errors li").length).toBe(1);
+                });
+            });
+        });
+    }
+
     beforeEach(function() {
         spyOn(chorus, 'styleSelect');
         this.modalSpy = stubModals();
@@ -195,7 +274,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             });
 
                             it("sends a create to the server", function() {
-                                expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing")
+                                expect(this.server.lastCreate().url).toBe("/gpdb_instances/" + this.instance.id + "/sharing");
                             });
                         });
                     });
@@ -580,7 +659,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         context("clicking save", function() {
                             beforeEach(function() {
                                 this.dialog.$('a.save:visible').click();
-                            })
+                            });
 
                             it("saves the correct fields", function() {
                                 expect(this.dialog.account.save).toHaveBeenCalledWith({
@@ -782,83 +861,4 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
         });
     });
-
-    // this shared example assumes that
-    // - #launchSubModal is spied on
-    // - this.newOwner is set
-    function itLaunchesTheConfirmChangeOwnerDialog(options) {
-        beforeEach(function() {
-            expect(this.dialog.launchSubModal).toHaveBeenCalled();
-            this.submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-        });
-
-        it("launches the change owner confirmation dialog", function() {
-            expect(this.submodal).toBeA(chorus.alerts.InstanceChangeOwner);
-        });
-
-        it("passes the selected user to the confirmation dialog, as the model", function() {
-            expect(this.submodal.model.get("id")).toBe(this.newOwner.get("id"));
-            expect(this.submodal.model.displayName()).toBe(this.newOwner.displayName());
-        });
-
-        describe("confirming the new owner", function() {
-            beforeEach(function() {
-                expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-                spyOn(this.dialog.ownership, 'save').andCallThrough();
-                submodal.trigger("confirmChangeOwner", this.newOwner);
-            });
-
-            it("saves the instance", function() {
-                expect(this.dialog.ownership.save).toHaveBeenCalled();
-            });
-
-            describe("when the save succeeds", function() {
-                beforeEach(function() {
-                    spyOn(chorus, 'toast');
-                    spyOn(this.dialog, 'closeModal').andCallThrough();
-                    spyOnEvent(this.instance, 'invalidated');
-                    this.dialog.ownership.trigger("saved");
-                });
-
-                it("shows a toast message", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
-                });
-
-                describe("after re-fetching the accounts", function() {
-                    beforeEach(function() {
-                        this.instanceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}});
-                        this.server.completeFetchFor(this.dialog.collection, [this.instanceAccount]);
-                    });
-
-                    it("closes the dialog", function() {
-                        expect(this.dialog.closeModal).toHaveBeenCalled();
-                    });
-
-                    it("triggers the 'invalidated' event on the instance", function() {
-                        expect('invalidated').toHaveBeenTriggeredOn(this.instance);
-                    });
-
-                    it("sets the owner id on the instance", function() {
-                        expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
-                    });
-
-                    it("can render the instance's shared db username", function() {
-                        expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"));
-                    });
-                });
-            });
-
-            describe("when the save fails", function() {
-                beforeEach(function() {
-                    this.dialog.ownership.serverErrors = { fields: { a: { BLANK: {} } } };
-                    this.dialog.ownership.trigger("saveFailed");
-                });
-
-                it("displays the server errors in the errors div", function() {
-                    expect(this.dialog.$(".errors li").length).toBe(1);
-                });
-            });
-        });
-    }
 });

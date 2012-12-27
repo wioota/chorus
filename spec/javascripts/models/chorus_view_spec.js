@@ -1,4 +1,14 @@
 describe("chorus.models.ChorusView", function() {
+
+    function addJoin(self, sourceColumn) {
+        sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
+        var joinedDataset = newFixtures.workspaceDataset.sandboxTable();
+        joinedDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+        var joinedColumn = joinedDataset.columns().models[0];
+        self.model.addJoin(sourceColumn, joinedColumn, 'inner');
+        return joinedColumn;
+    }
+
     beforeEach(function() {
         this.sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
         this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
@@ -141,7 +151,7 @@ describe("chorus.models.ChorusView", function() {
                         join.destinationColumn === this.thirdNestedJoinColumn;
                 }, this))).toBeFalsy();
             });
-        })
+        });
     });
 
     describe("addColumn", function() {
@@ -361,13 +371,4 @@ describe("chorus.models.ChorusView", function() {
             });
         });
     });
-
-    function addJoin(self, sourceColumn) {
-        sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
-        var joinedDataset = newFixtures.workspaceDataset.sandboxTable();
-        joinedDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
-        var joinedColumn = joinedDataset.columns().models[0];
-        self.model.addJoin(sourceColumn, joinedColumn, 'inner');
-        return joinedColumn;
-    }
 });

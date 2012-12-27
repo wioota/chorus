@@ -54,7 +54,7 @@ describe("chorus.views.SearchDataset", function() {
 
         it("links to the correct dataset url", function() {
             expect(this.view.$('.name').attr('href')).toMatch(/workspace/);
-        })
+        });
     });
 
     context("when there are column comments", function() {
@@ -92,7 +92,7 @@ describe("chorus.views.SearchDataset", function() {
     it("displays an icon for the item", function() {
         var img = this.view.$(".icon");
         expect(img).toExist();
-        expect(img).toHaveAttr("src", this.model.iconUrl())
-        expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes))
+        expect(img).toHaveAttr("src", this.model.iconUrl());
+        expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes));
     });
 });

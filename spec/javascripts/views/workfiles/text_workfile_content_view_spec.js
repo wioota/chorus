@@ -16,7 +16,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
 
         stubDefer();
-    })
+    });
 
     describe("hotkey options", function() {
         beforeEach(function() {
@@ -110,7 +110,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         afterEach(function() {
             this.view.replaceCurrentVersion();
-        })
+        });
 
         it("sets readonly to false", function() {
             expect(this.view.editor.getOption("readOnly")).toBe(false);
@@ -204,7 +204,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             this.view.render();
             this.view.editText();
-            this.view.editor.setValue('This should be a big enough text, okay?')
+            this.view.editor.setValue('This should be a big enough text, okay?');
             this.view.editor.setCursor(0, 19);
 
             this.modalSpy = stubModals();

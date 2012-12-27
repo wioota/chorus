@@ -6,7 +6,7 @@ describe("chorus.alerts.RemoveIndividualAccount", function() {
 
     it("displays the confirmation message", function() {
         expect(this.alert.$("h1").text().trim()).toMatchTranslation("instances.remove_individual_account.title", {instanceName: "someInstance", userName: "joey boy"});
-        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.remove_individual_account.remove")
+        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.remove_individual_account.remove");
     });
 
     it("raises the 'removeIndividualAccount' event when the submit button is clicked", function() {
@@ -18,6 +18,6 @@ describe("chorus.alerts.RemoveIndividualAccount", function() {
     it("closes when the account delete request responds is clicked", function() {
         spyOnEvent($(document), "close.facebox");
         this.alert.$("button.submit").click();
-        expect("close.facebox").toHaveBeenTriggeredOn($(document))
+        expect("close.facebox").toHaveBeenTriggeredOn($(document));
     });
-})
+});

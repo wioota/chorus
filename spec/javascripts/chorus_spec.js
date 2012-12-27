@@ -1,8 +1,8 @@
 describe("chorus global", function() {
     beforeEach(function() {
-        this.chorus = new Chorus();
-        this.backboneSpy = spyOn(Backbone.history, "start")
-    })
+        this.chorus = new window.Chorus();
+        this.backboneSpy = spyOn(Backbone.history, "start");
+    });
 
     context("classExtend", function() {
         context("when in chorus dev mode", function() {
@@ -46,12 +46,12 @@ describe("chorus global", function() {
             this.backboneSpy.andCallFake(function() {
                 expect(self.chorus.session).toBeDefined();
             });
-            this.chorus.initialize()
+            this.chorus.initialize();
             expect(Backbone.history.start).toHaveBeenCalled();
         });
 
         it("should create a session", function() {
-            this.chorus.initialize()
+            this.chorus.initialize();
             expect(this.chorus.session).toBeDefined();
         });
 
@@ -249,7 +249,7 @@ describe("chorus global", function() {
                     }
                 });
                 this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
-            })
+            });
 
             it("should have the tooltip-modal class", function() {
                 expect(this.qtipArgs.style).toEqual({
@@ -283,39 +283,39 @@ describe("chorus global", function() {
                     }
                 });
                 this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
-            })
+            });
 
             it("calls qtip on the given element", function() {
                 expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
-            })
+            });
 
             it("passes down the given content", function() {
                 expect(this.qtipArgs.content).toEqual("menu content<a class='test_link'></a>");
-            })
+            });
 
             it("sets up the events on the contents", function() {
                 this.element.click();
-                this.qtipElement.find('.test_link').click()
+                this.qtipElement.find('.test_link').click();
                 expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), this.element.data('qtip'));
-            })
+            });
 
             context("event handling", function() {
                 beforeEach(function() {
                     this.element.click();
-                })
+                });
 
                 it("closes the qtip", function() {
                     expect(this.qtipElement).toHaveVisibleQtip();
-                    this.qtipElement.find('.test_link').click()
+                    this.qtipElement.find('.test_link').click();
                     expect(this.qtipElement).not.toHaveVisibleQtip();
                 });
-            })
+            });
 
             it("sets up our menu styling", function() {
                 expect(this.qtipArgs.show.event).toEqual('click');
                 expect(this.qtipArgs.hide).toEqual('unfocus');
-                expect(this.qtipArgs.position.my).toEqual("left center")
-                expect(this.qtipArgs.position.at).toEqual("right center")
+                expect(this.qtipArgs.position.my).toEqual("left center");
+                expect(this.qtipArgs.position.at).toEqual("right center");
                 expect(this.qtipArgs.style).toEqual({
                     classes: "myClass tooltip-white",
                     foo: "bar",
@@ -336,8 +336,8 @@ describe("chorus global", function() {
 
                 it("calls $.fn.remove on the menu element", function() {
                     expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
-                })
-            })
+                });
+            });
         });
     });
 
@@ -354,9 +354,9 @@ describe("chorus global", function() {
                 "%Y": this.input3
             });
 
-            this.id1 = this.input1.attr("id"),
-                this.id2 = this.input2.attr("id"),
-                this.id3 = this.input3.attr("id");
+            this.id1 = this.input1.attr("id");
+            this.id2 = this.input2.attr("id");
+            this.id3 = this.input3.attr("id");
         });
 
         it("gives the elements unique ids", function() {
@@ -402,21 +402,21 @@ describe("chorus global", function() {
 
             this.chorus.page = new chorus.pages.Base();
 
-            spyOnEvent(this.page1, "resized")
-            spyOnEvent(this.page2, "resized")
-            spyOnEvent(this.chorus.page, "resized")
+            spyOnEvent(this.page1, "resized");
+            spyOnEvent(this.page2, "resized");
+            spyOnEvent(this.chorus.page, "resized");
             $(window).resize();
         });
 
         it("should not trigger resized on the anonymous pages, because those pages aren't the active page", function() {
             expect("resized").not.toHaveBeenTriggeredOn(this.page1);
             expect("resized").not.toHaveBeenTriggeredOn(this.page2);
-        })
+        });
 
         it("should trigger resized on chorus.page", function() {
             expect("resized").toHaveBeenTriggeredOn(this.chorus.page);
-        })
-    })
+        });
+    });
 
     describe("#search", function() {
         beforeEach(function() {
@@ -442,25 +442,25 @@ describe("chorus global", function() {
             beforeEach(function() {
                 this.onTextChange = jasmine.createSpy("onTextChange");
                 chorus.search({ input: this.input1, onTextChange: this.onTextChange});
-            })
+            });
 
             it("should call the onTextChange function when the text changes", function() {
                 expect(this.onTextChange).not.toHaveBeenCalled();
                 this.input1.val("otherText").trigger("keyup");
                 expect(this.onTextChange).toHaveBeenCalled();
-            })
+            });
         });
 
         context("with the default onTextChange and a supplied eventName", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast");
                 chorus.search({ input: this.input1, list: this.list, eventName: "database:search"});
-            })
+            });
 
             it("should broadcast the event", function() {
                 this.input1.val("otherText").trigger("keyup");
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:search")
-            })
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:search");
+            });
         });
 
         context("when called multiple times on the same element", function() {
@@ -478,7 +478,7 @@ describe("chorus global", function() {
         context("with a selector", function() {
             beforeEach(function() {
                 chorus.search({ input: this.input1, list: this.list, selector: ".name" });
-            })
+            });
 
             describe("when text is entered in the search input", function() {
                 it("hides elements in the list that do not contain the search string", function() {
@@ -502,7 +502,7 @@ describe("chorus global", function() {
         context("without a selector", function() {
             beforeEach(function() {
                 chorus.search({ input: this.input1, list: this.list});
-            })
+            });
 
             describe("when text is entered in the search input", function() {
                 it("hides elements in the list that do not contain the search string", function() {
@@ -594,7 +594,7 @@ describe("chorus global", function() {
     describe("#addClearButton", function() {
         beforeEach(function() {
             this.input1 = $("<input></input>");
-            this.container = $("<div></div>").append(this.input1)
+            this.container = $("<div></div>").append(this.input1);
 
             chorus.addClearButton(this.input1);
             this.clearLink = this.container.find("a.chorus_search_clear");
@@ -620,7 +620,7 @@ describe("chorus global", function() {
             beforeEach(function() {
                 this.input1.val("nit").trigger("textchange");
                 spyOnEvent(this.input1, 'textchange');
-                spyOn($.fn, "blur")
+                spyOn($.fn, "blur");
                 this.clearLink.click();
             });
 
@@ -638,49 +638,49 @@ describe("chorus global", function() {
 
             it("blurs the element so the placeholder text reappears", function() {
                 expect($.fn.blur).toHaveBeenCalled();
-            })
+            });
         });
     });
 
     describe("#help", function() {
         beforeEach(function() {
-            spyOn(window, "FMCOpenHelp")
+            spyOn(window, "FMCOpenHelp");
         });
 
         context("when the current page has a helpId", function() {
             beforeEach(function() {
                 chorus.page = {
                     helpId: "foo"
-                }
+                };
 
                 chorus.help();
             });
 
             it("calls into the help system with the helpId", function() {
                 expect(window.FMCOpenHelp).toHaveBeenCalledWith("foo", null, null, null, "/help");
-            })
-        })
+            });
+        });
 
         context("when the current page does not have a helpId", function() {
             beforeEach(function() {
                 chorus.page = {
-                }
+                };
 
                 chorus.help();
             });
 
             it("calls into the help system with 'home'", function() {
                 expect(window.FMCOpenHelp).toHaveBeenCalledWith("home", null, null, null, "/help");
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("#requireLogin", function() {
         beforeEach(function() {
             this.chorus.initialize();
             Backbone.history.fragment = "/foo";
             setLoggedInUser({id: "1", username: "iAmNumberOne"}, this.chorus);
-        })
+        });
 
         it("deletes the user from the session", function () {
             expect(this.chorus.session._user).toBeTruthy();
@@ -699,6 +699,5 @@ describe("chorus global", function() {
             this.chorus.requireLogin();
             expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login");
         });
-    })
-})
-;
+    });
+});

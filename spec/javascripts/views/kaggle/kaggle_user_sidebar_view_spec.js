@@ -26,7 +26,7 @@ describe("chorus.views.KaggleUserSidebar", function () {
         it("does not show the 'Compose message' link", function() {
            expect(this.view.$('.actions .sendMessage')).not.toExist();
         });
-    })
+    });
 
     context("with a user", function () {
         beforeEach(function () {
@@ -60,7 +60,7 @@ describe("chorus.views.KaggleUserSidebar", function () {
                 expect(dialogLink.data("workspace")).toBe(this.workspace);
                 expect(dialogLink.data("dialog")).toBe("ComposeKaggleMessage");
             });
-        })
+        });
     });
 
     describe("when a single Kaggle user is checked", function () {

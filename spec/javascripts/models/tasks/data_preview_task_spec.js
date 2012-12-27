@@ -40,7 +40,7 @@ describe("chorus.models.DataPreviewTask", function() {
         expect(this.model.getRows()).toEqual([
             {first_column: "1", second_column: "2"},
             {first_column: "3", second_column: "4"}
-        ])
+        ]);
     });
 
 });

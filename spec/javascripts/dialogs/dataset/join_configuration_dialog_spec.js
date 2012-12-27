@@ -64,7 +64,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(this.dialog.$('select.join_type')).toExist();
                 var joinTypes = this.dialog.$('select.join_type option');
 
-                expect(joinTypes.length).toBe(4)
+                expect(joinTypes.length).toBe(4);
                 expect(joinTypes.eq(0).text()).toMatchTranslation("dataset.manage_join_tables.inner");
                 expect(joinTypes.eq(1).text()).toMatchTranslation("dataset.manage_join_tables.left");
                 expect(joinTypes.eq(2).text()).toMatchTranslation("dataset.manage_join_tables.right");

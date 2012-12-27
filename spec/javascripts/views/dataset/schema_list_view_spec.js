@@ -23,7 +23,7 @@ describe("chorus.views.SchemaList", function() {
     });
 
     it("displays the right icon for each schema", function() {
-        expect(this.view.$("li.schema img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_schema.png")
+        expect(this.view.$("li.schema img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_schema.png");
     });
 
     it("displays the dataset count for each schema", function() {
@@ -34,7 +34,7 @@ describe("chorus.views.SchemaList", function() {
     describe("when the refreshed_at is null", function() {
         it("displays a message", function() {
             expect(this.view.$("li.schema .description").eq(2)).toContainTranslation("entity.name.WorkspaceDataset.refreshing");
-        })
+        });
     });
 
     it("should broadcast a schema:selected event when itemSelected is called", function() {

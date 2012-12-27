@@ -1,4 +1,6 @@
 describe("chorus.presenters.Activity", function() {
+    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset, gnipInstance, datasetModel;
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }
@@ -50,8 +52,6 @@ describe("chorus.presenters.Activity", function() {
             });
         });
     }
-
-    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset;
 
     describe("common aspects", function() {
         context("activity with a workspace", function() {
@@ -354,8 +354,6 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("gnip instance created", function() {
-        var gnipInstance;
-
         beforeEach(function() {
             model = rspecFixtures.activity.gnipInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
@@ -1268,7 +1266,6 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
             context("when importing to an existing table", function () {
-                var datasetModel;
                 beforeEach(function () {
                     datasetModel = rspecFixtures.dataset();
                     model = rspecFixtures.activity.fileImportCreated({dataset: datasetModel});
@@ -1432,7 +1429,6 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
             context("when importing to an existing table", function () {
-                var datasetModel;
                 beforeEach(function () {
                     datasetModel = rspecFixtures.dataset();
                     model = rspecFixtures.activity.datasetImportCreated({dataset: datasetModel});
@@ -1496,7 +1492,6 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
             context("when importing to an existing table", function () {
-                var datasetModel;
                 beforeEach(function () {
                     datasetModel = rspecFixtures.dataset();
                     model = rspecFixtures.activity.importScheduleUpdated({dataset: datasetModel});
@@ -1560,7 +1555,6 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
             context("when importing to an existing table", function () {
-                var datasetModel;
                 beforeEach(function () {
                     datasetModel = rspecFixtures.dataset();
                     model = rspecFixtures.activity.importScheduleDeleted({dataset: datasetModel});
@@ -1636,7 +1630,7 @@ describe("chorus.presenters.Activity", function() {
                 sourceObject.set({workspace: workspace});
                 model.set({sourceObject: sourceObject});
 
-                translation_params = {
+                this.translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
                     chorusViewSourceType: t("dataset.types.query"),
@@ -1649,7 +1643,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["without_workspace"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.without_workspace", translation_params
+                        "activity.header.ChorusViewCreated.without_workspace", this.translation_params
                     );
                 });
             });
@@ -1658,7 +1652,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["default"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.default", translation_params
+                        "activity.header.ChorusViewCreated.default", this.translation_params
                     );
                 });
             });
@@ -1674,7 +1668,7 @@ describe("chorus.presenters.Activity", function() {
                 workspace = model.workspace();
                 dataset = model.dataset();
                 var sourceObject = new chorus.models.Workfile(model.get('sourceObject'));
-                translation_params = {
+                this.translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
                     chorusViewSourceType: 'workfile',
@@ -1687,7 +1681,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["without_workspace"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.without_workspace", translation_params
+                        "activity.header.ChorusViewCreated.without_workspace", this.translation_params
                     );
                 });
             });
@@ -1696,7 +1690,7 @@ describe("chorus.presenters.Activity", function() {
                 it("has the right header html", function() {
                     presenter.options.displayStyle = ["default"];
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.ChorusViewCreated.default", translation_params
+                        "activity.header.ChorusViewCreated.default", this.translation_params
                     );
                 });
             });

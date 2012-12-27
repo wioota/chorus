@@ -11,7 +11,7 @@ describe("chorus.collections.WorkfileSet", function() {
         });
         describe("with filtering", function() {
             beforeEach(function() {
-                this.collection.attributes.fileType = "sql"
+                this.collection.attributes.fileType = "sql";
             });
             it("it has correct Url", function() {
                 expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=50");

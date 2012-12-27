@@ -26,7 +26,7 @@ describe("chorus.views.SearchWorkfile", function() {
         this.model = this.result.workfiles().models[0];
         this.model.set({highlightedAttributes: {fileName : "<em>cool</em> file"}});
         this.view = new chorus.views.SearchWorkfile({model: this.model});
-        this.view.render()
+        this.view.render();
     });
 
     it("includes the correct workspace file icon", function() {
@@ -41,8 +41,8 @@ describe("chorus.views.SearchWorkfile", function() {
         expect(this.view.$('.location')).toContainTranslation(
             "workspaces_used_in.body.one",
             {workspaceLink: "Test"}
-        )
-    })
+        );
+    });
 
     it("shows matching description if any", function() {
         expect(this.view.$(".description .description_content")).toBeEmpty();

@@ -16,7 +16,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         beforeEach(function() {
             this.instance = rspecFixtures.gpdbInstance({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
-            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
+            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
             this.view = new chorus.views.InstanceListSidebar();
@@ -107,7 +107,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
-                    })
+                    });
                 });
 
                 context("when the instance is provisioning", function() {
@@ -125,7 +125,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
 
                     it("display provisioning info text", function() {
-                        expect(this.view.$(".instance_type span")).toContainTranslation("instances.sidebar.provisioning")
+                        expect(this.view.$(".instance_type span")).toContainTranslation("instances.sidebar.provisioning");
                     });
 
                     it("doesn't display the edit instance link", function() {
@@ -218,12 +218,12 @@ describe("chorus.views.InstanceListSidebar", function() {
                 beforeEach(function() {
                     expect(this.view.$(".instance_configuration_details")).not.toBeVisible();
                     this.view.$(".tab_control .tabs li[data-name=configuration]").click();
-                })
+                });
 
                 it("shows configuration", function() {
-                    expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden")
-                    expect(this.view.$(".activity_list")).toHaveClass("hidden")
-                })
+                    expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden");
+                    expect(this.view.$(".activity_list")).toHaveClass("hidden");
+                });
 
                 it("shows the database version", function() {
                     expect(this.view.$(".instance_configuration_details")).toContainTranslation("instances.version");
@@ -272,7 +272,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                     });
                 });
-            })
+            });
 
             context("when the instance has a shared account", function() {
                 beforeEach(function() {
@@ -292,7 +292,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
                 it("displays the instance shared account info", function () {
-                    expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"))
+                    expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"));
                 });
 
                 it("displays edit instance link when user is admin", function() {
@@ -303,7 +303,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("displays edit instance link when user is owner", function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})])
+                    this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
                     this.instance.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();

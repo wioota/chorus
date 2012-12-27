@@ -8,14 +8,14 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
 
     it("fetches the workspace's activity", function() {
         expect(this.workspace.activities()).toHaveBeenFetched();
-    })
+    });
 
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace.activities());
             this.server.completeFetchFor(this.view.activityListHeader.insightCount, { numberOfInsight: 5 });
             this.view.render();
-        })
+        });
 
         it("displays the workspace title", function() {
             expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
@@ -23,7 +23,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
 
         it("fills the activityListHeader subview", function() {
             expect(this.view.$(".activity_list_header")).not.toBeEmpty();
-        })
+        });
 
         it("has a truncated text view with the workspace's summary", function() {
             expect(this.view.$(this.view.truncatedSummary.el)).toExist();
@@ -34,7 +34,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             expect(this.view.truncatedSummary.options.attribute).toBe("summary");
             expect(this.view.truncatedSummary.options.extraLine).toBeTruthy();
 
-        })
+        });
 
         it("hides the summary if the workspace does not have one", function() {
             this.view.model.unset("summary");
@@ -46,4 +46,4 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
         });
     });
-})
+});

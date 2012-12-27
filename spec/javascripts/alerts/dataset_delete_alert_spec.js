@@ -8,15 +8,15 @@ describe("chorus.alerts.DatasetDelete", function() {
 
     it("does not re-render when the model changes", function() {
         expect(this.alert.persistent).toBeTruthy();
-    })
+    });
 
     it("has the correct title", function() {
-        expect(this.alert.title).toBe(t("dataset.delete.title", this.model.name()))
-    })
+        expect(this.alert.title).toBe(t("dataset.delete.title", this.model.name()));
+    });
 
     it("has the correct text", function() {
-        expect(this.alert.text).toBe(t("dataset.delete.text"))
-    })
+        expect(this.alert.text).toBe(t("dataset.delete.text"));
+    });
 
     describe("when the alert closes", function() {
         beforeEach(function() {
@@ -49,5 +49,5 @@ describe("chorus.alerts.DatasetDelete", function() {
         it("navigates to the dataset list page", function() {
             expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/" + this.alert.model.get('workspace').id + "/datasets");
         });
-    })
-})
+    });
+});

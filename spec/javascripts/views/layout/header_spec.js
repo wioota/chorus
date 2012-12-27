@@ -84,7 +84,7 @@ describe("chorus.views.Header", function() {
             it("shows all of the unread notifications in the notification popup", function() {
                 expect(this.view.notificationList.collection.length).toBe(6);
                 this.view.unreadNotifications.each(function(notification, index) {
-                    expect(this.view.notificationList.collection.at(index).get("cid")).toEqual(notification.get("cid"))
+                    expect(this.view.notificationList.collection.at(index).get("cid")).toEqual(notification.get("cid"));
                 }, this);
             });
         });
@@ -101,7 +101,7 @@ describe("chorus.views.Header", function() {
                         page: 1,
                         total: 1,
                         records: 2
-                    })
+                    });
             });
 
             it("renders exactly 5 notifications, including read ones if necessary", function() {
@@ -156,7 +156,7 @@ describe("chorus.views.Header", function() {
         });
 
         it("inserts the number of unread notifications into the markup", function() {
-            expect(this.view.$("a.notifications").text().trim()).toBe("2")
+            expect(this.view.$("a.notifications").text().trim()).toBe("2");
         });
 
         it("should have a hidden type ahead search view", function() {
@@ -312,8 +312,8 @@ describe("chorus.views.Header", function() {
 
                 it("dismisses the popup", function() {
                     expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
-                })
-            })
+                });
+            });
         });
 
         xdescribe("notifications", function() {
@@ -375,7 +375,7 @@ describe("chorus.views.Header", function() {
                     });
 
                     it("internally marks the unread notifications as read", function() {
-                        expect(this.view.notificationList.collection.find(function(model) { return model.get("unread") })).toBeUndefined();
+                        expect(this.view.notificationList.collection.find(function(model) { return model.get("unread"); })).toBeUndefined();
                     });
 
                     it("re-renders the notification list subview", function() {
@@ -435,7 +435,7 @@ describe("chorus.views.Header", function() {
 
         describe("the gear menu", function() {
             it("is rendered", function() {
-                expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png")
+                expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png");
             });
 
             it("has a hidden popup menu", function() {
@@ -494,9 +494,9 @@ describe("chorus.views.Header", function() {
 
                 it("dismisses the popup", function() {
                     expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-                })
-            })
-        })
+                });
+            });
+        });
     });
 
     context("when in dev mode", function() {
@@ -537,7 +537,7 @@ describe("chorus.views.Header", function() {
                 this.users.each(function(user, i) {
                     var option = $(".switch_user option").eq(i + 1);
                     expect(option).toContainText(user.displayName());
-                    expect(option.val()).toBe(user.get("username"))
+                    expect(option.val()).toBe(user.get("username"));
                 }, this);
             });
 
@@ -570,7 +570,7 @@ describe("chorus.views.Header", function() {
 
                         it("reloads the current page", function() {
                             expect(chorus.router.reload).toHaveBeenCalled();
-                        })
+                        });
                     });
 
                     context("when the login failed", function() {
@@ -585,6 +585,6 @@ describe("chorus.views.Header", function() {
                     });
                 });
             });
-        })
+        });
     });
 });

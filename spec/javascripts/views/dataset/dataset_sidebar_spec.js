@@ -385,6 +385,51 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             context("when the dataset can be the source of an import", function() {
+                function itHasActionLinks(linkClasses) {
+                    var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
+
+                    context("when the user has permission to update in the workspace", function() {
+                        beforeEach(function() {
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] });
+                            this.view.render();
+                        });
+
+                        _.each(linkClasses, function(linkClass) {
+                            it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
+                                var link = this.view.$("a." + linkClass);
+                                expect(link).toExist();
+                                expect(link.text()).toMatchTranslation("actions." + linkClass);
+                                var dialog = linkClass === "import_now" ? "ImportNow" : "ImportScheduler";
+                                expect(link.data("dialog")).toBe(dialog);
+                            });
+
+                            it("attaches the dataset to the '" + linkClass + "' link", function() {
+                                var link = this.view.$("a." + linkClass);
+                                expect(link.data("dataset")).toBe(this.dataset);
+                            });
+                        });
+
+                        _.each(_.difference(possibleLinkClasses, linkClasses), function(linkClass) {
+                            it("does not have a '" + linkClass + "' link", function() {
+                                expect(this.view.$("a." + linkClass)).not.toExist();
+                            });
+                        });
+                    });
+
+                    context("when the user does not have permission to update things in the workspace", function() {
+                        beforeEach(function() {
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] });
+                            this.view.render();
+                        });
+
+                        _.each(possibleLinkClasses, function(linkClass) {
+                            it("does not have a '" + linkClass + "' link", function() {
+                                expect(this.view.$("a." + linkClass)).not.toExist();
+                            });
+                        });
+                    });
+                }
+
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
@@ -521,50 +566,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
 
             });
-            function itHasActionLinks(linkClasses) {
-                var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
-
-                context("when the user has permission to update in the workspace", function() {
-                    beforeEach(function() {
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] });
-                        this.view.render();
-                    });
-
-                    _.each(linkClasses, function(linkClass) {
-                        it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
-                            var link = this.view.$("a." + linkClass);
-                            expect(link).toExist();
-                            expect(link.text()).toMatchTranslation("actions." + linkClass);
-                            var dialog = linkClass == "import_now" ? "ImportNow" : "ImportScheduler";
-                            expect(link.data("dialog")).toBe(dialog);
-                        });
-
-                        it("attaches the dataset to the '" + linkClass + "' link", function() {
-                            var link = this.view.$("a." + linkClass);
-                            expect(link.data("dataset")).toBe(this.dataset);
-                        });
-                    });
-
-                    _.each(_.difference(possibleLinkClasses, linkClasses), function(linkClass) {
-                        it("does not have a '" + linkClass + "' link", function() {
-                            expect(this.view.$("a." + linkClass)).not.toExist();
-                        });
-                    });
-                });
-
-                context("when the user does not have permission to update things in the workspace", function() {
-                    beforeEach(function() {
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] });
-                        this.view.render();
-                    });
-
-                    _.each(possibleLinkClasses, function(linkClass) {
-                        it("does not have a '" + linkClass + "' link", function() {
-                            expect(this.view.$("a." + linkClass)).not.toExist();
-                        });
-                    });
-                });
-            }
 
             context("when the dataset is a source view", function() {
                 beforeEach(function() {

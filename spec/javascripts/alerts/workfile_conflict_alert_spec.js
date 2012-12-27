@@ -12,7 +12,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
 
     describe("#render", function() {
         it("should show the server message", function() {
-            expect(this.alert.title).toBe(this.message)
+            expect(this.alert.title).toBe(this.message);
         });
 
         it("should not displays the error div", function() {
@@ -53,7 +53,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
             spyOn(this.alert, "closeModal");
             spyOnEvent(this.alert.model, "invalidated");
             this.alert.$("button.cancel").click();
-            this.draft = rspecFixtures.draft({workfileId: this.workfile.get("id")})
+            this.draft = rspecFixtures.draft({workfileId: this.workfile.get("id")});
         });
 
         it("fetches the draft", function() {
@@ -69,16 +69,16 @@ describe("chorus.alerts.WorkfileConflict", function() {
         context("and the fetch returns", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.draft);
-            })
+            });
 
             it("deletes the draft", function() {
                 expect(_.last(this.server.requests).url).toBe(this.draft.url());
                 expect(_.last(this.server.requests).method).toBe("DELETE");
-            })
-        })
+            });
+        });
 
         it("should close the dialog", function() {
             expect(this.alert.closeModal).toHaveBeenCalled();
         });
     });
-})
+});

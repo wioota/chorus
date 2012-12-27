@@ -5,7 +5,7 @@ describe("chorus.views.SearchWorkspace", function() {
                 entityType: "workspace",
                 id: "10000",
                 isDeleted: false,
-                public: false,
+                "public": false,
                 lastUpdatedStamp: "2012-02-24 16:08:32",
                 name: "ws",
                 content: "ws <i>other text</i>",
@@ -36,7 +36,7 @@ describe("chorus.views.SearchWorkspace", function() {
 
         this.model = this.result.workspaces().models[0];
         this.view = new chorus.views.SearchWorkspace({ model: this.model });
-        this.view.render()
+        this.view.render();
     });
 
     it("includes the correct workspace file icon", function() {
@@ -66,7 +66,7 @@ describe("chorus.views.SearchWorkspace", function() {
                     entityType: "workspace",
                     id: "10000",
                     isDeleted: false,
-                    public: false,
+                    "public": false,
                     lastUpdatedStamp: "2012-02-24 16:08:32",
                     name: "ws",
                     content: "<i>that is not highlighted</i>",
@@ -96,11 +96,11 @@ describe("chorus.views.SearchWorkspace", function() {
 
             this.model = this.result.workspaces().models[0];
             this.view = new chorus.views.SearchWorkspace({ model: this.model });
-            this.view.render()
-        })
+            this.view.render();
+        });
 
         it("uses the displaySearchMatchFromSafeField method for the description", function() {
             expect(this.view.$(".description .description_content").html()).toContain("<i>that is not highlighted</i>");
-        })
-    })
+        });
+    });
 });

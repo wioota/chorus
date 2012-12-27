@@ -86,7 +86,7 @@ describe("chorus.views.TaskDataTable", function() {
 
         it("sets up custom scrolling", function() {
             expect($.fn.jScrollPane).toHaveBeenCalled();
-        })
+        });
 
         context("clicking on the jump to left arrow", function() {
             beforeEach(function() {
@@ -108,7 +108,7 @@ describe("chorus.views.TaskDataTable", function() {
             it("keeps all the columns and headers at the same level", function() {
                 expect(this.view.$("div.th:eq(0)").parent().children('.th').length).toBe(4);
                 expect(this.view.$(".column:eq(0)").parent().children('.column').length).toBe(4);
-            })
+            });
         });
 
         describe("enable and disable shuttling", function() {

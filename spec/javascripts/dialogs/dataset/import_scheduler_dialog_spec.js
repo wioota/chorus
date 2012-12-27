@@ -95,7 +95,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(params["dataset_import_schedule[truncate]"]).toBe("false");
                     expect(params["dataset_import_schedule[sample_count]"]).toBe("123");
                     expect(params["dataset_import_schedule[start_datetime]"]).toBe(this.startDatetime.toISOString());
-                    expect(params["dataset_import_schedule[end_date]"]).toBe("2012-03-21")
+                    expect(params["dataset_import_schedule[end_date]"]).toBe("2012-03-21");
                 });
 
                 context("when the date is invalid", function() {

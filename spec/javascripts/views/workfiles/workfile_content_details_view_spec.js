@@ -172,8 +172,8 @@ describe("chorus.views.WorkfileContentDetails", function() {
                     });
 
                     it("renders the menu links", function() {
-                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.replace_current")
-                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.save_new_version")
+                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.replace_current");
+                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.save_new_version");
                         expect(this.saveFileMenu.find("a")).not.toHaveAttr("disabled");
                         // expect($("span.save_file_as_current.disabled", this.saveFileMenu)).not.toExist();
                     });
@@ -214,8 +214,8 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 });
 
                 it("renders the menu links", function() {
-                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.save_selection_new_version")
-                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.replace_current_with_selection")
+                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.save_selection_new_version");
+                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.replace_current_with_selection");
                 });
 
                 context("when the workfile is not the most recent version", function() {
@@ -244,7 +244,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
                     it("displays the saved at text", function() {
                         this.saveSelectionMenu.find("a[data-menu-name='replace']").click();
                         expect(this.view.$("span.auto_save").text()).toContain("Saved at");
-                    })
+                    });
                 });
             });
 
@@ -279,7 +279,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
             var date = new Date(1325880000 * 1000);
             expect(this.view.formatTime(date)).toBe("12:00 PM");
 
-            var date = new Date(1325836800 * 1000);
+            date = new Date(1325836800 * 1000);
             expect(this.view.formatTime(date)).toBe("12:00 AM");
         });
     });

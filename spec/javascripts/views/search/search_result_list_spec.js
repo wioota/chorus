@@ -59,7 +59,7 @@ describe("chorus.views.SearchResultList", function() {
                 context("has no additional results", function() {
                     beforeEach(function() {
                         this.collection.pagination.records = this.collection.models.length;
-                        this.view.render()
+                        this.view.render();
                     });
 
                     it("has a short count", function() {
@@ -74,7 +74,7 @@ describe("chorus.views.SearchResultList", function() {
                 context("has additional results", function() {
                     beforeEach(function() {
                         this.collection.pagination.records = this.collection.models.length + 1;
-                        this.view.render()
+                        this.view.render();
                     });
 
                     it("has a long count", function() {
@@ -85,7 +85,7 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("has a showAll link", function() {
-                        expect(this.view.$("a.show_all")).toContainTranslation("search.show_all")
+                        expect(this.view.$("a.show_all")).toContainTranslation("search.show_all");
                         expect(this.view.$("a.show_all").data("type")).toBe("user");
                     });
 
@@ -115,7 +115,7 @@ describe("chorus.views.SearchResultList", function() {
                             entityType: "user"
                         });
 
-                        this.view.render()
+                        this.view.render();
                     });
 
                     it("does not show the bar or the list", function() {
@@ -123,7 +123,7 @@ describe("chorus.views.SearchResultList", function() {
                     });
                 });
             });
-        })
+        });
 
         context("filtered search results", function() {
             beforeEach(function() {

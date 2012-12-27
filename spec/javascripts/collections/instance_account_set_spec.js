@@ -52,13 +52,13 @@ describe("chorus.collections.InstanceAccountSet", function() {
                 rspecFixtures.instanceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
                 rspecFixtures.instanceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
             ]);
-        })
+        });
         it("sorts by last name, and first name", function() {
             var userNames = this.accountSet.map(function(account) {
-                return account.user().get('firstName')
+                return account.user().get('firstName');
             });
             expect(userNames).toEqual(['sammy', 'barnie', 'fred']);
-        })
+        });
     });
 
     describe("persistedAccountCount", function() {

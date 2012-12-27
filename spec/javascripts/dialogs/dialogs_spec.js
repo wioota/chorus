@@ -13,7 +13,7 @@ describe("chorus.views.Dialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.dialog.render()
+            this.dialog.render();
         });
 
         it("displays the title in the .dialog_header", function() {
@@ -80,7 +80,7 @@ describe("chorus.views.Dialog", function() {
             this.dialog.$("button.cancel").click();
         });
         it("dismisses the dialog", function(){
-            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+            expect("close.facebox").toHaveBeenTriggeredOn($(document));
         });
     });
 });

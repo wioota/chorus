@@ -20,7 +20,7 @@ describe("chorus.views.ReadOnlyWorkfileContentDetails", function() {
 
         it("explains the workfile is not editable", function() {
             expect(this.view.$(".not_previewable")).toContainTranslation("workfile.not_previewable");
-        })
+        });
     });
 
     describe("ArchivedWorkfileContentDetails subclass", function() {
@@ -31,7 +31,7 @@ describe("chorus.views.ReadOnlyWorkfileContentDetails", function() {
 
         it("explains the workfile is not editable", function() {
             expect(this.view.$(".not_previewable")).toContainTranslation("workfile.workspace_archived");
-        })
+        });
     });
 });
 

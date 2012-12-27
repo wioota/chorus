@@ -12,7 +12,7 @@ describe("chorus.Mixins.dbHelpers", function() {
             context("when the name matches chorus.ValidationRegexes.SafePgName", function() {
                 beforeEach(function() {
                     chorus.ValidationRegexes = {
-                        SafePgName: function() { return /.*/; }
+                        SafePgName: function() { return (/.*/); }
                     };
                 });
 
@@ -24,7 +24,7 @@ describe("chorus.Mixins.dbHelpers", function() {
             context("when the name does not match chorus.ValidationRegexes.SafePgName", function() {
                 beforeEach(function() {
                     chorus.ValidationRegexes = {
-                        SafePgName: function() { return /no match/; }
+                        SafePgName: function() { return (/no match/); }
                     };
                 });
 

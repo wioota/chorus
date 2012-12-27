@@ -21,11 +21,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         });
 
         it("shows the 'Run File' button", function() {
-            expect(this.view.$('button.run_file')).toContainTranslation('workfile.content_details.run_file')
+            expect(this.view.$('button.run_file')).toContainTranslation('workfile.content_details.run_file');
         });
 
         it("shows the execution schema name", function() {
-            expect(this.view.$(".execution_schema")).toContainText(this.model.executionSchema().canonicalName())
+            expect(this.view.$(".execution_schema")).toContainText(this.model.executionSchema().canonicalName());
         });
 
         it("puts the shortcuts next to the menu items", function() {
@@ -87,7 +87,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     expect(this.view.$(".save button")).not.toBeDisabled();
                 });
             });
-        })
+        });
 
         context("when the user has not selected any text", function() {
             beforeEach(function() {
@@ -99,7 +99,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             context("and opens the Run File menu", function() {
                 beforeEach(function() {
-                    this.view.$(".run_file").click()
+                    this.view.$(".run_file").click();
                 });
 
                 it("disables the 'run selected sql' links in the menu", function() {
@@ -205,11 +205,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("opening the Run File menu", function() {
             beforeEach(function() {
-                this.view.$(".run_file").click()
+                this.view.$(".run_file").click();
             });
 
             it("shows the 'run in another' schema link in the menu", function() {
-                expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
+                expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema");
             });
 
 
@@ -264,7 +264,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     var modalSpy = stubModals();
                     this.qtipElement.find('.run_other_schema').click();
                     expect(modalSpy).toHaveModal(chorus.dialogs.RunFileInSchema);
-                })
+                });
             });
 
             context("it fires an event - editorSelectionStatus", function() {
@@ -276,7 +276,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
 
                 it("broadcast the event", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:editorSelectionStatus")
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:editorSelectionStatus");
                 });
             });
         });
@@ -299,7 +299,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             context("does not update model if executionSchema is nil", function() {
                 beforeEach(function() {
                     this.executionSchema = null;
-                    this.oldSchema = this.view.model.get("executionSchema")
+                    this.oldSchema = this.view.model.get("executionSchema");
                 });
                 it("updates the execution schema in the workfile", function() {
                     expect(this.view.model.get("executionSchema")).toBe(this.oldSchema);

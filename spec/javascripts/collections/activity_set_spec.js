@@ -8,7 +8,7 @@ describe("chorus.collections.ActivitySet", function() {
             context("and collection is for the dashboard", function() {
                 it("returns the url for fetching all insights", function() {
                     expect(this.collection.url()).toHaveUrlPath("/insights");
-                    expect(this.collection.url()).toContainQueryParams({entity_type : "dashboard"})
+                    expect(this.collection.url()).toContainQueryParams({entity_type : "dashboard"});
                 });
             });
 
@@ -16,7 +16,7 @@ describe("chorus.collections.ActivitySet", function() {
                 it("returns the url for fetching insights belonging to a workspace", function() {
                     this.collection.attributes.entity = rspecFixtures.workspace({ id: 21 });
                     expect(this.collection.url()).toHaveUrlPath("/insights");
-                    expect(this.collection.url()).toContainQueryParams({entityType : "workspace", entityId: 21})
+                    expect(this.collection.url()).toContainQueryParams({entityType : "workspace", entityId: 21});
                 });
             });
 
@@ -35,16 +35,16 @@ describe("chorus.collections.ActivitySet", function() {
                     name : "test.csv"
                 });
 
-                activities = new chorus.collections.ActivitySet([], {entity: model} );
+                var activities = new chorus.collections.ActivitySet([], {entity: model} );
                 expect(activities.url()).toContain("/activities?entity_type=hdfs_file&entity_id=8789" );
             });
         });
 
         context("for a non-hdfs model type", function () {
             it("includes the entity_type and the id of the model", function() {
-                model = new chorus.models.Base({id: 1});
+                var model = new chorus.models.Base({id: 1});
                 model.entityType = "hello";
-                activities = new chorus.collections.ActivitySet([], {entity: model} );
+                var activities = new chorus.collections.ActivitySet([], {entity: model} );
                 expect(activities.url()).toContain("/activities?entity_type=hello&entity_id=" + model.id );
             });
         });
@@ -53,7 +53,7 @@ describe("chorus.collections.ActivitySet", function() {
             it("doesn't throw an error, even though HdfsEntry doesn't have a url (to keep other specs passing)", function() {
                 var model = new chorus.models.HdfsEntry();
                 expect(function() {
-                    new chorus.collections.ActivitySet([], {entity: model} );
+                    return new chorus.collections.ActivitySet([], {entity: model} );
                 }).not.toThrow();
             });
         });
@@ -64,7 +64,7 @@ describe("chorus.collections.ActivitySet", function() {
             spyOn(chorus.collections.ActivitySet.prototype, "reindexErrors");
             this.collection = new chorus.collections.ActivitySet([]);
             this.collection.trigger("reset");
-            expect(this.collection.reindexErrors).toHaveBeenCalled()
+            expect(this.collection.reindexErrors).toHaveBeenCalled();
         });
     });
 

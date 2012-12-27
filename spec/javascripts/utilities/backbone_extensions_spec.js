@@ -160,6 +160,8 @@ describe("backbone_extensions", function() {
     });
 
     describe("_super", function() {
+        var Friend, Animal, Mammal, Pet, Dog, CockerSpaniel;
+
         function itCallsTheOverriddenMethodCorrectly() {
             it("passes the given arguments to the overridden method", function() {
                 var greeting = this.friend.greet("Barbara", "morning");
@@ -183,8 +185,6 @@ describe("backbone_extensions", function() {
                 expect(this.friend.greet("Barbara", "morning")).toBe(greeting);
             });
         }
-
-        var Friend, Animal, Mammal, Pet, Dog, CockerSpaniel;
 
         beforeEach(function() {
             Friend = Backbone.Model.extend({

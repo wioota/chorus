@@ -46,14 +46,14 @@ describe("chorus.views.WorkfileList", function() {
             this.view = new chorus.views.WorkfileList({collection: this.collection});
             spyOn(this.view.collection, "fetch");
             this.view.filter("sql");
-        })
+        });
 
         it("should set the filter attribute", function() {
-            expect(this.view.collection.attributes.type).toBe("sql")
-        })
+            expect(this.view.collection.attributes.type).toBe("sql");
+        });
 
         it("should call fetch", function() {
             expect(this.view.collection.fetch).toHaveBeenCalled();
-        })
+        });
     });
 });

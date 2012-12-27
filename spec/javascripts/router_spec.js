@@ -1,8 +1,8 @@
 describe("chorus.router", function() {
     describe("generateRouteCallback", function() {
         beforeEach(function() {
-            this.chorus = new Chorus();
-            this.backboneSpy = spyOn(Backbone.history, "start")
+            this.chorus = new window.Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
             spyOn(window, "scroll");
             spyOn(chorus.PageEvents, "reset");
@@ -58,7 +58,7 @@ describe("chorus.router", function() {
                 });
 
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
-                    expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" })
+                    expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" });
                     expect(this.chorus.pageOptions).toBeUndefined();
                 });
             });
@@ -109,13 +109,13 @@ describe("chorus.router", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl").andCallThrough();
             spyOn(Backbone.history, "navigate").andCallThrough();
-            this.chorus = new Chorus();
-            this.backboneSpy = spyOn(Backbone.history, "start")
+            this.chorus = new window.Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
             var session = this.chorus.session;
             spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
                 options.success(session, { status: "ok" });
-            })
+            });
         });
 
         it("renders the page with parameters", function() {
@@ -194,16 +194,16 @@ describe("chorus.router", function() {
 
     describe("url decoding", function() {
         beforeEach(function() {
-            setLoggedInUser()
-            this.chorus = new Chorus();
-            this.backboneSpy = spyOn(Backbone.history, "start")
+            setLoggedInUser();
+            this.chorus = new window.Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
             var session = this.chorus.session;
             spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
                 options.success(session, { status: "ok" });
             });
 
-            spyOn(chorus.pages.SearchIndexPage.prototype, "setup").andCallThrough()
+            spyOn(chorus.pages.SearchIndexPage.prototype, "setup").andCallThrough();
         });
 
         it("does not decode fragments before matching routes", function() {

@@ -27,12 +27,12 @@ describe("chorus.views.UserList", function() {
             it("displays the users' names", function() {
                 _.each(this.view.$("a.name span"), function(el) {
                     expect($(el).text().trim()).not.toBeEmpty();
-                })
-            })
+                });
+            });
 
             it("displays the users' title", function() {
                 expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
-            })
+            });
 
             it("sets title attributes", function() {
                 var self = this;
@@ -40,8 +40,8 @@ describe("chorus.views.UserList", function() {
                 _.each(this.view.$("a.name span"), function(el, index) {
                     var model = self.collection.at(index);
                     expect($(el).attr("title")).toBe([model.get("firstName"), model.get("lastName")].join(' '));
-                })
-            })
+                });
+            });
 
             it("displays the Administrator tag for admin users", function() {
                 expect(this.view.$("li[data-userId=10001] .administrator")).toExist();
@@ -79,5 +79,5 @@ describe("chorus.views.UserList", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", user);
             });
         });
-    })
+    });
 });

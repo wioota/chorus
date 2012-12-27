@@ -7,7 +7,7 @@ describe("chorus.views.ShuttleWidget", function() {
         ]);
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
         this.nonRemovableItems = [this.collection.get("10000")];
-        this.nonRemovableText = "RockSteady"
+        this.nonRemovableText = "RockSteady";
         this.view = new chorus.views.ShuttleWidget(
             { collection : this.collection,
               selectionSource : this.selectedItems,
@@ -39,7 +39,7 @@ describe("chorus.views.ShuttleWidget", function() {
 
         it("adds the non_removable class to the appropriate available items", function() {
             expect(this.view.$("ul.available li.non_removable").length).toBe(this.nonRemovableItems.length);
-        })
+        });
 
         it("renders the model image in an li", function() {
            expect(this.view.$("ul.available li:eq(0) .profile").attr("src")).toBe(this.collection.get("10000").fetchImageUrl());
@@ -132,8 +132,8 @@ describe("chorus.views.ShuttleWidget", function() {
             });
 
             it("does not remove the owner", function() {
-               expect(this.view.$('ul.selected li.non_removable.added').length).toBe(1)
-               expect(this.view.$('ul.available li.non_removable.added').length).toBe(1)
+               expect(this.view.$('ul.selected li.non_removable.added').length).toBe(1);
+               expect(this.view.$('ul.available li.non_removable.added').length).toBe(1);
             });
 
             it("removes all the other members", function() {

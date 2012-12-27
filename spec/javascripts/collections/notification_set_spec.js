@@ -5,22 +5,22 @@ describe("chorus.collections.NotificationSet", function() {
 
     it("is composed of notifications", function() {
         expect(this.collection.model).toBe(chorus.models.Notification);
-    })
+    });
 
     describe("#url", function() {
         context("when constructed with no type option", function() {
             it("is correct", function() {
-                expect(this.collection.url()).toHaveUrlPath("/notifications")
+                expect(this.collection.url()).toHaveUrlPath("/notifications");
             });
         });
 
         context("when constructed with a type option", function() {
             beforeEach(function() {
-                this.collection = fixtures.notificationSet([], { type: "unread" })
+                this.collection = fixtures.notificationSet([], { type: "unread" });
             });
 
             it("is correct", function() {
-                expect(this.collection.url()).toMatchUrl("/notifications?type=unread", { paramsToIgnore: ["page", "per_page" ]})
+                expect(this.collection.url()).toMatchUrl("/notifications?type=unread", { paramsToIgnore: ["page", "per_page" ]});
             });
         });
     });
@@ -89,12 +89,12 @@ describe("chorus.collections.NotificationSet", function() {
 
         it("does not make any requests", function() {
             expect(this.server.requests.length).toBe(0);
-        })
+        });
 
         it("calls the success function", function() {
             expect(this.successSpy).toHaveBeenCalled();
-        })
-    })
+        });
+    });
 
     describe("#markAllRead with unread notifications", function() {
         beforeEach(function() {

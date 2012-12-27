@@ -9,10 +9,10 @@ describe("chorus.views.WorkspaceList", function() {
             summary: " this is an archived workspace"
         });
 
-        this.publicWorkspace = new chorus.models.Workspace({id: 4, public: true, name: "my public workspace"});
+        this.publicWorkspace = new chorus.models.Workspace({id: 4, "public": true, name: "my public workspace"});
         this.privateWorkspace = new chorus.models.Workspace({
             id: 3,
-            public: false,
+            "public": false,
             archivedAt: null,
             ownerFirstName: "Dr",
             ownerLastName: "Mario",
@@ -51,7 +51,7 @@ describe("chorus.views.WorkspaceList", function() {
 
         it("has class selectable", function() {
             expect($(this.view.el)).toHaveClass("selectable");
-        })
+        });
 
         it("displays all the workspaces", function() {
             expect(this.view.$("li").length).toBe(5);
@@ -62,8 +62,8 @@ describe("chorus.views.WorkspaceList", function() {
 
             _.each(this.view.$("a.name span"), function(el, index) {
                 expect($(el).attr("title")).toBe(self.collection.at(index).get("name"));
-            })
-        })
+            });
+        });
 
         it("links the workspace name to the show url", function() {
             expect($("a.name span", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
@@ -109,7 +109,7 @@ describe("chorus.views.WorkspaceList", function() {
 
             it("displays archived relative time", function() {
                 var dateFormat = Date.formatForApi((2).hours().ago());
-                this.archivedWorkspace.set({"archivedAt": dateFormat})
+                this.archivedWorkspace.set({"archivedAt": dateFormat});
                 this.view.render();
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });

@@ -13,7 +13,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 }
             }
         });
-        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function() {return this.schema}, this));
+        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function() {return this.schema;}, this));
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
@@ -41,7 +41,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
         it("declares hotkeys", function() {
             expect(this.view.hotkeys.r).toBeDefined();
-        })
+        });
     });
 
     describe("hotkeys", function() {
@@ -77,7 +77,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("file:runInSchema", {
                         schemaId: '6'
-                    })
+                    });
                 });
 
                 it("creates a task with the right parameters", function() {
@@ -99,7 +99,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                             databaseName: "rob",
                             schemaId: '6',
                             schemaName: "louis"
-                        }
+                        };
 
                         chorus.PageEvents.broadcast("file:runCurrent");
                     });
@@ -126,8 +126,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
-                            this.spy = jasmine.createSpy()
-                            chorus.PageEvents.subscribe("workfile:executed", this.spy)
+                            this.spy = jasmine.createSpy();
+                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
                             this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults());
                         });
 
@@ -170,12 +170,12 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
-                            this.spy = jasmine.createSpy()
-                            chorus.PageEvents.subscribe("workfile:executed", this.spy)
+                            this.spy = jasmine.createSpy();
+                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
                             this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
                                 executionInfo: this.executionInfo
                             });
-                        })
+                        });
 
                         it("broadcasts file:executionFailed", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.WorkfileExecutionTask));
@@ -187,14 +187,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                         it("broadcasts workfile:executed", function() {
                             expect(this.spy).toHaveBeenCalledWith(this.workfile, this.executionInfo);
-                        })
+                        });
                     });
 
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
                             chorus.PageEvents.broadcast.reset();
                             this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } }, {});
-                        })
+                        });
 
                         it("broadcasts file:executionFailed", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.WorkfileExecutionTask));
@@ -206,7 +206,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                         it("does not broadcast workfile:executed", function() {
                             expect(chorus.PageEvents.broadcast.callCount).toBe(1);
-                        })
+                        });
                     });
                 });
 

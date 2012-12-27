@@ -1,4 +1,169 @@
 describe("chorus.dialogs.Visualization", function() {
+    function itDoesNotShowRefreshOverlay() {
+        it("does not show refresh overlay", function() {
+            expect(this.dialog.$('.overlay')).toHaveClass('hidden');
+        });
+    }
+
+    function itReturnsToOriginalState() {
+        it("hides the overlay", function() {
+            expect(this.dialog.$('.overlay')).toHaveClass("hidden");
+        });
+
+        it("stops the spinner on the refresh button", function() {
+            expect(this.dialog.$('button.refresh').isLoading()).toBeFalsy();
+        });
+
+        it("swaps out the buttons", function() {
+            expect(this.dialog.$('button.refresh')).toHaveClass('hidden');
+            expect(this.dialog.$('button.save')).not.toHaveClass('hidden');
+            expect(this.dialog.$('button.revert')).toHaveClass('hidden');
+            expect(this.dialog.$('button.stop')).toHaveClass('hidden');
+            expect(this.dialog.$('button.close_dialog')).not.toHaveClass('hidden');
+        });
+    }
+
+    function itShowsThatOptionsHaveChanged() {
+        it("overlays some stuff on the chart", function() {
+            expect(this.dialog.$('.overlay')).not.toHaveClass('hidden');
+            expect(this.dialog.$(".overlay")).not.toHaveClass("disabled");
+            expect(this.dialog.$('.overlay')).toContainTranslation("visualization.overlay");
+        });
+
+        it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
+            expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
+            expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh");
+            expect(this.dialog.$('button.save')).toHaveClass('hidden');
+        });
+
+        it("swaps out the 'Close' button for a 'Revert' button", function() {
+            expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
+            expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert");
+            expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
+        });
+    }
+
+    function itRespondsToFilterUpdates() {
+        itShowsThatOptionsHaveChanged();
+
+        it("refreshes the chart when clicking the 'refresh visualization' button", function() {
+            this.dialog.$("button.refresh").click();
+            expect(this.dialog.refreshChart).toHaveBeenCalled();
+        });
+
+        it("refreshes the chart when clicking the overlay", function() {
+            this.dialog.$(".overlay").click();
+            expect(this.dialog.refreshChart).toHaveBeenCalled();
+        });
+
+        describe("clicking the revert button", function() {
+            beforeEach(function() {
+                this.dialog.$("button.revert").click();
+            });
+
+            it("sets the filters as they were when the dialog was initialized", function() {
+                var valueInputs = this.dialog.$(".filter_options li .default input");
+                expect(valueInputs.eq(0).val()).toBe("original_filter_value_a");
+                expect(valueInputs.eq(1).val()).toBe("original_filter_value_b");
+            });
+
+            itReturnsToOriginalState();
+        });
+
+        describe("#refreshChart", function() {
+            beforeEach(function() {
+                this.server.reset();
+                spyOn(this.dialog.filters, "sqlStrings").andReturn(["newSql"]);
+                spyOn(this.dialog, "drawChart").andCallThrough();
+                this.dialog.refreshChart();
+            });
+
+            it("submits a new task", function() {
+                expect(this.server.lastCreate().url).toBe(this.dialog.task.url());
+                expect(this.dialog.$('button.refresh').isLoading()).toBeTruthy();
+                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refreshing");
+            });
+
+            it("disables clicking the overlay", function() {
+                this.dialog.refreshChart.reset();
+                this.dialog.$(".overlay").click();
+                expect(this.dialog.$(".overlay")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".overlay")).toHaveClass("disabled");
+                expect(this.dialog.refreshChart).not.toHaveBeenCalled();
+            });
+
+            it("shows the cancel button and hides the revert button", function() {
+                expect(this.dialog.$("button.revert")).toHaveClass("hidden");
+                expect(this.dialog.$("button.stop")).not.toHaveClass("hidden");
+                expect(this.dialog.$("button.stop")).toContainTranslation("actions.cancel");
+            });
+
+            it("updates the task sql", function() {
+                expect(this.dialog.task.get("filters")).toEqual(["newSql"]);
+            });
+
+            describe("clicking the 'cancel' button", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.task, 'cancel').andCallThrough();
+                    this.dialog.$("button.stop").click();
+                });
+
+                it("cancels the task", function() {
+                    expect(this.dialog.task.cancel).toHaveBeenCalled();
+                });
+
+                describe("when the cancel completes", function() {
+                    beforeEach(function() {
+                        this.server.lastDestroy().succeed();
+                    });
+
+                    itShowsThatOptionsHaveChanged();
+                });
+            });
+
+            context("and the task save completes", function() {
+                beforeEach(function() {
+                    this.server.completeSaveFor(this.dialog.task);
+                });
+
+                it("re-draws the chart", function() {
+                    expect(this.dialog.drawChart).toHaveBeenCalled();
+                });
+
+                it("re-draws the result console table", function() {
+                    expect(this.dialog.$(".data_table .td").length).not.toBe(0);
+                });
+
+                it("does not hide the filter options", function() {
+                    expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
+                });
+
+                itReturnsToOriginalState();
+
+                describe("changing the filters again and clicking 'revert'", function() {
+                    beforeEach(function() {
+                        this.dialog.filters.sqlStrings.andCallThrough();
+                        this.previousSqlstring = this.dialog.filters.sqlStrings();
+                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
+                        expect(this.dialog.filters.sqlStrings()).not.toBe(this.previousSqlstring);
+                    });
+
+                    it("returns the filters to their last saved state", function() {
+                        this.dialog.$("button.revert").click();
+                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
+                    });
+
+                    it("can be used multiple times in a row without saving", function() {
+                        this.dialog.$("button.revert").click();
+                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
+                        this.dialog.$("button.revert").click();
+                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
+                    });
+                });
+            });
+        });
+    }
+
     beforeEach(function() {
         this.qtip = stubQtip();
         this.modalSpy = stubModals();
@@ -744,169 +909,4 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.task.get('filters').length).toBe(2);
         });
     });
-
-    function itDoesNotShowRefreshOverlay() {
-        it("does not show refresh overlay", function() {
-            expect(this.dialog.$('.overlay')).toHaveClass('hidden');
-        });
-    }
-
-    function itRespondsToFilterUpdates() {
-        itShowsThatOptionsHaveChanged();
-
-        it("refreshes the chart when clicking the 'refresh visualization' button", function() {
-            this.dialog.$("button.refresh").click();
-            expect(this.dialog.refreshChart).toHaveBeenCalled();
-        });
-
-        it("refreshes the chart when clicking the overlay", function() {
-            this.dialog.$(".overlay").click();
-            expect(this.dialog.refreshChart).toHaveBeenCalled();
-        });
-
-        describe("clicking the revert button", function() {
-            beforeEach(function() {
-                this.dialog.$("button.revert").click();
-            });
-
-            it("sets the filters as they were when the dialog was initialized", function() {
-                var valueInputs = this.dialog.$(".filter_options li .default input");
-                expect(valueInputs.eq(0).val()).toBe("original_filter_value_a");
-                expect(valueInputs.eq(1).val()).toBe("original_filter_value_b");
-            });
-
-            itReturnsToOriginalState();
-        });
-
-        describe("#refreshChart", function() {
-            beforeEach(function() {
-                this.server.reset();
-                spyOn(this.dialog.filters, "sqlStrings").andReturn(["newSql"]);
-                spyOn(this.dialog, "drawChart").andCallThrough();
-                this.dialog.refreshChart();
-            });
-
-            it("submits a new task", function() {
-                expect(this.server.lastCreate().url).toBe(this.dialog.task.url());
-                expect(this.dialog.$('button.refresh').isLoading()).toBeTruthy();
-                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refreshing");
-            });
-
-            it("disables clicking the overlay", function() {
-                this.dialog.refreshChart.reset();
-                this.dialog.$(".overlay").click();
-                expect(this.dialog.$(".overlay")).not.toHaveClass("hidden");
-                expect(this.dialog.$(".overlay")).toHaveClass("disabled");
-                expect(this.dialog.refreshChart).not.toHaveBeenCalled();
-            });
-
-            it("shows the cancel button and hides the revert button", function() {
-                expect(this.dialog.$("button.revert")).toHaveClass("hidden");
-                expect(this.dialog.$("button.stop")).not.toHaveClass("hidden");
-                expect(this.dialog.$("button.stop")).toContainTranslation("actions.cancel");
-            });
-
-            it("updates the task sql", function() {
-                expect(this.dialog.task.get("filters")).toEqual(["newSql"]);
-            });
-
-            describe("clicking the 'cancel' button", function() {
-                beforeEach(function() {
-                    spyOn(this.dialog.task, 'cancel').andCallThrough();
-                    this.dialog.$("button.stop").click();
-                });
-
-                it("cancels the task", function() {
-                    expect(this.dialog.task.cancel).toHaveBeenCalled();
-                });
-
-                describe("when the cancel completes", function() {
-                    beforeEach(function() {
-                        this.server.lastDestroy().succeed();
-                    });
-
-                    itShowsThatOptionsHaveChanged();
-                });
-            });
-
-            context("and the task save completes", function() {
-                beforeEach(function() {
-                    this.server.completeSaveFor(this.dialog.task);
-                });
-
-                it("re-draws the chart", function() {
-                    expect(this.dialog.drawChart).toHaveBeenCalled();
-                });
-
-                it("re-draws the result console table", function() {
-                    expect(this.dialog.$(".data_table .td").length).not.toBe(0);
-                });
-
-                it("does not hide the filter options", function() {
-                   expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
-                });
-
-                itReturnsToOriginalState();
-
-                describe("changing the filters again and clicking 'revert'", function() {
-                    beforeEach(function() {
-                        this.dialog.filters.sqlStrings.andCallThrough();
-                        this.previousSqlstring = this.dialog.filters.sqlStrings();
-                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
-                        expect(this.dialog.filters.sqlStrings()).not.toBe(this.previousSqlstring);
-                    });
-
-                    it("returns the filters to their last saved state", function() {
-                        this.dialog.$("button.revert").click();
-                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
-                    });
-
-                    it("can be used multiple times in a row without saving", function() {
-                        this.dialog.$("button.revert").click();
-                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
-                        this.dialog.$("button.revert").click();
-                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
-                    });
-                });
-            });
-        });
-
-        function itReturnsToOriginalState() {
-            it("hides the overlay", function() {
-                expect(this.dialog.$('.overlay')).toHaveClass("hidden");
-            });
-
-            it("stops the spinner on the refresh button", function() {
-                expect(this.dialog.$('button.refresh').isLoading()).toBeFalsy();
-            });
-
-            it("swaps out the buttons", function() {
-                expect(this.dialog.$('button.refresh')).toHaveClass('hidden');
-                expect(this.dialog.$('button.save')).not.toHaveClass('hidden');
-                expect(this.dialog.$('button.revert')).toHaveClass('hidden');
-                expect(this.dialog.$('button.stop')).toHaveClass('hidden');
-                expect(this.dialog.$('button.close_dialog')).not.toHaveClass('hidden');
-            });
-        }
-
-        function itShowsThatOptionsHaveChanged() {
-            it("overlays some stuff on the chart", function() {
-                expect(this.dialog.$('.overlay')).not.toHaveClass('hidden');
-                expect(this.dialog.$(".overlay")).not.toHaveClass("disabled");
-                expect(this.dialog.$('.overlay')).toContainTranslation("visualization.overlay");
-            });
-
-            it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
-                expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
-                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh");
-                expect(this.dialog.$('button.save')).toHaveClass('hidden');
-            });
-
-            it("swaps out the 'Close' button for a 'Revert' button", function() {
-                expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
-                expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert");
-                expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
-            });
-        }
-    }
 });

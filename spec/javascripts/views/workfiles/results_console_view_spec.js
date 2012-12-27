@@ -109,6 +109,253 @@ describe("chorus.views.ResultsConsoleView", function() {
         });
 
         describe("file:executionStarted", function() {
+            function itRemovesExecutionUI(shouldCancelTimers) {
+                it("removes the executing class", function() {
+                    expect(this.view.$(".right")).not.toHaveClass("executing");
+                });
+
+                it("hides the spinner", function() {
+                    expect(this.view.$(".spinner")).toHaveClass("hidden");
+                    expect(this.view.$(".spinner").isLoading()).toBeFalsy();
+                });
+
+                if (shouldCancelTimers) {
+                    it("stops updating the elapsed time", function() {
+                        expect(window.clearInterval).toHaveBeenCalled();
+                    });
+                }
+
+                it("clears timer ids", function() {
+                    expect(this.view.elapsedTimer).toBeUndefined();
+                });
+            }
+
+            function itCanExpandAndCollapseTheResults(tableShouldHaveClass, tableShouldNotHaveClass) {
+                describe("clicking the expander arrow when it points up", function() {
+                    beforeEach(function() {
+                        this.view.$(".arrow").click();
+                    });
+
+                    it("collapses the result table", function() {
+                        expect(this.view.$(".controls")).toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                        expect(this.view.$('.data_table').css("height")).toBe("0px");
+                    });
+
+                    it("makes the arrow point down", function() {
+                        expect(this.view.$(".arrow")).not.toHaveClass("up");
+                        expect(this.view.$(".arrow")).toHaveClass("down");
+                        expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                    });
+
+                    it("hides the minimize/maximize links", function() {
+                        expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
+                    });
+
+                    describe("clicking the arrow when it points down", function() {
+                        beforeEach(function() {
+                            this.view.$(".arrow").click();
+                        });
+                        it("restores the result table", function() {
+                            expect(this.view.$(".controls")).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).toHaveClass(tableShouldHaveClass);
+                            expect(this.view.$('.result_table')).not.toHaveClass(tableShouldNotHaveClass);
+                        });
+
+                        it("makes the arrow point up", function() {
+                            expect(this.view.$(".arrow")).toHaveClass("up");
+                            expect(this.view.$(".arrow")).not.toHaveClass("down");
+                            expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                        });
+
+                        it("restores the minimize/maximize link", function() {
+                            var selector1 = "." + tableShouldHaveClass.slice(0, -1);
+                            var selector2 = "." + tableShouldNotHaveClass.slice(0, -1);
+                            expect(this.view.$(selector1)).toHaveClass("hidden");
+                            expect(this.view.$(selector2)).not.toHaveClass("hidden");
+                        });
+                    });
+                });
+            }
+
+            function itShowsExecutionResults() {
+
+                it("renders a task data table with the given task", function() {
+                    expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
+                    expect(this.view.dataTable.model).toBe(this.task);
+                    expect($(this.view.el)).toContain(this.view.dataTable.el);
+                });
+
+                it("displays the result table", function() {
+                    expect(this.view.$('.result_table')).not.toHaveClass("hidden");
+                });
+
+                it("renders only one data table", function() {
+                    expect(this.view.$(".result_table .data_table").length).toBe(1);
+                });
+
+                it("shows the control section", function() {
+                    expect(this.view.$(".controls")).not.toHaveClass("hidden");
+                });
+
+                context("when another execution completed event occurs", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
+                    });
+
+                    it("still renders only one data table", function() {
+                        expect(this.view.$(".result_table .data_table").length).toBe(1);
+                    });
+                });
+
+                it("changes the state of the result table to 'minimized'", function() {
+                    expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                    expect(this.view.$('.result_table')).toHaveClass("minimized");
+                    expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                });
+
+                it("renders the maximize link", function() {
+                    expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                    expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                });
+
+                it("shows the bottom gutter (with the expander button)", function() {
+                    expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                });
+
+                specify("the expander button arrow points up", function() {
+                    expect(this.view.$(".arrow")).toHaveClass("up");
+                    expect(this.view.$(".arrow")).not.toHaveClass("down");
+                });
+
+                describe("clicking the maximize link", function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
+                        spyOn(this.view, "recalculateScrolling");
+                        this.view.$("a.maximize").click();
+                    });
+
+                    it("hides the maximize link and shows the minimize link", function() {
+                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
+                        expect(this.view.$("a.minimize")).not.toHaveClass("hidden");
+                    });
+
+                    it("changes the state of the result table to 'minimized'", function() {
+                        expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).toHaveClass("maximized");
+                    });
+
+                    it("recalculates scrolling", function() {
+                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
+                    });
+
+                    specify("the expander button arrow points up", function() {
+                        expect(this.view.$(".arrow")).toHaveClass("up");
+                        expect(this.view.$(".arrow")).not.toHaveClass("down");
+                    });
+
+                    it("sets .data_table height to use the full viewport", function() {
+                        expect(this.view.$(".data_table").css("height")).toBe("777px");
+                    });
+
+                    itCanExpandAndCollapseTheResults("maximized", "minimized");
+
+                    describe("clicking the minimize link", function() {
+                        beforeEach(function() {
+                            this.view.recalculateScrolling.reset();
+                            this.view.$("a.minimize").click();
+                        });
+
+                        it("hides the minimize link and shows the maximize link", function() {
+                            expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                            expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                        });
+
+                        it("changes the state of the result table to 'minimized'", function() {
+                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).toHaveClass("minimized");
+                            expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                        });
+
+                        it("recalculates scrolling", function() {
+                            expect(this.view.recalculateScrolling).toHaveBeenCalled();
+                        });
+
+
+                        specify("the expander button arrow points up", function() {
+                            expect(this.view.$(".arrow")).toHaveClass("up");
+                            expect(this.view.$(".arrow")).not.toHaveClass("down");
+                        });
+
+                        it("does not keep the maxmized height", function() {
+                            expect(this.view.$(".data_table").css("height")).not.toBe("777px");
+                        });
+
+                    });
+                });
+
+                describe("getDesiredDataTableHeight", function() {
+                    it("incorporates the footerSize passed to the view as a function", function() {
+                        var originalSize = this.view.getDesiredDataTableHeight();
+                        this.view.options.footerSize = function() {
+                            return 10;
+                        };
+                        expect(this.view.getDesiredDataTableHeight()).toBe(originalSize - 10);
+                    });
+                });
+
+                describe("clicking the download link", function() {
+                    context("with the show download dialog option", function() {
+                        beforeEach(function() {
+                            this.modalSpy = stubModals();
+                            spyOn($, "fileDownload");
+                            this.view.showDownloadDialog = true;
+                            this.view.dataset = rspecFixtures.dataset();
+                            this.view.$("a.download_csv").click();
+                        });
+
+                        it("should launch the dialog", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
+                        });
+
+                        it("should not have called $.fileDownload", function() {
+                            expect($.fileDownload).not.toHaveBeenCalled();
+                        });
+
+                        it("should have a page model for the dataset download dialog", function() {
+                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.Dataset);
+                        });
+                    });
+
+                    context("without the show download dialog option", function() {
+                        beforeEach(function() {
+                            spyOn($, "fileDownload");
+                            this.view.showDownloadDialog = false;
+                            this.view.$("a.download_csv").click();
+                        });
+
+                        it("starts the file download", function() {
+                            var content = new chorus.utilities.CsvWriter(
+                                _.pluck(this.view.resource.getColumns(), "name"), this.view.resource.getRows()).toCsv();
+                            expect($.fileDownload).toHaveBeenCalledWith("/download_data",
+                                {
+                                    data: {
+                                        content: content,
+                                        filename: this.view.resource.name()+'.csv',
+                                        mime_type: "text/csv"
+                                    },
+                                    httpMethod: "post"
+                                });
+                        });
+                    });
+                });
+            }
+
             beforeEach(function() {
                 this.clock = this.useFakeTimers();
                 spyOn(window, "clearInterval");
@@ -329,253 +576,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
                 });
             });
-
-            function itRemovesExecutionUI(shouldCancelTimers) {
-                it("removes the executing class", function() {
-                    expect(this.view.$(".right")).not.toHaveClass("executing");
-                });
-
-                it("hides the spinner", function() {
-                    expect(this.view.$(".spinner")).toHaveClass("hidden");
-                    expect(this.view.$(".spinner").isLoading()).toBeFalsy();
-                });
-
-                if (shouldCancelTimers) {
-                    it("stops updating the elapsed time", function() {
-                        expect(window.clearInterval).toHaveBeenCalled();
-                    });
-                }
-
-                it("clears timer ids", function() {
-                    expect(this.view.elapsedTimer).toBeUndefined();
-                });
-            }
-
-            function itShowsExecutionResults() {
-
-                it("renders a task data table with the given task", function() {
-                    expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
-                    expect(this.view.dataTable.model).toBe(this.task);
-                    expect($(this.view.el)).toContain(this.view.dataTable.el);
-                });
-
-                it("displays the result table", function() {
-                    expect(this.view.$('.result_table')).not.toHaveClass("hidden");
-                });
-
-                it("renders only one data table", function() {
-                    expect(this.view.$(".result_table .data_table").length).toBe(1);
-                });
-
-                it("shows the control section", function() {
-                    expect(this.view.$(".controls")).not.toHaveClass("hidden");
-                });
-
-                context("when another execution completed event occurs", function() {
-                    beforeEach(function() {
-                        chorus.PageEvents.broadcast("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
-                    });
-
-                    it("still renders only one data table", function() {
-                        expect(this.view.$(".result_table .data_table").length).toBe(1);
-                    });
-                });
-
-                it("changes the state of the result table to 'minimized'", function() {
-                    expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                    expect(this.view.$('.result_table')).toHaveClass("minimized");
-                    expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                });
-
-                it("renders the maximize link", function() {
-                    expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
-                    expect(this.view.$("a.minimize")).toHaveClass("hidden");
-                });
-
-                it("shows the bottom gutter (with the expander button)", function() {
-                    expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                });
-
-                specify("the expander button arrow points up", function() {
-                    expect(this.view.$(".arrow")).toHaveClass("up");
-                    expect(this.view.$(".arrow")).not.toHaveClass("down");
-                });
-
-                describe("clicking the maximize link", function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
-                        spyOn(this.view, "recalculateScrolling");
-                        this.view.$("a.maximize").click();
-                    });
-
-                    it("hides the maximize link and shows the minimize link", function() {
-                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
-                        expect(this.view.$("a.minimize")).not.toHaveClass("hidden");
-                    });
-
-                    it("changes the state of the result table to 'minimized'", function() {
-                        expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
-                        expect(this.view.$('.result_table')).toHaveClass("maximized");
-                    });
-
-                    it("recalculates scrolling", function() {
-                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                    });
-
-                    specify("the expander button arrow points up", function() {
-                        expect(this.view.$(".arrow")).toHaveClass("up");
-                        expect(this.view.$(".arrow")).not.toHaveClass("down");
-                    });
-
-                    it("sets .data_table height to use the full viewport", function() {
-                        expect(this.view.$(".data_table").css("height")).toBe("777px");
-                    });
-
-                    itCanExpandAndCollapseTheResults("maximized", "minimized");
-
-                    describe("clicking the minimize link", function() {
-                        beforeEach(function() {
-                            this.view.recalculateScrolling.reset();
-                            this.view.$("a.minimize").click();
-                        });
-
-                        it("hides the minimize link and shows the maximize link", function() {
-                            expect(this.view.$("a.minimize")).toHaveClass("hidden");
-                            expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
-                        });
-
-                        it("changes the state of the result table to 'minimized'", function() {
-                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                            expect(this.view.$('.result_table')).toHaveClass("minimized");
-                            expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                        });
-
-                        it("recalculates scrolling", function() {
-                            expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                        });
-
-
-                        specify("the expander button arrow points up", function() {
-                            expect(this.view.$(".arrow")).toHaveClass("up");
-                            expect(this.view.$(".arrow")).not.toHaveClass("down");
-                        });
-
-                        it("does not keep the maxmized height", function() {
-                            expect(this.view.$(".data_table").css("height")).not.toBe("777px");
-                        });
-
-                    });
-                });
-
-                describe("getDesiredDataTableHeight", function() {
-                    it("incorporates the footerSize passed to the view as a function", function() {
-                        var originalSize = this.view.getDesiredDataTableHeight();
-                        this.view.options.footerSize = function() {
-                            return 10;
-                        }
-                        expect(this.view.getDesiredDataTableHeight()).toBe(originalSize - 10);
-                    });
-                });
-
-                describe("clicking the download link", function() {
-                    context("with the show download dialog option", function() {
-                        beforeEach(function() {
-                            this.modalSpy = stubModals();
-                            spyOn($, "fileDownload");
-                            this.view.showDownloadDialog = true;
-                            this.view.dataset = rspecFixtures.dataset();
-                            this.view.$("a.download_csv").click();
-                        });
-
-                        it("should launch the dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
-                        });
-
-                        it("should not have called $.fileDownload", function() {
-                            expect($.fileDownload).not.toHaveBeenCalled();
-                        });
-
-                        it("should have a page model for the dataset download dialog", function() {
-                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.Dataset);
-                        });
-                    });
-
-                    context("without the show download dialog option", function() {
-                        beforeEach(function() {
-                            spyOn($, "fileDownload");
-                            this.view.showDownloadDialog = false;
-                            this.view.$("a.download_csv").click();
-                        });
-
-                        it("starts the file download", function() {
-                            var content = new chorus.utilities.CsvWriter(
-                                _.pluck(this.view.resource.getColumns(), "name"), this.view.resource.getRows()).toCsv();
-                            expect($.fileDownload).toHaveBeenCalledWith("/download_data",
-                            {
-                                data: {
-                                    content: content,
-                                    filename: this.view.resource.name()+'.csv',
-                                    mime_type: "text/csv"
-                                },
-                                httpMethod: "post"
-                            });
-                        });
-                    });
-                });
-            }
-
-            function itCanExpandAndCollapseTheResults(tableShouldHaveClass, tableShouldNotHaveClass) {
-                describe("clicking the expander arrow when it points up", function() {
-                    beforeEach(function() {
-                        this.view.$(".arrow").click();
-                    });
-
-                    it("collapses the result table", function() {
-                        expect(this.view.$(".controls")).toHaveClass("collapsed");
-                        expect(this.view.$('.result_table')).toHaveClass("collapsed");
-                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
-                        expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                        expect(this.view.$('.data_table').css("height")).toBe("0px");
-                    });
-
-                    it("makes the arrow point down", function() {
-                        expect(this.view.$(".arrow")).not.toHaveClass("up");
-                        expect(this.view.$(".arrow")).toHaveClass("down");
-                        expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                    });
-
-                    it("hides the minimize/maximize links", function() {
-                        expect(this.view.$("a.minimize")).toHaveClass("hidden");
-                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
-                    });
-
-                    describe("clicking the arrow when it points down", function() {
-                        beforeEach(function() {
-                            this.view.$(".arrow").click();
-                        });
-                        it("restores the result table", function() {
-                            expect(this.view.$(".controls")).not.toHaveClass("collapsed");
-                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                            expect(this.view.$('.result_table')).toHaveClass(tableShouldHaveClass);
-                            expect(this.view.$('.result_table')).not.toHaveClass(tableShouldNotHaveClass);
-                        });
-
-                        it("makes the arrow point up", function() {
-                            expect(this.view.$(".arrow")).toHaveClass("up");
-                            expect(this.view.$(".arrow")).not.toHaveClass("down");
-                            expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                        });
-
-                        it("restores the minimize/maximize link", function() {
-                            var selector1 = "." + tableShouldHaveClass.slice(0, -1);
-                            var selector2 = "." + tableShouldNotHaveClass.slice(0, -1);
-                            expect(this.view.$(selector1)).toHaveClass("hidden");
-                            expect(this.view.$(selector2)).not.toHaveClass("hidden");
-                        });
-                    });
-                });
-            }
         });
 
         describe("#teardown", function() {

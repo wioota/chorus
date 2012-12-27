@@ -186,7 +186,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(0).name());
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(1).name());
                                 expect(this.view.$("ul li")).toContainText(this.view.collection.at(2).name());
-                                expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.collection.models[0].toHintText())
+                                expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.collection.models[0].toHintText());
                             });
                         });
                     });

@@ -416,7 +416,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                         menus.eq(0).find("li:eq(2) a").click();
                     });
 
-                    itSelectsDestinationColumn(0, 2, "col3")
+                    itSelectsDestinationColumn(0, 2, "col3");
                     itHasSelectedCounts([0, 0, 1, 0, 0]);
                 });
 

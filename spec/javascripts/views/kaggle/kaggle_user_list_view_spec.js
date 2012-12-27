@@ -8,6 +8,16 @@ describe("chorus.views.KaggleUserList", function() {
         expect(new chorus.views.KaggleUserList({collection: this.collection})).toBeA(chorus.views.SelectableList);
     });
 
+    function expectKaggleUserChecked(expectedModels) {
+        expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+        var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
+        expect(eventName).toBe("kaggleUser:checked");
+
+        var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
+        expect(collection).toBeA(chorus.collections.KaggleUserSet);
+        expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
+    }
+
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.views.KaggleUserList({collection: this.collection});
@@ -104,16 +114,6 @@ describe("chorus.views.KaggleUserList", function() {
                 });
             });
         });
-
-        function expectKaggleUserChecked(expectedModels) {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-            var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
-            expect(eventName).toBe("kaggleUser:checked");
-
-            var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
-            expect(collection).toBeA(chorus.collections.KaggleUserSet);
-            expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
-        }
 
         it("displays the list of users", function() {
             expect(this.view.$("> li").length).toBe(this.collection.length);

@@ -537,7 +537,7 @@ describe("chorus.models.Workfile", function() {
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'large'));
                 expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'medium'));
 
-                var workfile = rspecFixtures.workfile.text({ fileName: "foo.java"; });
+                workfile = rspecFixtures.workfile.text({ fileName: "foo.java" });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('java', 'large'));
                 expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'medium'));
             });

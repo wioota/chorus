@@ -16,13 +16,13 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         it("has the correct urlTemplate", function() {
             expect(this.columns.url()).toContain("/datasets/1/columns");
-        })
+        });
 
         describe("when a model is added", function() {
             it("sets the dataset on the added column", function() {
                 this.columns.add(fixtures.databaseColumn());
                 expect(this.columns.models[0].dataset).toBe(this.columns.dataset);
-            })
+            });
         });
     });
 
@@ -37,13 +37,13 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 schema: {name: 'schema1'},
                 objectName: 'view1',
                 id: '3'
-            })
+            });
             this.columns = view.columns();
         });
 
         it("has the correct urlTemplate", function() {
             expect(this.columns.url()).toContain("/datasets/3/columns");
-        })
+        });
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
@@ -74,14 +74,14 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                     id: '10'
                 },
                 id: '5'
-            })
+            });
             this.columns = chorusView.columns();
-        })
+        });
 
         it("has the correct urlTemplate", function() {
             expect(this.columns.url()).toMatchUrl('/datasets/5/columns', {paramsToIgnore: ['page', 'per_page']});
-        })
-    })
+        });
+    });
 
     describe("#urlParams", function() {
         context("when type attribute is meta", function() {
@@ -114,7 +114,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 this.dataset1Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2}), fixtures.databaseColumn({ordinalPosition: 3})]);
                 this.dataset2 = newFixtures.workspaceDataset.sandboxTable();
                 this.dataset2.datasetNumber = 2;
-                this.dataset2Columns = this.dataset2.columns()
+                this.dataset2Columns = this.dataset2.columns();
                 this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);
 
                 this.columns = new chorus.collections.DatabaseColumnSet();

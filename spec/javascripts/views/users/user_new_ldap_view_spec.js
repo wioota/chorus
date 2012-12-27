@@ -2,9 +2,9 @@ describe("chorus.views.UserNewLdap", function() {
     describe("#render", function() {
         context("as an admin", function() {
             beforeEach(function() {
-                spyOn($.fn, "limitMaxlength")
+                spyOn($.fn, "limitMaxlength");
                 setLoggedInUser({'admin': true});
-                this.user = new chorus.models.User()
+                this.user = new chorus.models.User();
                 this.view = new chorus.views.UserNewLdap({ model: this.user });
                 this.modalSpy = stubModals();
                 this.view.render();
@@ -16,7 +16,7 @@ describe("chorus.views.UserNewLdap", function() {
 
             it("limits the length of the notes field", function() {
                 expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
-            })
+            });
 
             describe("#fieldValues", function() {
                 beforeEach(function() {
@@ -160,7 +160,7 @@ describe("chorus.views.UserNewLdap", function() {
 
                     it("doesn't redirect", function() {
                         expect(this.view.$("form")).toExist();
-                    })
+                    });
 
                     it("retains the data already entered", function() {
                         expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
@@ -188,16 +188,16 @@ describe("chorus.views.UserNewLdap", function() {
             context("cancelling", function() {
                 beforeEach(function() {
                     this.view.$("button.cancel").click();
-                })
+                });
 
                 it("does not save the user", function() {
                     expect(this.user).not.toHaveBeenCreated();
-                })
+                });
 
                 it("navigates back", function() {
                     expect(window.history.back).toHaveBeenCalled();
-                })
-            })
+                });
+            });
         });
 
         context("as a non admin", function() {
@@ -211,6 +211,6 @@ describe("chorus.views.UserNewLdap", function() {
                 expect(this.view.$(".aint_admin")).toExist();
             });
         });
-    })
-})
+    });
+});
 

@@ -20,6 +20,16 @@ describe("chorus.views.SchemaPicker", function() {
             });
         }
 
+        function itTriggersTheChangeEvent(expectedArg) {
+            it("triggers the 'change' event on itself", function() {
+                if(expectedArg === undefined) {
+                    expect("change").toHaveBeenTriggeredOn(this.view);
+                } else {
+                    expect("change").toHaveBeenTriggeredOn(this.view, [expectedArg]);
+                }
+            });
+        }
+
         function itShouldResetSelect(type, changeArgument) {
             it("should reset " + type + " select", function() {
                 expect(this.view.$('.' + type + ' select option:selected').val()).toBeFalsy();
@@ -79,16 +89,6 @@ describe("chorus.views.SchemaPicker", function() {
                 expect(this.view.$('.' + type + ' .unavailable')).toHaveClass("hidden");
                 expect(this.view.$('.' + type + ' .loading_text')).toHaveClass("hidden");
                 expect(this.view.$('.' + type + ' .select_container')).toHaveClass("hidden");
-            });
-        }
-
-        function itTriggersTheChangeEvent(expectedArg) {
-            it("triggers the 'change' event on itself", function() {
-                if(expectedArg === undefined) {
-                    expect("change").toHaveBeenTriggeredOn(this.view);
-                } else {
-                    expect("change").toHaveBeenTriggeredOn(this.view, [expectedArg]);
-                }
             });
         }
 
@@ -247,10 +247,10 @@ describe("chorus.views.SchemaPicker", function() {
                     itHidesSection('database');
                     itHidesSection('schema');
 
-                    itDisplaysDefaultOptionFor('instance')
+                    itDisplaysDefaultOptionFor('instance');
 
                     it("hides the loading placeholder", function() {
-                        expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
+                        expect(this.view.$(".instance .loading_text")).toHaveClass("hidden");
                     });
 
                     describe("when the view re-renders due to its parent re-rendering", function() {
@@ -480,7 +480,7 @@ describe("chorus.views.SchemaPicker", function() {
                                             });
 
                                             it("shows the 'new schema' link", function() {
-                                                expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
+                                                expect(this.view.$(".schema a.new")).not.toHaveClass("hidden");
                                             });
 
                                             it("hides the schema name, and cancel link", function() {

@@ -2,16 +2,16 @@ describe("chorus.views.userNew", function() {
     describe("#render", function() {
         context("as an admin", function() {
             beforeEach(function() {
-                spyOn($.fn, "limitMaxlength")
+                spyOn($.fn, "limitMaxlength");
                 setLoggedInUser({'admin': true});
-                this.user = new chorus.models.User()
+                this.user = new chorus.models.User();
                 this.view = new chorus.views.UserNew({model : this.user});
                 this.view.render();
             });
 
             it("limits the length of the notes field", function() {
                 expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
-            })
+            });
 
             context("submitting the form", function() {
                 beforeEach(function() {
@@ -24,7 +24,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=dept]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
                     this.view.$("textarea[name=notes]").val("some notes");
-                })
+                });
 
                 it("creates a user with the forms attributes", function() {
                     this.view.$("form").submit();
@@ -40,13 +40,13 @@ describe("chorus.views.userNew", function() {
                 });
 
                 it("trims text inputs", function() {
-                    this.view.$("input[name=username]").val("   foo   ")
+                    this.view.$("input[name=username]").val("   foo   ");
                     this.view.$("form").submit();
                     expect(this.user.get("username")).toBe("foo");
                 });
 
                 it("does not trim text areas", function() {
-                    this.view.$("textarea[name=notes]").val("   foo   ")
+                    this.view.$("textarea[name=notes]").val("   foo   ");
                     this.view.$("form").submit();
                     expect(this.user.get("notes")).toBe("   foo   ");
                 });
@@ -75,13 +75,13 @@ describe("chorus.views.userNew", function() {
 
                 context("saving the user with valid data", function() {
                     beforeEach(function() {
-                        spyOn(this.user, "save")
-                    })
+                        spyOn(this.user, "save");
+                    });
 
                     it("saves the user", function() {
                         this.view.$("form").submit();
-                        expect(this.user.save).toHaveBeenCalled()
-                    })
+                        expect(this.user.save).toHaveBeenCalled();
+                    });
 
 
                     context("when user creation is successful", function() {
@@ -90,7 +90,7 @@ describe("chorus.views.userNew", function() {
                             this.view.model.trigger("saved");
                             expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
                         });
-                    })
+                    });
 
                     context("when user creation fails on the server", function() {
                         beforeEach(function() {
@@ -103,7 +103,7 @@ describe("chorus.views.userNew", function() {
 
                         it("doesn't redirect", function() {
                             expect(this.view.$("form")).toExist();
-                        })
+                        });
 
                         it("retains the data already entered", function() {
                             expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
@@ -116,7 +116,7 @@ describe("chorus.views.userNew", function() {
                             expect(this.view.$("input[name=admin]")).toBeChecked();
                             
                         });
-                    })
+                    });
                 });
 
                 context("saving the user with invalid data", function() {
@@ -139,16 +139,16 @@ describe("chorus.views.userNew", function() {
                 beforeEach(function() {
                     spyOn(this.view.$("form")[0], "submit");
                     this.view.$("button.cancel").click();
-                })
+                });
 
                 it("does not submit the form", function() {
                     expect(this.view.$("form")[0].submit).not.toHaveBeenCalled();
-                })
+                });
 
                 it("navigates back", function() {
                     expect(window.history.back).toHaveBeenCalled();
-                })
-            })
+                });
+            });
 
         });
 
@@ -164,5 +164,5 @@ describe("chorus.views.userNew", function() {
                 expect(this.view.$(".aint_admin")).toExist();
             });
         });
-    })
-})
+    });
+});

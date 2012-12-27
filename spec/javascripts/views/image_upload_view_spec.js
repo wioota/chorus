@@ -48,7 +48,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("the image is hidden", function() {
-                expect(this.view.$("img")).toHaveClass('hidden')''
+                expect(this.view.$("img")).toHaveClass('hidden');
             });
         });
 

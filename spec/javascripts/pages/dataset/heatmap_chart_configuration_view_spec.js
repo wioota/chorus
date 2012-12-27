@@ -60,18 +60,18 @@ describe("chorus.views.HeatmapChartConfiguration", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columns})
+                this.view = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columns});
                 this.view.render();
             });
 
             it("should display 'No numerical columns' instead of the numerical column selector for x_axis", function() {
                 expect(this.view.$(".x_axis select option")).not.toExist();
-                expect(this.view.$(".x_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.numeric")
+                expect(this.view.$(".x_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.numeric");
             });
 
             it("should display 'No numerical columns' instead of the numerical column selector for y_axis", function() {
                 expect(this.view.$(".y_axis select option")).not.toExist();
-                expect(this.view.$(".y_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.numeric")
+                expect(this.view.$(".y_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.numeric");
             });
 
             it("should disable the button", function() {

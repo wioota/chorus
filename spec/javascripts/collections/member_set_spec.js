@@ -1,14 +1,14 @@
 describe("chorus.collections.MemberSet", function() {
     beforeEach(function() {
-        this.workspace = new chorus.models.Workspace({id: 17})
-        this.memberSet = new chorus.collections.MemberSet([], {workspaceId: 17})
+        this.workspace = new chorus.models.Workspace({id: 17});
+        this.memberSet = new chorus.collections.MemberSet([], {workspaceId: 17});
     });
 
     describe("#url", function() {
         it("has the workspace id in the url", function() {
-            expect(this.memberSet.url()).toContain("/workspaces/17/members")
-        })
-    })
+            expect(this.memberSet.url()).toContain("/workspaces/17/members");
+        });
+    });
 
     describe("#save", function() {
         beforeEach(function() {
@@ -50,7 +50,7 @@ describe("chorus.collections.MemberSet", function() {
 
             it("triggers the 'saveFailed' event on the member set", function() {
                 expect("saveFailed").toHaveBeenTriggeredOn(this.memberSet);
-            })
+            });
         });
     });
 });

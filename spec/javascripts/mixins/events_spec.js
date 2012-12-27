@@ -33,6 +33,43 @@ describe("chorus.Mixins.Events", function() {
     });
 
     describe("bindOnce", function() {
+        function itPassesArgumentsCorrectly() {
+            it("passes arguments correctly", function() {
+                this.source.trigger("increment", 'foo');
+                expect(this.callback).toHaveBeenCalledWith('foo');
+            });
+        }
+
+        function itCallsTheBoundFunctionOnlyOnce() {
+            it("calls the bound function only once over multiple triggers", function() {
+                this.source.trigger("increment", 'foo');
+                this.source.trigger("increment", 'bar');
+                this.source.trigger("increment", 'baz');
+
+                expect(this.callback.callCount).toBe(1);
+            });
+        }
+
+        function itTriggersOnlyOnMatchingEventName() {
+            it("does not call the function when a different trigger occurs", function() {
+                this.source.trigger("foobar");
+                expect(this.callback).not.toHaveBeenCalled();
+            });
+        }
+
+        function itUnbindsCorrectly() {
+            describe("unbinding", function() {
+                it("unbinds after the first call", function() {
+                    this.source.trigger("increment", 'baz');
+                    expect(this.callback.callCount).toBe(1);
+
+                    this.source.trigger("increment", 'baz');
+                    this.source.trigger("increment", 'baz');
+                    expect(this.callback.callCount).toBe(1);
+                });
+            });
+        }
+
         var fakeContext = function(name) {this.name = name;};
         beforeEach(function() {
             this.source = {};
@@ -92,43 +129,6 @@ describe("chorus.Mixins.Events", function() {
                 expect(this.callback.calls[1].object).toBe(this.context2);
             });
         });
-
-        function itPassesArgumentsCorrectly() {
-            it("passes arguments correctly", function() {
-                this.source.trigger("increment", 'foo');
-                expect(this.callback).toHaveBeenCalledWith('foo');
-            });
-        }
-
-        function itCallsTheBoundFunctionOnlyOnce() {
-            it("calls the bound function only once over multiple triggers", function() {
-                this.source.trigger("increment", 'foo');
-                this.source.trigger("increment", 'bar');
-                this.source.trigger("increment", 'baz');
-
-                expect(this.callback.callCount).toBe(1);
-            });
-        }
-
-        function itTriggersOnlyOnMatchingEventName() {
-            it("does not call the function when a different trigger occurs", function() {
-                this.source.trigger("foobar");
-                expect(this.callback).not.toHaveBeenCalled();
-            });
-        }
-
-        function itUnbindsCorrectly() {
-            describe("unbinding", function() {
-                it("unbinds after the first call", function() {
-                    this.source.trigger("increment", 'baz');
-                    expect(this.callback.callCount).toBe(1);
-
-                    this.source.trigger("increment", 'baz');
-                    this.source.trigger("increment", 'baz');
-                    expect(this.callback.callCount).toBe(1);
-                });
-            });
-        }
     });
 
     describe("shouldTriggerImmediately", function() {

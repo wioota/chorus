@@ -24,7 +24,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                     hasAddedWorkfile: false,
                     hasAddedSandbox: false,
                     hasChangedSettings: false
-                })
+                });
                 this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
 
@@ -97,7 +97,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when hasAddedMember is true", function() {
             this.view.model.set({"hasAddedMember": true});
             expect(this.view.$(".add_team_members")).not.toExist();
-        })
+        });
     });
 
     describe("the 'Add a Sandbox' section", function() {
@@ -132,7 +132,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when hasAddedSandbox is true", function() {
             this.view.model.set({"hasAddedSandbox": true});
             expect(this.view.$(".add_sandbox")).not.toExist();
-        })
+        });
     });
 
     describe("the 'Add Work Files' section", function() {
@@ -163,13 +163,13 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when hasAddedWorkfile is true", function() {
             this.view.model.set({"hasAddedWorkfile": true});
             expect(this.view.$(".add_workfiles")).not.toExist();
-        })
+        });
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
         var link;
         beforeEach(function() {
-            link = this.view.$(".edit_workspace_settings a")
+            link = this.view.$(".edit_workspace_settings a");
         });
 
         it("has a link", function() {
@@ -210,8 +210,8 @@ describe("chorus.views.WorkspaceQuickstart", function() {
     describe("when dialogs are dismissed", function() {
         context("and there are still unhidden info boxes", function() {
             beforeEach(function() {
-                this.view.$(".info_box.edit_workspace_settings").addClass("hidden")
-                chorus.PageEvents.broadcast("modal:closed")
+                this.view.$(".info_box.edit_workspace_settings").addClass("hidden");
+                chorus.PageEvents.broadcast("modal:closed");
             });
 
             it("does not navigate", function() {
@@ -221,8 +221,8 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         context("and all info boxes are hidden", function() {
             beforeEach(function() {
-                this.view.$(".info_box").addClass("hidden")
-                chorus.PageEvents.broadcast("modal:closed")
+                this.view.$(".info_box").addClass("hidden");
+                chorus.PageEvents.broadcast("modal:closed");
 
                 this.model.set({
                     hasAddedMember: true,
@@ -236,7 +236,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
             it("navigates to the normal workspace show page", function() {
                 this.view.render();
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl())
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl());
             });
         });
     });

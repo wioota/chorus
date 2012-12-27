@@ -23,7 +23,7 @@ describe("chorus.alerts.ExecutionMessage", function() {
             this.task = this.task.set({"dataset": {}});
             this.alert = new chorus.alerts.ExecutionMessage({ model: this.task });
             this.alert.render();
-        })
+        });
             it("has the correct title", function () {
                 expect(this.alert.title).toMatchTranslation("dataset.execution.message.title");
             });

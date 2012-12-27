@@ -5,9 +5,9 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
             this.pageModel = new chorus.models.Base();
             this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
-            this.alert.render()
-            this.alert.$('button.submit').click()
-        })
+            this.alert.render();
+            this.alert.$('button.submit').click();
+        });
 
         it("destroys a model with the right entityId, entityType, and id", function() {
             var note = this.activity.toNote();
@@ -23,7 +23,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
             it("shows a toast message", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, undefined);
-            })
+            });
         });
 
         describe("when the activity is a NOTE", function() {
@@ -33,15 +33,15 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
             it("sets the text correctly", function() {
                 expect(this.alert.text).toMatchTranslation("notes.delete.alert.text");
-            })
+            });
 
             it("sets the ok button text correctly", function() {
                 expect(this.alert.ok).toMatchTranslation("notes.delete.alert.ok");
-            })
+            });
 
             it("sets the delete message correctly", function() {
                 expect(this.alert.deleteMessage).toBe("notes.delete.alert.delete_message");
-            })
+            });
 
             it("should not displays the note's body", function () {
                 expect(this.alert.$(".body p").text()).toBe("");
@@ -54,8 +54,8 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
                 this.activity = fixtures.activities.INSIGHT_CREATED();
                 this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
                 this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
-                this.alert.render()
-                this.alert.$('button.submit').click()
+                this.alert.render();
+                this.alert.$('button.submit').click();
             });
 
             it("sets the alert title correctly", function() {

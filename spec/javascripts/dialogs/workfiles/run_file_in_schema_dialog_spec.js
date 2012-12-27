@@ -24,7 +24,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
         });
 
         it("expands 'within another schema' by default", function () {
-            expect(this.dialog.$("#another_schema")).not.toHaveClass("collapsed")
+            expect(this.dialog.$("#another_schema")).not.toHaveClass("collapsed");
         });
 
         it("has the right title", function () {

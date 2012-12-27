@@ -19,12 +19,12 @@ describe("chorus.views.WorkspaceListSidebar", function() {
 
         it("displays the workspace name", function() {
             expect(this.view.$(".name")).toContainText(this.workspace.get("name"));
-        })
+        });
 
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                spyOn(this.view.model, 'fetchImageUrl').andReturn("/user/456/image")
+                spyOn(this.view.model, 'fetchImageUrl').andReturn("/user/456/image");
                 this.view.render();
             });
 
@@ -36,7 +36,7 @@ describe("chorus.views.WorkspaceListSidebar", function() {
         context("the workspace does not have an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(false);
-                spyOn(this.view.model, 'fetchImageUrl').andReturn("/party.gif")
+                spyOn(this.view.model, 'fetchImageUrl').andReturn("/party.gif");
                 this.view.render();
             });
 
@@ -47,7 +47,7 @@ describe("chorus.views.WorkspaceListSidebar", function() {
 
         it("has the workspace member list", function() {
             expect(this.view.$(".workspace_member_list")[0]).toBe(this.view.workspaceMemberList.el);
-        })
+        });
 
         describe("when the activity fetch completes", function() {
             beforeEach(function() {
@@ -65,4 +65,4 @@ describe("chorus.views.WorkspaceListSidebar", function() {
             expect(this.view.$(".actions a[data-dialog=InsightsNew]")).toContainTranslation("actions.add_insight");
         });
     });
-})
+});

@@ -79,7 +79,7 @@ describe("chorus.views.DatasetStatistics", function() {
             });
 
             it("displays the partitions", function() {
-                expect(this.view.$(".partitions .value").text()).toBe("10")
+                expect(this.view.$(".partitions .value").text()).toBe("10");
             });
 
             it("should not show the rows pair", function() {

@@ -75,7 +75,7 @@ describe("chorus.views.Workfile", function() {
     describe("when the model received an 'invalidated' trigger", function() {
         beforeEach(function() {
             spyOn(this.model, "fetch");
-        })
+        });
 
         it("reloads the model", function() {
             this.model.trigger("invalidated");

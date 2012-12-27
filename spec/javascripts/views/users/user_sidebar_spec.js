@@ -1,7 +1,7 @@
 describe("chorus.views.UserSidebar", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({username: "bill", id: "42"})
-        this.config = new chorus.models.Config({ externalAuthEnabled: false })
+        this.user = new chorus.models.User({username: "bill", id: "42"});
+        this.config = new chorus.models.Config({ externalAuthEnabled: false });
 
         spyOn(chorus.views.UserSidebar.prototype, "setUser").andCallThrough();
         this.view = new chorus.views.UserSidebar({model: this.user, listMode: false});
@@ -13,6 +13,14 @@ describe("chorus.views.UserSidebar", function() {
     });
 
     context("when the fetch completes", function() {
+        function itShouldNotHaveActionLinks() {
+            it("should not render the action links", function() {
+                expect(this.view.$(".actions .edit_user")).not.toExist();
+                expect(this.view.$(".actions .delete_user")).not.toExist();
+                expect(this.view.$(".actions .change_password")).not.toExist();
+            });
+        }
+
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
             this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.greenplumInstanceCreated() ]);
@@ -26,7 +34,7 @@ describe("chorus.views.UserSidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true, username: "edcadmin"});
                 this.view.render();
-            })
+            });
 
             it("should have a 'delete user' action when current user is not the same user", function() {
                 expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
@@ -63,7 +71,7 @@ describe("chorus.views.UserSidebar", function() {
 
                 it("has the 'edit user' link", function() {
                     expect(this.view.$("a.edit_user")).toExist();
-                    expect(this.view.$("a.edit_user")).toHaveAttr("href", "#/users/42/edit")
+                    expect(this.view.$("a.edit_user")).toHaveAttr("href", "#/users/42/edit");
                 });
 
                 it("has the 'delete user' link", function() {
@@ -84,11 +92,11 @@ describe("chorus.views.UserSidebar", function() {
 
                 context("and external auth is configured", function() {
                     it("does not show the change password option", function() {
-                        this.view.config.set({ externalAuthEnabled: true })
+                        this.view.config.set({ externalAuthEnabled: true });
                         this.view.render();
                         expect(this.view.$("a.change_password")).not.toExist();
                     });
-                })
+                });
             });
         });
 
@@ -104,7 +112,7 @@ describe("chorus.views.UserSidebar", function() {
 
         describe("#setUser(user)", function() {
             beforeEach(function() {
-                this.user2 = rspecFixtures.user({ title: "Lame Test-Driver" })
+                this.user2 = rspecFixtures.user({ title: "Lame Test-Driver" });
                 this.view.setUser(this.user2);
             });
 
@@ -136,12 +144,4 @@ describe("chorus.views.UserSidebar", function() {
             expect(this.view.$(".info")).toExist();
         });
     });
-
-    function itShouldNotHaveActionLinks() {
-        it("should not render the action links", function() {
-            expect(this.view.$(".actions .edit_user")).not.toExist();
-            expect(this.view.$(".actions .delete_user")).not.toExist();
-            expect(this.view.$(".actions .change_password")).not.toExist();
-        });
-    }
 });

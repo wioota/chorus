@@ -264,6 +264,23 @@ describe("chorus.Mixins.Fetching", function() {
     });
 
     describe("#respondToErrors", function() {
+        function itHandlesFailure() {
+            it("does not set loaded", function() {
+                this.resource.parseErrors(this.data);
+                expect(this.resource.loaded).toBeFalsy();
+            });
+
+            it("stores the errors as the resource's 'serverErrors'", function() {
+                this.resource.parseErrors(this.data);
+                expect(this.resource.serverErrors).toBe(this.data.errors);
+            });
+
+            it("stores the returned response as the resource's errorData", function() {
+                this.resource.parseErrors(this.data);
+                expect(this.resource.errorData).toEqual(this.data.response);
+            });
+        }
+
         beforeEach(function() {
             this.things = [
                 {hi: "there"},
@@ -374,23 +391,6 @@ describe("chorus.Mixins.Fetching", function() {
                 expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {}});
             });
         });
-
-        function itHandlesFailure() {
-            it("does not set loaded", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.loaded).toBeFalsy();
-            });
-
-            it("stores the errors as the resource's 'serverErrors'", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.serverErrors).toBe(this.data.errors);
-            });
-
-            it("stores the returned response as the resource's errorData", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.errorData).toEqual(this.data.response);
-            });
-        }
     });
 
     describe("#fetch", function() {

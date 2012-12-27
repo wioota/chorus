@@ -2,7 +2,7 @@ describe("chorus.views.SearchInstance", function() {
     beforeEach(function() {
         this.model = rspecFixtures.hadoopInstance();
         this.view = new chorus.views.SearchInstance({ model: this.model });
-        this.view.render()
+        this.view.render();
     });
 
 

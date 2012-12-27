@@ -44,7 +44,7 @@ describe("chorus.collections.DatasetSet", function() {
 
         it("broadcasts 'searched' when API query returns", function() {
             var eventListener = jasmine.createSpy();
-            this.collection.bind('searched', eventListener)
+            this.collection.bind('searched', eventListener);
             this.collection.search("search term");
             this.server.completeFetchFor(this.collection, []);
             expect(eventListener).toHaveBeenCalled();

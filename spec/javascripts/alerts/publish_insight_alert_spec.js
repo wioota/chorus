@@ -25,7 +25,7 @@ describe("chorus.alerts.PublishInsight", function() {
         it("closes when the submit button is clicked", function() {
             spyOnEvent($(document), "close.facebox");
             this.alert.$("button.submit").click();
-            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+            expect("close.facebox").toHaveBeenTriggeredOn($(document));
         });
     });
 
@@ -51,4 +51,4 @@ describe("chorus.alerts.PublishInsight", function() {
     });
 
 
-})
+});

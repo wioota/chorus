@@ -60,13 +60,13 @@ describe("chorus.Modal", function() {
 
                 //Modal is abstract, so we need to give it a template to render
                 //this is the responsibility of subclasses
-                this.modal.templateName = "plain_text"
+                this.modal.templateName = "plain_text";
 
                 this.modal.launchModal();
             });
 
             it("sets chorus.modal", function() {
-                expect(chorus.modal).toBe(this.modal)
+                expect(chorus.modal).toBe(this.modal);
             });
 
             it("makes the body unable to scroll", function() {
@@ -89,7 +89,7 @@ describe("chorus.Modal", function() {
                 it("sets the dialog.top to 30", function() {
                     this.modal.resize();
                     var lastCall = $.fn.css.argsForCall;
-                      expect(lastCall).toContain(["top", "30px"])
+                      expect(lastCall).toContain(["top", "30px"]);
                 });
 
 
@@ -98,8 +98,8 @@ describe("chorus.Modal", function() {
                     var windowHeight = $(window).height() - 60 + "px";
 
                     var lastCall = $.fn.css.mostRecentCall;
-                    expect(lastCall.args).toEqual(["max-height", windowHeight])
-                    expect(lastCall.object.selector).toBe("#facebox .popup")
+                    expect(lastCall.args).toEqual(["max-height", windowHeight]);
+                    expect(lastCall.object.selector).toBe("#facebox .popup");
                 });
 
                 it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
@@ -124,8 +124,8 @@ describe("chorus.Modal", function() {
 
                 it("re-centers the modal", function() {
                     var lastCall = $.fn.css.mostRecentCall;
-                    expect(lastCall.args).toEqual(["left", jasmine.any(Number)])
-                    expect(lastCall.object.selector).toBe("#facebox")
+                    expect(lastCall.args).toEqual(["left", jasmine.any(Number)]);
+                    expect(lastCall.object.selector).toBe("#facebox");
                 });
 
                 it("calls #resize", function() {
@@ -135,10 +135,10 @@ describe("chorus.Modal", function() {
 
             describe("when the facebox closes", function() {
                 beforeEach(function() {
-                    this.modalClosedSpy = jasmine.createSpy("modal:closed")
-                    chorus.PageEvents.subscribe("modal:closed", this.modalClosedSpy)
+                    this.modalClosedSpy = jasmine.createSpy("modal:closed");
+                    chorus.PageEvents.subscribe("modal:closed", this.modalClosedSpy);
                     spyOn(this.modal, 'close');
-                    $("#jasmine_content").append("<div id='facebox'/>")
+                    $("#jasmine_content").append("<div id='facebox'/>");
                     $.facebox.settings.inited = true;
                     $(document).trigger("close.facebox");
                 });
@@ -148,7 +148,7 @@ describe("chorus.Modal", function() {
                 });
 
                 it("deletes the chorus.modal object", function() {
-                    expect(chorus.modal).toBeUndefined()
+                    expect(chorus.modal).toBeUndefined();
                 });
 
                 it("resets facebox", function() {
@@ -160,7 +160,7 @@ describe("chorus.Modal", function() {
                 });
 
                 it("triggers the modal:closed page event", function() {
-                    expect(this.modalClosedSpy).toHaveBeenCalled()
+                    expect(this.modalClosedSpy).toHaveBeenCalled();
                 });
 
                 it("resets the body's ability to scroll'", function() {
@@ -184,7 +184,7 @@ describe("chorus.Modal", function() {
         }
 
         beforeEach(function() {
-            this.modal.templateName = "plain_text"
+            this.modal.templateName = "plain_text";
             this.modal.launchModal();
 
             this.faceboxProxy = $("<div id='facebox'/>");
@@ -192,14 +192,14 @@ describe("chorus.Modal", function() {
             $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
 
             this.subModal = new chorus.Modal({ pageModel: this.model });
-            this.subModal.templateName = this.modal.templateName
+            this.subModal.templateName = this.modal.templateName;
             spyOn(this.subModal, "launchNewModal").andCallThrough();
             $.facebox.settings.inited = true;
-            this.modal.launchSubModal(this.subModal)
+            this.modal.launchSubModal(this.subModal);
         });
 
         it("backgrounds this modal", function() {
-            expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+            expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy);
         });
 
         it("resets facebox", function() {
@@ -238,20 +238,20 @@ describe("chorus.Modal", function() {
                 this.subSubModal.templateName = this.modal.templateName;
                 spyOn(this.subSubModal, "launchNewModal").andCallThrough();
                 $.facebox.settings.inited = true;
-                this.subModal.launchSubModal(this.subSubModal)
+                this.subModal.launchSubModal(this.subSubModal);
             });
 
             it("keeps original modal in background", function() {
-                expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy);
             });
 
             it("backgrounds this modal", function() {
-                expectBackgrounded(this.faceboxProxy2, this.faceboxOverlayProxy2)
-            })
+                expectBackgrounded(this.faceboxProxy2, this.faceboxOverlayProxy2);
+            });
 
             it("launches the sub modal", function() {
                 expect(this.subSubModal.launchNewModal).toHaveBeenCalled();
-            })
+            });
 
             describe("when the sub-sub modal is closed", function() {
                 beforeEach(function() {
@@ -259,11 +259,11 @@ describe("chorus.Modal", function() {
                 });
 
                 it("keeps original modal in background", function() {
-                    expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                    expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy);
                 });
 
                 it("foregrounds the preceeding dialog", function() {
-                    expectForegrounded(this.faceboxProxy2, this.faceboxOverlayProxy2)
+                    expectForegrounded(this.faceboxProxy2, this.faceboxOverlayProxy2);
                 });
 
                 context("when the sub modal is closed", function() {
@@ -272,7 +272,7 @@ describe("chorus.Modal", function() {
                     });
 
                     it("foregrounds the original modal", function() {
-                        expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                        expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy);
                     });
                 });
             });

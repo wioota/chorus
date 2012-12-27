@@ -1,4 +1,24 @@
 (function() {
+
+    function clearRenderedDOM() {
+        $('#jasmine_content').empty();
+    }
+
+    function checkTranslation(args) {
+        var translationKey = args[0];
+        var translatedText = t.apply(this, args);
+        var missingParams = translatedText.match(/missing (\{\{\w+\}\}) value/);
+
+        if (!I18n.lookup(translationKey)) {
+            throw("Test error - Missing translation key '" + translationKey + "'");
+        }
+        if (missingParams) {
+            throw("Test error - Missing parameter for translation key '" + translationKey + "':  " + missingParams[1]);
+        }
+
+        return translatedText;
+    }
+
     var loadTemplatesOnce = _.once(function() {
         var allFixturesLoaded = false;
 
@@ -561,25 +581,6 @@
         chorus.startHistory = origHistory;
 
     })();
-
-    function clearRenderedDOM() {
-        $('#jasmine_content').empty();
-    }
-
-    function checkTranslation(args) {
-        var translationKey = args[0];
-        var translatedText = t.apply(this, args);
-        var missingParams = translatedText.match(/missing ({{\w+}}) value/);
-
-        if (!I18n.lookup(translationKey)) {
-            throw("Test error - Missing translation key '" + translationKey + "'");
-        }
-        if (missingParams) {
-            throw("Test error - Missing parameter for translation key '" + translationKey + "':  " + missingParams[1]);
-        }
-
-        return translatedText;
-    }
 
     if (window.location.search.indexOf("profile=") !== -1) {
         jasmine.getEnv().addReporter(new jasmine.ProfileReporter());

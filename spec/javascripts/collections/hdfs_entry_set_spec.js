@@ -12,7 +12,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         describe("add", function() {
             it("sets the path and instance on the added entries", function() {
                 expect(this.hdfsEntrySet.at(0).get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
-            })
+            });
         });
 
         describe("hdfsEntry", function() {
@@ -40,7 +40,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');
                 expect(this.hdfsEntrySet.at(0).get('hadoopInstance').id).toBe('10000');
-            })
+            });
         });
     });
 });

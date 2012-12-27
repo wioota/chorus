@@ -38,8 +38,8 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         });
 
         it("has the correct axis labels", function() {
-            expect(this.view.$('.xaxis .axis_label').text()).toBe("count")
-            expect(this.view.$('.yaxis .axis_label').text()).toBe("fruits")
+            expect(this.view.$('.xaxis .axis_label').text()).toBe("count");
+            expect(this.view.$('.yaxis .axis_label').text()).toBe("fruits");
         });
 
         describe("re-rendering", function() {
@@ -69,12 +69,12 @@ describe("chorus.views.visualizations.FrequencyView", function() {
             it("have the wider boxes at the top", function() {
                 expect(width(this.boxes[2])).toBeGreaterThan(width(this.boxes[1]));
                 expect(width(this.boxes[1])).toBeGreaterThan(width(this.boxes[0]));
-            })
+            });
 
             it("have the same heights", function() {
                 expect(height(this.boxes[2])).toEqual(height(this.boxes[1]));
                 expect(height(this.boxes[1])).toEqual(height(this.boxes[0]));
-            })
+            });
 
             it("draws them with some padding in between", function() {
                 _.each(this.boxes, function(rect, i) {
@@ -92,17 +92,17 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         });
 
         it("draws vertical grid lines", function() {
-            expect(this.view.$(".xaxis line.grid").length).toBeGreaterThan(1)
-        })
+            expect(this.view.$(".xaxis line.grid").length).toBeGreaterThan(1);
+        });
 
         it("does not draw horizontal grid lines", function() {
-            expect(this.view.$(".yaxis line.grid").length).toBe(0)
-        })
+            expect(this.view.$(".yaxis line.grid").length).toBe(0);
+        });
 
         it("draws the grid lines after the rectangles", function() {
             var gridRect = this.view.$(".plot rect, line.grid");
-            expect($(gridRect[0]).attr("class")).not.toBe("grid")
-            expect($(gridRect[gridRect.length-1]).attr("class")).toBe("grid")
-        })
+            expect($(gridRect[0]).attr("class")).not.toBe("grid");
+            expect($(gridRect[gridRect.length-1]).attr("class")).toBe("grid");
+        });
     });
 });

@@ -1,4 +1,15 @@
 describe("chorus.views.Dataset", function() {
+    function itRendersTheNameAndIcon() {
+        it("renders the dataset's name", function() {
+            expect(this.view.$(".name")).toContainText("john_the_table");
+        });
+
+        it("renders an icon for the dataset", function() {
+            expect(this.view.$("img")).toHaveAttr("src", this.dataset.iconUrl());
+            expect(this.view.$("img")).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.dataset.attributes));
+        });
+    }
+
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName: "john_the_table"
@@ -50,10 +61,10 @@ describe("chorus.views.Dataset", function() {
 
         it("qtip-ifies the other_menu", function() {
             expect(this.qtipSpy).not.toHaveVisibleQtip();
-            this.view.$('.found_in .open_other_menu').click()
+            this.view.$('.found_in .open_other_menu').click();
             expect(this.qtipSpy).toHaveVisibleQtip();
             expect(this.qtipSpy.find('li').length).toBe(2);
-        })
+        });
 
         context("when the dataset is not used in any workspace", function() {
             beforeEach(function() {
@@ -66,7 +77,7 @@ describe("chorus.views.Dataset", function() {
                 expect(this.view.$(".found_in")).not.toExist();
             });
         });
-    })
+    });
 
     xdescribe("when the workspace is archived", function() {
         beforeEach(function() {
@@ -159,7 +170,7 @@ describe("chorus.views.Dataset", function() {
         it("displays the correct import tag", function() {
             expect(this.view.$(".tag .tag_name").text()).toContainTranslation("import.frequency.weekly");
         });
-    })
+    });
 
     context("when the model does not have an import schedule", function() {
         beforeEach(function() {
@@ -182,22 +193,11 @@ describe("chorus.views.Dataset", function() {
     describe("when the model received an 'invalidated' trigger", function() {
         beforeEach(function() {
             spyOn(this.dataset, "fetch");
-        })
+        });
 
         it("reloads the model", function() {
             this.dataset.trigger("invalidated");
             expect(this.dataset.fetch).toHaveBeenCalled();
         });
     });
-
-    function itRendersTheNameAndIcon() {
-        it("renders the dataset's name", function() {
-            expect(this.view.$(".name")).toContainText("john_the_table");
-        });
-
-        it("renders an icon for the dataset", function() {
-            expect(this.view.$("img")).toHaveAttr("src", this.dataset.iconUrl());
-            expect(this.view.$("img")).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.dataset.attributes));
-        });
-    }
 });

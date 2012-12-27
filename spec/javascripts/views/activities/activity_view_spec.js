@@ -1,13 +1,4 @@
 describe("chorus.views.Activity", function() {
-    function itDisplaysDeleteLink() {
-        it("displays a delete link", function () {
-            var deleteLink = this.view.$(".activity_content .delete_link");
-            expect(editLink).toHaveClass("dialog");
-            expect(editLink).toHaveData("dialog", "DeleteNoteConfirmAlert");
-            expect(deleteLink).toHaveData("activity", this.view.model);
-        });
-    }
-
     function itDoesNotDisplayDeleteLink() {
         it("does not display a delete link", function () {
             expect(this.view.$(".activity_content .delete_link")).not.toExist();

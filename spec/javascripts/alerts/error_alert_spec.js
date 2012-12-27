@@ -51,4 +51,4 @@ describe("chorus.alerts.Error", function() {
             expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.close_window");
         });
     });
-})
+});

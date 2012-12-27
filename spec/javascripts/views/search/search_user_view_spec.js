@@ -12,7 +12,7 @@ describe("chorus.views.SearchUser", function() {
                 username: "<em>foo</em>"
             },
             image: { icon: "bar" }
-        })
+        });
         this.view = new chorus.views.SearchUser({ model: this.model });
         this.view.render();
     });

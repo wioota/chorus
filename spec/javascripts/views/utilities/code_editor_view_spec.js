@@ -16,7 +16,7 @@ describe("chorus.views.CodeEditorView", function() {
             spyOn(window.TextRange.prototype, 'select');
         }
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
-    })
+    });
 
     it("defers call to CodeMirror", function() {
         this.view.render();

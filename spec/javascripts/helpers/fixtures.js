@@ -201,7 +201,7 @@ beforeEach(function() {
         },
 
         noteComment: function(overrides) {
-            commentOverrides = _.extend({
+            var commentOverrides = _.extend({
                 comments: [],
                 attachments: [],
                 entityType: 'instance',

@@ -47,6 +47,40 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     describe("#render", function() {
         var dialog, disableSpy;
 
+        function itHasEditableNameAndSummmary() {
+            it("does not disable the workspace name input", function() {
+                expect(this.dialog.$("input[name=name]")).not.toBeDisabled();
+            });
+
+            it("does not disable the summary", function() {
+                expect(this.dialog.$("textarea[name=summary]")).not.toBeDisabled();
+                expect(disableSpy).not.toHaveBeenCalled();
+            });
+        }
+
+        function itDoesNotAllowEditingImage() {
+            it("disables the workspace image uploader", function() {
+                expect(this.dialog.$("a.action")).not.toExist();
+            });
+        }
+
+        function itDisablesArchivingAndUnarchiving() {
+            it("disables the radio buttons for archiving and un-archiving the workspace", function() {
+                var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                expect(activeRadio).toBeDisabled();
+                expect(archivedRadio).toBeDisabled();
+            });
+        }
+
+        function itDoesNotAllowEditingMembers() {
+            it("renders the owner as link to the user profile", function() {
+                expect(this.dialog.$("select.owner")).not.toExist();
+                expect(this.dialog.$("div.owner a")).toHaveText("Deborah D");
+                expect(this.dialog.$("div.owner a").attr("href")).toBe(this.workspace.owner().showUrl());
+            });
+        }
+
         beforeEach(function() {
             dialog = this.dialog;
             stubDefer();
@@ -101,7 +135,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the workspace is public", function() {
             beforeEach(function() {
-                this.workspace.set({ public: true });
+                this.workspace.set({ "public": true });
                 this.dialog.render();
             });
 
@@ -572,40 +606,6 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 });
             });
         });
-
-        function itHasEditableNameAndSummmary() {
-            it("does not disable the workspace name input", function() {
-                expect(this.dialog.$("input[name=name]")).not.toBeDisabled();
-            });
-
-            it("does not disable the summary", function() {
-                expect(this.dialog.$("textarea[name=summary]")).not.toBeDisabled();
-                expect(disableSpy).not.toHaveBeenCalled();
-            });
-        }
-
-        function itDoesNotAllowEditingImage() {
-            it("disables the workspace image uploader", function() {
-                expect(this.dialog.$("a.action")).not.toExist();
-            });
-        }
-
-        function itDisablesArchivingAndUnarchiving() {
-            it("disables the radio buttons for archiving and un-archiving the workspace", function() {
-                var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
-                var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
-                expect(activeRadio).toBeDisabled();
-                expect(archivedRadio).toBeDisabled();
-            });
-        }
-
-        function itDoesNotAllowEditingMembers() {
-            it("renders the owner as link to the user profile", function() {
-                expect(this.dialog.$("select.owner")).not.toExist();
-                expect(this.dialog.$("div.owner a")).toHaveText("Deborah D");
-                expect(this.dialog.$("div.owner a").attr("href")).toBe(this.workspace.owner().showUrl());
-            });
-        }
     });
 
     describe("select styling", function() {

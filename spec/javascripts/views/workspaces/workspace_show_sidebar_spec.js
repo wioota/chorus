@@ -39,7 +39,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                this.spyImg = spyOn(this.view.model, 'fetchImageUrl').andReturn("imageUrl1")
+                this.spyImg = spyOn(this.view.model, 'fetchImageUrl').andReturn("imageUrl1");
                 this.view.render();
             });
 
@@ -70,7 +70,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("the workspace does not have an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(false);
-                spyOn(this.view.model, 'fetchImageUrl').andReturn("/party.gif")
+                spyOn(this.view.model, 'fetchImageUrl').andReturn("/party.gif");
                 this.view.render();
             });
 
@@ -83,7 +83,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             it("displays the find kaggle contributors link", function() {
                 chorus.models.Config.instance().set({ kaggleConfigured: true });
                 this.view.render();
-                expect(this.view.$("a.kaggle")).toHaveHref(this.view.model.showUrl()+"/kaggle")
+                expect(this.view.$("a.kaggle")).toHaveHref(this.view.model.showUrl()+"/kaggle");
             });
         });
 
@@ -115,7 +115,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
             context("and the workspace does not have a sandbox", function() {
                 beforeEach(function() {
-                    spyOn(this.model, "sandbox").andReturn(undefined)
+                    spyOn(this.model, "sandbox").andReturn(undefined);
                     this.view.render();
                 });
 
@@ -127,7 +127,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
             context("and the workspace has a sandbox", function() {
                 beforeEach(function() {
-                    spyOn(this.model, "sandbox").andReturn(rspecFixtures.workspace().sandbox())
+                    spyOn(this.model, "sandbox").andReturn(rspecFixtures.workspace().sandbox());
                     this.view.render();
                 });
 
@@ -162,11 +162,11 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
             it("does not have a link to delete the workspace", function() {
                 expect(this.view.$("a[data-alert=WorkspaceDelete]").length).toBe(0);
-            })
+            });
 
             it("does not have a link to edit the workspace members", function() {
                 expect(this.view.$("a[data-dialog=WorkspaceEditMembers]").length).toBe(0);
-            })
+            });
         });
 
         context("when the workspace is archived", function() {
@@ -199,18 +199,18 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         it("has a link to add a note", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
-            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"))
-            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-workspace-id")).toBe(this.model.get("id"))
+            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"));
+            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-workspace-id")).toBe(this.model.get("id"));
         });
 
         it("has a link to add an insight", function() {
             expect(this.view.$("a[data-dialog=InsightsNew]").text().trim()).toMatchTranslation("actions.add_insight");
-            expect(this.view.$("a[data-dialog=InsightsNew]").attr("data-workspace-id")).toBe(this.model.get("id"))
+            expect(this.view.$("a[data-dialog=InsightsNew]").attr("data-workspace-id")).toBe(this.model.get("id"));
         });
 
         it("should have a members list subview", function() {
             expect(this.view.$(".workspace_member_list")[0]).toBe(this.view.workspaceMemberList.el);
-        })
+        });
     });
 
     describe("#post_render", function() {

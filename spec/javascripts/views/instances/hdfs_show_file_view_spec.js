@@ -10,7 +10,7 @@ describe("chorus.pages.HdfsShowFileView", function() {
         });
 
         it("shows the text", function() {
-            expect(this.view.$(".hdfs_file_content").text()).toBe("My secret content\nnext line")
-        })
-    })
-})
+            expect(this.view.$(".hdfs_file_content").text()).toBe("My secret content\nnext line");
+        });
+    });
+});

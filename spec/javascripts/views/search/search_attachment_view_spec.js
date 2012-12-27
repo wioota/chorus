@@ -3,7 +3,7 @@ describe("chorus.views.SearchAttachment", function() {
         var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
         this.result = search.attachments().at(0);
         this.view = new chorus.views.SearchAttachment({model: this.result});
-        this.view.render()
+        this.view.render();
     });
 
     it("shows the thumbnail for an image", function() {
@@ -11,7 +11,7 @@ describe("chorus.views.SearchAttachment", function() {
     });
 
     it("shows the iconUrl for a non-image", function() {
-        this.result.set({fileType: "OTHER"})
+        this.result.set({fileType: "OTHER"});
         expect(this.view.$("img.icon").attr("src")).toBe(this.result.iconUrl());
     });
 

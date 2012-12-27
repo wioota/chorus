@@ -24,7 +24,7 @@ describe("chorus.views.HdfsEntryList", function() {
         it("renders the name for each item", function() {
             expect(this.view.$("li:eq(0) .name")).toContainText(this.collection.at(0).get("name"));
             expect(this.view.$("li:eq(1) .name")).toContainText(this.collection.at(1).get("name"));
-        })
+        });
 
         it("renders the size for the file", function() {
             expect(this.view.$("li:eq(1) .size")).toContainText(I18n.toHumanSize(this.collection.at(1).get("size")));
@@ -33,24 +33,24 @@ describe("chorus.views.HdfsEntryList", function() {
         it("renders the icon for each item", function() {
             expect(this.view.$("li:eq(0) img").attr("src")).toBe("/images/instances/hadoop_directory_large.png");
             expect(this.view.$("li:eq(1) img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl(_.last(this.collection.at(1).get("name").split("."))));
-        })
+        });
 
         it("pre-selects the first item", function() {
             expect(this.view.$("li:eq(0)")).toHaveClass("selected");
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(0));
-        })
+        });
 
         it("links the directory name to that browse page", function() {
             expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/"+this.collection.at(0).id);
-        })
+        });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
-            expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")})
-        })
+            expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")});
+        });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
-            expect(this.view.$("li:eq(4) .dir")).toContainTranslation("hdfs.directory_files.no_permission")
-        })
+            expect(this.view.$("li:eq(4) .dir")).toContainTranslation("hdfs.directory_files.no_permission");
+        });
 
         describe("when browsing the root directory", function() {
             beforeEach(function() {
@@ -61,8 +61,8 @@ describe("chorus.views.HdfsEntryList", function() {
 
             it("links the directory name to that browse page", function() {
                 expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/" + this.collection.at(0).id);
-            })
-        })
+            });
+        });
 
         it("broadcasts hdfs_entry:selected on itemSelected", function() {
             var model = new chorus.models.HdfsEntry({
@@ -71,11 +71,11 @@ describe("chorus.views.HdfsEntryList", function() {
                 },
                 path: "/",
                 name: "foo.csv"
-            })
+            });
 
             chorus.PageEvents.broadcast.reset();
             this.view.itemSelected(model);
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", model);
-        })
+        });
     });
 });

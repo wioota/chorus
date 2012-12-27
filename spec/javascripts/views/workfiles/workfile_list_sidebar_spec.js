@@ -25,12 +25,12 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when a workfile is selected", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
-                    _.extend(this.workfile.get("versionInfo"), { updatedAt : "2011-11-22T10:46:03Z" })
+                    _.extend(this.workfile.get("versionInfo"), { updatedAt : "2011-11-22T10:46:03Z" });
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 });
 
                 it("displays the selected filename", function() {
-                    expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
+                    expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"));
                 });
 
                 it("displays the selected workfile's date", function() {
@@ -54,9 +54,9 @@ describe("chorus.views.WorkfileListSidebar", function() {
                     it("displays a link to delete the workfile", function() {
                         var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
                         expect(deleteLink).toExist();
-                        expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-                        expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-                        expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
+                        expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
+                        expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
+                        expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"));
                     });
                 });
 
@@ -77,7 +77,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                     expect(copyLink).toExist();
                     expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
                     expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
-                    expect(copyLink).toHaveAttr("data-active-only", 'true')
+                    expect(copyLink).toHaveAttr("data-active-only", 'true');
                 });
 
                 it("displays a link to download the workfile", function() {
@@ -115,7 +115,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 context("when it is in a search result workfile list", function() {
                     beforeEach(function() {
                         this.view.options.hideAddNoteLink = true;
-                        this.view.render()
+                        this.view.render();
                     });
 
                     it("does not display a link 'add a note'", function() {
@@ -159,9 +159,9 @@ describe("chorus.views.WorkfileListSidebar", function() {
             it("displays a link to copy the workfile to another workspace", function() {
                 var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
                 expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-                expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-                expect(copyLink).toHaveAttr("data-active-only", 'true')
+                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
+                expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
+                expect(copyLink).toHaveAttr("data-active-only", 'true');
             });
 
             it("displays a link to download the workfile", function() {

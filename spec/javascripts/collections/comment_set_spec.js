@@ -1,7 +1,7 @@
 describe("chorus.collections.CommentSet", function() {
     beforeEach(function() {
-        this.workspace = new chorus.models.Workspace({id: 17})
-        this.commentSet = new chorus.collections.CommentSet([], {workspaceId: 17})
+        this.workspace = new chorus.models.Workspace({id: 17});
+        this.commentSet = new chorus.collections.CommentSet([], {workspaceId: 17});
     });
 
     describe("comparator", function() {

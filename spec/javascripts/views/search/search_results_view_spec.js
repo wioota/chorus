@@ -17,9 +17,9 @@ describe("chorus.views.SearchResults", function() {
         });
 
         it("displays the blank slate text", function() {
-            expect(this.view.$(".sorry .header").text()).toContain(t("search.no_results.header"))
-            expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.check_spelling"))
-            expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.try_wildcards"))
+            expect(this.view.$(".sorry .header").text()).toContain(t("search.no_results.header"));
+            expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.check_spelling"));
+            expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.try_wildcards"));
         });
 
         context("and there are no filters applied", function() {
@@ -30,7 +30,7 @@ describe("chorus.views.SearchResults", function() {
             });
 
             it("does not suggest expanding the search", function() {
-                expect(this.view.$(".sorry ul li").text()).not.toContain(t("search.no_results.expand"))
+                expect(this.view.$(".sorry ul li").text()).not.toContain(t("search.no_results.expand"));
             });
         });
 
@@ -42,8 +42,8 @@ describe("chorus.views.SearchResults", function() {
             });
 
             it("suggests expanding the search", function() {
-                expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.expand"))
-                expect(this.view.$(".sorry ul li a")).toHaveHref("#/search/foo")
+                expect(this.view.$(".sorry ul li").text()).toContain(t("search.no_results.expand"));
+                expect(this.view.$(".sorry ul li a")).toHaveHref("#/search/foo");
             });
         });
     });
@@ -68,6 +68,22 @@ describe("chorus.views.SearchResults", function() {
         });
 
         context("when searching for only workfiles", function() {
+            function itShowsOnlyTheWorkfileSection() {
+                it("shows the workfile section", function() {
+                    expect(this.view.$(".search_result_list.workfile_list")).toExist();
+                });
+
+                it("does not show the sections for other types of items", function() {
+                    expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
+                    expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
+                    expect(this.view.$(".search_result_list.instance_list")).not.toExist();
+                    expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
+                    expect(this.view.$(".search_result_list.user_list")).not.toExist();
+                    expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
+                    expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
+                });
+            }
+
             beforeEach(function() {
                 this.model = makeSearchResults();
                 this.model.set({ entityType: "workfile" });
@@ -111,22 +127,6 @@ describe("chorus.views.SearchResults", function() {
             });
         });
 
-        function itShowsOnlyTheWorkfileSection() {
-            it("shows the workfile section", function() {
-                expect(this.view.$(".search_result_list.workfile_list")).toExist();
-            });
-
-            it("does not show the sections for other types of items", function() {
-                expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
-                expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
-                expect(this.view.$(".search_result_list.instance_list")).not.toExist();
-                expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
-                expect(this.view.$(".search_result_list.user_list")).not.toExist();
-                expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
-                expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
-            });
-        }
-
         describe("clicking an li", function() {
             beforeEach(function() {
                 this.eventSpy = spyOn(chorus.PageEvents, 'broadcast');
@@ -155,7 +155,7 @@ describe("chorus.views.SearchResults", function() {
 
                 context("and it is for a workfile", function() {
                     it("triggers the 'workfile:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") == 'workfile'});
+                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'workfile';});
                         this.view.$(".this_workspace li[data-template=search_workfile]").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", modelToClick);
                     });
@@ -163,7 +163,7 @@ describe("chorus.views.SearchResults", function() {
 
                 context("and it is for a dataset", function() {
                     it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") == 'dataset'});
+                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'dataset';});
                         this.view.$(".this_workspace li[data-template=search_dataset]").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                     });

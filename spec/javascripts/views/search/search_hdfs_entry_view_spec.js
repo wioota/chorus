@@ -30,7 +30,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             beforeEach(function() {
                 setModelPath(this.model, '/aaa/bbb');
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
-                this.view.render()
+                this.view.render();
             });
 
             it("should return the path segments without highlighting", function() {
@@ -43,7 +43,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
                 this.model.set('highlightedAttributes', {path: ['/<em>aaa</em>/bbb/ccc']});
                 setModelPath(this.model, '/aaa/bbb/ccc');
                 this.view = new chorus.views.SearchHdfsEntry({model: this.model});
-                this.view.render()
+                this.view.render();
             });
 
             it("should return an array of path segments with highlighting", function() {
@@ -57,7 +57,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             this.model.set({isBinary: false, highlightedAttributes: {path: ['/<em>aaa</em>/bbb']} });
             setModelPath(this.model, '/aaa/bbb');
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
-            this.view.render()
+            this.view.render();
         });
 
         it("should render the name for each file", function() {
@@ -92,7 +92,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             this.model.set({isBinary: true});
             setModelPath(this.model, '/aaa/bbb');
             this.view = new chorus.views.SearchHdfsEntry({model: this.model});
-            this.view.render()
+            this.view.render();
         });
 
          it("should render the instance location", function() {

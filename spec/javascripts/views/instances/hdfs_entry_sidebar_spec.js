@@ -4,6 +4,41 @@ describe("chorus.views.HdfsEntrySidebar", function() {
     });
 
     describe("#render", function() {
+        function itHasTheRightDefaultBehavior(withActivities) {
+            it("should display the file name", function() {
+                expect(this.view.$(".info .name").text()).toBe(this.hdfsEntry.get("name"));
+            });
+
+            it("should display the last updated timestamp", function() {
+                var when = chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastUpdatedStamp"));
+                expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
+            });
+
+            if (withActivities) {
+                it("shows the activity stream", function() {
+                    expect(this.view.$(".tab_control")).not.toHaveClass("hidden");
+                });
+
+                it("fetches the activity list", function() {
+                    expect(this.view.tabs.activity.collection).toHaveBeenFetched();
+                });
+
+                it("re-fetches when csv_import:started is broadcast", function() {
+                    this.server.reset();
+                    chorus.PageEvents.broadcast("csv_import:started");
+                    expect(this.view.tabs.activity.collection).toHaveBeenFetched();
+                });
+            } else {
+                it("does not fetch the activity list", function() {
+                    expect(this.view.tabs.activity).toBeUndefined();
+                });
+
+                it("hides the activity stream", function() {
+                    expect(this.view.$(".tab_control")).toHaveClass("hidden");
+                });
+            }
+        }
+
         context("when the model is a directory", function() {
             beforeEach(function() {
                 this.hdfsEntry = fixtures.hdfsEntryDir();
@@ -18,7 +53,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("has a link to create an external table", function() {
                 expect(this.view.$("a.directory_external_table")).toExist();
-                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_instance.create_directory_external_table")
+                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_instance.create_directory_external_table");
             });
 
             it("calls the base implementation for postRender", function() {
@@ -45,7 +80,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     path: "/foo",
                     name: "my_file.sql",
                     isBinary: false
-               })
+               });
 
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
@@ -78,7 +113,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     this.view.$('a.external_table').click();
                     this.server.completeFetchFor(this.hdfsEntry);
 
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
                     expect(chorus.modal.model.get("path")).toBe("/");
                 });
             });
@@ -124,7 +159,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     path: "/",
                     name: "my_file.exe",
                     isBinary: true
-                })
+                });
 
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
@@ -142,39 +177,4 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
         });
     });
-
-    function itHasTheRightDefaultBehavior(withActivities) {
-        it("should display the file name", function() {
-            expect(this.view.$(".info .name").text()).toBe(this.hdfsEntry.get("name"));
-        });
-
-        it("should display the last updated timestamp", function() {
-            var when = chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastUpdatedStamp"));
-            expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
-        });
-
-        if (withActivities) {
-            it("shows the activity stream", function() {
-                expect(this.view.$(".tab_control")).not.toHaveClass("hidden")
-            });
-
-            it("fetches the activity list", function() {
-                expect(this.view.tabs.activity.collection).toHaveBeenFetched();
-            });
-
-            it("re-fetches when csv_import:started is broadcast", function() {
-                this.server.reset();
-                chorus.PageEvents.broadcast("csv_import:started");
-                expect(this.view.tabs.activity.collection).toHaveBeenFetched();
-            })
-        } else {
-            it("does not fetch the activity list", function() {
-                expect(this.view.tabs.activity).toBeUndefined();
-            });
-
-            it("hides the activity stream", function() {
-                expect(this.view.$(".tab_control")).toHaveClass("hidden")
-            });
-        }
-    }
-})
+});

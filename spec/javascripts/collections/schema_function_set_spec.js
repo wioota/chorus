@@ -21,8 +21,8 @@ describe("chorus.collections.SchemaFunctionSet", function() {
         });
 
         it("sorts by functionName, case insensitive", function() {
-            var functionNames = this.functionSet.pluck('name')
+            var functionNames = this.functionSet.pluck('name');
             expect(functionNames).toEqual(['foo', 'hello', 'ZOO']);
-        })
+        });
     });
 });
