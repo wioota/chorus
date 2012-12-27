@@ -16,5 +16,22 @@ unless Rails.env.production?
     end
 
     task :all => ['jshint', 'jshint:specs']
+
+    task :changed do
+      files = `git diff --cached --name-only --diff-filter=ACM`.split("\n")
+      javascript = files.select { |file| file.ends_with?('.js') }
+      production_js = javascript.select { |file| file.starts_with?('app/assets') }.join(',')
+      spec_js = javascript.select { |file| file.starts_with?('spec') }.join(',')
+
+      unless spec_js.empty?
+        ENV['paths'] = spec_js
+        Rake::Task['jshint:specs'].invoke
+      end
+
+      unless production_js.empty?
+        ENV['paths'] = production_js
+        Rake::Task['jshint'].invoke
+      end
+    end
   end
 end
