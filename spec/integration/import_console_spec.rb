@@ -8,25 +8,30 @@ describe "Import Console", :database_integration do
   let(:dataset) { datasets(:forever_chorus_view) }
   let(:workspace) { dataset.workspace }
 
-  xit "shows a list of pending imports" do
+  def clean_up
+    dataset.schema.connect_with(dataset.gpdb_instance.owner_account).drop_table("forever_table")
+  end
 
+  before do
+    Import.delete_all # remove existing fixtures
+    clean_up
+  end
+  after { clean_up }
+
+  it "shows a list of pending imports" do
     visit "#/workspaces/#{workspace.id}/chorus_views/#{dataset.id}"
     click_on "Import Now"
     fill_in "toTable", :with => "forever_table"
+    page.should have_content "Begin Import"
     click_on "Begin Import"
 
-    #within ".header" do
-    #  click_on users(:admin).name
-    #  click_on "Sign Out"
-    #end
-
-    #login(users(:admin))
-    Thread.new {
-      run_jobs_synchronously
-    }.run
-
-    sleep 2
     visit '/import_console'
-    page.should have_content "forever_table"
+    source_path = "#{dataset.schema.database.name}.#{dataset.schema.name}.#{dataset.name}"
+    destination_path = "#{workspace.sandbox.database.name}.#{workspace.sandbox.name}.forever_table"
+    page.should have_content destination_path
+
+    click_on source_path
+    page.should have_content dataset.name
+
   end
 end
