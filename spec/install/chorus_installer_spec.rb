@@ -648,6 +648,30 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#secure_sensitive_files" do
+    let(:files) {
+      %w{
+        /usr/local/greenplum-chorus/shared/secret.token
+        /usr/local/greenplum-chorus/shared/secret.key
+        /usr/local/greenplum-chorus/shared/chorus.properties
+      }
+    }
+    before do
+      installer.destination_path = "/usr/local/greenplum-chorus"
+      FileUtils.mkdir_p '/usr/local/greenplum-chorus/shared'
+      files.each do |f|
+        FileUtils.touch f
+      end
+      installer.secure_sensitive_files
+    end
+
+    it "makes changes permissions to 600" do
+      files.each do |f|
+        File.new(f).stat.mode.should == 0100600
+      end
+    end
+  end
+
   describe "#generate_paths_file" do
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"

@@ -459,6 +459,18 @@ class ChorusInstaller
     FileUtils.rm_rf release_path
   end
 
+  def secure_sensitive_files
+    files = %W{
+      #{destination_path}/shared/secret.token
+      #{destination_path}/shared/secret.key
+      #{destination_path}/shared/chorus.properties
+    }
+
+    files.each do |file|
+      File.chmod(0600, file)
+    end
+  end
+
   def configure_secret_key
     key_file = "#{destination_path}/shared/secret.key"
     return if File.exists?(key_file)
