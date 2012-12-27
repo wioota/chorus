@@ -14,6 +14,10 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
         expect(this.page.search.workspace()).toHaveBeenFetched();
     });
 
+    it("has no required resources", function() {
+       expect(this.page.requiredResources.length).toBe(0);
+    });
+
     describe("when the workspace and search are fetched", function() {
         context("when the search is scoped", function() {
             beforeEach(function() {
