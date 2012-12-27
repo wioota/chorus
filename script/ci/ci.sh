@@ -41,7 +41,7 @@ fi
 # start jasmine
 if $run_jasmine ; then
     rm -fr tmp/cache
-    b/rake jshint
+    b/rake jshint:all
     b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
     jasmine_pid=$!
     echo "Jasmine process id is : $jasmine_pid"
