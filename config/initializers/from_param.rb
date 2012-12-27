@@ -1,7 +1,7 @@
 module ActiveRecord
   class Base
     def self.from_param(param)
-      find_by_id(param)
+      find(param)
     end
   end
 end

@@ -44,5 +44,10 @@ describe ModelMap do
       }.to raise_error(ModelMap::UnknownEntityType)
     end
 
+    it "throws an error if the entity cannot be found" do
+      expect {
+        ModelMap.model_from_params("workspace", -1)
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 end
