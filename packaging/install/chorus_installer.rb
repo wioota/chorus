@@ -391,6 +391,8 @@ class ChorusInstaller
       configure_secret_token
 
       link_shared_files
+
+      secure_sensitive_files
     end
 
     log "Extracting postgres..." do
