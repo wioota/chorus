@@ -20,7 +20,7 @@ describe("chorus.views.TagList", function() {
             this.tags.trigger('loaded');
 
             _.each(this.tags.models, function(tag) {
-                expect(this.view.$el).toContainText(tag.name);
+                expect(this.view.$el).toContainText(tag.name());
             }, this);
         });
     });

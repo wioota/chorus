@@ -59,6 +59,8 @@ describe TaggingsController do
   end
 
   describe 'index' do
+    it_behaves_like "a paginated list"
+
     context "with no query" do
       it "should show all tags" do
         get :index

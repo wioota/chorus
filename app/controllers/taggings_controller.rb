@@ -8,7 +8,7 @@ class TaggingsController < ApplicationController
       ActsAsTaggableOn::Tag.all
     end
 
-    present tags
+    present paginate(tags)
   end
 
   def create
