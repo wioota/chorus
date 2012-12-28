@@ -68,7 +68,7 @@ RSpec.configure do |config|
   config.include InstanceIntegration
   config.include CapybaraHelpers
 
-  Capybara.default_wait_time = 60
+  Capybara.default_wait_time = 20
 end
 
 # capybara-screenshot must be included after the rspec after hook calling Capybara.reset_sessions! (see above)
