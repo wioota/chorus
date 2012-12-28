@@ -26,6 +26,5 @@ describe("textext extensions", function() {
             this.textext.ajax().onComplete({response: [{name: 'foo'}, {name: 'bar'}]}, 'bar');
             expect(setSuggestions).toHaveBeenCalledWith(jasmine.any(Object), {result: [{name: 'bar'}]});
         });
-
     });
 });

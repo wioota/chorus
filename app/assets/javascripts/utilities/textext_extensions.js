@@ -49,4 +49,18 @@
         core.getFormData();
         core.invalidateBounds();
     };
+
+    var TextExt = $.fn.textext.TextExt;
+
+    TextExt.prototype.getFormData = function(keyCode) {
+        var self = this,
+            data = self.getWeightedEventResponse('getFormData', keyCode || 0)
+            ;
+
+        self.trigger('setFormData'  , data['form']);
+
+        if (keyCode === 13 || keyCode === 108) {
+            self.trigger('setInputData' , data['input']);
+        }
+    };
 })();
