@@ -24,7 +24,10 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         }
 
         _.defer(_.bind(function() {
-            chorus.styleSelect(this.$("select.data_sources"));
+            chorus.styleSelect(this.$("select.data_sources"), { format: function(text, option) {
+                var aliasedName = $(option).attr("name");
+                    return '<span class='+ aliasedName +'></span>' + text;
+            } });
         }, this));
     },
 

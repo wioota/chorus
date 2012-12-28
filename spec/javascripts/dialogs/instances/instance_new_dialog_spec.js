@@ -1,7 +1,8 @@
  describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
         stubDefer();
-        spyOn(chorus, 'styleSelect');
+        this.selectMenuStub = stubSelectMenu();
+        spyOn(chorus, 'styleSelect').andCallThrough();;
         this.dialog = new chorus.dialogs.InstancesNew();
         $('#jasmine_content').append(this.dialog.el);
     });
@@ -51,6 +52,11 @@
         it("populates the template select box", function() {
             expect(this.dialog.$("select.instance_size option").length).toBe(1);
         });
+
+        it("shows the icon", function() {
+            this.dialog.$(".ui-selectmenu-button .ui-button").click();
+            expect(this.selectMenuStub.find(".create_new_greenplum")).toExist();
+        });
     });
 
     context("when aurora is not installed", function() {
@@ -58,6 +64,16 @@
             chorus.models.GpdbInstance.aurora().set({ installSucceed: false });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
+        });
+
+        it("styles the select", function() {
+            expect(chorus.styleSelect).toHaveBeenCalled();
+        });
+
+        it("shows the icon", function() {
+            this.dialog.$(".ui-selectmenu-button .ui-button").click();
+            expect(this.selectMenuStub.find(".register_existing_greenplum")).toExist();
+            expect(this.selectMenuStub.find(".register_existing_hadoop")).toExist();
         });
 
         it("shows data source description", function () {
@@ -212,6 +228,11 @@
 
         it("shows gnip data source description", function () {
             expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("instances.new_dialog.register_existing_gnip_help_text");
+        });
+
+        it("shows the icon", function() {
+            this.dialog.$(".ui-selectmenu-button .ui-button").click();
+            expect(this.selectMenuStub.find(".register_existing_gnip")).toExist();
         });
 
 

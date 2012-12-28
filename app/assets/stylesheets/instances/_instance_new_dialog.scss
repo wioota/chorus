@@ -103,3 +103,32 @@
         }
     }
 }
+
+.ui-selectmenu-menu #data_sources-menu li a,
+.ui-selectmenu-button #data_sources-button .ui-selectmenu-text {
+  span {
+    display: inline-block;
+    width: 17px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+
+  .select_one {
+    width: 0px;
+    height: 0px;
+  }
+
+  .register_existing_greenplum {
+    background: transparent url("/images/instances/icon_datasourcemenu_greenplum.png") center center no-repeat;
+  }
+
+  .register_existing_hadoop {
+    background: transparent url("/images/instances/icon_datasourcemenu_hadoop.png") center center no-repeat;
+  }
+
+  .register_existing_gnip {
+    background: transparent url("/images/instances/icon_datasourcemenu_gnip.png") center center no-repeat;
+  }
+}
