@@ -8,10 +8,12 @@ describe "Instances", :database_integration do
       click_button "Add Data Source"
     end
 
-    def select_and_do_within(class_name)
-      find(".instance_new.dialog").should have_content("Register an existing Gnip account ")
-      choose class_name
-      within ".#{class_name}" do
+    def select_and_do_within(value)
+      find(".instance_new.dialog").should have_content("Data Source Type")
+      page.find("#data_sources-button span.ui-selectmenu-text").should have_content("Select one")
+      select_item("select.data_sources", value)
+      page.find("#data_sources-button span.ui-selectmenu-text").should have_no_content("Select one")
+      within ".data_sources_form.#{value}" do
         yield
       end
     end

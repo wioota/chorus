@@ -18,23 +18,17 @@ describe "Sandbox", :database_integration do
     within_modal do
       #instance
       page.find("div.instance span.ui-selectmenu-text").should have_content("Select one")
-      page.execute_script("$('select[name=instance]').val('#{instance.id}')")
-      page.execute_script("$('select[name=instance]').selectmenu('refresh')")
-      page.execute_script("$('select[name=instance]').change()")
+      select_item("select[name=instance]", instance.id)
       page.find("div.instance span.ui-selectmenu-text").should have_content(instance.name)
 
       #database
       page.find("div.database span.ui-selectmenu-text").should have_content("Select one")
-      page.execute_script("$('select[name=database]').val('#{database.id}')")
-      page.execute_script("$('select[name=database]').selectmenu('refresh')")
-      page.execute_script("$('select[name=database]').change()")
+      select_item("select[name=database]", database.id)
       page.find("div.database span.ui-selectmenu-text").should have_content(database.name)
 
       #schema
       page.find("div.schema span.ui-selectmenu-text").should have_content("Select one")
-      page.execute_script("$('select[name=schema]').val('#{schema.id}')")
-      page.execute_script("$('select[name=schema]').selectmenu('refresh')")
-      page.execute_script("$('select[name=schema]').change()")
+      select_item("select[name=schema]", schema.id)
       page.find("div.schema span.ui-selectmenu-text").should have_content(schema.name)
 
       click_button "Add Sandbox"

@@ -41,4 +41,10 @@ module CapybaraHelpers
       page.should have_selector("h1", :text => title)
     end
   end
+
+  def select_item(selector, value)
+    page.execute_script("$('#{selector}').val('#{value}')")
+    page.execute_script("$('#{selector}').selectmenu('refresh')")
+    page.execute_script("$('#{selector}').change()")
+  end
 end
