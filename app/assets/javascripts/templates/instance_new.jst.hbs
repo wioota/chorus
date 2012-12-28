@@ -1,10 +1,15 @@
-<fieldset class="collapsed register_existing_greenplum">
-    <legend>
-        <input type="radio" name="instance_type" id="register_existing_greenplum"/>
-        <label for="register_existing_greenplum">{{t "instances.new_dialog.register_existing_greenplum"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_greenplum_help_text"}}'/>
-    </legend>
-    <div><form>
+<label for="data_sources">{{t "datasource.type"}}</label><br/>
+<select class="data_sources" id="data_sources">
+    <option selected name="select_one" value="">{{t "selectbox.select_one"}}</option>
+    <option name="register_existing_greenplum" value="register_existing_greenplum">{{t "datasource.greenplum"}}</option>
+    <option name="register_existing_hadoop"  value="register_existing_hadoop">{{t "datasource.hdfs"}}</option>
+    {{#if auroraInstalled}} <option name="create_new_greenplum" value="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</option>{{/if}}
+    {{#if gnipConfigured}} <option name="register_existing_gnip" value="register_existing_gnip">{{t "datasource.gnip"}}</option>{{/if}}
+</select>
+
+<div class="data_sources_form collapsed register_existing_greenplum">
+    <div class="description">{{t "instances.new_dialog.register_existing_greenplum_help_text"}}</div>
+    <form>
         <input type="hidden" name="provision_type" value="register" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
         <input type="text" name="name" maxlength="64"/>
@@ -29,29 +34,21 @@
         <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}}
             <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
         </label>
-    </form></div>
-</fieldset>
+    </form>
+</div>
 
 {{#if auroraInstalled}}
-<fieldset class="collapsed create_new_greenplum" >
-    <legend>
-        <input type="radio" name="instance_type" id="create_new_greenplum"/>
-        <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum_help_text"}}'/>
-    </legend>
-    <div><form>
+<div class="data_sources_form collapsed create_new_greenplum">
+    <div class="description">{{t "instances.new_dialog.create_new_greenplum_help_text"}}</div>
+    <form>
         {{renderTemplate "instance/provision" this}}
-    </form></div>
-</fieldset>
+    </div>
+</div>
 {{/if}}
 
-<fieldset class="collapsed register_existing_hadoop">
-    <legend>
-        <input type="radio" name="instance_type" id="register_existing_hadoop"/>
-        <label for="register_existing_hadoop">{{t "instances.new_dialog.register_existing_hadoop"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop_help_text"}}'/>
-    </legend>
-    <div><form>
+<div class="data_sources_form collapsed register_existing_hadoop">
+    <div class="description">{{t "instances.new_dialog.register_existing_hadoop_help_text"}}</div>
+    <form>
         <input type="hidden" name="provision_type" value="registerHadoop" />
         <input class="hidden" type="checkbox" name="shared" checked="checked"/>
 
@@ -70,17 +67,13 @@
         <label class="group_list required" name="groupList">{{t "instances.dialog.hadoop_group_list"}}</label>
         <input class="username" type="text" name="username" maxlength="255"/>
         <input class="group_list" type="text" name="groupList" maxlength="255"/>
-    </form></div>
-</fieldset>
+    </form>
+</div>
 
 {{#if gnipConfigured}}
-<fieldset class="collapsed register_existing_gnip">
-    <legend>
-        <input type="radio" name="instance_type" id="register_existing_gnip"/>
-        <label for="register_existing_gnip">{{t "instances.new_dialog.register_existing_gnip"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_gnip_help_text"}}'/>
-    </legend>
-    <div><form>
+<div class="data_sources_form collapsed register_existing_gnip">
+    <div class="description">{{t "instances.new_dialog.register_existing_gnip_help_text"}}</div>
+    <form>
         <input type="hidden" name="provision_type" value="registerGnip" />
 
         <label class="required">{{t "instances.dialog.gnip_instance_name"}}</label>
@@ -99,8 +92,8 @@
         <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>
         <input class="gnip_username" type="text" name="username" maxlength="255"/>
         <input class="gnip_password" type="password" name="password" maxlength="255"/>
-    </form></div>
-</fieldset>
+    </form>
+</div>
 {{/if}}
 
 <div class="modal_controls">

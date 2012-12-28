@@ -1,5 +1,7 @@
-describe("chorus.dialogs.InstancesNew", function() {
+ describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
+        stubDefer();
+        spyOn(chorus, 'styleSelect');
         this.dialog = new chorus.dialogs.InstancesNew();
         $('#jasmine_content').append(this.dialog.el);
     });
@@ -21,12 +23,17 @@ describe("chorus.dialogs.InstancesNew", function() {
             this.dialog.render();
         });
 
+        it("shows data source description", function () {
+            expect(this.dialog.$(".create_new_greenplum .description").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum_help_text");
+        });
+
+
         it("shows the 'create a new Greenplum database instance' option", function() {
-            expect(this.dialog.$(".create_new_greenplum input[type=radio]")).toExist();
+            expect(this.dialog.$("select.data_sources option[name=create_new_greenplum]")).toExist();
         });
 
         it("shows the correct text", function() {
-            expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum");
+            expect(this.dialog.$("select.data_sources option[name=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum");
         });
 
         it("defaults the schema name to 'public'", function() {
@@ -42,7 +49,7 @@ describe("chorus.dialogs.InstancesNew", function() {
         });
 
         it("populates the template select box", function() {
-            expect(this.dialog.$("select option").length).toBe(1);
+            expect(this.dialog.$("select.instance_size option").length).toBe(1);
         });
     });
 
@@ -53,8 +60,13 @@ describe("chorus.dialogs.InstancesNew", function() {
             this.dialog.render();
         });
 
+        it("shows data source description", function () {
+            expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
+            expect(this.dialog.$(".register_existing_hadoop .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop_help_text");
+        });
+
         it("does not show the 'create a new Greenplum database instance' option", function() {
-            expect(this.dialog.$(".create_new_greenplum input[type=radio]")).not.toExist();
+            expect(this.dialog.$("select.data_sources option[name=create_new_greenplum]")).not.toExist();
         });
 
         describe("when the fetches complete", function() {
@@ -63,32 +75,32 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.server.completeFetchFor(chorus.models.Config.instance());
             });
 
-            it("has radio buttons for 'register an existing instance' and 'register hadoop file system'", function() {
-                expect(this.dialog.$("input[type=radio]").length).toBe(2);
-                expect(this.dialog.$("label[for=register_existing_greenplum]").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum");
-                expect(this.dialog.$("label[for=register_existing_hadoop]").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop");
+            it("shows the label", function () {
+                expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type")
             });
 
-            it("starts with no radio buttons selected", function() {
-                expect(this.dialog.$("input[type=radio]:checked").length).toBe(0);
+            it("has select box for 'Greenplum Database', 'HDFS Cluster', and 'Gnip Account'", function () {
+                expect(this.dialog.$("select.data_sources option").length).toBe(3);
+                expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
+                expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.hdfs");
             });
 
-            it("starts with all fieldsets collapsed", function() {
-                expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(0);
+            it("starts with no select box selected", function() {
+                expect(this.dialog.$(".data_sources option:selected").text()).toMatchTranslation("selectbox.select_one");
             });
 
             it("starts with the submit button disabled", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
-            describe("selecting the 'register an existing instance' radio button", function() {
+            describe("selecting the 'Greenplum Database' option", function() {
                 beforeEach(function() {
-                    this.dialog.$("input[type=radio]#register_existing_greenplum").attr('checked', true).change();
+                    this.dialog.$(".data_sources").val("register_existing_greenplum").change();
                 });
 
-                it("un-collapses the 'register an existing instance' fieldset", function() {
-                    expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
-                    expect(this.dialog.$("fieldset.register_existing_greenplum")).not.toHaveClass("collapsed");
+                it("un-collapses the 'register an existing instance'", function() {
+                    expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
+                    expect(this.dialog.$(".register_existing_greenplum")).not.toHaveClass("collapsed");
                 });
 
                 it("enables the submit button", function() {
@@ -123,16 +135,31 @@ describe("chorus.dialogs.InstancesNew", function() {
                         expect(values.maintenanceDb).toBe("foo");
                     });
                 });
+
+                context("changing to 'Select one' option", function () {
+                    beforeEach(function () {
+                        this.dialog.$("select.data_sources").val("").change();
+                    });
+
+                    it("should hides all forms", function () {
+                        expect(this.dialog.$(".data_sources_form")).toHaveClass("collapsed");
+                    });
+
+                    it("should disable the submit button", function () {
+                        expect(this.dialog.$("button.submit")).toBeDisabled();
+                    });
+
+                });
             });
 
             describe("selecting the 'register a hadoop file system' radio button", function() {
                 beforeEach(function() {
-                    this.dialog.$("input[type=radio]#register_existing_hadoop").attr('checked', true).change();
+                    this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
                 });
 
-                it("un-collapses the 'register a hadoop file system' fieldset", function() {
-                    expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
-                    expect(this.dialog.$("fieldset.register_existing_hadoop")).not.toHaveClass("collapsed");
+                it("un-collapses the 'register a hadoop file system' form", function() {
+                    expect(this.dialog.$("div.data_sources_form").not(".collapsed").length).toBe(1);
+                    expect(this.dialog.$("div.register_existing_hadoop")).not.toHaveClass("collapsed");
                 });
 
                 it("enables the submit button", function() {
@@ -180,10 +207,19 @@ describe("chorus.dialogs.InstancesNew", function() {
         });
 
         it("shows the 'Register an existing GNIP instance' option", function() {
-            expect(this.dialog.$(".register_existing_gnip input[type=radio]")).toExist();
+            expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).toExist();
         });
 
-        describe("clicking on the radio button", function () {
+        it("shows gnip data source description", function () {
+            expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("instances.new_dialog.register_existing_gnip_help_text");
+        });
+
+
+        describe("selecting gnip instance", function () {
+            beforeEach(function () {
+                this.dialog.$("select.data_sources").val("register_existing_gnip").change();
+            });
+
             it("shows the gnip streamUrl", function () {
                 expect(this.dialog.$(".register_existing_gnip input[name=streamUrl]").val()).toBe("");
             });
@@ -199,7 +235,7 @@ describe("chorus.dialogs.InstancesNew", function() {
         });
 
         it("does not show the 'Register an existing GNIP instance' option", function() {
-            expect(this.dialog.$(".register_existing_gnip input[type=radio]")).not.toExist();
+            expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).not.toExist();
         });
     });
 
@@ -282,9 +318,9 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("when registering a hadoop instance", function() {
             beforeEach(function() {
-                var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop");
-                hadoopSection.find("input[type=radio]").attr('checked', true).change();
+                this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
 
+                var hadoopSection = this.dialog.$("div.register_existing_hadoop");
                 hadoopSection.find("input[name=name]").val(" Instance_Name ");
                 hadoopSection.find("textarea[name=description]").val(" Instance Description ");
                 hadoopSection.find("input[name=host]").val(" foo.bar ");
@@ -311,8 +347,9 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("using register existing greenplum database", function() {
             beforeEach(function() {
+                this.dialog.$("select.data_sources").val("register_existing_greenplum").change();
+
                 var section = this.dialog.$(".register_existing_greenplum");
-                section.find("input[type=radio]").attr('checked', true).change();
                 section.find("input[name=name]").val("Instance_Name");
                 section.find("textarea[name=description]").val("Instance Description");
                 section.find("input[name=host]").val("foo.bar");
@@ -344,7 +381,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("using a new Greenplum database instance", function() {
             beforeEach(function() {
-                this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
+                this.dialog.$("select.data_sources").val("create_new_greenplum").change();
                 this.dialog.$(".create_new_greenplum input[name=name]").val("new_greenplum_instance");
                 this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
                 this.dialog.$(".create_new_greenplum input[name=size]").val("1");
@@ -436,8 +473,9 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("using register existing gnip instance", function() {
             beforeEach(function() {
+                this.dialog.$("select.data_sources").val("register_existing_gnip").change();
+
                 var section = this.dialog.$(".register_existing_gnip");
-                section.find("input[type=radio]").attr('checked', true).change();
                 section.find("input[name=name]").val("Gnip_Name");
                 section.find("textarea[name=description]").val("Gnip Description");
                 section.find("input[name=streamUrl]").val("gnip.bar");
@@ -465,20 +503,4 @@ describe("chorus.dialogs.InstancesNew", function() {
         });
     });
 
-    describe("the help text tooltip", function() {
-        beforeEach(function() {
-            spyOn($.fn, 'qtip');
-            this.dialog.render();
-            this.qtipCall = $.fn.qtip.calls[0];
-        });
-
-        it("makes a tooltip for each help", function() {
-            expect($.fn.qtip).toHaveBeenCalled();
-            expect(this.qtipCall.object).toBe(".help");
-        });
-
-        it("renders a help text", function() {
-            expect(this.qtipCall.args[0].content).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
-        });
-    });
 });

@@ -5,7 +5,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     persistent:true,
 
     events:{
-        "change input[type='radio']":"showFieldset",
+        "change select.data_sources":"showFieldset",
         "click button.submit": "createInstance",
         "click a.close_errors": "clearServerErrors"
     },
@@ -22,6 +22,10 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         if (this.aurora.isInstalled()) {
             this.loadTemplates();
         }
+
+        _.defer(_.bind(function() {
+            chorus.styleSelect(this.$("select.data_sources"));
+        }, this));
     },
 
     loadTemplates: function() {
@@ -36,7 +40,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         });
 
         this.$(".instance_size_container").append($select);
-        chorus.styleSelect(this.$("select.instance_size"));
+        chorus.styleSelect(this.$("select.instance_size"), { menuWidth: 200 });
     },
 
     makeModel:function () {
@@ -52,10 +56,14 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     showFieldset:function (e) {
-        this.$("fieldset").addClass("collapsed");
-        $(e.currentTarget).closest("fieldset").removeClass("collapsed");
+        this.$(".data_sources_form").addClass("collapsed");
+        var className = $(e.currentTarget).val();
+
+        if(className.length) {
+            this.$("." + className).removeClass("collapsed");
+        }
+        this.$("button.submit").prop("disabled", className.length === 0);
         this.clearErrors();
-        this.$("button.submit").prop("disabled", false);
     },
 
     createInstance:function (e) {
@@ -72,7 +80,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     instanceClass: function() {
-        var instanceType = this.$("input[name=instance_type]").filter(":checked").attr("id");
+        var instanceType = this.$("select.data_sources").val();
         if (instanceType === "register_existing_hadoop") {
             return chorus.models.HadoopInstance;
         } else if (instanceType === "register_existing_gnip") {
@@ -84,7 +92,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     fieldValues: function() {
         var updates = {};
-        var inputSource = this.$("input[name=instance_type]:checked").closest("fieldset");
+        var className = this.$("select.data_sources").val();
+        var inputSource = this.$("." + className);
         _.each(inputSource.find("input[type=text], input[type=hidden], input[type=password], textarea, select"), function (i) {
             var input = $(i);
             updates[input.attr("name")] = input.val().trim();

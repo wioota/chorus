@@ -3,30 +3,45 @@
 
     width: $dialog-width;
 
-    legend div {
-        display: inline-block;
-        margin: 0 8px;
+    .data_sources {
+      min-width: 200px;
+      display: inline-block;
     }
 
-    fieldset.collapsed {
-        >div {
-            display: none;
-        }
+    label, input {
+      display: inline-block;
+    }
 
+    label[for='data_sources'] {
+      margin-bottom: 8px;
+    }
+
+    div.data_sources_form.collapsed {
+        display: none;
         border: none;
         padding: 0 $dialog-padding;
         margin-left: 1px;
         margin-bottom: 0;
     }
 
-    fieldset {
-        $fieldset-width : $dialog-width - 4 * $dialog-padding - 2px;
-        $hostname_width : 320px;
-        $account_width : 210px;
+    div.data_sources_form {
+        $fieldset-width : $dialog-width - 2 * $dialog-padding;
+        $hostname_width : 375px;
+        $account_width : 240px;
         $input-spacing : 12px;
         $size_width : 75px;
 
         margin-bottom: $dialog-padding;
+
+        .description {
+          background: transparent url("/images/instances/icon_info_mediumgrey.png") top left no-repeat;
+          min-height: 47px;
+          padding: 5px 0 0 54px;
+          margin: 8px 0;
+          @include dialog-label;
+          line-height: 16px;
+          border-bottom: 1px solid $border-color;
+        }
 
         label[name=host], input[name=host],
         label[name=database], input[name=database] {
@@ -34,7 +49,7 @@
         }
 
         label[name=port], input[name=port] {
-            width: $fieldset-width - $hostname_width - $dialog-padding - 4px;
+            width: $fieldset-width - $hostname_width - $dialog-padding - 2px;
             margin-left: $input-spacing;
         }
 
@@ -54,7 +69,7 @@
         label[name=schemaName], input[name=schemaName],
         .group_list, .gnip_password
         {
-            width: $fieldset-width - $account_width - $dialog-padding - 4px;
+            width: $fieldset-width - $account_width - $dialog-padding - 2px;
             margin-left: $input-spacing;
         }
 
