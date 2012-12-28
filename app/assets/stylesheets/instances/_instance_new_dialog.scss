@@ -132,3 +132,9 @@
     background: transparent url("/images/instances/icon_datasourcemenu_gnip.png") center center no-repeat;
   }
 }
+
+.ui-selectmenu-button #data_sources-button .ui-selectmenu-text {
+  span {
+    margin-top: -5px;
+  }
+}
