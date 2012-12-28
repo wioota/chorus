@@ -483,6 +483,10 @@ describe("chorus.views.Header", function() {
                 it("has a link to the notifications", function() {
                     expect(this.view.$(".menu.popup_gear a[href='#/notifications']").text()).toMatchTranslation("header.notifications");
                 });
+
+                it("has a link to the tags", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/tags']").text()).toMatchTranslation("header.tags");
+                });
             });
 
             describe("chorus:menu:popup handling", function() {
