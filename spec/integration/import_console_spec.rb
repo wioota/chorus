@@ -5,7 +5,7 @@ describe "Import Console", :database_integration do
     login(users(:admin))
   end
 
-  let(:dataset) { datasets(:forever_chorus_view) }
+  let(:dataset) { datasets(:real_chorus_view) }
   let(:workspace) { dataset.workspace }
 
   def clean_up
@@ -24,8 +24,6 @@ describe "Import Console", :database_integration do
     fill_in "toTable", :with => "forever_table"
     page.should have_content "Begin Import"
     click_on "Begin Import"
-    sleep 2
-    screenshot_and_save_page
 
     visit '/import_console'
     source_path = "#{dataset.schema.database.name}.#{dataset.schema.name}.#{dataset.name}"
