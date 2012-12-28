@@ -25,14 +25,6 @@ describe Dataset do
         }.to change(dataset.import_schedules, :count).to(0)
       end
 
-      it "deletes its imports when it is destroyed" do
-        dataset = datasets(:table)
-
-        expect {
-          dataset.destroy
-        }.to change(dataset.imports, :count).to(0)
-      end
-
       it "deletes its tableau workbook publications when it is destroyed" do
         dataset = datasets(:chorus_view)
 

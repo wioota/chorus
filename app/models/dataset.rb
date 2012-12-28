@@ -13,7 +13,7 @@ class Dataset < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema'
 
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
-  has_many :imports, :foreign_key => 'source_dataset_id', :dependent => :destroy
+  has_many :imports, :foreign_key => 'source_dataset_id'
   has_many :tableau_workbook_publications, :dependent => :destroy
   delegate :gpdb_instance, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics

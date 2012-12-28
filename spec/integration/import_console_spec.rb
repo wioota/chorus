@@ -1,30 +1,30 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Import Console", :database_integration do
+describe "Import Console" do
+  let(:user) {users(:admin)}
+
   before do
-    login(users(:admin))
+    login user
   end
 
   let(:dataset) { datasets(:real_chorus_view) }
   let(:workspace) { dataset.workspace }
+  let(:deleted_workspace) { FactoryGirl.create :workspace, :sandbox => workspace.sandbox, :owner => user, :name => "deleted workspace" }
 
-  def clean_up
-    dataset.schema.connect_with(dataset.gpdb_instance.owner_account).drop_table("forever_table")
-  end
+  let(:deleted_table) {datasets(:table)}
+  let(:other_table) {datasets(:other_table)}
 
   before do
     Import.delete_all # remove existing fixtures
-    clean_up
+
+    FactoryGirl.create :import, :source_dataset => dataset, :workspace => workspace, :to_table => "forever_table", :user => user
+    FactoryGirl.create :import, :source_dataset => deleted_table, :workspace => workspace, :to_table => "import_of_deleted_table", :user => user
+    FactoryGirl.create :import, :source_dataset => other_table, :workspace => deleted_workspace, :to_table => "import_to_deleted_workspace", :user => user
+    deleted_table.destroy
+    deleted_workspace.destroy
   end
-  after { clean_up }
 
   it "shows a list of pending imports" do
-    visit "#/workspaces/#{workspace.id}/chorus_views/#{dataset.id}"
-    click_on "Import Now"
-    fill_in "toTable", :with => "forever_table"
-    page.should have_content "Begin Import"
-    click_on "Begin Import"
-
     visit '/import_console'
     source_path = "#{dataset.schema.database.name}.#{dataset.schema.name}.#{dataset.name}"
     destination_path = "#{workspace.sandbox.database.name}.#{workspace.sandbox.name}.forever_table"
@@ -32,6 +32,5 @@ describe "Import Console", :database_integration do
 
     click_on source_path
     page.should have_content dataset.name
-
   end
 end

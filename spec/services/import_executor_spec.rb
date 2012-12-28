@@ -280,6 +280,66 @@ describe ImportExecutor do
 
       it_behaves_like :it_fails_with_message, :run_failing_import, "some crazy error"
     end
+
+    context "where the import source dataset has been deleted" do
+      before do
+        source_dataset.destroy
+        import.reload # reload the deleted source dataset
+      end
+
+      let(:error_message) { "Original source dataset #{source_dataset.scoped_name} has been deleted" }
+      let(:run_import) {
+        ImportExecutor.new(import).run
+      }
+
+      it "raises an error" do
+        expect {
+          run_import
+        }.to raise_error error_message
+      end
+
+      it "creates a DatasetImportFailed" do
+        expect {
+          expect {
+            run_import
+          }.to raise_error error_message
+        }.to change(Events::DatasetImportFailed, :count).by(1)
+
+        event = Events::DatasetImportFailed.last
+        event.error_message.should == error_message
+      end
+    end
+
+    context "where the workspace has been deleted" do
+      let(:error_message) { "Destination workspace #{workspace.name} has been deleted" }
+
+      before do
+        workspace.destroy
+        import.reload # reload the deleted source dataset
+      end
+
+      let(:run_import) {
+        ImportExecutor.new(import).run
+      }
+
+      it "raises an error" do
+        expect {
+          run_import
+        }.to raise_error error_message
+      end
+
+      it "creates a DatasetImportFailed" do
+        expect {
+          expect {
+            run_import
+          }.to raise_error error_message
+        }.to change(Events::DatasetImportFailed, :count).by(1)
+
+        event = Events::DatasetImportFailed.last
+        event.error_message.should == error_message
+        event.workspace.should == workspace
+      end
+    end
   end
 
   describe ".cancel" do

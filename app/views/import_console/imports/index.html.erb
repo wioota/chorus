@@ -42,11 +42,11 @@
       <td><%= show_process { import.busy?(:writer) } %></td>
       <td><%= show_process { import.busy?(:reader) } %></td>
 
-      <td><%= instance_description_for_schema(import.source_dataset.schema) %></td>
-      <td><%= link_to(table_description(import.source_dataset.schema, import.source_dataset.name), link_to_table(import.workspace, import.source_dataset))%></td>
+      <td><%= instance_description_for_schema(import.source_dataset_with_deleted.schema) %></td>
+      <td><%= link_to(table_description(import.source_dataset_with_deleted.schema, import.source_dataset.name), link_to_table(import.workspace_with_deleted, import.source_dataset_with_deleted))%></td>
 
-      <td><%= instance_description_for_schema(import.workspace.sandbox) %></td>
-      <td><%= link_to_destination(import.workspace, import.to_table) %></td>
+      <td><%= instance_description_for_schema(import.workspace_with_deleted.sandbox) %></td>
+      <td><%= link_to_destination(import.workspace_with_deleted, import.to_table) %></td>
 </tr>
   <% end %>
 </tbody>

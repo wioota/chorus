@@ -34,6 +34,6 @@ module ImportConsole::ImportsHelper
   def show_process
     yield || "Not found"
   rescue Exception => e
-    "#{e}"
+    "#{e}: #{e.message}"
   end
 end
