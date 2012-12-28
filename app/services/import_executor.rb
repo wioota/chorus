@@ -14,6 +14,8 @@ class ImportExecutor < DelegateClass(Import)
 
   def run
     touch(:started_at)
+    raise "Destination workspace #{workspace_with_deleted.name} has been deleted" if workspace_with_deleted.deleted?
+    raise "Original source dataset #{source_dataset_with_deleted.scoped_name} has been deleted" if source_dataset_with_deleted.deleted?
     source_database_url = get_database_url(source_dataset.schema.database)
     destination_database_url = get_database_url(sandbox.database)
     GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)
@@ -56,12 +58,12 @@ class ImportExecutor < DelegateClass(Import)
 
     touch(:finished_at)
     self.success = passed
-    save!
+    save(:validate => false)
 
     if passed
-      # this updates destination_dataset_id
       refresh_schema
-      save!
+      set_destination_dataset_id
+      save(:validate => false)
 
       event = create_passed_event_and_notification
       update_import_created_event
@@ -111,11 +113,11 @@ class ImportExecutor < DelegateClass(Import)
 
   def create_failed_event(error_message)
     Events::DatasetImportFailed.by(user).add(
-        :workspace => workspace,
+        :workspace => workspace_with_deleted,
         :destination_table => to_table,
         :error_message => error_message,
         :source_dataset => source_dataset,
-        :dataset => sandbox.datasets.find_by_name(to_table)
+        :dataset => workspace_with_deleted.sandbox.datasets.find_by_name(to_table)
     )
   end
 end

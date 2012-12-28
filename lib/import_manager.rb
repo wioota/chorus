@@ -22,6 +22,12 @@ class ImportManager < DelegateClass(Import)
     database(type).connect_as(user).fetch(procpid_sql(type)).any?
   end
 
+  def source_dataset
+    Dataset.unscoped {
+      __getobj__.source_dataset
+    }
+  end
+
   def named_pipe
     dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
     Dir.glob(dir.join "pipe*_#{created_at.to_i}_#{id}").first

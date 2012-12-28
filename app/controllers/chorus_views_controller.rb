@@ -59,8 +59,6 @@ class ChorusViewsController < ApplicationController
     chorus_view = ChorusView.find(params[:id])
     authorize! :can_edit_sub_objects, chorus_view.workspace
     chorus_view.destroy
-    schedule = ImportSchedule.find_by_source_dataset_id(params[:id])
-    schedule.destroy unless schedule.nil?
 
     render :json => {}
   end
