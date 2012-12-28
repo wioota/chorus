@@ -111,5 +111,7 @@ class ChorusView < Dataset
       metadata = results.getMetaData
     end
     @statistics = DatasetStatistics.new('column_count' => metadata.getColumnCount)
+  rescue Exception => e
+    raise MultipleResultsetQuery::QueryError, "The query could not be completed. Error: #{e.message}"
   end
 end

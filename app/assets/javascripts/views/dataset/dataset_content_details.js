@@ -44,7 +44,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.statistics = this.dataset.statistics();
         this.statistics.fetchIfNotLoaded();
 
-        this.requiredResources.add(this.statistics);
+        if (!this.dataset.isChorusView()) {
+            this.requiredResources.add(this.statistics);
+        }
+
         this.bindings.add(this.collection, "add remove", this.updateColumnCount);
     },
 
