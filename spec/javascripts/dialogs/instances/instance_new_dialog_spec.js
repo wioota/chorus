@@ -2,7 +2,7 @@
     beforeEach(function() {
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
-        spyOn(chorus, 'styleSelect').andCallThrough();;
+        spyOn(chorus, 'styleSelect').andCallThrough();
         this.dialog = new chorus.dialogs.InstancesNew();
         $('#jasmine_content').append(this.dialog.el);
     });
@@ -92,7 +92,7 @@
             });
 
             it("shows the label", function () {
-                expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type")
+                expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type");
             });
 
             it("has select box for 'Greenplum Database', 'HDFS Cluster', and 'Gnip Account'", function () {
