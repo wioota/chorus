@@ -6,7 +6,7 @@ describe("chorus.views.TagIndexContentDetails", function() {
         ]);
 
         this.view = new chorus.views.TagIndexContentDetails({
-            tags: this.tags
+            collection: this.tags
         });
     });
 

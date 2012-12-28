@@ -36,4 +36,18 @@ describe("chorus.pages.TagIndexPage", function() {
             expect(this.page.$('.count')).toContainText(this.tags.length);
         });
     });
+
+    describe("content", function() {
+        beforeEach(function() {
+            this.tags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
+            this.server.completeFetchAllFor(this.tagSet, this.tags);
+            this.page.render();
+        });
+
+        it("loads the tags", function() {
+            _.each(this.tags, function(tag) {
+                expect(this.page.$('.content')).toContainText(tag.name);
+            }, this);
+        });
+    });
 });

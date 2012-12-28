@@ -1,0 +1,9 @@
+{{#if models}}
+    <ul class="list selectable">
+        {{#each models}}
+            <li class="tag_list_item">{{this.name}}</li>
+        {{/each}}
+    </ul>
+{{else}}
+    <div class="no_tags">{{t "tags.none"}}</div>
+{{/if}}
