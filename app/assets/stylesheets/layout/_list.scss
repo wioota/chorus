@@ -146,7 +146,7 @@
             }
 
             &:hover {
-                background: $list-hover-color;
+                background-color: $list-hover-color;
 
                 .spacer_left {
                     background: $list-hover-color;
@@ -162,7 +162,7 @@
             &.selected {
                 $border-width: 2px;
 
-                background: white;
+                background-color: white;
                 padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
                 border-bottom: $border-width solid $border-color;
 

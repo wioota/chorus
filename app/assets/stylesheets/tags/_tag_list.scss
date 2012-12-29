@@ -2,10 +2,18 @@
     .tag_list_item {
         font-size: 18px;
         color: #5f5f5f;
-        padding: 5px 10px;
-        @include background-image(linear-gradient(#ebeef2, #d7dfe9));
-        border-top: 1px solid #cbcbcb;
-        border-bottom: 1px solid #a4a4a4;
+        background-image: url('/images/tags/icon_tag.png');
+        background-position: 10px center;
+        background-repeat: no-repeat;
+
+        div {
+            margin: 5px;
+            margin-left: 60px;
+        }
+    }
+
+    .tag_list_item.selected {
+        color: #2c95dd;
     }
 
     .no_tags {
