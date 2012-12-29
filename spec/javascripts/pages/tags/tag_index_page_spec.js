@@ -50,4 +50,16 @@ describe("chorus.pages.TagIndexPage", function() {
             }, this);
         });
     });
+
+    describe("sidebar", function() {
+        beforeEach(function() {
+            this.tags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
+            this.server.completeFetchAllFor(this.tagSet, this.tags);
+            this.page.render();
+        });
+
+        it("selects the first tag and shows it on the sidebar", function() {
+            expect(this.page.$('.tag_title')).toContainText("IamTag");
+        });
+    });
 });

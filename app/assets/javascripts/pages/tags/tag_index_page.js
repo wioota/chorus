@@ -12,5 +12,7 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
             modelClass: "Tag",
             collection: tags
         });
+
+        this.sidebar = new chorus.views.TagListSidebar();
     }
 });

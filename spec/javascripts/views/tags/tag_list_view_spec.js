@@ -10,6 +10,10 @@ describe("chorus.views.TagList", function() {
         });
     });
 
+    it("has the correct eventName", function() {
+        expect(this.view.eventName).toBe("tag");
+    });
+
     describe("loading", function() {
         beforeEach(function() {
             this.view.render();
