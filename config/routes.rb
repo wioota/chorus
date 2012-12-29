@@ -116,7 +116,6 @@ Chorus::Application.routes.draw do
 
   resources :insights, :only => [:index, :create] do
     collection do
-      get :count
       post :publish
       post :unpublish
     end
