@@ -99,7 +99,6 @@ describe StatisticsController do
         let(:user) { users(:admin) }
 
         it "returns a 422" do
-          puts bad_chorus_view.inspect
           get :show, :dataset_id => bad_chorus_view.to_param
           response.code.should == "422"
         end

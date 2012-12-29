@@ -32,13 +32,6 @@ class InsightsController < ApplicationController
     present paginate(get_insights), :presenter_options => {:activity_stream => true}
   end
 
-  def count
-    params[:entity_type] ||= 'dashboard'
-    insight_count = get_insights.count
-    insight_count = insight_count.keys.count unless insight_count.is_a?(Fixnum)
-    render :json => {response: { number_of_insight: insight_count } }
-  end
-
   private
 
   def get_insights

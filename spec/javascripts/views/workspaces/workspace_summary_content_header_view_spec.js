@@ -13,7 +13,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace.activities());
-            this.server.completeFetchFor(this.view.activityListHeader.insightCount, { numberOfInsight: 5 });
+            this.server.completeFetchFor(this.view.activityListHeader.insightsCount, [], {}, { records: 5 });
             this.view.render();
         });
 

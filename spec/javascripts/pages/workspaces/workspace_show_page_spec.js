@@ -131,7 +131,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.page.model, rspecFixtures.workspace({id: 4, summary: "this is a summary", name: "Cool Workspace"}));
                 this.server.completeFetchFor(this.page.model.activities(), [rspecFixtures.activity.noteOnWorkfileCreated(), fixtures.activities.INSIGHT_CREATED()]);
-                this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightCount, { numberOfInsight: 5 });
+                this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
             });
 

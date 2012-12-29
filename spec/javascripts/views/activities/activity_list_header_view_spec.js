@@ -15,36 +15,14 @@ describe("chorus.views.ActivityListHeader", function() {
     });
 
     describe("#pickTitle", function() {
-        context("with a workspace", function() {
-            beforeEach(function() {
-                this.workspace = rspecFixtures.workspace({ name: "a cool workspace" });
-                this.view.model = this.workspace;
-            });
-
-            it("has the right 'insight' title", function() {
-                this.collection.attributes.insights = true;
-                expect(this.view.pickTitle()).toBe("a cool workspace");
-            });
-
-            it("has the right 'all activities' title", function() {
-                this.collection.attributes.insights = false;
-                expect(this.view.pickTitle()).toBe("a cool workspace");
-            });
+        it("has the right 'insight' title", function() {
+            this.view.collection.attributes.insights = true;
+            expect(this.view.pickTitle()).toBe("the_insights_title_i_passed");
         });
 
-        context("without a workspace", function() {
-            beforeEach(function() {
-                this.view.model = undefined;
-            });
-            it("has the right 'insight' title", function() {
-                this.collection.attributes.insights = true;
-                expect(this.view.pickTitle()).toBe("the_insights_title_i_passed");
-            });
-
-            it("has the right 'all activities' title", function() {
-                this.collection.attributes.insights = false;
-                expect(this.view.pickTitle()).toBe("the_all_title_i_passed");
-            });
+        it("has the right 'all activities' title", function() {
+            this.view.collection.attributes.insights = false;
+            expect(this.view.pickTitle()).toBe("the_all_title_i_passed");
         });
     });
 
@@ -53,28 +31,26 @@ describe("chorus.views.ActivityListHeader", function() {
             it('updates when an insight is added', function() {
                 this.server.reset();
                 chorus.PageEvents.broadcast("insight:promoted");
-                expect(this.view.insightCount).toHaveBeenFetched();
+                expect(this.view.insightsCount).toHaveBeenFetched();
+                expect(new URI(this.server.lastFetchFor(this.view.insightsCount).url).query()).toMatch('per_page=0');
             });
 
             it("updates when a note is deleted", function() {
                 this.server.reset();
                 chorus.PageEvents.broadcast("note:deleted");
-                expect(this.view.insightCount).toHaveBeenFetched();
+                expect(this.view.insightsCount).toHaveBeenFetched();
+                expect(new URI(this.server.lastFetchFor(this.view.insightsCount).url).query()).toMatch('per_page=0');
             });
         });
 
         it("fetches the number of insights", function() {
-            expect(this.view.insightCount).toHaveBeenFetched();
-        });
-
-        it("configures the insight count for that workspace", function() {
-            expect(this.view.insightCount.url()).toContainQueryParams({ entityId: this.view.model.get("id") });
-            expect(this.view.insightCount.url()).toContainQueryParams({ entityType: "workspace" });
+            expect(this.view.insightsCount).toHaveBeenFetched();
+            expect(new URI(this.server.lastFetchFor(this.view.insightsCount).url).query()).toMatch('per_page=0');
         });
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 5 });
+                this.server.completeFetchFor(this.view.insightsCount, [], {}, {page: 1, total: null, records: 5});
             });
 
             it("should display the number of insights", function() {
@@ -82,7 +58,24 @@ describe("chorus.views.ActivityListHeader", function() {
             });
 
             describe("#render", function() {
-                context("when insights mode is false", function() {
+                context("when insights mode is true", function() {
+                    beforeEach(function() {
+                        this.view.collection.attributes.insights = true;
+                        this.view.render();
+                    });
+
+                    it("displays the title for 'insights'", function() {
+                        expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                        expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                    });
+
+                    it("displays the 'Insights' link as active", function() {
+                        expect(this.view.$(".menus .all")).not.toHaveClass("active");
+                        expect(this.view.$(".menus .insights")).toHaveClass("active");
+                    });
+                });
+
+                context("when insights is set to false", function() {
                     it("displays the title for 'all' mode by default", function() {
                         expect(this.view.$("h1")).toContainText(this.view.pickTitle());
                         expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
@@ -92,28 +85,9 @@ describe("chorus.views.ActivityListHeader", function() {
                         expect(this.view.$(".title img")).toHaveAttr("src", this.workspace.defaultIconUrl());
                     });
 
-                    context("when insights mode is false", function() {
-                        it("displays the 'All Activity' link as active", function() {
-                            expect(this.view.$(".menus .all")).toHaveClass("active");
-                            expect(this.view.$(".menus .insights")).not.toHaveClass("active");
-                        });
-                    });
-
-                    context("when insights mode is true", function() {
-                        beforeEach(function() {
-                            this.view.collection.attributes.insights = true;
-                            this.view.render();
-                        });
-
-                        it("displays the title for 'insights' mode by default", function() {
-                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
-                        });
-
-                        it("displays the 'Insights' link as active", function() {
-                            expect(this.view.$(".menus .all")).not.toHaveClass("active");
-                            expect(this.view.$(".menus .insights")).toHaveClass("active");
-                        });
+                    it("displays the 'All Activity' link as active", function() {
+                        expect(this.view.$(".menus .all")).toHaveClass("active");
+                        expect(this.view.$(".menus .insights")).not.toHaveClass("active");
                     });
 
                     it("should have a filter menu", function() {
@@ -124,12 +98,12 @@ describe("chorus.views.ActivityListHeader", function() {
 
                     describe("clicking on 'Insights'", function() {
                         beforeEach(function() {
+                            this.server.reset();
                             this.view.$(".menus .insights").click();
                         });
 
                         it("switches the activity set to 'insights' mode and re-fetches it", function() {
                             expect(this.collection.attributes.insights).toBeTruthy();
-                            expect(this.collection.attributes.workspace).toBeDefined();
                             expect(this.collection).toHaveBeenFetched();
                         });
 
@@ -145,12 +119,12 @@ describe("chorus.views.ActivityListHeader", function() {
 
                         describe("clicking on 'All Activity'", function() {
                             beforeEach(function() {
+                                this.server.reset();
                                 this.view.$(".menus .all").click();
                             });
 
                             it("switches the activity set to 'all' mode (not just insights) and re-fetches it", function() {
                                 expect(this.collection.attributes.insights).toBeFalsy();
-                                expect(this.collection.attributes.workspace).not.toBeDefined();
                                 expect(this.collection).toHaveBeenFetched();
                             });
 
@@ -165,28 +139,6 @@ describe("chorus.views.ActivityListHeader", function() {
                             });
                         });
                     });
-                });
-            });
-        });
-
-        describe("when the activity list is reset", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 5 });
-                this.server.reset();
-                this.view.collection.trigger("reset");
-            });
-
-            it("fetches the insight count", function() {
-                expect(this.view.insightCount).toHaveBeenFetched();
-            });
-
-            context("when the fetch completes", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 4 });
-                });
-
-                it("should display the number of insights", function() {
-                    expect(this.view.$(".menus .badge").text().trim()).toBe('4');
                 });
             });
         });

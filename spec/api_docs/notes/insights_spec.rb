@@ -61,18 +61,4 @@ resource "Notes" do
       status.should == 200
     end
   end
-
-  get "/insights/count" do
-    parameter :entity_id, "For entity_type of 'workspace', the id of the workspace whose activities will be returned"
-    parameter :entity_type, "The type of entity whose activities will be returned, ('dashboard' or 'workspace')"
-
-    required_parameters :entity_type
-
-    let(:entity_type) {"workspace"}
-    let(:entity_id) { workspace.id }
-
-    example_request "Get the number of notes that are insights" do
-      status.should == 200
-    end
-  end
 end

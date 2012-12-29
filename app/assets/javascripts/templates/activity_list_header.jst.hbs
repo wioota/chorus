@@ -1,11 +1,11 @@
 <div class="menus">
     <span class="title">{{t "filter.show"}}</span>
-    <a href="#" class="all">{{t "filter.all_activity"}}</a>
+    <a href="#" class="all {{#unless showInsights}}active{{/unless}}">{{t "filter.all_activity"}}</a>
     <span class="separator">|</span>
-    <a href="#" class="insights">{{t "filter.only_insights"}}</a>
+    <a href="#" class="insights {{#if showInsights}}active{{/if}}">{{t "filter.only_insights"}}</a>
 
     <div class="badge">
-        <div class="left"/><div class="center">{{ count }}</div><div class="right"/>
+        <div class="left"/><div class="center">{{ insightCount }}</div><div class="right"/>
     </div>
 </div>
 

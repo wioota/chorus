@@ -316,7 +316,7 @@ chorus.collections = {
 
         url: function(options) {
             options = _.extend({
-                per_page: this.per_page || 50,
+                per_page: this.per_page !== undefined ? this.per_page : 50,
                 page: 1
             }, options);
 
@@ -366,7 +366,7 @@ chorus.collections = {
         },
 
         fetchPage: function(page, options) {
-            if (options && options.per_page) {
+            if (options && options.per_page !== undefined) {
                 this.per_page = options.per_page;
                 delete options.per_page;
             }
