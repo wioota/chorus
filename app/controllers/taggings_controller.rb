@@ -8,7 +8,7 @@ class TaggingsController < ApplicationController
       ActsAsTaggableOn::Tag.all
     end
 
-    present paginate(tags)
+    present paginate(tags.sort_by!{ |tag| tag.name.downcase })
   end
 
   def create
