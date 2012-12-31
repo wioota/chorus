@@ -32,6 +32,7 @@ if __FILE__ == $0
   rescue InstallerErrors::InstallationFailed => e
     puts "An error has occurred. Trying to back out and restore previous state.."
     installer.remove_and_restart_previous! unless keep
+    puts "Please check the installation log (install.log) for failure details."
     exit 1
   rescue => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }

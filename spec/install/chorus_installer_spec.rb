@@ -269,6 +269,11 @@ describe ChorusInstaller do
         it "returns the RedHat 5.5 build" do
           installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.1.tar.gz'
         end
+
+        it "logs the users choice" do
+          mock(logger).debug("Selected redhat version 5")
+          installer.get_postgres_build
+        end
       end
 
       context "when Linux is CentOS/RHEL 5.7" do
@@ -280,6 +285,11 @@ describe ChorusInstaller do
         it "returns the RedHat 5.5 build" do
           installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.1.tar.gz'
         end
+
+        it "logs the users choice" do
+          mock(logger).debug("Selected redhat version 5")
+          installer.get_postgres_build
+        end
       end
 
       context "when Linux is CentOS/RHEL 6.2" do
@@ -290,6 +300,11 @@ describe ChorusInstaller do
 
         it "returns the RedHat 6.2 build" do
           installer.get_postgres_build.should == 'postgres-redhat6.2-9.2.1.tar.gz'
+        end
+
+        it "logs the users choice" do
+          mock(logger).debug("Selected redhat version 6")
+          installer.get_postgres_build
         end
       end
 
@@ -306,6 +321,11 @@ describe ChorusInstaller do
         it "returns the suse11 build" do
           installer.get_postgres_build.should == 'postgres-suse11-9.2.1.tar.gz'
         end
+
+        it "logs the users choice" do
+          mock(logger).debug("Selected suse version 11")
+          installer.get_postgres_build
+        end
       end
     end
 
@@ -316,6 +336,11 @@ describe ChorusInstaller do
 
       it "should return the OSX build" do
         installer.get_postgres_build.should == 'postgres-osx-9.2.1.tar.gz'
+      end
+
+      it "logs the users choice" do
+        mock(logger).debug("Selected OS X")
+        installer.get_postgres_build
       end
     end
 
@@ -1144,6 +1169,39 @@ describe ChorusInstaller do
   describe "#eula" do
     it "contains the eula" do
       installer.eula.should match(/LIMITATION OF LIABILITY/)
+    end
+  end
+
+  describe "#dump_environment" do
+    describe "detecting the installation OS" do
+      before do
+        stub(System.get_properties).entry_set { ["os.name=TestOS", "os.version=1.2.3"] }
+      end
+
+      it "prints out the java system properties" do
+        mock(logger).debug("os.name=TestOS")
+        mock(logger).debug("os.version=1.2.3")
+        installer.dump_environment
+      end
+
+      it "prints out the /etc/*-release files" do
+        mock(logger).debug("/etc/test-release: a test os 1.0")
+        FileUtils.mkdir_p('/etc')
+        File.open('/etc/test-release', 'w') { |f| f.puts "a test os 1.0" }
+        installer.dump_environment
+      end
+    end
+
+    describe "DCA specific files" do
+      it "prints out the file names and contents if files exist" do
+        FileUtils.mkdir_p('/opt/greenplum/conf')
+        ['/opt/greenplum/conf/build-version.txt',
+         '/opt/greenplum/conf/productid'].each do |path|
+          mock(logger).debug("#{path}: #{path} content")
+          File.open(path, 'w') { |f| f.puts "#{path} content" }
+        end
+        installer.dump_environment
+      end
     end
   end
 

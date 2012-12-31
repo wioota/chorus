@@ -5,8 +5,11 @@ require_relative 'installer_errors'
 require 'base64'
 require 'openssl'
 require 'pathname'
+require 'java'
 require_relative '../../lib/properties'
 require_relative '../../lib/legacy_migration/config_migrator'
+
+java_import "java.lang.System"
 
 class ChorusInstaller
   attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :legacy_installation_path, :log_stack
@@ -137,12 +140,16 @@ class ChorusInstaller
 
     case input
       when 1
+        @logger.debug "Selected redhat version 5"
         "postgres-redhat5.5-9.2.1.tar.gz"
       when 2
+        @logger.debug "Selected redhat version 6"
         "postgres-redhat6.2-9.2.1.tar.gz"
       when 3
+        @logger.debug "Selected suse version 11"
         "postgres-suse11-9.2.1.tar.gz"
       when 5
+        @logger.debug "Selected OS X"
         "postgres-osx-9.2.1.tar.gz"
       else
         raise InstallerErrors::InstallAborted, "OS version not supported."
@@ -370,6 +377,8 @@ class ChorusInstaller
   end
 
   def install
+    dump_environment
+
     prompt_for_eula
     validate_localhost
     get_destination_path
@@ -503,6 +512,23 @@ class ChorusInstaller
 
   def eula
     EULA
+  end
+
+  def dump_environment
+    System.get_properties.entry_set.each do |e|
+      @logger.debug(e)
+    end
+
+    Dir["/etc/*-release"].each do |file|
+      @logger.debug("#{file}: #{File.open(file).readlines.first}".chomp)
+    end
+
+    ['/opt/greenplum/conf/build-version.txt',
+     '/opt/greenplum/conf/productid',
+     '/opt/greenplum/serialnumber'].each do |path|
+      next unless File.exists?(path)
+      @logger.debug("#{path}: #{File.open(path).readlines.first}".chomp)
+    end
   end
 
   private
