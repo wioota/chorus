@@ -44,7 +44,7 @@ describe "Workspaces" do
       find(".submit").click
 
       visit('/#/workspaces')
-      within '.content' do
+      within '.content_footer' do
         page.should have_no_selector(".loading")
       end
 
