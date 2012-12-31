@@ -28,7 +28,7 @@ Chorus::Application.configure do
   # config.assets.manifest = YOUR_PATH
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = ChorusConfig.instance["ssl.enabled"]
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
