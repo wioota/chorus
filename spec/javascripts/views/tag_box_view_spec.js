@@ -198,6 +198,11 @@ describe("chorus.views.TagBox", function() {
                     expect(view.$(".text-tag").length).toBe(3);
                     expect(view.model.tags().length).toBe(3);
                 });
+
+                it("removes the text from the input", function() {
+                    expect(input.val()).toBe("");
+                });
+
             });
 
             describe("click done", function() {

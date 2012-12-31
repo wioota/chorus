@@ -51,7 +51,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.invalidTagName = "";
         if(!this.validateTag(data.tag.name)) {
             data.result = false;
-            this.invalidTagName = data.tag.name;
+
+            if(this.keepInvalidTagName) {
+                this.invalidTagName = data.tag.name;
+                this.keepInvalidTagName = false;
+            }
         }
     },
 
@@ -63,6 +67,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
         var valid = true;
         if(tagName.length > 100) {
             valid = false;
+            this.keepInvalidTagName = true;
             this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
         } else if (tagName.length === 0) {
             valid = false;
