@@ -61,10 +61,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
 
     setFieldValues: function (model) {
         this._super("setFieldValues", arguments);
-
-        var newTable = model.get("newTable");
+        var newTable = model.get("newTable") && model.get("newTable").toString() === "true";
         this.activeScheduleView = newTable ? this.scheduleViewNew : this.scheduleViewExisting;
-
 
         this.scheduleViewExisting.setFieldValues(model);
         this.scheduleViewNew.setFieldValues(model);

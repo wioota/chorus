@@ -51,7 +51,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.submitText = t("import.begin");
     },
 
-
     saveModel: function() {
         this.$("button.submit").startLoading("import.importing");
 
@@ -114,7 +113,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     setFieldValues: function(model) {
         this.$("input[type='radio']").prop("checked", false);
-        var newTable = model.get("newTable");
+        var newTable = model.get("newTable") && model.get("newTable").toString() === "true";
         if (!newTable) {
             this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
             this.changeSelectedDataset(model.get("toTable"));
@@ -186,7 +185,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var enabled = $fieldSet.find("input[name=limit_num_rows]").prop("checked");
         var $limitInput = $fieldSet.find(".limit input:text");
         $limitInput.prop("disabled", !enabled);
-//        this.activeScheduleView && this.activeScheduleView.enable();
         this.onInputFieldChanged();
     },
 

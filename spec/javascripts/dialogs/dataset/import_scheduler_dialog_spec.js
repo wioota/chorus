@@ -277,7 +277,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("and the toTable is an existing Table", function() {
             beforeEach(function () {
-                this.importSchedule.set({newTable: false});
+                // TODO: Sometimes the boolean values in this dialog are strings instead
+                // of booleans.
+                // [#41793255]
+                this.importSchedule.set({newTable: "false"});
                 this.server.completeFetchFor(this.dataset.getImportSchedules(), [this.importSchedule]);
                 this.dialog.render();
             });
