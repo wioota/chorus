@@ -377,12 +377,12 @@ class ChorusInstaller
   end
 
   def install
-    dump_environment
-
     prompt_for_eula
     validate_localhost
     get_destination_path
     get_data_path
+
+    dump_environment
 
     determine_postgres_installer
 
