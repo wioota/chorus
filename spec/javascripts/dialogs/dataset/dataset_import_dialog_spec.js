@@ -449,6 +449,13 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
 
+                        it("re-enables input file and the radio button after cancelling the 'import new table' dialog", function () {
+                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
+                            importCsvDialog.closeModal();
+                            expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+                            expect(this.dialog.$(".import_controls input[type=radio]")).not.toBeDisabled();
+                        });
+
                         it("closes itself when the 'import new table' dialog closes", function() {
                             var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
                             importCsvDialog.closeModal();

@@ -174,6 +174,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFinished: function(e, data) {
         e && e.preventDefault();
+        this.$(".file-wrapper a").removeClass("hidden");
+        this.$(".import_controls input[type=radio]").prop("disabled", false);
         this.$("button.submit").stopLoading();
     },
 
