@@ -91,7 +91,7 @@ describe("chorus.views.KaggleUserList", function() {
                     });
 
                     it("checks all of the kaggle users", function() {
-                        expect(this.view.$("input[type=checkbox]:checked").length).toBe(2);
+                        expect(this.view.$("input[type=checkbox]:checked").length).toBe(this.collection.length);
                     });
 
                     it("broadcasts the 'kaggleUser:checked' page event with a collection of all kaggle users", function() {
