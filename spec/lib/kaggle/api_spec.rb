@@ -32,7 +32,7 @@ describe Kaggle::API, :kaggle_API => true do
 
         stub(Kaggle::API).enabled? { true }
         FakeWeb.register_uri(:get, kaggle_api_url,
-                             :body => File.read(Rails.root + "lib/kaggle/userApi.json"),
+                             :body => File.read(Rails.root + "lib/kaggle/kaggleSearchResults.json"),
                              :status => ["200", "Success"])
       end
 
@@ -62,7 +62,7 @@ describe Kaggle::API, :kaggle_API => true do
       include FakeFS::SpecHelpers
 
       before :all do
-        @kaggle_users = File.read(Rails.root + "lib/kaggle/userApi.json")
+        @kaggle_users = File.read(Rails.root + "lib/kaggle/kaggleSearchResults.json")
       end
 
       before do
@@ -113,10 +113,10 @@ describe Kaggle::API, :kaggle_API => true do
       end
 
       it "can filter by equal" do
-        users = Kaggle::API.users(:filters => ["rank|equal|9"])
+        users = Kaggle::API.users(:filters => ["rank|equal|42"])
 
-        users.length.should == Kaggle::API.users.select { |user| user["KaggleRank"] == 9 }.count
-        users.first["KaggleRank"].should == 9
+        users.length.should == Kaggle::API.users.select { |user| user["KaggleRank"] == 42 }.count
+        users.first["KaggleRank"].should == 42
       end
 
       # API doesn't return any list data fields yet
@@ -137,18 +137,18 @@ describe Kaggle::API, :kaggle_API => true do
       end
 
       it "searches software, techniques and location by substring match" do
-        users = Kaggle::API.users(:filters => ["favorite_technique|includes|gbm",
+        users = Kaggle::API.users(:filters => ["favorite_technique|includes|matrix",
                                                "favorite_software|includes|r",
-                                               "location|includes|SinGaPore"])
+                                               "location|includes|fRaNcISco"])
 
-        users.first['FavoriteTechnique'].should include "gbm"
+        users.first['FavoriteTechnique'].should include "Matrix Methods"
         users.first['FavoriteSoftware'].should include "R"
-        users.first['Location'].should include "Singapore"
+        users.first['Location'].should include "San Francisco"
 
         users.length.should == Kaggle::API.users.select do |user|
-          user["FavoriteTechnique"].match(/gbm/i) &&
+          user["FavoriteTechnique"].match(/matrix/i) &&
           user["FavoriteSoftware"].match(/r/i) &&
-          user["Location"].match(/singapore/i)
+          user["Location"].match(/francisco/i)
         end.count
       end
 
