@@ -23,6 +23,7 @@ class Dataset < ActiveRecord::Base
 
   attr_accessor :statistics
   attr_accessible :name
+  attr_accessor :skip_deep_index
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities, :dependent => :destroy
@@ -44,7 +45,7 @@ class Dataset < ActiveRecord::Base
   has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
   has_many :events_where_target2, :class_name => "Events::Base", :as => :target2, :dependent => :destroy
 
-  searchable :unless => :stale? do
+  searchable :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :table_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
@@ -96,6 +97,10 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+  def should_reindex?
+    !stale? && !skip_deep_index
+  end
+
   def self.refresh(account, schema, options = {})
     found_datasets = []
     datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
@@ -116,6 +121,7 @@ class Dataset < ActiveRecord::Base
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
+        dataset.skip_deep_index = true if options[:new]
         if dataset.changed?
           dataset.save!
         elsif options[:force_index]
@@ -281,7 +287,8 @@ class Dataset < ActiveRecord::Base
 
     def tables_and_views_in_schema_with_permissions(options={})
       datasets_query = tables_and_views_in_schema(options).to_sql
-      %Q{SELECT datasets.*, ('"#{schema.name}"."' || datasets.name || '"')::regclass FROM (#{datasets_query}) datasets;}
+      schema_name = schema.name.gsub("'","''")
+      %Q{SELECT datasets.*, ('"#{schema_name}"."' || datasets.name || '"')::regclass FROM (#{datasets_query}) datasets;}
     end
 
     def tables_and_views_in_schema(options ={})

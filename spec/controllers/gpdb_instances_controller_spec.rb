@@ -107,7 +107,7 @@ describe GpdbInstancesController do
       end
 
       it "schedules a job to refresh the instance" do
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric)
+        mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
         post :create, :gpdb_instance => valid_attributes
       end
     end

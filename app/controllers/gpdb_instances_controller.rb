@@ -18,7 +18,7 @@ class GpdbInstancesController < GpdbController
 
   def create
     created_gpdb_instance = Gpdb::InstanceRegistrar.create!(params[:gpdb_instance], current_user)
-    QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id)
+    QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
 
     present created_gpdb_instance, :status => :created
   end
