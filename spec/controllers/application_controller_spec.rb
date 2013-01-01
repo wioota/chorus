@@ -135,6 +135,15 @@ describe ApplicationController do
       decoded_errors.fields.general.GENERIC.message.should == "sunspot error"
     end
 
+    it "returns error 422 when a SunspotError occurs" do
+      stub(controller).index { raise ModelMap::UnknownEntityType.new("Invalid entity type") }
+
+      get :index
+
+      response.code.should == "422"
+      decoded_errors.fields.general.GENERIC.message.should == "Invalid entity type"
+    end
+
     it "returns error 403 when a SqlPermissionDenied occurs" do
       stub(controller).index { raise SqlPermissionDenied.new("SqlPermissionDenied error") }
 

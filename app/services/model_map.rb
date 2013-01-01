@@ -6,6 +6,8 @@ module ModelMap
   }
 
   def self.class_from_type(entity_type)
+    raise UnknownEntityType.new("Invalid entity type") if entity_type.blank?
+
     class_name = CLASS_NAME_MAP[entity_type] || entity_type.to_s.camelcase
     class_name.constantize
   rescue NameError

@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
   rescue_from 'SunspotError', :with => :render_unprocessable_entity
   rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
+  rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
 
   helper_method :current_user
 

@@ -49,5 +49,11 @@ describe ModelMap do
         ModelMap.model_from_params("workspace", -1)
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it "throws an error if the entity is empty" do
+      expect {
+        ModelMap.model_from_params("", 1)
+      }.to raise_error(ModelMap::UnknownEntityType, "Invalid entity type")
+    end
   end
 end
