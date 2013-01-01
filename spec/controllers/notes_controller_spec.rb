@@ -31,12 +31,6 @@ describe NotesController do
       post :create, attributes
     end
 
-    it "raises an exception if the entity type is unknown" do
-      expect {
-        post :create, attributes.merge(:entity_type => "bogus")
-      }.to raise_error(ModelMap::UnknownEntityType)
-    end
-
     it "raises an exception if there is no model with the given entity id" do
       post :create, attributes.merge(:entity_id => "bogus")
       response.code.should == "404"
