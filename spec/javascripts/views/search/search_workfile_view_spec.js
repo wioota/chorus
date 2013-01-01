@@ -52,6 +52,17 @@ describe("chorus.views.SearchWorkfile", function() {
         expect(this.view.$(".name").html()).toContain("<em>cool</em> file");
     });
 
+    context("when the workfile has tags", function () {
+        beforeEach(function () {
+            this.model.set({tags: [{name: "tag1"}, {name: "tag2"}]});
+        });
+
+        it("should show a list of tags", function () {
+            expect(this.view.$('.tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.tag_list')).toContainText("tag1 tag2");
+        });
+    });
+
     describe("thumbnails", function() {
         it("uses the icon url", function() {
             this.view.render();

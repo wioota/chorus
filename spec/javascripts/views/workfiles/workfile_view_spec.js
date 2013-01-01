@@ -29,6 +29,17 @@ describe("chorus.views.Workfile", function() {
         });
     });
 
+    context("when the workfile has tags", function () {
+        beforeEach(function () {
+            this.model.set({tags: [{name: "tag1"}, {name: "tag2"}]});
+        });
+
+        it("should show a list of tags", function () {
+            expect(this.view.$('.tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.tag_list')).toContainText("tag1 tag2");
+        });
+    });
+
     context("when the workfile has one comment", function() {
         beforeEach(function() {
             this.model.get("recentComments")[0].timestamp = "2012-11-08T18:06:51Z";
