@@ -21,7 +21,6 @@
 
     .content_details {
         background: $content-details-action-background-color;
-        height: 31px;
         line-height: 30px;
         vertical-align: middle;
         color: $content-details-action-link-color;
@@ -32,6 +31,7 @@
             font-weight: $semibold;
             font-size: 13px;
             @include content-details-button($content-details-action-link-border-color);
+            margin-bottom: 0;
         }
 
         padding: 0;
