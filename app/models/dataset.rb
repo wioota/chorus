@@ -23,7 +23,7 @@ class Dataset < ActiveRecord::Base
 
   attr_accessor :statistics
   attr_accessible :name
-  attr_accessor :skip_deep_index
+  attr_accessor :skip_search_index
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities, :dependent => :destroy
@@ -98,7 +98,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def should_reindex?
-    !stale? && !skip_deep_index
+    !stale? && !skip_search_index
   end
 
   def self.refresh(account, schema, options = {})
@@ -121,7 +121,7 @@ class Dataset < ActiveRecord::Base
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
-        dataset.skip_deep_index = true if options[:new]
+        dataset.skip_search_index = true if options[:new]
         if dataset.changed?
           dataset.save!
         elsif options[:force_index]
