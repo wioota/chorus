@@ -9,6 +9,7 @@ describe "Instances", :database_integration do
     end
 
     def select_and_do_within(value)
+      page.should have_xpath('//select[@id="data_sources"]/option[4]')
       find(".instance_new.dialog").should have_content("Data Source Type")
       page.find("#data_sources-button span.ui-selectmenu-text").should have_content("Select one")
       select_item("select.data_sources", value)
