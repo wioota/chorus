@@ -79,6 +79,9 @@ module Chorus
       g.views false
     end
 
+    # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+    config.force_ssl = ChorusConfig.instance["ssl.enabled"]
+
     # Log UUIDs for all requests. This is also in the X-Request-Id header response.
     # To facilitate support staff tracking web requests.
     config.log_tags = [:uuid]
