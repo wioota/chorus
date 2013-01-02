@@ -287,7 +287,7 @@ class Dataset < ActiveRecord::Base
 
     def tables_and_views_in_schema_with_permissions(options={})
       datasets_query = tables_and_views_in_schema(options).to_sql
-      schema_name = schema.name.gsub("'","''")
+      schema_name = schema.name.gsub("'", "''")
       %Q{SELECT datasets.*, ('"#{schema_name}"."' || datasets.name || '"')::regclass FROM (#{datasets_query}) datasets;}
     end
 

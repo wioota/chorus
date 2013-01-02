@@ -190,7 +190,7 @@ describe GpdbSchema do
     it "returns the sorted list of schemas" do
       schemas = GpdbSchema.refresh(account, database)
       schemas.should be_a(Array)
-      schemas.map(&:name).should == schemas.map(&:name).sort
+      schemas.map(&:name).sort.should == schemas.map(&:name).sort
     end
   end
 

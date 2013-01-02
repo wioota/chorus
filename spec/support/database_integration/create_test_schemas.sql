@@ -279,3 +279,6 @@ CREATE SCHEMA test_gpfdist_schema;
   CREATE TABLE candy_one_column("2id" integer) DISTRIBUTED RANDOMLY;
 
   CREATE TABLE candy_composite("id" integer, "id2" integer, PRIMARY KEY("id", "id2"));
+
+  CREATE SCHEMA "test_schema_with_'_";
+  CREATE SCHEMA "test_schema_with_""_";
