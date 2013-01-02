@@ -86,7 +86,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             it("displays the appropriate file icon", function() {
                 expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden");
-                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
+                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "icon"));
             });
 
             it("should hide the 'No file Selected' text", function() {

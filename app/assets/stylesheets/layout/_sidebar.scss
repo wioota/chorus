@@ -45,7 +45,6 @@ body .ui-draggable-dragging {
     }
 
     .image {
-        padding-bottom: 16px;
         text-align: center;
     }
 
@@ -119,22 +118,19 @@ body .ui-draggable-dragging {
         }
     }
 
-    img {
-        max-width: $sidebar-width - 20px;
-    }
-
     .members {
 
         li {
             display: inline-block;
             vertical-align: middle;
             height: $icon-image-height + 6px;
+            width: $icon-image-width + 6px;
             padding-bottom: 3px;
         }
 
         img {
-            width: $icon-image-width;
-            height: $icon-image-height;
+            max-width: $icon-image-width;
+            max-height: $icon-image-height;
         }
 
         .dialog {

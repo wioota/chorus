@@ -31,8 +31,8 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
     });
 
     it("has the correct iconUrl", function() {
-        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', this.workfile2.iconUrl({ size: "medium" }));
-        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl({ size: "medium" }));
+        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', this.workfile2.iconUrl({ size: "icon" }));
+        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl({ size: "icon" }));
     });
 
     it("has the correct name", function() {

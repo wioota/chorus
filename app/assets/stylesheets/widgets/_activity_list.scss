@@ -11,10 +11,14 @@ $system-action-color: #7C7D7D;
 .media > .icon {
     float: left;
     margin-right: $activity-gutter;
+    width: $icon-image-width+6px;
+    height: $icon-image-height+6px;
 }
 
 .media > .icon img {
     display: block;
+    max-width: $icon-image-width;
+    max-height: $icon-image-height;
 }
 
 .activity_list_header {
@@ -80,10 +84,17 @@ $system-action-color: #7C7D7D;
         position: relative;
         overflow: visible;
 
-        img {
+        .image {
             width: $icon-image-width;
             height: $icon-image-height;
+            display: inline-block;
+
+            img {
+                max-width: $icon-image-width;
+                max-height: $icon-image-height;
+            }
         }
+
 
         a[href=''], a:not([href]) {
             color: $color-text3;

@@ -21,7 +21,7 @@ chorus.views.ShuttleWidget = chorus.views.Base.extend({
         });
         ctx.isAdded = _.include(selections, model.get("id"));
         ctx.displayName = model.displayName();
-        ctx.imageUrl = model.fetchImageUrl();
+        ctx.imageUrl = model.fetchImageUrl({size: "icon"});
 
         var nonRemovableModelIds = _.map(this.nonRemovableModels, function (model) {
             return model.get("id");

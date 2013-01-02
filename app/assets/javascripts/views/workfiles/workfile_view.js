@@ -24,7 +24,7 @@ chorus.views.Workfile = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        var ctx = new chorus.presenters.Attachment(this.model, { iconSize:'large' });
+        var ctx = new chorus.presenters.Attachment(this.model, { iconSize:'icon' });
 
         ctx.activeWorkspace = this.options.activeWorkspace;
 

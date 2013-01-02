@@ -10,4 +10,9 @@
     .workspace_member_list {
         margin: 5px 0px;
     }
+
+    img.workspace_image {
+        max-width: $sidebar-width - 20px;
+        padding-bottom: 16px;
+    }
 }

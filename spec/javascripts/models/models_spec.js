@@ -66,11 +66,11 @@ describe("chorus.models.Abstract", function() {
 
                     context("when the base url template includes a query string", function() {
                         beforeEach(function() {
-                            this.model.urlTemplate = "my_items/{{id}}?size=medium";
+                            this.model.urlTemplate = "my_items/{{id}}?roof=on_fire";
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.model.url()).toMatchUrl("/my_items/foo?dance_dance=the+thizzle&size=medium");
+                            expect(this.model.url()).toMatchUrl("/my_items/foo?dance_dance=the+thizzle&roof=on_fire");
                         });
                     });
                 });
@@ -1149,11 +1149,11 @@ describe("chorus.models.Abstract", function() {
 
                     context("when the base url template includes a query string", function() {
                         beforeEach(function() {
-                            this.collection.urlTemplate = "bar/{{foo}}?size=medium";
+                            this.collection.urlTemplate = "bar/{{foo}}?roof=on_fire";
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.collection.url()).toMatchUrl("/bar/bar?size=medium&dance_dance=the+thizzle&page=1&per_page=50");
+                            expect(this.collection.url()).toMatchUrl("/bar/bar?roof=on_fire&dance_dance=the+thizzle&page=1&per_page=50");
                         });
                     });
                 });

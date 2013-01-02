@@ -227,7 +227,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".new_table input[type='text']").val(basename.toLowerCase().replace(/ /g, '_'));
 
         this.$("img").removeClass("hidden");
-        this.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "medium"));
+        this.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "icon"));
 
         this.$(".import_controls").removeClass("hidden");
 

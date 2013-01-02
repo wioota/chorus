@@ -6,8 +6,8 @@
         img.icon {
             position: absolute;
             left: 10px;
-            height: 45px;
-            width: 45px;
+            max-height: 45px;
+            max-width: 45px;
         }
 
         .right_of_image {

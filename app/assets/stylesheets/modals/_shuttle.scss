@@ -83,9 +83,8 @@ $shuttle-width: 720px;
     div.image {
         position: relative;
         display: inline-block;
-        padding: 2px;
         width: $list-item-height - 6px;
-        height: $list-item-height - 6px;
+        height: $list-item-height - 10px;
     }
 
     ul {

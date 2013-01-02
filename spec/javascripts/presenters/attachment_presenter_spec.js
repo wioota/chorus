@@ -52,7 +52,7 @@ describe("chorus.presenters.Attachment", function() {
 
             it("uses the thumbnail url", function() {
                 var presenter = new chorus.presenters.Attachment(this.model);
-                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "medium"}));
+                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "icon"}));
             });
         });
 
@@ -63,7 +63,7 @@ describe("chorus.presenters.Attachment", function() {
 
             it("uses the icon url", function() {
                 var presenter = new chorus.presenters.Attachment(this.model);
-                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "medium"}));
+                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "icon"}));
             });
         });
     });

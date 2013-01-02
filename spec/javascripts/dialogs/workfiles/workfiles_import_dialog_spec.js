@@ -108,7 +108,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("displays the appropriate file icon", function() {
-            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "icon"));
         });
 
         it("adds the 'chosen' class to the form", function() {

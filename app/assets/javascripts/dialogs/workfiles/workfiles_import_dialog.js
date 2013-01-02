@@ -93,7 +93,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 self.uploadObj = data;
                 var filename = data.files[0].name;
                 self.uploadExtension = _.last(filename.split('.'));
-                var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "medium");
+                var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "icon");
                 self.$('img').attr('src', iconSrc);
                 self.$('.fileName').text(filename).attr('title', filename);
                 self.$("form").addClass("chosen");

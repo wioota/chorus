@@ -4,7 +4,7 @@ chorus.presenters.Attachment = chorus.presenters.Base.extend({
     },
 
     iconSrc: function() {
-        var iconSize = this.options.iconSize || "medium";
+        var iconSize = this.options.iconSize || "icon";
         return this.model.iconUrl({size: iconSize});
     },
 

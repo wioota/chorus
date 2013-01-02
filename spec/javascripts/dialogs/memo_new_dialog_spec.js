@@ -177,9 +177,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 it("displays the appropriate file icons", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
-                    expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
-                    expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
-                    expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("plain", "medium"));
+                    expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "icon"));
+                    expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "icon"));
+                    expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("plain", "icon"));
                 });
 
                 it("stores the collection", function() {
@@ -395,8 +395,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("displays the appropriate file icons", function() {
-                expect(this.dialog.$(".file_details img.icon:eq(0)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
-                expect(this.dialog.$(".file_details img.icon:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
+                expect(this.dialog.$(".file_details img.icon:eq(0)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "icon"));
+                expect(this.dialog.$(".file_details img.icon:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "icon"));
             });
 
             it("creates dependent commentFileUpload object for each upload", function() {

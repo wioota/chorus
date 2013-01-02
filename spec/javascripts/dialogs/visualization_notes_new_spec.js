@@ -43,7 +43,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
             it("display the chart image and chart fileName", function() {
                 expect(this.dialog.$(".options_area")).not.toHaveClass("hidden");
                 expect(this.dialog.$(".options_area .row.file_details.visualization .name")).toHaveText("hello-frequency.png");
-                expect(this.dialog.$(".icon").attr("src")).toBe("images/workfiles/medium/img.png");
+                expect(this.dialog.$(".icon").attr("src")).toBe("images/workfiles/icon/img.png");
                 expect(this.dialog.$("a.remove")).toHaveClass("hidden");
             });
         });

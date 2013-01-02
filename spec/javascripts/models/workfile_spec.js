@@ -527,7 +527,7 @@ describe("chorus.models.Workfile", function() {
                 });
 
                 expect(workfile.iconUrl()).toBe("some/file");
-                expect(workfile.iconUrl({ size: "medium" })).toBe("some/file");
+                expect(workfile.iconUrl({ size: "icon" })).toBe("some/file");
             });
         });
 
@@ -535,11 +535,11 @@ describe("chorus.models.Workfile", function() {
             it("proxies to fileIconUrl helper", function() {
                 var workfile = rspecFixtures.workfile.text({ fileName: "foo.cpp" });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'large'));
-                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'medium'));
+                expect(workfile.iconUrl({ size: "icon" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'icon'));
 
                 workfile = rspecFixtures.workfile.text({ fileName: "foo.java" });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('java', 'large'));
-                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'medium'));
+                expect(workfile.iconUrl({ size: "icon" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'icon'));
             });
         });
     });

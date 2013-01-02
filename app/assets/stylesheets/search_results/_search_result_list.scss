@@ -35,7 +35,7 @@
         color: $color-text4;
     }
 
-    li {
+    li.result_item {
         min-height: 45px;
         a.name {
             font-size: 18px;
@@ -44,8 +44,14 @@
         img {
             vertical-align: top;
             padding-top: 6px;
-            max-width: 32px;
-            max-height: 32px;
+            max-width: $icon-image-width;
+            max-height: $icon-image-height;
+        }
+
+        .image {
+            width: $icon-image-width;
+            height: $icon-image-height;
+            display: inline-block;
         }
 
         .description {

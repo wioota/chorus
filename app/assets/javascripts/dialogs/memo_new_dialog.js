@@ -216,7 +216,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.model.addFileUpload(uploadModel);
         var file = data.files[0];
         var extension = _.last(file.name.split('.'));
-        var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
+        var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "icon");
 
         file.isUpload = true;
         if (this.validateFileSize()) {
@@ -261,7 +261,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         }, this);
 
         this.model.workfiles.each(function(workfile) {
-            var iconUrl = workfile.iconUrl({size: 'medium'});
+            var iconUrl = workfile.iconUrl({size: "icon"});
             this.showFile(workfile, workfile.get("fileName"), iconUrl);
         }, this);
     },
