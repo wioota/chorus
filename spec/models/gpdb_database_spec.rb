@@ -239,4 +239,14 @@ describe GpdbDatabase do
       database.connect_with(account).should == "this is my connection"
     end
   end
+
+  describe "#with_gpdb_connection", :database_integration do
+    it "raises GreenplumConnection::ObjectNotFound when the database does not exist" do
+      database = FactoryGirl.create(:gpdb_database, :gpdb_instance => InstanceIntegration.real_gpdb_instance, :name => 'i_dont_exist')
+
+      expect {
+        database.with_gpdb_connection(InstanceIntegration.real_gpdb_account) {}
+      }.to raise_error(GreenplumConnection::ObjectNotFound, /database.*does not exist/)
+    end
+  end
 end

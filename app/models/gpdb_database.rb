@@ -69,6 +69,12 @@ class GpdbDatabase < ActiveRecord::Base
 
   def with_gpdb_connection(account, &block)
     Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, name, &block)
+  rescue ActiveRecord::JDBCError => e
+    if e.message =~ /database.*does not exist/
+      raise GreenplumConnection::ObjectNotFound, "The query could not be completed. Error: #{e.message}"
+    else
+      raise e
+    end
   end
 
   def find_dataset_in_schema(dataset_name, schema_name)

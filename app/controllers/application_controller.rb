@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Gpdb::InstanceUnreachable', :with => :render_instance_unreachable_error
   rescue_from 'GreenplumConnection::InstanceUnreachable', :with => :render_instance_unreachable_error
   rescue_from 'GreenplumConnection::DatabaseError', :with => :render_unprocessable_entity
+  rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'SqlPermissionDenied', :with => :render_resource_forbidden
@@ -56,6 +57,10 @@ class ApplicationController < ActionController::Base
     present_errors({:fields => {:general =>
                                     { :GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
+  end
+
+  def render_missing_database_object(e)
+    present_errors({:record => :MISSING_DB_OBJECT}, :status => :unprocessable_entity)
   end
 
   def render_resource_forbidden(e)

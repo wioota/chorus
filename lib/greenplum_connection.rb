@@ -3,6 +3,7 @@ require 'sequel'
 module GreenplumConnection
   class InstanceUnreachable < StandardError; end
   class DatabaseError < Sequel::DatabaseError; end
+  class ObjectNotFound < StandardError; end
 
   @@gpdb_login_timeout = 10
 
