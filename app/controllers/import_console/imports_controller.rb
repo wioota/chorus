@@ -4,7 +4,10 @@ class ImportConsole::ImportsController < ApplicationController
 
   def require_login
     return if logged_in? && !expired?
-    redirect_to url_for(:port => ChorusConfig.instance['server_port'], :controller => "/root", :action => "index")
+    redirect_to url_for(:port => ChorusConfig.instance['server_port'],
+                        :protocol => "http",
+                        :controller => "/root",
+                        :action => "index")
   end
 
   def index
