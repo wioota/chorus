@@ -88,7 +88,7 @@ http_interactions:
         1000015'',''name_texts''=>[''workspace44447'']}]}},{''groupValue''=>''Workspace
         1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
         1000016'',''name_texts''=>[''Real''],''summary_texts''=>[''A real workspace
-        with a sandbox on local_greenplum'']}]}},{''groupValue''=>''GpdbTable 1000006'',''doclist''=>{''numFound''=>5,''start''=>0,''docs''=>[{''id''=>''GpdbTable
+        with a sandbox on local-greenplum'']}]}},{''groupValue''=>''GpdbTable 1000006'',''doclist''=>{''numFound''=>5,''start''=>0,''docs''=>[{''id''=>''GpdbTable
         1000006'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
         comment 2''],''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''searchquery
         2'',''non-search'',''comment-search'',''comment-search-2'']},{''id''=>''Comment
@@ -142,7 +142,7 @@ http_interactions:
         1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
         1000007'',''name_texts''=>[''chorus_gpdb41'']}]}},{''groupValue''=>''GpdbInstance
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
-        1000008'',''name_texts''=>[''local_greenplum'']}]}},{''groupValue''=>''GpdbInstance
+        1000008'',''name_texts''=>[''local-greenplum'']}]}},{''groupValue''=>''GpdbInstance
         1000009'',''doclist''=>{''numFound''=>2,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
         1000009'',''name_texts''=>[''typeahead'']},{''id''=>''Events::NoteOnGreenplumInstance
         1000013'',''body_texts''=>[''i exist only for my attachments'']}]}},{''groupValue''=>''GpdbInstance
