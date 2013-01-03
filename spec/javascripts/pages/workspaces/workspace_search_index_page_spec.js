@@ -80,6 +80,29 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 expect(menuOptions.filter("[data-type=all]")).toContain("a");
             });
         });
+
+        context("called resourcesLoaded only when both workspace and search fetches completes", function () {
+            beforeEach(function () {
+                this.server.completeFetchFor(this.page.search.workspace(), { id: "101", name: "Bob the workspace" });
+            });
+
+            it("doesn't create mainContentView", function () {
+                expect(this.page.mainContent).toBeUndefined();
+            });
+
+            it("includes a section for every type of item when both fetches completes", function() {
+                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+
+                var sections = this.page.$(".search_result_list");
+                expect(sections.filter(".user_list.selectable")).toExist();
+                expect(sections.filter(".workfile_list.selectable")).toExist();
+                expect(sections.filter(".attachment_list.selectable")).toExist();
+                expect(sections.filter(".workspace_list.selectable")).toExist();
+                expect(sections.filter(".hdfs_list.selectable")).toExist();
+                expect(sections.filter(".instance_list.selectable")).toExist();
+            });
+
+        });
     });
 
     it("sets the workspace id, for prioritizing search", function() {

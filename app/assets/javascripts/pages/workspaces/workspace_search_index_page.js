@@ -38,5 +38,11 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
         this.workspaceId = this.search.get("workspaceId");
         this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
         this.search.workspace().fetch();
+    },
+
+    resourcesLoaded: function() {
+        if(this.search.workspace().loaded && this.search.loaded) {
+            this._super("resourcesLoaded", arguments);
+        }
     }
 });
