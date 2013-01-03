@@ -31,17 +31,17 @@ class ChorusView < Dataset
       errors.add(:query, :start_with_keywords)
     end
 
-    begin
-      query_without_comments = query.gsub(/\-\-.*?$|\/\*[\s\S]*?\*\//, "")
-      if query_without_comments.match /;\s*\S/
-        errors.add(:query, :multiple_result_sets)
-        return
-      end
-      schema.connect_as(current_user).test_transaction do |conn|
+    query_without_comments = query.gsub(/\-\-.*?$|\/\*[\s\S]*?\*\//, "")
+    if query_without_comments.match /;\s*\S/
+      errors.add(:query, :multiple_result_sets)
+      return
+    end
+    schema.connect_as(current_user).test_transaction do |conn|
+      begin
         conn.fetch_value(query_without_comments.gsub ";", "")
+      rescue Sequel::DatabaseError => e
+        errors.add(:query, :generic, {:message => e.message})
       end
-    rescue Sequel::DatabaseError => e
-      errors.add(:query, :generic, {:message => e.message})
     end
   end
 
