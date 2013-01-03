@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'rails', '3.2.9.rc2'
+gem 'rails', '3.2.10'
 
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
@@ -33,7 +33,6 @@ group :assets do
   gem 'therubyrhino'
   gem 'uglifier'
   gem 'yui-compressor'
-  gem 'turbo-sprockets-rails3'
 end
 
 group :integration do

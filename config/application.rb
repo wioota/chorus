@@ -5,10 +5,6 @@ require_relative '../app/models/chorus_config'
 require "active_record/railtie"
 require "action_controller/railtie"
 require "active_resource/railtie"
-require "sprockets/paths"
-require "sprockets/processing"
-require "sprockets/compressing"
-require "sprockets/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
