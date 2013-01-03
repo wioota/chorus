@@ -124,3 +124,16 @@ function exit_control () {
     test -t 0 && stty $SHELL_CONFIG
     exit $1
 }
+
+function checkSensitiveFiles() {
+     $RUBY -e "require '$CHORUS_HOME/lib/sensitive_file_checker.rb'" -e "unless SensitiveFileChecker.check; puts(SensitiveFileChecker.errors); exit(1); end"
+     SENSITIVE_FILE_EXIT_STATUS=$?
+
+     if [ $SENSITIVE_FILE_EXIT_STATUS -eq 1 ]; then
+        exit_control 1
+     fi
+}
+
+if [ "$RAILS_ENV" = "production" ]; then
+    checkSensitiveFiles
+fi

@@ -51,4 +51,14 @@ describe SensitiveFileChecker do
       SensitiveFileChecker.unprotected_files.should =~ files[0..1].collect(&:to_s)
     end
   end
+
+  describe "errors" do
+    it "returns an array of error messages" do
+      files[0..1].each do |file|
+        FileUtils.chmod 0644, file
+      end
+
+      SensitiveFileChecker.errors.should =~ files[0..1].collect {|f| "FATAL ERROR: #{f} is readable or writable by other users."}
+    end
+  end
 end
