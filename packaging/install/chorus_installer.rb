@@ -140,16 +140,16 @@ class ChorusInstaller
 
     case input
       when 1
-        @logger.debug "Selected redhat version 5"
+        @logger.log "Selected RedHat version 5."
         "postgres-redhat5.5-9.2.1.tar.gz"
       when 2
-        @logger.debug "Selected redhat version 6"
+        @logger.log "Selected RedHat version 6."
         "postgres-redhat6.2-9.2.1.tar.gz"
       when 3
-        @logger.debug "Selected suse version 11"
+        @logger.log "Selected SuSE version 11."
         "postgres-suse11-9.2.1.tar.gz"
       when 5
-        @logger.debug "Selected OS X"
+        @logger.log "Selected OS X."
         "postgres-osx-9.2.1.tar.gz"
       else
         raise InstallerErrors::InstallAborted, "OS version not supported."
@@ -515,20 +515,27 @@ class ChorusInstaller
   end
 
   def dump_environment
+    @logger.log("=== ENVIRONMENT INFO BEGIN")
+    @logger.log("== JAVA ENVIRONMENT")
     System.get_properties.entry_set.each do |e|
-      @logger.debug(e)
+      @logger.log(e)
     end
 
+    @logger.log("== OPERATING SYSTEM RELEASE")
     Dir["/etc/*-release"].each do |file|
-      @logger.debug("#{file}: #{File.open(file).readlines.first}".chomp)
+      @logger.log("#{file}: #{File.open(file).readlines.first}".chomp)
     end
 
+    dca_files_exist = false
     ['/opt/greenplum/conf/build-version.txt',
      '/opt/greenplum/conf/productid',
      '/opt/greenplum/serialnumber'].each do |path|
       next unless File.exists?(path)
-      @logger.debug("#{path}: #{File.open(path).readlines.first}".chomp)
+      @logger.log("== DCA SPECIFIC FILES") unless dca_files_exist
+      dca_files_exist = true
+      @logger.log("#{path}: #{File.open(path).readlines.first}".chomp)
     end
+    @logger.log("=== ENVIRONMENT INFO END")
   end
 
   private

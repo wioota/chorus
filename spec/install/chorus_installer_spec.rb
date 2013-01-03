@@ -271,7 +271,7 @@ describe ChorusInstaller do
         end
 
         it "logs the users choice" do
-          mock(logger).debug("Selected redhat version 5")
+          mock(logger).log("Selected RedHat version 5.")
           installer.get_postgres_build
         end
       end
@@ -287,7 +287,7 @@ describe ChorusInstaller do
         end
 
         it "logs the users choice" do
-          mock(logger).debug("Selected redhat version 5")
+          mock(logger).log("Selected RedHat version 5.")
           installer.get_postgres_build
         end
       end
@@ -303,7 +303,7 @@ describe ChorusInstaller do
         end
 
         it "logs the users choice" do
-          mock(logger).debug("Selected redhat version 6")
+          mock(logger).log("Selected RedHat version 6.")
           installer.get_postgres_build
         end
       end
@@ -323,7 +323,7 @@ describe ChorusInstaller do
         end
 
         it "logs the users choice" do
-          mock(logger).debug("Selected suse version 11")
+          mock(logger).log("Selected SuSE version 11.")
           installer.get_postgres_build
         end
       end
@@ -339,7 +339,7 @@ describe ChorusInstaller do
       end
 
       it "logs the users choice" do
-        mock(logger).debug("Selected OS X")
+        mock(logger).log("Selected OS X.")
         installer.get_postgres_build
       end
     end
@@ -1179,16 +1179,48 @@ describe ChorusInstaller do
       end
 
       it "prints out the java system properties" do
-        mock(logger).debug("os.name=TestOS")
-        mock(logger).debug("os.version=1.2.3")
+        mock(logger).log("os.name=TestOS")
+        mock(logger).log("os.version=1.2.3")
         installer.dump_environment
       end
 
       it "prints out the /etc/*-release files" do
-        mock(logger).debug("/etc/test-release: a test os 1.0")
+        mock(logger).log("/etc/test-release: a test os 1.0")
         FileUtils.mkdir_p('/etc')
         File.open('/etc/test-release', 'w') { |f| f.puts "a test os 1.0" }
         installer.dump_environment
+      end
+
+      describe "prints out section headers" do
+        it "outputs section headers" do
+          mock(logger).log("=== ENVIRONMENT INFO BEGIN")
+          mock(logger).log("== JAVA ENVIRONMENT")
+          mock(logger).log("== OPERATING SYSTEM RELEASE")
+          mock(logger).log("=== ENVIRONMENT INFO END")
+          installer.dump_environment
+        end
+
+        context "when there are DCA files present" do
+          before do
+            FileUtils.mkdir_p('/opt/greenplum/conf')
+            ['/opt/greenplum/conf/build-version.txt',
+             '/opt/greenplum/conf/productid'].each do |path|
+              File.open(path, 'w') { |f| f.puts "#{path} content" }
+            end
+          end
+
+          it "outputs the section header" do
+            mock(logger).log("== DCA SPECIFIC FILES")
+            installer.dump_environment
+          end
+        end
+
+        context "when there are not DCA files present" do
+          it "doesn't output the section header" do
+            dont_allow(logger).log("== DCA SPECIFIC FILES")
+            installer.dump_environment
+          end
+        end
       end
     end
 
@@ -1197,7 +1229,7 @@ describe ChorusInstaller do
         FileUtils.mkdir_p('/opt/greenplum/conf')
         ['/opt/greenplum/conf/build-version.txt',
          '/opt/greenplum/conf/productid'].each do |path|
-          mock(logger).debug("#{path}: #{path} content")
+          mock(logger).log("#{path}: #{path} content")
           File.open(path, 'w') { |f| f.puts "#{path} content" }
         end
         installer.dump_environment
