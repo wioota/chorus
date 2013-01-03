@@ -33,6 +33,7 @@ group :assets do
   gem 'therubyrhino'
   gem 'uglifier'
   gem 'yui-compressor'
+  gem 'turbo-sprockets-rails3'
 end
 
 group :integration do
