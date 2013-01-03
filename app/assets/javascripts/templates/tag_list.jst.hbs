@@ -1,7 +1,9 @@
 {{#if models}}
    {{#each models}}
       <li data-id="{{id}}" class="tag_list_item">
+          <span class="spacer_left"></span>
           <div>{{this.name}}</div>
+          <span class="spacer_right"></span>
        </li>
    {{/each}}
 {{else}}
