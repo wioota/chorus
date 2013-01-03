@@ -10,6 +10,8 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+// put import_console here because it will clobber jquery otherwise
+//= require import_console/import_console
 //= require handlebars
 //= require_tree ./templates
 //= require vendor/jquery-1.7.1
