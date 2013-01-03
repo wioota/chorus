@@ -117,7 +117,7 @@ describe ChorusViewsController, :database_integration => true do
         )
       }
 
-      it "responds with unprocessible entity" do
+      xit "responds with unprocessible entity" do
         post :create, options
         response.code.should == "422"
         decoded = JSON.parse(response.body)
