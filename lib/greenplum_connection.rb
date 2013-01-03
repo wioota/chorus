@@ -46,7 +46,7 @@ module GreenplumConnection
     end
 
     def fetch_value(sql)
-      result = with_connection { @connection.fetch(sql).first }
+      result = with_connection { @connection.fetch(sql).limit(1).first }
       result && result.first[1]
     end
 
@@ -164,7 +164,7 @@ module GreenplumConnection
     end
 
     def fetch_value(sql)
-      result = with_schema_connection { @connection.fetch(sql).first }
+      result = with_schema_connection { @connection.fetch(sql).limit(1).first }
       result && result.first[1]
     end
 

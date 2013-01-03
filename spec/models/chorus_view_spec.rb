@@ -28,6 +28,42 @@ describe ChorusView do
         chorus_view.should be_valid
       end
 
+      describe 'with comment containing semicolon' do
+        describe 'single line comment' do
+          let(:query) {  "select 1; -- a comment with semicolon ; in it" }
+
+          it "can be valid" do
+            chorus_view.should be_valid
+          end
+
+          describe 'with multiple statements' do
+            let(:query) {  "select 1; -- a comment with semicolon ; in it\n select 2;" }
+
+            it 'is invalid' do
+              chorus_view.should_not be_valid
+              chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
+            end
+          end
+        end
+
+        describe 'multi line comment' do
+          let(:query) {  "select 1; /* a comment with semicolon ; in\n it */" }
+
+          it "can be valid" do
+            chorus_view.should be_valid
+          end
+
+          describe 'with multiple statements' do
+            let(:query) {  "select 1; /* a comment with semicolon ; in\n it */ select 2;" }
+
+            it 'is invalid' do
+              chorus_view.should_not be_valid
+              chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
+            end
+          end
+        end
+      end
+
       describe 'with multiple statements' do
         let(:query) {  "select 1; create table a_new_table()" }
 
