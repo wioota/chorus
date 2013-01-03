@@ -149,15 +149,6 @@
                 links: [ "actor", "gnipInstance" ]
             },
 
-            ProvisioningSuccess: {
-                links: ["gpdbInstance"],
-                computed: ["instanceAddress"]
-            },
-
-            ProvisioningFail: {
-                computed: ["gpdbInstanceName"]
-            },
-
             HadoopInstanceCreated: {
                 links: [ "actor", "hadoopInstance" ]
             },

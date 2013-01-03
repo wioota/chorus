@@ -38,7 +38,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     },
 
     resourcesLoaded: function() {
-        this.model.maximumSize = chorus.models.Config.instance().get("provisionMaxSizeInGB");
     },
 
     save: function(e) {

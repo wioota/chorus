@@ -111,8 +111,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
             this.bindings.add(this.account, "loaded", this.checkAccount);
-
-            this.mainContent.contentDetails.provisioningState = this.instance.get("state");
             this.mainContent.contentDetails.render();
 
             this.account.fetchIfNotLoaded();

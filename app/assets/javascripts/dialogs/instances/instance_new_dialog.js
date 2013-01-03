@@ -11,18 +11,10 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.aurora = chorus.models.GpdbInstance.aurora();
-        this.aurora.fetch();
-
         this.requiredResources.add(chorus.models.Config.instance());
-        this.requiredResources.add(this.aurora);
     },
 
     postRender: function() {
-        if (this.aurora.isInstalled()) {
-            this.loadTemplates();
-        }
-
         _.defer(_.bind(function() {
             chorus.styleSelect(this.$("select.data_sources"), { format: function(text, option) {
                 var aliasedName = $(option).attr("name");
@@ -31,29 +23,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         }, this));
     },
 
-    loadTemplates: function() {
-        var templates = this.aurora.getTemplates();
-
-        var $select = $("<select/>").attr('name', 'template').
-                                     addClass('instance_size');
-
-        _.each(templates, function(template) {
-            var $option = $("<option/>").val(template.name()).text(template.toText());
-            $select.append($option);
-        });
-
-        this.$(".instance_size_container").append($select);
-        chorus.styleSelect(this.$("select.instance_size"), { menuWidth: 200 });
-    },
-
     makeModel:function () {
         this.model = this.model || new chorus.models.GpdbInstance();
     },
 
     additionalContext: function() {
         return {
-            auroraInstalled: chorus.models.GpdbInstance.aurora().isInstalled(),
-            provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGb"),
             gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured')
         };
     },
@@ -112,14 +87,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model);
-
-        if (this.model.get("provision_type") === "create") {
-            this.provisioning = true;
-            chorus.toast("instances.new_dialog.provisioning");
-            chorus.router.navigate("/instances", { selectId: this.model.get("id") });
-
-        }
-
         this.closeModal();
     },
 

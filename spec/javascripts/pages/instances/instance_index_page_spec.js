@@ -51,13 +51,6 @@ describe("chorus.pages.InstanceIndexPage", function() {
                 this.page.render();
                 expect(this.page.mainContent.content.$(".gpdb_instance li.instance:eq(0)")).toHaveClass("selected");
             });
-
-            xit("pre-selects the instance with ID specified in chorus.pageOptions, when available", function() {
-                // TODO: this is only used by Aurora, and doesn't work, the test only passed coincidentally
-                this.page.pageOptions = {selectId: 123456};
-                this.page.render();
-                expect(this.page.mainContent.content.$(".gpdb_instance li.instance[data-instance-id='123456']")).toHaveClass("selected");
-            });
         });
 
         describe("#render", function() {

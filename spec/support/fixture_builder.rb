@@ -69,16 +69,10 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :default, gpdb_instance
     Events::GreenplumInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
-    aurora_instance = FactoryGirl.create(:gpdb_instance, :name => "Aurora", :description => "Provisioned", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :provision_type => "create")
-    Events::GreenplumInstanceCreated.by(admin).add(:gpdb_instance => aurora_instance)
-    Events::ProvisioningSuccess.by(admin).add(:gpdb_instance => aurora_instance)
-    Events::ProvisioningFail.by(admin).add(:gpdb_instance => aurora_instance, :error_message => "could not provision")
-
     shared_instance = FactoryGirl.create(:gpdb_instance, :name => "Shared", :owner => admin, :shared => true)
     owners_instance = FactoryGirl.create(:gpdb_instance, :name => "Owners", :owner => owner, :shared => false)
 
     FactoryGirl.create(:gpdb_instance, :name => "Offline", :owner => owner, :state => "offline")
-    provisioning = FactoryGirl.create(:gpdb_instance, :name => "Provisioning", :owner => owner, :state => "provisioning")
 
     @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => owners_instance)
 
@@ -100,9 +94,6 @@ FixtureBuilder.configure do |fbuilder|
     @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)
     @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :gpdb_instance => owners_instance)
     owner_instance_account = FactoryGirl.create(:instance_account, :owner => owner, :gpdb_instance => owners_instance)
-    @aurora = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => aurora_instance)
-
-    FactoryGirl.create(:instance_account, :owner => owner, :gpdb_instance => provisioning)
 
     @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
     @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))

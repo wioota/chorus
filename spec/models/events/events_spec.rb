@@ -7,7 +7,6 @@ describe "Event types" do
 
   let(:actor) { users(:owner) }
   let(:gpdb_instance) { gpdb_instances(:default) }
-  let(:aurora_instance) { gpdb_instances(:aurora) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { users(:the_collaborator) }
@@ -173,40 +172,6 @@ describe "Event types" do
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
     it_creates_activities_for { [actor, hadoop_instance] }
-    it_creates_a_global_activity
-  end
-
-  describe "ProvisioningSuccess" do
-    subject do
-      Events::ProvisioningSuccess.add(
-          :actor => actor,
-          :gpdb_instance => aurora_instance
-      )
-    end
-
-    its(:action) { should == "ProvisioningSuccess" }
-    its(:gpdb_instance) { should == aurora_instance }
-    its(:targets) { should == {:gpdb_instance => aurora_instance} }
-
-    it_creates_activities_for { [actor, aurora_instance] }
-    it_creates_a_global_activity
-  end
-
-  describe "ProvisioningFail" do
-    subject do
-      Events::ProvisioningFail.add(
-          :actor => actor,
-          :gpdb_instance => aurora_instance,
-          :error_message => "provisioning has failed"
-      )
-    end
-
-    its(:action) { should == "ProvisioningFail" }
-    its(:gpdb_instance) { should == aurora_instance }
-    its(:targets) { should == {:gpdb_instance => aurora_instance} }
-    its(:additional_data) { should == {'error_message' => "provisioning has failed"} }
-
-    it_creates_activities_for { [actor, aurora_instance] }
     it_creates_a_global_activity
   end
 

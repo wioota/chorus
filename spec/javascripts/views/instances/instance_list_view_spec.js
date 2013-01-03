@@ -128,24 +128,6 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe("when an instance is provisioning", function() {
-            beforeEach(function() {
-                this.gpdbInstances.reset([
-                    rspecFixtures.gpdbInstance({ name: "Greenplum", state: "provisioning" })
-                ]);
-                this.view.render();
-            });
-
-            it("should display the offline/unknown state icon", function() {
-                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
-            });
-
-            it("should not display the name should as a link", function() {
-                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).not.toExist();
-                expect(this.view.$(".gpdb_instance li:eq(0) span.name")).toContainText("Greenplum");
-            });
-        });
-
         describe("when an instance is offline", function() {
             beforeEach(function() {
                 this.gpdbInstances.reset([

@@ -2,18 +2,9 @@ chorus.models.Instance = chorus.models.Base.extend({
     _imagePrefix: "/images/instances/",
 
     _stateIconMap: {
-        "provisioning": "yellow.png",
         "fault": "red.png",
         "online": "green.png",
         "offline": "yellow.png"
-    },
-
-    isProvisioning: function() {
-        return this.get("state") === "provisioning";
-    },
-
-    provisioningFailed: function() {
-        return this.get("state") === "fault";
     },
 
     isOnline: function() {

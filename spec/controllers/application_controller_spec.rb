@@ -117,15 +117,6 @@ describe ApplicationController do
       decoded_errors.service.should == "SOLR_UNREACHABLE"
     end
 
-    it "returns error 422 when an Gpdb::InstanceStillProvisioning error is raised" do
-      stub(controller).index { raise Gpdb::InstanceStillProvisioning }
-
-      get :index
-
-      response.code.should == "422"
-      decoded_errors.record.should == "INSTANCE_STILL_PROVISIONING"
-    end
-
     it "returns error 422 when a SunspotError occurs" do
       stub(controller).index { raise SunspotError.new("sunspot error") }
 

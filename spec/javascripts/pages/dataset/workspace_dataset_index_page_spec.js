@@ -33,36 +33,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             this.page.render();
             expect(this.page.$(".loading_section")).toExist();
         });
-
-        context("when the workspace fetch completes", function() {
-            beforeEach(function() {
-                spyOn(this.page.mainContent.contentDetails, "postRender").andCallThrough();
-            });
-
-            context("when the instance is provisioning", function() {
-                beforeEach(function() {
-                    this.workspace.attributes.sandboxInfo.database.instance.state = 'provisioning';
-                    this.server.completeFetchFor(this.workspace);
-                });
-
-                it("sets the provisioningState to 'provisioning' on the content details view", function() {
-                    expect(this.page.mainContent.contentDetails.provisioningState).toBe("provisioning");
-                    expect(this.page.mainContent.contentDetails.postRender).toHaveBeenCalled();
-                });
-            });
-
-            context("when the instance failed provisioning", function() {
-                beforeEach(function() {
-                    this.workspace.attributes.sandboxInfo.database.instance.state = 'fault';
-                    this.server.completeFetchFor(this.workspace);
-                });
-
-                it("sets the provisioningState to 'fault' on the content details view", function() {
-                    expect(this.page.mainContent.contentDetails.provisioningState).toBe("fault");
-                    expect(this.page.mainContent.contentDetails.postRender).toHaveBeenCalled();
-                });
-            });
-        });
     });
 
     describe("when a fetch fails", function() {

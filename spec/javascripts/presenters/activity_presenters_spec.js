@@ -288,49 +288,6 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("aurora instance provisioned", function() {
-        var gpdbInstance;
-
-        beforeEach(function() {
-            model = rspecFixtures.activity.auroraInstanceProvisioned();
-            presenter = new chorus.presenters.Activity(model);
-            gpdbInstance = model.gpdbInstance();
-            actor = model.actor();
-        });
-
-        itHasTheActorIcon();
-
-        it("has the right header html", function() {
-            expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.ProvisioningSuccess.default", {
-                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
-                    instanceAddress: gpdbInstance.get("host")
-                }
-            );
-        });
-    });
-
-    context("aurora instance provisioning fails", function() {
-        var gpdbInstance;
-
-        beforeEach(function() {
-            model = rspecFixtures.activity.auroraInstanceProvisioningFailed();
-            presenter = new chorus.presenters.Activity(model);
-            gpdbInstance = model.gpdbInstance();
-            actor = model.actor();
-        });
-
-        itHasTheActorIcon();
-
-        it("has the right header html", function() {
-            expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.ProvisioningFail.default", {
-                    gpdbInstanceName: gpdbInstance.name()
-                }
-            );
-        });
-    });
-
     context("hadoop instance created", function() {
         var hadoopInstance;
 

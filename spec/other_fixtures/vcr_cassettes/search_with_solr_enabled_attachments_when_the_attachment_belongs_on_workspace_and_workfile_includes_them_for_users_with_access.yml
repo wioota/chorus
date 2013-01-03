@@ -52,5 +52,5 @@ http_interactions:
         1000009''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''Attachment
         1000010''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hdfs_file'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 03 Jan 2013 22:20:47 GMT
+  recorded_at: Thu, 03 Jan 2013 22:55:09 GMT
 recorded_with: VCR 2.3.0

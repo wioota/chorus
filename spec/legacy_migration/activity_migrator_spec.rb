@@ -461,34 +461,6 @@ describe ActivityMigrator do
         Events::MembersAdded.count.should == rows.count
       end
 
-      it "copies PROVISIONING_FAIL from legacy activity" do
-        rows = Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
-          where  type = 'PROVISIONING_FAIL';")
-        rows.each do |row|
-          event = Events::ProvisioningFail.find_by_legacy_id(row['id'])
-          event.actor.username.should == row["author"]
-          event.workspace.should be_blank
-          event.gpdb_instance.legacy_id.should == row['entity_id']
-          event.additional_data['error_message'].should == nil
-        end
-        rows.count.should > 0
-        Events::ProvisioningFail.count.should == rows.count
-      end
-
-      it "copies PROVISIONING_SUCCESS from legacy activity" do
-        rows = Legacy.connection.select_all("SELECT ed.* from legacy_migrate.edc_activity_stream ed
-          where  type = 'PROVISIONING_SUCCESS';")
-        rows.each do |row|
-          event = Events::ProvisioningSuccess.find_by_legacy_id(row['id'])
-          event.actor.username.should == row["author"]
-          event.workspace.should be_blank
-          event.gpdb_instance.legacy_id.should == row['entity_id']
-          event.additional_data['error_message'].should == nil
-        end
-        rows.count.should > 0
-        Events::ProvisioningSuccess.count.should == rows.count
-      end
-
       it "copies WORKFILE UPGRADED VERSION from legacy activity" do
         rows = Legacy.connection.select_all("SELECT ed.*, aso.object_id as version_num, aso2.object_id as workfile_id, ewv.commit_message as commit_message from legacy_migrate.edc_activity_stream ed
           LEFT JOIN legacy_migrate.edc_activity_stream_object aso ON aso.activity_stream_id = ed.id AND aso.entity_type = 'version'

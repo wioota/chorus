@@ -9,8 +9,6 @@ window.fixtureDefinitions = {
         unique: [ "id" ],
 
         children: {
-            provisioningSuccess: {},
-            provisioningFail:    {},
             addHdfsPatternAsExtTable: {},
             addHdfsDirectoryAsExtTable: {}
         }
@@ -97,7 +95,6 @@ window.rspecFixtureDefinitions = {
     workfileVersionSet: {},
     workfileVersion: { unique: ['id']},
     draft: {},
-    provisioning: {},
 
     config: {},
 
@@ -131,8 +128,6 @@ window.rspecFixtureDefinitions = {
             gnipStreamImportCreated: {},
             gnipStreamImportSuccess: {},
             gnipStreamImportFailed: {},
-            auroraInstanceProvisioned: {},
-            auroraInstanceProvisioningFailed: {},
             greenplumInstanceChangedOwner: {},
             hadoopInstanceCreated: {},
             greenplumInstanceChangedName: {},

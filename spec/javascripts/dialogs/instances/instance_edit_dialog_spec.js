@@ -49,38 +49,6 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
-        describe("when editing a provisioned instance", function() {
-            beforeEach(function() {
-                this.dialog.model.set({ provisionType: "create", size: "10"});
-                this.dialog.render();
-            });
-
-            it("Field called 'Names' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
-                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'description' should be editable and pre populated", function() {
-                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
-                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'host' should not be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
-                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeTruthy();
-            });
-
-            it("Field called 'port' should not be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=port]").val()).toBe("8555");
-                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeTruthy();
-            });
-
-            it("Field called 'size' should not be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=size]").val()).toBe("10");
-                expect(this.dialog.$("input[name=size]").prop("disabled")).toBeTruthy();
-            });
-        });
-
         describe("when editing a hadoop instance", function() {
             beforeEach(function() {
                 this.dialog.model.set({ username: "user", groupList: "hadoop"});
@@ -199,14 +167,6 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
         });
 
-        it("saves silently (to prevent re-rendering in aurora instances)", function() {
-            this.dialog.model.set({ provisionType: "create"});
-            this.dialog.render();
-            spyOn(this.dialog.model, "save");
-            this.dialog.$("button.submit").submit();
-            expect(this.dialog.model.save.calls[0].args[1]).toEqual({silent: true});
-        });
-
         it("changes the text on the upload button to 'saving'", function() {
             spyOn(this.dialog.model, "save");
             this.dialog.$("button[type=submit]").submit();
@@ -217,26 +177,6 @@ describe("chorus.dialogs.InstanceEdit", function() {
             spyOn(this.dialog.model, "save");
             this.dialog.$("button[type=submit]").submit();
             expect(this.dialog.$("button.cancel")).toBeDisabled();
-        });
-
-        context("with a provisioned instance", function() {
-            beforeEach(function() {
-                this.dialog.model.set({ provisionType: "create"});
-                this.dialog.render();
-                this.dialog.$("input[name=name]").val("test2");
-                this.dialog.$("input[name=port]").val("8556");
-                this.dialog.$("input[name=host]").val("testhost2");
-                this.dialog.$("input[name=size]").val("123");
-                this.dialog.$("button[type=submit]").submit();
-            });
-
-            it("updates the model", function() {
-                expect(this.server.lastUpdate().params()["gpdb_instance[name]"]).toBe("test2");
-                expect(this.server.lastUpdate().params()["gpdb_instance[port]"]).toBe("8556");
-                expect(this.server.lastUpdate().params()["gpdb_instance[host]"]).toBe("testhost2");
-                expect(this.server.lastUpdate().params()["gpdb_instance[size]"]).toBe("123");
-                expect(this.server.lastUpdate().params()["gpdb_instance[maintenanceDb]"]).toBeUndefined();
-            });
         });
 
         context("with a hadoop instance", function() {

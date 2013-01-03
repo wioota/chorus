@@ -110,65 +110,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 });
 
-                context("when the instance is provisioning", function() {
-                    beforeEach(function() {
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.instance.set({
-                            state: "provisioning",
-                            provision_type: "create"
-                        });
-                        this.view.render();
-                    });
-
-                    it("doesn't display the account info section", function() {
-                        expect(this.view.$(".account_info")).not.toExist();
-                    });
-
-                    it("display provisioning info text", function() {
-                        expect(this.view.$(".instance_type span")).toContainTranslation("instances.sidebar.provisioning");
-                    });
-
-                    it("doesn't display the edit instance link", function() {
-                        expect(this.view.$(".actions .edit_instance")).not.toExist();
-                    });
-                });
-
-                context("when the instance failed to provision", function() {
-                    beforeEach(function() {
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.instance.set({
-                            state: "fault",
-                            provision_type: "create"
-                        });
-                        this.view.render();
-                    });
-
-                    it("doesn't display the account info section", function() {
-                        expect(this.view.$(".account_info")).not.toExist();
-                    });
-
-                    it("displays an error message in the info section", function() {
-                        expect(this.view.$(".instance_fault img")).toHaveAttr("src", "/images/message_error_small.png");
-                        expect(this.view.$(".instance_fault span")).toContainTranslation("instances.sidebar.fault");
-                    });
-
-                    it("sets the deleteable flag on the context", function() {
-                        expect(this.view.additionalContext().deleteable).toBeTruthy();
-                    });
-
-                    it("displays the delete instance link", function() {
-                        expect(this.view.$(".actions .delete_instance")).toExist();
-                    });
-
-                    it("doesn't display the edit instance link", function() {
-                        expect(this.view.$(".actions .edit_instance")).not.toExist();
-                    });
-
-                    it("does not display the edit accounts link", function() {
-                        expect(this.view.$("a[data-dialog=InstancePermissions]")).not.toExist();
-                    });
-                });
-
                 context("when the instance is offline", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
@@ -177,15 +118,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                             provision_type: "register"
                         });
                         this.view.render();
-                    });
-
-                    it("doesn't displays an error message in the info section", function() {
-                        expect(this.view.$(".instance_fault img")).not.toHaveAttr("src", "/images/message_error_small.png");
-                        expect(this.view.$(".instance_fault span")).not.toContainTranslation("instances.sidebar.fault");
-                    });
-
-                    it("doesn't display the delete instance link", function() {
-                        expect(this.view.$(".actions .delete_instance")).not.toExist();
                     });
 
                     it("does display the edit instance link", function() {

@@ -73,8 +73,6 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def connect_with(account)
-    raise Gpdb::InstanceStillProvisioning if state == 'provisioning'
-
     GreenplumConnection::InstanceConnection.new(
         :username => account.db_username,
         :password => account.db_password,

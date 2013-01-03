@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   rescue_from 'ApiValidationError', :with => :render_not_valid
   rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
-  rescue_from 'Gpdb::InstanceStillProvisioning', :with => :render_instance_still_provisioning_error
   rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
   rescue_from 'Gpdb::InstanceUnreachable', :with => :render_instance_unreachable_error
   rescue_from 'GreenplumConnection::InstanceUnreachable', :with => :render_instance_unreachable_error
@@ -75,10 +74,6 @@ class ApplicationController < ActionController::Base
     present_errors({:fields => {:general =>
                                     { :GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
-  end
-
-  def render_instance_still_provisioning_error(e)
-    present_errors({:record => :INSTANCE_STILL_PROVISIONING}, :status => :unprocessable_entity)
   end
 
   def render_instance_overloaded_error(e)

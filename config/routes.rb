@@ -112,8 +112,6 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show] , :controller => 'attachment_downloads'
   end
 
-  resource :provisioning, :only => [:show], :controller => 'provisioning'
-
   resources :insights, :only => [:index, :create] do
     collection do
       post :publish

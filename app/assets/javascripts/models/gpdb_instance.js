@@ -11,27 +11,14 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
-        switch (newAttrs.provision_type) {
-            case "register" :
-                this.require("host", newAttrs);
-                this.require("port", newAttrs);
-                this.require("maintenanceDb", newAttrs);
-                this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
-                if (this.isNew()) {
-                    this.require("dbUsername", newAttrs);
-                    this.require("dbPassword", newAttrs);
-                }
-                break;
-            case "create" :
-                this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGb"), newAttrs);
-                if (this.isNew()) {
-                    this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
-                    this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
-                    this.require("dbUsername", newAttrs);
-                    this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
-                }
-                break;
-            default :
+
+        this.require("host", newAttrs);
+        this.require("port", newAttrs);
+        this.require("maintenanceDb", newAttrs);
+        this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
+        if (this.isNew()) {
+            this.require("dbUsername", newAttrs);
+            this.require("dbPassword", newAttrs);
         }
     },
 
@@ -113,12 +100,5 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
 
     sharedAccountDetails: function() {
         return this.accountForOwner() && this.accountForOwner().get("dbUsername");
-    }
-}, {
-    aurora: function() {
-        if (!this._aurora) {
-            this._aurora = new chorus.models.Provisioning();
-        }
-        return this._aurora;
     }
 });

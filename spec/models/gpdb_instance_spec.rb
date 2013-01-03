@@ -426,19 +426,6 @@ describe GpdbInstance do
                                                         }) { "this is my connection" }
       instance.connect_with(account).should == "this is my connection"
     end
-
-    context "when the instance is still provisioning" do
-      before do
-        instance.state = "provisioning"
-      end
-
-      it "should raise IntanceStillProvisioning" do
-        dont_allow(GreenplumConnection::InstanceConnection).new
-        expect {
-          instance.connect_with(account)
-        }.to raise_error(Gpdb::InstanceStillProvisioning)
-      end
-    end
   end
 
   describe "#databases", :database_integration => true do

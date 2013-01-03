@@ -29,8 +29,6 @@ class ActivityMigrator < AbstractMigrator
           Events::HadoopInstanceCreated,
           Events::UserAdded,
           Events::MembersAdded,
-          Events::ProvisioningFail,
-          Events::ProvisioningSuccess,
           Events::WorkfileUpgradedVersion,
           Events::ChorusViewCreated,
           Events::ChorusViewChanged,
@@ -1224,76 +1222,6 @@ class ActivityMigrator < AbstractMigrator
       end
     end
 
-    def migrate_provision_failed
-      Legacy.connection.exec_query(<<-SQL)
-        INSERT INTO #{@@events_table_name}(
-          legacy_id,
-          legacy_type,
-          action,
-          target1_id,
-          target1_type,
-          created_at,
-          updated_at,
-          actor_id)
-        SELECT
-          streams.id,
-          'edc_activity_stream',
-          'Events::ProvisioningFail',
-          gpdb_instances.id,
-          'GpdbInstance',
-          streams.created_tx_stamp AT TIME ZONE 'UTC',
-          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
-          users.id
-        FROM edc_activity_stream streams
-        INNER JOIN edc_activity_stream_object target_instance
-          ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN gpdb_instances
-          ON target_instance.object_id = gpdb_instances.legacy_id
-        INNER JOIN edc_activity_stream_object actor
-          ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
-        INNER JOIN users
-          ON users.legacy_id = actor.object_id
-        WHERE streams.type = 'PROVISIONING_FAIL'
-        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ProvisioningFail');
-        SQL
-
-    end
-
-    def migrate_provision_success
-      Legacy.connection.exec_query(<<-SQL)
-        INSERT INTO #{@@events_table_name}(
-          legacy_id,
-          legacy_type,
-          action,
-          target1_id,
-          target1_type,
-          created_at,
-          updated_at,
-          actor_id)
-        SELECT
-          streams.id,
-          'edc_activity_stream',
-          'Events::ProvisioningSuccess',
-          gpdb_instances.id,
-          'GpdbInstance',
-          streams.created_tx_stamp AT TIME ZONE 'UTC',
-          streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
-          users.id
-        FROM edc_activity_stream streams
-        INNER JOIN edc_activity_stream_object target_instance
-          ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN gpdb_instances
-          ON target_instance.object_id = gpdb_instances.legacy_id
-        INNER JOIN edc_activity_stream_object actor
-          ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
-        INNER JOIN users
-          ON users.legacy_id = actor.object_id
-        WHERE streams.type = 'PROVISIONING_SUCCESS'
-        AND streams.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::ProvisioningSuccess');
-        SQL
-
-    end
-
     def migrate_workfile_upgrade_success
       Legacy.connection.exec_query(<<-SQL)
         INSERT INTO #{@@events_table_name}(
@@ -1437,8 +1365,6 @@ class ActivityMigrator < AbstractMigrator
       migrate_hadoop_instance_created
       migrate_user_added
       migrate_member_added
-      migrate_provision_failed
-      migrate_provision_success
       migrate_workfile_upgrade_success
       migrate_workfile_version_deleted_success
       migrate_chorus_view_created_from_workfile

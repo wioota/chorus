@@ -14,16 +14,6 @@
         <input type="text" name="maintenanceDb" value="{{maintenanceDb}}" tabindex="1"/>
     {{/if}}
 
-    {{#if provisionedInstance}}
-        <label name="host">{{t "instances.dialog.host"}}</label>
-        <label class="port" name="port">{{t "instances.dialog.port"}}</label>
-        <input type="text" disabled="disabled" name="host" value="{{host}}" tabindex="1"/>
-        <input type="text" disabled="disabled" class="port" name="port" value="{{port}}" tabindex="1"/>
-
-        <label>{{t "instances.dialog.size"}}</label>
-        <input type="text" disabled="disabled" name="size" value="{{size}}" tabindex="1"/>
-    {{/if}}
-
     {{#if hadoopInstance}}
         <label name="host" class="required">{{t "instances.dialog.host"}}</label>
         <label name="port" class="port required">{{t "instances.dialog.port"}}</label>

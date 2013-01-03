@@ -1,15 +1,7 @@
 {{#if name}}
 <div class="info">
     <div class="instance_name" title="{{name}}">{{name}}</div>
-    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}
-        {{#if isProvisioning}}<span>{{t "instances.sidebar.provisioning"}}</span>{{/if}}
-    </div>
-    {{#if provisioningFailed}}
-        <div class="instance_fault">
-            <img src="/images/message_error_small.png"/>
-            <span>{{t "instances.sidebar.fault"}}</span>
-        </div>
-    {{/if}}
+    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
 </div>
 {{#if isOnlineOrOffline}}
 <div class="account_info">

@@ -65,16 +65,6 @@ describe Gpdb::ConnectionBuilder do
       let(:fake_connection_adapter) { raise adapter_exception }
       let(:raised_message) { "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
 
-      context "when instance has not finished provisioning" do
-        let!(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :state => "provisioning") }
-
-        it "raises an InstanceStillProvisioning exception" do
-          expect {
-            Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
-          }.to raise_error(Gpdb::InstanceStillProvisioning)
-        end
-      end
-
       context "when the instance is overloaded" do
         let(:adapter_exception) { ActiveRecord::JDBCError.new("FATAL: sorry, too many clients already") }
 

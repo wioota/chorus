@@ -98,14 +98,14 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { record: "INSTANCE_STILL_PROVISIONING" };
+                    this.model.serverErrors = { record: "INSTANCE_OVERLOADED" };
                     this.page.dependOn(this.model);
                 });
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.instance_still_provisioning.title");
-                    expect(chorus.pageOptions.text).toMatchTranslation("unprocessable_entity.instance_still_provisioning.text");
+                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.instance_overloaded.title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("unprocessable_entity.instance_overloaded.text");
                 });
             });
 

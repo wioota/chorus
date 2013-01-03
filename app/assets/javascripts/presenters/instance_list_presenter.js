@@ -31,9 +31,7 @@ _.extend(chorus.presenters.InstanceList.prototype, {
             stateUrl: model.stateIconUrl(),
             showUrl: model.showUrl(),
             providerUrl: model.providerIconUrl(),
-            isProvisioning: model.isProvisioning(),
             isOffline: model.isOffline(),
-            provisioningFailed: model.provisioningFailed(),
             stateText: model.stateText()
         };
     }

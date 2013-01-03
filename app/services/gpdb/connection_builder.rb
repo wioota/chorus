@@ -1,7 +1,6 @@
 require 'error_logger'
 
 module Gpdb
-  class InstanceStillProvisioning < StandardError; end
   class InstanceOverloaded < StandardError; end
   class InstanceUnreachable < StandardError; end
 
@@ -10,8 +9,6 @@ module Gpdb
 
   module ConnectionBuilder
     def self.connect!(gpdb_instance, account, database_name=nil)
-      raise InstanceStillProvisioning if gpdb_instance.state == "provisioning"
-
       connection = ActiveRecord::Base.postgresql_connection( connection_params(gpdb_instance, account, database_name) )
 
       # TODO: this yield should really be after most of the exception handling [#39664445]
