@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts table_description_texts schema_name_texts
         column_name_texts column_description_texts query_texts parent_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -38,13 +38,13 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>2,''groups''=>[{''groupValue''=>''GpdbInstance
-        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1877.6501,''docs''=>[{''id''=>''GpdbInstance
+        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1873.437,''docs''=>[{''id''=>''GpdbInstance
         1000000'',''name_texts''=>[''searchquery''],''description_texts''=>[''Just
-        for searchquery and greenplumsearch''],''score''=>1877.6501},{''id''=>''Events::NoteOnGreenplumInstance
-        1000034'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>1.1674852}]}},{''groupValue''=>''GpdbInstance
-        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.8679764,''docs''=>[{''id''=>''Events::NoteOnGreenplumInstance
-        1000038'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.8679764},{''id''=>''Events::NoteOnGreenplumInstance
-        1000037'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.6344794}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''GpdbInstance
+        for searchquery and greenplumsearch''],''score''=>1873.437},{''id''=>''Events::NoteOnGreenplumInstance
+        1000034'',''body_texts''=>[''i am a comment with greenplumsearch in me''],''score''=>1.1641871}]}},{''groupValue''=>''GpdbInstance
+        1000002'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.8626994,''docs''=>[{''id''=>''Events::NoteOnGreenplumInstance
+        1000038'',''body_texts''=>[''no, not greenplumsearch''],''score''=>1.8626994},{''id''=>''Events::NoteOnGreenplumInstance
+        1000037'',''body_texts''=>[''is this a greenplumsearch instance?''],''score''=>1.629862}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Instance'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''GpdbInstance
         1000000''=>{''description_texts''=>[''Just for searchquery and @@@hl@@@greenplumsearch@@@endhl@@@'']},''Events::NoteOnGreenplumInstance
         1000034''=>{''body_texts''=>[''i am a comment with @@@hl@@@greenplumsearch@@@endhl@@@
         in me'']},''Events::NoteOnGreenplumInstance 1000038''=>{''body_texts''=>[''no,
@@ -52,5 +52,5 @@ http_interactions:
         1000037''=>{''body_texts''=>[''is this a @@@hl@@@greenplumsearch@@@endhl@@@
         instance?'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 20 Dec 2012 23:00:12 GMT
+  recorded_at: Thu, 03 Jan 2013 22:20:57 GMT
 recorded_with: VCR 2.3.0

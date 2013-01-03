@@ -356,7 +356,7 @@ describe Search do
           note.body.should == "notesearch ftw"
           create_and_record_search(owner, :query => 'notesearch') do |search|
             expect {
-              note.destroy
+              note.delete
               search.datasets
             }.to_not raise_error
           end

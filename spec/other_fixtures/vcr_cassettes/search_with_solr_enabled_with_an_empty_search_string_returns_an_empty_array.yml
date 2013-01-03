@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>66,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
         OR GpdbInstance OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
         OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''type_name_s:(User
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
@@ -85,10 +85,10 @@ http_interactions:
         1000013'',''name_texts''=>[''image'']}]}},{''groupValue''=>''Workspace 1000014'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
         1000014'',''name_texts''=>[''workspace44446'']}]}},{''groupValue''=>''Workspace
         1000015'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
-        1000015'',''name_texts''=>[''workspace44447'']}]}},{''groupValue''=>''Workspace
-        1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
-        1000016'',''name_texts''=>[''Real''],''summary_texts''=>[''A real workspace
-        with a sandbox on local-greenplum'']}]}},{''groupValue''=>''GpdbTable 1000006'',''doclist''=>{''numFound''=>5,''start''=>0,''docs''=>[{''id''=>''GpdbTable
+        1000015'',''name_texts''=>[''Real''],''summary_texts''=>[''A real workspace
+        with a sandbox on local-greenplum'']}]}},{''groupValue''=>''Workspace 1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
+        1000016'',''name_texts''=>[''workspace44447'']}]}},{''groupValue''=>''GpdbTable
+        1000006'',''doclist''=>{''numFound''=>5,''start''=>0,''docs''=>[{''id''=>''GpdbTable
         1000006'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
         comment 2''],''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''searchquery
         2'',''non-search'',''comment-search'',''comment-search-2'']},{''id''=>''Comment
@@ -158,7 +158,7 @@ http_interactions:
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
         1000003'',''name_texts''=>[''instance44446'']}]}},{''groupValue''=>''User
         1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@brekke.org''],''last_name_texts''=>[''AlphaSearch'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Instance'',17,''Workfile'',17,''Workspace'',15,''Attachment'',11,''Dataset'',6,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@corkerykovacek.info''],''last_name_texts''=>[''AlphaSearch'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Instance'',17,''Workfile'',17,''Workspace'',15,''Attachment'',11,''Dataset'',6,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
-  recorded_at: Thu, 20 Dec 2012 22:58:46 GMT
+  recorded_at: Thu, 03 Jan 2013 22:19:30 GMT
 recorded_with: VCR 2.3.0
