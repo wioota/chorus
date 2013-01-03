@@ -11,8 +11,6 @@ set -e
 
 . script/ci/setup.sh
 
-b/rake development:generate_secret_key
-
 targets=${@}
 possible_targets="fixtures jasmine ruby legacy_migration api_docs"
 

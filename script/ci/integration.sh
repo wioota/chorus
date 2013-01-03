@@ -7,8 +7,6 @@ export GPDB_HOST=chorus-gpdb42
 
 set -e
 
-b/rake development:generate_secret_key
-
 b/rake assets:precompile
 
 # start solr
