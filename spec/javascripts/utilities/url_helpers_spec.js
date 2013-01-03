@@ -41,7 +41,7 @@ describe("chorus.urlHelpers", function() {
         });
 
         it("takes an optional size override", function() {
-            expect(chorus.urlHelpers.fileIconUrl("C", "medium")).toBe("/images/workfiles/medium/c.png");
+            expect(chorus.urlHelpers.fileIconUrl("C", "icon")).toBe("/images/workfiles/icon/c.png");
         });
 
         it("returns 'plain' when null is passed", function() {
