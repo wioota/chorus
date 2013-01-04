@@ -120,8 +120,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     beforeEach(function () {
                         _.each(datasets, function (dataset, i) {
                             this.server.completeFetchAllFor(dataset.columns(), [
-                                fixtures.databaseColumn({name:"Rhino_" + i, recentComment:"awesome", typeCategory:"STRING" }),
-                                fixtures.databaseColumn({name:"Sloth_" + i, recentComment:"lazy", typeCategory:"WHOLE_NUMBER" })
+                                rspecFixtures.databaseColumn({name:"Rhino_" + i, typeCategory:"STRING" }),
+                                rspecFixtures.databaseColumn({name:"Sloth_" + i, typeCategory:"WHOLE_NUMBER" })
                             ]);
                             this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable({ rows:11 * (i + 1) }));
                         }, this);
@@ -153,10 +153,10 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
                 describe("when some of the fetches don't complete", function () {
                     beforeEach(function () {
-                        this.server.completeFetchAllFor(datasets[0].columns(), [
-                            fixtures.databaseColumn({name:"Rhino_0", recentComment:"awesome", typeCategory:"STRING" }),
-                            fixtures.databaseColumn({name:"Sloth_0", recentComment:"lazy", typeCategory:"WHOLE_NUMBER" })
-                        ]);
+                        this.server.completeFetchAllFor(datasets[0].columns(), rspecFixtures.databaseColumnSet([
+                            {name:"Rhino_0", description:"awesome", typeCategory:"STRING" },
+                            {name:"Sloth_0", description:"lazy", typeCategory:"WHOLE_NUMBER" }
+                        ]));
                     });
 
                     it("doesn't update the message", function () {

@@ -2,10 +2,9 @@ describe("chorus.views.FrequencyChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.column = fixtures.databaseColumn({typeCategory: "STRING", name: "Sandwich"});
-                this.columns = fixtures.databaseColumnSet([this.column]);
+                this.columns = rspecFixtures.databaseColumnSet([{typeCategory: "STRING", name: "Sandwich"}]);
 
-                this.model = newFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
                 this.view = new chorus.views.FrequencyChartConfiguration({collection: this.columns, model: this.model});
                 this.view.render();
                 this.view.$(".limiter .selected_value").text("3");

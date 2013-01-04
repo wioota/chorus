@@ -2,7 +2,7 @@ describe("chorus.dialogs.NameChorusView", function() {
     beforeEach(function() {
         stubModals();
         stubDefer();
-        this.chorusView = newFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
+        this.chorusView = rspecFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView });
         this.dialog.launchModal();
     });

@@ -5,8 +5,8 @@ describe("chorus.dialogs.DatasetsPicker", function() {
         dialog = new chorus.dialogs.DatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
         datasetModels = [
-                            newFixtures.workspaceDataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
-                            newFixtures.workspaceDataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
+                            rspecFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
+                            rspecFixtures.workspaceDataset.datasetTable({ objectName: "B", id: "AGENT_SMITH" })
                         ];
     });
 
@@ -75,11 +75,6 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                 expect(previewColumnsDialog.model.get("id")).toEqual(datasetModels[0].get("id"));
             });
 
-            it("shows the number of columns in each dataset", function() {
-                expect(dialog.$("ul li:eq(0) .column_count")).toContainTranslation("dataset.column_count", {count: 42});
-                expect(dialog.$("ul li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
-            });
-
             describe("selecting an item", function() {
                 beforeEach(function() {
                     dialog.$("ul li:eq(0)").click();
@@ -87,22 +82,6 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                 it("should mark the item selected", function() {
                     expect(dialog.$("ul li:eq(0)")).toHaveClass("selected");
                 });
-            });
-        });
-
-        context("when a dataset has no column count (or is undefined)", function() {
-            beforeEach(function() {
-                datasetModels = [
-                                    newFixtures.workspaceDataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
-                                    newFixtures.workspaceDataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
-                                ];
-                datasets = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
-                this.server.completeFetchFor(datasets, datasetModels, options);
-            });
-
-            it("doesn't show column count", function() {
-                expect(dialog.$("li:eq(0) span.column_count")).not.toExist();
-                expect(dialog.$("li:eq(1) span.column_count")).not.toExist();
             });
         });
     });

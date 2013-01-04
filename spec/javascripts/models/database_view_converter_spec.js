@@ -1,6 +1,6 @@
 describe("chorus.models.DatabaseViewConverter", function() {
     beforeEach(function() {
-        this.from = fixtures.chorusView({id: "43894639"});
+        this.from = rspecFixtures.workspaceDataset.chorusView({id: "43894639"});
         this.model = new chorus.models.DatabaseViewConverter({}, {from: this.from});
     });
 

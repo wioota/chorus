@@ -1,6 +1,6 @@
 describe("chorus.dialogs.DatasetPreview", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.workspaceDataset.sandboxTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
         spyOn(chorus.dialogs.DatasetPreview.prototype, "closeModal");
         this.view = new chorus.dialogs.DatasetPreview({

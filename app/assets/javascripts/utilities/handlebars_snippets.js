@@ -348,18 +348,6 @@
         tableauIcon: function () {
             return new Handlebars.SafeString(($('<span/>').addClass('tableau_icon')).outerHtml());
         },
-        
-        attachmentFoundIn: function(model) {
-            var datasetLink;
-            if (model.workspace()) {
-                var workspaceLink = model.workspace().showLink();
-                datasetLink = model.dataset().showLink();
-                return t("attachment.found_in.dataset_in_workspace", { workspaceLink: workspaceLink, datasetLink: datasetLink });
-            } else {
-                datasetLink = model.dataset().showLink();
-                return t("attachment.found_in.dataset_not_in_workspace", { datasetLink: datasetLink });
-            }
-        },
 
         datasetLocation: function(dataset, label) {
             label = _.isString(label) ? label : "dataset.from";
@@ -463,18 +451,6 @@
             }
             if (comment.isComment) {
                 return t("search.supporting_message_types.comment");
-            }
-            if (comment.isCommitMessage) {
-                return "";
-            }
-            if (comment.isColumn) {
-                return t("search.supporting_message_types.column");
-            }
-            if(comment.isColumnDescription) {
-                return t("search.supporting_message_types.column_description");
-            }
-            if(comment.isTableDescription) {
-                return t("search.supporting_message_types.table_description");
             }
             return t("search.supporting_message_types.note");
         },

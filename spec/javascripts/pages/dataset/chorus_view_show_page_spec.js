@@ -74,7 +74,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.chorusView);
-            this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+            this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
             this.server.completeFetchFor(this.chorusView.statistics());
         });
 
@@ -130,7 +130,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                     beforeEach(function() {
                         this.page.mainContent.content.render.reset();
                         this.page.mainContent.content.selectAll();
-                        var otherColumn = fixtures.databaseColumn();
+                        var otherColumn = rspecFixtures.databaseColumn();
                         otherColumn.dataset = this.page.model;
                         this.page.columnSet.add(otherColumn);
                         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');

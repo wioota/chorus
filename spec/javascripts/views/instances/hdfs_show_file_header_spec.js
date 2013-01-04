@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsShowFileHeader", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsEntryFile({ name: "myFile.txt" });
+        this.file = rspecFixtures.hdfsFile({ name: "myFile.txt" });
         this.view = new chorus.views.HdfsShowFileHeader({ model: this.file });
         this.view.render();
     });

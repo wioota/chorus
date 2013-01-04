@@ -23,7 +23,7 @@ describe("chorus.views.SearchResultList", function() {
 
     describe("header", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult();
+            this.result = rspecFixtures.searchResult();
             this.result.set({query: "foo"});
             this.collection = this.result.users();
             this.view = new chorus.views.SearchResultList({ collection: this.collection, search: this.result, entityType: "user"});
@@ -32,8 +32,8 @@ describe("chorus.views.SearchResultList", function() {
         context("when there are three or fewer results", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.DynamicDatasetSet([
-                    fixtures.datasetJson(),
-                    fixtures.datasetJson()
+                    rspecFixtures.datasetJson(),
+                    rspecFixtures.datasetJson()
                 ]);
                 this.collection.pagination = { records: 2 };
                 this.view = new chorus.views.SearchResultList({collection: this.collection, search: this.result, entityType: "dataset"});

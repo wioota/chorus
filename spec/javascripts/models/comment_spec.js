@@ -1,6 +1,6 @@
 describe("chorus.models.Comment", function() {
     beforeEach(function() {
-        this.model = fixtures.noteComment({
+        this.model = rspecFixtures.comment({
             id: '41',
             author: {
                 id: "45",

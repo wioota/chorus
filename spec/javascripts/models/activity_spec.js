@@ -290,7 +290,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns true for 'INSIGHT_CREATED' activities", function() {
-            expect(fixtures.activities.INSIGHT_CREATED().isUserGenerated()).toBeTruthy();
+            expect(rspecFixtures.activity.insightOnGreenplumInstance().isUserGenerated()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {

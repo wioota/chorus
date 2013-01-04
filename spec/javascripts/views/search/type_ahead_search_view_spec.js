@@ -298,17 +298,10 @@ describe("chorus.views.TypeAheadSearch", function() {
             });
         });
 
-        context("when a second search happens", function() {
+        context("when a second search happens with no results", function() {
             beforeEach(function() {
                 this.view.searchFor('test');
-                var newResults = fixtures.typeAheadSearchResult({
-                    query: "test",
-                    typeAhead: {
-                        results: [],
-                        numFound: 0
-                    }
-                });
-                this.server.completeFetchFor(newResults);
+                this.server.completeFetchFor(this.view.model, {typeAhead: { results:[]}});
             });
 
             it("should be empty", function() {

@@ -2,12 +2,17 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.column1 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "B Liger"});
-                this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"});
-                this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"});
+                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.columns = rspecFixtures.databaseColumnSet([
+                    {typeCategory: "ANIMAL", name: "B Liger"},
+                    {typeCategory: "REAL_NUMBER", name: "a Speed"},
+                    {typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"}
+                ]);
 
-                this.model = newFixtures.workspaceDataset.chorusView({objectName: "Foo"});
-                this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
+                this.column1 = this.columns.at(0);
+                this.column2 = this.columns.at(1);
+                this.column3 = this.columns.at(2);
+
                 this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns});
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
                     this.styledSelected = this.view.$(".category select").val();
@@ -113,10 +118,8 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
 
         context("with only one valid column", function() {
             beforeEach(function() {
-                this.column2 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "a Speed"});
-
-                this.model = newFixtures.workspaceDataset.chorusView({objectName: "Foo"});
-                this.columns = fixtures.databaseColumnSet([this.column2]);
+                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.columns = rspecFixtures.databaseColumnSet([{typeCategory: "ANIMAL", name: "a Speed"}]);
                 this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns});
                 this.view.render();
             });
@@ -129,7 +132,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
 
         describe("'create chart' button", function() {
             beforeEach(function() {
-                this.columns = fixtures.databaseColumnSet([]);
+                this.columns = rspecFixtures.databaseColumnSet([]);
                 this.view = new chorus.views.BoxplotChartConfiguration({collection: this.columns});
                 spyOn(chorus, 'styleSelect');
                 this.view.render();

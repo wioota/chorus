@@ -1,6 +1,6 @@
 describe("chorus.views.SearchDataset", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult();
+        this.result = rspecFixtures.searchResult();
         this.result.set({query: "foo"});
         this.model = this.result.datasets().models[0];
         this.view = new chorus.views.SearchDataset({model: this.model});
@@ -41,7 +41,7 @@ describe("chorus.views.SearchDataset", function() {
 
     context("when the search results include a chorus view", function() {
         beforeEach(function() {
-            this.model = fixtures.searchResultChorusView({ workspace: { name: "Chorus View Thing" }, type: "CHORUS_VIEW" });
+            this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { name: "Chorus View Thing" }, type: "CHORUS_VIEW" });
             this.view = new chorus.views.SearchDataset({model: this.model});
             this.view.render();
         });
@@ -54,19 +54,6 @@ describe("chorus.views.SearchDataset", function() {
 
         it("links to the correct dataset url", function() {
             expect(this.view.$('.name').attr('href')).toMatch(/workspace/);
-        });
-    });
-
-    context("when there are column comments", function() {
-        beforeEach(function() {
-            this.model.set({'columnDescriptions': [{highlightedAttributes: {body: ['comment 1']}}, {highlightedAttributes: {body: ['comment 2']}}]});
-            this.view.render();
-        });
-
-        it("displays the column comments", function() {
-            expect(this.view.$('.comment .comment_type').eq(0)).toContainText('Column Comment:');
-            expect(this.view.$('.comment .comment_content').eq(0)).toContainText('comment 1');
-            expect(this.view.$('.comment .comment_content').eq(1)).toContainText('comment 2');
         });
     });
 

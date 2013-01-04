@@ -89,7 +89,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#createDuplicateChorusView", function() {
         beforeEach(function() {
-            this.model = newFixtures.workspaceDataset.chorusView();
+            this.model = rspecFixtures.workspaceDataset.chorusView();
             this.copy = this.model.createDuplicateChorusView();
         });
 
@@ -97,10 +97,8 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.copy).toBeA(chorus.models.ChorusView);
             expect(this.copy.get("objectName")).toMatchTranslation("dataset.chorusview.copy_name", { name: this.model.get("objectName") });
 
-            _.each(["workspace", "databaseName", "schemaName"], function(attrName) {
-                expect(this.copy.get(attrName)).toBe(this.model.get(attrName));
-                expect(this.copy.get(attrName)).toBeDefined();
-            }, this);
+            expect(this.copy.get("workspace")).toBe(this.model.get("workspace"));
+            expect(this.copy.get("workspace")).toBeDefined();
 
             expect(this.copy.get("sourceObjectId")).toBe(this.model.id);
             expect(this.copy.sourceObject).toBe(this.model);

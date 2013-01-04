@@ -4,7 +4,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({
                 dataset: this.dataset,
@@ -701,7 +701,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
         describe("column count bar", function() {
             beforeEach(function() {
-                this.column = fixtures.databaseColumn();
+                this.column = rspecFixtures.databaseColumn();
             });
 
             it("renders", function() {

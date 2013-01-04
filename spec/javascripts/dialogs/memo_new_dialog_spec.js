@@ -270,8 +270,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             describe("when datasets are selected", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        newFixtures.workspaceDataset.sandboxTable({objectName: 'table1', id: '1'}),
-                        newFixtures.workspaceDataset.sandboxTable({objectName: 'table2', id: '2'})
+                        rspecFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
+                        rspecFixtures.workspaceDataset.datasetTable({objectName: 'table2', id: '2'})
                     ];
                     this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
                 });
@@ -306,8 +306,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     context("when additional datasets are selected", function() {
                         beforeEach(function() {
                             this.newDatasets = [
-                                newFixtures.workspaceDataset.sandboxTable({objectName: 'table1', id: '1'}),
-                                newFixtures.workspaceDataset.sandboxTable({objectName: 'table4', id: '4'})
+                                rspecFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
+                                rspecFixtures.workspaceDataset.datasetTable({objectName: 'table4', id: '4'})
                             ];
                             this.modalSpy.lastModal().trigger("datasets:selected", this.newDatasets);
                         });
@@ -754,7 +754,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
         context("the model was saved", function() {
             beforeEach(function() {
-                this.dialog.model.set({'id': fixtures.nextId().toString()});
+                this.dialog.model.set({'id': _.uniqueId().toString()});
                 this.dialog.saveFailed();
             });
 

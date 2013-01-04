@@ -1,16 +1,7 @@
 describe("chorus.views.WorkspaceSearchResultList", function() {
     beforeEach(function() {
-        this.search = fixtures.searchResult({
-            thisWorkspace: {
-                numFound: 9,
-                results: [
-                    fixtures.searchResultWorkfileJson(),
-                    fixtures.searchResultDatasetJson(),
-                    fixtures.searchResultChorusViewJson(),
-                    fixtures.searchResultWorkspaceJson(),
-                    fixtures.searchResultAttachmentJson()
-                ]
-            }
+        this.search = rspecFixtures.searchResultInWorkspace({
+            thisWorkspace: { numFound: 9 }
         });
         this.search.set({ query: "foo", workspaceId: "10001" });
         this.search.workspace().set({ name: "John the workspace" });
@@ -24,11 +15,9 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
 
     it("renders the right type of search result view for each result item", function() {
         var listItems = this.view.$("li");
-        expect(listItems.eq(0)).toHaveClass("search_workfile");
-        expect(listItems.eq(1)).toHaveClass("search_dataset");
-        expect(listItems.eq(2)).toHaveClass("search_dataset");
-        expect(listItems.eq(3)).toHaveClass("search_workspace");
-        expect(listItems.eq(4)).toHaveClass("search_attachment");
+        expect(this.view.$("li.search_workfile")).toExist();
+        expect(this.view.$("li.search_dataset")).toExist();
+        expect(this.view.$("li.search_workspace")).toExist();
     });
 
     it("has the right title", function() {

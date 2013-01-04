@@ -28,7 +28,7 @@ describe("chorus.collections.ActivitySet", function() {
 
         context("for a hdfs model type", function () {
             it("includes the entity_type, the ", function() {
-                var model = fixtures.hdfsFile({
+                var model = rspecFixtures.hdfsFile({
                     id: 8789,
                     hadoopInstance : { id : 1 },
                     path : "/data",

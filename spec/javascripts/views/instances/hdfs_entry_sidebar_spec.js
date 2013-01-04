@@ -41,7 +41,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
         context("when the model is a directory", function() {
             beforeEach(function() {
-                this.hdfsEntry = fixtures.hdfsEntryDir();
+                this.hdfsEntry = rspecFixtures.hdfsDir();
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 

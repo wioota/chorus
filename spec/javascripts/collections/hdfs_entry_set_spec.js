@@ -1,13 +1,12 @@
 describe("chorus.collections.HdfsEntrySet", function() {
     context("when the collection has path and instance set", function() {
         beforeEach(function() {
-            this.hdfsEntrySet = fixtures.hdfsEntrySet(null, {
+            this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([rspecFixtures.hdfsFile()], {
                 path: '/data/somewhere',
                 hadoopInstance: {id: 222},
                 id: 11
             });
         });
-
 
         describe("add", function() {
             it("sets the path and instance on the added entries", function() {
@@ -28,7 +27,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
 
     context("when the collection does not have path and instanceId set", function() {
         beforeEach(function() {
-            this.hdfsEntrySet = fixtures.hdfsEntrySet([], {
+            this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([], {
                 path: null,
                 hadoopInstance: null
             });

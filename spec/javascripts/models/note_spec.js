@@ -77,9 +77,9 @@ describe("chorus.models.Note", function() {
         describe("saving the dataset attachments", function() {
             it("assigns the 'datasetIds' field as a list of dataset ids", function() {
                 this.model.datasets = new chorus.collections.WorkspaceDatasetSet([
-                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_a", id: 'a'}),
-                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_b", id: 'b'}),
-                    newFixtures.workspaceDataset.sandboxTable({ objectName: "table_c", id: 'c'})
+                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_a", id: 'a'}),
+                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_b", id: 'b'}),
+                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_c", id: 'c'})
                 ]);
 
                 this.model.save();

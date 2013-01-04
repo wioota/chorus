@@ -51,7 +51,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
         describe("when the activity is an INSIGHT", function() {
             beforeEach(function() {
-                this.activity = fixtures.activities.INSIGHT_CREATED();
+                this.activity = rspecFixtures.activity.insightOnGreenplumInstance();
                 this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
                 this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
                 this.alert.render();

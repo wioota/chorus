@@ -1,6 +1,6 @@
 describe("chorus.views.SearchUser", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult();
+        this.result = rspecFixtures.searchResult();
         this.model = this.result.users().models[0];
         this.model.set({
             highlightedAttributes: {
@@ -11,6 +11,7 @@ describe("chorus.views.SearchUser", function() {
                 content: "<em>Here is some content</em>",
                 username: "<em>foo</em>"
             },
+            lastName: "Doe",
             image: { icon: "bar" }
         });
         this.view = new chorus.views.SearchUser({ model: this.model });

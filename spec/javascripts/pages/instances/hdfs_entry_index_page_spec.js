@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
         this.instance = rspecFixtures.hadoopInstance({id: "1234", name: "instance Name"});
-        this.hdfsEntry = fixtures.hdfsEntryDir({
+        this.hdfsEntry = rspecFixtures.hdfsDir({
             hadoopInstance: this.instance.attributes,
             id: "4",
             name: "myDir",
@@ -45,13 +45,10 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             this.server.completeFetchFor(this.instance);
             this.server.completeFetchFor(this.hdfsEntry,
                 {
-                ancestors: [],
-                path: "/foo",
-                name: "myDir",
-                entries: [
-                    fixtures.hdfsEntryDirJson(),
-                    fixtures.hdfsEntryDirJson(),
-                    fixtures.hdfsEntryDirJson() ]
+                    ancestors: [],
+                    path: "/foo",
+                    name: "myDir",
+                    entries: []
                 }
             );
         });
@@ -79,16 +76,9 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
         describe("when an entry is selected", function() {
             beforeEach(function() {
-                this.entry = new chorus.models.HdfsEntry({
-                    id: "not_in_the_fixture",
-                    hadoopInstance: {
-                        id: 111
-                    },
-                    path: "/",
-                    name: "foo.csv"
-                });
+                this.entry = new chorus.models.HdfsEntry({});
 
-                expect(this.page.model).toEqual(this.page.collection.models[0]);
+                expect(this.page.model).toEqual(this.page.collection.at(0));
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.entry);
             });
             it("sets the entry as the model", function() {
@@ -129,10 +119,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                         {id: 55, name: "start"}
                     ],
                     name: "foo",
-                    entries: [
-                        fixtures.hdfsEntryDirJson(),
-                        fixtures.hdfsEntryDirJson(),
-                        fixtures.hdfsEntryDirJson() ]
+                    entries: []
                 }
             );
         });

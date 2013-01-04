@@ -212,9 +212,9 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        xcontext("when the activity is an insight", function () {
+        context("when the activity is an insight", function () {
             beforeEach(function () {
-                this.model = fixtures.activities.INSIGHT_CREATED();
+                this.model = rspecFixtures.activity.insightOnGreenplumInstance();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });

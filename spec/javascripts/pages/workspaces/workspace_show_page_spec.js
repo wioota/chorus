@@ -130,7 +130,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         context("when the model has loaded", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.page.model, rspecFixtures.workspace({id: 4, summary: "this is a summary", name: "Cool Workspace"}));
-                this.server.completeFetchFor(this.page.model.activities(), [rspecFixtures.activity.noteOnWorkfileCreated(), fixtures.activities.INSIGHT_CREATED()]);
+                this.server.completeFetchFor(this.page.model.activities(), [rspecFixtures.activity.noteOnWorkfileCreated(), rspecFixtures.activity.insightOnGreenplumInstance()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
             });

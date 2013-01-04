@@ -35,7 +35,7 @@ describe Hdfs::FilesController do
   describe "show" do
     context "a directory" do
       before do
-        mock(HdfsEntry).list('/data/', hadoop_instance) { [] }
+        mock(HdfsEntry).list('/data/', hadoop_instance) { [ hdfs_entries(:directory), hdfs_entries(:hdfs_file) ] }
       end
 
       it "renders the path correctly, appending slashes" do
@@ -52,7 +52,7 @@ describe Hdfs::FilesController do
     end
 
     context "a file" do
-      let(:entry){ hdfs_entries(:hdfs_file) }
+      let(:entry) { hdfs_entries(:hdfs_file) }
 
       before do
         any_instance_of(Hdfs::QueryService) do |h|

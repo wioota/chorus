@@ -25,7 +25,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             beforeEach(function() {
                 this.databaseView = rspecFixtures.dataset({ objectName: "brian_the_view", schema: {name: "john_the_schema"}, objectType: "VIEW" });
                 chorus.PageEvents.broadcast("datasetSelected", this.databaseView);
-                this.server.completeFetchAllFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
+                this.server.completeFetchAllFor(this.databaseView.columns(), [rspecFixtures.databaseColumn()]);
             });
 
             it("renders successfully", function() {
@@ -36,9 +36,9 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
         describe("when rendered with a chorus view", function() {
             var chorusView;
             beforeEach(function() {
-                chorusView = newFixtures.workspaceDataset.chorusView({ objectName: "tobias_the_chorus_view" });
+                chorusView = rspecFixtures.workspaceDataset.chorusView({ objectName: "tobias_the_chorus_view" });
                 chorus.PageEvents.broadcast("datasetSelected", chorusView);
-                this.server.completeFetchAllFor(chorusView.columns(), [fixtures.databaseColumn()]);
+                this.server.completeFetchAllFor(chorusView.columns(), [rspecFixtures.databaseColumn()]);
             });
 
             it("renders successfully", function() {
@@ -70,8 +70,8 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
                 context("when there are columns", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.table.columns(), [
-                            fixtures.databaseColumn({name: "column_1"}),
-                            fixtures.databaseColumn({name: "column_2"})
+                            rspecFixtures.databaseColumn({name: "column_1"}),
+                            rspecFixtures.databaseColumn({name: "column_2"})
                         ]);
                     });
                     jasmine.sharedExamples.DatabaseSidebarList();
@@ -123,9 +123,9 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
                         context("when the fetch completes", function() {
                             beforeEach(function() {
                                 this.server.completeFetchAllFor(this.newTable.columns(), [
-                                    fixtures.databaseColumn({name: "column_a"}),
-                                    fixtures.databaseColumn({name: "column_b"}),
-                                    fixtures.databaseColumn({name: "column_c"})
+                                    rspecFixtures.databaseColumn({name: "column_a"}),
+                                    rspecFixtures.databaseColumn({name: "column_b"}),
+                                    rspecFixtures.databaseColumn({name: "column_c"})
                                 ]);
                             });
 
@@ -145,8 +145,8 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
                                 context("when the fetch completes", function() {
                                     beforeEach(function() {
                                         this.server.completeFetchAllFor(this.table.columns(), [
-                                            fixtures.databaseColumn({name: "column_1"}),
-                                            fixtures.databaseColumn({name: "column_2"})
+                                            rspecFixtures.databaseColumn({name: "column_1"}),
+                                            rspecFixtures.databaseColumn({name: "column_2"})
                                         ]);
                                     });
 

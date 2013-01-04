@@ -1,6 +1,11 @@
 describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
     beforeEach(function() {
-        this.collection = fixtures.csvHdfsFileSet(null, {hadoopInstance: {id: "234"}}).filesOnly();
+
+        this.collection = new chorus.collections.CsvHdfsFileSet([
+            rspecFixtures.hdfsFile().attributes,
+            rspecFixtures.hdfsFile().attributes,
+            rspecFixtures.hdfsFile().attributes], {hadoopInstance: {id: "234"}});
+
         this.csvOptions = {
             contents: [
                 "COL1,col2, col3 ,col 4,Col_5",

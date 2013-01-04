@@ -176,6 +176,23 @@ describe WorkspaceDatasetsController do
             get :show, :id => source_view.to_param, :workspace_id => workspace.to_param
           end
         end
+
+        context "when the dataset is an external table" do
+          let(:dataset) { datasets(:external_table) }
+          let(:the_datasets) { fake_relation [dataset] }
+
+          generate_fixture "workspaceDataset/externalTable.json" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+
+        context "when the dataset is an hdfs external table" do
+          let(:dataset) { datasets(:hdfs_external_table) }
+          let(:the_datasets) { fake_relation [dataset] }
+
+          generate_fixture "workspaceDataset/hdfsExternalTable.json" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+        end
       end
     end
 

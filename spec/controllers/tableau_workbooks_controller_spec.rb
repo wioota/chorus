@@ -25,6 +25,10 @@ describe TableauWorkbooksController do
 
     let(:extra_options) { {} }
 
+    generate_fixture "tableauWorkbook.json" do
+      post :create, params
+    end
+
     context 'when the dataset is a table' do
       let(:dataset) { datasets(:table) }
 

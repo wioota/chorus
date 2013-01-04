@@ -194,10 +194,10 @@ describe("chorus.models.Dataset", function() {
             var table = rspecFixtures.dataset();
             expect(table.canBeImportSource()).toBeFalsy();
 
-            var dataset = newFixtures.workspaceDataset.sandboxTable();
+            var dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = newFixtures.workspaceDataset.sandboxView();
+            dataset = rspecFixtures.workspaceDataset.datasetView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
             dataset = rspecFixtures.workspaceDataset.sourceTable();
@@ -213,10 +213,10 @@ describe("chorus.models.Dataset", function() {
             var table = rspecFixtures.dataset();
             expect(table.canBeImportDestination()).toBeFalsy();
 
-            var dataset = newFixtures.workspaceDataset.sandboxTable();
+            var dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.workspaceDataset.sandboxView();
+            dataset = rspecFixtures.workspaceDataset.datasetView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -513,7 +513,7 @@ describe("chorus.models.Dataset", function() {
 
         context("with chorus view", function() {
             beforeEach(function() {
-                this.dataset = fixtures.chorusView({objectName: "ChorusView", query: "SELECT a,b FROM xyz;"});
+                this.dataset = rspecFixtures.workspaceDataset.chorusView({objectName: "ChorusView", query: "SELECT a,b FROM xyz;"});
             });
 
             it("creates an appropriate string (trimmed, remove semicolon, and alias to pg-quoted CV name)", function() {
@@ -745,7 +745,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("is false otherwise", function() {
-            expect(newFixtures.workspaceDataset.sandboxTable().isDeleteable()).toBeFalsy();
+            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeFalsy();
         });
     });
 
@@ -888,7 +888,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#analyzableObjectType", function() {
         it("returns true for a sandbox table", function() {
-            this.dataset = newFixtures.workspaceDataset.sandboxTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(this.dataset.analyzableObjectType()).toBeTruthy();
         });
 
@@ -898,17 +898,17 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("returns false for views", function() {
-            this.dataset = newFixtures.workspaceDataset.sandboxView();
+            this.dataset = rspecFixtures.workspaceDataset.datasetView();
             expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
 
         it("returns false for Chorus views", function() {
-            this.dataset = fixtures.chorusView();
+            this.dataset = rspecFixtures.workspaceDataset.chorusView();
             expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
 
-        it("returns false for external tables", function() {
-            this.dataset = newFixtures.workspaceDataset.externalTable();
+        xit("returns false for external tables", function() {
+            this.dataset = rspecFixtures.workspaceDataset.externalTable();
             expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
     });

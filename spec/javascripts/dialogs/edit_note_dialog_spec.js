@@ -20,7 +20,7 @@ describe("chorus.dialogs.EditNote", function() {
 
     context("when the activity is an insight", function() {
         beforeEach(function() {
-            this.note = fixtures.activities.INSIGHT_CREATED({ workspace: { id: '2' }});
+            this.note = rspecFixtures.activity.insightOnGreenplumInstance();
             this.dialog = new chorus.dialogs.EditNote({ activity: this.note });
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();

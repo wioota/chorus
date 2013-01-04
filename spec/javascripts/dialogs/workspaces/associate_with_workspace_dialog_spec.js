@@ -38,7 +38,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspaceDataset.sandboxTable({workspace: {id: "645"}});
+                this.model = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_not_the_current_one'" }),

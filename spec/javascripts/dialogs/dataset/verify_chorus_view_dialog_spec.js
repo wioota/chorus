@@ -3,7 +3,7 @@ describe("chorus.dialogs.VerifyChorusView", function() {
         stubModals();
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
-        this.chorusView = newFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
+        this.chorusView = rspecFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.VerifyChorusView({ model: this.chorusView });
         this.dialog.launchModal();
     });

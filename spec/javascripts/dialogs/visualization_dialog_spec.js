@@ -173,11 +173,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.columns = this.dataset.columns();
-        this.columns.reset([
-            fixtures.databaseColumn(),
-            fixtures.databaseColumn(),
-            fixtures.databaseColumn()
-        ]);
+        this.columns.reset(rspecFixtures.databaseColumnSet().models);
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 

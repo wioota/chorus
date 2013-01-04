@@ -17,12 +17,12 @@ describe("chorus.dialogs.PreviewColumns", function() {
 
     describe("when the fetch completes successfully", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.dataset.columns(), [
-                fixtures.databaseColumn({name: "Rhino", recentComment: "awesome", dataType: "text" }),
-                fixtures.databaseColumn({name: "Giraffe", recentComment: "tall", dataType: "float8" }),
-                fixtures.databaseColumn({name: "Sloth", recentComment: "lazy", dataType: "int4" }),
-                fixtures.databaseColumn({name: "Penguin", recentComment: "Morgan Freeman", dataType: "time" })
-            ]);
+            this.server.completeFetchAllFor(this.dataset.columns(), rspecFixtures.databaseColumnSet([
+                {name: "Rhino", dataType: "text"     , description: "awesome"},
+                {name: "Giraffe", dataType: "float8" , description: "tall"},
+                {name: "Sloth", dataType: "int4"     , description: "lazy"},
+                {name: "Penguin", dataType: "time"   , description: "Morgan Freeman"}
+            ]).models);
         });
 
         it("should have a 'Return to List' button", function() {

@@ -82,7 +82,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
         context("when a dataset is selected", function() {
             beforeEach(function() {
-                var sandboxTable = newFixtures.workspaceDataset.sandboxTable();
+                var sandboxTable = rspecFixtures.workspaceDataset.datasetTable();
                 chorus.PageEvents.broadcast("datasetSelected", sandboxTable);
             });
             it("should scroll to the top", function() {

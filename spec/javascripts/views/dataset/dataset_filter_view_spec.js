@@ -2,7 +2,7 @@ describe("chorus.views.DatasetFilter", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.collection = this.dataset.columns();
-        this.collection.reset([ fixtures.databaseColumn(), fixtures.databaseColumn() ]);
+        this.collection.reset([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
 
         this.model = new chorus.models.DatasetFilter();
         this.view = new chorus.views.DatasetFilter({ model: this.model, collection: this.collection });

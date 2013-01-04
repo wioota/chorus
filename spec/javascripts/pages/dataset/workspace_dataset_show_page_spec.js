@@ -76,8 +76,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
                         this.server.lastFetchAllFor(this.columnSet).succeed([
-                            fixtures.databaseColumn(),
-                            fixtures.databaseColumn()
+                            rspecFixtures.databaseColumn(),
+                            rspecFixtures.databaseColumn()
                         ]);
                     });
 
@@ -107,7 +107,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
-            this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+            this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
             this.server.completeFetchFor(this.dataset.statistics());
         });
 

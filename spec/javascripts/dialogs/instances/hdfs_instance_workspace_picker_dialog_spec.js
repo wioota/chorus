@@ -6,8 +6,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
         stubModals();
 
         this.dialog = new chorus.dialogs.HdfsInstanceWorkspacePicker({
-            model: fixtures.hdfsEntryDir({
-                hadoopInstance: rspecFixtures.hadoopInstance({ id: 1234 }),
+            model: rspecFixtures.hdfsDir({
                 path: '/data',
                 name: 'foo'
             }),
@@ -66,16 +65,18 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                 });
 
                 it("fetches the list of hdfs files", function() {
-                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/1234/files/?id=1", {paramsToIgnore: ["page", "per_page"]});
+                    var hadoopInstanceId = this.dialog.model.get('hadoopInstance').id;
+                    var fileId = this.dialog.model.id;
+                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/" + hadoopInstanceId + "/files/?id=" + fileId, {paramsToIgnore: ["page", "per_page"]});
                 });
 
                 context("when the hdfs entries fetch completes", function() {
                     beforeEach(function() {
                         var hdfsFiles = [
-                            fixtures.hdfsEntryFileJson(),
-                            fixtures.hdfsEntryFileJson(),
-                            fixtures.hdfsEntryBinaryFileJson(),
-                            fixtures.hdfsEntryDirJson()
+                            rspecFixtures.hdfsFile(),
+                            rspecFixtures.hdfsFile(),
+                            rspecFixtures.hdfsFile(),
+                            rspecFixtures.hdfsDir()
                         ];
                         this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles);
                     });
@@ -95,7 +96,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                 context("when the hdfs entries fetch completes with no text files", function() {
                     beforeEach(function() {
                         var hdfsFiles2 = [
-                            fixtures.hdfsEntryDirJson()
+                            rspecFixtures.hdfsDirJson()
                         ];
                         this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles2);
 

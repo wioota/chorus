@@ -38,10 +38,9 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
             {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"}
         ];
-        this.dataset = newFixtures.workspaceDataset.sandboxTable({
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
             id: "dat-id",
-            workspace: {id: this.model.get("workspaceId")},
-            columnNames: this.columns
+            workspace: {id: this.model.get("workspaceId")}
         });
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();

@@ -1,7 +1,7 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.workspaceDataset.sandboxTable({objectName : "My_table"});
-        this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectName : "My_table"});
+        this.dataset.columns().reset([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
         var aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
         aggregateColumnSet.reset(this.dataset.columns().models);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
@@ -62,8 +62,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         context("when a join is added to the chorus view", function() {
             beforeEach(function() {
-                this.otherDataset = newFixtures.workspaceDataset.sandboxTable();
-                this.otherDataset.columns().reset([fixtures.databaseColumn()]);
+                this.otherDataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.otherDataset.columns().reset([rspecFixtures.databaseColumn()]);
                 this.dataset.columns().models[0].dataset.aliasedName="a";
                 this.chorusView.addJoin(this.dataset.columns().models[0], this.otherDataset.columns().models[0], 'inner');
             });
@@ -170,9 +170,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                 this.column1 = this.dataset.columns().models[0];
 
-                this.joinedDataset = newFixtures.workspaceDataset.sandboxTable();
+                this.joinedDataset = rspecFixtures.workspaceDataset.datasetTable();
                 this.joinedColumns = this.joinedDataset.columns();
-                this.joinedColumns.reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                this.joinedColumns.reset([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                 this.column2 = this.joinedColumns.models[0];
 
                 this.chorusView.addJoin(this.column1, this.column2, 'inner');
@@ -265,7 +265,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.launchModalSpy).toHaveBeenCalled();
                 expect(this.chorusView.get("type")).toBe("CHORUS_VIEW");
                 expect(this.chorusView.get("query")).toBe("SELECT * FROM FOO");
-                expect(this.chorusView.get("schemaId")).toBe(this.dataset.get("schema").id);
                 expect(this.chorusView.get("objectType")).toBe("CHORUS_VIEW");
             });
         });

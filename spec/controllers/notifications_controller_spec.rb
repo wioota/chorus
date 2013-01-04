@@ -46,6 +46,12 @@ describe NotificationsController do
       put :read, :notification_ids => [notification1.id]
       get :index
     end
+
+    it "generates a fixture for a single notification", :fixture do
+      put :read, :notification_ids => [notification1.id]
+      get :index
+      save_fixture "notification.json", { :response => response.decoded_body["response"].first }
+    end
   end
 
   describe '#read' do

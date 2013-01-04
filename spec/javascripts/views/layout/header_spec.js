@@ -55,25 +55,25 @@ describe("chorus.views.Header", function() {
             this.view.render.reset();
 
             this.server.completeFetchFor(this.view.notifications, [
-                fixtures.notification({ id: '1' }),
-                fixtures.notification({ id: '2' }),
-                fixtures.notification({ id: '3' }),
-                fixtures.notification({ id: '4' }),
-                fixtures.notification({ id: '5' }),
-                fixtures.notification({ id: '6' }),
-                fixtures.notification({ id: '7' })
+                rspecFixtures.notification({id: '1'}),
+                rspecFixtures.notification({id: '2'}),
+                rspecFixtures.notification({id: '3'}),
+                rspecFixtures.notification({id: '4'}),
+                rspecFixtures.notification({id: '5'}),
+                rspecFixtures.notification({id: '6'}),
+                rspecFixtures.notification({id: '7'})
             ]);
         });
 
         context("when there are at least 5 unread notifications", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.unreadNotifications, [
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification()
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification()
                 ]);
             });
 
@@ -93,8 +93,8 @@ describe("chorus.views.Header", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.unreadNotifications,
                     [
-                        fixtures.notification({ id: '1' }),
-                        fixtures.notification({ id: '2' })
+                        rspecFixtures.notification({ id: '1' }),
+                        rspecFixtures.notification({ id: '2' })
                     ],
                     null,
                     {
@@ -124,8 +124,8 @@ describe("chorus.views.Header", function() {
             this.view.session.trigger("loaded");
             this.server.completeFetchAllFor(this.view.unreadNotifications,
                 [
-                    fixtures.notification(),
-                    fixtures.notification()
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification()
                 ],
                 null,
                 {
@@ -135,11 +135,11 @@ describe("chorus.views.Header", function() {
                 });
             this.server.completeFetchFor(this.view.notifications,
                 [
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification(),
-                    fixtures.notification()
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification(),
+                    rspecFixtures.notification()
                 ]);
         });
 
@@ -409,10 +409,10 @@ describe("chorus.views.Header", function() {
                         beforeEach(function() {
                             this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { total: 0, page: 1, records: 0 });
                             this.server.completeFetchAllFor(this.view.notifications, [
-                                fixtures.notification({ id: '1' }),
-                                fixtures.notification({ id: '2' }),
-                                fixtures.notification({ id: '3' }),
-                                fixtures.notification({ id: '4' })
+                                rspecFixtures.notification(),
+                                rspecFixtures.notification(),
+                                rspecFixtures.notification(),
+                                rspecFixtures.notification()
                             ]);
                         });
 

@@ -5,13 +5,12 @@ describe("chorus.dialogs.DatasetImport", function() {
         this.modalSpy = stubModals();
         this.fakeFileUpload = stubFileUpload();
         this.validDatasets = [
-            newFixtures.workspaceDataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
-            newFixtures.workspaceDataset.sandboxTable({objectName: "1_table_b", workspace: {id: 243}})
+            rspecFixtures.workspaceDataset.datasetTable({objectName: "table_a", workspace: {id: 242}}),
+            rspecFixtures.workspaceDataset.datasetTable({objectName: "1_table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
-            newFixtures.workspaceDataset.externalTable(),
-            newFixtures.workspaceDataset.sandboxView(),
-            fixtures.datasetHadoopExternalTable()
+            rspecFixtures.workspaceDataset.sourceTable(),
+            rspecFixtures.workspaceDataset.datasetView()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.DatasetImport({
@@ -424,7 +423,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: newFixtures.csvImport({contents: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
+                                    response: rspecFixtures.csvImport({contents: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -473,7 +472,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: newFixtures.csvImport({contents: []}).attributes,
+                                    response: rspecFixtures.csvImport({contents: []}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -504,7 +503,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: newFixtures.csvImport({contents: ['"foo,"bar"']}).attributes,
+                                    response: rspecFixtures.csvImport({contents: ['"foo,"bar"']}).attributes,
                                     status: "ok"
                                 }
                             };

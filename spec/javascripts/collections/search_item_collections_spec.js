@@ -1,12 +1,12 @@
 describe("chorus.collections.Search", function() {
     beforeEach(function() {
-        this.search = fixtures.searchResult({
+        this.search = rspecFixtures.searchResult({
             instances: {
                 numFound: 131,
                 results: [
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbInstanceJson({ response: { name: "instance101", id: '101' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbInstanceJson({ response: { name: "instance102", id: '102' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbInstanceJson({ response: { name: "instance103", id: '103' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.hadoopInstanceJson({ response: { name: "instance102", id: '102' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gnipInstanceJson({ response: { name: "instance103", id: '103' } }).response),
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbInstanceJson({ response: { name: "instance104", id: '104' } }).response),
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbInstanceJson({ response: { name: "instance105", id: '105' } }).response)
                 ]

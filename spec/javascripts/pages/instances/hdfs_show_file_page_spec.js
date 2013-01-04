@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
         this.hadoopInstance = rspecFixtures.hadoopInstance({id: 1234, name: "MyInstance"});
-        this.file = fixtures.hdfsFile({
+        this.file = rspecFixtures.hdfsFile({
             id: 789,
             path: "/my/path/my file.txt",
             name: "my file.txt",

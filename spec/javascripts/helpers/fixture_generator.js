@@ -131,19 +131,14 @@
         });
     }
 
-    window.newFixtures = {
-        definitions: window.fixtureDefinitions,
-        parsedJson: {},
-        rawJsonPathPrefix: ""
-    };
     window.rspecFixtures = {
         definitions: window.rspecFixtureDefinitions,
         parsedJson: {},
         rawJsonPathPrefix: "rspec"
     };
-    window.newFixtures.safeExtend = safeExtend;
-    window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
-    defineAllFixtures(window.newFixtures);
+    window.rspecFixtures.safeExtend = safeExtend;
+    window.rspecFixtures.addUniqueDefaults = addUniqueDefaults;
+
     defineAllFixtures(window.rspecFixtures);
 })();

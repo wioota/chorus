@@ -717,7 +717,7 @@ describe("handlebars", function () {
 
             context("when the first arguments is an array", function () {
                 beforeEach(function () {
-                    this.workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
+                    this.workspaceList = [rspecFixtures.workspace().attributes, rspecFixtures.workspace().attributes];
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
@@ -814,17 +814,17 @@ describe("handlebars", function () {
             context("when the first arguments is an array", function () {
                 beforeEach(function () {
                     this.workbookList = [
-                        fixtures.tableauWorkbookJson({name: "foo", url: "foo.com"}),
-                        fixtures.tableauWorkbookJson({name: "bar", url: "bar.com"})
+                        rspecFixtures.tableauWorkbook({name: "foo", url: "foo.com"}).attributes,
+                        rspecFixtures.tableauWorkbook({name: "bar", url: "bar.com"}).attributes
                     ];
                     this.result = Handlebars.helpers.usedInTableau(this.workbookList).toString();
                 });
 
                 it("includes the 'published to workbook' information", function () {
                     var workbook = this.workbookList[0];
-                    expect($(this.result).find("a").attr("href")).toMatchUrl('foo.com');
-                    expect($(this.result).find("a")).toContainText(workbook.name);
-                    expect($(this.result).find("a")).toHaveAttr("title", workbook.name);
+                    expect($(this.result).find("a:eq(0)").attr("href")).toMatchUrl('foo.com');
+                    expect($(this.result).find("a:eq(0)")).toContainText(workbook.name);
+                    expect($(this.result).find("a:eq(0)")).toHaveAttr("title", workbook.name);
                 });
 
                 it("should open link in new window", function() {
@@ -850,38 +850,9 @@ describe("handlebars", function () {
             });
         });
 
-        describe("attachmentFoundIn", function () {
-            context("on a dataset in a workspace", function () {
-                beforeEach(function () {
-                    this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
-                    this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
-                });
-
-                it("displays the correct text", function () {
-                    expect(this.result).toMatchTranslation('attachment.found_in.dataset_in_workspace', {
-                        workspaceLink:Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().name()),
-                        datasetLink:Handlebars.helpers.linkTo(this.model.dataset().showUrl(), this.model.dataset().name())
-                    });
-                });
-            });
-
-            context("on a dataset not in a workspace", function () {
-                beforeEach(function () {
-                    this.model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
-                    this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
-                });
-
-                it("displays the correct text", function () {
-                    expect(this.result).toMatchTranslation('attachment.found_in.dataset_not_in_workspace', {
-                        datasetLink:Handlebars.helpers.linkTo(this.model.dataset().showUrl(), this.model.dataset().name())
-                    });
-                });
-            });
-        });
-
         describe("datasetLocation", function () {
             beforeEach(function () {
-                this.model = fixtures.dataset();
+                this.model = rspecFixtures.dataset();
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();
             });
 
@@ -903,14 +874,17 @@ describe("handlebars", function () {
             });
 
             it("includes the highlighted database and schema name", function () {
-                this.model = fixtures.dataset({
-                    schema:{
-                        highlightedAttributes:{ name:'schema_<em>name</em>' },
-                        database:{
-                            highlightedAttributes:{ name:'db_<em>name</em>' }
+                var searchResult = rspecFixtures.searchResult({
+                    datasets: {
+                        results:[{
+                        schema:{
+                            highlightedAttributes:{ name:['schema_<em>name</em>'] },
+                            database:{
+                                highlightedAttributes:{ name:['db_<em>name</em>'] }
+                            }
                         }
-                    }
-                });
+                }]}});
+                this.model = searchResult.datasets().at(0);
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 expect($(this.result).find('em').length).toBe(2);
             });
@@ -918,7 +892,7 @@ describe("handlebars", function () {
 
             context("when credentials are not present", function () {
                 beforeEach(function () {
-                    this.model = fixtures.dataset({hasCredentials:false});
+                    this.model = rspecFixtures.dataset({hasCredentials:false});
                     this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 });
 
@@ -1051,7 +1025,7 @@ describe("handlebars", function () {
         describe("searchResultCommentTitle", function () {
             context("when the comment is an insight", function () {
                 beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isInsight:true});
+                    this.comment = rspecFixtures.activity.noteOnWorkfileCreated({isInsight:true}).attributes;
                 });
 
                 it("returns the insight title", function () {
@@ -1061,7 +1035,8 @@ describe("handlebars", function () {
 
             context("when the comment is a comment", function () {
                 beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isComment:true});
+                    this.comment = rspecFixtures.activity.noteOnWorkfileCreated().attributes;
+                    this.comment.isComment = true;
                 });
 
                 it("returns the comment title", function () {
@@ -1069,59 +1044,9 @@ describe("handlebars", function () {
                 });
             });
 
-            context("when the comment is a column description", function () {
-                beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isColumnDescription:true});
-                });
-
-                it("returns the comment title", function () {
-                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column_description");
-                });
-            });
-
-            context("when the comment is an commit message for a workfile", function () {
-                beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isCommitMessage:true});
-                });
-
-                it("returns an empty string", function () {
-                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toBe("");
-                });
-            });
-
-            context("when the comment is a column", function () {
-                beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isColumn:true});
-                });
-
-                it("returns the column title", function () {
-                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column");
-                });
-            });
-
-            context("when the comment is a column description", function () {
-                beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isColumnDescription:true});
-                });
-
-                it("returns the column description string", function () {
-                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column_description");
-                });
-            });
-
-            context("when the comment is a table description", function () {
-                beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson({isTableDescription:true});
-                });
-
-                it("returns the table description string", function () {
-                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.table_description");
-                });
-            });
-
             context("when the comment nothing special", function () {
                 beforeEach(function () {
-                    this.comment = fixtures.searchResultCommentJson();
+                    this.comment = rspecFixtures.commentJson();
                 });
 
                 it("returns the note title", function () {

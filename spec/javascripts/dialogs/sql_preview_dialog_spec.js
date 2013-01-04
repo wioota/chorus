@@ -1,7 +1,7 @@
 describe("chorus.dialogs.SqlPreview", function() {
     describe("#render", function() {
         beforeEach(function() {
-            var model = newFixtures.workspaceDataset.chorusView({query: "select awesome from sql"});
+            var model = rspecFixtures.workspaceDataset.chorusView({query: "select awesome from sql"});
             this.dialog = new chorus.dialogs.SqlPreview({ model: model });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });

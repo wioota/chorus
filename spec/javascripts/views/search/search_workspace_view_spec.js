@@ -1,14 +1,12 @@
 describe("chorus.views.SearchWorkspace", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult({workspaces: {results: [
+        this.result = rspecFixtures.searchResult({workspaces: {results: [
             {
                 entityType: "workspace",
                 id: "10000",
-                isDeleted: false,
                 "public": false,
-                lastUpdatedStamp: "2012-02-24 16:08:32",
                 name: "ws",
-                content: "ws <i>other text</i>",
+                summary: "ws <i>other text</i>",
                 owner: {
                     firstName: "EDC",
                     id: "InitialUser",
@@ -16,7 +14,6 @@ describe("chorus.views.SearchWorkspace", function() {
                 },
                 comments: [
                     {
-                        "lastUpdatedStamp": "2012-03-08 09:57:46",
                         "isPublished": false,
                         "body": "good version",
                         "isComment": false,
@@ -26,15 +23,15 @@ describe("chorus.views.SearchWorkspace", function() {
                         "highlightedAttributes": {"body": ["good <em>version<\/em>"]},
                         "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
                     }
-                ],
-                highlightedAttributes: {
-                    name: "<em>ws</em>",
-                    content: "<em>ws</em> <i>other text</i>"
-                }
+                ]
             }
         ]}});
 
         this.model = this.result.workspaces().models[0];
+        this.model.set("highlightedAttributes", {
+            name: "<em>ws</em>",
+            summary: "<em>ws</em> <i>other text</i>"
+        });
         this.view = new chorus.views.SearchWorkspace({ model: this.model });
         this.view.render();
     });
@@ -61,15 +58,13 @@ describe("chorus.views.SearchWorkspace", function() {
 
     context("the description does not contain the search string", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult({workspaces: {results: [
+            this.result = rspecFixtures.searchResult({workspaces: {results: [
                 {
                     entityType: "workspace",
                     id: "10000",
-                    isDeleted: false,
                     "public": false,
-                    lastUpdatedStamp: "2012-02-24 16:08:32",
                     name: "ws",
-                    content: "<i>that is not highlighted</i>",
+                    summary: "<i>that is not highlighted</i>",
                     owner: {
                         firstName: "EDC",
                         id: "InitialUser",
@@ -77,7 +72,6 @@ describe("chorus.views.SearchWorkspace", function() {
                     },
                     comments: [
                         {
-                            "lastUpdatedStamp": "2012-03-08 09:57:46",
                             "isPublished": false,
                             "content": "good version",
                             "isComment": false,
@@ -87,14 +81,12 @@ describe("chorus.views.SearchWorkspace", function() {
                             "highlightedAttributes": {"body": ["good <em>version<\/em>"]},
                             "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
                         }
-                    ],
-                    highlightedAttributes: {
-                        name: "<em>ws</em>"
-                    }
+                    ]
                 }
             ]}});
 
             this.model = this.result.workspaces().models[0];
+            this.model.unset('highlightedAttributes');
             this.view = new chorus.views.SearchWorkspace({ model: this.model });
             this.view.render();
         });

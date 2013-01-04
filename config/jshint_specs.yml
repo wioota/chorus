@@ -100,8 +100,6 @@ predef:             # Names of predefined global variables - comma-separated str
   - clearAjaxRequests
   - sinon
   - rspecFixtures
-  - newFixtures
-  - fixtures
   - stubModals
   - spyOnEvent
   - setLoggedInUser

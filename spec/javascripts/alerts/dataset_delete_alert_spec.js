@@ -1,6 +1,6 @@
 describe("chorus.alerts.DatasetDelete", function() {
     beforeEach(function() {
-        this.model = newFixtures.workspaceDataset.chorusView();
+        this.model = rspecFixtures.workspaceDataset.chorusView();
         this.alert = new chorus.alerts.DatasetDelete({ keyPrefix: 'delete', pageModel : this.model });
         stubModals();
         this.alert.launchModal();

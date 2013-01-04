@@ -44,7 +44,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
     },
 
     launchCreateHdfsDialog: function() {
-        var hdfsTextFiles = this.hdfsFiles.filesOnly();
+        var hdfsTextFiles = this.hdfsFiles.removeDirectories();
 
         if (hdfsTextFiles.length === 0) {
             this.showDialogError(t("hdfs_instance.no_text_files"));

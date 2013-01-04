@@ -16,7 +16,7 @@ describe("chorus.collections.NotificationSet", function() {
 
         context("when constructed with a type option", function() {
             beforeEach(function() {
-                this.collection = fixtures.notificationSet([], { type: "unread" });
+                this.collection = new chorus.collections.NotificationSet([], { type: "unread" });
             });
 
             it("is correct", function() {
@@ -64,7 +64,7 @@ describe("chorus.collections.NotificationSet", function() {
             });
 
             it("sets 'unread' to true on each model", function() {
-                var model = fixtures.notification();
+                var model = rspecFixtures.notificationSet().at(0);
                 this.collection.add(model);
                 expect(model.get("unread")).toBeTruthy();
             });
@@ -72,7 +72,8 @@ describe("chorus.collections.NotificationSet", function() {
 
         context("when the notification set does not have the type 'unread'", function() {
             it("does not set the 'unread' attribute on the model", function() {
-                var model = fixtures.notification();
+                var model = rspecFixtures.notificationSet().at(0);
+                model.unset('unread');
                 this.collection.add(model);
                 expect(model.get("unread")).toBeUndefined();
             });

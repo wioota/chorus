@@ -397,7 +397,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {

@@ -1,35 +1,200 @@
-window.fixtureDefinitions = {
-    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
-
-    csvImport: { model: "CSVImport" },
-
-    config: {},
-
+window.rspecFixtureDefinitions = {
     activity: {
         unique: [ "id" ],
 
         children: {
-            addHdfsPatternAsExtTable: {},
-            addHdfsDirectoryAsExtTable: {}
+            chorusViewChanged: {},
+            chorusViewCreatedFromDataset: {},
+            chorusViewCreatedFromWorkfile: {},
+            datasetImportCreated: {},
+            datasetImportFailed: {},
+            datasetImportFailedWithModelErrors: {},
+            datasetImportSuccess: {},
+            fileImportCreated: {},
+            fileImportFailed: {},
+            fileImportSuccess: {},
+            gnipInstanceCreated: {},
+            gnipStreamImportCreated: {},
+            gnipStreamImportFailed: {},
+            gnipStreamImportSuccess: {},
+            greenplumInstanceChangedName: {},
+            greenplumInstanceChangedOwner: {},
+            greenplumInstanceCreated: {},
+            hadoopInstanceCreated: {},
+            hadoopInstanceChangedName: {},
+            hdfsFileExtTableCreated: {},
+            hdfsDirectoryExtTableCreated: {},
+            hdfsPatternExtTableCreated: {},
+            importScheduleDeleted: {},
+            importScheduleUpdated: {},
+            insightOnGreenplumInstance: {},
+            membersAdded: {},
+            noteOnDatasetCreated: {},
+            noteOnGnipInstanceCreated: {},
+            noteOnGreenplumInstanceCreated: {},
+            noteOnHadoopInstanceCreated: {},
+            noteOnHdfsFileCreated: {},
+            noteOnWorkfileCreated: {},
+            noteOnWorkspaceCreated: {},
+            noteOnWorkspaceDatasetCreated: {},
+            privateWorkspaceCreated: {},
+            publicWorkspaceCreated: {},
+            sandboxAdded: {},
+            sourceTableCreated: {},
+            tableauWorkbookPublished: {},
+            tableauWorkfileCreated: {},
+            userCreated: {},
+            viewCreated: {},
+            workfileCreated: {},
+            workfileUpgradedVersion: {},
+            workfileVersionDeleted: {},
+            workspaceChangeName: {},
+            workspaceDeleted: {},
+            workspaceMakePublic: {},
+            workspaceMakePrivate: {},
+            workspaceArchived: {},
+            workspaceUnarchived: {}
         }
     },
 
-    workspaceDataset: {
-        derived: {
-            id: function(a) {
-                return a.id;
-            }
-        },
+    boxplotTask: {},
 
-        children: {
-            sourceTable:   {},
-            sourceView:    {},
-            sandboxTable:  {},
-            sandboxView:   {},
-            chorusView:    {},
-            chorusViewSearchResult: {},
-            externalTable: {}
-        }
+    comment: { model: "Comment", unique: ['id'] },
+
+    config: {},
+
+    csvImport: {  model: "CSVImport" },
+
+    csvImportSet: {
+        collection: "DatasetImportSet"
+    },
+
+    database: { unique: ["id"] },
+
+    databaseColumn: {},
+
+    databaseColumnSet: {},
+
+    dataPreviewTaskResults: {
+        model: "DataPreviewTask"
+    },
+
+    dataset: { unique: [ "id" ] },
+
+    datasetImportScheduleSet: {},
+
+    datasetImportSet: {},
+
+    datasetStatisticsTable: {
+        model: "DatasetStatistics"
+    },
+
+    datasetStatisticsView: {
+        model: "DatasetStatistics"
+    },
+
+    draft: {},
+
+    forbiddenInstance: {},
+
+    frequencyTask: {},
+
+    frequencyTaskWithErrors: {
+        model: 'FrequencyTask'
+    },
+
+    gnipInstance: { unique: ["id"] },
+
+    gpdbInstance: { unique: [ "id" ] },
+
+    hadoopInstance: { unique: ["id"] },
+
+    heatmapTask: {},
+
+    hdfsEntrySet: {},
+
+    hdfsFile: {  unique: ["id"], model: "HdfsEntry" },
+
+    hdfsDir: {  unique: ["id"], model: "HdfsEntry" },
+
+    histogramTask: {},
+
+    image: {},
+
+    instanceAccount: { unique: ["id"] },
+
+    instanceAccountSet: {},
+
+    instanceDetails: {
+        model: 'InstanceUsage'
+    },
+
+    instanceDetailsWithoutPermission: {
+        model: 'InstanceUsage'
+    },
+
+    kaggleUserSet: { unique: ["id"] },
+
+    notification: {
+        unique: ["id"]
+    },
+
+    notificationSet: {},
+
+    schema: { unique: [ "id", "database.id", "database.instance.id" ] },
+
+    schemaFunctionSet: {},
+
+    schemaSet: { unique: [ "id" ] },
+
+    searchResult: {},
+
+    emptySearchResult: {
+        model: "SearchResult"
+    },
+
+    searchResultInWorkspace: {
+        model: "SearchResult"
+    },
+
+    searchResultInWorkspaceWithEntityTypeWorkfile: {
+        model: "SearchResult"
+    },
+
+    searchResultWithEntityTypeUser: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnInstanceNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnWorkspaceNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnWorkfileNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnDatasetNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnHdfsNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnHadoopNote: {
+        model: "SearchResult"
+    },
+
+    searchResultWithAttachmentOnWorkspaceDatasetNote: {
+        model: "SearchResult"
+    },
+
+    tableauWorkbook: {
+        unique: [ "id" ]
     },
 
     test: {
@@ -40,46 +205,17 @@ window.fixtureDefinitions = {
             noOverrides: {},
             withOverrides: { model: "Workspace" }
         }
-    }
-};
+    },
 
-window.rspecFixtureDefinitions = {
-    comment: { model: "Comment", unique: ['id'] },
-    csvImport: {  model: "CSVImport" },
-    user:    { unique: [ "id" ] },
-    userWithErrors: { model:'User' },
+    timeseriesTask: {},
+
+    typeAheadSearchResult: {},
+
+    user: { unique: [ "id" ] },
+
     userSet: { unique: [ "id" ] },
-    kaggleUserSet: { unique: ["id"] },
 
-    workspaceDataset: {
-        unique: ["id"],
-        children: {
-            chorusView: {
-                model: 'ChorusView'
-            },
-            datasetTable: {},
-            datasetView: {},
-            sourceTable: {},
-            sourceView: {}
-        }
-    },
-
-    databaseColumnSet: {},
-
-    datasetImportScheduleSet: {},
-
-    datasetImportSet: {
-    },
-
-    csvImportSet: {
-        collection: "DatasetImportSet"
-    },
-
-    schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
-    schemaSet: { unique: [ "id" ] },
-
-    workspace:    { unique: [ "id" ] },
-    workspaceSet: { unique: [ "id" ] },
+    userWithErrors: { model: 'User' },
 
     workfile: {
         unique: [ "id" ],
@@ -91,161 +227,6 @@ window.rspecFixtureDefinitions = {
             tableau: {}
         }
     },
-    workfileSet: {},
-    workfileVersionSet: {},
-    workfileVersion: { unique: ['id']},
-    draft: {},
-
-    config: {},
-
-    hadoopInstance: { unique: ["id"] },
-
-    gnipInstance: { unique: ["id"] },
-
-    image: {},
-
-    gpdbInstance: { unique: [ "id" ] },
-    database: { unique: ["id"] },
-
-    instanceAccount: { unique: ["id"] },
-    instanceAccountSet: {},
-
-    instanceDetails: {
-        model: 'InstanceUsage'
-    },
-    instanceDetailsWithoutPermission: {
-        model: 'InstanceUsage'
-    },
-
-    forbiddenInstance: {},
-
-    activity: {
-        unique: [ "id" ],
-
-        children :{
-            greenplumInstanceCreated: {},
-            gnipInstanceCreated: {},
-            gnipStreamImportCreated: {},
-            gnipStreamImportSuccess: {},
-            gnipStreamImportFailed: {},
-            greenplumInstanceChangedOwner: {},
-            hadoopInstanceCreated: {},
-            greenplumInstanceChangedName: {},
-            hadoopInstanceChangedName: {},
-            publicWorkspaceCreated: {},
-            privateWorkspaceCreated: {},
-            workspaceMakePublic: {},
-            workspaceMakePrivate: {},
-            workspaceArchived: {},
-            workspaceUnarchived: {},
-            workfileCreated: {},
-            sourceTableCreated: {},
-            userCreated: {},
-            sandboxAdded: {},
-            noteOnGnipInstanceCreated: {},
-            noteOnGreenplumInstanceCreated: {},
-            noteOnHadoopInstanceCreated: {},
-            insightOnGreenplumInstance: {},
-            hdfsFileExtTableCreated: {},
-            hdfsDirectoryExtTableCreated: {},
-            hdfsPatternExtTableCreated: {},
-            fileImportCreated: {},
-            fileImportFailed: {},
-            fileImportSuccess: {},
-            datasetImportCreated:{},
-            datasetImportFailed: {},
-            datasetImportFailedWithModelErrors: {},
-            datasetImportSuccess: {},
-            noteOnHdfsFileCreated: {},
-            noteOnWorkspaceCreated: {},
-            noteOnDatasetCreated: {},
-            noteOnWorkspaceDatasetCreated: {},
-            noteOnWorkfileCreated: {},
-            membersAdded: {},
-            workfileUpgradedVersion: {},
-            workfileVersionDeleted: {},
-            chorusViewCreatedFromDataset: {},
-            chorusViewCreatedFromWorkfile: {},
-            chorusViewChanged: {},
-            workspaceChangeName: {},
-            tableauWorkbookPublished: {},
-            tableauWorkfileCreated: {},
-            viewCreated: {},
-            importScheduleUpdated: {},
-            importScheduleDeleted: {},
-            workspaceDeleted: {}
-        }
-    },
-
-    notificationSet: {},
-
-    searchResult : {},
-    typeAheadSearchResult : {},
-    emptySearchResult : {
-        model: "SearchResult"
-    },
-    searchResultInWorkspace : {
-        model: "SearchResult"
-    },
-    searchResultInWorkspaceWithEntityTypeWorkfile : {
-        model: "SearchResult"
-    },
-    searchResultWithEntityTypeUser : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnInstanceNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnWorkspaceNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnWorkfileNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnDatasetNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnHdfsNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnHadoopNote : {
-        model: "SearchResult"
-    },
-
-    searchResultWithAttachmentOnWorkspaceDatasetNote : {
-        model: "SearchResult"
-    },
-
-    frequencyTask: {},
-    frequencyTaskWithErrors: {
-        model: 'FrequencyTask'
-    },
-    heatmapTask: {},
-    boxplotTask: {},
-    timeseriesTask: {},
-    histogramTask: {},
-
-    dataset: { unique: [ "id" ] },
-    dataPreviewTaskResults: {
-        model: "DataPreviewTask"
-    },
-    datasetStatisticsTable: {
-        model: "DatasetStatistics"
-    },
-    datasetStatisticsView: {
-        model: "DatasetStatistics"
-    },
-
-    schemaFunctionSet: {},
-
-    hdfsFile: {  unique: ["id"], model: "HdfsEntry" },
-    hdfsDir: {  unique: ["id"], model: "HdfsEntry" },
 
     workfileExecutionResults: {
         model: "WorkfileExecutionTask"
@@ -261,6 +242,28 @@ window.rspecFixtureDefinitions = {
 
     workfileExecutionError: {
         model: "WorkfileExecutionTask"
-    }
-};
+    },
 
+    workfileSet: {},
+
+    workfileVersionSet: {},
+
+    workfileVersion: { unique: ['id']},
+
+    workspace: { unique: [ "id" ] },
+
+    workspaceDataset: {
+        unique: ["id"],
+        children: {
+            chorusView: {
+                model: 'ChorusView'
+            },
+            datasetTable: {},
+            datasetView: {},
+            sourceTable: {},
+            sourceView: {}
+        }
+    },
+
+    workspaceSet: { unique: [ "id" ] }
+};

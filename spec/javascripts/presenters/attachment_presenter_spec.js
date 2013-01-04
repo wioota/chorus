@@ -10,7 +10,7 @@ describe("chorus.presenters.Attachment", function() {
 
     context("given a model without its own page", function() {
         it("includes the model's download url", function() {
-            var model = fixtures.attachment();
+            var model = new chorus.models.Attachment();
             spyOn(model, "hasOwnPage").andReturn(false);
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.url()).toBe(model.downloadUrl());
@@ -19,7 +19,7 @@ describe("chorus.presenters.Attachment", function() {
 
     describe("name", function() {
         it("uses objectName if available", function() {
-            var model = newFixtures.workspaceDataset.sandboxTable();
+            var model = rspecFixtures.workspaceDataset.datasetTable();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBe(model.get('objectName'));
         });
@@ -37,7 +37,7 @@ describe("chorus.presenters.Attachment", function() {
         });
 
         it("uses nothing otherwise", function() {
-            var model = fixtures.hdfsFile();
+            var model = rspecFixtures.hdfsFile();
             model.unset("name");
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBeUndefined();
@@ -47,7 +47,7 @@ describe("chorus.presenters.Attachment", function() {
     describe("iconSrc", function() {
         context("when the model is an image", function() {
             beforeEach(function() {
-                this.model = fixtures.attachment({type: "IMAGE"});
+                this.model = new chorus.models.Attachment({type: "IMAGE"});
             });
 
             it("uses the thumbnail url", function() {
@@ -58,7 +58,7 @@ describe("chorus.presenters.Attachment", function() {
 
         context("when the model is not an image", function() {
             beforeEach(function() {
-                this.model = fixtures.attachment({type: "OTHER"});
+                this.model = new chorus.models.Attachment({type: "OTHER"});
             });
 
             it("uses the icon url", function() {

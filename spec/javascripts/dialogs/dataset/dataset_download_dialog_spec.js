@@ -3,7 +3,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
         var radioButtonSpecify, radioButtonAll;
 
         beforeEach(function() {
-            this.dataset = newFixtures.workspaceDataset.sandboxTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             spyOn(this.dataset, 'download');
             this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
             this.dialog.render();

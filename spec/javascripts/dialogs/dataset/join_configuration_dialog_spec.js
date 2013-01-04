@@ -1,12 +1,7 @@
 describe("chorus.dialogs.JoinConfiguration", function() {
     beforeEach(function() {
-        this.sourceTable = newFixtures.workspaceDataset.sandboxTable();
-        this.sourceTable.columns().reset([
-            fixtures.databaseColumn({ name: "source_column_1" }),
-            fixtures.databaseColumn({ name: "source_column_2" }),
-            fixtures.databaseColumn({ name: "source_column_3" }),
-            fixtures.databaseColumn({ name: "source_column_4" })
-        ]);
+        this.sourceTable = rspecFixtures.workspaceDataset.datasetTable();
+        this.sourceTable.columns().reset(rspecFixtures.databaseColumnSet().models);
 
         this.chorusView = this.sourceTable.deriveChorusView();
         this.chorusView.aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
@@ -37,11 +32,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
 
         describe("when the fetch completes successfully for the destination table's columns", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.destinationTable.columns(), [
-                    fixtures.databaseColumn({ name: "destination_column_1" }),
-                    fixtures.databaseColumn({ name: "destination_column_2" }),
-                    fixtures.databaseColumn({ name: "destination_column_3" })
-                ]);
+                this.server.completeFetchFor(this.destinationTable.columns(), rspecFixtures.databaseColumnSet().models);
             });
 
             it("should have a header", function() {

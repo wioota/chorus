@@ -3,7 +3,7 @@ describe("chorus.models.FrequencyTask", function() {
         this.model = new chorus.models.FrequencyTask({
             bins: 23,
             yAxis: "height",
-            dataset: newFixtures.workspaceDataset.sandboxTable({objectName: "users"})
+            dataset: rspecFixtures.workspaceDataset.datasetTable({objectName: "users"})
         });
     });
 

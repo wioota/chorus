@@ -195,7 +195,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#comments", function() {
         beforeEach(function() {
-            this.model.set({ id: 5, latestCommentList: [fixtures.commentJson()] });
+            this.model.set({ id: 5, latestCommentList: [rspecFixtures.comment().attributes] });
             this.comments = this.model.comments();
         });
 
@@ -209,7 +209,7 @@ describe("chorus.models.Workspace", function() {
 
         it("initially contains the workspace's latestCommentList", function() {
             var serializedComments = this.model.get("latestCommentList");
-            expect(_.first(serializedComments).text).toBeTruthy(); //assert it exists first
+            expect(_.first(serializedComments).body).toBeTruthy(); //assert it exists first
             expect(_.first(this.comments.models).attributes).toEqual(_.first(serializedComments));
         });
     });

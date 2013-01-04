@@ -1,8 +1,8 @@
 describe("chorus.pages.DatasetShowPage", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.dataset({
-            associatedWorkspaces: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
-            tableauWorkbooks: [fixtures.tableauWorkbookJson(), fixtures.tableauWorkbookJson(), fixtures.tableauWorkbookJson()]
+            associatedWorkspaces: [rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson()],
+            tableauWorkbooks: [rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes]
         });
         this.columnSet = this.dataset.columns();
         this.page = new chorus.pages.DatasetShowPage(
@@ -84,7 +84,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 this.qtipSpy = stubQtip();
                 this.resizedSpy = spyOnEvent(this.page, 'resized');
                 this.server.completeFetchFor(this.dataset);
-                this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                 this.server.completeFetchFor(this.dataset.statistics());
             });
 
@@ -129,7 +129,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                             "slashes%2F"
                         );
                         this.server.completeFetchFor(this.dataset);
-                        this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                        this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                         expect(this.page.$('.content_header .found_in')).not.toExist();
                     });
                 });
@@ -161,7 +161,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                             "slashes%2F"
                         );
                         this.server.completeFetchFor(this.dataset);
-                        this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                        this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                         expect(this.page.$('.content_header .published_to')).not.toExist();
                     });
                 });

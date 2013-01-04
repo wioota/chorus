@@ -88,14 +88,14 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
 
-            it("does not display the action for a external table", function() {
-                this.dataset = newFixtures.workspaceDataset.externalTable();
+            xit("does not display the action for an external table", function() {
+                this.dataset = rspecFixtures.workspaceDataset.externalTable();
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
 
-            it("does not display the action for a hadoop external table", function() {
-                this.dataset = fixtures.datasetHadoopExternalTable();
+            xit("does not display the action for a hadoop external table", function() {
+                this.dataset = rspecFixtures.workspaceDataset.hadoopExternalTable();
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });

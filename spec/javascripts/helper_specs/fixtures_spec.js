@@ -1,13 +1,13 @@
-describe("newFixtures", function() {
+describe("rspecFixtures", function() {
     describe("nested fixture definitions", function() {
         var definition, model;
 
         beforeEach(function() {
-            definition = window.fixtureDefinitions.test;
+            definition = window.rspecFixtureDefinitions.test;
         });
 
         it("gets the right data", function() {
-            model = newFixtures.test.withOverrides();
+            model = rspecFixtures.test.withOverrides();
             var fixtureScript = $("#fixtures [data-fixture-path='test/withOverrides']");
             var fixtureJson = JSON.parse(fixtureScript.html());
             expect(model.get("firstName")).toBeDefined();
@@ -15,13 +15,13 @@ describe("newFixtures", function() {
         });
 
         it("caches the json data in a nested structure", function() {
-            model = newFixtures.test.withOverrides();
-            expect(window.newFixtures.parsedJson.test.withOverrides).toBeDefined();
+            model = rspecFixtures.test.withOverrides();
+            expect(window.rspecFixtures.parsedJson.test.withOverrides).toBeDefined();
         });
 
         context("when the nested definition overrides the parent definition", function() {
             it("uses the values in the nested definition", function() {
-                model = newFixtures.test.withOverrides();
+                model = rspecFixtures.test.withOverrides();
                 expect(definition.children.withOverrides.model).toBe("Workspace");
                 expect(model).toBeA(chorus.models.Workspace);
             });
@@ -29,7 +29,7 @@ describe("newFixtures", function() {
 
         context("when the nested definition does not override the parent definition", function() {
             it("uses the values in the parent definition", function() {
-                model = newFixtures.test.noOverrides();
+                model = rspecFixtures.test.noOverrides();
                 expect(definition.model).toBe("User");
                 expect(model).toBeA(chorus.models.User);
             });
@@ -169,7 +169,7 @@ describe("newFixtures", function() {
                         }
                     };
 
-                    newFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                    rspecFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
                 });
 
                 it("does not change the properties (even if they are null)", function() {
@@ -204,8 +204,8 @@ describe("newFixtures", function() {
                     attributes2.workspace = _.clone(attributes1.workspace);
                     attributes2.workspace.sandbox = _.clone(attributes1.workspace.sandbox);
 
-                    newFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
-                    newFixtures.addUniqueDefaults(attributes2, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                    rspecFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                    rspecFixtures.addUniqueDefaults(attributes2, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
                 });
 
                 it("gives the object unique values for those attributes", function() {
@@ -229,8 +229,8 @@ describe("newFixtures", function() {
                 it("creates the nested object and the unique id inside of it", function() {
                     attributes1 = { name: "foo" };
                     attributes2 = { name: "foo" };
-                    newFixtures.addUniqueDefaults(attributes1, [ "workspace.sandbox.id" ]);
-                    newFixtures.addUniqueDefaults(attributes2, [ "workspace.sandbox.id" ]);
+                    rspecFixtures.addUniqueDefaults(attributes1, [ "workspace.sandbox.id" ]);
+                    rspecFixtures.addUniqueDefaults(attributes2, [ "workspace.sandbox.id" ]);
                     expect(attributes1.workspace.sandbox.id).toBeA("string");
                     expect(attributes2.workspace.sandbox.id).toBeA("string");
                     expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);
@@ -261,8 +261,8 @@ describe("newFixtures", function() {
             });
 
             it("it adds the unique attribute values to each object in the array", function() {
-                newFixtures.addUniqueDefaults(attrArray1, [ "id", "workspace.id" ]);
-                newFixtures.addUniqueDefaults(attrArray2, [ "id", "workspace.id" ]);
+                rspecFixtures.addUniqueDefaults(attrArray1, [ "id", "workspace.id" ]);
+                rspecFixtures.addUniqueDefaults(attrArray2, [ "id", "workspace.id" ]);
 
                 var ids = [
                     attrArray1[0].id,
@@ -310,14 +310,14 @@ describe("newFixtures", function() {
 
         context("when no overrides are specified", function() {
             it("returns the original", function() {
-                var result = newFixtures.safeExtend(original, undefined);
+                var result = rspecFixtures.safeExtend(original, undefined);
                 expect(result).toEqual(original);
             });
         });
 
         context("when a property is overriden", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(original, { foo: "pizza" });
+                result = rspecFixtures.safeExtend(original, { foo: "pizza" });
             });
 
             it("uses the override", function() {
@@ -331,7 +331,7 @@ describe("newFixtures", function() {
             context("when the overrides contain a key that is not present in the original object", function() {
                 it("throws an exception containing the specified name", function() {
                     expect(function() {
-                        newFixtures.safeExtend(original, { whippedCream: "lots" }, "user");
+                        rspecFixtures.safeExtend(original, { whippedCream: "lots" }, "user");
                     }).toThrow("The fixture 'user' has no key 'whippedCream'");
                 });
             });
@@ -339,7 +339,7 @@ describe("newFixtures", function() {
 
         context("when overriding a key in a nested object", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(original, {
+                result = rspecFixtures.safeExtend(original, {
                     nestedObject: {
                         name: "pizza"
                     }
@@ -364,7 +364,7 @@ describe("newFixtures", function() {
             context("when the overrides contain a key that is not present in the nested object", function() {
                 it("throws an exception containing the specified name", function() {
                     expect(function() {
-                        newFixtures.safeExtend(original, { nestedObject: { hamburger: "double" }}, "user");
+                        rspecFixtures.safeExtend(original, { nestedObject: { hamburger: "double" }}, "user");
                     }).toThrow("The fixture 'user.nestedObject' has no key 'hamburger'");
                 });
             });
@@ -375,7 +375,7 @@ describe("newFixtures", function() {
 
         context("when overriding a value in a nested array", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(original, {
+                result = rspecFixtures.safeExtend(original, {
                     nestedStringArray: [
                         "Pivotal", "Labs", "Is", "Awesome"
                     ]
@@ -390,7 +390,7 @@ describe("newFixtures", function() {
         context("when overriding an object in a nested array", function() {
             context("when the override array is shorter than the original array", function() {
                 beforeEach(function() {
-                    result = newFixtures.safeExtend(original, {
+                    result = rspecFixtures.safeExtend(original, {
                         nestedObjectArray: [
                             { name: "bazillionaire" }
                         ]
@@ -412,7 +412,7 @@ describe("newFixtures", function() {
 
             context("when the override array is longer than the original array", function() {
                 beforeEach(function() {
-                    result = newFixtures.safeExtend(original, {
+                    result = rspecFixtures.safeExtend(original, {
                         nestedObjectArray: [
                             { name: "bazillionaire" },
                             { name: "gajillionaire" },

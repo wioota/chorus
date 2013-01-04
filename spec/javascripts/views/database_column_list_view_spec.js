@@ -1,22 +1,25 @@
 describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.column1 = fixtures.databaseColumn({
-                name: "column_name_1",
-                typeCategory: "BOOLEAN",
-                dataType: "boolean",
-                comment: "column comment"
-            });
-            this.column2 = fixtures.databaseColumn({
-                name: "column_name_2",
-                typeCategory: "WHOLE_NUMBER",
-                dataType: "int4",
-                comment: "column comment"
-            });
-            this.dataset = newFixtures.workspaceDataset.sandboxTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             this.dataset.setDatasetNumber(1);
-            this.dataset.columns().reset([this.column1, this.column2]);
-            this.collection = fixtures.databaseColumnSet([this.column1, this.column2]);
+            this.collection = rspecFixtures.databaseColumnSet([
+                {
+                    name: "column_name_1",
+                    typeCategory: "BOOLEAN",
+                    dataType: "boolean",
+                    description: "column comment"
+                },
+                {
+                    name: "column_name_2",
+                    typeCategory: "WHOLE_NUMBER",
+                    dataType: "int4",
+                    description: "column comment"
+                }
+            ]);
+            this.column1 = this.collection.at(0);
+            this.column2 = this.collection.at(1);
+            this.dataset.columns().reset(this.collection.models);
             this.view = new chorus.views.DatabaseColumnList({collection: this.collection});
             this.view.render();
         });

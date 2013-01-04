@@ -1,15 +1,13 @@
 describe("chorus.views.ChartConfiguration", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.column1 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "B Liger"});
-        this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"});
-        this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"});
-        this.column4 = fixtures.databaseColumn({typeCategory: "DATE", name: "the date"});
-        this.column5 = fixtures.databaseColumn({typeCategory: "TIME", name: "the time"});
-        this.column6 = fixtures.databaseColumn({typeCategory: "DATETIME", name: "the time & date"});
-
-        this.columns = fixtures.databaseColumnSet([
-            this.column1, this.column2, this.column3, this.column4, this.column5, this.column6
+        this.columns = rspecFixtures.databaseColumnSet([
+            {typeCategory: "ANIMAL", name: "B Liger"},
+            {typeCategory: "REAL_NUMBER", name: "a Speed"},
+            {typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"},
+            {typeCategory: "DATE", name: "the date"},
+            {typeCategory: "TIME", name: "the time"},
+            {typeCategory: "DATETIME", name: "the time & date"}
         ], {dataset: this.dataset});
 
         this.view = new chorus.views.FrequencyChartConfiguration({collection: this.columns});
@@ -22,7 +20,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
     describe("#buildForType(chartType)", function() {
         it("returns an instance of the subclass for the given chart type", function() {
-            var options = {collection: fixtures.databaseColumnSet()};
+            var options = {collection: rspecFixtures.databaseColumnSet()};
             var views = [
                 chorus.views.ChartConfiguration.buildForType("frequency", options),
                 chorus.views.ChartConfiguration.buildForType("boxplot", options),

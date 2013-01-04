@@ -233,18 +233,18 @@ describe("chorus.models.SearchResult", function() {
 
     describe("child collection methods", function() {
         beforeEach(function() {
-            this.model = fixtures.searchResult({
-                workspaceId: "123",
+            this.model = rspecFixtures.searchResultInWorkspace({
                 thisWorkspace: {
                     numFound: 171,
-                    results: [
-                        fixtures.searchResultWorkfileJson(),
-                        fixtures.searchResultDatasetJson(),
-                        fixtures.searchResultChorusViewJson(),
-                        fixtures.searchResultWorkspaceJson()
-                    ]
+                    results: []
                 }
             });
+            this.model.workspaceItems().reset([
+                rspecFixtures.workfile.sql(),
+                rspecFixtures.dataset(),
+                rspecFixtures.workspaceDataset.chorusView(),
+                rspecFixtures.workspace()
+            ]);
         });
 
         describe("#workspaceItems", function() {
@@ -401,7 +401,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#total", function() {
         context("when there are results", function() {
             beforeEach(function() {
-                this.model = fixtures.emptySearchResult();
+                this.model = rspecFixtures.emptySearchResult();
                 this.model.set({
                     thisWorkspace: {
                         numFound: 3
@@ -484,15 +484,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#download", function() {
         var searchResult;
         beforeEach(function() {
-            searchResult = fixtures.searchResult({
-                workspaceId: "123",
-                thisWorkspace: {
-                    numFound: 171,
-                    results: [
-                        fixtures.searchResultDatasetJson()
-                    ]
-                }
-            });
+            searchResult = rspecFixtures.searchResult();
 
             this.model.selectedItem = searchResult.datasets().at(0);
             spyOn(this.model.selectedItem, "download");

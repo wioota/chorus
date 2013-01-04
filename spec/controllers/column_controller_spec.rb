@@ -43,12 +43,20 @@ describe ColumnController do
     context "with real data", :database_integration => true do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:user) { account.owner }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
+      let(:dataset) {database.find_dataset_in_schema('base_table1', 'test_schema')}
+
+      before do
+        dataset.analyze(account)
+      end
 
       generate_fixture "databaseColumnSet.json" do
-        database = GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)
-        dataset = database.find_dataset_in_schema('base_table1', 'test_schema')
-        dataset.analyze(account)
         get :index, :dataset_id => dataset.to_param
+      end
+
+      it "generates a column fixture", :fixture do
+        get :index, :dataset_id => dataset.to_param
+        save_fixture "databaseColumn.json", { :response => response.decoded_body["response"].first }
       end
     end
   end
