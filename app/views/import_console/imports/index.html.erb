@@ -7,8 +7,6 @@
 
   <title>Greenplum Chorus</title>
   <%= stylesheet_link_tag "import_console/import_console" %>
-  <%= javascript_include_tag "import_console/import_console.js" %>
-
 </head>
 <body>
 
@@ -53,19 +51,11 @@
   <% end %>
 </tbody>
 </table>
-    <label>Select All</label>
-    <input type="checkbox" id="select_all" value="false">
     <button type="submit" name="success" value="true">Pass</button>
     <button type="submit" name="success" value="false">Fail</button>
     <label>Failure message:</label>
     <input type="text" name="message">
 <% end %>
 
-<script>
-  $('#select_all').change(function() {
-      var checked = $(this).prop('checked');
-      $('table input[type=checkbox]').prop('checked', checked);
-  });
-</script>
 </body>
 </html>
