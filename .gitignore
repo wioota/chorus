@@ -80,3 +80,6 @@ GREENPLUM_IP
 
 # Ignore load-test data
 /performance/load-test-users.csv
+
+# Ignore oracle jar
+ojdbc*.jar
