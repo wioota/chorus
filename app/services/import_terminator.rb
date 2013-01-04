@@ -36,20 +36,22 @@ class ImportTerminator < DelegateClass(Import)
       log "Found running #{type} running on #{database_description}"
       kills = kill(type)
 
-      log "Killed #{kills.count(true)} of #{kills.length} procpids for #{type}"
+      log "Killed #{kills.count(true)} of #{kills.length} playrocpids for #{type}"
     else
-      log "Could not find running #{type} process on database #{database_description}"
+      log "Could not find running #{type} process ona database #{database_description}"
     end
   end
 
   def kill(type)
     procpids = manager.procpid_sql(type)
 
-    kills = manager.database(type).connect_as(user).fetch(<<-SQL)
-      SELECT pg_terminate_backend(procpid)
-      FROM (#{procpids}) AS procpids
-    SQL
-    kills.map {|row| row[:pg_terminate_backend]}
+    database = manager.database(type)
+    database.with_gpdb_connection(database.gpdb_instance.account_for_user(user)) do |connection|
+      kills = connection.select(<<-SQL)
+        SELECT pg_terminate_backend(procpid)
+        FROM (#{procpids}) AS procpids
+      SQL
+      kills.map {|row| row[:pg_terminate_backend]}
     end
-
+  end
 end

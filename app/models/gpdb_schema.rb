@@ -1,5 +1,3 @@
-require 'greenplum_connection'
-
 class GpdbSchema < ActiveRecord::Base
   include Stale
   SCHEMAS_SQL = <<-SQL
@@ -160,24 +158,6 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
-<<<<<<< HEAD
-=======
-  def connect_as(user)
-    connect_with(gpdb_instance.account_for_user!(user))
-  end
-
-  def connect_with(account)
-    ::GreenplumConnection::SchemaConnection.new(
-        :host => gpdb_instance.host,
-        :port => gpdb_instance.port,
-        :username => account.db_username,
-        :password => account.db_password,
-        :database => database.name,
-        :schema => name
-    )
-  end
-
->>>>>>> 640e156... [ #41244423] finish implementing import console/import cancellation api
   private
 
   def add_schema_to_search_path(conn)

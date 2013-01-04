@@ -19,7 +19,9 @@ class ImportManager < DelegateClass(Import)
   end
 
   def busy?(type)
-    database(type).connect_as(user).fetch(procpid_sql(type)).any?
+    database(type).with_gpdb_connection(database(type).gpdb_instance.account_for_user(user)) do |connection|
+      connection.select_values(procpid_sql(type)).any?
+    end
   end
 
   def source_dataset

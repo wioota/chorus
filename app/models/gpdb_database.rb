@@ -1,5 +1,3 @@
-require 'greenplum_connection'
-
 class GpdbDatabase < ActiveRecord::Base
   include Stale
 
