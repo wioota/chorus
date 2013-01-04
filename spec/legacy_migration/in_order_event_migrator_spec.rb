@@ -13,9 +13,10 @@ describe InOrderEventMigrator do
     it "inserts the event objects in created_at order" do
       #TODO: a large portion of this filtering should go away when we correctly migrate imports from chorus views story 38441081
       NOT_YET_IMPLEMENTED_EVENTS = %w(INSTANCE_DELETED WORKSPACE_ADD_TABLE)
+      IGNORED_EVENTS = %w(START_PROVISIONING PROVISIONING_SUCCESS PROVISIONING_FAIL)
       NOT_SUPPORTED_IN_2_2_EVENTS = %w(MEMBERS_DELETED)
       IMPORT_EVENTS = %w(IMPORT_CREATED IMPORT_SUCCESS IMPORT_FAILED)
-      EXCLUDED_EVENTS = (NOT_YET_IMPLEMENTED_EVENTS + NOT_SUPPORTED_IN_2_2_EVENTS + IMPORT_EVENTS).map { |ev| "'#{ev}'" }.join(', ')
+      EXCLUDED_EVENTS = (NOT_YET_IMPLEMENTED_EVENTS + NOT_SUPPORTED_IN_2_2_EVENTS + IMPORT_EVENTS + IGNORED_EVENTS).map { |ev| "'#{ev}'" }.join(', ')
 
       activities = select_legacy_values(:id, <<-SQL)
       SELECT id

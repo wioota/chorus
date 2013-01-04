@@ -3,15 +3,14 @@ require 'legacy_migration_spec_helper'
 describe CommentMigrator do
   describe ".migrate" do
     it "migrates comments on notes" do
-      count = 0
-      Legacy.connection.select_all("
+      rows = Legacy.connection.select_all(<<-SQL)
         SELECT ec.*
         FROM edc_comment ec
           INNER JOIN edc_user eu
             ON ec.author_name = eu.user_name
         WHERE entity_type = 'comment'
-      ").each do |legacy_comment|
-        count += 1
+      SQL
+      rows.each do |legacy_comment|
         comment = Comment.find_with_destroyed(:first, :conditions => { :legacy_id => legacy_comment["id"]} )
         comment.body.should == legacy_comment["body"]
         comment.event_id.should == Events::Base.find_with_destroyed(:last, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_comment" }).id
@@ -20,19 +19,19 @@ describe CommentMigrator do
         comment.updated_at.should == legacy_comment["last_updated_stamp"]
         comment.deleted_at.should == legacy_comment["last_updated_stamp"] if legacy_comment["is_deleted"] == 't'
       end
-      count.should > 0
+      rows.length.should > 0
     end
 
     it "migrates comments on system generated activities" do
-      count = 0
-      Legacy.connection.select_all("
+      rows = Legacy.connection.select_all(<<-SQL)
         SELECT ec.*
         FROM edc_comment ec
           INNER JOIN edc_user eu
             ON ec.author_name = eu.user_name
-        WHERE entity_type = 'activitystream'
-      ").each do |legacy_comment|
-        count += 1
+          LEFT JOIN edc_activity_stream eas ON ec.entity_id = eas.id
+        WHERE ec.entity_type = 'activitystream' AND eas.type NOT IN ('START_PROVISIONING', 'PROVISIONING_SUCCESS', 'PROVISIONING_FAIL')
+      SQL
+      rows.each do |legacy_comment|
         comment = Comment.find_with_destroyed(:first, :conditions => {:legacy_id => legacy_comment["id"]})
         comment.body.should == legacy_comment["body"]
         comment.event_id.should == Events::Base.find_with_destroyed(:last, :conditions => { :legacy_id => legacy_comment["entity_id"], :legacy_type => "edc_activity_stream" }).id
@@ -41,20 +40,18 @@ describe CommentMigrator do
         comment.updated_at.should == legacy_comment["last_updated_stamp"]
         comment.deleted_at.should == legacy_comment["last_updated_stamp"] if legacy_comment["is_deleted"] == 't'
       end
-      count.should > 0
+      rows.length.should > 0
     end
 
     it "has all the comments" do
-      count = 0
-      Legacy.connection.select_all("
+      rows = Legacy.connection.select_all(<<-SQL)
       SELECT *
-        FROM edc_comment
-        WHERE entity_type = 'comment'
-        OR entity_type = 'activitystream'
-      ").each do |legacy_comment|
-        count += 1
-      end
-      Comment.find_with_destroyed(:all).count.should == count
+        FROM edc_comment ec
+        LEFT JOIN edc_activity_stream eas ON ec.entity_id = eas.id
+        WHERE ec.entity_type = 'comment'
+        OR ec.entity_type = 'activitystream' AND eas.type NOT IN ('START_PROVISIONING', 'PROVISIONING_SUCCESS', 'PROVISIONING_FAIL')
+      SQL
+      Comment.find_with_destroyed(:all).count.should == rows.length
     end
 
     it "is idempotent" do
