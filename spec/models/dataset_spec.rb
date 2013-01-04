@@ -44,31 +44,6 @@ describe Dataset do
           dataset.destroy
         }.to change(dataset.associated_datasets, :count).to(0)
       end
-
-      it "deletes its events when it is destroyed" do
-        dataset = datasets(:table)
-
-        expect {
-          expect {
-            dataset.destroy
-          }.to change(dataset.events, :count).to(0)
-        }.to change(dataset.activities, :count).to(0)
-      end
-
-      it "deletes all events with target1 or target2 set to the dataset when it is destroyed" do
-        workspace = workspaces(:public)
-        dataset = datasets(:searchquery_table)
-        user = users(:owner)
-        table = datasets(:table)
-
-        Events::DatasetImportSuccess.by(user).add(:workspace => workspace, :source_dataset => table, :dataset => dataset)
-
-        expect {
-          expect {
-            dataset.destroy
-          }.to change(dataset.events_where_target1, :count).to(0)
-        }.to change(dataset.events_where_target2, :count).to(0)
-      end
     end
   end
 

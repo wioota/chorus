@@ -26,7 +26,7 @@ class Dataset < ActiveRecord::Base
   attr_accessor :skip_search_index
 
   has_many :activities, :as => :entity
-  has_many :events, :through => :activities, :dependent => :destroy
+  has_many :events, :through => :activities
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
   has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
@@ -41,9 +41,6 @@ class Dataset < ActiveRecord::Base
   delegate :gpdb_instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
-
-  has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
-  has_many :events_where_target2, :class_name => "Events::Base", :as => :target2, :dependent => :destroy
 
   searchable :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
