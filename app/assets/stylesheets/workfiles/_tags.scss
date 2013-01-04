@@ -27,6 +27,7 @@
 
             .tag_editor {
                 line-height: 16px;
+                font-size: 13px;
             }
 
             .text-tags .text-tag {
@@ -46,6 +47,8 @@
                         padding-right: 5px;
                         word-wrap: break-word;
                         max-width: 100%;
+                        font-size: 12px;
+                        font-weight: $semibold;
                     }
 
                     .transition-border {
