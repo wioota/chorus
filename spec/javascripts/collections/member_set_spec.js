@@ -29,8 +29,8 @@ describe("chorus.collections.MemberSet", function() {
             expect(this.server.requests[0].url).toBe(this.memberSet.url());
         });
 
-        it("passes a list of user names as data", function() {
-            expect(this.server.requests[0].url).toContain($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
+        it("passes a list of user names as post data", function() {
+            expect(this.server.lastCreateFor(this.memberSet).requestBody).toContain($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
         });
 
         context("when the request succeeds", function() {

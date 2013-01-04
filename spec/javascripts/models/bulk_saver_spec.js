@@ -4,9 +4,6 @@ describe("chorus.models.BulkSaver", function() {
 
         beforeEach(function() {
             collection = new chorus.collections.Base();
-            collection.urlParams = function() {
-                return {abc: "123"};
-            };
             collection.urlTemplate = "the/collections/url";
 
             saver = new chorus.models.BulkSaver({collection: collection});
@@ -15,11 +12,6 @@ describe("chorus.models.BulkSaver", function() {
         it("submits to its collection's url", function() {
             saver.save();
             expect(this.server.lastCreate().url).toHaveUrlPath("/the/collections/url");
-        });
-
-        it("adds its collection's model's ids to the url params", function() {
-            saver.save();
-            expect(this.server.lastCreate().url).toContainQueryParams({abc: "123"});
         });
 
         it("triggers saved on the collection", function() {
@@ -35,6 +27,5 @@ describe("chorus.models.BulkSaver", function() {
             this.server.lastCreate().failUnprocessableEntity();
             expect("saveFailed").toHaveBeenTriggeredOn(collection);
         });
-
     });
 });
