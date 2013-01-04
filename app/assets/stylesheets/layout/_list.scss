@@ -120,28 +120,6 @@
             font-size: 12px;
             font-style: italic;
         }
-
-        .tag_list {
-            font-size: 12px;
-            font-weight: normal;
-            color: $color-text2;
-            line-height: 21px;
-
-            span.tag_name {
-                font-weight: $semibold;
-                color: $link-color;
-            }
-
-            span.tag_name:after {
-                content: ', ';
-                font-weight: $semibold;
-                color: $color-text2;
-            }
-
-            span.tag_name:last-child:after {
-                content: '';
-            }
-        }
     }
 
     &.selectable {
@@ -203,6 +181,27 @@
                 }
             }
         }
+    }
+}
+
+.tag_list {
+    font-size: 12px;
+    font-weight: normal;
+    color: $color-text2;
+    line-height: 21px;
+
+    .tag_name {
+        font-weight: $semibold;
+        font-size: 12px;
+    }
+
+    .tag_name:after {
+        content: ', ';
+        font-weight: $semibold;
+    }
+
+    .tag_name:last-child:after {
+        content: '';
     }
 }
 
