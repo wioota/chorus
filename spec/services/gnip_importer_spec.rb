@@ -15,6 +15,57 @@ describe GnipImporter do
     stub(connection).drop_table(anything)
   end
 
+  describe "validations", :database_integration do
+    let(:workspace) { workspaces(:real) }
+    let(:schema) { workspace.sandbox }
+    let(:instance) { schema.gpdb_instance }
+    let(:user) { instance.owner }
+
+    context "when table name already exists" do
+      let(:table_name) { schema.active_tables_and_views.first.name }
+
+      it "adds an error on table_name" do
+        importer = GnipImporter.new(table_name, instance.id, workspace.id, user.id, import_created_event.id)
+        importer.should_not be_valid
+        importer.should have_error_on(:table_name).with_message(:table_exists).with_options(:table_name => table_name)
+      end
+    end
+
+    context "when schema does not exist" do
+      before do
+        schema.update_attribute(:name, 'something_fake')
+      end
+
+      it "adds an error on table_name" do
+        importer = GnipImporter.new('table_name', instance.id, workspace.id, user.id, import_created_event.id)
+        importer.should_not be_valid
+        importer.should have_error_on(:workspace).with_message(:missing_sandbox)
+      end
+    end
+
+    context "when workspace doesn't have a sandbox" do
+      let!(:instance) { schema.gpdb_instance }
+      before do
+        workspace.sandbox = nil
+        workspace.save!
+      end
+
+      it "adds an error on workspace" do
+        importer = GnipImporter.new('table_name', instance.id, workspace.id, user.id, import_created_event.id)
+        importer.should_not be_valid
+        importer.should have_error_on(:workspace).with_message(:empty_sandbox)
+      end
+    end
+
+    describe "validate!" do
+      it "raises ApiValidationError when the model is not valid" do
+        importer = GnipImporter.new('table_name', instance.id, workspace.id, user.id, import_created_event.id)
+        stub(importer).valid? { false }
+        expect { importer.validate! }.to raise_error(ApiValidationError)
+      end
+    end
+  end
+
   describe "#import_to_table" do
     let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
     let(:resource_urls) { ["url1"] }

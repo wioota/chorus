@@ -3,28 +3,27 @@ class GnipInstanceImportsController < ApplicationController
 
   def create
     workspace = Workspace.find(params['import']['workspace_id'])
-    raise ApiValidationError.new(:base, :generic, {:message => "Workspace must have a sandbox"}) unless workspace.sandbox.present?
 
     authorize! :can_edit_sub_objects, workspace
+
     table_name = params['import']['to_table']
+    gnip_instance = GnipInstance.find(params['gnip_instance_id'])
+
+    GnipImporter.new(table_name, gnip_instance.id, workspace.id, current_user.id, nil).validate!
 
     temp_csv_file = workspace.csv_files.new(
-        :to_table => table_name,
+        :to_table => table_name
     )
     temp_csv_file.user = current_user
-    if temp_csv_file.table_already_exists(table_name)
-      raise ApiValidationError.new(:base, :table_exists, { :table_name => table_name })
-    end
 
-    gnip_instance = GnipInstance.find(params['gnip_instance_id'])
     event = create_import_event(temp_csv_file, gnip_instance)
 
     QC.enqueue_if_not_queued("GnipImporter.import_to_table",
-               table_name,
-               gnip_instance.id,
-               workspace.id,
-               current_user.id,
-               event.id)
+                             table_name,
+                             gnip_instance.id,
+                             workspace.id,
+                             current_user.id,
+                             event.id)
 
     render :json => [], :status => :ok
   end

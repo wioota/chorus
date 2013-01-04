@@ -5,7 +5,13 @@ class GnipFileSizeExceeded < RuntimeError
 end
 
 class GnipImporter
-  attr_accessor :table_name, :gnip_instance_id, :workspace_id, :user_id, :event_id, :workspace
+  include ActiveModel::Validations
+  include ChorusApiValidationFormat
+
+  validate :validate_schema_and_table
+  validate :workspace_must_have_sandbox
+
+  attr_accessor :table_name, :gnip_instance_id, :workspace_id, :workspace, :user_id, :user, :event_id
 
   def self.import_to_table(table_name, gnip_instance_id, workspace_id, user_id, event_id)
     importer = new(table_name, gnip_instance_id, workspace_id, user_id, event_id)
@@ -17,6 +23,7 @@ class GnipImporter
     self.gnip_instance_id = gnip_instance_id
     self.workspace_id = workspace_id
     self.user_id = user_id
+    self.user = User.find(user_id)
     self.event_id = event_id
     self.workspace = Workspace.find(workspace_id)
   end
@@ -36,6 +43,33 @@ class GnipImporter
   rescue => e
     create_failure_event(e.message)
     raise e
+  end
+
+  def validate!
+    raise ApiValidationError.new(errors) unless valid?
+  end
+
+  def validate_schema_and_table
+    return unless workspace.sandbox
+    db_connection = workspace.sandbox.database.connect_as(user)
+    unless db_connection.schema_exists?(workspace.sandbox.name)
+      errors.add(:workspace, :missing_sandbox)
+      return
+    end
+
+    temp_csv_file = workspace.csv_files.new(
+        :to_table => table_name
+    )
+    temp_csv_file.user = user
+    if temp_csv_file.table_already_exists(table_name)
+      errors.add(:table_name, :table_exists, { :table_name => table_name })
+    end
+  end
+
+  def workspace_must_have_sandbox
+    unless workspace.sandbox.present?
+      errors.add(:workspace, :empty_sandbox)
+    end
   end
 
   private
@@ -112,7 +146,6 @@ class GnipImporter
 
   def account
     @account ||= begin
-      user = User.find(user_id)
       workspace.sandbox.gpdb_instance.account_for_user!(user)
     end
   end
