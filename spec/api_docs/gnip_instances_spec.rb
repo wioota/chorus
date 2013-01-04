@@ -72,7 +72,7 @@ resource "Gnip instances" do
 
   post "/gnip_instances/:gnip_instance_id/imports" do
     before do
-      any_instance_of(CsvFile) {|file| stub(file).table_already_exists(anything) { false } }
+      any_instance_of(GnipImporter) {|importer| stub(importer).valid? { true } }
     end
 
     parameter :gnip_instance_id, "gnip instance id"
