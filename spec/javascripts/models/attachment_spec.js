@@ -219,5 +219,22 @@ describe("chorus.models.Attachment", function() {
         it("memoizes", function() {
             expect(this.model.dataset()).toBe(this.model.dataset());
         });
+
+        context("ChorusView", function() {
+            beforeEach(function() {
+                this.model.get('dataset')['type'] = "CHORUS_VIEW";
+                this.dataset = this.model.dataset();
+            });
+
+            it("returns a ChorusView Object", function() {
+                expect(this.dataset).toBeA(chorus.models.ChorusView);
+                expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
+                expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
+            });
+
+            it("return a url appropriate for a ChorusView", function() {
+                expect(this.dataset.showUrl()).toContain("chorus_views");
+            });
+        });
     });
 });

@@ -82,11 +82,14 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     dataset: function() {
         if(!this._dataset) {
-            if(this.get("dataset")) {
-                if(_.isEmpty(this.get("workspace"))) {
-                    this._dataset = new chorus.models.Dataset(this.get('dataset'));
+            var dataset = this.get("dataset");
+            if(dataset) {
+                if (dataset.type === "CHORUS_VIEW") {
+                    this._dataset = new chorus.models.ChorusView(dataset);
+                } else if(_.isEmpty(this.get("workspace"))) {
+                    this._dataset = new chorus.models.Dataset(dataset);
                 } else {
-                    this._dataset = new chorus.models.WorkspaceDataset(this.get('dataset'));
+                    this._dataset = new chorus.models.WorkspaceDataset(dataset);
                     this._dataset.set({ workspace: this.get('workspace') });
                 }
             }
