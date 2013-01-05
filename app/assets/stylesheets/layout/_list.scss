@@ -205,3 +205,15 @@
     }
 }
 
+.checkable_list {
+    .image {
+        display: block;
+        float: left;
+    }
+
+    input[type=checkbox] {
+        float: left;
+        margin-top: 16px;
+    }
+}
+
