@@ -6,8 +6,19 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
 
     setup:function () {
         this.tabs = new chorus.views.TabControl(["activity"]);
-        chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this);
-        chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:checked", this.workfileChecked, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
+        this.checkedWorkfiles = [];
+    },
+
+    postRender: function() {
+        var multiSelectEl = this.$(".multiple_selection");
+        if(this.checkedWorkfiles && this.checkedWorkfiles.length < 2) {
+            multiSelectEl.addClass("hidden");
+        } else {
+            multiSelectEl.removeClass('hidden');
+        }
     },
 
     setWorkfile:function (workfile) {
@@ -42,7 +53,8 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         var ctx = {
             canUpdate: this.options.workspace && this.options.workspace.canUpdate(),
             activeWorkspace: this.options.workspace && this.options.workspace.isActive(),
-            hideAddNoteLink: this.options.hideAddNoteLink
+            hideAddNoteLink: this.options.hideAddNoteLink,
+            checkedWorkfiles: this.checkedWorkfiles
         };
 
         if (this.workfile) {
@@ -60,5 +72,10 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         }
 
         return ctx;
+    },
+
+    workfileChecked: function(checkedWorkfiles){
+        this.checkedWorkfiles = checkedWorkfiles;
+        this.render();
     }
 });

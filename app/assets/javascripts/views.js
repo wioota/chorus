@@ -542,7 +542,16 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
     setup: function(options) {
         var modelClass = options.modelClass;
         var collection = this.collection;
-        this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
+        if(options.checkable) {
+            this.content = new chorus.views.CheckableList(_.extend({
+                    collection: collection,
+                    entityType: modelClass.toLowerCase(),
+                    entityViewType: chorus.views[modelClass]
+                },
+                options.contentOptions));
+        } else {
+            this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
+        }
 
         this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl, sandbox: options.sandbox});
 

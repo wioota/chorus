@@ -20,6 +20,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             collection: this.collection,
             model: this.workspace,
             title: t("workfiles.title"),
+            checkable: true,
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
@@ -99,10 +100,6 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                     ]
                 }
             ];
-        }
-
-        if (this.workspace.get("active")) {
-            this.mainContent.content.options.activeWorkspace = true;
         }
 
         this.render();

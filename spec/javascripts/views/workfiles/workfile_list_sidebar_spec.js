@@ -25,7 +25,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when a workfile is selected", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
-                    _.extend(this.workfile.get("versionInfo"), { updatedAt : "2011-11-22T10:46:03Z" });
+                    _.extend(this.workfile.get("versionInfo"), { updatedAt: "2011-11-22T10:46:03Z" });
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 });
 
@@ -95,18 +95,18 @@ describe("chorus.views.WorkfileListSidebar", function() {
                     });
                 });
 
-                context("when it is a tableau workbook", function () {
-                    beforeEach(function () {
+                context("when it is a tableau workbook", function() {
+                    beforeEach(function() {
                         this.workfile.set({fileType: 'tableau_workbook'});
                         this.view.render();
                     });
 
-                    it("hide the copy and download links", function () {
+                    it("hide the copy and download links", function() {
                         expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
                         expect(this.view.$('.actions a.download')).not.toExist();
                     });
 
-                    it("hide the updated information", function () {
+                    it("hide the updated information", function() {
                         expect(this.view.$('.info .updated')).not.toExist();
                     });
 
@@ -172,6 +172,38 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
             it("doesn't display any other links", function() {
                 expect(this.view.$('.actions a').length).toBe(2);
+            });
+        });
+    });
+
+    describe('workfile:checked', function() {
+        beforeEach(function() {
+            this.view.render();
+            this.checkedWorkfiles = new chorus.collections.WorkfileSet([
+                rspecFixtures.workfile.sql(),
+                rspecFixtures.workfile.text()
+            ]);
+            chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
+        });
+
+        it('shows the multiple select widget', function() {
+            expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
+        });
+
+        it('displays the number of selected workfiles', function() {
+            expect(this.view.$(".multiple_selection")).toContainText('2 Selected');
+        });
+
+        context('when only one is checked', function() {
+            beforeEach(function() {
+                this.checkedWorkfiles = new chorus.collections.WorkfileSet([
+                    rspecFixtures.workfile.sql()
+                ]);
+                chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
+            });
+
+            it('doesnt show the multiple select widget', function() {
+                expect(this.view.$(".multiple_selection")).toHaveClass("hidden");
             });
         });
     });

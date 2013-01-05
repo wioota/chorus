@@ -1,7 +1,7 @@
 describe("chorus.views.Workfile", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.sql({ id: "24" });
-        this.view = new chorus.views.Workfile({ model: this.model, activeWorkspace: true });
+        this.view = new chorus.views.Workfile({ model: this.model });
         this.view.render();
     });
 

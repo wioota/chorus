@@ -723,50 +723,54 @@ describe("chorus.views.DatasetSidebar", function() {
         it("does not display the multiple selection section", function() {
             expect(this.multiSelectSection).toHaveClass("hidden");
         });
+    });
 
-        context("when two datasets are checked", function() {
+    describe("when two datasets are checked", function() {
+        beforeEach(function() {
+            this.checkedDatasets = new chorus.collections.DynamicDatasetSet([
+                rspecFixtures.workspaceDataset.datasetTable(),
+                rspecFixtures.workspaceDataset.datasetTable()
+            ]);
+            this.multiSelectSection = this.view.$(".multiple_selection");
+            chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
+        });
+
+        it("does display the multiple selection section", function() {
+            expect(this.multiSelectSection).not.toHaveClass("hidden");
+        });
+
+        it("displays the number of selected datasets", function() {
+            expect(this.multiSelectSection.find(".count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
+        });
+
+        it("displays the 'associate with workspace' link", function() {
+            expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
+        });
+
+        describe("clicking the 'associate with workspace' link", function() {
             beforeEach(function() {
-                this.checkedDatasets.add(rspecFixtures.workspaceDataset.datasetTable());
-                chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
+                this.multiSelectSection.find("a.associate").click();
             });
 
-            it("does display the multiple selection section", function() {
-                expect(this.multiSelectSection).not.toHaveClass("hidden");
+            it("launches the dialog for associating multiple datasets with a workspace", function() {
+                var dialog = this.modalSpy.lastModal();
+                expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
+                expect(dialog.datasets).toBe(this.checkedDatasets);
+            });
+        });
+
+        context("when a dataset is selected", function() {
+            beforeEach(function() {
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
             });
 
-            it("displays the number of selected datasets", function() {
-                expect(this.multiSelectSection.find(".count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
+            it("should still show the multiple selection section", function() {
+                expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
             });
 
-            it("displays the 'associate with workspace' link", function() {
-                expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
-            });
-
-            describe("clicking the 'associate with workspace' link", function() {
-                beforeEach(function() {
-                    this.multiSelectSection.find("a.associate").click();
-                });
-
-                it("launches the dialog for associating multiple datasets with a workspace", function() {
-                    var dialog = this.modalSpy.lastModal();
-                    expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
-                    expect(dialog.datasets).toBe(this.checkedDatasets);
-                });
-            });
-
-            context("when a dataset is selected", function() {
-                beforeEach(function() {
-                    this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
-                });
-
-                it("should still show the multiple selection section", function() {
-                    expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
-                });
-
-                it("should retain the selection count when the view is re-rendered", function() {
-                    expect(this.view.$(".multiple_selection .count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
-                });
+            it("should retain the selection count when the view is re-rendered", function() {
+                expect(this.view.$(".multiple_selection .count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
             });
         });
     });

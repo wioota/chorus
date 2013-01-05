@@ -26,10 +26,9 @@ chorus.views.Workfile = chorus.views.Base.extend({
     additionalContext: function() {
         var ctx = new chorus.presenters.Attachment(this.model, { iconSize:'icon' });
 
-        ctx.activeWorkspace = this.options.activeWorkspace;
-
         ctx.tableauWorkbook = this.model.get('fileType') === 'tableau_workbook';
         ctx.tableauIcon = chorus.helpers.tableauIcon();
+        ctx.checkable = this.options.checkable;
 
         var lastComment = this.model.lastComment();
         if (lastComment) {
