@@ -12,20 +12,21 @@ describe FunctionsController do
   describe "#index" do
     let(:database) { schema.database }
     let(:schema) { gpdb_schemas(:default) }
+    let(:functions) { [
+          GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", [], "{text}", "Hi!!", "awesome"),
+          GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1, arg2}, "{text, int4}", "Hi2", "awesome2"),
+          GpdbSchemaFunction.new("a_schema", "foo", "sql", "text", %w{arg1}, "{text}", "hi3", "cross joins FTW")
+
+    ]}
 
     before do
-      @functions = [
-          GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", nil, "{text}", "Hi!!", "awesome"),
-          GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", "{arg1, arg2}", "{text, int4}", "Hi2", "awesome2"),
-          GpdbSchemaFunction.new("a_schema", "foo", "sql", "text", "{arg1}", "{text}", "hi3", "cross joins FTW")
-      ]
       any_instance_of(GpdbSchema) do |schema|
-        mock(schema).stored_functions.with_any_args { @functions }
+        mock(schema).stored_functions.with_any_args { functions }
       end
     end
 
     it "should list all the functions in the schema" do
-      mock_present { |model| model.should == @functions }
+      mock_present { |model| model.should == functions }
 
       get :index, :schema_id => schema.to_param
       response.code.should == "200"
