@@ -6,6 +6,7 @@ module Events
     include SearchableHtml
 
     validates_presence_of :actor_id
+    validate :no_note_on_archived_workspace, :on => :create
 
     searchable_html :body
     searchable do
@@ -67,6 +68,12 @@ module Events
     def set_insight_published(published)
       self.published = published
       save!
+    end
+
+    private
+
+    def no_note_on_archived_workspace
+      errors.add(:workspace, :generic, {:message => "Can not add a note on an archived workspace"}) if workspace.present? && workspace.archived?
     end
 
     class << self

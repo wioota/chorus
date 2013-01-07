@@ -267,6 +267,20 @@ describe Events::Note do
   describe "#create_on_model(model, body, creator)" do
     let(:user) { users(:owner) }
 
+    context "workspace is archived" do
+      it "does not create a note" do
+        workspace.archived_at = Time.current
+        workspace.archiver = user
+        workspace.save!
+        expect {
+          Events::Note.create_on_model(workfile, {
+              :body => "More crazy content",
+              :workspace_id => workspace.id
+          }, user)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     it "creates a note on a greenplum instance" do
       gpdb_instance = gpdb_instances(:default)
       expect {
@@ -318,33 +332,6 @@ describe Events::Note do
       last_note.action.should == "NoteOnGnipInstance"
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
-    end
-
-    context "workspace not archived" do
-      it "creates a note on a workspace" do
-        Events::Note.create_on_model(workspace, {
-          :body => "More crazy content",
-        }, user)
-
-        last_note = Events::Note.last
-        last_note.action.should == "NoteOnWorkspace"
-        last_note.actor.should == user
-        last_note.workspace.should == workspace
-        last_note.body.should == "More crazy content"
-      end
-    end
-
-    context "workspace is archived" do
-      it "does not create a note on a workspace" do
-        workspace.archived_at = Time.current
-        workspace.archiver = user
-        workspace.save!
-        expect {
-          Events::Note.create_on_model(workspace, {
-            :body => "More crazy content",
-          }, user)
-        }.to raise_error
-      end
     end
 
     it "creates a note on a workfile" do
