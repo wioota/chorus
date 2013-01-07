@@ -29,6 +29,7 @@ class ImportManager < DelegateClass(Import)
   end
 
   def named_pipe
+    return unless ChorusConfig.instance.gpfdist_configured?
     dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
     Dir.glob(dir.join "pipe*_#{created_at.to_i}_#{id}").first
   end
