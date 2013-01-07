@@ -89,12 +89,28 @@ describe ExternalTable do
   end
 
   context "when saving fails" do
+    before do
+      begin
+        POSTGRES_DB.run('DROP TABLE IF EXISTS existing_external_table')
+      rescue
+        POSTGRES_DB.run('DROP EXTERNAL TABLE IF EXISTS existing_external_table')
+      end
+      POSTGRES_DB.run("CREATE TABLE existing_external_table (id integer)")
+    end
+
+    after do
+      begin
+        POSTGRES_DB.run('DROP TABLE IF EXISTS existing_external_table')
+      rescue
+        POSTGRES_DB.run('DROP EXTERNAL TABLE IF EXISTS existing_external_table')
+      end
+    end
+
     it "adds table already exists error when the table already exists" do
-      POSTGRES_DB.run('CREATE TEMPORARY TABLE existing_external_table (id integer)')
       e = ExternalTable.new(params.merge(:name => 'existing_external_table'))
 
       e.save.should be_false
-      e.errors.first.should == [:name, [:TAKEN, {}]]
+      e.should have_error_on(:name).with_message(:TAKEN)
     end
   end
 
