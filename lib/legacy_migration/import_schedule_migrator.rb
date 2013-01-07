@@ -64,7 +64,7 @@ class ImportScheduleMigrator < AbstractMigrator
 
       ImportSchedule.find_each do |schedule|
         silence_activerecord do
-          schedule.save!(:validate => false)
+          schedule.save(:validate => false)
         end
       end
     end
