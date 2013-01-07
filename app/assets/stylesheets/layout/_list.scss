@@ -53,7 +53,7 @@
             display: inline-block;
         }
 
-        .description {
+        .description, .instance_description {
             @include secondary-text-small;
             padding-top: 4px;
         }
