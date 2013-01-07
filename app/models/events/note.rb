@@ -27,6 +27,8 @@ module Events
 
       if model.kind_of?(Dataset)
         entity_type = 'dataset'
+      elsif model.kind_of?(Workfile)
+        entity_type = 'workfile'
       elsif model.kind_of?(HdfsEntry)
         entity_type = 'hdfs_file'
       else

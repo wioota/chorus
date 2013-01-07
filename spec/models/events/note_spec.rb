@@ -11,6 +11,7 @@ describe Events::Note do
   let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
   let(:workfile) { workfiles(:public)}
+  let(:tableau_workfile) { workfiles(:tableau)}
   let(:dataset) { datasets(:table) }
   let(:hdfs_entry) do
     hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
@@ -356,6 +357,20 @@ describe Events::Note do
       last_note.action.should == "NoteOnWorkfile"
       last_note.actor.should == user
       last_note.workfile.should == workfile
+      last_note.workspace.should == workspace
+      last_note.body.should == "Workfile content"
+    end
+
+    it "creates a note on a tableau workfile" do
+      Events::Note.create_on_model(tableau_workfile, {
+        :body => "Workfile content",
+        :workspace_id => workspace.id
+      }, user)
+
+      last_note = Events::Note.last
+      last_note.action.should == "NoteOnWorkfile"
+      last_note.actor.should == user
+      last_note.workfile.should == tableau_workfile
       last_note.workspace.should == workspace
       last_note.body.should == "Workfile content"
     end
