@@ -29,7 +29,7 @@ class ImageMigrator < AbstractMigrator
         user_image_rows.each do |row|
           user = User.unscoped.find_by_legacy_id!(row['user_id'])
           user.image = StringIO.new(row['image'].force_encoding("UTF-8"))
-          user.save!
+          user.save(:validate => false)
         end
 
         workspace_image_rows = Legacy.connection.exec_query(
@@ -45,7 +45,7 @@ class ImageMigrator < AbstractMigrator
         workspace_image_rows.each do |row|
           workspace = Workspace.unscoped.find_by_legacy_id(row['workspace_id'])
           workspace.image = StringIO.new(row['image'].force_encoding("UTF-8"))
-          workspace.save!
+          workspace.save(:validate => false)
         end
       end
     end
