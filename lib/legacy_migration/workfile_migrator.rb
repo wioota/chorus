@@ -169,7 +169,7 @@ class WorkfileMigrator < AbstractMigrator
           fake_file.content_type = row['mime_type']
           fake_file.content_type = 'text/plain' if fake_file.size == 0 # workaround for empty images
           workfile_version.contents = fake_file
-          workfile_version.save!
+          workfile_version.save(:validate => false)
           workfile.update_column :updated_at, workfile_updated_at
         end
 
@@ -186,7 +186,7 @@ class WorkfileMigrator < AbstractMigrator
           ").first
           path = LegacyFilePath.new(options[:workfile_path], "workfile", row["workspace_id"], row["draft_file_id"])
           workfile_draft.content = StringIO.new(File.read(path.path))
-          workfile_draft.save!
+          workfile_draft.save(:validate => false)
         end
 
         Workfile.unscoped.where(:content_type => nil).find_each do |wf|
