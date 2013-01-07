@@ -62,7 +62,7 @@ describe "Notes" do
       workfile = workfiles(:no_collaborators_public)
       workspace = workfile.workspace
       visit("#/workspaces/#{workspace.id}/workfiles")
-      within ".workfile_list" do
+      within ".selectable.list" do
         find("li", :text => workfile.file_name).click
       end
       click_link "Add a note"
