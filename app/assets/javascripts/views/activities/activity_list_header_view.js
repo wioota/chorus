@@ -44,19 +44,24 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.insightsCount.fetchPage(1, {per_page: 0});
     },
 
+    reloadCollection: function() {
+        this.collection.loaded = false;
+        this.collection.reset();
+        this.collection.fetch();
+        this.render();
+    },
+
     onAllClicked: function(e) {
         e.preventDefault();
 
         this.collection.attributes.insights = false;
-        this.collection.fetch();
-        this.render();
+        this.reloadCollection();
     },
 
     onInsightsClicked: function(e) {
         e.preventDefault();
 
         this.collection.attributes.insights = true;
-        this.collection.fetch();
-        this.render();
+        this.reloadCollection();
     }
 });

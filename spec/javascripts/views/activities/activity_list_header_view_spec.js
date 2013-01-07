@@ -99,6 +99,8 @@ describe("chorus.views.ActivityListHeader", function() {
                     describe("clicking on 'Insights'", function() {
                         beforeEach(function() {
                             this.server.reset();
+                            this.collection.loaded = true;
+                            spyOn(this.collection, 'reset');
                             this.view.$(".menus .insights").click();
                         });
 
@@ -117,26 +119,43 @@ describe("chorus.views.ActivityListHeader", function() {
                             expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
                         });
 
-                        describe("clicking on 'All Activity'", function() {
-                            beforeEach(function() {
-                                this.server.reset();
-                                this.view.$(".menus .all").click();
-                            });
+                        it("clears the loaded flag on the collection", function() {
+                            expect(this.collection.loaded).toBeFalsy();
+                        });
 
-                            it("switches the activity set to 'all' mode (not just insights) and re-fetches it", function() {
-                                expect(this.collection.attributes.insights).toBeFalsy();
-                                expect(this.collection).toHaveBeenFetched();
-                            });
+                        it("resets the collection", function() {
+                            expect(this.collection.reset).toHaveBeenCalled();
+                        });
+                    });
 
-                            it("sets the 'All Activity' option to active", function() {
-                                expect(this.view.$(".menus .all")).toHaveClass("active");
-                                expect(this.view.$(".menus .insights")).not.toHaveClass("active");
-                            });
+                    describe("clicking on 'All Activity'", function() {
+                        beforeEach(function() {
+                            this.server.reset();
+                            spyOn(this.collection, 'reset');
+                            this.view.$(".menus .all").click();
+                        });
 
-                            it("switches back to the title for 'all' mode", function() {
-                                expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                                expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
-                            });
+                        it("switches the activity set to 'all' mode (not just insights) and re-fetches it", function() {
+                            expect(this.collection.attributes.insights).toBeFalsy();
+                            expect(this.collection).toHaveBeenFetched();
+                        });
+
+                        it("sets the 'All Activity' option to active", function() {
+                            expect(this.view.$(".menus .all")).toHaveClass("active");
+                            expect(this.view.$(".menus .insights")).not.toHaveClass("active");
+                        });
+
+                        it("switches back to the title for 'all' mode", function() {
+                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                        });
+
+                        it("clears the loaded flag on the collection", function() {
+                            expect(this.collection.loaded).toBeFalsy();
+                        });
+
+                        it("resets the collection", function() {
+                            expect(this.collection.reset).toHaveBeenCalled();
                         });
                     });
                 });
