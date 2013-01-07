@@ -211,13 +211,13 @@ describe GpdbDatabase do
     end
 
     context "when gpdb connection is broken" do
-      let(:database) { gpdb_databases(:default) }
+      let(:database) { gpdb_databases(:default) } #not a real db
       let(:user) { users(:owner) }
 
       it "does not create a local database" do
         expect {
           database.create_schema("my_new_schema", user)
-        }.to raise_error(GreenplumConnection::InstanceUnreachable)
+        }.to raise_error(GreenplumConnection::DatabaseError)
         database.schemas.find_by_name("my_new_schema").should be_nil
       end
     end

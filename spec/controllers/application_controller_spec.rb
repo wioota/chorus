@@ -64,12 +64,15 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a Greenplum Connection error occurs" do
-      stub(controller).index { raise GreenplumConnection::DatabaseError.new("oops") }
+      error = GreenplumConnection::DatabaseError.new("oops")
+      stub(error).error_type { :SOME_ERROR_TYPE }
+      stub(controller).index { raise error }
 
       get :index
 
       response.code.should == '422'
-      decoded_errors.fields.general.GENERIC.message.should == 'oops'
+      decoded_errors.record.should == "SOME_ERROR_TYPE"
+      decoded_errors.message.should == 'oops'
     end
 
     it "returns error 422 when a Postgres error occurs" do

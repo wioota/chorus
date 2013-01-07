@@ -2,7 +2,20 @@ require 'sequel'
 
 module GreenplumConnection
   class InstanceUnreachable < StandardError; end
-  class DatabaseError < Sequel::DatabaseError; end
+
+  DatabaseError = Sequel::DatabaseError
+  class DatabaseError
+    ERROR_MAP = {
+        '3D000' => :DATABASE_MISSING,
+        '28P01' => :INVALID_PASSWORD
+    }
+
+    def error_type
+      error_code = wrapped_exception && wrapped_exception.respond_to?(:get_sql_state) && wrapped_exception.get_sql_state
+      ERROR_MAP[error_code] || :GENERIC
+    end
+  end
+
   class ObjectNotFound < StandardError; end
 
   @@gpdb_login_timeout = 10
@@ -25,11 +38,7 @@ module GreenplumConnection
     end
 
     def connect!
-      begin
-        @connection ||= GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
-      rescue Sequel::DatabaseConnectionError => e
-        raise InstanceUnreachable, e.message
-      end
+      @connection ||= GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
     end
 
     def disconnect
@@ -60,8 +69,6 @@ module GreenplumConnection
     def with_connection
       connect!
       yield
-    rescue Sequel::DatabaseError => e
-      raise DatabaseError.new(e.message)
     ensure
       disconnect
     end

@@ -59,27 +59,6 @@ describe GreenplumConnection::Base, :database_integration do
         connection.should be_connected
       end
     end
-
-    context "with incorrect credentials" do
-      let(:username) { "not_a_user" }
-      let(:password) { "not_a_password" }
-
-      it "raises a GreenplumConnection::InstanceUnreachable error" do
-        expect {
-          connection.connect!
-        }.to raise_error(GreenplumConnection::InstanceUnreachable)
-      end
-    end
-
-    context "when the database is unreachable" do
-      let(:port) { "976543" }
-
-      it "raises a GreenplumConnection::InstanceUnreachable error" do
-        expect {
-          connection.connect!
-        }.to raise_error(GreenplumConnection::InstanceUnreachable)
-      end
-    end
   end
 
   describe "#disconnect" do
@@ -100,18 +79,18 @@ describe GreenplumConnection::Base, :database_integration do
 
   describe "#fetch" do
     let(:sql) { "SELECT 1 AS answer" }
-    let(:parameters) {{}}
+    let(:parameters) { {} }
     let(:subject) { connection.fetch(sql) }
-    let(:expected) { [{ :answer => 1 }] }
+    let(:expected) { [{:answer => 1}] }
 
     it_should_behave_like "a well behaved database query"
 
     context "with SQL parameters" do
       let(:sql) { "SELECT :num AS answer" }
-      let(:parameters) {{:num => 3}}
+      let(:parameters) { {:num => 3} }
 
       it "succeeds" do
-        connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+        connection.fetch(sql, parameters).should == [{:answer => 3}]
       end
     end
   end
@@ -131,7 +110,7 @@ describe GreenplumConnection::Base, :database_integration do
 
   describe "#execute" do
     let(:sql) { "SET search_path TO 'public'" }
-    let(:parameters) {{}}
+    let(:parameters) { {} }
     let(:subject) { connection.execute(sql) }
     let(:expected) { true }
 
@@ -487,9 +466,9 @@ describe GreenplumConnection::Base, :database_integration do
 
     describe "#fetch" do
       let(:sql) { "SELECT 1 AS answer" }
-      let(:parameters) {{}}
+      let(:parameters) { {} }
       let(:subject) { connection.fetch(sql) }
-      let(:expected) { [{ :answer => 1 }] }
+      let(:expected) { [{:answer => 1}] }
 
       it_behaves_like "a well behaved database query"
 
@@ -504,10 +483,10 @@ describe GreenplumConnection::Base, :database_integration do
 
       context "with SQL parameters" do
         let(:sql) { "SELECT :num AS answer" }
-        let(:parameters) {{:num => 3}}
+        let(:parameters) { {:num => 3} }
 
         it "succeeds" do
-          connection.fetch(sql, parameters).should == [{ :answer => 3 }]
+          connection.fetch(sql, parameters).should == [{:answer => 3}]
         end
       end
     end
@@ -575,7 +554,7 @@ describe GreenplumConnection::Base, :database_integration do
 
     describe "#execute" do
       let(:sql) { "SET search_path TO 'public'" }
-      let(:parameters) {{}}
+      let(:parameters) { {} }
       let(:subject) { connection.execute(sql) }
       let(:expected) { true }
 
@@ -599,6 +578,45 @@ describe GreenplumConnection::Base, :database_integration do
         end
 
         connection.table_exists?('test_transaction').should_not be_true
+      end
+    end
+  end
+
+  describe "GreenplumConnection::DatabaseError" do
+    let(:wrapped_exception) { StandardError.new }
+    let(:error) do
+      GreenplumConnection::DatabaseError.new.tap do |e|
+        e.wrapped_exception = wrapped_exception
+      end
+    end
+
+    describe "error_type" do
+      context "when the wrapped error has a sql state error code" do
+        before do
+          stub(wrapped_exception).get_sql_state { error_code }
+        end
+
+        context "when the error code is 3D000" do
+          let(:error_code) { '3D000' }
+
+          it "returns :DATABASE_MISSING" do
+            error.error_type.should == :DATABASE_MISSING
+          end
+        end
+
+        context "when the error code is 28P01" do
+          let(:error_code) { '28P01' }
+
+          it "returns :INVALID_PASSWORD" do
+            error.error_type.should == :INVALID_PASSWORD
+          end
+        end
+      end
+
+      context "when the wrapped error has no sql state error code" do
+        it "returns :GENERIC" do
+          error.error_type.should == :GENERIC
+        end
       end
     end
   end

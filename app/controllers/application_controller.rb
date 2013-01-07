@@ -18,8 +18,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
   rescue_from 'Gpdb::InstanceUnreachable', :with => :render_instance_unreachable_error
-  rescue_from 'GreenplumConnection::InstanceUnreachable', :with => :render_instance_unreachable_error
-  rescue_from 'GreenplumConnection::DatabaseError', :with => :render_unprocessable_entity
+  rescue_from 'GreenplumConnection::DatabaseError', :with => :render_database_error
   rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'MultipleResultsetQuery::QueryError', :with => :render_query_error
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
@@ -56,6 +55,10 @@ class ApplicationController < ActionController::Base
     present_errors({:fields => {:general =>
                                     { :GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
+  end
+
+  def render_database_error(e)
+    present_errors({:record => e.error_type, :message => e.message}, :status => :unprocessable_entity)
   end
 
   def render_missing_database_object(e)
