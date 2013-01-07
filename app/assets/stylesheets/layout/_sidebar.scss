@@ -216,16 +216,14 @@ body .ui-draggable-dragging {
                 }
 
                 li {
-                    height: 29px;
+                    height: 25px;
                     padding-top: 0px;
                     padding-bottom: 0px;
                     color: $color-text2;
                     cursor: pointer;
 
                     img {
-                        margin-top: 2px;
                         display: inline-block;
-                        vertical-align: middle;
                     }
 
                     .name, .details {

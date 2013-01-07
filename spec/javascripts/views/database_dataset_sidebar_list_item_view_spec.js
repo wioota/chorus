@@ -35,10 +35,10 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
 
         it("renders appropriate icon for each item in the collection", function() {
             var $lis = this.view.$("li img");
-            expect($lis.eq(0)).toHaveAttr("src", "/images/sandbox_table_medium.png");
-            expect($lis.eq(1)).toHaveAttr("src", "/images/sandbox_view_medium.png");
-            expect($lis.eq(2)).toHaveAttr("src", "/images/sandbox_table_medium.png");
-            expect($lis.eq(3)).toHaveAttr("src", "/images/sandbox_view_medium.png");
+            expect($lis.eq(0)).toHaveAttr("src", "/images/sandbox_table_small.png");
+            expect($lis.eq(1)).toHaveAttr("src", "/images/sandbox_view_small.png");
+            expect($lis.eq(2)).toHaveAttr("src", "/images/sandbox_table_small.png");
+            expect($lis.eq(3)).toHaveAttr("src", "/images/sandbox_view_small.png");
         });
 
         describe("clicking on a dataset item", function () {

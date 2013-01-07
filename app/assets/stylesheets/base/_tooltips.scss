@@ -92,7 +92,7 @@
 .tooltip-insert {
     @include tooltip(red, $selected-row-hover-background-color, $list-border-color);
     .ui-tooltip-content {
-        $height: 19px;
+        $height: 15px;
         height: $height;
         line-height: $height;
         font-weight: $semibold;
