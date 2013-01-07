@@ -702,10 +702,12 @@ describe("chorus.dialogs.Visualization", function() {
                     this.dialog.$("button.save").click();
                 });
 
-                it("does not display the 'save as workfile' option", function() {
+                it("only displays the 'Save to desktop' option", function() {
                     var menuItems = this.qtip.find("li a");
-                    expect(menuItems.length).toBe(2);
+                    expect(menuItems.length).toBe(1);
                     expect(menuItems.filter("[data-menu-name='save_as_workfile']")).not.toExist();
+                    expect(menuItems.filter("[data-menu-name='save_as_note']")).not.toExist();
+                    expect(menuItems.filter("[data-menu-name='save_to_desktop']")).toExist();
                 });
             });
 
