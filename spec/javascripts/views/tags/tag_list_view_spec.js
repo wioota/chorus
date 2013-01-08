@@ -1,10 +1,6 @@
 describe("chorus.views.TagList", function() {
     beforeEach(function() {
-        this.tags = new chorus.collections.TagSet([
-            {name: "IamTag"},
-            {name: "IamAlsoTag"}
-        ]);
-
+        this.tags = rspecFixtures.tagSet();
         this.view = new chorus.views.TagList({
             collection: this.tags
         });
@@ -36,7 +32,9 @@ describe("chorus.views.TagList", function() {
 
         it("should display all the tags", function() {
             _.each(this.tags.models, function(tag) {
-                expect(this.view.$el).toContainText(tag.get('name'));
+                var element = this.view.$('li[data-id=' + tag.get('id') + ']');
+                expect(element).toContainText(tag.get('name'));
+                expect(element).toContainText(tag.get('count') + " items");
             }, this);
         });
 

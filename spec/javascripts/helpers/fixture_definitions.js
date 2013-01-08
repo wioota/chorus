@@ -197,6 +197,10 @@ window.rspecFixtureDefinitions = {
         unique: [ "id" ]
     },
 
+    tagSet: {
+
+    },
+
     test: {
         model:   "User",
         unique:  [ "id" ],

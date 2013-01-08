@@ -1,7 +1,9 @@
 class TagPresenter < Presenter
   def to_hash
     {
-        :name => model.name
+        :id => model.id,
+        :name => model.name,
+        :count => model.taggings_count
     }
   end
 end

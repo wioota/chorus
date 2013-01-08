@@ -43,4 +43,14 @@ describe TagsController do
       end
     end
   end
+
+  describe "jasmine fixtures" do
+    def self.generate_tags_fixture
+      generate_fixture "tagSet.json" do
+        get :index
+      end
+    end
+
+    generate_tags_fixture
+  end
 end
