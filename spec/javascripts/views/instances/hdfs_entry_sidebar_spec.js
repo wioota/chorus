@@ -116,6 +116,16 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
                     expect(chorus.modal.model.get("path")).toBe("/");
                 });
+
+                context("when the entry fetch fails", function() {
+                    it("show the user an error", function() {
+                        spyOn(chorus, 'toast');
+                        this.view.$('a.external_table').click();
+                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity({"fields":{"contents":{"UNABLE_TO_READ":{}}}});
+
+                        expect(chorus.toast).toHaveBeenCalledWith("field_error.hdfs.contents.UNABLE_TO_READ");
+                    });
+                });
             });
 
             context("when file is in subdirectory", function() {

@@ -95,6 +95,15 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             });
             dialog.launchModal();
         });
+
+        this.bindings.add(hdfsFile, "unprocessableEntity", function() {
+            var fields = hdfsFile.serverErrors.fields;
+            _.forEach(fields, function(field, fieldName) {
+                _.forEach(field, function(_, message) {
+                    chorus.toast("field_error.hdfs." + fieldName + "." + message);
+                });
+            });
+        });
     },
 
     openDirectoryExternalTable: function(e) {

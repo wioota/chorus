@@ -99,7 +99,7 @@ class HdfsEntry < ActiveRecord::Base
       hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
       hdfs_query.show(path)
     rescue
-      raise ApiValidationError.new(:base, :generic, {:message => "Not able to read file contents"})
+      raise ApiValidationError.new(:contents, :unable_to_read)
     end
   end
 
