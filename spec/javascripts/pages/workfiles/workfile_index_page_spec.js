@@ -69,6 +69,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.server.lastFetchFor(this.page.workspace).failNotFound();
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
+
+        it("passes the multiSelect option to the list content details", function() {
+            expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
+        });
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {
@@ -95,7 +99,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         it("should have set up search correctly", function() {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("workfile.search_placeholder"));
-            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
 
             this.page.$("input.search").val("bar").trigger("keyup");
 

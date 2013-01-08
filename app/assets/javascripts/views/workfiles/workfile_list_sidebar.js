@@ -4,12 +4,17 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         '.tab_control': 'tabs'
     },
 
+    events: {
+        "click .deselect_all": 'deselectAll',
+        "click .edit_tags": 'editTags'
+    },
+
     setup:function () {
         this.tabs = new chorus.views.TabControl(["activity"]);
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:checked", this.workfileChecked, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
-        this.checkedWorkfiles = [];
+        this.checkedWorkfiles = new chorus.collections.Base();
     },
 
     postRender: function() {
@@ -77,5 +82,16 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     workfileChecked: function(checkedWorkfiles){
         this.checkedWorkfiles = checkedWorkfiles;
         this.render();
+    },
+
+    deselectAll: function(e) {
+        e.preventDefault();
+        chorus.PageEvents.broadcast("selectNone");
+    },
+
+    editTags: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.EditTags({collection: this.checkedWorkfiles});
+        dialog.launchModal();
     }
 });

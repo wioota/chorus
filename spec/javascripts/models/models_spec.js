@@ -1425,6 +1425,29 @@ describe("chorus.models.Abstract", function() {
             });
 
         });
+
+        describe("#saveTags", function() {
+            beforeEach(function() {
+                this.model1 = rspecFixtures.workfile.sql({tags: [
+                    {name: "tag1"},
+                    {name: "tag2"}
+                ]});
+                this.model2 = rspecFixtures.workfile.sql({tags: [
+                    {name: "tag1"},
+                    {name: "tag3"}
+                ]});
+                this.collection = rspecFixtures.workfileSet([
+                    this.model1.attributes, this.model2.attributes]);
+                spyOn(this.collection.at(0).tags(), "save");
+                spyOn(this.collection.at(1).tags(), "save");
+            });
+
+            it("saves tags for each model in the collection", function() {
+                this.collection.saveTags();
+                expect(this.collection.at(0).tags().save).toHaveBeenCalled();
+                expect(this.collection.at(1).tags().save).toHaveBeenCalled();
+            });
+        });
     });
 });
 

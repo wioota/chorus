@@ -8,7 +8,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
     postRender: function() {
         this.input = this.$('input');
-        var tags = this.model.tags().map(function(tag) {
+        var tags = this.tags().map(function(tag) {
             return tag.attributes;
         });
         this.input.textext({
@@ -18,7 +18,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             ajax: {
                 url: '/taggings',
                 dataType: 'json',
-                existingTagCollection: this.model.tags()
+                existingTagCollection: this.tags()
             },
             autocomplete: {
                 render: function(suggestion) {
@@ -43,8 +43,12 @@ chorus.views.TagBox = chorus.views.Base.extend({
         }
     },
 
+    tags: function() {
+        return this.model.tags();
+    },
+
     updateTags: function(e, data) {
-        this.model.tags().reset(data);
+        this.tags().reset(data);
     },
 
     textExtValidate: function(e, data) {
@@ -73,7 +77,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             valid = false;
         }
 
-        if (this.model.tags().containsTag(tagName)) {
+        if (this.tags().containsTag(tagName)) {
             valid = false;
         }
 
@@ -90,7 +94,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             hasTags: this.model.hasTags(),
-            tags: this.model.tags().models
+            tags: this.tags().models
         };
     },
 
@@ -105,7 +109,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             this.textext.tags().addTags([{name: inputText}]);
         }
 
-        this.model.tags().save();
+        this.tags().save();
 
         this.editing = false;
         this.render();

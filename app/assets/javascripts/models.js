@@ -421,6 +421,12 @@ chorus.collections = {
             this._sort(idx, "asc");
         },
 
+        saveTags: function(options) {
+            this.each(function (model) {
+               model.tags().save(options);
+            });
+        },
+
         _prepareModel: function() {
             var model = this._super("_prepareModel", arguments);
             this.attributes || (this.attributes = {});

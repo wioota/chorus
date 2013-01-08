@@ -31,7 +31,8 @@ describe("chorus.views.Workfile", function() {
 
     context("when the workfile has tags", function () {
         beforeEach(function () {
-            this.model.set({tags: [{name: "tag1"}, {name: "tag2"}]});
+            this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
+            this.view.render();
         });
 
         it("should show a list of tags", function () {

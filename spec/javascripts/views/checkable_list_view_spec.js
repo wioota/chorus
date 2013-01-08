@@ -86,25 +86,13 @@ describe("chorus.views.CheckableList", function() {
                 chorus.PageEvents.broadcast("selectAll");
             });
 
-            it("fetches the whole collection", function() {
-                var fetch = this.server.lastFetchAllFor(this.collection);
-                expect(fetch.url).toContainQueryParams({ per_page: 1000 });
+            it("checks all of the items", function() {
+                expect(this.view.$("input[type=checkbox]:checked").length).toBe(2);
+                expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
             });
 
-            describe("when the fetch completes", function() {
-                beforeEach(function() {
-                    expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
-                    this.server.completeFetchAllFor(this.view.selectedModels, this.collection.models);
-                });
-
-                it("checks all of the items", function() {
-                    expect(this.view.$("input[type=checkbox]:checked").length).toBe(2);
-                    expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
-                });
-
-                it("broadcasts the '{{eventName}}:checked' page event with a collection of all models", function() {
-                    expectItemChecked(this.collection.models);
-                });
+            it("broadcasts the '{{eventName}}:checked' page event with a collection of all models", function() {
+                expectItemChecked(this.collection.models);
             });
 
             context("when the selectNone page event is received", function() {

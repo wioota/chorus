@@ -3,9 +3,9 @@ chorus.collections.TagSet = chorus.collections.Base.extend({
     model: chorus.models.Tag,
     constructorName: "TagSet",
 
-    save: function() {
+    save: function(options) {
         var entityInfo = {entityId: this.attributes.entity.id, entityType: this.attributes.entity.entityType};
-        new chorus.models.BulkSaver({collection: this}).save(_.extend(entityInfo, {tagNames: this._tagNames()}));
+        new chorus.models.BulkSaver({collection: this}).save(_.extend(entityInfo, {tagNames: this._tagNames()}), options);
     },
 
     containsTag: function(tagName) {

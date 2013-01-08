@@ -191,7 +191,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
         });
 
         it('displays the number of selected workfiles', function() {
-            expect(this.view.$(".multiple_selection")).toContainText('2 Selected');
+            expect(this.view.$(".multiple_selection")).toContainText('2 items');
         });
 
         context('when only one is checked', function() {
@@ -216,6 +216,30 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         it("sets the local workfile as undefined", function() {
             expect(this.view.workfile).toBeFalsy();
+        });
+    });
+
+    context("when clicking deselect all link", function() {
+       it("broadcasts selectNone event", function() {
+           this.view.render();
+           spyOn(chorus.PageEvents, "broadcast");
+           this.view.$(".deselect_all").click();
+           expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+       });
+    });
+
+    describe("editing tags", function() {
+        beforeEach(function() {
+            this.modalSpy = stubModals();
+            this.view.render();
+            this.checkedWorkfiles = rspecFixtures.workfileSet();
+            chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
+        });
+
+        it("launches the edit tags dialog when you click the link", function() {
+            this.view.$(".edit_tags").click();
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+            expect(this.modalSpy.lastModal().collection).toBe(this.checkedWorkfiles);
         });
     });
 });

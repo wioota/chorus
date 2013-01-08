@@ -73,13 +73,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     selectAll: function() {
-        this.bindings.add(this.selectedModels, "reset", this.selectAllFetched);
-        this.selectedModels.fetchAll();
-    },
-
-    selectAllFetched: function() {
         this.$("> li input[type=checkbox]").prop("checked", true).change();
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },
 
     selectNone: function() {

@@ -19,15 +19,21 @@ body .ui-draggable-dragging {
         padding: 10px;
         background-color: $shaded-background-color;
 
+        .title {
+            @include heading-sidebar;
+        }
+
         .count {
-            font-size: 18px;
-            font-weight: $semibold;
-            display: inline-block;
+            @include secondary-text-small;
             margin-bottom: 8px;
         }
 
-        li a {
+        a {
             font-size: 12px;
+        }
+
+        ul.multiselect_actions {
+            margin-top: 15px;
             font-weight: $semibold;
         }
     }
