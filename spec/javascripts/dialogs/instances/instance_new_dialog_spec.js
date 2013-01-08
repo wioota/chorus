@@ -37,9 +37,10 @@
         });
 
         it("has select box for 'Greenplum Database', 'HDFS Cluster', and 'Gnip Account'", function () {
-            expect(this.dialog.$("select.data_sources option").length).toBe(3);
+            expect(this.dialog.$("select.data_sources option").length).toBe(4);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
-            expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.hdfs");
+            expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.oracle");
+            expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hdfs");
         });
 
         it("starts with no select box selected", function() {
@@ -106,6 +107,50 @@
                     expect(this.dialog.$("button.submit")).toBeDisabled();
                 });
 
+            });
+        });
+
+        describe("selecting the 'Oracle Database' option", function() {
+            beforeEach(function() {
+                this.dialog.$(".data_sources").val("register_existing_oracle").change();
+            });
+
+            it("un-collapses the 'register an existing instance'", function() {
+                expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
+                expect(this.dialog.$(".register_existing_oracle")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            it("uses a blank name as the default database name", function() {
+                expect(this.dialog.$(".register_existing_oracle input[name=dbName]").val()).toBe("");
+            });
+
+            describe("filling out the form", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_oracle input[name=name]").val("Instance_Name");
+                    this.dialog.$(".register_existing_oracle textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_oracle input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
+                    this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
+                    this.dialog.$(".register_existing_oracle input[name=dbPassword]").val("my_password");
+                    this.dialog.$(".register_existing_oracle input[name=dbName]").val("foo");
+
+                    this.dialog.$(".register_existing_oracle input[name=name]").trigger("change");
+                });
+
+                it("should return the values in fieldValues", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("Instance_Name");
+                    expect(values.description).toBe("Instance Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.port).toBe("1234");
+                    expect(values.dbUsername).toBe("user");
+                    expect(values.dbPassword).toBe("my_password");
+                    expect(values.dbName).toBe("foo");
+                });
             });
         });
 
@@ -331,6 +376,40 @@
                 expect(attrs.provision_type).toBe("register");
                 expect(attrs.description).toBe("Instance Description");
                 expect(attrs.maintenanceDb).toBe("foo");
+            });
+
+            testUpload();
+        });
+
+        context("using register existing oracle database", function() {
+            beforeEach(function() {
+                this.dialog.$("select.data_sources").val("register_existing_oracle").change();
+
+                var section = this.dialog.$(".register_existing_oracle");
+                section.find("input[name=name]").val("Instance_Name");
+                section.find("textarea[name=description]").val("Instance Description");
+                section.find("input[name=host]").val("foo.bar");
+                section.find("input[name=port]").val("1234");
+                section.find("input[name=dbUsername]").val("user");
+                section.find("input[name=dbPassword]").val("my_password");
+                section.find("input[name=dbName]").val("foo");
+                section.find("input[name=name]").trigger("change");
+
+                spyOn(chorus.models.OracleInstance.prototype, "save").andCallThrough();
+            });
+
+
+            it("calls save on the dialog's model", function() {
+                this.dialog.$("button.submit").click();
+                expect(this.dialog.model.save).toHaveBeenCalled();
+
+                var attrs = this.dialog.model.save.calls[0].args[0];
+
+                expect(attrs.dbPassword).toBe("my_password");
+                expect(attrs.name).toBe("Instance_Name");
+                expect(attrs.provision_type).toBe("register");
+                expect(attrs.description).toBe("Instance Description");
+                expect(attrs.dbName).toBe("foo");
             });
 
             testUpload();

@@ -63,6 +63,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
             return chorus.models.HadoopInstance;
         } else if (instanceType === "register_existing_gnip") {
             return chorus.models.GnipInstance;
+        } else if (instanceType === "register_existing_oracle") {
+            return chorus.models.OracleInstance;
         } else {
             return chorus.models.GpdbInstance;
         }

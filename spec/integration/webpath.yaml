@@ -51,3 +51,10 @@ hadoop_instance_db:
   port: 8020
   username: hadoop
   group_list: hadoop
+
+oracle_instance_db:
+  oracle_host: chorus-oracle.sf.pivotallabs.com
+  oracle_port: 1521
+  oracle_database: oracle
+  oracle_user: oracle
+  oracle_pass: oracle

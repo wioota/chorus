@@ -2,6 +2,7 @@
 <select class="data_sources" id="data_sources">
     <option selected name="select_one" value="">{{t "selectbox.select_one"}}</option>
     <option name="register_existing_greenplum" value="register_existing_greenplum">{{t "datasource.greenplum"}}</option>
+    <option name="register_existing_oracle" value="register_existing_oracle">{{t "datasource.oracle"}}</option>
     <option name="register_existing_hadoop"  value="register_existing_hadoop">{{t "datasource.hdfs"}}</option>
     {{#if gnipConfigured}} <option name="register_existing_gnip" value="register_existing_gnip">{{t "datasource.gnip"}}</option>{{/if}}
 </select>
@@ -34,6 +35,36 @@
             <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
         </label>
     </form>
+</div>
+
+<div class="data_sources_form collapsed register_existing_oracle">
+  <div class="description">{{t "instances.new_dialog.register_existing_oracle_help_text"}}</div>
+  <form>
+    <input type="hidden" name="provision_type" value="register" />
+    <label class="required">{{t "instances.dialog.instance_name"}}</label>
+    <input type="text" name="name" maxlength="64"/>
+
+    <label>{{t "instances.dialog.description"}}</label>
+    <textarea rows="3" name="description"/>
+
+    <label class="required" name="host">{{t "instances.dialog.host"}}</label>
+    <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+    <input type="text" name="host"/>
+    <input type="text" name="port"/>
+
+    <label class="required" name="dbName">{{t "instances.dialog.database_name"}}</label>
+    <input type="text" name="dbName" value=""/>
+
+    <label class="required db_username" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
+    <label class="required db_password" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
+    <input class="db_username" type="text" name="dbUsername" maxlength="256"/>
+    <input class="db_password" type="password" name="dbPassword" maxlength="256"/>
+
+    <input type="checkbox" name="shared" id="register_oracle_shared"/>
+    <label for="register_oracle_shared">{{t "instances.dialog.is_community_account"}}
+      <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
+    </label>
+  </form>
 </div>
 
 <div class="data_sources_form collapsed register_existing_hadoop">

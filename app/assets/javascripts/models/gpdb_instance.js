@@ -61,15 +61,12 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
     attrToLabel: {
         "dbUsername": "instances.dialog.database_account",
         "dbPassword": "instances.dialog.database_password",
-        "userName": "instances.dialog.hadoop_account",
-        "userGroups": "instances.dialog.hadoop_group_list",
         "name": "instances.dialog.instance_name",
         "host": "instances.dialog.host",
         "port": "instances.dialog.port",
         "databaseName": "instances.dialog.database_name",
         "maintenanceDb": "instances.dialog.maintenance_db",
-        "description": "instances.dialog.description",
-        "size": "instances.dialog.size"
+        "description": "instances.dialog.description"
     },
 
     isShared: function() {
