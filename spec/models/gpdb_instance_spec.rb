@@ -143,7 +143,7 @@ describe GpdbInstance do
     it "returns the gpdb instance owner's account" do
       owner = users(:owner)
       gpdb_instance = FactoryGirl.create(:gpdb_instance, :owner => owner)
-      owner_account = FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner)
+      owner_account = FactoryGirl.create(:instance_account, :instance => gpdb_instance, :owner => owner)
 
       gpdb_instance.owner_account.should == owner_account
     end
@@ -155,7 +155,7 @@ describe GpdbInstance do
     before(:each) do
       @gpdb_instance_owned = FactoryGirl.create :gpdb_instance, :owner => user
       @gpdb_instance_shared = FactoryGirl.create :gpdb_instance, :shared => true
-      @gpdb_instance_with_membership = FactoryGirl.create(:instance_account, :owner => user).gpdb_instance
+      @gpdb_instance_with_membership = FactoryGirl.create(:instance_account, :owner => user).instance
       @gpdb_instance_forbidden = FactoryGirl.create :gpdb_instance
     end
 
@@ -271,7 +271,7 @@ describe GpdbInstance do
 
     context "shared gpdb instance" do
       let!(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }
-      let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner_id => gpdb_instance.owner.id }
+      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => gpdb_instance, :owner_id => gpdb_instance.owner.id }
 
       it "should return the same account for everyone" do
         gpdb_instance.account_for_user!(user).should == owner_account
@@ -281,8 +281,8 @@ describe GpdbInstance do
 
     context "individual gpdb instance" do
       let(:gpdb_instance) { gpdb_instances(:owners) }
-      let!(:owner_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
-      let!(:user_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
+      let!(:owner_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
+      let!(:user_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
 
       it "should return the account for the user" do
         gpdb_instance.account_for_user!(gpdb_instance.owner).should == owner_account
@@ -319,7 +319,7 @@ describe GpdbInstance do
   describe "refresh_databases", :database_integration => true do
     context "with database integration", :database_integration => true do
       let(:account_with_access) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_instance) { account_with_access.gpdb_instance }
+      let(:gpdb_instance) { account_with_access.instance }
       let(:database) { InstanceIntegration.real_database }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_dataset_permissions" do
@@ -434,10 +434,8 @@ describe GpdbInstance do
   describe "#databases", :database_integration => true do
     let(:account) { InstanceIntegration.real_gpdb_account }
 
-    subject { account.gpdb_instance }
-
     it "should not include the 'template0' database" do
-      subject.databases.map(&:name).should_not include "template0"
+      account.instance.databases.map(&:name).should_not include "template0"
     end
   end
 

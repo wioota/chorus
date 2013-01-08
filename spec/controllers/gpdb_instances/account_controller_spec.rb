@@ -115,9 +115,9 @@ describe GpdbInstances::AccountController do
       end
 
       it "deletes the current users account for this gpdb_instance" do
-        InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
         delete :destroy, :gpdb_instance_id => gpdb_instance.id
-        InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
       end
     end
 

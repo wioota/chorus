@@ -156,7 +156,7 @@ describe Workspace do
       end
 
       context "when the user has an instance account" do
-        let!(:account) { FactoryGirl.create(:instance_account, :gpdb_instance => schema.database.gpdb_instance, :owner => user) }
+        let!(:account) { FactoryGirl.create(:instance_account, :instance => schema.database.gpdb_instance, :owner => user) }
 
         context "when the sandbox has tables" do
           before do

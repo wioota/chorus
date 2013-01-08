@@ -11,7 +11,7 @@ class GpdbInstance < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :gpdb_instance
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id"
   has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
@@ -66,7 +66,7 @@ class GpdbInstance < ActiveRecord::Base
   def self.accessible_to(user)
     where('gpdb_instances.shared OR gpdb_instances.owner_id = :owned OR gpdb_instances.id IN (:with_membership)',
           :owned => user.id,
-          :with_membership => user.instance_accounts.pluck(:gpdb_instance_id)
+          :with_membership => user.instance_accounts.pluck(:instance_id)
     )
   end
 

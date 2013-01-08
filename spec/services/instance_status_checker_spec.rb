@@ -142,9 +142,9 @@ describe InstanceStatusChecker do
   describe "GPDB Instances:" do
     let(:user1) { FactoryGirl::create :user }
 
-    let(:instance_account1) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance1, :owner => user1 }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance2, :owner => user1 }
-    let(:instance_account3) { FactoryGirl::create :instance_account, :gpdb_instance => gpdb_instance3, :owner => user1 }
+    let(:instance_account1) { FactoryGirl::create :instance_account, :instance => gpdb_instance1, :owner => user1 }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :instance => gpdb_instance2, :owner => user1 }
+    let(:instance_account3) { FactoryGirl::create :instance_account, :instance => gpdb_instance3, :owner => user1 }
 
     let(:gpdb_instance1) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
     let(:gpdb_instance2) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
@@ -206,7 +206,7 @@ describe InstanceStatusChecker do
 
       context "Exception occur while trying to connect to the database" do
         before do
-          stub_gpdb_fail(instance_account1)
+          stub_gpdb_fail(instance_account1.instance)
 
           stub_gpdb(instance_account2,
                     "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]

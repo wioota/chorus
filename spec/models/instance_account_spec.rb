@@ -15,8 +15,8 @@ describe InstanceAccount do
     it { should belong_to :owner }
     it { should validate_presence_of :owner }
 
-    it { should belong_to :gpdb_instance }
-    it { should validate_presence_of :gpdb_instance }
+    it { should belong_to :instance }
+    it { should validate_presence_of :instance }
   end
 
   describe "password encryption in the rails database" do
@@ -50,7 +50,7 @@ describe InstanceAccount do
     context "creating a new account" do
       it "should reindex" do
         mock(instance).refresh_databases_later
-        InstanceAccount.create!({:owner => user, :gpdb_instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
+        InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
       end
     end
 
@@ -58,7 +58,7 @@ describe InstanceAccount do
       let(:user) { users(:the_collaborator) }
       let(:account) { instance.account_for_user(user) }
       it "should reindex" do
-        mock(account.gpdb_instance).refresh_databases_later
+        mock(account.instance).refresh_databases_later
         account.destroy
       end
     end

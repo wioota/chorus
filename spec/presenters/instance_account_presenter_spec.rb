@@ -9,7 +9,7 @@ describe InstanceAccountPresenter, :type => :view do
 
     @account = FactoryGirl.create :instance_account
     @account.owner = @user
-    @account.gpdb_instance = @gpdb_instance
+    @account.instance = @gpdb_instance
 
     @presenter = InstanceAccountPresenter.new(@account, view)
   end

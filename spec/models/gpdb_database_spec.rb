@@ -40,7 +40,7 @@ describe GpdbDatabase do
 
   describe '#refresh' do
     let(:gpdb_instance) { FactoryGirl.build_stubbed(:gpdb_instance) }
-    let(:account) { FactoryGirl.build_stubbed(:instance_account, :gpdb_instance => gpdb_instance) }
+    let(:account) { FactoryGirl.build_stubbed(:instance_account, :instance => gpdb_instance) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
     let(:connection) { Object.new }
 
@@ -84,7 +84,7 @@ describe GpdbDatabase do
 
       it "marks them as non-stale" do
         GpdbDatabase.refresh(account)
-        account.gpdb_instance.databases.each { |database|
+        account.instance.databases.each { |database|
           database.reload.should_not be_stale
         }
       end

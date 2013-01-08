@@ -8,8 +8,8 @@ describe GpdbInstances::MembersController do
   let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :owner => instance_owner }
 
   describe "#index" do
-    let!(:account1) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "instance_owner", :owner => instance_owner }
-    let!(:account2) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "joe", :owner => joe }
+    let!(:account1) { FactoryGirl.create :instance_account, :instance => gpdb_instance, :db_username => "instance_owner", :owner => instance_owner }
+    let!(:account2) { FactoryGirl.create :instance_account, :instance => gpdb_instance, :db_username => "joe", :owner => joe }
 
     before do
       log_in instance_owner
@@ -29,7 +29,7 @@ describe GpdbInstances::MembersController do
 
     describe "pagination" do
       let!(:bob) { FactoryGirl.create :user }
-      let!(:account3) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "bob", :owner => bob }
+      let!(:account3) { FactoryGirl.create :instance_account, :instance => gpdb_instance, :db_username => "bob", :owner => bob }
 
       it "paginates the collection" do
         get :index, :gpdb_instance_id => gpdb_instance.to_param, :page => 1, :per_page => 2
@@ -92,7 +92,7 @@ describe GpdbInstances::MembersController do
           rehydrated_account.db_username.should == "lenny"
           rehydrated_account.db_password.should == "secret"
           rehydrated_account.owner.should == admin
-          rehydrated_account.gpdb_instance.should == gpdb_instance
+          rehydrated_account.instance.should == gpdb_instance
         end
       end
     end
@@ -122,7 +122,7 @@ describe GpdbInstances::MembersController do
           rehydrated_account.db_username.should == "lenny"
           rehydrated_account.db_password.should == "secret"
           rehydrated_account.owner.should == owner
-          rehydrated_account.gpdb_instance.should == gpdb_instance
+          rehydrated_account.instance.should == gpdb_instance
         end
       end
     end
@@ -160,7 +160,7 @@ describe GpdbInstances::MembersController do
   end
 
   describe "#update" do
-    let(:account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => instance_owner }
+    let(:account) { FactoryGirl.create :instance_account, :instance => gpdb_instance, :owner => instance_owner }
 
     before do
       stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
@@ -259,7 +259,7 @@ describe GpdbInstances::MembersController do
 
   describe "#destroy" do
     before do
-      @joe_account = FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => joe
+      @joe_account = FactoryGirl.create :instance_account, :instance => gpdb_instance, :owner => joe
     end
 
     context "when the current user is the instance's owner" do

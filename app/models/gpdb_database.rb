@@ -30,7 +30,7 @@ class GpdbDatabase < ActiveRecord::Base
   SQL
 
   def self.refresh(account)
-    gpdb_instance = account.gpdb_instance
+    gpdb_instance = account.instance
     results = []
     gpdb_instance.connect_with(account).databases.map do |name|
       next if new(:name => name).invalid?
@@ -68,7 +68,7 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def with_gpdb_connection(account, &block)
-    Gpdb::ConnectionBuilder.connect!(account.gpdb_instance, account, name, &block)
+    Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
   rescue ActiveRecord::JDBCError => e
     if e.message =~ /database.*does not exist/
       raise GreenplumConnection::ObjectNotFound, "The query could not be completed. Error: #{e.message}"

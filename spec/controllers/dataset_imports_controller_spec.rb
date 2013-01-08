@@ -344,8 +344,8 @@ describe DatasetImportsController do
 
     let(:gpdb_params) do
       {
-          :host => instance_account.gpdb_instance.host,
-          :port => instance_account.gpdb_instance.port,
+          :host => instance_account.instance.host,
+          :port => instance_account.instance.port,
           :database => database.name,
           :username => instance_account.db_username,
           :password => instance_account.db_password,

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Gpdb::InstanceOwnership do
   let!(:old_owner) { gpdb_instance.owner }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => old_owner) }
+  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => gpdb_instance, :owner => old_owner) }
   let!(:new_owner) { FactoryGirl.create(:user) }
 
   describe ".change_owner(instance, new_owner)" do
@@ -28,7 +28,7 @@ describe Gpdb::InstanceOwnership do
 
       context "when switching to a user with an existing account" do
         before do
-          FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => new_owner)
+          FactoryGirl.create(:instance_account, :instance => gpdb_instance, :owner => new_owner)
         end
 
         it "switches ownership of instance" do

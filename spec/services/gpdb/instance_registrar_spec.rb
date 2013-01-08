@@ -80,7 +80,7 @@ describe Gpdb::InstanceRegistrar do
       }.to change { InstanceAccount.count }.by(1)
 
       cached_instance = GpdbInstance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
-      cached_instance_account = InstanceAccount.find_by_owner_id_and_gpdb_instance_id(owner.id, cached_instance.id)
+      cached_instance_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
       cached_instance_account.db_username.should == valid_input_attributes[:db_username]
       cached_instance_account.db_password.should == valid_input_attributes[:db_password]
@@ -111,7 +111,7 @@ describe Gpdb::InstanceRegistrar do
 
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
     let(:cached_instance) { FactoryGirl.create(:gpdb_instance, valid_instance_attributes.merge(:owner => owner)) }
-    let!(:cached_instance_account) { FactoryGirl.create(:instance_account, :db_username => "bob", :owner => owner, :gpdb_instance => cached_instance) }
+    let!(:cached_instance_account) { FactoryGirl.create(:instance_account, :db_username => "bob", :owner => owner, :instance => cached_instance) }
     let(:updated_attributes) { valid_input_attributes.merge(:name => new_name) }
     let(:new_name) { "new_name" }
 
@@ -138,7 +138,7 @@ describe Gpdb::InstanceRegistrar do
 
     it "keeps the existing credentials" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
-      owners_account = InstanceAccount.find_by_owner_id_and_gpdb_instance_id(owner.id, updated_instance.id)
+      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
       owners_account.db_username.should == "bob"
       owners_account.db_password.should == "secret"
     end

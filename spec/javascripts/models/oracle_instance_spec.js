@@ -36,7 +36,7 @@ describe("chorus.models.OracleInstance", function() {
                     dbPassword: "whatever",
                     port: "1234",
                     dbName: "foo",
-                    provision_type: "register"
+                    provision_type: "register" //FIXME
                 };
             });
 
