@@ -43,6 +43,8 @@ class WorkspaceDatasetsController < ApplicationController
       dataset =  datasets.find(params[:id])
     end
 
+    dataset.verify_in_source(current_user)
+
     present dataset, :presenter_options => { :workspace => workspace }
   end
 

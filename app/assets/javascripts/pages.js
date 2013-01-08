@@ -21,22 +21,22 @@ chorus.pages.Bare = chorus.views.Bare.extend({
     },
 
     unprocessableEntity: function(model) {
-        var prefix = "unprocessable_entity.";
-        if (model.serverErrors) {
-            _.each(model.serverErrors, function(error, key) {
-                if(key === 'record') {
-                    var code = prefix + _.underscored(error);
-                    chorus.pageOptions = {
-                        title: t(code + ".title"),
-                        text: t(code + ".text")
-                    };
-                } else {
-                    chorus.pageOptions = {
-                        title: t(prefix + "unidentified_error.title"),
-                        text: error
-                    };
-                }
-            });
+        var errors = model.serverErrors;
+        if (errors) {
+            var undefinedErrorTitle = "unprocessable_entity.unidentified_error.title";
+            if(errors.record) {
+                var code = "record_error." + errors.record;
+                var title = I18n.lookup(code + "_title");
+                chorus.pageOptions = {
+                    title: title ? title : t(undefinedErrorTitle),
+                    text: t(code, errors)
+                };
+            } else {
+                chorus.pageOptions = {
+                    title: t(undefinedErrorTitle),
+                    text: errors.message
+                };
+            }
         }
 
         Backbone.history.loadUrl("/unprocessableEntity");

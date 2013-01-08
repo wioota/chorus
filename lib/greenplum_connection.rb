@@ -5,14 +5,17 @@ module GreenplumConnection
 
   DatabaseError = Sequel::DatabaseError
   class DatabaseError
-    ERROR_MAP = {
-        '3D000' => :DATABASE_MISSING,
-        '28P01' => :INVALID_PASSWORD
-    }
 
     def error_type
       error_code = wrapped_exception && wrapped_exception.respond_to?(:get_sql_state) && wrapped_exception.get_sql_state
-      ERROR_MAP[error_code] || :GENERIC
+      case error_code
+        when '28P01' then :INVALID_PASSWORD
+        when '3D000' then :DATABASE_MISSING
+        when '53300' then :TOO_MANY_CONNECTIONS
+        when /42.../ then :INVALID_STATEMENT
+        when /08.../ then :INSTANCE_UNREACHABLE
+        else :GENERIC
+      end
     end
   end
 

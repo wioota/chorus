@@ -611,6 +611,30 @@ describe GreenplumConnection::Base, :database_integration do
             error.error_type.should == :INVALID_PASSWORD
           end
         end
+
+        context "when the error code is 53300" do
+          let(:error_code) { '53300' }
+
+          it "returns :TOO_MANY_CONNECTIONS" do
+            error.error_type.should == :TOO_MANY_CONNECTIONS
+          end
+        end
+
+        context "when the error code is 08NNN" do
+          let(:error_code) { '08123' }
+
+          it "returns :INSTANCE_UNREACHABLE" do
+            error.error_type.should == :INSTANCE_UNREACHABLE
+          end
+        end
+
+        context "when the error code is 42NNN" do
+          let(:error_code) { '42123' }
+
+          it "returns :INVALID_STATEMENT" do
+            error.error_type.should == :INVALID_STATEMENT
+          end
+        end
       end
 
       context "when the wrapped error has no sql state error code" do

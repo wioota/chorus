@@ -104,7 +104,7 @@ class GpdbInstance < ActiveRecord::Base
       database_accounts = accounts.where(:db_username => db_usernames)
       if database.instance_accounts.sort != database_accounts.sort
         database.instance_accounts = database_accounts
-        QC.enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id) if database.datasets.count > 0
+        QC.enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", database.id) if database.datasets.count > 0
       end
       found_databases << database
     end

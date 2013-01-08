@@ -320,18 +320,18 @@ describe GpdbInstance do
       let(:gpdb_instance) { account_with_access.gpdb_instance }
       let(:database) { InstanceIntegration.real_database }
 
-      it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindexDatasetPermissions" do
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything)
+      it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_dataset_permissions" do
+        mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", database.id)
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", anything)
         database.instance_accounts = []
         database.instance_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_instance.refresh_databases
         database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
-      it "does not enqueue GpdbDatabase.reindexDatasetPermissions if the instance accounts for a database have not changed" do
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything)
-        dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", database.id)
+      it "does not enqueue GpdbDatabase.reindex_dataset_permissions if the instance accounts for a database have not changed" do
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", anything)
+        dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", database.id)
         gpdb_instance.refresh_databases
       end
     end
@@ -357,7 +357,7 @@ describe GpdbInstance do
       end
 
       it "should not index databases that were just created" do
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindexDatasetPermissions", anything) do |method, id|
+        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", anything) do |method, id|
           GpdbDatabase.find(id).name.should_not == 'something_new'
         end
         gpdb_instance.refresh_databases

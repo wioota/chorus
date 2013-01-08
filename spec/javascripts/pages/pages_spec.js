@@ -104,8 +104,8 @@ describe("chorus.pages.Base", function() {
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.instance_overloaded.title");
-                    expect(chorus.pageOptions.text).toMatchTranslation("unprocessable_entity.instance_overloaded.text");
+                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.INSTANCE_OVERLOADED_title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.INSTANCE_OVERLOADED");
                 });
             });
 
@@ -113,7 +113,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { errors: "Bad things happened." };
+                    this.model.serverErrors = { message: "Bad things happened." };
                     this.page.dependOn(this.model);
                 });
 
@@ -217,6 +217,41 @@ describe("chorus.pages.Base", function() {
                 it("navigates to the UnprocessableEntityPage if requiredResource fetch returns 422", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unprocessableEntity");
+                });
+
+                context("when the errors include a record key", function() {
+                    beforeEach(function() {
+                        this.resource.serverErrors = {record: 'TOO_MANY_CONNECTIONS', message: 'something is broken'};
+                        this.resource.trigger("unprocessableEntity");
+                    });
+
+                    it("sets the pageOptions to the correct translation", function() {
+                        expect(chorus.pageOptions.text).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS');
+                        expect(chorus.pageOptions.title).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS_title');
+                    });
+                });
+
+                context("when the error key does not have a title", function() {
+                    beforeEach(function() {
+                        this.resource.serverErrors = {record: 'FAKE_ERROR', message: 'something is broken'};
+                        this.resource.trigger("unprocessableEntity");
+                    });
+
+                    it("sets the pageOptions title to a generic message", function() {
+                        expect(chorus.pageOptions.title).toMatchTranslation('unprocessable_entity.unidentified_error.title');
+                    });
+                });
+
+                context("when the errors do not have a record key", function() {
+                    beforeEach(function() {
+                        this.resource.serverErrors = {message: 'something is broken'};
+                        this.resource.trigger("unprocessableEntity");
+                    });
+
+                    it("sets the pageOptions to be the error message", function() {
+                        expect(chorus.pageOptions.text).toEqual('something is broken');
+                        expect(chorus.pageOptions.title).toMatchTranslation('unprocessable_entity.unidentified_error.title');
+                    });
                 });
             });
         });

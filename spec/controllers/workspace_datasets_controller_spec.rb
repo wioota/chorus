@@ -24,9 +24,11 @@ describe WorkspaceDatasetsController do
       stub(workspace).dataset_count { 42 }
       any_instance_of(GpdbTable) do |table|
         stub(table).accessible_to(user) { true }
+        stub(table).verify_in_source
       end
       any_instance_of(GpdbView) do |view|
         stub(view).accessible_to(user) { true }
+        stub(view).verify_in_source
       end
     end
 
@@ -175,6 +177,18 @@ describe WorkspaceDatasetsController do
           generate_fixture "workspaceDataset/sourceView.json" do
             get :show, :id => source_view.to_param, :workspace_id => workspace.to_param
           end
+        end
+      end
+
+      context 'when the dataset does not exist in greenplum' do
+        before do
+          any_instance_of(GpdbTable) do |table|
+            mock(table).verify_in_source(anything)
+          end
+        end
+
+        it 'calls verify_in_source' do
+          get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
         end
       end
     end
