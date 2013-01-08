@@ -106,17 +106,6 @@ describe("chorus.views.TagBox", function() {
                 input = view.$('input.tag_editor');
             });
 
-            function enterTag(tagName) {
-                var keyup = $.Event('keyup');
-                keyup.keyCode = $.ui.keyCode.ENTER;
-                var enter = $.Event('enterKeyPress');
-                enter.keyCode = $.ui.keyCode.ENTER;
-                input.val(tagName);
-                input.focus();
-                input.trigger(enter);
-                input.trigger(keyup);
-            }
-
             it('shows the x character on the tags', function() {
                 expect(view.$(".text-remove").eq(0)).toExist();
             });
@@ -124,7 +113,7 @@ describe("chorus.views.TagBox", function() {
             describe("when a valid tag is entered", function() {
                 beforeEach(function() {
                     var tagName = _.repeat("a", 100);
-                    enterTag(tagName);
+                    enterTag(view, tagName);
                 });
 
                 it("creates a new tag", function() {
@@ -142,7 +131,7 @@ describe("chorus.views.TagBox", function() {
 
             describe("when an empty tag is entered", function() {
                 beforeEach(function() {
-                    enterTag("");
+                    enterTag(view, "");
                 });
 
                 it("should not create a new tag", function() {
@@ -153,7 +142,7 @@ describe("chorus.views.TagBox", function() {
 
             describe("when a tag with only white spaces is entered", function() {
                 beforeEach(function() {
-                    enterTag("       ");
+                    enterTag(view, "       ");
                 });
 
                 it("should not create a new tag", function() {
@@ -166,7 +155,7 @@ describe("chorus.views.TagBox", function() {
                 var longString;
                 beforeEach(function() {
                     longString = _.repeat("a", 101);
-                    enterTag(longString);
+                    enterTag(view, longString);
                 });
 
                 it("does not create a new tag", function() {
@@ -184,14 +173,14 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it("entering a valid tag clears the error class", function() {
-                    enterTag("new-tag");
+                    enterTag(view, "new-tag");
                     expect(input).not.toHaveClass("has_error");
                 });
             });
 
             describe("when a duplicate tag is entered", function() {
                 beforeEach(function() {
-                    enterTag("alpha");
+                    enterTag(view, "alpha");
                 });
 
                 it("does not create the duplicate tag", function() {

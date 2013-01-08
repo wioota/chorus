@@ -17,17 +17,13 @@ describe("chorus.views.TagBoxCollection", function() {
         this.collection = rspecFixtures.workfileSet([
             this.model1.attributes,
             this.model2.attributes]);
+        this.collection.each(function(model){
+            model.editableTags = model.tags().clone();
+        });
+
         view = new chorus.views.TagBoxCollection({collection: this.collection});
         view.render();
     });
-
-    function enterTag(tagName) {
-        var enter = $.Event('enterKeyPress');
-        var input = view.$("input");
-        input.val(tagName);
-        input.focus();
-        input.trigger(enter);
-    }
 
     it("displays all the relevant tags", function() {
         expect(view.$(".text-tags")).toContainText("tag1");
@@ -37,16 +33,14 @@ describe("chorus.views.TagBoxCollection", function() {
     });
 
     it("adds a tag to all models when you add a tag", function() {
-        enterTag("foo");
-        expect(this.collection.at(0).tags().pluck("name")).toEqual(["tag1", "tag2", "foo"]);
-        expect(this.collection.at(1).tags().pluck("name")).toEqual(["tag1", "tag3", "foo"]);
+        enterTag(view, "foo");
+        expect(this.collection.at(0).editableTags.pluck("name")).toEqual(["tag1", "tag2", "foo"]);
+        expect(this.collection.at(1).editableTags.pluck("name")).toEqual(["tag1", "tag3", "foo"]);
     });
 
     it("removes a tag from all models when you remove a tag", function() {
         view.$(".text-remove:eq(0)").click();
-        expect(this.collection.at(0).tags().pluck("name")).toEqual(["tag2"]);
-        expect(this.collection.at(1).tags().pluck("name")).toEqual(["tag3"]);
+        expect(this.collection.at(0).editableTags.pluck("name")).toEqual(["tag2"]);
+        expect(this.collection.at(1).editableTags.pluck("name")).toEqual(["tag3"]);
     });
-
-
 });

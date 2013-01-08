@@ -25,7 +25,7 @@ chorus.views.TagBoxCollection = chorus.views.TagBox.extend({
             // add
             var added = _.last(data);
             this.collection.each(function(model) {
-               model.tags().add(added);
+               model.editableTags.add(added);
             });
             this.resetTagCache();
         } else if(data.length < this.tagCache.length) {
@@ -35,8 +35,8 @@ chorus.views.TagBoxCollection = chorus.views.TagBox.extend({
                return !_.contains(tagNames, tagName);
             });
             this.collection.each(function(model) {
-                var missingTag = model.tags().where({name: missing });
-                model.tags().remove(missingTag);
+                var missingTag = model.editableTags.where({name: missing });
+                model.editableTags.remove(missingTag);
             });
             this.resetTagCache();
         }
@@ -44,12 +44,25 @@ chorus.views.TagBoxCollection = chorus.views.TagBox.extend({
 
     tagNames: function () {
         var tagNames = this.collection.map(function(model) {
-            return model.tags().pluck("name");
+            return model.editableTags.pluck("name");
         });
         return _.uniq(_.flatten(tagNames));
     },
 
     resetTagCache: function() {
         this.tagCache = this.tagNames();
+    },
+
+    finishLastTag: function() {
+        var lastTagValid = true;
+        var inputText = this.input.val().trim();
+        if(inputText) {
+            lastTagValid = this.validateTag(inputText);
+
+            if(lastTagValid) {
+                this.textext.tags().addTags([{name: inputText}]);
+            }
+        }
+        return lastTagValid;
     }
 });

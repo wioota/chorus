@@ -545,6 +545,18 @@
         spyOn($.fn, "cleditor").andReturn([0]);
     };
 
+
+    window.enterTag = function(view, tagName) {
+        var keyup = $.Event('keyup');
+        keyup.keyCode = $.ui.keyCode.ENTER;
+        var enter = $.Event('enterKeyPress');
+        var input = view.$("input");
+        input.val(tagName);
+        input.focus();
+        input.trigger(enter);
+        input.trigger(keyup);
+    };
+
     if ($.browser.msie && !window['con' + 'sole']) {
         (function(F, i, r, e, b, u, g, L, I, T, E) {
             if (F.getElementById(b))return;

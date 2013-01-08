@@ -28,11 +28,18 @@ describe("chorus.dialogs.EditTags", function() {
         beforeEach(function() {
             spyOn(this.collection, "saveTags").andCallThrough();
             spyOn(this.dialog, "closeModal");
+            enterTag(this.dialog, "new_tag");
             this.dialog.$("button.submit").click();
         });
 
         it("saves tags for each model", function() {
             expect(this.collection.saveTags).toHaveBeenCalled();
+        });
+
+        it("includes the new tag", function() {
+            this.collection.each(function(model) {
+                expect(model.tags().pluck("name")).toContain("new_tag");
+            });
         });
 
         it("starts the loading spinner", function() {
@@ -51,12 +58,72 @@ describe("chorus.dialogs.EditTags", function() {
 
         it("closes the dialog and triggers 'change' on the collection models when all of the saves succeed", function() {
             spyOnEvent(this.collection.at(0), "change");
-            _.each(this.server.creates(), function(create) {create.succeed();});
+            _.each(this.server.creates(), function(create) {
+                create.succeed();
+            });
             expect(this.dialog.closeModal).toHaveBeenCalled();
         });
 
-        it("does something when the saves fail", function() {
+        context("when the save fails", function() {
+            beforeEach(function() {
+                var savedModel = this.collection.last();
+                spyOn(this.dialog, "showErrors");
+                this.server.lastCreateFor(savedModel.tags()).failForbidden({message: "Forbidden"});
+            });
 
+            it("shows an error message", function() {
+                expect(this.dialog.showErrors).toHaveBeenCalledWith(this.collection.last().tags());
+            });
+
+            it("stops the spinner", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
+        });
+
+    });
+
+    describe("clicking save before enter is pressed on the currently edited tag", function() {
+        context("when the last tag is valid", function() {
+            beforeEach(function() {
+                this.dialog.$("input").val("unentered_tag");
+                this.dialog.$("button.submit").click();
+            });
+
+            it("includes that last tag", function() {
+                this.collection.each(function(model) {
+                    expect(model.tags().pluck("name")).toContain("unentered_tag");
+                });
+            });
+        });
+
+        context("when the last tag is invalid (because it already exists)", function() {
+            beforeEach(function() {
+                this.tooLongTag = _.repeat("a", 101);
+                this.dialog.$("input").val(this.tooLongTag);
+                this.dialog.$("button.submit").click();
+            });
+
+            it("does not include that last tag", function() {
+                this.collection.each(function(model) {
+                    expect(model.tags().pluck("name")).not.toContain(this.tooLongTag);
+                });
+            });
+
+            it("should not do post", function() {
+                expect(this.server.lastCreate()).toBeUndefined();
+            });
+        });
+    });
+
+    describe("cancel/x", function() {
+        beforeEach(function() {
+            enterTag(this.dialog, "bad_tag");
+            this.dialog.$("a.close").click();
+        });
+
+        it("resets the tags on the models to their original values", function() {
+            expect(this.collection.at(0).tags().pluck("name")).toEqual(["tag1", "tag2"]);
+            expect(this.collection.at(1).tags().pluck("name")).toEqual(["tag1", "tag3"]);
         });
     });
 });
