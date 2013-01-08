@@ -87,7 +87,7 @@ chorus.views.Header = chorus.views.Base.extend({
             var $select = $("<select class='switch_user'></select>");
 
             $select.append("<option>Switch to user..</option>");
-            this.users.each(function(user) {
+            self.users.each(function(user) {
                 $select.append("<option value=" + Handlebars.Utils.escapeExpression(user.get("username")) + ">" + Handlebars.Utils.escapeExpression(user.displayName()) + "</option>");
             });
 
