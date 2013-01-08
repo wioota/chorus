@@ -27,6 +27,12 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets/:id" do
+    before do
+      any_instance_of(GpdbTable) do |table|
+        stub(table).verify_in_source
+      end
+    end
+
     parameter :workspace_id, "Id of a workspace"
     parameter :id, "Id of a dataset"
 
