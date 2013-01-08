@@ -1,22 +1,5 @@
 chorus.collections.TagSet = chorus.collections.Base.extend({
-    urlTemplate: 'taggings',
+    urlTemplate: 'tags',
     model: chorus.models.Tag,
-    constructorName: "TagSet",
-
-    save: function(options) {
-        var entityInfo = {entityId: this.attributes.entity.id, entityType: this.attributes.entity.entityType};
-        new chorus.models.BulkSaver({collection: this}).save(_.extend(entityInfo, {tagNames: this._tagNames()}), options);
-    },
-
-    containsTag: function(tagName) {
-        return this.any(function(tag) {
-            return tag.name().toLowerCase() === tagName.toLowerCase();
-        });
-    },
-
-    _tagNames: function() {
-        return this.map(function(tag) {
-            return tag.name();
-        });
-    }
+    constructorName: "TagSet"
 });

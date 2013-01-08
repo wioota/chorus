@@ -1,6 +1,6 @@
-describe("chorus.Mixins.Tags", function() {
+describe("chorus.Mixins.Taggable", function() {
     beforeEach(function() {
-        var modelClass = Backbone.Model.include(chorus.Mixins.Tags);
+        var modelClass = Backbone.Model.include(chorus.Mixins.Taggable);
         this.model = new modelClass();
     });
 
@@ -15,9 +15,9 @@ describe("chorus.Mixins.Tags", function() {
                     this.model.unset('tags');
                 });
 
-                it("returns an empty TagSet", function() {
+                it("returns an empty TaggingSet", function() {
                     var tags = this.model.tags();
-                    expect(tags).toBeA(chorus.collections.TagSet);
+                    expect(tags).toBeA(chorus.collections.TaggingSet);
                     expect(tags.length).toEqual(0);
                 });
             });
@@ -30,9 +30,9 @@ describe("chorus.Mixins.Tags", function() {
                     ]);
                 });
 
-                it("creates a TagSet with the tags objects", function() {
+                it("creates a TaggingSet with the tags objects", function() {
                     var tags = this.model.tags();
-                    expect(tags).toBeA(chorus.collections.TagSet);
+                    expect(tags).toBeA(chorus.collections.TaggingSet);
                     expect(tags.length).toEqual(2);
                     expect(tags.pluck('name')).toEqual(['foo', 'bar']);
                 });
@@ -84,9 +84,9 @@ describe("chorus.Mixins.Tags", function() {
                 ]);
             });
 
-            it("returns an empty TagSet", function() {
+            it("returns an empty TaggingSet", function() {
                 var tags = this.model.tags();
-                expect(tags).toBeA(chorus.collections.TagSet);
+                expect(tags).toBeA(chorus.collections.TaggingSet);
                 expect(tags.length).toEqual(0);
             });
 

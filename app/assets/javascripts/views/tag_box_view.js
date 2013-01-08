@@ -16,7 +16,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
             tagsItems: tags,
             itemManager: chorus.utilities.TagItemManager,
             ajax: {
-                url: '/taggings',
+                url: '/tags',
                 dataType: 'json',
                 existingTagCollection: this.tags()
             },

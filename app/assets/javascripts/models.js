@@ -5,7 +5,7 @@ chorus.models = {
         chorus.Mixins.dbHelpers,
         chorus.Mixins.Fetching,
         chorus.Mixins.ServerErrors,
-        chorus.Mixins.Tags
+        chorus.Mixins.Taggable
     ).extend({
         constructorName: "Model",
 

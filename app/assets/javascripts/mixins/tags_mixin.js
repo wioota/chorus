@@ -1,4 +1,4 @@
-chorus.Mixins.Tags = {
+chorus.Mixins.Taggable = {
 
     hasTags: function() {
         return this.tags().length > 0;
@@ -6,11 +6,11 @@ chorus.Mixins.Tags = {
 
     tags: function() {
         if(!this.loaded) {
-            return new chorus.collections.TagSet([], {entity: this});
+            return new chorus.collections.TaggingSet([], {entity: this});
         }
 
         if(!this._tags) {
-            this._tags = new chorus.collections.TagSet(this.get('tags'), {entity: this});
+            this._tags = new chorus.collections.TaggingSet(this.get('tags'), {entity: this});
         }
         return this._tags;
     }

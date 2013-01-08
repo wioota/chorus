@@ -24,7 +24,7 @@ resource 'Tags' do
     end
   end
 
-  get '/taggings' do
+  get '/tags' do
     parameter :query, 'String to search tags for'
 
     let(:query) { "something" }

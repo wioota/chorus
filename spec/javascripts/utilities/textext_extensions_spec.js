@@ -2,7 +2,7 @@ describe("textext extensions", function() {
     describe("Ajax onComplete", function() {
         beforeEach(function() {
             this.textarea = $('<textarea></textarea>');
-            this.tagSet = new chorus.collections.TagSet();
+            this.tagSet = new chorus.collections.TaggingSet();
             this.textarea.textext({
                 plugins: 'ajax',
                 ajax: {
