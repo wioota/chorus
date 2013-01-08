@@ -28,9 +28,7 @@ describe "Import Console" do
     visit '/import_console'
     source_path = "#{dataset.schema.database.name}.#{dataset.schema.name}.#{dataset.name}"
     destination_path = "#{workspace.sandbox.database.name}.#{workspace.sandbox.name}.forever_table"
+    page.should have_content source_path
     page.should have_content destination_path
-
-    click_on source_path
-    page.should have_content dataset.name
   end
 end
