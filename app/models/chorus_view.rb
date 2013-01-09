@@ -45,7 +45,6 @@ class ChorusView < Dataset
     end
   end
 
-
   def preview_sql
     query
   end
@@ -113,5 +112,9 @@ class ChorusView < Dataset
     @statistics = DatasetStatistics.new('column_count' => metadata.getColumnCount)
   rescue Exception => e
     raise MultipleResultsetQuery::QueryError, "The query could not be completed. Error: #{e.message}"
+  end
+
+  def verify_in_source(user)
+    true
   end
 end

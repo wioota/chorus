@@ -216,6 +216,33 @@ describe WorkspaceDatasetsController do
       log_in user
     end
 
+    describe "index" do
+      context "for a source_table" do
+        let(:dataset) { workspace.bound_datasets.first }
+
+        it "works" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
+      end
+
+      context "for a chorus_view" do
+        let(:dataset) { datasets(:executable_chorus_view) }
+        let(:workspace) { workspaces(:public) }
+
+        it "works" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
+      end
+
+      context "for a sandbox_table" do
+        let(:dataset) { workspace.sandbox.datasets.first }
+
+        it "works" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
+      end
+    end
+
     context "when searching within the workspace" do
       context "all the tables have been refreshed into rails" do
         before do
