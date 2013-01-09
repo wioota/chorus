@@ -66,6 +66,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     textExtValidate: function(e, data) {
         this.invalidTagName = "";
+        data.tag.name = $.trim(data.tag.name);
         if(!this.validateTag(data.tag.name)) {
             data.result = false;
 

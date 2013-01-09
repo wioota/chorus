@@ -163,6 +163,23 @@ describe("chorus.views.TagsInput", function() {
             });
         });
 
+        describe("when the first entered tag has a leading space", function() {
+            beforeEach(function() {
+                enterTag(view, " sigma");
+            });
+
+            it("discards the leading space", function() {
+                expect(view.$(".text-tag .text-label")[3].innerHTML).toEqual("sigma");
+                expect(this.addedSpy).toHaveBeenCalled();
+            });
+
+            it("does not allow adding the same tag with no space", function() {
+                enterTag(view, "sigma");
+                expect(this.addedSpy).toHaveBeenCalled();
+                expect(this.addedSpy.callCount).toBe(1);
+            });
+        });
+
         describe("when a duplicate tag is entered", function() {
             beforeEach(function() {
                 enterTag(view, "alpha");
