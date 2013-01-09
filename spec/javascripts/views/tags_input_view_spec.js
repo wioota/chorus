@@ -32,6 +32,7 @@ describe("chorus.views.TagsInput", function() {
 
         describe("escaping the tags", function() {
             beforeEach(function() {
+                this.server.reset();
                 view.tags.reset();
                 view.render();
                 view.$('a.edit_tags').click();
@@ -45,7 +46,7 @@ describe("chorus.views.TagsInput", function() {
                 }, this));
             });
 
-            xit("should escape malicious tags", function() {
+            it("should escape malicious tags", function() {
                 this.server.lastFetch().succeed([
                     {name: '<script>foo</script>'}
                 ]);
