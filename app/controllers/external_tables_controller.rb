@@ -12,7 +12,7 @@ class ExternalTablesController < GpdbController
     end
 
     account = authorized_gpdb_account(workspace.sandbox)
-    url = Gpdb::ConnectionBuilder.url(workspace.sandbox.database, account)
+    database = workspace.sandbox.connect_with(account)
 
     file_pattern =
         case table_params[:path_type]
@@ -25,12 +25,11 @@ class ExternalTablesController < GpdbController
     e = ExternalTable.build(
       :column_names => table_params[:column_names],
       :column_types => table_params[:types],
-      :database => url,
+      :database => database,
       :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
       :location_url => hdfs_entry.url,
       :name => table_params[:table_name],
-      :schema_name => workspace.sandbox.name
     )
     if e.save
       Dataset.refresh(account, workspace.sandbox)

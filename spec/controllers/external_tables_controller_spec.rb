@@ -60,12 +60,11 @@ describe ExternalTablesController do
         mock_external_table_build_success do |ext_table_params|
           ext_table_params[:column_names].should == %w{field1 field2}
           ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should == Gpdb::ConnectionBuilder.url(sandbox.database, instance_account)
+          ext_table_params[:database].should be_a(GreenplumConnection::SchemaConnection)
           ext_table_params[:delimiter].should == ','
           ext_table_params[:location_url].should == hdfs_entry.url
           ext_table_params[:file_pattern].should == "*"
           ext_table_params[:name].should == 'tablefromhdfs'
-          ext_table_params[:schema_name].should == 'default'
         end
 
         post :create, parameters
@@ -96,12 +95,11 @@ describe ExternalTablesController do
         mock_external_table_build_success do |ext_table_params|
           ext_table_params[:column_names].should == %w{field1 field2}
           ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should == Gpdb::ConnectionBuilder.url(sandbox.database, instance_account)
+          ext_table_params[:database].should be_a(GreenplumConnection::SchemaConnection)
           ext_table_params[:delimiter].should == ','
           ext_table_params[:location_url].should == hdfs_entry.url
           ext_table_params[:file_pattern].should == "*.csv"
           ext_table_params[:name].should == 'tablefromhdfs'
-          ext_table_params[:schema_name].should == 'default'
         end
 
         post :create, parameters
@@ -127,11 +125,10 @@ describe ExternalTablesController do
         mock_external_table_build_success do |ext_table_params|
           ext_table_params[:column_names].should == %w{field1 field2}
           ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should == Gpdb::ConnectionBuilder.url(sandbox.database, instance_account)
+          ext_table_params[:database].should be_a(GreenplumConnection::SchemaConnection)
           ext_table_params[:delimiter].should == ','
           ext_table_params[:location_url].should == hdfs_entry.url
           ext_table_params[:name].should == 'tablefromhdfs'
-          ext_table_params[:schema_name].should == 'default'
           ext_table_params[:file_pattern].should be_nil
         end
 

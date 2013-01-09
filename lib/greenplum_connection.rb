@@ -152,6 +152,17 @@ module GreenplumConnection
       true
     end
 
+    def create_external_table(options)
+      with_schema_connection do
+        @connection.execute(<<-SQL)
+          CREATE EXTERNAL TABLE "#{schema_name}"."#{options[:table_name]}"
+          (#{options[:columns]}) LOCATION ('#{options[:location_url]}') FORMAT 'TEXT'
+          (DELIMITER '#{options[:delimiter]}')
+        SQL
+      end
+      true
+    end
+
     def table_exists?(table_name)
       with_schema_connection { @connection.table_exists?(table_name.to_s) }
     end

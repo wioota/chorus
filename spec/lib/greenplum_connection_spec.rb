@@ -341,6 +341,50 @@ describe GreenplumConnection::Base, :database_integration do
       end
     end
 
+    describe "#create_external_table" do
+      after do
+        if table_name == "a_new_external_table"
+          db = Sequel.connect(db_url)
+          db.default_schema = schema_name
+          db.execute("DROP EXTERNAL TABLE IF EXISTS \"#{schema_name}\".\"#{table_name}\"")
+          db.disconnect
+        end
+      end
+
+      let(:table_name) { "a_new_external_table" }
+      let(:columns) { "field1 varchar, field2 integer" }
+      let(:location_url) { "gphdfs://foo/*.csv" }
+      let(:delimiter) { "," }
+      let(:subject) do
+        connection.create_external_table(
+            {
+                :table_name => table_name,
+                :columns => columns,
+                :location_url => location_url,
+                :delimiter => delimiter
+            }
+        )
+      end
+      let(:expected) { true }
+
+      it_should_behave_like "a well behaved database query"
+
+      it 'creates an external table' do
+        expect {
+          subject
+        }.to change { Sequel.connect(db_url).tables }
+      end
+
+      context 'when a table with that name already exists' do
+        let(:table_name) { "base_table1" }
+        it 'raises an error' do
+          expect {
+            subject
+          }.to raise_error(GreenplumConnection::DatabaseError)
+        end
+      end
+    end
+
     describe "#table_exists?" do
       let(:subject) { connection.table_exists?(table_name) }
       let(:expected) { true }

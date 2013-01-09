@@ -1,48 +1,10 @@
 require 'spec_helper'
 
-require 'sequel/no_core_ext'
-require 'shoulda-matchers'
-
-require 'lib/hdfs/external_table'
-
-class Sequel::Database
-  def log_duration(duration, message)
-    log_info(message)
-  end
-end
-
-REAL_DB_URL = "jdbc:postgresql://#{InstanceIntegration.real_gpdb_hostname}/#{InstanceIntegration.database_name}?user=#{InstanceIntegration.real_gpdb_account.db_username}&password=#{InstanceIntegration.real_gpdb_account.db_password}"
-
-# The hdfs should have the following directory structure:
-
-#/
-#/data
-#/data/test1.csv
-# a,b,c
-#/data/test2.csv
-# d,e,f
-
-POSTGRES_DB = Sequel.connect(REAL_DB_URL, :max_connections => 1)
-
-def POSTGRES_DB.sqls
-  (@sqls ||= [])
-end
-
-logger = Object.new
-def logger.method_missing(m, msg)
-  POSTGRES_DB.sqls << msg
-end
-POSTGRES_DB.loggers << logger
-
 describe ExternalTable do
-  before do
-    POSTGRES_DB.run('DROP EXTERNAL TABLE IF EXISTS foo')
-    POSTGRES_DB.sqls.clear
-  end
-
+  let(:database) { Object.new }
   let(:params) do
     {
-        :database => POSTGRES_DB,
+        :database => database,
         :schema_name => 'public',
         :column_names => ['field1', 'field2'],
         :column_types => ['text', 'text'],
@@ -53,10 +15,10 @@ describe ExternalTable do
   end
 
   it "should validate the presence of attributes" do
-    [:schema_name, :column_names, :column_types, :name, :location_url].each do |a|
+    [:column_names, :column_types, :name, :location_url].each do |a|
       e = ExternalTable.new(params.merge(a => nil))
       e.should_not be_valid
-      e.errors.detect { |error| error[0] == a}.should be_present
+      e.should have_error_on(a)
     end
   end
 
@@ -77,37 +39,29 @@ describe ExternalTable do
 
   it "should save successfully" do
     e = ExternalTable.new(params)
+    mock(database).create_external_table(
+        {
+            :table_name => "foo",
+            :columns => "field1 text, field2 text",
+            :location_url => "gphdfs://foo",
+            :delimiter => ","
+        })
     e.save
-    POSTGRES_DB.sqls.last.should == "CREATE EXTERNAL TABLE \"public\".\"foo\" (field1 text, field2 text) LOCATION ('gphdfs://foo') FORMAT 'TEXT' (DELIMITER ',')"
   end
 
   it "should not save if invalid" do
-    e = ExternalTable.new(params.merge(:schema_name => nil))
+    e = ExternalTable.new(params.merge(:name => nil))
+    dont_allow(database).create_external_table
     e.save.should be_false
-    POSTGRES_DB.sqls.should == []
-    e.errors.first.should == [:schema_name, [:blank, {}]]
+    e.should have_error_on(:name).with_message(:blank)
   end
 
   context "when saving fails" do
-    before do
-      begin
-        POSTGRES_DB.run('DROP TABLE IF EXISTS existing_external_table')
-      rescue
-        POSTGRES_DB.run('DROP EXTERNAL TABLE IF EXISTS existing_external_table')
-      end
-      POSTGRES_DB.run("CREATE TABLE existing_external_table (id integer)")
-    end
-
-    after do
-      begin
-        POSTGRES_DB.run('DROP TABLE IF EXISTS existing_external_table')
-      rescue
-        POSTGRES_DB.run('DROP EXTERNAL TABLE IF EXISTS existing_external_table')
-      end
-    end
-
     it "adds table already exists error when the table already exists" do
-      e = ExternalTable.new(params.merge(:name => 'existing_external_table'))
+      e = ExternalTable.new(params)
+      stub(database).create_external_table.with_any_args do
+        raise GreenplumConnection::DatabaseError
+      end
 
       e.save.should be_false
       e.should have_error_on(:name).with_message(:TAKEN)
@@ -117,8 +71,14 @@ describe ExternalTable do
   context "creating an external table from a directory" do
     it "create the table" do
       e = ExternalTable.new(params.merge(:file_pattern => "*.csv", :location_url => 'gphdfs://foo'))
+      mock(database).create_external_table(
+          {
+              :table_name => "foo",
+              :columns => "field1 text, field2 text",
+              :location_url => "gphdfs://foo/*.csv",
+              :delimiter => ","
+          })
       e.save
-      POSTGRES_DB.sqls.last.should == "CREATE EXTERNAL TABLE \"public\".\"foo\" (field1 text, field2 text) LOCATION ('gphdfs://foo/*.csv') FORMAT 'TEXT' (DELIMITER ',')"
     end
   end
 end

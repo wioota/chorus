@@ -1,26 +1,23 @@
 require 'active_model'
-require_relative '../database_connection'
 require_relative '../chorus_api_validation_format'
 
 class ExternalTable
   include ActiveModel::Validations
   include ChorusApiValidationFormat
-  include DatabaseConnection
 
   def self.build(options)
     new(options)
   end
 
-  attr_accessor :schema_name, :column_names, :column_types, :name, :location_url,
+  attr_accessor :column_names, :column_types, :name, :location_url,
                 :delimiter, :file_pattern
 
-  validates_presence_of :schema_name, :column_names, :column_types, :name, :location_url
+  validates_presence_of :column_names, :column_types, :name, :location_url
 
   validate :delimiter_not_blank
 
   def initialize(options = {})
-    self.database = options[:database]
-    @schema_name = options[:schema_name]
+    @database = options[:database]
     @column_names = options[:column_names]
     @column_types = options[:column_types]
     @name = options[:name]
@@ -31,11 +28,15 @@ class ExternalTable
 
   def save
     return false unless valid?
-    database.run("CREATE EXTERNAL TABLE \"#{schema_name}\".\"#{name}\"" +
-                  " (#{map_columns}) LOCATION ('#{location_url}#{file_pattern_string}') FORMAT 'TEXT'" +
-                  " (DELIMITER '#{delimiter}')")
+    @database.create_external_table(
+        {
+            :table_name => name,
+            :columns => map_columns,
+            :location_url => location_url + file_pattern_string,
+            :delimiter => delimiter
+        })
     true
-  rescue Sequel::DatabaseError => e
+  rescue GreenplumConnection::DatabaseError => e
     errors.add(:name, :TAKEN)
     false
   end
