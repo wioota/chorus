@@ -67,6 +67,56 @@ describe("chorus.views.TagBox", function() {
         });
     });
 
+    describe("autocomplete", function() {
+        var input;
+        beforeEach(function() {
+            var suggestions = rspecFixtures.tagSetJson();
+            $("#jasmine_content").append(view.el);
+            view.render();
+            view.$('a.edit_tags').click();
+            input = view.$("input.tag_editor");
+            input.val("s");
+            var event = $.Event('keyup');
+            event.keyCode = 115; // s
+            input.trigger(event);
+            waitsFor(_.bind(function() {
+                return this.server.requests.length > 0;
+            }, this));
+            runs(_.bind(function() {
+                this.server.lastFetch().succeed(suggestions);
+            }, this));
+        });
+
+        it("does not select anything by default", function() {
+            expect(view.$(".text-list .text-selected")).not.toExist();
+            expect(view.$(".text-dropdown").css("display")).not.toEqual('none');
+        });
+
+        describe("pressing down", function() {
+            beforeEach(function() {
+                var event = $.Event('keydown');
+                event.keyCode = 40; // down arrow
+                input.trigger(event);
+            });
+
+            it("selects the first suggested item", function() {
+                expect(view.$(".text-suggestion:eq(0)")).toHaveClass('text-selected');
+            });
+
+            describe("pressing up from the top row", function() {
+                beforeEach(function() {
+                    var event = $.Event('keydown');
+                    event.keyCode = 38; // up arrow
+                    input.trigger(event);
+                });
+
+                it("closes the menu", function() {
+                    expect(view.$(".text-dropdown").css("display")).toEqual('none');
+                });
+            });
+        });
+    });
+
     describe("when there are no tags", function() {
         beforeEach(function() {
             this.server.completeFetchFor(model);

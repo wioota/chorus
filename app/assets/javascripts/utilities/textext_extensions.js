@@ -1,5 +1,6 @@
 (function() {
     var TextExtAjax = $.fn.textext.TextExtAjax;
+    var TextExtAutocomplete = $.fn.textext.TextExtAutocomplete;
 
     TextExtAjax.prototype.onComplete = function(data, query)
     {
@@ -48,6 +49,44 @@
         self.updateFormCache();
         core.getFormData();
         core.invalidateBounds();
+    };
+
+    TextExtAutocomplete.prototype.onShowDropdown = function(e, renderCallback)
+    {
+        var self        = this,
+            suggestions = self._suggestions
+            ;
+
+        if(!suggestions)
+            return self.trigger('getSuggestions');
+
+        if($.isFunction(renderCallback))
+        {
+            renderCallback(self);
+        }
+        else
+        {
+            self.renderSuggestions(self._suggestions);
+        }
+
+        self.showDropdown(self.containerElement());
+    };
+
+    TextExtAutocomplete.prototype.togglePreviousSuggestion = function()
+    {
+        var self     = this,
+            selected = self.selectedSuggestionElement(),
+            prev     = selected.prev()
+            ;
+
+        if(prev.length === 0) {
+            self.hideDropdown();
+            return;
+        }
+
+        self.clearSelected();
+        prev.addClass("text-selected");
+        self.scrollSuggestionIntoView(prev);
     };
 
     var TextExt = $.fn.textext.TextExt;
