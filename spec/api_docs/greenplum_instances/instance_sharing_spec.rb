@@ -11,7 +11,7 @@ resource "Greenplum DB: instances" do
   post "/gpdb_instances/:gpdb_instance_id/sharing" do
     parameter :gpdb_instance_id, "Greenplum instance id"
 
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     example_request "Allow individual users to share the account of the owner of an instance" do
       status.should == 201
@@ -21,7 +21,7 @@ resource "Greenplum DB: instances" do
   delete "/gpdb_instances/:gpdb_instance_id/sharing" do
     parameter :gpdb_instance_id, "Greenplum instance id"
 
-    let(:gpdb_instance) { gpdb_instances(:shared) }
+    let(:gpdb_instance) { data_sources(:shared) }
 
     example_request "Require individual accounts to access an instance" do
       status.should == 200

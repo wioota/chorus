@@ -21,7 +21,7 @@ describe EventsController do
       end
 
       context "for a gpdb instance" do
-        let(:object) { gpdb_instances(:default) }
+        let(:object) { data_sources(:default) }
 
         it "presents the gpdb instance's activities" do
           mock_present { |models| models.should include(event) }

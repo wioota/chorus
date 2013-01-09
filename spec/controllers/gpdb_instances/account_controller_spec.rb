@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbInstances::AccountController do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:user) { users(:default) }
   let(:owner) { users(:owner) }
   let(:account) { gpdb_instance.account_for_user(owner) }
@@ -122,7 +122,7 @@ describe GpdbInstances::AccountController do
     end
 
     context "of a shared account" do
-      let(:gpdb_instance) { gpdb_instances(:shared) }
+      let(:gpdb_instance) { data_sources(:shared) }
       let(:admin) { users(:admin) }
 
       it "does not delete the owner's account" do

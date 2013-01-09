@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Greenplum DB: instances" do
   let(:owner) { owned_instance.owner }
-  let(:owned_instance) { gpdb_instances(:shared)}
+  let(:owned_instance) { data_sources(:shared)}
   let(:new_owner) { users(:no_collaborators) }
 
   before do

@@ -7,7 +7,7 @@ describe "Notes" do
   
   describe "creating a note on a GPDB instance" do
     it "contains the note" do
-      instance = gpdb_instances(:default)
+      instance = data_sources(:default)
       visit("#/instances")
       within ".gpdb_instance ul" do
         find("li", :text => instance.name).click

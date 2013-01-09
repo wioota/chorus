@@ -46,16 +46,14 @@ describe GpdbInstance do
     it { should have_many :events }
 
     describe "cascading deletes" do
+      let(:instance) { data_sources(:owners) }
       it "deletes its databases when it is destroyed" do
-        instance = gpdb_instances(:owners)
-
         expect {
           instance.destroy
         }.to change(instance.databases, :count).to(0)
       end
 
       it "deletes all events with target1 set to the schema when it is destroyed" do
-        instance = gpdb_instances(:owners)
         user = users(:owner)
 
         Events::GreenplumInstanceChangedName.by(user).add(:gpdb_instance => instance, :old_name => 'old', :new_name => instance.name)
@@ -115,7 +113,7 @@ describe GpdbInstance do
     end
 
     context "when gpdb connection is broken" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
       let(:user) { users(:owner) }
 
       before do
@@ -280,7 +278,7 @@ describe GpdbInstance do
     end
 
     context "individual gpdb instance" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
       let!(:owner_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
       let!(:user_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
 
@@ -291,7 +289,7 @@ describe GpdbInstance do
     end
 
     context "missing account" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
 
       it "raises an exception" do
         expect { gpdb_instance.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -300,7 +298,7 @@ describe GpdbInstance do
   end
 
   describe "#account_for_user" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     context "missing account" do
       it "returns nil" do
@@ -339,7 +337,7 @@ describe GpdbInstance do
     end
 
     context "with database stubbed" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
       let(:database) { gpdb_databases(:default) }
       let(:missing_database) { gpdb_instance.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_instance.owner_account }
@@ -415,7 +413,7 @@ describe GpdbInstance do
   end
 
   describe "#connect_with" do
-    let(:instance) { gpdb_instances(:default) }
+    let(:instance) { data_sources(:default) }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
@@ -440,7 +438,7 @@ describe GpdbInstance do
   end
 
   describe ".refresh" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       @refreshed_databases = false
@@ -461,7 +459,7 @@ describe GpdbInstance do
   end
 
   describe "automatic reindexing" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       stub(Sunspot).index.with_any_args
@@ -476,7 +474,7 @@ describe GpdbInstance do
     end
 
     context "making the instance un-shared" do
-      let(:instance) { gpdb_instances(:shared) }
+      let(:instance) { data_sources(:shared) }
       it "should reindex" do
         mock(instance).solr_reindex_later
         instance.shared = false
@@ -493,7 +491,7 @@ describe GpdbInstance do
   end
 
   describe "#solr_reindex_later" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     it "should enqueue a job" do
       mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.reindex_instance", instance.id)
       instance.solr_reindex_later
@@ -501,7 +499,7 @@ describe GpdbInstance do
   end
 
   describe "#refresh_databases_later" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     it "should enqueue a job" do
       mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh_databases", instance.id)
       instance.refresh_databases_later
@@ -510,7 +508,7 @@ describe GpdbInstance do
 
 
   describe "#reindex_instance" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       stub(Sunspot).index.with_any_args

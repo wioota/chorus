@@ -16,7 +16,7 @@ describe InstanceDatabasesController do
     end
 
     context "when the instance is accessible" do
-      let(:gpdb_instance) { gpdb_instances(:shared) }
+      let(:gpdb_instance) { data_sources(:shared) }
       let(:database) { gpdb_databases(:shared_database) }
       let(:database2) { gpdb_databases(:shared_database) }
 

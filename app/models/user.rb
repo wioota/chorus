@@ -108,7 +108,7 @@ class User < ActiveRecord::Base
   end
 
   def accessible_account_ids
-    shared_account_ids = InstanceAccount.joins(:instance).where("gpdb_instances.shared = true").collect(&:id)
+    shared_account_ids = InstanceAccount.joins(:instance).where("data_sources.shared = true").collect(&:id)
     (shared_account_ids + instance_account_ids).uniq
   end
 

@@ -26,7 +26,7 @@ describe "Search" do
         find("div.hdfs_list").should have_content(hdfs_entries(:searchable).name)
         find("div.workspace_list").should have_content(workspaces(:search_public).name)
         find("div.workfile_list").should have_content(workfiles(:public).file_name)
-        find("div.instance_list").should have_content(gpdb_instances(:default).name)
+        find("div.instance_list").should have_content(data_sources(:default).name)
       end
     end
   end
@@ -70,7 +70,7 @@ describe "Search" do
 
   describe "instance search" do
     let(:model_type) { "instance" }
-    let(:found_model_text) { gpdb_instances(:default).name }
+    let(:found_model_text) { data_sources(:default).name }
     let(:model_link) { "Data Sources" }
     it_behaves_like "model specific search"
   end

@@ -21,12 +21,12 @@ describe GpdbInstancesController do
     it "returns all gpdb instances (online and offline) that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.map(&:id).should include(gpdb_instances(:offline).id)
+      decoded_response.map(&:id).should include(data_sources(:offline).id)
     end
   end
 
   describe "#show" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     context "with a valid instance id" do
       it "does not require authorization" do
@@ -59,7 +59,7 @@ describe GpdbInstancesController do
 
   describe "#update" do
     let(:changed_attributes) { {"name" => "changed"} }
-    let(:gpdb_instance) { gpdb_instances(:shared) }
+    let(:gpdb_instance) { data_sources(:shared) }
     let(:params) { changed_attributes.merge( :id => gpdb_instance.id) }
 
     before do
@@ -90,7 +90,7 @@ describe GpdbInstancesController do
 
     context "with register provision type" do
       let(:valid_attributes) { Hash.new }
-      let(:instance) { gpdb_instances(:default) }
+      let(:instance) { data_sources(:default) }
 
       before do
         mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user) { instance }
@@ -115,7 +115,7 @@ describe GpdbInstancesController do
     context "with invalid attributes" do
       before do
         stub(Gpdb::InstanceRegistrar).create!({}, user) {
-          raise(ActiveRecord::RecordInvalid.new(gpdb_instances(:default)))
+          raise(ActiveRecord::RecordInvalid.new(data_sources(:default)))
         }
       end
 

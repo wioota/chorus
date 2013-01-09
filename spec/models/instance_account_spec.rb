@@ -21,7 +21,7 @@ describe InstanceAccount do
 
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
-    let(:instance) { gpdb_instances(:default) }
+    let(:instance) { data_sources(:default) }
     let(:secret_key) { '\0' * 32 }
     let(:password) { "apass" }
     let!(:instance_account) do
@@ -40,7 +40,7 @@ describe InstanceAccount do
   end
 
   describe "automatic reindexing" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     let(:user) { users(:not_a_member) }
 
     before do

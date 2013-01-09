@@ -6,7 +6,7 @@ describe "Event types" do
   extend EventHelpers
 
   let(:actor) { users(:owner) }
-  let(:gpdb_instance) { gpdb_instances(:default) }
+  let(:gpdb_instance) { data_sources(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { users(:the_collaborator) }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }

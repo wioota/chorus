@@ -1,4 +1,4 @@
-class GpdbInstance < ActiveRecord::Base
+class GpdbInstance < DataSource
   attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
                   :provision_type, :description, :instance_provider, :version
 
@@ -30,7 +30,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def self.unshared
-    where("gpdb_instances.shared = false OR gpdb_instances.shared IS NULL")
+    where("data_sources.shared = false OR data_sources.shared IS NULL")
   end
 
   def self.reindex_instance instance_id
@@ -64,7 +64,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    where('gpdb_instances.shared OR gpdb_instances.owner_id = :owned OR gpdb_instances.id IN (:with_membership)',
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           :owned => user.id,
           :with_membership => user.instance_accounts.pluck(:instance_id)
     )

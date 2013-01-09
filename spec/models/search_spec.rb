@@ -199,7 +199,7 @@ describe Search do
     let(:admin) { users(:admin) }
     let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
-    let(:gpdb_instance) { gpdb_instances(:default) }
+    let(:gpdb_instance) { data_sources(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:gnip_instance) { gnip_instances(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }

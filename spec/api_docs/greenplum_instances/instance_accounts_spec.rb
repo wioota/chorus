@@ -5,7 +5,7 @@ resource "Greenplum DB: accounts" do
   let(:non_owner) { users(:no_collaborators) }
   let(:member) { users(:the_collaborator) }
 
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do

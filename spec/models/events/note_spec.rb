@@ -6,7 +6,7 @@ describe Events::Note do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
-  let(:gpdb_instance) { gpdb_instances(:default) }
+  let(:gpdb_instance) { data_sources(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
@@ -282,7 +282,7 @@ describe Events::Note do
     end
 
     it "creates a note on a greenplum instance" do
-      gpdb_instance = gpdb_instances(:default)
+      gpdb_instance = data_sources(:default)
       expect {
         Events::Note.create_on_model(gpdb_instance, {
           :body => "Some crazy content",

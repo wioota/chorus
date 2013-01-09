@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DatasetsController do
   let(:user) { users(:the_collaborator) }
   let(:instance_account) { gpdb_instance.account_for_user!(user) }
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions(options) }
   let(:schema) { gpdb_schemas(:default) }
   let(:table) { datasets(:table) }
