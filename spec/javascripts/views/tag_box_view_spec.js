@@ -69,7 +69,7 @@ describe("chorus.views.TagBox", function() {
         });
     });
 
-    describe("autocomplete", function() {
+    xdescribe("autocomplete", function() {
         var input;
         beforeEach(function() {
             var suggestions = rspecFixtures.tagSetJson();
