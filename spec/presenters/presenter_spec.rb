@@ -17,8 +17,16 @@ describe Presenter, :type => :view do
       Presenter.present_collection([@model], view, {}).should be_a(Array)
     end
 
-    it "should handle multiple models with custom presenter class" do
-      hash = Presenter.present_collection([GpdbTable.new(:name => 'foo'), GpdbView.new(:name => 'bar')], view, {:presenter_class => 'TagPresenter'})
+    it "allows passing explicit presenter class for polymorphic collections" do
+      class SpecExplicitPolymorphicPresenter < Presenter
+        def to_hash
+          {
+            :name => model.name
+          }
+        end
+      end
+
+      hash = Presenter.present_collection([GpdbTable.new(:name => 'foo'), GpdbView.new(:name => 'bar')], view, {:presenter_class => 'SpecExplicitPolymorphicPresenter'})
       hash.should == [{:name => 'foo'}, {:name => 'bar'}]
     end
   end

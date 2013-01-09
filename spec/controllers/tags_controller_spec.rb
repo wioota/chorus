@@ -17,8 +17,12 @@ describe TagsController do
 
       get :index
 
-      a_index = decoded_response.index({'name' => "atag"})
-      capital_a_index = decoded_response.index({'name' => "Atag"})
+      a_index = decoded_response.index { |tag|
+        tag[:name] == "atag"
+      }
+      capital_a_index = decoded_response.index { |tag|
+        tag[:name] == "Atag"
+      }
 
       capital_a_index.should < a_index
 
@@ -31,15 +35,22 @@ describe TagsController do
 
     context "with no query" do
       it "should show all tags" do
+        mock_present do |collection|
+          collection.should == ActsAsTaggableOn::Tag.all
+        end
+
         get :index
-        decoded_response.should == ActsAsTaggableOn::Tag.all.map { |tag| {'name' => tag.name} }
       end
     end
 
     context "with a search query" do
       it "should show only tags that contain the search text" do
+        mock_present do |collection|
+          collection.length == 1
+          collection.first.name.should == 'beta'
+        end
+
         get :index, :q => "ET"
-        decoded_response.should == [{'name' => 'beta'}]
       end
     end
   end
