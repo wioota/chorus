@@ -73,10 +73,10 @@ describe("chorus.views.TagBox", function() {
         var input;
         beforeEach(function() {
             var suggestions = rspecFixtures.tagSetJson();
-            $("#jasmine_content").append(view.el);
-            view.render();
-            view.$('a.edit_tags').click();
-            input = view.$("input.tag_editor");
+            $("#jasmine_content").append(this.view.el);
+            this.view.render();
+            this.view.$('a.edit_tags').click();
+            input = this.view.$("input.tag_editor");
             input.val("s");
             var event = $.Event('keyup');
             event.keyCode = 115; // s
@@ -90,8 +90,8 @@ describe("chorus.views.TagBox", function() {
         });
 
         it("does not select anything by default", function() {
-            expect(view.$(".text-list .text-selected")).not.toExist();
-            expect(view.$(".text-dropdown").css("display")).not.toEqual('none');
+            expect(this.view.$(".text-list .text-selected")).not.toExist();
+            expect(this.view.$(".text-dropdown").css("display")).not.toEqual('none');
         });
 
         describe("pressing down", function() {
@@ -102,7 +102,7 @@ describe("chorus.views.TagBox", function() {
             });
 
             it("selects the first suggested item", function() {
-                expect(view.$(".text-suggestion:eq(0)")).toHaveClass('text-selected');
+                expect(this.view.$(".text-suggestion:eq(0)")).toHaveClass('text-selected');
             });
 
             describe("pressing up from the top row", function() {
@@ -113,7 +113,7 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it("closes the menu", function() {
-                    expect(view.$(".text-dropdown").css("display")).toEqual('none');
+                    expect(this.view.$(".text-dropdown").css("display")).toEqual('none');
                 });
             });
         });
