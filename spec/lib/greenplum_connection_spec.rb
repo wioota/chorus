@@ -49,14 +49,46 @@ describe GreenplumConnection::Base, :database_integration do
   end
 
   describe "#connect!" do
-    before do
-      mock.proxy(Sequel).connect(db_url, hash_including(:test => true))
+    context "when a logger is not provided" do
+      before do
+        mock.proxy(Sequel).connect(db_url, :test => true)
+      end
+
+      context "with valid credentials" do
+        it "connects successfully passing no logging options" do
+          connection.connect!
+          connection.should be_connected
+        end
+      end
     end
 
-    context "with valid credentials" do
-      it "connects successfully" do
-        connection.connect!
-        connection.should be_connected
+    context "when a logger is provided" do
+      let(:logger) do
+        log = Object.new
+        stub(log).debug
+        log
+      end
+
+      let(:details) {
+        {
+            :host => the_host,
+            :username => username,
+            :password => password,
+            :port => port,
+            :database => database_name,
+            :logger => logger
+        }
+      }
+
+      before do
+        mock.proxy(Sequel).connect(db_url, hash_including(:test => true, :sql_log_level => :debug, :logger => logger))
+      end
+
+      context "with valid credentials" do
+        it "connects successfully passing the proper logging options" do
+          connection.connect!
+          connection.should be_connected
+        end
       end
     end
   end

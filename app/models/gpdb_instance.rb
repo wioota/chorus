@@ -78,7 +78,8 @@ class GpdbInstance < ActiveRecord::Base
         :password => account.db_password,
         :host => host,
         :port => port,
-        :database => maintenance_db
+        :database => maintenance_db,
+        :logger => Rails.logger
     )
   end
 

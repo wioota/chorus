@@ -123,7 +123,8 @@ class GpdbSchema < ActiveRecord::Base
         :username => account.db_username,
         :password => account.db_password,
         :database => database.name,
-        :schema => name
+        :schema => name,
+        :logger => Rails.logger
     )
   end
 

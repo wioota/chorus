@@ -234,7 +234,8 @@ describe GpdbDatabase do
                                                             :port => instance.port,
                                                             :username => account.db_username,
                                                             :password => account.db_password,
-                                                            :database => database.name
+                                                            :database => database.name,
+                                                            :logger => Rails.logger
       }) { "this is my connection" }
       database.connect_with(account).should == "this is my connection"
     end

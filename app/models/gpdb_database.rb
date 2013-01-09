@@ -91,7 +91,8 @@ class GpdbDatabase < ActiveRecord::Base
         :port => gpdb_instance.port,
         :username => account.db_username,
         :password => account.db_password,
-        :database => name
+        :database => name,
+        :logger => Rails.logger
     }
     GreenplumConnection::DatabaseConnection.new(options)
   end

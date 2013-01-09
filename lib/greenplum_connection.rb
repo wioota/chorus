@@ -33,15 +33,12 @@ module GreenplumConnection
 
   class Base
 
-    USE_LOGGER = false
-    LOGGER_OPTIONS = USE_LOGGER ? { :logger => Rails.logger } : {}
-
     def initialize(details)
       @settings = details
     end
 
     def connect!
-      @connection ||= GreenplumConnection::connect_to_sequel db_url, LOGGER_OPTIONS.merge(:test => true)
+      @connection ||= GreenplumConnection::connect_to_sequel db_url, logger_options.merge({:test => true})
     end
 
     def disconnect
@@ -68,6 +65,14 @@ module GreenplumConnection
     end
 
     private
+
+    def logger_options
+      if @settings[:logger]
+        { :logger => @settings[:logger], :sql_log_level => :debug }
+      else
+        {}
+      end
+    end
 
     def with_connection
       connect!

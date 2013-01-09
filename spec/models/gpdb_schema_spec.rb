@@ -324,7 +324,8 @@ describe GpdbSchema do
                                                           :username => account.db_username,
                                                           :password => account.db_password,
                                                           :database => schema.database.name,
-                                                          :schema => schema.name
+                                                          :schema => schema.name,
+                                                          :logger => Rails.logger
                                                       })
       schema.connect_with(account)
     end
