@@ -663,26 +663,37 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
                         });
                         context("and cancel is clicked", function() {
+                            var cancelButton;
                             beforeEach(function() {
                                 spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                                this.view.$('.edit_chorus_view .cancel').click();
+                                cancelButton = this.view.$('.edit_chorus_view .cancel');
                             });
                             it("shows the definition bar and hides the create_chart bar", function() {
+                                cancelButton.click();
                                 expect(this.view.$('.definition')).not.toHaveClass('hidden');
                                 expect(this.view.$('.edit_chorus_view')).toHaveClass('hidden');
                             });
                             it("shows the column_count and hides info_bar", function() {
+                                cancelButton.click();
                                 expect(this.view.$('.column_count')).not.toHaveClass('hidden');
                                 expect(this.view.$('.edit_chorus_view_info')).toHaveClass('hidden');
                             });
                             it("triggers 'cancel:sidebar'", function() {
+                                cancelButton.click();
                                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                             });
                             it("broadcasts dataset:cancelEdit", function() {
+                                cancelButton.click();
                                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:cancelEdit");
                             });
-                            it("resets the query to the initial query", function() {
-                                expect(this.view.dataset.get("query")).toBe("select * from abc");
+                            it("resets the query to the initial query before triggering events", function() {
+                                chorus.PageEvents.subscribe("dataset:cancelEdit", function() {
+                                    expect(this.view.dataset.get("query")).toBe("select * from abc");
+                                }, this);
+                                chorus.PageEvents.subscribe("cancel:sidebar", function() {
+                                    expect(this.view.dataset.get("query")).toBe("select * from abc");
+                                }, this);
+                                cancelButton.click();
                             });
                         });
                         context("and 'Save and Return' is clicked", function() {

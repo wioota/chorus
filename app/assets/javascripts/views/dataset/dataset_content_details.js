@@ -187,9 +187,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".column_count").removeClass("hidden");
         this.$(".definition").removeClass("hidden");
+        this.dataset.set({query: this.dataset.initialQuery});
         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
         chorus.PageEvents.broadcast('dataset:cancelEdit');
-        this.dataset.set({query: this.dataset.initialQuery});
     },
 
     saveChorusView: function() {
