@@ -1,123 +1,36 @@
 chorus.views.TagBox = chorus.views.Base.extend({
     templateName: "tag_box",
     constructorName: "TagBoxView",
+    subviews: {'.tags_input': 'tagsInput'},
     events: {
-        "click .save_tags": "saveTags",
-        "click .edit_tags": "editTags"
+        "click .save_tags": "saveTags"
     },
 
-    postRender: function() {
-        this.input = this.$('input');
-        var tags = this.tags().map(function(tag) {
-            return tag.attributes;
-        });
-        this.input.textext({
-            plugins: 'tags autocomplete ajax',
-            tagsItems: tags,
-            itemManager: chorus.utilities.TagItemManager,
-            ajax: {
-                url: '/tags',
-                dataType: 'json',
-                existingTagCollection: this.tags()
-            },
-            autocomplete: {
-                render: function(suggestion) {
-                    return Handlebars.Utils.escapeExpression(suggestion.name);
-                },
-                dropdown: {
-                    maxHeight: '200px'
-                }
-            }
-        });
-
-        this.textext = this.input.textext()[0];
-        this.input.on("setFormData", _.bind(this.updateTags, this));
-        this.input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
-        this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
-
-        if(this.editing) {
-            this.$el.addClass('editing');
-            this.input.focus();
-        } else {
-            this.$el.removeClass('editing');
-        }
+    setup: function() {
+        this.bindings.add(this.model, "loaded", this.modelLoaded);
+        this.tags = this.model.tags();
+        this.tagsInput = new chorus.views.TagsInput({tags: this.tags, editing: false});
+        this.bindings.add(this.tagsInput, "startedEditing", this.startedEditing);
+        this.bindings.add(this.tagsInput, "finishedEditing", this.finishedEditing);
     },
 
-    tags: function() {
-        return this.model.tags();
+    modelLoaded: function() {
+        this.tags.reset(this.model.get("tags"));
     },
 
-    updateTags: function(e, data) {
-        this.tags().reset(data);
+    startedEditing: function() {
+        this.editing = true;
+        this.render();
     },
 
-    textExtValidate: function(e, data) {
-        this.invalidTagName = "";
-        if(!this.validateTag(data.tag.name)) {
-            data.result = false;
-
-            if(this.keepInvalidTagName) {
-                this.invalidTagName = data.tag.name;
-                this.keepInvalidTagName = false;
-            }
-        }
-    },
-
-    validateTag: function(tagName) {
-        this.clearErrors();
-
-        tagName = tagName.trim();
-
-        var valid = true;
-        if(tagName.length > 100) {
-            valid = false;
-            this.keepInvalidTagName = true;
-            this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
-        } else if (tagName.length === 0) {
-            valid = false;
-        }
-
-        if (this.tags().containsTag(tagName)) {
-            valid = false;
-        }
-
-        return valid;
-    },
-
-    restoreInvalidTag: function(e) {
-        if(this.invalidTagName) {
-            this.input.val(this.invalidTagName);
-            this.invalidTagName = "";
-        }
-    },
-
-    additionalContext: function() {
-        return {
-            hasTags: this.model.hasTags(),
-            tags: this.tags().models
-        };
-    },
-
-    saveTags: function(e) {
-        e.preventDefault();
-
-        var inputText = this.input.val().trim();
-        if(inputText) {
-            if(!this.validateTag(inputText)) {
-                return;
-            }
-            this.textext.tags().addTags([{name: inputText}]);
-        }
-
-        this.tags().save();
-
+    finishedEditing: function() {
+        this.tags.save();
         this.editing = false;
         this.render();
     },
 
-    editTags: function(e) {
+    saveTags: function(e) {
         e.preventDefault();
-        this.editing = true;
-        this.render();
+        this.tagsInput.finishEditing();
     }
 });

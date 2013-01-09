@@ -9,7 +9,7 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     },
 
     subviews: {
-        ".tag_box_collection": "tagBoxCollection"
+        ".tags_input": "tagsInput"
     },
 
     setup: function() {
@@ -18,12 +18,48 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
             this.bindings.add(model.tags(), "saveFailed", this.saveFailed);
             model.editableTags = model.tags().clone();
         }, this);
-        this.tagBoxCollection = new chorus.views.TagBoxCollection({collection: this.collection});
+        var tags = this.tags();
+        this.bindings.add(tags, "add", this.addTag);
+        this.bindings.add(tags, "remove", this.removeTag);
+        this.tagsInput = new chorus.views.TagsInput({tags: tags, editing: true});
+        this.bindings.add(this.tagsInput, "finishedEditing", this.finishedEditing);
+    },
+
+    addTag: function(tag) {
+        this.collection.each(function(model) {
+            model.editableTags.add(tag);
+        });
+    },
+
+    removeTag: function(tag) {
+        this.collection.each(function(model) {
+            var tagToRemove = model.editableTags.where({name: tag.name()});
+            model.editableTags.remove(tagToRemove);
+        });
+    },
+
+    tags: function() {
+        if(!this._tags) {
+
+            var tagNames = this.collection.map(function(model) {
+                return model.editableTags.pluck("name");
+            });
+            tagNames = _.uniq(_.flatten(tagNames));
+
+            var tagsHash = _.map(tagNames, function(tagName) {
+                return {name: tagName};
+            });
+
+            this._tags = new chorus.collections.TaggingSet(tagsHash);
+        }
+        return this._tags;
     },
 
     saveTags: function() {
-        if(!this.tagBoxCollection.finishLastTag()) { return; }
+        this.tagsInput.finishEditing();
+    },
 
+    finishedEditing: function() {
         this.$("button.submit").startLoading("actions.saving");
         this.collection.each(function(model) {
             model.saved = false;

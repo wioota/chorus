@@ -126,4 +126,45 @@ describe("chorus.dialogs.EditTags", function() {
             expect(this.collection.at(1).tags().pluck("name")).toEqual(["tag1", "tag3"]);
         });
     });
+
+    describe("editing tags", function() {
+        beforeEach(function() {
+            this.model1 = rspecFixtures.workfile.sql({
+                tags: [
+                    {name: "tag1"},
+                    {name: "tag2"}
+                ]
+            });
+            this.model2 = rspecFixtures.workfile.sql({
+                tags: [
+                    {name: "tag1"},
+                    {name: "tag3"}
+                ]
+            });
+            this.collection = rspecFixtures.workfileSet([
+                this.model1.attributes,
+                this.model2.attributes]);
+            this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
+            this.dialog.render();
+        });
+
+        it("displays all the relevant tags", function() {
+            expect(this.dialog.$(".text-tags")).toContainText("tag1");
+            expect(this.dialog.$(".text-tags")).toContainText("tag2");
+            expect(this.dialog.$(".text-tags")).toContainText("tag3");
+            expect(this.dialog.$(".text-button").length).toBe(3);
+        });
+
+        it("adds a tag to all models when you add a tag", function() {
+            enterTag(this.dialog, "foo");
+            expect(this.collection.at(0).editableTags.pluck("name")).toEqual(["tag1", "tag2", "foo"]);
+            expect(this.collection.at(1).editableTags.pluck("name")).toEqual(["tag1", "tag3", "foo"]);
+        });
+
+        it("removes a tag from all models when you remove a tag", function() {
+            this.dialog.$(".text-remove:eq(0)").click();
+            expect(this.collection.at(0).editableTags.pluck("name")).toEqual(["tag2"]);
+            expect(this.collection.at(1).editableTags.pluck("name")).toEqual(["tag3"]);
+        });
+    });
 });

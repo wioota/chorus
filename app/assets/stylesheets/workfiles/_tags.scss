@@ -1,4 +1,4 @@
-.tag_box {
+.tags_input {
     &.editing {
         border: 1px solid #A5A6A8;
         padding: 3px;
@@ -124,14 +124,6 @@
         }
     }
 
-    .save_tags {
-        font-size: 12px;
-        position: absolute;
-        right: 13px;
-        bottom: 14px;
-        z-index: 10;
-    }
-
     .edit_tags {
         position: relative;
         top: -5px;
@@ -144,4 +136,12 @@
             color: $link-color
         }
     }
+}
+
+.tag_box .save_tags {
+    font-size: 12px;
+    position: absolute;
+    right: 13px;
+    bottom: 14px;
+    z-index: 10;
 }

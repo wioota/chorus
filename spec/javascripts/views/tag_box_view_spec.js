@@ -2,11 +2,12 @@ describe("chorus.views.TagBox", function() {
     var view, model;
 
     beforeEach(function() {
-        view = new chorus.views.TagBox();
         model = rspecFixtures.workfile.sql({
             tags: []
         });
-        view.model = model;
+        model.loaded = false;
+        model.fetch();
+        view = new chorus.views.TagBox({model: model});
     });
 
     describe("#render", function() {
@@ -23,10 +24,8 @@ describe("chorus.views.TagBox", function() {
 
         context("when there are already tags", function() {
             beforeEach(function() {
-                model = rspecFixtures.workfile.sql({
-                    tags: [{name: "alpha"}]
-                });
-                view.model = model;
+                model.set("tags", [{name: "alpha"}]);
+                this.server.completeFetchFor(model);
                 view.render();
             });
 
@@ -49,8 +48,7 @@ describe("chorus.views.TagBox", function() {
 
     describe("escaping the tags", function() {
         beforeEach(function() {
-            view.model.tags().reset();
-            view.render();
+            this.server.completeFetchFor(model);
             view.$('a.edit_tags').click();
             var input = view.$('input.tag_editor');
             input.val("s");
@@ -58,7 +56,7 @@ describe("chorus.views.TagBox", function() {
             event.keyCode = 115; // s
             input.trigger(event);
             waitsFor(_.bind(function() {
-                return this.server.requests.length > 0;
+                return this.server.requests.length > 1;
             }, this));
         });
 
@@ -71,6 +69,7 @@ describe("chorus.views.TagBox", function() {
 
     describe("when there are no tags", function() {
         beforeEach(function() {
+            this.server.completeFetchFor(model);
             view.render();
         });
         context("clicking on add tags", function() {
@@ -88,7 +87,8 @@ describe("chorus.views.TagBox", function() {
     describe("When there are some existing tags", function() {
 
         beforeEach(function() {
-            view.model.tags().reset([{name: 'alpha'}, {name: 'beta'}, {name: 'gamma'}]);
+            model.set("tags", [{name: 'alpha'}, {name: 'beta'}, {name: 'gamma'}]);
+            this.server.completeFetchFor(model);
             view.render();
         });
 
@@ -125,7 +125,7 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it("adds the tag to the model's tagset", function() {
-                    expect(view.model.tags().at(3).name()).toEqual(_.repeat("a", 100));
+                    expect(view.tags.at(3).name()).toEqual(_.repeat("a", 100));
                 });
             });
 
@@ -196,7 +196,7 @@ describe("chorus.views.TagBox", function() {
 
             describe("click done", function() {
                 beforeEach(function() {
-                    spyOn(model.tags(), "save");
+                    spyOn(view.tags, "save");
                     view.$('a.save_tags').click();
                 });
 
@@ -207,7 +207,7 @@ describe("chorus.views.TagBox", function() {
                 });
 
                 it('saves the tags', function() {
-                    expect(model.tags().save).toHaveBeenCalled();
+                    expect(view.tags.save).toHaveBeenCalled();
                 });
 
                 it('hides the x character on the tag', function() {
@@ -239,7 +239,7 @@ describe("chorus.views.TagBox", function() {
 
                     it("includes that last tag", function() {
                         expect(view.$el).toContainText("hello");
-                        expect(view.model.tags().containsTag("hello")).toBe(true);
+                        expect(view.tags.containsTag("hello")).toBe(true);
                     });
 
                     it("posts", function() {
@@ -247,7 +247,7 @@ describe("chorus.views.TagBox", function() {
                     });
 
                     it("does not update the model", function() {
-                        expect(model.tags().length).toBe(4);
+                        expect(view.tags.length).toBe(4);
                     });
                 });
 
