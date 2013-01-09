@@ -11,7 +11,7 @@ chorus.views.TagBoxCollection = chorus.views.TagBox.extend({
            return {name: tagName};
         });
 
-        return new chorus.collections.TagSet(tagsHash);
+        return new chorus.collections.TaggingSet(tagsHash);
     },
 
     additionalContext: function() {
