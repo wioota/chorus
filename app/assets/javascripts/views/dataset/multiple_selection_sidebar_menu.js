@@ -1,6 +1,6 @@
-chorus.views.MultipleSelectionSidebar = chorus.views.Base.extend({
-    constructorName: "MultiSelectionSidebarView",
-    templateName: "multiple_selection_sidebar",
+chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
+    constructorName: "MultiSelectionSidebarMenu",
+    templateName: "multiple_selection_sidebar_menu",
 
     events: {
         "click .deselect_all": 'deselectAll'

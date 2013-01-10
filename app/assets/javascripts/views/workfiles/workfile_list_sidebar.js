@@ -13,7 +13,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         this.tabs = new chorus.views.TabControl(["activity"]);
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
-        this.multiSelect = new chorus.views.MultipleSelectionSidebar({
+        this.multiSelect = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "workfile:checked",
             actions: [
                 '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'

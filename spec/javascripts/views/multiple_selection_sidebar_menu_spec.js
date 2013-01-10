@@ -1,6 +1,6 @@
 describe("chorus.views.MultipleSelectionSidebar", function(){
     beforeEach(function(){
-       this.view = new chorus.views.MultipleSelectionSidebar({
+       this.view = new chorus.views.MultipleSelectionSidebarMenu({
            actions:['I am an action'],
            selectEvent: "model:selected"});
        this.view.render();
