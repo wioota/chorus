@@ -8,15 +8,13 @@ chorus.views.MultipleSelectionSidebar = chorus.views.Base.extend({
 
     setup: function() {
         this.actions = this.options.actions;
-        this.select_event = this.options.select_event;
+        this.selectEvent = this.options.selectEvent;
         this.selectedModels = new chorus.collections.Base();
-        this.subscriptions.push(chorus.PageEvents.subscribe(this.select_event, this.modelSelected, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe(this.selectEvent, this.modelSelected, this));
     },
 
     render: function() {
-//        if (!this.disabled) {
-            this._super("render", arguments);
-//        }
+        this._super("render", arguments);
     },
 
     modelSelected: function(selectedModels) {
@@ -25,10 +23,10 @@ chorus.views.MultipleSelectionSidebar = chorus.views.Base.extend({
     },
 
     showOrHideMultipleSelectionSection: function() {
-        if(this.selectedModels && this.selectedModels.length < 2) {
-            this.$el.addClass("hidden");
-        } else {
+        if(this.selectedModels.length > 0) {
             this.$el.removeClass('hidden');
+        } else {
+            this.$el.addClass("hidden");
         }
     },
 

@@ -710,22 +710,7 @@ describe("chorus.views.DatasetSidebar", function() {
         });
     });
 
-    describe("when a single dataset is checked", function() {
-        beforeEach(function() {
-            this.checkedDatasets = new chorus.collections.DynamicDatasetSet([
-                rspecFixtures.workspaceDataset.datasetTable()
-            ]);
-
-            this.multiSelectSection = this.view.$(".multiple_selection");
-            chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
-        });
-
-        it("does not display the multiple selection section", function() {
-            expect(this.multiSelectSection).toHaveClass("hidden");
-        });
-    });
-
-    describe("when two datasets are checked", function() {
+    describe("when a dataset is checked", function() {
         beforeEach(function() {
             this.checkedDatasets = new chorus.collections.DynamicDatasetSet([
                 rspecFixtures.workspaceDataset.datasetTable(),
@@ -733,14 +718,6 @@ describe("chorus.views.DatasetSidebar", function() {
             ]);
             chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
             this.multiSelectSection = this.view.$(".multiple_selection");
-        });
-
-        it("does display the multiple selection section", function() {
-            expect(this.multiSelectSection).not.toHaveClass("hidden");
-        });
-
-        it("displays the number of selected datasets", function() {
-            expect(this.multiSelectSection).toContainText('2 items');
         });
 
         it("displays the 'associate with workspace' link", function() {
@@ -756,28 +733,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 var dialog = this.modalSpy.lastModal();
                 expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
                 expect(dialog.datasets).toBe(this.checkedDatasets);
-            });
-        });
-
-        context("when a dataset is selected", function() {
-            beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
-                this.multiSelectSection = this.view.$(".multiple_selection");
-            });
-
-            it("should still show the multiple selection section", function() {
-                expect(this.multiSelectSection).not.toHaveClass("hidden");
-            });
-
-            it("should retain the selection count when the view is re-rendered", function() {
-                expect(this.multiSelectSection).toContainText('2 items');
-            });
-
-            it("clicking deselect all broadcasts selectNone event", function() {
-                spyOn(chorus.PageEvents, "broadcast");
-                this.view.$(".deselect_all").click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
             });
         });
     });

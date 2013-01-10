@@ -26,7 +26,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
         this.multiSelect = new chorus.views.MultipleSelectionSidebar({
-            select_event: "dataset:checked",
+            selectEvent: "dataset:checked",
             actions: [
                 '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>'
             ]
