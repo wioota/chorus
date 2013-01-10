@@ -35,14 +35,14 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
         AND -instance_account_ids_im:(1000000 OR 1000002))'',''-(security_type_name_sm:ChorusView
-        AND -member_ids_im:1000006 AND -public_b:true)''],''hl''=>''on'',''defType''=>''edismax'',''rows''=>''3''}},''response''=>{''numFound''=>15,''start''=>0,''maxScore''=>4476265.5,''docs''=>[{''id''=>''User
-        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@fritsch.info''],''last_name_texts''=>[''Hane''],''score''=>4476265.5},{''id''=>''LinkedTableauWorkfile
-        1000002'',''file_name_texts''=>[''searchquery''],''score''=>4476265.5},{''id''=>''GpdbInstance
+        AND -member_ids_im:1000006 AND -public_b:true)''],''hl''=>''on'',''defType''=>''edismax'',''rows''=>''3''}},''response''=>{''numFound''=>15,''start''=>0,''maxScore''=>4481312.5,''docs''=>[{''id''=>''User
+        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@mckenzie.com''],''last_name_texts''=>[''Durgan''],''score''=>4481312.5},{''id''=>''LinkedTableauWorkfile
+        1000002'',''file_name_texts''=>[''searchquery''],''score''=>4481312.5},{''id''=>''GpdbInstance
         1000000'',''name_texts''=>[''searchquery''],''description_texts''=>[''Just
-        for searchquery and greenplumsearch''],''score''=>1729141.6}]},''highlighting''=>{''User
+        for searchquery and greenplumsearch''],''score''=>1733227.6}]},''highlighting''=>{''User
         1000006''=>{''first_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''LinkedTableauWorkfile
         1000002''=>{''file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''GpdbInstance
         1000000''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 03 Jan 2013 23:02:10 GMT
+  recorded_at: Thu, 10 Jan 2013 18:37:35 GMT
 recorded_with: VCR 2.3.0
