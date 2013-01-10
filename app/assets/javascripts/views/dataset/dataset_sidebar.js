@@ -13,20 +13,26 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     subviews: {
-        '.tab_control': 'tabs'
+        '.tab_control': 'tabs',
+        '.multiple_selection': 'multiSelect'
     },
 
     setup: function() {
-        this.checkedDatasetsLength = 0;
         this.subscriptions.push(chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:checked", this.datasetChecked, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("column:selected", this.setColumn, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
+        this.multiSelect = new chorus.views.MultipleSelectionSidebar({
+            select_event: "dataset:checked",
+            actions: [
+                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>'
+            ]
+        });
         this.registerSubView(this.tabs);
+        this.registerSubView(this.multiSelect);
     },
 
     render: function() {
@@ -96,18 +102,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    datasetChecked: function(checkedDatasets) {
-        this.checkedDatasets = checkedDatasets;
-        this.showOrHideMultipleSelectionSection();
-    },
-
-    showOrHideMultipleSelectionSection: function() {
-        var multiSelectEl = this.$(".multiple_selection");
-        var numChecked = this.checkedDatasets ? this.checkedDatasets.length : 0;
-        multiSelectEl.toggleClass("hidden", numChecked <= 1);
-        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: numChecked }));
-    },
-
     resetStatistics: function(){
         this.resource.statistics().fetch();
     },
@@ -120,7 +114,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download, a.delete");
         $actionLinks.data("dataset", this.resource);
         $actionLinks.data("workspace", this.resource && this.resource.workspace());
-        this.showOrHideMultipleSelectionSection();
         this._super("postRender");
     },
 
@@ -138,7 +131,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     launchAssociateMultipleWithWorkspaceDialog: function(e) {
         e.preventDefault();
 
-        new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.checkedDatasets, activeOnly: true}).launchModal();
+        new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.multiSelect.selectedModels, activeOnly: true}).launchModal();
     },
 
     launchDatasetPreviewDialog: function(e) {
