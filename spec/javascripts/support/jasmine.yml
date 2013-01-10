@@ -39,6 +39,7 @@ stylesheets:
 helpers:
   - helpers/fixture_definitions.js
   - helpers/fixture_generator.js
+  - helpers/shared_examples/_init.js
   - helpers/**/*.js
 
 # spec_files
