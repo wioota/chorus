@@ -48,17 +48,15 @@ describe("chorus.views.KaggleUserSidebar", function () {
 
         describe("sending a message", function () {
             beforeEach(function () {
-            });
-
-            it("links to the send message dialogue", function () {
-                expect(this.view.$('a[data-dialog=ComposeKaggleMessage]')).toContainTranslation("actions.compose_kaggle_message");
+                this.view.$(".actions a.sendMessage").click();
             });
 
             it("opens the send message dialog", function () {
-                var dialogLink = this.view.$(".actions a.sendMessage");
-                expect(dialogLink.data("recipients").at(0).id).toBe(this.collection.at(0).id);
-                expect(dialogLink.data("workspace")).toBe(this.workspace);
-                expect(dialogLink.data("dialog")).toBe("ComposeKaggleMessage");
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.ComposeKaggleMessage);
+                var modal = this.modalSpy.lastModal();
+                expect(modal.recipients.at(0)).toEqual(this.model);
+                expect(modal.recipients.length).toEqual(1);
+                expect(modal.workspace).toEqual(this.workspace);
             });
         });
     });

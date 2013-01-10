@@ -18,7 +18,7 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
         this.multiSelect = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "kaggleUser:checked",
             actions: [
-                '<a class="sendMessage" data-dialog="ComposeKaggleMessage" href="#">{{t "actions.send_kaggle_message"}}</a>'
+                '<a class="sendMessage" href="#">{{t "actions.send_kaggle_message"}}</a>'
             ]
         });
         this.registerSubView(this.multiSelect);
@@ -56,10 +56,5 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
             { recipients: new chorus.collections.KaggleUserSet([this.resource]),
               workspace: this.workspace
             }).launchModal();
-    },
-
-    postRender: function() {
-        this.$('.actions a.sendMessage').data('recipients', new chorus.collections.KaggleUserSet([this.model]));
-        this.$('.actions a.sendMessage').data('workspace', this.workspace);
     }
 });

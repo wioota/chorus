@@ -37,6 +37,7 @@ chorus.views.TabControl = chorus.views.Base.extend({
         _.each(this.tabNames, function(tabName) {
             var view = this[tabName];
             if (view) {
+                this.registerSubView(view);
                 this.$(".tabbed_area").append(view.render().el);
                 view.delegateEvents();
             }
