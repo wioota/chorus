@@ -109,6 +109,7 @@ RSpec.configure do |config|
   config.include RocketPants::TestHelper, :type => :controller
   config.include RocketPants::TestHelper, :type => :request
   config.include MockPresenters, :type => :controller
+  config.include CustomValidators, :type => :model
   config.include JsonHelper, :type => :controller
   config.include JsonHelper, :type => :request
   config.include FixtureGenerator, :type => :controller

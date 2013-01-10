@@ -7,6 +7,8 @@ class HadoopInstance < ActiveRecord::Base
   validates_presence_of :name, :host, :port
   validates_length_of :name, :maximum => 64
 
+  validates_with DataSourceNameValidator
+
   after_create :create_root_entry
 
   attr_accessor :highlighted_attributes, :search_result_notes

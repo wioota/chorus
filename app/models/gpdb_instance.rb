@@ -6,6 +6,8 @@ class GpdbInstance < ActiveRecord::Base
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
 
+  validates_with DataSourceNameValidator
+
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'

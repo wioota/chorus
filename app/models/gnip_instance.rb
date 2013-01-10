@@ -5,6 +5,8 @@ class GnipInstance < ActiveRecord::Base
   validates_presence_of :name, :stream_url, :username, :password, :owner
   validates_length_of :name, :maximum => 64
 
+  validates_with DataSourceNameValidator
+
   belongs_to :owner, :class_name => 'User'
   has_many :events, :through => :activities
   has_many :activities, :as => :entity
