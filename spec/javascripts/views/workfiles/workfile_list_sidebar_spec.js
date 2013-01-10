@@ -176,38 +176,6 @@ describe("chorus.views.WorkfileListSidebar", function() {
         });
     });
 
-    describe('workfile:checked', function() {
-        beforeEach(function() {
-            this.view.render();
-            this.checkedWorkfiles = new chorus.collections.WorkfileSet([
-                rspecFixtures.workfile.sql(),
-                rspecFixtures.workfile.text()
-            ]);
-            chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
-        });
-
-        it('shows the multiple select widget', function() {
-            expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
-        });
-
-        it('displays the number of selected workfiles', function() {
-            expect(this.view.$(".multiple_selection")).toContainText('2 items');
-        });
-
-        context('when only one is checked', function() {
-            beforeEach(function() {
-                this.checkedWorkfiles = new chorus.collections.WorkfileSet([
-                    rspecFixtures.workfile.sql()
-                ]);
-                chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
-            });
-
-            it('doesnt show the multiple select widget', function() {
-                expect(this.view.$(".multiple_selection")).toHaveClass("hidden");
-            });
-        });
-    });
-
     context("when no workfile is selected", function() {
         beforeEach(function() {
             this.view.workfile = "foo";
@@ -217,15 +185,6 @@ describe("chorus.views.WorkfileListSidebar", function() {
         it("sets the local workfile as undefined", function() {
             expect(this.view.workfile).toBeFalsy();
         });
-    });
-
-    context("when clicking deselect all link", function() {
-       it("broadcasts selectNone event", function() {
-           this.view.render();
-           spyOn(chorus.PageEvents, "broadcast");
-           this.view.$(".deselect_all").click();
-           expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
-       });
     });
 
     describe("editing tags", function() {

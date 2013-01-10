@@ -1,29 +1,25 @@
 chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     templateName:"workfile_list_sidebar",
     subviews:{
-        '.tab_control': 'tabs'
+        '.tab_control': 'tabs',
+        '.multiple_selection': 'multiSelect'
     },
 
     events: {
-        "click .deselect_all": 'deselectAll',
         "click .edit_tags": 'editTags'
     },
 
     setup:function () {
         this.tabs = new chorus.views.TabControl(["activity"]);
-        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:checked", this.workfileChecked, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
-        this.checkedWorkfiles = new chorus.collections.Base();
-    },
-
-    postRender: function() {
-        var multiSelectEl = this.$(".multiple_selection");
-        if(this.checkedWorkfiles && this.checkedWorkfiles.length < 2) {
-            multiSelectEl.addClass("hidden");
-        } else {
-            multiSelectEl.removeClass('hidden');
-        }
+        this.multiSelect = new chorus.views.MultipleSelectionSidebar({
+            selectEvent: "workfile:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ]
+        });
+        this.registerSubView(this.multiSelect);
     },
 
     setWorkfile:function (workfile) {
@@ -58,8 +54,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         var ctx = {
             canUpdate: this.options.workspace && this.options.workspace.canUpdate(),
             activeWorkspace: this.options.workspace && this.options.workspace.isActive(),
-            hideAddNoteLink: this.options.hideAddNoteLink,
-            checkedWorkfiles: this.checkedWorkfiles
+            hideAddNoteLink: this.options.hideAddNoteLink
         };
 
         if (this.workfile) {
@@ -79,19 +74,9 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         return ctx;
     },
 
-    workfileChecked: function(checkedWorkfiles){
-        this.checkedWorkfiles = checkedWorkfiles;
-        this.render();
-    },
-
-    deselectAll: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.broadcast("selectNone");
-    },
-
     editTags: function(e) {
         e.preventDefault();
-        var dialog = new chorus.dialogs.EditTags({collection: this.checkedWorkfiles});
+        var dialog = new chorus.dialogs.EditTags({collection: this.multiSelect.selectedModels});
         dialog.launchModal();
     }
 });
