@@ -12,6 +12,7 @@
 #
 src_files:
   - assets/application.js
+  - public/help/Default.js
 
 non_spec_src_files:
 
@@ -48,9 +49,10 @@ helpers:
 # EXAMPLE:
 #
 # spec_files:
-#   - **/*[sS]pec.js
-#
+ #   - **/*[sS]pec.js
+ #
 spec_files:
+  - "**/*[sS]pec.js"
 
 # src_dir
 #
