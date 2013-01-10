@@ -7,7 +7,8 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
         var context = {
             dataset: this.model.asWorkspaceDataset(),
             showUrl: this.model.showUrl(),
-            iconUrl: this.model.iconUrl()
+            iconUrl: this.model.iconUrl(),
+            tags: this.model.tags().models
         };
 
         var workspaces;

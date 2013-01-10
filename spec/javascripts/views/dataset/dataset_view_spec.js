@@ -182,6 +182,18 @@ describe("chorus.views.Dataset", function() {
         });
     });
 
+    context("when the dataset has tags", function () {
+        beforeEach(function () {
+            this.dataset.tags().reset([{name: "tag1"}, {name: "tag2"}]);
+            this.view.render();
+        });
+
+        it("shows a list of tags", function () {
+            expect(this.view.$('.tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.tag_list')).toContainText("tag1 tag2");
+        });
+    });
+
     it("works with database objects as well as datasets", function() {
         var table = rspecFixtures.dataset({objectName: 'yyy'});
         var view = new chorus.views.Dataset({ model: table });

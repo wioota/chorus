@@ -9,5 +9,8 @@
 {{#if imageUrl}}
     <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}"/>
 {{/if}}
-<h1 title="{{title}}">{{title}}</h1>
-{{importFrequencyTag importFrequency}}
+<div style="display: inline-block; width: 90%;">
+    <h1 title="{{title}}">{{title}}</h1>
+    {{importFrequencyTag importFrequency}}
+    <div class="tag_box"></div>
+</div>

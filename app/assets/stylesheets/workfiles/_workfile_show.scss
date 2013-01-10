@@ -1,21 +1,12 @@
 #page[data-page=WorkfileShow]  {
     .content_header {
-        position: relative;
-        padding: 12px 60px 5px;
-
-        img.icon {
-            position: absolute;
-            left: 10px;
+        .icon {
             max-height: 45px;
             max-width: 45px;
         }
 
-        .right_of_image {
-            width: 100%;
-
-            h1 {
-                padding:6px 0 5px;
-            }
+        h1 {
+            padding:6px 0 5px;
         }
     }
 

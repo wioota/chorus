@@ -30,6 +30,15 @@
 
     {{usedInWorkspaces workspaces dataset}}
 
+    {{#if tags}}
+    <div class="tag_list">
+        {{t "tag_list.title"}}:
+        {{#each tags}}
+        <a class="tag_name" href="#">{{this.name}}</a>
+        {{/each}}
+    </div>
+    {{/if}}
+
     {{#if lastComment}}
         <div class="comment">
             <div class="body"></div>

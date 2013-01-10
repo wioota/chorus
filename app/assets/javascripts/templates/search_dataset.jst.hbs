@@ -8,5 +8,14 @@
     </div>
 
     <div class="comments_container"/>
+    {{#if tags}}
+    <div class="tag_list">
+        {{t "tag_list.title"}}:
+        {{#each tags}}
+        <a class="tag_name" href="#">{{this.name}}</a>
+        {{/each}}
+    </div>
+    {{/if}}
+
 </div>
 <div class="spacer_right"></div>

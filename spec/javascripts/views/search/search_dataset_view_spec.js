@@ -82,4 +82,16 @@ describe("chorus.views.SearchDataset", function() {
         expect(img).toHaveAttr("src", this.model.iconUrl());
         expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes));
     });
+
+    context("when the dataset has tags", function () {
+        beforeEach(function () {
+            this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
+            this.view.render();
+        });
+
+        it("shows a list of tags", function () {
+            expect(this.view.$('.tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.tag_list')).toContainText("tag1 tag2");
+        });
+    });
 });

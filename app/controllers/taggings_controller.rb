@@ -2,8 +2,8 @@ class TaggingsController < ApplicationController
   MAXIMUM_TAG_LENGTH=100
 
   def create
-    model = Workfile.find(params[:entity_id])
-    authorize! :update, model
+    model = ModelMap.model_from_params(params[:entity_type], params[:entity_id])
+    authorize! :show, model
 
     tag_names = params[:tag_names] || []
     tag_names.each do |tagname|

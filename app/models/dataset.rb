@@ -42,6 +42,8 @@ class Dataset < ActiveRecord::Base
 
   attr_accessor :highlighted_attributes, :search_result_notes
 
+  acts_as_taggable
+
   searchable :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST

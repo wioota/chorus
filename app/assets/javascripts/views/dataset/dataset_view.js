@@ -48,7 +48,8 @@ chorus.views.Dataset = chorus.views.Base.extend({
             humanizedImportFrequency: chorus.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.workspacesAssociated(),
             viewable: viewable,
-            checkable: this.options.checkable
+            checkable: this.options.checkable,
+            tags: this.model.tags().models
         };
 
         if (recentComment) {

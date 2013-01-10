@@ -80,6 +80,15 @@ describe DatasetPresenter, :type => :view do
         hash[:comment_count].should == 0
       end
 
+      context 'when the table has tags' do
+        let(:dataset) { datasets(:tagged) }
+
+        it 'includes tags' do
+          hash[:tags].count.should be > 0
+          hash[:tags].should == Presenter.present(dataset.tags, @view)
+        end
+      end
+
       context "when it has comments" do
         let!(:dataset_note) { Events::NoteOnDataset.by(@user).add(:dataset => dataset, :body => 'Note on dataset') }
 

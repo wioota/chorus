@@ -1,6 +1,14 @@
 chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
     templateName: "dataset_show_content_header",
 
+    subviews: {
+        '.tag_box': 'tagBox'
+    },
+
+    setup: function() {
+        this.tagBox = new chorus.views.TagBox({model: this.model});
+    },
+
     additionalContext: function() {
         return {
             importFrequency: chorus.helpers.importFrequencyForModel(this.model),

@@ -118,6 +118,10 @@ FixtureBuilder.configure do |fbuilder|
     source_table = FactoryGirl.create(:gpdb_table, :name => "source_table", :schema => other_schema)
     source_view = FactoryGirl.create(:gpdb_view, :name => "source_view", :schema => other_schema)
 
+    tagged = FactoryGirl.create(:gpdb_table, :name => 'tagged', :schema => default_schema)
+    tagged.tag_list = ['alpha']
+    tagged.save!
+
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
