@@ -25,6 +25,7 @@ describe("chorus.dialogs.EditTags", function() {
     });
 
     describe("after the dialog is revealed by facebox", function() {
+        // TODO #42306281: get this working on ci
         xit("focus moves to the tag input box", function() {
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.launchModal();
