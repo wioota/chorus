@@ -47,6 +47,12 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.input.on("setFormData", _.bind(this.updateTags, this));
         this.input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
         this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+        // this is so the dropdown always appears at the bottom of the text area
+        this.input.bind('focus', _.bind(this.resizeTextExt, this));
+    },
+
+    resizeTextExt: function() {
+        this.textext.trigger('postInvalidate');
     },
 
     updateTags: function(e, data) {
@@ -134,5 +140,9 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.editing = true;
         this.render();
         this.trigger("startedEditing");
+    },
+
+    focusInput: function() {
+        this.input.focus();
     }
 });

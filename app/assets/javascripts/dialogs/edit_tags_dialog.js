@@ -90,5 +90,11 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
             delete model.editableTags;
         }, this);
         this._super("closeModal", arguments);
+    },
+
+    revealed: function() {
+        this._super("revealed", arguments);
+        $("#facebox").css("overflow", "visible");
+        this.tagsInput.focusInput();
     }
 });

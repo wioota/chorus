@@ -24,6 +24,16 @@ describe("chorus.dialogs.EditTags", function() {
         expect(this.dialog.$(".text-tags")).toContainText("tag3");
     });
 
+    describe("after the dialog is revealed by facebox", function() {
+        it("focus moves to the tag input box", function() {
+            $('#jasmine_content').append(this.dialog.el);
+            this.dialog.launchModal();
+            expect(this.dialog.$('.tag_editor').is(":focus")).toBeTruthy();
+            this.dialog.closeModal();
+            $(document).trigger("close.facebox");
+        });
+    });
+
     describe("clicking save", function() {
         beforeEach(function() {
             spyOn(this.collection, "saveTags").andCallThrough();

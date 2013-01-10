@@ -35,6 +35,9 @@ window.Chorus = function chorus$Global() {
 
         self.startHistory();
         self.updateCachebuster();
+
+        //set qtip to appear above dialogs
+        $.fn.qtip.zindex = 17000;
     };
 
     // to enable development mode, run `rake enable_dev_mode`
@@ -372,4 +375,3 @@ window.Chorus = function chorus$Global() {
 };
 
 window.chorus = window.chorus || new window.Chorus();
-
