@@ -284,6 +284,7 @@ chorus.views.Bare = Backbone.View.include(
                     $el.find('.jspVerticalBar').hide();
                     $el.find('.jspHorizontalBar').hide();
 
+                    // TODO #42333397: clean up this binding at teardown because it leaks memory
                     $el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
                     if(this.scrollHandle) {
