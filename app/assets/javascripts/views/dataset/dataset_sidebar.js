@@ -9,8 +9,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .multiple_selection .associate": "launchAssociateMultipleWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
-        "click a.duplicate": "launchDuplicateChorusView",
-        "click .deselect_all": 'deselectAll'
+        "click a.duplicate": "launchDuplicateChorusView"
     },
 
     subviews: {
@@ -18,6 +17,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
+        this.checkedDatasetsLength = 0;
         this.subscriptions.push(chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("dataset:checked", this.datasetChecked, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("column:selected", this.setColumn, this));
@@ -27,7 +27,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
         this.registerSubView(this.tabs);
-        this.checkedDatasets = new chorus.collections.Base();
     },
 
     render: function() {
@@ -99,21 +98,14 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     datasetChecked: function(checkedDatasets) {
         this.checkedDatasets = checkedDatasets;
-        this.render();
+        this.showOrHideMultipleSelectionSection();
     },
 
     showOrHideMultipleSelectionSection: function() {
         var multiSelectEl = this.$(".multiple_selection");
-        if(this.checkedDatasets && this.checkedDatasets.length < 2) {
-            multiSelectEl.addClass("hidden");
-        } else {
-            multiSelectEl.removeClass('hidden');
-        }
-    },
-
-    deselectAll: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.broadcast("selectNone");
+        var numChecked = this.checkedDatasets ? this.checkedDatasets.length : 0;
+        multiSelectEl.toggleClass("hidden", numChecked <= 1);
+        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: numChecked }));
     },
 
     resetStatistics: function(){
@@ -121,9 +113,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        return _.extend(new chorus.presenters.DatasetSidebar(this.resource, this.options), {
-            checkedDatasets: this.checkedDatasets
-        });
+        return new chorus.presenters.DatasetSidebar(this.resource, this.options);
     },
 
     postRender: function() {

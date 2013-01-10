@@ -731,8 +731,8 @@ describe("chorus.views.DatasetSidebar", function() {
                 rspecFixtures.workspaceDataset.datasetTable(),
                 rspecFixtures.workspaceDataset.datasetTable()
             ]);
-            chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
             this.multiSelectSection = this.view.$(".multiple_selection");
+            chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
         });
 
         it("does display the multiple selection section", function() {
@@ -740,7 +740,7 @@ describe("chorus.views.DatasetSidebar", function() {
         });
 
         it("displays the number of selected datasets", function() {
-            expect(this.multiSelectSection).toContainText('2 items');
+            expect(this.multiSelectSection.find(".count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
         });
 
         it("displays the 'associate with workspace' link", function() {
@@ -763,21 +763,14 @@ describe("chorus.views.DatasetSidebar", function() {
             beforeEach(function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
-                this.multiSelectSection = this.view.$(".multiple_selection");
             });
 
             it("should still show the multiple selection section", function() {
-                expect(this.multiSelectSection).not.toHaveClass("hidden");
+                expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
             });
 
             it("should retain the selection count when the view is re-rendered", function() {
-                expect(this.multiSelectSection).toContainText('2 items');
-            });
-
-            it("clicking deselect all broadcasts selectNone event", function() {
-                spyOn(chorus.PageEvents, "broadcast");
-                this.view.$(".deselect_all").click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                expect(this.view.$(".multiple_selection .count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
             });
         });
     });
