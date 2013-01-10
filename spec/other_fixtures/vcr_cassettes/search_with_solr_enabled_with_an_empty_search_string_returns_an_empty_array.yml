@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>87,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>95,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
         OR GpdbInstance OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
         OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''type_name_s:(User
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
@@ -63,7 +63,7 @@ http_interactions:
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
         1000003'',''name_texts''=>[''workspace44445'']}]}},{''groupValue''=>''Workspace
         1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
-        1000004'',''name_texts''=>[''typeahead'']}]}},{''groupValue''=>''Workspace
+        1000004'',''name_texts''=>[''typeahead_workspace'']}]}},{''groupValue''=>''Workspace
         1000005'',''doclist''=>{''numFound''=>2,''start''=>0,''docs''=>[{''id''=>''Workspace
         1000005'',''name_texts''=>[''Public with no collaborators except collaborator''],''summary_texts''=>[''searchquery
         can see I guess'']},{''id''=>''Events::NoteOnWorkspace 1000053'',''body_texts''=>[''some
@@ -117,14 +117,7 @@ http_interactions:
         1000000'',''body_texts''=>[''Comment on Note on Greenplum'']},{''id''=>''Comment
         1000001'',''body_texts''=>[''2nd Comment on Note on Greenplum'']},{''id''=>''GpdbInstance
         1000000'',''name_texts''=>[''searchquery''],''description_texts''=>[''Just
-        for searchquery and greenplumsearch'']}]}},{''groupValue''=>''GnipInstance
-        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''docs''=>[{''id''=>''GnipInstance
-        1000000'',''name_texts''=>[''default''],''description_texts''=>[''a searchquery
-        example gnip account'']},{''id''=>''Events::NoteOnGnipInstance 1000041'',''body_texts''=>[''i
-        am a comment with gnipsearch in me'']},{''id''=>''Events::NoteOnGnipInstance
-        1000042'',''body_texts''=>[''i am an insight with gnipinsight in me'']}]}},{''groupValue''=>''GnipInstance
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GnipInstance
-        1000001'',''name_texts''=>[''typeahead'']}]}},{''groupValue''=>''GpdbInstance
+        for searchquery and greenplumsearch'']}]}},{''groupValue''=>''GpdbInstance
         1000001'',''doclist''=>{''numFound''=>4,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
         1000001'',''name_texts''=>[''Shared'']},{''id''=>''Events::NoteOnGreenplumInstance
         1000034'',''body_texts''=>[''is this a greenplumsearch instance?'']},{''id''=>''Events::NoteOnGreenplumInstance
@@ -140,25 +133,31 @@ http_interactions:
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
         1000006'',''name_texts''=>[''local-greenplum'']}]}},{''groupValue''=>''GpdbInstance
         1000007'',''doclist''=>{''numFound''=>2,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
-        1000007'',''name_texts''=>[''typeahead'']},{''id''=>''Events::NoteOnGreenplumInstance
+        1000007'',''name_texts''=>[''typeahead_gpdb_instance'']},{''id''=>''Events::NoteOnGreenplumInstance
         1000010'',''body_texts''=>[''i exist only for my attachments'']}]}},{''groupValue''=>''GpdbInstance
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbInstance
-        1000008'',''name_texts''=>[''instance44445'']}]}},{''groupValue''=>''HadoopInstance
+        1000008'',''name_texts''=>[''gpdb_instance44445'']}]}},{''groupValue''=>''HadoopInstance
         1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
-        1000000'',''name_texts''=>[''searchquery''],''description_texts''=>[''searchquery
+        1000000'',''name_texts''=>[''searchquery_hadoop''],''description_texts''=>[''searchquery
         for the hadoop instance'']},{''id''=>''Events::NoteOnHadoopInstance 1000037'',''body_texts''=>[''hadoop-idy-doop'']}]}},{''groupValue''=>''HadoopInstance
         1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
-        1000001'',''name_texts''=>[''instance44445'']}]}},{''groupValue''=>''HadoopInstance
+        1000001'',''name_texts''=>[''hadoop_instance44445'']}]}},{''groupValue''=>''HadoopInstance
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
-        1000002'',''name_texts''=>[''typeahead'']}]}},{''groupValue''=>''HadoopInstance
+        1000002'',''name_texts''=>[''typeahead_hadoop_instance'']}]}},{''groupValue''=>''HadoopInstance
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
-        1000003'',''name_texts''=>[''instance44446'']}]}},{''groupValue''=>''User
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@johnstonwillms.info''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
+        1000003'',''name_texts''=>[''hadoop_instance44446'']}]}},{''groupValue''=>''GnipInstance
+        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''docs''=>[{''id''=>''GnipInstance
+        1000000'',''name_texts''=>[''default''],''description_texts''=>[''a searchquery
+        example gnip account'']},{''id''=>''Events::NoteOnGnipInstance 1000041'',''body_texts''=>[''i
+        am a comment with gnipsearch in me'']},{''id''=>''Events::NoteOnGnipInstance
+        1000042'',''body_texts''=>[''i am an insight with gnipinsight in me'']}]}},{''groupValue''=>''GnipInstance
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GnipInstance
+        1000001'',''name_texts''=>[''typeahead'']}]}},{''groupValue''=>''User 1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
+        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@hillljenkins.biz''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
         1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@kemmer.org''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
+        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@ondrickabeatty.info''],''last_name_texts''=>[''AlphaSearch'']}]}},{''groupValue''=>''User
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''User
-        1000002'',''first_name_texts''=>[''Amely''],''username_texts''=>[''default''],''email_texts''=>[''amely@herzogborer.info''],''last_name_texts''=>[''Hyatt'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Workfile'',17,''Instance'',15,''Workspace'',15,''Attachment'',11,''Dataset'',6,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+        1000002'',''first_name_texts''=>[''Olin''],''username_texts''=>[''default''],''email_texts''=>[''olin@maggioflatley.net''],''last_name_texts''=>[''Legros'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Workfile'',17,''Instance'',15,''Workspace'',15,''Attachment'',11,''Dataset'',6,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 01:06:43 GMT
+  recorded_at: Thu, 10 Jan 2013 19:47:35 GMT
 recorded_with: VCR 2.3.0

@@ -76,7 +76,7 @@ FixtureBuilder.configure do |fbuilder|
 
     @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_instance => owners_instance)
 
-    hadoop_instance = HadoopInstance.create!({:name => "searchquery", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    hadoop_instance = HadoopInstance.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
     Events::HadoopInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 
@@ -144,9 +144,9 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
     @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
-    typeahead_instance = FactoryGirl.create :gpdb_instance, :name => 'typeahead'
+    typeahead_instance = FactoryGirl.create :gpdb_instance, :name => 'typeahead_gpdb_instance'
     [:workspace, :hadoop_instance].each do |model|
-      fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead')
+      fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead_' + model.to_s)
     end
 
     note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_instance => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')

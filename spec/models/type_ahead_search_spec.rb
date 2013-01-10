@@ -64,7 +64,7 @@ describe TypeAheadSearch do
         search.results.should include(workfiles(:typeahead))
         search.results.should include(hdfs_entries(:typeahead))
         search.results.should include(users(:typeahead))
-        search.results.should include(gpdb_instances(:typeahead))
+        search.results.should include(gpdb_instances(:typeahead_gpdb_instance))
         search.results.should include(hadoop_instances(:typeahead))
         search.results.should include(datasets(:typeahead))
       end

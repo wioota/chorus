@@ -42,5 +42,5 @@ http_interactions:
         1000047'',''body_texts''=>[''insightsearch ftw''],''score''=>2.6224928}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnDataset
         1000047''=>{''body_texts''=>[''@@@hl@@@insightsearch@@@endhl@@@ ftw'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 01:07:15 GMT
+  recorded_at: Thu, 10 Jan 2013 19:48:14 GMT
 recorded_with: VCR 2.3.0

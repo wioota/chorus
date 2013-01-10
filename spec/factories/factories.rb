@@ -2,7 +2,7 @@ require 'factory_girl'
 
 FactoryGirl.define do
   factory :gpdb_instance do
-    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:name) { |n| "gpdb_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     maintenance_db "postgres"
@@ -11,14 +11,14 @@ FactoryGirl.define do
   end
 
   factory :hadoop_instance do
-    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:name) { |n| "hadoop_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     owner
   end
 
   factory :gnip_instance do
-    sequence(:name) { |n| "instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:name) { |n| "gnip_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:stream_url) { |n| "https://historical.gnip.com/stream_url#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:username) { |n| "user#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     password "secret"

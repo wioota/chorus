@@ -39,5 +39,5 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 17:45:32 GMT
+  recorded_at: Thu, 10 Jan 2013 19:41:59 GMT
 recorded_with: VCR 2.3.0

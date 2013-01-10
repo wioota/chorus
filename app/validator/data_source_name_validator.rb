@@ -4,7 +4,7 @@ class DataSourceNameValidator < ActiveModel::Validator
 
   def validate(record)
     if record.name && unique_name?(record)
-      record.errors.add(:name, :in_use)
+      record.errors.add(:name, :in_use => record.name)
     end
   end
 
