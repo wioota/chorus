@@ -17,6 +17,10 @@ describe GreenplumConnection::Base, :database_integration do
     InstanceIntegration.setup_gpdb
   end
 
+  before do
+    stub.proxy(Sequel).connect.with_any_args
+  end
+
   let(:details) { {
       :host => the_host,
       :username => username,
@@ -38,7 +42,7 @@ describe GreenplumConnection::Base, :database_integration do
     end
 
     it "masks sequel errors" do
-      mock(GreenplumConnection).connect_to_sequel(anything, anything).once do
+      stub(Sequel).connect(anything, anything) do
         raise Sequel::DatabaseError
       end
 
@@ -716,6 +720,50 @@ describe GreenplumConnection::Base, :database_integration do
       context "when the wrapped error has no sql state error code" do
         it "returns :GENERIC" do
           error.error_type.should == :GENERIC
+        end
+      end
+    end
+
+    describe "sanitizing exception messages" do
+      let(:error) { GreenplumConnection::DatabaseError.new message }
+
+      context "one kind" do
+        let(:message) do
+          "foo jdbc:postgresql://somehost:5432/db_name?user=someguy&password=secrets and stuff"
+        end
+
+        it "should sanitize the connection string" do
+          error.message.should == "foo jdbc:postgresql://somehost:5432/db_name?user=xxxx&password=xxxx and stuff"
+        end
+      end
+
+      context "another kind" do
+        let(:message) do
+          "foo jdbc:postgresql://somehost:5432/db_name?user=someguy&password=secrets"
+        end
+
+        it "should sanitize the connection string" do
+          error.message.should == "foo jdbc:postgresql://somehost:5432/db_name?user=xxxx&password=xxxx"
+        end
+      end
+
+      context "and another kind" do
+        let(:message) do
+          "foo jdbc:postgresql://somehost:5432/db_name?user=someguy&password=secrets&somethingelse=blah"
+        end
+
+        it "should sanitize the connection string" do
+          error.message.should == "foo jdbc:postgresql://somehost:5432/db_name?user=xxxx&password=xxxx&somethingelse=blah"
+        end
+      end
+
+      context "with other orders" do
+        let(:message) do
+          "foo jdbc:postgresql://somehost:5432/db_name?password=secrets&user=someguy blah"
+        end
+
+        it "should sanitize the connection string" do
+          error.message.should == "foo jdbc:postgresql://somehost:5432/db_name?password=xxxx&user=xxxx blah"
         end
       end
     end

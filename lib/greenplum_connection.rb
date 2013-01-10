@@ -17,6 +17,20 @@ module GreenplumConnection
         else :GENERIC
       end
     end
+
+    def to_s
+      sanitize_message super
+    end
+
+    def message
+      sanitize_message super
+    end
+
+    private
+
+    def sanitize_message(message)
+      message.gsub /(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx'
+    end
   end
 
   class ObjectNotFound < StandardError; end
@@ -27,10 +41,6 @@ module GreenplumConnection
     @@gpdb_login_timeout
   end
 
-  def self.connect_to_sequel(url, opts)
-    Sequel.connect(url, opts)
-  end
-
   class Base
 
     def initialize(details)
@@ -38,7 +48,7 @@ module GreenplumConnection
     end
 
     def connect!
-      @connection ||= GreenplumConnection::connect_to_sequel db_url, logger_options.merge({:test => true})
+      @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
     end
 
     def disconnect
