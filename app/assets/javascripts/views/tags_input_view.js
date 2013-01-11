@@ -16,6 +16,18 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             plugins: 'tags autocomplete ajax',
             tagsItems: tagsForTextext,
             itemManager: chorus.utilities.TagItemManager,
+            keys: {
+                8   : 'backspace',
+                9   : 'tab',
+                13  : 'enter!',
+                27  : 'escape',
+                37  : 'left',
+                38  : 'up!',
+                39  : 'right',
+                40  : 'down!',
+                46  : 'delete',
+                108 : 'numpadEnter'
+            },
             ajax: {
                 url: '/tags',
                 dataType: 'json',
