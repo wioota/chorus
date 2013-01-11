@@ -2,7 +2,12 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.dataset();
+                this.model = rspecFixtures.dataset({
+                    associatedWorkspaces: [
+                        {id: "123"},
+                        {id: "645"}
+                    ]
+                });
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
@@ -11,7 +16,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 ]);
             });
 
-            xit("shows all workspaces except for the ones the source table is already associated with", function() {
+            it("shows all workspaces except for the ones the source table is already associated with", function() {
                 expect(this.dialog.$("li").length).toBe(1);
                 expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_the_current_one");
             });
