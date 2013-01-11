@@ -43,6 +43,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             this.$el.removeClass('editing');
         }
 
+        // TODO #42333697: change these to use this.binding.add so they get cleaned up
         this.textext = this.input.textext()[0];
         this.input.on("setFormData", _.bind(this.updateTags, this));
         this.input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
