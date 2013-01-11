@@ -89,11 +89,9 @@ describe "Workfiles" do
       end
 
       within '.content_header' do
-        click_link 'Add tags'
         page.should have_selector("#tag_editor", :visible => true)
         fill_in 'tag_editor', :with => 'new_tag'
         find('.tag_editor').native.send_keys(:return)
-        click_link 'Done'
       end
 
       visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
