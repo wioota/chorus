@@ -6,7 +6,7 @@ describe OracleInstancesController do
   let(:user) { users(:owner) }
   let(:instance_params) { {
       :name => 'New Instance',
-      :db_name => 'database',
+      :maintenance_db => 'database',
       :host => 'oracle.com',
       :port => '123'
     }}
@@ -16,10 +16,6 @@ describe OracleInstancesController do
   end
 
   describe "#create" do
-    before do
-      mock.proxy(Oracle::InstanceRegistrar).create!(hash_including(instance_params), user)
-    end
-
     it 'creates a new instance' do
       expect {
         post :create, instance_params
@@ -28,8 +24,11 @@ describe OracleInstancesController do
     end
 
     it 'presents the instance' do
+      mock_present do |instance|
+        instance.name == instance_params[:name]
+      end
       post :create, instance_params
-      decoded_response.name.should == 'New Instance'
+      response.should be_success
     end
   end
 end

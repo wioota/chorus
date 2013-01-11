@@ -585,7 +585,7 @@ describe Dataset::Query, :database_integration => true do
 
   describe ".refresh" do
     context "when user does not have access to schema" do
-      let(:account_without_permission) { FactoryGirl.create(:instance_account, :db_password => "secret", :db_username => "user_with_no_access", :instance => database.gpdb_instance, :owner => account.owner) }
+      let(:account_without_permission) { FactoryGirl.build(:instance_account, :db_password => "secret", :db_username => "user_with_no_access", :instance => database.gpdb_instance, :owner => account.owner).tap { |a| a.save(:validate => false) } }
       let(:not_accessible_schema_name) { "not_accessible" }
       let(:not_accessible_schema) { database.schemas.find_by_name(not_accessible_schema_name) }
 

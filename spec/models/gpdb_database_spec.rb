@@ -229,7 +229,7 @@ describe GpdbDatabase do
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
-      mock(GreenplumConnection::DatabaseConnection).new({
+      mock(GreenplumConnection).new({
                                                             :host => instance.host,
                                                             :port => instance.port,
                                                             :username => account.db_username,

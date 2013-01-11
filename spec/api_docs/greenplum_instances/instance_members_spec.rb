@@ -11,7 +11,7 @@ resource "Greenplum DB: instance members" do
 
   before do
     log_in owner
-    stub(Gpdb::ConnectionChecker).check! { true }
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   get "/gpdb_instances/:gpdb_instance_id/members" do

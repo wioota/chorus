@@ -94,7 +94,7 @@ class GpdbDatabase < ActiveRecord::Base
         :database => name,
         :logger => Rails.logger
     }
-    GreenplumConnection::DatabaseConnection.new(options)
+    GreenplumConnection.new(options)
   end
 
   private

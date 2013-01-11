@@ -14,7 +14,6 @@ module GpdbInstances
       account = gpdb_instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
       account.attributes = params[:account]
 
-      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
 
       present account, :status => :created
@@ -26,7 +25,6 @@ module GpdbInstances
 
       account = gpdb_instance.accounts.find(params[:id])
       account.attributes = params[:account]
-      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
 
       present account, :status => :ok

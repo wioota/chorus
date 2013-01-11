@@ -1,7 +1,6 @@
 class OracleInstancesController < ApplicationController
   def create
-    #instance = OracleInstance.create!(params)
-    instance = Oracle::InstanceRegistrar.create!(params, current_user)
+    instance = current_user.oracle_instances.create!(params, :as => :create)
     present instance, :status => :created
   end
 end

@@ -96,7 +96,8 @@ module InstanceIntegration
 
   def self.instance_config_for_gpdb(name)
     config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
-    config.reject { |k, v| k == "account" }
+    account_config = config['account']
+    config.reject { |k, v| k == "account" }.merge(account_config)
   end
 
   def self.instance_config_for_hadoop(name = REAL_HADOOP_HOST)

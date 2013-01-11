@@ -318,7 +318,7 @@ describe GpdbSchema do
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should create a Greenplum SchemaConnection" do
-      mock(GreenplumConnection::SchemaConnection).new({
+      mock(GreenplumConnection).new({
                                                           :host => schema.gpdb_instance.host,
                                                           :port => schema.gpdb_instance.port,
                                                           :username => account.db_username,

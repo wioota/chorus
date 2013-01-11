@@ -142,9 +142,9 @@ describe InstanceStatusChecker do
   describe "GPDB Instances:" do
     let(:user1) { FactoryGirl::create :user }
 
-    let(:instance_account1) { FactoryGirl::create :instance_account, :instance => gpdb_instance1, :owner => user1 }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :instance => gpdb_instance2, :owner => user1 }
-    let(:instance_account3) { FactoryGirl::create :instance_account, :instance => gpdb_instance3, :owner => user1 }
+    let(:instance_account1) {gpdb_instance1.account_for_user(user1) }
+    let(:instance_account2) {gpdb_instance2.account_for_user(user1) }
+    let(:instance_account3) {gpdb_instance3.account_for_user(user1) }
 
     let(:gpdb_instance1) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
     let(:gpdb_instance2) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }

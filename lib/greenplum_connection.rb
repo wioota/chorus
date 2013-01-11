@@ -1,11 +1,9 @@
-require 'sequel'
+require_relative 'data_source_connection'
 
-module GreenplumConnection
-  class InstanceUnreachable < StandardError; end
+class GreenplumConnection < DataSourceConnection
 
-  DatabaseError = Sequel::DatabaseError
+  DatabaseError = Error
   class DatabaseError
-
     def error_type
       error_code = wrapped_exception && wrapped_exception.respond_to?(:get_sql_state) && wrapped_exception.get_sql_state
       case error_code
@@ -41,63 +39,64 @@ module GreenplumConnection
     @@gpdb_login_timeout
   end
 
-  class Base
+  def initialize(details)
+    @settings = details
+  end
 
-    def initialize(details)
-      @settings = details
-    end
+  def connect!
+    @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+  end
 
-    def connect!
-      @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
-    end
+  def disconnect
+    @connection.disconnect if @connection
+    @connection = nil
+  end
 
-    def disconnect
-      @connection.disconnect if @connection
-      @connection = nil
-    end
+  def connected?
+    !!@connection
+  end
 
-    def connected?
-      !!@connection
-    end
+  def fetch(sql, parameters = {})
+    with_connection { @connection.fetch(sql, parameters).all }
+  end
 
-    def fetch(sql, parameters = {})
-      with_connection { @connection.fetch(sql, parameters).all }
-    end
+  def fetch_value(sql)
+    result = with_connection { @connection.fetch(sql).limit(1).first }
+    result && result.first[1]
+  end
 
-    def fetch_value(sql)
-      result = with_connection { @connection.fetch(sql).limit(1).first }
-      result && result.first[1]
-    end
+  def execute(sql)
+    with_connection { @connection.execute(sql) }
+    true
+  end
 
-    def execute(sql)
-      with_connection { @connection.execute(sql) }
-      true
-    end
+  private
 
-    private
-
-    def logger_options
-      if @settings[:logger]
-        { :logger => @settings[:logger], :sql_log_level => :debug }
-      else
-        {}
-      end
-    end
-
-    def with_connection
-      connect!
-      yield
-    ensure
-      disconnect
-    end
-
-    def db_url
-      query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-      "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+  def logger_options
+    if @settings[:logger]
+      { :logger => @settings[:logger], :sql_log_level => :debug }
+    else
+      {}
     end
   end
 
-  class DatabaseConnection < Base
+  def with_connection
+    connect!
+    if(schema_name)
+      @connection.default_schema = schema_name
+      @connection.execute("SET search_path TO '#{schema_name}'")
+    end
+    yield
+  ensure
+    disconnect
+  end
+
+  def db_url
+    query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
+    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+  end
+
+  module DatabaseMethods
     def schemas
       with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:schema_name] } }
     end
@@ -130,7 +129,7 @@ module GreenplumConnection
     SQL
   end
 
-  class InstanceConnection < Base
+  module InstanceMethods
     def databases
       with_connection { @connection.fetch(DATABASES_SQL).map { |row| row[:database_name] } }
     end
@@ -148,7 +147,7 @@ module GreenplumConnection
     SQL
   end
 
-  class SchemaConnection < Base
+  module SchemaMethods
     def functions
       with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
     end
@@ -195,24 +194,10 @@ module GreenplumConnection
       true
     end
 
-    def fetch(sql, parameters = {})
-      with_schema_connection { @connection.fetch(sql, parameters).all }
-    end
-
-    def fetch_value(sql)
-      result = with_schema_connection { @connection.fetch(sql).limit(1).first }
-      result && result.first[1]
-    end
-
     def stream_table(table_name, limit = nil, &block)
       sql = "SELECT * FROM \"#{table_name}\""
       sql = sql + " LIMIT #{limit}" if limit
       with_schema_connection { @connection.fetch(sql).each(&block) }
-      true
-    end
-
-    def execute(sql)
-      with_schema_connection { @connection.execute(sql) }
       true
     end
 
@@ -271,4 +256,8 @@ module GreenplumConnection
       WHERE  pg_catalog.pg_namespace.nspname = :schema
     SQL
   end
+
+  include DatabaseMethods
+  include InstanceMethods
+  include SchemaMethods
 end

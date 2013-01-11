@@ -25,7 +25,6 @@ module GpdbInstances
 
       account = gpdb_instance.accounts.find_or_initialize_by_owner_id(current_user.id)
       account.attributes = params[:account]
-      Gpdb::ConnectionChecker.check!(gpdb_instance, account)
       account.save!
       account
     end

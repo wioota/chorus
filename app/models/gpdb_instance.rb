@@ -1,13 +1,10 @@
 class GpdbInstance < DataSource
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
-                  :provision_type, :description, :instance_provider, :version
+  attr_accessor :db_username, :db_password
 
-  validates_presence_of :name, :maintenance_db
-  validates_numericality_of :port, :only_integer => true, :if => :host?
-  validates_length_of :name, :maximum => 64
+  validates_associated :owner_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'maintenance_db']).empty? }
 
   validates_with DataSourceNameValidator
-
+  
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
@@ -16,9 +13,12 @@ class GpdbInstance < DataSource
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
-  after_update :solr_reindex_later, :if => :shared_changed?
-
   has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
+
+  before_validation :build_instance_account_for_owner, :on => :create
+  after_update :solr_reindex_later, :if => :shared_changed?
+  after_create :create_instance_created_event, :if => :current_user
+  after_update :create_instance_name_changed_event, :if => :current_user
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
@@ -75,7 +75,7 @@ class GpdbInstance < DataSource
   end
 
   def connect_with(account)
-    GreenplumConnection::InstanceConnection.new(
+    GreenplumConnection.new(
         :username => account.db_username,
         :password => account.db_password,
         :host => host,
@@ -134,10 +134,6 @@ class GpdbInstance < DataSource
     accounts.pluck(:db_username)
   end
 
-  def owner_account
-    account_owned_by(owner)
-  end
-
   def account_for_user(user)
     if shared?
       owner_account
@@ -174,7 +170,7 @@ class GpdbInstance < DataSource
     databases.each do |database|
       begin
         GpdbSchema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
-      rescue GreenplumConnection::InstanceUnreachable => e
+      rescue GreenplumConnection::DatabaseError => e
         Chorus.log_error "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
       end
     end
@@ -182,6 +178,14 @@ class GpdbInstance < DataSource
 
   def entity_type_name
     'gpdb_instance'
+  end
+
+  def provision_type
+    "register"
+  end
+
+  def instance_provider
+    "Greenplum Database"
   end
 
   def self.type_name
@@ -214,7 +218,21 @@ class GpdbInstance < DataSource
     ).to_sql
   end
 
-  def account_owned_by(user)
-    accounts.find_by_owner_id(user.id)
+  def build_instance_account_for_owner
+    build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
+  end
+
+  def create_instance_created_event
+    Events::GreenplumInstanceCreated.by(current_user).add(:gpdb_instance => self)
+  end
+
+  def create_instance_name_changed_event
+    if name_changed?
+      Events::GreenplumInstanceChangedName.by(current_user).add(
+          :gpdb_instance => self,
+          :old_name => name_was,
+          :new_name => name
+      )
+    end
   end
 end

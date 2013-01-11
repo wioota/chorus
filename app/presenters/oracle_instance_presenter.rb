@@ -5,9 +5,8 @@ class OracleInstancePresenter < Presenter
         :name => model.name,
         :host => model.host,
         :port => model.port,
-        :db_name => model.db_name,
+        :maintenance_db => model.maintenance_db,
         :description => model.description
-        #:entity_type => 'gpdb_instance'
     }
   end
 end

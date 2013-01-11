@@ -25,7 +25,7 @@ describe GpdbInstances::AccountController do
 
   describe "#create" do
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
       log_in user
     end
 
@@ -42,7 +42,7 @@ describe GpdbInstances::AccountController do
 
     context "when the credentials are invalid" do
       before do
-        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
       end
 
       it "fails" do
@@ -65,7 +65,7 @@ describe GpdbInstances::AccountController do
 
   describe "#update" do
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
       log_in user
     end
 
@@ -93,7 +93,7 @@ describe GpdbInstances::AccountController do
 
     context "when credentials are invalid " do
       before do
-        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
       end
 
       it "fails" do

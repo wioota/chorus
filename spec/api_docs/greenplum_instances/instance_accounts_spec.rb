@@ -9,7 +9,7 @@ resource "Greenplum DB: accounts" do
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do
-    stub(Gpdb::ConnectionChecker).check! { true }
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   get "/gpdb_instances/:gpdb_instance_id/account" do

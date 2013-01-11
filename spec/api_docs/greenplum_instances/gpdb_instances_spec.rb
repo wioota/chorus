@@ -6,7 +6,7 @@ resource "Greenplum DB: instances" do
 
   before do
     log_in owner
-    stub(Gpdb::ConnectionChecker).check! { true }
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   post "/gpdb_instances" do

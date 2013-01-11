@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Gpdb::ConnectionBuilder do
   let(:gpdb_instance) { FactoryGirl::create :gpdb_instance, :host => "hello" }
-  let(:instance_account) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1111" }
+  let(:instance_account) { gpdb_instance.owner_account }
   let(:fake_connection_adapter) { stub(Object.new).disconnect!.subject }
   let(:connection_timeout) { Gpdb.gpdb_login_timeout }
 
@@ -98,8 +98,8 @@ describe Gpdb::ConnectionBuilder do
       end
 
       context "with an invalid password" do
-        let(:adapter_exception) { ActiveRecord::JDBCError.new("org.postgresql.util.PSQLException: FATAL: password authentication failed for user 'user1'") }
-        let(:nice_exception) { ActiveRecord::JDBCError.new("Password authentication failed for user 'user1'") }
+        let(:adapter_exception) { ActiveRecord::JDBCError.new("org.postgresql.util.PSQLException: FATAL: password authentication failed for user '#{instance_account.db_username}'") }
+        let(:nice_exception) { ActiveRecord::JDBCError.new("Password authentication failed for user '#{instance_account.db_username}'") }
         let(:raised_message) { "#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}" }
 
         it "raises an InvalidLogin exception" do
