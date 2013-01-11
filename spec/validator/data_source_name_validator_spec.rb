@@ -49,25 +49,25 @@ describe DataSourceNameValidator do
     it "fails if a GPDBInstance has the same name as the record" do
       FactoryGirl.create(:gpdb_instance, :name => name)
       record.valid?.should == false
-      record.should have_error_on(:base).with_message(:name_in_use)
+      record.should have_error_on(:name).with_message(:taken)
     end
 
     it "fails if a HadoopInstance has the same name as the record" do
       FactoryGirl.create(:hadoop_instance, :name => name)
       record.valid?.should == false
-      record.should have_error_on(:base).with_message(:name_in_use)
+      record.should have_error_on(:name).with_message(:taken)
     end
 
     it "fails if a GnipInstance has the same name as the record" do
       FactoryGirl.create(:gnip_instance, :name => name)
       record.valid?.should == false
-      record.should have_error_on(:base).with_message(:name_in_use)
+      record.should have_error_on(:name).with_message(:taken)
     end
 
     it "it matches data source names regardless of case" do
       FactoryGirl.create(:gnip_instance, :name => name.capitalize)
       record.valid?.should == false
-      record.should have_error_on(:base).with_message(:name_in_use)
+      record.should have_error_on(:name).with_message(:taken)
     end
   end
 end
