@@ -187,24 +187,28 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("with an ordinal scale", function() {
             beforeEach(function() {
+                this.renderXAxisWithLabels = function(labels) {
+                    this.axis = new chorus.views.visualizations.XAxis({
+                        el: this.el,
+                        labels: labels,
+                        axisLabel: this.axisLabelValue,
+                        scaleType: "ordinal",
+                        ticks: true,
+                        paddingX: this.paddingX,
+                        paddingY: this.paddingY
+                    });
+                    this.axis.render();
+
+                    this.axisLine = this.$el.find("line.axis");
+                    this.ticks = this.$el.find("line.tick");
+                    this.grids = this.$el.find("line.grid");
+                    this.axisLabel = this.$el.find(".axis_label");
+                    this.labels = this.$el.find(".label");
+                };
+
                 this.labelValues = ['one', 'two', 'three', 'four', 'five'];
 
-                this.axis = new chorus.views.visualizations.XAxis({
-                    el: this.el,
-                    labels: this.labelValues,
-                    axisLabel: this.axisLabelValue,
-                    scaleType: "ordinal",
-                    ticks: true,
-                    paddingX: this.paddingX,
-                    paddingY: this.paddingY
-                });
-                this.axis.render();
-
-                this.axisLine = this.$el.find("line.axis");
-                this.ticks = this.$el.find("line.tick");
-                this.grids = this.$el.find("line.grid");
-                this.axisLabel = this.$el.find(".axis_label");
-                this.labels = this.$el.find(".label");
+                this.renderXAxisWithLabels(this.labelValues);
             });
 
             describe("#requiredBottomSpace (used for drawing the y axis)", function() {
@@ -260,11 +264,11 @@ describe("chorus.views.visualizations.Axes", function() {
             describe("when there are too many tick labels to fit horizontally within the width", function() {
                 beforeEach(function() {
                     this.labelValues = [
-                        'one',
-                        'two',
-                        'three',
-                        'four',
-                        'five',
+                        'one_long',
+                        'two_long',
+                        'three_long',
+                        'four_long',
+                        'five_long',
                         'one hundred and six',
                         'one hundred and seven',
                         'one hundred and eight',
@@ -272,6 +276,8 @@ describe("chorus.views.visualizations.Axes", function() {
                         'one hundred and ten',
                         'one hundred and eleven'
                     ];
+                    this.$el.empty();
+                    this.renderXAxisWithLabels(this.labelValues.slice(0,5));
 
                     this.$unrotatedEl = this.$el;
                     this.unrotatedLabels = this.labels;
@@ -300,17 +306,13 @@ describe("chorus.views.visualizations.Axes", function() {
                 itHasAReasonableLayout();
                 itDisplaysOrdinalLabelsCorrectly();
 
-                // TODO: This test frequently fails because the relevant SVG elements do not always render in time inJasmine
-                xit("rotates the labels", function() {
-                    waits(100);
-                    runs(function() {
-                        _.each(this.labels, function(label, i) {
-                            var unrotatedLabel = this.unrotatedLabels[i];
-                            if (!unrotatedLabel) return;
-                            expect(width(label)).toBeLessThan(width(unrotatedLabel));
-                            expect(height(label)).toBeGreaterThan(height(unrotatedLabel));
-                        }, this);
-                    });
+                it("rotates the labels", function() {
+                    _.each(this.labels, function(label, i) {
+                        var unrotatedLabel = this.unrotatedLabels[i];
+                        if (!unrotatedLabel) return;
+                        expect(width(label)).toBeLessThan(width(unrotatedLabel));
+                        expect(height(label)).toBeGreaterThan(height(unrotatedLabel));
+                    }, this);
                 });
 
                 it("aligns the tops of the labels", function() {
