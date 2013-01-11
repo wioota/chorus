@@ -62,7 +62,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_mig
   gem 'foreman', '0.46',         :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
-  gem 'jasmine'
+  gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
