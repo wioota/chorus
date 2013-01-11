@@ -1,4 +1,4 @@
-.edit_tags .dialog_content{
+.edit_tags .dialog_content {
     width: 580px;
     height: 225px;
 
@@ -7,9 +7,6 @@
         .text-tags {
             height: 150px;
             overflow-y: scroll;
-        }
-        .tag_editor.has_error {
-            padding-right: 20px;
         }
     }
 }

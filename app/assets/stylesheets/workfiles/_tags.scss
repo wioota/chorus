@@ -21,6 +21,10 @@
                 min-height: 20px;
             }
 
+            input.has_error {
+                padding-right: 20px;
+            }
+
             textarea.borderless {
                 border: none;
             }
@@ -124,4 +128,3 @@
         }
     }
 }
-
