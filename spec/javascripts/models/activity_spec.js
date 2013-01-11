@@ -574,11 +574,6 @@ describe("chorus.models.Activity", function() {
             expect(this.comments.models[0].get("timestamp")).toBe(commentsJson[0].timestamp);
             expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
         });
-
-        xit("sets the entityType and entityId as attributes of the CommentSet", function() {
-            expect(this.comments.attributes.entityType).toBe("workspace");
-            expect(this.comments.attributes.entityId).toBe(10000);
-        });
     });
 
     describe("#reindexError", function() {
