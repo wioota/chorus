@@ -290,6 +290,10 @@ class ChorusInstaller
     end
   end
 
+  def validate_data_sources
+    raise InstallerErrors::InstallAborted, "Duplicate names found in data sources.  Please change data source names so that they are all unique before upgrading." unless @executor.rake "validations:data_source"
+  end
+
   def setup_database
     if upgrade_existing?
       @executor.start_postgres
@@ -409,6 +413,8 @@ class ChorusInstaller
     end
 
     if upgrade_existing?
+      validate_data_sources
+
       log "Shutting down previous Chorus install..." do
         stop_old_install
       end

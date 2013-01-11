@@ -890,6 +890,36 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#validate_data_sources" do
+    before do
+      stub(installer).version { "2.2.0.0" }
+      installer.destination_path = destination_path
+      FileUtils.mkdir_p "#{destination_path}/shared"
+    end
+
+    let(:destination_path) { "/usr/local/greenplum-chorus" }
+
+    context "when the data sources are invalid" do
+      before do
+        mock(executor).rake("validations:data_source") {false}
+      end
+
+      it "raises an installer error" do
+        expect { installer.validate_data_sources }.to raise_error(InstallerErrors::InstallAborted, /Duplicate names found in data sources\.  Please change data source names so that they are all unique before upgrading/)
+      end
+    end
+
+    context "when the data sources are valid" do
+      before do
+        mock(executor).rake("validations:data_source") {true}
+      end
+
+      it "runs without incident" do
+        expect { installer.validate_data_sources }.to_not raise_error
+      end
+    end
+  end
+
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }
