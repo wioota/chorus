@@ -14,42 +14,75 @@ describe("chorus.views.TagBox", function() {
         });
 
         context("when there are no tags", function() {
-            it('shows the add tags link, textarea is hidden', function() {
-                expect(this.view.$('a')).toContainTranslation('tags.add_tags');
-                expect(this.view.$(".save_tags")).not.toExist();
+            it('shows the add tags placeholder text in the textarea', function() {
+                expect(this.view.$('input.tag_editor')).toExist();
+                expect(this.view.$('input.tag_editor').attr("placeholder")).toContainTranslation('tags.add_tags');
             });
         });
 
         context("when there are already tags", function() {
             beforeEach(function() {
                 this.model.set("tags", [
-                    {name: "alpha"}
+                    {name: 'alpha'},
+                    {name: 'beta'},
+                    {name: 'gamma'}
                 ]);
                 this.server.completeFetchFor(this.model);
                 this.view.render();
             });
 
-            it("should show the tags", function() {
-                expect(this.view.$(".tag-list span")).toContainText("alpha");
-                expect(this.view.$("textarea")).not.toExist();
+            it('shows the tag names', function() {
+                expect(this.view.$el).toContainText("alpha");
+                expect(this.view.$el).toContainText("beta");
+                expect(this.view.$el).toContainText("gamma");
             });
 
-            it("should show tags without the x's", function() {
-                expect(this.view.$(".text-remove")).not.toExist();
+            it('shows the x character on the tags', function() {
+                expect(this.view.$(".text-remove").eq(0)).toExist();
             });
 
-            it("only shows the edit tags link", function() {
-                expect(this.view.$(".save_tags")).not.toExist();
-                expect(this.view.$(".edit_tags")).toExist();
-                expect(this.view.$('a')).toContainTranslation('tags.edit_tags');
+            it('shows the add tags ghost text and textarea', function() {
+                expect(this.view.$('input.tag_editor')).toExist();
+                expect(this.view.$('input').attr("placeholder")).toContainTranslation('tags.add_tags');
+            });
+
+            describe("when a valid tag is entered", function() {
+                beforeEach(function() {
+                    spyOn(this.view.tags, "save");
+                    var tagName = _.repeat("a", 100);
+                    enterTag(this.view, tagName);
+                });
+
+                it("creates a new tag", function() {
+                    expect(this.view.$(".text-tag").length).toBe(4);
+                });
+
+                it("removes the text from the input", function() {
+                    expect(this.view.$('input.tag_editor').val()).toBe("");
+                });
+
+                it("adds the tag to the model's tagset", function() {
+                    expect(this.view.tags.at(3).name()).toEqual(_.repeat("a", 100));
+                });
+
+                it('saves the tags', function() {
+                    expect(this.view.tags.save).toHaveBeenCalled();
+                });
+            });
+
+            describe("when a tag is removed", function() {
+                it('saves the tags', function() {
+                    spyOn(this.view.tags, "save");
+                    this.view.$('.text-remove:first').click();
+                    expect(this.view.tags.save).toHaveBeenCalled();
+                });
             });
         });
     });
 
-    describe("escaping the tags", function() {
+    describe("displaying the list of suggested tags (autocomplete)", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
-            this.view.$('a.edit_tags').click();
             var input = this.view.$('input.tag_editor');
             input.val("s");
             var event = $.Event('keyup');
@@ -61,7 +94,7 @@ describe("chorus.views.TagBox", function() {
         });
 
         // TODO #42312673: failing on ci
-        xit("should escape malicious tags", function() {
+        xit("escapes malicious tags", function() {
             this.server.lastFetch().succeed([
                 {name: '<script>foo</script>'}
             ]);
@@ -76,7 +109,6 @@ describe("chorus.views.TagBox", function() {
             var suggestions = rspecFixtures.tagSetJson();
             $("#jasmine_content").append(this.view.el);
             this.view.render();
-            this.view.$('a.edit_tags').click();
             input = this.view.$("input.tag_editor");
             input.val("s");
             var event = $.Event('keyup');
@@ -115,145 +147,6 @@ describe("chorus.views.TagBox", function() {
 
                 it("closes the menu", function() {
                     expect(this.view.$(".text-dropdown").css("display")).toEqual('none');
-                });
-            });
-        });
-    });
-
-    describe("when there are no tags", function() {
-        beforeEach(function() {
-            this.server.completeFetchFor(this.model);
-            this.view.render();
-        });
-        context("clicking on add tags", function() {
-            it('shows the textarea', function() {
-                expect(this.view.$('.save_tags')).not.toExist();
-                expect(this.view.$('.edit_tags')).toExist();
-                this.view.$('a.edit_tags').click();
-                expect(this.view.$('.save_tags')).toExist();
-                expect(this.view.$('.edit_tags')).not.toExist();
-                expect(this.view.$("input")).toExist();
-            });
-        });
-    });
-
-    describe("When there are some existing tags", function() {
-
-        beforeEach(function() {
-            this.model.set("tags", [
-                {name: 'alpha'},
-                {name: 'beta'},
-                {name: 'gamma'}
-            ]);
-            this.server.completeFetchFor(this.model);
-            this.view.render();
-        });
-
-        it('shows the tag names', function() {
-            expect(this.view.$el).toContainText("alpha");
-            expect(this.view.$el).toContainText("beta");
-            expect(this.view.$el).toContainText("gamma");
-        });
-
-        describe("When edit is clicked", function() {
-            beforeEach(function() {
-                this.view.$('a.edit_tags').click();
-            });
-
-            it('shows the x character on the tags', function() {
-                expect(this.view.$(".text-remove").eq(0)).toExist();
-            });
-
-            describe("when a valid tag is entered", function() {
-                beforeEach(function() {
-                    var tagName = _.repeat("a", 100);
-                    enterTag(this.view, tagName);
-                });
-
-                it("creates a new tag", function() {
-                    expect(this.view.$(".text-tag").length).toBe(4);
-                });
-
-                it("removes the text from the input", function() {
-                    expect(this.view.$('input.tag_editor').val()).toBe("");
-                });
-
-                it("adds the tag to the model's tagset", function() {
-                    expect(this.view.tags.at(3).name()).toEqual(_.repeat("a", 100));
-                });
-            });
-
-            describe("click done", function() {
-                beforeEach(function() {
-                    spyOn(this.view.tags, "save");
-                    this.view.$('a.save_tags').click();
-                });
-
-                it("closes the text box", function() {
-                    expect(this.view.$('.save_tags')).not.toExist();
-                    expect(this.view.$('.edit_tags')).toExist();
-                    expect(this.view.$("input")).not.toExist();
-                });
-
-                it('saves the tags', function() {
-                    expect(this.view.tags.save).toHaveBeenCalled();
-                });
-
-                it('hides the x character on the tag', function() {
-                    expect(this.view.$(".text-remove")).not.toExist();
-                });
-
-                it("displays the new tags", function() {
-                    expect(this.view.$('a')).toContainTranslation('tags.edit_tags');
-                });
-            });
-
-            describe("removing all the tags and clicking done", function() {
-                beforeEach(function() {
-                    this.view.$(".text-remove").click();
-                    this.view.$('a.save_tags').click();
-                });
-
-                it("updates the 'edit_tags' text", function() {
-                    expect(this.view.$(".edit_tags")).toContainTranslation("tags.add_tags");
-                });
-            });
-
-            describe("typing a tag without hitting enter and then clicking done", function() {
-                context("when the last tag is valid", function() {
-                    beforeEach(function() {
-                        this.view.$("input").val("hello");
-                        this.view.$(".save_tags").click();
-                    });
-
-                    it("includes that last tag", function() {
-                        expect(this.view.$el).toContainText("hello");
-                        expect(this.view.tags.containsTag("hello")).toBe(true);
-                    });
-
-                    it("posts", function() {
-                        expect(this.server.lastCreate()).toBeDefined();
-                    });
-
-                    it("does not update the model", function() {
-                        expect(this.view.tags.length).toBe(4);
-                    });
-                });
-
-                context("when the last tag is invalid", function() {
-                    beforeEach(function() {
-                        this.server.reset();
-                        this.view.$("input").val("alpha");
-                        this.view.$(".save_tags").click();
-                    });
-
-                    it("should not post any tags", function() {
-                        expect(this.server.lastCreate()).toBeUndefined();
-                    });
-
-                    it("does not update the model", function() {
-                        expect(this.model.tags().length).toBe(3);
-                    });
                 });
             });
         });

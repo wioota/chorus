@@ -21,7 +21,7 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
         var tags = this.tags();
         this.bindings.add(tags, "add", this.addTag);
         this.bindings.add(tags, "remove", this.removeTag);
-        this.tagsInput = new chorus.views.TagsInput({tags: tags, editing: true});
+        this.tagsInput = new chorus.views.TagsInput({tags: tags});
         this.bindings.add(this.tagsInput, "finishedEditing", this.finishedEditing);
     },
 

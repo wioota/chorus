@@ -1,11 +1,9 @@
 .tags_input {
-    &.editing {
-        border: 1px solid #A5A6A8;
-        display: inline-block;
-        padding: 3px;
-        padding-bottom: 0;
-        width: 90%;
-    }
+    border: 1px solid #A5A6A8;
+    display: inline-block;
+    padding: 3px;
+    padding-bottom: 0;
+    width: 100%;
 
     .text-core {
         width: 100%;
@@ -125,21 +123,5 @@
             }
         }
     }
-
-    .edit_tags {
-        position: relative;
-        top: -5px;
-        left: 2px;
-        white-space: nowrap;
-        font-size: 10px;
-        color: $color-text3;
-
-        &:hover {
-            color: $link-color
-        }
-    }
 }
 
-.tag_box .save_tags {
-    font-size: 12px;
-}

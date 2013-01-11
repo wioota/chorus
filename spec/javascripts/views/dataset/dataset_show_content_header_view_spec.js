@@ -12,7 +12,7 @@ describe("chorus.views.DatasetShowContentHeader", function() {
         });
 
         it("has tags", function() {
-            expect(this.view.$('.tag-list')).toContainText("alpha");
+            expect(this.view.$('.text-tags')).toContainText("alpha");
         });
     });
 });

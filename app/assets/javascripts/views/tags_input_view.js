@@ -3,13 +3,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     constructorName: "TagsInputView",
     tags: [],
 
-    events: {
-        "click .edit_tags": "editTags"
-    },
-
     setup: function() {
         this.tags = this.options.tags;
-        this.editing = this.options.editing;
     },
 
     postRender: function() {
@@ -36,12 +31,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             }
         });
 
-        if(this.editing) {
-            this.$el.addClass('editing');
-            this.input.focus();
-        } else {
-            this.$el.removeClass('editing');
-        }
+        this.input.attr("placeholder", t("tags.add_tags"));
 
         // TODO #42333697: change these to use this.binding.add so they get cleaned up
         this.textext = this.input.textext()[0];
@@ -124,7 +114,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         }
 
         if(lastTagValid) {
-            this.editing = false;
             this.trigger("finishedEditing");
         }
     },
@@ -134,13 +123,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             tags: this.tags.models,
             hasTags: this.tags.length > 0
         };
-    },
-
-    editTags: function(e) {
-        e.preventDefault();
-        this.editing = true;
-        this.render();
-        this.trigger("startedEditing");
     },
 
     focusInput: function() {
