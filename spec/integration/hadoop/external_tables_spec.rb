@@ -16,6 +16,7 @@ describe "External Tables", :database_integration do
     end
 
     it 'creates an external table', :hdfs_integration => true do
+      # TODO 42385175: enable an integration label test for external tables
       pending "there seems to be some kind of backend error in the test setup"
       visit "#/hadoop_instances/#{hadoop_instance.to_param}/browse"
       click_link '2_lines.csv'
