@@ -24,6 +24,4 @@ describe ChorusViewMigrator do
     ChorusView.joins(:workspace).where("workspaces.legacy_id != datasets.edc_workspace_id").should be_empty
     ChorusView.where('workspace_id IS NULL').should be_empty
   end
-
-  xit "duplicate chorus views are given unique names"
 end

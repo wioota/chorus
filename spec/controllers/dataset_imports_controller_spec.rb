@@ -103,19 +103,6 @@ describe DatasetImportsController do
         put :update, params.merge(:format => :html)
         response.should redirect_to ":#{ChorusConfig.instance['server_port']}/import_console/imports"
       end
-
-      describe "when the user marks an import as successfully completed" do
-        let(:success) { true }
-
-        it "generates an event and a notification" do
-          pending "this would require a bunch of nasty stubbing of Dataset.refresh"
-          expect {
-            expect {
-              put :update, params
-            }.to change(Events::DatasetImportSuccess, :count).by(1)
-          }.to change(Notification, :count).by(1)
-        end
-      end
     end
 
     it "authorizes only the admin" do

@@ -358,48 +358,6 @@ describe "Backup and Restore" do
     end
   end
 
-  xit "backs up and restores the data" do
-    begin
-      connection_config = ActiveRecord::Base.connection_config
-
-      make_tmp_path("rspec_backup_restore_backup") do |backup_path|
-        all_models_before_backup = all_models
-
-        with_rails_root @original_path do
-          BackupRestore.backup backup_path
-        end
-
-        backup_filename = Dir.glob(backup_path.join "*.tar").first
-
-        deleted_user = User.first.delete
-
-        with_rails_root @restore_path do
-          BackupRestore.restore backup_filename, true
-        end
-
-        original_entries = get_filesystem_entries_at_path @original_path
-        restored_entries = get_filesystem_entries_at_path @restore_path
-
-        restored_entries.should == original_entries
-
-        User.find_by_id(deleted_user.id).should == deleted_user
-
-        all_models.should_not == []
-        all_models.should =~ all_models_before_backup
-      end
-
-    rescue => e
-      # return the test database to its original state
-      ActiveRecord::Base.connection.disconnect! if ActiveRecord::Base.connection_handler.active_connections?
-
-      system "RAILS_ENV=development rake db:test:prepare"
-      system "RAILS_ENV=test rake db:fixtures:load"
-      ActiveRecord::Base.establish_connection connection_config
-
-      raise e
-    end
-  end
-
   def all_models
     ActiveRecord::Base.subclasses.map(&:unscoped).flatten.map(&:reload)
   end
