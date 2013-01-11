@@ -375,6 +375,14 @@ class ChorusInstaller
     end
   end
 
+  def enqueue_solr_reindex
+    log "Migrating data from previous version..." do
+      log "Loading legacy data into postgres..." do
+        @executor.rake "enqueue_reindex"
+      end
+    end
+  end
+
   def prompt_for_eula
     @io.log eula
     @io.require_confirmation :accept_terms
@@ -432,6 +440,7 @@ class ChorusInstaller
     if upgrade_legacy?
       migrate_legacy_config
       migrate_legacy_data
+      enqueue_solr_reindex
     end
 
     if is_supported_mac?

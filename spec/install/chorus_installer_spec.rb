@@ -920,6 +920,16 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#enqueue_solr_reindex" do
+    before do
+      mock(executor).rake("enqueue_reindex") {true}
+    end
+
+    it "should enqueue the refresh_all task" do
+      expect { installer.enqueue_solr_reindex }.to_not raise_error
+    end
+  end
+
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }
