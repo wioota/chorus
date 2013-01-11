@@ -5,11 +5,8 @@ describe DatasetsController do
   let(:instance_account) { gpdb_instance.account_for_user!(user) }
   let(:gpdb_instance) { gpdb_instances(:owners) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions(options) }
-  let(:database) { gpdb_instance.databases.first }
   let(:schema) { gpdb_schemas(:default) }
-  let(:table) { schema.datasets.tables.first }
-  let(:dataset) { datasets(:table) }
-  let(:view) { schema.datasets.views.first }
+  let(:table) { datasets(:table) }
 
   before do
     log_in user
@@ -21,7 +18,7 @@ describe DatasetsController do
         stub_gpdb(instance_account, datasets_sql => [
             {'type' => "v", "name" => "new_view", "master_table" => 'f'},
             {'type' => "r", "name" => "new_table", "master_table" => 't'},
-            {'type' => "r", "name" => dataset.name, "master_table" => 't'}
+            {'type' => "r", "name" => table.name, "master_table" => 't'}
         ])
         stub(Dataset).total_entries { 122 }
         stub(table).add_metadata!(instance_account)

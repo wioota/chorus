@@ -267,20 +267,39 @@ describe("chorus.models.Dataset", function() {
 
     describe("#lastComment", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.dataset();
+            this.model = rspecFixtures.dataset({
+                recentComments: [
+                    {
+                        author: {
+                            id: 1234,
+                            firstName: "anything",
+                            lastName: "something"
+                        },
+                        body: "some text"
+                    },
+                    {
+                        author: {
+                            id: 5678,
+                            firstName: "nothing",
+                            lastName: "nothing"
+                        },
+                        body: "some text"
+                    }
+                ]
+            });
             this.comment = this.model.lastComment();
             this.lastCommentJson = this.model.get('recentComments')[0];
         });
 
         it("has the right body", function() {
-            expect(this.comment.get("body")).toBe(this.lastCommentJson.body);
+            expect(this.comment.get("body")).toBe("some text");
         });
 
         it("has the right creator", function() {
             var creator = this.comment.author();
-            expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
-            expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
-            expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
+            expect(creator.get("id")).toBe(1234);
+            expect(creator.get("firstName")).toBe("anything");
+            expect(creator.get("lastName")).toBe("something");
         });
 
         it("is loaded", function() {
@@ -289,7 +308,7 @@ describe("chorus.models.Dataset", function() {
 
         context("when the data doesn't have any comments", function() {
             it("returns null", function() {
-                expect(rspecFixtures.dataset({recentComments: null}).lastComment()).toBeFalsy();
+                expect(rspecFixtures.dataset({recentComments: null}).lastComment()).toBeUndefined();
             });
         });
     });
