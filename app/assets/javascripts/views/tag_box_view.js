@@ -4,14 +4,14 @@ chorus.views.TagBox = chorus.views.Base.extend({
     subviews: {'.tags_input': 'tagsInput'},
 
     setup: function() {
-        this.bindings.add(this.model, "loaded", this.modelLoaded);
+        this.requiredResources.add(this.model);
         this.tags = this.model.tags();
         this.tagsInput = new chorus.views.TagsInput({tags: this.tags});
         this.bindings.add(this.tags, "add", this.saveTags);
         this.bindings.add(this.tags, "remove", this.saveTags);
     },
 
-    modelLoaded: function() {
+    resourcesLoaded: function() {
         this.tags.reset(this.model.get("tags"));
     },
 

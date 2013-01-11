@@ -1,7 +1,7 @@
 chorus.views.TagsInput = chorus.views.Base.extend({
     templateName: "tags_input",
     constructorName: "TagsInputView",
-    tags: [],
+    tags: [], // to make jshint happy
 
     setup: function() {
         this.tags = this.options.tags;
