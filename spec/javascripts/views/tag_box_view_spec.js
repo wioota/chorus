@@ -95,8 +95,7 @@ describe("chorus.views.TagBox", function() {
             }, this));
         });
 
-        // TODO #42312673: failing on ci
-        xit("escapes malicious tags", function() {
+        it("escapes malicious tags", function() {
             this.server.lastFetch().succeed([
                 {name: '<script>foo</script>'}
             ]);
