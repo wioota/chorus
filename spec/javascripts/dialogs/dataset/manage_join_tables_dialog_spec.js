@@ -94,6 +94,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             expect(this.dialog.$(".name").eq(3)).toHaveText("lions");
         });
 
+        // TODO #42338303 : make this work again
         xit("shows the column count for each table/view", function () {
             var columnCounts = this.dialog.$(".column_count");
             expect(columnCounts.eq(0).text().trim()).toBe("");
