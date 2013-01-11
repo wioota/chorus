@@ -925,11 +925,6 @@ describe("chorus.models.Dataset", function() {
             this.dataset = rspecFixtures.workspaceDataset.chorusView();
             expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
-
-        xit("returns false for external tables", function() {
-            this.dataset = rspecFixtures.workspaceDataset.externalTable();
-            expect(this.dataset.analyzableObjectType()).toBeFalsy();
-        });
     });
 
     describe("#hasImport", function() {
