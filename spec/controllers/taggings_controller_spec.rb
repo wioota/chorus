@@ -8,40 +8,49 @@ describe TaggingsController do
   end
 
   describe 'create' do
-    let(:workfile) { workfiles(:public) }
-    let(:params) { { :entity_id => workfile.id, :entity_type => 'workfile', :tag_names => tag_names } }
+    let(:entity) { workfiles(:public) }
+    let(:params) { { :entity_id => entity.id, :entity_type => entity.class.name, :tag_names => tag_names } }
     let(:tag_names) { ['alpha', 'beta'] }
 
-    it 'sets the tags to the workfile' do
+    it 'adds the tags' do
       post :create, params
       response.code.should == '201'
-      workfile.reload.tags.map(&:name).should =~ tag_names
+      entity.reload.tags.map(&:name).should =~ tag_names
     end
 
     context 'with a dataset' do
-      let(:dataset) { datasets(:table) }
-      let(:params) { { :entity_id => dataset.id, :entity_type => 'dataset', :tag_names => tag_names } }
+      let(:entity) { datasets(:table) }
 
-      it 'sets the tags to the dataset' do
+      it 'adds the tags' do
         post :create, params
         response.code.should == '201'
-        dataset.reload.tags.map(&:name).should =~ tag_names
+        entity.reload.tags.map(&:name).should =~ tag_names
       end
     end
 
-    describe "when no tag names are provided" do
+    context 'when no tag names are provided' do
       let(:tag_names) { [] }
 
       it 'clears the list of tags on the model' do
         post :create, params
         response.code.should == '201'
-        workfile.reload.tags.should == []
+        entity.reload.tags.should == []
+      end
+    end
+
+    context 'with duplicate tag names' do
+      let(:tag_names) { ['dupe', 'dupe'] }
+
+      it 'sets the tag only once' do
+        post :create, params
+        response.code.should == '201'
+        entity.reload.tags.length.should == 1
       end
     end
 
     context 'when the user cannot see the work file' do
       let(:user) { users(:no_collaborators) }
-      let(:workfile) { workfiles(:private) }
+      let(:entity) { workfiles(:private) }
 
       it 'returns unauthorized' do
         post :create, params
@@ -65,7 +74,7 @@ describe TaggingsController do
       it "sets a single tag on the workfile using the first tag's case" do
         post :create, params
         response.code.should == '201'
-        workfile.reload.tags.map(&:name).should == ['AlphaNotInFixtures']
+        entity.reload.tags.map(&:name).should == ['AlphaNotInFixtures']
       end
     end
   end
