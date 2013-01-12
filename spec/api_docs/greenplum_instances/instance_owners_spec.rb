@@ -7,6 +7,7 @@ resource "Greenplum DB: instances" do
 
   before do
     log_in owner
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   put "/gpdb_instances/:gpdb_instance_id/owner" do
