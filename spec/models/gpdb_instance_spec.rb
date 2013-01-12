@@ -23,6 +23,12 @@ describe GpdbInstance do
           instance.maintenance_db = 'something_new'
           instance.valid?
         end
+        it "pulls associated error messages onto the instance" do
+          stub(instance).valid_db_credentials? { false }
+          instance.maintenance_db = 'something_new'
+          instance.valid?
+          instance.errors.values.should =~ instance.owner_account.errors.values
+        end
       end
 
       context "when other attributes change" do

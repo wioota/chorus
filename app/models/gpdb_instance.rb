@@ -1,7 +1,7 @@
 class GpdbInstance < DataSource
   attr_accessor :db_username, :db_password
 
-  validates_associated :owner_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'maintenance_db']).empty? }
+  validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'maintenance_db']).empty? }
 
   validates_with DataSourceNameValidator
   

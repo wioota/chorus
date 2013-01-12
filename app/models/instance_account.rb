@@ -23,7 +23,7 @@ class InstanceAccount < ActiveRecord::Base
     if association.loaded?
       association.loaded! if association.stale_target?
     end
-    return unless instance
+    return unless instance && db_username.present? && db_password.present?
     unless instance.valid_db_credentials?(self)
       errors.add(:base, :INVALID_PASSWORD)
     end
