@@ -199,7 +199,7 @@ describe Search do
     let(:admin) { users(:admin) }
     let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
-    let(:gpdb_instance) { gpdb_instances(:default) }
+    let(:gpdb_instance) { data_sources(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:gnip_instance) { gnip_instances(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
@@ -438,7 +438,7 @@ describe Search do
 
         it "is excluded from search results" do
           create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -447,7 +447,7 @@ describe Search do
 
         it "excludes results with matching notes on the chorus view" do
           create_and_record_search(user, :query => 'workspacedatasetnotesearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -456,7 +456,7 @@ describe Search do
 
         it "excludes results with matching comments on the chorus view" do
           create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -557,7 +557,7 @@ describe Search do
 
           it "excludes attachments when the chorus view is not accessible" do
             create_and_record_search(user, :query => 'attachmentsearch', :entity_type => 'Attachment') do |search|
-              instance_account = FactoryGirl.create(:instance_account, :gpdb_instance => chorus_view.gpdb_instance, :owner => user)
+              instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
               chorus_view.schema.database.instance_accounts << instance_account
               chorus_view.solr_index!
               search.attachments.should_not include(attachment)

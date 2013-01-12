@@ -5,11 +5,11 @@ resource "Greenplum DB: accounts" do
   let(:non_owner) { users(:no_collaborators) }
   let(:member) { users(:the_collaborator) }
 
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:gpdb_instance_id) { gpdb_instance.to_param }
 
   before do
-    stub(Gpdb::ConnectionChecker).check! { true }
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   get "/gpdb_instances/:gpdb_instance_id/account" do

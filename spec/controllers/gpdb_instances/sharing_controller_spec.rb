@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbInstances::SharingController do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:owner_account) { gpdb_instance.owner_account }
   let(:owner) { users(:owner) }
   let(:user) { users(:default) }

@@ -2,10 +2,6 @@ require "spec_helper"
 
 describe ChorusView do
   describe "validations" do
-    it 'has a valid factory' do
-      FactoryGirl.create(:chorus_view).should be_valid
-    end
-
     it { should validate_presence_of(:workspace) }
     it { should validate_presence_of(:query) }
 

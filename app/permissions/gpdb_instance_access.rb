@@ -12,6 +12,6 @@ class GpdbInstanceAccess < DefaultAccess
   end
 
   def show_contents?(gpdb_instance)
-    gpdb_instance.shared? || current_user.instance_accounts.exists?(:gpdb_instance_id => gpdb_instance.id)
+    gpdb_instance.shared? || current_user.instance_accounts.exists?(:instance_id => gpdb_instance.id)
   end
 end

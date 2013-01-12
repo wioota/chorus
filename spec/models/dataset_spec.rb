@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }
@@ -585,7 +585,7 @@ describe Dataset::Query, :database_integration => true do
 
   describe ".refresh" do
     context "when user does not have access to schema" do
-      let(:account_without_permission) { InstanceAccount.create({ :db_password=> "secret", :db_username => "user_with_no_access", :gpdb_instance => database.gpdb_instance, :owner => account.owner }, :without_protection => true) }
+      let(:account_without_permission) { FactoryGirl.build(:instance_account, :db_password => "secret", :db_username => "user_with_no_access", :instance => database.gpdb_instance, :owner => account.owner).tap { |a| a.save(:validate => false) } }
       let(:not_accessible_schema_name) { "not_accessible" }
       let(:not_accessible_schema) { database.schemas.find_by_name(not_accessible_schema_name) }
 

@@ -38,7 +38,7 @@ describe CancelableQuery do
 
     describe "with a real database connection", :database_integration => true do
       let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_instance) { account.gpdb_instance }
+      let(:gpdb_instance) { account.instance }
 
       it "cancels the query" do
         query_thread = Thread.new do

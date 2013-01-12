@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbInstances::AccountController do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:user) { users(:default) }
   let(:owner) { users(:owner) }
   let(:account) { gpdb_instance.account_for_user(owner) }
@@ -25,7 +25,7 @@ describe GpdbInstances::AccountController do
 
   describe "#create" do
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
       log_in user
     end
 
@@ -42,7 +42,7 @@ describe GpdbInstances::AccountController do
 
     context "when the credentials are invalid" do
       before do
-        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
       end
 
       it "fails" do
@@ -65,7 +65,7 @@ describe GpdbInstances::AccountController do
 
   describe "#update" do
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
       log_in user
     end
 
@@ -93,7 +93,7 @@ describe GpdbInstances::AccountController do
 
     context "when credentials are invalid " do
       before do
-        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
       end
 
       it "fails" do
@@ -115,14 +115,14 @@ describe GpdbInstances::AccountController do
       end
 
       it "deletes the current users account for this gpdb_instance" do
-        InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
         delete :destroy, :gpdb_instance_id => gpdb_instance.id
-        InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
       end
     end
 
     context "of a shared account" do
-      let(:gpdb_instance) { gpdb_instances(:shared) }
+      let(:gpdb_instance) { data_sources(:shared) }
       let(:admin) { users(:admin) }
 
       it "does not delete the owner's account" do

@@ -17,7 +17,7 @@ resource "Notes" do
     parameter :is_insight, "Promote this note to an insight?"
 
     let(:body) { note.body }
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
     let(:entity_type) { "gpdb_instance" }
     let(:entity_id) { gpdb_instance.id }
 

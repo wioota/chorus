@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Greenplum DB: schemas" do
   let(:owner) { owned_instance.owner }
-  let!(:owned_instance) { gpdb_instances(:owners) }
+  let!(:owned_instance) { data_sources(:owners) }
   let!(:database) { gpdb_databases(:default) }
   let!(:owner_account) { owned_instance.account_for_user(owner) }
 

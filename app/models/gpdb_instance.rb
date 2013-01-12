@@ -1,24 +1,24 @@
-class GpdbInstance < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
-                  :provision_type, :description, :instance_provider, :version
+class GpdbInstance < DataSource
+  attr_accessor :db_username, :db_password
 
-  validates_presence_of :name, :maintenance_db
-  validates_numericality_of :port, :only_integer => true, :if => :host?
-  validates_length_of :name, :maximum => 64
+  validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'maintenance_db']).empty? }
 
   validates_with DataSourceNameValidator
-
+  
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :gpdb_instance
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id"
   has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
-  after_update :solr_reindex_later, :if => :shared_changed?
-
   has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
+
+  before_validation :build_instance_account_for_owner, :on => :create
+  after_update :solr_reindex_later, :if => :shared_changed?
+  after_create :create_instance_created_event, :if => :current_user
+  after_update :create_instance_name_changed_event, :if => :current_user
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
@@ -30,7 +30,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def self.unshared
-    where("gpdb_instances.shared = false OR gpdb_instances.shared IS NULL")
+    where("data_sources.shared = false OR data_sources.shared IS NULL")
   end
 
   def self.reindex_instance instance_id
@@ -64,9 +64,9 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    where('gpdb_instances.shared OR gpdb_instances.owner_id = :owned OR gpdb_instances.id IN (:with_membership)',
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           :owned => user.id,
-          :with_membership => user.instance_accounts.pluck(:gpdb_instance_id)
+          :with_membership => user.instance_accounts.pluck(:instance_id)
     )
   end
 
@@ -75,7 +75,7 @@ class GpdbInstance < ActiveRecord::Base
   end
 
   def connect_with(account)
-    GreenplumConnection::InstanceConnection.new(
+    GreenplumConnection.new(
         :username => account.db_username,
         :password => account.db_password,
         :host => host,
@@ -134,10 +134,6 @@ class GpdbInstance < ActiveRecord::Base
     accounts.pluck(:db_username)
   end
 
-  def owner_account
-    account_owned_by(owner)
-  end
-
   def account_for_user(user)
     if shared?
       owner_account
@@ -174,7 +170,7 @@ class GpdbInstance < ActiveRecord::Base
     databases.each do |database|
       begin
         GpdbSchema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
-      rescue GreenplumConnection::InstanceUnreachable => e
+      rescue GreenplumConnection::DatabaseError => e
         Chorus.log_error "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
       end
     end
@@ -182,6 +178,14 @@ class GpdbInstance < ActiveRecord::Base
 
   def entity_type_name
     'gpdb_instance'
+  end
+
+  def provision_type
+    "register"
+  end
+
+  def instance_provider
+    "Greenplum Database"
   end
 
   def self.type_name
@@ -214,7 +218,21 @@ class GpdbInstance < ActiveRecord::Base
     ).to_sql
   end
 
-  def account_owned_by(user)
-    accounts.find_by_owner_id(user.id)
+  def build_instance_account_for_owner
+    build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
+  end
+
+  def create_instance_created_event
+    Events::GreenplumInstanceCreated.by(current_user).add(:gpdb_instance => self)
+  end
+
+  def create_instance_name_changed_event
+    if name_changed?
+      Events::GreenplumInstanceChangedName.by(current_user).add(
+          :gpdb_instance => self,
+          :old_name => name_was,
+          :new_name => name
+      )
+    end
   end
 end

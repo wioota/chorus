@@ -9,7 +9,6 @@ resource "Hadoop" do
 
   before do
     log_in owner
-    stub(Gpdb::ConnectionChecker).check! { true }
     stub(Hdfs::QueryService).instance_version(anything) { "1.0.0" }
 
     service = Object.new

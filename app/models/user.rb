@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
   has_many :gnip_instances, :foreign_key => :owner_id
   has_many :gpdb_instances, :foreign_key => :owner_id
+  has_many :oracle_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
   has_many :workspaces, :through => :memberships
@@ -108,7 +109,7 @@ class User < ActiveRecord::Base
   end
 
   def accessible_account_ids
-    shared_account_ids = InstanceAccount.joins(:gpdb_instance).where("gpdb_instances.shared = true").collect(&:id)
+    shared_account_ids = InstanceAccount.joins(:instance).where("data_sources.shared = true").collect(&:id)
     (shared_account_ids + instance_account_ids).uniq
   end
 

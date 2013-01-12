@@ -67,7 +67,7 @@ describe GpdbSchema do
   end
 
   describe '#accessible_to' do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
     let(:account) { gpdb_instance.owner_account }
     let(:schema) { gpdb_schemas(:default) }
 
@@ -82,7 +82,7 @@ describe GpdbSchema do
   end
 
   context ".refresh" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
     let(:account) { gpdb_instance.owner_account }
     let(:database) do
       stub(schema.database).connect_with(account) { connection }
@@ -318,7 +318,7 @@ describe GpdbSchema do
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should create a Greenplum SchemaConnection" do
-      mock(GreenplumConnection::SchemaConnection).new({
+      mock(GreenplumConnection).new({
                                                           :host => schema.gpdb_instance.host,
                                                           :port => schema.gpdb_instance.port,
                                                           :username => account.db_username,

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbInstancePresenter, :type => :view do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:user) { gpdb_instance.owner }
   let(:presenter) { GpdbInstancePresenter.new(gpdb_instance, view, options) }
   let(:options) { {} }

@@ -21,12 +21,12 @@ describe GpdbInstancesController do
     it "returns all gpdb instances (online and offline) that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.map(&:id).should include(gpdb_instances(:offline).id)
+      decoded_response.map(&:id).should include(data_sources(:offline).id)
     end
   end
 
   describe "#show" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     context "with a valid instance id" do
       it "does not require authorization" do
@@ -58,16 +58,26 @@ describe GpdbInstancesController do
   end
 
   describe "#update" do
-    let(:changed_attributes) { {"name" => "changed"} }
-    let(:gpdb_instance) { gpdb_instances(:shared) }
-    let(:params) { changed_attributes.merge( :id => gpdb_instance.id) }
+    let(:changed_attributes) { {} }
+    let(:gpdb_instance) { data_sources(:shared) }
+    let(:params) do
+      {
+          :id => gpdb_instance.id,
+          :name => "changed"
+      }
+    end
 
     before do
-      stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, user) { gpdb_instance }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
     it "uses authorization" do
       mock(subject).authorize!(:edit, gpdb_instance)
+      put :update, params
+    end
+
+    it "presents the gpdb instance" do
+      mock.proxy(controller).present(gpdb_instance)
       put :update, params
     end
 
@@ -77,9 +87,7 @@ describe GpdbInstancesController do
     end
 
     it "returns 422 when the update parameters are invalid" do
-      stub(Gpdb::InstanceRegistrar).update!(gpdb_instance, changed_attributes, user) do
-        raise(ActiveRecord::RecordInvalid.new(gpdb_instance))
-      end
+      params[:name] = ''
       put :update, params
       response.code.should == "422"
     end
@@ -88,39 +96,43 @@ describe GpdbInstancesController do
   describe "#create" do
     it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
 
-    context "with register provision type" do
-      let(:valid_attributes) { Hash.new }
-      let(:instance) { gpdb_instances(:default) }
+    let(:valid_attributes) do
+      {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :maintenance_db => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret"
+      }
+    end
 
-      before do
-        mock(Gpdb::InstanceRegistrar).create!(valid_attributes, user) { instance }
-      end
+    before do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+    end
 
-      it "reports that the gpdb instance was created" do
-        post :create, valid_attributes
-        response.code.should == "201"
-      end
+    it "reports that the gpdb instance was created" do
+      post :create, valid_attributes
+      response.code.should == "201"
+    end
 
-      it "renders the newly created gpdb instance" do
-        post :create, valid_attributes
-        decoded_response.name.should == instance.name
+    it "presents the gpdb instance" do
+      mock_present do |instance|
+        instance.name == valid_attributes[:name]
       end
+      post :create, valid_attributes
+    end
 
-      it "schedules a job to refresh the instance" do
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
-        post :create, :gpdb_instance => valid_attributes
-      end
+    it "schedules a job to refresh the instance" do
+      mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
+      post :create, :gpdb_instance => valid_attributes
     end
 
     context "with invalid attributes" do
-      before do
-        stub(Gpdb::InstanceRegistrar).create!({}, user) {
-          raise(ActiveRecord::RecordInvalid.new(gpdb_instances(:default)))
-        }
-      end
-
       it "responds with validation errors" do
-        post :create
+        valid_attributes.delete(:name)
+        post :create, valid_attributes
         response.code.should == "422"
       end
     end

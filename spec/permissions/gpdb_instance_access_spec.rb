@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe GpdbInstanceAccess do
-  let(:gpdb_instance) { gpdb_instances(:owners) }
+  let(:gpdb_instance) { data_sources(:owners) }
   let(:owner) { gpdb_instance.owner }
   let(:instance_access) {
     controller = GpdbInstancesController.new
@@ -45,7 +45,7 @@ describe GpdbInstanceAccess do
     context "for public gpdb instances" do
       it "shows for everybody, including non-owner, non-admin users" do
         @user = users(:no_collaborators)
-        gpdb_instance = gpdb_instances(:shared)
+        gpdb_instance = data_sources(:shared)
         gpdb_instance.shared.should be_true
         instance_access.can?(:show_contents, gpdb_instance).should be_true
       end

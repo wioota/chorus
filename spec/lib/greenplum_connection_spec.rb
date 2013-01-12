@@ -2,7 +2,7 @@ require 'minimal_spec_helper'
 require 'greenplum_connection'
 require_relative '../../spec/support/database_integration/instance_integration'
 
-describe GreenplumConnection::Base, :database_integration do
+describe GreenplumConnection, :database_integration do
   let(:username) { InstanceIntegration::REAL_GPDB_USERNAME }
   let(:password) { InstanceIntegration::REAL_GPDB_PASSWORD }
   let(:database_name) { InstanceIntegration.database_name }
@@ -29,7 +29,7 @@ describe GreenplumConnection::Base, :database_integration do
       :database => database_name
   } }
 
-  let(:connection) { GreenplumConnection::Base.new(details) }
+  let(:connection) { GreenplumConnection.new(details) }
 
   shared_examples "a well behaved database query" do
     let(:db) { Sequel.connect(db_url) }
@@ -153,8 +153,8 @@ describe GreenplumConnection::Base, :database_integration do
     it_should_behave_like "a well behaved database query"
   end
 
-  describe GreenplumConnection::DatabaseConnection do
-    let(:connection) { GreenplumConnection::DatabaseConnection.new(details) }
+  describe "DatabaseMethods" do
+    let(:connection) { GreenplumConnection.new(details) }
     describe "#schemas" do
       let(:schema_list_sql) do
         <<-SQL
@@ -247,8 +247,8 @@ describe GreenplumConnection::Base, :database_integration do
     end
   end
 
-  describe GreenplumConnection::InstanceConnection do
-    let(:connection) { GreenplumConnection::InstanceConnection.new(details) }
+  describe "InstanceMethods" do
+    let(:connection) { GreenplumConnection.new(details) }
     let(:database_name) { 'postgres' }
 
     describe "#databases" do
@@ -271,8 +271,8 @@ describe GreenplumConnection::Base, :database_integration do
     end
   end
 
-  describe GreenplumConnection::SchemaConnection do
-    let(:connection) { GreenplumConnection::SchemaConnection.new(details.merge(:schema => schema_name)) }
+  describe "SchemaMethods" do
+    let(:connection) { GreenplumConnection.new(details.merge(:schema => schema_name)) }
     let(:schema_name) { "test_schema" }
 
     describe "#functions" do

@@ -9,25 +9,41 @@ describe InstanceAccount do
   describe "validations" do
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
+
+    it "validates the uniqueness of owner_id and instance_id" do
+      account = InstanceAccount.first
+      instance = account.instance
+      stub(instance).valid_db_credentials?(anything) { true }
+      new_account = instance.accounts.build(:owner => account.owner)
+      new_account.should_not be_valid
+      new_account.should have_error_on(:owner_id).with_message(:taken)
+    end
+
+    it "validates the credentials are valid" do
+      account = InstanceAccount.first
+      stub(account.instance).valid_db_credentials?(account) { false }
+      account.should_not be_valid
+      account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
+    end
   end
 
   describe "associations" do
     it { should belong_to :owner }
     it { should validate_presence_of :owner }
 
-    it { should belong_to :gpdb_instance }
-    it { should validate_presence_of :gpdb_instance }
+    it { should belong_to :instance }
+    it { should validate_presence_of :instance }
   end
 
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
-    let(:instance) { gpdb_instances(:default) }
-    let(:secret_key) { '\0' * 32 }
+    let(:instance) { data_sources(:default) }
     let(:password) { "apass" }
-    let!(:instance_account) do
-      instance.accounts.create!(
-          {:db_password => password, :db_username => 'aname', :owner => owner},
-          :without_protection => true)
+    let(:instance_account) do
+      account = instance.account_for_user(owner)
+      stub(account.instance).valid_db_credentials?(anything) { true }
+      account.update_attributes!(:db_password => password, :db_username => 'aname')
+      account
     end
 
     it "stores db_password as encrypted_db_password using the attr_encrypted gem" do
@@ -40,17 +56,24 @@ describe InstanceAccount do
   end
 
   describe "automatic reindexing" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     let(:user) { users(:not_a_member) }
 
     before do
       stub(Sunspot).index.with_any_args
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
     context "creating a new account" do
       it "should reindex" do
         mock(instance).refresh_databases_later
-        InstanceAccount.create!({:owner => user, :gpdb_instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
+        InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
+      end
+
+      it "should not reindex if the instance is new" do
+        dont_allow(instance).refresh_databases_later
+        stub(instance).created_at { Time.now }
+        account = InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
       end
     end
 
@@ -58,7 +81,7 @@ describe InstanceAccount do
       let(:user) { users(:the_collaborator) }
       let(:account) { instance.account_for_user(user) }
       it "should reindex" do
-        mock(account.gpdb_instance).refresh_databases_later
+        mock(account.instance).refresh_databases_later
         account.destroy
       end
     end

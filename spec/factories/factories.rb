@@ -1,13 +1,40 @@
 require 'factory_girl'
 
 FactoryGirl.define do
+  factory :data_source do
+    sequence(:name) { |n| "data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
+    sequence(:port) { |n| 5000+n }
+    maintenance_db "db_name"
+    owner
+  end
+
   factory :gpdb_instance do
     sequence(:name) { |n| "gpdb_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
+    sequence(:host) { |n| "gpdb_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     maintenance_db "postgres"
     owner
     version "9.1.2 - FactoryVersion"
+    db_username 'username'
+    db_password 'secret'
+    after(:build) do |instance|
+      def instance.valid_db_credentials?(account)
+        true
+      end
+    end
+
+    after(:create) do |instance|
+      instance.singleton_class.send :remove_method, :valid_db_credentials?
+    end
+  end
+
+  factory :oracle_instance do
+    sequence(:name) { |n| "oracle_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "oracle_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
+    sequence(:port) { |n| 5000+n }
+    db_name "oracle"
+    owner
   end
 
   factory :hadoop_instance do
@@ -29,7 +56,7 @@ FactoryGirl.define do
     sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"
     owner
-    gpdb_instance
+    association :instance, :factory => :gpdb_instance
   end
 
   factory :gpdb_database do

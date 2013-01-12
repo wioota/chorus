@@ -10,7 +10,7 @@ describe SchemasController do
   end
 
   describe "#index" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
     let(:database) { gpdb_databases(:default) }
     let(:schema1) { database.schemas[0] }
     let(:schema2) { database.schemas[1] }

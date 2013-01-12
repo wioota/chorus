@@ -3,8 +3,8 @@ require "spec_helper"
 describe Events::Base do
   describe ".add(params)" do
     it "creates an event with the given parameters" do
-      gpdb_instance1 = gpdb_instances(:shared)
-      gpdb_instance2 = gpdb_instances(:owners)
+      gpdb_instance1 = data_sources(:shared)
+      gpdb_instance2 = data_sources(:owners)
       user1 = users(:owner)
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)

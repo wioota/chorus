@@ -7,13 +7,13 @@ module GpdbTestHelpers
       stub(fake_connection).select_all(query).times(any_times) { clone_response(response) }
       stub(fake_connection).select_value(query).times(any_times) { response.empty? ? nil : response.first }
     end
-    stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account) {|_, _, block| block.call(fake_connection) }
-    stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account, anything) {|_, _, _, block| block.call(fake_connection) }
+    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account) {|_, _, block| block.call(fake_connection) }
+    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account, anything) {|_, _, _, block| block.call(fake_connection) }
   end
 
-  def stub_gpdb_fail(account)
-    stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account) { raise ActiveRecord::JDBCError }
-    stub(Gpdb::ConnectionBuilder).connect!(account.gpdb_instance, account, anything) { raise ActiveRecord::JDBCError }
+  def stub_gpdb_fail(instance)
+    stub(Gpdb::ConnectionBuilder).connect!(instance, anything) { raise ActiveRecord::JDBCError }
+    stub(Gpdb::ConnectionBuilder).connect!(instance, anything, anything) { raise ActiveRecord::JDBCError }
   end
 
   def clone_response(response)

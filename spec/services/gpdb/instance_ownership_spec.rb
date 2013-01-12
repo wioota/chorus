@@ -2,11 +2,14 @@ require "spec_helper"
 
 describe Gpdb::InstanceOwnership do
   let!(:old_owner) { gpdb_instance.owner }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => old_owner) }
+  let!(:owner_account) { gpdb_instance.owner_account }
   let!(:new_owner) { FactoryGirl.create(:user) }
 
   describe ".change_owner(instance, new_owner)" do
     let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :shared => true) }
+    before do
+      stub(gpdb_instance).valid_db_credentials? { true }
+    end
 
     it "creates a GreenplumInstanceChangedOwner event" do
       request_ownership_update
@@ -28,7 +31,7 @@ describe Gpdb::InstanceOwnership do
 
       context "when switching to a user with an existing account" do
         before do
-          FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => new_owner)
+          FactoryGirl.build(:instance_account, :instance => gpdb_instance, :owner => new_owner).tap { |a| a.save(:validate => false)}
         end
 
         it "switches ownership of instance" do

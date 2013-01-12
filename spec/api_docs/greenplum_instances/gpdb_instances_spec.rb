@@ -2,11 +2,11 @@ require 'spec_helper'
 
 resource "Greenplum DB: instances" do
   let(:owner) { users(:owner) }
-  let(:owned_instance) { gpdb_instances(:owners) }
+  let(:owned_instance) { data_sources(:owners) }
 
   before do
     log_in owner
-    stub(Gpdb::ConnectionChecker).check! { true }
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
   post "/gpdb_instances" do

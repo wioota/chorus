@@ -1,16 +1,14 @@
 require 'spec_helper'
 
 describe GpdbInstances::MembersController do
-  let(:admin) { FactoryGirl.create :admin }
-  let(:instance_owner) { FactoryGirl.create :user }
-  let(:joe) { FactoryGirl.create :user }
-  let(:tom) { FactoryGirl.create :user }
-  let(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :owner => instance_owner }
+  let(:admin) { users(:admin) }
+  let(:gpdb_instance) { data_sources(:owners) }
+  let(:instance_owner) { gpdb_instance.owner }
+  let(:shared_instance) { data_sources(:shared) }
+  let(:shared_owner) { shared_instance.owner }
+  let(:other_user) { FactoryGirl.create :user }
 
   describe "#index" do
-    let!(:account1) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "instance_owner", :owner => instance_owner }
-    let!(:account2) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "joe", :owner => joe }
-
     before do
       log_in instance_owner
     end
@@ -24,35 +22,11 @@ describe GpdbInstances::MembersController do
 
     it "shows list of users" do
       get :index, :gpdb_instance_id => gpdb_instance.to_param
-      decoded_response.length.should == 2
+      decoded_response.length.should == gpdb_instance.accounts.size
     end
 
-    describe "pagination" do
-      let!(:bob) { FactoryGirl.create :user }
-      let!(:account3) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :db_username => "bob", :owner => bob }
-
-      it "paginates the collection" do
-        get :index, :gpdb_instance_id => gpdb_instance.to_param, :page => 1, :per_page => 2
-        decoded_response.length.should == 2
-      end
-
-      it "defaults to page one" do
-        get :index, :gpdb_instance_id => gpdb_instance.to_param, :per_page => 2
-        decoded_response.length.should == 2
-        decoded_response.first.db_username.should == "instance_owner"
-        decoded_response.second.db_username.should == "joe"
-      end
-
-      it "accepts a page parameter" do
-        get :index, :gpdb_instance_id => gpdb_instance.to_param, :page => 2, :per_page => 2
-        decoded_response.length.should == 1
-        decoded_response.first.db_username.should == "bob"
-      end
-
-      it "defaults the per_page to fifty" do
-        get :index, :gpdb_instance_id => gpdb_instance.to_param
-        request.params[:per_page].should == 50
-      end
+    it_behaves_like "a paginated list" do
+      let(:params) { {:gpdb_instance_id => gpdb_instance.to_param} }
     end
 
     generate_fixture "instanceAccountSet.json" do
@@ -61,10 +35,8 @@ describe GpdbInstances::MembersController do
   end
 
   describe "#create" do
-    let!(:owner) { FactoryGirl.create :user }
-
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
     context "when admin" do
@@ -72,15 +44,9 @@ describe GpdbInstances::MembersController do
         log_in admin
       end
 
-      context "for a shared account instance" do
-        before do
-          gpdb_instance.update_attribute :shared, true
-        end
-
-        it "fails" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
-          response.should be_not_found
-        end
+      it "fails for a shared account instance" do
+        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        response.should be_not_found
       end
 
       context "for an individual accounts instance" do
@@ -92,7 +58,7 @@ describe GpdbInstances::MembersController do
           rehydrated_account.db_username.should == "lenny"
           rehydrated_account.db_password.should == "secret"
           rehydrated_account.owner.should == admin
-          rehydrated_account.gpdb_instance.should == gpdb_instance
+          rehydrated_account.instance.should == gpdb_instance
         end
       end
     end
@@ -102,68 +68,56 @@ describe GpdbInstances::MembersController do
         log_in instance_owner
       end
 
-      context "for a shared accounts instance" do
-        before do
-          gpdb_instance.update_attribute :shared, true
-        end
-
-        it "fails" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
-          response.should be_not_found
-        end
+      it "fails for a shared accounts instance" do
+        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        response.should be_not_found
       end
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
+          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
           rehydrated_account.db_username.should == "lenny"
           rehydrated_account.db_password.should == "secret"
-          rehydrated_account.owner.should == owner
-          rehydrated_account.gpdb_instance.should == gpdb_instance
+          rehydrated_account.owner.should == instance_owner
+          rehydrated_account.instance.should == gpdb_instance
         end
       end
     end
 
-    context "when regular joe" do
+    context "when other_user" do
       before do
-        log_in joe
+        log_in other_user
       end
 
-      context "for a shared accounts instance" do
-        before do
-          gpdb_instance.update_attribute :shared, true
-        end
-
-        it "fails" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
-          response.should be_not_found
-        end
+      it "fails for a shared accounts instance" do
+        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
+        response.should be_not_found
       end
 
-      context "for an individual accounts instance" do
-        it "fails" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
-          response.should be_forbidden
-        end
+      it "fails for an individual accounts instance" do
+        post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
+        response.should be_forbidden
       end
     end
 
     it "does not succeed when credentials are invalid" do
       log_in instance_owner
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError.new }
-      post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {
+        false
+      } }
+      post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
       response.code.should == "422"
     end
   end
 
   describe "#update" do
-    let(:account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => instance_owner }
+    let(:account) { gpdb_instance.account_for_user(instance_owner) }
 
     before do
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
     context "when admin" do
@@ -212,21 +166,21 @@ describe GpdbInstances::MembersController do
       end
 
       it "succeeds for other's account" do
-        account.update_attribute :owner, joe
+        account.update_attribute :owner, other_user
         put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
 
         decoded_response.db_username.should == "changed"
-        decoded_response.owner.id.should == joe.id
+        decoded_response.owner.id.should == other_user.id
 
         rehydrated_account = InstanceAccount.find(decoded_response.id)
         rehydrated_account.db_password.should == "changed"
       end
     end
 
-    context "when regular joe" do
+    context "when other_user" do
       before do
-        log_in joe
+        log_in other_user
       end
 
       context "someone else's account'" do
@@ -238,7 +192,7 @@ describe GpdbInstances::MembersController do
 
       context "his own account" do
         before do
-          account.owner = joe
+          account.owner = other_user
           account.save!
         end
 
@@ -251,7 +205,7 @@ describe GpdbInstances::MembersController do
 
     it "does not succeed when credentials are invalid" do
       log_in instance_owner
-      stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError.new }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
       put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
       response.code.should == "422"
     end
@@ -259,7 +213,7 @@ describe GpdbInstances::MembersController do
 
   describe "#destroy" do
     before do
-      @joe_account = FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner => joe
+      @other_user_account = FactoryGirl.build(:instance_account, :instance => gpdb_instance, :owner => other_user).tap { |a| a.save(:validate => false) }
     end
 
     context "when the current user is the instance's owner" do
@@ -268,13 +222,13 @@ describe GpdbInstances::MembersController do
       end
 
       it "removes the given account" do
-        gpdb_instance.accounts.find_by_owner_id(joe.id).should_not be_nil
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @joe_account.id
-        gpdb_instance.accounts.find_by_owner_id(joe.id).should be_nil
+        gpdb_instance.accounts.find_by_owner_id(other_user.id).should_not be_nil
+        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        gpdb_instance.accounts.find_by_owner_id(other_user.id).should be_nil
       end
 
       it "succeeds" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @joe_account.id
+        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
         response.should be_ok
       end
 
@@ -292,12 +246,12 @@ describe GpdbInstances::MembersController do
       end
 
       it "does not remove the account" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @joe_account.id
-        gpdb_instance.accounts.find_by_owner_id(joe.id).should_not be_nil
+        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        gpdb_instance.accounts.find_by_owner_id(other_user.id).should_not be_nil
       end
 
       it "responds with 'forbidden'" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @joe_account.id
+        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
         response.should be_forbidden
       end
     end

@@ -2,60 +2,57 @@ require "spec_helper"
 
 describe GpdbInstance do
   describe "validations" do
-    it { should validate_presence_of :name }
-    it { should validate_presence_of :maintenance_db }
 
     it_should_behave_like "it validates with DataSourceNameValidator"
 
-    it_should_behave_like 'a model with name validations' do
-      let(:factory_name) { :gpdb_instance }
-    end
-
-    describe "port" do
-      context "when port is not a number" do
-        it "fails validation" do
-          FactoryGirl.build(:gpdb_instance, :port => "1aaa1").should_not be_valid
+    describe "associated account" do
+      let(:instance) { data_sources(:shared) }
+      context "when host, port, or maintenance_db change" do
+        it "validates the account when host changes" do
+          mock(instance.owner_account).valid?
+          instance.host = 'something_new'
+          instance.valid?
+        end
+        it "validates the account when port changes" do
+          mock(instance.owner_account).valid?
+          instance.port = '5413'
+          instance.valid?
+        end
+        it "validates the account when maintenance_db changes" do
+          mock(instance.owner_account).valid?
+          instance.maintenance_db = 'something_new'
+          instance.valid?
+        end
+        it "pulls associated error messages onto the instance" do
+          stub(instance).valid_db_credentials? { false }
+          instance.maintenance_db = 'something_new'
+          instance.valid?
+          instance.errors.values.should =~ instance.owner_account.errors.values
         end
       end
 
-      context "when port is number" do
-        it "validates" do
-          FactoryGirl.build(:gpdb_instance, :port => "1111").should be_valid
-        end
-      end
-
-      context "when host is set but not port" do
-        it "fails validation" do
-          FactoryGirl.build(:gpdb_instance, :host => "1111", :port => "").should_not be_valid
-        end
-      end
-
-      context "when host and port both are not set" do
-        it "NO validate" do
-          FactoryGirl.build(:gpdb_instance, :host => "", :port => "").should be_valid
+      context "when other attributes change" do
+        it "does not validate the account" do
+          dont_allow(instance.owner_account).valid?
+          instance.name = 'purple_bandana'
+          instance.valid?
         end
       end
     end
   end
 
   describe "associations" do
-    it { should belong_to :owner }
-    it { should have_many :accounts }
     it { should have_many :databases }
-    it { should have_many :activities }
-    it { should have_many :events }
 
     describe "cascading deletes" do
+      let(:instance) { data_sources(:owners) }
       it "deletes its databases when it is destroyed" do
-        instance = gpdb_instances(:owners)
-
         expect {
           instance.destroy
         }.to change(instance.databases, :count).to(0)
       end
 
       it "deletes all events with target1 set to the schema when it is destroyed" do
-        instance = gpdb_instances(:owners)
         user = users(:owner)
 
         Events::GreenplumInstanceChangedName.by(user).add(:gpdb_instance => instance, :old_name => 'old', :new_name => instance.name)
@@ -67,16 +64,85 @@ describe GpdbInstance do
     end
   end
 
-  it "should not allow changing inaccessible attributes" do
-    gpdb_instance = FactoryGirl.build :gpdb_instance
-    changed_id = 122222
-    gpdb_instance.attributes = {:id => changed_id, :owner_id => changed_id}
-    gpdb_instance.id.should_not == changed_id
-    gpdb_instance.owner_id.should_not == changed_id
+  describe "#create" do
+    let(:user) { users(:admin) }
+    let :valid_input_attributes do
+      {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :maintenance_db => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret"
+      }
+    end
+
+    before do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+    end
+
+    it "requires db username and password" do
+      [:db_username, :db_password].each do |attribute|
+        instance = GpdbInstance.new(valid_input_attributes.merge(attribute => nil), :as => :create)
+        instance.should_not be_valid
+        instance.should have_error_on(:owner_account)
+      end
+    end
+
+    it "requires that a real connection to GPDB requires valid credentials" do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
+      instance = GpdbInstance.new(valid_input_attributes, :as => :create)
+      instance.should_not be_valid
+      instance.should have_error_on(:owner_account)
+    end
+
+    it "can save a new instance that is shared" do
+      instance = user.gpdb_instances.create(valid_input_attributes.merge({:shared => true}), :as => :create)
+      instance.shared.should == true
+      instance.should be_valid
+    end
+
+    it "makes a GreenplumInstanceCreated event" do
+      set_current_user(user)
+      instance = user.gpdb_instances.create!(valid_input_attributes, :as => :create)
+      event = Events::GreenplumInstanceCreated.last
+      event.gpdb_instance.should == instance
+      event.actor.should == user
+    end
+  end
+
+  describe "#update" do
+    before do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+    end
+
+    let(:instance) { data_sources(:shared) }
+
+    it "does not allow you to update the shared attribute" do
+      instance.update_attributes!(:shared => false)
+      instance.shared.should be_true
+    end
+
+    it "generates a GreenplumInstanceChangedName event when the name is being changed" do
+      set_current_user(instance.owner)
+      old_name = instance.name
+      instance.update_attributes(:name => 'something_else')
+      event = Events::GreenplumInstanceChangedName.find_last_by_actor_id(instance.owner)
+      event.gpdb_instance.should == instance
+      event.old_name.should == old_name
+      event.new_name.should == 'something_else'
+    end
+
+    it "does not generate an event when the name is not being changed" do
+      expect {
+        instance.update_attributes!(:description => 'hi!')
+      }.to_not change(Events::GreenplumInstanceChangedName, :count)
+    end
   end
 
   describe "#create_database" do
-    context "using a real remote greenplum instance", :database_integration => true do
+    context "using a real remote greenplum instance", :database_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
 
@@ -115,7 +181,7 @@ describe GpdbInstance do
     end
 
     context "when gpdb connection is broken" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
       let(:user) { users(:owner) }
 
       before do
@@ -139,23 +205,15 @@ describe GpdbInstance do
     end
   end
 
-  describe "#owner_account" do
-    it "returns the gpdb instance owner's account" do
-      owner = users(:owner)
-      gpdb_instance = FactoryGirl.create(:gpdb_instance, :owner => owner)
-      owner_account = FactoryGirl.create(:instance_account, :gpdb_instance => gpdb_instance, :owner => owner)
-
-      gpdb_instance.owner_account.should == owner_account
-    end
-  end
-
   describe "access control" do
     let(:user) { users(:owner) }
 
     before(:each) do
       @gpdb_instance_owned = FactoryGirl.create :gpdb_instance, :owner => user
       @gpdb_instance_shared = FactoryGirl.create :gpdb_instance, :shared => true
-      @gpdb_instance_with_membership = FactoryGirl.create(:instance_account, :owner => user).gpdb_instance
+      @membership_account = FactoryGirl.build(:instance_account, :owner => user)
+      @membership_account.save(:validate => false)
+      @gpdb_instance_with_membership = @membership_account.instance
       @gpdb_instance_forbidden = FactoryGirl.create :gpdb_instance
     end
 
@@ -270,8 +328,8 @@ describe GpdbInstance do
     let(:user) { users(:owner) }
 
     context "shared gpdb instance" do
-      let!(:gpdb_instance) { FactoryGirl.create :gpdb_instance, :shared => true }
-      let!(:owner_account) { FactoryGirl.create :instance_account, :gpdb_instance => gpdb_instance, :owner_id => gpdb_instance.owner.id }
+      let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance, :shared => true) }
+      let(:owner_account) { gpdb_instance.owner_account }
 
       it "should return the same account for everyone" do
         gpdb_instance.account_for_user!(user).should == owner_account
@@ -280,9 +338,9 @@ describe GpdbInstance do
     end
 
     context "individual gpdb instance" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
-      let!(:owner_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
-      let!(:user_account) { InstanceAccount.find_by_gpdb_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
+      let(:gpdb_instance) { data_sources(:owners) }
+      let!(:owner_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, gpdb_instance.owner.id) }
+      let!(:user_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, users(:the_collaborator).id) }
 
       it "should return the account for the user" do
         gpdb_instance.account_for_user!(gpdb_instance.owner).should == owner_account
@@ -291,7 +349,7 @@ describe GpdbInstance do
     end
 
     context "missing account" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
 
       it "raises an exception" do
         expect { gpdb_instance.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -300,7 +358,7 @@ describe GpdbInstance do
   end
 
   describe "#account_for_user" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     context "missing account" do
       it "returns nil" do
@@ -316,10 +374,10 @@ describe GpdbInstance do
     end
   end
 
-  describe "refresh_databases", :database_integration => true do
+  describe "refresh_databases", :database_integration do
     context "with database integration", :database_integration => true do
       let(:account_with_access) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_instance) { account_with_access.gpdb_instance }
+      let(:gpdb_instance) { account_with_access.instance }
       let(:database) { InstanceIntegration.real_database }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_dataset_permissions" do
@@ -339,7 +397,7 @@ describe GpdbInstance do
     end
 
     context "with database stubbed" do
-      let(:gpdb_instance) { gpdb_instances(:owners) }
+      let(:gpdb_instance) { data_sources(:owners) }
       let(:database) { gpdb_databases(:default) }
       let(:missing_database) { gpdb_instance.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_instance.owner_account }
@@ -415,34 +473,32 @@ describe GpdbInstance do
   end
 
   describe "#connect_with" do
-    let(:instance) { gpdb_instances(:default) }
+    let(:instance) { data_sources(:default) }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
-      mock(GreenplumConnection::InstanceConnection).new({
-                                                            :host => instance.host,
-                                                            :port => instance.port,
-                                                            :username => account.db_username,
-                                                            :password => account.db_password,
-                                                            :database => instance.maintenance_db,
-                                                            :logger => Rails.logger
-                                                        }) { "this is my connection" }
+      mock(GreenplumConnection).new({
+                                        :host => instance.host,
+                                        :port => instance.port,
+                                        :username => account.db_username,
+                                        :password => account.db_password,
+                                        :database => instance.maintenance_db,
+                                        :logger => Rails.logger
+                                    }) { "this is my connection" }
       instance.connect_with(account).should == "this is my connection"
     end
   end
 
-  describe "#databases", :database_integration => true do
+  describe "#databases", :database_integration do
     let(:account) { InstanceIntegration.real_gpdb_account }
 
-    subject { account.gpdb_instance }
-
     it "should not include the 'template0' database" do
-      subject.databases.map(&:name).should_not include "template0"
+      account.instance.databases.map(&:name).should_not include "template0"
     end
   end
 
   describe ".refresh" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       @refreshed_databases = false
@@ -463,7 +519,7 @@ describe GpdbInstance do
   end
 
   describe "automatic reindexing" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       stub(Sunspot).index.with_any_args
@@ -478,7 +534,7 @@ describe GpdbInstance do
     end
 
     context "making the instance un-shared" do
-      let(:instance) { gpdb_instances(:shared) }
+      let(:instance) { data_sources(:shared) }
       it "should reindex" do
         mock(instance).solr_reindex_later
         instance.shared = false
@@ -495,7 +551,7 @@ describe GpdbInstance do
   end
 
   describe "#solr_reindex_later" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     it "should enqueue a job" do
       mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.reindex_instance", instance.id)
       instance.solr_reindex_later
@@ -503,16 +559,15 @@ describe GpdbInstance do
   end
 
   describe "#refresh_databases_later" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
     it "should enqueue a job" do
       mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh_databases", instance.id)
       instance.refresh_databases_later
     end
   end
 
-
   describe "#reindex_instance" do
-    let(:instance) { gpdb_instances(:owners) }
+    let(:instance) { data_sources(:owners) }
 
     before do
       stub(Sunspot).index.with_any_args
@@ -527,6 +582,13 @@ describe GpdbInstance do
       mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
       GpdbInstance.reindex_instance(instance.id)
     end
+  end
+
+  describe "DataSource Behaviors", :database_integration do
+    let(:instance) { InstanceIntegration.real_gpdb_instance }
+    let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
+
+    it_should_behave_like "DataSource"
   end
 end
 

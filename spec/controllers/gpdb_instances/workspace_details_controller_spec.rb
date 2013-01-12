@@ -13,7 +13,7 @@ describe GpdbInstances::WorkspaceDetailsController do
   end
 
   describe "#show" do
-    let(:gpdb_instance) { gpdb_instances(:owners) }
+    let(:gpdb_instance) { data_sources(:owners) }
 
     context "with a valid instance id" do
       it "does not require authorization" do

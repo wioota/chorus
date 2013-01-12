@@ -30,6 +30,10 @@ FixtureBuilder.configure do |fbuilder|
       end
     end
 
+    any_instance_of(DataSource) do |data_source|
+      stub(data_source).valid_db_credentials? { true }
+    end
+
     (ActiveRecord::Base.direct_descendants).each do |klass|
       ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{klass.table_name}_id_seq RESTART WITH 1000000;")
     end
@@ -91,17 +95,17 @@ FixtureBuilder.configure do |fbuilder|
     Events::GnipInstanceCreated.by(admin).add(:gnip_instance => gnip_instance)
 
     # Instance Accounts
-    @shared_instance_account = FactoryGirl.create(:instance_account, :owner => admin, :gpdb_instance => shared_instance)
-    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :gpdb_instance => owners_instance)
-    owner_instance_account = FactoryGirl.create(:instance_account, :owner => owner, :gpdb_instance => owners_instance)
+    @shared_instance_account = shared_instance.account_for_user(admin)
+    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :instance => owners_instance)
+    owner_instance_account = owners_instance.account_for_user(owner)
 
-    @chorus_gpdb40_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb40").merge(:owner => admin, :gpdb_instance => chorus_gpdb40_instance))
-    @chorus_gpdb41_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb("chorus-gpdb41").merge(:owner => admin, :gpdb_instance => chorus_gpdb41_instance))
-    @chorus_gpdb42_test_superuser = FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => admin, :gpdb_instance => chorus_gpdb42_instance))
-    FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :gpdb_instance => chorus_gpdb42_instance))
+    @chorus_gpdb42_test_superuser = chorus_gpdb42_instance.account_for_user(admin)
+
+    FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
 
     [chorus_gpdb40_instance, chorus_gpdb41_instance, chorus_gpdb42_instance].each do |instance|
-      FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :gpdb_instance => instance)
+      FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :instance => instance)
+      instance.reload
     end
 
     # Datasets
