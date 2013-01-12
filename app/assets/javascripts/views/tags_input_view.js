@@ -114,22 +114,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
        }
     },
 
-    finishEditing: function() {
-        var lastTagValid = true;
-        var inputText = this.input.val().trim();
-        if(inputText) {
-            lastTagValid = this.validateTag(inputText);
-
-            if(lastTagValid) {
-                this.textext.tags().addTags([{name: inputText}]);
-            }
-        }
-
-        if(lastTagValid) {
-            this.trigger("finishedEditing");
-        }
-    },
-
     additionalContext: function() {
         return {
             tags: this.tags.models,
