@@ -17,7 +17,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :gpdb_instances, :only => [:index, :show, :create, :update] do
+  resources :data_sources, :only => [:index, :show, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases'
 
     scope :module => 'gpdb_instances' do

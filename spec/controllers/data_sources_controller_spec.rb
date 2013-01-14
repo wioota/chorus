@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpdbInstancesController do
+describe DataSourcesController do
   ignore_authorization!
 
   let(:user) { users(:owner) }
@@ -94,46 +94,52 @@ describe GpdbInstancesController do
   end
 
   describe "#create" do
-    it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
+    context "for a GpdbInstance" do
+      let(:type) { "GREENPLUM" }
+      it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
 
-    let(:valid_attributes) do
-      {
-          :name => "create_spec_name",
-          :port => 12345,
-          :host => "server.emc.com",
-          :maintenance_db => "postgres",
-          :description => "old description",
-          :db_username => "bob",
-          :db_password => "secret"
-      }
-    end
-
-    before do
-      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
-    end
-
-    it "reports that the gpdb instance was created" do
-      post :create, valid_attributes
-      response.code.should == "201"
-    end
-
-    it "presents the gpdb instance" do
-      mock_present do |instance|
-        instance.name == valid_attributes[:name]
+      let(:valid_attributes) do
+        {
+            :name => "create_spec_name",
+            :port => 12345,
+            :host => "server.emc.com",
+            :maintenance_db => "postgres",
+            :description => "old description",
+            :db_username => "bob",
+            :db_password => "secret",
+            :type => type
+        }
       end
-      post :create, valid_attributes
-    end
 
-    it "schedules a job to refresh the instance" do
-      mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
-      post :create, :gpdb_instance => valid_attributes
-    end
+      before do
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+      end
 
-    context "with invalid attributes" do
-      it "responds with validation errors" do
-        valid_attributes.delete(:name)
+      it "creates the data source" do
+        expect {
+          post :create, valid_attributes
+        }.to change(GpdbInstance, :count).by(1)
+        response.code.should == "201"
+      end
+
+      it "presents the gpdb data_source" do
+        mock_present do |data_source|
+          data_source.name == valid_attributes[:name]
+        end
         post :create, valid_attributes
-        response.code.should == "422"
+      end
+
+      it "schedules a job to refresh the data_source" do
+        mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
+        post :create, :gpdb_instance => valid_attributes
+      end
+
+      context "with invalid attributes" do
+        it "responds with validation errors" do
+          valid_attributes.delete(:name)
+          post :create, valid_attributes
+          response.code.should == "422"
+        end
       end
     end
   end

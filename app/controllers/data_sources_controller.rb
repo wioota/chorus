@@ -1,4 +1,4 @@
-class GpdbInstancesController < GpdbController
+class DataSourcesController < GpdbController
   wrap_parameters :gpdb_instance, :exclude => []
 
   def index
