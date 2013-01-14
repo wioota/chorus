@@ -53,7 +53,7 @@ describe("chorus.views.TagsInput", function() {
         });
 
         it("removes the text from the input", function() {
-            expect(input.val()).toBe("");
+            expect(view.$('input').val()).toBe("");
         });
 
         it("adds the tag to the tagset", function() {
@@ -109,7 +109,7 @@ describe("chorus.views.TagsInput", function() {
         });
     });
 
-    describe("when the first entered tag has a leading space", function() {
+    xdescribe("when the tag has a leading space", function() {
         beforeEach(function() {
             enterTag(view, " sigma");
         });
@@ -131,13 +131,9 @@ describe("chorus.views.TagsInput", function() {
             enterTag(view, "alpha");
         });
 
-        it("does not create the duplicate tag", function() {
+        it("adds the tag to the end of the list", function() {
             expect(view.$(".text-tag").length).toBe(3);
-            expect(this.addedSpy).not.toHaveBeenCalled();
-        });
-
-        it("removes the text from the input", function() {
-            expect(input.val()).toBe("");
+            expect(view.$(".text-tag:last")).toContainText('alpha');
         });
     });
 

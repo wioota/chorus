@@ -10,7 +10,7 @@ chorus.collections.TaggingSet = chorus.collections.Base.extend({
 
     containsTag: function(tagName) {
         return this.any(function(tag) {
-            return tag.name().toLowerCase() === tagName.toLowerCase();
+            return tag.matches(tagName);
         });
     },
 
@@ -18,5 +18,14 @@ chorus.collections.TaggingSet = chorus.collections.Base.extend({
         return this.map(function(tag) {
             return tag.name();
         });
+    },
+
+    add: function(models, options){
+        models = _.isArray(models) ? models.slice() : [models];
+        models = _.reject(models, function(model){
+            var name = model instanceof chorus.models.Base ? model.get('name') : model.name;
+            return this.containsTag(name);
+        }, this);
+        this._super('add', [models, options]);
     }
 });

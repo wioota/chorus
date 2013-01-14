@@ -9,12 +9,12 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     postRender: function() {
         this.input = this.$('input');
-        var tagsForTextext = this.tags.map(function(tag) {
+        this.tagsForTextext = this.tags.map(function(tag) {
             return tag.attributes;
         });
         this.input.textext({
             plugins: 'tags autocomplete ajax',
-            tagsItems: tagsForTextext,
+            tagsItems: this.tagsForTextext,
             itemManager: chorus.utilities.TagItemManager,
             keys: {
                 8   : 'backspace',
@@ -62,7 +62,14 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         if(data.length > this.tags.length) {
             // add
             var added = _.last(data);
+            var duplicate = this.tags.find(function(tag){
+                return tag.matches(added.name);
+            });
+            if(duplicate){
+                this.tags.remove(duplicate, {silent: true});
+            }
             this.tags.add(added);
+            this.render();
         } else if(data.length < this.tags.length) {
             // remove
             var tagNames = _.pluck(data, "name");
@@ -97,10 +104,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             this.keepInvalidTagName = true;
             this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
         } else if (tagName.length === 0) {
-            valid = false;
-        }
-
-        if (this.tags.containsTag(tagName)) {
             valid = false;
         }
 

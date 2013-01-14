@@ -28,11 +28,15 @@ describe("chorus.collections.TaggingSet", function() {
         });
     });
 
-    describe("#containsTag", function() {
-        it("compares tag names ignoring case", function() {
-            expect(this.collection.containsTag('foo')).toBe(true);
-            expect(this.collection.containsTag('FOO')).toBe(true);
-            expect(this.collection.containsTag('baz')).toBe(false);
+    describe('#add', function() {
+        context("when called with a tag that already exists", function(){
+            beforeEach(function(){
+               this.collection.add({name: "foo"});
+            });
+
+            it("does not add a new tag", function(){
+                expect(this.collection.length).toBe(2);
+            });
         });
     });
 });

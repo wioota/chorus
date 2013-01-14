@@ -86,6 +86,26 @@ describe("chorus.dialogs.EditTags", function() {
                 expect("change").toHaveBeenTriggeredOn(savedModel);
             });
 
+            context('when the tag is already on some of the models', function() {
+               beforeEach(function(){
+                   enterTag(this.dialog, 'tag2');
+               });
+
+                it('saves the tags', function() {
+                    expect(this.collection.saveTags).toHaveBeenCalled();
+                });
+
+                it('adds the tag to all the models', function(){
+                    this.collection.each(function(model) {
+                        expect(model.tags().pluck('name')).toContain('tag2');
+                    });
+                });
+
+                it('puts the new tag at the end', function(){
+                    expect(this.dialog.tags().last().get('name')).toEqual('tag2');
+                });
+            });
+
             context('when the save fails', function(){
                 beforeEach(function() {
                     var savedModel = this.collection.last();
