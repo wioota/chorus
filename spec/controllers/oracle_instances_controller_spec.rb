@@ -16,14 +16,14 @@ describe OracleInstancesController do
   end
 
   describe "#create" do
-    it 'creates a new instance' do
+    xit 'creates a new instance' do
       expect {
         post :create, instance_params
       }.to change(OracleInstance, :count).by(1)
       response.code.should == "201"
     end
 
-    it 'presents the instance' do
+    xit 'presents the instance' do
       mock_present do |instance|
         instance.name == instance_params[:name]
       end

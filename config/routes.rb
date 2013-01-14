@@ -29,8 +29,6 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :oracle_instances, :only => :create
-
   resources :gnip_instances, :only => [:index, :show, :create, :update] do
     resources :imports, :only => [:create], :controller => 'gnip_instance_imports'
   end
