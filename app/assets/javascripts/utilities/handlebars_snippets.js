@@ -1,6 +1,9 @@
 (function() {
 
-    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{renderErrors serverErrors}}<a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}</div>');
+    (function registerPartials(){
+        Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{renderErrors serverErrors}}<a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}</div>');
+        Handlebars.registerPartial("itemTags", window.JST["templates/item_tags"]);
+    })();
 
     var templates = {}; //for memoizing handlebars helpers templates
     chorus.helpers = {

@@ -3,14 +3,7 @@
 <div class="description">
     <a class="name" href="{{showUrl}}">{{displaySearchMatch "fileName"}}</a>
 
-    {{#if tags}}
-    <div class="tag_list">
-        {{t "tag_list.title"}}:
-        {{#each tags}}
-            <a class="tag_name" href="#">{{this.name}}</a>
-        {{/each}}
-    </div>
-    {{/if}}
+    {{> itemTags}}
 
     <div class="location">{{usedInWorkspaces workspaces resource}}</div>
     <div class="description_content">{{displaySearchMatch "description"}}</div>

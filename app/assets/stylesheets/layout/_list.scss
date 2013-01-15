@@ -197,6 +197,7 @@
 
     .tag_name:after {
         content: ', ';
+        color: $color-text2;
         font-weight: $semibold;
     }
 

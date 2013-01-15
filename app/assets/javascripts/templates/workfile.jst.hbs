@@ -12,14 +12,7 @@
         <a title="{{fileName}}" class="name" href="{{url}}">{{fileName}}</a>
     </div>
 
-    {{#if tags}}
-    <div class="tag_list">
-        {{t "tag_list.title"}}:
-        {{#each tags}}
-            <a class="tag_name" href="#">{{this.name}}</a>
-        {{/each}}
-    </div>
-    {{/if}}
+    {{> itemTags}}
 
     <div class="details">
         {{#if tableauWorkbook}}
