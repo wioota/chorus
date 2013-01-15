@@ -1,7 +1,7 @@
 describe("chorus.utilities.TagItemManager", function() {
     beforeEach(function() {
         this.manager = new chorus.utilities.TagItemManager();
-        this.manager.init({});
+        this.manager.init({_opts:{}});
     });
 
     describe("#filter", function() {
