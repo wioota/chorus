@@ -35,6 +35,8 @@ FactoryGirl.define do
     sequence(:port) { |n| 5000+n }
     maintenance_db "db_name"
     owner
+    db_username 'username'
+    db_password 'secret'
   end
 
   factory :hadoop_instance do
