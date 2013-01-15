@@ -36,8 +36,8 @@ describe("chorus.views.Workfile", function() {
         });
 
         it("should show a list of tags", function () {
-            expect(this.view.$('.tag_list')).toContainTranslation("tag_list.title");
-            expect(this.view.$('.tag_list')).toContainText("tag1 tag2");
+            expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
         });
     });
 

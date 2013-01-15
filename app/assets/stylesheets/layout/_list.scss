@@ -189,24 +189,25 @@
     }
 }
 
-.tag_list {
+.item_tag_list {
     font-size: 12px;
     font-weight: normal;
     color: $color-text2;
     line-height: 21px;
 
-    .tag_name {
+    a.tag_name {
+        color: $link-color;
         font-weight: $semibold;
         font-size: 12px;
     }
 
-    .tag_name:after {
+    a.tag_name:after {
         content: ', ';
         color: $color-text2;
         font-weight: $semibold;
     }
 
-    .tag_name:last-child:after {
+    a.tag_name:last-child:after {
         content: '';
     }
 }
