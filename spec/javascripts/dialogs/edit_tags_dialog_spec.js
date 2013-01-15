@@ -11,6 +11,7 @@ describe("chorus.dialogs.EditTags", function() {
         this.collection = rspecFixtures.workfileSet([
             this.model1.attributes, this.model2.attributes]);
         this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
+        spyOn(this.dialog, "closeModal");
         this.dialog.render();
     });
 
@@ -22,6 +23,16 @@ describe("chorus.dialogs.EditTags", function() {
         expect(this.dialog.$(".text-tags")).toContainText("tag1");
         expect(this.dialog.$(".text-tags")).toContainText("tag2");
         expect(this.dialog.$(".text-tags")).toContainText("tag3");
+    });
+
+    describe("clicking the close button", function(){
+        beforeEach(function(){
+           this.dialog.$(".cancel").click();
+        });
+
+        it("closes the dialog", function(){
+            expect(this.dialog.closeModal).toHaveBeenCalled();
+        });
     });
 
     describe("after the dialog is revealed by facebox", function() {

@@ -21,7 +21,7 @@
         },
 
         compareItems: function (item1, item2) {
-            return item1.name.toLowerCase() === item2.name.toLowerCase();
+            return _.strip(item1.name.toLowerCase()) === _.strip(item2.name.toLowerCase());
         }
     };
 })();
