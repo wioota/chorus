@@ -194,7 +194,7 @@ describe ChorusView do
     end
 
     it "raises if it cant create the view" do
-      stub(connection).create_view(view_name, anything) { raise GreenplumConnection::DatabaseError }
+      stub(connection).create_view(view_name, anything) { raise GreenplumConnection::DatabaseError.new(StandardError.new()) }
 
       expect {
         chorus_view.convert_to_database_view(view_name, user)

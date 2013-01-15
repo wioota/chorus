@@ -1,6 +1,8 @@
 class InstanceAccount < ActiveRecord::Base
+  attr_accessor :legacy_migrate
+
   attr_accessible :db_username, :db_password, :owner
-  validate :credentials_are_valid
+  validate :credentials_are_valid, :unless => :legacy_migrate
   validates_presence_of :db_username, :db_password, :instance, :owner
   validates_uniqueness_of :owner_id, :scope => :instance_id
 

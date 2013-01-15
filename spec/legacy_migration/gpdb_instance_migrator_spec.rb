@@ -18,8 +18,6 @@ describe GpdbInstanceMigrator do
           gpdb_instance.description.should == legacy_instance["description"]
           gpdb_instance.host.should == legacy_instance["host"]
           gpdb_instance.port.should == legacy_instance["port"].try(:to_i)
-          gpdb_instance.provision_type.should == legacy_instance["provision_type"]
-          gpdb_instance.instance_provider.should == legacy_instance["instance_provider"]
           gpdb_instance.maintenance_db.should == legacy_instance["maintenance_db"]
           gpdb_instance.owner.should == User.find_by_username(legacy_instance["owner"])
           gpdb_instance.state.should == legacy_instance["state"]

@@ -67,12 +67,12 @@ class WorkfileMigrator < AbstractMigrator
           SET execution_schema_id = (SELECT gpdb_schemas.id FROM gpdb_schemas
           INNER JOIN edc_task ON
             edc_task.entity_id=workfiles.legacy_id
-          INNER JOIN gpdb_instances ON
-            edc_task.instance_id=gpdb_instances.legacy_id
+          INNER JOIN data_sources ON
+            edc_task.instance_id=data_sources.legacy_id
           INNER JOIN edc_database ON
             edc_database.instance_id=edc_task.instance_id AND edc_database.id=edc_task.database_id
           INNER JOIN gpdb_databases ON
-            gpdb_databases.name=edc_database.name AND gpdb_databases.gpdb_instance_id=gpdb_instances.id
+            gpdb_databases.name=edc_database.name AND gpdb_databases.gpdb_instance_id=data_sources.id
           INNER JOIN edc_schema ON
             edc_schema.id=edc_task.schema_id
           WHERE edc_task.task_type='WORKFILE_SQL_EXECUTION'

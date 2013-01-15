@@ -1077,7 +1077,7 @@ class ActivityMigrator < AbstractMigrator
           streams.id,
           'edc_activity_stream',
           'Events::GreenplumInstanceCreated',
-          gpdb_instances.id,
+          data_sources.id,
           'GpdbInstance',
           streams.created_tx_stamp AT TIME ZONE 'UTC',
           streams.last_updated_tx_stamp AT TIME ZONE 'UTC',
@@ -1085,8 +1085,8 @@ class ActivityMigrator < AbstractMigrator
         FROM edc_activity_stream streams
         INNER JOIN edc_activity_stream_object target_instance
           ON streams.id = target_instance.activity_stream_id AND target_instance.entity_type = 'instance'
-        INNER JOIN gpdb_instances
-          ON target_instance.object_id = gpdb_instances.legacy_id
+        INNER JOIN data_sources
+          ON target_instance.object_id = data_sources.legacy_id
         INNER JOIN edc_activity_stream_object actor
           ON streams.id = actor.activity_stream_id AND actor.object_type = 'actor'
         INNER JOIN users

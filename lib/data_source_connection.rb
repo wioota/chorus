@@ -1,6 +1,5 @@
 require 'sequel'
 
 class DataSourceConnection
-  Error = Sequel::DatabaseError
-
+  class Error < StandardError; end
 end

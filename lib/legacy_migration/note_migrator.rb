@@ -52,7 +52,7 @@ class NoteMigrator < AbstractMigrator
         edc_comment.id,
         'edc_comment',
         'Events::NoteOnGreenplumInstance',
-        gpdb_instances.id,
+        data_sources.id,
         'GpdbInstance',
         edc_comment.created_stamp AT TIME ZONE 'UTC',
         edc_comment.last_updated_stamp AT TIME ZONE 'UTC',
@@ -68,8 +68,8 @@ class NoteMigrator < AbstractMigrator
             AND instance_provider = 'Greenplum Database'
         INNER JOIN users
           ON users.username = edc_comment.author_name
-        INNER JOIN gpdb_instances
-          ON gpdb_instances.legacy_id = edc_comment.entity_id
+        INNER JOIN data_sources
+          ON data_sources.legacy_id = edc_comment.entity_id
       WHERE
         edc_comment.entity_type = 'instance'
         AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnGreenplumInstance');

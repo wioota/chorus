@@ -39,7 +39,7 @@ class ChorusView < Dataset
     schema.connect_as(current_user).test_transaction do |conn|
       begin
         conn.fetch_value(query_without_comments.gsub ";", "")
-      rescue Sequel::DatabaseError => e
+      rescue GreenplumConnection::DatabaseError => e
         errors.add(:query, :generic, {:message => e.message})
       end
     end

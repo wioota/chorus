@@ -20,7 +20,7 @@ class SandboxMigrator < AbstractMigrator
           INNER JOIN gpdb_databases database
             ON sandbox.database_name = database.name
             AND database.id = schema.database_id
-          INNER JOIN gpdb_instances gpdb_instance
+          INNER JOIN data_sources gpdb_instance
             ON gpdb_instance.legacy_id = sandbox.instance_id
             AND database.gpdb_instance_id = gpdb_instance.id
         WHERE sandbox.workspace_id = workspaces.legacy_id;")

@@ -14,7 +14,7 @@ class InstanceAccountMigrator < AbstractMigrator
 
       # Make sure gpdb_instances are flagged as shared if any legacy account maps are shared
       Legacy.connection.exec_query(<<-SQL)
-          UPDATE gpdb_instances
+          UPDATE data_sources
           SET shared = true
           WHERE legacy_id IN
           (SELECT instance_id FROM edc_account_map WHERE shared = 'yes');
@@ -24,7 +24,7 @@ class InstanceAccountMigrator < AbstractMigrator
                                 legacy_id,
                                 db_username,
                                 owner_id,
-                                gpdb_instance_id,
+                                instance_id,
                                 created_at,
                                 updated_at
                               )
@@ -38,10 +38,10 @@ class InstanceAccountMigrator < AbstractMigrator
                               FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name
-                              INNER JOIN gpdb_instances i
+                              INNER JOIN data_sources i
                                 ON map.instance_id = i.legacy_id
                               WHERE map.id NOT IN (SELECT legacy_id FROM instance_accounts)
-                              AND i.instance_provider = 'Greenplum Database'
+                              AND i.type = 'GpdbInstance'
                               AND NOT (map.shared = 'no' AND i.shared = true);")
 
       unless inserted == 0

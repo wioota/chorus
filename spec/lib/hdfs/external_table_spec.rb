@@ -60,7 +60,7 @@ describe ExternalTable do
     it "adds table already exists error when the table already exists" do
       e = ExternalTable.new(params)
       stub(database).create_external_table.with_any_args do
-        raise GreenplumConnection::DatabaseError
+        raise GreenplumConnection::DatabaseError.new(StandardError.new())
       end
 
       e.save.should be_false

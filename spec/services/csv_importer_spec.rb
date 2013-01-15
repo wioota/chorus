@@ -263,7 +263,7 @@ describe CsvImporter do
 
           expect {
             schema.connect_with(account).fetch("SELECT * FROM #{table_name}")
-          }.to raise_error(Sequel::DatabaseError)
+          }.to raise_error(GreenplumConnection::DatabaseError)
         end
 
         it "does not remove import table when new_table is false" do

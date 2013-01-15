@@ -7,6 +7,8 @@ describe InstanceAccount do
   end
 
   describe "validations" do
+    let(:gpdb_instance) { FactoryGirl.build(:gpdb_instance) }
+
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
 
@@ -24,6 +26,15 @@ describe InstanceAccount do
       stub(account.instance).valid_db_credentials?(account) { false }
       account.should_not be_valid
       account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
+    end
+
+    context "during legacy migration" do
+      it "does not validate credentials" do
+        account = InstanceAccount.first
+        stub(account.instance).valid_db_credentials?(account) { false }
+        account.legacy_migrate = true
+        account.should be_valid
+      end
     end
   end
 

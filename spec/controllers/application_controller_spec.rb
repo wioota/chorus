@@ -64,7 +64,7 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a Greenplum Connection error occurs" do
-      error = GreenplumConnection::DatabaseError.new("oops")
+      error = GreenplumConnection::DatabaseError.new(StandardError.new('oops'))
       stub(error).error_type { :SOME_ERROR_TYPE }
       stub(controller).index { raise error }
 

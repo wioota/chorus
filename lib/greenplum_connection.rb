@@ -1,11 +1,16 @@
 require_relative 'data_source_connection'
 
 class GreenplumConnection < DataSourceConnection
+  class DatabaseError < Error
+    def initialize(exception = nil)
+      if exception
+        super(exception.message)
+        @exception = exception
+      end
+    end
 
-  DatabaseError = Error
-  class DatabaseError
     def error_type
-      error_code = wrapped_exception && wrapped_exception.respond_to?(:get_sql_state) && wrapped_exception.get_sql_state
+      error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_sql_state) && @exception.wrapped_exception.get_sql_state
       case error_code
         when '28P01' then :INVALID_PASSWORD
         when '3D000' then :DATABASE_MISSING
@@ -46,6 +51,8 @@ class GreenplumConnection < DataSourceConnection
 
   def connect!
     @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+  rescue Sequel::DatabaseError => e
+    raise GreenplumConnection::DatabaseError.new(e)
   end
 
   def disconnect
@@ -88,6 +95,9 @@ class GreenplumConnection < DataSourceConnection
       @connection.execute("SET search_path TO '#{schema_name}'")
     end
     yield
+
+  rescue Sequel::DatabaseError => e
+    raise GreenplumConnection::DatabaseError.new(e)
   ensure
     disconnect
   end
@@ -213,7 +223,7 @@ class GreenplumConnection < DataSourceConnection
       disconnect
       result
     rescue Sequel::DatabaseError => e
-      raise GreenplumConnection::DatabaseError.new(e.message) unless e.message =~ /transaction is aborted/
+      raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
     ensure
       disconnect
     end
@@ -254,7 +264,7 @@ class GreenplumConnection < DataSourceConnection
         yield query.qualify_to_first_source
       end
     rescue DatabaseError => e
-      raise SqlPermissionDenied, e.message if e.message =~ /permission denied/i
+      raise SqlPermissionDenied, e if e.message =~ /permission denied/i
       raise e
     end
 

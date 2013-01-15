@@ -845,18 +845,23 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
     end
   end
 
-  describe GreenplumConnection::DatabaseError do
-    let(:wrapped_exception) { StandardError.new }
+  describe "GreenplumConnection::DatabaseError" do
+    let(:sequel_exception) {
+      obj = Object.new
+      wrp_exp = Object.new
+      stub(obj).wrapped_exception { wrp_exp }
+      stub(obj).message { "A message" }
+      obj
+    }
+
     let(:error) do
-      GreenplumConnection::DatabaseError.new.tap do |e|
-        e.wrapped_exception = wrapped_exception
-      end
+      GreenplumConnection::DatabaseError.new(sequel_exception)
     end
 
     describe "error_type" do
       context "when the wrapped error has a sql state error code" do
         before do
-          stub(wrapped_exception).get_sql_state { error_code }
+          stub(sequel_exception.wrapped_exception).get_sql_state { error_code }
         end
 
         context "when the error code is 3D000" do
@@ -908,7 +913,7 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
     end
 
     describe "sanitizing exception messages" do
-      let(:error) { GreenplumConnection::DatabaseError.new message }
+      let(:error) { GreenplumConnection::DatabaseError.new(StandardError.new(message)) }
 
       context "one kind" do
         let(:message) do
