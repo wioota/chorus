@@ -13,6 +13,8 @@ class DataSource < ActiveRecord::Base
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
 
+  validates_with DataSourceNameValidator
+
   def refresh_databases_later
   end
 

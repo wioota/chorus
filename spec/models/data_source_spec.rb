@@ -5,6 +5,8 @@ describe DataSource do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of :maintenance_db }
 
+    it_should_behave_like "it validates with DataSourceNameValidator"
+
     it_should_behave_like 'a model with name validations' do
       let(:factory_name) { :data_source }
     end

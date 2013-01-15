@@ -1,10 +1,18 @@
 require 'spec_helper'
 
+def it_validates_against(model_type)
+  it "fails if a #{model_type} has the same name as the record" do
+    FactoryGirl.create(model_type.to_s.underscore.to_sym, :name => name)
+    record.valid?.should == false
+    record.should have_error_on(:name).with_message(:taken)
+  end
+end
+
 describe DataSourceNameValidator do
   let(:name) { 'theodore' }
   let(:record) {
     Class.new(ActiveRecord::Base) {
-      self.table_name = 'gpdb_instances'
+      self.table_name = 'data_sources'
       attr_accessible :name
       validates_with DataSourceNameValidator
     }.new(:name => name)
@@ -19,7 +27,7 @@ describe DataSourceNameValidator do
   end
 
   describe "#validate" do
-    it "passes if name if the record doesn't have a name" do
+    it "passes if the record doesn't have a name" do
       record.name = nil
       record.valid?.should be_true
     end
@@ -31,7 +39,7 @@ describe DataSourceNameValidator do
     it "passes on model update" do
       OriginalGpdbInstance = GpdbInstance
 
-      class GpdbInstance < ActiveRecord::Base
+      class GpdbInstance < DataSource
         validates_with DataSourceNameValidator
       end
 
@@ -46,23 +54,10 @@ describe DataSourceNameValidator do
       end
     end
 
-    it "fails if a GPDBInstance has the same name as the record" do
-      FactoryGirl.create(:gpdb_instance, :name => name)
-      record.valid?.should == false
-      record.should have_error_on(:name).with_message(:taken)
-    end
-
-    it "fails if a HadoopInstance has the same name as the record" do
-      FactoryGirl.create(:hadoop_instance, :name => name)
-      record.valid?.should == false
-      record.should have_error_on(:name).with_message(:taken)
-    end
-
-    it "fails if a GnipInstance has the same name as the record" do
-      FactoryGirl.create(:gnip_instance, :name => name)
-      record.valid?.should == false
-      record.should have_error_on(:name).with_message(:taken)
-    end
+    it_validates_against(GpdbInstance)
+    it_validates_against(OracleInstance)
+    it_validates_against(HadoopInstance)
+    it_validates_against(GnipInstance)
 
     it "it matches data source names regardless of case" do
       FactoryGirl.create(:gnip_instance, :name => name.capitalize)

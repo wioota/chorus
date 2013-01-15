@@ -33,7 +33,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "oracle_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "oracle_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
-    db_name "oracle"
+    maintenance_db "db_name"
     owner
   end
 

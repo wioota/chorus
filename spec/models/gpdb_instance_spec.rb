@@ -2,9 +2,6 @@ require "spec_helper"
 
 describe GpdbInstance do
   describe "validations" do
-
-    it_should_behave_like "it validates with DataSourceNameValidator"
-
     describe "associated account" do
       let(:instance) { data_sources(:shared) }
       context "when host, port, or maintenance_db change" do
