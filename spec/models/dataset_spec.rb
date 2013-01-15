@@ -5,7 +5,6 @@ describe Dataset do
   let(:account) { gpdb_instance.owner_account }
   let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }
-  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions }
   let(:dataset) { datasets(:table) }
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
@@ -176,12 +175,10 @@ describe Dataset do
 
   context ".total_entries" do
     before do
-      stub_gpdb(account, dataset_count_sql => [3])
+      connection = Object.new
+      stub(schema).connect_with(account) { connection }
+      stub(connection).datasets_count { 3 }
     end
-
-    let(:dataset_count_sql) {
-      "select count(tables_and_views.*) from (#{Dataset::Query.new(schema).tables_and_views_in_schema({}).to_sql}) tables_and_views;"
-    }
 
     it "returns the number of total entries" do
       Dataset.total_entries(account, schema).should == 3
@@ -189,17 +186,27 @@ describe Dataset do
   end
 
   context ".refresh" do
+    let(:connection) { Object.new }
+    let(:options) { {} }
+
+    before do
+      stub(schema).connect_with(account) { connection }
+      mock(connection).datasets(options).at_least(1) { found_datasets.map(&:clone) }
+    end
+
     context "refresh once, without mark_stale flag" do
-      before do
-        stub_gpdb(account, datasets_sql => [
-            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
-            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
-            {'type' => "r", "name" => "new_table", "master_table" => 't'}
-        ])
+      let(:found_datasets) do
+        [
+            {:type => "r", :name => dataset.name, :master_table => 't'},
+            {:type => "v", :name => "new_view", :master_table => 'f'},
+            {:type => "r", :name => "new_table", :master_table => 't'}
+        ]
       end
 
       it "creates new copies of the datasets in our db" do
-        Dataset.refresh(account, schema)
+        expect do
+          Dataset.refresh(account, schema)
+        end.to change(Dataset, :count).by(2)
         new_table = schema.datasets.find_by_name('new_table')
         new_view = schema.datasets.find_by_name('new_view')
         new_table.should be_a GpdbTable
@@ -220,10 +227,10 @@ describe Dataset do
       end
 
       context "when a limit and sort are passed to refresh" do
-        let(:sort) { [{"lower(relname)" => "asc"}] }
-        let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions({:sort => sort, :limit => 2}) }
-        it "generates sql with limit and sort" do
-          Dataset.refresh(account, schema, { :limit => 2, :sort => sort })
+        let(:options) { {:limit => 2, :sort => [{"lower(relname)" => "asc"}]} }
+
+        it "passes limit and sort to greenplum connection" do
+          Dataset.refresh(account, schema, options)
         end
       end
 
@@ -259,10 +266,12 @@ describe Dataset do
       end
 
       it "does not re-create datasets that already exist in our database" do
-        Dataset.refresh(account, schema)
-        lambda {
+        expect do
           Dataset.refresh(account, schema)
-        }.should_not change(Dataset, :count)
+        end.to change(Dataset, :count).by(2)
+        expect {
+          Dataset.refresh(account, schema)
+        }.to_not change(Dataset, :count)
       end
 
       it "does not reindex unmodified datasets" do
@@ -275,10 +284,9 @@ describe Dataset do
     context "with stale records that now exist" do
       before do
         dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)
-        stub_gpdb(account, datasets_sql => [
-            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
-        ])
       end
+
+      let(:found_datasets) { [{:type => "r", :name => dataset.name, :master_table => 't'}] }
 
       it "clears the stale flag" do
         Dataset.refresh(account, schema)
@@ -293,9 +301,7 @@ describe Dataset do
     end
 
     context "with records missing" do
-      before do
-        stub_gpdb(account, datasets_sql => [])
-      end
+      let(:found_datasets) { [] }
 
       it "mark missing records as stale" do
         Dataset.refresh(account, schema, :mark_stale => true)
@@ -329,12 +335,12 @@ describe Dataset do
     end
 
     context "with force_index option set" do
-      before do
-        stub_gpdb(account, datasets_sql => [
-            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
-            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
-            {'type' => "r", "name" => "new_table", "master_table" => 't'}
-        ])
+      let(:found_datasets) do
+        [
+            {:type => "r", :name => dataset.name, :master_table => 't'},
+            {:type => "v", :name => "new_view", :master_table => 'f'},
+            {:type => "r", :name => "new_table", :master_table => 't'}
+        ]
       end
 
       it "reindexes unmodified datasets" do
@@ -350,11 +356,14 @@ describe Dataset do
     let(:partition_data_sql) { Dataset::Query.new(schema).partition_data_for_dataset([dataset.name]).to_sql }
 
     before do
-      stub_gpdb(account,
-                datasets_sql => [
-                    {'type' => "r", "name" => dataset.name, "master_table" => 't'}
-                ],
+      found_datasets = [
+          {:type => "r", :name => dataset.name, :master_table => 't'}
+      ]
+      connection = Object.new
+      stub(schema).connect_with(account) { connection }
+      mock(connection).datasets({}).at_least(1) { found_datasets.map(&:clone) }
 
+      stub_gpdb(account,
                 metadata_sql => [
                     {
                         'name' => dataset.name,
@@ -395,11 +404,14 @@ describe Dataset do
   describe ".add_metadata! for a view" do
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset([dataset_view.name]).to_sql }
     before do
-      stub_gpdb(account,
-                datasets_sql => [
-                    {'type' => "v", "name" => dataset_view.name, }
-                ],
+      found_datasets = [
+          {'type' => "v", "name" => dataset_view.name}
+      ]
+      connection = Object.new
+      stub(schema).connect_with(account) { connection }
+      mock(connection).datasets({}).at_least(1) { found_datasets.map(&:clone) }
 
+      stub_gpdb(account,
                 metadata_sql => [
                     {
                         'name' => dataset_view.name,
@@ -532,92 +544,6 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#tables_and_views_in_schema" do
-    let(:sql) { subject.tables_and_views_in_schema(options).to_sql }
-    context "without filter options" do
-      let(:options) { {} }
-
-      it "returns a query whose result includes the names of all tables and views in the schema," +
-             "but does not include sub-partition tables, indexes, or relations in other schemas" do
-        names = rows.map { |row| row[:name] }
-        names.should include(*["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types", "different_names_table", "different_types_table", "7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?", "2candy", "candy", "candy_composite", "candy_empty", "candy_one_column", "second_candy_one_column", "allcaps_candy"])
-      end
-
-      it "includes the relations' types ('r' for table, 'v' for view)" do
-        view_row = rows.find { |row| row[:name] == "view1" }
-        view_row[:type].should == "v"
-
-        rows.each { |row| ['v', 'r'].should include row[:type] }
-      end
-
-      it "includes whether or not each relation is a master table" do
-        master_row = rows.find { |row| row[:name] == "master_table1" }
-        master_row[:master_table].should == true
-
-        rows.each { |row| [true, false].should include row[:master_table] }
-      end
-    end
-
-    context "with filter options" do
-      let(:options) { {:filter => [{:relname => "Table"}]} }
-      it "returns a query whose result with proper filtering" do
-        names = rows.map { |row| row[:name] }
-        names.should =~ ["base_table1", "external_web_table1", "master_table1", "different_names_table", "different_types_table"]
-      end
-    end
-
-    context "with sort options" do
-      let(:options) { {:sort => [{:relname => "asc"}], :filter => [{:relname => 'table'}]} }
-      it "returns a query whose result with proper sort" do
-        names = rows.map { |row| row[:name] }
-        names.should == ["base_table1", "different_names_table", "different_types_table", "external_web_table1", "master_table1"]
-      end
-    end
-
-    context "with limit options" do
-      let(:options) { {:limit => 2} }
-      it "returns a query whose result with limit" do
-        names = rows.map { |row| row[:name] }
-        names.should == ["base_table1", "view1"]
-      end
-    end
-  end
-
-  describe ".refresh" do
-    context "when user does not have access to schema" do
-      let(:account_without_permission) { FactoryGirl.build(:instance_account, :db_password => "secret", :db_username => "user_with_no_access", :instance => database.gpdb_instance, :owner => account.owner).tap { |a| a.save(:validate => false) } }
-      let(:not_accessible_schema_name) { "not_accessible" }
-      let(:not_accessible_schema) { database.schemas.find_by_name(not_accessible_schema_name) }
-
-      before do
-        database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("REVOKE CONNECT ON DATABASE \"#{database.name}\" FROM #{account_without_permission.db_username};") rescue nil
-          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
-          conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
-          conn.exec_query("CREATE USER #{account_without_permission.db_username} WITH PASSWORD '#{account_without_permission.db_password}';") rescue nil
-          conn.exec_query("GRANT CONNECT ON DATABASE \"#{database.name}\" TO #{account_without_permission.db_username};")
-          conn.exec_query("CREATE SCHEMA #{not_accessible_schema_name};")
-          conn.exec_query("CREATE TABLE #{not_accessible_schema_name}.a_table (id integer);")
-          conn.exec_query("REVOKE ALL ON SCHEMA #{not_accessible_schema_name} FROM #{account_without_permission.db_username};")
-        end
-        GpdbSchema.refresh(account, database)
-      end
-
-      after do
-        database.with_gpdb_connection(account) do |conn|
-          conn.exec_query("REVOKE CONNECT ON DATABASE \"#{database.name}\" FROM #{account_without_permission.db_username};") rescue nil
-          conn.exec_query("DROP USER #{account_without_permission.db_username};") rescue nil
-          conn.exec_query("DROP SCHEMA IF EXISTS #{not_accessible_schema_name} CASCADE;")
-        end
-      end
-
-      it "raises an error" do
-        expect { Dataset.refresh(account_without_permission, not_accessible_schema) }.to raise_error(SqlPermissionDenied,
-                                                                /ActiveRecord::JDBCError: ERROR: permission denied for schema not_accessible/)
-      end
-    end
-  end
-
   describe "#metadata_for_dataset" do
     context "Base table" do
       let(:sql) { subject.metadata_for_dataset("base_table1").to_sql }
@@ -726,4 +652,3 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 end
-

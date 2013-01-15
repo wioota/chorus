@@ -119,12 +119,8 @@ class Workspace < ActiveRecord::Base
     end
 
     datasets.map do |relation|
-      if options[:filter]
-        name_search = options[:filter].select {|hash| hash.has_key?(:relname)}
-        if name_search.first
-          searching_name = name_search.first[:relname]
-          relation.with_name_like(searching_name)
-        end
+      if options[:name_filter]
+        relation.with_name_like options[:name_filter]
       else
         relation
       end
@@ -136,7 +132,7 @@ class Workspace < ActiveRecord::Base
     database_id = options[:id]
 
     extra_options = {}
-    extra_options.merge! :filter => [{:relkind => "r"}] if type == "SANDBOX_TABLE"
+    extra_options.merge! :tables_only => true if type == "SANDBOX_TABLE"
 
     account = sandbox && sandbox.database.account_for_user(current_user)
     skip_sandbox = !account ||

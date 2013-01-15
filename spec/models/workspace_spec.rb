@@ -182,7 +182,7 @@ describe Workspace do
           describe "filtering by sandbox table" do
             before do
               options ={:type => "SANDBOX_TABLE",
-                        :filter => [{:relkind => "r"}] }
+                        :tables_only => true }
               mock(Dataset).refresh(account, schema, options) {
                 [sandbox_table]
               }

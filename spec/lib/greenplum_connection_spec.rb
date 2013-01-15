@@ -660,9 +660,192 @@ describe GreenplumConnection, :database_integration do
         connection.table_exists?('test_transaction').should_not be_true
       end
     end
+
+    describe "#datasets"  do
+      let(:datasets_sql) do
+        <<-SQL
+SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+ORDER BY lower(replace(relname,'_', '')) ASC
+        SQL
+      end
+      let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+      let(:subject) { connection.datasets }
+
+      it_should_behave_like "a well behaved database query"
+
+      context "when the user doesn't have permission to the schema" do
+        let(:subject) { connection.datasets }
+        let(:db) { Sequel.connect(db_url) }
+        let(:restricted_user) { "user_with_no_access" }
+        let(:restricted_password) { "secrets" }
+
+        let(:connection) do
+          GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
+        end
+
+        before do
+          db.execute("CREATE USER #{restricted_user} WITH PASSWORD '#{restricted_password}';") rescue nil
+          db.execute("GRANT CONNECT ON DATABASE \"#{database_name}\" TO #{restricted_user};")
+          db.execute("REVOKE ALL ON SCHEMA #{schema_name} FROM #{restricted_user};")
+        end
+
+        after do
+          db.execute("REVOKE CONNECT ON DATABASE \"#{database_name}\" FROM #{restricted_user};") rescue nil
+          db.execute("DROP USER #{restricted_user};") rescue nil
+          db.disconnect
+        end
+
+        it "should raise a SqlPermissionDenied" do
+          expect { subject }.to raise_error(GreenplumConnection::SqlPermissionDenied)
+        end
+      end
+
+      context "when a limit is passed" do
+        let(:datasets_sql) do
+          <<-SQL
+SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+ORDER BY lower(replace(relname,'_', '')) ASC
+LIMIT 2
+          SQL
+        end
+        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+        let(:subject) { connection.datasets(:limit => 2) }
+
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "when a name filter is passed" do
+        let(:datasets_sql) do
+          <<-SQL
+SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+ORDER BY lower(replace(relname,'_', '')) ASC
+          SQL
+        end
+        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+        let(:subject) { connection.datasets(:name_filter => 'cANdy') }
+
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "when only showing tables" do
+        let(:datasets_sql) do
+          <<-SQL
+SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind = 'r'
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+ORDER BY lower(replace(relname,'_', '')) ASC
+          SQL
+        end
+        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+        let(:subject) { connection.datasets(:tables_only => true) }
+
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "when multiple options are passed" do
+        let(:datasets_sql) do
+          <<-SQL
+SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+ORDER BY lower(replace(relname,'_', '')) ASC
+LIMIT 2
+          SQL
+        end
+        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+        let(:subject) { connection.datasets(:name_filter => 'caNDy', :limit => 2) }
+
+        it_should_behave_like "a well behaved database query"
+      end
+    end
+
+    describe "#datasets_count" do
+      let(:datasets_sql) do
+        <<-SQL
+SELECT count(pg_catalog.pg_class.relname)
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+        SQL
+      end
+      let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
+      let(:subject) { connection.datasets_count }
+
+      it_should_behave_like "a well behaved database query"
+
+      context "when the user doesn't have permission to the schema" do
+        let(:subject) { connection.datasets_count }
+        let(:db) { Sequel.connect(db_url) }
+        let(:restricted_user) { "user_with_no_access" }
+        let(:restricted_password) { "secrets" }
+
+        let(:connection) do
+          GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
+        end
+
+        before do
+          db.execute("CREATE USER #{restricted_user} WITH PASSWORD '#{restricted_password}';") rescue nil
+          db.execute("GRANT CONNECT ON DATABASE \"#{database_name}\" TO #{restricted_user};")
+          db.execute("REVOKE ALL ON SCHEMA #{schema_name} FROM #{restricted_user};")
+        end
+
+        after do
+          db.execute("REVOKE CONNECT ON DATABASE \"#{database_name}\" FROM #{restricted_user};") rescue nil
+          db.execute("DROP USER #{restricted_user};") rescue nil
+          db.disconnect
+        end
+
+        it "should raise a SqlPermissionDenied" do
+          expect { subject }.to raise_error(GreenplumConnection::SqlPermissionDenied)
+        end
+      end
+
+      context "when a name filter is passed" do
+        let(:datasets_sql) do
+          <<-SQL
+SELECT count(pg_catalog.pg_class.relname)
+FROM pg_catalog.pg_class
+LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+AND pg_catalog.pg_class.relkind in ('r', 'v')
+AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+          SQL
+        end
+        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
+        let(:subject) { connection.datasets_count(:name_filter => 'cANdy') }
+
+        it_should_behave_like "a well behaved database query"
+      end
+    end
   end
 
-  describe "GreenplumConnection::DatabaseError" do
+  describe GreenplumConnection::DatabaseError do
     let(:wrapped_exception) { StandardError.new }
     let(:error) do
       GreenplumConnection::DatabaseError.new.tap do |e|

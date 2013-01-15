@@ -59,30 +59,30 @@ describe WorkspaceDatasetsController do
       end
 
       it "filter the list by the name_pattern value" do
-        mock(workspace).dataset_count(is_a(User), hash_including(:filter => [{:relname => "view"}])) { 12 }
-        mock(workspace).datasets(is_a(User), hash_including(:filter => [{:relname => "view"}])) { the_datasets }
+        mock(workspace).dataset_count(is_a(User), hash_including(:name_filter => "view")) { 12 }
+        mock(workspace).datasets(is_a(User), hash_including(:name_filter => "view")) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :name_pattern => "view"
       end
 
       it "filters db objects by type" do
-        options = {:type => "SANDBOX_TABLE", :limit => 50, :sort => [{"lower(replace(relname,'_',''))" => "asc"}]}
+        options = {:type => "SANDBOX_TABLE", :limit => 50}
         mock(workspace).datasets(user, options) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
       end
 
       it "asks for datasets only from the selected database" do
-        options = {:database_id => workspace.sandbox.database.to_param, :limit => 50, :sort => [{"lower(replace(relname,'_',''))" => "asc"}]}
+        options = {:database_id => workspace.sandbox.database.to_param, :limit => 50}
         mock(workspace).datasets(user, options) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :database_id => workspace.sandbox.database.to_param
       end
 
       describe "limiting datasets to load" do
         it "passes the limit parameter to workspace.datasets in the options hash and adds the sort option" do
-          mock(workspace).datasets(anything, {:limit => 5, :sort => [{"lower(replace(relname,'_',''))" => "asc"}]}) { the_datasets }
+          mock(workspace).datasets(anything, {:limit => 5}) { the_datasets }
           get :index, :workspace_id => workspace.to_param, :page => 1, :per_page => 5
         end
         it "sets the limit option to page * per_page" do
-          mock(workspace).datasets(anything, {:limit => 20, :sort => [{"lower(replace(relname,'_',''))" => "asc"}]}) { the_datasets }
+          mock(workspace).datasets(anything, {:limit => 20}) { the_datasets }
           get :index, :workspace_id => workspace.to_param, :page => 4, :per_page => 5
         end
       end

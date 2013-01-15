@@ -13,7 +13,6 @@ describe StatisticsController do
     let!(:table) { datasets(:table) }
 
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table").to_sql }
-    let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
     let(:partition_data_sql) { Dataset::Query.new(schema).partition_data_for_dataset(["table"]).to_sql }
     let(:metadata_info) {
       {
@@ -38,9 +37,6 @@ describe StatisticsController do
     context "with fake gpdb" do
       before do
         stub_gpdb(instance_account,
-                  datasets_sql => [
-                      {'type' => "r", "name" => "table", "master_table" => 't'}
-                  ],
                   metadata_sql => [
                       metadata_info
                   ],

@@ -138,14 +138,14 @@ describe ApplicationController do
       decoded_errors.fields.general.GENERIC.message.should == "Invalid entity type"
     end
 
-    it "returns error 403 when a SqlPermissionDenied occurs" do
-      stub(controller).index { raise SqlPermissionDenied.new("SqlPermissionDenied error") }
+    it "returns error 403 when a GreenplumConnection::SqlPermissionDenied occurs" do
+      stub(controller).index { raise GreenplumConnection::SqlPermissionDenied.new("SqlPermissionDenied error") }
 
       get :index
 
       response.code.should == "403"
       decoded_errors.message.should == "SqlPermissionDenied error"
-      decoded_errors.type.should == "SqlPermissionDenied"
+      decoded_errors.type.should == "GreenplumConnection::SqlPermissionDenied"
     end
 
     describe "when an access denied error is raised" do

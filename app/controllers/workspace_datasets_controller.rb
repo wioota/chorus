@@ -5,12 +5,11 @@ class WorkspaceDatasetsController < ApplicationController
     options = {
         :type => params[:type],
         :database_id => params[:database_id],
-        :limit => params[:page].to_i * params[:per_page].to_i,
-        :sort => [{"lower(replace(relname,'_',''))" => "asc"}]
+        :limit => params[:page].to_i * params[:per_page].to_i
     }.reject { |k,v| v.nil? }
 
     if params[:name_pattern]
-      options.merge!(:filter => [{:relname => params[:name_pattern]}])
+      options.merge!(:name_filter => params[:name_pattern])
     end
 
     params.merge!(:total_entries => workspace.dataset_count(current_user, options))

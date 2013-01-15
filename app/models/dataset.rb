@@ -1,11 +1,5 @@
 require 'stale'
 
-class SqlCommandFailed < Exception
-end
-
-class SqlPermissionDenied < StandardError
-end
-
 class Dataset < ActiveRecord::Base
   include Stale
   include SoftDelete
@@ -91,9 +85,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.total_entries(account, schema, options = {})
-    schema.with_gpdb_connection(account, false) do |conn|
-      conn.select_value("select count(tables_and_views.*) from (#{Query.new(schema).tables_and_views_in_schema(options).to_sql}) tables_and_views;")
-    end
+    schema.connect_with(account).datasets_count options
   end
 
   def should_reindex?
@@ -102,28 +94,21 @@ class Dataset < ActiveRecord::Base
 
   def self.refresh(account, schema, options = {})
     found_datasets = []
-    datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
-      sql = Query.new(schema).tables_and_views_in_schema_with_permissions(options)
-      begin
-        conn.select_all(sql)
-      rescue ActiveRecord::StatementInvalid => e
-        raise SqlPermissionDenied.new e.message if e.message =~ /Permission denied/i
-        raise e
-      end
-    end
+    mark_stale = options.delete(:mark_stale)
+    force_index = options.delete(:force_index)
+    datasets_in_gpdb = schema.connect_with(account).datasets(options)
 
     datasets_in_gpdb.each do |attrs|
-      attrs.delete('regclass')
-      type = attrs.delete('type')
+      type = attrs.delete(:type)
       klass = type == 'r' ? GpdbTable : GpdbView
-      dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
+      dataset = klass.find_or_initialize_by_name_and_schema_id(attrs[:name], schema.id)
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
         dataset.skip_search_index = true if options[:new]
         if dataset.changed?
           dataset.save!
-        elsif options[:force_index]
+        elsif force_index
           dataset.index
         end
         found_datasets << dataset
@@ -133,7 +118,7 @@ class Dataset < ActiveRecord::Base
 
     schema.touch(:refreshed_at)
 
-    if options[:mark_stale]
+    if mark_stale
       raise "You should not use mark_stale and limit at the same time" if options[:limit]
       (schema.datasets.not_stale - found_datasets).each do |dataset|
         dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true) unless dataset.is_a? ChorusView
@@ -282,45 +267,6 @@ class Dataset < ActiveRecord::Base
     def relations_in_schema
       schema_ids = SCHEMAS.where(SCHEMAS[:nspname].eq(schema.name)).project(:oid)
       RELATIONS.where(RELATIONS[:relnamespace].in(schema_ids))
-    end
-
-    def tables_and_views_in_schema_with_permissions(options={})
-      datasets_query = tables_and_views_in_schema(options).to_sql
-      schema_name = schema.name.gsub("'", "''")
-      %Q{SELECT datasets.*, ('"#{schema_name}"."' || datasets.name || '"')::regclass FROM (#{datasets_query}) datasets;}
-    end
-
-    def tables_and_views_in_schema(options ={})
-      query = relations_in_schema.where(RELATIONS[:relkind].in(['r', 'v'])).
-          join(PARTITION_RULE, Arel::Nodes::OuterJoin).
-          on(
-          RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
-              and(RELATIONS[:relhassubclass].eq('f'))
-      ).
-          where(
-          RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
-      ).
-        project(
-          RELATIONS[:relkind].as('type'),
-          RELATIONS[:relname].as('name'),
-          RELATIONS[:relhassubclass].as('master_table')
-      )
-
-      (options[:filter] || []).each do |h|
-        h.each_pair do |filter_key,filter_value|
-          query.where(RELATIONS[filter_key.to_sym].matches("%#{filter_value}%"))
-        end
-      end
-
-      (options[:sort] || []).each do |h|
-        h.each_pair do |sort_key,sort_value|
-          query.order("#{sort_key} #{sort_value}")
-        end
-      end
-
-      query.take(options[:limit]) if options[:limit]
-
-      query
     end
 
     def metadata_for_dataset(table_name)

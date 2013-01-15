@@ -4,7 +4,6 @@ describe DatasetsController do
   let(:user) { users(:the_collaborator) }
   let(:instance_account) { gpdb_instance.account_for_user!(user) }
   let(:gpdb_instance) { data_sources(:owners) }
-  let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema_with_permissions(options) }
   let(:schema) { gpdb_schemas(:default) }
   let(:table) { datasets(:table) }
 
@@ -14,32 +13,27 @@ describe DatasetsController do
 
   context "#index" do
     context "with stubbed greenplum" do
+      let(:dataset1) { datasets(:table) }
+      let(:dataset2) { datasets(:view) }
+      let(:dataset3) { datasets(:other_table) }
       before do
-        stub_gpdb(instance_account, datasets_sql => [
-            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
-            {'type' => "r", "name" => "new_table", "master_table" => 't'},
-            {'type' => "r", "name" => table.name, "master_table" => 't'}
-        ])
+        stub(Dataset).visible_to(is_a(InstanceAccount), schema, options) do
+          [dataset1, dataset2, dataset3]
+        end
         stub(Dataset).total_entries { 122 }
         stub(table).add_metadata!(instance_account)
       end
 
       context "without any filter " do
-        let(:options) { {:sort => [{"lower(replace(relname,'_',''))" => 'asc'}], :limit => per_page} }
+        let(:options) { {:limit => per_page} }
         let(:per_page) { 50 }
         it "should retrieve authorized db objects for a schema" do
           get :index, :schema_id => schema.to_param
 
           response.code.should == "200"
           decoded_response.length.should == 3
-          decoded_response.map(&:object_name).should match_array(['table', 'new_table', 'new_view'])
+          decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
           schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
-        end
-
-        it "should not return db objects in another schema" do
-          different_table = datasets(:other_table)
-          get :index, :schema_id => schema.to_param
-          decoded_response.map(&:id).should_not include different_table.id
         end
 
         context "pagination" do
@@ -58,7 +52,7 @@ describe DatasetsController do
       end
 
       context "with filter" do
-        let(:options) { {:filter => [{:relname => 'view'}], :sort => [{"lower(replace(relname,'_',''))" => 'asc'}], :limit => 50} }
+        let(:options) { {:name_filter => 'view', :limit => 50} }
         it "should filter db objects by name" do
           get :index, :schema_id => schema.to_param, :filter => 'view'
           # stub checks for valid SQL with sorting and filtering

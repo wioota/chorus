@@ -32,6 +32,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   class ObjectNotFound < StandardError; end
+  class SqlPermissionDenied < DatabaseError; end
 
   @@gpdb_login_timeout = 10
 
@@ -217,7 +218,45 @@ class GreenplumConnection < DataSourceConnection
       disconnect
     end
 
+    def datasets(options = {})
+      datasets_query(options) do |query|
+        query = query.limit(options[:limit])
+        query = query.order { lower(replace(relname, '_', '')) }
+
+        query.all { |hash| hash.delete(:regclass) }
+      end
+    end
+
+    def datasets_count(options = {})
+      datasets_query(options) do |query|
+        @connection.fetch("SELECT count(datasets.*) from (#{query.sql}) datasets").single_value
+      end
+    end
+
     private
+
+    def datasets_query(options)
+      with_connection do
+        query = @connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
+        query = query.select_append do |o|
+          o.`(%Q{('"#{schema_name}"."' || relations.relname || '"')::regclass})
+        end
+        query = query.join(:pg_namespace, :oid => :relnamespace)
+        query = query.left_outer_join(:pg_partition_rule, :parchildrelid => :relations__oid, :relations__relhassubclass => 'f')
+        query = query.where(:pg_namespace__nspname => schema_name)
+        query = query.where(:relations__relkind => options[:tables_only] ? 'r' : %w(r v))
+        query = query.where("\"relations\".\"relhassubclass\" = 't' OR \"pg_partition_rule\".\"parchildrelid\" is null")
+
+        if options[:name_filter]
+          query = query.where { relname.ilike("%#{options[:name_filter]}%") }
+        end
+
+        yield query.qualify_to_first_source
+      end
+    rescue DatabaseError => e
+      raise SqlPermissionDenied, e.message if e.message =~ /permission denied/i
+      raise e
+    end
 
     def schema_name
       @settings[:schema]

@@ -197,7 +197,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
                     spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
-                    this.resource.serverErrors = {message: "error message", type: "SqlPermissionDenied" };
+                    this.resource.serverErrors = {message: "error message", type: "GreenplumConnection::SqlPermissionDenied" };
                     this.resource.trigger("resourceForbidden");
                 });
 
