@@ -92,7 +92,7 @@ class GreenplumConnection < DataSourceConnection
     connect!
     if(schema_name)
       @connection.default_schema = schema_name
-      @connection.execute("SET search_path TO '#{schema_name}'")
+      @connection.execute("SET search_path TO #{quote_identifier(schema_name)}")
     end
     yield
 
@@ -100,6 +100,10 @@ class GreenplumConnection < DataSourceConnection
     raise GreenplumConnection::DatabaseError.new(e)
   ensure
     disconnect
+  end
+
+  def quote_identifier(identifier)
+    @connection.send(:quote_identifier, identifier)
   end
 
   def db_url
@@ -168,12 +172,12 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def create_view(view_name, query)
-      with_schema_connection { @connection.create_view(view_name, query) }
+      with_connection { @connection.create_view(view_name, query) }
       true
     end
 
     def create_external_table(options)
-      with_schema_connection do
+      with_connection do
         @connection.execute(<<-SQL)
           CREATE EXTERNAL TABLE "#{schema_name}"."#{options[:table_name]}"
           (#{options[:columns]}) LOCATION ('#{options[:location_url]}') FORMAT 'TEXT'
@@ -184,11 +188,11 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def table_exists?(table_name)
-      with_schema_connection { @connection.table_exists?(table_name.to_s) }
+      with_connection { @connection.table_exists?(table_name.to_s) }
     end
 
     def view_exists?(view_name)
-      with_schema_connection { @connection.views.map(&:to_s).include? view_name }
+      with_connection { @connection.views.map(&:to_s).include? view_name }
     end
 
     def analyze_table(table_name)
@@ -201,14 +205,14 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def drop_table(table_name)
-      with_schema_connection { @connection.drop_table(table_name, :if_exists => true) }
+      with_connection { @connection.drop_table(table_name, :if_exists => true) }
       true
     end
 
     def stream_table(table_name, limit = nil, &block)
       sql = "SELECT * FROM \"#{table_name}\""
       sql = sql + " LIMIT #{limit}" if limit
-      with_schema_connection { @connection.fetch(sql).each(&block) }
+      with_connection { @connection.fetch(sql).each(&block) }
       true
     end
 
@@ -249,7 +253,7 @@ class GreenplumConnection < DataSourceConnection
       with_connection do
         query = @connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
         query = query.select_append do |o|
-          o.`(%Q{('"#{schema_name}"."' || relations.relname || '"')::regclass})
+          o.`(%Q{('#{quote_identifier(schema_name)}."' || relations.relname || '"')::regclass})
         end
         query = query.join(:pg_namespace, :oid => :relnamespace)
         query = query.left_outer_join(:pg_partition_rule, :parchildrelid => :relations__oid, :relations__relhassubclass => 'f')
@@ -270,14 +274,6 @@ class GreenplumConnection < DataSourceConnection
 
     def schema_name
       @settings[:schema]
-    end
-
-    def with_schema_connection
-      with_connection do
-        @connection.default_schema = schema_name
-        @connection.execute("SET search_path TO '#{schema_name}'")
-        yield
-      end
     end
 
     SCHEMA_FUNCTIONS_SQL = <<-SQL

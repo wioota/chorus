@@ -349,6 +349,20 @@ describe Dataset do
         Dataset.refresh(account, schema, :force_index => true)
       end
     end
+
+    context "when GreenplumConnection has a problem" do
+      let(:found_datasets) { raise GreenplumConnection::DatabaseError }
+
+      it "should return an empty array" do
+        Dataset.refresh(account, schema).should == []
+      end
+
+      it "should still mark the schema as refreshed" do
+        expect {
+          Dataset.refresh(account, schema)
+        }.to change(schema, :refreshed_at)
+      end
+    end
   end
 
   describe ".add_metadata!(dataset, account)" do

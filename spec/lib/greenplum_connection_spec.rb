@@ -555,7 +555,7 @@ describe GreenplumConnection, :database_integration do
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
           stub(connection).execute(anything, anything)
-          mock(connection).execute("SET search_path TO '#{schema_name}'")
+          mock(connection).execute("SET search_path TO \"#{schema_name}\"")
         end
 
         connection.fetch(sql)
@@ -575,13 +575,14 @@ describe GreenplumConnection, :database_integration do
       let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
       let(:subject) { connection.fetch_value(sql) }
       let(:expected) { 1 }
+      let(:schema_name) { "test_schema_with_\"_" }
 
       it_behaves_like "a well behaved database query"
 
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
           stub(connection).execute(anything, anything)
-          mock(connection).execute("SET search_path TO '#{schema_name}'")
+          mock(connection).execute("SET search_path TO \"#{schema_name.gsub("\"", "\"\"")}\"")
         end
 
         connection.fetch_value(sql)

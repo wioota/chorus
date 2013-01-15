@@ -126,10 +126,17 @@ class Dataset < ActiveRecord::Base
     end
 
     found_datasets
+  rescue GreenplumConnection::DatabaseError
+    schema.touch(:refreshed_at)
+    found_datasets
   end
 
   def self.visible_to(*args)
     refresh(*args)
+  end
+
+  def self.list_order
+    order("lower(replace(datasets.name,'_',''))")
   end
 
   def self.find_and_verify_in_source(dataset_id, user)

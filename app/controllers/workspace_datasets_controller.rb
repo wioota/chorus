@@ -13,7 +13,7 @@ class WorkspaceDatasetsController < ApplicationController
     end
 
     params.merge!(:total_entries => workspace.dataset_count(current_user, options))
-    datasets = workspace.datasets(current_user, options).order("lower(replace(datasets.name,'_',''))")
+    datasets = workspace.datasets(current_user, options).list_order
 
     present paginate(datasets), :presenter_options => { :workspace => workspace }
   end
