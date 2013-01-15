@@ -67,7 +67,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_mig
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder'
-  gem 'ci_reporter', '>= 1.8.1'
+  gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'
   gem 'jshint_on_rails'

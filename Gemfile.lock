@@ -164,7 +164,7 @@ GEM
       ffi (~> 1.0, >= 1.0.6)
     choice (0.1.6)
     chunky_png (1.2.6)
-    ci_reporter (1.8.1)
+    ci_reporter (1.8.3)
       builder (>= 2.1.2)
     clockwork (0.4.1)
       tzinfo
@@ -373,7 +373,7 @@ DEPENDENCIES
   capybara-screenshot
   chorusgnip!
   chunky_png
-  ci_reporter (>= 1.8.1)
+  ci_reporter (>= 1.8.2)
   clockwork
   compass-rails
   database_cleaner
