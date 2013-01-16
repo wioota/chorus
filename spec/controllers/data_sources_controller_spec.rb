@@ -94,26 +94,27 @@ describe DataSourcesController do
   end
 
   describe "#create" do
+    it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
+
+    let(:valid_attributes) do
+      {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :maintenance_db => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret",
+          :type => type
+      }
+    end
+
+    before do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+    end
+
     context "for a GpdbInstance" do
       let(:type) { "GREENPLUM" }
-      it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
-
-      let(:valid_attributes) do
-        {
-            :name => "create_spec_name",
-            :port => 12345,
-            :host => "server.emc.com",
-            :maintenance_db => "postgres",
-            :description => "old description",
-            :db_username => "bob",
-            :db_password => "secret",
-            :type => type
-        }
-      end
-
-      before do
-        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
-      end
 
       it "creates the data source" do
         expect {
@@ -140,6 +141,25 @@ describe DataSourcesController do
           post :create, valid_attributes
           response.code.should == "422"
         end
+      end
+    end
+
+    context "for an OracleInstance" do
+      let(:type) { "ORACLE" }
+
+      it "creates a new OracleInstance" do
+        expect {
+          post :create, valid_attributes
+        }.to change(OracleInstance, :count).by(1)
+        response.code.should == "201"
+      end
+
+      it "presents the OracleInstance" do
+        mock_present do |data_source|
+          data_source.name == valid_attributes[:name]
+        end
+
+        post :create, :data_source => valid_attributes
       end
     end
   end
