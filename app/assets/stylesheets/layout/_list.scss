@@ -52,6 +52,31 @@
             .summary {
                 padding-bottom: 15px;
             }
+
+            .name {
+                font-weight: $semibold;
+            }
+
+            .name_disabled {
+                color: $color-text2;
+            }
+
+            .location, .found_in {
+                padding-top: 4px;
+                @include results-console-message;
+                line-height: 16px;
+                vertical-align: top;
+                a {
+                    font-size: 12px;
+                    font-weight: $semibold;
+                    line-height: 16px;
+                    vertical-align: top;
+                }
+            }
+
+            .found_in {
+                padding-left: 20px;
+            }
         }
 
         div.main_text {
@@ -128,6 +153,30 @@
     }
 
     &.selectable {
+        input[type=checkbox] {
+            float: left;
+            margin-top: 16px;
+        }
+
+        .no_credentials {
+            .name {
+                color: $color-text3;
+            }
+            .location {
+                color: $color-text2;
+            }
+        }
+
+        .browse_more {
+            padding: 20px 10px;
+            @include font-normal-beta;
+            height: auto;
+
+            a {
+                font-size: 13px;
+            }
+        }
+
         li {
             a {
                 color: $color-text2;
@@ -211,16 +260,3 @@
         content: '';
     }
 }
-
-.checkable_list {
-    .image {
-        display: block;
-        float: left;
-    }
-
-    input[type=checkbox] {
-        float: left;
-        margin-top: 16px;
-    }
-}
-

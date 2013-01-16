@@ -1,5 +1,5 @@
 chorus.views.CheckableList = chorus.views.SelectableList.extend({
-    additionalClass: "selectable list checkable_list",
+    additionalClass: "selectable list",
 
     events: {
         "click  li input[type=checkbox]": "checkboxClicked",

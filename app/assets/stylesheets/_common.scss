@@ -319,24 +319,6 @@ $summary-line-height: 19px;
     @include background-image(linear-gradient($body-background-color, $tab-gradient-color));
 }
 
-@mixin recent-comment {
-    .comment {
-        .body {
-            @include font-normal-alpha;
-        }
-
-        .user {
-            font-size: 13px;
-            font-weight: $semibold;
-        }
-
-        .comment_info {
-            font-size: 13px;
-            color: $color-text4;
-        }
-    }
-}
-
 @mixin menu-triangle {
     padding-right: 10px;
     background-image: url("/images/blue-menu-triangle.png");
