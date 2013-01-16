@@ -64,8 +64,16 @@ describe("chorus.models.GpdbInstance", function() {
 
     describe("#accountForOwner", function() {
         beforeEach(function() {
-            this.owner = this.instance.owner();
+            var owner = this.owner = this.instance.owner();
             this.accounts = rspecFixtures.instanceAccountSet();
+            this.accounts.each(function(account) {
+                account.set({
+                    owner: {
+                        id: owner.id + 1
+                    }
+                });
+            });
+
             this.accounts.models[1].set({owner: this.owner.attributes});
             spyOn(this.instance, "accounts").andReturn(this.accounts);
         });
