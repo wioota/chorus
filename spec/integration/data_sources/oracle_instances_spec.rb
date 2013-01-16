@@ -11,6 +11,7 @@ describe "Data Source", :database_integration do
     end
 
     it "creates a instance" do
+      pending "in process for oracle story"
       within_modal do
         select_and_do_within_data_source "register_existing_oracle" do
           fill_in 'name', :with => "new_oracle_instance"

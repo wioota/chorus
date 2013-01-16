@@ -6,7 +6,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
 
     showUrlTemplate: "instances/{{id}}/databases",
 
-    parameterWrapper: "gpdb_instance",
+    parameterWrapper: "data_source",
 
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
