@@ -57,7 +57,6 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             }, this)).toBeTruthy();
         });
 
-
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
@@ -201,5 +200,4 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             });
         });
     });
-
 });

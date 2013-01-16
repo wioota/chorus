@@ -70,37 +70,75 @@ describe("chorus.pages.DatasetShowPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.dataset.loaded = false;
             this.page.render();
         });
 
         it("shows a loading spinner until the fetches complete", function() {
             expect($(this.page.mainContent.el)).toHaveClass('loading_section');
         });
+    });
 
+    context("when the dataset fetch completes", function() {
+        beforeEach(function() {
+            spyOn(chorus, "search");
+            this.qtipSpy = stubQtip();
+            this.resizedSpy = spyOnEvent(this.page, 'resized');
+            this.server.completeFetchFor(this.dataset);
+        });
 
-        context("when the fetches complete", function() {
+        it("renders the header", function(){
+           expect(this.page.$('h1')).toContainText(this.dataset.name());
+        });
+
+        describe("breadcrumbs", function() {
+            it("has the right breadcrumbs", function() {
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
+
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/instances");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
+
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.dataset.instance().databases().showUrl());
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.dataset.instance().name());
+
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.dataset.database().showUrl());
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.dataset.database().name());
+
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.dataset.schema().showUrl());
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.dataset.schema().name());
+
+                expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.dataset.name());
+            });
+        });
+
+        describe("#contentDetails", function() {
+            it("does not have a Derive Chorus View button", function() {
+                expect(this.page.$(".derive")).not.toExist();
+            });
+
+            it("does not have a publish to Tableau button", function() {
+                chorus.models.Config.instance().set({ tableauConfigured: true });
+                this.page.render();
+                expect(this.page.$("button.publish")).not.toExist();
+            });
+        });
+
+        context("when the dataset fails to load properly", function() {
             beforeEach(function() {
-                spyOn(chorus, "search");
-                this.qtipSpy = stubQtip();
-                this.resizedSpy = spyOnEvent(this.page, 'resized');
-                this.server.completeFetchFor(this.dataset);
+                spyOn(Backbone.history, "loadUrl");
+                this.page.model.trigger('resourceNotFound', this.page.model);
+            });
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
+
+        context("when the columns and statistics fetches complete", function() {
+            beforeEach(function(){
                 this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                 this.server.completeFetchFor(this.dataset.statistics());
-            });
-
-            it("hides the loading spinner", function() {
-                expect($(this.page.mainContent.el)).not.toHaveClass('loading_section');
-            });
-
-            context("when the model fails to load properly", function() {
-                beforeEach(function() {
-                    spyOn(Backbone.history, "loadUrl");
-                    this.page.model.trigger('resourceNotFound', this.page.model);
-                });
-
-                it("navigates to the 404 page", function() {
-                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-                });
             });
 
             describe("workspace usage", function() {
@@ -167,6 +205,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            it("hides the loading spinner", function() {
+                expect($(this.page.mainContent.el)).not.toHaveClass('loading_section');
+            });
+
             it("has a search field in the content details that filters the column list", function() {
                 var searchInput = this.page.mainContent.contentDetails.$("input.search"),
                     columnList = $(this.page.mainContent.content.el);
@@ -177,39 +219,6 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 expect(searchOptions.input).toBe(searchInput);
                 expect(searchOptions.list).toBe(columnList);
-            });
-
-            describe("breadcrumbs", function() {
-                it("has the right breadcrumbs", function() {
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
-
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/instances");
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
-
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.dataset.instance().databases().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.dataset.instance().name());
-
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.dataset.database().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.dataset.database().name());
-
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.dataset.schema().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.dataset.schema().name());
-
-                    expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.dataset.name());
-                });
-            });
-
-            describe("#contentDetails", function() {
-                it("does not have a Derive Chorus View button", function() {
-                    expect(this.page.$(".derive")).not.toExist();
-                });
-
-                it("does not have a publish to Tableau button", function() {
-                    chorus.models.Config.instance().set({ tableauConfigured: true });
-                    this.page.render();
-                    expect(this.page.$("button.publish")).not.toExist();
-                });
             });
         });
     });
