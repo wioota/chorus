@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpdbInstances::AccountController do
+describe DataSources::AccountController do
   let(:gpdb_instance) { data_sources(:owners) }
   let(:user) { users(:default) }
   let(:owner) { users(:owner) }
@@ -12,14 +12,14 @@ describe GpdbInstances::AccountController do
     end
 
     it "returns the current_user's InstanceAccount for the specified Instance" do
-      get :show, :gpdb_instance_id => gpdb_instance.to_param
+      get :show, :data_source_id => gpdb_instance.to_param
       response.code.should == "200"
       decoded_response.id.should == account.id
       decoded_response.db_username.should == account.db_username
     end
 
     generate_fixture "instanceAccount.json" do
-      get :show, :gpdb_instance_id => gpdb_instance.to_param
+      get :show, :data_source_id => gpdb_instance.to_param
     end
   end
 
@@ -30,7 +30,7 @@ describe GpdbInstances::AccountController do
     end
 
     it "succeeds" do
-      post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+      post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
       response.code.should == "201"
 
       decoded_response.db_username.should == "lenny"
@@ -46,7 +46,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+        post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
         response.code.should == '422'
       end
     end
@@ -57,7 +57,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        post :create, :gpdb_instance_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+        post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
         response.should be_not_found
       end
     end
@@ -70,7 +70,7 @@ describe GpdbInstances::AccountController do
     end
 
     it "succeeds" do
-      put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+      put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
       response.code.should == "200"
 
       decoded_response.db_username.should == "changed"
@@ -86,7 +86,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+        put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
         response.should be_not_found
       end
     end
@@ -97,7 +97,7 @@ describe GpdbInstances::AccountController do
       end
 
       it "fails" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+        put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
         response.code.should == '422'
       end
     end
@@ -110,13 +110,13 @@ describe GpdbInstances::AccountController do
       end
 
       it "succeeds" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id
+        delete :destroy, :data_source_id => gpdb_instance.id
         response.should be_success
       end
 
       it "deletes the current users account for this gpdb_instance" do
         InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id
+        delete :destroy, :data_source_id => gpdb_instance.id
         InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
       end
     end
@@ -127,13 +127,13 @@ describe GpdbInstances::AccountController do
 
       it "does not delete the owner's account" do
         log_in admin
-        lambda { delete :destroy, :gpdb_instance_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end
 
       it "does not delete the shared account" do
         log_in user
-        lambda { delete :destroy, :gpdb_instance_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end
     end

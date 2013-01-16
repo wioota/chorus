@@ -63,13 +63,6 @@ class GpdbInstance < DataSource
     workspaces.workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
-  def self.accessible_to(user)
-    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
-          :owned => user.id,
-          :with_membership => user.instance_accounts.pluck(:instance_id)
-    )
-  end
-
   def accessible_to(user)
     GpdbInstance.accessible_to(user).include?(self)
   end

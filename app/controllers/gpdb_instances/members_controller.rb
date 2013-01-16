@@ -1,14 +1,14 @@
-module GpdbInstances
+module DataSources
   class MembersController < ApplicationController
     wrap_parameters :account, :include => [:db_username, :db_password, :owner_id]
 
     def index
-      accounts = GpdbInstance.find(params[:gpdb_instance_id]).accounts
+      accounts = GpdbInstance.find(params[:data_source_id]).accounts
       present paginate(accounts.includes(:owner).order(:id))
     end
 
     def create
-      gpdb_instance = GpdbInstance.unshared.find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.unshared.find(params[:data_source_id])
       authorize! :edit, gpdb_instance
 
       account = gpdb_instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
@@ -20,7 +20,7 @@ module GpdbInstances
     end
 
     def update
-      gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.find(params[:data_source_id])
       authorize! :edit, gpdb_instance
 
       account = gpdb_instance.accounts.find(params[:id])
@@ -31,7 +31,7 @@ module GpdbInstances
     end
 
     def destroy
-      gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
+      gpdb_instance = GpdbInstance.find(params[:data_source_id])
       authorize! :edit, gpdb_instance
       account = gpdb_instance.accounts.find(params[:id])
 

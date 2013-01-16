@@ -1,9 +1,9 @@
 class DataSourcesController < GpdbController
-  wrap_parameters :gpdb_instance, :exclude => []
+  wrap_parameters :data_source, :exclude => []
 
   def index
     gpdb_instances = if params[:accessible]
-                       GpdbInstanceAccess.gpdb_instances_for(current_user)
+                       DataSourceAccess.data_sources_for(current_user)
                      else
                        GpdbInstance.scoped
                      end
@@ -17,16 +17,16 @@ class DataSourcesController < GpdbController
   end
 
   def create
-    created_gpdb_instance = current_user.gpdb_instances.create!(params[:gpdb_instance], :as => :create)
+    created_gpdb_instance = current_user.gpdb_instances.create!(params[:data_source], :as => :create)
     QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
 
     present created_gpdb_instance, :status => :created
   end
 
   def update
-    gpdb_instance = GpdbInstance.find(params[:id])
-    authorize! :edit, gpdb_instance
-    gpdb_instance.update_attributes!(params[:gpdb_instance])
-    present gpdb_instance
+    data_source = DataSource.find(params[:id])
+    authorize! :edit, data_source
+    data_source.update_attributes!(params[:data_source])
+    present data_source
   end
 end

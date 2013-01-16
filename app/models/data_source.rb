@@ -25,6 +25,13 @@ class DataSource < ActiveRecord::Base
     false
   end
 
+  def self.accessible_to(user)
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
+          :owned => user.id,
+          :with_membership => user.instance_accounts.pluck(:instance_id)
+    )
+  end
+
   private
 
   def account_owned_by(user)

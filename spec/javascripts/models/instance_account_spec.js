@@ -10,16 +10,16 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#url", function() {
         it("has the right url for modifying own account", function() {
             this.model.set({userId: chorus.session.user().id});
-            expect(this.model.url({ method: 'update' })).toMatchUrl("/gpdb_instances/1045/account");
-            expect(this.model.url({ method: 'delete' })).toMatchUrl("/gpdb_instances/1045/account");
-            expect(this.model.url({ method: 'create' })).toMatchUrl("/gpdb_instances/1045/account");
-            expect(this.model.url({ method: 'read' })).toMatchUrl("/gpdb_instances/1045/account");
+            expect(this.model.url({ method: 'update' })).toMatchUrl("/data_sources/1045/account");
+            expect(this.model.url({ method: 'delete' })).toMatchUrl("/data_sources/1045/account");
+            expect(this.model.url({ method: 'create' })).toMatchUrl("/data_sources/1045/account");
+            expect(this.model.url({ method: 'read' })).toMatchUrl("/data_sources/1045/account");
         });
 
         it("has the right url for modifying members's accounts", function() {
-            expect(this.model.url({ method: 'update' })).toMatchUrl("/gpdb_instances/1045/members/72");
-            expect(this.model.url({ method: 'delete' })).toMatchUrl("/gpdb_instances/1045/members/72");
-            expect(this.model.url({ method: 'create' })).toMatchUrl("/gpdb_instances/1045/members");
+            expect(this.model.url({ method: 'update' })).toMatchUrl("/data_sources/1045/members/72");
+            expect(this.model.url({ method: 'delete' })).toMatchUrl("/data_sources/1045/members/72");
+            expect(this.model.url({ method: 'create' })).toMatchUrl("/data_sources/1045/members");
         });
     });
 
@@ -58,7 +58,7 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(this.server.requests[0].url).toMatchUrl("/gpdb_instances/4/members");
+            expect(this.server.requests[0].url).toMatchUrl("/data_sources/4/members");
         });
 
         it("returns an InstanceAccount", function() {
@@ -105,7 +105,7 @@ describe("chorus.models.InstanceAccount", function() {
     describe("toJSON", function() {
         it("does not return unnecessary attributes", function() {
             expect(this.model.toJSON()['account']).toEqual({
-                db_username: "username44447",
+                db_username: "username",
                 owner_id: 1000006,
                 instance_id: "1045",
                 complete_json: true,

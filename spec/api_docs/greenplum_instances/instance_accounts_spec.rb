@@ -5,19 +5,19 @@ resource "Greenplum DB: accounts" do
   let(:non_owner) { users(:no_collaborators) }
   let(:member) { users(:the_collaborator) }
 
-  let(:gpdb_instance) { data_sources(:owners) }
-  let(:gpdb_instance_id) { gpdb_instance.to_param }
+  let(:data_source) { data_sources(:owners) }
+  let(:data_source_id) { data_source.to_param }
 
   before do
     any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
-  get "/gpdb_instances/:gpdb_instance_id/account" do
+  get "/data_sources/:data_source_id/account" do
     before do
       log_in owner
     end
 
-    parameter :gpdb_instance_id, "The id of a Greenplum instance"
+    parameter :data_source_id, "The id of a Greenplum data source"
 
     example_request "Get personal credentials" do
       explanation <<-DESC
@@ -30,8 +30,8 @@ resource "Greenplum DB: accounts" do
     end
   end
 
-  post "/gpdb_instances/:gpdb_instance_id/account" do
-    parameter :gpdb_instance_id, "The id of a Greenplum instance"
+  post "/data_sources/:data_source_id/account" do
+    parameter :data_source_id, "The id of a Greenplum data source"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -49,8 +49,8 @@ resource "Greenplum DB: accounts" do
     end
   end
 
-  put "/gpdb_instances/:gpdb_instance_id/account" do
-    parameter :gpdb_instance_id, "The id of a Greenplum instance"
+  put "/data_sources/:data_source_id/account" do
+    parameter :data_source_id, "The id of a Greenplum data source"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -68,11 +68,11 @@ resource "Greenplum DB: accounts" do
     end
   end
 
-  delete "/gpdb_instances/:gpdb_instance_id/account" do
+  delete "/data_sources/:data_source_id/account" do
     before do
       log_in member
     end
-    parameter :gpdb_instance_id, "The id of a Greenplum instance"
+    parameter :data_source_id, "The id of a Greenplum data source"
 
     example_request "Remove personal credentials" do
       status.should == 200

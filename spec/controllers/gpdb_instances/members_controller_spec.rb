@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpdbInstances::MembersController do
+describe DataSources::MembersController do
   let(:admin) { users(:admin) }
   let(:gpdb_instance) { data_sources(:owners) }
   let(:instance_owner) { gpdb_instance.owner }
@@ -13,24 +13,24 @@ describe GpdbInstances::MembersController do
       log_in instance_owner
     end
 
-    it_behaves_like "an action that requires authentication", :get, :index, :gpdb_instance_id => '-1'
+    it_behaves_like "an action that requires authentication", :get, :index, :data_source_id => '-1'
 
     it "succeeds" do
-      get :index, :gpdb_instance_id => gpdb_instance.to_param
+      get :index, :data_source_id => gpdb_instance.to_param
       response.code.should == "200"
     end
 
     it "shows list of users" do
-      get :index, :gpdb_instance_id => gpdb_instance.to_param
+      get :index, :data_source_id => gpdb_instance.to_param
       decoded_response.length.should == gpdb_instance.accounts.size
     end
 
     it_behaves_like "a paginated list" do
-      let(:params) { {:gpdb_instance_id => gpdb_instance.to_param} }
+      let(:params) { {:data_source_id => gpdb_instance.to_param} }
     end
 
     generate_fixture "instanceAccountSet.json" do
-      get :index, :gpdb_instance_id => gpdb_instance.to_param
+      get :index, :data_source_id => gpdb_instance.to_param
     end
   end
 
@@ -45,13 +45,13 @@ describe GpdbInstances::MembersController do
       end
 
       it "fails for a shared account instance" do
-        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
         response.should be_not_found
       end
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => admin.id}
+          post :create, :data_source_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => admin.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -69,13 +69,13 @@ describe GpdbInstances::MembersController do
       end
 
       it "fails for a shared accounts instance" do
-        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
         response.should be_not_found
       end
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
+          post :create, :data_source_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -93,12 +93,12 @@ describe GpdbInstances::MembersController do
       end
 
       it "fails for a shared accounts instance" do
-        post :create, :gpdb_instance_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
+        post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
         response.should be_not_found
       end
 
       it "fails for an individual accounts instance" do
-        post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
+        post :create, :data_source_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
         response.should be_forbidden
       end
     end
@@ -108,7 +108,7 @@ describe GpdbInstances::MembersController do
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {
         false
       } }
-      post :create, :gpdb_instance_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
+      post :create, :data_source_id => gpdb_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
       response.code.should == "422"
     end
   end
@@ -126,7 +126,7 @@ describe GpdbInstances::MembersController do
       end
 
       it "succeeds" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
 
         decoded_response.db_username.should == "changed"
@@ -138,7 +138,7 @@ describe GpdbInstances::MembersController do
 
       it "succeeds, even if instance is shared" do
         gpdb_instance.update_attribute :shared, true
-        put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
       end
     end
@@ -149,7 +149,7 @@ describe GpdbInstances::MembersController do
       end
 
       it "succeeds for user's account" do
-        put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
 
         decoded_response.db_username.should == "changed"
@@ -161,13 +161,13 @@ describe GpdbInstances::MembersController do
 
       it "succeeds for user's account, even if instance is shared" do
         gpdb_instance.update_attribute :shared, true
-        put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
       end
 
       it "succeeds for other's account" do
         account.update_attribute :owner, other_user
-        put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+        put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
 
         decoded_response.db_username.should == "changed"
@@ -185,7 +185,7 @@ describe GpdbInstances::MembersController do
 
       context "someone else's account'" do
         it "fails" do
-          put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+          put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.should be_forbidden
         end
       end
@@ -197,7 +197,7 @@ describe GpdbInstances::MembersController do
         end
 
         it "fails" do
-          put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+          put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.should be_forbidden
         end
       end
@@ -206,7 +206,7 @@ describe GpdbInstances::MembersController do
     it "does not succeed when credentials are invalid" do
       log_in instance_owner
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
-      put :update, :gpdb_instance_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+      put :update, :data_source_id => gpdb_instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
       response.code.should == "422"
     end
   end
@@ -223,18 +223,18 @@ describe GpdbInstances::MembersController do
 
       it "removes the given account" do
         gpdb_instance.accounts.find_by_owner_id(other_user.id).should_not be_nil
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        delete :destroy, :data_source_id => gpdb_instance.id, :id => @other_user_account.id
         gpdb_instance.accounts.find_by_owner_id(other_user.id).should be_nil
       end
 
       it "succeeds" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        delete :destroy, :data_source_id => gpdb_instance.id, :id => @other_user_account.id
         response.should be_ok
       end
 
       context "when there is no account for the given instance and user" do
         it "responds with 'not found'" do
-          delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => 'not_an_id'
+          delete :destroy, :data_source_id => gpdb_instance.id, :id => 'not_an_id'
           response.should be_not_found
         end
       end
@@ -246,12 +246,12 @@ describe GpdbInstances::MembersController do
       end
 
       it "does not remove the account" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        delete :destroy, :data_source_id => gpdb_instance.id, :id => @other_user_account.id
         gpdb_instance.accounts.find_by_owner_id(other_user.id).should_not be_nil
       end
 
       it "responds with 'forbidden'" do
-        delete :destroy, :gpdb_instance_id => gpdb_instance.id, :id => @other_user_account.id
+        delete :destroy, :data_source_id => gpdb_instance.id, :id => @other_user_account.id
         response.should be_forbidden
       end
     end

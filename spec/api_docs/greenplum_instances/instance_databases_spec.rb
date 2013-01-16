@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-resource "Greenplum DB: instances" do
+resource "Greenplum DB: data sources" do
   let(:owner) { users(:owner) }
-  let(:gpdb_instance) { data_sources(:owners) }
+  let(:data_source) { data_sources(:owners) }
   let!(:database) { gpdb_databases(:default) }
-  let!(:gpdb_instance_id) {gpdb_instance.to_param}
+  let!(:data_source_id) {data_source.to_param}
 
   before do
     log_in owner
@@ -12,11 +12,11 @@ resource "Greenplum DB: instances" do
   end
 
 
-  get "/gpdb_instances/:gpdb_instance_id/databases" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  get "/data_sources/:data_source_id/databases" do
+    parameter :data_source_id, "Greenplum data source id"
     pagination
 
-    example_request "Get a list of databases on the instance" do
+    example_request "Get a list of databases on the data source" do
       status.should == 200
     end
   end

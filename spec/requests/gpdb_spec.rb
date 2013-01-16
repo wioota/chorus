@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "gpdb instances", :database_integration => true, :network => true do
+describe "gpdb instances", :database_integration, :network do
   let(:valid_attributes) do
     {
         :name => "chorusgpdb42",
@@ -20,16 +20,16 @@ describe "gpdb instances", :database_integration => true, :network => true do
     end
 
     it "can be created" do
-      post "/gpdb_instances", :gpdb_instance => valid_attributes
+      post "/data_sources", :data_source => valid_attributes
 
       response.code.should == "201"
     end
 
     it "can be updated" do
-      post "/gpdb_instances", :gpdb_instance => valid_attributes
-      gpdb_instance_id = decoded_response.id
-      put "/gpdb_instances/#{gpdb_instance_id}",
-          :gpdb_instance => valid_attributes.merge(:name => "new_name")
+      post "/data_sources", :data_source => valid_attributes
+      data_source_id = decoded_response.id
+      put "/data_sources/#{data_source_id}",
+          :data_source => valid_attributes.merge(:name => "new_name")
 
       decoded_response.name.should == "new_name"
     end

@@ -1,6 +1,6 @@
-class InstanceDatabasesController < GpdbController
+class InstanceDatabasesController < DataSourcesController
   def index
-    gpdb_instance = GpdbInstance.find(params[:gpdb_instance_id])
+    gpdb_instance = GpdbInstance.find(params[:data_source_id])
     databases = GpdbDatabase.visible_to(authorized_gpdb_account(gpdb_instance))
 
     present paginate databases

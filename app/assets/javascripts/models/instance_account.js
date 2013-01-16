@@ -8,14 +8,14 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
         var isEditingOwnAccount = this.get("userId") === chorus.session.user().id;
 
         if (isEditingOwnAccount) {
-            return "gpdb_instances/{{instanceId}}/account";
+            return "data_sources/{{instanceId}}/account";
         }
 
         if (method === "update" || method === "delete") {
-            return "gpdb_instances/{{instanceId}}/members/{{id}}";
+            return "data_sources/{{instanceId}}/members/{{id}}";
         }
 
-        return "gpdb_instances/{{instanceId}}/members";
+        return "data_sources/{{instanceId}}/members";
     },
 
     user: function() {

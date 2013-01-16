@@ -12,7 +12,7 @@ describe("chorus.models.GpdbInstance", function() {
     });
 
     it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/gpdb_instances/" + this.instance.get('id'));
+        expect(this.instance.url()).toBe("/data_sources/" + this.instance.get('id'));
     });
 
     describe("#accountForUser", function() {

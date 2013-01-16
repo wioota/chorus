@@ -1,4 +1,4 @@
-module GpdbInstances
+module DataSources
   class OwnerController < ApplicationController
     def update
       authorize! :edit, gpdb_instance
@@ -13,7 +13,7 @@ module GpdbInstances
     end
 
     def gpdb_instance
-      @gpdb_instance ||= GpdbInstance.owned_by(current_user).find(params[:gpdb_instance_id])
+      @gpdb_instance ||= GpdbInstance.owned_by(current_user).find(params[:data_source_id])
     end
   end
 end

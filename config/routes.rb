@@ -20,7 +20,7 @@ Chorus::Application.routes.draw do
   resources :data_sources, :only => [:index, :show, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases'
 
-    scope :module => 'gpdb_instances' do
+    scope :module => 'data_sources' do
       resource :owner, :only => [:update], :controller => 'owner'
       resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
       resource :account, :only => [:show, :create, :update, :destroy], :controller => 'account'

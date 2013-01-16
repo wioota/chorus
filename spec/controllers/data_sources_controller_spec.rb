@@ -131,7 +131,7 @@ describe DataSourcesController do
 
       it "schedules a job to refresh the data_source" do
         mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
-        post :create, :gpdb_instance => valid_attributes
+        post :create, :data_source => valid_attributes
       end
 
       context "with invalid attributes" do

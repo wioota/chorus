@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: instances" do
+resource "Greenplum DB: data sources" do
   let(:owner) { owned_instance.owner }
   let(:owned_instance) { data_sources(:shared)}
   let(:new_owner) { users(:no_collaborators) }
@@ -10,16 +10,16 @@ resource "Greenplum DB: instances" do
     any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
-  put "/gpdb_instances/:gpdb_instance_id/owner" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  put "/data_sources/:data_source_id/owner" do
+    parameter :data_source_id, "Greenplum data source id"
     parameter :id, "The new owner's user id"
 
-    required_parameters :gpdb_instance_id, :id
+    required_parameters :data_source_id, :id
 
-    let(:gpdb_instance_id) { owned_instance.to_param }
+    let(:data_source_id) { owned_instance.to_param }
     let(:id) { new_owner.to_param }
 
-    example_request "Change the owner of an instance" do
+    example_request "Change the owner of an data source" do
       status.should == 200
     end
   end

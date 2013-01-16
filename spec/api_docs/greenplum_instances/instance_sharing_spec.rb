@@ -1,29 +1,29 @@
 require 'spec_helper'
 
-resource "Greenplum DB: instances" do
-  let(:owner) { gpdb_instance.owner }
-  let(:gpdb_instance_id) { gpdb_instance.to_param }
+resource "Greenplum DB: data sources" do
+  let(:owner) { data_source.owner }
+  let(:data_source_id) { data_source.to_param }
 
   before do
     log_in owner
   end
 
-  post "/gpdb_instances/:gpdb_instance_id/sharing" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  post "/data_sources/:data_source_id/sharing" do
+    parameter :data_source_id, "Greenplum data source id"
 
-    let(:gpdb_instance) { data_sources(:owners) }
+    let(:data_source) { data_sources(:owners) }
 
-    example_request "Allow individual users to share the account of the owner of an instance" do
+    example_request "Allow individual users to share the account of the owner of an data source" do
       status.should == 201
     end
   end
 
-  delete "/gpdb_instances/:gpdb_instance_id/sharing" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  delete "/data_sources/:data_source_id/sharing" do
+    parameter :data_source_id, "Greenplum data source id"
 
-    let(:gpdb_instance) { data_sources(:shared) }
+    let(:data_source) { data_sources(:shared) }
 
-    example_request "Require individual accounts to access an instance" do
+    example_request "Require individual accounts to access an data source" do
       status.should == 200
     end
   end

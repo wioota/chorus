@@ -11,7 +11,7 @@ describe InstanceDatabasesController do
 
   describe "#index" do
     it "fails when no such gpdb instance" do
-      get :index, :gpdb_instance_id => 12345
+      get :index, :data_source_id => 12345
       response.code.should == "404"
     end
 
@@ -23,7 +23,7 @@ describe InstanceDatabasesController do
       it "checks authorization" do
         stub(GpdbDatabase).refresh { [database] }
         mock(subject).authorize!(:show_contents, gpdb_instance)
-        get :index, :gpdb_instance_id => gpdb_instance.id
+        get :index, :data_source_id => gpdb_instance.id
       end
 
       context "when the refresh of the db fails" do
@@ -32,7 +32,7 @@ describe InstanceDatabasesController do
         end
 
         it "should fail" do
-          get :index, :gpdb_instance_id => gpdb_instance.id
+          get :index, :data_source_id => gpdb_instance.id
           response.code.should == "422"
         end
       end
@@ -43,7 +43,7 @@ describe InstanceDatabasesController do
         end
 
         it "should succeed" do
-          get :index, :gpdb_instance_id => gpdb_instance.id
+          get :index, :data_source_id => gpdb_instance.id
           response.code.should == "200"
           decoded_response[0].id.should == database.id
           decoded_response[0].instance.id.should == gpdb_instance.id
@@ -51,7 +51,7 @@ describe InstanceDatabasesController do
         end
 
         it_behaves_like "a paginated list" do
-          let(:params) {{ :gpdb_instance_id => gpdb_instance.id }}
+          let(:params) {{ :data_source_id => gpdb_instance.id }}
         end
       end
     end

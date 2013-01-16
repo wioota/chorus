@@ -3,6 +3,6 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
 ).extend({
     constructorName: "DatabaseSet",
     model:chorus.models.Database,
-    urlTemplate: "gpdb_instances/{{instanceId}}/databases",
+    urlTemplate: "data_sources/{{instanceId}}/databases",
     showUrlTemplate: "instances/{{instanceId}}/databases"
 });

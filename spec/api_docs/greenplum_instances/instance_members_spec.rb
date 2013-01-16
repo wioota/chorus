@@ -1,28 +1,28 @@
 require 'spec_helper'
 
-resource "Greenplum DB: instance members" do
+resource "Greenplum DB: data source members" do
   let(:owner) { users(:owner) }
   let(:non_member) { users(:no_collaborators) }
-  let!(:member_account) { gpdb_instance.account_for_user(member) }
+  let!(:member_account) { data_source.account_for_user(member) }
   let!(:member) { users(:the_collaborator) }
 
-  let!(:gpdb_instance) { data_sources(:owners) }
-  let(:gpdb_instance_id) { gpdb_instance.to_param }
+  let!(:data_source) { data_sources(:owners) }
+  let(:data_source_id) { data_source.to_param }
 
   before do
     log_in owner
     any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
-  get "/gpdb_instances/:gpdb_instance_id/members" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  get "/data_sources/:data_source_id/members" do
+    parameter :data_source_id, "Greenplum data source id"
     pagination
 
-    example_request "List members with access to instance" do
+    example_request "List members with access to data source" do
       explanation <<-DESC
-        For a Greenplum instance owner to manage which users can access their
-        instances.  When the instance is shared this list will only
-        return the instance owner's credentials.  When the instance
+        For a Greenplum data source owner to manage which users can access their
+        data sources.  When the data source is shared this list will only
+        return the data source owner's credentials.  When the data source
         is not shared, this list includes people who were added by the owner
         or who have manually added their own credentials.
       DESC
@@ -31,11 +31,11 @@ resource "Greenplum DB: instance members" do
     end
   end
 
-  post "/gpdb_instances/:gpdb_instance_id/members" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  post "/data_sources/:data_source_id/members" do
+    parameter :data_source_id, "Greenplum data source id"
     parameter :owner_id, "User ID of new member"
-    parameter :db_username, "Username for account that connects to instance"
-    parameter :db_password, "Password for account that connects to instance"
+    parameter :db_username, "Username for account that connects to data source"
+    parameter :db_password, "Password for account that connects to data source"
 
     let(:owner_id) { non_member.to_param }
     let(:db_username) { "big" }
@@ -48,11 +48,11 @@ resource "Greenplum DB: instance members" do
     end
   end
 
-  put "/gpdb_instances/:gpdb_instance_id/members/:id" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  put "/data_sources/:data_source_id/members/:id" do
+    parameter :data_source_id, "Greenplum data source id"
     parameter :id, "Account ID of member to update"
-    parameter :db_username, "Username for account that connects to instance"
-    parameter :db_password, "Password for account that connects to instance"
+    parameter :db_username, "Username for account that connects to data source"
+    parameter :db_password, "Password for account that connects to data source"
 
     let(:id) { member_account.to_param }
     let(:db_username) { "snuffle" }
@@ -65,8 +65,8 @@ resource "Greenplum DB: instance members" do
     end
   end
 
-  delete "/gpdb_instances/:gpdb_instance_id/members/:id" do
-    parameter :gpdb_instance_id, "Greenplum instance id"
+  delete "/data_sources/:data_source_id/members/:id" do
+    parameter :data_source_id, "Greenplum data source id"
     parameter :id, "Account ID of member to delete"
 
     let(:id) { member_account.to_param }

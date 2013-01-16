@@ -1,4 +1,4 @@
-module GpdbInstances
+module DataSources
   class SharingController < ApplicationController
     def create
       authorize! :edit, gpdb_instance
@@ -20,7 +20,7 @@ module GpdbInstances
     private
 
     def gpdb_instance
-      @gpdb_instance ||= GpdbInstance.find(params[:gpdb_instance_id])
+      @gpdb_instance ||= GpdbInstance.find(params[:data_source_id])
     end
   end
 end
