@@ -33,13 +33,15 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.model.isLatestVersion()).toBeTruthy();
         });
 
-        it("fetches the workfile's workspace", function() {
-            expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
-        });
-
         it("displays a loading spinner when rendered before fetches complete", function() {
             this.page.render();
             expect(this.page.$(".loading_section")).toExist();
+        });
+
+        it("should save the workspace ID as an integer", function() {
+            var workspaceIdString = "4";
+            this.page = new chorus.pages.WorkfileShowPage(workspaceIdString, this.workfileId);
+            expect(this.page.workspaceId).toEqual(4);
         });
 
         context("with a version number", function() {
@@ -52,6 +54,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
         });
 
+        context("when the specified workspace ID doesn't match the workfile's workspace ID", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl");
+                this.page = new chorus.pages.WorkfileShowPage(3, this.workfileId);
+            });
+
+            it("renders a 404", function() {
+                this.server.completeFetchFor(this.model);
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
+
         describe("fetch failure", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl");
@@ -61,17 +75,11 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 this.page.model.trigger('resourceNotFound', this.page.model);
                 expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
             });
-
-            it("navigates to the 404 page for the workspace", function() {
-                this.page.workspace.trigger('resourceNotFound', this.page.workspace);
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-            });
         });
 
-        describe("when the workspace and workfile are fetched", function() {
+        describe("when the workfile is fetched", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Base.prototype, "render").andCallThrough();
-                this.server.completeFetchFor(this.workspace);
             });
 
             context("and the workfile does not have a draft", function() {
@@ -129,12 +137,15 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.model = rspecFixtures.workfile.sql({id: this.workfileId,
+                workspace: {
+                    id: this.workspaceId,
+                    name: "Cool Workspace"
+                }});
+
             this.spy = spyOn(chorus.views.DatabaseFunctionSidebarList.prototype, "forwardEvent").andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.workspace);
-            this.page.model.workspace().set({name: "Cool Workspace"});
-            this.page.resourcesLoaded();
         });
 
         it("it displays the workfile name in the content header", function() {
