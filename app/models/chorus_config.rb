@@ -90,6 +90,14 @@ class ChorusConfig
     @instance ||= ChorusConfig.new
   end
 
+  def server_port
+    if(self['ssl.enabled'] == true)
+      return self['ssl_server_port']
+    end
+
+    self['server_port']
+  end
+
   private
 
   def set_root_dir(root_dir)

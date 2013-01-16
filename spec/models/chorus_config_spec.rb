@@ -143,18 +143,18 @@ describe ChorusConfig do
   describe "#gnip_configured?" do
     it 'returns true if the gnip.enabled key is there' do
       config.config = {
-        'gnip' => {
-          'enabled' => true
-        }
+          'gnip' => {
+              'enabled' => true
+          }
       }
       config.gnip_configured?.should == true
     end
 
     it 'returns false if the gnip.enabled value is false' do
       config.config = {
-        'gnip' => {
-          'enabled' => false
-        }
+          'gnip' => {
+              'enabled' => false
+          }
       }
       config.gnip_configured?.should == false
     end
@@ -168,18 +168,18 @@ describe ChorusConfig do
   describe "#alpine_configured?" do
     it 'returns true if the alpine.enabled key is there' do
       config.config = {
-        'alpine' => {
-          'enabled' => true
-        }
+          'alpine' => {
+              'enabled' => true
+          }
       }
       config.alpine_configured?.should == true
     end
 
     it 'returns false if the alpine.enabled value is false' do
       config.config = {
-        'alpine' => {
-          'enabled' => false
-        }
+          'alpine' => {
+              'enabled' => false
+          }
       }
       config.alpine_configured?.should == false
     end
@@ -218,11 +218,11 @@ describe ChorusConfig do
   describe "#syslog_configured?" do
     it 'returns true if the logger.syslog.enabled key is there' do
       config.config = {
-        'logging' => {
-          'syslog' => {
-            'enabled' => true
+          'logging' => {
+              'syslog' => {
+                  'enabled' => true
+              }
           }
-        }
       }
       config.syslog_configured?.should be_true
     end
@@ -270,6 +270,40 @@ describe ChorusConfig do
         }
         config.config['gpfdist'].delete(gpfdist_key)
         config.should_not be_gpfdist_configured
+      end
+    end
+  end
+
+  describe "#server_port" do
+    context "when ssl is enabled" do
+      before do
+        config.config = {
+            'server_port' => 4567,
+            'ssl_server_port' => 1234,
+            'ssl' => {
+                'enabled' => true
+            }
+        }
+      end
+
+      it "returns the ssl server port" do
+        config.server_port.should == 1234
+      end
+    end
+
+    context "when ssl is disabled" do
+      before do
+        config.config = {
+            'server_port' => 4567,
+            'ssl_server_port' => 1234,
+            'ssl' => {
+                'enabled' => false
+            }
+        }
+      end
+
+      it "returns the ssl server port" do
+        config.server_port.should == 4567
       end
     end
   end

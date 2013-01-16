@@ -28,7 +28,7 @@ class DatasetImportsController < ApplicationController
 
     respond_to do |format|
       format.json { render :json => {}, :status => 200 }
-      format.html { redirect_to ":#{ChorusConfig.instance['server_port']}/import_console/imports" }
+      format.html { redirect_to ":#{ChorusConfig.instance.server_port}/import_console/imports" }
     end
   end
 
