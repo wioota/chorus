@@ -803,7 +803,7 @@ AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid
         let(:subject) { connection.datasets_count }
         let(:db) { Sequel.connect(db_url) }
         let(:restricted_user) { "user_with_no_access" }
-        let(:restricted_password) { "secrets" }
+        let(:restricted_password) { "secret" }
 
         let(:connection) do
           GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
