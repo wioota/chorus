@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative '../spec_helper'
 
 describe "Data Sources", :database_integration do
   describe "adding a greenplum instance" do
