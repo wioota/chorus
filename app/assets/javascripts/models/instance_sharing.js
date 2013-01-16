@@ -1,4 +1,4 @@
 chorus.models.InstanceSharing = chorus.models.Base.extend({
     constructorName: "InstanceSharing",
-    urlTemplate: "gpdb_instances/{{instanceId}}/sharing"
+    urlTemplate: "data_sources/{{instanceId}}/sharing"
 });

@@ -38,10 +38,11 @@ describe("chorus.collections.InstanceAccountSet", function() {
         });
     });
 
-    describe("#url", function() {
-        it("has the instanceId param", function() {
-            var uri = new URI(this.accountSet.url());
-            expect(uri.path()).toMatchUrl("/gpdb_instances/1/members");
+    describe("url", function() {
+        it("fetches from the correct endpoint", function() {
+            this.accountSet.fetch();
+            var accountFetch = this.server.lastFetchFor(this.accountSet);
+            expect(accountFetch.url).toContain('/data_sources/1/members');
         });
     });
 

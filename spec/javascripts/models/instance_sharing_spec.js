@@ -3,7 +3,9 @@ describe("chorus.models.InstanceSharing", function() {
         this.sharing = new chorus.models.InstanceSharing({instanceId: 1});
     });
 
-    it("has a valid url", function() {
-        expect(this.sharing.url()).toBe("/gpdb_instances/1/sharing");
+    it("posts to the correct endpoint", function() {
+        this.sharing.save();
+        var sharingPost = this.server.lastCreateFor(this.sharing);
+        expect(sharingPost.url).toContain('/data_sources/1/sharing');
     });
 });

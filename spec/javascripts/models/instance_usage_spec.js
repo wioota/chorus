@@ -1,6 +1,7 @@
 describe("chorus.models.InstanceUsage", function() {
     beforeEach(function() {
         this.usage = rspecFixtures.instanceDetails();
+        this.usage.set({ instanceId: 123 });
         this.workspaces = this.usage.get('workspaces');
     });
 
@@ -14,5 +15,11 @@ describe("chorus.models.InstanceUsage", function() {
             this.usage.unset("workspaces");
             expect(this.usage.workspaceCount()).toBeUndefined();
         });
+    });
+
+    it("fetches from the correct endpoint", function() {
+        this.usage.fetch();
+        var usageFetch = this.server.lastFetchFor(this.usage);
+        expect(usageFetch.url).toContain('data_sources/123/workspace_detail');
     });
 });
