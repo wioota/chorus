@@ -683,7 +683,7 @@ ORDER BY lower(replace(relname,'_', '')) ASC
         let(:subject) { connection.datasets }
         let(:db) { Sequel.connect(db_url) }
         let(:restricted_user) { "user_with_no_access" }
-        let(:restricted_password) { "secrets" }
+        let(:restricted_password) { "secret" }
 
         let(:connection) do
           GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
