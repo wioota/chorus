@@ -1,15 +1,15 @@
 .comment {
+    font-size: 13px;
+
     .body {
-        @include font-normal-alpha;
+        color: $color-text4;
     }
 
     .user {
-        font-size: 13px;
         font-weight: $semibold;
     }
 
     .comment_info {
-        font-size: 13px;
         color: $color-text4;
     }
 
