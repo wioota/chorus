@@ -31,6 +31,13 @@ describe ConfigurationsController do
       decoded_response.kaggle_configured.should == 'value'
     end
 
+    it "includes the alpine_configured? value" do
+      stub(ChorusConfig.instance).alpine_configured? { 'value' }
+      get :show
+      response.code.should == "200"
+      decoded_response.alpine_configured.should == 'value'
+    end
+
     it "includes the gnip_configured? value" do
       stub(ChorusConfig.instance).gnip_configured? { 'value' }
       get :show

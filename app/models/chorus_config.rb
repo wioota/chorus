@@ -40,6 +40,10 @@ class ChorusConfig
     !!self['gnip.enabled']
   end
 
+  def alpine_configured?
+    !!self['alpine.enabled']
+  end
+
   def syslog_configured?
     (self['logging.syslog.enabled'] && true)
   end

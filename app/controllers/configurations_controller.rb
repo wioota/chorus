@@ -16,6 +16,7 @@ class ConfigurationsController < ApplicationController
       :file_sizes_mb_attachment => ChorusConfig.instance['file_sizes_mb.attachment'],
       :kaggle_configured => ChorusConfig.instance.kaggle_configured?,
       :gnip_configured => ChorusConfig.instance.gnip_configured?,
+      :alpine_configured => ChorusConfig.instance.alpine_configured?,
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
       :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100
     } }

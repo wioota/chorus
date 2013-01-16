@@ -165,6 +165,31 @@ describe ChorusConfig do
     end
   end
 
+  describe "#alpine_configured?" do
+    it 'returns true if the alpine.enabled key is there' do
+      config.config = {
+        'alpine' => {
+          'enabled' => true
+        }
+      }
+      config.alpine_configured?.should == true
+    end
+
+    it 'returns false if the alpine.enabled value is false' do
+      config.config = {
+        'alpine' => {
+          'enabled' => false
+        }
+      }
+      config.alpine_configured?.should == false
+    end
+
+    it 'returns false if the enabled key is undefined' do
+      config.config = {}
+      config.alpine_configured?.should == false
+    end
+  end
+
   describe "#log_level" do
     it 'returns info for invalid values of loglevel' do
       config.config = {
