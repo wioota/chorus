@@ -11,8 +11,15 @@ describe("chorus.models.GpdbInstance", function() {
         expect(this.instance.showUrl()).toBe("#/instances/1/databases");
     });
 
-    it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/data_sources/" + this.instance.get('id'));
+    it("has the right url", function() {
+        expect(this.instance.url()).toContain('/data_sources/1');
+
+        this.instance.unset("id", { silent: true });
+        expect(this.instance.url()).toBe('/data_sources/');
+    });
+
+    it('has the type', function() {
+        expect(this.instance.get('type')).toBe('GREENPLUM');
     });
 
     describe("#accountForUser", function() {

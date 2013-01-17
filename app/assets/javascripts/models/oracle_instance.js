@@ -8,13 +8,17 @@ chorus.models.OracleInstance = chorus.models.Instance.extend({
 
     parameterWrapper: "data_source",
 
+    defaults: {
+        type: 'ORACLE'
+    },
+
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
 
         this.require("host", newAttrs);
         this.require("port", newAttrs);
-        this.require("dbName", newAttrs);
+        this.require("maintenanceDb", newAttrs);
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         if (this.isNew()) {
             this.require("dbUsername", newAttrs);

@@ -20,17 +20,15 @@ describe("chorus.models.OracleInstance", function() {
         expect(this.instance.showUrl()).toBe("#/instances/1/schemas");
     });
 
-    it("posts to the correct endpoint on creation", function() {
+    it("has the right url", function() {
+        expect(this.instance.url()).toContain('/data_sources/1');
+
         this.instance.unset("id", { silent: true });
-        this.instance.save();
-        var instancePost = this.server.lastCreateFor(this.instance);
-        expect(instancePost.url).toBe('/data_sources/');
+        expect(this.instance.url()).toBe('/data_sources/');
     });
 
-    it("fetches from the correct endpoint", function() {
-        this.instance.fetch();
-        var instanceFetch = this.server.lastFetchFor(this.instance);
-        expect(instanceFetch.url).toContain('/data_sources/1');
+    it('has the type', function() {
+        expect(this.instance.get('type')).toBe('ORACLE');
     });
 
     describe("#isGreenplum", function() {

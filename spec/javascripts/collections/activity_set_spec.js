@@ -25,7 +25,6 @@ describe("chorus.collections.ActivitySet", function() {
             });
         });
 
-
         context("for a hdfs model type", function () {
             it("includes the entity_type, the ", function() {
                 var model = rspecFixtures.hdfsFile({

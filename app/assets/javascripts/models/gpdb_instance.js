@@ -8,6 +8,10 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
 
     parameterWrapper: "data_source",
 
+    defaults: {
+        type: 'GREENPLUM'
+    },
+
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);

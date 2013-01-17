@@ -54,7 +54,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         var values = this.fieldValues();
-        this.model.save(values);
+        this.model.set(values);
+        this.model.save();
     },
 
     instanceClass: function() {
@@ -89,6 +90,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model);
+        chorus.toast('instances.add.toast', {instanceName: this.model.name()});
         this.closeModal();
     },
 
