@@ -53,10 +53,15 @@ class WorkfilesController < ApplicationController
     workfile = nil
     workfile_params = params[:workfile]
     Workfile.transaction do
-      if workfile_params[:svg_data]
-        workfile = Workfile.create_from_svg(workfile_params, workspace, current_user)
+      if workfile_params[:type] == 'alpine'
+        workfile = AlpineWorkfile.new(workfile_params)
+        workfile.owner = current_user
+        workfile.workspace = workspace
+        workfile.save!
+      elsif workfile_params[:svg_data]
+        workfile = ChorusWorkfile.create_from_svg(workfile_params, workspace, current_user)
       else
-        workfile = Workfile.create_from_file_upload(workfile_params, workspace, current_user)
+        workfile = ChorusWorkfile.create_from_file_upload(workfile_params, workspace, current_user)
       end
 
       Events::WorkfileCreated.by(current_user).add(

@@ -8,8 +8,16 @@ FactoryGirl.define do
     file_name 'workfile.doc'
   end
 
+  factory :chorus_workfile do
+    owner
+    workspace
+    additional_data ''
+    description 'A nice description'
+    file_name 'chorus_workfile.doc'
+  end
+
   factory :workfile_version do
-    workfile
+    association :workfile, :factory => :chorus_workfile
     version_num '1'
     owner
     commit_message 'Factory commit message'
@@ -17,8 +25,8 @@ FactoryGirl.define do
   end
 
   factory :workfile_draft do
+    association :workfile, :factory => :chorus_workfile
     owner
-    workfile
     content 'Excellent content'
   end
 

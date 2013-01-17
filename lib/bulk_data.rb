@@ -98,6 +98,7 @@ module BulkData
             file.content_type = "text/sql"
             file.original_filename = "#{WORDS.sample}.sql"
             workfile_params = {
+                :file_name => "#{Faker::Name.first_name}.sql",
                 :versions_attributes => [
                     {
                         :contents => file,
@@ -106,7 +107,7 @@ module BulkData
                     }
                 ]
             }
-            workfile = Workfile.new(workfile_params)
+            workfile = ChorusWorkfile.new(workfile_params)
             workfile.owner = current_user
             workfile.workspace = workspace
             workfile.save!

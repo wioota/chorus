@@ -66,7 +66,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_mig
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
-  gem 'fixture_builder'
+  gem 'fixture_builder', :github => "rdy/fixture_builder"
   gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'

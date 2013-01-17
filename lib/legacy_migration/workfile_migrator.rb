@@ -33,6 +33,7 @@ class WorkfileMigrator < AbstractMigrator
 
       Legacy.connection.exec_query <<-SQL
         INSERT INTO public.workfiles(
+          type,
           legacy_id,
           workspace_id,
           owner_id,
@@ -43,6 +44,7 @@ class WorkfileMigrator < AbstractMigrator
           deleted_at
         )
         SELECT
+          'ChorusWorkfile',
           edc_work_file.id,
           workspace.id,
           owner.id,

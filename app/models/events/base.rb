@@ -63,6 +63,10 @@ module Events
       create!(params).tap { |event| event.create_activities }
     end
 
+    def self.presenter_class
+      EventPresenter
+    end
+
     def action
       self.class.name.demodulize
     end
@@ -146,14 +150,6 @@ module Events
 
     def self.has_activities(*entity_names)
       self.entities_that_get_activities = entity_names
-    end
-
-    def self.has_additional_data(*names)
-      attr_accessible(*names)
-      names.each do |name|
-        define_method(name) { additional_data[name.to_s] }
-        define_method("#{name}=") { |value| additional_data[name.to_s] = value }
-      end
     end
 
     private

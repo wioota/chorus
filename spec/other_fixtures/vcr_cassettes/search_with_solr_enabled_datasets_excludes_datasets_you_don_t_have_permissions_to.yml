@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000000%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&q=searchquery&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&q=searchquery&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,12 +22,12 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>80,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         database_name_texts table_description_texts schema_name_texts column_name_texts
         column_description_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000000))'',''-(security_type_name_sm:ChorusView
+        AND -instance_account_ids_im:(1000001))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.19221494E10,''docs''=>[{''id''=>''GpdbTable
         1000008'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
@@ -37,5 +37,5 @@ http_interactions:
         comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''column_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'',''@@@hl@@@searchquery@@@endhl@@@
         2'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 19:48:06 GMT
+  recorded_at: Thu, 17 Jan 2013 18:35:11 GMT
 recorded_with: VCR 2.3.0

@@ -1,13 +1,6 @@
 class WorkfilePresenter < Presenter
 
   def to_hash
-    if options[:workfile_as_latest_version] && model.latest_workfile_version
-      version_options = options.dup
-      version_options.delete :workfile_as_latest_version
-
-      return present(model.latest_workfile_version, version_options)
-    end
-
     notes = model.notes
     comments = model.comments
 
@@ -30,14 +23,13 @@ class WorkfilePresenter < Presenter
     unless rendering_activities?
       workfile.merge!({
         :owner => present(model.owner),
-        :has_draft => model.has_draft(current_user)
       })
     end
-    workfile[:execution_schema] = present(model.execution_schema) if options[:include_execution_schema]
+    workfile.merge!(model.additional_data)
     workfile
   end
 
   def complete_json?
-    options[:include_execution_schema] && !rendering_activities?
+    !rendering_activities?
   end
 end

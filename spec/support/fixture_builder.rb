@@ -9,7 +9,7 @@ FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb", "spec/factories.rb", "db/structure.sql", "spec/support/database_integration/*", "tmp/GPDB_HOST_STALE"]
 
-  fbuilder.name_model_with(Workfile) do |record|
+  fbuilder.name_model_with(ChorusWorkfile) do |record|
     record['file_name'].gsub(/\s+/, '_').downcase
   end
   fbuilder.name_model_with(User) do |record|
@@ -143,7 +143,7 @@ FixtureBuilder.configure do |fbuilder|
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
     @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)
-    typeahead_workfile = FactoryGirl.create :workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
+    typeahead_workfile = FactoryGirl.create :chorus_workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
@@ -245,21 +245,21 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
-      no_collaborators_private = FactoryGirl.create(:workfile, :file_name => "no collaborators Private", :description => "searchquery", :owner => no_collaborators, :workspace => no_collaborators_private_workspace)
-      no_collaborators_public = FactoryGirl.create(:workfile, :file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace)
-      private_workfile = FactoryGirl.create(:workfile, :file_name => "Private", :description => "searchquery", :owner => owner, :workspace => private_workspace, :execution_schema => default_schema)
-      public_workfile = FactoryGirl.create(:workfile, :file_name => "Public", :description => "searchquery", :owner => owner, :workspace => public_workspace)
-      private_search_workfile = FactoryGirl.create(:workfile, :file_name => "Search Private", :description => "searchquery", :owner => owner, :workspace => search_private_workspace, :execution_schema => searchquery_schema)
-      public_search_workfile = FactoryGirl.create(:workfile, :file_name => "Search Public", :description => "searchquery", :owner => owner, :workspace => search_public_workspace)
-      tagged_workfile = FactoryGirl.create(:workfile, :file_name => 'tagged', :owner => owner, :workspace => public_workspace)
+      no_collaborators_private = FactoryGirl.create(:chorus_workfile, :file_name => "no collaborators Private", :description => "searchquery", :owner => no_collaborators, :workspace => no_collaborators_private_workspace)
+      no_collaborators_public = FactoryGirl.create(:chorus_workfile, :file_name => "no collaborators Public", :description => "No Collaborators Search", :owner => no_collaborators, :workspace => no_collaborators_public_workspace)
+      private_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Private", :description => "searchquery", :owner => owner, :workspace => private_workspace, :execution_schema => default_schema)
+      public_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Public", :description => "searchquery", :owner => owner, :workspace => public_workspace)
+      private_search_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Search Private", :description => "searchquery", :owner => owner, :workspace => search_private_workspace, :execution_schema => searchquery_schema)
+      public_search_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Search Public", :description => "searchquery", :owner => owner, :workspace => search_public_workspace)
+      tagged_workfile = FactoryGirl.create(:chorus_workfile, :file_name => 'tagged', :owner => owner, :workspace => public_workspace)
       tagged_workfile.tag_list = "alpha, beta"
       tagged_workfile.save!
 
       @draft_default = FactoryGirl.create(:workfile_draft, :owner => owner)
 
-      archived_workfile = FactoryGirl.create(:workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace)
+      archived_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace)
 
-      sql_workfile = FactoryGirl.create(:workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace)
+      sql_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace)
       fbuilder.name :sql, sql_workfile
 
       Events::NoteOnWorkfile.by(owner).add(:workspace => sql_workfile.workspace, :workfile => sql_workfile, :body => 'note on workfile')
@@ -291,10 +291,10 @@ FixtureBuilder.configure do |fbuilder|
       Events::ViewCreated.by(owner).add(:source_dataset => chorus_view, :workspace => public_workspace, :dataset => source_view)
     end
 
-    text_workfile = FactoryGirl.create(:workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace)
-    image_workfile = FactoryGirl.create(:workfile, :file_name => "image.png", :owner => owner, :workspace => public_workspace)
-    binary_workfile = FactoryGirl.create(:workfile, :file_name => "binary.tar.gz", :owner => owner, :workspace => public_workspace)
-    code_workfile = FactoryGirl.create(:workfile, :file_name => "code.cpp", :owner => owner, :workspace => public_workspace)
+    text_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace)
+    image_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "image.png", :owner => owner, :workspace => public_workspace)
+    binary_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "binary.tar.gz", :owner => owner, :workspace => public_workspace)
+    code_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "code.cpp", :owner => owner, :workspace => public_workspace)
 
     File.open Rails.root + 'spec/fixtures/some.txt' do |file|
       FactoryGirl.create(:workfile_version, :workfile => text_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)

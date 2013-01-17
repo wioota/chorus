@@ -85,6 +85,7 @@ resource "Workfiles" do
   post "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
 
+    parameter :type, ""
     parameter :workspace_id, "Workspace Id"
     parameter :owner_id, "Id of workfile owner"
     parameter :description, "Workfile description"

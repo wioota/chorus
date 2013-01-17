@@ -53,12 +53,10 @@ class Presenter
     case model
       when Paperclip::Attachment
         ImagePresenter
-      when Events::Base
-        EventPresenter
       when ActsAsTaggableOn::Tag
         TagPresenter
       else
-        "#{model.class.name}Presenter".constantize
+        model.class.respond_to?(:presenter_class) ? model.class.presenter_class : "#{model.class.name}Presenter".constantize
     end
   end
 

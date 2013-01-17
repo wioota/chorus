@@ -20,14 +20,10 @@ describe WorkfilePresenter, :type => :view do
 
       hash.should have_key(:file_name)
       hash.should have_key(:file_type)
-      hash.should have_key(:latest_version_id)
-      hash.should have_key(:has_draft)
       hash.should have_key(:is_deleted)
       hash.should have_key(:recent_comments)
       hash.should have_key(:comment_count)
       hash.should have_key(:tags)
-
-      hash.should_not have_key(:execution_schema)
     end
 
     it "uses the workspace presenter to serialize the workspace" do
@@ -43,7 +39,7 @@ describe WorkfilePresenter, :type => :view do
     end
 
     context "when the workfile has tags" do
-      let(:workfile) {workfiles(:tagged)}
+      let(:workfile) { workfiles(:tagged) }
 
       it 'includes the tags' do
         hash[:tags].count.should be > 0
@@ -113,37 +109,6 @@ describe WorkfilePresenter, :type => :view do
       end
     end
 
-    context "workfile has a draft for that user" do
-      it "has_draft value is true" do
-        FactoryGirl.create(:workfile_draft, :workfile_id => workfile.id, :owner_id => user.id)
-        hash = presenter.to_hash
-        hash[:has_draft].should == true
-      end
-    end
-
-    context "No workfile draft for that user" do
-      it "has_draft value is false" do
-        hash[:has_draft].should == false
-      end
-    end
-
-    context ":include_execution_schema is passed as an option" do
-      let(:presenter) { WorkfilePresenter.new(workfile, view, :include_execution_schema => true) }
-
-      it "includes the execution_schema" do
-        hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view).presentation_hash
-      end
-    end
-
-    it "sanitizes file name" do
-      bad_value = 'file_ending_in_invalid_quote"'
-      workfile = FactoryGirl.create(:workfile)
-      workfile_version = FactoryGirl.create(:workfile_version, :contents => test_file(bad_value), :workfile => workfile)
-      json = WorkfilePresenter.new(workfile, view).to_hash
-
-      json[:file_name].should_not include '"'
-    end
-
     context "for activity stream" do
       let(:options) { {:activity_stream => true} }
 
@@ -153,49 +118,31 @@ describe WorkfilePresenter, :type => :view do
       end
     end
 
-    describe "when the 'workfile_as_latest_version' option is set" do
-      let(:options) { {:workfile_as_latest_version => true} }
-
-      it "calls the presenter for the latest version of the workfile" do
-        mock(WorkfilePresenter).present(workfile.latest_workfile_version, anything, {})
-        hash
-      end
-
-      context "when there is no latest workfile version" do
-        before do
-          workfile.latest_workfile_version_id = nil
-        end
-
-        it "does not try to present the latest workfile version" do
-          dont_allow(Presenter).present
-          hash
-        end
-      end
-    end
-  end
-
-  describe "complete_json?" do
-    context "when not including execution schema" do
-      it "is not true" do
-        presenter.complete_json?.should_not be_true
-      end
-    end
-
-    context "when including execution schema" do
-      let(:options) { {:include_execution_schema => true, :activity_stream => activity_stream} }
-
+    describe "complete_json?" do
       context "when rendering activity stream" do
-        let(:activity_stream) { true }
+        let(:options) { {:activity_stream => true} }
         it "should be false" do
           presenter.should_not be_complete_json
         end
       end
 
       context "when not rendering for activity stream" do
-        let(:activity_stream) { false }
+        let(:options) { {:activity_stream => false} }
         it "is true" do
           presenter.complete_json?.should be_true
         end
+      end
+    end
+
+    context "for a model with additional_data" do
+      class WorkfileWithAdditionalData < Workfile
+        has_additional_data :test
+      end
+
+      let(:workfile) { WorkfileWithAdditionalData.new(:file_name => 'fn', :test => 'test_value') }
+
+      it "includes the additional_data values" do
+        hash['test'].should == 'test_value'
       end
     end
   end

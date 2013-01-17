@@ -1,4 +1,4 @@
-class LinkedTableauWorkfile < Workfile
+class LinkedTableauWorkfile < ChorusWorkfile
 
   has_one :tableau_workbook_publication
   delegate :workbook_url, :to => :tableau_workbook_publication, :allow_nil => true
@@ -6,9 +6,5 @@ class LinkedTableauWorkfile < Workfile
 
   def content_type
     "tableau_workbook"
-  end
-
-  def self.type_name
-    'Workfile'
   end
 end
