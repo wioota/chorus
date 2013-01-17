@@ -105,7 +105,8 @@ describe DataSourcesController do
           :description => "old description",
           :db_username => "bob",
           :db_password => "secret",
-          :type => type
+          :type => type,
+          :shared => false
       }
     end
 
@@ -160,6 +161,11 @@ describe DataSourcesController do
         end
 
         post :create, :data_source => valid_attributes
+      end
+
+      it "creates a shared OracleInstance" do
+        post :create, valid_attributes
+        OracleInstance.last.should be_shared
       end
     end
   end

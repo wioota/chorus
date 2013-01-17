@@ -25,7 +25,10 @@ class DataSourcesController < GpdbController
       present created_gpdb_instance, :status => :created
 
     elsif type == "ORACLE"
-      created_oracle_instance = current_user.oracle_instances.create!(params[:data_source])
+      created_oracle_instance = current_user.oracle_instances.new(params[:data_source])
+      created_oracle_instance.shared = true
+      created_oracle_instance.save!
+
       present created_oracle_instance, :status => :created
     end
   end
