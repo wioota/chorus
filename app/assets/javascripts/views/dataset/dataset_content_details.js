@@ -15,7 +15,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click .edit_chorus_view .cancel": "cancelEditChorusView",
         "click .edit_chorus_view .save": "saveChorusView",
         "click .chart_icon": "selectVisualization",
-        "click .close_errors": "closeError",
+        "click .close_errors": "closeErrorWithDetailsLink",
         "click .view_error_details": "viewErrorDetails",
         "click a.select_all": "triggerSelectAll",
         "click a.select_none": "triggerSelectNone",
@@ -81,7 +81,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         }
 
         if(this.collection.serverErrors && _.keys(this.collection.serverErrors).length){
-            this.showError(this.collection, chorus.alerts.Error);
+            this.showErrorWithDetailsLink(this.collection, chorus.alerts.Error);
         }
         this.showErrors(this.dataset);
     },
@@ -194,7 +194,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("dataset:saveEdit");
     },
 
-    closeError: function(e) {
+    closeErrorWithDetailsLink: function(e) {
         e && e.preventDefault();
         this.$(".dataset_errors").addClass("hidden");
     },
@@ -202,7 +202,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     viewErrorDetails: function(e) {
         e.preventDefault();
 
-        var alert = new this.alertClass({model: this.taskWithErrors});
+        var alert = new this.alertClass({model: this.errorSource});
         alert.launchModal();
         $(".errors").addClass("hidden");
     },
@@ -240,10 +240,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         };
     },
 
-    showError: function(task, alertClass) {
+    showErrorWithDetailsLink: function(taskOrColumnSet, alertClass) {
         this.$('.dataset_errors').removeClass('hidden');
         this.alertClass = alertClass;
-        this.taskWithErrors = task;
+        this.errorSource = taskOrColumnSet;
     },
 
     updateColumnCount: function() {

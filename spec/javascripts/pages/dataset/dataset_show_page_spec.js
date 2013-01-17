@@ -60,6 +60,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     });
 
                     it("puts the errors on the new column set", function() {
+                        //so deriving a chorus view and adding columns through table joins doesn't have side effects
                         expect(this.page.columnSet.serverErrors).toEqual({message: "No permission"});
                     });
                 });

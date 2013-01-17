@@ -228,21 +228,21 @@ describe("chorus.views.ChartConfiguration", function() {
 
     describe("errors", function() {
         beforeEach(function() {
-            this.view.options.errorContainer = jasmine.createSpyObj("errorContainer", ['showError', 'closeError']);
+            this.view.options.errorContainer = jasmine.createSpyObj("errorContainer", ['showErrorWithDetailsLink', 'closeErrorWithDetailsLink']);
             this.view.task = {};
         });
 
         describe("showSqlErrors", function() {
             it("passes the task and the alert class to showSqlErrors on the errorContainer", function() {
                 this.view.showSqlErrors();
-                expect(this.view.options.errorContainer.showError).toHaveBeenCalledWith(this.view.task, chorus.alerts.VisualizationError);
+                expect(this.view.options.errorContainer.showErrorWithDetailsLink).toHaveBeenCalledWith(this.view.task, chorus.alerts.VisualizationError);
             });
         });
 
         describe("clearSqlErrors", function() {
             it("passes the task and the alert class to showSqlErrors on the errorContainer", function() {
                 this.view.clearSqlErrors();
-                expect(this.view.options.errorContainer.closeError).toHaveBeenCalled();
+                expect(this.view.options.errorContainer.closeErrorWithDetailsLink).toHaveBeenCalled();
             });
         });
     });

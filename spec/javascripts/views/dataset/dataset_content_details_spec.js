@@ -739,13 +739,13 @@ describe("chorus.views.DatasetContentDetails", function() {
 
         describe("column errors", function() {
             beforeEach(function() {
-                spyOn(this.view, "showError");
+                spyOn(this.view, "showErrorWithDetailsLink");
                 this.collection.serverErrors = {fields: {a: {BLANK: {}}}};
                 this.view.render();
             });
 
             it("shows errors in the main content area", function() {
-                expect(this.view.showError).toHaveBeenCalledWith(this.collection, chorus.alerts.Error);
+                expect(this.view.showErrorWithDetailsLink).toHaveBeenCalledWith(this.collection, chorus.alerts.Error);
             });
         });
 
@@ -759,11 +759,11 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".sql_errors").html()).not.toBe("");
             });
 
-            describe("showError", function() {
+            describe("showErrorWithDetailsLink", function() {
                 beforeEach(function() {
-                    this.taskWithErrors = rspecFixtures.dataPreviewTaskResults();
+                    this.errorsource = rspecFixtures.dataPreviewTaskResults();
                     this.alertClass = chorus.alerts.VisualizationError;
-                    this.view.showError(this.taskWithErrors, this.alertClass);
+                    this.view.showErrorWithDetailsLink(this.errorsource, this.alertClass);
                 });
 
                 it("unhides .dataset_errors", function() {
@@ -775,7 +775,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 });
 
                 it("sets the task correctly", function() {
-                    expect(this.view.taskWithErrors).toBe(this.taskWithErrors);
+                    expect(this.view.errorSource).toBe(this.errorsource);
                 });
 
                 describe("clicking view_error_details", function() {
@@ -787,13 +787,13 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("launches the alertClass with the task as the model", function() {
                         var modal = this.modalSpy.lastModal();
                         expect(modal).toBeA(this.alertClass);
-                        expect(modal.model).toBe(this.taskWithErrors);
+                        expect(modal.model).toBe(this.errorsource);
                     });
                 });
 
-                describe("closeError", function() {
+                describe("closeErrorWithDetailsLink", function() {
                     beforeEach(function() {
-                        this.view.closeError();
+                        this.view.closeErrorWithDetailsLink();
                     });
 
                     it("hides the .sql_errors", function() {

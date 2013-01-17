@@ -161,11 +161,11 @@
         },
 
         showSqlErrors: function() {
-            this.options.errorContainer.showError(this.task, chorus.alerts.VisualizationError);
+            this.options.errorContainer.showErrorWithDetailsLink(this.task, chorus.alerts.VisualizationError);
         },
 
         clearSqlErrors: function() {
-            this.options.errorContainer && this.options.errorContainer.closeError();
+            this.options.errorContainer && this.options.errorContainer.closeErrorWithDetailsLink();
         }
     }, {
         buildForType: function(chartType, options) {
