@@ -8,4 +8,11 @@ class TagsController < ApplicationController
 
     present paginate(tags.sort_by!{ |tag| tag.name.downcase })
   end
+
+  def destroy
+    tag = ActsAsTaggableOn::Tag.find(params[:id])
+    tag.destroy
+
+    head :ok
+  end
 end

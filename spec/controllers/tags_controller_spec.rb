@@ -55,6 +55,31 @@ describe TagsController do
     end
   end
 
+  describe 'delete' do
+    let(:dataset) { datasets(:tagged) }
+    let(:workfile) { workfiles(:tagged) }
+    let(:tag) { ActsAsTaggableOn::Tag.where(:name => 'alpha').first }
+
+    it 'should delete the tag' do
+      dataset.tag_list.should include(tag.name)
+      workfile.tag_list.should include(tag.name)
+
+      delete :destroy, :id => tag.id
+      response.code.should == "200"
+
+      ActsAsTaggableOn::Tag.where(:name => 'alpha').should be_empty
+      dataset.reload.tag_list.should_not include(tag.name)
+      workfile.reload.tag_list.should_not include(tag.name)
+    end
+
+    context "when the tag with the specified ID does not exist" do
+      it "404s" do
+        delete :destroy, :id => "56789"
+        response.code.should == "404"
+      end
+    end
+  end
+
   describe "jasmine fixtures" do
     def self.generate_tags_fixture
       generate_fixture "tagSet.json" do

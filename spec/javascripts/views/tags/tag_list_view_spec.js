@@ -47,4 +47,26 @@ describe("chorus.views.TagList", function() {
             });
         });
     });
+
+    describe("when a tag is deleted", function() {
+        beforeEach(function() {
+            this.view.render();
+
+            this.tag = this.tags.first();
+            this.tagId = this.tag.id;
+            this.tag.destroy();
+            this.server.completeDestroyFor(this.tag);
+            expect(this.tags.length).toBeGreaterThan(0);
+            expect(this.tags.pluck('name')).not.toContain(this.tag.get('name'));
+        });
+
+        it("should re-render", function() {
+            expect(this.view.$('li[data-id=' + this.tagId + ']')).not.toExist();
+            this.tags.each(function(tag) {
+                var element = this.view.$('li[data-id=' + tag.get('id') + ']');
+                expect(element).toContainText(tag.get('name'));
+                expect(element).toContainText(tag.get('count') + " items");
+            }, this);
+        });
+    });
 });

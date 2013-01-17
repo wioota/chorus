@@ -1,7 +1,7 @@
 <div class="multiple_selection"></div>
 
 {{#if workfile}}
-<div class="info">
+    <div class="info">
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
         {{#unless hideUpdatedTime}}
             <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{displayTimestamp workfile.versionInfo.updatedAt}}</span></div>

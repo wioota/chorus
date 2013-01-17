@@ -5,5 +5,6 @@ chorus.views.TagList = chorus.views.SelectableList.extend({
 
     setup: function() {
         this.bindings.add(this.resource, 'loaded', this.render, this);
+        this.bindings.add(this.resource, 'remove', this.render, this);
     }
 });
