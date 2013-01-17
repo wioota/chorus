@@ -264,41 +264,10 @@ describe("chorus.Mixins.Fetching", function() {
     });
 
     describe("#respondToErrors", function() {
-        function itHandlesFailure() {
-            it("does not set loaded", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.loaded).toBeFalsy();
-            });
-
-            it("stores the errors as the resource's 'serverErrors'", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.serverErrors).toBe(this.data.errors);
-            });
-
-            it("stores the returned response as the resource's errorData", function() {
-                this.resource.parseErrors(this.data);
-                expect(this.resource.errorData).toEqual(this.data.response);
-            });
-        }
-
-        beforeEach(function() {
-            this.things = [
-                {hi: "there"},
-                {go: "away"}
-            ];
-        });
-
         context("when the response is '401 unauthorized'", function() {
             beforeEach(function() {
                 spyOnEvent(chorus.session, "needsLogin");
-
-                this.data = {
-                    response: { foo: "bar" },
-                    errors: { record: "bad" }
-                };
             });
-
-            itHandlesFailure();
 
             it("triggers the 'needsLogin' event on the session", function() {
                 this.resource.respondToErrors(401);
@@ -306,17 +275,10 @@ describe("chorus.Mixins.Fetching", function() {
             });
         });
 
-
         context("when the response is '403 forbidden'", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
-                this.data = {
-                    response: { instanceId: 1 },
-                    errors: { record: "no" }
-                };
             });
-
-            itHandlesFailure();
 
             it("triggers resourceForbidden on the resource", function() {
                 this.resource.respondToErrors(403);
@@ -327,10 +289,7 @@ describe("chorus.Mixins.Fetching", function() {
         context("when the response is '404 not found'", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
-                this.data = {};
             });
-
-            itHandlesFailure();
 
             it("triggers resourceNotFound on the resource", function() {
                 this.resource.respondToErrors(404);
@@ -354,10 +313,7 @@ describe("chorus.Mixins.Fetching", function() {
         context("when the response is '422 unprocessable entity'", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
-                this.data = {};
             });
-
-            itHandlesFailure();
 
             it("triggers unprocessableEntity on the resource", function() {
                 this.resource.respondToErrors(422);
@@ -378,13 +334,10 @@ describe("chorus.Mixins.Fetching", function() {
             });
         });
 
-        context("when the response is any other error", function() {
+        context("when the response is 500", function() {
             beforeEach(function() {
                 spyOn(chorus, "toast");
-                this.data = {};
             });
-
-            itHandlesFailure();
 
             it("shows a toast message", function() {
                 this.resource.respondToErrors(500);
@@ -393,8 +346,8 @@ describe("chorus.Mixins.Fetching", function() {
         });
     });
 
-    describe("#fetch", function() {
-        beforeEach(function() {
+    describe('#fetch', function(){
+        beforeEach(function(){
             this.errorSpy = jasmine.createSpy("error");
             this.successSpy = jasmine.createSpy("success");
             this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
@@ -409,60 +362,55 @@ describe("chorus.Mixins.Fetching", function() {
             });
         });
 
-        context("when there is a server error", function() {
+        context('when the fetch succeeds', function(){
+            beforeEach(function(){
+                this.server.lastFetchFor(this.resource).respondJson(200, { response: {someResponse: 'OK'}});
+            });
+
+            it('sets the attributes on the resource', function(){
+                expect(this.resource.get('someResponse')).toEqual('OK');
+            });
+        });
+
+        context('when the xhr only includes errors', function() {
+            beforeEach(function(){
+                this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' });
+            });
+
+            it('populates the server errors', function(){
+                expect(this.resource.serverErrors).not.toBeEmpty();
+            });
+
             it("triggers the 'fetchFailed' event on the resource", function() {
-                this.server.lastFetch().failUnprocessableEntity();
                 expect(this.fetchFailedSpy).toHaveBeenCalled();
                 expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
             });
-        });
 
-        context("when the response is '403 forbidden'", function() {
-            it("does not trigger 'loaded", function() {
-                this.server.lastFetch().failForbidden({custom: "error"});
-                expect(this.loadedSpy).not.toHaveBeenCalled();
-            });
-
-            it("fills serverErrors from the errors key", function() {
-                this.server.lastFetch().failForbidden({custom: "error"});
-                expect(this.resource.serverErrors).toEqual({custom: "error"});
-            });
-
-            it("calls the 'error' callback if one is provided", function() {
-                this.server.lastFetch().failForbidden({custom: "error"});
-                expect(this.errorSpy).toHaveBeenCalled();
-            });
-
-            it("triggers the 'fetchFailed' event on the resource after populating the data", function() {
-                var resource = this.resource;
-                this.fetchFailedSpy.andCallFake(function() {
-                    expect(resource.serverErrors).toEqual({custom: "error"});
-                });
-
-                this.server.lastFetch().failForbidden({custom: "error"});
-
-                expect(this.fetchFailedSpy).toHaveBeenCalled();
-                expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+            it('doesnt set loaded on the model', function(){
+                expect(this.resource.loaded).toBeFalsy();
             });
         });
 
-        context("when the fetch succeeds", function() {
-            beforeEach(function() {
-                this.server.lastFetch().succeed();
+        context('when the xhr includes errors and real data', function(){
+            beforeEach(function(){
+                this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' }, { attribute_name: 'value' });
             });
 
-            it("triggers the 'loaded' event on the resource", function() {
-                expect(this.loadedSpy).toHaveBeenCalled();
+            it('populates the server errors', function(){
+                expect(this.resource.serverErrors).not.toBeEmpty();
             });
 
-            it("calls the 'success' callback if one is provided", function() {
-                expect(this.successSpy).toHaveBeenCalled();
+            it("includes object data", function(){
+                expect(this.resource.get('attributeName')).toEqual('value');
+            });
+
+            it('sets loaded on the model', function(){
+                expect(this.resource.loaded).toBeTruthy();
             });
         });
 
         context("when there is an error with a single space in the response text", function() {
             beforeEach(function() {
-                this.fetchFailedSpy.reset();
                 this.server.lastFetch().respond(401, {'Content-Type': 'application/json'}, " ");
             });
 

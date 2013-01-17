@@ -34,7 +34,6 @@ describe("chorus.pages.DatasetShowPage", function() {
                 this.server.completeFetchFor(this.dataset);
             });
 
-
             describe("when the columnSet fetch completes", function() {
                 context("with valid data", function() {
 
@@ -87,8 +86,8 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.dataset);
         });
 
-        it("renders the header", function(){
-           expect(this.page.$('h1')).toContainText(this.dataset.name());
+        it("renders the header", function() {
+            expect(this.page.$('h1')).toContainText(this.dataset.name());
         });
 
         describe("breadcrumbs", function() {
@@ -124,19 +123,8 @@ describe("chorus.pages.DatasetShowPage", function() {
             });
         });
 
-        context("when the dataset fails to load properly", function() {
-            beforeEach(function() {
-                spyOn(Backbone.history, "loadUrl");
-                this.page.model.trigger('resourceNotFound', this.page.model);
-            });
-
-            it("navigates to the 404 page", function() {
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-            });
-        });
-
         context("when the columns and statistics fetches complete", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
                 this.server.completeFetchFor(this.dataset.statistics());
             });
@@ -220,6 +208,37 @@ describe("chorus.pages.DatasetShowPage", function() {
                 expect(searchOptions.input).toBe(searchInput);
                 expect(searchOptions.list).toBe(columnList);
             });
+        });
+    });
+
+    context('when the dataset fetch fails with errors', function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.dataset).failUnprocessableEntity(
+                { record: 'MISSING_DB_OBJECT' }, { object_name: 'Table Name'});
+        });
+
+        it('stays on the page', function() {
+            expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
+        });
+
+        it("renders the header", function() {
+            expect(this.page.$('h1')).toContainText('Table Name');
+        });
+
+        it('shows the error bar', function() {
+            expect(this.page.$('div.dataset_errors')).toExist();
+        });
+    });
+
+    context("when the dataset fetch 404s", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.dataset).failNotFound();
+        });
+
+        it("navigates to the 404 page", function() {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
     });
 });

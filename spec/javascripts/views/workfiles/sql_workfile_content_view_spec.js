@@ -192,6 +192,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
+                            this.spy = jasmine.createSpy();
+                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
                             chorus.PageEvents.broadcast.reset();
                             this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } }, {});
                         });
@@ -205,7 +207,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("does not broadcast workfile:executed", function() {
-                            expect(chorus.PageEvents.broadcast.callCount).toBe(1);
+                            expect(this.spy).not.toHaveBeenCalled();
                         });
                     });
                 });

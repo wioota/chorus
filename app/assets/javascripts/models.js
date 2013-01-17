@@ -64,6 +64,15 @@ chorus.models = {
             return attrs;
         },
 
+        afterParseErrors: function(data){
+            var response = data.response;
+            if(response) {
+                var attributes = this.camelizeKeys(response);
+                this.set(attributes);
+                this.loaded = true;
+            }
+        },
+
         destroy: function(options) {
             options || (options = {});
             options.wait = true;

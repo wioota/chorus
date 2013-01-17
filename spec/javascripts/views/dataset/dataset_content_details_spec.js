@@ -839,4 +839,46 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
         });
     });
+
+    describe('when the statistics have not loaded', function() {
+        beforeEach(function() {
+            this.$columnList = $("<ul/>");
+            this.qtipMenu = stubQtip();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+
+            this.view = new chorus.views.DatasetContentDetails({
+                dataset: this.dataset,
+                collection: this.collection,
+                $columnList: this.$columnList
+            });
+            this.view.render();
+        });
+
+        it('renders the page', function(){
+            expect(this.view.$el).toContainText('Explore'); // hella random text
+        });
+    });
+
+    describe('when the statistics have loaded', function(){
+        beforeEach(function(){
+            this.$columnList = $("<ul/>");
+            this.qtipMenu = stubQtip();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+
+            this.view = new chorus.views.DatasetContentDetails({
+                dataset: this.dataset,
+                collection: this.collection,
+                $columnList: this.$columnList
+            });
+
+            this.statistics = rspecFixtures.datasetStatisticsView();
+            this.server.completeFetchFor(this.dataset.statistics(), this.statistics);
+        });
+
+        it("renders the page with the view's query", function(){
+            expect(this.view.$('.definition')).toContainText(this.statistics.get('definition'));
+        });
+    });
 });

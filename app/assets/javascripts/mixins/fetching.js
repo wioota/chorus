@@ -87,7 +87,10 @@
         parseErrors: function(data) {
             this.errorData = data.response;
             this.serverErrors = data.errors;
+            this.afterParseErrors(data);
         },
+
+        afterParseErrors: $.noop,
 
         respondToErrors: function(status, options) {
             options = options || {};

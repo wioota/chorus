@@ -20,9 +20,8 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         setup: function() {
             this.makeModel.apply(this, arguments);
-            this.dependOn(this.dataset);
+            this.dependOn(this.dataset, this.fetchColumnSet);
             this.dataset.fetch();
-            this.bindings.add(this.dataset, "loaded", this.fetchColumnSet);
             this.mainContent = new chorus.views.LoadingSection();
         },
 
@@ -60,12 +59,15 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                     this.contentDetailsOptions))
             });
 
-            this.render();
-
             if(!this.columnSet.loaded) {
                 this.bindings.add(this.columnSet, "loaded", this.drawColumns);
                 this.columnSet.fetchAll();
             }
+            this.render();
+        },
+
+        unprocessableEntity: function(){
+            this.fetchColumnSet();
         },
 
         postRender: function() {
