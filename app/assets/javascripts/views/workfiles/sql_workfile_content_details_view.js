@@ -10,6 +10,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         this.contentView = this.options.contentView;
     },
 
+    events: {
+        'click a.change_workfile_schema': 'changeWorkfileSchema'
+    },
+
     postRender: function() {
         this._super("postRender");
         chorus.menu(this.$('.run_file'), {
@@ -120,6 +124,12 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     runOtherSchema: function() {
         this.dialog = new chorus.dialogs.RunFileInSchema({ model: this.model });
+        this.dialog.launchModal();
+    },
+
+    changeWorkfileSchema: function(e) {
+        e.preventDefault();
+        this.dialog = new chorus.dialogs.ChangeWorkfileSchema();
         this.dialog.launchModal();
     },
 

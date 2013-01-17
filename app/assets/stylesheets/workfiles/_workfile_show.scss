@@ -4,7 +4,7 @@
         line-height: 30px;
         vertical-align: middle;
         color: $content-details-action-link-color;
-
+        @include font-content-details;
         button, a.button {
             margin-left: 0;
             color: $content-details-action-link-color;
@@ -12,6 +12,11 @@
             font-size: 13px;
             @include content-details-button($content-details-action-link-border-color);
             margin-bottom: 0;
+        }
+
+        a {
+            @include font-content-details;
+            color: $content-details-action-link-color;
         }
 
         padding: 0;
@@ -42,10 +47,16 @@
         }
 
         .execution_schema {
-            @include font-content-details;
+
             color: $content-details-action-link-color;
             display: inline;
             padding-left: $padding-x;
+            padding-right: $padding-x;
+            font-weight: normal;
+        }
+
+        .change_workfile_schema {
+
         }
     }
 

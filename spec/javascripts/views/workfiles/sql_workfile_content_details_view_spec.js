@@ -11,7 +11,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         this.contentView.getSelectedText = function() {};
 
         this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
-        spyOn(this.view, 'runInExecutionSchema').andCallThrough();
         this.qtipElement = stubQtip();
     });
 
@@ -280,9 +279,34 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
         });
+
+        describe("clicking the change button", function(){
+            var modalSpy;
+            beforeEach(function() {
+                modalSpy = stubModals();
+                this.view.$(".change_workfile_schema").click();
+            });
+
+            it("shows the change schema dialog", function(){
+                expect(modalSpy).toHaveModal(chorus.dialogs.ChangeWorkfileSchema);
+            });
+        });
     });
 
     describe("event handling", function() {
+
+        describe("a.change_workfile_schema:clicked", function() {
+            beforeEach(function() {
+                this.view.render();
+                spyOn(this.view, "changeWorkfileSchema");
+                this.view.delegateEvents();
+                this.view.$("a.change_workfile_schema").click();
+            });
+            it("calls the changeWorkfileSchema function", function() {
+                expect(this.view.changeWorkfileSchema).toHaveBeenCalled();
+            });
+        });
+
         describe("workfile:executed", function() {
             beforeEach(function() {
                 spyOn(this.view, "render");
