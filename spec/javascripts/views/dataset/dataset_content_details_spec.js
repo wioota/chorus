@@ -881,4 +881,28 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$('.definition')).toContainText(this.statistics.get('definition'));
         });
     });
+
+    describe("when initialized with a dataset with errors", function() {
+        beforeEach(function() {
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset.serverErrors = {record: "MISSING_DB_OBJECT"};
+            this.collection = this.dataset.columns();
+            this.$columnList = $("<ul/>");
+
+            this.view = new chorus.views.DatasetContentDetails({
+                dataset: this.dataset,
+                collection: this.collection,
+                $columnList: this.$columnList
+            });
+            this.view.render();
+        });
+
+        it("displays the errors", function() {
+            expect(this.view.$(".errors")).toContainTranslation("record_error.MISSING_DB_OBJECT");
+        });
+
+        it("doesn't break the definition bar", function() {
+            expect(this.view.$(".definition")).toExist();
+        });
+    });
 });

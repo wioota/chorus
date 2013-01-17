@@ -20,9 +20,34 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         setup: function() {
             this.makeModel.apply(this, arguments);
-            this.dependOn(this.dataset, this.fetchColumnSet);
+            this.dependOn(this.dataset, this.datasetLoaded);
             this.dataset.fetch();
             this.mainContent = new chorus.views.LoadingSection();
+        },
+
+        datasetLoaded: function() {
+            this.setupMainContent();
+            this.setupSidebar();
+            this.fetchColumnSet();
+            this.render();
+        },
+
+        setupMainContent: function() {
+            this.columnSet = this.dataset.columns();
+
+            this.customHeaderView = this.getHeaderView({
+                model: this.dataset
+            });
+
+            this.mainContent = new chorus.views.MainContentList({
+                modelClass: "DatabaseColumn",
+                collection: this.columnSet,
+                persistent: true,
+                contentHeader: this.customHeaderView,
+                contentDetails: new chorus.views.DatasetContentDetails(_.extend(
+                    { dataset: this.dataset, collection: this.columnSet, isInstanceBrowser: this.isInstanceBrowser},
+                    this.contentDetailsOptions))
+            });
         },
 
         crumbs: function() {
@@ -43,31 +68,16 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         fetchColumnSet: function() {
-            this.columnSet = this.dataset.columns();
-
-            this.customHeaderView = this.getHeaderView({
-                model: this.dataset
-            });
-
-            this.mainContent = new chorus.views.MainContentList({
-                modelClass: "DatabaseColumn",
-                collection: this.columnSet,
-                persistent: true,
-                contentHeader: this.customHeaderView,
-                contentDetails: new chorus.views.DatasetContentDetails(_.extend(
-                    { dataset: this.dataset, collection: this.columnSet, isInstanceBrowser: this.isInstanceBrowser},
-                    this.contentDetailsOptions))
-            });
-
             if(!this.columnSet.loaded) {
                 this.bindings.add(this.columnSet, "loaded", this.drawColumns);
                 this.columnSet.fetchAll();
             }
-            this.render();
         },
 
-        unprocessableEntity: function(){
-            this.fetchColumnSet();
+        unprocessableEntity: function() {
+            this.setupMainContent();
+            this.setupSidebar();
+            this.render();
         },
 
         postRender: function() {
@@ -81,6 +91,14 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             });
         },
 
+        setupSidebar: function() {
+            this.sidebar && this.sidebar.teardown();
+            this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
+            this.sidebar.setDataset(this.dataset);
+
+            this.bindings.add(this.mainContent.contentDetails, "transform:sidebar", this.showSidebar);
+        },
+
         drawColumns: function() {
             var serverErrors = this.columnSet.serverErrors;
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
@@ -88,11 +106,6 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             this.columnSet.loaded = true;
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar && this.sidebar.teardown();
-            this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
-            this.sidebar.setDataset(this.dataset);
-
-            this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
 
             this.render();
         },

@@ -42,9 +42,15 @@ class WorkspaceDatasetsController < ApplicationController
       dataset =  datasets.find(params[:id])
     end
 
-    dataset.verify_in_source(current_user)
-
-    present dataset, :presenter_options => { :workspace => workspace }
+    if dataset.verify_in_source(current_user)
+      present dataset, { :presenter_options => { :workspace => workspace } }
+    else
+      json = {
+          :response => Presenter.present(dataset, view_context, {:workspace => workspace}),
+          :errors => {:record => :MISSING_DB_OBJECT}
+      }
+      render json: json, status: :unprocessable_entity
+    end
   end
 
   def destroy

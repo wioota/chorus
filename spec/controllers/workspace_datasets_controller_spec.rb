@@ -183,12 +183,23 @@ describe WorkspaceDatasetsController do
       context 'when the dataset does not exist in greenplum' do
         before do
           any_instance_of(GpdbTable) do |table|
-            mock(table).verify_in_source(anything)
+            stub(table).verify_in_source(anything) { false }
           end
         end
 
-        it 'calls verify_in_source' do
-          get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+        it 'responds an error http code' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.code.should == '422'
+        end
+
+        it 'renders the table' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.decoded_body.should have_key :response
+        end
+
+        it 'renders the database_not_found error' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.decoded_body.should have_key :errors
         end
       end
     end

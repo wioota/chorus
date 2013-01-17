@@ -83,6 +83,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         if(this.collection.serverErrors && _.keys(this.collection.serverErrors).length){
             this.showError(this.collection, chorus.alerts.Error);
         }
+        this.showErrors(this.dataset);
     },
 
     triggerSelectAll: function(e) {
