@@ -1,12 +1,12 @@
 chorus.models.OracleInstance = chorus.models.Instance.extend({
     constructorName: "OracleInstance",
-    urlTemplate: "oracle_instances/{{id}}",
+    urlTemplate: "data_sources/{{id}}",
     nameAttribute: 'name',
     entityType: "oracle_instance",
 
     showUrlTemplate: "instances/{{id}}/schemas",
 
-    parameterWrapper: "oracle_instance",
+    parameterWrapper: "data_source",
 
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);

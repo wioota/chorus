@@ -5,7 +5,11 @@ describe("chorus.models.OracleInstance", function() {
             id: 1,
             entityType: "oracle_instance"
         }));
-        this.instance.set('dbName', 'RockinDB');
+        this.instance.set({
+           dbName: 'RockinDB',
+           dbUsername: 'system',
+           dbPassword: 'oracle'
+        });
     });
 
     it("has the right entity type", function() {
@@ -16,8 +20,17 @@ describe("chorus.models.OracleInstance", function() {
         expect(this.instance.showUrl()).toBe("#/instances/1/schemas");
     });
 
-    it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/oracle_instances/" + this.instance.get('id'));
+    it("posts to the correct endpoint on creation", function() {
+        this.instance.unset("id", { silent: true });
+        this.instance.save();
+        var instancePost = this.server.lastCreateFor(this.instance);
+        expect(instancePost.url).toBe('/data_sources/');
+    });
+
+    it("fetches from the correct endpoint", function() {
+        this.instance.fetch();
+        var instanceFetch = this.server.lastFetchFor(this.instance);
+        expect(instanceFetch.url).toContain('/data_sources/1');
     });
 
     describe("#isGreenplum", function() {
