@@ -27,7 +27,7 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
     },
 
     providerIconUrl: function() {
-        return this._imagePrefix + "icon_datasource_greenplum.png";
+        return this._imagePrefix + "icon_gpdb_instance.png";
     },
 
     databases: function() {

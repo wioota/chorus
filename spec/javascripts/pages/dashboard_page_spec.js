@@ -8,26 +8,25 @@ describe("chorus.pages.DashboardPage", function() {
         expect(this.page.helpId).toBe("dashboard");
     });
 
-    it("uses fetch all for the collections", function() {
+    it("fetches all the collections", function() {
         spyOn(chorus.collections.UserSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.GpdbInstanceSet.prototype, "fetchAll").andCallThrough();
+        spyOn(chorus.collections.DataSourceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.HadoopInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.GnipInstanceSet.prototype, "fetchAll").andCallThrough();
         spyOn(chorus.collections.WorkspaceSet.prototype, "fetchAll").andCallThrough();
         var page = new chorus.pages.DashboardPage();
         expect(page.userSet.fetchAll).toHaveBeenCalled();
-        expect(page.gpdbInstanceSet.fetchAll).toHaveBeenCalled();
+        expect(page.dataSourceSet.fetchAll).toHaveBeenCalled();
         expect(page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
         expect(page.workspaceSet.fetchAll).toHaveBeenCalled();
     });
 
-
     describe("#render", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.page.gpdbInstanceSet, [
+            this.server.completeFetchAllFor(this.page.dataSourceSet, [
                                          rspecFixtures.gpdbInstance(),
-                                         rspecFixtures.gpdbInstance()
+                                         rspecFixtures.oracleInstance()
             ]);
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
                                          rspecFixtures.hadoopInstance(),
@@ -80,9 +79,9 @@ describe("chorus.pages.DashboardPage", function() {
 
     context("#setup", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.page.gpdbInstanceSet, [
+            this.server.completeFetchAllFor(this.page.dataSourceSet, [
                 rspecFixtures.gpdbInstance(),
-                rspecFixtures.gpdbInstance()
+                rspecFixtures.oracleInstance()
             ]);
 
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
@@ -90,6 +89,10 @@ describe("chorus.pages.DashboardPage", function() {
                 rspecFixtures.hadoopInstance()
             ]);
 
+            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
+                rspecFixtures.gnipInstance(),
+                rspecFixtures.gnipInstance()
+            ]);
             this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
                 rspecFixtures.gnipInstance(),
                 rspecFixtures.gnipInstance()
@@ -124,10 +127,10 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.attributes.userId).toBe("foo");
         });
 
-        it("fetches only the chorus instances where the user has permissions", function() {
-            expect(this.page.gpdbInstanceSet).toBeA(chorus.collections.GpdbInstanceSet);
-            expect(this.page.gpdbInstanceSet.attributes.accessible).toBe(true);
-            expect(this.page.gpdbInstanceSet).toHaveBeenFetched();
+        it("fetches only the data sources where the user has permissions", function() {
+            expect(this.page.dataSourceSet).toBeA(chorus.collections.DataSourceSet);
+            expect(this.page.dataSourceSet.attributes.accessible).toBe(true);
+            expect(this.page.dataSourceSet).toHaveBeenFetched();
         });
 
         it("fetches the hadoop instances", function() {
@@ -141,25 +144,21 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("passes the instance set through to the instance list view", function() {
-            var packedUpGreenplumSet = _.map(this.page.gpdbInstanceSet.models, function(instance) {
+            var packedUpDataSourceSet = this.page.dataSourceSet.map(function(instance) {
                 return new chorus.models.Base(instance);
             });
-            var packedUpHadoopSet = _.map(this.page.hadoopInstanceSet.models, function(instance) {
+            var packedUpHadoopSet = this.page.hadoopInstanceSet.map(function(instance) {
                 return new chorus.models.Base(instance);
             });
-            var packedUpGnipSet = _.map(this.page.gnipInstanceSet.models, function(instance) {
+            var packedUpGnipSet = this.page.gnipInstanceSet.map(function(instance) {
                 return new chorus.models.Base(instance);
             });
             var packedUpInstanceSet = new chorus.collections.Base();
             packedUpInstanceSet.add(packedUpGnipSet);
-            packedUpInstanceSet.add(packedUpGreenplumSet);
+            packedUpInstanceSet.add(packedUpDataSourceSet);
             packedUpInstanceSet.add(packedUpHadoopSet);
 
             expect(packedUpInstanceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
-
-            this.page.mainContent.instanceList.collection.each(function(instance, i) {
-                expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.at(i).get("name"));
-            });
         });
 
         describe("when an instance is added", function() {

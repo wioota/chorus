@@ -10,10 +10,10 @@ describe DataSourcesController do
   end
 
   describe "#index" do
-    it "returns all gpdb instances" do
+    it "returns all data source" do
       get :index
       response.code.should == "200"
-      decoded_response.size.should == GpdbInstance.count
+      decoded_response.size.should == DataSource.count
     end
 
     it_behaves_like "a paginated list"
@@ -26,32 +26,36 @@ describe DataSourcesController do
   end
 
   describe "#show" do
-    let(:gpdb_instance) { data_sources(:owners) }
+    let(:data_source) { DataSource.first }
 
     context "with a valid instance id" do
       it "does not require authorization" do
         dont_allow(subject).authorize!.with_any_args
-        get :show, :id => gpdb_instance.to_param
+        get :show, :id => data_source.to_param
       end
 
       it "succeeds" do
-        get :show, :id => gpdb_instance.to_param
+        get :show, :id => data_source.to_param
         response.should be_success
       end
 
       it "presents the gpdb instance" do
-        mock.proxy(controller).present(gpdb_instance)
-        get :show, :id => gpdb_instance.to_param
+        mock.proxy(controller).present(data_source)
+        get :show, :id => data_source.to_param
       end
+    end
 
-      generate_fixture "gpdbInstance.json" do
-        get :show, :id => gpdb_instance.to_param
-      end
+    generate_fixture "gpdbInstance.json" do
+      get :show, :id => data_sources(:owners).to_param
+    end
+
+    generate_fixture "oracleInstance.json" do
+      get :show, :id => data_sources(:oracle).to_param
     end
 
     context "with an invalid gpdb instance id" do
       it "returns not found" do
-        get :show, :id => 'invalid'
+        get :show, :id => -1
         response.should be_not_found
       end
     end

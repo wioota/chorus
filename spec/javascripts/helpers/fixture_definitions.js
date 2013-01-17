@@ -107,6 +107,8 @@ window.rspecFixtureDefinitions = {
 
     gpdbInstance: { unique: [ "id" ] },
 
+    oracleInstance: { unique: [ "id" ] },
+
     hadoopInstance: { unique: ["id"] },
 
     heatmapTask: {},

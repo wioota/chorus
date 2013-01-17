@@ -6,7 +6,8 @@ class OracleInstancePresenter < Presenter
         :host => model.host,
         :port => model.port,
         :maintenance_db => model.maintenance_db,
-        :description => model.description
+        :description => model.description,
+        :entity_type => model.class.name.underscore
     }
   end
 end

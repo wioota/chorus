@@ -2,18 +2,18 @@ class DataSourcesController < GpdbController
   wrap_parameters :data_source, :exclude => []
 
   def index
-    gpdb_instances = if params[:accessible]
+    data_sources = if params[:accessible]
                        DataSourceAccess.data_sources_for(current_user)
                      else
-                       GpdbInstance.scoped
+                       DataSource.scoped
                      end
 
-    present paginate gpdb_instances
+    present paginate data_sources
   end
 
   def show
-    gpdb_instance = GpdbInstance.find(params[:id])
-    present gpdb_instance
+    data_source = DataSource.find(params[:id])
+    present data_source
   end
 
   def create

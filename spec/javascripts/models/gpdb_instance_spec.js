@@ -250,7 +250,7 @@ describe("chorus.models.GpdbInstance", function() {
 
     describe("#providerIconUrl", function() {
         it("returns the right url for gpdb instances", function() {
-            expect(this.instance.providerIconUrl()).toBe("/images/instances/icon_datasource_greenplum.png");
+            expect(this.instance.providerIconUrl()).toBe("/images/instances/icon_gpdb_instance.png");
         });
     });
 });
