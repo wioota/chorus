@@ -33,4 +33,14 @@ resource 'Tags' do
       status.should == 200
     end
   end
+
+  delete '/tags/:id' do
+    parameter :id, 'Id of the tag to delete'
+
+    let(:id) { ActsAsTaggableOn::Tag.first.id }
+
+    example_request 'Delete a tag' do
+      status.should == 200
+    end
+  end
 end
