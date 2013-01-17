@@ -61,6 +61,10 @@ class Workfile < ActiveRecord::Base
     end
   end
 
+  def entity_type
+    'workfile'
+  end
+
   private
 
   def init_file_name

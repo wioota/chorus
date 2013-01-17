@@ -5,4 +5,8 @@ class AlpineWorkfile < Workfile
   def self.presenter_class
     WorkfilePresenter
   end
+
+  def entity_type
+    'alpine'
+  end
 end

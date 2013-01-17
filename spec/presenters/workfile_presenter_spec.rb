@@ -38,6 +38,11 @@ describe WorkfilePresenter, :type => :view do
       hash[:file_name].should == workfile.file_name
     end
 
+    it "uses the entity_type for type" do
+      stub(workfile).entity_type { 'something' }
+      hash[:type].should == 'something'
+    end
+
     context "when the workfile has tags" do
       let(:workfile) { workfiles(:tagged) }
 

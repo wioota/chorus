@@ -82,4 +82,10 @@ describe Workfile do
       Workfile.should have_searchable_field :description
     end
   end
+
+  describe "entity_type" do
+    it "should return 'workfile'" do
+      Workfile.new.entity_type.should == 'workfile'
+    end
+  end
 end

@@ -10,6 +10,7 @@ class WorkfilePresenter < Presenter
 
     workfile = {
       :id => model.id,
+      :type => model.entity_type,
       :workspace => present(model.workspace, @options),
       :file_name => model.file_name,
       :file_type => model.content_type,
