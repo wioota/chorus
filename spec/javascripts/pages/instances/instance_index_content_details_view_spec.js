@@ -14,23 +14,30 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         ]);
 
         this.view = new chorus.views.InstanceIndexContentDetails({
-            gpdbInstances : gpdbInstances,
+            gpdbInstances: gpdbInstances,
             hadoopInstances: hadoopInstances,
             gnipInstances: gnipInstances
         });
-        this.view.render();
     });
 
-    it("displays the loading text", function() {
-        expect(this.view.$(".loading")).toExist();
-    });
-
-    describe("when gpInstances and hadoopInstances are loaded", function() {
-        beforeEach(function() {
-            this.view.options.gpdbInstances.loaded = true;
-            this.view.options.hadoopInstances.loaded = true;
-            this.view.options.gnipInstances.loaded = true;
+    describe('#render', function() {
+        beforeEach(function(){
             this.view.render();
+        });
+
+        it("displays the loading text", function() {
+            expect(this.view.$(".loading")).toExist();
+        });
+    });
+
+    describe("when the instances are loaded", function() {
+        beforeEach(function() {
+            this.view.gpdbInstances.loaded = true;
+            this.view.gpdbInstances.trigger('loaded');
+            this.view.hadoopInstances.loaded = true;
+            this.view.hadoopInstances.trigger('loaded');
+            this.view.gnipInstances.loaded = true;
+            this.view.gnipInstances.trigger('loaded');
         });
 
         it("doesn't display the loading text", function() {
