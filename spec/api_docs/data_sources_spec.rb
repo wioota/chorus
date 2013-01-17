@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: data sources" do
+resource "Data sources" do
   let(:owner) { users(:owner) }
   let(:owned_data_source) { data_sources(:owners) }
 
@@ -12,12 +12,13 @@ resource "Greenplum DB: data sources" do
   post "/data_sources" do
     parameter :name, "Name to show Chorus users for data source"
     parameter :description, "Description of data source"
-    parameter :host, "Host IP or address of Greenplum data source"
-    parameter :port, "Port of Greenplum data source"
+    parameter :host, "Host IP or address of data source"
+    parameter :port, "Port of data source"
     parameter :maintenance_db, "Database on data source to use for initial connection (usually 'postgres')"
     parameter :db_username, "Username for connection to data source"
     parameter :db_password, "Password for connection to data source"
     parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
+    parameter :type, "The type of data source (either 'GREENPLUM' or 'ORACLE')"
 
     let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }
@@ -27,10 +28,11 @@ resource "Greenplum DB: data sources" do
     let(:db_username) { "big" }
     let(:db_password) { "bird_yellow" }
     let(:shared) { "1" }
+    let(:type) { "GREENPLUM" }
 
-    required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password
+    required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password, :type
 
-    example_request "Register a Greenplum data source" do
+    example_request "Register a data source" do
       status.should == 201
     end
   end
@@ -41,26 +43,26 @@ resource "Greenplum DB: data sources" do
 
     let(:accessible) { "1" }
 
-    example_request "Get a list of registered Greenplum data sources" do
+    example_request "Get a list of registered data sources" do
       status.should == 200
     end
   end
 
   get "/data_sources/:id" do
-    parameter :id, "Greenplum data sources id"
+    parameter :id, "Data sources id"
     let(:id) { owned_data_source.to_param }
 
-    example_request "Get a registered Greenplum data sources" do
+    example_request "Get a registered data source" do
       status.should == 200
     end
   end
 
   put "/data_sources/:id" do
-    parameter :id, "Greenplum data sources id"
+    parameter :id, "Data source id"
     parameter :name, "Name to show Chorus users for data source"
     parameter :description, "Description of data source"
-    parameter :host, "Host IP or address of Greenplum data source"
-    parameter :port, "Port of Greenplum data source"
+    parameter :host, "Host IP or address of data source"
+    parameter :port, "Port of data source"
     parameter :maintenance_db, "Database on data source to use for initial connection (usually 'postgres')"
 
     let(:id) { owned_data_source.to_param }
@@ -76,7 +78,7 @@ resource "Greenplum DB: data sources" do
   end
 
   get "/data_sources/:data_source_id/workspace_detail" do
-    parameter :data_source_id, "Greenplum data source id"
+    parameter :data_source_id, "Data source id"
 
     let(:data_source_id) { owned_data_source.to_param }
 
