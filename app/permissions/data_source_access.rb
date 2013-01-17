@@ -16,5 +16,3 @@ class DataSourceAccess < DefaultAccess
   end
 end
 
-class GpdbInstanceAccess < DataSourceAccess
-end
