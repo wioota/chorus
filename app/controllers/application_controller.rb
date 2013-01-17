@@ -42,7 +42,12 @@ class ApplicationController < ActionController::Base
   private
 
   def set_current_user
-    Thread.current[:user] = User.find_by_id(session[:user_id])
+    if params[:api_key].present?
+      Thread.current[:user] = User.find_by_api_key(params[:api_key])
+      @api_auth = true if Thread.current[:user].present?
+    else
+      Thread.current[:user] = User.find_by_id(session[:user_id])
+    end
     yield
     Thread.current[:user] = nil
   end
@@ -53,7 +58,7 @@ class ApplicationController < ActionController::Base
 
   def render_unprocessable_entity(e)
     present_errors({:fields => {:general =>
-                                    { :GENERIC => {:message => e.message}}}},
+                                    {:GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
   end
 
@@ -75,7 +80,7 @@ class ApplicationController < ActionController::Base
 
   def render_model_error(e)
     present_errors({:fields => {:general =>
-                                    { :GENERIC => {:message => e.message}}}},
+                                    {:GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
   end
 
@@ -108,7 +113,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_expiration
-    head(:unauthorized) if expired?
+    head(:unauthorized) if !@api_auth && expired?
   end
 
   def expired?
@@ -142,14 +147,14 @@ class ApplicationController < ActionController::Base
 
   def present(model_or_collection, options={})
     presenter_options = options.delete(:presenter_options) || {}
-    json = {:response => Presenter.present(model_or_collection, view_context, presenter_options) }
+    json = {:response => Presenter.present(model_or_collection, view_context, presenter_options)}
 
     if model_or_collection.respond_to? :current_page
       json[:pagination] = {
-        :page => model_or_collection.current_page,
-        :per_page => model_or_collection.per_page,
-        :records => model_or_collection.total_entries,
-        :total => model_or_collection.per_page > 0 ? model_or_collection.total_pages : nil
+          :page => model_or_collection.current_page,
+          :per_page => model_or_collection.per_page,
+          :records => model_or_collection.total_entries,
+          :total => model_or_collection.per_page > 0 ? model_or_collection.total_pages : nil
       }
     end
 
@@ -165,7 +170,7 @@ class ApplicationController < ActionController::Base
 
     if model
       response_json[:response] = {
-        model.class.name.underscore => { :id => model.id }
+          model.class.name.underscore => {:id => model.id}
       }
     end
 

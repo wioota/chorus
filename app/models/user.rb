@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
   end
 
   before_save :update_password_digest, :unless => lambda { password.blank? }
+  before_create :create_api_key
 
   def accessible_events(current_user)
     events.where("workspace_id IS NULL
@@ -141,5 +142,9 @@ class User < ActiveRecord::Base
     self.password = unencrypted_password
     self.legacy_password_digest = nil
     save!
+  end
+
+  def create_api_key
+    self.api_key = SecureRandom.hex(20)
   end
 end

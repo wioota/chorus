@@ -276,9 +276,14 @@ describe User do
       lambda { @user.bogus }.should raise_error
     end
 
-    it "should create a random password salt on creation" do
-      @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
-      @user.password_salt.should_not be_empty
+    it "should create a random password salt" do
+      user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+      user.password_salt.should_not be_blank
+    end
+
+    it "should create a random api key" do
+      user = User.create :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+      user.api_key.length.should == 40
     end
 
     describe "when creating a second user with the same password" do

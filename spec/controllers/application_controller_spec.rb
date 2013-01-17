@@ -208,14 +208,12 @@ describe ApplicationController do
       end
     end
 
-    before do
-      @user = users(:no_collaborators)
-      log_in @user
-    end
+    let(:user) { users(:no_collaborators) }
 
     it "returns the user based on the session's user id" do
+      log_in user
       get :index
-      response.body.should == @user.id.to_s
+      response.body.should == user.id.to_s
     end
 
     it "returns nil when there is no user_id stored in the session" do
@@ -227,6 +225,22 @@ describe ApplicationController do
     it "returns nil when there is no user with the id stored in the session" do
       session[:user_id] = -1
       get :index
+      response.body.should == ' '
+    end
+
+    it "sets the user when api_key is sent" do
+      get :index, :api_key => user.api_key
+      response.body.should == user.id.to_s
+    end
+
+    it "does not set the user when api_key is invalid" do
+      get :index, :api_key => '8675309'
+      response.body.should == ' '
+    end
+
+    it "does not set the user when api_key is blank" do
+      user.update_attribute :api_key, ''
+      get :index, :api_key => user.api_key
       response.body.should == ' '
     end
   end
