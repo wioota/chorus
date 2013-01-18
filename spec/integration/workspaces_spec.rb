@@ -5,6 +5,8 @@ describe "Workspaces" do
     login(users(:admin))
   end
 
+  let(:workspace) { workspaces(:public) }
+
   describe "Create workspaces" do
     it "creates a private workspace" do
       visit('#/workspaces')
@@ -34,8 +36,18 @@ describe "Workspaces" do
     end
   end
 
+  describe "Edit a workspace" do
+    it "uploads an image for a workspace" do
+      visit("#/workspaces/#{workspace.id}")
+      click_link "Edit Workspace"
+      attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
+      click_button "Save Changes"
+      page.should have_selector(".breadcrumb:contains('#{workspace.name}')")
+      workspace.reload.image.original_filename.should == 'User.png'
+    end
+  end
+
   describe "Delete a workspace" do
-    let(:workspace) { workspaces(:public) }
 
     it "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")
