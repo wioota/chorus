@@ -31,11 +31,28 @@ describe ConfigurationsController do
       decoded_response.kaggle_configured.should == 'value'
     end
 
-    it "includes the alpine_configured? value" do
-      stub(ChorusConfig.instance).alpine_configured? { 'value' }
+    it "includes the alpine configuration" do
+      stub(ChorusConfig.instance).alpine_configured? { true }
+      stub(ChorusConfig.instance).[]('alpine.url') { 'test.example' }
+      stub(ChorusConfig.instance).[]('alpine.port') { '1234' }
+      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
       get :show
       response.code.should == "200"
-      decoded_response.alpine_configured.should == 'value'
+      decoded_response.alpine_url.should == 'test.example'
+      decoded_response.alpine_port.should == '1234'
+      decoded_response.alpine_api_key.should == 'abcdefg'
+    end
+
+    it "does not include the alpine configuration when it is disabled" do
+      stub(ChorusConfig.instance).alpine_configured? { false }
+      stub(ChorusConfig.instance).[]('alpine.url') { 'test.example' }
+      stub(ChorusConfig.instance).[]('alpine.port') { '1234' }
+      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
+      get :show
+      response.code.should == "200"
+      decoded_response.should_not have_key('alpine_url')
+      decoded_response.should_not have_key('alpine_port')
+      decoded_response.should_not have_key('alpine_api_key')
     end
 
     it "includes the gnip_configured? value" do
@@ -96,6 +113,10 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('file_sizes_mb.attachment') { 10 }
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { 15 }
       stub(ChorusConfig.instance).[]('default_preview_row_limit') { 20 }
+      stub(ChorusConfig.instance).[]('alpine.url') { 'text.example' }
+      stub(ChorusConfig.instance).[]('alpine.port') { 1234 }
+      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
+      stub(ChorusConfig.instance).alpine_configured? { true }
       get :show
     end
   end

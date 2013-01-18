@@ -239,6 +239,14 @@ FixtureBuilder.configure do |fbuilder|
         :workfile => tableau_workfile
     )
 
+    #Alpine workfile
+
+    AlpineWorkfile.create({:file_name => 'alpine.afm',
+                                     :workspace => public_workspace,
+                                     :owner => owner,
+                                     :alpine_id => '42'
+                                    }, :without_protection => true)
+
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
     @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hadoop_instance => hadoop_instance, :is_directory => true)
@@ -503,12 +511,12 @@ FixtureBuilder.configure do |fbuilder|
     @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
     @notification4 = Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true)
 
-    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
-    #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.
-
-    bad_workfiles = Workfile.select { |x| x.versions.empty? && x.class.name != "LinkedTableauWorkfile" }
+    bad_workfiles = ChorusWorkfile.select { |x| x.versions.empty? && x.class.name != "LinkedTableauWorkfile" }
     if !bad_workfiles.empty?
       raise "OH NO!  A workfile has no versions!  Be more careful in the future." + bad_workfiles.map(&:file_name).inspect
     end
+
+    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+    #Nothing should go ↓ here.  Resetting the sunspot session should be the last thing in this file.
   end
 end

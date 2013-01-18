@@ -137,7 +137,8 @@
     }
 }
 
-.alpine_workfile_content .not_found {
-    @include font-menu;
-    padding: 5px;
+.alpine_workfile_content {
+  .alpine_workfile_image {
+    max-width: 100%;
+  }
 }

@@ -224,6 +224,9 @@ window.rspecFixtureDefinitions = {
     workfile: {
         unique: [ "id" ],
         children: {
+            alpine: {
+                model: 'AlpineWorkfile'
+            },
             sql: {},
             binary: {},
             image: {},

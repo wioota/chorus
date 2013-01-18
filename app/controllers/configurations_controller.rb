@@ -16,10 +16,9 @@ class ConfigurationsController < ApplicationController
       :file_sizes_mb_attachment => ChorusConfig.instance['file_sizes_mb.attachment'],
       :kaggle_configured => ChorusConfig.instance.kaggle_configured?,
       :gnip_configured => ChorusConfig.instance.gnip_configured?,
-      :alpine_configured => ChorusConfig.instance.alpine_configured?,
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
       :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100
-    } }
+    }.merge!(alpine_config) }
   end
 
   def version
@@ -29,5 +28,19 @@ class ConfigurationsController < ApplicationController
   def build_string
     f = File.join(Rails.root, 'version_build')
     File.exists?(f) ? File.read(f) : Chorus::VERSION::STRING
+  end
+
+  private
+
+  def alpine_config
+    if ChorusConfig.instance.alpine_configured?
+      {
+        :alpine_url => ChorusConfig.instance['alpine.url'],
+        :alpine_port => ChorusConfig.instance['alpine.port'],
+        :alpine_api_key => ChorusConfig.instance['alpine.api_key']
+      }
+    else
+      {}
+    end
   end
 end
