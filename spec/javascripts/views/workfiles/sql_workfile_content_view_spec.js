@@ -92,15 +92,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has a schema in which to execute", function() {
                     beforeEach(function() {
                         spyOn(this.view.resultsConsole, 'render').andCallThrough();
-                        this.executionInfo = {
-                            instanceId: '4',
-                            instanceName: "ned",
-                            databaseId: '5',
-                            databaseName: "rob",
-                            schemaId: '6',
-                            schemaName: "louis"
-                        };
-
                         chorus.PageEvents.broadcast("file:runCurrent");
                     });
 
@@ -173,7 +164,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                             this.spy = jasmine.createSpy();
                             chorus.PageEvents.subscribe("workfile:executed", this.spy);
                             this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
-                                executionInfo: this.executionInfo
                             });
                         });
 
@@ -183,10 +173,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                         it("sets the executing property to false", function() {
                             expect(this.view.executing).toBeFalsy();
-                        });
-
-                        it("broadcasts workfile:executed", function() {
-                            expect(this.spy).toHaveBeenCalledWith(this.workfile, this.executionInfo);
                         });
                     });
 
@@ -224,7 +210,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("with selected text", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
-                        this.view.model.unset("executionInfo");
                         this.schema = rspecFixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
                         spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
                     });

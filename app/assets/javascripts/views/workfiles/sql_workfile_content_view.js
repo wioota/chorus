@@ -125,9 +125,5 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     executionFailed: function(task) {
         this.executing = false;
         chorus.PageEvents.broadcast("file:executionFailed", task);
-        var executionInfo = task.errorData && task.errorData.executionInfo;
-        if (executionInfo) {
-            chorus.PageEvents.broadcast("workfile:executed", this.model, executionInfo);
-        }
     }
 });

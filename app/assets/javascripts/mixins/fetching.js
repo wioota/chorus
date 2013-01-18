@@ -85,7 +85,6 @@
         },
 
         parseErrors: function(data) {
-            this.errorData = data.response;
             this.serverErrors = data.errors;
             this.afterParseErrors(data);
         },
