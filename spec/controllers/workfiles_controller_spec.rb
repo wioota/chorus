@@ -225,6 +225,58 @@ describe WorkfilesController do
     end
   end
 
+  describe "#update" do
+    let(:schema) { gpdb_schemas(:default) }
+    let(:options) do
+      {
+          :id => public_workfile.to_param,
+          :execution_schema_id => schema.to_param
+      }
+    end
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, public_workfile.workspace)
+      put :update, options
+    end
+
+    it "updates the schema of workfile" do
+      put :update, options
+      response.should be_success
+      decoded_response[:execution_schema][:id].should == schema.id
+      public_workfile.reload.execution_schema.should == schema
+    end
+
+    context "when no execution schema has been set" do
+      let(:options) do
+        {
+            :id => public_workfile.to_param
+        }
+      end
+
+      it "does not throw an error" do
+        put :update, options
+        response.should be_success
+      end
+    end
+
+    context "as a user who is not a workspace member" do
+      let(:user) { users(:not_a_member) }
+      let(:schema) { gpdb_schemas(:other_schema) }
+      let(:options) do
+        {
+            :id => private_workfile.to_param,
+            :execution_schema_id => schema.to_param
+        }
+      end
+
+      it "does not allow updating the workfile" do
+        put :update, options
+        response.should be_forbidden
+        private_workfile.reload.execution_schema.should_not == schema
+      end
+    end
+  end
+
   describe "#destroy" do
     before do
       workspace.members << member

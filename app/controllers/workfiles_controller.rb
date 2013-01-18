@@ -16,6 +16,19 @@ class WorkfilesController < ApplicationController
     present create_workfile(workspace), :presenter_options => { :workfile_as_latest_version => true }
   end
 
+  def update
+    workfile = Workfile.find(params[:id])
+    authorize! :can_edit_sub_objects, workfile.workspace
+
+    if params[:execution_schema_id]
+      schema = GpdbSchema.find(params[:execution_schema_id])
+      workfile.execution_schema = schema
+      workfile.save!
+    end
+
+    present workfile, :presenter_options => { :include_execution_schema => true }
+  end
+
   def index
     workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace

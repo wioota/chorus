@@ -176,6 +176,14 @@
             return (!versionNum || versionNum === this.get("latestVersionId"));
         },
 
+        saveWorkfileAttributes: function(attrs, options) {
+            var executionSchema = this.get("executionSchema");
+            if (executionSchema) {
+                this.set("executionSchemaId", executionSchema.id);
+            }
+            return this._super("save", [attrs, options]);
+        },
+
         save: function(attrs, options) {
             if (this.isNew() || this.canEdit()) {
                 options = options || {};

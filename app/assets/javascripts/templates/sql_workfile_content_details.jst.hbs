@@ -1,6 +1,11 @@
 <button class="run_file"><span class="run_description">{{t "workfile.content_details.run_file"}}</span><span class="down_arrow"></span></button>
 <div class="execution_schema">
-{{t "workfile.content_details.execution_schema"}}:  {{schemaName}}
+{{t "workfile.content_details.execution_schema"}}:
+{{#if schemaName}}
+    {{schemaName}}
+{{else}}
+    {{t "workfile.content_details.no_schema"}}
+{{/if}}
 </div>
 <a class="change_workfile_schema" href="#">Change</a>
 

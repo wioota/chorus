@@ -417,6 +417,19 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("#saveWorkfileAttributes", function() {
+        it("posts the data to the workfile endpoint instead of to the workfile version", function() {
+            this.model.saveWorkfileAttributes();
+            expect(this.server.lastUpdate().url).toBe("/workfiles/10020");
+        });
+
+        it("sets the execution schema id attribute", function() {
+            this.model.set("executionSchema", {id: 123});
+            this.model.saveWorkfileAttributes();
+            expect(this.model.get("executionSchemaId")).toBe(123);
+        });
+    });
+
     describe("#save", function() {
         beforeEach(function() {
             spyOn(this.model.workspace(), 'isActive').andReturn(true);

@@ -5,7 +5,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             sandboxInfo: {
                 id: 4, name: "schema",
                 database: { id: 3, name: "db", instance: { id: 2, name: "instance" } }
-            }});
+            }
+        });
         this.contentView = new chorus.views.SqlWorkfileContent({ model: this.model });
         spyOn(this.contentView, 'run');
         this.contentView.getSelectedText = function() {};
@@ -17,6 +18,19 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
     describe("render", function() {
         beforeEach(function() {
             this.view.render();
+        });
+
+        context("when neither the workfile nor its workspace have a schema", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
+                this.model.workspace().set({sandboxInfo: null});
+                this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
+                this.view.render();
+            });
+
+            it("shows none as execution schema name", function() {
+                expect(this.view.$(".execution_schema")).toContainTranslation("workfile.content_details.no_schema");
+            });
         });
 
         it("shows the 'Run File' button", function() {

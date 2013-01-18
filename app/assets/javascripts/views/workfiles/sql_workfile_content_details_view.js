@@ -129,7 +129,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     changeWorkfileSchema: function(e) {
         e.preventDefault();
-        this.dialog = new chorus.dialogs.ChangeWorkfileSchema();
+        this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
         this.dialog.launchModal();
     },
 
