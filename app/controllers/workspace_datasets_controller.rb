@@ -6,7 +6,7 @@ class WorkspaceDatasetsController < ApplicationController
         :type => params[:type],
         :database_id => params[:database_id],
         :limit => params[:page].to_i * params[:per_page].to_i
-    }.reject { |k,v| v.nil? }
+    }.reject { |k, v| v.nil? }
 
     if params[:name_pattern]
       options.merge!(:name_filter => params[:name_pattern])
@@ -39,18 +39,26 @@ class WorkspaceDatasetsController < ApplicationController
     if params[:name]
       dataset = datasets.find_by_name(params[:name])
     else
-      dataset =  datasets.find(params[:id])
+      dataset = datasets.find(params[:id])
     end
 
-    if dataset.verify_in_source(current_user)
-      present dataset, { :presenter_options => { :workspace => workspace } }
+    if dataset.schema.verify_in_source(current_user)
+      if dataset.verify_in_source(current_user)
+        present dataset, {:presenter_options => {:workspace => workspace}}
+      else
+        render_missing_db_object(dataset)
+      end
     else
-      json = {
-          :response => Presenter.present(dataset, view_context, {:workspace => workspace}),
-          :errors => {:record => :MISSING_DB_OBJECT}
-      }
-      render json: json, status: :unprocessable_entity
+      render_missing_db_object(dataset)
     end
+  end
+
+  def render_missing_db_object(dataset)
+    json = {
+        :response => Presenter.present(dataset, view_context, {:workspace => workspace}),
+        :errors => {:record => :MISSING_DB_OBJECT}
+    }
+    render json: json, status: :unprocessable_entity
   end
 
   def destroy
@@ -68,8 +76,8 @@ class WorkspaceDatasetsController < ApplicationController
 
   def create_event_for_dataset(dataset, workspace)
     Events::SourceTableCreated.by(current_user).add(
-      :dataset => dataset,
-      :workspace => workspace
+        :dataset => dataset,
+        :workspace => workspace
     )
   end
 end

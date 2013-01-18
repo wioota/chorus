@@ -127,6 +127,12 @@ describe WorkspaceDatasetsController do
     end
 
     describe "#show" do
+      before do
+        any_instance_of(GpdbSchema) do |schema|
+          stub(schema).verify_in_source(anything) { true }
+        end
+      end
+
       it "does not present datasets not associated with the workspace" do
         get :show, :id => other_table.to_param, :workspace_id => workspace.to_param
         response.should be_not_found
@@ -200,6 +206,33 @@ describe WorkspaceDatasetsController do
         it 'renders the database_not_found error' do
           get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
           response.decoded_body.should have_key :errors
+        end
+      end
+
+      context 'when the schema does not exist in greenplum' do
+        before do
+          any_instance_of(GpdbSchema) do |schema|
+            stub(schema).verify_in_source(anything) { false }
+          end
+          any_instance_of(GpdbTable) do |table|
+            stub(table).verify_in_source(anything) { raise "BANG!" }
+          end
+        end
+
+        it 'responds an error http code' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.code.should == '422'
+        end
+
+        it 'renders the table' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.decoded_body.should have_key :response
+        end
+
+        it 'renders the schema_not_found error' do
+          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
+          response.decoded_body.should have_key :errors
+          response.decoded_body[:errors]["record"].should == 'MISSING_DB_OBJECT'
         end
       end
     end
