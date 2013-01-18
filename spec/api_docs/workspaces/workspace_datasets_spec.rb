@@ -29,7 +29,10 @@ resource "Workspaces" do
   get "/workspaces/:workspace_id/datasets/:id" do
     before do
       any_instance_of(GpdbTable) do |table|
-        stub(table).verify_in_source
+        stub(table).verify_in_source { true }
+      end
+      any_instance_of(GpdbSchema) do |schema|
+        stub(schema).verify_in_source { true }
       end
     end
 
