@@ -1436,8 +1436,10 @@ describe("chorus.models.Abstract", function() {
                     {name: "tag1"},
                     {name: "tag3"}
                 ]});
-                this.collection = rspecFixtures.workfileSet([
-                    this.model1.attributes, this.model2.attributes]);
+                this.collection = rspecFixtures.workfileSet();
+                this.collection.reset([
+                    this.model1.attributes, this.model2.attributes
+                ]);
                 spyOn(this.collection.at(0).tags(), "save");
                 spyOn(this.collection.at(1).tags(), "save");
             });

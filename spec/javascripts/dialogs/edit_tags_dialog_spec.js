@@ -8,8 +8,10 @@ describe("chorus.dialogs.EditTags", function() {
             {name: "tag1"},
             {name: "tag3"}
         ]});
-        this.collection = rspecFixtures.workfileSet([
-            this.model1.attributes, this.model2.attributes]);
+        this.collection = rspecFixtures.workfileSet();
+        this.collection.reset([
+            this.model1.attributes, this.model2.attributes
+        ]);
         this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
         spyOn(this.dialog, "closeModal");
         this.dialog.render();
@@ -61,9 +63,11 @@ describe("chorus.dialogs.EditTags", function() {
                     {name: "tag3"}
                 ]
             });
-            this.collection = rspecFixtures.workfileSet([
+            this.collection = rspecFixtures.workfileSet();
+            this.collection.reset([
                 this.model1.attributes,
-                this.model2.attributes]);
+                this.model2.attributes
+            ]);
             this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
             spyOn(this.collection, "saveTags").andCallThrough();
             this.dialog.render();
