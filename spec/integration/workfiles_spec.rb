@@ -75,30 +75,4 @@ describe "Workfiles" do
       end
     end
   end
-
-  describe 'adding a tag to a workfile' do
-    let(:workfile) {workfiles(:public)}
-    let(:workspace) {workfile.workspace}
-
-    it 'adds the tags in the workfile show page' do
-      login(users(:admin))
-      visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
-
-      within '.content' do
-        page.should have_no_selector(".loading_section")
-      end
-
-      within '.content_header' do
-        page.should have_selector("#tag_editor", :visible => true)
-        fill_in 'tag_editor', :with => 'new_tag'
-        find('.tag_editor').native.send_keys(:return)
-      end
-
-      visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
-
-      within '.content_header' do
-        page.should have_content 'new_tag'
-      end
-    end
-  end
 end
