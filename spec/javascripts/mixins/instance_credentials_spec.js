@@ -9,14 +9,14 @@ describe("chorus.Mixins.InstanceCredentials", function() {
         describe("#instanceRequiringCredentials", function() {
             context("when a fetch failed because of missing instance credentials", function() {
                 it("returns an instance model with the right id", function() {
-                    var json = rspecFixtures.forbiddenInstanceJson({ response: { gpdb_instance: { id: '101' } } });
+                    var json = rspecFixtures.forbiddenInstanceJson({ errors: { model_data: { id: 101 } } });
 
                     this.collection.fetch();
                     this.server.lastFetchFor(this.collection).respondJson(403, json);
 
                     var instance = this.collection.instanceRequiringCredentials();
                     expect(instance).toBeA(chorus.models.GpdbInstance);
-                    expect(instance.get("id")).toBe("101");
+                    expect(instance.get("id")).toBe(101);
                 });
             });
         });

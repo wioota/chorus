@@ -162,9 +162,10 @@ describe ApplicationController do
         response.should be_forbidden
       end
 
-      it "includes the given model's id" do
+      it "includes the given model's id and entity_type" do
         get :index
-        decoded_response.gpdb_instance.id.should == object_to_present.id
+        decoded_errors["model_data"]["id"].should == object_to_present.id
+        decoded_errors["model_data"]["entity_type"].should == object_to_present.class.name.underscore
       end
     end
   end

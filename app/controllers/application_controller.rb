@@ -169,8 +169,8 @@ class ApplicationController < ActionController::Base
     response_json = {}
 
     if model
-      response_json[:response] = {
-          model.class.name.underscore => {:id => model.id}
+      response_json[:errors] = {
+          :model_data => {:id => model.id, :entity_type => model.class.name.underscore}
       }
     end
 
