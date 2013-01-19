@@ -1,5 +1,10 @@
 require_relative 'data_source_connection'
-require_relative 'ojdbc6.jar'
+begin
+  require_relative 'ojdbc6.jar'
+rescue LoadError
+  pa "Oracle driver not found"
+end
+
 
 class OracleConnection < DataSourceConnection
   def initialize(details)
