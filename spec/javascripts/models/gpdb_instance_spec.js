@@ -22,93 +22,6 @@ describe("chorus.models.GpdbInstance", function() {
         expect(this.instance.get('type')).toBe('GREENPLUM');
     });
 
-    describe("#accountForUser", function() {
-        beforeEach(function() {
-            this.user = rspecFixtures.user();
-            this.account = this.instance.accountForUser(this.user);
-        });
-
-        it("returns an InstanceAccount", function() {
-            expect(this.account).toBeA(chorus.models.InstanceAccount);
-        });
-
-        it("sets the instance id", function() {
-            expect(this.account.get("instanceId")).toBe(this.instance.get("id"));
-        });
-
-        it("sets the user id based on the given user", function() {
-            expect(this.account.get("userId")).toBe(this.user.get("id"));
-        });
-    });
-
-    describe("#accountForCurrentUser", function() {
-        beforeEach(function() {
-            this.currentUser = rspecFixtures.user();
-            setLoggedInUser(this.currentUser.attributes);
-        });
-
-        it("memoizes", function() {
-            var account = this.instance.accountForCurrentUser();
-            expect(account).toBe(this.instance.accountForCurrentUser());
-        });
-
-        context("when the account is destroyed", function() {
-            it("un-memoizes the account", function() {
-                var previousAccount = this.instance.accountForCurrentUser();
-                previousAccount.trigger("destroy");
-
-                var account = this.instance.accountForCurrentUser();
-                expect(account).not.toBe(previousAccount);
-            });
-
-            it("triggers 'change' on the instance", function() {
-                spyOnEvent(this.instance, 'change');
-                this.instance.accountForCurrentUser().trigger("destroy");
-                expect("change").toHaveBeenTriggeredOn(this.instance);
-            });
-        });
-    });
-
-    describe("#accountForOwner", function() {
-        beforeEach(function() {
-            var owner = this.owner = this.instance.owner();
-            this.accounts = rspecFixtures.instanceAccountSet();
-            this.accounts.each(function(account) {
-                account.set({
-                    owner: {
-                        id: owner.id + 1
-                    }
-                });
-            });
-
-            this.accounts.models[1].set({owner: this.owner.attributes});
-            spyOn(this.instance, "accounts").andReturn(this.accounts);
-        });
-
-        it("returns the account for the owner", function() {
-            expect(this.instance.accountForOwner()).toBeA(chorus.models.InstanceAccount);
-            expect(this.instance.accountForOwner()).toBe(this.accounts.models[1]);
-        });
-    });
-
-    describe("#accounts", function() {
-        beforeEach(function() {
-            this.instanceAccounts = this.instance.accounts();
-        });
-
-        it("returns an InstanceAccountSet", function() {
-            expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet);
-        });
-
-        it("sets the instance id", function() {
-            expect(this.instanceAccounts.attributes.instanceId).toBe(this.instance.get('id'));
-        });
-
-        it("memoizes", function() {
-            expect(this.instanceAccounts).toBe(this.instance.accounts());
-        });
-    });
-
     describe("#databases", function() {
         beforeEach(function() {
             this.databases = this.instance.databases();
@@ -124,30 +37,6 @@ describe("chorus.models.GpdbInstance", function() {
 
         it("memoizes", function() {
             expect(this.databases).toBe(this.instance.databases());
-        });
-    });
-
-    describe("#usage", function() {
-        beforeEach(function() {
-            this.instanceUsage = this.instance.usage();
-        });
-
-        it("returns an InstanceUsage object", function() {
-            expect(this.instanceUsage).toBeA(chorus.models.InstanceUsage);
-        });
-
-        it("sets the instance id", function() {
-            expect(this.instanceUsage.attributes.instanceId).toBe(this.instance.get('id'));
-        });
-
-        it("memoizes", function() {
-            expect(this.instanceUsage).toBe(this.instance.usage());
-        });
-    });
-
-    describe("#isGreenplum", function() {
-        it("returns true for gpdb instances", function() {
-            expect(this.instance.isGreenplum()).toBeTruthy();
         });
     });
 
@@ -207,44 +96,6 @@ describe("chorus.models.GpdbInstance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 });
             });
-        });
-    });
-
-    describe("#hasWorkspaceUsageInfo", function() {
-        it("returns true when the instance's usage is loaded", function() {
-            this.instance.usage().set({workspaces: []});
-            expect(this.instance.hasWorkspaceUsageInfo()).toBeTruthy();
-        });
-
-        it("returns false when the instances's usage is not loaded", function() {
-            this.instance.usage().unset("workspaces");
-            expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
-        });
-    });
-
-    describe("#sharing", function() {
-        it("returns an instance sharing model", function() {
-            expect(this.instance.sharing().get("instanceId")).toBe(this.instance.get("id"));
-        });
-
-        it("caches the sharing model", function() {
-            var originalModel = this.instance.sharing();
-            expect(this.instance.sharing()).toBe(originalModel);
-        });
-    });
-
-    describe("#sharedAccountDetails", function() {
-        beforeEach(function() {
-            this.owner = this.instance.owner();
-            this.accounts = rspecFixtures.instanceAccountSet();
-            this.accounts.models[1].set({owner: this.owner.attributes});
-            spyOn(this.instance, "accounts").andReturn(this.accounts);
-        });
-
-        it("returns the account name of the user who owns the instance and shared it", function() {
-            this.user = rspecFixtures.user();
-            this.account = this.instance.accountForUser(this.user);
-            expect(this.instance.sharedAccountDetails()).toBe(this.instance.accountForOwner().get("dbUsername"));
         });
     });
 

@@ -10,26 +10,26 @@ describe("chorus.pages.InstanceIndexPage", function() {
         expect(this.page.helpId).toBe("instances");
     });
 
-    it("fetches all registered gpdb instances", function() {
+    it("fetches all data sources", function() {
         expect(this.dataSourceSet).toHaveBeenFetched();
     });
 
-    it("fetches all registered hadoop instances", function() {
+    it("fetches all hadoop instances", function() {
         expect(this.hadoopInstanceSet).toHaveBeenFetched();
     });
 
-    it("fetches all registered gnip instances", function() {
+    it("fetches all gnip instances", function() {
         expect(this.gnipInstanceSet).toHaveBeenFetched();
     });
 
-    it("passes the gpdb and hadoop instances to the content details view", function() {
+    it("passes the data sources and hadoop instances to the content details view", function() {
         var contentDetails = this.page.mainContent.contentDetails;
         expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
         expect(contentDetails.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(contentDetails.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
 
-    it("passes the gpdb, hadoop and gnip instances to the list view", function() {
+    it("passes the data sources, hadoop and gnip instances to the list view", function() {
         var list = this.page.mainContent.content;
         expect(list.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
         expect(list.options.dataSources).toBeA(chorus.collections.DataSourceSet);
@@ -63,7 +63,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
     describe("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.dataSourceSet, [
-                rspecFixtures.gpdbInstance(),
+                rspecFixtures.oracleInstance(),
                 rspecFixtures.gpdbInstance()
             ]);
 

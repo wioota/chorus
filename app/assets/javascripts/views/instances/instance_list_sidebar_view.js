@@ -96,7 +96,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditPermissions: function() {
-        return this.resource.isGreenplum() && this.canEditInstance();
+        return this.resource.canHaveIndividualAccounts() && this.canEditInstance();
     },
 
     canEditInstance: function() {

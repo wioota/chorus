@@ -86,7 +86,7 @@ describe("chorus.views.InstanceList", function() {
         it("pre-selects the first instance", function() {
             expect(this.view.$("li:first-child")).toHaveClass("selected");
             expect(this.view.$("li.selected").length).toBe(1);
-            expect(this.view.$("li.selected").data("type")).toBe("greenplum");
+            expect(this.view.$("li.selected")).toContainText('gP1');
         });
 
         describe("when an instance is destroyed", function() {
@@ -148,14 +148,14 @@ describe("chorus.views.InstanceList", function() {
 
         describe("instance:added event", function() {
             beforeEach(function() {
-                this.newInstance = rspecFixtures.gpdbInstance({id: "1234567"});
+                this.newInstance = rspecFixtures.oracleInstance({id: 31415});
                 spyOn(this.view.dataSources, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 spyOn(this.view.gnipInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
-            it("re-fetches the gpdb, hadoop and gnip instances", function() {
+            it("re-fetches the data source, hadoop and gnip instances", function() {
                 expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
@@ -165,7 +165,7 @@ describe("chorus.views.InstanceList", function() {
                 this.dataSources.add(this.newInstance);
                 this.view.render(); // re-renders when fetch completes
 
-                expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
+                expect(this.view.$("li[data-instance-id=31415]")).toHaveClass("selected");
                 expect(this.view.$("li.selected").length).toBe(1);
             });
         });

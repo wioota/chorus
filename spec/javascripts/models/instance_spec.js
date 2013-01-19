@@ -55,6 +55,10 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    it("returns false for canHaveIndividualAccounts", function() {
+        expect(this.instance.canHaveIndividualAccounts()).toBeFalsy();
+    });
+
     it("returns true for isHadoop", function() {
         expect(this.instance.isHadoop()).toBeFalsy();
     });

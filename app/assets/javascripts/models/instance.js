@@ -1,4 +1,5 @@
 chorus.models.Instance = chorus.models.Base.extend({
+    constructorName: 'AbstractInstance',
     _imagePrefix: "/images/instances/",
 
     _stateIconMap: {
@@ -47,6 +48,10 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     isGnip: function() {
+        return false;
+    },
+
+    canHaveIndividualAccounts: function() {
         return false;
     },
 

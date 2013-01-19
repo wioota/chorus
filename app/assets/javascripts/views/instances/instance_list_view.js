@@ -1,9 +1,9 @@
 chorus.views.InstanceList = chorus.views.Base.extend({
     constructorName: "InstanceListView",
-    templateName:"instance_list",
+    templateName: "instance_list",
 
-    events:{
-        "click li":"selectItem"
+    events: {
+        "click li": "selectItem"
     },
 
     makeModel: function() {
@@ -21,7 +21,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("instance:added", function (instance) {
+        chorus.PageEvents.subscribe("instance:added", function(instance) {
             this.dataSources.fetchAll();
             this.hadoopInstances.fetchAll();
             this.gnipInstances.fetchAll();
@@ -33,14 +33,13 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     instanceDestroyed: function(model) {
-        if (this.selectedInstance.get("id") === model.get("id")) delete this.selectedInstance;
+        if(this.selectedInstance.get("id") === model.get("id")) delete this.selectedInstance;
         this.render();
     },
 
     postRender: function() {
-        if (this.selectedInstance) {
-            this.$('.instance_provider.' + this.selectedInstance.get('entityType') +
-                ' li[data-instance-id=' + this.selectedInstance.get("id") + ']').click();
+        if(this.selectedInstance) {
+            this.$('li[data-instance-id=' + this.selectedInstance.get("id") + ']' + '[data-type=' + this.selectedInstance.get("entityType") + ']').click();
         } else {
             if(this.dataSources.loaded) {
                 this.$('.instance_provider li:first').click();
@@ -57,16 +56,21 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         return presenter.present();
     },
 
-    selectItem:function (e) {
+    selectItem: function(e) {
         var target = $(e.currentTarget);
-        if (target.hasClass("selected")) {
+        if(target.hasClass("selected")) {
             return;
         }
 
         this.$("li").removeClass("selected");
         target.addClass("selected");
 
-        var map = {greenplum: this.dataSources, hadoop: this.hadoopInstances, gnip: this.gnipInstances};
+        var map = {
+            oracle_instance: this.dataSources,
+            gpdb_instance: this.dataSources,
+            hadoop_instance: this.hadoopInstances,
+            gnip_instance: this.gnipInstances
+        };
         var collection = map[target.data("type")];
 
         var instance = collection.get(target.data("instanceId"));
