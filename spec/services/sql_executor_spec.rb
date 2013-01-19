@@ -142,7 +142,7 @@ describe SqlExecutor do
     end
 
     context "without live data" do
-      it "limits the preview to 100 rows if no row limit mentioned in chorus properties file" do
+      it "uses the default row limit if no row limit mentioned in chorus properties file" do
         stub.proxy(ChorusConfig.instance).[](anything)
         stub(ChorusConfig.instance).[]('default_preview_row_limit') { nil }
         mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 500)
@@ -156,10 +156,11 @@ describe SqlExecutor do
     let(:schema) { GpdbSchema.find_by_name!('test_schema') }
     let(:sql) { 'select 1' }
     let(:check_id) { '42' }
-    let(:timeout) { 0 }
+    let(:timeout) { nil }
 
     before do
-      stub(subject).sql_execution_timeout { timeout }
+      stub.proxy(ChorusConfig.instance).[].with_any_args
+      stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { timeout }
     end
 
     it "returns a SqlResult" do
@@ -173,26 +174,31 @@ describe SqlExecutor do
     end
 
     it "passes the limit to CancelableQuery" do
-      called = false
       any_instance_of(CancelableQuery) do |query|
-        called = true
         mock.proxy(query).execute(sql, :limit => 42)
       end
-      result = SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
+      SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
     end
 
     context "with a timeout set" do
       let(:timeout) { 100 }
-      it "times out when the query exceeds the timeout limit" do
 
+      it "times out when the query exceeds the timeout limit" do
+        fake_connection = Object.new
+        fake_query = Object.new
+        connection_provider = Object.new
+        account = Object.new
         sql = "SELECT pg_sleep(.2);"
 
+        mock(connection_provider).connect_with(account) { fake_connection }
+        mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
+        mock(fake_query).execute(sql, { :timeout => 60 * 1000 * timeout }) { raise GreenplumConnection::QueryError }
+
         expect {
-          SqlExecutor.execute_sql(schema, account, check_id, sql)
-        }.to raise_error(MultipleResultsetQuery::QueryError)
+          SqlExecutor.execute_sql(connection_provider, account, check_id, sql)
+        }.to raise_error(GreenplumConnection::QueryError)
       end
     end
-
   end
 
   describe "#cancel_query" do
@@ -202,7 +208,7 @@ describe SqlExecutor do
       connection_provider = Object.new
       account = Object.new
 
-      mock(connection_provider).with_gpdb_connection(account).yields(fake_connection)
+      mock(connection_provider).connect_with(account) { fake_connection }
       mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
       mock(fake_query).cancel
 

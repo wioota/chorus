@@ -100,18 +100,8 @@ class ChorusView < Dataset
   end
 
   def add_metadata!(account)
-    metadata = nil
-    with_gpdb_connection(account) do |connection|
-      jdbc_conn = connection.raw_connection.connection
-      s = jdbc_conn.prepareStatement(query)
-      flag = org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY
-      s.executeWithFlags(flag)
-      results = s.getResultSet
-      metadata = results.getMetaData
-    end
-    @statistics = DatasetStatistics.new('column_count' => metadata.getColumnCount)
-  rescue Exception => e
-    raise MultipleResultsetQuery::QueryError, "The query could not be completed. Error: #{e.message}"
+    result = connect_with(account).prepare_and_execute_statement(query, :describe_only => true)
+    @statistics = DatasetStatistics.new('column_count' => result.columns.count)
   end
 
   def verify_in_source(user)

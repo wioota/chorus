@@ -32,6 +32,7 @@ class Dataset < ActiveRecord::Base
   scope :chorus_views, where(:type => 'ChorusView')
 
   delegate :with_gpdb_connection, :to => :schema
+  delegate :connect_with, :to => :schema
   delegate :gpdb_instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
@@ -112,7 +113,7 @@ class Dataset < ActiveRecord::Base
           dataset.index
         end
         found_datasets << dataset
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, MultipleResultsetQuery::QueryError
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, GreenplumConnection::QueryError
       end
     end
 

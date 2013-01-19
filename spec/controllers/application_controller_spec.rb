@@ -85,7 +85,7 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a QueryError occurs" do
-      stub(controller).index { raise MultipleResultsetQuery::QueryError.new("broken!") }
+      stub(controller).index { raise GreenplumConnection::QueryError.new("broken!") }
 
       get :index
 

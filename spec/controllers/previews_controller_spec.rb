@@ -47,7 +47,7 @@ describe PreviewsController do
 
     context "when there's an error'" do
       before do
-        mock(SqlExecutor).preview_dataset(gpdb_table, account, check_id) { raise MultipleResultsetQuery::QueryError }
+        mock(SqlExecutor).preview_dataset(gpdb_table, account, check_id) { raise GreenplumConnection::QueryError }
       end
       it "returns an error if the query fails" do
         post :create, params

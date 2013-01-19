@@ -153,6 +153,132 @@ describe GreenplumConnection, :database_integration do
     it_should_behave_like "a well behaved database query"
   end
 
+  describe "#prepare_and_execute_statement" do
+    let(:sql) { "SELECT 1 AS answer" }
+    let(:options) { {} }
+    let(:subject) { connection.prepare_and_execute_statement(sql, options) }
+    let(:expected) { [{'answer' => '1'}] }
+
+    it "should return a SqlResult" do
+      subject.should be_a(SqlResult)
+      subject.hashes.should == expected
+    end
+
+    context "when the query has no results" do
+      let(:sql) { "" }
+
+      it "should be empty" do
+        subject.rows.should be_empty
+      end
+    end
+
+    context "when there are multiple statements" do
+      context "with multiple results" do
+        let(:sql) { "SELECT 2 AS question; SELECT 1 AS answer" }
+
+        it "should return the last results" do
+          subject.should be_a(SqlResult)
+          subject.hashes.should == expected
+        end
+      end
+
+      context "when some don't have results" do
+        let(:sql) { "create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; SELECT 1 AS answer" }
+
+        it "should return the last results" do
+          subject.hashes.should == expected
+        end
+      end
+    end
+
+    context "warnings" do
+      let(:sql) { "create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings" }
+
+      context "with warnings enabled" do
+        let(:options) { {:warnings => true} }
+        it "should surface warnings" do
+          subject.warnings.each do |warning|
+            warning.should match /will create implicit index/
+          end
+        end
+      end
+
+      context "without warnings enabled" do
+        let(:options) { {:warnings => false} }
+
+        it "should not surface warnings" do
+          subject.warnings.should == []
+        end
+      end
+    end
+
+    context "limiting queries" do
+      let(:sql) { "select 1 as hi limit 3; select * from test_schema.base_table1 limit 4" }
+
+      context "when a limit is passed" do
+        let(:options) { {:limit => 1} }
+
+        it "should limit the query" do
+          subject.rows.length.should == 1
+        end
+
+        it "should optimize the query to only actually fetch the limited number of rows, not just fetch all and subselect" do
+          stub.proxy(Sequel).connect(db_url, :test => true) do |connection|
+            connection.synchronize(:default) do |jdbc_conn|
+              mock.proxy(jdbc_conn).set_auto_commit(false)
+              stub.proxy(jdbc_conn).prepare_statement do |statement|
+                mock.proxy(statement).set_fetch_size(1)
+              end
+              mock.proxy(jdbc_conn).commit
+
+              stub(connection).synchronize.with_no_args.yields(jdbc_conn)
+            end
+            connection
+          end
+
+          subject
+        end
+      end
+
+      context "when no limit is passed" do
+        it "should not limit the query" do
+          subject.rows.length.should > 1
+        end
+
+        it "should continue to use auto_commit" do
+          stub.proxy(Sequel).connect(db_url, :test => true) do |connection|
+            connection.synchronize(:default) do |jdbc_conn|
+              dont_allow(jdbc_conn).set_auto_commit(false)
+              dont_allow(jdbc_conn).commit
+
+              stub(connection).synchronize.with_no_args.yields(jdbc_conn)
+            end
+            connection
+          end
+
+          subject
+        end
+      end
+    end
+
+    context "when an error occurs" do
+      let(:sql) { "select hi from non_existant_table_please" }
+
+      it "should wrap it in a QueryError" do
+        expect { subject }.to raise_error(GreenplumConnection::QueryError)
+      end
+    end
+
+    context "when a timeout is specified" do
+      let(:options) { {:timeout => 100} }
+      let(:sql) { "SELECT pg_sleep(.2);" }
+
+      it "should raise a timeout error" do
+        expect { subject }.to raise_error(GreenplumConnection::QueryError, /timeout/)
+      end
+    end
+  end
+
   describe "DatabaseMethods" do
     let(:connection) { GreenplumConnection.new(details) }
     describe "#schemas" do
@@ -662,7 +788,7 @@ describe GreenplumConnection, :database_integration do
       end
     end
 
-    describe "#datasets"  do
+    describe "#datasets" do
       let(:datasets_sql) do
         <<-SQL
 SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
@@ -840,6 +966,55 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
         let(:subject) { connection.datasets_count(:name_filter => 'cANdy') }
+
+        it_should_behave_like "a well behaved database query"
+      end
+    end
+
+    describe "#column_info" do
+      let(:table_name) { "base_table1" }
+      let(:columns_sql) do
+        <<-SQL
+        SELECT a.attname, format_type(a.atttypid, a.atttypmod), des.description, a.attnum,
+               s.null_frac, s.n_distinct, s.most_common_vals, s.most_common_freqs, s.histogram_bounds,
+               c.reltuples
+          FROM pg_attribute a
+          LEFT JOIN pg_description des
+            ON a.attrelid = des.objoid AND a.attnum = des.objsubid
+          LEFT JOIN pg_namespace n
+            ON n.nspname = :schema
+          LEFT JOIN pg_class c
+            ON c.relnamespace = n.oid
+           AND c.relname = :table
+          LEFT JOIN pg_stats s
+            ON s.attname = a.attname
+           AND s.schemaname = n.nspname
+           AND s.tablename = c.relname
+          WHERE a.attrelid = '"#{table_name}"'::regclass
+          AND a.attnum > 0 AND NOT a.attisdropped
+        ORDER BY a.attnum;
+        SQL
+      end
+      let(:expected) do
+        db.execute("SET search_path TO #{db.send(:quote_identifier, schema_name)}")
+        db.fetch(columns_sql, :schema => schema_name, :table => table_name).all
+      end
+
+      context "with no setup sql" do
+        let(:subject) { connection.column_info(table_name, '') }
+
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "with setup sql for a temp view" do
+        let(:subject) { connection.column_info('TMP_VIEW', 'CREATE TEMP VIEW "TMP_VIEW" as select * from base_table1;;') }
+        let(:expected) do
+          db.execute("SET search_path TO #{db.send(:quote_identifier, schema_name)}")
+          table_results = db.fetch(columns_sql, :schema => schema_name, :table => table_name).all
+          table_results.map do |result|
+            result.merge(:description => nil, :null_frac => nil, :n_distinct => nil, :most_common_vals => nil, :most_common_freqs => nil, :histogram_bounds => nil, :reltuples => nil)
+          end
+        end
 
         it_should_behave_like "a well behaved database query"
       end

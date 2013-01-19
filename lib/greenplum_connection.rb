@@ -1,4 +1,5 @@
 require_relative 'data_source_connection'
+require_relative '../app/models/sql_result'
 
 class GreenplumConnection < DataSourceConnection
   class DatabaseError < Error
@@ -38,6 +39,7 @@ class GreenplumConnection < DataSourceConnection
 
   class ObjectNotFound < StandardError; end
   class SqlPermissionDenied < StandardError; end
+  class QueryError < StandardError; end
 
   @@gpdb_login_timeout = 10
 
@@ -76,6 +78,54 @@ class GreenplumConnection < DataSourceConnection
   def execute(sql)
     with_connection { @connection.execute(sql) }
     true
+  end
+
+  def prepare_and_execute_statement(query, options = {})
+    with_connection do
+      @connection.synchronize do |jdbc_conn|
+        if options[:timeout]
+          @connection.send(:statement, jdbc_conn) do |statement|
+            statement.execute "SET statement_timeout TO #{options[:timeout]}"
+          end
+        end
+
+        statement = jdbc_conn.prepare_statement(query)
+        if options[:limit]
+          jdbc_conn.set_auto_commit(false)
+          statement.set_fetch_size(options[:limit])
+          statement.set_max_rows(options[:limit])
+        end
+
+        if options[:describe_only]
+          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
+        else
+          statement.execute
+        end
+
+        if options[:limit]
+          jdbc_conn.commit
+        end
+
+        warnings = []
+        if options[:warnings]
+          warning = statement.get_warnings
+          while (warning)
+            warnings << warning.to_s
+            warning = warning.next_warning
+          end
+        end
+
+        result_set = statement.get_result_set
+        while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
+          result_set.close if result_set
+          result_set = statement.get_result_set
+        end
+
+        SqlResult.new(:warnings => warnings, :result_set => result_set)
+      end
+    end
+  rescue Exception => e
+    raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
   private
@@ -247,6 +297,13 @@ class GreenplumConnection < DataSourceConnection
       end
     end
 
+    def column_info(table_name, table_setup_sql)
+      with_connection do
+        @connection.execute(table_setup_sql)
+        @connection.fetch(COLUMN_METADATA_QUERY, :schema => schema_name, :table => table_name).all
+      end
+    end
+
     private
 
     def datasets_query(options)
@@ -300,6 +357,28 @@ class GreenplumConnection < DataSourceConnection
       LEFT JOIN pg_catalog.pg_namespace ON relnamespace = pg_catalog.pg_namespace.oid
       WHERE  pg_catalog.pg_namespace.nspname = :schema
     SQL
+
+    COLUMN_METADATA_QUERY = <<-SQL
+    SELECT a.attname, format_type(a.atttypid, a.atttypmod), des.description, a.attnum,
+           s.null_frac, s.n_distinct, s.most_common_vals, s.most_common_freqs, s.histogram_bounds,
+           c.reltuples
+      FROM pg_attribute a
+      LEFT JOIN pg_description des
+        ON a.attrelid = des.objoid AND a.attnum = des.objsubid
+      LEFT JOIN pg_namespace n
+        ON n.nspname = :schema
+      LEFT JOIN pg_class c
+        ON c.relnamespace = n.oid
+       AND c.relname = :table
+      LEFT JOIN pg_stats s
+        ON s.attname = a.attname
+       AND s.schemaname = n.nspname
+       AND s.tablename = c.relname
+      WHERE a.attrelid = ('"' || :table || '"')::regclass
+      AND a.attnum > 0 AND NOT a.attisdropped
+    ORDER BY a.attnum;
+    SQL
+
   end
 
   include DatabaseMethods

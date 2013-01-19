@@ -1,15 +1,14 @@
-class CancelableQuery < MultipleResultsetQuery
+class CancelableQuery
   def initialize(connection, check_id)
-    super(connection)
+    @connection = connection
     @check_id = check_id
   end
 
   def execute(sql, options = {})
-    @canceled = false
-    super("/*#{@check_id}*/#{sql}", options)
+    @connection.prepare_and_execute_statement("/*#{@check_id}*/#{sql}", options.merge(:warnings => true))
   end
 
   def cancel
-    @connection.exec_query("select pg_cancel_backend(procpid) from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'")
+    @connection.fetch("select pg_cancel_backend(procpid) from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'")
   end
 end

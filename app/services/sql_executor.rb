@@ -5,29 +5,22 @@ module SqlExecutor
     end
 
     def execute_sql(schema, account, check_id, sql, options = {})
-        schema.with_gpdb_connection(account) do |conn|
-          cancelable_query = CancelableQuery.new(conn, check_id)
+      conn = schema.connect_with(account)
+      cancelable_query = CancelableQuery.new(conn, check_id)
 
-          if sql_execution_timeout > 0
-            cancelable_query.execute("SET statement_timeout TO #{sql_execution_timeout}", options)
-          end
+      options.merge!({ :timeout => sql_execution_timeout }) if sql_execution_timeout > 0
+      result = cancelable_query.execute(sql, options)
+      result.schema = schema
 
-          result = cancelable_query.execute(sql, options)
-          result.schema = schema
-
-          result
-        end
+      result
     end
 
     def cancel_query(gpdb_connection_provider, account, check_id)
-      gpdb_connection_provider.with_gpdb_connection(account) do |conn|
-        cancelable_query = CancelableQuery.new(conn, check_id)
-        cancelable_query.cancel
-      end
+      CancelableQuery.new(gpdb_connection_provider.connect_with(account), check_id).cancel
     end
 
     def sql_execution_timeout
-      (60 * 1000 * (ChorusConfig.instance["execution_timeout_in_minutes"] || 0) )
+      (60 * 1000 * (ChorusConfig.instance["execution_timeout_in_minutes"] || 0))
     end
 
     def limit_rows

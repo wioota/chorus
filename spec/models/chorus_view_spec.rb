@@ -210,7 +210,7 @@ describe ChorusView do
       chorus_view.update_attribute :query, 'select 1, 2, 3;'
       expect {
         chorus_view.check_duplicate_column(user)
-      }.to raise_error
+      }.to raise_error(GreenplumConnection::DatabaseError)
     end
 
     it 'returns true when the column names are unique' do

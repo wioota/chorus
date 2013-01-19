@@ -1,59 +1,79 @@
 require 'spec_helper'
 
 describe GpdbColumn do
-  describe ".columns_for", :database_integration do
+  describe ".columns_for" do
     subject { GpdbColumn.columns_for(account, dataset) }
 
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
-    let(:account) { InstanceIntegration.real_gpdb_account }
-    let(:database) { gpdb_instance.databases.find_by_name(InstanceIntegration.database_name) }
-
-    describe 'for a real table' do
-      let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
-
-      it "gets the column information for table users" do
-        subject.count.should == 5
-        column1 = subject[1]
-
-        column1.name.should eq('column1')
-        column1.data_type.should eq('integer')
-        column1.description.should == 'comment on column1'
-        column1.ordinal_position.should eq(2)
-      end
-
-      it "gets the column stats for table users" do
-        column1 = subject[1]
-        column1_stats = column1.statistics
-
-        column1_stats.should be_a GpdbColumnStatistics
-        column1_stats.null_fraction.should == 0.0
-        column1_stats.number_distinct.should == 2
-        column1_stats.common_values.should =~ %w(0 1)
-      end
-
-      it 'has the correct column type for time values' do
-        time_column = subject.last
-        time_column.simplified_type.should == :datetime
-        time_column.should be_number_or_time
-      end
+    let(:connection) { Object.new }
+    let(:account) { Object.new }
+    let(:dataset) { OpenStruct.new({:name => 'hiya_bob', :query_setup_sql => "select yo from bar;"}) }
+    let(:column_with_stats) do
+      [
+          {
+              :attname => 'id',
+              :format_type => 'integer',
+              :description => nil,
+              :null_frac => 0.0,
+              :n_distinct => 2,
+              :most_common_vals => '{0, 1}',
+              :most_common_freqs => '{0, 1}',
+              :histogram_bounds => '{0, 1}',
+              :reltuples => 2
+          },
+          {
+              :attname => 'column1',
+              :format_type => 'integer',
+              :description => 'comment on column1',
+              :null_frac => 0.0,
+              :n_distinct => 2,
+              :most_common_vals => '{0, 1}',
+              :most_common_freqs => '{0, 1}',
+              :histogram_bounds => '{0, 1}',
+              :reltuples => 2
+          },
+          {
+              :attname => 'timecolumn',
+              :format_type => 'timestamp without time zone',
+              :description => 'comment on timecolumn',
+              :null_frac => 0.0,
+              :n_distinct => 2,
+              :most_common_vals => '{0, 1}',
+              :most_common_freqs => '{0, 1}',
+              :histogram_bounds => '{0, 1}',
+              :reltuples => 2
+          }
+      ]
     end
 
-    describe "for a chorus view" do
-      let(:schema) { database.schemas.find_by_name('test_schema') }
-      let(:dataset) { datasets(:executable_chorus_view) }
+    before do
+      stub(connection).column_info(dataset.name, dataset.query_setup_sql) { column_with_stats }
+      stub(dataset).connect_with(account) { connection }
+    end
 
-      it "gets the column information" do
-        subject.count.should == 5
-        row = subject.first
-        row.name.should eq('id')
-        row.data_type.should eq('integer')
-      end
+    it "gets the column information for table users" do
+      subject.count.should == 3
+      column1 = subject[1]
 
-      it 'has the correct column type for time values' do
-        time_column = subject.last
-        time_column.simplified_type.should == :datetime
-        time_column.should be_number_or_time
-      end
+      column1.name.should eq('column1')
+      column1.data_type.should eq('integer')
+      column1.description.should == 'comment on column1'
+      column1.ordinal_position.should eq(2)
+    end
+
+    it "gets the column stats for table users" do
+      column1 = subject[1]
+      column1_stats = column1.statistics
+
+      column1_stats.should be_a GpdbColumnStatistics
+      column1_stats.null_fraction.should == 0.0
+      column1_stats.number_distinct.should == 2
+      column1_stats.common_values.should =~ %w(0 1)
+    end
+
+    it 'has the correct column type for time values' do
+      time_column = subject.last
+      time_column.simplified_type.should == :datetime
+      time_column.should be_number_or_time
     end
   end
 
