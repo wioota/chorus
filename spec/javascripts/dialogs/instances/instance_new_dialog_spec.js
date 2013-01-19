@@ -27,7 +27,7 @@
         expect(this.dialog.$(".register_existing_hadoop .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop_help_text");
     });
 
-    describe("when the fetches complete", function() {
+    describe("when the configuration is loaded", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
         });
@@ -82,7 +82,7 @@
                     this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
                 });
 
-                it("should return the values in fieldValues", function() {
+                it("gets the fieldValues", function() {
                     var values = this.dialog.fieldValues();
                     expect(values.name).toBe("Instance_Name");
                     expect(values.description).toBe("Instance Description");
@@ -125,7 +125,7 @@
             });
 
             it("uses a blank name as the default database name", function() {
-                expect(this.dialog.$(".register_existing_oracle input[name=dbName]").val()).toBe("");
+                expect(this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val()).toBe("");
             });
 
             describe("filling out the form", function() {
@@ -136,7 +136,7 @@
                     this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
                     this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
                     this.dialog.$(".register_existing_oracle input[name=dbPassword]").val("my_password");
-                    this.dialog.$(".register_existing_oracle input[name=dbName]").val("foo");
+                    this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val("foo");
 
                     this.dialog.$(".register_existing_oracle input[name=name]").trigger("change");
                 });
@@ -149,7 +149,7 @@
                     expect(values.port).toBe("1234");
                     expect(values.dbUsername).toBe("user");
                     expect(values.dbPassword).toBe("my_password");
-                    expect(values.dbName).toBe("foo");
+                    expect(values.maintenanceDb).toBe("foo");
                 });
             });
         });
@@ -191,7 +191,7 @@
                     expect(values.groupList).toBe("hadoop");
                 });
 
-                it("#fieldValues should have the right values for 'provision_type' and 'shared'", function() {
+                it("#fieldValues includes 'shared'", function() {
                     var values = this.dialog.fieldValues();
                     expect(values.shared).toBe("true");
                 });
@@ -280,6 +280,13 @@
                         expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
 
+                    it('displays a toast message', function(){
+                        spyOn(chorus, 'toast');
+                        this.server.lastCreate().succeed();
+                        expect(chorus.toast).toHaveBeenCalledWith('instances.add.toast',
+                            {instanceName: this.dialog.model.name()});
+                    });
+
                     it("publishes the 'instance:added' page event with the new instance's id", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added", this.dialog.model);
                     });
@@ -318,7 +325,7 @@
             });
         }
 
-        context("when registering a hadoop instance", function() {
+        context("registering a hadoop instance", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
 
@@ -335,19 +342,18 @@
             });
 
             it("creates a hadoop instance model with the right data and saves it", function() {
-                var instance = this.dialog.model;
-                expect(instance.save).toHaveBeenCalled();
+                var params = this.server.lastCreate().params();
 
-                expect(instance.get("name")).toBe("Instance_Name");
-                expect(instance.get("description")).toBe("Instance Description");
-                expect(instance.get("host")).toBe("foo.bar");
-                expect(instance.get("port")).toBe("1234");
-                expect(instance.get("username")).toBe("user");
-                expect(instance.get("groupList")).toBe("hadoop");
+                expect(params['hadoop_instance[name]']).toBe("Instance_Name");
+                expect(params['hadoop_instance[description]']).toBe("Instance Description");
+                expect(params['hadoop_instance[host]']).toBe("foo.bar");
+                expect(params['hadoop_instance[port]']).toBe("1234");
+                expect(params['hadoop_instance[username]']).toBe("user");
+                expect(params['hadoop_instance[group_list]']).toBe("hadoop");
             });
         });
 
-        context("using register existing greenplum database", function() {
+        context("registering a greenplum database", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_greenplum").change();
 
@@ -360,28 +366,23 @@
                 section.find("input[name=dbPassword]").val("my_password");
                 section.find("input[name=maintenanceDb]").val("foo");
                 section.find("input[name=name]").trigger("change");
-
-                spyOn(chorus.models.GpdbInstance.prototype, "save").andCallThrough();
             });
 
 
-            it("calls save on the dialog's model", function() {
+            it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
-                expect(this.dialog.model.save).toHaveBeenCalled();
+                var params = this.server.lastCreate().params();
 
-                var attrs = this.dialog.model.save.calls[0].args[0];
-
-                expect(attrs.dbPassword).toBe("my_password");
-                expect(attrs.name).toBe("Instance_Name");
-                expect(attrs.provision_type).toBe("register");
-                expect(attrs.description).toBe("Instance Description");
-                expect(attrs.maintenanceDb).toBe("foo");
+                expect(params['data_source[type]']).toBe('GREENPLUM');
+                expect(params["data_source[name]"]).toBe("Instance_Name");
+                expect(params["data_source[description]"]).toBe("Instance Description");
+                expect(params["data_source[maintenance_db]"]).toBe("foo");
             });
 
             testUpload();
         });
 
-        context("using register existing oracle database", function() {
+        context("registering an oracle database", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_oracle").change();
 
@@ -392,59 +393,51 @@
                 section.find("input[name=port]").val("1234");
                 section.find("input[name=dbUsername]").val("user");
                 section.find("input[name=dbPassword]").val("my_password");
-                section.find("input[name=dbName]").val("foo");
+                section.find("input[name=maintenanceDb]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
                 spyOn(chorus.models.OracleInstance.prototype, "save").andCallThrough();
             });
 
 
-            it("calls save on the dialog's model", function() {
+            it('sends the right params', function() {
                 this.dialog.$("button.submit").click();
-                expect(this.dialog.model.save).toHaveBeenCalled();
+                var params = this.server.lastCreate().params();
 
-                var attrs = this.dialog.model.save.calls[0].args[0];
-
-                expect(attrs.dbPassword).toBe("my_password");
-                expect(attrs.name).toBe("Instance_Name");
-                expect(attrs.provision_type).toBe("register");
-                expect(attrs.description).toBe("Instance Description");
-                expect(attrs.dbName).toBe("foo");
+                expect(params['data_source[type]']).toBe('ORACLE');
+                expect(params["data_source[db_password]"]).toBe("my_password");
+                expect(params["data_source[name]"]).toBe("Instance_Name");
+                expect(params["data_source[description]"]).toBe("Instance Description");
+                expect(params["data_source[maintenance_db]"]).toBe("foo");
             });
 
             testUpload();
         });
 
-        context("using register existing gnip instance", function() {
+        context("registering a gnip instance", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_gnip").change();
 
                 var section = this.dialog.$(".register_existing_gnip");
-                section.find("input[name=name]").val("Gnip_Name");
+                section.find("input[name=name]").val("Gnip Name");
                 section.find("textarea[name=description]").val("Gnip Description");
-                section.find("input[name=streamUrl]").val("gnip.bar");
+                section.find("input[name=streamUrl]").val("gnip.com");
                 section.find("input[name=username]").val("gnip_user");
                 section.find("input[name=password]").val("my_password");
-
-                spyOn(chorus.models.GnipInstance.prototype, "save").andCallThrough();
             });
 
-            it("calls save on the dialog's model", function() {
+            it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
-                expect(this.dialog.model.save).toHaveBeenCalled();
+                var params = this.server.lastCreate().params();
 
-                var attrs = this.dialog.model.save.calls[0].args[0];
-
-                expect(attrs.name).toBe("Gnip_Name");
-                expect(attrs.provision_type).toBe("registerGnip");
-                expect(attrs.description).toBe("Gnip Description");
-                expect(attrs.streamUrl).toBe("gnip.bar");
-                expect(attrs.username).toBe("gnip_user");
-                expect(attrs.password).toBe("my_password");
+                expect(params["gnip_instance[name]"]).toBe("Gnip Name");
+                expect(params["gnip_instance[description]"]).toBe("Gnip Description");
+                expect(params["gnip_instance[stream_url]"]).toBe("gnip.com");
+                expect(params["gnip_instance[username]"]).toBe("gnip_user");
+                expect(params["gnip_instance[password]"]).toBe("my_password");
             });
 
             testUpload();
         });
     });
-
 });

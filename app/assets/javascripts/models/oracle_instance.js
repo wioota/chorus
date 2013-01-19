@@ -1,12 +1,16 @@
-chorus.models.OracleInstance = chorus.models.Instance.extend({
+chorus.models.OracleInstance = chorus.models.DataSource.extend({
     constructorName: "OracleInstance",
-    urlTemplate: "oracle_instances/{{id}}",
+    urlTemplate: "data_sources/{{id}}",
     nameAttribute: 'name',
     entityType: "oracle_instance",
 
     showUrlTemplate: "instances/{{id}}/schemas",
 
-    parameterWrapper: "oracle_instance",
+    parameterWrapper: "data_source",
+
+    defaults: {
+        type: 'ORACLE'
+    },
 
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
@@ -14,7 +18,7 @@ chorus.models.OracleInstance = chorus.models.Instance.extend({
 
         this.require("host", newAttrs);
         this.require("port", newAttrs);
-        this.require("dbName", newAttrs);
+        this.require("maintenanceDb", newAttrs);
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         if (this.isNew()) {
             this.require("dbUsername", newAttrs);
@@ -30,9 +34,5 @@ chorus.models.OracleInstance = chorus.models.Instance.extend({
         "port": "instances.dialog.port",
         "dbName": "instances.dialog.database_name",
         "description": "instances.dialog.description"
-    },
-
-    providerIconUrl: function() {
-        return this._imagePrefix + "icon_datasource_oracle.png";
     }
 });

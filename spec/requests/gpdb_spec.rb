@@ -8,7 +8,8 @@ describe "gpdb instances", :database_integration, :network do
         :host => InstanceIntegration::REAL_GPDB_HOST,
         :maintenance_db => "postgres",
         :db_username => InstanceIntegration::REAL_GPDB_USERNAME,
-        :db_password => InstanceIntegration::REAL_GPDB_PASSWORD
+        :db_password => InstanceIntegration::REAL_GPDB_PASSWORD,
+        :type => 'GREENPLUM'
     }
   end
 

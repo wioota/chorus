@@ -8,12 +8,13 @@ class GpdbInstancePresenter < Presenter
       :id => model.id,
       :shared => model.shared,
       :state => model.state,
-      :provision_type => model.provision_type,
       :maintenance_db => model.maintenance_db,
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => 'gpdb_instance'
+      :entity_type => 'gpdb_instance',
+      :provision_type => model.provision_type,
+      :type => 'GREENPLUM'
     }.merge(owner_hash)
   end
 

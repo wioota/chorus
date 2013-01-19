@@ -6,17 +6,17 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
     helpId: "instances",
 
     setup:function () {
-        var gpdbInstances = new chorus.collections.GpdbInstanceSet();
+        var dataSources = new chorus.collections.DataSourceSet();
         var hadoopInstances = new chorus.collections.HadoopInstanceSet();
         var gnipInstances = new chorus.collections.GnipInstanceSet();
-        gpdbInstances.fetchAll();
+        dataSources.fetchAll();
         hadoopInstances.fetchAll();
         gnipInstances.fetchAll();
 
-        this.dependOn(gpdbInstances);
+        this.dependOn(dataSources);
 
         var options = {
-            gpdbInstances: gpdbInstances,
+            dataSources: dataSources,
             hadoopInstances: hadoopInstances,
             gnipInstances: gnipInstances
         };

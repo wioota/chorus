@@ -2,25 +2,35 @@ class DataSourcesController < GpdbController
   wrap_parameters :data_source, :exclude => []
 
   def index
-    gpdb_instances = if params[:accessible]
+    data_sources = if params[:accessible]
                        DataSourceAccess.data_sources_for(current_user)
                      else
-                       GpdbInstance.scoped
+                       DataSource.scoped
                      end
 
-    present paginate gpdb_instances
+    present paginate data_sources
   end
 
   def show
-    gpdb_instance = GpdbInstance.find(params[:id])
-    present gpdb_instance
+    data_source = DataSource.find(params[:id])
+    present data_source
   end
 
   def create
-    created_gpdb_instance = current_user.gpdb_instances.create!(params[:data_source], :as => :create)
-    QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
+    type = params[:data_source].delete(:type)
 
-    present created_gpdb_instance, :status => :created
+    if type == "GREENPLUM"
+      created_gpdb_instance = current_user.gpdb_instances.create!(params[:data_source], :as => :create)
+      QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
+      present created_gpdb_instance, :status => :created
+
+    elsif type == "ORACLE"
+      created_oracle_instance = current_user.oracle_instances.new(params[:data_source])
+      created_oracle_instance.shared = true
+      created_oracle_instance.save!
+
+      present created_oracle_instance, :status => :created
+    end
   end
 
   def update

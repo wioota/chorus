@@ -32,7 +32,8 @@ _.extend(chorus.presenters.InstanceList.prototype, {
             showUrl: model.showUrl(),
             providerUrl: model.providerIconUrl(),
             isOffline: model.isOffline(),
-            stateText: model.stateText()
+            stateText: model.stateText(),
+            entityType: model.get('entityType')
         };
     }
 });

@@ -10,10 +10,10 @@ describe DataSourcesController do
   end
 
   describe "#index" do
-    it "returns all gpdb instances" do
+    it "returns all data source" do
       get :index
       response.code.should == "200"
-      decoded_response.size.should == GpdbInstance.count
+      decoded_response.size.should == DataSource.count
     end
 
     it_behaves_like "a paginated list"
@@ -26,32 +26,36 @@ describe DataSourcesController do
   end
 
   describe "#show" do
-    let(:gpdb_instance) { data_sources(:owners) }
+    let(:data_source) { DataSource.first }
 
     context "with a valid instance id" do
       it "does not require authorization" do
         dont_allow(subject).authorize!.with_any_args
-        get :show, :id => gpdb_instance.to_param
+        get :show, :id => data_source.to_param
       end
 
       it "succeeds" do
-        get :show, :id => gpdb_instance.to_param
+        get :show, :id => data_source.to_param
         response.should be_success
       end
 
       it "presents the gpdb instance" do
-        mock.proxy(controller).present(gpdb_instance)
-        get :show, :id => gpdb_instance.to_param
+        mock.proxy(controller).present(data_source)
+        get :show, :id => data_source.to_param
       end
+    end
 
-      generate_fixture "gpdbInstance.json" do
-        get :show, :id => gpdb_instance.to_param
-      end
+    generate_fixture "gpdbInstance.json" do
+      get :show, :id => data_sources(:owners).to_param
+    end
+
+    generate_fixture "oracleInstance.json" do
+      get :show, :id => data_sources(:oracle).to_param
     end
 
     context "with an invalid gpdb instance id" do
       it "returns not found" do
-        get :show, :id => 'invalid'
+        get :show, :id => -1
         response.should be_not_found
       end
     end
@@ -94,26 +98,28 @@ describe DataSourcesController do
   end
 
   describe "#create" do
+    it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
+
+    let(:valid_attributes) do
+      {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :maintenance_db => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret",
+          :type => type,
+          :shared => false
+      }
+    end
+
+    before do
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+    end
+
     context "for a GpdbInstance" do
       let(:type) { "GREENPLUM" }
-      it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
-
-      let(:valid_attributes) do
-        {
-            :name => "create_spec_name",
-            :port => 12345,
-            :host => "server.emc.com",
-            :maintenance_db => "postgres",
-            :description => "old description",
-            :db_username => "bob",
-            :db_password => "secret",
-            :type => type
-        }
-      end
-
-      before do
-        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
-      end
 
       it "creates the data source" do
         expect {
@@ -140,6 +146,30 @@ describe DataSourcesController do
           post :create, valid_attributes
           response.code.should == "422"
         end
+      end
+    end
+
+    context "for an OracleInstance" do
+      let(:type) { "ORACLE" }
+
+      it "creates a new OracleInstance" do
+        expect {
+          post :create, valid_attributes
+        }.to change(OracleInstance, :count).by(1)
+        response.code.should == "201"
+      end
+
+      it "presents the OracleInstance" do
+        mock_present do |data_source|
+          data_source.name == valid_attributes[:name]
+        end
+
+        post :create, :data_source => valid_attributes
+      end
+
+      it "creates a shared OracleInstance" do
+        post :create, valid_attributes
+        OracleInstance.last.should be_shared
       end
     end
   end

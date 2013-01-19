@@ -14,7 +14,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetchAll();
 
-        this.gpdbInstanceSet = new chorus.collections.GpdbInstanceSet([], { accessible: true });
+        this.dataSourceSet = new chorus.collections.DataSourceSet([], { accessible: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
@@ -32,8 +32,8 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     fetchInstances: function() {
-        this.bindings.add(this.gpdbInstanceSet, "loaded", this.mergeInstances);
-        this.gpdbInstanceSet.fetchAll();
+        this.bindings.add(this.dataSourceSet, "loaded", this.mergeInstances);
+        this.dataSourceSet.fetchAll();
 
         this.bindings.add(this.hadoopInstanceSet, "loaded", this.mergeInstances);
         this.hadoopInstanceSet.fetchAll();
@@ -43,7 +43,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     instancesLoaded: function() {
-        return (this.gpdbInstanceSet && this.gpdbInstanceSet.loaded &&
+        return (this.dataSourceSet && this.dataSourceSet.loaded &&
             this.hadoopInstanceSet && this.hadoopInstanceSet.loaded &&
                 this.gnipInstanceSet && this.gnipInstanceSet.loaded);
     },
@@ -56,7 +56,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
                 });
             };
 
-            var proxyInstances = wrapInstances(this.gpdbInstanceSet.models);
+            var proxyInstances = wrapInstances(this.dataSourceSet.models);
             var proxyHadoopInstances = wrapInstances(this.hadoopInstanceSet.models);
             var proxyGnipInstances = wrapInstances(this.gnipInstanceSet.models);
 

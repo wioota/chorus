@@ -30,7 +30,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             deleteable: false,
             isOnlineOrOffline: this.instance.isOnline() || this.instance.isOffline(),
             entityType: this.model.entityType,
-            instanceProvider: t("instances.provider." + this.model.entityType),
+            instanceProvider: t("instances.provider." + this.model.get('entityType')),
             shared: this.model.isShared && this.model.isShared(),
             isGnip: this.model.isGnip()
         };
@@ -96,7 +96,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditPermissions: function() {
-        return this.resource.isGreenplum() && this.canEditInstance();
+        return this.resource.canHaveIndividualAccounts() && this.canEditInstance();
     },
 
     canEditInstance: function() {
