@@ -1,14 +1,14 @@
 describe("chorus.views.InstanceList", function() {
     beforeEach(function() {
-        this.gpdbInstances = new chorus.collections.GpdbInstanceSet();
+        this.dataSources = new chorus.collections.DataSourceSet();
         this.hadoopInstances = new chorus.collections.HadoopInstanceSet();
         this.gnipInstances = new chorus.collections.GnipInstanceSet();
-        this.gpdbInstances.fetch();
+        this.dataSources.fetch();
         this.hadoopInstances.fetch();
         this.gnipInstances.fetch();
 
         this.view = new chorus.views.InstanceList({
-            gpdbInstances: this.gpdbInstances,
+            dataSources: this.dataSources,
             hadoopInstances: this.hadoopInstances,
             gnipInstances: this.gnipInstances
         });
@@ -35,7 +35,7 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
                 rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
             ]);
-            this.server.completeFetchFor(this.gpdbInstances, [
+            this.server.completeFetchFor(this.dataSources, [
                 rspecFixtures.gpdbInstance({name : "GP9", id: "1"}),
                 rspecFixtures.gpdbInstance({name : "gP1", id: "2"}),
                 rspecFixtures.gpdbInstance({name : "GP10", id: "3"})
@@ -91,7 +91,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("when an instance is destroyed", function() {
             beforeEach(function() {
-                this.oldLength = this.gpdbInstances.length;
+                this.oldLength = this.dataSources.length;
                 var liToSelect = this.view.$("li").eq(2);
                 liToSelect.click();
                 this.selectedId = liToSelect.data("instanceId");
@@ -99,7 +99,7 @@ describe("chorus.views.InstanceList", function() {
 
             context("when it is currently selected", function() {
                 beforeEach(function() {
-                    this.gpdbInstances.get(this.selectedId).destroy();
+                    this.dataSources.get(this.selectedId).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
@@ -109,7 +109,7 @@ describe("chorus.views.InstanceList", function() {
                 });
 
                 it("renders only the existing items", function() {
-                    expect(this.gpdbInstances.models.length).toBe(this.oldLength - 1);
+                    expect(this.dataSources.models.length).toBe(this.oldLength - 1);
                     expect(this.view.$(".gpdb_instance li.instance").length).toBe(this.oldLength - 1);
                 });
             });
@@ -118,7 +118,7 @@ describe("chorus.views.InstanceList", function() {
                 beforeEach(function() {
                     var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
                     var id = nonSelectedLi.data("instanceId");
-                    this.gpdbInstances.get(id).destroy();
+                    this.dataSources.get(id).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
@@ -130,7 +130,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("when an instance is offline", function() {
             beforeEach(function() {
-                this.gpdbInstances.reset([
+                this.dataSources.reset([
                     rspecFixtures.gpdbInstance({ name: "Greenplum", state: "offline" })
                 ]);
                 this.view.render();
@@ -149,20 +149,20 @@ describe("chorus.views.InstanceList", function() {
         describe("instance:added event", function() {
             beforeEach(function() {
                 this.newInstance = rspecFixtures.gpdbInstance({id: "1234567"});
-                spyOn(this.view.gpdbInstances, "fetchAll");
+                spyOn(this.view.dataSources, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 spyOn(this.view.gnipInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
             it("re-fetches the gpdb, hadoop and gnip instances", function() {
-                expect(this.view.gpdbInstances.fetchAll).toHaveBeenCalled();
+                expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
             });
 
             it("selects the li with a matching id when fetch completes", function() {
-                this.gpdbInstances.add(this.newInstance);
+                this.dataSources.add(this.newInstance);
                 this.view.render(); // re-renders when fetch completes
 
                 expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
@@ -172,7 +172,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("clicking on a gpdb instance", function() {
             beforeEach(function() {
-                this.eventSpy = jasmine.createSpy();
+                this.eventSpy = jasmine.createSpy("instance:selected");
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
                 this.li2 = this.view.$('li:contains("GP9")');
                 this.li3 = this.view.$('li:contains("GP10")');

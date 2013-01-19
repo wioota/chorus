@@ -58,8 +58,6 @@
 //= require dialogs/sql_preview_dialog
 //= require models/dataset
 //= require models/workspace_dataset
-//= require models/instance
-//= require models/gpdb_instance
 //= require models/tasks/task
 //= require models/tasks/chart_task
 //= require models/csv_import

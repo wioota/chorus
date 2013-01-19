@@ -7,12 +7,6 @@ describe("chorus.views.DatabaseSidebarList", function() {
             this.view = new subclass({schema: undefined});
         });
 
-        describe("#setup", function() {
-            it("should not crash", function() {
-                expect(this.view).toBeDefined();
-            });
-        });
-
         describe("render", function() {
             beforeEach(function() {
                 chorus.page = new chorus.pages.WorkspaceDatasetShowPage(1, 2);

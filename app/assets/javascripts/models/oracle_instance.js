@@ -1,4 +1,4 @@
-chorus.models.OracleInstance = chorus.models.Instance.extend({
+chorus.models.OracleInstance = chorus.models.DataSource.extend({
     constructorName: "OracleInstance",
     urlTemplate: "data_sources/{{id}}",
     nameAttribute: 'name',
@@ -34,9 +34,5 @@ chorus.models.OracleInstance = chorus.models.Instance.extend({
         "port": "instances.dialog.port",
         "dbName": "instances.dialog.database_name",
         "description": "instances.dialog.description"
-    },
-
-    providerIconUrl: function() {
-        return this._imagePrefix + "icon_datasource_oracle.png";
     }
 });

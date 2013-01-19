@@ -1,7 +1,7 @@
 describe("chorus.pages.InstanceIndexPage", function() {
     beforeEach(function() {
         this.page = new chorus.pages.InstanceIndexPage();
-        this.gpdbInstanceSet = new chorus.collections.GpdbInstanceSet();
+        this.dataSourceSet = new chorus.collections.DataSourceSet();
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();
     });
@@ -11,7 +11,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
     });
 
     it("fetches all registered gpdb instances", function() {
-        expect(this.gpdbInstanceSet).toHaveBeenFetched();
+        expect(this.dataSourceSet).toHaveBeenFetched();
     });
 
     it("fetches all registered hadoop instances", function() {
@@ -25,14 +25,14 @@ describe("chorus.pages.InstanceIndexPage", function() {
     it("passes the gpdb and hadoop instances to the content details view", function() {
         var contentDetails = this.page.mainContent.contentDetails;
         expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
-        expect(contentDetails.options.gpdbInstances).toBeA(chorus.collections.GpdbInstanceSet);
+        expect(contentDetails.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(contentDetails.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
 
     it("passes the gpdb, hadoop and gnip instances to the list view", function() {
         var list = this.page.mainContent.content;
         expect(list.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
-        expect(list.options.gpdbInstances).toBeA(chorus.collections.GpdbInstanceSet);
+        expect(list.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(list.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
 
@@ -62,17 +62,18 @@ describe("chorus.pages.InstanceIndexPage", function() {
 
     describe("when the instances are fetched", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.gpdbInstanceSet, [
+            this.server.completeFetchAllFor(this.dataSourceSet, [
                 rspecFixtures.gpdbInstance(),
-                rspecFixtures.gpdbInstance({id: 123456})
+                rspecFixtures.gpdbInstance()
             ]);
+
             this.server.completeFetchAllFor(this.hadoopInstanceSet, [
                 rspecFixtures.hadoopInstance(),
-                rspecFixtures.hadoopInstance({id: 123456})
+                rspecFixtures.hadoopInstance()
             ]);
             this.server.completeFetchAllFor(this.gnipInstanceSet, [
                 rspecFixtures.gnipInstance(),
-                rspecFixtures.gnipInstance({id: 123456})
+                rspecFixtures.gnipInstance()
             ]);
         });
 

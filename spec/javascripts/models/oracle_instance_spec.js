@@ -1,10 +1,6 @@
 describe("chorus.models.OracleInstance", function() {
     beforeEach(function() {
-        // TODO: generate real oracle fixture
-        this.instance = new chorus.models.OracleInstance(rspecFixtures.gpdbInstance({
-            id: 1,
-            entityType: "oracle_instance"
-        }));
+        this.instance = rspecFixtures.oracleInstance({id: 1});
         this.instance.set({
            dbName: 'RockinDB',
            dbUsername: 'system',
@@ -60,7 +56,7 @@ describe("chorus.models.OracleInstance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 });
 
-                _.each(["name", "host", "dbUsername", "dbPassword", "port", "dbName"], function(attr) {
+                _.each(["name", "host", "dbUsername", "dbPassword", "port", "maintenanceDb"], function(attr) {
                     it("requires " + attr, function() {
                         this.attrs[attr] = "";
                         expect(this.instance.performValidation(this.attrs)).toBeFalsy();
@@ -93,12 +89,6 @@ describe("chorus.models.OracleInstance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 });
             });
-        });
-    });
-
-    describe("#providerIconUrl", function() {
-        it("returns the right url for oracle instances", function() {
-            expect(this.instance.providerIconUrl()).toBe("/images/instances/icon_datasource_oracle.png");
         });
     });
 });

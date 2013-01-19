@@ -4,6 +4,13 @@ describe('chorus.models.DataSource', function() {
         }
     );
 
+    it("has the right url", function() {
+        expect(this.model.url()).toHaveUrlPath('/data_sources/1');
+
+        this.model.unset("id", { silent: true });
+        expect(this.model.url()).toHaveUrlPath('/data_sources/');
+    });
+
     describe('#providerIconUrl', function() {
         it('has the right icon', function() {
             var gpdbInstance = new chorus.models.DataSource({entityType: 'gpdb_instance'});

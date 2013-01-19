@@ -1,0 +1,2 @@
+class OracleInstanceAccess < DataSourceAccess
+end

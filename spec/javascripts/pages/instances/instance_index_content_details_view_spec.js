@@ -1,6 +1,6 @@
 describe("chorus.views.InstanceIndexContentDetails", function() {
     beforeEach(function() {
-        var gpdbInstances = new chorus.collections.GpdbInstanceSet([
+        var dataSources = new chorus.collections.DataSourceSet([
             rspecFixtures.gpdbInstance(),
             rspecFixtures.gpdbInstance()
         ]);
@@ -14,7 +14,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         ]);
 
         this.view = new chorus.views.InstanceIndexContentDetails({
-            gpdbInstances: gpdbInstances,
+            dataSources: dataSources,
             hadoopInstances: hadoopInstances,
             gnipInstances: gnipInstances
         });
@@ -32,8 +32,8 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
 
     describe("when the instances are loaded", function() {
         beforeEach(function() {
-            this.view.gpdbInstances.loaded = true;
-            this.view.gpdbInstances.trigger('loaded');
+            this.view.dataSources.loaded = true;
+            this.view.dataSources.trigger('loaded');
             this.view.hadoopInstances.loaded = true;
             this.view.hadoopInstances.trigger('loaded');
             this.view.gnipInstances.loaded = true;

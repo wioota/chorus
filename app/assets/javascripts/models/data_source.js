@@ -1,7 +1,10 @@
-chorus.models.DataSource = chorus.models.Base.extend({
+//= require ./instance
+chorus.models.DataSource = chorus.models.Instance.extend({
     constructorName: 'DataSource',
 
-    showUrlTemplate: 'data_sources/{{id}}/databases',
+    urlTemplate: "data_sources/{{id}}",
+    showUrlTemplate: 'instances/{{id}}/databases',
+    entityType: "data_source",
 
     providerIconUrl: function() {
         return '/images/instances/icon_' + this.get('entityType') + '.png';

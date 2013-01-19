@@ -1,4 +1,4 @@
-chorus.models.GpdbInstance = chorus.models.Instance.extend({
+chorus.models.GpdbInstance = chorus.models.DataSource.extend({
     constructorName: "GpdbInstance",
     urlTemplate: "data_sources/{{id}}",
     nameAttribute: 'name',
@@ -24,10 +24,6 @@ chorus.models.GpdbInstance = chorus.models.Instance.extend({
             this.require("dbUsername", newAttrs);
             this.require("dbPassword", newAttrs);
         }
-    },
-
-    providerIconUrl: function() {
-        return this._imagePrefix + "icon_gpdb_instance.png";
     },
 
     databases: function() {
