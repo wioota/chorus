@@ -23,7 +23,7 @@ chorus.dialogs.WorkfileNewVersion = chorus.dialogs.Base.extend({
         e.preventDefault();
         this.$("button.submit").startLoading("actions.saving");
         this.model.set({"commitMessage":this.$("[name=commitMessage]").val()}, {silent:true});
-        this.model.saveAsNewVersion();
+        this.model.save({}, {newWorkfileVersion: true});
     },
 
     saved:function () {

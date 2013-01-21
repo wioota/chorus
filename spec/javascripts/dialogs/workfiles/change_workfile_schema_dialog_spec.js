@@ -2,12 +2,10 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.sql();
         this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
+        this.dialog.render();
     });
 
     describe("#render", function () {
-        beforeEach(function () {
-            this.dialog.render();
-        });
         it("has the right title", function () {
             expect(this.dialog.$(".dialog_header h1")).toContainTranslation("workfile.change_workfile_schema.title");
         });
@@ -27,8 +25,11 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            spyOn(this.model, "saveWorkfileAttributes").andCallThrough();
+            this.executionSchema = new chorus.models.Schema({id: 321});
+            spyOn(this.model, "updateExecutionSchema").andCallThrough();
+            spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
             spyOn(this.dialog, "closeModal");
+            spyOn(this.dialog.schemaPicker, "getSelectedSchema").andReturn(this.executionSchema);
             this.dialog.render();
             this.dialog.$("button.submit").click();
         });
@@ -39,13 +40,14 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
         });
 
         it("saves the model", function(){
-            expect(this.model.saveWorkfileAttributes).toHaveBeenCalled();
+            expect(this.model.updateExecutionSchema).toHaveBeenCalledWith(this.executionSchema);
         });
 
         context("when save succeeds", function(){
             beforeEach(function() {
                 spyOn(chorus, "toast");
                 this.dialog.model.trigger("saved");
+                this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionSchema: this.executionSchema.attributes}));
             });
 
             it("dismisses the dialog", function(){
@@ -54,6 +56,10 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
             it("displays toast message", function() {
                 expect(chorus.toast).toHaveBeenCalledWith("workfile.change_workfile_schema.saved_message");
+            });
+
+            it("presents the new execution schema", function(){
+                expect(this.model.executionSchema().get("id")).toEqual(this.executionSchema.get("id"));
             });
         });
 
@@ -70,6 +76,51 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             it("doesn't close the dialog box", function () {
                 this.dialog.model.trigger("savedFailed");
                 expect(this.dialog.closeModal).not.toHaveBeenCalled();
+            });
+
+            it("presents the original execution schema", function(){
+                expect(this.model.executionSchema().get("id")).not.toEqual(this.executionSchema.get("id"));
+            });
+        });
+    });
+
+    context("when the schema picker is not ready", function () {
+        beforeEach(function () {
+            spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
+        });
+
+        it("disables the Run File button", function () {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+        });
+    });
+
+    context("when the schema picker is ready", function () {
+        beforeEach(function () {
+            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
+            this.dialog.schemaPicker.trigger("change");
+        });
+
+        it("enables the save schema button", function () {
+            expect(this.dialog.$("button.submit")).toBeEnabled();
+        });
+    });
+
+    context("when the SchemaPicker triggers an error", function() {
+        beforeEach(function() {
+            var modelWithError = rspecFixtures.schemaSet();
+            modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
+            this.dialog.schemaPicker.trigger("error", modelWithError);
+        });
+
+        it("shows the error", function() {
+            expect(this.dialog.$('.errors')).toContainText("A can't be blank");
+        });
+
+        context("and then the schemaPicker triggers clearErrors", function(){
+            it("clears the errors", function() {
+                this.dialog.schemaPicker.trigger("clearErrors");
+                expect(this.dialog.$('.errors')).toBeEmpty();
             });
         });
     });

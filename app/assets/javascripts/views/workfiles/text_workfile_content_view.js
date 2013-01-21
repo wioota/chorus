@@ -135,6 +135,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         var model = this.model;
 
         this.model.save({}, {
+            updateWorkfileVersion: true,
             silent: true,
             notFound: function() {
                 this.alert = new chorus.alerts.WorkfileConflict({ model: model });

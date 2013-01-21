@@ -58,6 +58,11 @@
             this.workspace().set({id: workspace.id});
         },
 
+        updateExecutionSchema:function(schema){
+            delete this._executionSchema;
+            return this.save({"executionSchemaId": schema.get("id")}, {wait: true});
+        },
+
         sandbox: function() {
             return this.workspace().sandbox();
         },
@@ -67,12 +72,11 @@
         },
 
         executionSchema: function() {
-            var executionSchema = this.get("executionSchema");
-            if (executionSchema) {
-                return new chorus.models.Schema(executionSchema);
-            } else {
-                return this.sandbox() && this.sandbox().schema();
+            if(!this._executionSchema) {
+                var executionSchema = this.get("executionSchema");
+                this._executionSchema = executionSchema && new chorus.models.Schema(executionSchema);
             }
+            return this._executionSchema || (this.sandbox() && this.sandbox().schema());
         },
 
         modifier: function() {
@@ -176,38 +180,28 @@
             return (!versionNum || versionNum === this.get("latestVersionId"));
         },
 
-        saveWorkfileAttributes: function(attrs, options) {
-            var executionSchema = this.get("executionSchema");
-            if (executionSchema) {
-                this.set("executionSchemaId", executionSchema.id);
-            }
-            return this._super("save", [attrs, options]);
-        },
-
         save: function(attrs, options) {
             if (this.isNew() || this.canEdit()) {
                 options = options || {};
                 attrs = attrs || {};
                 var overrides = {};
 
-                if (this.get("versionInfo") && this.get("versionInfo").id) {
+                if (options.updateWorkfileVersion) {
                     overrides.url = "/workfiles/" + this.get("id") + "/versions/" + this.get("versionInfo").id;
                     attrs['lastUpdatedStamp'] = this.get("versionInfo").lastUpdatedStamp;
                 }
 
+                if (options.newWorkfileVersion) {
+                    overrides = {
+                        method: 'create',
+                        url: "/workfiles/" + this.get("id") + "/versions"
+                    };
+                }
+
+                options = _.omit(options, "updateWorkfileVersion", "newWorkfileVersion");
+
                 return this._super("save", [attrs, _.extend(options, overrides)]);
             }
-        },
-
-        saveAsNewVersion: function(attrs, options) {
-            options = options || {};
-
-            var overrides = {
-                method: 'create',
-                url: "/workfiles/" + this.get("id") + "/versions"
-            };
-
-            return this._super("save", [attrs, _.extend(options, overrides)]);
         },
 
         iconUrl: function(options) {
