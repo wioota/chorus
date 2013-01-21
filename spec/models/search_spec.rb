@@ -211,7 +211,7 @@ describe Search do
     let(:private_workfile) { workfiles(:private) }
     let(:public_workfile) { workfiles(:public) }
     let(:dataset) { datasets(:searchquery_table) }
-    let(:typeahead_dataset) { datasets(:typeahead) }
+    let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
     let(:shared_dataset) { datasets(:searchquery_shared_table) }
     let(:chorus_view) { datasets(:searchquery_chorus_view) }
 

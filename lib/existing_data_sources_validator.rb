@@ -1,28 +1,37 @@
 module ExistingDataSourcesValidator
-  def self.run
-    datasources = [GpdbInstance, OracleInstance, HadoopInstance, GnipInstance]
-    invalid_instances = datasources.reduce([]) { |records, datasource|
-      records << self.validate_instances_of(datasource)
-    }.flatten
+  def self.run(data_source_types)
+    puts "Searching for duplicate data source names..."
 
-    if(invalid_instances.empty?)
+    existing_data_source_types = data_source_types.select { |data_source|
+      ActiveRecord::Base.connection.table_exists? data_source.table_name
+    }
+
+    invalid_instances = find_invalid_instances(existing_data_source_types)
+
+    if invalid_instances.empty?
       return true
     else
-      log("Duplicate data source names found: #{invalid_instances.map(&:name).uniq.join(", ")}")
+      puts "Duplicate data source names found: #{invalid_instances.map(&:name).uniq.join(", ")}"
       return false
     end
   end
 
-  def self.log(*args)
-    puts *args
-  end
-
   private
 
-  def self.validate_instances_of(type)
-    type.all.select do |record|
-      DataSourceNameValidator.new(record).validate(record)
-      record.errors.size > 0
+  def self.find_invalid_instances(data_source_types)
+    invalid_instances = []
+
+    data_source_types.each do |type|
+      type.all.each do |record|
+        data_source_types.each do |other_type|
+          other_type.where('LOWER(name) = ?', record.name.downcase).each do |invalid_instance|
+            next if invalid_instance == record
+            invalid_instances << invalid_instance
+          end
+        end
+      end
     end
+
+    invalid_instances
   end
 end

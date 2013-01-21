@@ -93,7 +93,7 @@ FixtureBuilder.configure do |fbuilder|
     chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:name => InstanceIntegration::real_gpdb_hostname, :owner => admin))
 
     gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
-    FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead')
+    FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead_gnip')
     Events::GnipInstanceCreated.by(admin).add(:gnip_instance => gnip_instance)
 
     # Instance Accounts
@@ -143,7 +143,7 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
 
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
-    FactoryGirl.create(:gpdb_table, :name => "typeahead", :schema => searchquery_schema)
+    FactoryGirl.create(:gpdb_table, :name => "typeahead_gpdb_table", :schema => searchquery_schema)
     @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)
     typeahead_workfile = FactoryGirl.create :chorus_workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
