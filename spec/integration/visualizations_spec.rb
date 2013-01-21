@@ -16,6 +16,7 @@ describe "Visualizations", :database_integration do
     find("a", :text => /^#{database.name}$/).click
     find("a", :text => /^#{schema.name}$/).click
     find("a", :text => /^#{table.name}$/).click
+    find(".list li.selected").click
     click_button "Visualize"
   end
 

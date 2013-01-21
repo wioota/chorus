@@ -4,7 +4,7 @@ if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
 
-cp ~/ojdbc6.jar ./lib/ojdbc6.jar
+cp ~/ojdbc6.jar ./lib/libraries/ojdbc6.jar
 export GPDB_HOST=chorus-gpdb42
 export HADOOP_HOST=chorus-gphd02
 
