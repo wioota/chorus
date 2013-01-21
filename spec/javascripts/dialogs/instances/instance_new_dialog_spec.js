@@ -1,4 +1,4 @@
- describe("chorus.dialogs.InstancesNew", function() {
+describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
@@ -22,7 +22,7 @@
         expect(this.selectMenuStub.find(".register_existing_hadoop")).toExist();
     });
 
-    it("shows data source description", function () {
+    it("shows data source description", function() {
         expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
         expect(this.dialog.$(".register_existing_hadoop .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop_help_text");
     });
@@ -32,15 +32,14 @@
             this.server.completeFetchFor(chorus.models.Config.instance());
         });
 
-        it("shows the label", function () {
+        it("shows the label", function() {
             expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type");
         });
 
-        it("has select box for 'Greenplum Database', 'HDFS Cluster', and 'Gnip Account'", function () {
-            expect(this.dialog.$("select.data_sources option").length).toBe(4);
+        it("has select box for 'Greenplum Database', 'HDFS Cluster'", function() {
+            expect(this.dialog.$("select.data_sources option").length).toBe(3);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
-            expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.oracle");
-            expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hdfs");
+            expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.hdfs");
         });
 
         it("starts with no select box selected", function() {
@@ -94,63 +93,19 @@
                 });
             });
 
-            context("changing to 'Select one' option", function () {
-                beforeEach(function () {
+            context("changing to 'Select one' option", function() {
+                beforeEach(function() {
                     this.dialog.$("select.data_sources").val("").change();
                 });
 
-                it("should hides all forms", function () {
+                it("should hides all forms", function() {
                     expect(this.dialog.$(".data_sources_form")).toHaveClass("collapsed");
                 });
 
-                it("should disable the submit button", function () {
+                it("should disable the submit button", function() {
                     expect(this.dialog.$("button.submit")).toBeDisabled();
                 });
 
-            });
-        });
-
-        describe("selecting the 'Oracle Database' option", function() {
-            beforeEach(function() {
-                this.dialog.$(".data_sources").val("register_existing_oracle").change();
-            });
-
-            it("un-collapses the 'register an existing instance'", function() {
-                expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
-                expect(this.dialog.$(".register_existing_oracle")).not.toHaveClass("collapsed");
-            });
-
-            it("enables the submit button", function() {
-                expect(this.dialog.$("button.submit")).toBeEnabled();
-            });
-
-            it("uses a blank name as the default database name", function() {
-                expect(this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val()).toBe("");
-            });
-
-            describe("filling out the form", function() {
-                beforeEach(function() {
-                    this.dialog.$(".register_existing_oracle input[name=name]").val("Instance_Name");
-                    this.dialog.$(".register_existing_oracle textarea[name=description]").val("Instance Description");
-                    this.dialog.$(".register_existing_oracle input[name=host]").val("foo.bar");
-                    this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
-                    this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
-                    this.dialog.$(".register_existing_oracle input[name=dbPassword]").val("my_password");
-                    this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val("foo");
-
-                    this.dialog.$(".register_existing_oracle input[name=name]").trigger("change");
-                });
-
-                it("should return the values in fieldValues", function() {
-                    var values = this.dialog.fieldValues();
-                    expect(values.name).toBe("Instance_Name");
-                    expect(values.description).toBe("Instance Description");
-                    expect(values.host).toBe("foo.bar");
-                    expect(values.port).toBe("1234");
-                    expect(values.dbUsername).toBe("user");
-                    expect(values.dbPassword).toBe("my_password");
-                    expect(values.maintenanceDb).toBe("foo");
-                });
             });
         });
 
@@ -199,18 +154,66 @@
         });
     });
 
+    context("when oracle is configured", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(chorus.models.Config.instance().set({oracleConfigured: true}));
+        });
+
+        describe("selecting the 'Oracle Database' option", function() {
+            beforeEach(function() {
+                this.dialog.$(".data_sources").val("register_existing_oracle").change();
+            });
+
+            it("un-collapses the 'register an existing instance'", function() {
+                expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
+                expect(this.dialog.$(".register_existing_oracle")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            it("uses a blank name as the default database name", function() {
+                expect(this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val()).toBe("");
+            });
+
+            describe("filling out the form", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_oracle input[name=name]").val("Instance_Name");
+                    this.dialog.$(".register_existing_oracle textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_oracle input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
+                    this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
+                    this.dialog.$(".register_existing_oracle input[name=dbPassword]").val("my_password");
+                    this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val("foo");
+
+                    this.dialog.$(".register_existing_oracle input[name=name]").trigger("change");
+                });
+
+                it("should return the values in fieldValues", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("Instance_Name");
+                    expect(values.description).toBe("Instance Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.port).toBe("1234");
+                    expect(values.dbUsername).toBe("user");
+                    expect(values.dbPassword).toBe("my_password");
+                    expect(values.maintenanceDb).toBe("foo");
+                });
+            });
+        });
+    });
+
     context("when gnip is configured", function() {
         beforeEach(function() {
-            chorus.models.Config.instance().set({ gnipConfigured: true  });
-            this.dialog = new chorus.dialogs.InstancesNew();
-            this.dialog.render();
+            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true }));
         });
 
         it("shows the 'Register an existing GNIP instance' option", function() {
             expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).toExist();
         });
 
-        it("shows gnip data source description", function () {
+        it("shows gnip data source description", function() {
             expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("instances.new_dialog.register_existing_gnip_help_text");
         });
 
@@ -219,13 +222,12 @@
             expect(this.selectMenuStub.find(".register_existing_gnip")).toExist();
         });
 
-
-        describe("selecting gnip instance", function () {
-            beforeEach(function () {
+        describe("selecting gnip instance", function() {
+            beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_gnip").change();
             });
 
-            it("shows the gnip streamUrl", function () {
+            it("shows the gnip streamUrl", function() {
                 expect(this.dialog.$(".register_existing_gnip input[name=streamUrl]").val()).toBe("");
             });
         });
@@ -233,9 +235,7 @@
 
     context("when gnip is not configured", function() {
         beforeEach(function() {
-            chorus.models.Config.instance().set({ gnipConfigured: false });
-            this.dialog = new chorus.dialogs.InstancesNew();
-            this.dialog.render();
+            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: false }));
         });
 
         it("does not show the 'Register an existing GNIP instance' option", function() {
@@ -245,8 +245,7 @@
 
     describe("submitting the form", function() {
         beforeEach(function() {
-            this.dialog.render();
-            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433 }));
+            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433, oracleConfigured:true }));
         });
 
         function testUpload() {
@@ -280,7 +279,7 @@
                         expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
 
-                    it('displays a toast message', function(){
+                    it('displays a toast message', function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
                         expect(chorus.toast).toHaveBeenCalledWith('instances.add.toast',
@@ -368,7 +367,6 @@
                 section.find("input[name=name]").trigger("change");
             });
 
-
             it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
                 var params = this.server.lastCreate().params();
@@ -398,7 +396,6 @@
 
                 spyOn(chorus.models.OracleInstance.prototype, "save").andCallThrough();
             });
-
 
             it('sends the right params', function() {
                 this.dialog.$("button.submit").click();

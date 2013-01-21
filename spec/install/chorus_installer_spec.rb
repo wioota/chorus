@@ -830,6 +830,10 @@ describe ChorusInstaller do
       File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/vendor/nginx/nginx_dist/nginx_data/logs').should == '/usr/local/greenplum-chorus/shared/log/nginx'
     end
 
+    it "links the libraries directory" do
+      File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/lib/libraries').should == '/usr/local/greenplum-chorus/shared/libraries'
+    end
+
     shared_examples "not link the data paths" do
       it "doesn't link system" do
         File.readlink('/usr/local/greenplum-chorus/releases/2.2.0.0/system').should == '/usr/local/greenplum-chorus/shared/system'

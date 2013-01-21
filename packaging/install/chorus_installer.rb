@@ -271,6 +271,10 @@ class ChorusInstaller
     FileUtils.rm_rf("#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/log/nginx", "#{release_path}/vendor/nginx/nginx_dist/nginx_data/logs")
     FileUtils.ln_sf("#{destination_path}/shared/system", "#{release_path}/system")
+
+    @logger.debug("Linking libraries")
+    FileUtils.ln_sf("#{destination_path}/shared/libraries", "#{release_path}/lib/libraries")
+
   end
 
   def create_database_config

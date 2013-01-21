@@ -53,6 +53,14 @@ class ChorusConfig
     (self['kaggle.enabled'] && self['kaggle.api_key'] && true)
   end
 
+  def oracle_configured?
+    (File.exist? Rails.root.join('lib', 'libraries' , 'ojdbc6.jar')) && !!self['oracle.enabled']
+  end
+
+  def oracle_driver_expected_but_missing?
+    !(File.exist? Rails.root.join('lib', 'libraries', 'ojdbc6.jar')) && !!self['oracle.enabled']
+  end
+
   def self.config_file_path(root_dir=nil)
     root_dir = Rails.root unless root_dir
     File.join root_dir, 'config/chorus.properties'

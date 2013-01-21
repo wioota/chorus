@@ -17,7 +17,8 @@ class ConfigurationsController < ApplicationController
       :kaggle_configured => ChorusConfig.instance.kaggle_configured?,
       :gnip_configured => ChorusConfig.instance.gnip_configured?,
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
-      :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100
+      :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100,
+      :oracle_configured => ChorusConfig.instance.oracle_configured?
     }.merge!(alpine_config) }
   end
 

@@ -126,3 +126,6 @@ alpine.enabled = false
 alpine.url =
 alpine.port = 8080
 alpine.api_key =
+
+#ORACLE
+oracle.enabled = false

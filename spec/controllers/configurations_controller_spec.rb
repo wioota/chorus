@@ -62,6 +62,13 @@ describe ConfigurationsController do
       decoded_response.gnip_configured.should == 'value'
     end
 
+    it "includes the oracle_configured? value" do
+      stub(ChorusConfig.instance).oracle_configured? { 'truthy' }
+      get :show
+      response.code.should == "200"
+      decoded_response.oracle_configured.should == 'truthy'
+    end
+
     it "gpfdist_configured is true when config.gpfdist_configured? is true" do
       stub(ChorusConfig.instance).gpfdist_configured? { true }
       get :show
@@ -117,6 +124,7 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('alpine.port') { 1234 }
       stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
       stub(ChorusConfig.instance).alpine_configured? { true }
+      stub(ChorusConfig.instance).oracle_configured? { true }
       get :show
     end
   end

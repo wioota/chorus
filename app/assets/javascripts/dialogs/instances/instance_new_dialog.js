@@ -29,7 +29,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured')
+            gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured'),
+            oracleConfigured:  chorus.models.Config.instance().get('oracleConfigured')
         };
     },
 

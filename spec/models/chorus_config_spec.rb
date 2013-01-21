@@ -190,6 +190,52 @@ describe ChorusConfig do
     end
   end
 
+  describe "oracle configuration" do
+    let(:enabled) {false}
+    before do
+      config.config = {
+          'oracle' => {
+              'enabled' => enabled
+          }
+      }
+    end
+    context "if the jar file exists" do
+      before do
+        dir = Rails.root.join('lib','libraries')
+        FileUtils.mkdir_p(dir.to_s)
+        File.open(dir.join('ojdbc6.jar').to_s, 'w') do |f|
+          f << "Hello, World!"
+        end
+      end
+
+      context 'oracle.enabled key is true' do
+        let(:enabled) {true}
+        specify { config.oracle_configured?.should == true }
+        specify { config.oracle_driver_expected_but_missing?.should == false }
+      end
+
+      context 'oracle.enabled key is false' do
+        let(:enabled) {false}
+        specify { config.oracle_configured?.should == false }
+        specify { config.oracle_driver_expected_but_missing?.should == false }
+      end
+    end
+
+    context "if the jar file does not exist" do
+      context 'oracle.enabled key is true' do
+        let(:enabled) {true}
+        specify { config.oracle_configured?.should == false }
+        specify { config.oracle_driver_expected_but_missing?.should == true }
+      end
+
+      context 'oracle.enabled key is false' do
+        let(:enabled) {false}
+        specify { config.oracle_configured?.should == false }
+        specify { config.oracle_driver_expected_but_missing?.should == false }
+      end
+    end
+  end
+
   describe "#log_level" do
     it 'returns info for invalid values of loglevel' do
       config.config = {

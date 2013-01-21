@@ -1,8 +1,12 @@
 require_relative 'data_source_connection'
-begin
-  require_relative 'ojdbc6.jar'
-rescue LoadError
-  pa "Oracle driver not found"
+if ChorusConfig.instance.oracle_configured?
+  begin
+    require_relative 'libraries/ojdbc6.jar'
+  rescue LoadError
+    pa "Error loading Oracle driver"
+  end
+elsif ChorusConfig.instance.oracle_driver_expected_but_missing?
+  pa "Oracle driver ojdbc6.jar not found"
 end
 
 

@@ -2,7 +2,7 @@
 <select class="data_sources" id="data_sources">
     <option selected name="select_one" value="">{{t "selectbox.select_one"}}</option>
     <option name="register_existing_greenplum" value="register_existing_greenplum">{{t "datasource.greenplum"}}</option>
-    <option name="register_existing_oracle" value="register_existing_oracle">{{t "datasource.oracle"}}</option>
+    {{#if oracleConfigured}} <option name="register_existing_oracle" value="register_existing_oracle">{{t "datasource.oracle"}}</option>{{/if}}
     <option name="register_existing_hadoop"  value="register_existing_hadoop">{{t "datasource.hdfs"}}</option>
     {{#if gnipConfigured}} <option name="register_existing_gnip" value="register_existing_gnip">{{t "datasource.gnip"}}</option>{{/if}}
 </select>
