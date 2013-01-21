@@ -52,36 +52,10 @@ class ChorusExecutor
     previous_chorus_control "stop"
   end
 
-  def import_legacy_schema(legacy_installation_path)
-    exec "cd #{release_path} && INSTALL_ROOT=#{@destination_path} CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data"
-  end
-
-  def dump_legacy_data
-    exec "cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql"
-  end
-
-  def stop_legacy_app(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsvrctl stop; true"
-  end
-
-  def stop_legacy_app!(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsvrctl stop"
-  end
-
-  def start_legacy_postgres(legacy_installation_path)
-    legacy_exec legacy_installation_path, "bin/edcsvrctl start || bin/edcsvrctl start"
-  end
-
   private
 
   def release_path
     "#{@destination_path}/releases/#{@version}"
-  end
-
-  def legacy_exec(legacy_installation_path, command)
-    Dir.chdir(legacy_installation_path) do
-      exec "source #{legacy_installation_path}/edc_path.sh && #{command}"
-    end
   end
 
   def chorus_control(command)

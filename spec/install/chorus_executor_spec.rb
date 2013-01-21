@@ -157,57 +157,5 @@ describe ChorusExecutor do
         executor.stop_previous_release
       end
     end
-
-    context "legacy app operations" do
-      include FakeFS::SpecHelpers
-      before do
-        FileUtils.mkdir_p(legacy_installation_path)
-      end
-      let(:legacy_installation_path) { "/old/install" }
-      let(:edc_env) { "source #{legacy_installation_path}/edc_path.sh &&" }
-
-      describe "#import_legacy_schema" do
-        let(:command) { "cd #{release_path} && INSTALL_ROOT=#{destination_path} CHORUS_HOME=#{release_path} packaging/chorus_migrate -s legacy_database.sql -w #{legacy_installation_path}/chorus-apps/runtime/data" }
-
-        it "should work" do
-          executor.import_legacy_schema legacy_installation_path
-        end
-      end
-
-      describe "#stop_legacy_app" do
-        let(:command) { "#{edc_env} bin/edcsvrctl stop; true" }
-
-        it "should work" do
-          mock.proxy(Dir).chdir(legacy_installation_path)
-          executor.stop_legacy_app legacy_installation_path
-        end
-      end
-
-      describe "#start_legacy_postgres" do
-        let(:command) { "#{edc_env} bin/edcsvrctl start || bin/edcsvrctl start" }
-
-        it "should run twice since sometimes the first one fails" do
-          mock.proxy(Dir).chdir(legacy_installation_path)
-          executor.start_legacy_postgres legacy_installation_path
-        end
-      end
-
-      describe "#stop_legacy_app!" do
-        let(:command) { "#{edc_env} bin/edcsvrctl stop" }
-
-        it "should work" do
-          mock.proxy(Dir).chdir(legacy_installation_path)
-          executor.stop_legacy_app! legacy_installation_path
-        end
-      end
-    end
-
-    describe "#dump_legacy_data" do
-      let(:command) { "cd #{release_path} && PGUSER=edcadmin pg_dump -p 8543 chorus -O -f legacy_database.sql" }
-
-      it "should work" do
-        executor.dump_legacy_data
-      end
-    end
   end
 end
