@@ -7,14 +7,13 @@ require 'openssl'
 require 'pathname'
 require 'java'
 require_relative '../../lib/properties'
-require_relative '../../lib/legacy_migration/config_migrator'
 
 java_import "java.lang.System"
 
 class ChorusInstaller
-  attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :legacy_installation_path, :log_stack
+  attr_accessor :destination_path, :data_path, :database_password, :database_user, :install_mode, :log_stack
 
-  INSTALL_MODES = [:upgrade_existing, :upgrade_legacy, :fresh]
+  INSTALL_MODES = [:upgrade_existing, :fresh]
 
   INSTALL_MODES.each do |mode|
     define_method :"#{mode}?" do
@@ -68,7 +67,7 @@ class ChorusInstaller
     @destination_path = File.expand_path(relative_path)
     @version_detector.destination_path = @destination_path
     prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
-    prompt_for_legacy_upgrade if @version_detector.can_upgrade_legacy?
+    @version_detector.check_for_legacy!
 
     @logger.logfile = File.join(@destination_path, 'install.log')
     validate_path(destination_path)
@@ -100,19 +99,6 @@ class ChorusInstaller
 
   def prompt_for_passphrase
     @io.prompt_or_default(:passphrase, "")
-  end
-
-  def prompt_for_legacy_upgrade
-    @io.require_confirmation :confirm_legacy_upgrade
-
-    self.install_mode = :upgrade_legacy
-    self.legacy_installation_path = destination_path
-    prompt_legacy_upgrade_destination
-  end
-
-  def prompt_legacy_upgrade_destination
-    @destination_path = @io.prompt_until(:legacy_destination_path) { |input| !input.nil? && File.expand_path(input) != legacy_installation_path }
-    @destination_path = File.expand_path @destination_path
   end
 
   def prompt_for_2_2_upgrade
@@ -314,7 +300,7 @@ class ChorusInstaller
         @executor.initdb data_path, database_user
         @executor.start_postgres
         db_commands = "db:create db:migrate"
-        db_commands += " db:seed" unless upgrade_legacy?
+        db_commands += " db:seed"
         log "Running rake #{db_commands}"
         @executor.rake db_commands
         @executor.stop_postgres
@@ -344,46 +330,6 @@ class ChorusInstaller
 
     log "Starting up Chorus..." do
       @executor.start_chorus
-    end
-  end
-
-  def dump_and_shutdown_legacy
-    log "Shutting down Chorus..." do
-      @executor.stop_legacy_app legacy_installation_path
-    end
-    log "Starting legacy Chorus services (i.e. postgres)..." do
-      @executor.start_legacy_postgres legacy_installation_path
-    end
-    log "Dumping previous Chorus data..." do
-      @executor.dump_legacy_data
-    end
-    log "Stopping legacy Chorus services (i.e. postgres)..." do
-      @executor.stop_legacy_app! legacy_installation_path
-    end
-  end
-
-  def migrate_legacy_config
-    log "Migrating configuration from previous version..." do
-      ConfigMigrator.migrate(
-          :input_path => File.join(legacy_installation_path, 'chorus-apps', 'applications', 'edcbase', 'config', 'chorus.properties'),
-          :output_path => File.join(destination_path, 'shared', 'chorus.properties')
-      )
-    end
-  end
-
-  def migrate_legacy_data
-    log "Migrating data from previous version..." do
-      log "Loading legacy data into postgres..." do
-        @executor.import_legacy_schema legacy_installation_path
-      end
-    end
-  end
-
-  def enqueue_solr_reindex
-    log "Migrating data from previous version..." do
-      log "Loading legacy data into postgres..." do
-        @executor.rake "enqueue_reindex"
-      end
     end
   end
 
@@ -430,21 +376,12 @@ class ChorusInstaller
       log "Shutting down previous Chorus install..." do
         stop_old_install
       end
-    elsif upgrade_legacy?
-      dump_and_shutdown_legacy
     end
 
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       generate_paths_file
       generate_chorus_psql_files
       setup_database
-    end
-
-
-    if upgrade_legacy?
-      migrate_legacy_config
-      migrate_legacy_data
-      enqueue_solr_reindex
     end
 
     if is_supported_mac?
@@ -463,8 +400,7 @@ class ChorusInstaller
     log "#{e.class}: #{e.message}"
     raise
   rescue => e
-    chorus_control "stop" if upgrade_legacy? rescue # rescue in case chorus_control blows up
-        log "#{e.class}: #{e.message}"
+    log "#{e.class}: #{e.message}"
     raise InstallerErrors::InstallationFailed, e.message
   end
 

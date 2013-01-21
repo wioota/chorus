@@ -46,12 +46,11 @@ describe ChorusInstaller do
       stub(logger).logfile=(anything)
       stub(version_detector).destination_path=(anything)
       stub(version_detector).can_upgrade_2_2?(anything) { upgrade_2_2 }
-      stub(version_detector).can_upgrade_legacy? { upgrade_legacy }
+      stub(version_detector).check_for_legacy! { true }
       mock(io).prompt_or_default(:destination_path, default_path) { destination_path }
     end
 
     let(:upgrade_2_2) { false }
-    let(:upgrade_legacy) { false }
     let(:default_path) { '/usr/local/greenplum-chorus' }
     let(:destination_path) { '/somewhere/chorus' }
 
@@ -62,6 +61,11 @@ describe ChorusInstaller do
       mock(executor).version=("2.2.0.1-8840ae71c")
       installer.get_destination_path
       installer.destination_path.should == '/somewhere/chorus'
+    end
+
+    it "checks for legacy versions" do
+      mock(version_detector).check_for_legacy!
+      installer.get_destination_path
     end
 
     describe "when the user types a relative path" do
@@ -91,33 +95,6 @@ describe ChorusInstaller do
         dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
         installer.get_destination_path
         installer.upgrade_existing?.should be_false
-      end
-    end
-
-    describe "when the user specifies a directory that looks like an upgradable Chorus 2.2 install" do
-      let(:upgrade_2_2) { true }
-
-      before do
-        mock(io).require_confirmation(:confirm_upgrade)
-        installer.get_destination_path
-      end
-
-      it "should set the destination path" do
-        installer.destination_path.should == '/somewhere/chorus'
-      end
-
-      it "should set upgrade_existing?" do
-        installer.upgrade_existing?.should be_true
-      end
-    end
-
-    describe "when the user specifies a directory that can be upgraded from a legacy install" do
-      let(:upgrade_legacy) { true }
-
-      it "should confirm legacy upgrade" do
-        mock(installer).prompt_for_legacy_upgrade { installer.destination_path = 'foo' }
-        mock(logger).logfile=('foo/install.log')
-        installer.get_destination_path
       end
     end
   end
@@ -196,60 +173,6 @@ describe ChorusInstaller do
         expect {
           installer.validate_path(path)
         }.to raise_error(InstallerErrors::InstallAborted)
-      end
-    end
-  end
-
-  describe "#prompt_for_legacy_upgrade" do
-    subject { installer.prompt_for_legacy_upgrade }
-    before do
-      stub(installer).version { '2.2.0.0' }
-      mock(io).require_confirmation(:confirm_legacy_upgrade)
-      mock(installer).prompt_legacy_upgrade_destination
-    end
-
-    it "should set upgrade_legacy?" do
-      subject
-      installer.upgrade_legacy?.should be_true
-    end
-
-    it "should set the legacy installation path" do
-      installer.destination_path = '/usr/local/greenplum-chorus/thingy'
-      subject
-      installer.legacy_installation_path.should == '/usr/local/greenplum-chorus/thingy'
-    end
-  end
-
-  describe "#prompt_legacy_upgrade_destination" do
-    subject { installer.prompt_legacy_upgrade_destination }
-
-    it "should ask the user to specify a path to install 2.2" do
-      mock(io).prompt_until(:legacy_destination_path) do |symbol, proc|
-        proc.call(nil).should be_false
-        proc.call('foo').should be_true
-        "/home/chorus22"
-      end
-      subject
-      installer.destination_path.should == "/home/chorus22"
-    end
-
-    it "should not accept the legacy path" do
-      installer.legacy_installation_path = "/home/chorus21"
-      mock(io).prompt_until(:legacy_destination_path) do |symbol, proc|
-        proc.call('/home/chorus21').should be_false
-        proc.call('/home/../home/chorus21').should be_false
-        proc.call('/home/chorus22').should be_true
-        "/home/chorus22"
-      end
-      subject
-      installer.destination_path.should == "/home/chorus22"
-    end
-
-    describe "when the user types a relative path" do
-      it "returns the expanded path" do
-        mock(io).prompt_until(:legacy_destination_path) { "~/chorus" }
-        subject
-        installer.destination_path.should == "#{ENV['HOME']}/chorus"
       end
     end
   end
@@ -468,15 +391,6 @@ describe ChorusInstaller do
           expect {
             installer.create_shared_structure
           }.to raise_error(InstallerErrors::InstallAborted)
-        end
-      end
-
-      context "when doing a 2.1 upgrade" do
-        let(:install_mode) { :upgrade_legacy }
-        it "doesn't raise" do
-          expect {
-            installer.create_shared_structure
-          }.to_not raise_error(InstallerErrors::InstallAborted)
         end
       end
 
@@ -924,16 +838,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#enqueue_solr_reindex" do
-    before do
-      mock(executor).rake("enqueue_reindex") {true}
-    end
-
-    it "should enqueue the refresh_all task" do
-      expect { installer.enqueue_solr_reindex }.to_not raise_error
-    end
-  end
-
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }
@@ -954,22 +858,6 @@ describe ChorusInstaller do
         executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
         executor.calls[:initdb].should == [installer.data_path, installer.database_user]
         executor.calls[:rake].should == ["db:create db:migrate db:seed"]
-
-        stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
-        sprintf("%o", stats).should == "100400"
-      end
-    end
-
-    context "when doing a legacy upgrade" do
-      before do
-        installer.install_mode = :upgrade_legacy
-      end
-
-      it "creates the database structure" do
-        installer.setup_database
-        executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
-        executor.calls[:initdb].should == [installer.data_path, installer.database_user]
-        executor.calls[:rake].should == ["db:create db:migrate"]
 
         stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
         sprintf("%o", stats).should == "100400"
@@ -1101,50 +989,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#dump_and_shutdown_legacy" do
-    before do
-      installer.legacy_installation_path = '/opt/old_chorus'
-      installer.destination_path = '/usr/local/greenplum-chorus'
-      stub(installer).version { '2.2.0.0' }
-      FileUtils.mkdir_p installer.legacy_installation_path
-    end
-
-    it "should dump the old database and shut it down" do
-      installer.dump_and_shutdown_legacy
-      executor.call_order.should == [:stop_legacy_app, :start_legacy_postgres, :dump_legacy_data, :stop_legacy_app!]
-    end
-  end
-
-  describe '#migrate_legacy_config' do
-    before do
-      installer.legacy_installation_path = '/opt/old_chorus'
-      installer.destination_path = '/usr/local/greenplum-chorus'
-      stub(installer).version { '2.2.0.0' }
-    end
-
-    it 'executes the config migrator' do
-      mock(ConfigMigrator).migrate(
-          hash_including(:input_path => "#{installer.legacy_installation_path}/chorus-apps/applications/edcbase/config/chorus.properties",
-                         :output_path => "#{installer.destination_path}/shared/chorus.properties"))
-      installer.migrate_legacy_config
-    end
-  end
-
-  describe "#migrate_legacy_data" do
-    subject { installer.migrate_legacy_data }
-
-    before do
-      installer.legacy_installation_path = '/opt/old_chorus'
-      installer.destination_path = '/usr/local/greenplum-chorus'
-      stub(installer).version { '2.2.0.0' }
-      mock(executor).import_legacy_schema('/opt/old_chorus')
-    end
-
-    it "should execute the data migrator" do
-      subject
-    end
-  end
-
   describe "#remove_and_restart_previous!" do
     before do
       stub(installer).version { "2.2.0.0" }
@@ -1168,9 +1012,9 @@ describe ChorusInstaller do
       end
     end
 
-    context "when doing a legacy_upgrade or a fresh install" do
+    context "when doing a fresh install" do
       before do
-        installer.install_mode = :upgrade_legacy
+        installer.install_mode = :fresh
       end
 
       it "stops postgres and removes the release folder" do
@@ -1205,7 +1049,7 @@ describe ChorusInstaller do
       mock(io).require_confirmation(:accept_terms)
     end
 
-    it "should set upgrade_legacy?" do
+    it "should require confirmation" do
       subject
     end
   end

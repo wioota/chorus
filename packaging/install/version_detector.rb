@@ -8,14 +8,14 @@ class VersionDetector
     @destination_path = destination_path
   end
 
-  def can_upgrade_legacy?
+  def check_for_legacy!
     case legacy_version
       when nil
         false
       when '2.1'
-        true
+        raise InstallerErrors::InstallAborted, "Chorus must be upgraded to 2.2 before it can be upgraded to 2.3 or newer"
       when '2.0'
-        raise InstallerErrors::InstallAborted, "Chorus must be upgraded to 2.1 before it can be upgraded to 2.2"
+        raise InstallerErrors::InstallAborted, "Chorus must be upgraded to 2.1 before it can be upgraded to 2.3 or newer"
       else
         raise InstallerErrors::InstallAborted, "Chorus cannot upgrade from existing installation"
     end
