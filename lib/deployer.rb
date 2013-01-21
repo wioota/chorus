@@ -68,7 +68,6 @@ class Deployer
 
     if install_success
       remove_old_builds
-      ssh.run("cp ~/ojdbc6.jar #{install_path}/current/lib/")
       ssh.chorus_control("start")
     end
 
