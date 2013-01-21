@@ -181,7 +181,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("shows the tabular data item in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead");
+                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead_gpdb_table");
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
