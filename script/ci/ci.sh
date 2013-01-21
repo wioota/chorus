@@ -13,7 +13,7 @@ set -e
 . script/ci/setup.sh
 
 targets=${@}
-possible_targets="fixtures jasmine ruby legacy_migration api_docs"
+possible_targets="fixtures jasmine ruby api_docs"
 
 for target in $possible_targets; do
     declare run_${target}=true
@@ -93,15 +93,6 @@ if $run_ruby ; then
     killall gpfdist
 fi
 
-if $run_legacy_migration; then
-    echo "Running legacy migration tests"
-    b/rake db:drop db:create db:migrate
-    CI_REPORTS=spec/legacy_migration/reports b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:legacy_migration --trace
-    LEGACY_MIGRATION_TESTS_RESULT=$?
-else
-    LEGACY_MIGRATION_TESTS_RESULT=0
-fi
-
 if $run_api_docs ; then
     echo "Running API docs check"
     b/rake api_docs:check
@@ -118,13 +109,9 @@ if $run_jasmine ; then
     echo "Jasmine exit code: $JS_TESTS_RESULT"
 fi
 
-if $run_legacy_migration ; then
-    echo "Legacy migration exit code: $LEGACY_MIGRATION_TESTS_RESULT"
-fi
-
 if $run_api_docs ; then
     echo "API docs check exit code: $API_DOCS_CHECK_RESULT"
 fi
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $FIXTURES_RESULT + $JS_TESTS_RESULT + $LEGACY_MIGRATION_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
+SUCCESS=`expr $RUBY_TESTS_RESULT + $FIXTURES_RESULT + $JS_TESTS_RESULT + $API_DOCS_CHECK_RESULT`
 exit $SUCCESS
