@@ -154,30 +154,40 @@ describe SqlExecutor do
   describe "#execute_sql", :database_integration do
     let(:account) { instance_accounts(:chorus_gpdb42_test_superuser) }
     let(:schema) { GpdbSchema.find_by_name!('test_schema') }
-    let(:sql) { 'select 1' }
+    let(:sql) { 'create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings' }
     let(:check_id) { '42' }
     let(:timeout) { nil }
+    let(:result) { SqlExecutor.execute_sql(schema, account, check_id, sql) }
 
     before do
       stub.proxy(ChorusConfig.instance).[].with_any_args
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { timeout }
     end
 
+    after do
+      admin = users(:admin)
+      schema.connect_as(admin).drop_table('table_with_warning')
+    end
+
     it "returns a SqlResult" do
-      result = SqlExecutor.execute_sql(schema, account, check_id, sql)
       result.should be_a SqlResult
     end
 
     it "sets the schema on the SqlResult" do
-      result = SqlExecutor.execute_sql(schema, account, check_id, sql)
       result.schema.should == schema
     end
 
-    it "passes the limit to CancelableQuery" do
-      any_instance_of(CancelableQuery) do |query|
-        mock.proxy(query).execute(sql, :limit => 42)
+    it 'includes warnings from postgres' do
+      result.warnings.should_not be_empty
+    end
+
+    context 'when a limit is given' do
+      it "passes the limit to CancelableQuery" do
+        any_instance_of(CancelableQuery) do |query|
+          mock.proxy(query).execute(sql, :limit => 42)
+        end
+        SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
       end
-      SqlExecutor.execute_sql(schema, account, check_id, sql, :limit => 42)
     end
 
     context "with a timeout set" do

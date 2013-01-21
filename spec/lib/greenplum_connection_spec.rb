@@ -1,6 +1,4 @@
-require 'minimal_spec_helper'
-require 'greenplum_connection'
-require_relative '../../spec/support/database_integration/instance_integration'
+require 'spec_helper'
 
 describe GreenplumConnection, :database_integration do
   let(:username) { InstanceIntegration::REAL_GPDB_USERNAME }
@@ -191,23 +189,14 @@ describe GreenplumConnection, :database_integration do
       end
     end
 
-    context "warnings" do
-      let(:sql) { "create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings" }
+    context 'with warnings enabled' do
+      let(:sql) { "create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings;create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings;" }
+      let(:options) { {:warnings => true} }
 
-      context "with warnings enabled" do
-        let(:options) { {:warnings => true} }
-        it "should surface warnings" do
-          subject.warnings.each do |warning|
-            warning.should match /will create implicit index/
-          end
-        end
-      end
-
-      context "without warnings enabled" do
-        let(:options) { {:warnings => false} }
-
-        it "should not surface warnings" do
-          subject.warnings.should == []
+      it 'surfaces all notices and warnings' do
+        subject.warnings.length.should == 2
+        subject.warnings.each do |warning|
+          warning.should match /will create implicit index/
         end
       end
     end

@@ -121,6 +121,7 @@ describe WorkfileExecutionsController do
 
     describe "rspec fixtures", :database_integration do
       let(:schema) { GpdbSchema.find_by_name!('test_schema') }
+
       before do
         log_in users(:admin)
       end
