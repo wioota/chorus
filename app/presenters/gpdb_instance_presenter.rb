@@ -13,7 +13,6 @@ class GpdbInstancePresenter < Presenter
       :instance_provider => model.instance_provider,
       :version => model.version,
       :entity_type => 'gpdb_instance',
-      :provision_type => model.provision_type,
       :type => 'GREENPLUM'
     }.merge(owner_hash)
   end

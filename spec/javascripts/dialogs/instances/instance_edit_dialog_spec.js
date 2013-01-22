@@ -16,9 +16,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
     });
 
     describe("#render", function() {
-        describe("when editing a registered instance", function() {
+        describe("when editing a greenplum instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "register"});
+                this.dialog.model.set({ type: "GREENPLUM"});
                 this.dialog.render();
             });
 
@@ -130,7 +130,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            this.dialog.model.set({ provisionType: "register"});
+            this.dialog.model.set({ type: "GREENPLUM"});
             this.dialog.render();
 
             spyOn(this.dialog, "closeModal");
@@ -155,7 +155,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
-        it("should call save with the right parameters ( to make sure that we pass in the provisionType for validation )", function() {
+        it("should call save with the right parameters", function() {
             spyOn(this.dialog.model, "save").andCallThrough();
             this.dialog.$("button[type=submit]").submit();
 
@@ -164,7 +164,6 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
             expect(this.dialog.model.save.argsForCall[0][0].description).toBe("instance");
             expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
-            expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
         });
 
         it("changes the text on the upload button to 'saving'", function() {

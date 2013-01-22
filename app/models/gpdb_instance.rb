@@ -173,10 +173,6 @@ class GpdbInstance < DataSource
     'gpdb_instance'
   end
 
-  def provision_type
-    "register"
-  end
-
   def instance_provider
     "Greenplum Database"
   end

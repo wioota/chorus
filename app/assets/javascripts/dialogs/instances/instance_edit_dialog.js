@@ -20,18 +20,16 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            registeredInstance: this.model.get("provisionType") === "register",
+            gpdbInstance: this.model.get("type") === "GREENPLUM",
             hadoopInstance: this.model.constructorName === "HadoopInstance",
             gnipInstance: this.model.constructorName === "GnipInstance"
         };
     },
 
-    save: function(e) {            //TODO  rename 'registeredInstance' to 'GpdbInstance'
-
+    save: function(e) {
         e.preventDefault();
         var attrs = {
-            description: this.$("textarea[name=description]").val().trim(),
-            provisionType: this.model.get("provisionType")
+            description: this.$("textarea[name=description]").val().trim()
         };
 
         _.each(["name", "host", "port", "size", "maintenanceDb", "username", "groupList", "streamUrl", "password"], function(name) {
