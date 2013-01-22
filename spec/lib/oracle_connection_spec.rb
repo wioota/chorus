@@ -1,7 +1,10 @@
 require 'spec_helper'
-require Rails.root + 'lib/libraries/ojdbc6.jar'
 
-describe OracleConnection do
+describe OracleConnection, :oracle_integration do
+  before(:all) do
+    require Rails.root + 'lib/libraries/ojdbc6.jar'
+  end
+
   let(:connection) { OracleConnection.new(
       :host => "chorus-oracle",
       :username => "system",

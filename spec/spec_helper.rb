@@ -59,6 +59,11 @@ RSpec.configure do |config|
     config.filter_run_excluding :kaggle_api => true
   end
 
+  unless File.exist? Rails.root + 'lib/libraries/ojdbc6.jar'
+    warn "No Oracle driver found. Skipping Oracle integration tests"
+    config.filter_run_excluding :oracle_integration => true
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
