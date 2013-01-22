@@ -1,5 +1,5 @@
 class DataSource < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :state, :version, :db_username, :db_password, :as => [:default, :create]
+  attr_accessible :name, :description, :host, :port, :maintenance_db, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
   belongs_to :owner, :class_name => 'User'

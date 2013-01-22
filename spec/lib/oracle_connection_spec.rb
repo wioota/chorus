@@ -14,7 +14,7 @@ describe OracleConnection, :oracle_integration do
   ) }
   describe "#connect!" do
     it "should connect" do
-      mock.proxy(Sequel).connect("jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl", :test => true)
+      mock(Sequel).connect("jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl", :test => true) { true }
 
       connection.connect!
       connection.connected?.should be_true

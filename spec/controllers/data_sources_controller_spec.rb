@@ -106,6 +106,7 @@ describe DataSourcesController do
           :port => 12345,
           :host => "server.emc.com",
           :maintenance_db => "postgres",
+          :db_name => "oracle",
           :description => "old description",
           :db_username => "bob",
           :db_password => "secret",
