@@ -27,5 +27,9 @@ class DataMigrator
     UserMigrator.validate
     WorkfileMigrator.validate
     WorkspaceMigrator.validate
+
+    if AbstractMigrator.failed?
+      raise MigratorValidationError.new("WARNING: Validation failed. See list of invalid records.")
+    end
   end
 end
