@@ -7,25 +7,16 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         showEditingLinks: true
     },
     subviews:{
-        '.tab_control': 'tabs',
-        '.multiple_selection': 'multiSelect'
+        '.tab_control': 'tabs'
     },
 
     events: {
-        "click .edit_tags": 'editTags',
         "click a.version_list": 'displayVersionList'
     },
 
     setup:function () {
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
-        this.multiSelect = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "workfile:checked",
-            actions: [
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-            ]
-        });
-        this.registerSubView(this.multiSelect);
 
         this.tabs = new chorus.views.TabControl();
 
@@ -148,11 +139,5 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     displayVersionList:function (e) {
         e.preventDefault();
-    },
-
-    editTags: function(e) {
-        e.preventDefault();
-        var dialog = new chorus.dialogs.EditTags({collection: this.multiSelect.selectedModels});
-        dialog.launchModal();
     }
 });

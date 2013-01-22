@@ -10,6 +10,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
         this.actions = this.options.actions;
         this.selectEvent = this.options.selectEvent;
         this.selectedModels = new chorus.collections.Base();
+        this.events = _.extend({}, this.events, this.options.actionEvents);
         this.subscriptions.push(chorus.PageEvents.subscribe(this.selectEvent, this.modelSelected, this));
     },
 

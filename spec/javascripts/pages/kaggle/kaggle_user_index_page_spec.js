@@ -1,7 +1,7 @@
 describe("chorus.pages.KaggleUserIndexPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({name: "kagSpace"});
-        this.kaggleUsers = new chorus.collections.KaggleUserSet([]);
+        this.kaggleUsers = rspecFixtures.kaggleUserSet();
         this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 
@@ -61,6 +61,39 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
         it("shows the kaggle header", function() {
             expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary", {kaggleLink: 'Kaggle'});
+        });
+
+        describe("multiple selection", function() {
+            it("does not display the multiple selection section", function() {
+                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            });
+
+            context("when a row has been checked", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("kaggleUser:checked", this.kaggleUsers.clone());
+                });
+
+                it("displays the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                });
+
+                it("has an action to send message to kaggle users", function() {
+                    expect(this.page.$(".multiple_selection a.send_message")).toExist();
+                });
+
+                describe("clicking the 'send_message' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.send_message").click();
+                    });
+
+                    it("launches the dialog for sending a kaggle message", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.ComposeKaggleMessage);
+                        expect(this.modalSpy.lastModal().recipients).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+
+                    });
+                });
+            });
         });
     });
 

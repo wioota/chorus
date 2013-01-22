@@ -6,15 +6,13 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
-        "click .multiple_selection .associate": "launchAssociateMultipleWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView"
     },
 
     subviews: {
-        '.tab_control': 'tabs',
-        '.multiple_selection': 'multiSelect'
+        '.tab_control': 'tabs'
     },
 
     setup: function() {
@@ -25,14 +23,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.subscriptions.push(chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
-        this.multiSelect = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "dataset:checked",
-            actions: [
-                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>'
-            ]
-        });
         this.registerSubView(this.tabs);
-        this.registerSubView(this.multiSelect);
     },
 
     render: function() {
@@ -126,12 +117,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         e.preventDefault();
 
         new chorus.dialogs.AssociateWithWorkspace({model: this.resource, activeOnly: true}).launchModal();
-    },
-
-    launchAssociateMultipleWithWorkspaceDialog: function(e) {
-        e.preventDefault();
-
-        new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.multiSelect.selectedModels, activeOnly: true}).launchModal();
     },
 
     launchDatasetPreviewDialog: function(e) {

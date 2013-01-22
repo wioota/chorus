@@ -2,7 +2,6 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
     constructorName: "KaggleUserIndexPage",
     additionalClass: 'kaggle_user_list',
 
-
     setup: function(workspaceId) {
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({ id: workspaceId });
@@ -16,7 +15,19 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
             modelClass: "KaggleUser",
             collection: this.collection,
             contentHeader: new chorus.views.KaggleHeader(),
-            contentDetails : new chorus.views.KaggleUserListContentDetails({collection: this.collection})
+            contentDetails: new chorus.views.KaggleUserListContentDetails({collection: this.collection})
+        });
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "kaggleUser:checked",
+            actions: [
+                '<a class="send_message" href="#">{{t "actions.send_kaggle_message"}}</a>'
+            ],
+            actionEvents: {
+                'click .send_message': _.bind(function() {
+                    new chorus.dialogs.ComposeKaggleMessage({recipients: this.multiSelectSidebarMenu.selectedModels, workspace: this.workspace}).launchModal();
+                }, this)
+            }
         });
 
         this.sidebar = new chorus.views.KaggleUserSidebar({workspace: this.workspace});

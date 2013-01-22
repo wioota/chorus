@@ -52,6 +52,18 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.WorkfileSidebar({workspace: this.workspace});
         chorus.PageEvents.subscribe("workfile:selected", this.setModel, this);
 
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "workfile:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
+        });
+
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
             this.collection.attributes.fileType = choice;
             this.collection.fetchAll();

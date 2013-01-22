@@ -30,10 +30,6 @@ describe("chorus.views.DatasetSidebar", function() {
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
         });
 
-        it("does not display the multiple selection section", function() {
-            expect(this.view.$(".multiple_selection")).toHaveClass("hidden");
-        });
-
         it("displays the selected dataset name", function() {
             expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"));
         });
@@ -694,33 +690,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 it("lists only active workspaces", function() {
                     expect(chorus.modal.options.activeOnly).toBeTruthy();
                 });
-            });
-        });
-    });
-
-    describe("when a dataset is checked", function() {
-        beforeEach(function() {
-            this.checkedDatasets = new chorus.collections.DynamicDatasetSet([
-                rspecFixtures.workspaceDataset.datasetTable(),
-                rspecFixtures.workspaceDataset.datasetTable()
-            ]);
-            chorus.PageEvents.broadcast("dataset:checked", this.checkedDatasets);
-            this.multiSelectSection = this.view.$(".multiple_selection");
-        });
-
-        it("displays the 'associate with workspace' link", function() {
-            expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
-        });
-
-        describe("clicking the 'associate with workspace' link", function() {
-            beforeEach(function() {
-                this.multiSelectSection.find("a.associate").click();
-            });
-
-            it("launches the dialog for associating multiple datasets with a workspace", function() {
-                var dialog = this.modalSpy.lastModal();
-                expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
-                expect(dialog.datasets).toBe(this.checkedDatasets);
             });
         });
     });

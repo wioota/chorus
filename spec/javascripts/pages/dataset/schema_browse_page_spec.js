@@ -155,5 +155,38 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 });
             });
         });
+
+        describe("multiple selection", function() {
+            it("does not display the multiple selection section", function() {
+                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            });
+
+            context("when a row has been checked", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("dataset:checked", this.page.collection.clone());
+                });
+
+                it("displays the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                });
+
+                it("has an action to associate datasets with workspace", function() {
+                    expect(this.page.$(".multiple_selection a.associate")).toExist();
+                });
+
+                describe("clicking the 'associate with workspace' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.associate").click();
+                    });
+
+                    it("launches the dialog for associating multiple datasets with a workspace", function() {
+                        var dialog = this.modalSpy.lastModal();
+                        expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
+                        expect(dialog.datasets).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+        });
     });
 });

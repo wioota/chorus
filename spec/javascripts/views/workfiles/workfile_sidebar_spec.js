@@ -179,21 +179,6 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(this.view.model).toBeFalsy();
             });
         });
-
-        describe("editing tags", function() {
-            beforeEach(function() {
-                this.modalSpy = stubModals();
-                this.view.render();
-                this.checkedWorkfiles = rspecFixtures.workfileSet();
-                chorus.PageEvents.broadcast("workfile:checked", this.checkedWorkfiles);
-            });
-
-            it("launches the edit tags dialog when you click the link", function() {
-                this.view.$(".edit_tags").click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection).toBe(this.checkedWorkfiles);
-            });
-        });
     });
 
     context("when workfile is passed to setup", function() {

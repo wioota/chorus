@@ -2,26 +2,17 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     templateName:"kaggle/user_sidebar",
 
     events: {
-        "click .multiple_selection .sendMessage": "launchMultipleUserKaggleSendMessageDialog",
         "click .actions .sendMessage": "launchSingleUserKaggleSendMessageDialog"
     },
 
     subviews: {
-        '.tab_control': 'tabs',
-        '.multiple_selection': 'multiSelect'
+        '.tab_control': 'tabs'
     },
 
     setup: function(options) {
         this.workspace = options.workspace;
         chorus.PageEvents.subscribe("kaggleUser:selected", this.setKaggleUser, this);
         chorus.PageEvents.subscribe("kaggleUser:deselected", this.setKaggleUser, this);
-        this.multiSelect = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "kaggleUser:checked",
-            actions: [
-                '<a class="sendMessage" href="#">{{t "actions.send_kaggle_message"}}</a>'
-            ]
-        });
-        this.registerSubView(this.multiSelect);
     },
 
     additionalContext: function() {
@@ -43,11 +34,6 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
             this.tabs = null;
         }
         this.render();
-    },
-
-    launchMultipleUserKaggleSendMessageDialog: function(e) {
-        e.preventDefault();
-        new chorus.dialogs.ComposeKaggleMessage({recipients: this.multiSelect.selectedModels, workspace: this.workspace}).launchModal();
     },
 
     launchSingleUserKaggleSendMessageDialog: function(e) {

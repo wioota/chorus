@@ -13,11 +13,6 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         this._super("teardown");
     },
 
-    template: function() {
-        var result = this._super('template', arguments);
-        return "<div class='spacer'/>" + result;
-    },
-
     postRender: function() {
         this._super('postRender');
 

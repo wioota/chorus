@@ -87,6 +87,45 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
     });
 
+    describe("when the workspace and workfile collection fetches completes", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.workspace);
+            this.server.completeFetchFor(this.page.collection, rspecFixtures.workfileSet());
+        });
+
+        describe("multiple selection", function() {
+            it("does not display the multiple selection section", function() {
+                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            });
+
+            context("when a row has been checked", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("workfile:checked", this.page.collection.clone());
+                });
+
+                it("displays the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                });
+
+                it("has an action to edit tags", function() {
+                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                });
+
+                describe("clicking the 'edit_tags' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.edit_tags").click();
+                    });
+
+                    it("launches the dialog for associating multiple datasets with a workspace", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+        });
+    });
+
     describe("search", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);

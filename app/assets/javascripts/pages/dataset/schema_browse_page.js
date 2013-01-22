@@ -16,6 +16,18 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
         this.sidebar = new chorus.views.DatasetSidebar({listMode: true});
 
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "dataset:checked",
+            actions: [
+                '<a class="associate">{{t "actions.associate_with_another_workspace"}}</a>'
+            ],
+            actionEvents: {
+                'click .associate': _.bind(function() {
+                    new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.multiSelectSidebarMenu.selectedModels, activeOnly: true}).launchModal();
+                }, this)
+            }
+        });
+
         this.mainContent = new chorus.views.MainContentList({
             emptyTitleBeforeFetch: true,
             modelClass: "Dataset",
