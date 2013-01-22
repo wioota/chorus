@@ -148,10 +148,10 @@ describe("chorus.views.SchemaPicker", function() {
 
             context("when clicking the 'new database' button", function() {
                 it("empties the 'existing database' select", function() {
-                    spyOn(this.view, 'clearDatabaseSelection');
+                    spyOn(this.view, 'clearSelection');
                     this.view.createNewDatabase({ preventDefault: function() {
                     } });
-                    expect(this.view.clearDatabaseSelection).toHaveBeenCalled();
+                    expect(this.view.clearSelection).toHaveBeenCalledWith("database");
                 });
             });
         });
@@ -643,6 +643,72 @@ describe("chorus.views.SchemaPicker", function() {
                         expect(this.view.$(".database .create_container")).not.toExist();
                         expect(this.view.$(".schema a.new")).not.toExist();
                         expect(this.view.$(".schema .create_container")).not.toExist();
+                    });
+                });
+            });
+        });
+
+        context("a default schema is provided", function() {
+            beforeEach(function() {
+                this.instance = new chorus.models.Instance({name: "instance", id: 789});
+                this.database = new chorus.models.Database({name: "database", id: 456, instance: this.instance.attributes});
+                this.schema = new chorus.models.Schema({name: "schema", id: 123, database: this.database.attributes});
+                this.view = new chorus.views.SchemaPicker({ defaultSchema: this.schema });
+                spyOnEvent(this.view, 'change');
+                this.view.render();
+                this.view.delegateEvents();
+                $("#jasmine_content").append(this.view.el);
+            });
+
+            context("when the instance list fetch completes", function() {
+                beforeEach(function() {
+                    this.server.completeFetchAllFor(this.view.instances, [
+                        rspecFixtures.gpdbInstance(),
+                        this.instance.attributes,
+                        rspecFixtures.gpdbInstance()
+                    ]);
+                });
+
+                itHidesSection("schema");
+                itHidesSection("database");
+                itDisplaysLoadingPlaceholderFor('instance');
+
+                context("when the database list fetch completes", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.view.databases, [
+                            rspecFixtures.database(),
+                            this.database.attributes,
+                            rspecFixtures.database()]);
+                    });
+
+                    itHidesSection("schema");
+                    itHidesSection("database");
+                    itDisplaysLoadingPlaceholderFor('instance');
+
+                    context("when the schema list fetch completes", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchAllFor(this.view.schemas, [
+                                rspecFixtures.schema(),
+                                this.schema.attributes,
+                                rspecFixtures.schema()
+                            ]);
+                        });
+
+                        it("selects the instance", function() {
+                            expect(this.view.$('.instance select option:selected').val()).toEqual('789');
+                        });
+
+                        it("selects the database", function() {
+                            expect(this.view.$('.database select option:selected').val()).toEqual('456');
+                        });
+
+                        it("selects the schema", function() {
+                            expect(this.view.$('.schema select option:selected').val()).toEqual('123');
+                        });
+
+                        itShowsSelect("instance");
+                        itShowsSelect("database");
+                        itShowsSelect("schema");
                     });
                 });
             });

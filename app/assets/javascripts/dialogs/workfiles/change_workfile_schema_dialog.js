@@ -16,7 +16,14 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "saved", this.saved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
 
-        this.schemaPicker = new chorus.views.SchemaPicker();
+        var options = {};
+
+        var schema = this.model.executionSchema();
+        if (schema) {
+            options.defaultSchema = schema;
+        }
+
+        this.schemaPicker = new chorus.views.SchemaPicker(options);
         this.bindings.add(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
         this.bindings.add(this.schemaPicker, "error", this.showErrors);
         this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);

@@ -23,6 +23,20 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
         });
     });
 
+    describe("pre-populating the current schema", function() {
+        beforeEach(function() {
+            this.executionSchema = new chorus.models.Schema({id: 321});
+            this.model = rspecFixtures.workfile.sql();
+            this.model._executionSchema = this.executionSchema;
+            this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
+            this.dialog.render();
+        });
+
+        it("passes the current schema to the picker", function() {
+            expect(this.dialog.schemaPicker.options.defaultSchema).toEqual(this.executionSchema);
+        });
+    });
+
     describe("saving", function() {
         beforeEach(function() {
             this.executionSchema = new chorus.models.Schema({id: 321});
@@ -87,9 +101,10 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
     context("when the schema picker is not ready", function () {
         beforeEach(function () {
             spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
+            this.dialog.schemaPicker.trigger("change");
         });
 
-        it("disables the Run File button", function () {
+        it("disables the save schema button", function () {
             expect(this.dialog.$("button.submit")).toBeDisabled();
         });
     });
