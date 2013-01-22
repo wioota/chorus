@@ -10,6 +10,7 @@ describe "Chorus Views", :database_integration do
       login(users(:admin))
       visit("#/workspaces/#{workspace.id}/datasets/#{dataset.id}")
       page.should have_button("Derive a Chorus View")
+      find(".list li.selected").click
       click_button "Derive a Chorus View"
       click_button "Verify Chorus View"
       within_modal do
