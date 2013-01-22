@@ -3,9 +3,9 @@ describe("chorus.views.TagsInput", function() {
 
     beforeEach(function() {
         tags = new chorus.collections.TaggingSet([
-            {name: 'alpha', count: 1},
-            {name: 'beta', count: 2},
-            {name: 'gamma', count: 3}
+            {name: 'alpha'},
+            {name: 'beta'},
+            {name: 'gamma'}
         ]);
         view = new chorus.views.TagsInput({tags: tags});
         this.addedSpy = jasmine.createSpy("addedTag");
@@ -33,18 +33,6 @@ describe("chorus.views.TagsInput", function() {
         expect(view.$el).toContainText("alpha");
         expect(view.$el).toContainText("beta");
         expect(view.$el).toContainText("gamma");
-    });
-
-    describe('displayCount', function(){
-        beforeEach(function(){
-            view = new chorus.views.TagsInput({tags: tags, displayCount: true});
-            view.render();
-        });
-
-        it('displays the tag counts', function(){
-            expect(view.$('.text-label:first')).toContainText('(1)');
-            expect(view.$('.text-label:last')).toContainText('(3)');
-        });
     });
 
     describe('clicking on the x', function() {

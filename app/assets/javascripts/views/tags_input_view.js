@@ -5,7 +5,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     setup: function() {
         this.tags = this.options.tags;
-        this.displayCount = this.options.displayCount;
     },
 
     postRender: function() {
@@ -41,8 +40,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
                 dropdown: {
                     maxHeight: '200px'
                 }
-            },
-            displayCount : this.displayCount
+            }
         });
 
         this.input.attr("placeholder", t("tags.add_tags"));

@@ -16,11 +16,10 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
         var tags = this.tags();
         this.bindings.add(tags, "add", this.addTag);
         this.bindings.add(tags, "remove", this.removeTag);
-        this.tagsInput = new chorus.views.TagsInput({tags: tags, displayCount: true});
+        this.tagsInput = new chorus.views.TagsInput({tags: tags});
     },
 
     addTag: function(tag) {
-        tag.set('count', this.collection.length);
         this.collection.each(function(model) {
             model.tags().add(tag);
         });
@@ -37,24 +36,18 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
 
     tags: function() {
         if(!this._tags) {
-            var attributeHash = this.getTagCounts(this.collection);
-            this._tags = new chorus.collections.TaggingSet(attributeHash);
+            var tagNames = this.collection.map(function(model) {
+                return model.tags().pluck("name");
+            });
+            tagNames = _.uniq(_.flatten(tagNames));
+
+            var tagsHash = _.map(tagNames, function(tagName) {
+                return {name: tagName};
+            });
+
+            this._tags = new chorus.collections.TaggingSet(tagsHash);
         }
         return this._tags;
-    },
-
-    getTagCounts: function (collection) {
-        var tagHash = {};
-
-        collection.each(function(model){
-            model.tags().each(function(tag){
-                tagHash[tag.get('name')] = tagHash[tag.get('name')] + 1 || 1;
-            });
-        });
-
-        return _.map(tagHash, function(value, key) {
-            return { name : key, count: value };
-        });
     },
 
     saveSuccess: function(savedModel) {

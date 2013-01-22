@@ -22,10 +22,9 @@ describe("chorus.dialogs.EditTags", function() {
     });
 
     it("displays all the relevant tags", function() {
-        var tagList = this.dialog.$('.text-label');
-        expect($(tagList[0])).toContainText("tag1 (2)");
-        expect($(tagList[1])).toContainText("tag2 (1)");
-        expect($(tagList[2])).toContainText("tag3 (1)");
+        expect(this.dialog.$(".text-tags")).toContainText("tag1");
+        expect(this.dialog.$(".text-tags")).toContainText("tag2");
+        expect(this.dialog.$(".text-tags")).toContainText("tag3");
     });
 
     describe("clicking the close button", function(){
@@ -102,11 +101,6 @@ describe("chorus.dialogs.EditTags", function() {
                 expect("change").toHaveBeenTriggeredOn(savedModel);
             });
 
-            it('adds the new tag to the end and updates the count', function(){
-                expect(this.dialog.tags().last().get('name')).toEqual('foo');
-                expect(this.dialog.tags().last().get('count')).toEqual(this.collection.length);
-            });
-
             context('when the tag is already on some of the models', function() {
                beforeEach(function(){
                    enterTag(this.dialog, 'tag2');
@@ -122,9 +116,8 @@ describe("chorus.dialogs.EditTags", function() {
                     });
                 });
 
-                it('adds the new tag to the end and updates the count', function(){
+                it('puts the new tag at the end', function(){
                     expect(this.dialog.tags().last().get('name')).toEqual('tag2');
-                    expect(this.dialog.tags().last().get('count')).toEqual(this.collection.length);
                 });
             });
 

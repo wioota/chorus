@@ -1,31 +1,27 @@
-chorus.utilities.TagItemManager = function() { };
+(function () {
+    var TagItemManager = chorus.utilities.TagItemManager = function () {};
 
-chorus.utilities.TagItemManager.prototype = {
-    init: function(core) {
-        this.displayCount = core._opts.displayCount;
-    },
+    TagItemManager.prototype = {
+        init: function (core) {},
 
-    filter: function(list, query) {
-        return list;
-    },
+        filter: function (list, query) {
+            return list;
+        },
 
-    itemContains: function(item, needle) {
-        return true;
-    },
+        itemContains: function (item, needle) {
+            return true;
+        },
 
-    stringToItem: function(str) {
-        return {name: str};
-    },
+        stringToItem: function (str) {
+            return {name: str};
+        },
 
-    itemToString: function(item) {
-        if(this.displayCount) {
-            return item.name + " (" + item.count + ")";
-        } else {
+        itemToString: function (item) {
             return item.name;
-        }
-    },
+        },
 
-    compareItems: function(item1, item2) {
-        return _.strip(item1.name.toLowerCase()) === _.strip(item2.name.toLowerCase());
-    }
-};
+        compareItems: function (item1, item2) {
+            return _.strip(item1.name.toLowerCase()) === _.strip(item2.name.toLowerCase());
+        }
+    };
+})();
