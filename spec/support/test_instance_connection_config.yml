@@ -4,14 +4,14 @@ instances:
       port: 5432
       maintenance_db: "postgres"
       account:
-        db_username: "test_superuser"
+        db_username: "gpadmin"
         db_password: "secret"
 
     - host: "chorus-gpdb41"
       port: 5432
       maintenance_db: "postgres"
       account:
-        db_username: "test_superuser"
+        db_username: "gpadmin"
         db_password: "secret"
 
     - host: "chorus-gpdb40"
