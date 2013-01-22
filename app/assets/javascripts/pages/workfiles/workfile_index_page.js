@@ -49,7 +49,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                 eventName: "workfile:search"
             }
         });
-        this.sidebar = new chorus.views.WorkfileListSidebar({workspace: this.workspace});
+        this.sidebar = new chorus.views.WorkfileSidebar({workspace: this.workspace});
         chorus.PageEvents.subscribe("workfile:selected", this.setModel, this);
 
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {

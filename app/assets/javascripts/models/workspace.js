@@ -24,7 +24,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     isActive: function() {
-        return (this.get("archivedAt") === null);
+        return this.get("archivedAt") === null;
     },
 
     isPublic: function() {

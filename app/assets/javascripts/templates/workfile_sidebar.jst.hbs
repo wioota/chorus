@@ -1,0 +1,35 @@
+<div class="multiple_selection"></div>
+
+{{#if resource}}
+    <div class="info">
+        <div title="{{fileName}}" class="fileName">{{fileName}}</div>
+        {{#if showVersions}}
+          <a class="version_list" href="#">
+            <span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span>
+            <img src="/images/blue-menu-triangle.png"/>
+          </a>
+        {{/if}}
+
+        {{#if showUpdatedTime}}
+          <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp versionInfo.updatedAt}}</span></div>
+        {{/if}}
+    </div>
+    <div class="actions">
+        <ul>
+            {{#if showAddNoteLink}}
+                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id={{workspace.id}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+            {{/if}}
+            {{#if showCopyLink}}
+                <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
+            {{/if}}
+            {{#if showDownloadLink}}
+                <li><a href="{{downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
+            {{/if}}
+            {{#if showDeleteLink}}
+                <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "workfile.delete.button"}}</a></li>
+            {{/if}}
+        </ul>
+    </div>
+
+    <div class="tab_control"></div>
+{{/if}}

@@ -1,8 +1,9 @@
-.workfile_list_sidebar, .workfile_show_sidebar {
+.workfile_sidebar {
     .info {
         .fileName {
             @include ellipsis;
             @include heading-sidebar;
+            margin-bottom: 10px;
         }
 
         .updated {
@@ -10,15 +11,11 @@
             font-size: 12px;
             margin-top: 5px;
         }
-
-        .fileName {
-            margin-bottom: 10px;
-        }
     }
 }
 
 
-.workfile_list_sidebar {
+.workfile_sidebar {
     .info {
         margin-bottom: 20px;
     }
@@ -31,7 +28,7 @@
     }
 }
 
-.workfile_show_sidebar {
+.workfile_sidebar {
     .info {
         margin: 5px 0 20px 0;
     }

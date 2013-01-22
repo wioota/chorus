@@ -124,6 +124,13 @@ describe("chorus.pages.SearchIndexPage", function() {
                         expect(this.page.sidebar.$(".fileName")).toHaveText("Public");
                     });
 
+                    it('shows the right links', function(){
+                        expect(this.page.sidebar.$('.actions')).toContainTranslation('actions.copy_to_another_workspace');
+                        expect(this.page.sidebar.$('.actions')).toContainTranslation('actions.download');
+                        expect(this.page.sidebar.$('.actions')).not.toContainTranslation('actions.add_note');
+                        expect(this.page.sidebar.$('.actions')).not.toContainTranslation('workfile.delete.button');
+                    });
+
                     it("sets the workfile as the selectedItem on the search result", function() {
                         expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(3));
                     });

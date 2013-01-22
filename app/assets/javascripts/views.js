@@ -103,8 +103,6 @@ chorus.views.Bare = Backbone.View.include(
             }
             this._super('_configure', backboneOptions);
 
-            this.options = options;
-
             this.requiredResources = new chorus.RequiredResources();
             this.requiredResources.bind('add', function(resources) {
                 resources = _.isArray(resources) ? resources.slice() : [resources];
