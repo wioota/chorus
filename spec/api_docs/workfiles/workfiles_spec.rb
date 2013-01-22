@@ -100,6 +100,7 @@ resource "Workfiles" do
     let(:workspace_id) { workspace.to_param }
 
     parameter :type, ""
+    parameter :alpine_id, "1"
     parameter :workspace_id, "Workspace Id"
     parameter :owner_id, "Id of workfile owner"
     parameter :description, "Workfile description"
@@ -112,7 +113,7 @@ resource "Workfiles" do
     let(:file_name) { workfile.file_name }
 
     example_request "Create a new workfile in a workspace" do
-      status.should == 200
+      status.should == 201
     end
   end
 

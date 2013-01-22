@@ -13,7 +13,7 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
-    present create_workfile(workspace), :presenter_options => { :workfile_as_latest_version => true }
+    present create_workfile(workspace), presenter_options: {:workfile_as_latest_version => true}, status: :created
   end
 
   def update
