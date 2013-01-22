@@ -8,6 +8,8 @@ describe "Visualizations", :database_integration do
   let(:schema) { database.schemas.find_by_name("test_schema") }
   let(:table) { schema.datasets.find_by_name("base_table1") }
   let(:configure_chart) {}
+  let(:save_type) { 'desktop_image' }
+  let(:workspace) { workspaces(:image) }
 
   before do
     login(users(:admin))
@@ -31,9 +33,7 @@ describe "Visualizations", :database_integration do
         click_link "Show Data Table"
         page.should have_content "Results Console"
         click_link "Hide Data Table"
-        click_button "Save As..."
-        find(:xpath, "//a[contains(., 'Desktop Image')]").click
-        #find('a', :text => "Desktop Image").click
+        save_as(save_type)
         # We would like to make an assertion about the content-type header or response code,
         # but Selenium does not support this. Add assertion if we move to different driver.
         click_button "Close"
@@ -44,7 +44,21 @@ describe "Visualizations", :database_integration do
   describe "Create frequency plot" do
     let(:chart_type) { 'frequency' }
 
-    it_behaves_like "a visualization"
+    context "and save as a desktop image" do
+      it_behaves_like "a visualization"
+    end
+
+    context "and save as a workfile" do
+      let(:save_type) { 'workfile_image' }
+
+      it_behaves_like "a visualization"
+    end
+
+    context "and save as a note attachment" do
+      let(:save_type) { 'note_attachment' }
+
+      it_behaves_like "a visualization"
+    end
   end
 
   describe "Create box plot" do
@@ -84,5 +98,41 @@ describe "Visualizations", :database_integration do
     let(:chart_type) { 'histogram' }
 
     it_behaves_like "a visualization"
+  end
+
+  def save_as(type)
+    case type
+    when 'desktop_image'
+      save_desktop_image
+    when 'workfile_image'
+      expect {
+        save_workfile_image
+      }.to change(Workfile, :count).by(1)
+    when 'note_attachment'
+      expect {
+        save_note_attachment
+      }.to change(Events::Note, :count).by(1)
+    end
+  end
+
+  def save_desktop_image
+    click_button "Save As..."
+    find(:xpath, "//a[contains(., 'Desktop Image')]").click
+  end
+
+  def save_workfile_image
+    click_button "Save As..."
+    find(:xpath, "//a[contains(., 'Work File Image')]").click
+    find("li[data-id='#{workspace.id}']").click
+    click_button 'Save'
+    find("button.save", :text => "Save As...")
+  end
+
+  def save_note_attachment
+    click_button "Save As..."
+    find(:xpath, "//a[contains(., 'Note Attachment')]").click
+    set_cleditor_value("body", "Note on the visualization")
+    click_button "Add Note"
+    find("button.save", :text => "Save As...")
   end
 end
