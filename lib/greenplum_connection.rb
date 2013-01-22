@@ -3,13 +3,6 @@ require_relative '../app/models/sql_result'
 
 class GreenplumConnection < DataSourceConnection
   class DatabaseError < Error
-    def initialize(exception = nil)
-      if exception
-        super(exception.message)
-        @exception = exception
-      end
-    end
-
     def error_type
       error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_sql_state) && @exception.wrapped_exception.get_sql_state
       case error_code
@@ -20,14 +13,6 @@ class GreenplumConnection < DataSourceConnection
         when /08.../ then :INSTANCE_UNREACHABLE
         else :GENERIC
       end
-    end
-
-    def to_s
-      sanitize_message super
-    end
-
-    def message
-      sanitize_message super
     end
 
     private

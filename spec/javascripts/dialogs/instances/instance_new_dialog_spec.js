@@ -174,7 +174,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             });
 
             it("uses a blank name as the default database name", function() {
-                expect(this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val()).toBe("");
+                expect(this.dialog.$(".register_existing_oracle input[name=dbName]").val()).toBe("");
             });
 
             describe("filling out the form", function() {
@@ -185,7 +185,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
                     this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
                     this.dialog.$(".register_existing_oracle input[name=dbPassword]").val("my_password");
-                    this.dialog.$(".register_existing_oracle input[name=maintenanceDb]").val("foo");
+                    this.dialog.$(".register_existing_oracle input[name=dbName]").val("foo");
 
                     this.dialog.$(".register_existing_oracle input[name=name]").trigger("change");
                 });
@@ -198,7 +198,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     expect(values.port).toBe("1234");
                     expect(values.dbUsername).toBe("user");
                     expect(values.dbPassword).toBe("my_password");
-                    expect(values.maintenanceDb).toBe("foo");
+                    expect(values.dbName).toBe("foo");
                 });
             });
         });

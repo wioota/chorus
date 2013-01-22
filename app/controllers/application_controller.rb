@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
   rescue_from 'Gpdb::InstanceUnreachable', :with => :render_instance_unreachable_error
-  rescue_from 'GreenplumConnection::DatabaseError', :with => :render_database_error
+  rescue_from 'DataSourceConnection::Error', :with => :render_database_error
   rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'GreenplumConnection::QueryError', :with => :render_query_error
   rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden

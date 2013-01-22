@@ -55,6 +55,6 @@ hadoop_instance_db:
 oracle_instance_db:
   oracle_host: chorus-oracle.sf.pivotallabs.com
   oracle_port: 1521
-  oracle_database: oracle
-  oracle_user: oracle
+  oracle_database: orcl
+  oracle_user: system
   oracle_pass: oracle

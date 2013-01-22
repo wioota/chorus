@@ -172,5 +172,17 @@ describe DataSourcesController do
         OracleInstance.last.should be_shared
       end
     end
+
+    context "for an unknown type" do
+      let(:type) { "######" }
+
+      it "returns an error" do
+        post :create, valid_attributes
+        response.code.should == "422"
+        puts decoded_errors
+        puts decoded_errors.fields.type
+        decoded_errors.fields.type.should have_key :INVALID
+      end
+    end
   end
 end

@@ -11,7 +11,6 @@ describe "Data Source", :database_integration do
     end
 
     it "creates a instance" do
-      pending "in process for oracle story"
       within_modal do
         select_and_do_within_data_source "register_existing_oracle" do
           fill_in 'name', :with => "new_oracle_instance"
@@ -22,10 +21,10 @@ describe "Data Source", :database_integration do
           fill_in 'dbPassword', :with => WEBPATH['oracle_instance_db']['oracle_pass']
         end
         click_button "Add Data Source"
-        pending "need to provide api"
       end
 
-      find(".oracle_instance ul").should have_content("new_oracle_instance")
+      #  See Tracker Story #42326927
+      find(".gpdb_instance ul").should have_content("new_oracle_instance")
     end
   end
 end
