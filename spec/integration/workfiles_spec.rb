@@ -68,7 +68,7 @@ describe "Workfiles" do
       it "Lists the work files by updated date when selected" do
         find('a', :text => "Alphabetically", :visible => true).click
         find('a', :text => "By Date", :visible => true).click
-        find('.workfile_list_sidebar .fileName').should have_content(workfile_first_by_date.file_name)
+        find('.workfile_sidebar .fileName').should have_content(workfile_first_by_date.file_name)
         workfiles = page.all("li.workfile")
         workfiles.first.text.should include workfile_first_by_date.file_name
         workfiles.last.text.should include workfile_last_by_date.file_name
