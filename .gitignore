@@ -83,3 +83,4 @@ GREENPLUM_IP
 
 # Ignore oracle jar
 ojdbc*.jar
+/lib/libraries
