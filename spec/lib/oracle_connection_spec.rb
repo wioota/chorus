@@ -1,4 +1,5 @@
 require 'spec_helper'
+require Rails.root + 'lib/libraries/ojdbc6.jar'
 
 describe OracleConnection do
   let(:connection) { OracleConnection.new(
