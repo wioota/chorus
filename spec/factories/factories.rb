@@ -5,7 +5,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
-    maintenance_db "db_name"
+    db_name "db_name"
     owner
   end
 
@@ -13,7 +13,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "gpdb_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "gpdb_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
-    maintenance_db "postgres"
+    db_name "postgres"
     owner
     version "9.1.2 - FactoryVersion"
     db_username 'username'
@@ -33,7 +33,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "oracle_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "oracle_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
-    maintenance_db "db_name"
+    db_name "db_name"
     owner
     db_username 'username'
     db_password 'secret'

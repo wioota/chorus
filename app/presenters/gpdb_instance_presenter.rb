@@ -8,7 +8,7 @@ class GpdbInstancePresenter < Presenter
       :id => model.id,
       :shared => model.shared,
       :state => model.state,
-      :maintenance_db => model.maintenance_db,
+      :db_name => model.db_name,
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,

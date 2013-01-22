@@ -32,7 +32,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             description: this.$("textarea[name=description]").val().trim()
         };
 
-        _.each(["name", "host", "port", "size", "maintenanceDb", "username", "groupList", "streamUrl", "password"], function(name) {
+        _.each(["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password"], function(name) {
             var input = this.$("input[name=" + name + "]");
             if (input.length) {
                 attrs[name] = input.val().trim();

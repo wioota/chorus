@@ -3,7 +3,7 @@ require "spec_helper"
 describe DataSource do
   describe 'validations' do
     it { should validate_presence_of(:name) }
-    it { should validate_presence_of :maintenance_db }
+    it { should validate_presence_of :db_name }
 
     it_should_behave_like "it validates with DataSourceNameValidator"
 

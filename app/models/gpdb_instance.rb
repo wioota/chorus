@@ -1,7 +1,7 @@
 class GpdbInstance < DataSource
   attr_accessor :db_username, :db_password
 
-  validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'maintenance_db']).empty? }
+  validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'db_name']).empty? }
 
   validates_with DataSourceNameValidator
   
@@ -73,14 +73,14 @@ class GpdbInstance < DataSource
         :password => account.db_password,
         :host => host,
         :port => port,
-        :database => maintenance_db,
+        :database => db_name,
         :logger => Rails.logger
     )
   end
 
   def refresh_databases(options ={})
     found_databases = []
-    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
+    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, db_name) { |conn| conn.select_all(database_and_role_sql) }
     database_account_groups = rows.inject({}) do |groups, row|
       groups[row["database_name"]] ||= []
       groups[row["database_name"]] << row["db_username"]

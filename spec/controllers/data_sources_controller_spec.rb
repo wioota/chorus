@@ -105,8 +105,7 @@ describe DataSourcesController do
           :name => "create_spec_name",
           :port => 12345,
           :host => "server.emc.com",
-          :maintenance_db => "postgres",
-          :db_name => "oracle",
+          :db_name => "postgres",
           :description => "old description",
           :db_username => "bob",
           :db_password => "secret",
@@ -180,8 +179,6 @@ describe DataSourcesController do
       it "returns an error" do
         post :create, valid_attributes
         response.code.should == "422"
-        puts decoded_errors
-        puts decoded_errors.fields.type
         decoded_errors.fields.type.should have_key :INVALID
       end
     end

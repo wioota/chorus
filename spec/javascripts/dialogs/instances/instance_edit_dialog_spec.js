@@ -5,7 +5,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             host: "greenplum",
             port: "8555",
             description: "it is a food name",
-            maintenanceDb: "postgres"
+            dbName: "postgres"
         });
         this.dialog = new chorus.dialogs.InstanceEdit({ instance: this.instance });
     });
@@ -43,9 +43,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("has a 'database' field that is pre-populated", function() {
-                expect(this.dialog.$("input[name='maintenanceDb']").val()).toBe("postgres");
-                expect(this.dialog.$("label[name='maintenanceDb']").text()).toMatchTranslation("instances.dialog.database_name");
-                expect(this.dialog.$("input[name='maintenanceDb']").prop("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name='dbName']").val()).toBe("postgres");
+                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
             });
         });
 
@@ -139,7 +139,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             this.dialog.$("input[name=name]").val(" test1 ");
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val(" testhost ");
-            this.dialog.$("input[name=maintenanceDb]").val(" not_postgres ");
+            this.dialog.$("input[name=dbName]").val(" not_postgres ");
             this.dialog.$("textarea[name=description]").val("  instance   ");
         });
 
@@ -163,7 +163,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
             expect(this.dialog.model.save.argsForCall[0][0].description).toBe("instance");
-            expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
+            expect(this.dialog.model.save.argsForCall[0][0].dbName).toBe("not_postgres");
         });
 
         it("changes the text on the upload button to 'saving'", function() {
@@ -196,7 +196,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.model.get("host")).toBe("testhost3");
                 expect(this.dialog.model.get("username")).toBe("username");
                 expect(this.dialog.model.get("groupList")).toBe("groupList");
-                expect(this.dialog.model.has("maintenanceDb")).toBeFalsy();
+                expect(this.dialog.model.has("dbName")).toBeFalsy();
             });
         });
 

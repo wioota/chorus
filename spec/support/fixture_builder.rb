@@ -69,7 +69,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
     #Instances
-    gpdb_instance = FactoryGirl.create(:gpdb_instance, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin)
+    gpdb_instance = FactoryGirl.create(:gpdb_instance, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :db_name => "postgres", :owner => admin)
     fbuilder.name :default, gpdb_instance
     Events::GreenplumInstanceCreated.by(admin).add(:gpdb_instance => gpdb_instance)
 

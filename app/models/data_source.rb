@@ -1,5 +1,5 @@
 class DataSource < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :db_username, :db_password, :as => [:default, :create]
+  attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
   belongs_to :owner, :class_name => 'User'
@@ -9,7 +9,7 @@ class DataSource < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
 
-  validates_presence_of :name, :maintenance_db
+  validates_presence_of :name, :db_name
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
 

@@ -14,7 +14,7 @@ describe OracleInstance do
       end
     end
 
-    context "when host, port, or maintenance_db change" do
+    context "when host, port, or db_name change" do
       before do
         instance.save!(:validate => false)
         mock(instance).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
@@ -28,8 +28,8 @@ describe OracleInstance do
         instance.port = '5413'
         instance.valid?
       end
-      it "validates the account when maintenance_db changes" do
-        instance.maintenance_db = 'something_new'
+      it "validates the account when db_name changes" do
+        instance.db_name = 'something_new'
         instance.valid?
       end
     end

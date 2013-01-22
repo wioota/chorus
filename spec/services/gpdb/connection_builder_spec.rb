@@ -18,7 +18,7 @@ describe Gpdb::ConnectionBuilder do
     }
   end
 
-  let(:expected_database) { gpdb_instance.maintenance_db }
+  let(:expected_database) { gpdb_instance.db_name }
 
   describe ".connect!" do
     before do
@@ -35,7 +35,7 @@ describe Gpdb::ConnectionBuilder do
       end
 
       context "when no database name is passed" do
-        it "connects to the given instance's 'maintenance db''" do
+        it "connects to the given instance's 'db_name'" do
           Gpdb::ConnectionBuilder.connect!(gpdb_instance, instance_account)
         end
       end

@@ -5,7 +5,7 @@ class OracleInstancePresenter < Presenter
         :name => model.name,
         :host => model.host,
         :port => model.port,
-        :maintenance_db => model.maintenance_db,
+        :db_name => model.db_name,
         :description => model.description,
         :entity_type => 'oracle_instance',
         :type => 'ORACLE'

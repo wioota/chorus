@@ -15,7 +15,7 @@ describe OracleInstancePresenter, :type => :view do
       hash.should have_key(:port)
       hash.should have_key(:host)
       hash.should have_key(:description)
-      hash.should have_key(:maintenance_db)
+      hash.should have_key(:db_name)
       hash[:entity_type].should == "oracle_instance"
     end
   end

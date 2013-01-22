@@ -63,7 +63,7 @@ module BulkData
       without_solr do
         current_user = User.find_by_username(admin_user_name)
         params = {:name => instance_name, :host => 'chorus-gpdb42', :port => 5432, :db_username => 'gpadmin',
-                  :db_password => 'secret', :maintenance_db => 'postgres', :shared => true}
+                  :db_password => 'secret', :db_name => 'postgres', :shared => true}
         gpdb_instance = current_user.gpdb_instances.create!(params, :as => :create)
         gpdb_instance.refresh_all
       end

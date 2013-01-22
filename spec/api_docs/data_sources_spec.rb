@@ -14,7 +14,7 @@ resource "Data sources" do
     parameter :description, "Description of data source"
     parameter :host, "Host IP or address of data source"
     parameter :port, "Port of data source"
-    parameter :maintenance_db, "Database on data source to use for initial connection (usually 'postgres')"
+    parameter :db_name, "Database on data source to use for initial connection (usually 'postgres')"
     parameter :db_username, "Username for connection to data source"
     parameter :db_password, "Password for connection to data source"
     parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
@@ -24,13 +24,13 @@ resource "Data sources" do
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "5432" }
-    let(:maintenance_db) { "postgres" }
+    let(:db_name) { "postgres" }
     let(:db_username) { "big" }
     let(:db_password) { "bird_yellow" }
     let(:shared) { "1" }
     let(:type) { "GREENPLUM" }
 
-    required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password, :type
+    required_parameters :name, :host, :port, :db_name, :db_username, :db_password, :type
 
     example_request "Register a data source" do
       status.should == 201
@@ -63,14 +63,14 @@ resource "Data sources" do
     parameter :description, "Description of data source"
     parameter :host, "Host IP or address of data source"
     parameter :port, "Port of data source"
-    parameter :maintenance_db, "Database on data source to use for initial connection (usually 'postgres')"
+    parameter :db_name, "Database on data source to use for initial connection (usually 'postgres')"
 
     let(:id) { owned_data_source.to_param }
     let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "5432" }
-    let(:maintenance_db) { "postgres" }
+    let(:db_name) { "postgres" }
 
     example_request "Update data source details" do
       status.should == 200

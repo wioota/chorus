@@ -12,14 +12,14 @@ class OracleInstance < DataSource
         :password => account.db_password,
         :host => host,
         :port => port,
-        :database => maintenance_db
+        :database => db_name
     )
   end
 
   private
 
   def validate_owner?
-    self.changed.include?('host') || self.changed.include?('port') || self.changed.include?('maintenance_db')
+    self.changed.include?('host') || self.changed.include?('port') || self.changed.include?('db_name')
   end
 
   def build_instance_account_for_owner

@@ -48,7 +48,7 @@ describe("chorus.models.GpdbInstance", function() {
                 dbUsername: "dude",
                 dbPassword: "whatever",
                 port: "1234",
-                maintenanceDb: "postgres"
+                dbName: "postgres"
             };
         });
 
@@ -61,7 +61,7 @@ describe("chorus.models.GpdbInstance", function() {
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
             });
 
-            _.each(["name", "host", "dbUsername", "dbPassword", "port", "maintenanceDb"], function(attr) {
+            _.each(["name", "host", "dbUsername", "dbPassword", "port", "dbName"], function(attr) {
                 it("requires " + attr, function() {
                     this.attrs[attr] = "";
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();

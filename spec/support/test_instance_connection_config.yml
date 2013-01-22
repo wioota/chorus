@@ -2,28 +2,28 @@ instances:
   gpdb:
     - host: "chorus-gpdb42"
       port: 5432
-      maintenance_db: "postgres"
+      db_name: "postgres"
       account:
         db_username: "gpadmin"
         db_password: "secret"
 
     - host: "chorus-gpdb41"
       port: 5432
-      maintenance_db: "postgres"
+      db_name: "postgres"
       account:
         db_username: "gpadmin"
         db_password: "secret"
 
     - host: "chorus-gpdb40"
       port: 5432
-      maintenance_db: "postgres"
+      db_name: "postgres"
       account:
         db_username: "gpadmin"
         db_password: "secret"
 
     - host: "local-greenplum"
       port: 5432
-      maintenance_db: "postgres"
+      db_name: "postgres"
       account:
         db_username: "vagrant"
         db_password: "secret"

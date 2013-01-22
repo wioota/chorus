@@ -4,7 +4,7 @@ describe GpdbInstance do
   describe "validations" do
     describe "associated account" do
       let(:instance) { data_sources(:shared) }
-      context "when host, port, or maintenance_db change" do
+      context "when host, port, or db_name change" do
         it "validates the account when host changes" do
           mock(instance.owner_account).valid?
           instance.host = 'something_new'
@@ -15,14 +15,14 @@ describe GpdbInstance do
           instance.port = '5413'
           instance.valid?
         end
-        it "validates the account when maintenance_db changes" do
+        it "validates the account when db_name changes" do
           mock(instance.owner_account).valid?
-          instance.maintenance_db = 'something_new'
+          instance.db_name = 'something_new'
           instance.valid?
         end
         it "pulls associated error messages onto the instance" do
           stub(instance).valid_db_credentials? { false }
-          instance.maintenance_db = 'something_new'
+          instance.db_name = 'something_new'
           instance.valid?
           instance.errors.values.should =~ instance.owner_account.errors.values
         end
@@ -68,7 +68,7 @@ describe GpdbInstance do
           :name => "create_spec_name",
           :port => 12345,
           :host => "server.emc.com",
-          :maintenance_db => "postgres",
+          :db_name => "postgres",
           :description => "old description",
           :db_username => "bob",
           :db_password => "secret"
@@ -479,7 +479,7 @@ describe GpdbInstance do
                                         :port => instance.port,
                                         :username => account.db_username,
                                         :password => account.db_password,
-                                        :database => instance.maintenance_db,
+                                        :database => instance.db_name,
                                         :logger => Rails.logger
                                     }) { "this is my connection" }
       instance.connect_with(account).should == "this is my connection"

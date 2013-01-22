@@ -25,8 +25,6 @@ class DataSourcesController < GpdbController
       present created_gpdb_instance, :status => :created
 
     elsif type == "ORACLE"
-      # clean up #42326927
-      params[:data_source][:maintenance_db] = params[:data_source][:db_name]
       created_oracle_instance = current_user.oracle_instances.new(params[:data_source])
       created_oracle_instance.shared = true
       created_oracle_instance.save!

@@ -20,7 +20,7 @@ module InstanceIntegration
     REAL_GPDB_HOST
   end
 
-  def self.execute_sql(sql_file, database = INSTANCE_CONFIG['maintenance_db'])
+  def self.execute_sql(sql_file, database = INSTANCE_CONFIG['db_name'])
     puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 

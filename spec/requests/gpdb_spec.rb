@@ -6,7 +6,7 @@ describe "gpdb instances", :database_integration, :network do
         :name => "chorusgpdb42",
         :port => 5432,
         :host => InstanceIntegration::REAL_GPDB_HOST,
-        :maintenance_db => "postgres",
+        :db_name => "postgres",
         :db_username => InstanceIntegration::REAL_GPDB_USERNAME,
         :db_password => InstanceIntegration::REAL_GPDB_PASSWORD,
         :type => 'GREENPLUM'

@@ -42,7 +42,7 @@ module Gpdb
       connection_params = {
         :host => gpdb_instance.host,
         :port => gpdb_instance.port,
-        :database => database_name || gpdb_instance.maintenance_db,
+        :database => database_name || gpdb_instance.db_name,
         :username => account.db_username,
         :password => account.db_password,
         :adapter => "jdbcpostgresql"

@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>87}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>259}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 19:46:19 GMT
+  recorded_at: Tue, 22 Jan 2013 23:20:08 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>70}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 19:46:19 GMT
+  recorded_at: Tue, 22 Jan 2013 23:20:09 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -72,9 +72,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>70}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 19:46:19 GMT
+  recorded_at: Tue, 22 Jan 2013 23:20:09 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -97,9 +97,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''fl''=>''*
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>43,''params''=>{''fl''=>''*
         score'',''start''=>''0'',''q''=>''text'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:SearchableHtmlTestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.15342641,''docs''=>[{''id''=>''SearchableHtmlTestClass
         1'',''html_field_texts''=>[''this is text''],''score''=>0.15342641}]}}'
     http_version: '1.1'
-  recorded_at: Thu, 10 Jan 2013 19:46:19 GMT
+  recorded_at: Tue, 22 Jan 2013 23:20:09 GMT
 recorded_with: VCR 2.3.0

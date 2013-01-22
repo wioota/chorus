@@ -18,7 +18,7 @@ chorus.models.GpdbInstance = chorus.models.DataSource.extend({
 
         this.require("host", newAttrs);
         this.require("port", newAttrs);
-        this.require("maintenanceDb", newAttrs);
+        this.require("dbName", newAttrs);
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
         if(this.isNew()) {
             this.require("dbUsername", newAttrs);
@@ -38,7 +38,7 @@ chorus.models.GpdbInstance = chorus.models.DataSource.extend({
         "host": "instances.dialog.host",
         "port": "instances.dialog.port",
         "databaseName": "instances.dialog.database_name",
-        "maintenanceDb": "instances.dialog.maintenance_db",
+        "dbName": "instances.dialog.db_name",
         "description": "instances.dialog.description"
     }
 });
