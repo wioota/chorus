@@ -56,7 +56,7 @@ describe("chorus.models.OracleInstance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 });
 
-                _.each(["name", "host", "dbUsername", "dbPassword", "port", "maintenanceDb"], function(attr) {
+                _.each(["name", "host", "dbUsername", "dbPassword", "port", "dbName"], function(attr) {
                     it("requires " + attr, function() {
                         this.attrs[attr] = "";
                         expect(this.instance.performValidation(this.attrs)).toBeFalsy();

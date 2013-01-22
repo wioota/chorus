@@ -391,7 +391,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 section.find("input[name=port]").val("1234");
                 section.find("input[name=dbUsername]").val("user");
                 section.find("input[name=dbPassword]").val("my_password");
-                section.find("input[name=maintenanceDb]").val("foo");
+                section.find("input[name=dbName]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
                 spyOn(chorus.models.OracleInstance.prototype, "save").andCallThrough();
@@ -405,7 +405,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 expect(params["data_source[db_password]"]).toBe("my_password");
                 expect(params["data_source[name]"]).toBe("Instance_Name");
                 expect(params["data_source[description]"]).toBe("Instance Description");
-                expect(params["data_source[maintenance_db]"]).toBe("foo");
+                expect(params["data_source[db_name]"]).toBe("foo");
             });
 
             testUpload();
