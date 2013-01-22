@@ -7,7 +7,7 @@ end
 
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
-  fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb", "spec/factories.rb", "db/structure.sql", "spec/support/database_integration/*", "tmp/GPDB_HOST_STALE"]
+  fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb", "spec/factories.rb", "db/structure.sql", "spec/support/database_integration/*", "tmp/GPDB_HOST_STALE", "spec/support/test_instance_connection_config.yml"]
 
   fbuilder.name_model_with(ChorusWorkfile) do |record|
     record['file_name'].gsub(/\s+/, '_').downcase

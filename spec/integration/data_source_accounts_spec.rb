@@ -21,7 +21,9 @@ describe "Data Source Permissions" do
     login(no_access_user)
     visit("#/instances/")
     click_link the_data_source.name
-    page.should have_selector(".breadcrumb:contains('#{the_data_source.name}')")
+    within ".content_details" do
+      find(:css, '.count').text.should =~ /.*Databases/
+    end
   end
 
   it "Adds new data source account" do
