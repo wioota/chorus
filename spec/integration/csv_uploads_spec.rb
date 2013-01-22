@@ -13,9 +13,11 @@ describe "CSV Uploads", :database_integration do
     visit("#/workspaces/#{workspace.id}/datasets")
     click_button "Import File"
     csv_file = File.join(File.dirname(__FILE__), '../fixtures/test.csv')
-    attach_file("csv[contents]", csv_file)
-    click_button "Upload File"
-    click_button "Import Data"
+    within_modal do
+      attach_file("csv[contents]", csv_file)
+      click_button "Upload File"
+      click_button "Import Data"
+    end
     find("a.name:contains('test')").click
     page_title_should_be("test")
     within ".dataset_sidebar" do
