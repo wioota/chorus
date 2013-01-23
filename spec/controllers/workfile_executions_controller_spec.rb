@@ -33,13 +33,6 @@ describe WorkfileExecutionsController do
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
       end
 
-      it "sets the execution schema of the workfile" do
-        workfile.execution_schema.should_not == workspace.sandbox
-        stub(SqlExecutor).execute_sql { SqlResult.new }
-        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id
-        workfile.reload.execution_schema.should == workspace.sandbox
-      end
-
       it "uses the presenter for SqlResult" do
         stub(SqlExecutor).execute_sql { SqlResult.new }
         mock_present { |model| model.should be_a SqlResult }
