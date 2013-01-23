@@ -656,8 +656,22 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view = new chorus.views.SchemaPicker({ defaultSchema: this.schema });
                 spyOnEvent(this.view, 'change');
                 this.view.render();
-                this.view.delegateEvents();
                 $("#jasmine_content").append(this.view.el);
+            });
+
+            context("when the instances list does not include the selected instance", function() {
+                beforeEach(function() {
+                    this.server.completeFetchAllFor(this.view.instances, [
+                        rspecFixtures.gpdbInstance({id: 1, name: "A"}),
+                        rspecFixtures.gpdbInstance({id: 2, name: "B"})
+                    ]);
+                    this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                });
+
+                itShowsSelect("instance");
+                itShowsUnavailable("database");
+                itShowsUnavailable("schema");
             });
 
             context("when the instance list fetch completes", function() {
@@ -672,6 +686,20 @@ describe("chorus.views.SchemaPicker", function() {
                 itHidesSection("schema");
                 itHidesSection("database");
                 itDisplaysLoadingPlaceholderFor('instance');
+
+                context("when the databases list does not include the selected database", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.view.databases, [
+                            rspecFixtures.database({id: 1, name: "A"}),
+                            rspecFixtures.database({id: 2, name: "B"})
+                        ]);
+                        this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    });
+
+                    itShowsSelect("instance");
+                    itShowsSelect("database");
+                    itShowsUnavailable("schema");
+                });
 
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
@@ -713,6 +741,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                     context("when the schema list returns without the default schema", function() {
                         beforeEach(function() {
+                            spyOnEvent(this.view, 'error');
                             this.server.completeFetchAllFor(this.view.schemas, [
                                 rspecFixtures.schema()
                             ]);
@@ -720,8 +749,17 @@ describe("chorus.views.SchemaPicker", function() {
 
                         itDisplaysDefaultOptionFor("schema");
 
-                        it("should not be ready", function(){
+                        it("is not ready", function(){
                           expect(this.view.ready()).toBeFalsy();
+                        });
+
+                        it("triggers an error event", function() {
+                            expect("error").toHaveBeenTriggeredOn(this.view);
+                        });
+
+                        it("sets the serverErrors on the schema collection", function() {
+                            var serverErrors = this.view.schemas.serverErrors;
+                            expect(serverErrors.fields.base.SCHEMA_MISSING.name).toEqual("schema");
                         });
                     });
 

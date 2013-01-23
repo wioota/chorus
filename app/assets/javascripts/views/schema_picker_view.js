@@ -47,7 +47,7 @@
             if (this.options.instance) {
                 this.setState({ instance: STATIC, database: LOADING, schema: HIDDEN });
             } else {
-                this.instances = new chorus.collections.GpdbDataSourceSet();
+                this.instances = new chorus.collections.GpdbInstanceSet();
                 this.bindings.add(this.instances, "loaded", this.instancesLoaded);
                 this.instances.attributes = {accessible: true};
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
@@ -65,7 +65,7 @@
             }
 
             if (this.options.defaultSchema) {
-                this.defaultRequiredResources = new chorus.RequiredResources([
+                this.requiredResourcesForDefaultSchema = new chorus.RequiredResources([
                     this.databases,
                     this.schemas,
                     this.instances
@@ -81,7 +81,7 @@
         },
 
         instancesLoaded: function () {
-            var state = (this.gpdbDataSources().length === 0) ? UNAVAILABLE : SELECT;
+            var state = (this.gpdbInstances().length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ instance: state });
         },
 
@@ -207,14 +207,14 @@
         restyleAllSectionsToReflectStates: function() {
             var states = _.clone(this.sectionStates);
 
-            if(this.defaultRequiredResources) {
-                if (this.defaultRequiredResources.allLoaded()) {
+            if(this.requiredResourcesForDefaultSchema) {
+                if (this.requiredResourcesForDefaultSchema.allLoaded()) {
                     _.extend(states, {
                         instance: SELECT,
                         database: SELECT,
                         schema: SELECT
                     });
-                    delete this.defaultRequiredResources;
+                    delete this.requiredResourcesForDefaultSchema;
                 } else {
                     _.extend(states, {
                         instance: LOADING,
@@ -288,7 +288,7 @@
         fetchFailed: function(type, collection) {
             if (type) { this.clearSelection(type); }
             this.trigger("error", collection);
-            delete this.defaultRequiredResources;
+            delete this.requiredResourcesForDefaultSchema;
         },
 
         setSelection: function(type, value) {
@@ -307,7 +307,7 @@
             return select;
         },
 
-        gpdbDataSources: function() {
+        gpdbInstances: function() {
             return this.instances.filter(function(instance) {
                 return instance.get("instanceProvider") !== "Hadoop";
             });
@@ -322,8 +322,8 @@
             return !!(attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
         },
 
-        populateSelect: function(type, defaultValue) {
-            var models = (type === "instance") ? this.gpdbDataSources() : this[type + "s"].models;
+       populateSelect: function(type, defaultValue) {
+            var models = (type === "instance") ? this.gpdbInstances() : this[type + "s"].models;
             var select = this.rebuildEmptySelect(type);
 
             _.each(this.sortModels(models), function(model) {
@@ -336,11 +336,17 @@
                 select.append(option);
             });
 
-            if (!_.contains(_.pluck(models, "id"), defaultValue)) {
+            if (defaultValue !== undefined && !_.contains(_.pluck(models, "id"), defaultValue)) {
+                if (type === "schema") this.showErrorForMissingSchema();
                 this.clearSelection(type);
             }
 
             chorus.styleSelect(select);
+        },
+
+        showErrorForMissingSchema: function() {
+            this.schemas.serverErrors = {fields: {base: {SCHEMA_MISSING: {name: this.selection.schema.name()}}}};
+            this.trigger("error", this.schemas);
         },
 
         sortModels: function(models) {
