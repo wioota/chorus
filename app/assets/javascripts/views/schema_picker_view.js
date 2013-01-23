@@ -96,6 +96,7 @@
         },
 
         instanceSelected:function () {
+            this.trigger("clearErrors");
             this.clearSelection('database');
             this.clearSelection('schema');
             var selectedInstance = this.getSelectedInstance();
@@ -118,6 +119,7 @@
         },
 
         databaseSelected: function () {
+            this.trigger("clearErrors");
             this.clearSelection('schema');
             var selectedDatabase = this.getSelectedDatabase();
 
@@ -139,11 +141,13 @@
         },
 
         schemaSelected:function () {
+            this.trigger("clearErrors");
             this.setSelection("schema", this.getSelectedSchema());
         },
 
         createNewDatabase:function (e) {
             e.preventDefault();
+            this.trigger("clearErrors");
             this.clearSelection('database');
             this.clearSelection("schema");
             this.setState({ database: CREATE_NEW, schema: CREATE_NESTED });
@@ -152,6 +156,7 @@
 
         createNewSchema:function (e) {
             e.preventDefault();
+            this.trigger("clearErrors");
             this.$('.schema select option:selected').prop("selected", false);
             this.setState({ schema: CREATE_NEW });
             this.$(".schema input.name").val("");
@@ -283,6 +288,7 @@
         fetchFailed: function(type, collection) {
             if (type) { this.clearSelection(type); }
             this.trigger("error", collection);
+            delete this.defaultRequiredResources;
         },
 
         setSelection: function(type, value) {
@@ -308,7 +314,6 @@
         },
 
         triggerSchemaSelected: function() {
-            this.trigger("clearErrors");
             this.trigger("change", this.ready());
         },
 
@@ -330,6 +335,10 @@
                 }
                 select.append(option);
             });
+
+            if (!_.contains(_.pluck(models, "id"), defaultValue)) {
+                this.clearSelection(type);
+            }
 
             chorus.styleSelect(select);
         },

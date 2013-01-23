@@ -710,6 +710,32 @@ describe("chorus.views.SchemaPicker", function() {
                         itShowsSelect("database");
                         itShowsSelect("schema");
                     });
+
+                    context("when the schema list returns without the default schema", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchAllFor(this.view.schemas, [
+                                rspecFixtures.schema()
+                            ]);
+                        });
+
+                        itDisplaysDefaultOptionFor("schema");
+
+                        it("should not be ready", function(){
+                          expect(this.view.ready()).toBeFalsy();
+                        });
+                    });
+
+                    context("when the schema list fetch fails", function() {
+                        beforeEach(function() {
+                            this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({
+                                fields: { a: { BLANK: {} } }
+                            });
+                        });
+
+                        itShowsSelect("instance");
+                        itShowsSelect("database");
+                        itShowsUnavailable("schema");
+                    });
                 });
             });
         });
