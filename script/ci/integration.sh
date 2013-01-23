@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp ~/ojdbc6.jar ./lib/libraries/ojdbc6.jar
+cp ~/ojdbc6.jar $WORKSPACE/lib/libraries/ojdbc6.jar
 export RAILS_ENV=integration
 export GPDB_HOST=chorus-gpdb42
 
