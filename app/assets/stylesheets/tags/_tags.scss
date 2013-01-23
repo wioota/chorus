@@ -1,5 +1,5 @@
 .tags_input {
-    border: 1px solid #A5A6A8;
+    border: 1px solid $border-color;
     background-color: #FFFFFF;
     padding: 3px;
     padding-bottom: 0;
@@ -78,7 +78,7 @@
             }
 
             .text-dropdown {
-                border: 1px solid #A5A6A8;
+                border: 1px solid $type-ahead-result-border-color;
                 font: inherit;
                 font-size: 12px;
                 font-weight: bold;
