@@ -27,5 +27,5 @@ namespace :services do
 end
 
 task :enqueue_reindex => :environment do
-  QC.enqueue_if_not_queued('SolrIndexer.reindex', ['all'])
+  QC.enqueue_if_not_queued('SolrIndexer.refresh_and_reindex', ['all'])
 end
