@@ -7,8 +7,6 @@ class WorkfileExecutionsController < ApplicationController
     account = @schema.account_for_user! current_user
     result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
 
-    @workfile.execution_schema = @schema
-    @workfile.save!
     if params[:download] && !result.canceled?
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"

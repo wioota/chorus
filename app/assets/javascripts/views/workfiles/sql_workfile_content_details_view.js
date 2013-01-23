@@ -29,7 +29,6 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             contentEvents: {
                 "a.run_default": _.bind(this.runInExecutionSchema, this),
                 "a.run_selection": _.bind(this.runSelectedInExecutionSchema, this),
-                "a.run_other_schema": _.bind(this.runOtherSchema, this),
                 "a.run_and_download": _.bind(this.runAndDownloadInExecutionSchema, this),
                 "a.run_selection_and_download": _.bind(this.runSelectionAndDownloadInExecutionSchema, this)
             }
@@ -122,10 +121,6 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         this.dialog.launchModal();
     },
 
-    runOtherSchema: function() {
-        this.dialog = new chorus.dialogs.RunFileInSchema({ model: this.model });
-        this.dialog.launchModal();
-    },
 
     changeWorkfileSchema: function(e) {
         e.preventDefault();

@@ -190,7 +190,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            context("and there is no schema to run in", function() {
+            context("and there is no sandbox to run in", function() {
                 context("and opens the Run File menu", function() {
                     beforeEach(function() {
                         this.view.model.workspace().unset("sandboxInfo");
@@ -204,7 +204,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     });
 
                     it("has the right translation", function() {
-                        expect(this.qtipElement.find(".run_selection")).toContainTranslation("workfile.content_details.run_selection_sandbox");
+                        expect(this.qtipElement.find(".run_selection")).toContainTranslation("workfile.content_details.run_selection");
                     });
 
                     it("does nothing when the user clicks run selection", function() {
@@ -220,11 +220,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             beforeEach(function() {
                 this.view.$(".run_file").click();
             });
-
-            it("shows the 'run in another' schema link in the menu", function() {
-                expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema");
-            });
-
 
             describe("when the workspace does not have a sandbox", function() {
                 beforeEach(function() {
@@ -269,14 +264,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     this.qtipElement.find('.run_and_download').click();
                     expect(this.view.dialog.options.selection).toBeFalsy();
                     expect(modalSpy).toHaveModal(chorus.dialogs.RunAndDownload);
-                });
-            });
-
-            describe("clicking on 'Run in another schema'", function() {
-                it("launches the RunFileInSchema dialog", function() {
-                    var modalSpy = stubModals();
-                    this.qtipElement.find('.run_other_schema').click();
-                    expect(modalSpy).toHaveModal(chorus.dialogs.RunFileInSchema);
                 });
             });
 
