@@ -19,7 +19,7 @@ describe("chorus.models.GpdbInstance", function() {
     });
 
     it('has the type', function() {
-        expect(this.instance.get('type')).toBe('GREENPLUM');
+        expect(this.instance.get('entityType')).toBe('gpdb_instance');
     });
 
     describe("#databases", function() {

@@ -371,7 +371,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$("button.submit").click();
                 var params = this.server.lastCreate().params();
 
-                expect(params['data_source[type]']).toBe('GREENPLUM');
+                expect(params['data_source[entity_type]']).toBe('gpdb_instance');
                 expect(params["data_source[name]"]).toBe("Instance_Name");
                 expect(params["data_source[description]"]).toBe("Instance Description");
                 expect(params["data_source[db_name]"]).toBe("foo");
@@ -401,7 +401,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$("button.submit").click();
                 var params = this.server.lastCreate().params();
 
-                expect(params['data_source[type]']).toBe('ORACLE');
+                expect(params['data_source[entity_type]']).toBe('oracle_instance');
                 expect(params["data_source[db_password]"]).toBe("my_password");
                 expect(params["data_source[name]"]).toBe("Instance_Name");
                 expect(params["data_source[description]"]).toBe("Instance Description");

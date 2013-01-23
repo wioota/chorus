@@ -109,7 +109,7 @@ describe DataSourcesController do
           :description => "old description",
           :db_username => "bob",
           :db_password => "secret",
-          :type => type,
+          :entity_type => entity_type,
           :shared => false
       }
     end
@@ -119,7 +119,7 @@ describe DataSourcesController do
     end
 
     context "for a GpdbInstance" do
-      let(:type) { "GREENPLUM" }
+      let(:entity_type) { "gpdb_instance" }
 
       it "creates the data source" do
         expect {
@@ -150,7 +150,7 @@ describe DataSourcesController do
     end
 
     context "for an OracleInstance" do
-      let(:type) { "ORACLE" }
+      let(:entity_type) { "oracle_instance" }
 
       it "creates a new OracleInstance" do
         expect {
@@ -173,13 +173,13 @@ describe DataSourcesController do
       end
     end
 
-    context "for an unknown type" do
-      let(:type) { "######" }
+    context "for an unknown entity type" do
+      let(:entity_type) { "######" }
 
       it "returns an error" do
         post :create, valid_attributes
         response.code.should == "422"
-        decoded_errors.fields.type.should have_key :INVALID
+        decoded_errors.fields.entity_type.should have_key :INVALID
       end
     end
   end

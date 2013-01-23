@@ -9,7 +9,7 @@ chorus.models.GpdbInstance = chorus.models.DataSource.extend({
     parameterWrapper: "data_source",
 
     defaults: {
-        type: 'GREENPLUM'
+        entityType: 'gpdb_instance'
     },
 
     declareValidations: function(newAttrs) {

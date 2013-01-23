@@ -17,21 +17,21 @@ class DataSourcesController < GpdbController
   end
 
   def create
-    type = params[:data_source].delete(:type)
+    entity_type = params[:data_source].delete(:entity_type)
 
-    if type == "GREENPLUM"
+    if entity_type == "gpdb_instance"
       created_gpdb_instance = current_user.gpdb_instances.create!(params[:data_source], :as => :create)
       QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
       present created_gpdb_instance, :status => :created
 
-    elsif type == "ORACLE"
+    elsif entity_type == "oracle_instance"
       created_oracle_instance = current_user.oracle_instances.new(params[:data_source])
       created_oracle_instance.shared = true
       created_oracle_instance.save!
 
       present created_oracle_instance, :status => :created
     else
-      raise ApiValidationError.new(:type, :invalid)
+      raise ApiValidationError.new(:entity_type, :invalid)
     end
   end
 

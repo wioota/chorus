@@ -9,7 +9,7 @@ chorus.models.OracleInstance = chorus.models.DataSource.extend({
     parameterWrapper: "data_source",
 
     defaults: {
-        type: 'ORACLE'
+        entityType: 'oracle_instance'
     },
 
     declareValidations: function(newAttrs) {

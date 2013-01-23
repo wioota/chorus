@@ -24,7 +24,7 @@ describe("chorus.models.OracleInstance", function() {
     });
 
     it('has the type', function() {
-        expect(this.instance.get('type')).toBe('ORACLE');
+        expect(this.instance.get('entityType')).toBe('oracle_instance');
     });
 
     describe("#isGreenplum", function() {
