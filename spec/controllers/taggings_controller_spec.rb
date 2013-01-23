@@ -9,7 +9,7 @@ describe TaggingsController do
 
   describe 'create' do
     let(:entity) { workfiles(:public) }
-    let(:params) { { :entity_id => entity.id, :entity_type => entity.class.name, :tag_names => tag_names } }
+    let(:params) { { :entity_id => entity.id, :entity_type => entity.class.name.underscore, :tag_names => tag_names } }
     let(:tag_names) { ['alpha', 'beta'] }
 
     it 'adds the tags' do
@@ -65,6 +65,20 @@ describe TaggingsController do
         post :create, params
         response.should_not be_success
         decoded_errors.fields.base.should have_key :TOO_LONG
+      end
+    end
+
+    context 'when saving the tags fail' do
+      before do
+        mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
+        mock(entity).save!.twice {
+          raise ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang'))
+        }
+      end
+
+      it 're-tries saving' do
+        post :create, params
+        response.code.should == '422'
       end
     end
 
