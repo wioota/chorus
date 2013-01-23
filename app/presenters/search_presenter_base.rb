@@ -25,7 +25,7 @@ class SearchPresenterBase < Presenter
   private
 
   def model_to_present(model)
-    (model.is_a?(Workfile) && !model.is_a?(LinkedTableauWorkfile)) ? model.latest_workfile_version : model
+    model.is_a?(ChorusWorkfile) ? model.latest_workfile_version : model
   end
 
   def extend_result_with_nested_highlights(result)

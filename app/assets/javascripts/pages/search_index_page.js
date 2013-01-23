@@ -84,7 +84,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.sidebars = {
             hdfs: new chorus.views.HdfsEntrySidebar(),
             user: new chorus.views.UserSidebar({listMode: true}),
-            workfile: new chorus.views.WorkfileSidebar({showEditingLinks: false}),
             workspace: new chorus.views.WorkspaceListSidebar(),
             dataset: new chorus.views.DatasetSidebar({listMode: true}),
             instance: new chorus.views.InstanceListSidebar(),
@@ -118,8 +117,9 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.renderSidebar(this.sidebars.dataset);
     },
 
-    workfileSelected: function() {
-        this.renderSidebar(this.sidebars.workfile);
+    workfileSelected: function(workfile) {
+        var sidebar = chorus.views.WorkfileSidebar.buildFor({model: workfile, showEditingLinks: false});
+        this.renderSidebar(sidebar);
     },
 
     userSelected: function(user) {
@@ -138,10 +138,17 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     renderSidebar: function(sidebar) {
-        this.sidebar && $(this.sidebar.el).removeClass("attachment_list_sidebar workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar hdfs_list_sidebar");
+        this.sidebar && $(this.sidebar.el).removeClass("attachment_list_sidebar workspace_list_sidebar dataset_list_sidebar user_list_sidebar hdfs_list_sidebar");
+        this.teardownSidebar();
         this.sidebar = sidebar;
         this.renderSubview('sidebar');
         this.trigger('resized');
+    },
+
+    teardownSidebar: function() {
+        if(this.sidebar instanceof chorus.views.WorkfileSidebar) {
+            this.sidebar.teardown(true);
+        }
     },
 
     postRender: function() {
