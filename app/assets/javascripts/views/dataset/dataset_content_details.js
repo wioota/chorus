@@ -73,12 +73,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             this.showEditChorusViewWizard();
         }
 
-        if (this.options.$columnList) {
-            chorus.search({
-                input: this.$("input.search"),
-                list: this.options.$columnList
-            });
-        }
+        chorus.search({
+            input: this.$("input.search"),
+            list: this.options.$columnList
+        });
 
         if(this.collection.serverErrors && _.keys(this.collection.serverErrors).length){
             this.showErrorWithDetailsLink(this.collection, chorus.alerts.Error);

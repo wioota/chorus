@@ -42,21 +42,19 @@ class WorkspaceDatasetsController < ApplicationController
       dataset = datasets.find(params[:id])
     end
 
-    if dataset.schema.verify_in_source(current_user)
-      if dataset.verify_in_source(current_user)
-        present dataset, {:presenter_options => {:workspace => workspace}}
-      else
-        render_missing_db_object(dataset)
-      end
+    if dataset.schema.verify_in_source(current_user) && dataset.verify_in_source(current_user)
+      present dataset, {:presenter_options => {:workspace => workspace}}
     else
-      render_missing_db_object(dataset)
+      render_dataset_with_error(dataset)
     end
+  rescue GreenplumConnection::DatabaseError => e
+    render_dataset_with_error(dataset, e.error_type)
   end
 
-  def render_missing_db_object(dataset)
+  def render_dataset_with_error(dataset, error_type = :MISSING_DB_OBJECT)
     json = {
         :response => Presenter.present(dataset, view_context, {:workspace => workspace}),
-        :errors => {:record => :MISSING_DB_OBJECT}
+        :errors => {:record => error_type}
     }
     render json: json, status: :unprocessable_entity
   end
