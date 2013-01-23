@@ -22,12 +22,9 @@ describe("chorus.models.AlpineWorkfile", function () {
 
         it("matches the expected url", function() {
             expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
-            expect(chorus.models.Config.instance().get('alpinePort')).toBeDefined();
             expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();
             var uri = new URI({
-                protocol: "http",
                 hostname: chorus.models.Config.instance().get('alpineUrl'),
-                port: chorus.models.Config.instance().get('alpinePort'),
                 path: "/alpinedatalabs/main/chorus.do",
                 query: "method=getWorkFlowImage&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + workfile.get("alpineId")
             });
@@ -43,12 +40,9 @@ describe("chorus.models.AlpineWorkfile", function () {
 
         it("matches the expected url", function() {
             expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
-            expect(chorus.models.Config.instance().get('alpinePort')).toBeDefined();
             expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();
             var uri = new URI({
-                protocol: "http",
                 hostname: chorus.models.Config.instance().get('alpineUrl'),
-                port: chorus.models.Config.instance().get('alpinePort'),
                 path: "/alpinedatalabs/main/chorus.do",
                 query: "method=runWorkFlow&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + workfile.get("alpineId") + "&chorus_workfile_type=Workfile&chorus_workfile_id=" + workfile.get('id')
             });

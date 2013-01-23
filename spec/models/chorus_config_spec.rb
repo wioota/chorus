@@ -166,19 +166,31 @@ describe ChorusConfig do
   end
 
   describe "#alpine_configured?" do
-    it 'returns true if the alpine.enabled key is there' do
+    it 'returns true if alpine.url and alpine.api_key are set' do
       config.config = {
           'alpine' => {
-              'enabled' => true
+              'url' => 'test',
+              'api_key' => 'key'
           }
       }
       config.alpine_configured?.should == true
     end
 
-    it 'returns false if the alpine.enabled value is false' do
+    it 'returns false if the alpine.url is not set' do
       config.config = {
           'alpine' => {
-              'enabled' => false
+              'url' => '',
+              'api_key' => 'key'
+          }
+      }
+      config.alpine_configured?.should == false
+    end
+
+    it 'returns false if the alpine.api_key is not set' do
+      config.config = {
+          'alpine' => {
+              'url' => 'test',
+              'api_key' => ''
           }
       }
       config.alpine_configured?.should == false

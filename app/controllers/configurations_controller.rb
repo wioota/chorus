@@ -37,7 +37,6 @@ class ConfigurationsController < ApplicationController
     if ChorusConfig.instance.alpine_configured?
       {
         :alpine_url => ChorusConfig.instance['alpine.url'],
-        :alpine_port => ChorusConfig.instance['alpine.port'],
         :alpine_api_key => ChorusConfig.instance['alpine.api_key']
       }
     else

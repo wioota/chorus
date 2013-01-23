@@ -32,26 +32,20 @@ describe ConfigurationsController do
     end
 
     it "includes the alpine configuration" do
-      stub(ChorusConfig.instance).alpine_configured? { true }
-      stub(ChorusConfig.instance).[]('alpine.url') { 'test.example' }
-      stub(ChorusConfig.instance).[]('alpine.port') { '1234' }
+      stub(ChorusConfig.instance).[]('alpine.url') { 'http://test.example.com:8080' }
       stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
       get :show
       response.code.should == "200"
-      decoded_response.alpine_url.should == 'test.example'
-      decoded_response.alpine_port.should == '1234'
+      decoded_response.alpine_url.should == 'http://test.example.com:8080'
       decoded_response.alpine_api_key.should == 'abcdefg'
     end
 
-    it "does not include the alpine configuration when it is disabled" do
-      stub(ChorusConfig.instance).alpine_configured? { false }
-      stub(ChorusConfig.instance).[]('alpine.url') { 'test.example' }
-      stub(ChorusConfig.instance).[]('alpine.port') { '1234' }
+    it "does not include the alpine configuration when it is not fully configured" do
+      stub(ChorusConfig.instance).[]('alpine.url') { '' }
       stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
       get :show
       response.code.should == "200"
       decoded_response.should_not have_key('alpine_url')
-      decoded_response.should_not have_key('alpine_port')
       decoded_response.should_not have_key('alpine_api_key')
     end
 
@@ -120,8 +114,7 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('file_sizes_mb.attachment') { 10 }
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { 15 }
       stub(ChorusConfig.instance).[]('default_preview_row_limit') { 20 }
-      stub(ChorusConfig.instance).[]('alpine.url') { 'text.example' }
-      stub(ChorusConfig.instance).[]('alpine.port') { 1234 }
+      stub(ChorusConfig.instance).[]('alpine.url') { 'http://text.example:8080' }
       stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
       stub(ChorusConfig.instance).alpine_configured? { true }
       stub(ChorusConfig.instance).oracle_configured? { true }

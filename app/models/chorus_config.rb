@@ -41,7 +41,7 @@ class ChorusConfig
   end
 
   def alpine_configured?
-    !!self['alpine.enabled']
+    !!(self['alpine.url'].present? && self['alpine.api_key'].present?)
   end
 
   def syslog_configured?

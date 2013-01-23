@@ -26,9 +26,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
 
     alpineUrlBase: function() {
         var uri = URI({
-            protocol: "http",
             hostname: chorus.models.Config.instance().get('alpineUrl'),
-            port: chorus.models.Config.instance().get('alpinePort'),
             path: "/alpinedatalabs/main/chorus.do"
         });
         uri.addQuery({
