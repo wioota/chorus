@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ImportConsole::ImportsController do
-  #ignore_authorization!
+  render_views
 
   let(:user) { users(:admin) }
 
@@ -14,7 +14,7 @@ describe ImportConsole::ImportsController do
       let(:pending_import) { imports(:one) }
 
       before do
-        Import.where(:finished_at => nil).map do |import|
+        Import.where(:finished_at => nil).each do |import|
           import.update_attribute(:finished_at, Time.now)
         end
         pending_import.update_attribute(:finished_at, nil)
@@ -22,12 +22,24 @@ describe ImportConsole::ImportsController do
 
       it "returns success" do
         get :index
-        response.code.should == "200"
+        response.should be_success
       end
 
       it "fetches a list of pending imports" do
         get :index
         assigns(:imports).map(&:id).should == [pending_import.id]
+      end
+
+      context 'when gpfdist is not configured' do
+        before do
+          stub.proxy(ChorusConfig.instance).[](anything)
+          stub.proxy(ChorusConfig.instance).[](/gpfdist/) { nil }
+        end
+
+        it 'does not blow up' do
+          get :index
+          response.should be_success
+        end
       end
     end
 

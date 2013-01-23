@@ -36,7 +36,7 @@ app/assets/javascripts/environment.js
 /spec/javascripts/fixtures/rspec
 
 # Ignore ctags file
-tags
+/tags
 
 # Bundler binstub dir
 /b
@@ -80,3 +80,7 @@ GREENPLUM_IP
 
 # Ignore load-test data
 /performance/load-test-users.csv
+
+# Ignore oracle jar
+ojdbc*.jar
+/lib/libraries

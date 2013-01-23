@@ -1,11 +1,20 @@
 class AbstractMigrator
   class MigratorValidationError < StandardError; end
 
+  @@failed = false
+
+  def self.failed?
+    @@failed
+  end
+
   def self.validate
     classes_to_validate.each do |klass|
       klass, finder_options = klass if klass.is_a? Array
       klass.find_each(finder_options || {}) do |record|
-        record.valid? || raise(MigratorValidationError.new("Invalid record. Errors: #{record.errors.full_messages} Record: #{record.inspect}"))
+        unless record.valid?
+          @@failed = true
+          puts "Invalid record. Errors: #{record.errors.full_messages} Record: #{record.inspect}"
+        end
       end
     end
   end
