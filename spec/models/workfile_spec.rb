@@ -88,4 +88,24 @@ describe Workfile do
       Workfile.new.entity_type.should == 'workfile'
     end
   end
+
+  describe "copy" do
+    let(:workfile) { workfiles(:public) }
+    let(:workspace) { workspaces(:private) }
+    let(:user) { users(:admin) }
+
+    it "copies the associated data" do
+      new_workfile = workfile.copy(user, workspace)
+      new_workfile.file_name = workfile.file_name
+      new_workfile.description = workfile.description
+      new_workfile.workspace = workspace
+      new_workfile.owner = user
+    end
+
+    it "copies any additional_data" do
+      workfile.additional_data["something"] = "here"
+      new_workfile = workfile.copy(user, workspace)
+      new_workfile.additional_data["something"].should == "here"
+    end
+  end
 end

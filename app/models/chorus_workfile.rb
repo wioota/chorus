@@ -59,16 +59,6 @@ class ChorusWorkfile < Workfile
     !!WorkfileDraft.find_by_owner_id_and_workfile_id(current_user.id, id)
   end
 
-  def copy(user, workspace)
-    workfile = self.class.new
-    workfile.file_name = file_name
-    workfile.description = description
-    workfile.workspace = workspace
-    workfile.owner = user
-
-    workfile
-  end
-
   def entity_type_name
     'workfile'
   end

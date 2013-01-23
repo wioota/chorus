@@ -65,6 +65,17 @@ class Workfile < ActiveRecord::Base
     'workfile'
   end
 
+  def copy(user, workspace)
+    workfile = self.class.new
+    workfile.file_name = file_name
+    workfile.description = description
+    workfile.workspace = workspace
+    workfile.owner = user
+    workfile.additional_data = additional_data
+
+    workfile
+  end
+
   private
 
   def init_file_name
