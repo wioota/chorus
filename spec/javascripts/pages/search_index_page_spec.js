@@ -113,15 +113,17 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 describe("clicking on a workfile search result", function() {
                     beforeEach(function() {
-                        this.workfileLIs.eq(3).trigger("click");
+                        this.searchedWorkfile = this.workfileLIs.eq(2);
+                        this.searchedWorkfile.trigger("click");
                     });
 
                     it("selects that workfile", function() {
-                        expect(this.workfileLIs.eq(3)).toHaveClass("selected");
+                        expect(this.searchedWorkfile).toHaveClass("selected");
                     });
 
                     it("shows that workfile in the sidebar", function() {
-                        expect(this.page.sidebar.$(".fileName")).toHaveText("Public");
+                        var workfileName = this.searchedWorkfile.find('a.name').text();
+                        expect(this.page.sidebar.$(".fileName")).toHaveText(workfileName);
                     });
 
                     it('shows the right links', function(){
@@ -132,7 +134,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("sets the workfile as the selectedItem on the search result", function() {
-                        expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(3));
+                        expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(2));
                     });
                 });
             });
