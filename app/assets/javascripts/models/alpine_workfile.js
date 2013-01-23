@@ -19,7 +19,8 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
         uri.addQuery({
             method: "runWorkFlow",
             chorus_workfile_type: "Workfile",
-            chorus_workfile_id: this.id
+            chorus_workfile_id: this.id,
+            chorus_workfile_name: this.get("fileName")
         });
         return uri.toString();
     },

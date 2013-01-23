@@ -44,7 +44,7 @@ describe("chorus.models.AlpineWorkfile", function () {
             var uri = new URI({
                 hostname: chorus.models.Config.instance().get('alpineUrl'),
                 path: "/alpinedatalabs/main/chorus.do",
-                query: "method=runWorkFlow&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + workfile.get("alpineId") + "&chorus_workfile_type=Workfile&chorus_workfile_id=" + workfile.get('id')
+                query: "method=runWorkFlow&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + workfile.get("alpineId") + "&chorus_workfile_type=Workfile&chorus_workfile_id=" + workfile.get('id') + "&chorus_workfile_name=" + workfile.get('fileName')
             });
             expect(new URI(workfile.runUrl()).equals(uri)).toBeTruthy();
         });
