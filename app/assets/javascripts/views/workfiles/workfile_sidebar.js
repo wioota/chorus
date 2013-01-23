@@ -4,7 +4,8 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     useLoadingSection:true,
 
     options: {
-        showEditingLinks: true
+        showEditingLinks: true,
+        showDownloadLink: true
     },
     subviews:{
         '.tab_control': 'tabs'
@@ -15,9 +16,6 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     },
 
     setup:function () {
-        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this));
-
         this.tabs = new chorus.views.TabControl();
 
         if(this.model) {
@@ -41,11 +39,11 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 this.bindings.add(this.allVersions, "changed", this.render);
 
                 this.allVersions.fetch();
-                chorus.PageEvents.subscribe("workfile_version:deleted", this.versionDestroyed, this);
+                this.subscriptions.push(chorus.PageEvents.subscribe("workfile_version:deleted", this.versionDestroyed, this));
             }
 
-            chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this);
-            chorus.PageEvents.subscribe("dataset:back", this.recalculateScrolling, this);
+            this.subscriptions.push(chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this));
+            this.subscriptions.push(chorus.PageEvents.subscribe("dataset:back", this.recalculateScrolling, this));
 
             this.tabs.activity = new chorus.views.ActivityList({
                 collection:this.collection,
@@ -82,16 +80,12 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
     },
 
-    unsetWorkfile: function(){
-        this.setWorkfile(undefined);
-    },
-
     additionalContext:function () {
         var workspaceActive = this.model && this.model.workspace().isActive();
         var ctx = {
             showAddNoteLink: workspaceActive && this.options.showEditingLinks,
             showCopyLink: true,
-            showDownloadLink: true,
+            showDownloadLink: this.options.showDownloadLink,
             showDeleteLink: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
             showUpdatedTime: true,
             showVersions: this.options.showVersions
@@ -140,4 +134,21 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     displayVersionList:function (e) {
         e.preventDefault();
     }
-});
+
+},
+    {
+        typeMap: {
+            alpine: 'AlpineWorkfileSidebar'
+        },
+
+        buildFor: function(options) {
+            var modelType = options.model.get("type");
+
+            if (!chorus.views[this.typeMap[modelType]]) {
+                return new chorus.views.WorkfileSidebar(options);
+            }
+
+            return new chorus.views[this.typeMap[modelType]](options);
+        }
+}
+);

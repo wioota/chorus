@@ -12,6 +12,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         beforeEach(function() {
             spyOn(chorus.views.WorkfileContentDetails, 'buildFor').andCallThrough();
             spyOn(chorus.views.WorkfileContent, 'buildFor').andCallThrough();
+            spyOn(chorus.views.WorkfileSidebar, 'buildFor').andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
         });
 
@@ -101,6 +102,11 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
                 it("instantiates the content view", function() {
                     expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model);
+                });
+
+                it('instantiates the sidebar view', function() {
+                    expect(this.page.sidebar).toBeDefined();
+                    expect(chorus.views.WorkfileSidebar.buildFor).toHaveBeenCalled();
                 });
 
                 it("renders again", function() {

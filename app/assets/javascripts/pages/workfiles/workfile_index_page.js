@@ -49,7 +49,6 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                 eventName: "workfile:search"
             }
         });
-        this.sidebar = new chorus.views.WorkfileSidebar({workspace: this.workspace});
         chorus.PageEvents.subscribe("workfile:selected", this.setModel, this);
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
@@ -87,6 +86,11 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
 
     setModel: function(workfile) {
         this.model = workfile;
+        if(this.sidebar) {
+            this.sidebar.teardown(true);
+        }
+        this.sidebar = chorus.views.WorkfileSidebar.buildFor({model: this.model});
+        this.renderSubview('sidebar');
     },
 
     updateButtons: function() {

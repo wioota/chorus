@@ -10,7 +10,7 @@ chorus.views.Sidebar = chorus.views.Base.extend({
 
     teardown: function() {
         $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
-        this._super("teardown");
+        this._super("teardown", arguments);
     },
 
     postRender: function() {

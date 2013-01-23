@@ -2,6 +2,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace();
         this.model = rspecFixtures.workfile.sql({workspace: {id: this.workspace.id}});
+        spyOn(chorus.views.WorkfileSidebar, 'buildFor').andCallThrough();
         this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
     });
 
@@ -79,11 +80,29 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
+            chorus.PageEvents.broadcast("workfile:selected", this.model);
         });
 
         it("sets the model of the page", function() {
-            chorus.PageEvents.broadcast("workfile:selected", this.model);
             expect(this.page.model).toBe(this.model);
+        });
+
+        it('instantiates the sidebar view', function() {
+            expect(this.page.sidebar).toBeDefined();
+            expect(chorus.views.WorkfileSidebar.buildFor).toHaveBeenCalled();
+            expect(this.page.$("#sidebar .sidebar_content.primary")).not.toBeEmpty();
+        });
+
+        describe("when workfile:selected event is triggered and there is already a sidebar", function() {
+            beforeEach(function() {
+                this.oldSidebar = this.page.sidebar;
+                spyOn(this.page.sidebar, 'teardown');
+                chorus.PageEvents.broadcast("workfile:selected", this.model);
+            });
+
+            it("tears down the old sidebar", function() {
+                expect(this.oldSidebar.teardown).toHaveBeenCalled();
+            });
         });
     });
 
