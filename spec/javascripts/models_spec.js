@@ -1191,6 +1191,35 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
+        describe("#remove", function() {
+            context("with a paginated collection", function() {
+                beforeEach(function(){
+                    this.collection.add([{}, {}, {}, {}]);
+                    this.collection.pagination = {
+                        total: 1,
+                        page: 1,
+                        records: 4,
+                        per_page: 50
+                    };
+                });
+
+                it('decreases the record count', function(){
+                    this.collection.remove(this.collection.at(0));
+                    expect(this.collection.totalRecordCount()).toBe(3);
+                });
+
+                it('takes an array of models', function() {
+                    this.collection.remove(this.collection.models);
+                    expect(this.collection.totalRecordCount()).toBe(0);
+                });
+
+                it('doesnt decrease the count for models that are not in the collection', function(){
+                    this.collection.remove({});
+                    expect(this.collection.totalRecordCount()).toBe(4);
+                });
+            });
+        });
+
         describe("#findWhere", function() {
             beforeEach(function() {
                 this.m1 = rspecFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });

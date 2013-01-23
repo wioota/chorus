@@ -9,6 +9,10 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         "click a.select_none": "selectNone"
     },
 
+    setup: function(){
+        this.bindings.add(this.collection, "remove", this.render);
+    },
+
     fetchNextPage: function() {
         var page = parseInt(this.collection.pagination.page, 10);
         this.collection.fetchPage(page + 1);
@@ -71,7 +75,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     },
 
     updatePagination: function() {
-        var count = this.collection.pagination ? parseInt(this.collection.pagination.records, 10) : this.collection.length;
+        var count = this.collection.totalRecordCount();
         this.$(".count").text(t("entity.name." + this.options.modelClass, {count: count}));
 
         if (this.collection.loaded && this.collection.pagination) {
@@ -80,8 +84,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
                 this.$(".total").text(this.collection.pagination.total);
             }
 
-            var page = parseInt(this.collection.pagination.page, 10);
-            var total = parseInt(this.collection.pagination.total, 10);
+            var page = this.collection.pagination.page;
+            var total = this.collection.pagination.total;
 
             this.$(".pagination").toggleClass("hidden", total <= 1);
 

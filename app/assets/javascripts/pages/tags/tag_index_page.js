@@ -14,5 +14,7 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.TagListSidebar();
+
+        this.dependOn(tags, this.render);
     }
 });

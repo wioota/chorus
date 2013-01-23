@@ -2,9 +2,9 @@ describe("chorus.views.ListContentDetails", function() {
     beforeEach(function() {
         this.collection = rspecFixtures.userSet();
         this.collection.pagination = {
-            "total": "2",
-            "page": "1",
-            "records": "22"
+            "total": 2,
+            "page": 1,
+            "records": 22
         };
         this.collection.loaded = true;
         this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User" });
@@ -270,6 +270,13 @@ describe("chorus.views.ListContentDetails", function() {
             it("displays 'loading'", function() {
                 expect(this.view.$(".loading")).toExist();
             });
+        });
+    });
+
+    describe("changing the collection", function() {
+        it("renders the view", function() {
+            this.collection.remove(this.collection.first());
+            expect(this.view.$(".count")).toContainText(this.collection.totalRecordCount());
         });
     });
 

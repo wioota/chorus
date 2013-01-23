@@ -15,51 +15,36 @@ describe("chorus.pages.TagIndexPage", function() {
         });
     });
 
-    describe("page title", function() {
+    describe("#render", function() {
         beforeEach(function() {
             this.page.render();
         });
 
-        it("is 'Tags'", function() {
+        it('displays the page title', function() {
             expect(this.page.$('h1[title=Tags]')).toContainTranslation("tags.title_plural");
         });
     });
 
-    describe("content details", function() {
+    describe("when the tags have loaded", function() {
         beforeEach(function() {
             this.tags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
             this.server.completeFetchAllFor(this.tagSet, this.tags);
-            this.page.render();
+        });
+
+        it("displays the tags", function() {
+            _.each(this.tags, function(tag) {
+                expect(this.page.$('.content')).toContainText(tag.name);
+            }, this);
         });
 
         it("loads the correct count", function() {
             expect(this.page.$('.count')).toContainText(this.tags.length);
         });
-    });
 
-    describe("content", function() {
-        beforeEach(function() {
-            this.tags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
-            this.server.completeFetchAllFor(this.tagSet, this.tags);
-            this.page.render();
-        });
-
-        it("loads the tags", function() {
-            _.each(this.tags, function(tag) {
-                expect(this.page.$('.content')).toContainText(tag.name);
-            }, this);
-        });
-    });
-
-    describe("sidebar", function() {
-        beforeEach(function() {
-            this.tags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
-            this.server.completeFetchAllFor(this.tagSet, this.tags);
-            this.page.render();
-        });
-
-        it("selects the first tag and shows it on the sidebar", function() {
-            expect(this.page.$('.tag_title')).toContainText("IamTag");
+        describe("sidebar", function() {
+            it("selects the first tag and shows it on the sidebar", function() {
+                expect(this.page.$('.tag_title')).toContainText("IamTag");
+            });
         });
     });
 });

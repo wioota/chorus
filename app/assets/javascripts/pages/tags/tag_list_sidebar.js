@@ -1,4 +1,5 @@
 chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
+    constructorName: 'TagListSidebar',
     templateName: 'tag_list_sidebar',
 
     events: {
