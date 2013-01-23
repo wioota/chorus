@@ -4,7 +4,6 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     setup: function() {
         this._super("setup", arguments);
 
-        chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
         chorus.PageEvents.subscribe("file:selectionPresent", this.changeRunFileButtonText, this);
         chorus.PageEvents.subscribe("file:selectionEmpty", this.changeRunSelectedButtonText, this);
         this.contentView = this.options.contentView;
@@ -126,14 +125,6 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         e.preventDefault();
         this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
         this.dialog.launchModal();
-    },
-
-    workfileExecuted: function(workfile, executionSchema) {
-
-        if(executionSchema.id) {
-            this.model.set({executionSchema: executionSchema}, {silent: true});
-            this.render();
-        }
     }
 });
 

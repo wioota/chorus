@@ -307,38 +307,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.view.changeWorkfileSchema).toHaveBeenCalled();
             });
         });
-
-        describe("workfile:executed", function() {
-            beforeEach(function() {
-                spyOn(this.view, "render");
-                spyOnEvent(this.view.model, "change");
-                this.executionSchema = rspecFixtures.schema();
-
-                chorus.PageEvents.broadcast("workfile:executed", this.model, this.executionSchema);
-            });
-
-            it("updates the execution schema in the workfile", function() {
-                expect(this.view.model.get("executionSchema")).toBe(this.executionSchema);
-            });
-
-            context("does not update model if executionSchema is nil", function() {
-                beforeEach(function() {
-                    this.executionSchema = null;
-                    this.oldSchema = this.view.model.get("executionSchema");
-                });
-                it("updates the execution schema in the workfile", function() {
-                    expect(this.view.model.get("executionSchema")).toBe(this.oldSchema);
-                });
-            });
-
-            it("re-renders", function() {
-                expect(this.view.render).toHaveBeenCalled();
-            });
-
-            it("does not trigger change on the model", function() {
-                expect("change").not.toHaveBeenTriggeredOn(this.view.model);
-            });
-        });
     });
 
     describe("create chorus view", function() {
