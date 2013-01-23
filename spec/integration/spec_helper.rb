@@ -36,7 +36,7 @@ FACTORY_GIRL_SEQUENCE_OFFSET = 44444
 FactoryGirl.find_definitions
 require "#{Rails.root}/spec/support/fixture_builder.rb"
 require "#{Rails.root}/spec/support/database_integration/instance_integration.rb"
-require Rails.root.join('spec/support/external_service_detector.rb').to_s
+require Rails.root.join('spec/external_service_detector.rb').to_s
 
 RSpec.configure do |config|
   config.before(:each) do
