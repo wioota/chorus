@@ -15,7 +15,7 @@ describe GnipImporter do
     stub(connection).drop_table(anything)
   end
 
-  describe "validations", :database_integration do
+  describe "validations", :greenplum_integration do
     let(:workspace) { workspaces(:real) }
     let(:schema) { workspace.sandbox }
     let(:instance) { schema.gpdb_instance }

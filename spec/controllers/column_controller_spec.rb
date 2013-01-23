@@ -40,7 +40,7 @@ describe ColumnController do
       end
     end
 
-    context "with real data", :database_integration => true do
+    context "with real data", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:user) { account.owner }
       let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }

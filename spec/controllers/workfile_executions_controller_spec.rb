@@ -112,7 +112,7 @@ describe WorkfileExecutionsController do
       end
     end
 
-    describe "rspec fixtures", :database_integration do
+    describe "rspec fixtures", :greenplum_integration do
       let(:schema) { GpdbSchema.find_by_name!('test_schema') }
 
       before do

@@ -91,7 +91,7 @@ describe GpdbDatabase do
     end
   end
 
-  context "refresh using a real greenplum instance", :database_integration => true do
+  context "refresh using a real greenplum instance", :greenplum_integration do
     let(:account) { InstanceIntegration.real_gpdb_account }
 
     it "sorts the database by name in ASC order" do
@@ -167,7 +167,7 @@ describe GpdbDatabase do
   end
 
   describe ".create_schema" do
-    context "using a real greenplum instance", :database_integration => true do
+    context "using a real greenplum instance", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
       let(:instance) { database.gpdb_instance }
@@ -241,7 +241,7 @@ describe GpdbDatabase do
     end
   end
 
-  describe "#with_gpdb_connection", :database_integration do
+  describe "#with_gpdb_connection", :greenplum_integration do
     it "raises GreenplumConnection::ObjectNotFound when the database does not exist" do
       database = FactoryGirl.create(:gpdb_database, :gpdb_instance => InstanceIntegration.real_gpdb_instance, :name => 'i_dont_exist')
 

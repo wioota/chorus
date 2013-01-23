@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Import, :database_integration => true do
+describe Import, :greenplum_integration do
   let(:user)  { schema.gpdb_instance.owner }
   let(:workspace) { workspaces(:real) }
   let(:database) { InstanceIntegration.real_database }

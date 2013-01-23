@@ -21,7 +21,7 @@ describe VisualizationsController do
         response.status.should == 200
       end
 
-      describe "fixtures", :database_integration => true do
+      describe "fixtures", :greenplum_integration do
         let(:account) { InstanceIntegration.real_gpdb_account }
         before do
           log_in account.owner

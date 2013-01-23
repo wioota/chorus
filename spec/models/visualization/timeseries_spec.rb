@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Visualization::Timeseries, :database_integration => true do
+describe Visualization::Timeseries, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
   let(:filters) { [%Q{"#{dataset.name}"."time_value" > '2012-03-03'},
                    %Q{"#{dataset.name}"."column1" < 5}] }

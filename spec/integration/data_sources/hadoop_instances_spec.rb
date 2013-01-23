@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe "Data Sources", :database_integration do
+describe "Data Sources", :greenplum_integration do
   describe "adding a hadoop instance" do
     include DataSourceHelpers
 

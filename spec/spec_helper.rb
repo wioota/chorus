@@ -46,7 +46,7 @@ RSpec.configure do |config|
 
   unless ENV['GPDB_HOST']
     warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
-    config.filter_run_excluding :database_integration => true
+    config.filter_run_excluding :greenplum_integration => true
   end
 
   unless ENV['HADOOP_HOST']
@@ -121,7 +121,7 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
-  config.include InstanceIntegration, :database_integration => true
+  config.include InstanceIntegration, :greenplum_integration => true
   config.include SunspotMatchers
   config.include SolrHelpers
   config.extend ApiDocHelper, :api_doc_dsl => :endpoint

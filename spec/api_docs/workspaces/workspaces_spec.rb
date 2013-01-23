@@ -57,7 +57,7 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:workspace_id/sandbox", :database_integration do
+  post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
     parameter :workspace_id, "Id of a workspace"
     parameter :instance_id, "Id of an instance to create new database in"
     parameter :database_name, "Name of a new database"
@@ -81,7 +81,7 @@ resource "Workspaces" do
     end
   end
 
-  post "/workspaces/:workspace_id/sandbox", :database_integration do
+  post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
     parameter :workspace_id, "Id of a workspace"
     parameter :instance_id, "Id of the instance to create a schema in"
     parameter :database_id, "Id of the database to create a schema in"

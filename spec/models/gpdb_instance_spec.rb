@@ -139,7 +139,7 @@ describe GpdbInstance do
   end
 
   describe "#create_database" do
-    context "using a real remote greenplum instance", :database_integration do
+    context "using a real remote greenplum instance", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
 
@@ -371,8 +371,8 @@ describe GpdbInstance do
     end
   end
 
-  describe "refresh_databases", :database_integration do
-    context "with database integration", :database_integration => true do
+  describe "refresh_databases", :greenplum_integration do
+    context "with database integration" do
       let(:account_with_access) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { account_with_access.instance }
       let(:database) { InstanceIntegration.real_database }
@@ -486,7 +486,7 @@ describe GpdbInstance do
     end
   end
 
-  describe "#databases", :database_integration do
+  describe "#databases", :greenplum_integration do
     let(:account) { InstanceIntegration.real_gpdb_account }
 
     it "should not include the 'template0' database" do
@@ -581,7 +581,7 @@ describe GpdbInstance do
     end
   end
 
-  describe "DataSource Behaviors", :database_integration do
+  describe "DataSource Behaviors", :greenplum_integration do
     let(:instance) { InstanceIntegration.real_gpdb_instance }
     let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
 

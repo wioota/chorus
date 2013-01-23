@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Chorus Views", :database_integration do
+describe "Chorus Views", :greenplum_integration do
   describe "Create" do
 
     let(:workspace) { workspaces(:gpdb_workspace) }

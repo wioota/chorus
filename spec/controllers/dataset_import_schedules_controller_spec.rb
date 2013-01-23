@@ -326,7 +326,7 @@ describe DatasetImportSchedulesController do
     end
   end
 
-  describe "smoke test for import schedules", :database_integration => true do
+  describe "smoke test for import schedules", :greenplum_integration do
     # In the test, use gpfdist to move data between tables in the same schema and database
     let(:instance_account) { InstanceIntegration.real_gpdb_account }
     let(:user) { instance_account.owner }

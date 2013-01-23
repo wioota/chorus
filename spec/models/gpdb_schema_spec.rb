@@ -183,7 +183,7 @@ describe GpdbSchema do
     end
   end
 
-  context "refresh returns the list of schemas", :database_integration => true do
+  context "refresh returns the list of schemas", :greenplum_integration do
     let(:account) { InstanceIntegration.real_gpdb_account }
     let(:database) { GpdbDatabase.find_by_name(InstanceIntegration.database_name) }
 

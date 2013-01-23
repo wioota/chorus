@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpPipe, :database_integration => true do
+describe GpPipe, :greenplum_integration do
   let(:instance_account) { InstanceIntegration.real_gpdb_account }
   let(:user) { instance_account.owner }
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }

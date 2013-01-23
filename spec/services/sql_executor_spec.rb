@@ -4,7 +4,7 @@ describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
   describe "#preview_dataset" do
-    context "with live data", :database_integration do
+    context "with live data", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
       let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
@@ -151,7 +151,7 @@ describe SqlExecutor do
     end
   end
 
-  describe "#execute_sql", :database_integration do
+  describe "#execute_sql", :greenplum_integration do
     let(:account) { instance_accounts(:chorus_gpdb42_test_superuser) }
     let(:schema) { GpdbSchema.find_by_name!('test_schema') }
     let(:sql) { 'create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings' }

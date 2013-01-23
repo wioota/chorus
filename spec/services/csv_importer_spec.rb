@@ -8,7 +8,7 @@ describe CsvImporter do
   let(:file_import_created_event) { Events::FileImportCreated.last }
   let(:destination_dataset) { FactoryGirl.build :gpdb_table, :name => csv_file.to_table }
 
-  describe "with a real database connection", :database_integration => true do
+  describe "with a real database connection", :greenplum_integration do
     let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }

@@ -40,7 +40,7 @@ require "#{Rails.root}/spec/support/database_integration/instance_integration.rb
 RSpec.configure do |config|
   unless ENV['GPDB_HOST']
     warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
-    config.filter_run_excluding :database_integration => true
+    config.filter_run_excluding :greenplum_integration => true
   end
 
   config.before(:each) do

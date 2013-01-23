@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe "External Tables", :database_integration do
+describe "External Tables", :greenplum_integration do
   describe "importing a hadoop file into an external table" do
     let(:hadoop_instance) { hadoop_instances(:real) }
 

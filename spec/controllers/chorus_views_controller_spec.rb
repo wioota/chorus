@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ChorusViewsController, :database_integration => true do
+describe ChorusViewsController, :greenplum_integration do
   let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
   let(:account) { gpdb_instance.owner_account }
   let(:user) { account.owner }

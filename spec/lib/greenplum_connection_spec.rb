@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GreenplumConnection, :database_integration do
+describe GreenplumConnection, :greenplum_integration do
   let(:username) { InstanceIntegration::REAL_GPDB_USERNAME }
   let(:password) { InstanceIntegration::REAL_GPDB_PASSWORD }
   let(:database_name) { InstanceIntegration.database_name }

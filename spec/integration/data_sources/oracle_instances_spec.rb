@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe "Data Source", :database_integration do
+describe "Data Source", :greenplum_integration do
   include DataSourceHelpers
 
   describe "adding an oracle data source" do

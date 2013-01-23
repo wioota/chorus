@@ -13,7 +13,7 @@ describe Visualization::Heatmap do
   end
   let(:instance_account) { InstanceIntegration.real_gpdb_account }
 
-  describe "#fetch!", :database_integration => true do
+  describe "#fetch!", :greenplum_integration do
 
     before do
       visualization.fetch!(instance_account, 12345)

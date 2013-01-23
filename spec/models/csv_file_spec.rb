@@ -99,7 +99,7 @@ describe CsvFile do
     end
   end
   
-  describe "#table_already_exists", :database_integration => true do
+  describe "#table_already_exists", :greenplum_integration do
     let(:csv_file) { CsvFile.first }
     let(:account) { InstanceIntegration.real_gpdb_account }
     let(:user) { account.owner }

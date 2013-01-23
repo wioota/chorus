@@ -5,7 +5,7 @@ describe ChorusView do
     it { should validate_presence_of(:workspace) }
     it { should validate_presence_of(:query) }
 
-    describe "#validate_query", :database_integration => true do
+    describe "#validate_query", :greenplum_integration do
       let(:database) { InstanceIntegration.real_database }
       let(:schema) { database.schemas.find_by_name('public') }
       let(:account) { InstanceIntegration.real_gpdb_account }
@@ -218,7 +218,7 @@ describe ChorusView do
     end
   end
 
-  describe '#add_metadata!(account)', :database_integration => true do
+  describe '#add_metadata!(account)', :greenplum_integration do
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:database) { InstanceIntegration.real_database }
     let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 2, 3, 4, 5") }

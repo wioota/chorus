@@ -524,7 +524,7 @@ describe Dataset do
   end
 end
 
-describe Dataset::Query, :database_integration => true do
+describe Dataset::Query, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
@@ -629,7 +629,7 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#dataset_consistent?", :database_integration => true do
+  describe "#dataset_consistent?", :greenplum_integration do
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:dataset) { schema.datasets.find_by_name('base_table1') }
 

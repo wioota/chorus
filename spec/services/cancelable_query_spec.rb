@@ -38,7 +38,7 @@ describe CancelableQuery do
   describe "#cancel" do
     let(:check_id) { '54321' }
 
-    describe "with a real database connection", :database_integration => true do
+    describe "with a real database connection", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:gpdb_instance) { account.instance }
 

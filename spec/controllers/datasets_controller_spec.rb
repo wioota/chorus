@@ -60,7 +60,7 @@ describe DatasetsController do
       end
     end
 
-    context "with real greenplum", :database_integration do
+    context "with real greenplum", :greenplum_integration do
       let(:user) { users(:admin) }
       let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
 

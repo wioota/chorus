@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpTableCopier, :database_integration => true do
+describe GpTableCopier, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
   let(:user) { account.owner }
   let(:database) { InstanceIntegration.real_database }

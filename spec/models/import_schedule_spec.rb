@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ImportSchedule, :database_integration => true do
+describe ImportSchedule, :greenplum_integration do
   let(:import_schedule) { import_schedules(:default) }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DatasetStreamer, :database_integration => true do
+describe DatasetStreamer, :greenplum_integration do
   let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
   let(:dataset) { database.find_dataset_in_schema("base_table1", "test_schema") }
   let(:user) { InstanceIntegration.real_gpdb_account.owner }

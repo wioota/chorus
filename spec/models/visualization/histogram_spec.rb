@@ -42,7 +42,7 @@ describe Visualization::Histogram do
     end
   end
 
-  context "integration", :database_integration => true do
+  context "integration", :greenplum_integration do
     let(:account) { InstanceIntegration.real_gpdb_account }
     let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)}
     let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }

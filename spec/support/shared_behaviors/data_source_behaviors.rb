@@ -1,5 +1,5 @@
 shared_examples_for "DataSource" do
-  describe "#valid_db_credentials?", :database_integration do
+  describe "#valid_db_credentials?", :greenplum_integration do
     it "returns true when the credentials are valid" do
       instance.valid_db_credentials?(account).should be_true
     end

@@ -252,7 +252,7 @@ describe WorkspaceDatasetsController do
     end
   end
 
-  context "with real greenplum", :database_integration do
+  context "with real greenplum", :greenplum_integration do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:gpdb_workspace) }
 

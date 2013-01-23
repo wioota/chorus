@@ -67,7 +67,7 @@ describe BulkData do
     end
   end
 
-  describe "add default GPDB instance", :database_integration do
+  describe "add default GPDB instance", :greenplum_integration do
     it "should create a GPDB instance with owner" do
       any_instance_of(GpdbInstance) do |instance|
         mock(instance).refresh_all
@@ -79,7 +79,7 @@ describe BulkData do
     end
   end
 
-  describe "add sandboxes", :database_integration do
+  describe "add sandboxes", :greenplum_integration do
     before do
       BulkData.create_workspaces(2)
     end

@@ -83,7 +83,7 @@ describe StatisticsController do
       end
     end
 
-    context "with real gpdb connection", :database_integration do
+    context "with real gpdb connection", :greenplum_integration do
       context "when a chorus view uses a table that has been deleted" do
         let(:workspace) { workspaces(:gpdb_workspace) }
         let(:schema) { workspace.sandbox }
