@@ -128,10 +128,16 @@ describe NotesController do
   end
 
   describe "#destroy" do
-    let(:note) { events(:note_on_greenplum) }
+    let(:note) {
+      Events::NoteOnGreenplumInstance.by(user).add(:gpdb_instance => data_sources(:default), :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
+    }
 
     before do
       log_in note.actor
+    end
+
+    after do
+      note.destroy
     end
 
     it "destroys the note with the given id" do
