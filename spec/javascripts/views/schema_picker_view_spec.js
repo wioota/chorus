@@ -619,6 +619,16 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
 
+                context("when the instance list fetch completes without any instances", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.view.instances, []);
+                    });
+
+                    itShowsUnavailable('instance');
+                    itHidesSection('database');
+                    itHidesSection('schema');
+                });
+
                 context("when the instance list fetch fails", function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, 'error');
@@ -670,8 +680,20 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 itShowsSelect("instance");
-                itShowsUnavailable("database");
-                itShowsUnavailable("schema");
+                itHidesSection("database");
+                itHidesSection("schema");
+            });
+
+            context("when the instances list is empty", function() {
+                beforeEach(function() {
+                    this.server.completeFetchAllFor(this.view.instances, []);
+                    this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                });
+
+                itShowsUnavailable("instance");
+                itHidesSection("database");
+                itHidesSection("schema");
             });
 
             context("when the instance list fetch completes", function() {
@@ -684,8 +706,7 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 itHidesSection("schema");
-                itHidesSection("database");
-                itDisplaysLoadingPlaceholderFor('instance');
+                itDisplaysLoadingPlaceholderFor('database');
 
                 context("when the databases list does not include the selected database", function() {
                     beforeEach(function() {
@@ -697,8 +718,8 @@ describe("chorus.views.SchemaPicker", function() {
                     });
 
                     itShowsSelect("instance");
-                    itShowsSelect("database");
-                    itShowsUnavailable("schema");
+                    itShowsSelect('database');
+                    itHidesSection("schema");
                 });
 
                 context("when the database list fetch completes", function() {
@@ -709,9 +730,8 @@ describe("chorus.views.SchemaPicker", function() {
                             rspecFixtures.database()]);
                     });
 
-                    itHidesSection("schema");
-                    itHidesSection("database");
-                    itDisplaysLoadingPlaceholderFor('instance');
+                    itShowsSelect("database");
+                    itDisplaysLoadingPlaceholderFor('schema');
 
                     context("when the schema list fetch completes", function() {
                         beforeEach(function() {

@@ -31,12 +31,15 @@
 
             this.sectionStates = {};
 
+            this.setState({ instance: HIDDEN, database: HIDDEN, schema: HIDDEN });
+
             if (this.options.defaultSchema) {
                 this.selection = {
                     schema: this.options.defaultSchema,
                     database: this.options.defaultSchema.database(),
                     instance: this.options.defaultSchema.database().instance()
                 };
+                this.setState({ instance: LOADING, database: LOADING, schema: LOADING });
             } else {
                 this.selection = {
                     instance: this.options.instance,
@@ -45,7 +48,10 @@
             }
 
             if (this.options.instance) {
-                this.setState({ instance: STATIC, database: LOADING, schema: HIDDEN });
+                this.setState({
+                    instance: STATIC,
+                    database: this.options.database ? STATIC : LOADING
+                });
             } else {
                 this.instances = new chorus.collections.GpdbInstanceSet();
                 this.bindings.add(this.instances, "loaded", this.instancesLoaded);
@@ -53,7 +59,7 @@
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
 
-                this.setState({ instance: LOADING, database: HIDDEN, schema: HIDDEN });
+                this.setState({ instance: LOADING });
             }
 
             if (this.selection.instance && !this.options.database) {
@@ -62,14 +68,6 @@
 
             if (this.selection.database) {
                 this.fetchSchemas(this.selection.database);
-            }
-
-            if (this.options.defaultSchema) {
-                this.requiredResourcesForDefaultSchema = new chorus.RequiredResources([
-                    this.databases,
-                    this.schemas,
-                    this.instances
-                ]);
             }
         },
 
@@ -87,7 +85,7 @@
 
         databasesLoaded: function () {
             var state = (this.databases.length === 0) ? UNAVAILABLE : SELECT;
-            this.setState({ database: state, schema: HIDDEN });
+            this.setState({ database: state });
         },
 
         schemasLoaded: function () {
@@ -103,11 +101,11 @@
 
             if (selectedInstance) {
                 this.setSelection("instance", selectedInstance);
-                this.setState({ database: LOADING, schema: HIDDEN });
+                this.setState({ database: LOADING });
                 this.fetchDatabases(selectedInstance);
             } else {
                 this.clearSelection('instance');
-                this.setState({ database: HIDDEN, schema: HIDDEN });
+                this.restyleAllSectionsToReflectStates();
             }
         },
 
@@ -129,7 +127,7 @@
                 this.fetchSchemas(selectedDatabase);
             } else {
                 this.clearSelection('database');
-                this.setState({ schema: HIDDEN });
+                this.restyleAllSectionsToReflectStates();
             }
         },
 
@@ -207,25 +205,13 @@
         restyleAllSectionsToReflectStates: function() {
             var states = _.clone(this.sectionStates);
 
-            if(this.requiredResourcesForDefaultSchema) {
-                if (this.requiredResourcesForDefaultSchema.allLoaded()) {
-                    _.extend(states, {
-                        instance: SELECT,
-                        database: SELECT,
-                        schema: SELECT
-                    });
-                    delete this.requiredResourcesForDefaultSchema;
-                } else {
-                    _.extend(states, {
-                        instance: LOADING,
-                        database: HIDDEN,
-                        schema: HIDDEN
-                    });
-                }
-            }
-
+            var hideTheRest = false;
             _.each(["instance", "database", "schema"], function(sectionName) {
-                this.restyleSection(sectionName, states[sectionName]);
+                var state = hideTheRest ? HIDDEN : states[sectionName];
+                this.restyleSection(sectionName, state);
+
+                var waitingForSelect = (state === SELECT && !this.selection[sectionName]);
+                if (_.contains([UNAVAILABLE, LOADING, HIDDEN], state) || waitingForSelect) hideTheRest = true;
             }, this);
         },
 
@@ -288,7 +274,6 @@
         fetchFailed: function(type, collection) {
             if (type) { this.clearSelection(type); }
             this.trigger("error", collection);
-            delete this.requiredResourcesForDefaultSchema;
         },
 
         setSelection: function(type, value) {
