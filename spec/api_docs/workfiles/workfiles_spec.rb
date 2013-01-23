@@ -102,13 +102,11 @@ resource "Workfiles" do
     parameter :type, ""
     parameter :alpine_id, "1"
     parameter :workspace_id, "Workspace Id"
-    parameter :owner_id, "Id of workfile owner"
     parameter :description, "Workfile description"
     parameter :file_name, "Filename"
 
     required_parameters :file_name, :workspace_id
 
-    let(:owner_id) { owner.to_param }
     let(:description) { "Get off my lawn, you darn kids!" }
     let(:file_name) { workfile.file_name }
 
