@@ -32,3 +32,11 @@ instances:
     - host: "chorus-gphd02"
       port: 8020
       username: "pivotal"
+
+  oracle:
+    - host: "chorus-oracle"
+      port: 1521
+      db_name: "orcl"
+      account:
+        db_username: "system"
+        db_password: "oracle"

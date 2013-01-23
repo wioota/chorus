@@ -26,6 +26,8 @@ module Shoulda # :nodoc:
   end
 end
 
+require 'external_service_detector'
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f unless f.match /fixture_builder/ }
@@ -39,8 +41,6 @@ require 'support/fixture_builder'
 silence_warnings do
   FACTORY_GIRL_SEQUENCE_OFFSET = 0
 end
-
-require 'external_service_detector'
 
 RSpec.configure do |config|
 

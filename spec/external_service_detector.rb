@@ -14,8 +14,13 @@ RSpec.configure do |config|
     config.filter_run_excluding :kaggle_api => true
   end
 
-  unless File.exist? Rails.root + 'lib/libraries/ojdbc6.jar'
-    warn "No Oracle driver found. Skipping Oracle integration tests"
+  if ENV['ORACLE_HOST']
+    unless File.exist? Rails.root + 'lib/libraries/ojdbc6.jar'
+      warn "No Oracle driver found. Skipping Oracle integration tests"
+      config.filter_run_excluding :oracle_integration => true
+    end
+  else
+    warn "No Oracle instance detected in environment variable 'ORACLE_HOST'.  Skipping Oracle integration tests"
     config.filter_run_excluding :oracle_integration => true
   end
 end

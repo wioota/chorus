@@ -88,10 +88,6 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
-    chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
-    chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
-    chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:name => InstanceIntegration::real_gpdb_hostname, :owner => admin))
-
     gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
     FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead_gnip')
     Events::GnipInstanceCreated.by(admin).add(:gnip_instance => gnip_instance)
@@ -101,14 +97,6 @@ FixtureBuilder.configure do |fbuilder|
     @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :instance => owners_instance)
     owner_instance_account = owners_instance.account_for_user(owner)
 
-    @chorus_gpdb42_test_superuser = chorus_gpdb42_instance.account_for_user(admin)
-
-    FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
-
-    [chorus_gpdb40_instance, chorus_gpdb41_instance, chorus_gpdb42_instance].each do |instance|
-      FactoryGirl.create(:instance_account, :owner => user_with_restricted_access, :instance => instance)
-      instance.reload
-    end
 
     # Datasets
     default_database = FactoryGirl.create(:gpdb_database, :gpdb_instance => owners_instance, :name => 'default')
@@ -478,6 +466,14 @@ FixtureBuilder.configure do |fbuilder|
     RR.reset
 
     if ENV['GPDB_HOST']
+      chorus_gpdb40_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+      chorus_gpdb41_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+      chorus_gpdb42_instance = FactoryGirl.create(:gpdb_instance, InstanceIntegration.instance_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:name => InstanceIntegration::greenplum_hostname, :owner => admin))
+
+      @chorus_gpdb42_test_superuser = chorus_gpdb42_instance.account_for_user(admin)
+
+      FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
+
       InstanceIntegration.refresh_chorus
       chorus_gpdb42_instance.refresh_databases
       GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(InstanceIntegration.database_name), :refresh_all => true)

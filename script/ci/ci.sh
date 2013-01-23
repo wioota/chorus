@@ -6,6 +6,7 @@ fi
 
 export GPDB_HOST=chorus-gpdb42
 export HADOOP_HOST=chorus-gphd02
+export ORACLE_HOST=chorus-oracle
 
 set -e
 

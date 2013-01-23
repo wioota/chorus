@@ -4,29 +4,19 @@ require 'yaml'
 require 'socket'
 
 module InstanceIntegration
-  config_file = "test_instance_connection_config.yml"
-
   REAL_GPDB_HOST = ENV['GPDB_HOST']
   REAL_HADOOP_HOST = ENV['HADOOP_HOST']
-  CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
-  INSTANCE_CONFIG = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == REAL_GPDB_HOST }
-  ACCOUNT_CONFIG = INSTANCE_CONFIG['account']
-  REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
-  REAL_GPDB_PASSWORD = ACCOUNT_CONFIG['db_password']
+  REAL_ORACLE_HOST = ENV['ORACLE_HOST']
   FILES_TO_TRACK_CHANGES_OF = %w(create_gpadmin.sql create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql)
   GPDB_VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/instance_integration_file_versions')).to_s
 
-  def self.real_gpdb_hostname
-    REAL_GPDB_HOST
-  end
-
-  def self.execute_sql(sql_file, database = INSTANCE_CONFIG['db_name'])
-    puts "Executing SQL file: #{sql_file} on host: #{INSTANCE_CONFIG['host']}"
+  def self.execute_sql(sql_file, database = greenplum_config['db_name'])
+    puts "Executing SQL file: #{sql_file} on host: #{REAL_GPDB_HOST}"
     sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
 
     sql = sql_read.gsub('gpdb_test_database', InstanceIntegration.database_name)
 
-    database_string = "jdbc:postgresql://#{INSTANCE_CONFIG['host']}:#{INSTANCE_CONFIG['port']}/#{database}?user=#{ACCOUNT_CONFIG['db_username']}&password=#{ACCOUNT_CONFIG['db_password']}"
+    database_string = "jdbc:postgresql://#{REAL_GPDB_HOST}:#{greenplum_port}/#{database}?user=#{greenplum_username}&password=#{greenplum_password}"
     Sequel.connect(database_string) do |database_connection|
       database_connection.run(sql)
     end
@@ -38,11 +28,11 @@ module InstanceIntegration
 
   def self.exec_sql_line(sql)
     conn = ActiveRecord::Base.postgresql_connection(
-        :host => INSTANCE_CONFIG['host'],
-        :port => INSTANCE_CONFIG['port'],
+        :host => REAL_GPDB_HOST,
+        :port => greenplum_port,
         :database => self.database_name,
-        :username => ACCOUNT_CONFIG['db_username'],
-        :password => ACCOUNT_CONFIG['db_password'],
+        :username => greenplum_username,
+        :password => greenplum_password,
         :adapter => "jdbcpostgresql")
     conn.exec_query(sql)
   end
@@ -95,18 +85,17 @@ module InstanceIntegration
   end
 
   def self.instance_config_for_gpdb(name)
-    config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
+    config = find_greenplum_instance name
     account_config = config['account']
     config.reject { |k, v| k == "account" }.merge(account_config)
   end
 
   def self.instance_config_for_hadoop(name = REAL_HADOOP_HOST)
-    CONFIG['instances']['hadoop'].find { |hash| hash["host"] == name }
+    config['instances']['hadoop'].find { |hash| hash["host"] == name }
   end
 
   def self.account_config_for_gpdb(name)
-    config = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == name }
-    config["account"]
+    find_greenplum_instance(name)['account']
   end
 
   def self.refresh_chorus
@@ -132,17 +121,87 @@ module InstanceIntegration
     InstanceIntegration.refresh_chorus
   end
 
+  def self.greenplum_hostname
+    REAL_GPDB_HOST
+  end
+
   def self.real_gpdb_account
     gpdb_instance = InstanceIntegration.real_gpdb_instance
     gpdb_instance.owner_account
   end
 
   def self.real_gpdb_instance
-    GpdbInstance.find_by_name(real_gpdb_hostname)
+    GpdbInstance.find_by_name(greenplum_hostname)
   end
 
   def self.real_database
     real_gpdb_instance.databases.find_by_name!(self.database_name)
   end
+
+  def self.greenplum_username
+    greenplum_account['db_username']
+  end
+
+  def self.greenplum_password
+    greenplum_account['db_password']
+  end
+
+  def self.greenplum_port
+    greenplum_config['port']
+  end
+
+  def self.oracle_hostname
+    REAL_ORACLE_HOST
+  end
+
+  def self.oracle_username
+    oracle_account['db_username']
+  end
+
+  def self.oracle_password
+    oracle_account['db_password']
+  end
+
+  def self.oracle_port
+    oracle_config['port']
+  end
+
+  def self.oracle_db_name
+    oracle_config['db_name']
+  end
+
+  private
+
+  def self.config
+    config_file = "test_instance_connection_config.yml"
+    @@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
+  end
+
+  def self.greenplum_config
+    @@gp_config ||= find_greenplum_instance REAL_GPDB_HOST
+  end
+
+  def self.oracle_config
+    @@oracle_config ||= find_oracle_instance REAL_ORACLE_HOST
+  end
+
+  def self.find_greenplum_instance(name)
+    config['instances']['gpdb'].find { |hash| hash["host"] == name }
+  end
+
+  def self.find_oracle_instance(name)
+    config['instances']['oracle'].find { |hash| hash["host"] == name }
+  end
+
+  def self.greenplum_account
+    greenplum_config['account'] || {}
+  end
+
+  def self.oracle_account
+    oracle_config['account'] || {}
+  end
+
+
+
 end
 

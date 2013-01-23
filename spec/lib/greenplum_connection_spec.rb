@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe GreenplumConnection, :greenplum_integration do
-  let(:username) { InstanceIntegration::REAL_GPDB_USERNAME }
-  let(:password) { InstanceIntegration::REAL_GPDB_PASSWORD }
+  let(:username) { InstanceIntegration.greenplum_username }
+  let(:password) { InstanceIntegration.greenplum_password }
   let(:database_name) { InstanceIntegration.database_name }
-  let(:the_host) { InstanceIntegration.real_gpdb_hostname }
-  let(:port) { InstanceIntegration::INSTANCE_CONFIG['port'] }
+  let(:the_host) { InstanceIntegration.greenplum_hostname }
+  let(:port) { InstanceIntegration.greenplum_port }
   let(:db_url) {
     query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params

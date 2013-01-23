@@ -5,16 +5,23 @@ describe OracleConnection, :oracle_integration do
     require Rails.root + 'lib/libraries/ojdbc6.jar'
   end
 
+  let(:username) { InstanceIntegration.oracle_username }
+  let(:password) { InstanceIntegration.oracle_password }
+  let(:db_name) { InstanceIntegration.oracle_db_name }
+  let(:host) { InstanceIntegration.oracle_hostname }
+  let(:port) { InstanceIntegration.oracle_port }
+  let(:db_url) { "jdbc:oracle:thin:#{username}/#{password}@//#{host}:#{port}/#{db_name}" }
+
   let(:connection) { OracleConnection.new(
-      :host => "chorus-oracle",
-      :username => "system",
-      :password => "oracle",
-      :port => 8888,
-      :database => "orcl"
+      :host => host,
+      :username => username,
+      :password => password,
+      :port => port,
+      :database => db_name
   ) }
   describe "#connect!" do
     it "should connect" do
-      mock(Sequel).connect("jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl", :test => true) { true }
+      mock.proxy(Sequel).connect(db_url, :test => true)
 
       connection.connect!
       connection.connected?.should be_true
