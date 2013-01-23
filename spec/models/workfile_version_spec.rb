@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe WorkfileVersion do
-  let!(:workfile) { workfile = FactoryGirl.create(:workfile) }
+  let!(:workfile) { workfile = FactoryGirl.create(:chorus_workfile) }
   let!(:version) { version = FactoryGirl.create(:workfile_version, :workfile => workfile) }
   let!(:version2) { version = FactoryGirl.create(:workfile_version, :workfile => workfile, :version_num => "2") }
 

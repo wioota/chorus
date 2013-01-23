@@ -6,7 +6,7 @@ class WorkfileVersion < ActiveRecord::Base
                     :url => "/:class/:id/image?style=:style",
                     :restricted_characters => nil #retain original filename
 
-  belongs_to :workfile, :touch => true
+  belongs_to :workfile, :class_name => 'ChorusWorkfile', :touch => true
   belongs_to :owner, :class_name => 'User'
   belongs_to :modifier, :class_name => 'User'
   before_post_process :check_file_type
