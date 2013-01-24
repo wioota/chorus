@@ -116,14 +116,12 @@ resource "Workfiles" do
   end
 
   post "/workfiles/:workfile_id/executions" do
-    parameter :schema_id, "Schema Id"
     parameter :workfile_id, "Workfile Id"
     parameter :check_id, "A client-generated identifier which can be used to cancel this execution later"
     parameter :sql, "SQL to execute"
 
-    required_parameters :workfile_id, :schema_id, :check_id
+    required_parameters :workfile_id, :check_id
 
-    let(:schema_id) { gpdb_schemas(:default).id }
     let(:check_id) { "12345" }
 
     let(:result) do
@@ -138,14 +136,12 @@ resource "Workfiles" do
   end
 
   delete "/workfiles/:workfile_id/executions/:id" do
-    parameter :schema_id, "Schema ID"
     parameter :workfile_id, "Workfile Id"
     parameter :id, "A client-generated identifier, previously passed as 'check_id' to workfile execution method to identify a query"
 
-    required_parameters :id, :workfile_id, :schema_id
+    required_parameters :id, :workfile_id
 
     let(:id) { 0 }
-    let(:schema_id) { gpdb_schemas(:default).id }
 
     example_request "Cancel execution of a workfile" do
       status.should == 200

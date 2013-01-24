@@ -3,7 +3,6 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         this.workfile = rspecFixtures.workfile.sql({id: 1});
         this.model = new chorus.models.WorkfileExecutionTask({
             workfile: this.workfile,
-            schemaId: '7',
             sql: "show tables"
         });
     });
@@ -19,10 +18,9 @@ describe("chorus.models.WorkfileExecutionTask", function() {
     it("posts the correct data on save", function() {
         this.model.save();
         var params = this.server.lastCreate().params();
-        expect(params['schema_id']).toEqual('7');
         expect(params['check_id']).toEqual(this.model.get("checkId"));
         expect(params['sql']).toEqual('show tables');
-        expect(_.keys(params).length).toEqual(3);
+        expect(_.keys(params).length).toEqual(2);
     });
 
     describe("executionSchema", function() {
@@ -40,10 +38,10 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     });
 
-    it("sends schemaId when doing a destroy", function() {
+    it("sends the correct parameters on destroy", function() {
         this.model.cancel();
         var params = this.server.lastDestroy().params();
-        expect(params.schema_id).toBe('7');
+        expect(_.keys(params).length).toEqual(0);
     });
 
     describe("SQLResults support functions", function() {

@@ -1,5 +1,5 @@
 class WorkfileExecutionsController < ApplicationController
-  before_filter :find_schema, :find_workfile, :verify_workspace, :check_authorization
+  before_filter :find_workfile, :find_schema, :verify_workspace, :check_authorization
   require_params :check_id, :only => :create
   require_params :id, :only => :destroy, :field_name => :check_id
 
@@ -27,7 +27,7 @@ class WorkfileExecutionsController < ApplicationController
   private
 
   def find_schema
-    @schema = GpdbSchema.find(params[:schema_id])
+    @schema = @workfile.execution_schema
   end
 
   def find_workfile
