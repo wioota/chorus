@@ -1,6 +1,10 @@
 module ExistingDataSourcesValidator
+  def self.log(*args)
+    puts *args
+  end
+
   def self.run(data_source_types)
-    puts "Searching for duplicate data source names..."
+    log "Searching for duplicate data source names..."
 
     existing_data_source_types = data_source_types.select { |data_source|
       ActiveRecord::Base.connection.table_exists? data_source.table_name
@@ -11,7 +15,7 @@ module ExistingDataSourcesValidator
     if invalid_instances.empty?
       return true
     else
-      puts "Duplicate data source names found: #{invalid_instances.map(&:name).uniq.join(", ")}"
+      log "Duplicate data source names found: #{invalid_instances.map(&:name).uniq.join(", ")}"
       return false
     end
   end

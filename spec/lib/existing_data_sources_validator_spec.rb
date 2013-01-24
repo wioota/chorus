@@ -10,6 +10,10 @@ def it_validates_duplicate(new_model, existing_model)
 end
 
 describe ExistingDataSourcesValidator do
+  before do
+    stub(ExistingDataSourcesValidator).log
+  end
+
   describe '.run' do
     let(:data_sources) { [GpdbDataSource, HadoopInstance, GnipInstance] }
 
