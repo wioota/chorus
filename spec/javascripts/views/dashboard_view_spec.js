@@ -72,7 +72,7 @@ describe("chorus.views.Dashboard", function(){
             it("has a 'browse all' link in the content details", function() {
                 var browseLink = this.view.$(".dashboard_instance_list_content_details a.browse_all");
                 expect(browseLink.text().trim()).toMatchTranslation("dashboard.instances.browse_all");
-                expect(browseLink.attr("href")).toBe("#/instances");
+                expect(browseLink.attr("href")).toBe("#/data_sources");
             });
 
             it("has an 'add an instance' link", function() {

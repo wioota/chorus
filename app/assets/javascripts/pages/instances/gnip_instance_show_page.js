@@ -16,7 +16,7 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
     crumbs: function() {
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.instances"), url: "#/instances"},
+            {label: t("breadcrumbs.instances"), url: "#/data_sources"},
             {label: this.model.name()}
         ];
     }

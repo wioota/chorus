@@ -4,7 +4,7 @@ chorus.models.OracleInstance = chorus.models.DataSource.extend({
     nameAttribute: 'name',
     entityType: "oracle_instance",
 
-    showUrlTemplate: "instances/{{id}}/schemas",
+    showUrlTemplate: "data_sources/{{id}}/schemas",
 
     parameterWrapper: "data_source",
 

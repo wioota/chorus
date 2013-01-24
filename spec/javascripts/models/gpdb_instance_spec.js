@@ -8,7 +8,7 @@ describe("chorus.models.GpdbInstance", function() {
     });
 
     it("has the right show url", function() {
-        expect(this.instance.showUrl()).toBe("#/instances/1/databases");
+        expect(this.instance.showUrl()).toBe("#/data_sources/1/databases");
     });
 
     it("has the right url", function() {

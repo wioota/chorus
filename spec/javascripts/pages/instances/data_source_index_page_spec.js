@@ -1,6 +1,6 @@
-describe("chorus.pages.InstanceIndexPage", function() {
+describe("chorus.pages.DataSourceIndexPage", function() {
     beforeEach(function() {
-        this.page = new chorus.pages.InstanceIndexPage();
+        this.page = new chorus.pages.DataSourceIndexPage();
         this.dataSourceSet = new chorus.collections.DataSourceSet();
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();

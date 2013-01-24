@@ -4,7 +4,7 @@ chorus.models.GpdbInstance = chorus.models.DataSource.extend({
     nameAttribute: 'name',
     entityType: "gpdb_instance",
 
-    showUrlTemplate: "instances/{{id}}/databases",
+    showUrlTemplate: "data_sources/{{id}}/databases",
 
     parameterWrapper: "data_source",
 

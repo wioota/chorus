@@ -48,7 +48,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     crumbs: function() {
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.instances"), url: '#/instances'},
+            {label: t("breadcrumbs.instances"), url: '#/data_sources'},
             {label: this.schema.database().instance().name(), url: this.schema.database().instance().showUrl()},
             {label: this.schema.database().name(), url: this.schema.database().showUrl() },
             {label: this.schema.name()}

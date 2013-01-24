@@ -53,7 +53,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         crumbs: function() {
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.instances"), url: '#/instances'},
+                {label: t("breadcrumbs.instances"), url: '#/data_sources'},
                 {label: this.dataset.instance().name(), url: this.dataset.instance().databases().showUrl() },
                 {label: this.dataset.database().name(), url: this.dataset.database().showUrl() },
                 {label: this.dataset.schema().name(), url: this.dataset.schema().showUrl()},

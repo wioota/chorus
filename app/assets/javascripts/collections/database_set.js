@@ -4,5 +4,5 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
     constructorName: "DatabaseSet",
     model:chorus.models.Database,
     urlTemplate: "data_sources/{{instanceId}}/databases",
-    showUrlTemplate: "instances/{{instanceId}}/databases"
+    showUrlTemplate: "data_sources/{{instanceId}}/databases"
 });

@@ -473,7 +473,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("has a link to instances", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/instances']").text()).toMatchTranslation("header.instances");
+                    expect(this.view.$(".menu.popup_gear a[href='#/data_sources']").text()).toMatchTranslation("header.instances");
                 });
 
                 it("has a link to the workspaces list", function() {

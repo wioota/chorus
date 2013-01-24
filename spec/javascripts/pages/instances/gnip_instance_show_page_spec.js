@@ -23,7 +23,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.instances"));
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("gnip");

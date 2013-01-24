@@ -29,7 +29,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: t("breadcrumbs.instances"), url: "#/data_sources" },
             { label: this.hadoopInstance.loaded ? instanceCrumb : "..." , url: "#/hadoop_instances"},
             { label: this.model.loaded ? fileNameCrumb : "..."}
         ];

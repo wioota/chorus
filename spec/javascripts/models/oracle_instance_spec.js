@@ -13,7 +13,7 @@ describe("chorus.models.OracleInstance", function() {
     });
 
     it("has the right show url", function() {
-        expect(this.instance.showUrl()).toBe("#/instances/1/schemas");
+        expect(this.instance.showUrl()).toBe("#/data_sources/1/schemas");
     });
 
     it("has the right url", function() {

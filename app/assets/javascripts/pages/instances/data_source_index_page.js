@@ -1,4 +1,4 @@
-chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
+chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
     crumbs:[
         { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.instances") }

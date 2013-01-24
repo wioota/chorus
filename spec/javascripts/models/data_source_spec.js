@@ -22,7 +22,7 @@ describe('chorus.models.DataSource', function() {
 
     describe('#showUrl', function(){
         it('has the right url', function(){
-            expect(this.model.showUrl()).toEqual('#/instances/' + this.model.id + '/databases');
+            expect(this.model.showUrl()).toEqual('#/data_sources/' + this.model.id + '/databases');
         });
     });
 

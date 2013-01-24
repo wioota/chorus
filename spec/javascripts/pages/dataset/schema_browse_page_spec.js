@@ -88,7 +88,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/instances");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/data_sources");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toContainTranslation("breadcrumbs.instances");
 
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText("AnInstance");

@@ -32,7 +32,7 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
     crumbs: function() {
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: t("breadcrumbs.instances"), url: "#/data_sources" },
             { label: this.database.instance().name(), url: this.database.instance().showUrl() },
             { label: this.database.name() }
         ];

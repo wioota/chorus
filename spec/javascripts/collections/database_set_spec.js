@@ -4,7 +4,7 @@ describe("chorus.collections.DatabaseSet", function() {
     });
 
     it("has the right show url", function() {
-        expect(this.collection.showUrl()).toMatchUrl("#/instances/86/databases");
+        expect(this.collection.showUrl()).toMatchUrl("#/data_sources/86/databases");
     });
 
     it("fetches from the correct endpoint", function() {

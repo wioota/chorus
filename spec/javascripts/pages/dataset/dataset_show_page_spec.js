@@ -96,7 +96,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
 
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/instances");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/data_sources");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
 
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.dataset.instance().databases().showUrl());

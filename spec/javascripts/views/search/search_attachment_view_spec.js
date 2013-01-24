@@ -120,7 +120,7 @@ describe("chorus.views.SearchAttachment", function() {
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.instance",
                 {
-                    instanceLink: '<a href="#/instances/'+instance.id+'/databases">'+instance.name()+'</a>'
+                    instanceLink: '<a href="#/data_sources/'+instance.id+'/databases">'+instance.name()+'</a>'
                 }
             );
         });

@@ -29,7 +29,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
         });
     });
@@ -47,7 +47,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyInstance (2)");

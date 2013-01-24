@@ -42,7 +42,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         var modelCrumb = this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: t("breadcrumbs.instances"), url: "#/data_sources" },
             { label: this.instance.loaded ? modelCrumb : "..." }
         ];
     },
