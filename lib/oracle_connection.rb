@@ -1,27 +1,27 @@
 require_relative 'data_source_connection'
+
 if ChorusConfig.instance.oracle_configured?
   begin
     require_relative 'libraries/ojdbc6.jar'
   rescue LoadError
-    pa "Error loading Oracle driver"
+    Rails.logger.warn "Error loading Oracle driver"
   end
 elsif ChorusConfig.instance.oracle_driver_expected_but_missing?
-  pa "Oracle driver ojdbc6.jar not found"
+  Rails.logger.warn "Oracle driver ojdbc6.jar not found"
 end
-
 
 class OracleConnection < DataSourceConnection
   class DatabaseError < Error
     def error_type
       error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_error_code) && @exception.wrapped_exception.get_error_code
-      pa "Oracle error code = #{error_code}"
+      Rails.logger.error "Oracle error code = #{error_code}"
       errortype = case error_code
         when 1017 then :INVALID_PASSWORD
         when 12514 then :DATABASE_MISSING
         when 17002 then :INSTANCE_UNREACHABLE
         else :GENERIC
       end
-      pa "Oracle error code type = #{errortype}"
+      Rails.logger.error "Oracle error code type = #{errortype}"
       errortype
     end
 
