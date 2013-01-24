@@ -63,6 +63,8 @@ Chorus::Application.routes.draw do
     end
   end
 
+  resource :imports, :only => :update, :controller => "dataset_imports"
+
   resources :workspaces, :only => [:index, :create, :show, :update, :destroy] do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:create, :show], :controller => :workspace_images
@@ -133,6 +135,11 @@ Chorus::Application.routes.draw do
   end
 
   resource :status, :only => [:show], :controller => 'status'
+
+  namespace :import_console do
+    match '/' =>  'imports#index'
+    resources :imports, :only => :index
+  end
 
   post 'download_chart', :controller => 'image_downloads'
 

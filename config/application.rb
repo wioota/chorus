@@ -65,7 +65,7 @@ module Chorus
     # Enable the asset pipeline
     config.assets.enabled = true
     config.assets.initialize_on_precompile = false
-    config.assets.precompile += ['visualizations.css']
+    config.assets.precompile += %w{visualizations.css import_console/import_console.css}
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
@@ -81,6 +81,8 @@ module Chorus
     # Log UUIDs for all requests. This is also in the X-Request-Id header response.
     # To facilitate support staff tracking web requests.
     config.log_tags = [:uuid]
+
+    config.action_controller.include_all_helpers = true
 
     config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
     config.middleware.use Rack::Sendfile

@@ -19,21 +19,21 @@ class GpPipe < DelegateClass(GpTableCopier)
 
       reader_finished = false
       writer_finished = false
-      t1 = Thread.new { begin
+      reader = Thread.new { begin
                           reader_loop(count)
                         ensure
                           reader_finished = true
                           semaphore.release
                         end }
-      t2 = Thread.new { begin
-                          source_connection << writer_sql
+      writer = Thread.new { begin
+                          source_connection << writer_sql #this never seems to run?  Where is my connection pointing to?
                         ensure
                           writer_finished = true
                           semaphore.release
                         end }
 
       semaphore.acquire
-      semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
+      acquire_result = semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
 
       #see if we need to recover from any errors.
       if !reader_finished
@@ -43,8 +43,8 @@ class GpPipe < DelegateClass(GpTableCopier)
         raise Exception, "Contents could not be read."
       end
 
-      t1.join
-      t2.join
+      reader.join
+      writer.join
     end
   rescue Exception => e
     raise GpTableCopier::ImportFailed, e.message
@@ -54,8 +54,12 @@ class GpPipe < DelegateClass(GpTableCopier)
 
   def reader_loop(count)
     while (destination_count - @initial_destination_count) < count
-      destination_connection << "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{read_pipe_name});"
+      destination_connection << reader_sql
     end
+  end
+
+  def reader_sql
+    "INSERT INTO #{destination_table_fullname} (SELECT * FROM #{read_pipe_name});"
   end
 
   def writer_sql
@@ -87,7 +91,7 @@ class GpPipe < DelegateClass(GpTableCopier)
   end
 
   def pipe_name
-    @pipe_name ||= "pipe_#{Process.pid}_#{Time.current.to_i}"
+    @pipe_name ||= "pipe_#{Process.pid}_#{Time.current.to_i}_#{attributes[:pipe_name]}"
   end
 
   private

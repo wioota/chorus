@@ -7,7 +7,7 @@ module InstanceIntegration
 
   REAL_GPDB_HOST = ENV['GPDB_HOST']
   REAL_HADOOP_HOST = ENV['HADOOP_HOST']
-  CONFIG = YAML.load_file(Rails.root + "config/#{config_file}")
+  CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
   INSTANCE_CONFIG = CONFIG['instances']['gpdb'].find { |hash| hash["host"] == REAL_GPDB_HOST }
   ACCOUNT_CONFIG = INSTANCE_CONFIG['account']
   REAL_GPDB_USERNAME = ACCOUNT_CONFIG['db_username']
@@ -16,9 +16,6 @@ module InstanceIntegration
   GPDB_VERSIONS_FILE = (Rails.root + 'tmp/instance_integration_file_versions').to_s
 
   def self.real_gpdb_hostname
-    if REAL_GPDB_HOST.match /^([0-9]{1,3}\.){3}[0-9]{1,3}$/
-      return "local_greenplum"
-    end
     REAL_GPDB_HOST
   end
 

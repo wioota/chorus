@@ -21,19 +21,13 @@ instances:
         db_username: "test_superuser"
         db_password: "secret"
 
-    - host: "local_greenplum"
-      port: 5432
-      maintenance_db: "postgres"
-      account:
-        db_username: "test_superuser"
-        db_password: "secret"
-
-    - host: "192.168.33.10"
+    - host: "local-greenplum"
       port: 5432
       maintenance_db: "postgres"
       account:
         db_username: "vagrant"
         db_password: "secret"
+
   hadoop:
     - host: "chorus-gphd02"
       port: 8020

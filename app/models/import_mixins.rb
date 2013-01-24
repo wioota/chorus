@@ -63,4 +63,13 @@ module ImportMixins
 
     delegate :sandbox, :to => :workspace
   end
+
+  def source_dataset_with_deleted
+    Dataset.unscoped.find(source_dataset_id)
+  end
+
+  def workspace_with_deleted
+    Workspace.unscoped.find(workspace_id)
+  end
+
 end

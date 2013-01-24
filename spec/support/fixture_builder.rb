@@ -463,6 +463,9 @@ FixtureBuilder.configure do |fbuilder|
 
       test_database = GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance)
       test_schema = test_database.schemas.find_by_name('test_schema')
+      real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local-greenplum", :sandbox => test_schema}, :without_protection => true)
+      fbuilder.name :real, real_workspace
+
       @executable_chorus_view = FactoryGirl.create(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => public_workspace)
       @gpdb_workspace = FactoryGirl.create(:workspace, :owner => owner, :sandbox => test_schema)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
@@ -470,8 +473,11 @@ FixtureBuilder.configure do |fbuilder|
       test_schema2 = test_database.schemas.find_by_name('test_schema2')
       @gpdb_workspace.bound_datasets << test_schema2.datasets.first
 
-      real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local_greenplum", :sandbox => test_schema}, :without_protection => true)
-      fbuilder.name :real, real_workspace
+      forever_chorus_view = FactoryGirl.create(:chorus_view,
+                                               :name => "forever_chorus_view",
+                                               :schema => test_schema,
+                                               :query => "select 1 from test_schema.#{test_schema.active_tables_and_views.first.name} cross join pg_sleep(60)",
+                                               :workspace => real_workspace)
     end
 
     if ENV['HADOOP_HOST']

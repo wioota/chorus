@@ -15,7 +15,7 @@ describe GpTableCopier, :database_integration => true do
   let(:distrib_def) { 'DISTRIBUTED BY("id2", "id3")' }
   let(:to_table) { Sequel.qualify(sandbox.name, destination_table_name) }
   # To do an import:
-  #database = Sequel.connect('jdbc:postgresql://local_greenplum:5432/gpdb_noe_tes?user=foo&password=bar')
+  #database = Sequel.connect('jdbc:postgresql://local-greenplum:5432/gpdb_noe_tes?user=foo&password=bar')
   #
   #dataset = database[Sequel.qualify('schemaname', 'tablename')]
   #dataset = database['select * from foo limit 1']

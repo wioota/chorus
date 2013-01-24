@@ -1,0 +1,36 @@
+@import "base";
+
+.imports {
+    $header-line-height: 32px;
+    $line-height: 40px;
+
+    background: $data-table-background-color;
+
+    thead {
+        background: #eaeef2;
+    }
+
+    td, th {
+        border-right: 1px solid $subheader-border-color-dark;
+    }
+
+    th {
+        line-height: $header-line-height;
+        height: $header-line-height;
+        padding: 0 10px;
+        border-bottom: 1px solid $subheader-border-color-dark;
+    }
+
+    td {
+        line-height: $line-height;
+        padding: 0 10px;
+        border-bottom : $dotted-list-item-border;
+        @include font-normal-alpha;
+    }
+
+    input[type=text] {
+        width: 400px;
+        display: inline;
+    }
+}
+
