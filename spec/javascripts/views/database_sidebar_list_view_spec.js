@@ -49,7 +49,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             expect(this.view.postRender).not.toHaveBeenCalled();
         });
 
-        context("when the fetch completes", function() {
+        describe("when the fetch completes", function() {
             beforeEach(function() {
                 this.qtip = stubQtip(".context a");
                 spyOn(this.view, 'closeQtip');
@@ -64,7 +64,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             it("renders", function() {
                 expect(this.view.postRender).toHaveBeenCalled();
             });
-            context("selecting a schema", function() {
+            describe("selecting a schema", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'fetchResourceAfterSchemaSelected');
                     this.view.$(".context a").click();
@@ -101,7 +101,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             });
 
             describe("event handling", function() {
-                describe("workfile:executed", function() {
+                describe("workfile:changed", function() {
                     beforeEach(function() {
                         this.server.reset();
                     });
@@ -109,7 +109,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     context("when the execution schema is in the same database as the view's schema", function() {
                         beforeEach(function() {
                             this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
-                            chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.sql(), this.executionSchema);
+                            this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                            chorus.PageEvents.broadcast("workfile:changed", this.workfile);
                         });
 
                         it("does not fetch anything", function() {
@@ -121,7 +122,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     context("when the execution schema is not in the same database as the view's schema", function() {
                         beforeEach(function() {
                             this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
-                            chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.sql(), this.executionSchema);
+                            this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                            chorus.PageEvents.broadcast("workfile:changed", this.workfile);
                         });
 
                         it("fetches the execution schema", function() {

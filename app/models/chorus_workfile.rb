@@ -26,6 +26,12 @@ class ChorusWorkfile < Workfile
     workfile.owner = owner
     workfile.workspace = workspace
 
+    if attributes[:execution_schema]
+      workfile.execution_schema = GpdbSchema.find(attributes[:execution_schema][:id])
+    else
+      workfile.execution_schema = workspace.sandbox
+    end
+
     raise ActiveRecord::RecordInvalid.new(workfile) if workfile.invalid?
 
     version = nil

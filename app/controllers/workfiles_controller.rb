@@ -19,9 +19,9 @@ class WorkfilesController < ApplicationController
   def update
     workfile = Workfile.find(params[:id])
     authorize! :can_edit_sub_objects, workfile.workspace
-    exeuction_schema_id = params[:workfile][:execution_schema_id]
-    if exeuction_schema_id
-      schema = GpdbSchema.find(exeuction_schema_id)
+    execution_schema = params[:workfile][:execution_schema]
+    if execution_schema && execution_schema[:id]
+      schema = GpdbSchema.find(execution_schema[:id])
       workfile.execution_schema = schema
       workfile.save!
     end

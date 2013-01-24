@@ -27,48 +27,21 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("#executionSchema", function() {
+        beforeEach(function() {
+            this.schemaJson = rspecFixtures.schemaJson()['response'];
+            this.model.set({ executionSchema: this.schemaJson});
+        });
+
+        it("returns that schema as a model", function() {
+            var schema = this.model.executionSchema();
+            expect(schema.get("id")).toBe(this.schemaJson.id);
+            expect(schema.get("name")).toBe(this.schemaJson.name);
+        });
+
         context("when the workfile is not loaded", function() {
             beforeEach(function() {
                 this.model.clear();
                 delete this.model.loaded;
-            });
-
-            it("returns undefined", function() {
-                expect(this.model.executionSchema()).toBeUndefined();
-            });
-        });
-
-        context("when the workfile's workspace has a sandbox", function() {
-            context("when the workfile has never been executed", function() {
-                it("returns the sandbox's schema", function() {
-                    var schema = this.model.executionSchema();
-                    var sandboxSchema = this.model.workspace().sandbox();
-                    expect(schema.database().instance().id).toBe(sandboxSchema.database().instance().id);
-                    expect(schema.database().instance().name()).toBe(sandboxSchema.database().instance().name());
-                    expect(schema.database().id).toBe(sandboxSchema.database().id);
-                    expect(schema.database().name()).toBe(sandboxSchema.database().name());
-                    expect(schema.get("id")).toBe(sandboxSchema.get("id"));
-                    expect(schema.get("name")).toBe(sandboxSchema.get("name"));
-                });
-            });
-
-            context("when the workfile was last executed in a schema other than its sandbox's schema", function() {
-                beforeEach(function() {
-                    this.schemaJson = rspecFixtures.schemaJson()['response'];
-                    this.model.set({ executionSchema: this.schemaJson});
-                });
-
-                it("returns that schema", function() {
-                    var schema = this.model.executionSchema();
-                    expect(schema.get("id")).toBe(this.schemaJson.id);
-                    expect(schema.get("name")).toBe(this.schemaJson.name);
-                });
-            });
-        });
-
-        context("when the workfile's workspace does not have a sandbox", function() {
-            beforeEach(function() {
-                delete this.model.attributes.workspace.sandboxInfo;
             });
 
             it("returns undefined", function() {
@@ -81,7 +54,7 @@ describe("chorus.models.Workfile", function() {
         it("calls save with exeuctionSchemaId and wait attribute set to true", function() {
             spyOn(this.model, "save");
             this.model.updateExecutionSchema(new chorus.models.Schema({id: 123}));
-            expect(this.model.save).toHaveBeenCalledWith({executionSchemaId: 123}, {wait: true});
+            expect(this.model.save).toHaveBeenCalledWith({executionSchema: {id: 123}}, {wait: true});
         });
     });
 

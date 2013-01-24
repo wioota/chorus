@@ -60,6 +60,8 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
         context("when save succeeds", function(){
             beforeEach(function() {
                 spyOn(chorus, "toast");
+                this.workfileChangedSpy = jasmine.createSpy();
+                chorus.PageEvents.subscribe("workfile:changed", this.workfileChangedSpy);
                 this.dialog.model.trigger("saved");
                 this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionSchema: this.executionSchema.attributes}));
             });
@@ -74,6 +76,16 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
             it("presents the new execution schema", function(){
                 expect(this.model.executionSchema().get("id")).toEqual(this.executionSchema.get("id"));
+            });
+
+            it("updates the execution schema", function() {
+                var lastUpdate = this.server.lastUpdateFor(this.model);
+                var updatedExecutionSchemaId = URI.decode(lastUpdate.requestBody).match(/execution_schema\]\[id\]=(\d+)/)[1];
+                expect(updatedExecutionSchemaId).toEqual("321");
+            });
+
+            it("broadcasts workfile:changed", function() {
+                expect(this.workfileChangedSpy).toHaveBeenCalledWith(this.model);
             });
         });
 

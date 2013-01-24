@@ -118,7 +118,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
                             this.spy = jasmine.createSpy();
-                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
+                            chorus.PageEvents.subscribe("workfile:changed", this.spy);
                             this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults());
                         });
 
@@ -130,8 +130,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                             expect(this.view.executing).toBeFalsy();
                         });
 
-                        it("broadcasts workfile:executed", function() {
-                            expect(this.spy).toHaveBeenCalledWith(this.workfile, this.view.task.executionSchema());
+                        it("broadcasts workfile:changed", function() {
+                            expect(this.spy).toHaveBeenCalledWith(this.workfile);
                         });
 
                         it("renders the resultsConsole", function() {
@@ -162,7 +162,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
                             this.spy = jasmine.createSpy();
-                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
+                            chorus.PageEvents.subscribe("workfile:changed", this.spy);
                             this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
                             });
                         });
@@ -179,7 +179,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
                             this.spy = jasmine.createSpy();
-                            chorus.PageEvents.subscribe("workfile:executed", this.spy);
+                            chorus.PageEvents.subscribe("workfile:changed", this.spy);
                             chorus.PageEvents.broadcast.reset();
                             this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } }, {});
                         });
@@ -192,7 +192,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                             expect(this.view.executing).toBeFalsy();
                         });
 
-                        it("does not broadcast workfile:executed", function() {
+                        it("does not broadcast workfile:changed", function() {
                             expect(this.spy).not.toHaveBeenCalled();
                         });
                     });

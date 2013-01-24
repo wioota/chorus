@@ -20,10 +20,10 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             this.view.render();
         });
 
-        context("when neither the workfile nor its workspace have a schema", function() {
+        context("when the workfile does not have an execution schema", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
-                this.model.workspace().set({sandboxInfo: null});
+                this.model.set("executionSchema", null);
                 this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
                 this.view.render();
             });
@@ -163,8 +163,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            context("and there is a schema to run in", function() {
-                context("and opens the Run File menu", function() {
+            context("when the model has an execution schema", function() {
+                describe("opening the Run File menu", function() {
                     beforeEach(function() {
                         this.view.$(".run_file").click();
                     });
@@ -190,11 +190,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            context("and there is no sandbox to run in", function() {
-                context("and opens the Run File menu", function() {
+            context("when the model has no execution schema", function() {
+                context("opening the Run File menu", function() {
                     beforeEach(function() {
-                        this.view.model.workspace().unset("sandboxInfo");
-                        delete this.view.model.workspace()._sandbox;
+                        this.model.set("executionSchema", null);
+                        delete this.model._executionSchema;
                         this.view.render();
                         this.view.$(".run_file").click();
                     });
@@ -221,9 +221,10 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 this.view.$(".run_file").click();
             });
 
-            describe("when the workspace does not have a sandbox", function() {
+            describe("when the workfile does not have an execution schema", function() {
                 beforeEach(function() {
-                    spyOn(this.model.workspace(), 'sandbox');
+                    this.model.set("executionSchema", null);
+                    delete this.model._executionSchema;
                     this.view.render();
                     this.view.$(".run_file").click();
                 });

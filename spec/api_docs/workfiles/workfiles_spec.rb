@@ -28,12 +28,12 @@ resource "Workfiles" do
 
   put "/workfiles/:id" do
     parameter :id, "Id of a workfile"
-    parameter :execution_schema_id, "Id of the execution schema"
+    parameter :"execution_schema[id]", "Id of the execution schema"
 
     required_parameters :id
 
     let(:id) { workfile.to_param }
-    let(:execution_schema_id) { gpdb_schemas(:default).to_param }
+    let(:"execution_schema[id]") { gpdb_schemas(:default).to_param }
 
     example_request "Update a workfile" do
       status.should == 200

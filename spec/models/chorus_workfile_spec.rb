@@ -33,7 +33,6 @@ describe ChorusWorkfile do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }
 
-
     shared_examples "file upload" do
       it "creates a workfile in the database" do
         subject.should be_valid
@@ -75,12 +74,14 @@ describe ChorusWorkfile do
     end
 
     context "with versions" do
+      let(:execution_schema) { nil }
       let(:attributes) do
         {
             :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
             :versions_attributes => [{
                                          :contents => test_file('workfile.sql')
-                                     }]
+                                     }],
+            :execution_schema => ({ :id => execution_schema.id } if execution_schema)
         }
       end
 
@@ -94,6 +95,25 @@ describe ChorusWorkfile do
 
       it "sets the right description on the workfile" do
         subject.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
+      end
+
+      context "when no execution schema is provided" do
+        let(:sandbox) { gpdb_schemas(:default) }
+        before do
+          workspace.sandbox = sandbox
+          workspace.save!
+        end
+        it "sets the execution_schema of the workfile to the workspace sandbox" do
+          subject.execution_schema.should == sandbox
+        end
+      end
+
+      context "when execution schema is provided" do
+        let(:execution_schema) { gpdb_schemas(:other_schema) }
+
+        it "sets the execution_schema" do
+          subject.execution_schema.should == execution_schema
+        end
       end
     end
 

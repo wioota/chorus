@@ -230,7 +230,7 @@ describe WorkfilesController do
     let(:options) do
       {
           :id => public_workfile.to_param,
-          :execution_schema_id => schema.to_param
+          :execution_schema => { :id => schema.to_param }
       }
     end
 

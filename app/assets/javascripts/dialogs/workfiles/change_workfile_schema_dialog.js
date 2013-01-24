@@ -44,6 +44,7 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
     saved: function() {
         this.closeModal();
         chorus.toast("workfile.change_workfile_schema.saved_message");
+        chorus.PageEvents.broadcast("workfile:changed", this.model);
     },
 
     saveFailed: function() {

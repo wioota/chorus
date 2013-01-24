@@ -13,7 +13,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     setup: function() {
         this.setSchema(this.options.schema);
-        chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
+        chorus.PageEvents.subscribe("workfile:changed", this.workfileChanged, this);
     },
 
     additionalContext: function() {
@@ -159,7 +159,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         e.preventDefault();
     },
 
-    workfileExecuted: function(workfile, executionSchema) {
+    workfileChanged: function(workfile) {
+        var executionSchema = workfile.executionSchema();
         if (!this.schema || (executionSchema.id && executionSchema.id !== this.schema.id)) {
             this.setSchema(new chorus.models.Schema(executionSchema));
         }

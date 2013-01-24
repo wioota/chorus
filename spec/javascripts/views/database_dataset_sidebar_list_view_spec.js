@@ -305,10 +305,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
         });
     });
 
-    describe("after workfile execution", function () {
+    describe("after workfile changed", function () {
         beforeEach(function () {
             this.executionSchema = rspecFixtures.workspace().sandbox().schema();
-            chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.text(), this.executionSchema.attributes);
+            chorus.PageEvents.broadcast("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
         });
 
         it("updates focusSchema", function () {

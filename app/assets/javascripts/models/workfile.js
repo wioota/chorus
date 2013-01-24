@@ -60,7 +60,7 @@
 
         updateExecutionSchema:function(schema){
             delete this._executionSchema;
-            return this.save({"executionSchemaId": schema.get("id")}, {wait: true});
+            return this.save({executionSchema: {id: schema.get("id")}}, {wait: true});
         },
 
         sandbox: function() {
@@ -76,7 +76,7 @@
                 var executionSchema = this.get("executionSchema");
                 this._executionSchema = executionSchema && new chorus.models.Schema(executionSchema);
             }
-            return this._executionSchema || (this.sandbox() && this.sandbox().schema());
+            return this._executionSchema;
         },
 
         modifier: function() {

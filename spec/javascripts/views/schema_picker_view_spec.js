@@ -672,8 +672,8 @@ describe("chorus.views.SchemaPicker", function() {
             context("when the instances list does not include the selected instance", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.instances, [
-                        rspecFixtures.gpdbInstance({id: 1, name: "A"}),
-                        rspecFixtures.gpdbInstance({id: 2, name: "B"})
+                        rspecFixtures.gpdbDataSource({id: 1, name: "A"}),
+                        rspecFixtures.gpdbDataSource({id: 2, name: "B"})
                     ]);
                     this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
