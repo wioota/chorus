@@ -75,6 +75,22 @@ describe GpdbDatabase do
       GpdbDatabase.reindexDatasetPermissions(database.id)
     end
 
+    it "redindexes all notes of datasets" do
+      actual_note_count = 0
+      any_instance_of(Events::Note) do |note|
+        stub(note).solr_index {
+          actual_note_count += 1
+        }
+      end
+      expected_note_count = database.datasets.reduce(0) { |current, dataset|
+        current += dataset.notes.count
+      }
+      expected_note_count.should_not == 0
+
+      GpdbDatabase.reindexDatasetPermissions(database.id)
+      actual_note_count.should == expected_note_count
+    end
+
     it "does not call solr_index on stale datasets" do
       dataset = database.datasets.first
       dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)

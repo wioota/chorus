@@ -39,6 +39,7 @@ class GpdbDatabase < ActiveRecord::Base
     GpdbDatabase.find(database_id).datasets.not_stale.each do |dataset|
       begin
         dataset.solr_index
+        dataset.notes.each { |note| note.solr_index }
       rescue => e
         Chorus.log_error "Error in GpdbDataset.reindexDatasetPermissions: #{e.message}"
       end
