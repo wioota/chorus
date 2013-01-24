@@ -21,7 +21,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders empty text for each instance type", function() {
-                expect(this.view.$(".gpdb_data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
@@ -38,7 +38,7 @@ describe("chorus.views.InstanceList", function() {
             this.server.completeFetchFor(this.dataSources, [
                 rspecFixtures.gpdbDataSource({name : "GP9", id: "1"}),
                 rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
-                rspecFixtures.gpdbDataSource({name : "GP10", id: "3"})
+                rspecFixtures.oracleDataSource({name : "oracle", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
                 rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
@@ -59,12 +59,12 @@ describe("chorus.views.InstanceList", function() {
             expect(this.view.$("div.instance_provider .details").length).toBe(3);
         });
 
-        it("renders the gpdb instances in the correct instance div", function() {
-            var gpdbItems = this.view.$(".gpdb_data_source li.instance");
-            expect(gpdbItems.length).toBe(3);
-            expect(gpdbItems).toContainText("gP1");
-            expect(gpdbItems).toContainText("GP9");
-            expect(gpdbItems).toContainText("GP10");
+        it("renders the data sources in the correct instance div", function() {
+            var dataSources = this.view.$(".data_source li.instance");
+            expect(dataSources.length).toBe(3);
+            expect(dataSources).toContainText("gP1");
+            expect(dataSources).toContainText("GP9");
+            expect(dataSources).toContainText("oracle");
         });
 
         it("renders the hadoop instances in the correct instance div", function() {
@@ -110,7 +110,7 @@ describe("chorus.views.InstanceList", function() {
 
                 it("renders only the existing items", function() {
                     expect(this.dataSources.models.length).toBe(this.oldLength - 1);
-                    expect(this.view.$(".gpdb_data_source li.instance").length).toBe(this.oldLength - 1);
+                    expect(this.view.$(".data_source li.instance").length).toBe(this.oldLength - 1);
                 });
             });
 
@@ -137,12 +137,12 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".gpdb_data_source li:eq(0) img.state")).toHaveAttr("src", "/images/data_sources/yellow.png");
+                expect(this.view.$(".data_source li:eq(0) img.state")).toHaveAttr("src", "/images/data_sources/yellow.png");
             });
 
             it("should display the name as a link", function() {
-                expect(this.view.$(".gpdb_data_source li:eq(0) a.name")).toExist();
-                expect(this.view.$(".gpdb_data_source li:eq(0) a.name")).toContainText("Greenplum");
+                expect(this.view.$(".data_source li:eq(0) a.name")).toExist();
+                expect(this.view.$(".data_source li:eq(0) a.name")).toContainText("Greenplum");
             });
         });
 
@@ -155,7 +155,7 @@ describe("chorus.views.InstanceList", function() {
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
-            it("re-fetches the data source, hadoop and gnip instances", function() {
+            it("re-fetches the data sources, hadoop and gnip instances", function() {
                 expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
@@ -175,7 +175,7 @@ describe("chorus.views.InstanceList", function() {
                 this.eventSpy = jasmine.createSpy("instance:selected");
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
                 this.li2 = this.view.$('li:contains("GP9")');
-                this.li3 = this.view.$('li:contains("GP10")');
+                this.li3 = this.view.$('li:contains("oracle")');
                 this.li2.click();
             });
 

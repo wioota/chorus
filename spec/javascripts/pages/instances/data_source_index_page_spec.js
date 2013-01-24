@@ -79,7 +79,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
         describe("pre-selection", function() {
             it("pre-selects the first item by default", function() {
-                expect(this.page.mainContent.content.$(".gpdb_data_source li.instance:eq(0)")).toHaveClass("selected");
+                expect(this.page.mainContent.content.$(".data_source li.instance:eq(0)")).toHaveClass("selected");
             });
         });
 
