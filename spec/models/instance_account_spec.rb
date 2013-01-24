@@ -57,6 +57,7 @@ describe InstanceAccount do
     context "deleting an account" do
       let(:user) { users(:the_collaborator) }
       let(:account) { instance.account_for_user(user) }
+
       it "should reindex" do
         mock(account.gpdb_instance).refresh_databases_later
         account.destroy
@@ -67,8 +68,8 @@ describe InstanceAccount do
       let(:user) { users(:the_collaborator) }
       let(:account) { instance.account_for_user(user) }
 
-      it "should not reindex" do
-        dont_allow(instance).refresh_databases_later
+      it "should reindex" do
+        mock(account.gpdb_instance).refresh_databases_later
         account.update_attributes(:db_username => "baz")
       end
     end
