@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'rails', '3.2.9.rc2'
+gem 'rails', '3.2.11'
 
 gem 'will_paginate'
 gem 'net-ldap',      :require => false

@@ -4,9 +4,6 @@ require File.expand_path('../boot', __FILE__)
 require "active_record/railtie"
 require "action_controller/railtie"
 require "active_resource/railtie"
-require "sprockets/paths"
-require "sprockets/processing"
-require "sprockets/compressing"
 require "sprockets/railtie"
 
 if defined?(Bundler)
