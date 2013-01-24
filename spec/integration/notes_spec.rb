@@ -8,7 +8,7 @@ describe "Notes" do
   describe "creating a note on a GPDB instance" do
     it "contains the note" do
       instance = data_sources(:default)
-      visit("#/instances")
+      visit("#/data_sources")
       within ".gpdb_instance ul" do
         find("li", :text => instance.name).click
       end
@@ -42,7 +42,7 @@ describe "Notes" do
   describe "creating a note on a hadoop instance" do
     it "creates the note" do
       hadoop_instance = hadoop_instances(:hadoop)
-      visit("#/instances")
+      visit("#/data_sources")
       within ".hadoop_instance ul" do
         find("li", :text => hadoop_instance.name).click
       end

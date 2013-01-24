@@ -6,7 +6,7 @@ describe "Data Source", :oracle_integration do
   describe "adding an oracle data source" do
     before do
       login(users(:admin))
-      visit("#/instances")
+      visit("#/data_sources")
       click_button "Add Data Source"
     end
 

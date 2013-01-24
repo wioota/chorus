@@ -13,7 +13,7 @@ describe "Visualizations", :greenplum_integration do
 
   before do
     login(users(:admin))
-    visit("#/instances")
+    visit("#/data_sources")
     find("a", :text => /^#{instance.name}$/).click
     find("a", :text => /^#{database.name}$/).click
     find("a", :text => /^#{schema.name}$/).click

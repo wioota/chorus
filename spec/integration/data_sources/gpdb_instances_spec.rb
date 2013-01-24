@@ -6,7 +6,7 @@ describe "Data Sources", :greenplum_integration do
     
     before do
       login(users(:admin))
-      visit("#/instances")
+      visit("#/data_sources")
       click_button "Add Data Source"
     end
 

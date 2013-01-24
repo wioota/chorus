@@ -7,7 +7,7 @@ describe "Data Source Permissions" do
 
   before do
     login(owner)
-    visit("#/instances/")
+    visit("#/data_sources/")
     find("li.instance[data-instance-id='#{the_data_source.id}']").click
     within '.account_info' do
       click_link "Edit"
@@ -19,7 +19,7 @@ describe "Data Source Permissions" do
     logout
 
     login(no_access_user)
-    visit("#/instances/")
+    visit("#/data_sources/")
     click_link the_data_source.name
     within ".content_details" do
       find(:css, '.count').text.should =~ /.*Databases/
@@ -30,8 +30,8 @@ describe "Data Source Permissions" do
     click_button "Add Account"
     select_item('#select_new_instance_account_owner', no_access_user.id)
     within "li.editing" do
-      fill_in "dbUsername", :with => InstanceIntegration::REAL_GPDB_USERNAME
-      fill_in "dbPassword", :with => InstanceIntegration::REAL_GPDB_PASSWORD
+      fill_in "dbUsername", :with => InstanceIntegration.greenplum_username
+      fill_in "dbPassword", :with => InstanceIntegration.greenplum_password
       click_link "Save Changes"
     end
   end

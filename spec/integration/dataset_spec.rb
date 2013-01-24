@@ -8,7 +8,7 @@ describe "Dataset", :database_integration do
 
   it "associate Dataset to workspace" do
     login(owner)
-    visit("#/instances")
+    visit("#/data_sources")
     click_link the_data_source.name
     click_link dataset.schema.database.name
     click_link dataset.schema.name

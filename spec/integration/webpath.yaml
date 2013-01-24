@@ -19,7 +19,7 @@ user_menu:
   signout: '.menu.popup_username a[href="#/logout"]'
 
 instance:
-  route: '#/instances'
+  route: '#/data_sources'
   new_btn: 'button[data-dialog=InstancesNew]'
   list: '.instance_list'
 
