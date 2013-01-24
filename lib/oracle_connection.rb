@@ -52,6 +52,13 @@ class OracleConnection < DataSourceConnection
     @connection = nil
   end
 
+  def version
+    connect!
+    result = @connection.fetch(%Q{select * from v$version where banner like 'Oracle%'}).first.first[1]
+    disconnect
+    result.match(/((\d+\.)+\d+)/)[1]
+  end
+
   private
 
   def db_url

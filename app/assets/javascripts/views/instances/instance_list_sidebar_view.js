@@ -32,7 +32,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             entityType: this.model.entityType,
             instanceProvider: t("instances.provider." + this.model.get('entityType')),
             shared: this.model.isShared && this.model.isShared(),
-            isGnip: this.model.isGnip()
+            isGnip: this.model.isGnip(),
+            isOracle: this.model.isOracle()
         };
     },
 
@@ -64,8 +65,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.bindings.removeAll();
         this.bindings.add(this.resource, "change", this.render, this);
 
-        var account = this.instance.accountForCurrentUser();
-        if(account) {
+        if(this.resource.isGreenplum()) {
+            var account = this.instance.accountForCurrentUser();
             this.instance.accounts().fetchAllIfNotLoaded();
             account.fetchIfNotLoaded();
             this.requiredResources.push(this.instance.accounts());

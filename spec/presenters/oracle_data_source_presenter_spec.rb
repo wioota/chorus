@@ -16,6 +16,7 @@ describe OracleDataSourcePresenter, :type => :view do
       hash.should have_key(:host)
       hash.should have_key(:description)
       hash.should have_key(:db_name)
+      hash.should have_key(:version)
       hash[:entity_type].should == "oracle_data_source"
     end
   end

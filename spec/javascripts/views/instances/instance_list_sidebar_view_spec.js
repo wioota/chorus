@@ -414,6 +414,35 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
+    context('when a oracle instance is selected', function() {
+        beforeEach(function(){
+            this.instance = rspecFixtures.oracleDataSource();
+            this.view = new chorus.views.InstanceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.instance);
+        });
+
+        it('displays the name of the instance', function(){
+            expect(this.view.$(".instance_name")).toContainText(this.instance.get("name"));
+        });
+
+        it("displays instance type", function() {
+            expect(this.view.$(".instance_type")).toContainText("Oracle Database");
+        });
+
+        context("sidebar links", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'canEditInstance').andReturn(true);
+                this.view.render();
+            });
+
+            it('doesnt display the add note and edit link', function(){
+                expect(this.view.$('.actions')).not.toContainTranslation('actions.add_note');
+                expect(this.view.$('.actions')).not.toContainTranslation('instances.sidebar.edit_instance');
+            });
+        });
+    });
+
+
     context("when a hadoop instance is selected", function() {
         beforeEach(function() {
             this.instance = rspecFixtures.hadoopInstance({name: "Harry's House of Glamour", username: "hadoop", groupList: "hadoop" });

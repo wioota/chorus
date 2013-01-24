@@ -55,6 +55,10 @@ chorus.models.Instance = chorus.models.Base.extend({
         return false;
     },
 
+    isOracle: function() {
+        return false;
+    },
+
     canHaveIndividualAccounts: function() {
         return false;
     },

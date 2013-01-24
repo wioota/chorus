@@ -18,6 +18,10 @@ chorus.models.DataSource = chorus.models.Instance.extend({
         return this.get('entityType') === 'gpdb_data_source';
     },
 
+    isOracle: function() {
+      return this.get('entityType') === 'oracle_data_source';
+    },
+
     accounts: function() {
         this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId: this.get("id")}));
         return this._accounts;

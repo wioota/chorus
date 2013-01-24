@@ -44,6 +44,12 @@ describe OracleConnection, :oracle_integration do
     end
   end
 
+  describe "#version" do
+    it "returns the Oracle connection" do
+      connection.version.should == '11.2.0.2.0'
+    end
+  end
+
   describe "OracleConnection::DatabaseError" do
     let(:sequel_exception) {
       obj = Object.new

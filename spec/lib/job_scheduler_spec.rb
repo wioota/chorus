@@ -3,14 +3,14 @@ require 'job_scheduler'
 
 describe JobScheduler do
   let(:job_scheduler) { JobScheduler.new }
-  describe "InstanceStatusChecker.check" do
+  describe "InstanceStatusChecker.check_all" do
     it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
-      job_scheduler.job_named('InstanceStatusChecker.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
+      job_scheduler.job_named('InstanceStatusChecker.check_all').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
     end
 
-    it "enqueues the 'InstanceStatusChecker.check' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("InstanceStatusChecker.check")
-      job_scheduler.job_named('InstanceStatusChecker.check').run(Time.current)
+    it "enqueues the 'InstanceStatusChecker.check_all' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("InstanceStatusChecker.check_all")
+      job_scheduler.job_named('InstanceStatusChecker.check_all').run(Time.current)
     end
   end
 

@@ -37,6 +37,15 @@ FactoryGirl.define do
     owner
     db_username 'username'
     db_password 'secret'
+    after(:build) do |instance|
+      def instance.valid_db_credentials?(account)
+        true
+      end
+    end
+
+    after(:create) do |instance|
+      instance.singleton_class.send :remove_method, :valid_db_credentials?
+    end
   end
 
   factory :hadoop_instance do
