@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   has_many :gnip_instances, :foreign_key => :owner_id
   has_many :gpdb_data_sources, :foreign_key => :owner_id
-  has_many :oracle_instances, :foreign_key => :owner_id
+  has_many :oracle_data_sources, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
   has_many :workspaces, :through => :memberships

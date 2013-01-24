@@ -107,7 +107,7 @@ window.rspecFixtureDefinitions = {
 
     gpdbDataSource: { unique: [ "id" ] },
 
-    oracleInstance: { unique: [ "id" ] },
+    oracleDataSource: { unique: [ "id" ] },
 
     hadoopInstance: { unique: ["id"] },
 

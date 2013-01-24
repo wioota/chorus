@@ -24,12 +24,12 @@ class DataSourcesController < GpdbController
       QC.enqueue_if_not_queued("GpdbDataSource.refresh", created_gpdb_data_source.id, 'new' => true)
       present created_gpdb_data_source, :status => :created
 
-    elsif entity_type == "oracle_instance"
-      created_oracle_instance = current_user.oracle_instances.new(params[:data_source])
-      created_oracle_instance.shared = true
-      created_oracle_instance.save!
+    elsif entity_type == "oracle_data_source"
+      created_oracle_data_source = current_user.oracle_data_sources.new(params[:data_source])
+      created_oracle_data_source.shared = true
+      created_oracle_data_source.save!
 
-      present created_oracle_instance, :status => :created
+      present created_oracle_data_source, :status => :created
     else
       raise ApiValidationError.new(:entity_type, :invalid)
     end

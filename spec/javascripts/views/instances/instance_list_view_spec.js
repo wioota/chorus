@@ -148,7 +148,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("instance:added event", function() {
             beforeEach(function() {
-                this.newInstance = rspecFixtures.oracleInstance({id: 31415});
+                this.newInstance = rspecFixtures.oracleDataSource({id: 31415});
                 spyOn(this.view.dataSources, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 spyOn(this.view.gnipInstances, "fetchAll");

@@ -52,7 +52,7 @@ hadoop_instance_db:
   username: hadoop
   group_list: hadoop
 
-oracle_instance_db:
+oracle_data_source_db:
   oracle_host: chorus-oracle.sf.pivotallabs.com
   oracle_port: 1521
   oracle_database: orcl

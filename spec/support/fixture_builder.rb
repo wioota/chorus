@@ -80,7 +80,7 @@ FixtureBuilder.configure do |fbuilder|
 
     @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_data_source => owners_instance)
 
-    FactoryGirl.create(:oracle_instance, name: 'oracle')
+    FactoryGirl.create(:oracle_data_source, name: 'oracle')
 
     hadoop_instance = HadoopInstance.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance

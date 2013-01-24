@@ -18,7 +18,7 @@ resource "Data sources" do
     parameter :db_username, "Username for connection to data source"
     parameter :db_password, "Password for connection to data source"
     parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
-    parameter :entity_type, "The type of data source (either 'gpdb_data_source' or 'oracle_instance')"
+    parameter :entity_type, "The type of data source (either 'gpdb_data_source' or 'oracle_data_source')"
 
     let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }

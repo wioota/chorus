@@ -26,7 +26,7 @@ describe("chorus.pages.DashboardPage", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.page.dataSourceSet, [
                                          rspecFixtures.gpdbDataSource(),
-                                         rspecFixtures.oracleInstance()
+                                         rspecFixtures.oracleDataSource()
             ]);
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [
                                          rspecFixtures.hadoopInstance(),
@@ -81,7 +81,7 @@ describe("chorus.pages.DashboardPage", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.page.dataSourceSet, [
                 rspecFixtures.gpdbDataSource(),
-                rspecFixtures.oracleInstance()
+                rspecFixtures.oracleDataSource()
             ]);
 
             this.server.completeFetchAllFor(this.page.hadoopInstanceSet, [

@@ -394,14 +394,14 @@ describe("chorus.dialogs.InstancesNew", function() {
                 section.find("input[name=dbName]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
-                spyOn(chorus.models.OracleInstance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.OracleDataSource.prototype, "save").andCallThrough();
             });
 
             it('sends the right params', function() {
                 this.dialog.$("button.submit").click();
                 var params = this.server.lastCreate().params();
 
-                expect(params['data_source[entity_type]']).toBe('oracle_instance');
+                expect(params['data_source[entity_type]']).toBe('oracle_data_source');
                 expect(params["data_source[db_password]"]).toBe("my_password");
                 expect(params["data_source[name]"]).toBe("Instance_Name");
                 expect(params["data_source[description]"]).toBe("Instance Description");

@@ -1,6 +1,6 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
-        this.instance1 = rspecFixtures.oracleInstance({ name: "broccoli" });
+        this.instance1 = rspecFixtures.oracleDataSource({ name: "broccoli" });
         this.instance2 = rspecFixtures.hadoopInstance({ name: "Camels" });
         this.instance3 = rspecFixtures.hadoopInstance({ name: "doppler" });
         this.instance4 = rspecFixtures.gpdbDataSource({ name: "Ego" });

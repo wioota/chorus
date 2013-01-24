@@ -24,8 +24,8 @@ describe('chorus.models.DataSource', function() {
         });
 
         it('is true for oracle data sources', function(){
-            var oracleInstance = rspecFixtures.gpdbDataSource();
-            expect(oracleInstance.canHaveIndividualAccounts()).toBeTruthy();
+            var oracleDataSource = rspecFixtures.gpdbDataSource();
+            expect(oracleDataSource.canHaveIndividualAccounts()).toBeTruthy();
         });
     });
 
@@ -42,7 +42,7 @@ describe('chorus.models.DataSource', function() {
         it('returns true if the instance is a greenplum db', function(){
             var gpdb = new chorus.models.DataSource({entityType: 'gpdb_data_source'});
             expect(gpdb.isGreenplum()).toBeTruthy();
-            var oracle = new chorus.models.DataSource({entityType: 'oracle_instance'});
+            var oracle = new chorus.models.DataSource({entityType: 'oracle_data_source'});
             expect(oracle.isGreenplum()).toBeFalsy();
         });
     });

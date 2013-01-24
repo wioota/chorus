@@ -1,4 +1,4 @@
-class OracleInstancePresenter < Presenter
+class OracleDataSourcePresenter < Presenter
   def to_hash
     {
         :id => model.id,
@@ -7,7 +7,7 @@ class OracleInstancePresenter < Presenter
         :port => model.port,
         :db_name => model.db_name,
         :description => model.description,
-        :entity_type => 'oracle_instance'
+        :entity_type => 'oracle_data_source'
     }
   end
 end

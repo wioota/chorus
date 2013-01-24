@@ -1,6 +1,6 @@
-describe("chorus.models.OracleInstance", function() {
+describe("chorus.models.OracleDataSource", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.oracleInstance({id: 1});
+        this.instance = rspecFixtures.oracleDataSource({id: 1});
         this.instance.set({
             dbName: 'RockinDB',
             dbUsername: 'system',
@@ -9,7 +9,7 @@ describe("chorus.models.OracleInstance", function() {
     });
 
     it("has the right entity type", function() {
-        expect(this.instance.entityType).toBe("oracle_instance");
+        expect(this.instance.entityType).toBe("oracle_data_source");
     });
 
     it("has the right show url", function() {
@@ -24,7 +24,7 @@ describe("chorus.models.OracleInstance", function() {
     });
 
     it('has the type', function() {
-        expect(this.instance.get('entityType')).toBe('oracle_instance');
+        expect(this.instance.get('entityType')).toBe('oracle_data_source');
     });
 
     describe("#isGreenplum", function() {

@@ -55,7 +55,7 @@ describe DataSourceNameValidator do
     end
 
     it_validates_against(GpdbDataSource)
-    it_validates_against(OracleInstance)
+    it_validates_against(OracleDataSource)
     it_validates_against(HadoopInstance)
     it_validates_against(GnipInstance)
 

@@ -182,14 +182,14 @@ module InstanceIntegration
   end
 
   def self.oracle_config
-    @@oracle_config ||= find_oracle_instance REAL_ORACLE_HOST
+    @@oracle_config ||= find_oracle_data_source REAL_ORACLE_HOST
   end
 
   def self.find_greenplum_instance(name)
     config['instances']['gpdb'].find { |hash| hash["host"] == name }
   end
 
-  def self.find_oracle_instance(name)
+  def self.find_oracle_data_source(name)
     config['instances']['oracle'].find { |hash| hash["host"] == name }
   end
 

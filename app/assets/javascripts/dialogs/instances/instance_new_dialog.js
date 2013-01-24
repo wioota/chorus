@@ -66,7 +66,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         } else if (instanceType === "register_existing_gnip") {
             return chorus.models.GnipInstance;
         } else if (instanceType === "register_existing_oracle") {
-            return chorus.models.OracleInstance;
+            return chorus.models.OracleDataSource;
         } else {
             return chorus.models.GpdbDataSource;
         }

@@ -66,7 +66,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         target.addClass("selected");
 
         var map = {
-            oracle_instance: this.dataSources,
+            oracle_data_source: this.dataSources,
             gpdb_data_source: this.dataSources,
             hadoop_instance: this.hadoopInstances,
             gnip_instance: this.gnipInstances

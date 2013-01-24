@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe OracleInstancePresenter, :type => :view do
+describe OracleDataSourcePresenter, :type => :view do
 
-  let(:oracle_instance) { OracleInstance.new }
+  let(:oracle_data_source) { OracleDataSource.new }
   let(:options) { {} }
-  let(:presenter) { OracleInstancePresenter.new(oracle_instance, view, options) }
+  let(:presenter) { OracleDataSourcePresenter.new(oracle_data_source, view, options) }
 
   let(:hash) { presenter.to_hash }
 
@@ -16,7 +16,7 @@ describe OracleInstancePresenter, :type => :view do
       hash.should have_key(:host)
       hash.should have_key(:description)
       hash.should have_key(:db_name)
-      hash[:entity_type].should == "oracle_instance"
+      hash[:entity_type].should == "oracle_data_source"
     end
   end
 end

@@ -49,7 +49,7 @@ describe DataSourcesController do
       get :show, :id => data_sources(:owners).to_param
     end
 
-    generate_fixture "oracleInstance.json" do
+    generate_fixture "oracleDataSource.json" do
       get :show, :id => data_sources(:oracle).to_param
     end
 
@@ -149,17 +149,17 @@ describe DataSourcesController do
       end
     end
 
-    context "for an OracleInstance" do
-      let(:entity_type) { "oracle_instance" }
+    context "for an OracleDataSource" do
+      let(:entity_type) { "oracle_data_source" }
 
-      it "creates a new OracleInstance" do
+      it "creates a new OracleDataSource" do
         expect {
           post :create, valid_attributes
-        }.to change(OracleInstance, :count).by(1)
+        }.to change(OracleDataSource, :count).by(1)
         response.code.should == "201"
       end
 
-      it "presents the OracleInstance" do
+      it "presents the OracleDataSource" do
         mock_present do |data_source|
           data_source.name == valid_attributes[:name]
         end
@@ -167,9 +167,9 @@ describe DataSourcesController do
         post :create, :data_source => valid_attributes
       end
 
-      it "creates a shared OracleInstance" do
+      it "creates a shared OracleDataSource" do
         post :create, valid_attributes
-        OracleInstance.last.should be_shared
+        OracleDataSource.last.should be_shared
       end
     end
 

@@ -29,8 +29,8 @@ FactoryGirl.define do
     end
   end
 
-  factory :oracle_instance do
-    sequence(:name) { |n| "oracle_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+  factory :oracle_data_source do
+    sequence(:name) { |n| "oracle_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "oracle_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     db_name "db_name"

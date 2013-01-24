@@ -1,2 +1,0 @@
-class OracleInstanceAccess < DataSourceAccess
-end

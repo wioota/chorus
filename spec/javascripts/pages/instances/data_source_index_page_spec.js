@@ -63,7 +63,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
     describe("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.dataSourceSet, [
-                rspecFixtures.oracleInstance(),
+                rspecFixtures.oracleDataSource(),
                 rspecFixtures.gpdbDataSource()
             ]);
 

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe OracleInstance do
+describe OracleDataSource do
   describe "validations" do
-    let(:instance) { FactoryGirl.build(:oracle_instance) }
+    let(:instance) { FactoryGirl.build(:oracle_data_source) }
 
     it { should validate_presence_of(:host) }
     it { should validate_presence_of(:port) }
@@ -37,7 +37,7 @@ describe OracleInstance do
 
   describe "owner_account" do
     it "is created automatically" do
-      instance = FactoryGirl.build(:oracle_instance, :owner_account => nil)
+      instance = FactoryGirl.build(:oracle_data_source, :owner_account => nil)
       stub(instance).valid_db_credentials?(anything) { true }
       instance.save!
       instance.owner_account.should_not be_nil

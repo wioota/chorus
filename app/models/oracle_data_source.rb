@@ -1,4 +1,4 @@
-class OracleInstance < DataSource
+class OracleDataSource < DataSource
   validates :host, :presence => true
   validates :port, :presence => true
   validates_associated :owner_account, :if => :validate_owner?
