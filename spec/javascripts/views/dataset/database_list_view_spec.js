@@ -36,7 +36,7 @@ describe("chorus.views.DatabaseList", function() {
         });
 
         it("displays the right icon for each database", function() {
-            expect(this.view.$("li.database img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_database.png");
+            expect(this.view.$("li.database img").eq(0)).toHaveAttr("src", "/images/data_sources/greenplum_database.png");
         });
 
         it("should broadcast a database:selected event when itemSelected is called", function() {

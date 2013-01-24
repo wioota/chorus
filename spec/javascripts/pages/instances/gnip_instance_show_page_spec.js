@@ -31,7 +31,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
 
         it("has a title bar with an icon", function() {
             expect(this.page.$(".content_header")).toContainText("gnip");
-            expect(this.page.$(".content_header img").attr("src")).toContain("/images/instances/icon_datasource_gnip.png");
+            expect(this.page.$(".content_header img").attr("src")).toContain("/images/data_sources/icon_gnip_instance.png");
         });
 
         it("displays the sidebar", function() {

@@ -1,6 +1,10 @@
 chorus.models.Instance = chorus.models.Base.extend({
     constructorName: 'AbstractInstance',
-    _imagePrefix: "/images/instances/",
+    _imagePrefix: "/images/data_sources/",
+
+    providerIconUrl: function() {
+        return this._imagePrefix + 'icon_' + this.get('entityType') + '.png';
+    },
 
     _stateIconMap: {
         "fault": "red.png",

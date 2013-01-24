@@ -41,7 +41,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
         });
 
         it("should have the correct instance icon in the header ", function() {
-            expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", "/images/instances/greenplum_database.png");
+            expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", "/images/data_sources/greenplum_database.png");
         });
 
         it("should have set up search correctly", function() {

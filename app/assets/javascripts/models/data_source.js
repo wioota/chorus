@@ -6,10 +6,6 @@ chorus.models.DataSource = chorus.models.Instance.extend({
     showUrlTemplate: 'data_sources/{{id}}/databases',
     entityType: 'data_source',
 
-    providerIconUrl: function() {
-        return '/images/instances/icon_' + this.get('entityType') + '.png';
-    },
-
     canHaveIndividualAccounts: function() {
         return true;
     },

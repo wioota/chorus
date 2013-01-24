@@ -1,7 +1,6 @@
 describe("chorus.models.GnipInstance", function() {
     beforeEach(function() {
-        this.model = new chorus.models.GnipInstance();
-        this.model.set({id:123});
+        this.model = rspecFixtures.gnipInstance({id: 123});
         this.attrs = {
             name: "someName",
             streamUrl: "someUrl",
@@ -20,10 +19,6 @@ describe("chorus.models.GnipInstance", function() {
 
     it("has the right showUrlTemplate", function() {
         expect(this.model.showUrl()).toBe("#/gnip_instances/123");
-    });
-
-    it("has the right provider icon url", function() {
-        expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_gnip.png");
     });
 
     it("has the correct entityType", function() {

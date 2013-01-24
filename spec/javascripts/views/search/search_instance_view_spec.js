@@ -7,11 +7,11 @@ describe("chorus.views.SearchInstance", function() {
 
 
     it("includes the correct instance icon", function() {
-        expect(this.view.$("img.provider").attr("src")).toBe("/images/instances/icon_datasource_hadoop.png");
+        expect(this.view.$("img.provider").attr("src")).toBe("/images/data_sources/icon_hadoop_instance.png");
     });
 
     it("includes the correct state icon", function() {
-        expect(this.view.$("img.state").attr("src")).toBe("/images/instances/green.png");
+        expect(this.view.$("img.state").attr("src")).toBe("/images/data_sources/green.png");
     });
 
     it("includes the state text as a title", function() {

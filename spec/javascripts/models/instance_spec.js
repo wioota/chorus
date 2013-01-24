@@ -3,22 +3,27 @@ describe("chorus.models.Instance", function() {
         this.instance = new chorus.models.Instance({id : 1, version: "1234", owner:{firstName: "John", lastName: "Doe", id: 2}});
     });
 
+    it("has the right providerIconUrl", function() {
+        this.instance.set({entityType: "foo"});
+        expect(this.instance.providerIconUrl()).toBe("/images/data_sources/icon_foo.png");
+    });
+
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
             this.instance.set({ state: "offline" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/data_sources/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 
         it("works for online instances", function() {
             this.instance.set({ state: "online" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/green.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/data_sources/green.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.online");
         });
 
         it("works for other instances", function() {
             this.instance.set({ state: null });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/data_sources/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.unknown");
         });
     });

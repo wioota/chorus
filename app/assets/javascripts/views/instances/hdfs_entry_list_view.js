@@ -15,7 +15,7 @@ chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
         return {
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: model.get("isDir") ?
-                "/images/instances/hadoop_directory_large.png" :
+                "/images/data_sources/hadoop_directory_large.png" :
                 chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
             showUrl: model.showUrl(),
             dirInfo: message,

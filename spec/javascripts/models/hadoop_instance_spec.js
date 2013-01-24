@@ -16,10 +16,6 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.entityType).toBe("hadoop_instance");
     });
 
-    it("has the right provider icon url", function() {
-        expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_hadoop.png");
-    });
-
     it("links to the root directory of the hadoop instance", function() {
         expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
@@ -40,12 +36,6 @@ describe("chorus.models.HadoopInstance", function() {
         this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
         expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"});
-    });
-
-    describe("#providerIconUrl", function() {
-        it("returns the right url for hadoop instances", function() {
-            expect(this.model.providerIconUrl()).toBe("/images/instances/icon_datasource_hadoop.png");
-        });
     });
 
     describe("#sharedAccountDetails", function() {

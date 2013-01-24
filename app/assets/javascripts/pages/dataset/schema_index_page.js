@@ -18,7 +18,7 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
             modelClass: "Schema",
             collection: this.collection,
             title: _.bind(this.database.name, this.database),
-            imageUrl: "/images/instances/greenplum_database.png",
+            imageUrl: "/images/data_sources/greenplum_database.png",
             search: {
                 selector: ".name",
                 placeholder: t("schema.search_placeholder"),

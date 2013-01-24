@@ -255,7 +255,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the current user is NOT an admin or owner of the instance", function() {
                     context("when the user does not have an account for the instance", function() {
                         it("shows the 'no access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/instances/no_access.png");
+                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
                             expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
                         });
 
@@ -285,7 +285,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
 
                         it("shows the 'access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/instances/access.png");
+                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/access.png");
                             expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
                         });
 

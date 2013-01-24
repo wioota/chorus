@@ -137,7 +137,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
+                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/data_sources/yellow.png");
             });
 
             it("should display the name as a link", function() {

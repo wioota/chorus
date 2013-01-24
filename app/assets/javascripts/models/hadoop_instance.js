@@ -10,7 +10,7 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
     },
 
     providerIconUrl: function() {
-        return this._imagePrefix + "icon_datasource_hadoop.png";
+        return this._imagePrefix + "icon_hadoop_instance.png";
     },
 
     isHadoop: function() {
