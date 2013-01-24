@@ -80,12 +80,6 @@ describe InstanceAccount do
         mock(instance).refresh_databases_later
         InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
       end
-
-      it "should not reindex if the instance is new" do
-        dont_allow(instance).refresh_databases_later
-        stub(instance).created_at { Time.now }
-        account = InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
-      end
     end
 
     context "deleting an account" do
@@ -101,8 +95,8 @@ describe InstanceAccount do
       let(:user) { users(:the_collaborator) }
       let(:account) { instance.account_for_user(user) }
 
-      it "should not reindex" do
-        dont_allow(instance).refresh_databases_later
+      it "should reindex" do
+        mock(account.instance).refresh_databases_later
         account.update_attributes(:db_username => "baz")
       end
     end

@@ -11,11 +11,11 @@ class InstanceAccount < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :instance, :class_name => 'DataSource'
   has_and_belongs_to_many :gpdb_databases
-  after_create :reindex_gpdb_instance
+  after_save :reindex_gpdb_instance
   after_destroy :reindex_gpdb_instance
 
   def reindex_gpdb_instance
-    instance.refresh_databases_later unless instance.created_at > 1.minute.ago
+    instance.refresh_databases_later
   end
 
   private
