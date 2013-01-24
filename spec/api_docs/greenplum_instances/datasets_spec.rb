@@ -4,7 +4,7 @@ resource "Greenplum DB: datasets" do
   let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 
-  let(:owner_account) { dataset.gpdb_instance.owner_account }
+  let(:owner_account) { dataset.gpdb_data_source.owner_account }
   let(:dataset_id) { dataset.id }
   let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 

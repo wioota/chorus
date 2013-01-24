@@ -21,7 +21,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders empty text for each instance type", function() {
-                expect(this.view.$(".gpdb_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".gpdb_data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
@@ -36,9 +36,9 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
             ]);
             this.server.completeFetchFor(this.dataSources, [
-                rspecFixtures.gpdbInstance({name : "GP9", id: "1"}),
-                rspecFixtures.gpdbInstance({name : "gP1", id: "2"}),
-                rspecFixtures.gpdbInstance({name : "GP10", id: "3"})
+                rspecFixtures.gpdbDataSource({name : "GP9", id: "1"}),
+                rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
+                rspecFixtures.gpdbDataSource({name : "GP10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
                 rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
@@ -60,7 +60,7 @@ describe("chorus.views.InstanceList", function() {
         });
 
         it("renders the gpdb instances in the correct instance div", function() {
-            var gpdbItems = this.view.$(".gpdb_instance li.instance");
+            var gpdbItems = this.view.$(".gpdb_data_source li.instance");
             expect(gpdbItems.length).toBe(3);
             expect(gpdbItems).toContainText("gP1");
             expect(gpdbItems).toContainText("GP9");
@@ -110,7 +110,7 @@ describe("chorus.views.InstanceList", function() {
 
                 it("renders only the existing items", function() {
                     expect(this.dataSources.models.length).toBe(this.oldLength - 1);
-                    expect(this.view.$(".gpdb_instance li.instance").length).toBe(this.oldLength - 1);
+                    expect(this.view.$(".gpdb_data_source li.instance").length).toBe(this.oldLength - 1);
                 });
             });
 
@@ -131,18 +131,18 @@ describe("chorus.views.InstanceList", function() {
         describe("when an instance is offline", function() {
             beforeEach(function() {
                 this.dataSources.reset([
-                    rspecFixtures.gpdbInstance({ name: "Greenplum", state: "offline" })
+                    rspecFixtures.gpdbDataSource({ name: "Greenplum", state: "offline" })
                 ]);
                 this.view.render();
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".gpdb_instance li:eq(0) img.state")).toHaveAttr("src", "/images/data_sources/yellow.png");
+                expect(this.view.$(".gpdb_data_source li:eq(0) img.state")).toHaveAttr("src", "/images/data_sources/yellow.png");
             });
 
             it("should display the name as a link", function() {
-                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).toExist();
-                expect(this.view.$(".gpdb_instance li:eq(0) a.name")).toContainText("Greenplum");
+                expect(this.view.$(".gpdb_data_source li:eq(0) a.name")).toExist();
+                expect(this.view.$(".gpdb_data_source li:eq(0) a.name")).toContainText("Greenplum");
             });
         });
 

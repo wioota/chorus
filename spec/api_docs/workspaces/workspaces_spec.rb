@@ -6,8 +6,8 @@ resource "Workspaces" do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:gpdb_instance) { database.gpdb_instance}
-  let(:instance_id) { gpdb_instance.id }
+  let(:gpdb_data_source) { database.gpdb_data_source}
+  let(:instance_id) { gpdb_data_source.id }
   let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
@@ -65,13 +65,13 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_name, :schema_name, :workspace_id
 
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
     let(:database_name) { "a_new_database_name" }
     let(:schema_name) { "a_new_schema_name" }
-    let(:user) { gpdb_instance.owner }
+    let(:user) { gpdb_data_source.owner }
 
     after do
-      Gpdb::ConnectionBuilder.connect!(gpdb_instance, gpdb_instance.owner_account) do |conn|
+      Gpdb::ConnectionBuilder.connect!(gpdb_data_source, gpdb_data_source.owner_account) do |conn|
         conn.exec_query("DROP DATABASE IF EXISTS #{database_name};")
       end
     end
@@ -89,13 +89,13 @@ resource "Workspaces" do
 
     required_parameters :instance_id, :database_id, :schema_name, :workspace_id
 
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+    let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
     let(:database) { InstanceIntegration.real_database }
     let(:schema_name) { "a_new_schema" }
-    let(:user) { gpdb_instance.owner }
+    let(:user) { gpdb_data_source.owner }
 
     after do
-      database.connect_with(gpdb_instance.owner_account).drop_schema(schema_name)
+      database.connect_with(gpdb_data_source.owner_account).drop_schema(schema_name)
     end
 
     example_request "Add a sandbox by creating a new schema in an existing database" do

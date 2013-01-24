@@ -37,24 +37,24 @@ describe DataSourceNameValidator do
     end
 
     it "passes on model update" do
-      OriginalGpdbInstance = GpdbInstance
+      OriginalGpdbDataSource = GpdbDataSource
 
-      class GpdbInstance < DataSource
+      class GpdbDataSource < DataSource
         validates_with DataSourceNameValidator
       end
 
-      record = FactoryGirl.build(:gpdb_instance, :name => name)
+      record = FactoryGirl.build(:gpdb_data_source, :name => name)
       record.save
       record.reload.valid?.should be_true
 
       # don't leak modified instance class
       Object.class_eval do
-        const_set(:GpdbInstance, OriginalGpdbInstance)
-        remove_const(:OriginalGpdbInstance)
+        const_set(:GpdbDataSource, OriginalGpdbDataSource)
+        remove_const(:OriginalGpdbDataSource)
       end
     end
 
-    it_validates_against(GpdbInstance)
+    it_validates_against(GpdbDataSource)
     it_validates_against(OracleInstance)
     it_validates_against(HadoopInstance)
     it_validates_against(GnipInstance)

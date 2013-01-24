@@ -60,7 +60,7 @@ describe("chorus.models.Sandbox", function() {
         });
 
         it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.GpdbInstance);
+            expect(this.instance).toBeA(chorus.models.GpdbDataSource);
             expect(this.instance.get("id")).toBe(this.model.get("database").instance.id);
             expect(this.instance.get("name")).toBe(this.model.get("database").instance.name);
         });

@@ -233,7 +233,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.GpdbInstance);
+            expect(this.instance).toBeA(chorus.models.GpdbDataSource);
 
             expect(this.instance.id).toBe(this.dataset.get("schema").database.instance.id);
             expect(this.instance.name()).toBe(this.dataset.get("schema").database.instance.name);

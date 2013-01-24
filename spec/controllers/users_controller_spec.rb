@@ -274,7 +274,7 @@ describe UsersController do
         let(:user) { users(:the_collaborator) }
 
         before do
-          user.gpdb_instances << data_sources(:default)
+          user.gpdb_data_sources << data_sources(:default)
           delete :destroy, :id => user.id
         end
 

@@ -45,7 +45,7 @@ describe DataSourcesController do
       end
     end
 
-    generate_fixture "gpdbInstance.json" do
+    generate_fixture "gpdbDataSource.json" do
       get :show, :id => data_sources(:owners).to_param
     end
 
@@ -63,10 +63,10 @@ describe DataSourcesController do
 
   describe "#update" do
     let(:changed_attributes) { {} }
-    let(:gpdb_instance) { data_sources(:shared) }
+    let(:gpdb_data_source) { data_sources(:shared) }
     let(:params) do
       {
-          :id => gpdb_instance.id,
+          :id => gpdb_data_source.id,
           :name => "changed"
       }
     end
@@ -76,12 +76,12 @@ describe DataSourcesController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:edit, gpdb_instance)
+      mock(subject).authorize!(:edit, gpdb_data_source)
       put :update, params
     end
 
     it "presents the gpdb instance" do
-      mock.proxy(controller).present(gpdb_instance)
+      mock.proxy(controller).present(gpdb_data_source)
       put :update, params
     end
 
@@ -118,13 +118,13 @@ describe DataSourcesController do
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
-    context "for a GpdbInstance" do
-      let(:entity_type) { "gpdb_instance" }
+    context "for a GpdbDataSource" do
+      let(:entity_type) { "gpdb_data_source" }
 
       it "creates the data source" do
         expect {
           post :create, valid_attributes
-        }.to change(GpdbInstance, :count).by(1)
+        }.to change(GpdbDataSource, :count).by(1)
         response.code.should == "201"
       end
 
@@ -136,7 +136,7 @@ describe DataSourcesController do
       end
 
       it "schedules a job to refresh the data_source" do
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbInstance.refresh", numeric, {'new' => true})
+        mock(QC.default_queue).enqueue_if_not_queued("GpdbDataSource.refresh", numeric, {'new' => true})
         post :create, :data_source => valid_attributes
       end
 

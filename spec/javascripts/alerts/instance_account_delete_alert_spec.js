@@ -1,6 +1,6 @@
 describe("chorus.alerts.InstanceAccountDelete", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.gpdbInstance({ id: '456' });
+        this.instance = rspecFixtures.gpdbDataSource({ id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
     });

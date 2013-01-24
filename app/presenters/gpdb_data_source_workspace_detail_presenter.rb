@@ -1,4 +1,4 @@
-class GpdbInstanceWorkspaceDetailPresenter < Presenter
+class GpdbDataSourceWorkspaceDetailPresenter < Presenter
 
   def to_hash
     account = model.account_for_user(current_user)

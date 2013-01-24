@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Import, :greenplum_integration do
-  let(:user)  { schema.gpdb_instance.owner }
+  let(:user)  { schema.gpdb_data_source.owner }
   let(:workspace) { workspaces(:real) }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:account) { InstanceIntegration.real_gpdb_account }
-  let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+  let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
 
   before do
     workspace.update_attribute :sandbox_id, schema.id

@@ -105,7 +105,7 @@ window.rspecFixtureDefinitions = {
 
     gnipInstance: { unique: ["id"] },
 
-    gpdbInstance: { unique: [ "id" ] },
+    gpdbDataSource: { unique: [ "id" ] },
 
     oracleInstance: { unique: [ "id" ] },
 

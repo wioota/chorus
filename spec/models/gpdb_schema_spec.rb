@@ -67,13 +67,13 @@ describe GpdbSchema do
   end
 
   describe '#accessible_to' do
-    let(:gpdb_instance) { data_sources(:owners) }
-    let(:account) { gpdb_instance.owner_account }
+    let(:gpdb_data_source) { data_sources(:owners) }
+    let(:account) { gpdb_data_source.owner_account }
     let(:schema) { gpdb_schemas(:default) }
 
     it 'returns true if the user can access the gpdb instance' do
       owner = account.owner
-      any_instance_of(GpdbInstance) do |instance|
+      any_instance_of(GpdbDataSource) do |instance|
         mock(instance).accessible_to(owner) { true }
       end
 
@@ -82,8 +82,8 @@ describe GpdbSchema do
   end
 
   context ".refresh" do
-    let(:gpdb_instance) { data_sources(:owners) }
-    let(:account) { gpdb_instance.owner_account }
+    let(:gpdb_data_source) { data_sources(:owners) }
+    let(:account) { gpdb_data_source.owner_account }
     let(:database) do
       stub(schema.database).connect_with(account) { connection }
       schema.database
@@ -91,8 +91,8 @@ describe GpdbSchema do
     let(:schema) { gpdb_schemas(:default) }
     let(:settings) do
       {
-          :host => gpdb_instance.host,
-          :port => gpdb_instance.port,
+          :host => gpdb_data_source.host,
+          :port => gpdb_data_source.port,
           :username => account.db_username,
           :password => account.db_password,
           :database => database.name
@@ -230,7 +230,7 @@ describe GpdbSchema do
 
   describe "#stored_functions" do
     let(:schema) { gpdb_schemas(:public) }
-    let(:account) { schema.database.gpdb_instance.owner_account }
+    let(:account) { schema.database.gpdb_data_source.owner_account }
     let(:connection) { Object.new }
 
     before do
@@ -319,8 +319,8 @@ describe GpdbSchema do
 
     it "should create a Greenplum SchemaConnection" do
       mock(GreenplumConnection).new({
-                                                          :host => schema.gpdb_instance.host,
-                                                          :port => schema.gpdb_instance.port,
+                                                          :host => schema.gpdb_data_source.host,
+                                                          :port => schema.gpdb_data_source.port,
                                                           :username => account.db_username,
                                                           :password => account.db_password,
                                                           :database => schema.database.name,

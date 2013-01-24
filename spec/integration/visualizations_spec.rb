@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 #These tests actually create the charts from the instances view. Need to write separate tests for visulaization from sandbox
 
 describe "Visualizations", :greenplum_integration do
-  let(:instance) { InstanceIntegration.real_gpdb_instance }
+  let(:instance) { InstanceIntegration.real_gpdb_data_source }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name("test_schema") }
   let(:table) { schema.datasets.find_by_name("base_table1") }

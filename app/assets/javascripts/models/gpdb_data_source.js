@@ -1,15 +1,15 @@
-chorus.models.GpdbInstance = chorus.models.DataSource.extend({
-    constructorName: "GpdbInstance",
+chorus.models.GpdbDataSource = chorus.models.DataSource.extend({
+    constructorName: "GpdbDataSource",
     urlTemplate: "data_sources/{{id}}",
     nameAttribute: 'name',
-    entityType: "gpdb_instance",
+    entityType: "gpdb_data_source",
 
     showUrlTemplate: "data_sources/{{id}}/databases",
 
     parameterWrapper: "data_source",
 
     defaults: {
-        entityType: 'gpdb_instance'
+        entityType: 'gpdb_data_source'
     },
 
     declareValidations: function(newAttrs) {

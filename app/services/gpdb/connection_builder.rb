@@ -8,13 +8,13 @@ module Gpdb
   self.gpdb_login_timeout = 10
 
   module ConnectionBuilder
-    def self.connect!(gpdb_instance, account, database_name=nil)
-      connection = ActiveRecord::Base.postgresql_connection( connection_params(gpdb_instance, account, database_name) )
+    def self.connect!(gpdb_data_source, account, database_name=nil)
+      connection = ActiveRecord::Base.postgresql_connection( connection_params(gpdb_data_source, account, database_name) )
 
       # TODO: this yield should really be after most of the exception handling [#39664445]
       yield connection if block_given?
     rescue ActiveRecord::JDBCError => e
-      friendly_message = "Failed to establish JDBC connection to #{gpdb_instance.host}:#{gpdb_instance.port}"
+      friendly_message = "Failed to establish JDBC connection to #{gpdb_data_source.host}:#{gpdb_data_source.port}"
       Chorus.log_error(friendly_message + " - " + e.message)
 
       if e.message.include?("password")
@@ -35,14 +35,14 @@ module Gpdb
     end
 
     def self.url(database, account)
-      "jdbc:postgresql://#{database.gpdb_instance.host}:#{database.gpdb_instance.port}/#{database.name}?user=#{account.db_username}&password=#{account.db_password}"
+      "jdbc:postgresql://#{database.gpdb_data_source.host}:#{database.gpdb_data_source.port}/#{database.name}?user=#{account.db_username}&password=#{account.db_password}"
     end
 
-    def self.connection_params(gpdb_instance, account, database_name)
+    def self.connection_params(gpdb_data_source, account, database_name)
       connection_params = {
-        :host => gpdb_instance.host,
-        :port => gpdb_instance.port,
-        :database => database_name || gpdb_instance.db_name,
+        :host => gpdb_data_source.host,
+        :port => gpdb_data_source.port,
+        :database => database_name || gpdb_data_source.db_name,
         :username => account.db_username,
         :password => account.db_password,
         :adapter => "jdbcpostgresql"

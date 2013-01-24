@@ -6,7 +6,7 @@ describe Events::Note do
   extend EventHelpers
 
   let(:actor) { users(:not_a_member) }
-  let(:gpdb_instance) { data_sources(:default) }
+  let(:gpdb_data_source) { data_sources(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:private_with_no_collaborators) }
@@ -43,16 +43,16 @@ describe Events::Note do
     subject do
       Events::NoteOnGreenplumInstance.add(
           :actor => actor,
-          :gpdb_instance => gpdb_instance,
+          :gpdb_data_source => gpdb_data_source,
           :body => "This is the body"
       )
     end
 
-    its(:gpdb_instance) { should == gpdb_instance }
-    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
+    its(:gpdb_data_source) { should == gpdb_data_source }
+    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
     its(:additional_data) { should == {'body' => "This is the body"} }
 
-    it_creates_activities_for { [actor, gpdb_instance] }
+    it_creates_activities_for { [actor, gpdb_data_source] }
     it_creates_a_global_activity
   end
 
@@ -238,7 +238,7 @@ describe Events::Note do
     let(:event) {
       Events::NoteOnGreenplumInstance.add(
           :actor => actor,
-          :gpdb_instance => gpdb_instance,
+          :gpdb_data_source => gpdb_data_source,
           :body => "This is the body"
       )
     }
@@ -282,16 +282,16 @@ describe Events::Note do
     end
 
     it "creates a note on a greenplum instance" do
-      gpdb_instance = data_sources(:default)
+      gpdb_data_source = data_sources(:default)
       expect {
-        Events::Note.create_on_model(gpdb_instance, {
+        Events::Note.create_on_model(gpdb_data_source, {
           :body => "Some crazy content",
         }, user)
       }.to change(Events::Note, :count).by(1)
 
       last_note = Events::Note.last
       last_note.action.should == "NoteOnGreenplumInstance"
-      last_note.gpdb_instance.should == gpdb_instance
+      last_note.gpdb_data_source.should == gpdb_data_source
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
     end

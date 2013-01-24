@@ -68,10 +68,10 @@ class TableauWorkbooksController < ApplicationController
         :port => ChorusConfig.instance['tableau.port'],
         :tableau_username => username,
         :tableau_password => password,
-        :db_username => dataset.gpdb_instance.account_for_user!(current_user).db_username,
-        :db_password => dataset.gpdb_instance.account_for_user!(current_user).db_password,
-        :db_host => dataset.gpdb_instance.host,
-        :db_port => dataset.gpdb_instance.port,
+        :db_username => dataset.gpdb_data_source.account_for_user!(current_user).db_username,
+        :db_password => dataset.gpdb_data_source.account_for_user!(current_user).db_password,
+        :db_host => dataset.gpdb_data_source.host,
+        :db_port => dataset.gpdb_data_source.port,
         :db_database => dataset.schema.database.name,
         :db_schema => dataset.schema.name}
 

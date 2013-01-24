@@ -54,7 +54,7 @@
         searchKey: "hdfsEntries"
     });
 
-    chorus.collections.Search.InstanceSet = chorus.collections.GpdbInstanceSet.include(
+    chorus.collections.Search.InstanceSet = chorus.collections.GpdbDataSourceSet.include(
         searchCollectionMixins
     ).extend({
         searchKey: "instances",

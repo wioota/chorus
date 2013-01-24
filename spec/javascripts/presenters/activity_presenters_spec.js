@@ -102,7 +102,7 @@ describe("chorus.presenters.Activity", function() {
 
             beforeEach(function() {
                 model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-                noteObject = model.gpdbInstance();
+                noteObject = model.gpdbDataSource();
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
             });
@@ -267,12 +267,12 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("gpdb instance created", function() {
-        var gpdbInstance;
+        var gpdbDataSource;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            gpdbInstance = model.gpdbInstance();
+            gpdbDataSource = model.gpdbDataSource();
             actor = model.actor();
         });
 
@@ -282,7 +282,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name())
+                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name())
                 }
             );
         });
@@ -331,12 +331,12 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("gpdb instance changed owner", function() {
-        var gpdbInstance, newOwner;
+        var gpdbDataSource, newOwner;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceChangedOwner();
             presenter = new chorus.presenters.Activity(model);
-            gpdbInstance = model.gpdbInstance();
+            gpdbDataSource = model.gpdbDataSource();
             newOwner = model.newOwner();
             actor = model.actor();
         });
@@ -347,7 +347,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceChangedOwner.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
+                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
                 }
             );
@@ -355,7 +355,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("gpdb instance changed name", function() {
-        var gpdbInstance;
+        var gpdbDataSource;
 
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceChangedName({
@@ -363,7 +363,7 @@ describe("chorus.presenters.Activity", function() {
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            gpdbInstance = model.gpdbInstance();
+            gpdbDataSource = model.gpdbDataSource();
             actor = model.actor();
         });
 
@@ -373,7 +373,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GreenplumInstanceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbInstanceLink: linkTo(gpdbInstance.showUrl(), gpdbInstance.name()),
+                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name()),
                     newName: "jane",
                     oldName: "john"
                 }
@@ -903,14 +903,14 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                gpdbInstance: {
+                gpdbDataSource: {
                     id: 42,
                     name: 'my_instance'
                 }
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            instance = rspecFixtures.gpdbInstance({id: 42, name: 'my_instance'});
+            instance = rspecFixtures.gpdbDataSource({id: 42, name: 'my_instance'});
         });
 
         itHasTheActorIcon();

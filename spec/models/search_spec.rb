@@ -32,7 +32,7 @@ describe Search do
       search = Search.new(user, :query => 'bob')
       search.search
       Sunspot.session.should be_a_search_for(User)
-      Sunspot.session.should be_a_search_for(GpdbInstance)
+      Sunspot.session.should be_a_search_for(GpdbDataSource)
       Sunspot.session.should be_a_search_for(HadoopInstance)
       Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
@@ -111,7 +111,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :entity_type => 'instance')
         search.search
         Sunspot.session.should_not be_a_search_for(User)
-        Sunspot.session.should be_a_search_for(GpdbInstance)
+        Sunspot.session.should be_a_search_for(GpdbDataSource)
         Sunspot.session.should be_a_search_for(HadoopInstance)
         Sunspot.session.should be_a_search_for(GnipInstance)
       end
@@ -120,7 +120,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :entity_type => 'user')
         search.search
         Sunspot.session.should be_a_search_for(User)
-        Sunspot.session.should_not be_a_search_for(GpdbInstance)
+        Sunspot.session.should_not be_a_search_for(GpdbDataSource)
         Sunspot.session.should have_search_params(:fulltext, 'bob')
         Sunspot.session.should_not have_search_params(:facet, :type_name)
       end
@@ -144,7 +144,7 @@ describe Search do
         search.search
         session = Sunspot.session
         session.should be_a_search_for(User)
-        session.should_not be_a_search_for(GpdbInstance)
+        session.should_not be_a_search_for(GpdbDataSource)
         session.should have_search_params(:fulltext, 'bob')
         session.should_not have_search_params(:facet, :type_name)
       end
@@ -199,7 +199,7 @@ describe Search do
     let(:admin) { users(:admin) }
     let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
-    let(:gpdb_instance) { data_sources(:default) }
+    let(:gpdb_data_source) { data_sources(:default) }
     let(:hadoop_instance) { hadoop_instances(:hadoop) }
     let(:gnip_instance) { gnip_instances(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
@@ -281,14 +281,14 @@ describe Search do
     describe "instances" do
       it "should include Gpdb, Hadoop, and Gnip" do
         create_and_record_search do |search|
-          search.instances.should include(gpdb_instance)
+          search.instances.should include(gpdb_data_source)
           search.instances.should include(hadoop_instance)
           search.instances.should include(gnip_instance)
         end
       end
 
       context "including highlighted attributes" do
-        [GpdbInstance, HadoopInstance, GnipInstance].each do |instance_type|
+        [GpdbDataSource, HadoopInstance, GnipInstance].each do |instance_type|
           it "should include highlighted attributes for #{instance_type.name}" do
             create_and_record_search do |search|
               instance = search.instances.select { |instance| instance.is_a?(instance_type) }.first
@@ -438,7 +438,7 @@ describe Search do
 
         it "is excluded from search results" do
           create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_data_source, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -447,7 +447,7 @@ describe Search do
 
         it "excludes results with matching notes on the chorus view" do
           create_and_record_search(user, :query => 'workspacedatasetnotesearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_data_source, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -456,7 +456,7 @@ describe Search do
 
         it "excludes results with matching comments on the chorus view" do
           create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
+            instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_data_source, :owner => user).tap { |a| a.save(:validate => false)}
             chorus_view.schema.database.instance_accounts << instance_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
@@ -557,7 +557,7 @@ describe Search do
 
           it "excludes attachments when the chorus view is not accessible" do
             create_and_record_search(user, :query => 'attachmentsearch', :entity_type => 'Attachment') do |search|
-              instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_instance, :owner => user).tap { |a| a.save(:validate => false)}
+              instance_account = FactoryGirl.build(:instance_account, :instance => chorus_view.gpdb_data_source, :owner => user).tap { |a| a.save(:validate => false)}
               chorus_view.schema.database.instance_accounts << instance_account
               chorus_view.solr_index!
               search.attachments.should_not include(attachment)
@@ -571,9 +571,9 @@ describe Search do
       it "includes highlighted notes in the highlighted_attributes" do
         create_and_record_search(owner, :query => 'greenplumsearch') do |search|
           search.instances.length.should == 2
-          gpdb_instance_with_notes = search.instances[1]
-          gpdb_instance_with_notes.search_result_notes.length.should == 2
-          gpdb_instance_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
+          gpdb_data_source_with_notes = search.instances[1]
+          gpdb_data_source_with_notes.search_result_notes.length.should == 2
+          gpdb_data_source_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end
       end
     end

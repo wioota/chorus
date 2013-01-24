@@ -31,5 +31,5 @@ http_interactions:
         1000010'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery''],''score''=>2601.0764}]}}]}},''highlighting''=>{''ChorusWorkfile
         1000010''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Wed, 23 Jan 2013 01:29:14 GMT
+  recorded_at: Thu, 24 Jan 2013 18:21:36 GMT
 recorded_with: VCR 2.3.0

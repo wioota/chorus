@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 resource "Greenplum DB: datasets" do
-  let(:owner) { gpdb_table.schema.gpdb_instance.owner }
+  let(:owner) { gpdb_table.schema.gpdb_data_source.owner }
   let(:gpdb_table) { datasets(:table) }
   let(:dataset_id) { gpdb_table.to_param }
-  let!(:owner_account) { gpdb_table.schema.gpdb_instance.account_for_user(owner) }
+  let!(:owner_account) { gpdb_table.schema.gpdb_data_source.account_for_user(owner) }
   let(:row) {
     { "definition" => "definition",
       "description" => "description",

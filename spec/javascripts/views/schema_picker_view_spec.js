@@ -97,9 +97,9 @@ describe("chorus.views.SchemaPicker", function() {
 
                 if(type === "instance") {
                     this.server.completeFetchAllFor(this.view.instances, [
-                        rspecFixtures.gpdbInstance({name: "Zoo"}),
-                        rspecFixtures.gpdbInstance({name: "Aardvark"}),
-                        rspecFixtures.gpdbInstance({name: "bear"})
+                        rspecFixtures.gpdbDataSource({name: "Zoo"}),
+                        rspecFixtures.gpdbDataSource({name: "Aardvark"}),
+                        rspecFixtures.gpdbDataSource({name: "bear"})
                     ]);
                 } else if(type === "schema") {
                     this.server.completeFetchFor(this.view.schemas, [
@@ -127,14 +127,14 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when instance is provided", function() {
             beforeEach(function() {
-                this.instance = rspecFixtures.gpdbInstance();
+                this.instance = rspecFixtures.gpdbDataSource();
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                 $("#jasmine_content").append(this.view.el);
                 this.view.render();
             });
 
             it('does not try to fetch the instances', function() {
-                expect(this.server.lastFetchAllFor(new chorus.collections.GpdbInstanceSet())).toBeUndefined();
+                expect(this.server.lastFetchAllFor(new chorus.collections.GpdbDataSourceSet())).toBeUndefined();
             });
 
             it("displays the instance's name as a label instead of a select instances", function() {
@@ -158,7 +158,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when an instance and a database are provided", function() {
             beforeEach(function() {
-                this.instance = rspecFixtures.gpdbInstance();
+                this.instance = rspecFixtures.gpdbDataSource();
                 this.database = rspecFixtures.database({instance: { id: this.instance.get("id") } });
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
@@ -168,7 +168,7 @@ describe("chorus.views.SchemaPicker", function() {
             });
 
             it('does not try to fetch the instances or the databases', function() {
-                expect(this.server.lastFetchAllFor(new chorus.collections.GpdbInstanceSet())).toBeUndefined();
+                expect(this.server.lastFetchAllFor(new chorus.collections.GpdbDataSourceSet())).toBeUndefined();
                 expect(this.server.lastFetchAllFor(new chorus.collections.DatabaseSet({instanceId: this.instance.get("id")}))).toBeUndefined();
             });
 
@@ -236,9 +236,9 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the instance list fetch completes", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.instances, [
-                            rspecFixtures.gpdbInstance({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
-                            rspecFixtures.gpdbInstance({ shared: true, id: 2 }),
-                            rspecFixtures.gpdbInstance({ shared: false, id: 3 })
+                            rspecFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
+                            rspecFixtures.gpdbDataSource({ shared: true, id: 2 }),
+                            rspecFixtures.gpdbDataSource({ shared: false, id: 3 })
                         ]);
                     });
 
@@ -663,9 +663,9 @@ describe("chorus.views.SchemaPicker", function() {
             context("when the instance list fetch completes", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.instances, [
-                        rspecFixtures.gpdbInstance(),
+                        rspecFixtures.gpdbDataSource(),
                         this.instance.attributes,
-                        rspecFixtures.gpdbInstance()
+                        rspecFixtures.gpdbDataSource()
                     ]);
                 });
 
@@ -745,7 +745,7 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                 $('#jasmine_content').append(this.view.el);
                 this.view.render();
-                this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.gpdbInstance({ id: '4' }) ]);
+                this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.gpdbDataSource({ id: '4' }) ]);
                 this.view.$(".instance select").val("4").change();
                 this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
@@ -771,7 +771,7 @@ describe("chorus.views.SchemaPicker", function() {
         describe("#fieldValues", function() {
             context("with an instance provided", function() {
                 beforeEach(function() {
-                    this.instance = rspecFixtures.gpdbInstance();
+                    this.instance = rspecFixtures.gpdbDataSource();
                     this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                     this.view.render();
                     this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
@@ -794,7 +794,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
-                    this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.gpdbInstance({ id: '4' }) ]);
+                    this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.gpdbDataSource({ id: '4' }) ]);
                     this.view.$(".instance select").val("4").change();
                 });
 

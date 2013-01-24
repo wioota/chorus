@@ -17,7 +17,7 @@ describe TypeAheadSearch do
       search.search
       Sunspot.session.should be_a_search_for(Attachment)
       Sunspot.session.should be_a_search_for(User)
-      Sunspot.session.should be_a_search_for(GpdbInstance)
+      Sunspot.session.should be_a_search_for(GpdbDataSource)
       Sunspot.session.should be_a_search_for(HadoopInstance)
       Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
@@ -64,7 +64,7 @@ describe TypeAheadSearch do
         search.results.should include(workfiles(:typeahead))
         search.results.should include(hdfs_entries(:typeahead))
         search.results.should include(users(:typeahead))
-        search.results.should include(data_sources(:typeahead_gpdb_instance))
+        search.results.should include(data_sources(:typeahead_gpdb_data_source))
         search.results.should include(hadoop_instances(:typeahead))
         search.results.should include(datasets(:typeahead_gpdb_table))
       end

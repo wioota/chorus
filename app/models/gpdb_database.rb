@@ -8,16 +8,16 @@ class GpdbDatabase < ActiveRecord::Base
   validates :name,
             :format => /^[^\/?&]*$/,
             :presence => true,
-            :uniqueness => { :scope => :gpdb_instance_id }
+            :uniqueness => { :scope => :gpdb_data_source_id }
 
-  belongs_to :gpdb_instance
+  belongs_to :gpdb_data_source
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id, :dependent => :destroy
   has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
 
 
   before_save :mark_schemas_as_stale
-  delegate :account_for_user!, :account_for_user, :to => :gpdb_instance
+  delegate :account_for_user!, :account_for_user, :to => :gpdb_data_source
 
   DATABASE_NAMES_SQL = <<-SQL
   SELECT
@@ -30,12 +30,12 @@ class GpdbDatabase < ActiveRecord::Base
   SQL
 
   def self.refresh(account)
-    gpdb_instance = account.instance
+    gpdb_data_source = account.instance
     results = []
-    gpdb_instance.connect_with(account).databases.map do |name|
+    gpdb_data_source.connect_with(account).databases.map do |name|
       next if new(:name => name).invalid?
 
-      db = gpdb_instance.databases.find_or_create_by_name!(name)
+      db = gpdb_data_source.databases.find_or_create_by_name!(name)
       results << db
       db.update_attributes!({:stale_at => nil}, :without_protection => true)
     end
@@ -82,13 +82,13 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def connect_as(user)
-    connect_with(gpdb_instance.account_for_user!(user))
+    connect_with(gpdb_data_source.account_for_user!(user))
   end
 
   def connect_with(account)
     options = {
-        :host => gpdb_instance.host,
-        :port => gpdb_instance.port,
+        :host => gpdb_data_source.host,
+        :port => gpdb_data_source.port,
         :username => account.db_username,
         :password => account.db_password,
         :database => name,

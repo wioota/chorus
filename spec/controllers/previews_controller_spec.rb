@@ -4,9 +4,9 @@ describe PreviewsController do
   ignore_authorization!
 
   let(:gpdb_table) { datasets(:table) }
-  let(:gpdb_instance) { gpdb_table.gpdb_instance }
+  let(:gpdb_data_source) { gpdb_table.gpdb_data_source }
   let(:user) { users(:the_collaborator) }
-  let(:account) { gpdb_instance.account_for_user!(user) }
+  let(:account) { gpdb_data_source.account_for_user!(user) }
   let(:check_id) { 'id-for-cancelling-previews' }
 
   before do
@@ -24,7 +24,7 @@ describe PreviewsController do
       end
 
       it "uses authentication" do
-        mock(subject).authorize! :show_contents, gpdb_instance
+        mock(subject).authorize! :show_contents, gpdb_data_source
         post :create, params
       end
 

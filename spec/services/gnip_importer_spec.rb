@@ -18,7 +18,7 @@ describe GnipImporter do
   describe "validations", :greenplum_integration do
     let(:workspace) { workspaces(:real) }
     let(:schema) { workspace.sandbox }
-    let(:instance) { schema.gpdb_instance }
+    let(:instance) { schema.gpdb_data_source }
     let(:user) { instance.owner }
 
     context "when table name already exists" do
@@ -44,7 +44,7 @@ describe GnipImporter do
     end
 
     context "when workspace doesn't have a sandbox" do
-      let!(:instance) { schema.gpdb_instance }
+      let!(:instance) { schema.gpdb_data_source }
       before do
         workspace.sandbox = nil
         workspace.save!

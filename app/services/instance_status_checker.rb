@@ -6,15 +6,15 @@ class InstanceStatusChecker
 
   def self.check
     check_hdfs_instances
-    check_gpdb_instances
+    check_gpdb_data_sources
   end
 
   def self.check_hdfs_instances
     check_each_instance(HadoopInstance.scoped)
   end
 
-  def self.check_gpdb_instances
-    check_each_instance(GpdbInstance.scoped)
+  def self.check_gpdb_data_sources
+    check_each_instance(GpdbDataSource.scoped)
   end
 
   def check
@@ -23,7 +23,7 @@ class InstanceStatusChecker
       if instance.is_a?(HadoopInstance)
         check_hdfs_instance
       else
-        check_gpdb_instance
+        check_gpdb_data_source
       end
     rescue => e
       Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
@@ -55,7 +55,7 @@ class InstanceStatusChecker
     end
   end
 
-  def check_gpdb_instance
+  def check_gpdb_data_source
     check_with_exponential_backoff do
       Gpdb::ConnectionBuilder.connect!(instance, instance.owner_account) do |conn|
         instance.state = "online"

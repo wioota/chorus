@@ -3,8 +3,8 @@ describe("chorus.views.DashboardInstanceList", function() {
         this.instance1 = rspecFixtures.oracleInstance({ name: "broccoli" });
         this.instance2 = rspecFixtures.hadoopInstance({ name: "Camels" });
         this.instance3 = rspecFixtures.hadoopInstance({ name: "doppler" });
-        this.instance4 = rspecFixtures.gpdbInstance({ name: "Ego" });
-        this.instance5 = rspecFixtures.gpdbInstance({ name: "fatoush" });
+        this.instance4 = rspecFixtures.gpdbDataSource({ name: "Ego" });
+        this.instance5 = rspecFixtures.gpdbDataSource({ name: "fatoush" });
         this.instance6 = rspecFixtures.gnipInstance({ name: "kangaroo" });
         this.instance7 = rspecFixtures.gnipInstance({ name: "chicken" });
         this.collection = new chorus.collections.DataSourceSet([

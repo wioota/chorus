@@ -41,13 +41,13 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def get_database_url(db)
-    account = db.gpdb_instance.account_for_user!(user)
+    account = db.gpdb_data_source.account_for_user!(user)
     Gpdb::ConnectionBuilder.url(db, account)
   end
 
   def refresh_schema
     # update rails db for new dataset
-    destination_account = sandbox.database.gpdb_instance.account_for_user!(user)
+    destination_account = sandbox.database.gpdb_data_source.account_for_user!(user)
     Dataset.refresh(destination_account, sandbox) rescue ActiveRecord::JDBCError
   end
 

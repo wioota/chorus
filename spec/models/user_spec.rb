@@ -239,7 +239,7 @@ describe User do
   end
 
   describe "associations" do
-    it { should have_many(:gpdb_instances) }
+    it { should have_many(:gpdb_data_sources) }
     it { should have_many(:instance_accounts) }
     it { should have_many(:hadoop_instances) }
     it { should have_many(:workspaces) }
@@ -299,7 +299,7 @@ describe User do
     let(:user) { users(:default) }
 
     it "should not allow deleting a user who owns a gpdb instance" do
-      user.gpdb_instances << FactoryGirl.build(:gpdb_instance, :owner => user)
+      user.gpdb_data_sources << FactoryGirl.build(:gpdb_data_source, :owner => user)
       expect { user.destroy }.to raise_error(ActiveRecord::RecordInvalid)
       user.should have_error_on(:user).with_message(:nonempty_instance_list)
     end

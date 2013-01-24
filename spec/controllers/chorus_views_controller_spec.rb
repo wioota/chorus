@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe ChorusViewsController, :greenplum_integration do
-  let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
-  let(:account) { gpdb_instance.owner_account }
+  let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+  let(:account) { gpdb_data_source.owner_account }
   let(:user) { account.owner }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
@@ -253,7 +253,7 @@ describe ChorusViewsController, :greenplum_integration do
     end
 
     before do
-      Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+      Gpdb::ConnectionBuilder.connect!(gpdb_data_source, account, database.name) do |connection|
         connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
       end
       chorus_view.schema = schema
@@ -267,7 +267,7 @@ describe ChorusViewsController, :greenplum_integration do
 
     context "When there is no error in creation" do
       after do
-        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        Gpdb::ConnectionBuilder.connect!(gpdb_data_source, account, database.name) do |connection|
           connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
         end
       end
@@ -308,13 +308,13 @@ describe ChorusViewsController, :greenplum_integration do
 
     context "when database view already exists" do
       before do
-        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        Gpdb::ConnectionBuilder.connect!(gpdb_data_source, account, database.name) do |connection|
           connection.exec_query("CREATE VIEW \"test_schema\".\"Gretchen\" AS SELECT 1")
         end
       end
 
       after do
-        Gpdb::ConnectionBuilder.connect!(gpdb_instance, account, database.name) do |connection|
+        Gpdb::ConnectionBuilder.connect!(gpdb_data_source, account, database.name) do |connection|
           connection.exec_query("DROP VIEW IF EXISTS \"test_schema\".\"Gretchen\"")
         end
       end

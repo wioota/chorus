@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
-  let(:gpdb_instance) { data_sources(:owners) }
-  let(:user) { gpdb_instance.owner }
-  let(:presenter) { GpdbInstanceWorkspaceDetailPresenter.new(gpdb_instance, view, {}) }
+describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
+  let(:gpdb_data_source) { data_sources(:owners) }
+  let(:user) { gpdb_data_source.owner }
+  let(:presenter) { GpdbDataSourceWorkspaceDetailPresenter.new(gpdb_data_source, view, {}) }
   let(:config_instance) { { 'kaggle.enabled' => true } }
 
   before do
@@ -31,7 +31,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
       let(:duplicate_sandbox_workspace2) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
 
       it "doesn't add up the sandbox size of the duplicate sandboxes" do
-        sandbox_ids = Workspace.where(:sandbox_id => gpdb_instance.schema_ids).collect(&:sandbox_id).uniq
+        sandbox_ids = Workspace.where(:sandbox_id => gpdb_data_source.schema_ids).collect(&:sandbox_id).uniq
         hash[:sandboxes_size_in_bytes].should == sandbox_ids.length * size
       end
     end

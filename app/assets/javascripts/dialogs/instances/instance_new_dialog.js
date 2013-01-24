@@ -24,7 +24,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.GpdbInstance();
+        this.model = this.model || new chorus.models.GpdbDataSource();
     },
 
     additionalContext: function() {
@@ -68,7 +68,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         } else if (instanceType === "register_existing_oracle") {
             return chorus.models.OracleInstance;
         } else {
-            return chorus.models.GpdbInstance;
+            return chorus.models.GpdbDataSource;
         }
     },
 

@@ -1,4 +1,4 @@
-class GpdbInstancePresenter < Presenter
+class GpdbDataSourcePresenter < Presenter
 
   def to_hash
     {
@@ -12,7 +12,7 @@ class GpdbInstancePresenter < Presenter
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => 'gpdb_instance'
+      :entity_type => 'gpdb_data_source'
     }.merge(owner_hash)
   end
 

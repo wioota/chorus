@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
 
   has_many :gnip_instances, :foreign_key => :owner_id
-  has_many :gpdb_instances, :foreign_key => :owner_id
+  has_many :gpdb_data_sources, :foreign_key => :owner_id
   has_many :oracle_instances, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    if gpdb_instances.count > 0
+    if gpdb_data_sources.count > 0
       errors.add(:user, :nonempty_instance_list)
       raise ActiveRecord::RecordInvalid.new(self)
     elsif owned_workspaces.count > 0

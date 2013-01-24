@@ -3,10 +3,10 @@ require 'spec_helper'
 describe SandboxesController do
   ignore_authorization!
 
-  let(:owner) { gpdb_instance.owner }
+  let(:owner) { gpdb_data_source.owner }
   let(:sandbox) { gpdb_schemas(:default) }
   let(:database) { sandbox.database }
-  let(:gpdb_instance) { database.gpdb_instance }
+  let(:gpdb_data_source) { database.gpdb_data_source }
   let(:workspace) { workspaces(:no_sandbox) }
   before do
     log_in owner
@@ -46,7 +46,7 @@ describe SandboxesController do
 
       it 'calls create_schema' do
         any_instance_of(GpdbDatabase) do |db|
-          stub(db).create_schema("create_new_schema", database.gpdb_instance.owner) do |name|
+          stub(db).create_schema("create_new_schema", database.gpdb_data_source.owner) do |name|
             database.schemas.create!({:name => name}, :without_protection => true)
           end
         end
@@ -74,20 +74,20 @@ describe SandboxesController do
       end
 
       it 'calls both create_database and create_schema' do
-        any_instance_of(GpdbInstance) do |instance_double|
-          mock(instance_double).create_database("new_database", gpdb_instance.owner) do |name|
-            gpdb_instance.databases.create!({:name => name}, :without_protection => true)
+        any_instance_of(GpdbDataSource) do |instance_double|
+          mock(instance_double).create_database("new_database", gpdb_data_source.owner) do |name|
+            gpdb_data_source.databases.create!({:name => name}, :without_protection => true)
           end
         end
 
         any_instance_of(GpdbDatabase) do |database_double|
-          mock(database_double).create_schema("create_new_schema", gpdb_instance.owner) do |name|
-            database = gpdb_instance.reload.databases.find_by_name("new_database")
+          mock(database_double).create_schema("create_new_schema", gpdb_data_source.owner) do |name|
+            database = gpdb_data_source.reload.databases.find_by_name("new_database")
             FactoryGirl.create :gpdb_schema, :name => name, :database => database
           end
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_instance.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
         response.code.should == '201'
 
         workspace.reload.sandbox.name.should == 'create_new_schema'
@@ -95,9 +95,9 @@ describe SandboxesController do
       end
 
       it 'does not call create_schema if the schema is public' do
-        any_instance_of(GpdbInstance) do |instance_double|
-          stub(instance_double).create_database('new_database', gpdb_instance.owner) do |name|
-            database = FactoryGirl.create :gpdb_database, :name => name, :gpdb_instance => gpdb_instance
+        any_instance_of(GpdbDataSource) do |instance_double|
+          stub(instance_double).create_database('new_database', gpdb_data_source.owner) do |name|
+            database = FactoryGirl.create :gpdb_database, :name => name, :gpdb_data_source => gpdb_data_source
             schema = FactoryGirl.create :gpdb_schema, :name => 'public', :database => database
             database
           end
@@ -106,20 +106,20 @@ describe SandboxesController do
           mock(database_double).create_schema.with_any_args.times(0)
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'public', :database_name => 'new_database', :instance_id => gpdb_instance.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'public', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
         response.should be_success
         workspace.reload.sandbox.name.should == 'public'
         workspace.reload.sandbox.database.name.should == 'new_database'
       end
 
       it 'returns an error if creation fails' do
-        any_instance_of(GpdbInstance) do |gpdb_instance|
-          stub(gpdb_instance).create_database.with_any_args {
+        any_instance_of(GpdbDataSource) do |gpdb_data_source|
+          stub(gpdb_data_source).create_database.with_any_args {
             raise Exception.new("Database creation failed")
           }
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_instance.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
 
         response.code.should == '422'
         decoded_errors.fields.database.GENERIC.message.should == 'Database creation failed'

@@ -24,7 +24,7 @@ describe ColumnController do
       end
 
       it "should check for permissions" do
-        mock(subject).authorize! :show_contents, table.gpdb_instance
+        mock(subject).authorize! :show_contents, table.gpdb_data_source
         get :index, :dataset_id => table.to_param
       end
 
@@ -43,7 +43,7 @@ describe ColumnController do
     context "with real data", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:user) { account.owner }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
       let(:dataset) {database.find_dataset_in_schema('base_table1', 'test_schema')}
 
       before do

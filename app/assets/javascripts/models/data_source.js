@@ -15,7 +15,7 @@ chorus.models.DataSource = chorus.models.Instance.extend({
     },
 
     isGreenplum: function() {
-        return this.get('entityType') === 'gpdb_instance';
+        return this.get('entityType') === 'gpdb_data_source';
     },
 
     accounts: function() {

@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Data Source Permissions" do
-  let(:the_data_source) { InstanceIntegration.real_gpdb_instance }
+  let(:the_data_source) { InstanceIntegration.real_gpdb_data_source }
   let(:no_access_user) { users(:default) }
   let(:owner) { users(:admin)}
 

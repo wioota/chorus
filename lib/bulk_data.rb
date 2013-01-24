@@ -59,25 +59,25 @@ module BulkData
       end
     end
 
-    def create_gpdb_instance(admin_user_name, instance_name)
+    def create_gpdb_data_source(admin_user_name, instance_name)
       without_solr do
         current_user = User.find_by_username(admin_user_name)
         params = {:name => instance_name, :host => 'chorus-gpdb42', :port => 5432, :db_username => 'gpadmin',
                   :db_password => 'secret', :db_name => 'postgres', :shared => true}
-        gpdb_instance = current_user.gpdb_instances.create!(params, :as => :create)
-        gpdb_instance.refresh_all
+        gpdb_data_source = current_user.gpdb_data_sources.create!(params, :as => :create)
+        gpdb_data_source.refresh_all
       end
     end
 
-    def add_sandboxes(admin_user_name, gpdb_instance_name)
+    def add_sandboxes(admin_user_name, gpdb_data_source_name)
       without_solr do
         current_user = User.find_by_username(admin_user_name)
-        gpdb_instance = GpdbInstance.find_by_name(gpdb_instance_name)
-        database = gpdb_instance.databases.find_by_name("CHORUSANALYTICS")
+        gpdb_data_source = GpdbDataSource.find_by_name(gpdb_data_source_name)
+        database = gpdb_data_source.databases.find_by_name("CHORUSANALYTICS")
         if database.nil?
-          database = gpdb_instance.create_database("CHORUSANALYTICS", current_user)
+          database = gpdb_data_source.create_database("CHORUSANALYTICS", current_user)
         end
-        GpdbSchema.refresh(gpdb_instance.account_for_user(current_user), database)
+        GpdbSchema.refresh(gpdb_data_source.account_for_user(current_user), database)
         sandbox = database.schemas.find_by_name("public")
         Workspace.where(:sandbox_id => nil).find_each do |workspace|
           workspace.sandbox = sandbox

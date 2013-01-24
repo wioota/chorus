@@ -23,7 +23,7 @@ describe GpdbDatabase do
         it 'does not allow two databases with the same name' do
           new_database = FactoryGirl.build(:gpdb_database,
                                            :name => existing.name,
-                                           :gpdb_instance => existing.gpdb_instance)
+                                           :gpdb_data_source => existing.gpdb_data_source)
           new_database.should_not be_valid
           new_database.should have_error_on(:name).with_message(:taken)
         end
@@ -39,24 +39,24 @@ describe GpdbDatabase do
   end
 
   describe '#refresh' do
-    let(:gpdb_instance) { FactoryGirl.build_stubbed(:gpdb_instance) }
-    let(:account) { FactoryGirl.build_stubbed(:instance_account, :instance => gpdb_instance) }
+    let(:gpdb_data_source) { FactoryGirl.build_stubbed(:gpdb_data_source) }
+    let(:account) { FactoryGirl.build_stubbed(:instance_account, :instance => gpdb_data_source) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
     let(:connection) { Object.new }
 
     before(:each) do
-      stub(gpdb_instance).connect_with(account) { connection }
+      stub(gpdb_data_source).connect_with(account) { connection }
       stub(connection).databases { db_names }
     end
 
     it "creates new copies of the databases in our db" do
       GpdbDatabase.refresh(account)
 
-      databases = gpdb_instance.databases
+      databases = gpdb_data_source.databases
 
       databases.length.should == 4
       databases.map { |db| db.name }.should =~ db_names
-      databases.map { |db| db.gpdb_instance_id }.uniq.should == [gpdb_instance.id]
+      databases.map { |db| db.gpdb_data_source_id }.uniq.should == [gpdb_data_source.id]
     end
 
     it "returns a list of GpdbDatabase objects" do
@@ -64,7 +64,7 @@ describe GpdbDatabase do
 
       db_objects = []
       db_names.each do |name|
-        db_objects << gpdb_instance.databases.find_by_name(name)
+        db_objects << gpdb_data_source.databases.find_by_name(name)
       end
 
       results.should match_array(db_objects)
@@ -169,8 +169,8 @@ describe GpdbDatabase do
   describe ".create_schema" do
     context "using a real greenplum instance", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
-      let(:instance) { database.gpdb_instance }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:instance) { database.gpdb_data_source }
 
       after do
         exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
@@ -225,7 +225,7 @@ describe GpdbDatabase do
 
   describe "#connect_with" do
     let(:database) { gpdb_databases(:default) }
-    let(:instance) { database.gpdb_instance }
+    let(:instance) { database.gpdb_data_source }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
@@ -243,7 +243,7 @@ describe GpdbDatabase do
 
   describe "#with_gpdb_connection", :greenplum_integration do
     it "raises GreenplumConnection::ObjectNotFound when the database does not exist" do
-      database = FactoryGirl.create(:gpdb_database, :gpdb_instance => InstanceIntegration.real_gpdb_instance, :name => 'i_dont_exist')
+      database = FactoryGirl.create(:gpdb_database, :gpdb_data_source => InstanceIntegration.real_gpdb_data_source, :name => 'i_dont_exist')
 
       expect {
         database.with_gpdb_connection(InstanceIntegration.real_gpdb_account) {}

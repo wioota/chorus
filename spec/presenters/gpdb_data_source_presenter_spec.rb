@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GpdbInstancePresenter, :type => :view do
-  let(:gpdb_instance) { data_sources(:owners) }
-  let(:user) { gpdb_instance.owner }
-  let(:presenter) { GpdbInstancePresenter.new(gpdb_instance, view, options) }
+describe GpdbDataSourcePresenter, :type => :view do
+  let(:gpdb_data_source) { data_sources(:owners) }
+  let(:user) { gpdb_data_source.owner }
+  let(:presenter) { GpdbDataSourcePresenter.new(gpdb_data_source, view, options) }
   let(:options) { {} }
 
   before do
@@ -30,7 +30,7 @@ describe GpdbInstancePresenter, :type => :view do
       hash.should have_key(:description)
       hash.should have_key(:instance_provider)
       hash.should have_key(:version)
-      hash[:entity_type].should == "gpdb_instance"
+      hash[:entity_type].should == "gpdb_data_source"
     end
 
     it "should use ownerPresenter Hash method for owner" do

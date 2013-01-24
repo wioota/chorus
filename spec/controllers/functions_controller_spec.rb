@@ -37,7 +37,7 @@ describe FunctionsController do
     end
 
     it "should check for permissions" do
-      mock(subject).authorize! :show_contents, schema.gpdb_instance
+      mock(subject).authorize! :show_contents, schema.gpdb_data_source
       get :index, :schema_id => schema.to_param
     end
 

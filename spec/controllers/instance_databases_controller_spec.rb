@@ -16,14 +16,14 @@ describe InstanceDatabasesController do
     end
 
     context "when the instance is accessible" do
-      let(:gpdb_instance) { data_sources(:shared) }
+      let(:gpdb_data_source) { data_sources(:shared) }
       let(:database) { gpdb_databases(:shared_database) }
       let(:database2) { gpdb_databases(:shared_database) }
 
       it "checks authorization" do
         stub(GpdbDatabase).refresh { [database] }
-        mock(subject).authorize!(:show_contents, gpdb_instance)
-        get :index, :data_source_id => gpdb_instance.id
+        mock(subject).authorize!(:show_contents, gpdb_data_source)
+        get :index, :data_source_id => gpdb_data_source.id
       end
 
       context "when the refresh of the db fails" do
@@ -32,7 +32,7 @@ describe InstanceDatabasesController do
         end
 
         it "should fail" do
-          get :index, :data_source_id => gpdb_instance.id
+          get :index, :data_source_id => gpdb_data_source.id
           response.code.should == "422"
         end
       end
@@ -43,15 +43,15 @@ describe InstanceDatabasesController do
         end
 
         it "should succeed" do
-          get :index, :data_source_id => gpdb_instance.id
+          get :index, :data_source_id => gpdb_data_source.id
           response.code.should == "200"
           decoded_response[0].id.should == database.id
-          decoded_response[0].instance.id.should == gpdb_instance.id
+          decoded_response[0].instance.id.should == gpdb_data_source.id
           decoded_response.size.should == 2
         end
 
         it_behaves_like "a paginated list" do
-          let(:params) {{ :data_source_id => gpdb_instance.id }}
+          let(:params) {{ :data_source_id => gpdb_data_source.id }}
         end
       end
     end
@@ -61,15 +61,15 @@ describe InstanceDatabasesController do
     let(:database) { gpdb_databases(:default) }
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, database.gpdb_instance)
+      mock(subject).authorize!(:show_contents, database.gpdb_data_source)
       get :show, :id => database.to_param
     end
 
     it "renders the database" do
       get :show, :id => database.to_param
       response.code.should == "200"
-      decoded_response.instance.id.should == database.gpdb_instance.id
-      decoded_response.instance.name.should == database.gpdb_instance.name
+      decoded_response.instance.id.should == database.gpdb_data_source.id
+      decoded_response.instance.name.should == database.gpdb_data_source.name
       decoded_response.id.should == database.id
       decoded_response.name.should == database.name
     end

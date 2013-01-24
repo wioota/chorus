@@ -129,7 +129,7 @@ describe NotesController do
 
   describe "#destroy" do
     let(:note) {
-      Events::NoteOnGreenplumInstance.by(user).add(:gpdb_instance => data_sources(:default), :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
+      Events::NoteOnGreenplumInstance.by(user).add(:gpdb_data_source => data_sources(:default), :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     }
 
     before do

@@ -20,7 +20,7 @@ describe ModelMap do
 
     it "works for greenplum instances" do
       model = data_sources(:default)
-      ModelMap.model_from_params("gpdb_instance", model.id).should == model
+      ModelMap.model_from_params("gpdb_data_source", model.id).should == model
     end
 
     it "works for gnip instances" do

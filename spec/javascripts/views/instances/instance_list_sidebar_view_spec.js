@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when a gpdb instance is selected", function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.gpdbInstance({name: "Harry's House of Glamour", version: "99.999" });
+            this.instance = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
@@ -68,7 +68,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
                 expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
                 expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_instance');
+                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_data_source');
             });
 
             context("when user is an admin or owner of the instance", function() {
@@ -164,7 +164,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 describe("for existing gpdb instance", function() {
                     context("and the instance has a shared account", function() {
                         beforeEach(function() {
-                            var instance = rspecFixtures.gpdbInstance({"shared":true});
+                            var instance = rspecFixtures.gpdbDataSource({"shared":true});
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });

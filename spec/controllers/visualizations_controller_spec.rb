@@ -3,7 +3,7 @@ require 'spec_helper'
 describe VisualizationsController do
   let(:user) { users(:owner) }
   let(:dataset) { datasets(:table) }
-  let(:instance_account) { dataset.schema.database.gpdb_instance.owner_account }
+  let(:instance_account) { dataset.schema.database.gpdb_data_source.owner_account }
 
   before do
     log_in user

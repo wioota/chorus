@@ -6,7 +6,7 @@ describe "Event types" do
   extend EventHelpers
 
   let(:actor) { users(:owner) }
-  let(:gpdb_instance) { data_sources(:default) }
+  let(:gpdb_data_source) { data_sources(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { users(:the_collaborator) }
@@ -72,15 +72,15 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceCreated.add(
           :actor => actor,
-          :gpdb_instance => gpdb_instance
+          :gpdb_data_source => gpdb_data_source
       )
     end
 
     its(:action) { should == "GreenplumInstanceCreated" }
-    its(:gpdb_instance) { should == gpdb_instance }
-    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
+    its(:gpdb_data_source) { should == gpdb_data_source }
+    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
 
-    it_creates_activities_for { [actor, gpdb_instance] }
+    it_creates_activities_for { [actor, gpdb_data_source] }
     it_creates_a_global_activity
   end
 
@@ -120,16 +120,16 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceChangedOwner.add(
           :actor => actor,
-          :gpdb_instance => gpdb_instance,
+          :gpdb_data_source => gpdb_data_source,
           :new_owner => user
       )
     end
 
-    its(:gpdb_instance) { should == gpdb_instance }
+    its(:gpdb_data_source) { should == gpdb_data_source }
     its(:new_owner) { should == user }
-    its(:targets) { should == {:gpdb_instance => gpdb_instance, :new_owner => user} }
+    its(:targets) { should == {:gpdb_data_source => gpdb_data_source, :new_owner => user} }
 
-    it_creates_activities_for { [user, gpdb_instance] }
+    it_creates_activities_for { [user, gpdb_data_source] }
     it_creates_a_global_activity
   end
 
@@ -137,20 +137,20 @@ describe "Event types" do
     subject do
       Events::GreenplumInstanceChangedName.add(
           :actor => actor,
-          :gpdb_instance => gpdb_instance,
+          :gpdb_data_source => gpdb_data_source,
           :old_name => "brent",
           :new_name => "brenda"
       )
     end
 
-    its(:gpdb_instance) { should == gpdb_instance }
+    its(:gpdb_data_source) { should == gpdb_data_source }
     its(:old_name) { should == "brent" }
     its(:new_name) { should == "brenda" }
 
-    its(:targets) { should == {:gpdb_instance => gpdb_instance} }
+    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
-    it_creates_activities_for { [actor, gpdb_instance] }
+    it_creates_activities_for { [actor, gpdb_data_source] }
     it_creates_a_global_activity
   end
 

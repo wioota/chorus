@@ -69,13 +69,13 @@ describe BulkData do
 
   describe "add default GPDB instance", :greenplum_integration do
     it "should create a GPDB instance with owner" do
-      any_instance_of(GpdbInstance) do |instance|
+      any_instance_of(GpdbDataSource) do |instance|
         mock(instance).refresh_all
       end
       expect {
-        BulkData.create_gpdb_instance(user_name, 'chores_r_us')
-      }.to change { GpdbInstance.count }.by(1)
-      GpdbInstance.last.name.should == 'chores_r_us'
+        BulkData.create_gpdb_data_source(user_name, 'chores_r_us')
+      }.to change { GpdbDataSource.count }.by(1)
+      GpdbDataSource.last.name.should == 'chores_r_us'
     end
   end
 
@@ -87,7 +87,7 @@ describe BulkData do
     it "adds a sandbox to all workspaces" do
       expect {
         expect {
-          BulkData.add_sandboxes(user_name, InstanceIntegration.real_gpdb_instance.name)
+          BulkData.add_sandboxes(user_name, InstanceIntegration.real_gpdb_data_source.name)
         }.to change { Workspace.where(:sandbox_id => nil).count }.by_at_most(-2)
       }.to change { Events::WorkspaceAddSandbox.count }.by_at_least(2)
     end

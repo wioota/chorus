@@ -86,7 +86,7 @@ module Events
 
       def event_class_for_model(model, workspace_id)
         case model
-          when GpdbInstance
+          when GpdbDataSource
             Events::NoteOnGreenplumInstance
           when GnipInstance
             Events::NoteOnGnipInstance

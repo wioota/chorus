@@ -9,7 +9,7 @@ describe "Notes" do
     it "contains the note" do
       instance = data_sources(:default)
       visit("#/data_sources")
-      within ".gpdb_instance ul" do
+      within ".gpdb_data_source ul" do
         find("li", :text => instance.name).click
       end
       click_link "Add a note"

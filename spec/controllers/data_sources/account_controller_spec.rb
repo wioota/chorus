@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe DataSources::AccountController do
-  let(:gpdb_instance) { data_sources(:owners) }
+  let(:gpdb_data_source) { data_sources(:owners) }
   let(:user) { users(:default) }
   let(:owner) { users(:owner) }
-  let(:account) { gpdb_instance.account_for_user(owner) }
+  let(:account) { gpdb_data_source.account_for_user(owner) }
 
   describe "#show" do
     before do
@@ -12,14 +12,14 @@ describe DataSources::AccountController do
     end
 
     it "returns the current_user's InstanceAccount for the specified Instance" do
-      get :show, :data_source_id => gpdb_instance.to_param
+      get :show, :data_source_id => gpdb_data_source.to_param
       response.code.should == "200"
       decoded_response.id.should == account.id
       decoded_response.db_username.should == account.db_username
     end
 
     generate_fixture "instanceAccount.json" do
-      get :show, :data_source_id => gpdb_instance.to_param
+      get :show, :data_source_id => gpdb_data_source.to_param
     end
   end
 
@@ -30,7 +30,7 @@ describe DataSources::AccountController do
     end
 
     it "succeeds" do
-      post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+      post :create, :data_source_id => gpdb_data_source.id, :db_username => "lenny", :db_password => "secret"
       response.code.should == "201"
 
       decoded_response.db_username.should == "lenny"
@@ -46,18 +46,18 @@ describe DataSources::AccountController do
       end
 
       it "fails" do
-        post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+        post :create, :data_source_id => gpdb_data_source.id, :db_username => "lenny", :db_password => "secret"
         response.code.should == '422'
       end
     end
 
     context "for a shared accounts instance" do
       before do
-        gpdb_instance.update_attribute :shared, true
+        gpdb_data_source.update_attribute :shared, true
       end
 
       it "fails" do
-        post :create, :data_source_id => gpdb_instance.id, :db_username => "lenny", :db_password => "secret"
+        post :create, :data_source_id => gpdb_data_source.id, :db_username => "lenny", :db_password => "secret"
         response.should be_not_found
       end
     end
@@ -70,7 +70,7 @@ describe DataSources::AccountController do
     end
 
     it "succeeds" do
-      put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+      put :update, :data_source_id => gpdb_data_source.id, :db_username => "changed", :db_password => "changed"
       response.code.should == "200"
 
       decoded_response.db_username.should == "changed"
@@ -80,13 +80,13 @@ describe DataSources::AccountController do
       rehydrated_account.db_password.should == "changed"
     end
 
-    context "for a shared gpdb_instance" do
+    context "for a shared gpdb_data_source" do
       before do
-        gpdb_instance.update_attribute :shared, true
+        gpdb_data_source.update_attribute :shared, true
       end
 
       it "fails" do
-        put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+        put :update, :data_source_id => gpdb_data_source.id, :db_username => "changed", :db_password => "changed"
         response.should be_not_found
       end
     end
@@ -97,7 +97,7 @@ describe DataSources::AccountController do
       end
 
       it "fails" do
-        put :update, :data_source_id => gpdb_instance.id, :db_username => "changed", :db_password => "changed"
+        put :update, :data_source_id => gpdb_data_source.id, :db_username => "changed", :db_password => "changed"
         response.code.should == '422'
       end
     end
@@ -110,30 +110,30 @@ describe DataSources::AccountController do
       end
 
       it "succeeds" do
-        delete :destroy, :data_source_id => gpdb_instance.id
+        delete :destroy, :data_source_id => gpdb_data_source.id
         response.should be_success
       end
 
-      it "deletes the current users account for this gpdb_instance" do
-        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should_not be_nil
-        delete :destroy, :data_source_id => gpdb_instance.id
-        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_instance.id, owner.id).should be_nil
+      it "deletes the current users account for this gpdb_data_source" do
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_data_source.id, owner.id).should_not be_nil
+        delete :destroy, :data_source_id => gpdb_data_source.id
+        InstanceAccount.find_by_instance_id_and_owner_id(gpdb_data_source.id, owner.id).should be_nil
       end
     end
 
     context "of a shared account" do
-      let(:gpdb_instance) { data_sources(:shared) }
+      let(:gpdb_data_source) { data_sources(:shared) }
       let(:admin) { users(:admin) }
 
       it "does not delete the owner's account" do
         log_in admin
-        lambda { delete :destroy, :data_source_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => gpdb_data_source.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end
 
       it "does not delete the shared account" do
         log_in user
-        lambda { delete :destroy, :data_source_id => gpdb_instance.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => gpdb_data_source.id }.should_not change { InstanceAccount.count }
         response.code.should == "404"
       end
     end

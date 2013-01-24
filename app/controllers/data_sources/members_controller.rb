@@ -3,15 +3,15 @@ module DataSources
     wrap_parameters :account, :include => [:db_username, :db_password, :owner_id]
 
     def index
-      accounts = GpdbInstance.find(params[:data_source_id]).accounts
+      accounts = GpdbDataSource.find(params[:data_source_id]).accounts
       present paginate(accounts.includes(:owner).order(:id))
     end
 
     def create
-      gpdb_instance = GpdbInstance.unshared.find(params[:data_source_id])
-      authorize! :edit, gpdb_instance
+      gpdb_data_source = GpdbDataSource.unshared.find(params[:data_source_id])
+      authorize! :edit, gpdb_data_source
 
-      account = gpdb_instance.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
+      account = gpdb_data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
       account.attributes = params[:account]
 
       account.save!
@@ -20,10 +20,10 @@ module DataSources
     end
 
     def update
-      gpdb_instance = GpdbInstance.find(params[:data_source_id])
-      authorize! :edit, gpdb_instance
+      gpdb_data_source = GpdbDataSource.find(params[:data_source_id])
+      authorize! :edit, gpdb_data_source
 
-      account = gpdb_instance.accounts.find(params[:id])
+      account = gpdb_data_source.accounts.find(params[:id])
       account.attributes = params[:account]
       account.save!
 
@@ -31,9 +31,9 @@ module DataSources
     end
 
     def destroy
-      gpdb_instance = GpdbInstance.find(params[:data_source_id])
-      authorize! :edit, gpdb_instance
-      account = gpdb_instance.accounts.find(params[:id])
+      gpdb_data_source = GpdbDataSource.find(params[:data_source_id])
+      authorize! :edit, gpdb_data_source
+      account = gpdb_data_source.accounts.find(params[:id])
 
       account.destroy
       render :json => {}

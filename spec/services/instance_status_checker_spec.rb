@@ -142,16 +142,16 @@ describe InstanceStatusChecker do
   describe "GPDB Instances:" do
     let(:user1) { FactoryGirl::create :user }
 
-    let(:instance_account1) {gpdb_instance1.account_for_user(user1) }
-    let(:instance_account2) {gpdb_instance2.account_for_user(user1) }
-    let(:instance_account3) {gpdb_instance3.account_for_user(user1) }
+    let(:instance_account1) {gpdb_data_source1.account_for_user(user1) }
+    let(:instance_account2) {gpdb_data_source2.account_for_user(user1) }
+    let(:instance_account3) {gpdb_data_source3.account_for_user(user1) }
 
-    let(:gpdb_instance1) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
-    let(:gpdb_instance2) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
-    let(:gpdb_instance3) { FactoryGirl.create :gpdb_instance, :owner_id => user1.id }
+    let(:gpdb_data_source1) { FactoryGirl.create :gpdb_data_source, :owner_id => user1.id }
+    let(:gpdb_data_source2) { FactoryGirl.create :gpdb_data_source, :owner_id => user1.id }
+    let(:gpdb_data_source3) { FactoryGirl.create :gpdb_data_source, :owner_id => user1.id }
 
-    describe ".check_gpdb_instances" do
-      before { GpdbInstance.delete_all } # remove fixtures
+    describe ".check_gpdb_data_sources" do
+      before { GpdbDataSource.delete_all } # remove fixtures
 
       context "when the database connection is successful" do
         before do
@@ -165,27 +165,27 @@ describe InstanceStatusChecker do
         end
 
         it "checks the connection status for each instance" do
-          gpdb_instance1.update_attribute(:state, "offline")
-          gpdb_instance2.update_attribute(:state, "offline")
-          gpdb_instance3.update_attribute(:state, "online")
+          gpdb_data_source1.update_attribute(:state, "offline")
+          gpdb_data_source2.update_attribute(:state, "offline")
+          gpdb_data_source3.update_attribute(:state, "online")
 
-          InstanceStatusChecker.check_gpdb_instances
+          InstanceStatusChecker.check_gpdb_data_sources
 
-          gpdb_instance1.reload.state.should == "online"
-          gpdb_instance2.reload.state.should == "online"
-          gpdb_instance3.reload.state.should == "offline"
+          gpdb_data_source1.reload.state.should == "online"
+          gpdb_data_source2.reload.state.should == "online"
+          gpdb_data_source3.reload.state.should == "offline"
         end
 
         it "checks the version for each gpdb instance" do
-          gpdb_instance1.update_attribute(:version, "random_version")
-          gpdb_instance2.update_attribute(:version, "random_version")
-          gpdb_instance3.update_attribute(:version, "random_version")
+          gpdb_data_source1.update_attribute(:version, "random_version")
+          gpdb_data_source2.update_attribute(:version, "random_version")
+          gpdb_data_source3.update_attribute(:version, "random_version")
 
-          InstanceStatusChecker.check_gpdb_instances
+          InstanceStatusChecker.check_gpdb_data_sources
 
-          gpdb_instance1.reload.version.should == "4.1.1.1"
-          gpdb_instance2.reload.version.should == "4.1.1.2"
-          gpdb_instance3.reload.version.should == "random_version"
+          gpdb_data_source1.reload.version.should == "4.1.1.1"
+          gpdb_data_source2.reload.version.should == "4.1.1.2"
+          gpdb_data_source3.reload.version.should == "random_version"
         end
 
         context "with an invalid version string" do
@@ -196,10 +196,10 @@ describe InstanceStatusChecker do
           end
 
           it "handles itself gracefully" do
-            gpdb_instance3.update_attribute(:version, "random_version")
+            gpdb_data_source3.update_attribute(:version, "random_version")
             mock(Rails.logger).error.with_any_args
-            InstanceStatusChecker.check_gpdb_instances
-            gpdb_instance3.reload.version.should == "Error"
+            InstanceStatusChecker.check_gpdb_data_sources
+            gpdb_data_source3.reload.version.should == "Error"
           end
         end
       end
@@ -217,24 +217,24 @@ describe InstanceStatusChecker do
         end
 
         it "does not fail to update other instances" do
-          gpdb_instance1.update_attribute(:state, "offline")
-          gpdb_instance2.update_attribute(:state, "offline")
-          gpdb_instance3.update_attribute(:state, "online")
+          gpdb_data_source1.update_attribute(:state, "offline")
+          gpdb_data_source2.update_attribute(:state, "offline")
+          gpdb_data_source3.update_attribute(:state, "online")
 
-          InstanceStatusChecker.check_gpdb_instances
+          InstanceStatusChecker.check_gpdb_data_sources
 
-          gpdb_instance1.reload.state.should == "offline"
-          gpdb_instance2.reload.state.should == "online"
-          gpdb_instance3.reload.state.should == "online"
+          gpdb_data_source1.reload.state.should == "offline"
+          gpdb_data_source2.reload.state.should == "online"
+          gpdb_data_source3.reload.state.should == "online"
         end
       end
     end
 
     it_behaves_like :it_checks_an_instance_with_exponential_backoff do
-      let(:online_instance) { gpdb_instance3 }
+      let(:online_instance) { gpdb_data_source3 }
       let(:offline_instance) do
-        gpdb_instance1.update_attributes(:state => "offline")
-        gpdb_instance1
+        gpdb_data_source1.update_attributes(:state => "offline")
+        gpdb_data_source1
       end
       before do
         stub_gpdb(instance_account3,

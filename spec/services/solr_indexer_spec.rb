@@ -3,9 +3,9 @@ require 'spec_helper'
 describe SolrIndexer do
   describe ".refresh_external_data" do
     it "refreshes all gpdb instances, all their databases, and all hadoop instances" do
-      gpdb_instance_count = 0
-      any_instance_of(GpdbInstance) do |instance|
-        stub(instance).refresh_all(:mark_stale => true, :force_index => true) { gpdb_instance_count += 1 }
+      gpdb_data_source_count = 0
+      any_instance_of(GpdbDataSource) do |instance|
+        stub(instance).refresh_all(:mark_stale => true, :force_index => true) { gpdb_data_source_count += 1 }
       end
 
       hadoop_instance_count = 0
@@ -15,7 +15,7 @@ describe SolrIndexer do
 
       SolrIndexer.refresh_external_data
 
-      gpdb_instance_count.should == GpdbInstance.count
+      gpdb_data_source_count.should == GpdbDataSource.count
       hadoop_instance_count.should == HadoopInstance.count
     end
   end
@@ -35,8 +35,8 @@ describe SolrIndexer do
     context "when passed more than one type to index" do
       it "should index all types" do
         mock(Dataset).solr_reindex
-        mock(GpdbInstance).solr_reindex
-        SolrIndexer.reindex(['Dataset', 'GpdbInstance'])
+        mock(GpdbDataSource).solr_reindex
+        SolrIndexer.reindex(['Dataset', 'GpdbDataSource'])
       end
     end
 

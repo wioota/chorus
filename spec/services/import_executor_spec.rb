@@ -7,7 +7,7 @@ describe ImportExecutor do
   let(:sandbox) { workspace.sandbox }
   let(:destination_table_name) { "dst_table" }
   let(:database_url) { Gpdb::ConnectionBuilder.url(sandbox.database, account) }
-  let(:account) { sandbox.gpdb_instance.account_for_user!(user) }
+  let(:account) { sandbox.gpdb_data_source.account_for_user!(user) }
 
   let!(:dataset_import_created_event) do
     Events::DatasetImportCreated.by(user).add(
@@ -90,7 +90,7 @@ describe ImportExecutor do
       end
 
       it "refreshes the schema" do
-        mock(Dataset).refresh(sandbox.database.gpdb_instance.account_for_user!(user), sandbox)
+        mock(Dataset).refresh(sandbox.database.gpdb_data_source.account_for_user!(user), sandbox)
         send(trigger)
       end
 

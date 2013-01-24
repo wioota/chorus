@@ -1,6 +1,6 @@
-chorus.collections.GpdbInstanceSet = chorus.collections.Base.extend({
-    constructorName: "GpdbInstanceSet",
-    model: chorus.models.GpdbInstance,
+chorus.collections.GpdbDataSourceSet = chorus.collections.Base.extend({
+    constructorName: "GpdbDataSourceSet",
+    model: chorus.models.GpdbDataSource,
     urlTemplate: "data_sources/",
 
     urlParams: function() {

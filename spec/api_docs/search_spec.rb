@@ -90,7 +90,7 @@ resource "Search" do
     required_parameters :'types[]'
 
     let(:user) { users(:admin) }
-    let(:'types[]') { ['Dataset', 'GpdbInstance'] }
+    let(:'types[]') { ['Dataset', 'GpdbDataSource'] }
     example_request "Regenerate the search index" do
       status.should == 200
     end

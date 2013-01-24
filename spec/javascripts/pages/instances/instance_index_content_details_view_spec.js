@@ -1,8 +1,8 @@
 describe("chorus.views.InstanceIndexContentDetails", function() {
     beforeEach(function() {
         var dataSources = new chorus.collections.DataSourceSet([
-            rspecFixtures.gpdbInstance(),
-            rspecFixtures.gpdbInstance()
+            rspecFixtures.gpdbDataSource(),
+            rspecFixtures.gpdbDataSource()
         ]);
         var hadoopInstances = new chorus.collections.HadoopInstanceSet([
             rspecFixtures.hadoopInstance(),

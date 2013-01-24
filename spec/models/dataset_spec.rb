@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:gpdb_instance) { data_sources(:owners) }
-  let(:account) { gpdb_instance.owner_account }
+  let(:gpdb_data_source) { data_sources(:owners) }
+  let(:account) { gpdb_data_source.owner_account }
   let(:schema) { gpdb_schemas(:default) }
   let(:other_schema) { gpdb_schemas(:other_schema) }
   let(:dataset) { datasets(:table) }
@@ -515,7 +515,7 @@ describe Dataset do
   describe '#accessible_to' do
     it 'returns true if the user can access the gpdb instance' do
       owner = account.owner
-      any_instance_of(GpdbInstance) do |instance|
+      any_instance_of(GpdbDataSource) do |instance|
         mock(instance).accessible_to(owner) { true }
       end
 
@@ -526,7 +526,7 @@ end
 
 describe Dataset::Query, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_instance) }
+  let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   subject do
@@ -548,7 +548,7 @@ describe Dataset::Query, :greenplum_integration do
 
     context "when 'public' schema does not exist" do
       let(:database_name) { "#{InstanceIntegration.database_name}_priv" }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_instance_id(database_name, InstanceIntegration.real_gpdb_instance) }
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(database_name, InstanceIntegration.real_gpdb_data_source) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 

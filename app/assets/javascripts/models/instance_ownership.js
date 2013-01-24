@@ -1,5 +1,5 @@
 chorus.models.InstanceOwnership = chorus.models.Base.extend({
     constructorName: "InstanceOwnership",
-    urlTemplate: "gpdb_instances/{{instanceId}}/owner",
+    urlTemplate: "data_sources/{{instanceId}}/owner",
     parameterWrapper: "owner"
 });

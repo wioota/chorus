@@ -182,7 +182,7 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("dynamically assigns the instance type", function() {
-            expect(this.model.instance()).toBeA(chorus.models.GpdbInstance);
+            expect(this.model.instance()).toBeA(chorus.models.GpdbDataSource);
             var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
             var model = search.attachments().at(0);
             expect(model.instance()).toBeA(chorus.models.HadoopInstance);

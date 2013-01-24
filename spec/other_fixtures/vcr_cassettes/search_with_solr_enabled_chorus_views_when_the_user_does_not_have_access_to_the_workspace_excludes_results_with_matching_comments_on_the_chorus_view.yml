@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusView 1000014</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">ChorusView 1000014</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">ChorusView</field><field name="security_type_name_sm">Dataset</field><field name="instance_account_ids_im">1000016</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000010</field><field name="found_in_workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_chorus_view_private</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="table_description_texts">searchquery</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_description_texts">searchquery comment 1</field><field boost="1000" name="column_description_texts">searchquery comment 2</field><field boost="1000" name="query_texts">select searchquery from a_table</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusView 1000014</field><field name="type">ChorusView</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusView</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field name="grouping_id_s">ChorusView 1000014</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">ChorusView</field><field name="security_type_name_sm">Dataset</field><field name="instance_account_ids_im">1000113</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000010</field><field name="found_in_workspace_id_im">1000011</field><field boost="1000000" name="name_texts">searchquery_chorus_view_private</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="table_description_texts">searchquery</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_description_texts">searchquery comment 1</field><field boost="1000" name="column_description_texts">searchquery comment 2</field><field boost="1000" name="query_texts">select searchquery from a_table</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Thu, 17 Jan 2013 18:35:42 GMT
+  recorded_at: Thu, 24 Jan 2013 18:24:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,15 +47,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>35}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version: '1.1'
-  recorded_at: Thu, 17 Jan 2013 18:35:42 GMT
+  recorded_at: Thu, 24 Jan 2013 18:24:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000016%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000008+AND+-public_b%3Atrue%29&q=commentsearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000113%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000008+AND+-public_b%3Atrue%29&q=commentsearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -77,8 +77,8 @@ http_interactions:
         column_description_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''commentsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000016))'',''-(security_type_name_sm:ChorusView
+        AND -instance_account_ids_im:(1000001 OR 1000113))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000008 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Thu, 17 Jan 2013 18:35:42 GMT
+  recorded_at: Thu, 24 Jan 2013 18:24:29 GMT
 recorded_with: VCR 2.3.0

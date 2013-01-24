@@ -213,7 +213,7 @@ describe("chorus.views.SearchResults", function() {
             context("when the li is for an instance", function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                     var modelToClick = this.model.instances().find(function (instance) { return instance.isGreenplum(); });
-                    this.view.$(".instance_list li.gpdb_instance").eq(0).click();
+                    this.view.$(".instance_list li.gpdb_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
                 });
             });

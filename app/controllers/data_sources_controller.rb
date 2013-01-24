@@ -19,10 +19,10 @@ class DataSourcesController < GpdbController
   def create
     entity_type = params[:data_source].delete(:entity_type)
 
-    if entity_type == "gpdb_instance"
-      created_gpdb_instance = current_user.gpdb_instances.create!(params[:data_source], :as => :create)
-      QC.enqueue_if_not_queued("GpdbInstance.refresh", created_gpdb_instance.id, 'new' => true)
-      present created_gpdb_instance, :status => :created
+    if entity_type == "gpdb_data_source"
+      created_gpdb_data_source = current_user.gpdb_data_sources.create!(params[:data_source], :as => :create)
+      QC.enqueue_if_not_queued("GpdbDataSource.refresh", created_gpdb_data_source.id, 'new' => true)
+      present created_gpdb_data_source, :status => :created
 
     elsif entity_type == "oracle_instance"
       created_oracle_instance = current_user.oracle_instances.new(params[:data_source])

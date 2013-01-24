@@ -1,4 +1,4 @@
-class GpdbInstance < DataSource
+class GpdbDataSource < DataSource
   attr_accessor :db_username, :db_password
 
   validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'db_name']).empty? }
@@ -34,21 +34,21 @@ class GpdbInstance < DataSource
   end
 
   def self.reindex_instance instance_id
-    instance = GpdbInstance.find(instance_id)
+    instance = GpdbDataSource.find(instance_id)
     instance.solr_index
     instance.datasets(:reload => true).each(&:solr_index)
   end
 
   def self.refresh_databases instance_id
-    GpdbInstance.find(instance_id).refresh_databases
+    GpdbDataSource.find(instance_id).refresh_databases
   end
 
   def solr_reindex_later
-    QC.enqueue_if_not_queued('GpdbInstance.reindex_instance', id)
+    QC.enqueue_if_not_queued('GpdbDataSource.reindex_instance', id)
   end
 
   def refresh_databases_later
-    QC.enqueue_if_not_queued('GpdbInstance.refresh_databases', id)
+    QC.enqueue_if_not_queued('GpdbDataSource.refresh_databases', id)
   end
 
   def self.owned_by(user)
@@ -64,7 +64,7 @@ class GpdbInstance < DataSource
   end
 
   def accessible_to(user)
-    GpdbInstance.accessible_to(user).include?(self)
+    GpdbDataSource.accessible_to(user).include?(self)
   end
 
   def connect_with(account)
@@ -139,7 +139,7 @@ class GpdbInstance < DataSource
     account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
   end
 
-  def gpdb_instance
+  def gpdb_data_source
     self
   end
 
@@ -170,7 +170,7 @@ class GpdbInstance < DataSource
   end
 
   def entity_type_name
-    'gpdb_instance'
+    'gpdb_data_source'
   end
 
   def instance_provider
@@ -212,13 +212,13 @@ class GpdbInstance < DataSource
   end
 
   def create_instance_created_event
-    Events::GreenplumInstanceCreated.by(current_user).add(:gpdb_instance => self)
+    Events::GreenplumInstanceCreated.by(current_user).add(:gpdb_data_source => self)
   end
 
   def create_instance_name_changed_event
     if name_changed?
       Events::GreenplumInstanceChangedName.by(current_user).add(
-          :gpdb_instance => self,
+          :gpdb_data_source => self,
           :old_name => name_was,
           :new_name => name
       )

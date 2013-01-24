@@ -19,12 +19,12 @@ describe('chorus.models.DataSource', function() {
 
     describe('#canHaveIndividualAccounts', function(){
         it('is true for greenplum data sources', function(){
-            var gpdbInstance = rspecFixtures.gpdbInstance();
-            expect(gpdbInstance.canHaveIndividualAccounts()).toBeTruthy();
+            var gpdbDataSource = rspecFixtures.gpdbDataSource();
+            expect(gpdbDataSource.canHaveIndividualAccounts()).toBeTruthy();
         });
 
         it('is true for oracle data sources', function(){
-            var oracleInstance = rspecFixtures.gpdbInstance();
+            var oracleInstance = rspecFixtures.gpdbDataSource();
             expect(oracleInstance.canHaveIndividualAccounts()).toBeTruthy();
         });
     });
@@ -40,7 +40,7 @@ describe('chorus.models.DataSource', function() {
 
     describe('#isGreenplum', function(){
         it('returns true if the instance is a greenplum db', function(){
-            var gpdb = new chorus.models.DataSource({entityType: 'gpdb_instance'});
+            var gpdb = new chorus.models.DataSource({entityType: 'gpdb_data_source'});
             expect(gpdb.isGreenplum()).toBeTruthy();
             var oracle = new chorus.models.DataSource({entityType: 'oracle_instance'});
             expect(oracle.isGreenplum()).toBeFalsy();
@@ -50,7 +50,7 @@ describe('chorus.models.DataSource', function() {
     describe("#accountForUser", function() {
         beforeEach(function() {
             this.user = rspecFixtures.user();
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
             this.account = this.model.accountForUser(this.user);
         });
 
@@ -69,10 +69,10 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accountForCurrentUser", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
             this.currentUser = rspecFixtures.user();
             setLoggedInUser(this.currentUser.attributes);
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
         });
 
         it("memoizes", function() {
@@ -99,7 +99,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accountForOwner", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
             var owner = this.owner = this.model.owner();
             this.accounts = rspecFixtures.instanceAccountSet();
@@ -123,7 +123,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accounts", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
             this.instanceAccounts = this.model.accounts();
         });
@@ -143,7 +143,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#usage", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbInstance().attributes);
+            this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
             this.instanceUsage = this.model.usage();
         });

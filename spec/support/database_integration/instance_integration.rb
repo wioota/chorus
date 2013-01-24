@@ -126,16 +126,16 @@ module InstanceIntegration
   end
 
   def self.real_gpdb_account
-    gpdb_instance = InstanceIntegration.real_gpdb_instance
-    gpdb_instance.owner_account
+    gpdb_data_source = InstanceIntegration.real_gpdb_data_source
+    gpdb_data_source.owner_account
   end
 
-  def self.real_gpdb_instance
-    GpdbInstance.find_by_name(greenplum_hostname)
+  def self.real_gpdb_data_source
+    GpdbDataSource.find_by_name(greenplum_hostname)
   end
 
   def self.real_database
-    real_gpdb_instance.databases.find_by_name!(self.database_name)
+    real_gpdb_data_source.databases.find_by_name!(self.database_name)
   end
 
   def self.greenplum_username

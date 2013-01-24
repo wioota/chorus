@@ -132,7 +132,7 @@
 
         headerParamOptions: {
             GreenplumInstanceChangedName: {
-                links: [ "actor", "gpdbInstance" ],
+                links: [ "actor", "gpdbDataSource" ],
                 attrs: [ "newName", "oldName" ]
             },
 
@@ -142,7 +142,7 @@
             },
 
             GreenplumInstanceCreated: {
-                links: [ "actor", "gpdbInstance" ]
+                links: [ "actor", "gpdbDataSource" ]
             },
 
             GnipInstanceCreated: {
@@ -154,7 +154,7 @@
             },
 
             GreenplumInstanceChangedOwner: {
-                links: [ "actor", "gpdbInstance", "newOwner" ]
+                links: [ "actor", "gpdbDataSource", "newOwner" ]
             },
 
             PublicWorkspaceCreated: {
@@ -501,11 +501,11 @@
         },
 
         instanceAddress: function(self) {
-            return self.model.gpdbInstance().get("host");
+            return self.model.gpdbDataSource().get("host");
         },
 
-        gpdbInstanceName: function(self) {
-            return self.model.gpdbInstance().get("name");
+        gpdbDataSourceName: function(self) {
+            return self.model.gpdbDataSource().get("name");
         },
 
         workspaceOldName: function(self) {

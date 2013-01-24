@@ -30,9 +30,9 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Attachment
-        1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4486332.0,''docs''=>[{''id''=>''Attachment
-        1000012'',''name_texts''=>[''attachmentsearch''],''score''=>4486332.0}]}}]}},''highlighting''=>{''Attachment
+        1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4481312.5,''docs''=>[{''id''=>''Attachment
+        1000012'',''name_texts''=>[''attachmentsearch''],''score''=>4481312.5}]}}]}},''highlighting''=>{''Attachment
         1000012''=>{''name_texts''=>[''@@@hl@@@attachmentsearch@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 17 Jan 2013 18:36:02 GMT
+  recorded_at: Thu, 24 Jan 2013 18:25:04 GMT
 recorded_with: VCR 2.3.0

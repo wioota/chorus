@@ -21,8 +21,8 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                     return new chorus.models.Dataset(result);
                 case "chorus_view":
                     return new chorus.models.ChorusView(result);
-                case "gpdb_instance":
-                    return new chorus.models.GpdbInstance(result);
+                case "gpdb_data_source":
+                    return new chorus.models.GpdbDataSource(result);
                 case "hadoop_instance":
                     return new chorus.models.HadoopInstance(result);
                 case "gnip_instance":

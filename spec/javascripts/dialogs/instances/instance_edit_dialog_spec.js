@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InstanceEdit", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.gpdbInstance({
+        this.instance = rspecFixtures.gpdbDataSource({
             name: "pasta",
             host: "greenplum",
             port: "8555",
@@ -18,7 +18,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
     describe("#render", function() {
         describe("when editing a greenplum instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ entityType: "gpdb_instance"});
+                this.dialog.model.set({ entityType: "gpdb_data_source"});
                 this.dialog.render();
             });
 
@@ -130,7 +130,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            this.dialog.model.set({ entity_type: "gpdb_instance"});
+            this.dialog.model.set({ entity_type: "gpdb_data_source"});
             this.dialog.render();
 
             spyOn(this.dialog, "closeModal");

@@ -37,7 +37,7 @@ describe SearchPresenter, :type => :view do
         instance_hash.should have_key(:numFound)
         instance_hash.should have_key(:results)
         instance_types = instance_hash[:results].map {|result| result[:entity_type]}.uniq
-        instance_types.should =~ ['gpdb_instance', 'hadoop_instance', 'gnip_instance']
+        instance_types.should =~ ['gpdb_data_source', 'hadoop_instance', 'gnip_instance']
         instance_hash[:results].each do |result|
           result.should have_key(:highlighted_attributes)
         end
@@ -63,11 +63,11 @@ describe SearchPresenter, :type => :view do
       end
 
       it "includes the comments" do
-        gpdb_instance_hash = @hash[:instances]
-        gpdb_instance_result = gpdb_instance_hash[:results][0]
-        gpdb_instance_result.should have_key(:comments)
-        gpdb_instance_result[:comments].length.should == 1
-        gpdb_instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>searchquery</em>"
+        gpdb_data_source_hash = @hash[:instances]
+        gpdb_data_source_result = gpdb_data_source_hash[:results][0]
+        gpdb_data_source_result.should have_key(:comments)
+        gpdb_data_source_result[:comments].length.should == 1
+        gpdb_data_source_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>searchquery</em>"
       end
 
       it "includes the right dataset keys" do

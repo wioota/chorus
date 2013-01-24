@@ -7,7 +7,7 @@ describe InstanceAccount do
   end
 
   describe "validations" do
-    let(:gpdb_instance) { FactoryGirl.build(:gpdb_instance) }
+    let(:gpdb_data_source) { FactoryGirl.build(:gpdb_data_source) }
 
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }

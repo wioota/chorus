@@ -15,7 +15,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     this.server.lastFetchFor(this.collection).respondJson(403, json);
 
                     var instance = this.collection.instanceRequiringCredentials();
-                    expect(instance).toBeA(chorus.models.GpdbInstance);
+                    expect(instance).toBeA(chorus.models.GpdbDataSource);
                     expect(instance.get("id")).toBe(101);
                 });
             });
@@ -47,7 +47,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
         describe("when a fetch fails for one of the page's required resources", function() {
             context("when credentials are missing", function() {
                 beforeEach(function() {
-                    this.instance = rspecFixtures.gpdbInstance();
+                    this.instance = rspecFixtures.gpdbDataSource();
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
                     this.server.lastFetchFor(this.model).failForbidden();
                 });

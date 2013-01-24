@@ -67,7 +67,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
 
         var map = {
             oracle_instance: this.dataSources,
-            gpdb_instance: this.dataSources,
+            gpdb_data_source: this.dataSources,
             hadoop_instance: this.hadoopInstances,
             gnip_instance: this.gnipInstances
         };

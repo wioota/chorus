@@ -9,8 +9,8 @@ FactoryGirl.define do
     owner
   end
 
-  factory :gpdb_instance do
-    sequence(:name) { |n| "gpdb_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+  factory :gpdb_data_source do
+    sequence(:name) { |n| "gpdb_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "gpdb_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     db_name "postgres"
@@ -58,12 +58,12 @@ FactoryGirl.define do
     sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"
     owner
-    association :instance, :factory => :gpdb_instance
+    association :instance, :factory => :gpdb_data_source
   end
 
   factory :gpdb_database do
     sequence(:name) { |n| "database#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    gpdb_instance
+    gpdb_data_source
   end
 
   factory :gpdb_schema do

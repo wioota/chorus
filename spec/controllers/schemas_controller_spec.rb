@@ -10,17 +10,17 @@ describe SchemasController do
   end
 
   describe "#index" do
-    let(:gpdb_instance) { data_sources(:owners) }
+    let(:gpdb_data_source) { data_sources(:owners) }
     let(:database) { gpdb_databases(:default) }
     let(:schema1) { database.schemas[0] }
     let(:schema2) { database.schemas[1] }
 
     before do
-      stub(GpdbSchema).refresh(gpdb_instance.account_for_user!(user), database) { [schema1, schema2] }
+      stub(GpdbSchema).refresh(gpdb_data_source.account_for_user!(user), database) { [schema1, schema2] }
     end
 
     it 'uses authorization' do
-      mock(subject).authorize!(:show_contents, gpdb_instance)
+      mock(subject).authorize!(:show_contents, gpdb_data_source)
       get :index, :database_id => database.to_param
     end
 
@@ -31,12 +31,12 @@ describe SchemasController do
       decoded_response.should have(2).items
 
       decoded_response[0].name.should == schema1.name
-      decoded_response[0].database.instance.id.should == gpdb_instance.id
+      decoded_response[0].database.instance.id.should == gpdb_data_source.id
       decoded_response[0].database.name.should == schema1.database.name
       decoded_response[0].dataset_count.should == schema1.active_tables_and_views.count
 
       decoded_response[1].name.should == schema2.name
-      decoded_response[1].database.instance.id.should == gpdb_instance.id
+      decoded_response[1].database.instance.id.should == gpdb_data_source.id
       decoded_response[1].database.name.should == schema2.database.name
       decoded_response[1].dataset_count.should == schema2.active_tables_and_views.count
     end
@@ -59,7 +59,7 @@ describe SchemasController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, schema.gpdb_instance)
+      mock(subject).authorize!(:show_contents, schema.gpdb_data_source)
       get :show, :id => schema.to_param
     end
 

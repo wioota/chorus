@@ -30,8 +30,8 @@ describe GpdbViewAccess do
       let(:user) { users(:the_collaborator) }
 
       before do
-        any_instance_of(GpdbInstanceAccess) do |instance|
-          stub(instance).can? :show, gpdb_view.gpdb_instance { false }
+        any_instance_of(GpdbDataSourceAccess) do |instance|
+          stub(instance).can? :show, gpdb_view.gpdb_data_source { false }
         end
       end
 

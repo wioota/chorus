@@ -9,7 +9,7 @@ describe ChorusView do
       let(:database) { InstanceIntegration.real_database }
       let(:schema) { database.schemas.find_by_name('public') }
       let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
+      let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
       let(:workspace) { workspaces(:public)}
       let(:user) { users(:the_collaborator) }
       let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :workspace => workspace) }
@@ -158,8 +158,8 @@ describe ChorusView do
     let(:chorus_view) { datasets(:executable_chorus_view) }
     let(:schema) { chorus_view.schema }
     let(:database) { schema.database }
-    let(:gpdb_instance) { database.gpdb_instance }
-    let(:account) { gpdb_instance.owner_account }
+    let(:gpdb_data_source) { database.gpdb_data_source }
+    let(:account) { gpdb_data_source.owner_account }
     let(:user) { account.owner }
     let(:connection) { Object.new }
     let(:view_name) { 'a_new_database_view' }
@@ -222,8 +222,8 @@ describe ChorusView do
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:database) { InstanceIntegration.real_database }
     let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 2, 3, 4, 5") }
-    let(:gpdb_instance) { InstanceIntegration.real_gpdb_instance }
-    let(:account) { gpdb_instance.owner_account }
+    let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+    let(:account) { gpdb_data_source.owner_account }
 
     it "retrieves the statistics" do
       chorus_view.add_metadata!(account)

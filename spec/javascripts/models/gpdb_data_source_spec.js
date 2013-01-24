@@ -1,10 +1,10 @@
-describe("chorus.models.GpdbInstance", function() {
+describe("chorus.models.GpdbDataSource", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.gpdbInstance({id: 1});
+        this.instance = rspecFixtures.gpdbDataSource({id: 1});
     });
 
     it("has the right entity type", function() {
-        expect(this.instance.entityType).toBe("gpdb_instance");
+        expect(this.instance.entityType).toBe("gpdb_data_source");
     });
 
     it("has the right show url", function() {
@@ -19,7 +19,7 @@ describe("chorus.models.GpdbInstance", function() {
     });
 
     it('has the type', function() {
-        expect(this.instance.get('entityType')).toBe('gpdb_instance');
+        expect(this.instance.get('entityType')).toBe('gpdb_data_source');
     });
 
     describe("#databases", function() {

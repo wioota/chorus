@@ -5,7 +5,7 @@ FactoryGirl.define do
     actor
 
     factory :greenplum_instance_created_event, :class => Events::GreenplumInstanceCreated do
-      gpdb_instance
+      gpdb_data_source
     end
 
     factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do
@@ -13,12 +13,12 @@ FactoryGirl.define do
     end
 
     factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
-      gpdb_instance
+      gpdb_data_source
       new_owner :factory => :user
     end
 
     factory :greenplum_instance_changed_name_event, :class => Events::GreenplumInstanceChangedName do
-      gpdb_instance
+      gpdb_data_source
       new_name 'new_instance_name'
       old_name 'old_instance_name'
     end
@@ -54,7 +54,7 @@ FactoryGirl.define do
     end
 
     factory :note_on_greenplum_instance_event, :class => Events::NoteOnGreenplumInstance do
-      gpdb_instance
+      gpdb_data_source
       body 'Note to self, add a body'
     end
 

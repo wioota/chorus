@@ -4,7 +4,7 @@ describe GpTableCopier, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
   let(:user) { account.owner }
   let(:database) { InstanceIntegration.real_database }
-  let(:instance) { database.gpdb_instance }
+  let(:instance) { database.gpdb_data_source }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:source_table_name) { "src_table" }
   let(:source_dataset) { schema.datasets.find_by_name(source_table_name) }

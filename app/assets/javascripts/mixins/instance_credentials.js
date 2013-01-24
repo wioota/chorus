@@ -2,7 +2,7 @@ chorus.Mixins.InstanceCredentials = {};
 
 chorus.Mixins.InstanceCredentials.model = {
     instanceRequiringCredentials: function() {
-        return new chorus.models.GpdbInstance({id: this.serverErrors.model_data.id});
+        return new chorus.models.GpdbDataSource({id: this.serverErrors.model_data.id});
     }
 };
 

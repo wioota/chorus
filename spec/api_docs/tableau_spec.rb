@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "Tableau" do
   let(:dataset) { datasets(:chorus_view) }
   let(:workspace) { workspaces(:public) }
-  let(:user) { dataset.gpdb_instance.owner }
+  let(:user) { dataset.gpdb_data_source.owner }
 
   before do
     log_in user

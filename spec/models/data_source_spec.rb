@@ -14,25 +14,25 @@ describe DataSource do
     describe "port" do
       context "when port is not a number" do
         it "fails validation" do
-          FactoryGirl.build(:gpdb_instance, :port => "1aaa1").should_not be_valid
+          FactoryGirl.build(:gpdb_data_source, :port => "1aaa1").should_not be_valid
         end
       end
 
       context "when port is number" do
         it "validates" do
-          FactoryGirl.build(:gpdb_instance, :port => "1111").should be_valid
+          FactoryGirl.build(:gpdb_data_source, :port => "1111").should be_valid
         end
       end
 
       context "when host is set but not port" do
         it "fails validation" do
-          FactoryGirl.build(:gpdb_instance, :host => "1111", :port => "").should_not be_valid
+          FactoryGirl.build(:gpdb_data_source, :host => "1111", :port => "").should_not be_valid
         end
       end
 
       context "when host and port both are not set" do
         it "NO validate" do
-          FactoryGirl.build(:gpdb_instance, :host => "", :port => "").should be_valid
+          FactoryGirl.build(:gpdb_data_source, :host => "", :port => "").should be_valid
         end
       end
     end

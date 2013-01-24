@@ -40,16 +40,16 @@ describe CancelableQuery do
 
     describe "with a real database connection", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_instance) { account.instance }
+      let(:gpdb_data_source) { account.instance }
 
       it "cancels the query and throws a query error when the query is cancelled" do
         cancel_thread = Thread.new do
-          cancel_connection = gpdb_instance.connect_with(account)
+          cancel_connection = gpdb_data_source.connect_with(account)
           wait_until { get_running_queries_by_check_id(cancel_connection).present? }
           CancelableQuery.new(cancel_connection, check_id).cancel
         end
 
-        query_connection = gpdb_instance.connect_with(account)
+        query_connection = gpdb_data_source.connect_with(account)
         expect {
           CancelableQuery.new(query_connection, check_id).execute("SELECT pg_sleep(15)")
         }.to raise_error GreenplumConnection::QueryError

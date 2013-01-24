@@ -49,7 +49,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         });
 
         it("sets the page model when a 'instance:selected' event is broadcast", function() {
-            var instance = rspecFixtures.gpdbInstance();
+            var instance = rspecFixtures.gpdbDataSource();
             expect(this.page.model).not.toBe(instance);
             chorus.PageEvents.broadcast('instance:selected', instance);
             expect(this.page.model).toBe(instance);
@@ -64,7 +64,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.dataSourceSet, [
                 rspecFixtures.oracleInstance(),
-                rspecFixtures.gpdbInstance()
+                rspecFixtures.gpdbDataSource()
             ]);
 
             this.server.completeFetchAllFor(this.hadoopInstanceSet, [
@@ -79,7 +79,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
         describe("pre-selection", function() {
             it("pre-selects the first item by default", function() {
-                expect(this.page.mainContent.content.$(".gpdb_instance li.instance:eq(0)")).toHaveClass("selected");
+                expect(this.page.mainContent.content.$(".gpdb_data_source li.instance:eq(0)")).toHaveClass("selected");
             });
         });
 

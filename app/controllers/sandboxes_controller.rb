@@ -11,13 +11,13 @@ class SandboxesController < ApplicationController
         workspace.sandbox = GpdbSchema.find(attributes[:schema_id]) if attributes[:schema_id]
         if attributes[:schema_name]
           if attributes[:database_name]
-            gpdb_instance = GpdbInstance.find(attributes[:instance_id])
-            database = gpdb_instance.create_database(attributes[:database_name], current_user)
+            gpdb_data_source = GpdbDataSource.find(attributes[:instance_id])
+            database = gpdb_data_source.create_database(attributes[:database_name], current_user)
           else
             database = GpdbDatabase.find(attributes[:database_id])
           end
 
-          GpdbSchema.refresh(database.gpdb_instance.account_for_user!(current_user), database)
+          GpdbSchema.refresh(database.gpdb_data_source.account_for_user!(current_user), database)
 
           create_schema = attributes[:schema_name] && attributes[:schema_name] != 'public'
           if create_schema

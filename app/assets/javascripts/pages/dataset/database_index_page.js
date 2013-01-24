@@ -5,7 +5,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
     helpId: "instances",
 
     setup: function(instanceId) {
-        this.instance = new chorus.models.GpdbInstance({id: instanceId});
+        this.instance = new chorus.models.GpdbDataSource({id: instanceId});
         this.collection = this.instance.databases();
 
         this.instance.fetch();

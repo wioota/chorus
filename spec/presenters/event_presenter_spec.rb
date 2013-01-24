@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe EventPresenter, :type => :view do
-  let(:gpdb_instance) { FactoryGirl.create(:gpdb_instance) }
+  let(:gpdb_data_source) { FactoryGirl.create(:gpdb_data_source) }
   let(:current_user) { users(:owner) }
 
   before do
@@ -15,7 +15,7 @@ describe EventPresenter, :type => :view do
 
     it "has targets and additional_data values in it" do
       hash = subject.simple_hash
-      hash[:gpdb_instance].should be
+      hash[:gpdb_data_source].should be
       hash["body"].should == 'i am a comment with greenplumsearch in me'
     end
   end
@@ -66,7 +66,7 @@ describe EventPresenter, :type => :view do
     end
 
     context "Non-note event" do
-      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :gpdb_instance => gpdb_instance) }
+      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :gpdb_data_source => gpdb_data_source) }
 
       it "includes the 'id', 'timestamp', 'actor', 'action'" do
         hash = subject.to_hash
@@ -77,7 +77,7 @@ describe EventPresenter, :type => :view do
       end
 
       it "presents all of the event's 'targets', using the same names" do
-        special_instance = FactoryGirl.build(:gpdb_instance)
+        special_instance = FactoryGirl.build(:gpdb_data_source)
         special_user = FactoryGirl.build(:user)
 
         stub(event).targets do

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe DatasetsController do
   let(:user) { users(:the_collaborator) }
-  let(:instance_account) { gpdb_instance.account_for_user!(user) }
-  let(:gpdb_instance) { data_sources(:owners) }
+  let(:instance_account) { gpdb_data_source.account_for_user!(user) }
+  let(:gpdb_data_source) { data_sources(:owners) }
   let(:schema) { gpdb_schemas(:default) }
   let(:table) { datasets(:table) }
 
