@@ -15,7 +15,7 @@ module ExistingDataSourcesValidator
     if invalid_instances.empty?
       return true
     else
-      log "Duplicate data source names found: #{invalid_instances.map(&:name).uniq.join(", ")}"
+      log "Duplicate data source names found: #{invalid_instances.uniq.join(", ")}"
       return false
     end
   end
@@ -23,19 +23,11 @@ module ExistingDataSourcesValidator
   private
 
   def self.find_invalid_instances(data_source_types)
-    invalid_instances = []
-
+    names = []
     data_source_types.each do |type|
-      type.all.each do |record|
-        data_source_types.each do |other_type|
-          other_type.where('LOWER(name) = ?', record.name.downcase).each do |invalid_instance|
-            next if invalid_instance == record
-            invalid_instances << invalid_instance
-          end
-        end
-      end
+      names += ActiveRecord::Base.connection.exec_query("select * from #{type.table_name}").map {|record| record["name"] }
     end
 
-    invalid_instances
+    names.reject { |name| names.count(name) == 1 }
   end
 end

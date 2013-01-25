@@ -32,5 +32,17 @@ describe ExistingDataSourcesValidator do
 
       ExistingDataSourcesValidator.run([clazz]).should be_true
     end
+
+    it "validates regardless of STI" do
+      data_source = FactoryGirl.create(:data_source)
+      data_source_type = data_source.type
+      data_source.type = 'LolType'
+      data_source.save!
+
+      ExistingDataSourcesValidator.run([DataSource]).should be_true
+
+      data_source.type = data_source_type
+      data_source.save!(:validate => false)
+    end
   end
 end
