@@ -270,10 +270,10 @@ class GreenplumConnection < DataSourceConnection
 
       disconnect
       result
-    #rescue Sequel::DatabaseError => e
-    #  raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
-    #ensure
-    #  disconnect
+    rescue Sequel::DatabaseError => e
+      raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
+    ensure
+      disconnect
     end
 
     def datasets(options = {})
