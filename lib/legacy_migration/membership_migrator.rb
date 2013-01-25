@@ -28,6 +28,7 @@ class MembershipMigrator < AbstractMigrator
                               FROM edc_member
                                 JOIN users
                                 ON users.username = edc_member.member_name
+                                  AND users.deleted_at IS NULL
                                 JOIN workspaces
                                 ON workspaces.legacy_id = edc_member.workspace_id
                               WHERE edc_member.id NOT IN (SELECT legacy_id FROM memberships);")

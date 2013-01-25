@@ -68,6 +68,7 @@ class NoteMigrator < AbstractMigrator
             AND instance_provider = 'Greenplum Database'
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
         INNER JOIN gpdb_instances
           ON gpdb_instances.legacy_id = edc_comment.entity_id
       WHERE
@@ -110,6 +111,7 @@ class NoteMigrator < AbstractMigrator
             AND instance_provider = 'Hadoop'
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
         INNER JOIN hadoop_instances
           ON hadoop_instances.legacy_id = edc_comment.entity_id
       WHERE
@@ -154,6 +156,7 @@ class NoteMigrator < AbstractMigrator
             AND hdfs_entries.path = substring(edc_comment.entity_id from position('|' in edc_comment.entity_id) + 1)
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = 'hdfs'
         AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnHdfsFile');
@@ -191,6 +194,7 @@ class NoteMigrator < AbstractMigrator
           ON workspaces.legacy_id = edc_comment.entity_id
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = 'workspace'
         AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnWorkspace');
@@ -232,6 +236,7 @@ class NoteMigrator < AbstractMigrator
           ON workfiles.legacy_id = edc_comment.entity_id
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = 'workfile'
         AND edc_comment.id NOT IN (SELECT legacy_id from #{@@events_table_name} WHERE action = 'Events::NoteOnWorkfile');
@@ -273,6 +278,7 @@ class NoteMigrator < AbstractMigrator
           ON datasets.legacy_id = normalize_key(edc_comment.entity_id)
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
         INNER JOIN workspaces
           ON workspaces.legacy_id = edc_comment.workspace_id
       WHERE
@@ -314,6 +320,7 @@ class NoteMigrator < AbstractMigrator
           ON datasets.legacy_id = normalize_key(edc_comment.entity_id)
         INNER JOIN users
           ON users.username = edc_comment.author_name
+            AND users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = 'databaseObject'
         AND edc_comment.workspace_id IS NULL

@@ -38,6 +38,7 @@ class InstanceAccountMigrator < AbstractMigrator
                               FROM edc_account_map map
                               INNER JOIN users u
                                 ON u.username = map.user_name
+                                  AND u.deleted_at IS NULL
                               INNER JOIN gpdb_instances i
                                 ON map.instance_id = i.legacy_id
                               WHERE map.id NOT IN (SELECT legacy_id FROM instance_accounts)

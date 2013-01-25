@@ -57,6 +57,7 @@ class WorkfileMigrator < AbstractMigrator
         FROM edc_work_file
         INNER JOIN users owner
           ON owner.username = edc_work_file.owner
+            AND owner.deleted_at IS NULL
         INNER JOIN workspaces workspace
           ON workspace.legacy_id = edc_work_file.workspace_id
         WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);
@@ -104,8 +105,10 @@ class WorkfileMigrator < AbstractMigrator
         FROM edc_workfile_version
         INNER JOIN users owner
           ON owner.username = edc_workfile_version.version_owner
+            AND owner.deleted_at IS NULL
         INNER JOIN users modifier
           ON modifier.username = edc_workfile_version.modified_by
+            AND modifier.deleted_at IS NULL
         INNER JOIN workfiles
           ON edc_workfile_version.workfile_id = workfiles.legacy_id
         WHERE edc_workfile_version.id NOT IN (SELECT legacy_id FROM workfile_versions);
@@ -130,6 +133,7 @@ class WorkfileMigrator < AbstractMigrator
         FROM edc_workfile_draft
         INNER JOIN users owner
           ON owner.username = edc_workfile_draft.draft_owner
+            AND owner.deleted_at IS NULL
         INNER JOIN workfiles
           ON edc_workfile_draft.workfile_id = workfiles.legacy_id
         WHERE is_deleted = 'f'

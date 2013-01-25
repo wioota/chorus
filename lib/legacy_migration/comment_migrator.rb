@@ -39,7 +39,7 @@ class CommentMigrator < AbstractMigrator
           ON events.legacy_id = edc_comment.entity_id
           AND events.legacy_type = 'edc_#{entity_type}'
         INNER JOIN users
-          ON users.username = edc_comment.author_name
+          ON users.username = edc_comment.author_name and users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = '#{entity_type.gsub("_", "")}'
         AND edc_comment.id NOT IN (SELECT legacy_id from comments);

@@ -55,8 +55,8 @@ class WorkspaceMigrator < AbstractMigrator
           created_tx_stamp AT TIME ZONE 'UTC',
           last_updated_tx_stamp AT TIME ZONE 'UTC'
         FROM edc_workspace
-          LEFT JOIN users archivers ON archivers.username = archiver
-          LEFT JOIN users owners ON owners.username = owner
+          LEFT JOIN users archivers ON archivers.username = archiver AND archivers.deleted_at IS NULL
+          LEFT JOIN users owners ON owners.username = owner AND owners.deleted_at IS NULL
         WHERE edc_workspace.id NOT IN (SELECT legacy_id FROM workspaces);
       SQL
     end

@@ -40,6 +40,7 @@ class HadoopInstanceMigrator < AbstractMigrator
         FROM edc_instance i
           INNER JOIN users u
           ON u.username = i.owner
+            AND u.deleted_at IS NULL
           INNER JOIN edc_account_map map
           ON map.instance_id = i.id
         WHERE instance_provider = 'Hadoop'
