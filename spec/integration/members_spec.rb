@@ -20,6 +20,7 @@ describe "Managing workspace members" do
     logout
     login(user)
     visit("#/workspaces/#{private_workspace.id}")
+    page.should have_content("Summary")
     page.should_not have_link("Add or Edit Members")
   end
 end
