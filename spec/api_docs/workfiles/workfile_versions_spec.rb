@@ -80,7 +80,7 @@ resource "Workfiles: versions" do
     let(:content) { workfile_version.contents }
 
     example_request "Create a new version of a workfile" do
-      status.should == 200
+      status.should == 201
     end
   end
 

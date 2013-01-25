@@ -13,7 +13,7 @@ class WorkfileVersionsController < ApplicationController
     workfile_version.update_content(params[:workfile][:content])
     remove_draft(workfile)
 
-    present workfile.latest_workfile_version
+    present workfile.latest_workfile_version, :presenter_options => { :contents => true }
   end
 
   def create
@@ -30,7 +30,7 @@ class WorkfileVersionsController < ApplicationController
     end
 
     workfile.reload
-    present workfile.latest_workfile_version, :presenter_options => { :contents => true }
+    present workfile.latest_workfile_version, :presenter_options => { :contents => true }, :status => :created
   end
 
   def show

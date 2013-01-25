@@ -19,7 +19,7 @@ describe WorkfileVersionsController do
     end
 
     it "changes the file content" do
-      post :update, params
+      put :update, params
 
       File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
     end
@@ -28,15 +28,25 @@ describe WorkfileVersionsController do
       workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
       draft_count(workfile, user).should == 1
 
-      post :update, params
+      put :update, params
       draft_count(workfile, user).should == 0
     end
 
     context "when the workfile version does not exist" do
       it "should return a 404 error" do
-        post :update, params.merge(:id => -1)
+        put :update, params.merge(:id => -1)
         response.code.should == "404"
       end
+    end
+
+    it "presents the workfile version with the content" do
+      mock_present do |model, ignored, options|
+        model.should == workfile_version
+        options[:contents].should be_true
+      end
+
+      put :update, params
+      response.code.should == "200"
     end
   end
 
@@ -56,6 +66,16 @@ describe WorkfileVersionsController do
       decoded_response[:version_info][:commit_message].should == 'A new version'
       decoded_response[:version_info][:version_num].should == 2
       decoded_response[:version_info][:content].should == 'New content'
+    end
+
+    it "presents the workfile version with the content" do
+      mock_present do |model, ignored, options|
+        model.should == workfile.reload.latest_workfile_version
+        options[:contents].should be_true
+      end
+
+      post :create, params
+      response.code.should == "201"
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
@@ -82,19 +102,32 @@ describe WorkfileVersionsController do
       workfile_version.save
     end
 
+    let(:params) { { :workfile_id => workfile.id, :id => workfile_version.id } }
+
     it "show the specific version for the workfile" do
       another_version = workfile.build_new_version(user, test_file('some.txt'), "commit message - 1")
       another_version.save
 
-      get :show, :workfile_id => workfile.id, :id => workfile_version.id
+      get :show, params
 
       decoded_response[:version_info][:version_num].should == 1
       decoded_response[:version_info][:version_num].should_not == another_version.version_num
       decoded_response[:version_info][:content].should_not be_nil
     end
 
+    it "presents the workfile version with the content" do
+      mock_present do |model, ignored, options|
+        model.should == workfile_version
+        options[:contents].should be_true
+      end
+
+      get :show, params
+
+      response.code.should == "200"
+    end
+
     generate_fixture "workfileVersion.json" do
-      get :show, :workfile_id => workfile.id, :id => workfile_version.id
+      get :show, params
     end
   end
 
