@@ -2,7 +2,7 @@ require 'legacy_migration_spec_helper'
 
 describe DataMigrator do
   describe ".migrate" do
-    it "migrates and validates all without blowing up" do
+    before do
       mock(InstanceAccountMigrator).migrate.at_least(1)
       mock(ImageMigrator).migrate.at_least(1)
       mock(SandboxMigrator).migrate.at_least(1)
@@ -27,8 +27,17 @@ describe DataMigrator do
       mock(UserMigrator).validate
       mock(WorkfileMigrator).validate
       mock(WorkspaceMigrator).validate
+    end
 
+    it "migrates and validates all without blowing up" do
       DataMigrator.migrate_all(SPEC_WORKFILE_PATH)
+    end
+
+    it "finishes then raises when a validation error occurs after migration" do
+      stub(AbstractMigrator).failed? { true }
+      expect {
+        DataMigrator.migrate_all(SPEC_WORKFILE_PATH)
+      }.to raise_error AbstractMigrator::MigratorValidationError, "WARNING: Validation failed. See list of invalid records."
     end
   end
 end

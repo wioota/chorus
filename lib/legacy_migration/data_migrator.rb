@@ -29,7 +29,7 @@ class DataMigrator
     WorkspaceMigrator.validate
 
     if AbstractMigrator.failed?
-      raise MigratorValidationError.new("WARNING: Validation failed. See list of invalid records.")
+      raise AbstractMigrator::MigratorValidationError.new("WARNING: Validation failed. See list of invalid records.")
     end
   end
 end
