@@ -102,7 +102,7 @@ describe "Visualizations", :greenplum_integration do
 
   def save_as(type)
     case type
-    when 'desktop_image'
+      when 'desktop_image'
       save_desktop_image
     when 'workfile_image'
       expect {
