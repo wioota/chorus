@@ -153,6 +153,10 @@ describe DataSourcesController do
     context "for an OracleDataSource" do
       let(:entity_type) { "oracle_data_source" }
 
+      before do
+        stub(ChorusConfig.instance).oracle_configured? { true }
+      end
+
       it "creates a new OracleDataSource" do
         expect {
           post :create, valid_attributes
@@ -171,6 +175,18 @@ describe DataSourcesController do
       it "creates a shared OracleDataSource" do
         post :create, valid_attributes
         OracleDataSource.last.should be_shared
+      end
+
+      context "when oracle is not configured" do
+        before do
+          stub(ChorusConfig.instance).oracle_configured? { false }
+        end
+
+        it "should return an error" do
+          post :create, valid_attributes
+          response.code.should == "422"
+          decoded_errors.fields.oracle.should have_key :NOT_CONFIGURED
+        end
       end
     end
 

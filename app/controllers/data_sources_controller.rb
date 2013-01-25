@@ -25,6 +25,9 @@ class DataSourcesController < GpdbController
       present created_gpdb_data_source, :status => :created
 
     elsif entity_type == "oracle_data_source"
+      unless ChorusConfig.instance.oracle_configured?
+        raise ApiValidationError.new(:oracle, :not_configured)
+      end
       created_oracle_data_source = current_user.oracle_data_sources.new(params[:data_source])
       created_oracle_data_source.shared = true
       created_oracle_data_source.save!
