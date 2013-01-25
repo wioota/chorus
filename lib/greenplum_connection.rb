@@ -66,7 +66,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def prepare_and_execute_statement(query, options = {})
-    with_connection do
+    with_connection options do
       @connection.synchronize do |jdbc_conn|
         if options[:timeout]
           @connection.send(:statement, jdbc_conn) do |statement|
@@ -123,12 +123,21 @@ class GreenplumConnection < DataSourceConnection
     end
   end
 
-  def with_connection
+  def with_connection(options = {})
+    # do this before creating connection, because it calls with_connection
+    include_public_schema = options[:include_public_schema_in_search_path] && schema_exists?("public")
+
     connect!
-    if(schema_name)
+
+    if schema_name
+      search_path = "SET search_path TO #{quote_identifier(schema_name)}"
+      if include_public_schema
+        search_path << ", public"
+      end
       @connection.default_schema = schema_name
-      @connection.execute("SET search_path TO #{quote_identifier(schema_name)}")
+      @connection.execute(search_path)
     end
+
     yield
 
   rescue Sequel::DatabaseError => e
@@ -261,10 +270,10 @@ class GreenplumConnection < DataSourceConnection
 
       disconnect
       result
-    rescue Sequel::DatabaseError => e
-      raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
-    ensure
-      disconnect
+    #rescue Sequel::DatabaseError => e
+    #  raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
+    #ensure
+    #  disconnect
     end
 
     def datasets(options = {})

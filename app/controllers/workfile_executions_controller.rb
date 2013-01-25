@@ -5,8 +5,9 @@ class WorkfileExecutionsController < ApplicationController
 
   def create
     account = @schema.account_for_user! current_user
-    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
-
+    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql],
+                                     :limit => row_limit,
+                                     :include_public_schema_in_search_path => true)
     if params[:download] && !result.canceled?
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"

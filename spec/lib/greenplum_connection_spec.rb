@@ -162,6 +162,44 @@ describe GreenplumConnection, :greenplum_integration do
       subject.hashes.should == expected
     end
 
+    describe "when the schema is set" do
+      before do
+        details.merge!(
+            :schema => "test_schema",
+            :logger => Rails.logger
+        )
+      end
+
+      let(:sql) { "SELECT * from table_in_public" }
+
+      it "doesn't search public by default" do
+        expect {
+          subject
+        }.to raise_error(GreenplumConnection::QueryError, /"table_in_public" does not exist/)
+      end
+
+      describe "when including the public schema in the search path" do
+        let(:options) { { :include_public_schema_in_search_path => true } }
+
+        it "finds the the table in the public schema" do
+          expect {
+            subject.should be_a(SqlResult)
+          }.not_to raise_error
+        end
+
+        context "when the database does not have a public schema" do
+          let(:database_name) { InstanceIntegration.database_name << "_wo_pub" }
+          let(:sql) { "SELECT 1" }
+
+          it "does not raise an error" do
+            expect {
+              subject
+            }.not_to raise_error
+          end
+        end
+      end
+    end
+
     context "when the query has no results" do
       let(:sql) { "" }
 

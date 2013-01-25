@@ -7,7 +7,7 @@ module InstanceIntegration
   REAL_GPDB_HOST = ENV['GPDB_HOST']
   REAL_HADOOP_HOST = ENV['HADOOP_HOST']
   REAL_ORACLE_HOST = ENV['ORACLE_HOST']
-  FILES_TO_TRACK_CHANGES_OF = %w(create_gpadmin.sql create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql)
+  FILES_TO_TRACK_CHANGES_OF = %w(instance_integration.rb create_gpadmin.sql create_private_test_schema.sql create_test_schemas.sql drop_and_create_gpdb_databases.sql drop_public_schema.sql)
   GPDB_VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/instance_integration_file_versions')).to_s
 
   def self.execute_sql(sql_file, database = greenplum_config['db_name'])
@@ -44,6 +44,8 @@ module InstanceIntegration
       execute_sql("drop_and_create_gpdb_databases.sql")
       execute_sql("create_test_schemas.sql", database_name)
       execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
+      execute_sql("create_test_schemas.sql", "#{database_name}_wo_pub")
+      execute_sql("drop_public_schema.sql", "#{database_name}_wo_pub")
       record_changes
     end
   end

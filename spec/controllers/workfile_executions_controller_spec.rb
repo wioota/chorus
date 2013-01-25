@@ -40,6 +40,13 @@ describe WorkfileExecutionsController do
         mock_present { |model| model.should be_a SqlResult }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
+
+      it "executes the sql with include_public_schema_in_search_path option" do
+        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:include_public_schema_in_search_path => true)) {
+          SqlResult.new
+        }
+        post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
+      end
     end
 
     it "uses authorization" do

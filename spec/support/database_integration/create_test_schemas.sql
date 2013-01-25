@@ -1,4 +1,4 @@
-CREATE SCHEMA test_schema;
+ CREATE SCHEMA test_schema;
   SET search_path TO 'test_schema';
 
   -- if you change the number of column of this table, please update different_names_table and different_types_table.
@@ -88,6 +88,8 @@ CREATE SCHEMA test_schema;
     ( START (1::integer) END (8::integer) EVERY (1::integer));
   COMMENT ON TABLE master_table1 IS 'comment on master_table1';
   ANALYZE master_table1;
+
+  CREATE TABLE public.table_in_public (id integer);
 
   CREATE UNIQUE INDEX index1 ON base_table1 ( id );
 
