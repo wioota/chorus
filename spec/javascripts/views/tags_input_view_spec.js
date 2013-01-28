@@ -51,7 +51,7 @@ describe("chorus.views.TagsInput", function() {
             view.on("tag:click", function(tag) {
                 foundTag = tag;
             });
-            view.$('.text-label')[1].click();
+            view.$('.text-label').eq(1).click();
             expect(foundTag.attributes).toEqual(tags.at(1).attributes);
         });
     });

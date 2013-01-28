@@ -73,7 +73,7 @@ describe("chorus.views.TagBox", function() {
 
             it('opens the tag show page', function() {
                 spyOn(chorus.router, "navigate");
-                this.view.$('.text-label')[1].click();
+                this.view.$('.text-label').eq(1).click();
                 expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/beta');
             });
 
@@ -85,7 +85,7 @@ describe("chorus.views.TagBox", function() {
 
                 it('uri encodes the url', function() {
                     spyOn(chorus.router, "navigate");
-                    this.view.$('.text-label')[3].click();
+                    this.view.$('.text-label').eq(3).click();
                     expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/!%40%23%24%25%5E%26*()%22');
                 });
             });
