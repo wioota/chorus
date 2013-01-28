@@ -3,7 +3,7 @@ module Chorus
     MAJOR         = 2
     MINOR         = 2
     SERVICE_PACK  = 0
-    PATCH         = 3
+    PATCH         = 4
     STRING = [MAJOR, MINOR, SERVICE_PACK, PATCH, ENV['BUILD_NUMBER']].compact.join('.')
   end
 end
