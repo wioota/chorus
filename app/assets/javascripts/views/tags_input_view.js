@@ -10,9 +10,10 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     postRender: function() {
         this.input = this.$('input');
         this.tagsForTextext = this.tags.map(function(tag) {
-            return tag.attributes;
+            return {name: tag.name(), model: tag};
         });
-        this.input.textext({
+
+        var textextInput = this.input.textext({
             plugins: 'tags autocomplete ajax',
             tagsItems: this.tagsForTextext,
             itemManager: chorus.utilities.TagItemManager,
@@ -52,6 +53,9 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
         // this is so the dropdown always appears at the bottom of the text area
         this.input.bind('focus', _.bind(this.resizeTextExt, this));
+        textextInput.bind('tagClick', _.bind(function(e, tag, value, callback) {
+            this.trigger("tag:click", value.model);
+        }, this));
     },
 
     resizeTextExt: function() {

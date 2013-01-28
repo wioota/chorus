@@ -65,5 +65,30 @@ describe("chorus.views.TagBox", function() {
                 expect(this.view.tags.save).toHaveBeenCalled();
             });
         });
+
+        describe("when a tag is clicked", function() {
+            beforeEach(function() {
+                $('#jasmine_content').append(this.view.el);
+            });
+
+            it('opens the tag show page', function() {
+                spyOn(chorus.router, "navigate");
+                this.view.$('.text-label')[1].click();
+                expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/beta');
+            });
+
+            describe("when the tag name has special characters", function() {
+                beforeEach(function() {
+                    this.view.tags.add({name: '!@#$%^&*()"'});
+                    this.view.render();
+                });
+
+                it('uri encodes the url', function() {
+                    spyOn(chorus.router, "navigate");
+                    this.view.$('.text-label')[3].click();
+                    expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/!%40%23%24%25%5E%26*()%22');
+                });
+            });
+        });
     });
 });

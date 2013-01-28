@@ -52,3 +52,27 @@ describe 'adding a tag to a workfile' do
     end
   end
 end
+
+describe 'viewing all the entities sharing a specific tag' do
+  let(:workfile) {workfiles(:public)}
+  let(:workspace) {workfile.workspace}
+  let(:tag) { ActsAsTaggableOn::Tag.find_by_name('crazy_tag') }
+
+  before do
+    login(users(:admin))
+    workfile.tag_list = 'crazy_tag'
+    workfile.save!
+  end
+
+  it "shows list of tagged objects" do
+    visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
+
+    find('span', :text => 'crazy_tag').click
+    current_route.should == "/tags/crazy_tag"
+
+    pending "#39968421: need to implement tag show page"
+
+    page.should have_content("crazy_tag")
+    page.should have_content(workfile.file_name)
+  end
+end

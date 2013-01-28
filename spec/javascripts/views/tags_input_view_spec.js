@@ -41,6 +41,21 @@ describe("chorus.views.TagsInput", function() {
         });
     });
 
+    describe('clicking on the tag', function() {
+        beforeEach(function() {
+            $('#jasmine_content').append(view.el);
+        });
+
+        it("trigger the click event with a tag", function() {
+            var foundTag;
+            view.on("tag:click", function(tag) {
+                foundTag = tag;
+            });
+            view.$('.text-label')[1].click();
+            expect(foundTag.attributes).toEqual(tags.at(1).attributes);
+        });
+    });
+
     describe("when a valid tag is entered", function() {
         var tagName;
         beforeEach(function() {

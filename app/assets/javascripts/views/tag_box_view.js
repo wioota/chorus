@@ -7,8 +7,13 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.requiredResources.add(this.model);
         this.tags = this.model.tags();
         this.tagsInput = new chorus.views.TagsInput({tags: this.tags});
+        this.bindings.add(this.tagsInput, "tag:click", this.navigateToTagShowPage);
         this.bindings.add(this.tags, "add", this.saveTags);
         this.bindings.add(this.tags, "remove", this.saveTags);
+    },
+
+    navigateToTagShowPage: function(tag) {
+        chorus.router.navigate("#//tags/" + encodeURIComponent(tag.get('name')));
     },
 
     resourcesLoaded: function() {
