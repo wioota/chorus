@@ -17,7 +17,7 @@ gem 'attr_encrypted'
 gem 'tabcmd_gem', :github => "GreenplumChorus/tableau"
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
 gem "logger-syslog", :github => 'scambra/logger-syslog'
-gem 'sequel', :require => 'sequel/no_core_ext'
+gem 'sequel', :require => 'sequel/no_core_ext', github: 'pivotal-leopold/sequel'
 gem 'newrelic_rpm'
 gem 'acts-as-taggable-on', '~> 2.3.1'
 
