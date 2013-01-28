@@ -41,9 +41,9 @@ class WorkspaceMigrator < AbstractMigrator
             ELSE true
           END,
           archived_timestamp AT TIME ZONE 'UTC',
-          archivers.id,
+          (SELECT users.id FROM users WHERE users.username = edc_workspace.archiver ORDER BY users.legacy_id DESC limit 1),
           summary,
-          owners.id,
+          (SELECT users.id FROM users WHERE users.username = edc_workspace.owner ORDER BY users.legacy_id DESC limit 1),
           true,
           true,
           true,
@@ -55,8 +55,6 @@ class WorkspaceMigrator < AbstractMigrator
           created_tx_stamp AT TIME ZONE 'UTC',
           last_updated_tx_stamp AT TIME ZONE 'UTC'
         FROM edc_workspace
-          LEFT JOIN users archivers ON archivers.username = archiver AND archivers.deleted_at IS NULL
-          LEFT JOIN users owners ON owners.username = owner AND owners.deleted_at IS NULL
         WHERE edc_workspace.id NOT IN (SELECT legacy_id FROM workspaces);
       SQL
     end

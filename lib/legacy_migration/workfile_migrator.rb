@@ -45,7 +45,7 @@ class WorkfileMigrator < AbstractMigrator
         SELECT
           edc_work_file.id,
           workspace.id,
-          owner.id,
+          (SELECT users.id FROM users WHERE users.username = edc_work_file.owner ORDER BY users.legacy_id DESC limit 1),
           description,
           created_tx_stamp AT TIME ZONE 'UTC',
           file_name,
@@ -55,9 +55,6 @@ class WorkfileMigrator < AbstractMigrator
             ELSE null
           END
         FROM edc_work_file
-        INNER JOIN users owner
-          ON owner.username = edc_work_file.owner
-            AND owner.deleted_at IS NULL
         INNER JOIN workspaces workspace
           ON workspace.legacy_id = edc_work_file.workspace_id
         WHERE edc_work_file.id NOT IN (SELECT legacy_id FROM workfiles);
@@ -97,18 +94,12 @@ class WorkfileMigrator < AbstractMigrator
           edc_workfile_version.id,
           workfiles.id,
           version_num,
-          owner.id,
-          modifier.id,
+          (SELECT users.id FROM users WHERE users.username = edc_workfile_version.version_owner ORDER BY users.legacy_id DESC limit 1),
+          (SELECT users.id FROM users WHERE users.username = edc_workfile_version.modified_by ORDER BY users.legacy_id DESC limit 1),
           created_tx_stamp AT TIME ZONE 'UTC',
           last_updated_tx_stamp AT TIME ZONE 'UTC',
           commit_message
         FROM edc_workfile_version
-        INNER JOIN users owner
-          ON owner.username = edc_workfile_version.version_owner
-            AND owner.deleted_at IS NULL
-        INNER JOIN users modifier
-          ON modifier.username = edc_workfile_version.modified_by
-            AND modifier.deleted_at IS NULL
         INNER JOIN workfiles
           ON edc_workfile_version.workfile_id = workfiles.legacy_id
         WHERE edc_workfile_version.id NOT IN (SELECT legacy_id FROM workfile_versions);
@@ -127,13 +118,10 @@ class WorkfileMigrator < AbstractMigrator
           edc_workfile_draft.id,
           workfiles.id,
           base_version_num,
-          owner.id,
+          (SELECT users.id FROM users WHERE users.username = edc_workfile_draft.draft_owner ORDER BY users.legacy_id DESC limit 1),
           created_tx_stamp AT TIME ZONE 'UTC',
           last_updated_tx_stamp AT TIME ZONE 'UTC'
         FROM edc_workfile_draft
-        INNER JOIN users owner
-          ON owner.username = edc_workfile_draft.draft_owner
-            AND owner.deleted_at IS NULL
         INNER JOIN workfiles
           ON edc_workfile_draft.workfile_id = workfiles.legacy_id
         WHERE is_deleted = 'f'

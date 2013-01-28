@@ -33,14 +33,11 @@ class GpdbInstanceMigrator < AbstractMigrator
                               i.provision_type,
                               i.instance_provider,
                               i.maintenance_db,
-                              u.id,
+                              (SELECT users.id FROM users WHERE users.username = i.owner ORDER BY users.legacy_id DESC limit 1),
                               i.state,
                               i.created_tx_stamp,
                               i.last_updated_tx_stamp
                             FROM edc_instance i
-                              INNER JOIN users u
-                              ON u.username = i.owner
-                                AND u.deleted_at IS NULL
                             WHERE instance_provider = 'Greenplum Database'
                             AND i.id NOT IN (SELECT legacy_id FROM gpdb_instances);")
 

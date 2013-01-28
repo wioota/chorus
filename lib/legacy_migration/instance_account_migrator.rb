@@ -31,14 +31,11 @@ class InstanceAccountMigrator < AbstractMigrator
                               SELECT
                                 map.id,
                                 db_user_name,
-                                u.id,
+                                (SELECT users.id FROM users WHERE users.username = map.user_name ORDER BY users.legacy_id DESC limit 1),
                                 i.id,
                                 map.created_tx_stamp AT TIME ZONE 'UTC',
                                 map.last_updated_tx_stamp AT TIME ZONE 'UTC'
                               FROM edc_account_map map
-                              INNER JOIN users u
-                                ON u.username = map.user_name
-                                  AND u.deleted_at IS NULL
                               INNER JOIN gpdb_instances i
                                 ON map.instance_id = i.legacy_id
                               WHERE map.id NOT IN (SELECT legacy_id FROM instance_accounts)

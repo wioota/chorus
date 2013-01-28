@@ -21,14 +21,11 @@ class MembershipMigrator < AbstractMigrator
                                 updated_at)
                               SELECT
                                 edc_member.id::integer,
-                                users.id,
+                                (SELECT users.id FROM users WHERE users.username = edc_member.member_name ORDER BY users.legacy_id DESC limit 1),
                                 workspaces.id,
                                 edc_member.created_tx_stamp,
                                 edc_member.last_updated_tx_stamp
                               FROM edc_member
-                                JOIN users
-                                ON users.username = edc_member.member_name
-                                  AND users.deleted_at IS NULL
                                 JOIN workspaces
                                 ON workspaces.legacy_id = edc_member.workspace_id
                               WHERE edc_member.id NOT IN (SELECT legacy_id FROM memberships);")

@@ -31,16 +31,13 @@ class HadoopInstanceMigrator < AbstractMigrator
           i.description,
           i.host,
           i.port,
-          u.id,
+          (SELECT users.id FROM users WHERE users.username = i.owner ORDER BY users.legacy_id DESC limit 1),
           split_part(map.db_user_name, ',', 1),
           substring(map.db_user_name, position(',' in map.db_user_name) + 1),
           i.created_tx_stamp,
           i.last_updated_tx_stamp,
           i.state
         FROM edc_instance i
-          INNER JOIN users u
-          ON u.username = i.owner
-            AND u.deleted_at IS NULL
           INNER JOIN edc_account_map map
           ON map.instance_id = i.id
         WHERE instance_provider = 'Hadoop'

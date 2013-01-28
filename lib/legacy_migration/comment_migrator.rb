@@ -12,7 +12,7 @@ class CommentMigrator < AbstractMigrator
     end
 
     def migrate_comments_on_type(entity_type)
-      Legacy.connection.exec_query(%Q(
+      Legacy.connection.exec_query(<<-SQL)
       INSERT INTO comments(
         legacy_id,
         body,
@@ -26,7 +26,7 @@ class CommentMigrator < AbstractMigrator
         edc_comment.id,
         body,
         events.id,
-        users.id,
+        (SELECT users.id FROM users WHERE users.username = edc_comment.author_name ORDER BY users.legacy_id DESC limit 1),
         edc_comment.created_stamp AT TIME ZONE 'UTC',
         edc_comment.last_updated_stamp AT TIME ZONE 'UTC',
         CASE edc_comment.is_deleted
@@ -38,12 +38,10 @@ class CommentMigrator < AbstractMigrator
         INNER JOIN events
           ON events.legacy_id = edc_comment.entity_id
           AND events.legacy_type = 'edc_#{entity_type}'
-        INNER JOIN users
-          ON users.username = edc_comment.author_name and users.deleted_at IS NULL
       WHERE
         edc_comment.entity_type = '#{entity_type.gsub("_", "")}'
         AND edc_comment.id NOT IN (SELECT legacy_id from comments);
-      ))
+      SQL
     end
   end
 end
