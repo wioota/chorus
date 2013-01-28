@@ -39,6 +39,8 @@ $link-color : #2c95dd;
 $content-header-link-color: $color-text4;
 $content-details-action-link-color: #4E7225;
 
+$dialog-background-color: white;
+
 $element-background: white;
 $button-background-color : white;
 
@@ -162,13 +164,6 @@ $summary-line-height: 19px;
     @include debugging-mixin;
     font-size: 13px;
     font-weight: normal;
-    color: black;
-}
-
-@mixin font-normal-gamma {
-    @include debugging-mixin;
-    font-size: 12px;
-    font-weight: $semibold;
     color: black;
 }
 

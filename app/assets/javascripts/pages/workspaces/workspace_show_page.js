@@ -19,7 +19,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     },
 
     decideIfQuickstart: function() {
-        if (this.model.owner().get("id") === chorus.session.user().get("id")){
+        if (this.model.owner().get("id") === chorus.session.user().id) {
             if (!this.quickstartNavigated && (
                 this.model.get("hasAddedMember") === false ||
                 this.model.get("hasAddedWorkfile") === false ||

@@ -7,19 +7,27 @@ describe SessionsController do
     let(:params) { {:username => user.username, :password => 'secret'} }
 
     describe "with the correct credentials" do
-
       before do
         stub(CredentialsValidator).user('admin', 'secret') { user }
-        post :create, params
       end
 
       it "succeeds" do
+        post :create, params
         response.code.should == "201"
       end
 
-      it "includes the user info in the response" do
-        decoded_response.should be_present
-        decoded_response.username.should be_present
+      it "should present the user" do
+        mock_present do |model|
+          model.should == user
+        end
+        post :create, params
+      end
+
+      it "includes_api_key when presenting the user" do
+        mock_present do |user, view, options|
+          options[:include_api_key].should == true
+        end
+        post :create, params
       end
 
       it "sets session expiration" do
@@ -63,17 +71,30 @@ describe SessionsController do
 
   describe "#show" do
     context "When logged in" do
-      let(:user) { users(:owner) }
+      let(:user) { users(:default) }
 
       before do
         log_in user
         get :show
       end
-      it "should return the current user" do
+
+      it "should present the user" do
+        mock_present do |model|
+          model.should == user
+        end
+        get :show
         response.code.should == "200"
       end
-      it "should have the user attributes" do
-        decoded_response.username.should == user.username
+
+      it "includes_api_key when presenting the user" do
+        mock_present do |user, view, options|
+          options[:include_api_key].should == true
+        end
+        get :show
+      end
+
+      generate_fixture "session.json" do
+        get :show
       end
     end
 

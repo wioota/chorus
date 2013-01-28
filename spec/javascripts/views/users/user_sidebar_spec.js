@@ -100,6 +100,30 @@ describe("chorus.views.UserSidebar", function() {
             });
         });
 
+        context("when showApiKey is true", function() {
+            beforeEach(function() {
+                setLoggedInUser({ username: 'bill', id : "42" });
+                this.view.options.showApiKey = true;
+                this.view.render();
+            });
+
+            it("should have a 'show api key' action", function() {
+                expect(this.view.$("a.show_api_key")).toContainTranslation('actions.show_api_key');
+            });
+        });
+
+        context("when showApiKey is false", function() {
+            beforeEach(function() {
+                setLoggedInUser({ username: 'bill', id : "42" });
+                this.view.options.showApiKey = false;
+                this.view.render();
+            });
+
+            it("should have a 'show api key' action", function() {
+                expect(this.view.$("a.show_api_key")).not.toExist();
+            });
+        });
+
         describe("listMode", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});

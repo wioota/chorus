@@ -30,6 +30,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         _.defer(_.bind(this.render, this));
         this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
         this.workspace.loaded = true;
+        this.workspace._sandbox = new chorus.models.Sandbox();
+        this.instanceAccount = new chorus.models.InstanceAccount();
         this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"});
 
         //ChartTask require a dataset
@@ -90,6 +92,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
                 content: new chorus.views.StaticTemplate("ipsum")
             }),
+
+            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: this.instanceAccount, pageModel: this.workspace}),
+
+            "Change Password Dialog": new chorus.dialogs.ChangePassword(),
+
+            "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
 
@@ -314,6 +322,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             view.delegateEvents();
             view.render();
         });
+
+        $("body").css("overflow", "visible");
 
         return this;
     }

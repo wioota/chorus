@@ -34,7 +34,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
                     this.page = new chorus.pages.WorkspaceShowPage('4');
                     this.page.model._owner = { id: 4 };
-                    setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
+                    setLoggedInUser({id: "4"}, this.chorus);
                 });
 
                 describe("the fetch completes", function() {
@@ -64,7 +64,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                     spyOn(chorus.router, "navigate");
                     this.page = new chorus.pages.WorkspaceShowPage('4');
                     this.page.model._owner = { id: 9877 };
-                    setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
+                    setLoggedInUser({id: "4"}, this.chorus);
                 });
 
                 it("does not navigate to the quickstart page", function() {
@@ -85,7 +85,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 spyOn(chorus.router, "navigate");
                 this.page = new chorus.pages.WorkspaceShowPage('4');
                 this.page.model._owner = { id: 4 };
-                setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
+                setLoggedInUser({id: "4"}, this.chorus);
             });
 
             describe("the fetch completes", function() {

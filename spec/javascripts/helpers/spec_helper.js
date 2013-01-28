@@ -412,17 +412,10 @@
 
     window.setLoggedInUser = function(options, chorusInstance) {
         var target = (chorusInstance || chorus);
-        var user;
         if(options instanceof chorus.models.User) {
-            user = options.clone();
-        } else {
-            user = new chorus.models.User(_.extend({
-                username: 'chorusadmin',
-                id: "10000"
-            }, options));
+            options = options.attributes;
         }
-        target.session._user = user;
-        target.session.set({id: target.session._user.get('id')});
+        target.session = rspecFixtures.session(options);
     };
 
     window.stubView = function(html, options) {

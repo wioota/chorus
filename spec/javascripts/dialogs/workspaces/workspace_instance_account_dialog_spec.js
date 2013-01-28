@@ -16,7 +16,7 @@ describe("chorus.dialogs.WorkspaceInstanceAccount", function() {
         });
 
         it("has the right body text", function() {
-            expect(this.dialog.$('label')).toContainTranslation("workspace.instance.account.body", {instanceName: this.workspace.sandbox().database().instance().get("name")});
+            expect(this.dialog.$('.dialog_content')).toContainTranslation("workspace.instance.account.body", {instanceName: this.workspace.sandbox().database().instance().get("name")});
         });
     });
 });

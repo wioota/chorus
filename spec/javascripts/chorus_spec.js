@@ -683,9 +683,9 @@ describe("chorus global", function() {
         });
 
         it("deletes the user from the session", function () {
-            expect(this.chorus.session._user).toBeTruthy();
+            var user = this.chorus.session.user();
             this.chorus.requireLogin();
-            expect(this.chorus.session._user).toBeUndefined();
+            expect(this.chorus.session.user()).not.toEqual(user);
         });
 
         it("tells the session to save the path of the page the user was trying to get to", function() {

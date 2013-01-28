@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     user = CredentialsValidator.user(params[:session][:username], params[:session][:password])
     session[:user_id] = user.id
     force_extend_expiration
-    present user, :status => :created
+    present user, :status => :created, :presenter_options => {:include_api_key => true}
   rescue CredentialsValidator::Invalid => e
     present_validation_errors e.record.errors, :status => :unauthorized
   end
@@ -17,6 +17,6 @@ class SessionsController < ApplicationController
   end
 
   def show
-    present current_user
+    present current_user, :presenter_options => {:include_api_key => true}
   end
 end

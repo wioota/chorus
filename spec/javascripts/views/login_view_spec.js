@@ -105,7 +105,7 @@ describe("chorus.views.Login", function() {
 
             context("from the same user that timed out", function() {
                 beforeEach(function() {
-                    setLoggedInUser({id: "2", username: "iAmNumberTwo"});
+                    chorus.session.user().set('id', '2');
 
                     this.view.model.trigger('saved', this.view.model);
                 });
@@ -117,7 +117,7 @@ describe("chorus.views.Login", function() {
 
             context("from a different user that timed out", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id: "3", username: "iAmNumberThree" });
+                    chorus.session.user().set('id', '3');
 
                     this.view.model.trigger('saved', this.view.model);
                 });

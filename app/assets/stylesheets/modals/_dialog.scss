@@ -1,7 +1,10 @@
 .dialog {
+    max-width: 500px;
+    min-width: 450px;
     .dialog_header {
         height: 54px;
         border-bottom: 1px solid $border-color;
+        background-color: $dialog-background-color;
 
         h1 {
             @include heading-normal;
@@ -20,10 +23,11 @@
         background-color: $body-background-color;
         padding: 10px $dialog-padding;
 
+        @include font-normal-alpha;
+
         .menus {
             height: 30px;
         }
-
     }
 
     fieldset {
@@ -89,5 +93,16 @@
     float: right;
     font-size: 13px;
   }
-}
 
+  .display_box {
+     margin-top: 10px;
+     padding: 10px;
+     overflow-y: auto;
+     overflow-x: hidden;
+     max-height: 100px;
+     border: 1px solid $border-color;
+     @include font-normal-delta;
+     margin-left: 14px;
+     margin-right: 14px;
+  }
+}
