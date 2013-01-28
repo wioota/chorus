@@ -56,7 +56,8 @@
             ["hadoop_instances/:instanceId/browseFile/:id", "HdfsShowFile"],
             ["notifications", "NotificationIndex"],
             ["styleguide", "StyleGuide"],
-            ["tags", "TagIndex"]
+            ["tags", "TagIndex"],
+            ["tags/:name", "TagShow"]
         ],
 
         initialize:function (app) {

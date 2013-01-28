@@ -70,9 +70,10 @@ describe 'viewing all the entities sharing a specific tag' do
     find('span', :text => 'crazy_tag').click
     current_route.should == "/tags/crazy_tag"
 
+    page.should have_content("crazy_tag")
+
     pending "#39968421: need to implement tag show page"
 
-    page.should have_content("crazy_tag")
     page.should have_content(workfile.file_name)
   end
 end

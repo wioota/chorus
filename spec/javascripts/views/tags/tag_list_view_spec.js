@@ -31,11 +31,25 @@ describe("chorus.views.TagList", function() {
         });
 
         it("should display all the tags", function() {
+            expect(this.view.$('li[data-id]').length).toBeGreaterThan(0);
+
             _.each(this.tags.models, function(tag) {
                 var element = this.view.$('li[data-id=' + tag.get('id') + ']');
                 expect(element).toContainText(tag.get('name'));
+                expect(element.find('a').attr("href")).toEqual('#/tags/' + tag.name());
                 expect(element).toContainText(tag.get('count') + " items");
             }, this);
+        });
+
+        describe("when the tag name has special characters", function() {
+            beforeEach(function() {
+                this.tags.reset({ name: '!@#$%^&*()"', id: 1234 }, { silent: true });
+                this.tags.trigger('loaded');
+            });
+
+            it('uri encodes the url', function() {
+                expect(this.view.$('li[data-id=1234] a').attr("href")).toEqual('#/tags/!%40%23%24%25%5E%26*()%22');
+            });
         });
 
         context("when there are no tags", function() {
