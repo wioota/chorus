@@ -22,7 +22,7 @@ describe "Data Sources", :greenplum_integration do
         click_button "Add Data Source"
       end
 
-      find(".gpdb_data_source ul").should have_content("new_gpdb_data_source")
+      find(".data_source ul").should have_content("new_gpdb_data_source")
     end
   end
 end

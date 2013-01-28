@@ -24,7 +24,7 @@ describe "Data Source", :oracle_integration do
       end
 
       #  See Tracker Story #42326927
-      find(".gpdb_data_source ul").should have_content("new_oracle_data_source")
+      find(".data_source ul").should have_content("new_oracle_data_source")
     end
   end
 end
