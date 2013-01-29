@@ -9,7 +9,8 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         }
 
         this.dependsOn(this.model);
-        this.dependsOnChangeWithFunction(this.model, this.buildPage);
+        this.bindings.add(this.model, "loaded", this.buildPage);
+
         this.model.fetch();
 
         this.workspace = this.model.workspace();

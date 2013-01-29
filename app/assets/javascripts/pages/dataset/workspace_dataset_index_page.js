@@ -6,9 +6,9 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.workspace.fetch();
-        this.bindings.add(this.workspace, "loaded", this.entriesFetched);
+
         this.dependsOn(this.workspace);
-        this.dependsOnChangeWithFunction(this.workspace, this.workspaceLoaded);
+        this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
 
         this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("objectName");
@@ -75,11 +75,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
     },
 
-    entriesFetched: function() {
-        this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
-        this.render();
-    },
-
     crumbs: function() {
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
@@ -90,6 +85,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     },
 
     workspaceLoaded: function() {
+        this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
         this.render();
 
         var targetButton = this.mainContent.options.buttons[0];

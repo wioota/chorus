@@ -50,17 +50,6 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         this.bindings.add(resource, "change", this.render);
     },
 
-    dependsOnChangeWithFunction: function(resource, functionToCallWhenLoaded){
-        if (functionToCallWhenLoaded) {
-            if (
-                resource.loaded) {
-                functionToCallWhenLoaded.apply(this);
-            } else {
-                this.bindings.add(resource, "loaded", functionToCallWhenLoaded);
-            }
-        }
-    },
-
     failurePageOptions: function() {}
 });
 

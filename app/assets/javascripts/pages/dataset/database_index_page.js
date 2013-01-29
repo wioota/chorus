@@ -12,7 +12,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.collection.fetchAll();
 
         this.dependsOn(this.instance);
-        this.dependsOnChangeWithFunction(this.instance, this.instanceLoaded);
+        this.bindings.add(this.instance, "loaded", this.instanceLoaded);
 
         this.dependsOn(this.collection);
 

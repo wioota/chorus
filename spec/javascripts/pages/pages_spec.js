@@ -50,37 +50,6 @@ describe("chorus.pages.Base", function() {
             });
         });
 
-        context("when a function is provided", function() {
-            beforeEach(function() {
-                this.page = new chorus.pages.Bare();
-                this.model = new chorus.models.Base();
-            });
-
-            context("and the dependence is already loaded", function() {
-                beforeEach(function() {
-                    expect(this.page.foo).toBeUndefined();
-                    this.model.loaded = true;
-                    this.page.dependsOnChangeWithFunction(this.model, function() {this.foo = true;});
-                });
-
-                it("calls the function immediately", function() {
-                    expect(this.page.foo).toBeTruthy();
-                });
-            });
-
-            context("once the dependency is loaded", function() {
-                beforeEach(function() {
-                    this.page.dependsOnChangeWithFunction(this.model, function() {this.foo = true;});
-                });
-
-                it("calls the function ", function() {
-                    expect(this.page.foo).toBeUndefined();
-                    this.model.trigger("loaded");
-                    expect(this.page.foo).toBeTruthy();
-                });
-            });
-        });
-
         context("when the entity is unprocessable", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
