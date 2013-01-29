@@ -1,7 +1,7 @@
 class Search
   include ActiveModel::Validations
   include ChorusApiValidationFormat
-  attr_accessor :query, :page, :per_page, :workspace_id, :search_type
+  attr_accessor :query, :page, :per_page, :workspace_id, :search_type, :is_tag
   attr_reader :models_to_search, :per_type, :current_user
 
   validate :valid_entity_type
@@ -13,6 +13,7 @@ class Search
     self.per_type = params[:per_type]
     self.workspace_id = params[:workspace_id]
     self.search_type = params[:search_type]
+    self.is_tag = params[:tag].to_s == 'true'
     if per_type
       self.per_page = 100
     else
@@ -22,58 +23,54 @@ class Search
     self.entity_type = params[:entity_type]
   end
 
-  def search
-    return @search if @search
-    raise ApiValidationError.new(errors) unless valid?
-
-    begin
-      build_search
-
-      @search.execute
-      @search
-    rescue => e
-      raise SunspotError.new(e.message)
-    end
+  def models_with_tags
+    @models_to_search.select &:taggable?
   end
 
-  def build_search
-    @search = Sunspot.new_search(*(models_to_search + [Events::Note, Comment])) do
-      group :grouping_id do
-        limit 3
-        truncate
-      end
-      fulltext query do
-        highlight :max_snippets => 100
-      end
-      paginate :page => page, :per_page => per_page
+  def search
+    @search ||= begin
+      raise ApiValidationError.new(errors) unless valid?
+      return if is_tag
 
-      if count_using_facets?
-        facet :type_name
+      begin
+        search = build_search
+        search.execute
+        search
+      #rescue => e
+      #  raise SunspotError.new(e.message)
       end
-
-      with :type_name, type_names_to_search
-    end
-    models_to_search.each do |model_to_search|
-      model_to_search.add_search_permissions(current_user, @search) if model_to_search.respond_to? :add_search_permissions
     end
   end
 
   def models
-    return @models if @models
-    @models = Hash.new() { |hsh, key| hsh[key] = [] }
+    @models ||= begin
+      models = Hash.new() { |hsh, key| hsh[key] = [] }
 
-    search.associate_grouped_notes_with_primary_records
+      if is_tag
+        models_with_tags.each do |model_class|
+          results = model_class.tagged_with(query).paginate(:page => self.page, :per_page => self.per_page)
+          results.each do |result|
+            save_model(models, model_class.name, result)
+          end
+        end
+      else
+        search.associate_grouped_notes_with_primary_records
 
-    search.results.each do |result|
-      model_key = class_name_to_key(result.type_name)
-      @models[model_key] << result unless per_type && @models[model_key].length >= per_type
+        search.results.each do |result|
+          save_model(models, result.type_name, result)
+        end
+
+        populate_missing_records models
+      end
+
+      models[:this_workspace] = workspace_specific_results.results if workspace_specific_results
+      models
     end
+  end
 
-    populate_missing_records
-
-    populate_workspace_specific_results
-
-    @models
+  def save_model(models, class_name, model)
+    model_key = class_name_to_key(class_name)
+    models[model_key] << model unless per_type && models[model_key].length >= per_type
   end
 
   def users
@@ -109,20 +106,26 @@ class Search
   end
 
   def num_found
-    return @num_found if @num_found
-
-    @num_found = Hash.new(0)
-    if count_using_facets?
-      search.facet(:type_name).rows.each do |facet|
-        @num_found[class_name_to_key(facet.value)] = facet.count
+    @num_found ||= begin
+      num_found = Hash.new(0)
+      if is_tag
+        models_with_tags.each do |model_class|
+          model_key = class_name_to_key(model_class.name)
+          num_found[model_key] = model_class.tagged_with(query).count
+        end
+      else
+        if count_using_facets?
+          search.facet(:type_name).rows.each do |facet|
+            num_found[class_name_to_key(facet.value)] = facet.count
+          end
+        else
+          num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
+        end
       end
-    else
-      @num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
+
+      num_found[:this_workspace] = workspace_specific_results.num_found if workspace_specific_results
+      num_found
     end
-
-    populate_workspace_specific_results
-
-    @num_found
   end
 
   def per_type=(new_type)
@@ -154,7 +157,7 @@ class Search
     name.to_s.underscore.pluralize.to_sym
   end
 
-  def populate_missing_records
+  def populate_missing_records(models)
     return unless per_type
 
     type_names_to_search.each do |type_name|
@@ -171,19 +174,42 @@ class Search
     models_to_search.map(&:type_name).uniq
   end
 
-  def populate_workspace_specific_results
+  def workspace_specific_results
     return unless workspace_id.present?
-    return if models.has_key? :this_workspace
-    type_name = type_names_to_search.first
-    options = { :workspace_id => workspace_id, :per_page => per_type, :query => query }
-    options.merge!({:entity_type => type_name}) if @entity_type_set
-    workspace_search = WorkspaceSearch.new(current_user, options)
-    models[:this_workspace] = workspace_search.results
-    num_found[:this_workspace] = workspace_search.num_found
+    @workspace_specific_results ||= begin
+      type_name = type_names_to_search.first
+      options = { :workspace_id => workspace_id, :per_page => per_type, :query => query }
+      options.merge!({:entity_type => type_name}) if @entity_type_set
+      WorkspaceSearch.new(current_user, options)
+    end
   end
 
   def valid_entity_type
     errors.add(:entity_type, :invalid_entity_type) if models_to_search.blank?
   end
 
+  private
+
+  def build_search
+    search = Sunspot.new_search(*(models_to_search + [Events::Note, Comment])) do
+      group :grouping_id do
+        limit 3
+        truncate
+      end
+      fulltext query do
+        highlight :max_snippets => 100
+      end
+      paginate :page => page, :per_page => per_page
+
+      if count_using_facets?
+        facet :type_name
+      end
+
+      with :type_name, type_names_to_search
+    end
+    models_to_search.each do |model_to_search|
+      model_to_search.add_search_permissions(current_user, search) if model_to_search.respond_to? :add_search_permissions
+    end
+    search
+  end
 end

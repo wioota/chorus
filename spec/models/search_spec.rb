@@ -193,6 +193,25 @@ describe Search do
         end
       end
     end
+
+    describe "tag search" do
+      let!(:workfile) { FactoryGirl.create :workfile, :tag_list => "youll_only_find_this_here" }
+      let(:search) { Search.new(user, :tag => true, :query => "youll_only_find_this_here") }
+
+      it "returns models with the specified tag" do
+        search.num_found[:workfiles].should == 1
+        search.models[:workfiles].should =~ [workfile]
+      end
+
+      describe "pagination" do
+        let!(:workfile2) { FactoryGirl.create :workfile, :tag_list => "youll_only_find_this_here" }
+        it "supports pagination" do
+          search = Search.new(user, :tag => true, :query => 'youll_only_find_this_here', :page => 2, :per_page => 1)
+          search.num_found[:workfiles].should == 2
+          search.models[:workfiles].length.should == 1
+        end
+      end
+    end
   end
 
   context "with solr enabled" do

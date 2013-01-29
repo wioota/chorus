@@ -85,6 +85,36 @@ describe("chorus.models.SearchResult", function() {
                     expectShowUrl("#/workspaces/5/search/jackson5");
                 });
             });
+
+            describe("searching for tags", function() {
+                beforeEach(function() {
+                    this.model.set({ isTag: true });
+                });
+
+                context("when searching all of chorus", function() {
+                    beforeEach(function() {
+                        this.model.set({ searchIn: "all" });
+                    });
+
+                    context("when searching for a particular entity type", function() {
+                        beforeEach(function() {
+                            this.model.set({ entityType: "workfile" });
+                        });
+
+                        expectPaginatedUrl("/search/?tag=true&query=jackson5&entity_type=workfile&workspace_id=5");
+                        expectShowUrl("#/workspaces/5/tags/all/workfile/jackson5");
+                    });
+
+                    context("when searching for any entity type", function() {
+                        beforeEach(function() {
+                            this.model.set({ entityType: "all" });
+                        });
+
+                        expectUrl("/search/?tag=true&query=jackson5&workspace_id=5");
+                        expectShowUrl("#/workspaces/5/tags/jackson5");
+                    });
+                });
+            });
         });
 
         context("when not prioritizing a particular workspace", function() {

@@ -1,21 +1,27 @@
-chorus.pages.TagShowPage = chorus.pages.Base.extend({
+chorus.pages.TagShowPage = chorus.pages.SearchIndexPage.extend({
 
     crumbs: function() {
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.tags"), url: "#/tags" },
-            { label: this.model.name() }
+            { label: this.tagModel.name() }
         ];
     },
 
     setup: function(name) {
-        this.model = new chorus.models.Tag({name: name});
-        this.mainContent = new chorus.views.MainContentView({
-            contentHeader: new chorus.views.ListHeaderView({
-                title: t("tag.show.title", {
-                    name: this.model.name()
-                })
-            })
+        this._super("setup", arguments);
+        this.tagModel = new chorus.models.Tag({name: name});
+    },
+
+    parseSearchParams: function(){
+        var attrs = this._super("parseSearchParams", arguments);
+        attrs.isTag = true;
+        return attrs;
+    },
+
+    title: function() {
+        return t("tag.show.title", {
+            name: this.tagModel.name()
         });
     }
 });

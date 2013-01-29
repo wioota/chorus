@@ -62,10 +62,16 @@
                 prefix = "workspaces/" + workspaceId + "/";
             }
 
-            if (this.isConstrained()) {
-                return prefix + "search/" + this.searchIn() + "/" + this.entityType() + "/" + encodeURIComponent(this.get("query"));
+            if (this.get("isTag")) {
+                prefix += "tags/";
             } else {
-                return prefix + "search/" + encodeURIComponent(this.get("query"));
+                prefix += "search/";
+            }
+
+            if (this.isConstrained()) {
+                return prefix + this.searchIn() + "/" + this.entityType() + "/" + encodeURIComponent(this.get("query"));
+            } else {
+                return prefix + encodeURIComponent(this.get("query"));
             }
         },
 
@@ -111,6 +117,10 @@
 
         urlParams: function() {
             var params = { query: this.get("query") };
+
+            if(this.get("isTag")){
+                params.tag = true;
+            }
             if (this.hasSpecificEntityType()) {
                 params.entityType = this.entityType();
             }

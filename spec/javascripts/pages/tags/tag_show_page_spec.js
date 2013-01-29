@@ -26,10 +26,15 @@ describe("chorus.pages.TagShowPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             page.render();
+            this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
         });
 
         it('displays the page title', function() {
             expect(page.$('h1')).toContainTranslation("tag.show.title", {name: "tag-name"});
         });
+    });
+
+    it("searches tags", function() {
+        expect(page.search.get("isTag")).toBeTruthy();
     });
 });

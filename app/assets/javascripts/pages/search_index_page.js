@@ -52,12 +52,16 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         ];
     },
 
+    title: function() {
+        return t("search.index.title", {
+            query: this.model.displayShortName()
+        });
+    },
+
     resourcesLoaded: function() {
         this.mainContent = new chorus.views.MainContentView({
             contentHeader: new chorus.views.ListHeaderView({
-                title: t("search.index.title", {
-                    query: this.model.displayShortName()
-                }),
+                title: this.title(),
                 linkMenus: {
                     search_in: {
                         title: t("search.search_in"),
