@@ -416,6 +416,7 @@ DEPENDENCIES
   rails (= 3.2.11)
   rake
   rr
+  rspec
   rspec-rails
   rspec_api_documentation!
   ruby-debug
