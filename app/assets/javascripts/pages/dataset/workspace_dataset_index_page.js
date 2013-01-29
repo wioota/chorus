@@ -7,12 +7,13 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.workspace.fetch();
         this.bindings.add(this.workspace, "loaded", this.entriesFetched);
-        this.dependOn(this.workspace, this.workspaceLoaded);
+        this.dependsOn(this.workspace);
+        this.dependsOnChangeWithFunction(this.workspace, this.workspaceLoaded);
 
         this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("objectName");
         this.collection.fetch();
-        this.dependOn(this.collection);
+        this.dependsOn(this.collection);
 
         chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
             this.model = dataset;

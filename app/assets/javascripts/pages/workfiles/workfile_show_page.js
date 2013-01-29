@@ -8,7 +8,8 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
             this.model.set({ versionInfo : { id: versionId } }, { silent:true });
         }
 
-        this.dependOn(this.model, this.buildPage);
+        this.dependsOn(this.model);
+        this.dependsOnChangeWithFunction(this.model, this.buildPage);
         this.model.fetch();
 
         this.workspace = this.model.workspace();

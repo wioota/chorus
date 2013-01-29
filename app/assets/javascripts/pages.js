@@ -42,17 +42,21 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/unprocessableEntity");
     },
 
-    dependOn: function(model, functionToCallWhenLoaded) {
-        this.bindings.add(model, "resourceNotFound", this.dependentResourceNotFound);
-        this.bindings.add(model, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, model));
-        this.bindings.add(model, "unprocessableEntity", _.bind(this.unprocessableEntity, this, model));
-        this.bindings.add(model, "change", this.render);
+    dependsOn: function(resource) {
+        this.bindings.add(resource, "resourceNotFound", this.dependentResourceNotFound);
+        this.bindings.add(resource, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, resource));
+        this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
+
+        this.bindings.add(resource, "change", this.render);
+    },
+
+    dependsOnChangeWithFunction: function(resource, functionToCallWhenLoaded){
         if (functionToCallWhenLoaded) {
             if (
-                model.loaded) {
+                resource.loaded) {
                 functionToCallWhenLoaded.apply(this);
             } else {
-                this.bindings.add(model, "loaded", functionToCallWhenLoaded);
+                this.bindings.add(resource, "loaded", functionToCallWhenLoaded);
             }
         }
     },

@@ -11,8 +11,8 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
         this.database.fetch();
         this.collection.fetchAll();
 
-        this.dependOn(this.database);
-        this.dependOn(this.collection);
+        this.dependsOn(this.database);
+        this.dependsOn(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",

@@ -21,13 +21,13 @@ describe("chorus.pages.Base", function() {
         });
     });
 
-    describe("#dependOn", function() {
+    describe("#dependsOn", function() {
         context("when resource is not found", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "dependentResourceNotFound");
-                this.page.dependOn(this.model);
+                this.page.dependsOn(this.model);
             });
 
             it("calls dependentResourceNotFound", function() {
@@ -41,7 +41,7 @@ describe("chorus.pages.Base", function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "dependentResourceForbidden");
-                this.page.dependOn(this.model);
+                this.page.dependsOn(this.model);
             });
 
             it("calls dependentResourceForbidden", function() {
@@ -60,7 +60,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     expect(this.page.foo).toBeUndefined();
                     this.model.loaded = true;
-                    this.page.dependOn(this.model, function() {this.foo = true;});
+                    this.page.dependsOnChangeWithFunction(this.model, function() {this.foo = true;});
                 });
 
                 it("calls the function immediately", function() {
@@ -70,7 +70,7 @@ describe("chorus.pages.Base", function() {
 
             context("once the dependency is loaded", function() {
                 beforeEach(function() {
-                    this.page.dependOn(this.model, function() {this.foo = true;});
+                    this.page.dependsOnChangeWithFunction(this.model, function() {this.foo = true;});
                 });
 
                 it("calls the function ", function() {
@@ -86,7 +86,7 @@ describe("chorus.pages.Base", function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "unprocessableEntity");
-                this.page.dependOn(this.model);
+                this.page.dependsOn(this.model);
             });
 
             it("calls unprocessableEntity", function() {
@@ -99,7 +99,7 @@ describe("chorus.pages.Base", function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
                     this.model.serverErrors = { record: "INSTANCE_OVERLOADED" };
-                    this.page.dependOn(this.model);
+                    this.page.dependsOn(this.model);
                 });
 
                 it("has the right translations", function() {
@@ -114,7 +114,7 @@ describe("chorus.pages.Base", function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
                     this.model.serverErrors = { message: "Bad things happened." };
-                    this.page.dependOn(this.model);
+                    this.page.dependsOn(this.model);
                 });
 
                 it("displays the error message it was given", function() {
@@ -164,7 +164,7 @@ describe("chorus.pages.Base", function() {
         context("when the page depends on resources", function() {
             beforeEach(function() {
                 this.resource = rspecFixtures.user();
-                this.view.dependOn(this.resource);
+                this.view.dependsOn(this.resource);
             });
 
             context("when the fetch returns not found", function() {

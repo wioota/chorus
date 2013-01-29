@@ -15,7 +15,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         });
         this.hdfsEntry.fetch();
         this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
-        this.dependOn(this.hdfsEntry);
+        this.dependsOn(this.hdfsEntry);
 
         this.collection = new chorus.collections.HdfsEntrySet([], {
             hadoopInstance: {

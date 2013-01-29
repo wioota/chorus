@@ -5,7 +5,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         this.workspaceId = workspaceId;
         this.model = new chorus.models.Workspace({ id: workspaceId });
         this.bindings.add(this.model, "loaded", this.decideIfQuickstart);
-        this.dependOn(this.model);
+        this.dependsOn(this.model);
         this.model.fetch();
 
         this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"});

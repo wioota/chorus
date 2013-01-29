@@ -7,7 +7,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.bindings.add(this.workspace, "change", this.updateButtons);
         this.workspace.fetch();
-        this.dependOn(this.workspace);
+        this.dependsOn(this.workspace);
 
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
         this.collection.fileType = "";

@@ -34,8 +34,8 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             this.model.urlTemplate = "foo";
             this.otherModel.urlTemplate = "bar";
 
-            this.page.dependOn(this.model);
-            this.page.dependOn(this.otherModel);
+            this.page.dependsOn(this.model);
+            this.page.dependsOn(this.otherModel);
 
             this.modalSpy = stubModals();
             spyOn(Backbone.history, 'loadUrl');

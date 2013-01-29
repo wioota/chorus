@@ -20,7 +20,8 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         setup: function() {
             this.makeModel.apply(this, arguments);
-            this.dependOn(this.dataset, this.datasetLoaded);
+            this.dependsOn(this.dataset);
+            this.dependsOnChangeWithFunction(this.dataset, this.datasetLoaded);
             this.dataset.fetch();
             this.mainContent = new chorus.views.LoadingSection();
         },

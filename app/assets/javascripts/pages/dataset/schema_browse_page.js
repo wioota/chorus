@@ -7,8 +7,9 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.schema = new chorus.models.Schema({ id: schema_id });
         this.collection = this.schema.datasets();
 
-        this.dependOn(this.schema, this.schemaLoaded);
-        this.dependOn(this.collection);
+        this.dependsOn(this.schema);
+        this.dependsOnChangeWithFunction(this.schema, this.schemaLoaded);
+        this.dependsOn(this.collection);
 
         this.schema.fetch();
         this.collection.sortAsc("objectName");
