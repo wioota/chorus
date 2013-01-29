@@ -104,13 +104,8 @@ describe("chorus.models.InstanceAccount", function() {
 
     describe("toJSON", function() {
         it("does not return unnecessary attributes", function() {
-            expect(this.model.toJSON()['account']).toEqual({
-                db_username: "username",
-                owner_id: 1000006,
-                instance_id: "1045",
-                complete_json: true,
-                id: "72"
-            });
+            var json = this.model.toJSON()['account'];
+            expect(json.hasOwnProperty('owner')).toBe(false);
         });
     });
 });

@@ -33,4 +33,8 @@ class DatasetStatistics
     @disk_size = row['disk_size'] && row['disk_size'].to_i
     @partition_count = row['partition_count'] && row['partition_count'].to_i
   end
+
+  def entity_type_name
+    'dataset_statistics'
+  end
 end

@@ -10,7 +10,6 @@ class WorkfilePresenter < Presenter
 
     workfile = {
       :id => model.id,
-      :type => model.entity_type,
       :workspace => present(model.workspace, @options),
       :file_name => model.file_name,
       :file_type => model.content_type,
@@ -18,7 +17,9 @@ class WorkfilePresenter < Presenter
       :is_deleted => model.deleted?,
       :recent_comments => present(recent_comments, :as_comment => true),
       :comment_count => comments.count + notes.count,
-      :tags => present(model.tags, @options)
+      :tags => present(model.tags, @options),
+      :entity_type => model.entity_type_name,
+      :entity_subtype => model.entity_subtype
     }
 
     unless rendering_activities?

@@ -46,7 +46,8 @@ describe EventPresenter, :type => :view do
           hash[:workspace].should have_key(:id)
           hash[:workspace].should have_key(:name)
           hash[:workspace].should have_key(:is_deleted)
-          hash[:workspace].keys.size.should == 3
+          hash[:workspace].should have_key(:entity_type)
+          hash[:workspace].keys.size.should == 4
         end
       end
     end
@@ -153,7 +154,7 @@ describe EventPresenter, :type => :view do
           stub(event).workfiles { [workfile] }
           hash = subject.to_hash
           hash[:attachments].should be_present
-          hash[:attachments][0][:entity_type].should == 'file'
+          hash[:attachments][0][:entity_type].should == 'attachment'
           hash[:attachments][1][:entity_type].should == 'dataset'
           hash[:attachments][2][:entity_type].should == 'workfile'
           hash[:attachments][1][:workspace].should == event.workspace

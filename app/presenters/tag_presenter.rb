@@ -3,7 +3,8 @@ class TagPresenter < Presenter
     {
         :id => model.id,
         :name => model.name,
-        :count => model.taggings_count
+        :count => model.taggings_count,
+        :entity_type => 'tag'
     }
   end
 end

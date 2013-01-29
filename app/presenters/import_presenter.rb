@@ -11,7 +11,8 @@ class ImportPresenter < Presenter
         :source_dataset_id => model.source_dataset_id,
         :source_dataset_name => model.source_dataset.try(:name),
         :file_name => model.file_name,
-        :workspace_id => model.workspace_id
+        :workspace_id => model.workspace_id,
+        :entity_type => model.entity_type_name
     }
   end
 end

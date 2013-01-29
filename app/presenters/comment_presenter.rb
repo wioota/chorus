@@ -6,7 +6,8 @@ class CommentPresenter < Presenter
         :author => present(model.author),
         :body => model.body,
         :action => 'SUB_COMMENT',
-        :timestamp => model.created_at
+        :timestamp => model.created_at,
+        :entity_type => model.entity_type_name
     }
   end
 

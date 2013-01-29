@@ -1,30 +1,31 @@
 class WorkspacePresenter < Presenter
 
   def to_hash
-    if rendering_activities?
-      {
-          :id => model.id,
-          :name => model.name,
-          :is_deleted => model.deleted?
-      }
-    else
-      {
-          :id => model.id,
-          :name => model.name,
-          :summary => sanitize(model.summary),
-          :owner => present(model.owner),
-          :archiver => present(model.archiver),
-          :archived_at => model.archived_at,
-          :public => model.public,
-          :image => present(model.image),
-          :permission => model.permissions_for(current_user),
-          :has_added_member => model.has_added_member,
-          :has_added_workfile => model.has_added_workfile,
-          :has_added_sandbox => model.has_added_sandbox,
-          :has_changed_settings => model.has_changed_settings,
-          :sandbox_info => present(model.sandbox)
-      }.merge(latest_comments_hash)
+    results = {
+        :id => model.id,
+        :name => model.name,
+        :is_deleted => model.deleted?,
+        :entity_type => model.entity_type_name
+    }
+    unless rendering_activities?
+      results.merge!(
+          {
+              :summary => sanitize(model.summary),
+              :owner => present(model.owner),
+              :archiver => present(model.archiver),
+              :archived_at => model.archived_at,
+              :public => model.public,
+              :image => present(model.image),
+              :permission => model.permissions_for(current_user),
+              :has_added_member => model.has_added_member,
+              :has_added_workfile => model.has_added_workfile,
+              :has_added_sandbox => model.has_added_sandbox,
+              :has_changed_settings => model.has_changed_settings,
+              :sandbox_info => present(model.sandbox)
+          }.merge(latest_comments_hash)
+      )
     end
+    results
   end
 
   def complete_json?

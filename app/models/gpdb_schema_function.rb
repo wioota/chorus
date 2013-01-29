@@ -11,4 +11,8 @@ class GpdbSchemaFunction
     @definition = definition
     @description = description
   end
+
+  def entity_type_name
+    'gpdb_schema_function'
+  end
 end

@@ -12,4 +12,8 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
     it('does not render the download link', function(){
         expect(this.view.$('.actions a.download')).not.toExist();
     });
+
+    it('does not render the update time', function(){
+        expect(this.view.$('.info .updated')).not.toExist();
+    });
 });

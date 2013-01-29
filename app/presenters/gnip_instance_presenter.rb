@@ -8,7 +8,7 @@ class GnipInstancePresenter < Presenter
         :description => model.description,
         :username => model.username,
         :state => "online",
-        :entity_type => "gnip_instance"
+        :entity_type => model.entity_type_name
     }.merge(owner_hash)
   end
 

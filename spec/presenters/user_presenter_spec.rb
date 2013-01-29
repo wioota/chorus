@@ -32,8 +32,9 @@ describe UserPresenter, :type => :view do
         hash[:username].should == user.username
         hash[:first_name].should == user.first_name
         hash[:last_name].should == user.last_name
+        hash[:entity_type].should == 'user'
         hash[:image].to_hash.should == (ImagePresenter.new(user.image, view).presentation_hash)
-        hash.keys.size.should == 5
+        hash.keys.size.should == 6
       end
     end
 

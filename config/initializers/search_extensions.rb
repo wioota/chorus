@@ -60,10 +60,6 @@ module SearchExtensions
   def security_type_name
     self.class.security_type_name
   end
-
-  def entity_type_name
-    self.class.name.underscore
-  end
 end
 
 module ActiveRecord

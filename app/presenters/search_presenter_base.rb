@@ -10,8 +10,7 @@ class SearchPresenterBase < Presenter
 
       hsh[:highlighted_attributes] = model.highlighted_attributes
       hsh[:comments] = model.search_result_notes
-      hsh[:entity_type] = model.entity_type_name
-      if hsh[:entity_type] == 'dataset'
+      if model.is_a? Dataset
         extend_result_with_nested_highlights(hsh)
       end
       hsh

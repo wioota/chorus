@@ -19,10 +19,6 @@ class GnipInstance < ActiveRecord::Base
     string :security_type_name, :multiple => true
   end
 
-  def entity_type_name
-    'gnip_instance'
-  end
-
   def self.type_name
     'Instance'
   end

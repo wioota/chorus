@@ -5,7 +5,8 @@ class WorkfileDraftPresenter < Presenter
       :content => model.content,
       :id => model.id,
       :owner_id => model.owner_id,
-      :workfile_id => model.workfile_id
+      :workfile_id => model.workfile_id,
+      :entity_type => model.entity_type_name
     }
   end
 

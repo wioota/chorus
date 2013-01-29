@@ -44,4 +44,8 @@ class GpdbColumn
   def number_or_time?
     [:decimal, :integer, :float, :date, :time, :datetime].include? simplified_type
   end
+
+  def entity_type_name
+    'gpdb_column'
+  end
 end

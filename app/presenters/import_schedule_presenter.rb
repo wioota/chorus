@@ -14,7 +14,8 @@ class ImportSchedulePresenter < Presenter
         :truncate => model.truncate,
         :sample_count => model.sample_count,
         :destination_dataset_id => model.destination_dataset_id,
-        :new_table => model.new_table
+        :new_table => model.new_table,
+        :entity_type => model.entity_type_name
     }
   end
 

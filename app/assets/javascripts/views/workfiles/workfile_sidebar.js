@@ -5,7 +5,8 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     options: {
         showEditingLinks: true,
-        showDownloadLink: true
+        showDownloadLink: true,
+        showUpdatedTime: true
     },
     subviews:{
         '.tab_control': 'tabs'
@@ -87,7 +88,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             showCopyLink: true,
             showDownloadLink: this.options.showDownloadLink,
             showDeleteLink: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
-            showUpdatedTime: true,
+            showUpdatedTime: this.options.showUpdatedTime,
             showVersions: this.options.showVersions
         };
 
@@ -136,19 +137,18 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     }
 
 },
-    {
-        typeMap: {
-            alpine: 'AlpineWorkfileSidebar'
-        },
+{
+    typeMap: {
+        alpine: 'AlpineWorkfileSidebar'
+    },
 
-        buildFor: function(options) {
-            var modelType = options.model.get("type");
+    buildFor: function(options) {
+        var workfileType = options.model.get("entitySubtype");
 
-            if (!chorus.views[this.typeMap[modelType]]) {
-                return new chorus.views.WorkfileSidebar(options);
-            }
-
-            return new chorus.views[this.typeMap[modelType]](options);
+        if (!chorus.views[this.typeMap[workfileType]]) {
+            return new chorus.views.WorkfileSidebar(options);
         }
-}
-);
+
+        return new chorus.views[this.typeMap[workfileType]](options);
+    }
+});

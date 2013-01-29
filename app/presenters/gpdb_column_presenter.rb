@@ -7,7 +7,8 @@ class GpdbColumnPresenter < Presenter
       :data_type => model.data_type,
       :type_category => type_category,
       :description => model.description,
-      :statistics => statistics
+      :statistics => statistics,
+      :entity_type => model.entity_type_name
     }
   end
 

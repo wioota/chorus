@@ -9,7 +9,8 @@ class GpdbSchemaFunctionPresenter < Presenter
         :arg_names => model.arg_names,
         :arg_types => model.arg_types,
         :definition => model.definition,
-        :description => model.description
+        :description => model.description,
+        :entity_type => model.entity_type_name
     }
   end
 

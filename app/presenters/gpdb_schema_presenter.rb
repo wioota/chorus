@@ -7,7 +7,8 @@ class GpdbSchemaPresenter < Presenter
         :database => present(model.database),
         :dataset_count => model.active_tables_and_views.size,
         :has_credentials => model.accessible_to(current_user),
-        :refreshed_at => model.refreshed_at
+        :refreshed_at => model.refreshed_at,
+        :entity_type => model.entity_type_name
     }
   end
 

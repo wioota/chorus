@@ -61,7 +61,7 @@ class Workfile < ActiveRecord::Base
     end
   end
 
-  def entity_type
+  def entity_type_name
     'workfile'
   end
 

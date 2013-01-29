@@ -5,9 +5,9 @@ describe AlpineWorkfile do
     it { should validate_presence_of :alpine_id }
   end
 
-  describe "entity_type" do
+  describe "entity_subtype" do
     it "should return 'alpine'" do
-      AlpineWorkfile.new.entity_type.should == 'alpine'
+      AlpineWorkfile.new.entity_subtype.should == 'alpine'
     end
   end
 end

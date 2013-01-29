@@ -8,7 +8,7 @@ class OracleDataSourcePresenter < Presenter
         :db_name => model.db_name,
         :description => model.description,
         :version => model.version,
-        :entity_type => 'oracle_data_source'
+        :entity_type => model.entity_type_name
     }
   end
 end

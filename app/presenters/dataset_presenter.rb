@@ -15,7 +15,8 @@ class DatasetPresenter < Presenter
       :schema => schema_hash,
       :recent_comments => present(recent_comments, :as_comment => true),
       :comment_count => comments.count + notes.count,
-      :tags => present(model.tags)
+      :tags => present(model.tags),
+      :entity_type => model.entity_type_name
     }.merge(workspace_hash).
       merge(credentials_hash).
       merge(associated_workspaces_hash).

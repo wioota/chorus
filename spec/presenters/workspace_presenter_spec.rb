@@ -71,7 +71,8 @@ describe WorkspacePresenter, :type => :view do
         hash[:id].should == workspace.id
         hash[:name].should == workspace.name
         hash[:is_deleted].should == workspace.deleted?
-        hash.keys.size.should == 3
+        hash[:entity_type].should == 'workspace'
+        hash.keys.size.should == 4
       end
     end
 

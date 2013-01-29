@@ -12,7 +12,7 @@ class GpdbDataSourcePresenter < Presenter
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => 'gpdb_data_source'
+      :entity_type => model.entity_type_name
     }.merge(owner_hash)
   end
 

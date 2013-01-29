@@ -10,7 +10,8 @@ class HdfsEntryPresenter < Presenter
         :last_updated_stamp => model.modified_at.nil? ? "" : model.modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         :hadoop_instance => present(model.hadoop_instance),
         :ancestors => model.ancestors,
-        :path => model.parent_path
+        :path => model.parent_path,
+        :entity_type => model.entity_type_name
     }
 
     if model.is_directory

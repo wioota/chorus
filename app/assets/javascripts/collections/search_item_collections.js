@@ -24,8 +24,7 @@
     };
 
     var constructorMap = {
-        workfile: chorus.models.Workfile,
-        linked_tableau_workfile: chorus.models.Workfile,
+        workfile: chorus.models.DynamicWorkfile,
         dataset: chorus.models.DynamicDataset,
         workspace: chorus.models.Workspace,
         attachment: chorus.models.Attachment
