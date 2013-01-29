@@ -58,7 +58,8 @@
             ["styleguide", "StyleGuide"],
             ["tags", "TagIndex"],
             ["tags/:name", "TagShow"],
-            ["tags/:scope/:entityType/:name", "TagShow"]
+            ["tags/:scope/:entityType/:name", "TagShow"],
+            ["data_sources/:id/schemas", "OracleSchemaIndex"]
         ],
 
         initialize:function (app) {
