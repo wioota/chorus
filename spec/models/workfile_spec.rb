@@ -83,9 +83,9 @@ describe Workfile do
     end
   end
 
-  describe "entity_type" do
+  describe "entity_type_name" do
     it "should return 'workfile'" do
-      Workfile.new.entity_type.should == 'workfile'
+      Workfile.new.entity_type_name.should == 'workfile'
     end
   end
 
