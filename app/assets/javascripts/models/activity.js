@@ -178,9 +178,8 @@
                     var klass;
                     switch (artifactJson.entityType) {
                         case 'workfile':
-                            klass = chorus.models.Workfile;
+                            klass = chorus.models.DynamicWorkfile;
                             break;
-                        case 'chorusView':
                         case 'dataset':
                             klass = chorus.models.WorkspaceDataset;
                             break;

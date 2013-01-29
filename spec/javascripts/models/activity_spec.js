@@ -597,7 +597,7 @@ describe("chorus.models.Activity", function() {
                     { entityType: "workfile", id: 1 },
                     { entityType: "attachment", id: 2 },
                     { entityType: "dataset", id: 3 },
-                    { entityType: "chorusView", id: 4 }
+                    { entityType: "workfile", entitySubtype: "alpine", id: 4 }
                 ]
             });
             this.attachments = this.model.attachments();
@@ -607,7 +607,7 @@ describe("chorus.models.Activity", function() {
             expect(this.attachments[0]).toBeA(chorus.models.Workfile);
             expect(this.attachments[1]).toBeA(chorus.models.Attachment);
             expect(this.attachments[2]).toBeA(chorus.models.WorkspaceDataset);
-            expect(this.attachments[3]).toBeA(chorus.models.WorkspaceDataset);
+            expect(this.attachments[3]).toBeA(chorus.models.AlpineWorkfile);
         });
 
         it("memoizes", function() {
