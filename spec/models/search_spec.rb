@@ -195,20 +195,26 @@ describe Search do
     end
 
     describe "tag search" do
-      let!(:workfile) { FactoryGirl.create :workfile, :tag_list => "youll_only_find_this_here" }
-      let(:search) { Search.new(user, :tag => true, :query => "youll_only_find_this_here") }
+      let(:tag) { ActsAsTaggableOn::Tag.named("alpha").first }
+      let(:search) { Search.new(user, :tag => true, :query => tag.name) }
 
-      it "returns models with the specified tag" do
-        search.num_found[:workfiles].should == 1
-        search.models[:workfiles].should =~ [workfile]
+      before do
+        any_instance_of(Sunspot::Search::AbstractSearch) do |search|
+          stub(search).group_response { {} }
+        end
       end
 
-      describe "pagination" do
-        let!(:workfile2) { FactoryGirl.create :workfile, :tag_list => "youll_only_find_this_here" }
-        it "supports pagination" do
-          search = Search.new(user, :tag => true, :query => 'youll_only_find_this_here', :page => 2, :per_page => 1)
-          search.num_found[:workfiles].should == 2
-          search.models[:workfiles].length.should == 1
+      it "filters by tag_id" do
+        search.models
+        Sunspot.session.should have_search_params(:with, :tag_ids, tag.id)
+        Sunspot.session.should_not have_search_params(:fulltext, tag.name)
+      end
+
+      context "when tag does not exist" do
+        let(:search) { Search.new(user, :tag => true, :query => 'i am not a tag') }
+
+        it "returns empty results" do
+          search.models.values.flatten.should be_empty
         end
       end
     end
@@ -602,6 +608,16 @@ describe Search do
         create_and_record_search(owner, :query => 'alphasearch', :per_type => 1) do |search|
           search.users.length.should == 1
           search.num_found[:users].should > 1
+        end
+      end
+    end
+
+    describe "tag search" do
+      let(:tag) { ActsAsTaggableOn::Tag.named("alpha").first }
+
+      it "returns models with the specified tag" do
+        create_and_record_search(owner, :query => tag.name, :tag => true, :per_type => 1) do |search|
+          search.models[:workfiles].first.tags.should include tag
         end
       end
     end

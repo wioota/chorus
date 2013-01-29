@@ -38,9 +38,9 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''Attachment
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3836117.8,''docs''=>[{''id''=>''Attachment
-        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>3836117.8}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Attachment
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3842670.2,''docs''=>[{''id''=>''Attachment
+        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>3842670.2}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Attachment
         1000008''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@dataset@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 24 Jan 2013 18:20:54 GMT
+  recorded_at: Tue, 29 Jan 2013 22:54:40 GMT
 recorded_with: VCR 2.3.0

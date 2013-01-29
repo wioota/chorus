@@ -21,12 +21,9 @@ class GpdbDataSource < DataSource
   after_update :create_instance_name_changed_event, :if => :current_user
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do
+  searchable_model do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   def self.unshared

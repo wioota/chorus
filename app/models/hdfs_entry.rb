@@ -17,12 +17,9 @@ class HdfsEntry < ActiveRecord::Base
   scope :files, where(:is_directory => false)
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable :unless => lambda { |model| model.is_directory? || model.stale? } do
+  searchable_model :unless => lambda { |model| model.is_directory? || model.stale? } do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :parent_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   before_save :build_full_path, :on_create => true

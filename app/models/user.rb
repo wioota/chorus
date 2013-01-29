@@ -47,14 +47,11 @@ class User < ActiveRecord::Base
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do
+  searchable_model do
     text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :last_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :username, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   before_save :update_password_digest, :unless => lambda { password.blank? }

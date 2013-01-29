@@ -9,11 +9,7 @@ module Events
     validate :no_note_on_archived_workspace, :on => :create
 
     searchable_html :body
-    searchable do
-      string :grouping_id
-      string :type_name
-      string :security_type_name, :multiple => true
-    end
+    searchable_model
 
     attr_accessible :dataset_ids, :workfile_ids
 

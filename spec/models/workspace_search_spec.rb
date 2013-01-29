@@ -44,13 +44,13 @@ describe WorkspaceSearch do
           Sunspot.session.should_not have_search_params(:facet, :type_name)
         end
 
-        context "when scoped" do
+        context "when scoped to a invalid entity type" do
           let(:search) { WorkspaceSearch.new(owner, :query => 'bob', :workspace_id => 7, :entity_type => 'user') }
 
-          it "doesn't break" do
+          it "raises validation error" do
             expect {
               search.results
-            }.to_not raise_error(ApiValidationError)
+            }.to raise_error(ApiValidationError)
           end
         end
       end

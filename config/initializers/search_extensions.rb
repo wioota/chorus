@@ -5,7 +5,8 @@ module SearchExtensions
     class_attribute :shared_search_fields
   end
 
-  class SolrUnreachable < StandardError; end
+  class SolrUnreachable < StandardError;
+  end
 
   module ClassMethods
     def type_name
@@ -20,6 +21,16 @@ module SearchExtensions
         klass = klass.superclass
       end
       types
+    end
+
+    def searchable_model *args, &block
+      searchable(*args, &block) if block_given?
+      searchable do
+        integer :tag_ids, :multiple => true if taggable?
+        string :grouping_id
+        string :type_name
+        string :security_type_name, :multiple => true
+      end
     end
 
     def has_shared_search_fields(field_definitions)
@@ -170,6 +181,7 @@ module Sunspot
     rescue
       nil
     end
+
     alias_method_chain :prepare, :rescue
   end
 end

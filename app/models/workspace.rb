@@ -44,12 +44,9 @@ class Workspace < ActiveRecord::Base
 
   after_update :solr_reindex_later, :if => :public_changed?
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do
+  searchable_model do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   def self.reindex_workspace(workspace_id)

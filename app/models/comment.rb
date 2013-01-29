@@ -11,10 +11,7 @@ class Comment < ActiveRecord::Base
   validates_presence_of :author_id, :body, :event_id
 
   searchable_html :body
-  searchable do
-    string :grouping_id
-    string :type_name
-  end
+  searchable_model
 
   delegate :grouping_id, :type_name, :to => :event
   delegate_search_permissions_for :workspace, :dataset, :to => :event

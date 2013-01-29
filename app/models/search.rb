@@ -1,20 +1,21 @@
 class Search
   include ActiveModel::Validations
   include ChorusApiValidationFormat
-  attr_accessor :query, :page, :per_page, :workspace_id, :search_type, :is_tag
-  attr_reader :models_to_search, :per_type, :current_user
+  attr_accessor :query, :page, :per_page, :workspace_id, :search_type, :is_tag, :tag, :entity_type
+  attr_reader :current_user
+  attr_writer :per_type
 
   validate :valid_entity_type
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, GpdbDataSource, HadoopInstance, GnipInstance, Workspace, Workfile, Dataset, HdfsEntry, Attachment] unless @models_to_search.present?
     self.query = params[:query]
     self.per_type = params[:per_type]
     self.workspace_id = params[:workspace_id]
     self.search_type = params[:search_type]
     self.is_tag = params[:tag].to_s == 'true'
-    if per_type
+    self.tag = ActsAsTaggableOn::Tag.named(query).first if is_tag
+    if per_type > 0
       self.per_page = 100
     else
       self.page = params[:page] || 1
@@ -23,21 +24,27 @@ class Search
     self.entity_type = params[:entity_type]
   end
 
+  def models_to_search
+    [User, GpdbDataSource, HadoopInstance, GnipInstance, Workspace, Workfile, Dataset, HdfsEntry, Attachment].select do |model|
+      entity_type.nil? || class_name_to_key(model.type_name) == class_name_to_key(entity_type)
+    end
+  end
+
   def models_with_tags
-    @models_to_search.select &:taggable?
+    models_to_search.select &:taggable?
   end
 
   def search
     @search ||= begin
       raise ApiValidationError.new(errors) unless valid?
-      return if is_tag
+      return if tag_missing?
 
       begin
         search = build_search
         search.execute
         search
-      #rescue => e
-      #  raise SunspotError.new(e.message)
+      rescue => e
+        raise SunspotError.new(e.message)
       end
     end
   end
@@ -46,31 +53,20 @@ class Search
     @models ||= begin
       models = Hash.new() { |hsh, key| hsh[key] = [] }
 
-      if is_tag
-        models_with_tags.each do |model_class|
-          results = model_class.tagged_with(query).paginate(:page => self.page, :per_page => self.per_page)
-          results.each do |result|
-            save_model(models, model_class.name, result)
-          end
-        end
-      else
-        search.associate_grouped_notes_with_primary_records
+      return models if tag_missing?
 
-        search.results.each do |result|
-          save_model(models, result.type_name, result)
-        end
+      search.associate_grouped_notes_with_primary_records
 
-        populate_missing_records models
+      search.results.each do |result|
+        model_key = class_name_to_key(result.type_name)
+        models[model_key] << result unless per_type > 0 && models[model_key].length >= per_type
       end
+
+      populate_missing_records models
 
       models[:this_workspace] = workspace_specific_results.results if workspace_specific_results
       models
     end
-  end
-
-  def save_model(models, class_name, model)
-    model_key = class_name_to_key(class_name)
-    models[model_key] << model unless per_type && models[model_key].length >= per_type
   end
 
   def users
@@ -108,19 +104,15 @@ class Search
   def num_found
     @num_found ||= begin
       num_found = Hash.new(0)
-      if is_tag
-        models_with_tags.each do |model_class|
-          model_key = class_name_to_key(model_class.name)
-          num_found[model_key] = model_class.tagged_with(query).count
+
+      return num_found if tag_missing?
+
+      if count_using_facets?
+        search.facet(:type_name).rows.each do |facet|
+          num_found[class_name_to_key(facet.value)] = facet.count
         end
       else
-        if count_using_facets?
-          search.facet(:type_name).rows.each do |facet|
-            num_found[class_name_to_key(facet.value)] = facet.count
-          end
-        else
-          num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
-        end
+        num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
       end
 
       num_found[:this_workspace] = workspace_specific_results.num_found if workspace_specific_results
@@ -128,19 +120,8 @@ class Search
     end
   end
 
-  def per_type=(new_type)
-    new_type_as_int = new_type.to_i
-    if new_type_as_int > 0
-      @per_type = new_type_as_int
-    end
-  end
-
-  def entity_type=(new_type)
-    return unless new_type
-    @entity_type_set = true
-    models_to_search.select! do |model|
-      class_name_to_key(model.type_name) == class_name_to_key(new_type)
-    end
+  def per_type
+    @per_type.to_i
   end
 
   def workspace
@@ -149,6 +130,10 @@ class Search
 
   private
 
+  def tag_missing?
+    is_tag && tag.nil?
+  end
+  
   def count_using_facets?
     type_names_to_search.length > 1
   end
@@ -158,8 +143,6 @@ class Search
   end
 
   def populate_missing_records(models)
-    return unless per_type
-
     type_names_to_search.each do |type_name|
       model_key = class_name_to_key(type_name)
       found_count = models[model_key].length
@@ -177,9 +160,9 @@ class Search
   def workspace_specific_results
     return unless workspace_id.present?
     @workspace_specific_results ||= begin
-      type_name = type_names_to_search.first
-      options = { :workspace_id => workspace_id, :per_page => per_type, :query => query }
-      options.merge!({:entity_type => type_name}) if @entity_type_set
+      options = {:workspace_id => workspace_id, :query => query}
+      options.merge!(:entity_type => entity_type) if entity_type
+      options.merge!(:per_page => per_type) if per_type > 0
       WorkspaceSearch.new(current_user, options)
     end
   end
@@ -196,9 +179,15 @@ class Search
         limit 3
         truncate
       end
-      fulltext query do
-        highlight :max_snippets => 100
+
+      if is_tag
+        with :tag_ids, tag.id
+      else
+        fulltext query do
+          highlight :max_snippets => 100
+        end
       end
+
       paginate :page => page, :per_page => per_page
 
       if count_using_facets?

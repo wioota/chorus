@@ -1,6 +1,8 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
 
+  acts_as_taggable
+
   attr_accessible :description, :file_name
 
   serialize :additional_data, JsonHashSerializer
@@ -22,15 +24,12 @@ class Workfile < ActiveRecord::Base
   delegate :member_ids, :public, :to => :workspace
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do
+  searchable_model do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     integer :workspace_id, :multiple => true
     integer :member_ids, :multiple => true
     boolean :public
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   def self.type_name
@@ -48,8 +47,6 @@ class Workfile < ActiveRecord::Base
       end
     end
   end
-
-  acts_as_taggable
 
   def validate_name_uniqueness
     exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)

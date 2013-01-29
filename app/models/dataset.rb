@@ -39,7 +39,7 @@ class Dataset < ActiveRecord::Base
 
   acts_as_taggable
 
-  searchable :if => :should_reindex? do
+  searchable_model :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :table_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
@@ -47,9 +47,6 @@ class Dataset < ActiveRecord::Base
     text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :column_description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :query, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
-    string :security_type_name, :multiple => true
   end
 
   has_shared_search_fields [

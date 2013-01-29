@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Thu, 24 Jan 2013 18:24:09 GMT
+  recorded_at: Tue, 29 Jan 2013 22:57:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -49,7 +49,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Thu, 24 Jan 2013 18:24:09 GMT
+  recorded_at: Tue, 29 Jan 2013 22:57:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -88,10 +88,10 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
-        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.444857,''docs''=>[{''id''=>''Comment
-        1000003'',''body_texts''=>[''sometext searchwithhtml ftw''],''score''=>2.444857}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Comment
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.4475772,''docs''=>[{''id''=>''Comment
+        1000003'',''body_texts''=>[''sometext searchwithhtml ftw''],''score''=>2.4475772}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Comment
         1000003''=>{''body_texts''=>[''sometext @@@hl@@@searchwithhtml@@@endhl@@@
         ftw'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 24 Jan 2013 18:24:09 GMT
+  recorded_at: Tue, 29 Jan 2013 22:57:55 GMT
 recorded_with: VCR 2.3.0

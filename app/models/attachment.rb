@@ -15,10 +15,8 @@ class Attachment < ActiveRecord::Base
   validates_attachment_size :contents, :less_than => ChorusConfig.instance['file_sizes_mb']['attachment'].megabytes, :message => :file_size_exceeded
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do
+  searchable_model do
     text :name, :stored => true, :using => :contents_file_name, :boost => SOLR_PRIMARY_FIELD_BOOST
-    string :grouping_id
-    string :type_name
   end
 
   delegate_search_permissions_for :workspace, :dataset, :to => :note

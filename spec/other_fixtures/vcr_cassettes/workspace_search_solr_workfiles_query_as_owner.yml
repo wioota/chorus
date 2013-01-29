@@ -27,9 +27,9 @@ http_interactions:
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workfile
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Workfile)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'',''workspace_id_im:1000010'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''ChorusWorkfile
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2601.0764,''docs''=>[{''id''=>''ChorusWorkfile
-        1000010'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery''],''score''=>2601.0764}]}}]}},''highlighting''=>{''ChorusWorkfile
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2605.67,''docs''=>[{''id''=>''ChorusWorkfile
+        1000010'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery''],''score''=>2605.67}]}}]}},''highlighting''=>{''ChorusWorkfile
         1000010''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 24 Jan 2013 18:21:36 GMT
+  recorded_at: Tue, 29 Jan 2013 22:55:23 GMT
 recorded_with: VCR 2.3.0
