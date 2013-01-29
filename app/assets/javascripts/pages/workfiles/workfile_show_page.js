@@ -13,6 +13,8 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
 
         this.workspace = this.model.workspace();
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+
+        chorus.PageEvents.subscribe("workfileVersion:changed", this.workfileVersionChanged, this);
     },
 
     crumbs: function() {
@@ -54,6 +56,12 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         }
 
         this.render();
+    },
+
+    workfileVersionChanged: function(versionId) {
+        this.model.set({ versionInfo : { id: versionId } }, { silent:true });
+        this.model.fetch();
+        chorus.router.navigate(this.model.showUrl(), {trigger: false});
     }
 });
 

@@ -48,7 +48,8 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         this.bindings.add(model, "unprocessableEntity", _.bind(this.unprocessableEntity, this, model));
         this.bindings.add(model, "change", this.render);
         if (functionToCallWhenLoaded) {
-            if (model.loaded) {
+            if (
+                model.loaded) {
                 functionToCallWhenLoaded.apply(this);
             } else {
                 this.bindings.add(model, "loaded", functionToCallWhenLoaded);

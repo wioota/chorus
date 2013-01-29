@@ -52,7 +52,6 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 displayStyle:['without_object', 'without_workspace']
             });
             this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
-
             this.bindings.add(this.model, "loaded", this.modelLoaded);
         } else {
             delete this.collection;
@@ -68,7 +67,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             this.tabs.tabNames = ["datasets_and_columns","database_function_list","activity"];
             var schema = this.model.executionSchema();
             this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: schema });
-            this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({ model: schema });
+            this.tabs.datasets_and_columns = this.tabs.datasets_and_columns || new chorus.views.DatasetAndColumnList({ model: schema });
         } else {
             this.tabs.tabNames = ["activity"];
         }
@@ -120,6 +119,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             chorus.menu(this.$('a.version_list'), {
                 content:$(versionList.el)
             });
+            this.versionList.delegateEvents(this.versionList.events);
         }
         this._super('postRender');
     },

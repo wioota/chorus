@@ -77,4 +77,14 @@ describe("chorus.views.WorkfileVersionList", function() {
 
         });
     });
+
+    describe("clicking a version link", function() {
+        it("triggers version changed page event", function() {
+            this.workfileVersionChangedSpy = jasmine.createSpy();
+            chorus.PageEvents.subscribe("workfileVersion:changed", this.workfileVersionChangedSpy);
+
+            this.view.$("a.version_link:eq(1)").click();
+            expect(this.workfileVersionChangedSpy).toHaveBeenCalledWith(2);
+        });
+    });
 });

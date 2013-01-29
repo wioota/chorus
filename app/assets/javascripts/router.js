@@ -81,7 +81,8 @@
             if (Backbone.history.fragment === fragComparison || Backbone.history.fragment === decodeURIComponent(fragComparison)) {
                 Backbone.history.loadUrl(fragment);
             } else {
-                Backbone.Router.prototype.navigate.call(this, fragment, true);
+                pageOptions = pageOptions || { trigger: true };
+                Backbone.Router.prototype.navigate.call(this, fragment, pageOptions);
             }
         },
 

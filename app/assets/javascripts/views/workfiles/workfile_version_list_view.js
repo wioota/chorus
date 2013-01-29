@@ -3,6 +3,10 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
     templateName: "workfile_version_list",
     tagName: "ul",
 
+    events: {
+        "click a.version_link": "navigateToVersion"
+    },
+
     collectionModelContext: function(workfileVersion) {
         var author = workfileVersion.modifier();
 
@@ -15,8 +19,13 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
             versionId: workfileVersion.get("versionInfo").id,
             versionNumber: workfileVersion.get("versionInfo").versionNum,
             authorName: author.displayName(),
-            formattedDate: formattedDate,
-            showUrl: workfileVersion.showUrl()
+            formattedDate: formattedDate
         };
+    },
+
+    navigateToVersion: function(e) {
+        e.preventDefault();
+        var versionId = parseInt($(e.target).parents("a").andSelf().attr("data-version-id"), 10);
+        chorus.PageEvents.broadcast("workfileVersion:changed", versionId);
     }
 });

@@ -207,4 +207,85 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
         });
     });
+
+    describe("changing the workfile version", function() {
+        var oldVersion = 1;
+        var defaultSchemaId = 3;
+
+        function changeWorkfileVersion(version, model, server) {
+            chorus.PageEvents.broadcast("workfileVersion:changed", version);
+            model.set({ versionInfo : { id: version, versionNum: version } });
+            server.completeFetchFor(model);
+        }
+
+        beforeEach(function() {
+            this.schema = rspecFixtures.schema({id: defaultSchemaId});
+            this.model = rspecFixtures.workfile.sql({
+                id: this.workfileId,
+                workspace: {
+                    id: this.workspaceId,
+                    name: "Cool Workspace"
+                },
+                versionInfo: {
+                    id: oldVersion,
+                    versionNum: oldVersion
+                }
+            });
+            this.model.attributes.execution_schema = this.schema.attributes;
+        });
+
+        context("regardless of whether the new version id is the same as the latest version id", function() {
+            beforeEach(function() {
+                this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId, oldVersion);
+                this.server.completeFetchFor(this.model);
+            });
+
+            it("triggers rendering of the page", function() {
+                expect(this.page.$(".version_list .chosen")).toContainText("Version 1");
+                changeWorkfileVersion(2, this.model, this.server);
+                expect(this.page.$(".version_list .chosen")).toContainText("Version 2");
+            });
+
+            it("changes the versionId and fetches the model", function() {
+                spyOn(this.page.model, "fetch").andCallThrough();
+                changeWorkfileVersion(2, this.model, this.server);
+                expect(this.page.model.get("versionInfo").id).toEqual(2);
+                expect(this.page.model.fetch).toHaveBeenCalled();
+            });
+
+            it("does not change the sidebar dataset list", function() {
+                this.page.sidebar.tabs.datasets_and_columns.datasetList.schema = rspecFixtures.schema({id: 4});
+                changeWorkfileVersion(2, this.model, this.server);
+                expect(this.page.sidebar.tabs.datasets_and_columns.datasetList.schema.id).toEqual(4);
+            });
+        });
+
+        context("when the new version id is not the latest version id", function() {
+            beforeEach(function() {
+                this.model.set("latestVersionId", 123);
+                this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId, oldVersion);
+                this.server.completeFetchFor(this.model);
+            });
+
+            it("calls navigate with the new version's url and {trigger: false}", function() {
+                spyOn(chorus.router, "navigate");
+                changeWorkfileVersion(2, this.model, this.server);
+                expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/5/versions/2", {trigger: false});
+            });
+        });
+
+        context("when the new version id is the latest version id", function() {
+            beforeEach(function(){
+                this.model.set("latestVersionId", 2);
+                this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId, oldVersion);
+                this.server.completeFetchFor(this.model);
+            });
+
+            it("calls navigate with workfile url and {trigger: false}", function() {
+                spyOn(chorus.router, "navigate");
+                changeWorkfileVersion(2, this.model, this.server);
+                expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/5", {trigger: false});
+            });
+        });
+    });
 });

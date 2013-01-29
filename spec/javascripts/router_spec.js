@@ -131,20 +131,25 @@ describe("chorus.router", function() {
             expect(this.chorus.modal.closeModal).toHaveBeenCalled();
         });
 
-        it("sets chorus.pageOptions to the third argument", function() {
+        it("sets chorus.pageOptions to the second argument", function() {
             this.chorus.router.navigate("/workspaces/5", {foo: "bar"});
             expect(this.chorus.page.pageOptions).toEqual({foo: "bar"});
         });
 
-        describe("when triggerRoute is true", function() {
+        describe("when a current fragment is set", function() {
             beforeEach(function() {
                 Backbone.history.fragment = "foo";
             });
 
             describe("and the target fragment is not the current fragment", function() {
-                it("delegates to the Backbone.router implementation", function() {
-                    this.chorus.router.navigate("/bar");
-                    expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", true);
+                it("calls Backbone's navigate with {trigger: true} when pageOptions is undefined", function () {
+                   this.chorus.router.navigate("/bar");
+                   expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", {trigger: true});
+                });
+
+                it("calls Backbone's navigate with the given trigger value when pageOptions is defined", function () {
+                    this.chorus.router.navigate("/bar", {foo: "bar", trigger: false});
+                    expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", {foo: "bar", trigger: false});
                 });
             });
 
