@@ -1,6 +1,5 @@
 .dialog {
     max-width: 500px;
-    min-width: 450px;
     .dialog_header {
         height: 54px;
         border-bottom: 1px solid $border-color;
@@ -23,7 +22,9 @@
         background-color: $body-background-color;
         padding: 10px $dialog-padding;
 
-        @include font-normal-alpha;
+        @include font-normal-small;
+
+        line-height: 16px;
 
         .menus {
             height: 30px;

@@ -20,7 +20,7 @@
 
     .destination {
         padding-bottom: 10px;
-        @include results-console-message;
+        @include font-normal-small;
     }
 
     input[type=checkbox] {

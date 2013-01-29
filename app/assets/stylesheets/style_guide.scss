@@ -41,6 +41,10 @@
         @include font-content-details;
     }
 
+    .font_normal_small {
+        @include font-normal-small;
+    }
+
     .list_section_heading {
         @include list-section-heading;
     }

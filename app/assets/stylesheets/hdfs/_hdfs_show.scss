@@ -17,7 +17,7 @@
          text-align: right;
 
          .plain_text {
-             @include results-console-message;
+             @include font-normal-small;
              color: $content-details-action-link-color;
          }
      }

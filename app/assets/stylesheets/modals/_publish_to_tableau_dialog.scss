@@ -7,7 +7,7 @@
 
   .target_location {
     width: $dialog-width;
-    @include results-console-message;
+    @include font-normal-small;
     @include ellipsis;
     padding-bottom: 8px;
   }
