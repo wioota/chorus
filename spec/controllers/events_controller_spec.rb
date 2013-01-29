@@ -221,7 +221,7 @@ describe EventsController do
     end
 
     FIXTURE_FILES = {
-        "greenplumInstanceCreated" => Events::GreenplumInstanceCreated,
+        "dataSourceCreated" => Events::DataSourceCreated,
         "gnipInstanceCreated" => Events::GnipInstanceCreated,
         "hadoopInstanceCreated" => Events::HadoopInstanceCreated,
         "greenplumInstanceChangedOwner" => Events::GreenplumInstanceChangedOwner,

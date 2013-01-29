@@ -99,14 +99,6 @@ describe GpdbDataSource do
       instance.shared.should == true
       instance.should be_valid
     end
-
-    it "makes a GreenplumInstanceCreated event" do
-      set_current_user(user)
-      instance = user.gpdb_data_sources.create!(valid_input_attributes, :as => :create)
-      event = Events::GreenplumInstanceCreated.last
-      event.gpdb_data_source.should == instance
-      event.actor.should == user
-    end
   end
 
   describe "#update" do

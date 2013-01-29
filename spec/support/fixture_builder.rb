@@ -71,14 +71,14 @@ FixtureBuilder.configure do |fbuilder|
     #Instances
     gpdb_data_source = FactoryGirl.create(:gpdb_data_source, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :db_name => "postgres", :owner => admin)
     fbuilder.name :default, gpdb_data_source
-    Events::GreenplumInstanceCreated.by(admin).add(:gpdb_data_source => gpdb_data_source)
+    Events::DataSourceCreated.by(admin).add(:gpdb_data_source => gpdb_data_source)
 
     shared_instance = FactoryGirl.create(:gpdb_data_source, :name => "Shared", :owner => admin, :shared => true)
     owners_instance = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
 
-    @owner_creates_greenplum_instance = Events::GreenplumInstanceCreated.by(owner).add(:gpdb_data_source => owners_instance)
+    @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:gpdb_data_source => owners_instance)
 
     FactoryGirl.create(:oracle_data_source, name: 'oracle')
 

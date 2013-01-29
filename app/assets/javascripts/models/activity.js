@@ -2,6 +2,7 @@
     var CLASS_MAP = {
         "actor": "User",
         "dataset": "WorkspaceDataset",
+        'dataSource': 'DataSource',
         "gpdbDataSource": "GpdbDataSource",
         "gnipInstance": "GnipInstance",
         "newOwner": "User",
@@ -44,6 +45,7 @@
         newOwner: makeAssociationMethod("newOwner"),
         workspace: makeAssociationMethod("workspace"),
         actor: makeAssociationMethod("actor"),
+        dataSource: makeAssociationMethod('dataSource'),
         gpdbDataSource: makeAssociationMethod("gpdbDataSource"),
         gnipInstance: makeAssociationMethod("gnipInstance"),
         hadoopInstance: makeAssociationMethod("hadoopInstance"),

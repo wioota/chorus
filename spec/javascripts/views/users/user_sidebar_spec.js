@@ -23,7 +23,7 @@ describe("chorus.views.UserSidebar", function() {
 
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
-            this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.greenplumInstanceCreated() ]);
+            this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.dataSourceCreated() ]);
         });
 
         it("has an activity list", function() {

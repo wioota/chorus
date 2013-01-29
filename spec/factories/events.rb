@@ -4,8 +4,8 @@ FactoryGirl.define do
   factory :event, :class => Events::Base do
     actor
 
-    factory :greenplum_instance_created_event, :class => Events::GreenplumInstanceCreated do
-      gpdb_data_source
+    factory :data_source_created_event, :class => Events::DataSourceCreated do
+      association :data_source, :factory => :gpdb_data_source
     end
 
     factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do

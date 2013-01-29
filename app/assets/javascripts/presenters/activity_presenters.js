@@ -141,8 +141,8 @@
                 attrs: [ "newName", "oldName" ]
             },
 
-            GreenplumInstanceCreated: {
-                links: [ "actor", "gpdbDataSource" ]
+            DataSourceCreated: {
+                links: [ "actor", "dataSource" ]
             },
 
             GnipInstanceCreated: {
@@ -401,10 +401,10 @@
             }
             var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
             var key, n = possibleStyles.length;
-                 for (var i = 0; i < n; i++) {
-                     key = [mainKey, possibleStyles[i]].join(".");
-                     if (I18n.lookup(key)) return key;
-                 }
+            for(var i = 0; i < n; i++) {
+                key = [mainKey, possibleStyles[i]].join(".");
+                if(I18n.lookup(key)) return key;
+            }
         },
 
         datasetType: function(self) {

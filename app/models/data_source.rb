@@ -13,6 +13,7 @@ class DataSource < ActiveRecord::Base
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
 
+  after_create :create_instance_created_event, :if => :current_user
   validates_with DataSourceNameValidator
 
   def refresh_databases_later
@@ -40,5 +41,9 @@ class DataSource < ActiveRecord::Base
 
   def account_owned_by(user)
     accounts.find_by_owner_id(user.id)
+  end
+
+  def create_instance_created_event
+    Events::DataSourceCreated.by(current_user).add(:data_source => self)
   end
 end

@@ -12,16 +12,16 @@ describe Events::Base do
       hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
       workspace = workspaces(:public)
 
-      Events::GreenplumInstanceCreated.by(user1).add(:gpdb_data_source => gpdb_data_source1)
+      Events::DataSourceCreated.by(user1).add(:data_source => gpdb_data_source1)
       Events::GreenplumInstanceChangedOwner.by(user2).add(:gpdb_data_source => gpdb_data_source2, :new_owner => user3)
       Events::HdfsFileExtTableCreated.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
-      event1 = Events::GreenplumInstanceCreated.last
+      event1 = Events::DataSourceCreated.last
       event2 = Events::GreenplumInstanceChangedOwner.last
       event3 = Events::HdfsFileExtTableCreated.last
 
       event1.actor.should == user1
-      event1.gpdb_data_source.should == gpdb_data_source1
+      event1.data_source.should == gpdb_data_source1
 
       event2.actor.should == user2
       event2.gpdb_data_source.should == gpdb_data_source2

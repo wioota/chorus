@@ -67,13 +67,13 @@ describe EventPresenter, :type => :view do
     end
 
     context "Non-note event" do
-      let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :gpdb_data_source => gpdb_data_source) }
+      let(:event) { FactoryGirl.create(:data_source_created_event, :data_source => gpdb_data_source) }
 
       it "includes the 'id', 'timestamp', 'actor', 'action'" do
         hash = subject.to_hash
         hash[:id].should == event.id
         hash[:timestamp].should == event.created_at
-        hash[:action].should == "GreenplumInstanceCreated"
+        hash[:action].should == "DataSourceCreated"
         hash[:actor].should == Presenter.present(event.actor, view)
       end
 

@@ -185,7 +185,7 @@ describe("chorus.presenters.Activity", function() {
 
             context ("when it is a not a note" , function() {
                 beforeEach(function() {
-                    model = rspecFixtures.activity.greenplumInstanceCreated();
+                    model = rspecFixtures.activity.dataSourceCreated();
                     presenter = new chorus.presenters.Activity(model);
                 });
                 it("returns false", function() {
@@ -266,13 +266,13 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("gpdb instance created", function() {
-        var gpdbDataSource;
+    context("data source created", function() {
+        var dataSource;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.greenplumInstanceCreated();
+            model = rspecFixtures.activity.dataSourceCreated();
             presenter = new chorus.presenters.Activity(model);
-            gpdbDataSource = model.gpdbDataSource();
+            dataSource = model.dataSource();
             actor = model.actor();
         });
 
@@ -280,9 +280,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GreenplumInstanceCreated.default", {
+                "activity.header.DataSourceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name())
+                    dataSourceLink: linkTo(dataSource.showUrl(), dataSource.name())
                 }
             );
         });

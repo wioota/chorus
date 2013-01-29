@@ -211,10 +211,6 @@ class GpdbDataSource < DataSource
     build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
   end
 
-  def create_instance_created_event
-    Events::GreenplumInstanceCreated.by(current_user).add(:gpdb_data_source => self)
-  end
-
   def create_instance_name_changed_event
     if name_changed?
       Events::GreenplumInstanceChangedName.by(current_user).add(

@@ -46,4 +46,30 @@ describe DataSource do
     it { should have_many :events }
 
   end
+
+  describe 'activity creation' do
+    let(:user) { users(:admin) }
+    let :valid_input_attributes do
+      {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :db_name => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret"
+      }
+    end
+
+    it "makes a DataSourceCreated event" do
+      set_current_user(user)
+      instance = nil
+      expect {
+        instance = FactoryGirl.create(:data_source, :owner => user)
+      }.to change(Events::DataSourceCreated, :count).by(1)
+      event = Events::DataSourceCreated.last
+      event.data_source.should == instance
+      event.actor.should == user
+    end
+  end
 end

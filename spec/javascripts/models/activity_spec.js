@@ -1,6 +1,6 @@
 describe("chorus.models.Activity", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.activity.greenplumInstanceCreated();
+        this.model = rspecFixtures.activity.dataSourceCreated();
     });
 
     describe("model associations", function() {

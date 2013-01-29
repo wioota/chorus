@@ -2,8 +2,8 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet([]);
         this.collection.reset([
-            rspecFixtures.activity.greenplumInstanceCreated(),
-            rspecFixtures.activity.greenplumInstanceCreated()
+            rspecFixtures.activity.dataSourceCreated(),
+            rspecFixtures.activity.dataSourceCreated()
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
@@ -161,9 +161,9 @@ describe("chorus.views.ActivityList", function() {
                         this.view.$(".more_activities a").click();
 
                         this.server.completeFetchFor(this.collection, [
-                            rspecFixtures.activity.greenplumInstanceCreated(),
-                            rspecFixtures.activity.greenplumInstanceCreated(),
-                            rspecFixtures.activity.greenplumInstanceCreated()
+                            rspecFixtures.activity.dataSourceCreated(),
+                            rspecFixtures.activity.dataSourceCreated(),
+                            rspecFixtures.activity.dataSourceCreated()
                         ], { page: nextPage });
                     });
 
@@ -203,10 +203,10 @@ describe("chorus.views.ActivityList", function() {
             context("with partial pagination information in the response", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        rspecFixtures.activity.greenplumInstanceCreated(),
-                        rspecFixtures.activity.greenplumInstanceCreated(),
-                        rspecFixtures.activity.greenplumInstanceCreated(),
-                        rspecFixtures.activity.greenplumInstanceCreated()
+                        rspecFixtures.activity.dataSourceCreated(),
+                        rspecFixtures.activity.dataSourceCreated(),
+                        rspecFixtures.activity.dataSourceCreated(),
+                        rspecFixtures.activity.dataSourceCreated()
                     ]);
 
                     this.collection.pagination = {};

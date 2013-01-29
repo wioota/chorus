@@ -68,22 +68,6 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "GreenplumInstanceCreated" do
-    subject do
-      Events::GreenplumInstanceCreated.add(
-          :actor => actor,
-          :gpdb_data_source => gpdb_data_source
-      )
-    end
-
-    its(:action) { should == "GreenplumInstanceCreated" }
-    its(:gpdb_data_source) { should == gpdb_data_source }
-    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
-
-    it_creates_activities_for { [actor, gpdb_data_source] }
-    it_creates_a_global_activity
-  end
-
   describe "HadoopInstanceCreated" do
     subject do
       Events::HadoopInstanceCreated.add(

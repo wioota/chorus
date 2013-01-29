@@ -76,7 +76,7 @@ describe Presenter, :type => :view do
 
     context "with a subclass of Events::Base" do
       it "creates an EventPresenter" do
-        event = FactoryGirl.build(:greenplum_instance_created_event)
+        event = FactoryGirl.build(:data_source_created_event)
         mock.proxy(EventPresenter).new(event, view, {})
         Presenter.present(event, view)
       end
