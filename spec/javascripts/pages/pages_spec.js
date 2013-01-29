@@ -104,8 +104,8 @@ describe("chorus.pages.Base", function() {
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.page.pageOptions.title).toMatchTranslation("record_error.INSTANCE_OVERLOADED_title");
-                    expect(chorus.page.pageOptions.text).toMatchTranslation("record_error.INSTANCE_OVERLOADED");
+                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.INSTANCE_OVERLOADED_title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.INSTANCE_OVERLOADED");
                 });
             });
 
@@ -119,8 +119,8 @@ describe("chorus.pages.Base", function() {
 
                 it("displays the error message it was given", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.page.pageOptions.title).toMatchTranslation("unprocessable_entity.unidentified_error.title");
-                    expect(chorus.page.pageOptions.text).toBe("Bad things happened.");
+                    expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.unidentified_error.title");
+                    expect(chorus.pageOptions.text).toBe("Bad things happened.");
                 });
             });
         });
