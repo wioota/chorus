@@ -541,6 +541,8 @@ describe GreenplumConnection, :greenplum_integration do
         let(:location_url) { nil }
         let(:execute_command) { 'echo "1,2"' }
 
+        # we cannot directly test create_external_table with a location_string since we can't provide
+        # an http URL that serves data in the context of this test, so we test execution_string instead.
         it 'creates an external table' do
           subject
           row = Sequel.connect(db_url).fetch("SELECT * from #{schema_name}.#{table_name}").first
