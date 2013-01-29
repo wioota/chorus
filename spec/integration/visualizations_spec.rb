@@ -12,10 +12,26 @@ describe "Visualizations", :greenplum_integration do
   let(:workspace) { workspaces(:image) }
 
   before do
+    puts "**** Environment Variables before accessing instance **** "
+    puts ENV.inspect
+    puts "*** REAL_GPDB_HOST before accessing instance *** "
+    puts InstanceIntegration::REAL_GPDB_HOST
     login(users(:admin))
     visit("#/data_sources")
     find("a", :text => /^#{instance.name}$/).click
+
+    puts "**** Environment Variables after accessing instance **** "
+    puts ENV.inspect
+    puts "*** REAL_GPDB_HOST after accessing instance *** "
+    puts InstanceIntegration::REAL_GPDB_HOST
+
     find("a", :text => /^#{database.name}$/).click
+
+    puts "**** Environment Variables after accessing database **** "
+    puts ENV.inspect
+    puts "*** REAL_GPDB_HOST after accessing database *** "
+    puts InstanceIntegration::REAL_GPDB_HOST
+
     find("a", :text => /^#{schema.name}$/).click
     find("a", :text => /^#{table.name}$/).click
     find(".list li.selected").click
