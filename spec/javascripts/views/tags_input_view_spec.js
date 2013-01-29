@@ -60,6 +60,7 @@ describe("chorus.views.TagsInput", function() {
         var tagName;
         beforeEach(function() {
             tagName = _.repeat("a", 100);
+            spyOn(view, "focusInput");
             enterTag(view, tagName);
         });
 
@@ -73,6 +74,10 @@ describe("chorus.views.TagsInput", function() {
 
         it("adds the tag to the tagset", function() {
             expect(this.addedSpy).toHaveBeenCalled();
+        });
+
+        it("sets the focus on the tag input", function() {
+            expect(view.focusInput).toHaveBeenCalled();
         });
     });
 

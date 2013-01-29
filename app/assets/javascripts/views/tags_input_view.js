@@ -62,26 +62,32 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.textext.trigger('postInvalidate');
     },
 
-    updateTags: function(e, data) {
-        if(data.length > this.tags.length) {
-            // add
-            var added = _.last(data);
-            var duplicate = this.tags.find(function(tag){
-                return tag.matches(added.name);
-            });
-            if(duplicate){
-                this.tags.remove(duplicate, {silent: true});
-            }
-            this.tags.add(added);
-            this.render();
-        } else if(data.length < this.tags.length) {
-            // remove
-            var tagNames = _.pluck(data, "name");
-            var missingTag = this.tags.find(function(tag) {
-                return !_.contains(tagNames, tag.name());
-            });
-            this.tags.remove(missingTag);
+    updateTags: function(e, tags) {
+        if(tags.length > this.tags.length) {
+            this.addTag(_.last(tags));
+        } else if(tags.length < this.tags.length) {
+            this.removeMissingTag(tags);
         }
+    },
+
+    addTag: function(newTag) {
+        var duplicate = this.tags.find(function(tag) {
+            return tag.matches(newTag.name);
+        });
+        if(duplicate) {
+            this.tags.remove(duplicate, {silent: true});
+        }
+        this.tags.add(newTag);
+        this.render();
+        this.focusInput();
+    },
+
+    removeMissingTag: function(tags) {
+        var tagNames = _.pluck(tags, "name");
+        var missingTag = this.tags.find(function(tag) {
+            return !_.contains(tagNames, tag.name());
+        });
+        this.tags.remove(missingTag);
     },
 
     textExtValidate: function(e, data) {
