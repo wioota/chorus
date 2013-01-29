@@ -13,7 +13,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
             contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         });
 
-        if(this.model.id === chorus.session.user().id){
+        if(this.model.id === chorus.session.user().id.toString()){
             this.sidebar = new chorus.views.UserSidebar({model: this.model, showApiKey: true});
         } else {
             this.sidebar = new chorus.views.UserSidebar({model: this.model});

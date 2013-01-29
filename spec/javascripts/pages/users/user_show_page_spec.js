@@ -67,7 +67,7 @@ describe("chorus.pages.UserShow", function() {
 
         context("on your own page", function() {
             beforeEach(function() {
-                this.page = new chorus.pages.UserShowPage(chorus.session.user().id);
+                this.page = new chorus.pages.UserShowPage(chorus.session.user().id.toString());
             });
 
             it("sets showApiKey to true", function() {
