@@ -1,7 +1,7 @@
 (function() {
     var collectionMap = {
         hdfs_entries: "HdfsEntrySet",
-        datasets: "DynamicDatasetSet",
+        datasets: "DatasetSet",
         workfiles: "WorkfileSet",
         workspaces: "WorkspaceSet",
         workspaceItems: "WorkspaceItemSet",

@@ -2,7 +2,7 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
     constructorName: 'DatasetSet',
-    model: chorus.models.Dataset,
+    model:chorus.models.DynamicDataset,
     urlTemplate: "schemas/{{schemaId}}/datasets",
 
     urlParams: function() {

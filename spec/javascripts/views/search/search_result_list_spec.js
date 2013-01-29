@@ -31,7 +31,7 @@ describe("chorus.views.SearchResultList", function() {
 
         context("when there are three or fewer results", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DynamicDatasetSet([
+                this.collection = new chorus.collections.DatasetSet([
                     rspecFixtures.datasetJson(),
                     rspecFixtures.datasetJson()
                 ]);

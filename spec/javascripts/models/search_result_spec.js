@@ -285,7 +285,7 @@ describe("chorus.models.SearchResult", function() {
         describe("#dataset", function() {
             it("returns a collection of tabular data", function() {
                 this.model = rspecFixtures.searchResult();
-                expect(this.model.datasets()).toBeA(chorus.collections.Search.DynamicDatasetSet);
+                expect(this.model.datasets()).toBeA(chorus.collections.Search.DatasetSet);
             });
         });
 
@@ -325,7 +325,7 @@ describe("chorus.models.SearchResult", function() {
 
                 var methodCollectionPairs = {
                     hdfs_entries: "HdfsEntrySet",
-                    datasets: "DynamicDatasetSet",
+                    datasets: "DatasetSet",
                     workfiles: "WorkfileSet",
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",

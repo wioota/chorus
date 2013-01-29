@@ -66,7 +66,7 @@
         }
     });
 
-    chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
+    chorus.collections.Search.DatasetSet = chorus.collections.DatasetSet.include(
         searchCollectionMixins
     ).extend({
         searchKey: "datasets"
