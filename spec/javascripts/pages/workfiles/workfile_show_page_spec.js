@@ -242,7 +242,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             it("triggers rendering of the page", function() {
                 expect(this.page.$(".version_list .chosen")).toContainText("Version 1");
-                changeWorkfileVersion(2, this.model, this.server);
+                changeWorkfileVersion(2, this.page.model, this.server);
                 expect(this.page.$(".version_list .chosen")).toContainText("Version 2");
             });
 
