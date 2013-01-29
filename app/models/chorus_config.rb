@@ -106,6 +106,10 @@ class ChorusConfig
     self['server_port']
   end
 
+  def public_url
+    self['public_url']
+  end
+
   private
 
   def set_root_dir(root_dir)

@@ -365,4 +365,16 @@ describe ChorusConfig do
       end
     end
   end
+
+  describe "#public_url" do
+    before do
+      config.config = {
+          'public_url' => 'example.com',
+      }
+    end
+
+    it "returns the public url" do
+      config.public_url.should == 'example.com'
+    end
+  end
 end

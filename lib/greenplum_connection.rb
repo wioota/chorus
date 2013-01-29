@@ -51,20 +51,6 @@ class GreenplumConnection < DataSourceConnection
     !!@connection
   end
 
-  def fetch(sql, parameters = {})
-    with_connection { @connection.fetch(sql, parameters).all }
-  end
-
-  def fetch_value(sql)
-    result = with_connection { @connection.fetch(sql).limit(1).first }
-    result && result.first[1]
-  end
-
-  def execute(sql)
-    with_connection { @connection.execute(sql) }
-    true
-  end
-
   def prepare_and_execute_statement(query, options = {})
     with_connection options do
       @connection.synchronize do |jdbc_conn|
@@ -222,9 +208,11 @@ class GreenplumConnection < DataSourceConnection
 
     def create_external_table(options)
       with_connection do
+        location_string = options[:location_url] ? "LOCATION (E'#{options[:location_url]}')" : ""
+        execution_string = options[:execute] ? "EXECUTE E'#{options[:execute]}'" : ""
         @connection.execute(<<-SQL)
-          CREATE EXTERNAL TABLE "#{schema_name}"."#{options[:table_name]}"
-          (#{options[:columns]}) LOCATION ('#{options[:location_url]}') FORMAT 'TEXT'
+          CREATE EXTERNAL #{options[:web] ? 'WEB ' : ''}TABLE "#{schema_name}"."#{options[:table_name]}"
+          (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'TEXT'
           (DELIMITER '#{options[:delimiter]}')
         SQL
       end

@@ -512,13 +512,17 @@ describe GreenplumConnection, :greenplum_integration do
       let(:columns) { "field1 varchar, field2 integer" }
       let(:location_url) { "gphdfs://foo/*.csv" }
       let(:delimiter) { "," }
+      let(:web) { false }
+      let(:execute_command) { nil }
       let(:subject) do
         connection.create_external_table(
             {
                 :table_name => table_name,
                 :columns => columns,
                 :location_url => location_url,
-                :delimiter => delimiter
+                :execute => execute_command,
+                :delimiter => delimiter,
+                :web => web
             }
         )
       end
@@ -530,6 +534,19 @@ describe GreenplumConnection, :greenplum_integration do
         expect {
           subject
         }.to change { Sequel.connect(db_url).tables }
+      end
+
+      context 'for an external web table' do
+        let(:web) { true }
+        let(:location_url) { nil }
+        let(:execute_command) { 'echo "1,2"' }
+
+        it 'creates an external table' do
+          subject
+          row = Sequel.connect(db_url).fetch("SELECT * from #{schema_name}.#{table_name}").first
+          row[:field1].should == "1"
+          row[:field2].should == 2
+        end
       end
 
       context 'when a table with that name already exists' do

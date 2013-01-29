@@ -23,4 +23,18 @@ class DataSourceConnection
       message
     end
   end
+
+  def fetch(sql, parameters = {})
+    with_connection { @connection.fetch(sql, parameters).all }
+  end
+
+  def fetch_value(sql)
+    result = with_connection { @connection.fetch(sql).limit(1).first }
+    result && result.first[1]
+  end
+
+  def execute(sql)
+    with_connection { @connection.execute(sql) }
+    true
+  end
 end
