@@ -5,6 +5,12 @@ resource "OraclePipes" do
 
   before do
     log_in user
+
+    mock(OracleDatasetStreamer).new do
+      obj = Object.new
+      mock(obj).enum { "OK" }
+      obj
+    end
   end
 
   get "/oracle_pipes" do
