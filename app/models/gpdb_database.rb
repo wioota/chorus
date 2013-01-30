@@ -1,13 +1,17 @@
 class GpdbDatabase < ActiveRecord::Base
   include Stale
+  include SoftDelete
+
 
   belongs_to :gpdb_instance
-  has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
+  has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id, :dependent => :destroy
   has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
   delegate :account_for_user!, :account_for_user, :to => :gpdb_instance
 
   before_save :mark_schemas_as_stale
+
+  after_destroy { instance_accounts.clear }
 
   DATABASE_NAMES_SQL = <<-SQL
   SELECT

@@ -465,7 +465,6 @@ describe GpdbInstance do
     end
   end
 
-
   describe "#reindex_instance" do
     let(:instance) { gpdb_instances(:owners) }
 
@@ -481,6 +480,42 @@ describe GpdbInstance do
     it "should reindex all of it's datasets" do
       mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
       GpdbInstance.reindex_instance(instance.id)
+    end
+  end
+
+  describe "#destroy" do
+    let(:instance) { gpdb_instances(:owners) }
+
+    it "should not delete the database entry" do
+      instance.destroy
+      expect {
+        instance.reload
+      }.to_not raise_error(Exception)
+    end
+
+    it "should update the deleted_at field" do
+      instance.destroy
+      instance.reload.deleted_at.should_not be_nil
+    end
+
+    it "destroys dependent databases" do
+      databases = instance.databases
+      databases.length.should > 0
+
+      instance.destroy
+      databases.each do |database|
+        GpdbDatabase.find_by_id(database.id).should be_nil
+      end
+    end
+
+    it "destroys dependent instance accounts" do
+      instance_accounts = instance.accounts
+      instance_accounts.length.should > 0
+
+      instance.destroy
+      instance_accounts.each do |account|
+        InstanceAccount.find_by_id(account.id).should be_nil
+      end
     end
   end
 end

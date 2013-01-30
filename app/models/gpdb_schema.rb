@@ -1,5 +1,7 @@
 class GpdbSchema < ActiveRecord::Base
   include Stale
+  include SoftDelete
+
   SCHEMAS_SQL = <<-SQL
   SELECT
     schemas.nspname as schema_name
@@ -36,11 +38,12 @@ class GpdbSchema < ActiveRecord::Base
     WHERE  pg_catalog.pg_namespace.nspname = %s
   SQL
 
-  has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id
+  has_many :workspaces, :inverse_of => :sandbox, :foreign_key => :sandbox_id, :dependent => :nullify
   belongs_to :database, :class_name => 'GpdbDatabase'
-  has_many :datasets, :foreign_key => :schema_id
+  has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+  has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_schema_id, :dependent => :nullify
 
   delegate :with_gpdb_connection, :to => :database
   delegate :gpdb_instance, :account_for_user!, :to => :database

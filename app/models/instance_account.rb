@@ -9,6 +9,7 @@ class InstanceAccount < ActiveRecord::Base
   has_and_belongs_to_many :gpdb_databases
   after_save :reindex_gpdb_instance
   after_destroy :reindex_gpdb_instance
+  after_destroy { gpdb_databases.clear }
 
   def reindex_gpdb_instance
     gpdb_instance.refresh_databases_later

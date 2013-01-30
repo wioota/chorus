@@ -1,4 +1,6 @@
 class GpdbInstance < ActiveRecord::Base
+  include SoftDelete
+
   attr_accessible :name, :description, :host, :port, :maintenance_db, :state,
                   :provision_type, :description, :instance_provider, :version
 
@@ -9,8 +11,8 @@ class GpdbInstance < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :gpdb_instance
-  has_many :databases, :class_name => 'GpdbDatabase'
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :gpdb_instance, :dependent => :destroy
+  has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
