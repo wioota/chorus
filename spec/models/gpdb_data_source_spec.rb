@@ -40,25 +40,6 @@ describe GpdbDataSource do
 
   describe "associations" do
     it { should have_many :databases }
-
-    describe "cascading deletes" do
-      let(:instance) { data_sources(:owners) }
-      it "deletes its databases when it is destroyed" do
-        expect {
-          instance.destroy
-        }.to change(instance.databases, :count).to(0)
-      end
-
-      it "deletes all events with target1 set to the schema when it is destroyed" do
-        user = users(:owner)
-
-        Events::GreenplumInstanceChangedName.by(user).add(:gpdb_data_source => instance, :old_name => 'old', :new_name => instance.name)
-
-        expect {
-          instance.destroy
-        }.to change(instance.events_where_target1, :count).to(0)
-      end
-    end
   end
 
   describe "#create" do
@@ -573,6 +554,20 @@ describe GpdbDataSource do
     end
   end
 
+  describe "#destroy" do
+    let(:instance) { data_sources(:owners) }
+
+    it "destroys dependent databases" do
+      databases = instance.databases
+      databases.length.should > 0
+
+      instance.destroy
+      databases.each do |database|
+        GpdbDatabase.find_by_id(database.id).should be_nil
+      end
+    end
+  end
+
   describe "DataSource Behaviors", :greenplum_integration do
     let(:instance) { InstanceIntegration.real_gpdb_data_source }
     let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
@@ -580,4 +575,3 @@ describe GpdbDataSource do
     it_should_behave_like "DataSource"
   end
 end
-

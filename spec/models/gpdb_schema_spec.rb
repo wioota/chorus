@@ -43,27 +43,6 @@ describe GpdbSchema do
         end
       end
     end
-
-    describe "cascading deletes" do
-      it "deletes its datasets when it is destroyed" do
-        schema = gpdb_schemas(:default)
-
-        expect {
-          schema.destroy
-        }.to change(schema.datasets, :count).to(0)
-      end
-
-      it "nullifies its sandbox association in workspaces" do
-        schema = gpdb_schemas(:searchquery_schema)
-        workspace = FactoryGirl.create(:workspace, :sandbox => schema)
-
-        expect {
-          expect {
-            schema.destroy
-          }.to change(Workspace, :count).by(0)
-        }.to change { workspace.reload.sandbox }.from(schema).to(nil)
-      end
-    end
   end
 
   describe '#accessible_to' do
@@ -369,6 +348,52 @@ describe GpdbSchema do
         view.save!
       }.to change { schema.reload.active_tables_and_views.size }.by(-1)
       schema.active_tables_and_views.should_not include(view)
+    end
+  end
+
+  describe "#destroy" do
+    let(:schema) { gpdb_schemas(:default) }
+
+    it "should not delete the schema entry" do
+      schema.destroy
+      expect {
+        schema.reload
+      }.to_not raise_error(Exception)
+    end
+
+    it "should update the deleted_at field" do
+      schema.destroy
+      schema.reload.deleted_at.should_not be_nil
+    end
+
+    it "destroys dependent datasets" do
+      datasets = schema.datasets
+      datasets.length.should > 0
+
+      schema.destroy
+      datasets.each do |dataset|
+        Dataset.find_by_id(dataset.id).should be_nil
+      end
+    end
+
+    it "removes any sandboxes from associated workspaces" do
+      workspaces = schema.workspaces
+      workspaces.length.should > 0
+
+      schema.destroy
+      workspaces.each do |workspace|
+        workspace.reload.sandbox_id.should be_nil
+      end
+    end
+
+    it "removes any execution schemas from associated workfiles" do
+      workfiles = schema.workfiles_as_execution_schema
+      workfiles.length.should > 0
+
+      schema.destroy
+      workfiles.each do |workfile|
+        workfile.reload.execution_schema_id.should be_nil
+      end
     end
   end
 end

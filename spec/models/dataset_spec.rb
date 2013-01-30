@@ -14,36 +14,6 @@ describe Dataset do
     it { should have_many(:imports) }
     it { should have_many :notes }
     it { should have_many :comments }
-
-    describe "cascading deletes" do
-      it "deletes its import schedules when it is destroyed" do
-        dataset = datasets(:table)
-
-        expect {
-          dataset.destroy
-        }.to change(dataset.import_schedules, :count).to(0)
-      end
-
-      it "deletes its tableau workbook publications when it is destroyed" do
-        dataset = datasets(:chorus_view)
-
-        expect {
-          dataset.destroy
-        }.to change(dataset.tableau_workbook_publications, :count).to(0)
-      end
-
-      it "deletes its associated datasets when it is destroyed" do
-        dataset = datasets(:table)
-        workspace = workspaces(:public)
-        ad = dataset.associated_datasets.build
-        ad.workspace = workspace
-        ad.save
-
-        expect {
-          dataset.destroy
-        }.to change(dataset.associated_datasets, :count).to(0)
-      end
-    end
   end
 
   describe "workspace association" do
@@ -520,6 +490,48 @@ describe Dataset do
       end
 
       dataset.accessible_to(owner).should be_true
+    end
+  end
+
+  describe "#destroy" do
+    let(:dataset) { datasets(:table) }
+
+    it "should not delete the dataset entry" do
+      dataset.destroy
+      expect {
+        dataset.reload
+      }.to_not raise_error(Exception)
+    end
+
+    it "should update the deleted_at field" do
+      dataset.destroy
+      dataset.reload.deleted_at.should_not be_nil
+    end
+
+    it "destroys dependent import_schedules" do
+      schedules = dataset.import_schedules
+      schedules.length.should > 0
+
+      dataset.destroy
+      schedules.each do |schedule|
+        ImportSchedule.find_by_id(schedule.id).should be_nil
+      end
+    end
+
+    it "destroys dependent tableau_workbook_publications" do
+      tableau_publication = tableau_workbook_publications(:default)
+      dataset = tableau_publication.dataset
+
+      dataset.destroy
+      TableauWorkbookPublication.find_by_id(tableau_publication.id).should be_nil
+    end
+
+    it "destroys dependent associated_datasets" do
+      associated_dataset = AssociatedDataset.first
+      dataset = associated_dataset.dataset
+
+      dataset.destroy
+      AssociatedDataset.find_by_id(associated_dataset.id).should be_nil
     end
   end
 end

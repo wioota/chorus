@@ -2,6 +2,7 @@ require 'greenplum_connection'
 
 class GpdbDatabase < ActiveRecord::Base
   include Stale
+  include SoftDelete
 
   attr_accessible :name
 
@@ -15,8 +16,8 @@ class GpdbDatabase < ActiveRecord::Base
   has_many :datasets, :through => :schemas
   has_and_belongs_to_many :instance_accounts
 
-
   before_save :mark_schemas_as_stale
+  after_destroy { instance_accounts.clear }
   delegate :account_for_user!, :account_for_user, :to => :gpdb_data_source
 
   DATABASE_NAMES_SQL = <<-SQL

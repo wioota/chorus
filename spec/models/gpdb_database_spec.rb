@@ -139,16 +139,6 @@ describe GpdbDatabase do
     it "has many datasets" do
       gpdb_databases(:default).datasets.should include(datasets(:table))
     end
-
-    describe "cascading deletes" do
-      it "deletes its schemas when it is destroyed" do
-        database = gpdb_databases(:default)
-
-        expect {
-          database.destroy
-        }.to change(database.schemas, :count).to(0)
-      end
-    end
   end
 
   describe "callbacks" do
@@ -248,6 +238,44 @@ describe GpdbDatabase do
       expect {
         database.with_gpdb_connection(InstanceIntegration.real_gpdb_account) {}
       }.to raise_error(GreenplumConnection::ObjectNotFound, /database.*does not exist/)
+    end
+  end
+
+  describe "#destroy" do
+    let(:database) { gpdb_databases(:default) }
+
+    it "should not delete the database entry" do
+      database.destroy
+      expect {
+        database.reload
+      }.to_not raise_error(Exception)
+    end
+
+    it "should update the deleted_at field" do
+      database.destroy
+      database.reload.deleted_at.should_not be_nil
+    end
+
+    it "destroys dependent schemas" do
+      schemas = database.schemas
+      schemas.length.should > 0
+
+      database.destroy
+      schemas.each do |schema|
+        GpdbSchema.find_by_id(schema.id).should be_nil
+      end
+    end
+
+    it "does not destroy instance accounts (but secretly deletes the join model)" do
+      database.instance_accounts << database.gpdb_data_source.accounts.first
+      instance_accounts = database.reload.instance_accounts
+
+      instance_accounts.length.should > 0
+
+      database.destroy
+      instance_accounts.each do |account|
+        InstanceAccount.find_by_id(account.id).should_not be_nil
+      end
     end
   end
 end

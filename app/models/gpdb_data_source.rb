@@ -1,4 +1,5 @@
 class GpdbDataSource < DataSource
+  include SoftDelete
   attr_accessor :db_username, :db_password
 
   validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'db_name']).empty? }
@@ -8,12 +9,11 @@ class GpdbDataSource < DataSource
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id"
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id", :dependent => :destroy
   has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
-  has_many :events_where_target1, :class_name => "Events::Base", :as => :target1, :dependent => :destroy
 
   before_validation :build_instance_account_for_owner, :on => :create
   after_update :solr_reindex_later, :if => :shared_changed?

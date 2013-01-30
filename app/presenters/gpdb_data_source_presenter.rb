@@ -12,7 +12,8 @@ class GpdbDataSourcePresenter < Presenter
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => model.entity_type_name
+      :entity_type => model.entity_type_name,
+      :is_deleted => !model.deleted_at.nil?
     }.merge(owner_hash)
   end
 

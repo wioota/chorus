@@ -2,6 +2,7 @@ require 'greenplum_connection'
 
 class GpdbSchema < ActiveRecord::Base
   include Stale
+  include SoftDelete
 
   attr_accessible :name
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
@@ -9,6 +10,7 @@ class GpdbSchema < ActiveRecord::Base
   has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+  has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_schema_id, :dependent => :nullify
 
   validates :name,
             :presence => true,

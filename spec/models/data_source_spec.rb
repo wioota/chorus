@@ -72,4 +72,30 @@ describe DataSource do
       event.actor.should == user
     end
   end
+
+  describe "#destroy" do
+    let(:instance) { data_sources(:owners) }
+
+    it "should not delete the database entry" do
+      instance.destroy
+      expect {
+        instance.reload
+      }.to_not raise_error(Exception)
+    end
+
+    it "should update the deleted_at field" do
+      instance.destroy
+      instance.reload.deleted_at.should_not be_nil
+    end
+
+    it "destroys dependent instance accounts" do
+      instance_accounts = instance.accounts
+      instance_accounts.length.should > 0
+
+      instance.destroy
+      instance_accounts.each do |account|
+        InstanceAccount.find_by_id(account.id).should be_nil
+      end
+    end
+  end
 end
