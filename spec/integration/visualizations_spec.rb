@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-#These tests actually create the charts from the instances view. Need to write separate tests for visulaization from sandbox
+#These tests actually create the charts from the instances view. Need to write separate tests for visualization from sandbox
 
 describe "Visualizations", :greenplum_integration do
   let(:instance) { InstanceIntegration.real_gpdb_data_source }
@@ -80,7 +80,6 @@ describe "Visualizations", :greenplum_integration do
   describe "Create box plot" do
     let(:chart_type) { 'boxplot' }
     let(:configure_chart) do
-
       page.execute_script("$('.value.field select').val('column1')")
       page.execute_script("$('.value.field select').selectmenu('refresh')")
       page.execute_script("$('.value.field select').change()")

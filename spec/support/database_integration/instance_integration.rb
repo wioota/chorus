@@ -133,7 +133,8 @@ module InstanceIntegration
   end
 
   def self.real_gpdb_data_source
-    GpdbDataSource.find_by_name(greenplum_hostname)
+    #GpdbDataSource.find_by_name(greenplum_hostname) works 99% of the time, but fails with a mysterious 'type IN (0)' error 1% of the time
+    GpdbDataSource.find_by_sql(%Q{SELECT  "data_sources".* FROM "data_sources"  WHERE "data_sources"."name" = '#{greenplum_hostname}' LIMIT 1}).first
   end
 
   def self.real_database
