@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 describe SearchController do
+  def self.generate_and_record_fixture(fixture_name, &block)
+    self.generate_fixture fixture_name do
+      reindex_solr_fixtures
+
+      tape_name = "search_solr_query_" + fixture_name.underscore.gsub(".json", "")
+      VCR.use_cassette tape_name do
+        instance_exec(&block)
+      end
+    end
+  end
+
   describe "#show" do
     let(:user) { users(:owner) }
 
@@ -20,83 +31,49 @@ describe SearchController do
       get :show, :query => 'marty'
     end
 
-    generate_fixture "searchResult.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_all_types_as_owner" do
-        get :show, :query => 'searchquery'
-      end
+    generate_and_record_fixture "searchResult.json" do
+      get :show, :query => 'searchquery'
     end
 
-    generate_fixture "emptySearchResult.json" do
-      Sunspot.session = Sunspot.session.original_session
-      VCR.use_cassette "search_solr_query_empty" do
-        get :show, :query => 'hippopotomous'
-      end
+    generate_and_record_fixture "tagSearchResult.json" do
+        get :show, :query => 'alpha', :tag => true
     end
 
-    generate_fixture "searchResultWithEntityTypeUser.json" do
-      reindex_solr_fixtures
+    generate_and_record_fixture "emptySearchResult.json" do
+      #Sunspot.session = Sunspot.session.original_session
+      get :show, :query => 'hippopotomous'
+    end
 
-      VCR.use_cassette "search_solr_query_user_as_owner" do
+    generate_and_record_fixture "searchResultWithEntityTypeUser.json" do
         get :show, :query => 'searchquery', :entity_type => 'user'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnInstanceNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_instance" do
+    generate_and_record_fixture "searchResultWithAttachmentOnInstanceNote.json" do
         get :show, :query => 'searchquery_instance'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnWorkspaceNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_workspace" do
+    generate_and_record_fixture "searchResultWithAttachmentOnWorkspaceNote.json" do
         get :show, :query => 'searchquery_workspace'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnWorkfileNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_workfile" do
+    generate_and_record_fixture "searchResultWithAttachmentOnWorkfileNote.json" do
         get :show, :query => 'searchquery_workfile'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnDatasetNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_dataset" do
+    generate_and_record_fixture "searchResultWithAttachmentOnDatasetNote.json" do
         get :show, :query => 'searchquery_dataset'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnHadoopNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_hadoop" do
+    generate_and_record_fixture "searchResultWithAttachmentOnHadoopNote.json" do
         get :show, :query => 'searchquery_hadoop'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnHdfsNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_hdfs" do
+    generate_and_record_fixture "searchResultWithAttachmentOnHdfsNote.json" do
         get :show, :query => 'searchquery_hdfs_file'
-      end
     end
 
-    generate_fixture "searchResultWithAttachmentOnWorkspaceDatasetNote.json" do
-      reindex_solr_fixtures
-
-      VCR.use_cassette "search_solr_query_attachment_on_workspace_dataset" do
+    generate_and_record_fixture "searchResultWithAttachmentOnWorkspaceDatasetNote.json" do
         get :show, :query => 'searchquery_workspace_dataset'
-      end
     end
   end
 
@@ -113,7 +90,7 @@ describe SearchController do
 
       it "should search within the users workspaces and present the results" do
         stub(MyWorkspacesSearch).new(user, hash_including(:query => 'searchything')) { search_object }
-        mock(@controller).present(search_object, :presenter_options => { :presenter_class => 'SearchPresenter' }) { @controller.render :json => {} }
+        mock(@controller).present(search_object, :presenter_options => {:presenter_class => 'SearchPresenter'}) { @controller.render :json => {} }
         get :workspaces, :query => 'searchything'
       end
     end
@@ -139,12 +116,8 @@ describe SearchController do
         get :type_ahead, :query => 'marty'
       end
 
-      generate_fixture "typeAheadSearchResult.json" do
-        reindex_solr_fixtures
-
-        VCR.use_cassette "type_ahead_search_fixture" do
+      generate_and_record_fixture "typeAheadSearchResult.json" do
           get :type_ahead, :query => 'typeahead', :per_page => 15
-        end
       end
     end
   end

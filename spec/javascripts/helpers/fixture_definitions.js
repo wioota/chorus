@@ -151,6 +151,8 @@ window.rspecFixtureDefinitions = {
 
     searchResult: {},
 
+    tagSearchResult: {},
+
     session: {},
 
     emptySearchResult: {
