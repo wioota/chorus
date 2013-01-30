@@ -7,9 +7,22 @@ chorus.RequiredResources = chorus.collections.Base.extend({
         });
     },
 
-    add: function(obj, options) {
-        this._super('add', [obj, _.extend({}, options, {silent: true})]);
-        this.trigger('add', obj);
+    add: function(resources, options) {
+        this._super('add', [resources, _.extend({}, options, {silent: true})]);
+        this.trigger('add', resources);
+
+        resources = _.isArray(resources) ? resources.slice() : [resources];
+        _.each(resources, _.bind(function (resource) {
+            if(!resource.loaded) {
+                this.listenTo(resource, 'loaded', this.verifyResourcesLoaded);
+            }
+        }, this));
+    },
+
+    verifyResourcesLoaded: function() {
+        if (this.allLoaded()) {
+            this.trigger("allResourcesLoaded");
+        }
     },
 
     _prepareModel: function(obj) {
@@ -21,6 +34,7 @@ chorus.RequiredResources = chorus.collections.Base.extend({
 
     cleanUp: function(context) {
         this.unbind(null, null, context);
+        this.stopListening();
         this.each(function(resource) {
             resource.unbind(null, null, context);
         });

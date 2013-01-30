@@ -32,7 +32,50 @@ describe("chorus.RequiredResources", function() {
             this.requiredResources.add(this.model);
             expect('add').toHaveBeenTriggeredOn(this.requiredResources);
         });
+
+        it("should bind verifyResourcesLoaded to the loaded event of the resource", function() {
+            this.model.loaded = false;
+
+            spyOn(this.requiredResources, 'verifyResourcesLoaded');
+            this.requiredResources.add(this.model);
+            this.model.trigger("loaded");
+            expect(this.requiredResources.verifyResourcesLoaded).toHaveBeenCalled();
+        });
     });
+
+    describe("when a required resource gets loaded", function() {
+        context("when all resources have been loaded", function() {
+            it("should trigger the allResourcesLoaded event", function() {
+                this.model.loaded = false;
+
+                spyOnEvent(this.requiredResources, 'allResourcesLoaded');
+                this.requiredResources.add(this.model);
+
+                this.model.loaded = true;
+                this.model.trigger("loaded");
+
+                expect("allResourcesLoaded").toHaveBeenTriggeredOn(this.requiredResources);
+            });
+        });
+
+        context("when all resources have not yet been loaded", function() {
+            it("should not trigger the allResourcesLoaded event", function() {
+                var otherModel = rspecFixtures.dataset();
+
+                this.model.loaded = otherModel.loaded = false;
+
+                spyOnEvent(this.requiredResources, 'allResourcesLoaded');
+                this.requiredResources.add(this.model);
+                this.requiredResources.add(otherModel);
+
+                this.model.loaded = true;
+                this.model.trigger("loaded");
+
+                expect("allResourcesLoaded").not.toHaveBeenTriggeredOn(this.requiredResources);
+            });
+        });
+    });
+
 
     describe("allLoaded", function() {
         beforeEach(function() {
@@ -63,12 +106,17 @@ describe("chorus.RequiredResources", function() {
             spyOn(this.model, "unbind");
             this.requiredResources.add(this.model);
 
+            spyOn(this.requiredResources, "stopListening");
             spyOn(this.requiredResources, "unbind");
             this.requiredResources.cleanUp(this.viewContext);
         });
 
         it("unbinds 'viewContext' events from the individual resources", function() {
             expect(this.model.unbind).toHaveBeenCalledWith(null, null, this.viewContext);
+        });
+
+        it("stops listening to events on the individual resources", function() {
+            expect(this.requiredResources.stopListening).toHaveBeenCalled();
         });
 
         it("empties the collection", function() {

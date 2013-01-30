@@ -14,7 +14,9 @@ chorus.views.Bare = Backbone.View.include(
             this.bindCallbacks();
             this.bindHotkeys();
 
-            this.verifyResourcesLoaded(true);
+            if (this.requiredResources.length !== 0 && this.requiredResources.allLoaded()) {
+                this.resourcesLoaded();
+            }
         },
 
         preInitialize: $.noop,
@@ -46,6 +48,7 @@ chorus.views.Bare = Backbone.View.include(
 
             chorus.unregisterView(this);
             this.unbind();
+            this.stopListening();
             this.undelegateEvents();
             this.bindings.removeAll();
             delete this.bindings.defaultContext;
@@ -104,14 +107,12 @@ chorus.views.Bare = Backbone.View.include(
             this._super('_configure', backboneOptions);
 
             this.requiredResources = new chorus.RequiredResources();
-            this.requiredResources.bind('add', function(resources) {
-                resources = _.isArray(resources) ? resources.slice() : [resources];
-                _.each(resources, _.bind(function (resource) {
-                    if(!resource.loaded) {
-                        resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
-                    }
-                }, this));
-            }, this);
+
+            this.listenTo(this.requiredResources, 'allResourcesLoaded', function() {
+                this.resourcesLoaded();
+                this.render();
+            });
+
             this.requiredResources.reset(options.requiredResources);
         },
 
@@ -130,19 +131,6 @@ chorus.views.Bare = Backbone.View.include(
 
         createAlert: function(e) {
             this.createModal(e, "alert");
-        },
-
-        verifyResourcesLoaded: function(preventRender) {
-            if (this.requiredResources.length === 0) {
-                return;
-            }
-            if (this.requiredResources.allLoaded()) {
-                this.resourcesLoaded();
-
-                if (!preventRender) {
-                    this.render();
-                }
-            }
         },
 
         render: function render() {
