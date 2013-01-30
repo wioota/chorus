@@ -37,7 +37,7 @@ describe("chorus.views.TagList", function() {
                 var element = this.view.$('li[data-id=' + tag.get('id') + ']');
                 expect(element).toContainText(tag.get('name'));
                 expect(element.find('a').attr("href")).toEqual('#/tags/' + tag.name());
-                expect(element).toContainText(tag.get('count') + " items");
+                expect(element).toContainTranslation("tag_list.item_count", {count: tag.get('count')});
             }, this);
         });
 
@@ -79,7 +79,7 @@ describe("chorus.views.TagList", function() {
             this.tags.each(function(tag) {
                 var element = this.view.$('li[data-id=' + tag.get('id') + ']');
                 expect(element).toContainText(tag.get('name'));
-                expect(element).toContainText(tag.get('count') + " items");
+                expect(element).toContainTranslation("tag_list.item_count", {count: tag.get('count')});
             }, this);
         });
     });
