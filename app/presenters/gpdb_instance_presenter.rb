@@ -13,7 +13,8 @@ class GpdbInstancePresenter < Presenter
       :description => model.description,
       :instance_provider => model.instance_provider,
       :version => model.version,
-      :entity_type => 'gpdb_instance'
+      :entity_type => 'gpdb_instance',
+      :is_deleted => !model.deleted_at.nil?
     }.merge(owner_hash)
   end
 
