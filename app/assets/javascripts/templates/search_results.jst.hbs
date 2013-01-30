@@ -11,13 +11,17 @@
     <div class="user_list selectable"></div>
 {{else}}
     <div class="sorry">
-        <div class="header">{{t "search.no_results.header"}}</div>
-        <ul>
-            <li>{{t "search.no_results.check_spelling"}}</li>
-            <li>{{t "search.no_results.try_wildcards"}}</li>
-            {{#if isConstrained}}
-                <li><a href="{{expandHref}}">{{t "search.no_results.expand"}}</a></li>
-            {{/if}}
-        </ul>
+        {{#if isTag}}
+            {{t "tag.show.no_results"}}
+        {{else}}
+            <div class="header">{{t "search.no_results.header"}}</div>
+            <ul>
+                <li>{{t "search.no_results.check_spelling"}}</li>
+                <li>{{t "search.no_results.try_wildcards"}}</li>
+                {{#if isConstrained}}
+                    <li><a href="{{expandHref}}">{{t "search.no_results.expand"}}</a></li>
+                {{/if}}
+            </ul>
+        {{/if}}
     </div>
 {{/if}}

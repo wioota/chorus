@@ -24,13 +24,26 @@ describe("chorus.pages.TagShowPage", function() {
     });
 
     describe("#render", function() {
-        beforeEach(function() {
-            page.render();
-            this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
+        context("when tags are found", function() {
+            beforeEach(function() {
+                page.render();
+                this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
+            });
+
+            it('displays the page title', function() {
+                expect(page.$('h1')).toContainTranslation("tag.show.title", {name: "tag-name"});
+            });
         });
 
-        it('displays the page title', function() {
-            expect(page.$('h1')).toContainTranslation("tag.show.title", {name: "tag-name"});
+        context("when no tags are found", function() {
+            beforeEach(function() {
+                page.render();
+                this.server.completeFetchFor(page.search, rspecFixtures.emptySearchResult());
+            });
+
+            it("displays a special message", function() {
+                expect(page.$('.sorry')).toContainTranslation("tag.show.no_results");
+            });
         });
     });
 
