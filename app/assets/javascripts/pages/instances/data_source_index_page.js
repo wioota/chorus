@@ -14,6 +14,8 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         gnipInstances.fetchAll();
 
         this.dependsOn(dataSources);
+        this.dependsOn(hadoopInstances);
+        this.dependsOn(gnipInstances);
 
         var options = {
             dataSources: dataSources,

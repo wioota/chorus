@@ -9,6 +9,7 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
             { label:t("breadcrumbs.user_edit") }
         ];
     },
+
     setup:function (userId) {
         var self = this;
         this.model = new chorus.models.User({id:userId});
@@ -23,5 +24,7 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.UserSidebar({ model: this.model, editMode: true });
+
+        this.bindings.add(this.model, "loaded", this.render);
     }
 });

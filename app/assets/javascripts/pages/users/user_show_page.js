@@ -4,6 +4,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
     setup: function(userId) {
         this.model = new chorus.models.User({id: userId});
         this.model.fetch();
+
         this.dependsOn(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
@@ -18,6 +19,8 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
         } else {
             this.sidebar = new chorus.views.UserSidebar({model: this.model});
         }
+
+        this.bindings.add(this.model, "loaded", this.render);
     },
 
     crumbs: function() {

@@ -9,7 +9,6 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
         this.dependsOn(this.collection);
         this.dependsOn(this.schema);
-        this.bindings.add(this.schema, "loaded", this.schemaLoaded);
 
         this.schema.fetch();
         this.collection.sortAsc("objectName");
@@ -44,6 +43,8 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             this.mainContent.contentFooter.render();
             this.mainContent.contentDetails.updatePagination();
         });
+
+        this.bindings.add(this.schema, "loaded", this.schemaLoaded);
     },
 
     crumbs: function() {

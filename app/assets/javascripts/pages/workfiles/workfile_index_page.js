@@ -5,8 +5,8 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.workspaceId = workspaceId;
 
         this.workspace = new chorus.models.Workspace({id: workspaceId});
-        this.bindings.add(this.workspace, "change", this.updateButtons);
         this.workspace.fetch();
+
         this.dependsOn(this.workspace);
 
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
@@ -73,6 +73,8 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             this.collection.sortAsc(field);
             this.collection.fetchAll();
         }, this);
+
+        this.bindings.add(this.workspace, "change", this.updateButtons);
     },
 
     crumbs: function() {

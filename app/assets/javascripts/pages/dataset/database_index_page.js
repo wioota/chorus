@@ -12,7 +12,6 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.collection.fetchAll();
 
         this.dependsOn(this.instance);
-        this.bindings.add(this.instance, "loaded", this.instanceLoaded);
 
         this.dependsOn(this.collection);
 
@@ -23,6 +22,8 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         });
 
         this.sidebar = new chorus.views.DatabaseListSidebar();
+
+        this.bindings.add(this.instance, "loaded", this.instanceLoaded);
     },
 
     instanceLoaded: function() {

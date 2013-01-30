@@ -16,6 +16,8 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
             content: new chorus.views.WorkspaceShow({model: this.model }),
             contentHeader: new chorus.views.WorkspaceSummaryContentHeader({model: this.model})
         });
+
+        this.bindings.add(this.model, "loaded", this.render);
     },
 
     decideIfQuickstart: function() {

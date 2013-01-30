@@ -9,7 +9,6 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         }
 
         this.dependsOn(this.model);
-        this.bindings.add(this.model, "loaded", this.buildPage);
 
         this.model.fetch();
 
@@ -17,6 +16,8 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
         chorus.PageEvents.subscribe("workfileVersion:changed", this.workfileVersionChanged, this);
+
+        this.bindings.add(this.model, "loaded", this.buildPage);
     },
 
     crumbs: function() {

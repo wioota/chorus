@@ -169,16 +169,22 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                     this.page.model.set({name: "bar", "public": false});
                 });
 
-                it("displays the new breadcrumb automatically", function() {
-                    expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
-                });
-
                 it("updates the title", function() {
                     expect(this.page.$("h1")).toContainText("bar");
                 });
 
                 it("changes the icon", function() {
                     expect(this.page.$(".activity_list_header .title img").attr("src")).toBe("/images/workspaces/private_workspace_large.png");
+                });
+
+                context("after the model has been loaded", function() {
+                    beforeEach(function() {
+                        this.page.model.trigger("loaded");
+                    });
+
+                    it("displays the new breadcrumb automatically", function() {
+                        expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
+                    });
                 });
             });
         });

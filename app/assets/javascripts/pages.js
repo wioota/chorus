@@ -46,8 +46,6 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         this.bindings.add(resource, "resourceNotFound", this.dependentResourceNotFound);
         this.bindings.add(resource, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, resource));
         this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
-
-        this.bindings.add(resource, "change", this.render);
     },
 
     failurePageOptions: function() {}

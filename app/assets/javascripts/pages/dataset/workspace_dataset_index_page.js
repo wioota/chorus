@@ -8,7 +8,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.workspace.fetch();
 
         this.dependsOn(this.workspace);
-        this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
 
         this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("objectName");
@@ -73,6 +72,8 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         }, this);
 
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
+
+        this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
     },
 
     crumbs: function() {

@@ -14,7 +14,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
             }
         });
         this.hdfsEntry.fetch();
-        this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
+
         this.dependsOn(this.hdfsEntry);
 
         this.collection = new chorus.collections.HdfsEntrySet([], {
@@ -32,8 +32,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
             hadoopInstanceId: this.hadoopInstanceId
         });
 
-
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this);
+
+        this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
     },
 
     crumbs: function() {

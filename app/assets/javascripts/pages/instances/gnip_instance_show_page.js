@@ -1,8 +1,9 @@
 chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
     setup: function(id) {
         this.model = new chorus.models.GnipInstance({id: id});
-        this.dependsOn(this.model);
         this.model.fetch();
+
+        this.dependsOn(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
             model: this.model,
@@ -11,6 +12,8 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.InstanceListSidebar();
         this.sidebar.setInstance(this.model);
+
+        this.bindings.add(this.model, "loaded", this.render);
     },
 
     crumbs: function() {

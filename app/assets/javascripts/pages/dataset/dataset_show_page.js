@@ -24,6 +24,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             this.mainContent = new chorus.views.LoadingSection();
 
             this.dependsOn(this.dataset);
+
             this.bindings.add(this.dataset, "loaded", this.datasetLoaded);
         },
 
