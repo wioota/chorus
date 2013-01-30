@@ -55,6 +55,7 @@ describe("chorus.pages.Base", function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "unprocessableEntity");
+                spyOn(Backbone.history, 'loadUrl');
                 this.page.dependsOn(this.model);
             });
 
@@ -75,6 +76,7 @@ describe("chorus.pages.Base", function() {
                     this.model.trigger("unprocessableEntity");
                     expect(chorus.pageOptions.title).toMatchTranslation("record_error.INSTANCE_OVERLOADED_title");
                     expect(chorus.pageOptions.text).toMatchTranslation("record_error.INSTANCE_OVERLOADED");
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
                 });
             });
 
@@ -90,6 +92,7 @@ describe("chorus.pages.Base", function() {
                     this.model.trigger("unprocessableEntity");
                     expect(chorus.pageOptions.title).toMatchTranslation("unprocessable_entity.unidentified_error.title");
                     expect(chorus.pageOptions.text).toBe("Bad things happened.");
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
                 });
             });
         });
