@@ -33,6 +33,10 @@ describe("chorus.pages.TagShowPage", function() {
             it('displays the page title', function() {
                 expect(page.$('h1')).toContainTranslation("tag.show.title", {name: "tag-name"});
             });
+
+            it('marks Other Files as unavailable', function() {
+               expect(page.$('.popup_filter li[data-type=attachment] span')).toHaveClass("unavailable");
+            });
         });
 
         context("when no tags are found", function() {

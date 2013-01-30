@@ -23,5 +23,11 @@ chorus.pages.TagShowPage = chorus.pages.SearchIndexPage.extend({
         return t("tag.show.title", {
             name: this.tagModel.name()
         });
+    },
+
+    typeOptions: function() {
+        var options = this._super("typeOptions", arguments);
+        _.findWhere(options, {data: "attachment"})["disabled"] = true;
+        return options;
     }
 });
