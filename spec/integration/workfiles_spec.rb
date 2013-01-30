@@ -1,7 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Workfiles" do
-
   let(:workspace) { workspaces(:public) }
 
   describe "add a workfile" do
@@ -72,6 +71,42 @@ describe "Workfiles" do
         workfiles = page.all("li.workfile")
         workfiles.first.text.should include workfile_first_by_date.file_name
         workfiles.last.text.should include workfile_last_by_date.file_name
+      end
+    end
+  end
+
+  describe "editing a workfile", :greenplum_integration do
+    let(:workspace) { workspaces(:real) }
+    let(:user) { users(:admin) }
+    let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) }
+    let(:workfile) { FactoryGirl.create :chorus_workfile, :workspace => workspace, :file_name => 'sqley.sql', :execution_schema => workspace.sandbox, :owner => user }
+
+    before do
+      FactoryGirl.create :workfile_version, :workfile => workfile, :owner => user, :modifier => user, :contents => file
+      login(user)
+      visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
+    end
+
+    def type_workfile_contents(text)
+      page.execute_script "chorus.page.mainContent.content.textContent.editor.setValue('#{text}')"
+    end
+
+    def get_workfile_contents
+      page.execute_script "return chorus.page.mainContent.content.textContent.editor.getValue()"
+    end
+
+    describe "changing the schema" do
+      it "should retain any pre-existing edits" do
+        page.should have_css ".CodeMirror-lines"
+        type_workfile_contents "fooey"
+        click_link "Change"
+        within_modal do
+          within ".schema .select_container" do
+            page.should have_content(workspace.sandbox.name)
+          end
+          click_button "Save Search Path"
+        end
+        get_workfile_contents.should == "fooey"
       end
     end
   end

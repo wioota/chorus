@@ -286,7 +286,14 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             var modalSpy;
             beforeEach(function() {
                 modalSpy = stubModals();
+                this.saveDraftSpy = jasmine.createSpy("saveDraft");
+                chorus.PageEvents.subscribe('file:saveDraft', this.saveDraftSpy);
+
                 this.view.$(".change_workfile_schema").click();
+            });
+
+            it("broadcasts a 'file:saveDraft' page event", function() {
+                expect(this.saveDraftSpy).toHaveBeenCalled();
             });
 
             it("shows the change schema dialog", function(){

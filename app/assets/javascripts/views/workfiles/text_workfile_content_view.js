@@ -40,6 +40,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:replaceCurrentVersionWithSelection", this.replaceCurrentVersionWithSelection, this);
         chorus.PageEvents.subscribe("file:createNewVersionFromSelection", this.createNewVersionFromSelection, this);
         chorus.PageEvents.subscribe("file:editorSelectionStatus", this.editorSelectionStatus, this);
+        chorus.PageEvents.subscribe("file:saveDraft", this.saveDraft, this);
         this.bindings.add(this.model, "saveFailed", this.versionConflict);
     },
 

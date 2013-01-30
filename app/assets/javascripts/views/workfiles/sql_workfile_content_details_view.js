@@ -120,9 +120,9 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         this.dialog.launchModal();
     },
 
-
     changeWorkfileSchema: function(e) {
         e.preventDefault();
+        chorus.PageEvents.broadcast("file:saveDraft");
         this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
         this.dialog.launchModal();
     }

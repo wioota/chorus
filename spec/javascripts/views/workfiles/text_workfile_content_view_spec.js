@@ -10,7 +10,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         this.clock = this.useFakeTimers();
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
-        if ($.browser.msie) {
+        if($.browser.msie) {
             spyOn(window.TextRange.prototype, 'select');
         }
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
@@ -66,7 +66,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         it("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
             spyOn(chorus, "triggerHotKey");
-            this.view.editor.editor.triggerOnKeyDown( { ctrlKey: true, keyCode: 82 } );
+            this.view.editor.editor.triggerOnKeyDown({ ctrlKey: true, keyCode: 82 });
             expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
         });
 
@@ -197,6 +197,17 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
     });
 
+    describe("the 'file:saveDraft' event", function() {
+        beforeEach(function() {
+            spyOn(this.view.model, "createDraft").andCallThrough();
+            chorus.PageEvents.broadcast("file:saveDraft");
+        });
+
+        it("saves the draft", function() {
+            expect(this.view.model.createDraft).toHaveBeenCalled();
+        });
+    });
+
     describe("saving the workfile", function() {
         beforeEach(function() {
             this.textfile.content("old content");
@@ -237,7 +248,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 expect(this.view.model.content()).toBe('This should be a big enough text, okay?');
             });
 
-            it("maintains the editor in edit mode", function(){
+            it("maintains the editor in edit mode", function() {
                 expect(this.view.$(".CodeMirror")).toHaveClass("editable");
             });
 
@@ -278,7 +289,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         context("with text selected", function() {
             beforeEach(function() {
-                this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 20});
+                this.view.editor.setSelection({line: 0, ch: 17}, {line: 0, ch: 20});
             });
 
             describe("the 'file:replaceCurrentVersionWithSelection' event", function() {
@@ -303,7 +314,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     expect(this.view.editor.getOption("readOnly")).toBe(false);
                 });
 
-                it("maintains the editor in edit mode", function(){
+                it("maintains the editor in edit mode", function() {
                     expect(this.view.$(".CodeMirror")).toHaveClass("editable");
                 });
 
@@ -330,7 +341,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("puts the cursor at the end of the file", function() {
-                    expect(this.view.editor.getCursor().ch).toBeGreaterThan("big".length-1);
+                    expect(this.view.editor.getCursor().ch).toBeGreaterThan("big".length - 1);
                 });
 
                 it("launches save workfile as new version dialog", function() {
@@ -348,7 +359,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("calls file:selectionPresent when there is some text selected", function() {
-                    this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 20});
+                    this.view.editor.setSelection({line: 0, ch: 17}, {line: 0, ch: 20});
 
                     chorus.PageEvents.broadcast("file:editorSelectionStatus");
 
@@ -356,7 +367,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("calls file:selectionEmpty when there is No text selected", function() {
-                    this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 17});
+                    this.view.editor.setSelection({line: 0, ch: 17}, {line: 0, ch: 17});
 
                     chorus.PageEvents.broadcast("file:editorSelectionStatus");
 
