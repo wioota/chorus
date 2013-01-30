@@ -25,6 +25,6 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.UserSidebar({ model: this.model, editMode: true });
 
-        this.bindings.add(this.model, "loaded", this.render);
+        this.updateBreadcrumbsAfterLoading(this.model);
     }
 });

@@ -20,8 +20,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
 
-        this.bindings.add(this.model, "loaded", this.render);
-        this.bindings.add(this.hadoopInstance, "loaded", this.render);
+        this.updateBreadcrumbsAfterLoading(this.model, this.hadoopInstance);
     },
 
     crumbs: function() {

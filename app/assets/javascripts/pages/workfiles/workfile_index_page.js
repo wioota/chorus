@@ -75,6 +75,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         }, this);
 
         this.bindings.add(this.workspace, "change", this.updateButtons);
+        this.updateBreadcrumbsAfterLoading(this.workspace);
     },
 
     crumbs: function() {

@@ -98,6 +98,35 @@ describe("chorus.pages.Base", function() {
         });
     });
 
+    describe("#updateBreadcrumbsAfterLoading", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.Bare();
+            this.model = new chorus.models.Base();
+            spyOn(this.page, "render");
+        });
+
+        context("With a single resource", function() {
+            it("renders the page", function() {
+                this.page.updateBreadcrumbsAfterLoading(this.model);
+
+                this.model.trigger("loaded");
+                expect(this.page.render).toHaveBeenCalled();
+            });
+        });
+
+        context("With multiple resources", function() {
+            it("renders the page when each model changes", function() {
+                this.models = [this.model, new chorus.models.Base()];
+                this.page.updateBreadcrumbsAfterLoading(this.models[0], this.models[1]);
+
+                _.each(this.models, function(model) {
+                    model.trigger("loaded");
+                });
+                expect(this.page.render.calls.length).toBe(2);
+            });
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();

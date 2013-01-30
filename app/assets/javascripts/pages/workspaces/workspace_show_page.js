@@ -17,7 +17,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.WorkspaceSummaryContentHeader({model: this.model})
         });
 
-        this.bindings.add(this.model, "loaded", this.render);
+        this.updateBreadcrumbsAfterLoading(this.model);
     },
 
     decideIfQuickstart: function() {

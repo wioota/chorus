@@ -48,6 +48,15 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
     },
 
+    updateBreadcrumbsAfterLoading: function() {
+        var resources = arguments;
+        var page = this;
+
+        _.each(resources, function(resource) {
+            page.bindings.add(resource, "loaded", page.render);
+        });
+    },
+
     failurePageOptions: function() {}
 });
 
