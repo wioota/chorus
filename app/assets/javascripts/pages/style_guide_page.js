@@ -70,8 +70,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         })();
 
         this.views = {
-            "Header": new chorus.views.Header(),
-
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
                     { label: t("breadcrumbs.home"), url: "#/" },
@@ -98,6 +96,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Change Password Dialog": new chorus.dialogs.ChangePassword(),
 
             "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
+
+            "New Note Dialog" : new chorus.dialogs.NotesNew(),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
 
