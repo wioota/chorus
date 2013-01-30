@@ -80,7 +80,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                         ]);
                     });
 
-                    it("creates a new columnSet with the same data as the dataset's columnSet", function() {
+                    it("stores a local copy of the columns in case a join is added when editing a ChorusView", function() {
                         expect(this.page.columnSet.models).toEqual(this.page.dataset.columns().models);
                         expect(this.page.columnSet).not.toEqual(this.page.dataset.columns());
                     });

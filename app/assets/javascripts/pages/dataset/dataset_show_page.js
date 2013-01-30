@@ -30,6 +30,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         datasetLoaded: function() {
+            this.columnSet = this.dataset.columns();
             this.setupMainContent();
             this.setupSidebar();
             this.fetchColumnSet();
@@ -37,8 +38,6 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         setupMainContent: function() {
-            this.columnSet = this.dataset.columns();
-
             this.customHeaderView = this.getHeaderView({
                 model: this.dataset
             });
@@ -109,6 +108,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             this.columnSet.serverErrors = serverErrors;
             this.columnSet.loaded = true;
 
+            this.setupMainContent();
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
 
             this.render();
