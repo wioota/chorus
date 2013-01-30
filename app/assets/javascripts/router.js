@@ -57,7 +57,8 @@
             ["notifications", "NotificationIndex"],
             ["styleguide", "StyleGuide"],
             ["tags", "TagIndex"],
-            ["tags/:name", "TagShow"]
+            ["tags/:name", "TagShow"],
+            ["tags/:scope/:entityType/:name", "TagShow"]
         ],
 
         initialize:function (app) {

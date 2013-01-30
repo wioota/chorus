@@ -41,17 +41,6 @@ describe("chorus.views.TagList", function() {
             }, this);
         });
 
-        describe("when the tag name has special characters", function() {
-            beforeEach(function() {
-                this.tags.reset({ name: '!@#$%^&*()"', id: 1234 }, { silent: true });
-                this.tags.trigger('loaded');
-            });
-
-            it('uri encodes the url', function() {
-                expect(this.view.$('li[data-id=1234] a').attr("href")).toEqual('#/tags/!%40%23%24%25%5E%26*()%22');
-            });
-        });
-
         context("when there are no tags", function() {
             it("should render text to tell the user", function() {
                this.view.collection = new chorus.collections.TagSet();
