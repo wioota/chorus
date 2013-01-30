@@ -68,8 +68,8 @@ GIT
       multi_json (~> 1.0)
 
 GIT
-  remote: git://github.com/pivotal-leopold/sequel.git
-  revision: d90dad53acd40f8da8907fd383eeb16268753916
+  remote: git://github.com/jeremyevans/sequel.git
+  revision: 1c711730b135f3406b4c4deb5685153c2a281df5
   specs:
     sequel (3.43.0)
 

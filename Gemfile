@@ -13,7 +13,7 @@ gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/s
 gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
-gem 'sequel', :github => 'pivotal-leopold/sequel', :require => 'sequel/no_core_ext'
+gem 'sequel', :github => 'jeremyevans/sequel', :require => 'sequel/no_core_ext'
 gem 'attr_encrypted' #if you load attr_encrypted before sequel, it blows up saying 'sequel::model' is undefined
 gem 'tabcmd_gem', :github => "GreenplumChorus/tableau"
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
