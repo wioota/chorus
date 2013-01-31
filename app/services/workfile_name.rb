@@ -10,7 +10,7 @@ class WorkfileName
         base_file_name = workfile.file_name[0..(index - 1)]
         extension = workfile.file_name[index, length]
       end
-      workfile_names = Workfile.where("workspace_id = #{workfile.workspace_id} AND file_name LIKE '#{base_file_name}%#{extension}' ").pluck(:file_name)
+      workfile_names = Workfile.where(:workspace_id => workfile.workspace_id).where("file_name LIKE ?", "#{base_file_name}%#{extension}").pluck(:file_name)
 
       n = 1
       while workfile_names.include?("#{base_file_name}_#{n}#{extension}") do
