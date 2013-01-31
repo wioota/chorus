@@ -40,6 +40,9 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                 model: this.dataset
             });
 
+            if (this.mainContent) {
+                this.mainContent.teardown(true);
+            }
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
                 collection: this.columnSet,

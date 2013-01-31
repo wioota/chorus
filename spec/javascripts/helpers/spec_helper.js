@@ -364,6 +364,9 @@
         if (this instanceof jasmine.Spec) {
             _.each(this, function(_value, key) {
                 if (this.hasOwnProperty(key) && !(key in specWhitelist)) {
+                    if (this[key] && this[key].teardown) {
+                        this[key].teardown();
+                    }
                     delete this[key];
                 }
             }, this);

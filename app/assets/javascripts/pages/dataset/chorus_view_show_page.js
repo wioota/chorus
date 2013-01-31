@@ -12,18 +12,22 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     drawColumns: function() {
         this._super('drawColumns');
 
-        this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
+        this.bindings.add(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
     },
 
     editChorusView: function() {
         var sameHeader = this.mainContent.contentHeader;
+
+        if (this.mainContent) {
+            this.mainContent.teardown(true);
+        }
         this.mainContent = new chorus.views.MainContentView({
             content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
             contentHeader: sameHeader,
             contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
         });
 
-        chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this));
 
         this.renderSubview('mainContent');
     },

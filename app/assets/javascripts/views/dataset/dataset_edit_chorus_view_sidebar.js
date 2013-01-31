@@ -27,6 +27,6 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
             displayStyle: ['without_object', 'without_workspace']
         });
 
-        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
+        this.bindings.add(this.tabs, 'selected', this.recalculateScrolling);
     }
 });

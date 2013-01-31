@@ -1,5 +1,6 @@
 chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
     templateName: "dataset_edit_chorus_view",
+    constructorName: "DatasetEditChorusView",
 
     subviews: {
         ".editor": "editor"
@@ -11,14 +12,14 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
             model: this.model,
             readOnly: false,
             mode: "text/x-sql",
-            extraKeys: {},
-            onBlur: _.bind(this.updateQueryInModel, this)
+            extraKeys: {}
         });
 
-        chorus.PageEvents.subscribe("dataset:saveEdit", this.saveModel, this);
-        chorus.PageEvents.subscribe("dataset:cancelEdit", this.cancelEdit, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:saveEdit", this.saveModel, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.cancelEdit, this));
         this.model.initialQuery = this.model.get("query");
         this.bindings.add(this.model, "saved", this.navigateToChorusViewShowPage);
+        this.bindings.add(this.editor, 'blur', this.updateQueryInModel);
     },
 
     updateQueryInModel: function() {
