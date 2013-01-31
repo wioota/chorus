@@ -82,6 +82,7 @@ describe("chorus.pages.DatasetShowPage", function() {
     context("when the dataset fetch completes", function() {
         beforeEach(function() {
             spyOn(chorus, "search");
+            this.page.render();
             this.qtipSpy = stubQtip();
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
