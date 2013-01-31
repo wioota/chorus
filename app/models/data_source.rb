@@ -5,7 +5,7 @@ class DataSource < ActiveRecord::Base
   attr_accessible :shared, :as => :create
 
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id"
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id", :dependent => :destroy
   has_one :owner_account, :class_name => 'InstanceAccount', :foreign_key => "instance_id", :inverse_of => :instance, :conditions => proc { {:owner_id => owner_id} }
 
   has_many :activities, :as => :entity
@@ -18,8 +18,6 @@ class DataSource < ActiveRecord::Base
   after_create :create_instance_created_event, :if => :current_user
   validates_with DataSourceNameValidator
 
-  def refresh_databases_later
-  end
 
   def valid_db_credentials?(account)
     success = true
@@ -41,6 +39,10 @@ class DataSource < ActiveRecord::Base
           owned: user.id,
           with_membership: user.instance_accounts.pluck(:instance_id)
     )
+  end
+
+  def self.refresh_databases instance_id
+    find(instance_id).refresh_databases
   end
 
   private

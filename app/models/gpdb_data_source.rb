@@ -5,11 +5,7 @@ class GpdbDataSource < DataSource
   validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'db_name']).empty? }
 
   validates_with DataSourceNameValidator
-  
-  has_many :activities, :as => :entity
-  has_many :events, :through => :activities
-  belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id", :dependent => :destroy
+
   has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
@@ -34,10 +30,6 @@ class GpdbDataSource < DataSource
     instance = GpdbDataSource.find(instance_id)
     instance.solr_index
     instance.datasets(:reload => true).each(&:solr_index)
-  end
-
-  def self.refresh_databases instance_id
-    GpdbDataSource.find(instance_id).refresh_databases
   end
 
   def solr_reindex_later
