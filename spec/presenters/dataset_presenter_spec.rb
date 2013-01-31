@@ -80,6 +80,10 @@ describe DatasetPresenter, :type => :view do
         hash[:comment_count].should == 0
       end
 
+      it "includes is_deleted field" do
+        hash.should have_key(:is_deleted)
+      end
+
       context "when it has comments" do
         let!(:dataset_note) { Events::NoteOnDataset.by(@user).add(:dataset => dataset, :body => 'Note on dataset') }
 
