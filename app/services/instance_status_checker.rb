@@ -88,6 +88,10 @@ class InstanceStatusChecker
   def next_check_time
     #check immediately if data source has never been checked
     return 1.minute.ago if last_checked_at.blank?
+    if last_online_at.blank?
+      instance.last_online_at = last_checked_at
+      return 1.minute.ago
+    end
 
     next_check_at = last_online_at + downtime_before_last_check * 2
     must_check_by = last_checked_at + maximum_check_interval
@@ -97,11 +101,11 @@ class InstanceStatusChecker
   def check_with_exponential_backoff(&block)
     return if Time.current < next_check_time
     touch(:last_checked_at)
+    instance.last_online_at = last_checked_at if last_online_at.blank?
     success = yield block
     instance.last_online_at = last_checked_at if success
 
     #set last online_at during the first check, even if offline, for interval calculation later
-    instance.last_online_at = last_checked_at if last_online_at.blank?
   end
 end
 

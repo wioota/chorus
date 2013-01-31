@@ -84,6 +84,28 @@ describe InstanceStatusChecker do
         (next_check_time - Time.current).should > 12.hours
       end
     end
+
+    context "when times are nil" do
+      let(:last_online_at) { nil }
+      let(:last_checked_at) { nil }
+
+      it "it still does the update" do
+        expect {
+          check_and_reload(online_instance)
+        }.to change(online_instance, :last_checked_at)
+      end
+    end
+
+    context "when last_online_at is nil" do
+      let(:last_online_at) { nil }
+      let(:last_checked_at) { 1.day.ago }
+
+      it "it still does the update" do
+        expect {
+          check_and_reload(online_instance)
+        }.to change(online_instance, :last_online_at)
+      end
+    end
   end
 
   describe "Hadoop Instances:" do
