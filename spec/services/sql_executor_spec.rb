@@ -12,46 +12,47 @@ describe SqlExecutor do
       subject { SqlExecutor.preview_dataset(table, account, check_id) }
 
       it "returns a SqlResult object with the correct rows" do
-        subject.rows.should == [[
-                                    "(1,2)",
-                                    "1.2",
-                                    "{1,2,3}",
-                                    "1",
-                                    "1",
-                                    "10101",
-                                    "101",
-                                    "t",
-                                    "(2,2),(1,1)",
-                                    "xDEADBEEF",
-                                    "var char",
-                                    "char      ",
-                                    "192.168.100.128/25",
-                                    "<(1,2),3>",
-                                    "2011-01-01",
-                                    "10.01",
-                                    "192.168.100.128",
-                                    "10",
-                                    "3 days 04:05:06",
-                                    "[(1,1),(2,2)]",
-                                    "08:00:2b:01:02:03",
-                                    "$1,000.00",
-                                    "0.02000",
-                                    "[(1,1),(2,2),(3,3)]",
-                                    "(0,0)",
-                                    "((10,10),(20,20),(30,30))",
-                                    "1.1",
-                                    "1",
-                                    "2",
-                                    "text",
-                                    "04:05:06",
-                                    "01:02:03-08",
-                                    "1999-01-08 04:05:06",
-                                    "1999-01-08 04:05:06-08"
-                                ]]
+        row = subject.rows[0]
+        row[0..-2].should == [
+            "(1,2)",
+            "1.2",
+            "{1,2,3}",
+            "1",
+            "1",
+            "10101",
+            "101",
+            "t",
+            "(2,2),(1,1)",
+            "xDEADBEEF",
+            "var char",
+            "char      ",
+            "192.168.100.128/25",
+            "<(1,2),3>",
+            "2011-01-01",
+            "10.01",
+            "192.168.100.128",
+            "10",
+            "3 days 04:05:06",
+            "[(1,1),(2,2)]",
+            "08:00:2b:01:02:03",
+            "$1,000.00",
+            "0.02000",
+            "[(1,1),(2,2),(3,3)]",
+            "(0,0)",
+            "((10,10),(20,20),(30,30))",
+            "1.1",
+            "1",
+            "2",
+            "text",
+            "04:05:06",
+            "01:02:03-08",
+            "1999-01-08 04:05:06",
+        ]
+        Time.parse(row[-1]).should == Time.parse("1999-01-08 04:05:06-08")
       end
 
       context "with row limit" do
-        let(:table) {database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
+        let(:table) { database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
         before do
           stub.proxy(ChorusConfig.instance).[](anything)
           stub(ChorusConfig.instance).[]('default_preview_row_limit') { 2 }
@@ -202,7 +203,7 @@ describe SqlExecutor do
 
         mock(connection_provider).connect_with(account) { fake_connection }
         mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
-        mock(fake_query).execute(sql, { :timeout => 60 * 1000 * timeout }) { raise GreenplumConnection::QueryError }
+        mock(fake_query).execute(sql, {:timeout => 60 * 1000 * timeout}) { raise GreenplumConnection::QueryError }
 
         expect {
           SqlExecutor.execute_sql(connection_provider, account, check_id, sql)
