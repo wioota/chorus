@@ -13,6 +13,8 @@ class DataMigrator
     AttachmentMigrator.migrate(options)
     NotificationMigrator.migrate(options)
 
+    GpdbInstanceMigrator.purge_deleted_instances
+
     ActivityMigrator.validate
     AssociatedDatasetMigrator.validate
     DatabaseObjectMigrator.validate

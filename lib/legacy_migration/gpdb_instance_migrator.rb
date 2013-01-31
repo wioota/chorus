@@ -8,6 +8,14 @@ class GpdbInstanceMigrator < AbstractMigrator
       [GpdbInstance]
     end
 
+    def purge_deleted_instances
+      silence_solr do
+        Legacy.connection.select_all("SELECT id FROM edc_instance WHERE is_deleted = true").each do |legacy_deleted_instance|
+          GpdbInstance.find_by_legacy_id(legacy_deleted_instance['id']).destroy
+        end
+      end
+    end
+
     def migrate
       prerequisites
       Legacy.connection.exec_query("INSERT INTO public.gpdb_instances(

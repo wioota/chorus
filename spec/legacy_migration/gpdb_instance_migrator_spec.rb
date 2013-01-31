@@ -27,4 +27,16 @@ describe GpdbInstanceMigrator do
       end
     end
   end
+
+  describe ".purge_deleted_instances" do
+    it "destroys any instances that are marked is_deleted true in 2.1" do
+      deleted_instances= Legacy.connection.select_all("SELECT * FROM edc_instance WHERE is_deleted = true")
+      deleted_instances.length.should > 0
+
+      deleted_instances.each do |deleted_legacy_instance|
+        gpdb_instance = GpdbInstance.unscoped.find_by_legacy_id(deleted_legacy_instance["id"])
+        gpdb_instance.deleted_at.should_not be_nil
+      end
+    end
+  end
 end
