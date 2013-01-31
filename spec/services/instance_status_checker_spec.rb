@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe InstanceStatusChecker do
-  shared_examples :it_checks_a_data_source_with_exponential_backoff do |check_method|
+  shared_examples :it_checks_a_data_source_if_due do |check_method|
 
     define_method :check_and_reload do |data_source|
       begin
@@ -14,6 +14,7 @@ describe InstanceStatusChecker do
     end
 
     before do
+      offline_data_source.state = 'offline'
       [offline_data_source, online_data_source].each do |data_source|
         data_source.last_online_at = last_online_at
         data_source.last_checked_at = last_checked_at
@@ -21,26 +22,14 @@ describe InstanceStatusChecker do
       end
     end
 
-    context "when the data_source will be online for the first time" do
+    context "when the data_source is online" do
       let(:last_online_at) { nil }
       let(:last_checked_at) { nil }
-      it "updates the last_online_at timestamp" do
+
+      it "updates last_online_at" do
         expect {
           check_and_reload(online_data_source)
         }.to change(online_data_source, :last_online_at)
-      end
-    end
-
-    context "when data_source is still online" do
-      let(:last_online_at) { 1.minute.ago }
-      let(:last_checked_at) { 1.minute.ago }
-
-      it "updates the last_checked_at timestamp on data_source" do
-        previously_updated_at = online_data_source.updated_at
-        expect {
-          check_and_reload(online_data_source)
-        }.to change(online_data_source, :last_checked_at)
-        online_data_source.last_checked_at.should > previously_updated_at
       end
 
       it "updates last_checked_at and last_online_at" do
@@ -50,21 +39,10 @@ describe InstanceStatusChecker do
       end
     end
 
-    context "when the data_source becomes offline" do
-      let(:last_online_at) { 1.minute.ago }
-      let(:last_checked_at) { 1.minute.ago }
-
-      it "doesn't update the last_online_at timestamp for data_sources that are offline" do
-        expect {
-          check_and_reload(offline_data_source)
-        }.not_to change(offline_data_source, :last_online_at)
-      end
-    end
-
-    context "when the data_source was offline at the last check" do
-      context "when elapsed time since last check is greater than maximum check interval" do
-        let(:last_online_at) { 1.year.ago }
-        let(:last_checked_at) { 1.day.ago }
+    context "when the data_source was offline" do
+      context "when the last checked time was more than two hours ago" do
+        let(:last_checked_at) { 1.year.ago }
+        let(:last_online_at) { nil }
 
         it "checks the data_source" do
           expect {
@@ -73,51 +51,38 @@ describe InstanceStatusChecker do
         end
       end
 
-      context "when elapsed time since last check is more than double the downtime" do
-        let(:last_online_at) { 10.minutes.ago }
-        let(:last_checked_at) { 3.minutes.ago }
+      context "when last checked time was less than two hours ago" do
+        let(:last_checked_at) { 1.minutes.ago }
+        let(:last_online_at) { 1.year.ago }
 
-        it "does not check data_source" do
+        it "does not check the data_source" do
           expect {
             check_and_reload(offline_data_source)
           }.not_to change(offline_data_source, :last_checked_at)
         end
       end
-
-      context "when elapsed time since last check is less than double the downtime" do
-        let(:last_online_at) { 10.minutes.ago }
-        let(:last_checked_at) { 7.minutes.ago }
-
-        it "checks the data_source" do
-          expect {
-            check_and_reload(offline_data_source)
-          }.to change(offline_data_source, :last_checked_at)
-        end
-      end
     end
   end
 
-  describe "Hadoop Instances:" do
-    let(:hadoop_instance1) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
+  describe "checking a hadoop instance:" do
+    let(:hadoop_instance) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
 
     describe ".check_hdfs_data_sources" do
-      let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
-
       before do
-        stub(Hdfs::QueryService).data_source_version(hadoop_instance1) { "1.0.0" }
-        InstanceStatusChecker.check(hadoop_instance1)
+        stub(Hdfs::QueryService).data_source_version(hadoop_instance) { "1.0.0" }
+        InstanceStatusChecker.check(hadoop_instance)
       end
 
       it "updates the connection status for each data_source" do
-        hadoop_instance1.reload.should be_online
+        hadoop_instance.reload.should be_online
       end
 
       it "updates the version for each data_source" do
-        hadoop_instance1.reload.version.should == "1.0.0"
+        hadoop_instance.reload.version.should == "1.0.0"
       end
     end
 
-    it_behaves_like :it_checks_a_data_source_with_exponential_backoff do
+    it_behaves_like :it_checks_a_data_source_if_due do
       let(:online_data_source) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
       let(:offline_data_source) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
 
@@ -128,7 +93,7 @@ describe InstanceStatusChecker do
     end
   end
 
-  describe "GPDB Instances" do
+  describe "checking a GPDB data source" do
     let(:data_source_account) { gpdb_data_source.owner_account }
     let(:gpdb_data_source) { FactoryGirl.create :gpdb_data_source, :state => 'offline' }
 
@@ -182,7 +147,7 @@ describe InstanceStatusChecker do
       end
     end
 
-    it_behaves_like :it_checks_a_data_source_with_exponential_backoff do
+    it_behaves_like :it_checks_a_data_source_if_due do
       let(:online_data_source) { gpdb_data_source }
       let(:offline_data_source) { FactoryGirl.create(:gpdb_data_source) }
 
@@ -195,7 +160,7 @@ describe InstanceStatusChecker do
     end
   end
 
-  describe "Oracle Instances" do
+  describe "checking an oracle data source" do
     let(:oracle_data_source) { data_sources(:oracle) }
     let(:connection) { Object.new }
 
@@ -238,7 +203,7 @@ describe InstanceStatusChecker do
       end
     end
 
-    it_behaves_like :it_checks_a_data_source_with_exponential_backoff do
+    it_behaves_like :it_checks_a_data_source_if_due do
       let(:online_data_source) { oracle_data_source }
       let(:offline_data_source) { FactoryGirl.create(:oracle_data_source) }
       let(:online_connection ) { Object.new }
