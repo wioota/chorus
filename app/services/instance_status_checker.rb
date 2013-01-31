@@ -27,6 +27,10 @@ class InstanceStatusChecker
       end
     rescue => e
       Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+      if (e.message.match(/authentication/i))
+        #hack to make sure we wait a day if credentials are invalid
+        instance.last_online_at = Time.current - 1.day
+      end
     ensure
       instance.touch
       instance.save!
@@ -82,7 +86,9 @@ class InstanceStatusChecker
   end
 
   def next_check_time
-    return 1.minute.ago if last_online_at.blank?
+    #check immediately if data source has never been checked
+    return 1.minute.ago if last_checked_at.blank?
+
     next_check_at = last_online_at + downtime_before_last_check * 2
     must_check_by = last_checked_at + maximum_check_interval
     [next_check_at, must_check_by].min
@@ -93,6 +99,9 @@ class InstanceStatusChecker
     touch(:last_checked_at)
     success = yield block
     instance.last_online_at = last_checked_at if success
+
+    #set last online_at during the first check, even if offline, for interval calculation later
+    instance.last_online_at = last_checked_at if last_online_at.blank?
   end
 end
 

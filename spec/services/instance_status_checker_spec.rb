@@ -62,38 +62,26 @@ describe InstanceStatusChecker do
       end
     end
 
-    context "when the instance was offline at the last check" do
-      context "when elapsed time since last check is greater than maximum check interval" do
-        let(:last_online_at) { 1.year.ago }
-        let(:last_checked_at) { 1.day.ago }
+    context 'when the instance credentials are invalid' do
+      let(:last_online_at) { 1.minute.ago }
+      let(:last_checked_at) { 1.minute.ago }
 
-        it "checks the instance" do
-          expect {
-            check_and_reload(offline_instance)
-          }.to change(offline_instance, :last_checked_at)
+      before do
+        any_instance_of InstanceStatusChecker do |checker|
+          stub(checker).check_gpdb_instance do
+            raise StandardError.new 'FATAL: LDAP authentication failed for user "gpadmin"'
+          end
+
+          stub(checker).check_hdfs_instance do
+            raise StandardError.new 'FATAL: LDAP authentication failed for user "gpadmin"'
+          end
         end
       end
 
-      context "when elapsed time since last check is more than double the downtime" do
-        let(:last_online_at) { 10.minutes.ago }
-        let(:last_checked_at) { 3.minutes.ago }
-
-        it "does not check instance" do
-          expect {
-            check_and_reload(offline_instance)
-          }.not_to change(offline_instance, :last_checked_at)
-        end
-      end
-
-      context "when elapsed time since last check is less than double the downtime" do
-        let(:last_online_at) { 10.minutes.ago }
-        let(:last_checked_at) { 7.minutes.ago }
-
-        it "checks the instance" do
-          expect {
-            check_and_reload(offline_instance)
-          }.to change(offline_instance, :last_checked_at)
-        end
+      it 'does not check the instance for 12 hours' do
+        check_and_reload online_instance
+        next_check_time = InstanceStatusChecker.new(online_instance).send(:next_check_time)
+        (next_check_time - Time.current).should > 12.hours
       end
     end
   end
