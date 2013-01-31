@@ -20,7 +20,9 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
             this.sidebar = new chorus.views.UserSidebar({model: this.model});
         }
 
-        this.updateBreadcrumbsAfterLoading(this.model);
+        this.listenTo(this.model, "loaded", this.render);
+        this.breadcrumbRequiredResources = [this.model];
+
     },
 
     crumbs: function() {

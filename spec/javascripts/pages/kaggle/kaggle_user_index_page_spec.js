@@ -44,6 +44,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
     context("after the workspace has loaded successfully", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace, this.workspace);
+            this.page.render();
         });
 
         it("displays the breadcrumbs", function() {

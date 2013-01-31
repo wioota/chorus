@@ -24,7 +24,8 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.sidebar = new chorus.views.DatabaseListSidebar();
 
         this.bindings.add(this.instance, "loaded", this.instanceLoaded);
-        this.updateBreadcrumbsAfterLoading(this.instance);
+
+        this.breadcrumbRequiredResources = [this.instance];
     },
 
     instanceLoaded: function() {

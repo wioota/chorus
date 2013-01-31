@@ -36,6 +36,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
     context("fetches complete", function() {
         beforeEach(function() {
+            this.page.render();
             this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
             this.server.completeFetchFor(this.page.model, this.file);
         });

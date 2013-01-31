@@ -73,8 +73,8 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
 
-        this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
-        this.updateBreadcrumbsAfterLoading(this.workspace);
+        this.listenTo(this.workspace, "loaded", this.workspaceLoaded);
+        this.breadcrumbRequiredResources = [this.workspace];
     },
 
     crumbs: function() {

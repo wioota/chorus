@@ -48,15 +48,6 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
     },
 
-    updateBreadcrumbsAfterLoading: function() {
-        var resources = arguments;
-        var page = this;
-
-        _.each(resources, function(resource) {
-            page.bindings.add(resource, "loaded", page.render);
-        });
-    },
-
     failurePageOptions: function() {}
 });
 
@@ -76,8 +67,16 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     setupSubviews: function() {
         this.header = this.header || new chorus.views.Header({ workspaceId: this.workspaceId });
+        var page = this;
+
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
-            breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs
+            breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
+        });
+
+        _.each(this.breadcrumbRequiredResources, function(resource){
+            page.breadcrumbs.listenTo(resource, "loaded", function() {
+                page.breadcrumbs.render();
+            });
         });
     },
 

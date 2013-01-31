@@ -28,7 +28,7 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
 
         this.sidebar = new chorus.views.SchemaListSidebar();
 
-        this.updateBreadcrumbsAfterLoading(this.database);
+        this.breadcrumbRequiredResources = [this.database];
     },
 
     crumbs: function() {

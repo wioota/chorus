@@ -98,35 +98,6 @@ describe("chorus.pages.Base", function() {
         });
     });
 
-    describe("#updateBreadcrumbsAfterLoading", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.Bare();
-            this.model = new chorus.models.Base();
-            spyOn(this.page, "render");
-        });
-
-        context("With a single resource", function() {
-            it("renders the page", function() {
-                this.page.updateBreadcrumbsAfterLoading(this.model);
-
-                this.model.trigger("loaded");
-                expect(this.page.render).toHaveBeenCalled();
-            });
-        });
-
-        context("With multiple resources", function() {
-            it("renders the page when each model changes", function() {
-                this.models = [this.model, new chorus.models.Base()];
-                this.page.updateBreadcrumbsAfterLoading(this.models[0], this.models[1]);
-
-                _.each(this.models, function(model) {
-                    model.trigger("loaded");
-                });
-                expect(this.page.render.calls.length).toBe(2);
-            });
-        });
-    });
-
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();
@@ -260,30 +231,40 @@ describe("chorus.pages.Base", function() {
         describe("breadcrumb handling", function() {
             context("with static breadcrumbs", function() {
                 beforeEach(function() {
-                    this.view.crumbs = [
-                        {label: "Home"}
-                    ];
+                    this.originalCrumbs = chorus.pages.Base.prototype.crumbs;
+                    chorus.pages.Base.prototype.crumbs = [ {label: "Home"} ];
+                    this.view = new chorus.pages.Base();
                     this.view.render();
                 });
 
+                afterEach(function() {
+                    chorus.pages.Base.prototype.crumbs = this.originalCrumbs;
+                });
+
                 it("creates a BreadcrumbsView with the static breadcrumbs", function() {
-                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs);
+                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual([ {label: "Home"} ]);
                 });
             });
 
             context("with dynamic breadcrumbs", function() {
                 beforeEach(function() {
-
-                    this.view.crumbs = jasmine.createSpy("crumbs").andCallFake(function() {
+                    this.originalCrumbs = chorus.pages.Base.prototype.crumbs;
+                    chorus.pages.Base.prototype.crumbs = function () {
                         return [
                             {label: "There"}
                         ];
-                    });
+                    };
+                    this.view = new chorus.pages.Base();
+                    spyOn(this.view, 'crumbs').andCallThrough();
                     this.view.render();
                 });
 
+                afterEach(function() {
+                    chorus.pages.Base.prototype.crumbs = this.originalCrumbs;
+                });
+
                 it("creates a BreadcrumbsView with the dynamic breadcrumbs", function() {
-                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs());
+                    expect(this.view.breadcrumbs.options.breadcrumbs()).toEqual(this.view.crumbs());
                 });
 
                 it("re-evaluates the function every time render is called", function() {

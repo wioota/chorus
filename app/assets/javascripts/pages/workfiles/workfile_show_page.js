@@ -18,7 +18,8 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("workfileVersion:changed", this.workfileVersionChanged, this);
 
         this.bindings.add(this.model, "loaded", this.buildPage);
-        this.updateBreadcrumbsAfterLoading(this.model, this.workspace);
+
+        this.breadcrumbRequiredResources = [this.model, this.workspace];
     },
 
     crumbs: function() {
