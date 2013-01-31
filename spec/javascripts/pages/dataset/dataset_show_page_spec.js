@@ -34,15 +34,6 @@ describe("chorus.pages.DatasetShowPage", function() {
                 this.server.completeFetchFor(this.dataset);
             });
 
-            it("creates the sidebar", function() {
-                expect(this.page.sidebar).toBeDefined();
-                expect(this.page.sidebar.resource).toBe(this.page.dataset);
-            });
-
-            it("does not set workspace", function() {
-                expect(this.page.sidebar.options.workspace).toBeFalsy();
-            });
-
             describe("when the columnSet fetch completes", function() {
                 context("with valid data", function() {
 
@@ -52,6 +43,15 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("sets the main content as persistent", function() {
                         expect(this.page.mainContent.persistent).toBeTruthy();
+                    });
+
+                    it("creates the sidebar", function() {
+                        expect(this.page.sidebar).toBeDefined();
+                        expect(this.page.sidebar.resource).toBe(this.page.dataset);
+                    });
+
+                    it("does not set workspace", function() {
+                        expect(this.page.sidebar.options.workspace).toBeFalsy();
                     });
                 });
                 context("with errors", function() {
@@ -87,10 +87,6 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.dataset);
         });
 
-        it("renders the header", function() {
-            expect(this.page.$('h1')).toContainText(this.dataset.name());
-        });
-
         describe("breadcrumbs", function() {
             it("has the right breadcrumbs", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
@@ -121,38 +117,6 @@ describe("chorus.pages.DatasetShowPage", function() {
                 chorus.models.Config.instance().set({ tableauConfigured: true });
                 this.page.render();
                 expect(this.page.$("button.publish")).not.toExist();
-            });
-        });
-
-        describe("workspace usage", function() {
-            it("is in the custom header", function() {
-                expect(this.page.$('.content_header .found_in')).toExist();
-            });
-
-            it("qtip-ifies the other_menu", function() {
-                this.page.$('.content_header .found_in .open_other_menu').click();
-                expect(this.qtipSpy).toHaveVisibleQtip();
-                expect(this.qtipSpy.find('li').length).toBe(2);
-            });
-
-            context("when the tabular data is not used in any workspace", function() {
-                beforeEach(function() {
-                    this.dataset.unset("associatedWorkspaces");
-                    delete this.dataset._workspaceAssociated;
-                });
-
-                it("renders successfully, without the workspace usage section", function() {
-                    this.page = new chorus.pages.DatasetShowPage(
-                        "123",
-                        "Foo%2F",
-                        "Bar%25",
-                        "TABLE",
-                        "slashes%2F"
-                    );
-                    this.server.completeFetchFor(this.dataset);
-                    this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
-                    expect(this.page.$('.content_header .found_in')).not.toExist();
-                });
             });
         });
 
@@ -194,6 +158,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            it("renders the header", function() {
+                expect(this.page.$('h1')).toContainText(this.dataset.name());
+            });
+
             it("hides the loading spinner", function() {
                 expect($(this.page.mainContent.el)).not.toHaveClass('loading_section');
             });
@@ -208,6 +176,38 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 expect(searchOptions.input).toBe(searchInput);
                 expect(searchOptions.list).toBe(columnList);
+            });
+
+            describe("workspace usage", function() {
+                it("is in the custom header", function() {
+                    expect(this.page.$('.content_header .found_in')).toExist();
+                });
+
+                it("qtip-ifies the other_menu", function() {
+                    this.page.$('.content_header .found_in .open_other_menu').click();
+                    expect(this.qtipSpy).toHaveVisibleQtip();
+                    expect(this.qtipSpy.find('li').length).toBe(2);
+                });
+
+                context("when the tabular data is not used in any workspace", function() {
+                    beforeEach(function() {
+                        this.dataset.unset("associatedWorkspaces");
+                        delete this.dataset._workspaceAssociated;
+                    });
+
+                    it("renders successfully, without the workspace usage section", function() {
+                        this.page = new chorus.pages.DatasetShowPage(
+                            "123",
+                            "Foo%2F",
+                            "Bar%25",
+                            "TABLE",
+                            "slashes%2F"
+                        );
+                        this.server.completeFetchFor(this.dataset);
+                        this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+                        expect(this.page.$('.content_header .found_in')).not.toExist();
+                    });
+                });
             });
         });
     });

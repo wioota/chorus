@@ -32,10 +32,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         datasetLoaded: function() {
             this.columnSet = this.dataset.columns();
-            this.setupMainContent();
-            this.setupSidebar();
             this.fetchColumnSet();
-            this.render();
         },
 
         setupMainContent: function() {
@@ -52,6 +49,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                     { dataset: this.dataset, collection: this.columnSet, isInstanceBrowser: this.isInstanceBrowser},
                     this.contentDetailsOptions))
             });
+            this.setupSidebar();
         },
 
         crumbs: function() {
@@ -79,8 +77,8 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         unprocessableEntity: function() {
+            this.columnSet = this.dataset.columns();
             this.setupMainContent();
-            this.setupSidebar();
             this.render();
         },
 
