@@ -164,12 +164,14 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
             });
 
-            context("when the model changes", function() {
+            context("when the workspace settings dialog modifies the workspace", function() {
                 beforeEach(function() {
                     this.page.model.set({name: "bar", "public": false});
+                    this.page.model.trigger("saved");
+                    this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 });
 
-                xit("updates the title", function() {
+                it("updates the title", function() {
                     expect(this.page.$(".content_header h1")).toContainText("bar");
                 });
 
@@ -177,14 +179,8 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                     expect(this.page.$(".activity_list_header .title img").attr("src")).toBe("/images/workspaces/private_workspace_large.png");
                 });
 
-                context("after the model has been loaded", function() {
-                    beforeEach(function() {
-                        this.page.model.trigger("loaded");
-                    });
-
-                    it("displays the new breadcrumb automatically", function() {
-                        expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
-                    });
+                it("displays the new breadcrumb automatically", function() {
+                    expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
                 });
             });
         });

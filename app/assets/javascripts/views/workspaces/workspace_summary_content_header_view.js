@@ -10,8 +10,13 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 
     setup: function() {
         this.model.activities().fetchIfNotLoaded();
-        this.bindings.add(this.model, "saved", this.render);
         this.requiredResources.push(this.model);
+        this.listenTo(this.model, "saved", this.updateHeaderAndActivityList);
+    },
+
+    updateHeaderAndActivityList: function() {
+        this.resourcesLoaded();
+        this.render();
     },
 
     resourcesLoaded : function() {
