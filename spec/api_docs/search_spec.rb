@@ -17,7 +17,7 @@ resource "Search" do
     required_parameters :query
 
     example "Search all of Chorus" do
-      VCR.use_cassette('search_solr_query_all_types_as_owner') do
+      record_with_vcr do
         do_request(:query => 'searchquery', :per_type => 3)
         status.should == 200
       end
@@ -32,7 +32,7 @@ resource "Search" do
     required_parameters :query
 
     example "Search Chorus for a specific entity type" do
-      VCR.use_cassette('search_solr_query_user_as_owner') do
+      record_with_vcr do
         do_request(:query => 'searchquery', :entity_type => 'User', :page => 1, :per_page => 50)
         status.should == 200
       end
@@ -47,7 +47,7 @@ resource "Search" do
     required_parameters :query
 
     example "Search all workspaces that include the current user as a member" do
-      VCR.use_cassette('search_solr_query_workspaces_as_owner') do
+      record_with_vcr do
         do_request(:query => 'searchquery', :per_type => 3)
         status.should == 200
       end
