@@ -50,7 +50,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     context: function() {
         var presenter = new chorus.presenters.InstanceList({
             hadoop: this.hadoopInstances,
-            greenplum: this.dataSources,
+            dataSources: this.dataSources,
             gnip: this.gnipInstances
         });
         return presenter.present();

@@ -114,7 +114,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
-                            state: "offline"
+                            online: false
                         });
                         this.view.render();
                     });

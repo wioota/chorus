@@ -1,16 +1,16 @@
 describe("chorus.presenters.InstanceList", function() {
-    var gpdbDataSources, hadoopInstances, gnipInstances, presenter;
+    var dataSources, hadoopInstances, gnipInstances, presenter;
 
     beforeEach(function() {
-        gpdbDataSources = new chorus.collections.GpdbDataSourceSet([
-            rspecFixtures.gpdbDataSource({ name: "joe_instance", state: "online" }),
-            rspecFixtures.gpdbDataSource({ state: "offline" })
+        dataSources = new chorus.collections.DataSourceSet([
+            rspecFixtures.gpdbDataSource({ name: "joe_instance", online: true }),
+            rspecFixtures.gpdbDataSource({ online: false })
         ]);
 
         hadoopInstances = new chorus.collections.HadoopInstanceSet([
-            rspecFixtures.hadoopInstance({ state: "offline" }),
-            rspecFixtures.hadoopInstance({ description: "special instance", state: "online" }),
-            rspecFixtures.hadoopInstance({ state: null })
+            rspecFixtures.hadoopInstance({ online: false }),
+            rspecFixtures.hadoopInstance({ description: "special instance", online: true }),
+            rspecFixtures.hadoopInstance()
         ]);
 
         gnipInstances = new chorus.collections.GnipInstanceSet([
@@ -20,7 +20,7 @@ describe("chorus.presenters.InstanceList", function() {
         ]);
         
         presenter = new chorus.presenters.InstanceList({
-            greenplum: gpdbDataSources,
+            dataSources: dataSources,
             hadoop: hadoopInstances,
             gnip: gnipInstances
         });
@@ -28,24 +28,24 @@ describe("chorus.presenters.InstanceList", function() {
     });
 
     it("returns an object with three arrays 'greenplum', 'hadoop', and 'gnip'", function() {
-        expect(presenter.greenplum.length).toBe(2);
+        expect(presenter.dataSources.length).toBe(2);
         expect(presenter.hadoop.length).toBe(3);
         expect(presenter.gnip.length).toBe(3);
     });
 
     it("has the keys 'hasGreenplum', 'hasHadoop' and 'hasGnip'", function() {
-        expect(presenter.hasGreenplum).toBeTruthy();
+        expect(presenter.hasDataSources).toBeTruthy();
         expect(presenter.hasHadoop).toBeTruthy();
         expect(presenter.hasGnip).toBeTruthy();
 
         presenter = new chorus.presenters.InstanceList({
-            greenplum: new chorus.collections.GpdbDataSourceSet(),
+            dataSources: new chorus.collections.DataSourceSet(),
             hadoop: new chorus.collections.HadoopInstanceSet(),
             gnip: new chorus.collections.GnipInstanceSet()
 
         });
 
-        expect(presenter.hasGreenplum).toBeFalsy();
+        expect(presenter.hasDataSources).toBeFalsy();
         expect(presenter.hasHadoop).toBeFalsy();
         expect(presenter.hasGnip).toBeFalsy();
     });
@@ -58,8 +58,8 @@ describe("chorus.presenters.InstanceList", function() {
 
     function itPresentsModelAttribute(name) {
         it("presents each model's " + name + " attribute", function() {
-            gpdbDataSources.each(function(model, i) {
-                expect(presenter.greenplum[i][name]).toBe(model.get(name));
+            dataSources.each(function(model, i) {
+                expect(presenter.dataSources[i][name]).toBe(model.get(name));
             });
 
             hadoopInstances.each(function(model, i) {
@@ -76,8 +76,8 @@ describe("chorus.presenters.InstanceList", function() {
         presentedName || (presentedName = methodName);
 
         it("presents each model's " + methodName + " method as '" + presentedName + "''", function() {
-            gpdbDataSources.each(function(model, i) {
-                expect(presenter.greenplum[i][presentedName]).toBe(model[methodName]());
+            dataSources.each(function(model, i) {
+                expect(presenter.dataSources[i][presentedName]).toBe(model[methodName]());
             });
 
             hadoopInstances.each(function(model, i) {

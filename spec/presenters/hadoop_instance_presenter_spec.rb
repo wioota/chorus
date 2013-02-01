@@ -19,11 +19,11 @@ describe HadoopInstancePresenter, :type => :view do
       hash.should have_key(:port)
       hash.should have_key(:id)
       hash.should have_key(:owner)
-      hash.should have_key(:state)
       hash.should have_key(:description)
       hash.should have_key(:version)
       hash.should have_key(:username)
       hash.should have_key(:group_list)
+      hash.should have_key(:online)
       hash[:entity_type].should == 'hadoop_instance'
     end
 

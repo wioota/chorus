@@ -1,11 +1,11 @@
 <div class='instance_provider data_source'>
     <div class="details">{{t "instances.list.type.data_sources"}}</div>
     <ul class="list selectable">
-        {{#each greenplum}}
+        {{#each dataSources}}
             <li class="instance" data-type="{{entityType}}" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
-    {{#unless hasGreenplum}}
+    {{#unless hasDataSources}}
         <div class="no_instances">{{t "instances.none"}}</div>
     {{/unless}}
 </div>

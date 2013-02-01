@@ -4,7 +4,7 @@ chorus.presenters.InstanceList = function(options) {
 
 _.extend(chorus.presenters.InstanceList.prototype, {
     present: function() {
-        this.greenplum = this.options.greenplum.map(function(model) {
+        this.dataSources = this.options.dataSources.map(function(model) {
             return this.presentModel(model);
         }, this);
 
@@ -16,7 +16,7 @@ _.extend(chorus.presenters.InstanceList.prototype, {
             return this.presentModel(model);
         }, this);
 
-        this.hasGreenplum = this.greenplum.length > 0;
+        this.hasDataSources = this.dataSources.length > 0;
         this.hasHadoop = this.hadoop.length > 0;
         this.hasGnip = this.gnip.length > 0;
 

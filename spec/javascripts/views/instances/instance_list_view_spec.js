@@ -130,9 +130,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("when an instance is offline", function() {
             beforeEach(function() {
-                this.dataSources.reset([
-                    rspecFixtures.gpdbDataSource({ name: "Greenplum", state: "offline" })
-                ]);
+                this.dataSources.at(0).set({ name: "Greenplum", online: false });
                 this.view.render();
             });
 

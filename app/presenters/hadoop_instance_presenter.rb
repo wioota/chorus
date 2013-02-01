@@ -6,7 +6,7 @@ class HadoopInstancePresenter < Presenter
         :host => model.host,
         :port => model.port,
         :id => model.id,
-        :state => model.state,
+        :online => model.online?,
         :description => model.description,
         :version => model.version,
         :username => model.username,

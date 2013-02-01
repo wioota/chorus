@@ -6,16 +6,16 @@ describe("chorus.views.SearchInstance", function() {
     });
 
 
-    it("includes the correct instance icon", function() {
-        expect(this.view.$("img.provider").attr("src")).toBe("/images/data_sources/icon_hadoop_instance.png");
+    it("includes the instance icon", function() {
+        expect(this.view.$("img.provider").attr("src")).toBe(this.model.providerIconUrl());
     });
 
-    it("includes the correct state icon", function() {
-        expect(this.view.$("img.state").attr("src")).toBe("/images/data_sources/green.png");
+    it("includes the state icon", function() {
+        expect(this.view.$("img.state").attr("src")).toBe(this.model.stateIconUrl());
     });
 
     it("includes the state text as a title", function() {
-        expect(this.view.$("img.state").attr("title")).toBe("Online");
+        expect(this.view.$("img.state").attr("title")).toBe(this.model.stateText());
     });
 
     it("has a link to the instance for each instance in the collection", function() {
