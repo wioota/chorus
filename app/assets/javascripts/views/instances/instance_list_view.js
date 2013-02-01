@@ -21,12 +21,12 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("instance:added", function(instance) {
+        this.subscribePageEvent("instance:added", function(instance) {
             this.dataSources.fetchAll();
             this.hadoopInstances.fetchAll();
             this.gnipInstances.fetchAll();
             this.selectedInstance = instance;
-        }, this);
+        });
         this.bindings.add(this.dataSources, "remove", this.instanceDestroyed);
         this.bindings.add(this.hadoopInstances, "remove", this.instanceDestroyed);
         this.bindings.add(this.gnipInstances, "remove", this.instanceDestroyed);

@@ -11,10 +11,10 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
         this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.model });
         this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.model });
 
-        this.subscriptions.push(chorus.PageEvents.subscribe("datasetSelected", function(tableOrView) {
+        this.subscribePageEvent("datasetSelected", function(tableOrView) {
             this.$(".database_column_list").removeClass("hidden");
             this.$(".database_dataset_list").addClass("hidden");
-        }, this));
+        });
 
         this.bindings.add(this.columnList, "back", function() {
             this.$("input.search").val("");

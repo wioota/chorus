@@ -13,7 +13,7 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         this.tabs = new chorus.views.TabControl(["activity"]);
         if (this.model) this.setUser(this.model);
 
-        chorus.PageEvents.subscribe("user:selected", this.setUser, this);
+        this.subscribePageEvent("user:selected", this.setUser);
     },
 
     additionalContext:function () {

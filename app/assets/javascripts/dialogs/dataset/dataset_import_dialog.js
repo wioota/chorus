@@ -208,7 +208,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 } else {
                     dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsvImport, csvOptions: this.csvOptions});
                 }
-                chorus.PageEvents.subscribe("csv_import:started", this.closeModal, this);
+                this.subscribePageEvent("csv_import:started", this.closeModal);
                 dialog.launchModal();
             }
         }

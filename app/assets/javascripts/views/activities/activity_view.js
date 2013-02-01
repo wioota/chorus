@@ -16,8 +16,8 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.addCommentHandle = chorus.PageEvents.subscribe("comment:added", this.addComment, this);
-        this.deleteCommentHandle = chorus.PageEvents.subscribe("comment:deleted", this.deleteComment, this);
+        this.addCommentHandle = this.subscribePageEvent("comment:added", this.addComment);
+        this.deleteCommentHandle = this.subscribePageEvent("comment:deleted", this.deleteComment);
     },
 
     addComment: function(comment) {

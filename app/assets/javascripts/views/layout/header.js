@@ -41,7 +41,7 @@ chorus.views.Header = chorus.views.Base.extend({
             this.users.fetchAll();
         }
 
-        chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
+        this.subscribePageEvent("notification:deleted", this.refreshNotifications);
     },
 
     updateNotifications: function() {

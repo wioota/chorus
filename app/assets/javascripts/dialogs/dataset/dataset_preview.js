@@ -21,8 +21,8 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
             enableResize: true,
             enableExpander: true
         });
-        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
-        this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
+        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeModal);
+        this.modalClosedHandle = this.subscribePageEvent("modal:closed", this.cancelTask);
     },
 
     footerSize: function() {

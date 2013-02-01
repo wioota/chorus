@@ -15,8 +15,8 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
             extraKeys: {}
         });
 
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:saveEdit", this.saveModel, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.cancelEdit, this));
+        this.subscribePageEvent("dataset:saveEdit", this.saveModel);
+        this.subscribePageEvent("dataset:cancelEdit", this.cancelEdit);
         this.model.initialQuery = this.model.get("query");
         this.bindings.add(this.model, "saved", this.navigateToChorusViewShowPage);
         this.bindings.add(this.editor, 'blur', this.updateQueryInModel);

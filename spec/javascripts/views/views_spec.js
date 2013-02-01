@@ -1335,6 +1335,37 @@ describe("chorus.views.Base", function() {
             });
         });
 
+        describe("#subscribePageEvent", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Bare();
+            });
+
+            it("pushes a new subscription handle to the subscriptions array", function() {
+                expect(this.view.subscriptions.length).toBe(0);
+                this.view.subscribePageEvent("testevent", function() {}, this.view, "123");
+                expect(this.view.subscriptions.length).toBe(1);
+                var handle = this.view.subscriptions[0];
+                expect(chorus.PageEvents.subscriptionHandles[handle].eventName).toEqual("testevent");
+            });
+
+            it("pushes a new subscription handle to the subscriptions array with default context", function() {
+                expect(this.view.subscriptions.length).toBe(0);
+                this.view.subscribePageEvent("testevent", function() {});
+                expect(this.view.subscriptions.length).toBe(1);
+                var handle = this.view.subscriptions[0];
+                expect(chorus.PageEvents.subscriptionHandles[handle].binding.context).toBe(this.view);
+            });
+
+            it("pushes a new subscription handle to the subscriptions array with default context and specified id", function() {
+                expect(this.view.subscriptions.length).toBe(0);
+                this.view.subscribePageEvent("testevent", function() {}, "123");
+                expect(this.view.subscriptions.length).toBe(1);
+                var handle = this.view.subscriptions[0];
+                expect(chorus.PageEvents.subscriptionHandles[handle].binding.context).toBe(this.view);
+                expect(chorus.PageEvents.subscriptionHandles[handle].id).toBe("123");
+            });
+        });
+
         describe("#teardown", function() {
             beforeEach(function() {
                 this.view = new chorus.views.Bare();

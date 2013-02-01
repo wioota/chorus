@@ -7,10 +7,10 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe('tag:selected', function(tag) {
+        this.subscribePageEvent('tag:selected', function(tag) {
             this.tag = tag;
             this.render();
-        }, this);
+        });
     },
 
     additionalContext: function() {

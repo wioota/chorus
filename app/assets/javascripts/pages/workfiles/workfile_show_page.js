@@ -15,7 +15,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         this.workspace = this.model.workspace();
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
-        chorus.PageEvents.subscribe("workfileVersion:changed", this.workfileVersionChanged, this);
+        this.subscribePageEvent("workfileVersion:changed", this.workfileVersionChanged);
 
         this.bindings.add(this.model, "loaded", this.buildPage);
 
@@ -40,9 +40,9 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
             return;
         }
 
-        chorus.PageEvents.subscribe("file:autosaved", function () {
+        this.subscribePageEvent("file:autosaved", function () {
             this.model && this.model.trigger("invalidated");
-        }, this);
+        });
 
         var contentView = new chorus.views.WorkfileContent.buildFor(this.model);
         this.mainContent = new chorus.views.MainContentView({

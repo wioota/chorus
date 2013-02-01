@@ -11,7 +11,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             onBlur: _.bind(this.onBlur, this),
             onChange: _.bind(this.onChange, this)
         }, options);
-        this.subscriptions.push(chorus.PageEvents.subscribe("file:insertText", this.insertText, this));
+        this.subscribePageEvent("file:insertText", this.insertText);
     },
 
     teardown: function () {

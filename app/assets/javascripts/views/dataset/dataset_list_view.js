@@ -13,8 +13,8 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
         this._super("setup", arguments);
         this.selectedDatasets = new chorus.collections.DatasetSet();
         this.selectedDatasets.attributes = this.collection.attributes;
-        chorus.PageEvents.subscribe("selectAll", this.selectAll, this);
-        chorus.PageEvents.subscribe("selectNone", this.selectNone, this);
+        this.subscribePageEvent("selectAll", this.selectAll);
+        this.subscribePageEvent("selectNone", this.selectNone);
     },
 
     selectAll: function() {

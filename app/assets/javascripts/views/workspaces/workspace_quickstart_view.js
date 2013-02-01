@@ -19,7 +19,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("modal:closed", this.dismissQuickStart, this);
+        this.subscribePageEvent("modal:closed", this.dismissQuickStart);
         this.clickedDialogs = [];
     },
 

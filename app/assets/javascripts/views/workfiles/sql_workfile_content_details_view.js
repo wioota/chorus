@@ -4,8 +4,8 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     setup: function() {
         this._super("setup", arguments);
 
-        chorus.PageEvents.subscribe("file:selectionPresent", this.changeRunFileButtonText, this);
-        chorus.PageEvents.subscribe("file:selectionEmpty", this.changeRunSelectedButtonText, this);
+        this.subscribePageEvent("file:selectionPresent", this.changeRunFileButtonText);
+        this.subscribePageEvent("file:selectionEmpty", this.changeRunSelectedButtonText);
         this.contentView = this.options.contentView;
     },
 

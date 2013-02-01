@@ -40,11 +40,11 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 this.bindings.add(this.allVersions, "changed", this.render);
 
                 this.allVersions.fetch();
-                this.subscriptions.push(chorus.PageEvents.subscribe("workfile_version:deleted", this.versionDestroyed, this));
+                this.subscribePageEvent("workfile_version:deleted", this.versionDestroyed);
             }
 
-            this.subscriptions.push(chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this));
-            this.subscriptions.push(chorus.PageEvents.subscribe("dataset:back", this.recalculateScrolling, this));
+            this.subscribePageEvent("datasetSelected", this.jumpToTop);
+            this.subscribePageEvent("dataset:back", this.recalculateScrolling);
 
             this.tabs.activity = new chorus.views.ActivityList({
                 collection:this.collection,

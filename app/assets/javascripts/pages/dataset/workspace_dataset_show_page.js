@@ -37,7 +37,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
 
     bindCallbacks: function() {
         this._super('bindCallbacks');
-        this.subscriptions.push(chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this));
+        this.subscribePageEvent("cancel:sidebar", this.hideSidebar);
     },
 
     constructSidebarForType: function(type) {

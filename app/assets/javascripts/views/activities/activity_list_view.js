@@ -9,8 +9,8 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.subscriptions.push(chorus.PageEvents.subscribe('note:deleted', this.noteDeleted, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe('note:saved', this.noteSaved, this));
+        this.subscribePageEvent('note:deleted', this.noteDeleted);
+        this.subscribePageEvent('note:saved', this.noteSaved);
     },
 
     noteDeleted: function(note) {

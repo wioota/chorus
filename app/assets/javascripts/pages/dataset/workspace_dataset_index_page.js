@@ -14,13 +14,13 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.collection.fetch();
         this.dependsOn(this.collection);
 
-        chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
+        this.subscribePageEvent("dataset:selected", function(dataset) {
             this.model = dataset;
-        }, this);
+        });
 
-        chorus.PageEvents.subscribe("csv_import:started", function() {
+        this.subscribePageEvent("csv_import:started", function() {
             this.collection.fetch();
-        }, this);
+        });
 
         this.bindings.add(this.collection, 'searched', function() {
             this.mainContent.content.render();

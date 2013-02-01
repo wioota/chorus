@@ -32,7 +32,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.KaggleUserSidebar({workspace: this.workspace});
 
-        chorus.PageEvents.subscribe("filterKaggleUsers", this.filterKaggleUsers, this);
+        this.subscribePageEvent("filterKaggleUsers", this.filterKaggleUsers);
 
         this.breadcrumbs.requiredResources.add(this.workspace);
     },

@@ -31,7 +31,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.InstanceListSidebar();
 
-        chorus.PageEvents.subscribe("instance:selected", this.setModel, this);
+        this.subscribePageEvent("instance:selected", this.setModel);
     },
 
     setModel:function (instance) {

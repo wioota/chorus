@@ -44,7 +44,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.UserSidebar({listMode: true});
 
-        chorus.PageEvents.subscribe("user:selected", this.setModel, this);
+        this.subscribePageEvent("user:selected", this.setModel);
     },
 
     setModel:function(user) {

@@ -20,8 +20,8 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
             this.selectedModels = new chorus.collections.Base();
         }
 
-        this.subscriptions.push(chorus.PageEvents.subscribe("selectAll", this.selectAll, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("selectNone", this.selectNone, this));
+        this.subscribePageEvent("selectAll", this.selectAll);
+        this.subscribePageEvent("selectNone", this.selectNone);
 
         this._super("setup", arguments);
     },

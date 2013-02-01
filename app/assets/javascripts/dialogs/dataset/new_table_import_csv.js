@@ -29,7 +29,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.csvOptions.tableName)
         });
 
-        chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
+        this.subscribePageEvent("choice:setType", this.onSelectType);
 
         this.bindings.add(this.model, "saved", this.saved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);

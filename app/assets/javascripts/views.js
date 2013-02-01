@@ -241,6 +241,16 @@ chorus.views.Bare = Backbone.View.include(
             });
         },
 
+        subscribePageEvent: function(eventName, callback, context, id) {
+            context = context || this;
+            if(!id && _.isString(context)) {
+                id = context;
+                context = this;
+            }
+            var subscription = chorus.PageEvents.subscribe(eventName, callback, context, id);
+            this.subscriptions.push(subscription);
+        },
+
         template: function template(context) {
             if (this.displayLoadingSection()) {
                 return '<div class="loading_section"/>';
@@ -281,7 +291,7 @@ chorus.views.Bare = Backbone.View.include(
                         var index = this.subscriptions.indexOf(this.scrollHandle);
                         if(index > -1) this.subscriptions.splice(index, 1);
                     }
-                    this.scrollHandle = chorus.PageEvents.subscribe("content:changed", function() { this.recalculateScrolling($el); }, this);
+                    this.scrollHandle = this.subscribePageEvent("content:changed", function() { this.recalculateScrolling($el); });
                     this.subscriptions.push(this.scrollHandle);
 
                     if (!alreadyInitialized) {

@@ -3,7 +3,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this));
+        this.subscribePageEvent("dataset:cancelEdit", this.drawColumns);
     },
 
     makeModel: function(workspaceId, datasetId) {

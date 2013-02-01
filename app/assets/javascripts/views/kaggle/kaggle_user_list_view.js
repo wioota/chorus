@@ -25,8 +25,8 @@ chorus.views.KaggleUserList = chorus.views.SelectableList.extend({
         this._super("setup", arguments);
         this.selectedKaggleUsers = new chorus.collections.KaggleUserSet();
         this.selectedKaggleUsers.attributes = this.collection.attributes;
-        chorus.PageEvents.subscribe("selectAll", this.selectAll, this);
-        chorus.PageEvents.subscribe("selectNone", this.selectNone, this);
+        this.subscribePageEvent("selectAll", this.selectAll);
+        this.subscribePageEvent("selectNone", this.selectNone);
     },
 
     checkboxClicked: function(e) {

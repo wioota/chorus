@@ -29,7 +29,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
+        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeDataPreview);
         this.subscriptions.push(this.closePreviewHandle);
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({
@@ -158,7 +158,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').addClass('hidden');
 
         this.$(".column_count input.search").trigger("textchange");
-        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
+        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeDataPreview);
         this.inDeriveChorusView = false;
     },
 

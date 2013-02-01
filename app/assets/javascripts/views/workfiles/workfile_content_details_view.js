@@ -3,9 +3,9 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
     additionalClass: "workfile_content_details",
 
     setup: function() {
-        chorus.PageEvents.subscribe("file:autosaved", this.updateAutosaveText, this);
-        chorus.PageEvents.subscribe("file:selectionEmpty", this.showSaveFileMenu, this);
-        chorus.PageEvents.subscribe("file:selectionPresent", this.showSaveSelectionMenu, this);
+        this.subscribePageEvent("file:autosaved", this.updateAutosaveText);
+        this.subscribePageEvent("file:selectionEmpty", this.showSaveFileMenu);
+        this.subscribePageEvent("file:selectionPresent", this.showSaveSelectionMenu);
     },
 
     updateAutosaveText: function(args) {

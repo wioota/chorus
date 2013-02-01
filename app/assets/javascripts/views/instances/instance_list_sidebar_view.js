@@ -8,7 +8,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("instance:selected", this.setInstance, this);
+        this.subscribePageEvent("instance:selected", this.setInstance);
         this.tabs = new chorus.views.TabControl(["activity", "configuration"]);
     },
 

@@ -35,12 +35,12 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
             }
         });
 
-        chorus.PageEvents.subscribe("file:replaceCurrentVersion", this.replaceCurrentVersion, this);
-        chorus.PageEvents.subscribe("file:createNewVersion", this.createNewVersion, this);
-        chorus.PageEvents.subscribe("file:replaceCurrentVersionWithSelection", this.replaceCurrentVersionWithSelection, this);
-        chorus.PageEvents.subscribe("file:createNewVersionFromSelection", this.createNewVersionFromSelection, this);
-        chorus.PageEvents.subscribe("file:editorSelectionStatus", this.editorSelectionStatus, this);
-        chorus.PageEvents.subscribe("file:saveDraft", this.saveDraft, this);
+        this.subscribePageEvent("file:replaceCurrentVersion", this.replaceCurrentVersion);
+        this.subscribePageEvent("file:createNewVersion", this.createNewVersion);
+        this.subscribePageEvent("file:replaceCurrentVersionWithSelection", this.replaceCurrentVersionWithSelection);
+        this.subscribePageEvent("file:createNewVersionFromSelection", this.createNewVersionFromSelection);
+        this.subscribePageEvent("file:editorSelectionStatus", this.editorSelectionStatus);
+        this.subscribePageEvent("file:saveDraft", this.saveDraft);
         this.bindings.add(this.model, "saveFailed", this.versionConflict);
     },
 

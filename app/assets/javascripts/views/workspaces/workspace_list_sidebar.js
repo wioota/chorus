@@ -8,7 +8,7 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this);
+        this.subscribePageEvent("workspace:selected", this.setWorkspace);
         this.tabs = new chorus.views.TabControl(["activity"]);
         this.workspaceMemberList = new chorus.views.WorkspaceMemberList();
     },

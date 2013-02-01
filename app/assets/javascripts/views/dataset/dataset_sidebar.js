@@ -16,12 +16,12 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("column:selected", this.setColumn, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this));
+        this.subscribePageEvent("dataset:selected", this.setDataset);
+        this.subscribePageEvent("column:selected", this.setColumn);
+        this.subscribePageEvent("importSchedule:changed", this.updateImportSchedule);
+        this.subscribePageEvent("analyze:running", this.resetStatistics);
+        this.subscribePageEvent("start:visualization", this.enterVisualizationMode);
+        this.subscribePageEvent("cancel:visualization", this.endVisualizationMode);
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
         this.registerSubView(this.tabs);
     },

@@ -32,7 +32,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
             hadoopInstanceId: this.hadoopInstanceId
         });
 
-        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this);
+        this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);
 
         this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
     },

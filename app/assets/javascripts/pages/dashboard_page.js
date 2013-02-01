@@ -18,7 +18,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
-        chorus.PageEvents.subscribe("instance:added", function() { this.fetchInstances(); }, this);
+        this.subscribePageEvent("instance:added", function() { this.fetchInstances(); });
 
         this.fetchInstances();
         this.model = chorus.session.user();

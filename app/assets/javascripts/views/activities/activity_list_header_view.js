@@ -9,8 +9,8 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("note:deleted", this.updateInsightCount, this);
-        chorus.PageEvents.subscribe("insight:promoted", this.updateInsightCount, this);
+        this.subscribePageEvent("note:deleted", this.updateInsightCount);
+        this.subscribePageEvent("insight:promoted", this.updateInsightCount);
 
         if(!this.collection) {
             this.collection = this.model.activities();

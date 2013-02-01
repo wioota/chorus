@@ -34,9 +34,9 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             collection: this.collection
         });
 
-        chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
+        this.subscribePageEvent("dataset:selected", function(dataset) {
             this.model = dataset;
-        }, this);
+        });
 
         this.bindings.add(this.collection, 'searched', function() {
             this.mainContent.content.render();

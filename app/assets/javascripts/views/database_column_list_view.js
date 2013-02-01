@@ -9,10 +9,10 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     selectMulti: false,
 
     setup:function () {
-        this.subscriptions.push(chorus.PageEvents.subscribe("column:removed", this.deselectColumn, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("column:deselected", this.deselectColumn, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("column:select_all", this.selectAll, this));
-        this.subscriptions.push(chorus.PageEvents.subscribe("column:select_none", this.selectNone, this));
+        this.subscribePageEvent("column:removed", this.deselectColumn);
+        this.subscribePageEvent("column:deselected", this.deselectColumn);
+        this.subscribePageEvent("column:select_all", this.selectAll);
+        this.subscribePageEvent("column:select_none", this.selectNone);
     },
 
     postRender:function () {

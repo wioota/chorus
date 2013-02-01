@@ -95,16 +95,16 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         };
 
         // explicitly set up bindings after initializing sidebar collection
-        chorus.PageEvents.subscribe("hdfs_entry:selected", this.hdfsSelected, this);
-        chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
-        chorus.PageEvents.subscribe("dataset:selected", this.datasetSelected, this);
-        chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
-        chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
-        chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
-        chorus.PageEvents.subscribe("attachment:selected", this.attachmentSelected, this);
+        this.subscribePageEvent("hdfs_entry:selected", this.hdfsSelected);
+        this.subscribePageEvent("workspace:selected", this.workspaceSelected);
+        this.subscribePageEvent("dataset:selected", this.datasetSelected);
+        this.subscribePageEvent("workfile:selected", this.workfileSelected);
+        this.subscribePageEvent("user:selected", this.userSelected);
+        this.subscribePageEvent("instance:selected", this.instanceSelected);
+        this.subscribePageEvent("attachment:selected", this.attachmentSelected);
 
-        chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
-        chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
+        this.subscribePageEvent("choice:search_in", this.scopeSearchResults);
+        this.subscribePageEvent("choice:filter", this.filterSearchResults);
 
         this.render();
     },

@@ -19,12 +19,12 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             enableResize: true,
             enableExpander: true
         });
-        chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
-        chorus.PageEvents.subscribe("file:runSelected", this.runSelected, this);
-        chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);
-        chorus.PageEvents.subscribe("file:newChorusView", this.newChorusView, this);
-        chorus.PageEvents.subscribe("file:newSelectionChorusView", this.newSelectionChorusView, this);
-        chorus.PageEvents.subscribe("file:runAndDownload", this.runAndDownload, this);
+        this.subscribePageEvent("file:runCurrent", this.runInDefault);
+        this.subscribePageEvent("file:runSelected", this.runSelected);
+        this.subscribePageEvent("file:runInSchema", this.runInSchema);
+        this.subscribePageEvent("file:newChorusView", this.newChorusView);
+        this.subscribePageEvent("file:newSelectionChorusView", this.newSelectionChorusView);
+        this.subscribePageEvent("file:runAndDownload", this.runAndDownload);
     },
 
     runInSchema: function(options) {

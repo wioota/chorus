@@ -4,7 +4,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     numMembers: 24,
 
     setup: function() {
-        chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this);
+        this.subscribePageEvent("workspace:selected", this.setWorkspace);
     },
 
     context: function() {

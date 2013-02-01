@@ -6,10 +6,10 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     useLoadingSection: true,
 
     setup: function() {
-        chorus.PageEvents.subscribe("insight:promoted", this.fetchWorkspaces, this);
-        chorus.PageEvents.subscribe("note:deleted", this.fetchWorkspaces, this);
-        chorus.PageEvents.subscribe("comment:added", this.fetchWorkspaces, this);
-        chorus.PageEvents.subscribe("comment:deleted", this.fetchWorkspaces, this);
+        this.subscribePageEvent("insight:promoted", this.fetchWorkspaces);
+        this.subscribePageEvent("note:deleted", this.fetchWorkspaces);
+        this.subscribePageEvent("comment:added", this.fetchWorkspaces);
+        this.subscribePageEvent("comment:deleted", this.fetchWorkspaces);
     },
 
     fetchWorkspaces: function() {
