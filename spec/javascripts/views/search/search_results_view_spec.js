@@ -57,12 +57,12 @@ describe("chorus.views.SearchResults", function() {
 
         context("when searching for all types of items", function() {
             it("includes a section for every type of item", function() {
-                var sections = this.view.$(".search_result_list");
+                var sections = this.view.$(".search_result_list ul");
                 expect(sections.filter(".user_list.selectable")).toExist();
                 expect(sections.filter(".workfile_list.selectable")).toExist();
                 expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
-                expect(sections.filter(".hdfs_list.selectable")).toExist();
+                expect(sections.filter(".hdfs_entry_list.selectable")).toExist();
                 expect(sections.filter(".instance_list.selectable")).toExist();
             });
         });
@@ -70,17 +70,17 @@ describe("chorus.views.SearchResults", function() {
         context("when searching for only workfiles", function() {
             function itShowsOnlyTheWorkfileSection() {
                 it("shows the workfile section", function() {
-                    expect(this.view.$(".search_result_list.workfile_list")).toExist();
+                    expect(this.view.$(".search_result_list .workfile_list")).toExist();
                 });
 
                 it("does not show the sections for other types of items", function() {
-                    expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
-                    expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
-                    expect(this.view.$(".search_result_list.instance_list")).not.toExist();
-                    expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
-                    expect(this.view.$(".search_result_list.user_list")).not.toExist();
-                    expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
-                    expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .this_workspace")).not.toExist();
+                    expect(this.view.$(".search_result_list .attachment_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .instance_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .workspace_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .user_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .dataset_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .hdfs_entry_list")).not.toExist();
                 });
             }
 
@@ -113,17 +113,17 @@ describe("chorus.views.SearchResults", function() {
             });
 
             it("includes a section for the workspace specific results", function() {
-                expect(this.view.$(".search_result_list.this_workspace.selectable")).toExist();
+                expect(this.view.$(".search_result_list.this_workspace .selectable")).toExist();
             });
 
             it("does not show the other sections", function() {
-                expect(this.view.$(".search_result_list.workfile_list")).not.toExist();
-                expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
-                expect(this.view.$(".search_result_list.instance_list")).not.toExist();
-                expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
-                expect(this.view.$(".search_result_list.user_list")).not.toExist();
-                expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
-                expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
+                expect(this.view.$(".workfile_list")).toHaveHtml("");
+                expect(this.view.$(".attachment_list")).toHaveHtml("");
+                expect(this.view.$(".instance_list")).toHaveHtml("");
+                expect(this.view.$(".workspace_list")).toHaveHtml("");
+                expect(this.view.$(".user_list")).toHaveHtml("");
+                expect(this.view.$(".dataset_list")).toHaveHtml("");
+                expect(this.view.$(".hdfs_list")).toHaveHtml("");
             });
         });
 
@@ -164,7 +164,7 @@ describe("chorus.views.SearchResults", function() {
                 context("and it is for a dataset", function() {
                     it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
                         var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'dataset';});
-                        this.view.$(".this_workspace li[data-template=search_dataset]").click();
+                        this.view.$(".this_workspace li[data-template=search_dataset]:first").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                     });
                 });

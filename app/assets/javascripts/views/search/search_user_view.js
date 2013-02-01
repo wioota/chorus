@@ -1,7 +1,6 @@
 chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
     constructorName: "SearchUserView",
     templateName: "search_user",
-    eventType: "user",
 
     additionalContext: function() {
         var modelWithSearchResults = chorus.helpers.withSearchResults(this.model);

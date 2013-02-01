@@ -59,7 +59,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
         var preSelected = $(evt.target).hasClass("selected");
         if(!preSelected) {
             this.options.search.selectedItem = this.model;
-            chorus.PageEvents.broadcast(this.eventType + ":selected", this.model);
+            chorus.PageEvents.broadcast(this.model.eventType() + ":selected", this.model);
         }
     }
 });

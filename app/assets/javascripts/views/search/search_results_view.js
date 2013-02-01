@@ -15,10 +15,6 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".attachment_list":      "attachmentList"
     },
 
-    events: {
-        "click li.result_item": "selectItem"
-    },
-
     setup: function() {
         if (this.model.hdfs_entries().length) {
             this.hdfsList = this.buildListView('hdfs_entry', this.model.hdfs_entries());

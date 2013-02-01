@@ -3,6 +3,10 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     nameAttribute: 'name',
     entityType: "hdfs_file",
 
+    eventType: function() {
+        return "hdfs_entry";
+    },
+
     urlTemplate: function() {
         return "hadoop_instances/{{hadoopInstance.id}}/files/{{id}}";
     },

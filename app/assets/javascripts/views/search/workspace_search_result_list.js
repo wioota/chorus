@@ -15,9 +15,19 @@
             return t("search.type.this_workspace", { name: this.search.workspace().get("name") });
         },
 
-        makeListItemView: function(model) {
-            var viewConstructor = viewConstructorMap[model.get("entityType")];
-            return new viewConstructor({ model: model, search: this.search });
+        listClass: chorus.views.CheckableList.extend({
+            constructorName: "WorkspaceSearchResultCheckableList",
+            makeListItemView: function(model) {
+                var viewConstructor = viewConstructorMap[model.get("entityType")];
+                return new viewConstructor({ model: model, search: this.listItemOptions.search });
+            }
+        }),
+
+        buildList: function() {
+            return new this.listClass({
+                collection: this.collection,
+                listItemOptions: {search: this.options.search}
+            });
         },
 
         showAll: function(e) {

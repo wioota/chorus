@@ -13,6 +13,10 @@ chorus.views.SelectableList = chorus.views.Base.extend({
                 this.selectItem(this.$("li:not(:hidden)").eq(0));
             }, this);
         }
+
+        this.subscriptions.push(chorus.PageEvents.subscribe("selected",
+            this.clearSelectionUnlessPresent,
+            this));
     },
 
     delegateEvents: function() {
@@ -49,14 +53,24 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     },
 
     itemSelected: function(model) {
-        if (this.eventName) {
-            chorus.PageEvents.broadcast(this.eventName + ":selected", model);
+        var eventName = this.eventName || model.eventType();
+        if (eventName) {
+            this.lastEventName = eventName;
+            chorus.PageEvents.broadcast(eventName + ":selected", model);
+            chorus.PageEvents.broadcast("selected", model);
+        }
+    },
+
+    clearSelectionUnlessPresent: function(model) {
+        if (!this.collection.contains(model)) {
+            var $lis = this.$(">li");
+            $lis.removeClass("selected");
         }
     },
 
     itemDeselected: function() {
-        if (this.eventName) {
-            chorus.PageEvents.broadcast(this.eventName + ":deselected");
+        if (this.lastEventName) {
+            chorus.PageEvents.broadcast(this.lastEventName + ":deselected");
         }
     }
 });

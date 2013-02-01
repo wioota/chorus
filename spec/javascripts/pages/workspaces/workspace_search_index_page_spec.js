@@ -93,12 +93,12 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
             it("includes a section for every type of item when both fetches completes", function() {
                 this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
 
-                var sections = this.page.$(".search_result_list");
+                var sections = this.page.$(".search_result_list ul");
                 expect(sections.filter(".user_list.selectable")).toExist();
                 expect(sections.filter(".workfile_list.selectable")).toExist();
                 expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
-                expect(sections.filter(".hdfs_list.selectable")).toExist();
+                expect(sections.filter(".hdfs_entry_list.selectable")).toExist();
                 expect(sections.filter(".instance_list.selectable")).toExist();
             });
 

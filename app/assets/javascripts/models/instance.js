@@ -6,6 +6,10 @@ chorus.models.Instance = chorus.models.Base.extend({
         return this._imagePrefix + 'icon_' + this.get('entityType') + '.png';
     },
 
+    eventType: function() {
+        return "instance";
+    },
+
     isOnline: function() {
         return this.get("online");
     },

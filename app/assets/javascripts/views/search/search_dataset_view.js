@@ -1,7 +1,6 @@
 chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
     constructorName: "SearchDatasetView",
     templateName: "search_dataset",
-    eventType: 'dataset',
 
     additionalContext: function() {
         var context = {

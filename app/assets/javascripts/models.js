@@ -9,6 +9,10 @@ chorus.models = {
     ).extend({
         constructorName: "Model",
 
+        eventType: function() {
+            return this.get('entityType');
+        },
+
         isDeleted: function() {
             return this.get("isDeleted") && (this.get("isDeleted") === true || this.get("isDeleted") === "true");
         },

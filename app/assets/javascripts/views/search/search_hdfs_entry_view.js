@@ -1,7 +1,6 @@
 chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
     constructorName: "SearchHdfsEntryView",
     templateName: "search_hdfs",
-    eventType: "hdfs_entry",
 
     additionalContext: function() {
         var segments  = this.getHighlightedPathSegments();

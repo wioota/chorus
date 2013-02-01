@@ -1,5 +1,6 @@
 chorus.views.CheckableList = chorus.views.SelectableList.extend({
     additionalClass: "selectable list",
+    templateName: "empty",
 
     events: {
         "click  li input[type=checkbox]": "checkboxClicked",
@@ -9,11 +10,15 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     setup: function() {
         this.eventName = this.options.entityType;
         this.entityViewType = this.options.entityViewType;
-        this.templateName = "empty";
+        this.listItemOptions = this.options.listItemOptions || {};
 
-        this.selectedModels = this.collection.clone();
-        this.selectedModels.reset();
-        this.selectedModels.attributes = this.collection.attributes;
+        if (this.options.entityType) {
+            this.selectedModels = this.collection.clone();
+            this.selectedModels.reset();
+            this.selectedModels.attributes = this.collection.attributes;
+        } else {
+            this.selectedModels = new chorus.collections.Base();
+        }
 
         this.subscriptions.push(chorus.PageEvents.subscribe("selectAll", this.selectAll, this));
         this.subscriptions.push(chorus.PageEvents.subscribe("selectNone", this.selectNone, this));
@@ -28,7 +33,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         });
         this.liViews = [];
         this.collection.each(function(model) {
-            var view = new this.entityViewType({model: model, checkable: true});
+            var view = this.makeListItemView(model);
             $(this.el).append(view.render().el);
             this.liViews.push(view);
             this.registerSubView(view);
@@ -80,5 +85,9 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.selectedModels.reset();
         this.$("> li input[type=checkbox]").prop("checked", false).change();
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+    },
+
+    makeListItemView: function(model) {
+        return new this.entityViewType(_.extend({model: model, checkable: true}, this.listItemOptions));
     }
 });

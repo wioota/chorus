@@ -137,7 +137,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                         this.page.$(".multiple_selection a.edit_tags").click();
                     });
 
-                    it("launches the dialog for associating multiple datasets with a workspace", function() {
+                    it("launches the dialog for editing tags", function() {
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
                         expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
                     });

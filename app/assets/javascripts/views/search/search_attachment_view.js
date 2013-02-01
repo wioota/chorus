@@ -1,7 +1,6 @@
 chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
     constructorName: "SearchAttachment",
     templateName: "search_attachment",
-    eventType: "attachment",
 
     additionalContext: function() {
         var workspaceLink = this.model.workspace() && this.model.workspace().get('id') && this.model.workspace().showLink();
