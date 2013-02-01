@@ -65,20 +65,11 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#sub_nav": "subNav"
     },
 
-    _initializeHeader: function() {
+    _initializeHeaderAndBreadcrumbs: function() {
         this.header = this.header || new chorus.views.Header();
-    },
-
-    _initializeBreadcrumbs: function() {
         var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
-        });
-
-        _.each(this.breadcrumbRequiredResources, function(resource){
-            page.breadcrumbs.listenTo(resource, "loaded", function() {
-                page.breadcrumbs.render();
-            });
         });
     },
 

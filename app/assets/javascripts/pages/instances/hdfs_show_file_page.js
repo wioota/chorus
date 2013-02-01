@@ -23,7 +23,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.listenTo(this.hadoopInstance, "loaded", this.render);
         this.listenTo(this.hadoopInstance, "loaded", this.render);
 
-        this.breadcrumbRequiredResources = [this.model, this.hadoopInstance];
+        this.breadcrumbs.requiredResources.add([this.model, this.hadoopInstance]);
     },
 
     crumbs: function() {

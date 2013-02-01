@@ -25,7 +25,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
 
         this.bindings.add(this.instance, "loaded", this.instanceLoaded);
 
-        this.breadcrumbRequiredResources = [this.instance];
+        this.breadcrumbs.requiredResources.add(this.instance);
     },
 
     instanceLoaded: function() {

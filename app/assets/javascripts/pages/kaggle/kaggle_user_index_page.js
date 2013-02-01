@@ -34,7 +34,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         chorus.PageEvents.subscribe("filterKaggleUsers", this.filterKaggleUsers, this);
 
-        this.breadcrumbRequiredResources = [this.workspace];
+        this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
     crumbs: function() {

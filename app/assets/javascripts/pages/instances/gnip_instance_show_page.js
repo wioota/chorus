@@ -13,7 +13,7 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.InstanceListSidebar();
         this.sidebar.setInstance(this.model);
 
-        this.breadcrumbRequiredResources = [this.model];
+        this.breadcrumbs.requiredResources.add(this.model);
     },
 
     crumbs: function() {

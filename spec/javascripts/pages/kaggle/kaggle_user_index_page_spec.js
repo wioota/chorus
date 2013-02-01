@@ -31,16 +31,6 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
     });
 
-    context("while the workspace is loading", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("displays some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
-        });
-    });
-
     context("after the workspace has loaded successfully", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace, this.workspace);

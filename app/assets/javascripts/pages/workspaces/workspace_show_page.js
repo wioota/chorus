@@ -17,7 +17,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.WorkspaceSummaryContentHeader({model: this.model})
         });
 
-        this.breadcrumbRequiredResources = [this.model];
+        this.breadcrumbs.requiredResources.add(this.model);
         this.listenTo(this.model, 'saved', this.render);
     },
 

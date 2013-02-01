@@ -45,7 +45,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         });
 
         this.bindings.add(this.schema, "loaded", this.schemaLoaded);
-        this.breadcrumbRequiredResources = [this.schema];
+        this.breadcrumbs.requiredResources.add(this.schema);
     },
 
     crumbs: function() {

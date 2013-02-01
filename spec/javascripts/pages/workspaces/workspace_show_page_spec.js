@@ -105,17 +105,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             this.page = new chorus.pages.WorkspaceShowPage(4);
         });
 
-        context("while the model is loading", function() {
-            beforeEach(function() {
-                this.page.model.loaded = false;
-                this.page.render();
-            });
-
-            it("displays some breadcrumbs", function() {
-                expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
-            });
-        });
-
         context("when the model fails to load properly", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl");

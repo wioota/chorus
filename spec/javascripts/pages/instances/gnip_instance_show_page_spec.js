@@ -4,20 +4,10 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
         this.page = new chorus.pages.GnipInstanceShowPage(this.model.id);
     });
 
-    context("while the instance is loading", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("displays some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home");
-        });
-    });
-
     context("after the instance has loaded successfully", function() {
         beforeEach(function() {
+            this.server.completeFetchFor(this.model);
             this.page.render();
-            this.server.completeFetchFor(this.model, this.model);
         });
 
         it("displays the breadcrumbs", function() {

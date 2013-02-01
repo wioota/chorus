@@ -20,20 +20,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         expect(this.page.model.get("hadoopInstance").id).toBe("1234");
     });
 
-    describe("before fetches complete", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("shows some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
-
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
-        });
-    });
-
     context("fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);

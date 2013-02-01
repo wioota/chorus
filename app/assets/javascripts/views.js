@@ -10,9 +10,8 @@ chorus.views.Bare = Backbone.View.include(
             this.subViewObjects = [];
             this.subscriptions = [];
 
-            this._initializeHeader();
+            this._initializeHeaderAndBreadcrumbs();
             this.setup.apply(this, arguments);
-            this._initializeBreadcrumbs();
 
             this.bindCallbacks();
             this.bindHotkeys();
@@ -22,8 +21,7 @@ chorus.views.Bare = Backbone.View.include(
             }
         },
 
-        _initializeHeader: $.noop,
-        _initializeBreadcrumbs: $.noop,
+        _initializeHeaderAndBreadcrumbs: $.noop,
         preInitialize: $.noop,
         setup: $.noop,
         postRender: $.noop,

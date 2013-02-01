@@ -19,7 +19,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
 
         this.bindings.add(this.model, "loaded", this.buildPage);
 
-        this.breadcrumbRequiredResources = [this.model, this.workspace];
+        this.breadcrumbs.requiredResources.add(this.model);
     },
 
     crumbs: function() {

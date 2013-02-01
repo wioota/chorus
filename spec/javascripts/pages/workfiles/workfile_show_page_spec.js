@@ -89,8 +89,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     this.server.completeFetchFor(this.model);
                 });
 
-                it("loads breadcrumbs, sidebar, subnavigation, and mainContent", function() {
-                    expect(this.page.breadcrumbs).toBeDefined();
+                it("loads sidebar, subnavigation, and mainContent", function() {
                     expect(this.page.sidebar).toBeDefined();
                     expect(this.page.subNav).toBeDefined();
                     expect(this.page.mainContent).toBeDefined();

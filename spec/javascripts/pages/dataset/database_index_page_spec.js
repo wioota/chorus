@@ -28,10 +28,6 @@ describe("chorus.pages.DatabaseIndexPage", function() {
     });
 
     describe("before the fetches complete", function() {
-        it("has some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home");
-        });
-
         it("displays a loading section", function() {
             expect(this.page.$(".loading_section")).toExist();
         });

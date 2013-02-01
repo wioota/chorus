@@ -21,7 +21,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
         }
 
         this.listenTo(this.model, "loaded", this.render);
-        this.breadcrumbRequiredResources = [this.model];
+        this.breadcrumbs.requiredResources.add(this.model);
 
     },
 
