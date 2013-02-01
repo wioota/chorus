@@ -72,7 +72,7 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     escapePressed:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
     },
 
     modalClosed:function () {

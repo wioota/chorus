@@ -132,5 +132,10 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         chorus.styleSelect(this.$("select.hours"));
         chorus.styleSelect(this.$("select.minutes"));
         chorus.styleSelect(this.$("select.ampm"));
+    },
+
+    teardown: function(){
+      this._super("teardown", arguments);
+      this.disable();
     }
 });

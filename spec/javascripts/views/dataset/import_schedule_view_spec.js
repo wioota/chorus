@@ -207,4 +207,20 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".date.end input[name='year']").val()).toBe((now.getFullYear()).toString());
         });
     });
+
+    describe("teardown", function(){
+        beforeEach(function() {
+            spyOn(this.view, "disable");
+            spyOn(chorus.views.Base.prototype, "teardown");
+            this.view.teardown();
+        });
+
+        it("should disable itself", function(){
+            expect(this.view.disable).toHaveBeenCalled();
+        });
+
+        it("should call teardown on super", function(){
+            expect(chorus.views.Base.prototype.teardown).toHaveBeenCalled();
+        });
+    });
 });

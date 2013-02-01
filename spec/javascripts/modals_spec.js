@@ -278,4 +278,15 @@ describe("chorus.Modal", function() {
             });
         });
     });
+
+    describe("pressing the escape key", function(){
+        beforeEach(function() {
+            spyOn(this.modal, "closeModal").andCallThrough();
+            this.modal.keydownHandler({keyCode: 27});
+        });
+
+        it("should call #closeModal", function(){
+           expect(this.modal.closeModal).toHaveBeenCalled();
+        });
+    });
 });
