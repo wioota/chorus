@@ -98,4 +98,16 @@ describe DataSource do
       end
     end
   end
+
+  describe '#connect_as_owner' do
+    let(:data_source) { data_sources(:oracle) }
+
+    before do
+      mock(data_source).connect_with(data_source.owner_account)
+    end
+
+    it 'connects with the owners account' do
+      data_source.connect_as_owner
+    end
+  end
 end

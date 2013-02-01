@@ -32,6 +32,10 @@ class DataSource < ActiveRecord::Base
     success
   end
 
+  def connect_as_owner
+    connect_with(owner_account)
+  end
+
   def self.accessible_to(user)
     where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           owned: user.id,

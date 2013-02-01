@@ -179,6 +179,17 @@ class GreenplumConnection < DataSourceConnection
       with_connection { @connection.fetch(DATABASES_SQL).map { |row| row[:database_name] } }
     end
 
+    def version
+      # if the version string looks like this:
+      # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
+      # then we just want "4.1.1.2"
+
+      with_connection do
+        version_string = @connection.fetch("select version()").first[:version]
+        version_string.match(/Greenplum Database ([\d\.]*)/)[1]
+      end
+    end
+
     private
 
     DATABASES_SQL = <<-SQL

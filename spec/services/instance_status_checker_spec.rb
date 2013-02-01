@@ -96,13 +96,16 @@ describe InstanceStatusChecker do
   describe "checking a GPDB data source" do
     let(:data_source_account) { gpdb_data_source.owner_account }
     let(:gpdb_data_source) { FactoryGirl.create :gpdb_data_source, :state => 'offline' }
+    let(:connection) { Object.new }
+
+    before do
+      stub(gpdb_data_source).connect_as_owner { connection }
+    end
 
     describe ".check" do
       context "when the database connection is successful" do
         before do
-          stub_gpdb(data_source_account,
-                    "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
-          )
+          stub(connection).version { '1.2.3.4'}
         end
 
         it "updates the state" do
@@ -112,26 +115,13 @@ describe InstanceStatusChecker do
 
         it "updates the version" do
           InstanceStatusChecker.check(gpdb_data_source)
-          gpdb_data_source.reload.version.should == "4.1.1.1"
-        end
-      end
-
-      context "When retrieving the version fails" do
-        before do
-          stub_gpdb(data_source_account,
-                    "select version()" => [{"version" => ""}]
-          )
-        end
-
-        it "marks the data_source version as error" do
-          InstanceStatusChecker.check gpdb_data_source
-          gpdb_data_source.reload.version.should == "Error"
+          gpdb_data_source.reload.version.should == '1.2.3.4'
         end
       end
 
       context "When connecting to the database fails" do
         before do
-          stub_gpdb_fail(gpdb_data_source)
+          stub(connection).version { raise GreenplumConnection::DatabaseError.new }
         end
 
         it "does not raise an error" do
@@ -152,10 +142,17 @@ describe InstanceStatusChecker do
       let(:offline_data_source) { FactoryGirl.create(:gpdb_data_source) }
 
       before do
-        stub_gpdb(data_source_account,
-                  "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
-        )
-        stub_gpdb_fail(offline_data_source)
+        stub(online_data_source).connect_as_owner {
+          connection = Object.new
+          stub(connection).version { '1.2.3.4'}
+          connection
+        }
+
+        stub(offline_data_source).connect_as_owner {
+          connection = Object.new
+          stub(connection).version { raise GreenplumConnection::DatabaseError.new('bang') }
+          connection
+        }
       end
     end
   end
@@ -166,7 +163,7 @@ describe InstanceStatusChecker do
 
     describe ".check" do
       before do
-        stub(oracle_data_source).connect_with(oracle_data_source.owner_account) { connection }
+        stub(oracle_data_source).connect_as_owner { connection }
       end
 
       context "when the database connection is successful" do
@@ -213,8 +210,8 @@ describe InstanceStatusChecker do
         stub(online_connection).version { '1.0.0' }
         stub(offline_connection).version { raise OracleConnection::DatabaseError.new(Sequel::DatabaseError.new('error message')) }
 
-        stub(online_data_source).connect_with(online_data_source.owner_account) { online_connection }
-        stub(offline_data_source).connect_with(offline_data_source.owner_account) { offline_connection }
+        stub(online_data_source).connect_as_owner { online_connection }
+        stub(offline_data_source).connect_as_owner { offline_connection }
       end
     end
   end

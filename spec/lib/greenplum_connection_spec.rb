@@ -422,6 +422,13 @@ describe GreenplumConnection, :greenplum_integration do
 
       it_should_behave_like "a well behaved database query"
     end
+
+    describe '#version' do
+      let(:expected) { db.fetch('select version()').first[:version].match(/Greenplum Database ([\d\.]*)/)[1] }
+      let(:subject) { connection.version }
+
+      it_should_behave_like "a well behaved database query"
+    end
   end
 
   describe "SchemaMethods" do

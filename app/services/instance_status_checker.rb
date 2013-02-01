@@ -27,45 +27,21 @@ class InstanceStatusChecker
   end
 
   def poll_data_source
-    if @data_source.is_a?(HadoopInstance)
-      check_hdfs_data_source
-    elsif @data_source.is_a?(OracleDataSource)
-      check_oracle_data_source
-    else
-      check_gpdb_data_source
-    end
+    @data_source.version = get_data_source_version
+    @data_source.state = "online"
+  rescue => e
+    Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+    @data_source.state = "offline"
   end
 
   private
 
-  def check_hdfs_data_source
-    version = Hdfs::QueryService.data_source_version(@data_source)
-    @data_source.version = version
-    @data_source.state = "online"
-  rescue => e
-    @data_source.state = "offline"
-  end
-
-  def check_gpdb_data_source
-    Gpdb::ConnectionBuilder.connect!(@data_source, @data_source.owner_account) do |conn|
-      @data_source.state = "online"
-      version_string = conn.exec_query("select version()")[0]["version"]
-      # if the version string looks like this:
-      # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
-      # then we just want "4.1.1.2"
-      @data_source.version = version_string.match(/Greenplum Database ([\d\.]*)/)[1]
+  def get_data_source_version
+    if @data_source.is_a?(HadoopInstance)
+      Hdfs::QueryService.data_source_version(@data_source)
+    else
+      @data_source.connect_as_owner.version
     end
-  rescue => e
-    @data_source.version = "Error"
-    @data_source.state = "offline"
-  end
-
-  def check_oracle_data_source
-    @data_source.version = @data_source.connect_with(@data_source.owner_account).version
-    @data_source.state = "online"
-  rescue OracleConnection::DatabaseError => e
-    @data_source.version = "Error"
-    @data_source.state = "offline"
   end
 
   def should_check
