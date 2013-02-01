@@ -33,12 +33,26 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.collection.search($(e.target).val());
         }, this), 300);
 
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "dataset:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
+        });
+
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
             collection: this.collection,
             model: this.workspace,
+            checkable: true,
             title: t("dataset.title"),
+            contentDetailsOptions: { multiSelect: true },
             search: {
                 placeholder: t("workspace.search"),
                 onTextChange: onTextChangeFunction

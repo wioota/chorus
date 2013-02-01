@@ -142,14 +142,24 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     context("after the workspace and collection have loaded", function() {
         context("and the user has update permission on the workspace", function() {
             beforeEach(function() {
+                this.datasets = [
+                    rspecFixtures.workspaceDataset.datasetTable(),
+                    rspecFixtures.workspaceDataset.datasetTable()
+                ];
                 this.server.completeFetchFor(this.workspace);
-                this.server.completeFetchFor(this.page.collection);
+                this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
                 this.account = this.workspace.sandbox().instance().accountForCurrentUser();
             });
 
             it("creates the sidebar", function() {
                 expect(this.page.sidebar).toBeDefined();
                 expect(this.page.sidebar.options.workspace.id).toEqual(this.workspace.id);
+            });
+
+            it("creates the multi select sidebar", function() {
+                expect(this.page.multiSelectSidebarMenu).toBeDefined();
+                expect(this.page.multiSelectSidebarMenu).toBeA(chorus.views.MultipleSelectionSidebarMenu);
+                expect(this.page.multiSelectSidebarMenu.options.selectEvent).toEqual("dataset:checked");
             });
 
             it("has breadcrumbs", function() {
@@ -160,6 +170,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 expect(this.page.mainContent).toBeDefined();
                 expect(this.page.mainContent.model).toBeA(chorus.models.Workspace);
                 expect(this.page.mainContent.model.get("id")).toBe(this.workspace.get("id"));
+                expect(this.page.mainContent.options.checkable).toEqual(true);
+                expect(this.page.mainContent.options.contentDetailsOptions.multiSelect).toEqual(true);
                 expect(this.page.$("#main_content")).toExist();
                 expect(this.page.$("#main_content")).not.toBeEmpty();
             });
@@ -181,6 +193,37 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 spyOn(this.page.collection, 'fetch').andCallThrough();
                 chorus.PageEvents.broadcast("csv_import:started");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
+            });
+
+            describe("multiple selection", function() {
+                it("does not display the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+                });
+
+                context("when a row has been checked", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("dataset:checked", this.page.collection.clone());
+                    });
+
+                    it("displays the multiple selection section", function() {
+                        expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                    });
+
+                    it("has an action to edit tags", function() {
+                        expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                    });
+
+                    describe("clicking the 'edit_tags' link", function() {
+                        beforeEach(function() {
+                            this.page.$(".multiple_selection a.edit_tags").click();
+                        });
+
+                        it("launches the dialog for editing tags", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                            expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                        });
+                    });
+                });
             });
 
             context("it has a sandbox", function() {
