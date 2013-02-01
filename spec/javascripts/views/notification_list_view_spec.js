@@ -87,7 +87,7 @@ describe("chorus.views.NotificationList", function() {
             });
 
             it("hides the more link", function() {
-                expect(this.view.$(".more_notifications a")).not.toExist();
+                expect(this.view.$(".more_items a")).not.toExist();
             });
         });
 
@@ -99,12 +99,12 @@ describe("chorus.views.NotificationList", function() {
 
             context("when more results are available", function() {
                 it("shows the more link", function() {
-                    expect(this.view.$(".more_notifications a")).toExist();
+                    expect(this.view.$(".more_items a")).toExist();
                 });
 
                 context("clicking the more link", function() {
                     beforeEach(function() {
-                        this.view.$(".more_notifications a").click();
+                        this.view.$(".more_items a").click();
                     });
 
                     it("loads more results", function() {
@@ -136,8 +136,8 @@ describe("chorus.views.NotificationList", function() {
 
                         context("clicking the more link again", function() {
                             beforeEach(function() {
-                                expect(this.view.$(".more_notifications a")).toExist();
-                                this.view.$(".more_notifications a").click();
+                                expect(this.view.$(".more_items a")).toExist();
+                                this.view.$(".more_items a").click();
                             });
 
                             it("marks everything read again", function() {
@@ -157,7 +157,7 @@ describe("chorus.views.NotificationList", function() {
                 });
 
                 it("doesn't show the more link", function() {
-                    expect(this.view.$(".more_notifications a")).not.toExist();
+                    expect(this.view.$(".more_items a")).not.toExist();
                 });
             });
         });

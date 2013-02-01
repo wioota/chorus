@@ -63,8 +63,7 @@ describe("chorus.views.ActivityList", function() {
 
                 it("displays the 'no notes' message", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
-
-                    expect(this.view.$(".no_activity")).toContainTranslation("activity.none", {type: "Foo"});
+                    expect(this.view.$(".no_items")).toContainTranslation("activity.none", {type: "Foo"});
                 });
             });
 
@@ -77,7 +76,7 @@ describe("chorus.views.ActivityList", function() {
 
                 it("displays the 'no notes' message", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
-                    expect(this.view.$(".no_activity")).toContainTranslation("activity.no_recent");
+                    expect(this.view.$(".no_items")).toContainTranslation("activity.no_recent");
                 });
             });
         });
@@ -145,20 +144,20 @@ describe("chorus.views.ActivityList", function() {
         describe("pagination", function() {
             function itDoesNotShowAMoreLink() {
                 it("does not render a 'more' link", function() {
-                    expect(this.view.$("a.more_activities")).not.toExist();
+                    expect(this.view.$("a.more_items")).not.toExist();
                 });
             }
 
             function itShowsAMoreLink(nextPage) {
                 it("renders a 'more' link", function() {
-                    expect(this.view.$(".more_activities a")).toExist();
+                    expect(this.view.$(".more_items a")).toExist();
                 });
 
                 describe("when the 'more' link is clicked", function() {
                     beforeEach(function() {
                         this.originalActivityCount = this.view.$('li[data-activity-id]').length;
                         spyOn(this.view, 'postRender').andCallThrough();
-                        this.view.$(".more_activities a").click();
+                        this.view.$(".more_items a").click();
 
                         this.server.completeFetchFor(this.collection, [
                             rspecFixtures.activity.dataSourceCreated(),

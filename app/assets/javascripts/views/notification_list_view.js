@@ -4,7 +4,7 @@ chorus.views.NotificationList = chorus.views.Base.extend({
     useLoadingSection: true,
 
     events: {
-        "click .more_notifications a":"fetchMoreNotifications"
+        "click .more_items a":"fetchMoreNotifications"
     },
 
     setup: function() {
