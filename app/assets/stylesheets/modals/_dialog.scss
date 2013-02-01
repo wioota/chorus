@@ -1,5 +1,4 @@
 .dialog {
-    max-width: 600px;
     .dialog_header {
         height: 54px;
         border-bottom: 1px solid $border-color;
@@ -106,4 +105,8 @@
      margin-left: 14px;
      margin-right: 14px;
   }
+}
+
+.dialog.dialog-narrow {
+    width:500px;
 }

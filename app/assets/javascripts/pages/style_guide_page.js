@@ -17,8 +17,8 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        var siteElements = new chorus.pages.StyleGuidePage.SiteElementsView();
-        $(this.el).append(siteElements.render().el);
+        this.siteElements = new chorus.pages.StyleGuidePage.SiteElementsView();
+        $(this.el).append(this.siteElements.render().el);
     }
 });
 
@@ -41,9 +41,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         //necessary for collection views down at the bottom
         this.loadingCollection = new chorus.collections.UserSet();
         this.userCollection = new chorus.collections.UserSet([
-            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser"}),
-            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser"}),
-            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser"})
+            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1"}),
+            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2"}),
+            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3"})
         ]);
 
         this.userCollection.loaded = true;
@@ -97,7 +97,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
 
-            "New Note Dialog" : new chorus.dialogs.NotesNew(),
+            "New Note Dialog": new chorus.dialogs.NotesNew(),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
 
@@ -323,8 +323,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             view.render();
         });
 
-        $("body").css("overflow", "visible");
+        setInterval(this.enableScrolling, 100);
 
         return this;
+    },
+
+//    Used to ensure scrolling works after re-rendering dialog
+    enableScrolling: function() {
+        $("body").css("overflow", "visible");
     }
 });
