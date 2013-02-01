@@ -223,7 +223,7 @@ describe("chorus.views.Header", function() {
 
                 context("when the header has a workspace id", function() {
                     beforeEach(function() {
-                        this.view.options.workspaceId = '11';
+                        this.view.workspaceId = '11';
                         this.view.$(".search form").trigger("submit");
                     });
 
@@ -236,7 +236,7 @@ describe("chorus.views.Header", function() {
 
                 context("when the header doesn't have a workspace id", function() {
                     beforeEach(function() {
-                        delete this.view.options.workspaceId;
+                        delete this.view.workspaceId;
                         this.view.$(".search form").trigger("submit");
                     });
 

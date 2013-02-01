@@ -65,10 +65,12 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#sub_nav": "subNav"
     },
 
-    setupSubviews: function() {
-        this.header = this.header || new chorus.views.Header({ workspaceId: this.workspaceId });
-        var page = this;
+    _initializeHeader: function() {
+        this.header = this.header || new chorus.views.Header();
+    },
 
+    _initializeBreadcrumbs: function() {
+        var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
         });

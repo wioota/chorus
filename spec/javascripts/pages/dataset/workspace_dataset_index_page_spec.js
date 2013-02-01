@@ -22,7 +22,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         });
 
         it("sets the workspace id, for prioritizing search", function() {
-            expect(this.page.workspaceId).toBe(9999);
+            expect(this.page.header.workspaceId).toBe(9999);
         });
 
         it("fetches the collection", function() {

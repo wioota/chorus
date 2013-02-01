@@ -19,6 +19,23 @@ describe("chorus.pages.Base", function() {
         it("binds to change on chorus.user", function() {
             expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
         });
+
+        context("when the page already has a header", function() {
+            it("uses the cached header", function() {
+                var header = stubView("I is yr header");
+                this.view.header = header;
+                this.view.render();
+                expect(this.view.$("#header").text()).toBe("I is yr header");
+            });
+        });
+
+        context("when the page does not have a header", function() {
+            it("creates a Header view", function() {
+                this.view.render();
+                expect(this.view.$("#header.header")).toExist();
+                expect(this.view.header).toBeA(chorus.views.Header);
+            });
+        });
     });
 
     describe("#dependsOn", function() {
@@ -103,34 +120,6 @@ describe("chorus.pages.Base", function() {
             this.view = new chorus.pages.Base();
 
             this.view.mainContent = stubView();
-        });
-
-        context("when the page already has a header", function() {
-            it("uses the cached header", function() {
-                var header = stubView("I is yr header");
-                this.view.header = header;
-                this.view.render();
-                expect(this.view.$("#header").text()).toBe("I is yr header");
-            });
-        });
-
-        context("when the page does not have a header", function() {
-            it("creates a Header view", function() {
-                this.view.render();
-                expect(this.view.$("#header.header")).toExist();
-                expect(this.view.header).toBeA(chorus.views.Header);
-            });
-        });
-
-        context("when the page has a 'workspaceId'", function() {
-            beforeEach(function() {
-                this.view.workspaceId = '5';
-                this.view.render();
-            });
-
-            it("passes the workspace id to the header", function() {
-                expect(this.view.header.options.workspaceId).toBe("5");
-            });
         });
 
         context("when the page depends on resources", function() {
@@ -229,60 +218,45 @@ describe("chorus.pages.Base", function() {
         });
 
         describe("breadcrumb handling", function() {
-            context("with static breadcrumbs", function() {
-                beforeEach(function() {
-                    this.originalCrumbs = chorus.pages.Base.prototype.crumbs;
-                    chorus.pages.Base.prototype.crumbs = [ {label: "Home"} ];
-                    this.view = new chorus.pages.Base();
-                    this.view.render();
-                });
+            beforeEach(function() {
+                chorus.pages.Base.prototype.crumbs = [ {label: "Home"} ];
+                this.view = new chorus.pages.Base();
+            });
 
-                afterEach(function() {
-                    chorus.pages.Base.prototype.crumbs = this.originalCrumbs;
-                });
-
-                it("creates a BreadcrumbsView with the static breadcrumbs", function() {
-                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual([ {label: "Home"} ]);
-                });
+            it("creates a BreadcrumbsView with the static breadcrumbs", function() {
+                expect(this.view.breadcrumbs.additionalContext().breadcrumbs).toEqual([ {label: "Home"} ]);
             });
 
             context("with dynamic breadcrumbs", function() {
                 beforeEach(function() {
-                    this.originalCrumbs = chorus.pages.Base.prototype.crumbs;
                     chorus.pages.Base.prototype.crumbs = function () {
                         return [
                             {label: "There"}
                         ];
                     };
+                    spyOn(chorus.pages.Base.prototype, 'crumbs').andCallThrough();
                     this.view = new chorus.pages.Base();
-                    spyOn(this.view, 'crumbs').andCallThrough();
-                    this.view.render();
-                });
-
-                afterEach(function() {
-                    chorus.pages.Base.prototype.crumbs = this.originalCrumbs;
                 });
 
                 it("creates a BreadcrumbsView with the dynamic breadcrumbs", function() {
-                    expect(this.view.breadcrumbs.options.breadcrumbs()).toEqual(this.view.crumbs());
+                    expect(this.view.breadcrumbs.additionalContext().breadcrumbs).toEqual(this.view.crumbs());
                 });
 
                 it("re-evaluates the function every time render is called", function() {
-                    expect(this.view.crumbs).toHaveBeenCalled();
-                    this.view.crumbs.reset();
-                    this.view.render();
+                    expect(this.view.crumbs).not.toHaveBeenCalled();
+
+                    this.view.breadcrumbs.render();
                     expect(this.view.crumbs).toHaveBeenCalled();
                 });
             });
+
+            it("renders the breadcrumbs", function() {
+                this.view.render();
+
+                expect(this.view.$("#breadcrumbs.breadcrumbs .breadcrumb")).toExist();
+            });
         });
 
-        it("renders the breadcrumbs", function() {
-            this.view.crumbs = [
-                {label: "Home"}
-            ];
-            this.view.render();
-            expect(this.view.$("#breadcrumbs.breadcrumbs .breadcrumb")).toExist();
-        });
 
         it("populates the #main_content", function() {
             this.view.mainContent = stubView("OH HAI BARABARA");

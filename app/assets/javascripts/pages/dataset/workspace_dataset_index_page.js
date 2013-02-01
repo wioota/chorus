@@ -3,7 +3,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     helpId: "datasets",
 
     setup: function(workspaceId) {
-        this.workspaceId = workspaceId;
+        this.header.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.workspace.fetch();
 
