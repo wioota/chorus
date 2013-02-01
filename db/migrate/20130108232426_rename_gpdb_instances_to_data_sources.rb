@@ -1,4 +1,4 @@
-class RenameGpdbInstancesToInstances < ActiveRecord::Migration
+class RenameGpdbInstancesToDataSources < ActiveRecord::Migration
   def up
     add_column :gpdb_instances, :type, :string
     rename_table :gpdb_instances, :data_sources
