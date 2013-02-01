@@ -30,8 +30,4 @@ class SvgToPng
     file.original_filename = desired_file_name
     file
   end
-
-  class FakeFileUpload < StringIO
-    attr_accessor :content_type, :original_filename
-  end
 end

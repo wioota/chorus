@@ -6,14 +6,17 @@ class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
-    present workfile, :presenter_options => { :contents => true, :workfile_as_latest_version => true }
+    present workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true}
   end
 
   def create
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
-    present create_workfile(workspace), presenter_options: {:workfile_as_latest_version => true}, status: :created
+    workfile = Workfile.build_for(params[:workfile].merge(:workspace => workspace, :owner => current_user))
+    workfile.save!
+
+    present workfile, presenter_options: {:workfile_as_latest_version => true}, status: :created
   end
 
   def update
@@ -26,7 +29,7 @@ class WorkfilesController < ApplicationController
       workfile.save!
     end
 
-    present workfile, :presenter_options => { :include_execution_schema => true }
+    present workfile, :presenter_options => {:include_execution_schema => true}
   end
 
   def index
@@ -41,7 +44,7 @@ class WorkfilesController < ApplicationController
       workfiles = finder.find_all_by_workspace_id(workspace)
     end
 
-    present paginate(workfiles), :presenter_options => { :workfile_as_latest_version => true }
+    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true}
   end
 
   def destroy
@@ -60,33 +63,5 @@ class WorkfilesController < ApplicationController
     else
       "updated_at"
     end
-  end
-
-  def create_workfile(workspace)
-    workfile = nil
-    workfile_params = params[:workfile]
-    Workfile.transaction do
-      if workfile_params[:type] == 'alpine'
-        workfile = AlpineWorkfile.new(workfile_params)
-        workfile.owner = current_user
-        workfile.workspace = workspace
-        workfile.save!
-      elsif workfile_params[:svg_data]
-        workfile = ChorusWorkfile.create_from_svg(workfile_params, workspace, current_user)
-      else
-        workfile = ChorusWorkfile.create_from_file_upload(workfile_params, workspace, current_user)
-      end
-
-      Events::WorkfileCreated.by(current_user).add(
-        :workfile => workfile,
-        :workspace => workspace,
-        :commit_message => workfile_params[:description]
-      )
-
-      workspace.has_added_workfile = true
-      workspace.save!
-    end
-
-    workfile
   end
 end

@@ -1,9 +1,14 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
 
+  @@entity_types = Hash.new('ChorusWorkfile').merge!({
+     'alpine' => 'AlpineWorkfile'
+  })
+
   acts_as_taggable
 
-  attr_accessible :description, :file_name
+  attr_accessible :description, :file_name, :as => [:default, :create]
+  attr_accessible :owner, :workspace, :as => :create
 
   serialize :additional_data, JsonHashSerializer
 
@@ -21,6 +26,9 @@ class Workfile < ActiveRecord::Base
 
   before_validation :init_file_name, :on => :create
 
+  after_create :create_workfile_created_event, :if => :current_user
+  after_create :update_has_added_workfile_on_workspace
+
   delegate :member_ids, :public, :to => :workspace
 
   attr_accessor :highlighted_attributes, :search_result_notes
@@ -30,6 +38,11 @@ class Workfile < ActiveRecord::Base
     integer :workspace_id, :multiple => true
     integer :member_ids, :multiple => true
     boolean :public
+  end
+
+  def self.build_for(params)
+    klass = @@entity_types[params[:entity_type]].constantize
+    workfile = klass.new(params, :as => :create)
   end
 
   def self.type_name
@@ -77,5 +90,20 @@ class Workfile < ActiveRecord::Base
 
   def init_file_name
     WorkfileName.resolve_name_for!(self)
+    true
   end
+
+  def create_workfile_created_event
+    Events::WorkfileCreated.by(current_user).add(
+        :workfile => self,
+        :workspace => workspace,
+        :commit_message => description
+    )
+  end
+
+  def update_has_added_workfile_on_workspace
+    workspace.has_added_workfile = true
+    workspace.save!
+  end
+
 end

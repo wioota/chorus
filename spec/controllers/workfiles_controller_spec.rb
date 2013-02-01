@@ -160,24 +160,10 @@ describe WorkfilesController do
 
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
-    it 'creates a workfile' do
+    it 'creates a workfile from upload' do
       post :create, params
+      response.code.should == "201"
       Workfile.last.file_name.should == 'workfile.sql'
-    end
-
-    it 'sets has_added_workfile on the workspace to true' do
-      post :create, params
-      workspace.reload.has_added_workfile.should be_true
-    end
-
-    it 'makes a WorkfileCreated event' do
-      expect {
-        post :create, params
-      }.to change(Events::WorkfileCreated, :count).by(1)
-      event = Events::WorkfileCreated.by(user).last
-      event.workfile.description.should == params[:description]
-      event.additional_data['commit_message'].should == params[:description]
-      event.workspace.should == workspace
     end
 
     it 'creates a workfile from an svg document' do
@@ -185,13 +171,6 @@ describe WorkfilesController do
         post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
       }.to change(Workfile, :count).by(1)
       Workfile.last.file_name.should == 'some_vis.png'
-    end
-
-    context 'when creating a new workfile with an invalid name' do
-      it 'returns an unprocessable entity response code' do
-        post :create, :workspace_id => workspace.to_param, :file_name => 'a/file.sql'
-        response.code.should == "422"
-      end
     end
 
     context 'when uploading a workfile with an invalid name' do
@@ -203,10 +182,10 @@ describe WorkfilesController do
       end
     end
 
-    context 'when type is alpine' do
+    context 'when entity_type is alpine' do
       let(:params) do
         {
-            :type => 'alpine',
+            :entity_type => 'alpine',
             :workspace_id => workspace.to_param,
             :file_name => 'something',
             :alpine_id => '42'

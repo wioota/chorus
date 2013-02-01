@@ -1,5 +1,5 @@
 class WorkfileVersion < ActiveRecord::Base
-  attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
+  attr_accessible :commit_message, :owner, :modifier, :contents, :version_num, :as => [:default, :create]
   has_attached_file :contents,
                     :styles => {:icon => "50x50>"},
                     :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
@@ -11,6 +11,7 @@ class WorkfileVersion < ActiveRecord::Base
   belongs_to :modifier, :class_name => 'User'
   before_post_process :check_file_type
 
+  before_save :fix_workfile_association, :on => :create
   before_validation :init_version_number, :on => :create
 
   after_validation :clean_content_errors
@@ -104,5 +105,12 @@ class WorkfileVersion < ActiveRecord::Base
 
   def init_version_number
     self.version_num ||= 1
+  end
+
+  def fix_workfile_association
+    association = association(:workfile)
+    if association.loaded?
+      association.loaded! if association.stale_target?
+    end
   end
 end

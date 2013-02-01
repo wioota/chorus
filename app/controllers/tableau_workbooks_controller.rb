@@ -35,13 +35,6 @@ class TableauWorkbooksController < ApplicationController
       if workfile
         workfile.tableau_workbook_publication = publication
         workfile.save!
-
-        Events::TableauWorkfileCreated.by(current_user).add(
-            :dataset => publication.dataset,
-            :workfile => publication.linked_tableau_workfile,
-            :workspace => publication.workspace,
-            :workbook_name => publication.name
-        )
       end
       render :json => {
           :response => {

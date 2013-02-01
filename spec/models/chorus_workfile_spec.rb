@@ -29,102 +29,104 @@ describe ChorusWorkfile do
     end
   end
 
-  describe ".create_from_file_upload" do
+  describe "creating with file data" do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }
 
     shared_examples "file upload" do
       it "creates a workfile in the database" do
-        subject.should be_valid
-        subject.should be_persisted
+        workfile.should be_valid
+        workfile.should be_persisted
       end
 
       it "creates a workfile version in the database" do
-        subject.versions.should have(1).version
+        workfile.versions.should have(1).version
 
-        version = subject.versions.first
+        version = workfile.versions.first
         version.should be_valid
         version.should be_persisted
       end
 
       it "sets the attributes of the workfile" do
-        subject.owner.should == user
-        subject.file_name.should == 'workfile.sql'
-        subject.workspace.should == workspace
+        workfile.owner.should == user
+        workfile.file_name.should == 'workfile.sql'
+        workfile.workspace.should == workspace
       end
 
       it "has a valid latest version" do
-        subject.latest_workfile_version.should_not be_nil
+        workfile.latest_workfile_version.should_not be_nil
       end
 
       it "sets the modifier of the first, recently created version" do
-        subject.versions.first.modifier.should == user
+        workfile.versions.first.modifier.should == user
       end
 
       it "sets the attributes of the workfile version" do
-        version = subject.versions.first
+        version = workfile.versions.first
 
         version.contents.should be_present
         version.version_num.should == 1
       end
 
       it "does not set a commit message" do
-        subject.versions.first.commit_message.should be_nil
+        workfile.versions.first.commit_message.should be_nil
       end
     end
 
     context "with versions" do
       let(:execution_schema) { nil }
+      let(:contents) { test_file('workfile.sql') }
+
       let(:attributes) do
         {
             :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
             :versions_attributes => [{
-                                         :contents => test_file('workfile.sql')
+                                         :contents => contents
                                      }],
-            :execution_schema => ({ :id => execution_schema.id } if execution_schema)
+            :execution_schema => ({ :id => execution_schema.id } if execution_schema),
+            :workspace => workspace,
+            :owner => user
         }
       end
+      let(:workfile) { ChorusWorkfile.build_for(attributes).tap{ |w| w.save! } }
 
-      subject { described_class.create_from_file_upload(attributes, workspace, user) }
+      before do
+        workspace.sandbox = Schema.first
+        workspace.save!
+      end
 
       it_behaves_like "file upload"
 
       it "sets the content of the workfile" do
-        subject.versions.first.contents.size.should > 0
+        workfile.versions.first.contents.size.should > 0
       end
 
       it "sets the right description on the workfile" do
-        subject.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
+        workfile.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
       end
 
-      context "when no execution schema is provided" do
-        let(:sandbox) { schemas(:default) }
-        before do
-          workspace.sandbox = sandbox
-          workspace.save!
-        end
-        it "sets the execution_schema of the workfile to the workspace sandbox" do
-          subject.execution_schema.should == sandbox
-        end
+      it "sets the execution_schema to the workspace sandbox" do
+        workspace.sandbox.should be_present
+        workfile.execution_schema.should == workspace.sandbox
       end
 
-      context "when execution schema is provided" do
-        let(:execution_schema) { schemas(:other_schema) }
+      context "when the workfile is not a sql workfile" do
+        let(:contents) { test_file('some.txt') }
 
-        it "sets the execution_schema" do
-          subject.execution_schema.should == execution_schema
+        it "does not set the execution_schema" do
+          workfile.execution_schema.should be_nil
         end
       end
     end
 
     context "without a version" do
-      subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
+      let(:workfile) { ChorusWorkfile.build_for(:file_name => 'workfile.sql', :workspace => workspace, :owner => user).tap{ |w| w.save! } }
 
       it_behaves_like "file upload"
 
       it "sets the file as blank" do
-        subject.versions.first.contents.size.should == 0
-        subject.versions.first.file_name.should == 'workfile.sql'
+        workfile.versions.first.contents.size.should == 0
+        workfile.versions.first.file_name.should == 'workfile.sql'
       end
     end
 
@@ -133,72 +135,67 @@ describe ChorusWorkfile do
         {
             :versions_attributes => [{
                                          :contents => test_file('not_an_image.jpg')
-                                     }]
+                                     }],
+            :workspace => workspace,
+            :owner => user
         }
       end
 
-      it "throws an exception" do
-        expect { described_class.create_from_file_upload(attributes, workspace, user) }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "does not create a orphan workfile" do
-        expect do
-          begin
-            described_class.create_from_file_upload(attributes, workspace, user)
-          rescue Exception => e
-          end
-        end.to_not change(ChorusWorkfile, :count)
+      it "is invalid" do
+        workfile = ChorusWorkfile.build_for(attributes)
+        workfile.save.should be_false
+        workfile.should have_error_on(:file_name)
       end
     end
   end
 
-  describe ".create_from_svg" do
+  describe "creating with svg_data" do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:filename) { 'svg_img.png' }
-    subject { described_class.create_from_svg({:svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>', :file_name => filename}, workspace, user) }
+    let(:workfile) { ChorusWorkfile.build_for(:workspace => workspace, :owner => user, :file_name => filename, :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>').tap { |w| w.save! } }
 
     it "should make a new workfile with the initial version set to the image generated by the SVG data" do
-      subject.versions.first.contents.size.should_not == 0
-      subject.versions.first.file_name.should == filename
+      workfile.versions.first.contents.size.should_not == 0
+      workfile.versions.first.file_name.should == filename
     end
 
     it "creates a workfile in the database" do
-      subject.should be_valid
-      subject.should be_persisted
+      workfile.should be_valid
+      workfile.should be_persisted
     end
 
     it "creates a workfile version in the database" do
-      subject.versions.should have(1).version
+      workfile.versions.should have(1).version
 
-      version = subject.versions.first
+      version = workfile.versions.first
       version.should be_valid
       version.should be_persisted
     end
 
     it "sets the attributes of the workfile" do
-      subject.owner.should == user
-      subject.file_name.should == filename
-      subject.workspace.should == workspace
+      workfile.owner.should == user
+      workfile.file_name.should == filename
+      workfile.workspace.should == workspace
     end
 
     it "has a valid latest version" do
-      subject.latest_workfile_version.should_not be_nil
+      workfile.latest_workfile_version.should_not be_nil
     end
 
     it "sets the modifier of the first, recently created version" do
-      subject.versions.first.modifier.should == user
+      workfile.versions.first.modifier.should == user
     end
 
     it "sets the attributes of the workfile version" do
-      version = subject.versions.first
+      version = workfile.versions.first
 
       version.contents.should be_present
       version.version_num.should == 1
     end
 
     it "does not set a commit message" do
-      subject.versions.first.commit_message.should be_nil
+      workfile.versions.first.commit_message.should be_nil
     end
   end
 

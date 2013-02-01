@@ -108,4 +108,36 @@ describe Workfile do
       new_workfile.additional_data["something"].should == "here"
     end
   end
+
+  describe "create" do
+    let(:workspace) { workspaces(:empty_workspace) }
+    let(:user) { users(:owner) }
+
+    it 'updates has_added_workfile on the workspace to true' do
+      workspace.has_added_workfile.should be_false
+      Workfile.build_for(:workspace => workspace, :owner => user, :file_name => 'test.sql').save!
+      workspace.reload.has_added_workfile.should be_true
+    end
+
+    it 'makes a WorkfileCreated event' do
+      set_current_user(user)
+      description = 'i am a description'
+      expect {
+        Workfile.build_for(:workspace => workspace, :owner => user, :file_name => 'test.sql', :description => description).save!
+      }.to change(Events::WorkfileCreated, :count).by(1)
+      event = Events::WorkfileCreated.by(user).last
+      event.workfile.description.should == description
+      event.additional_data['commit_message'].should == description
+      event.workspace.should == workspace
+    end
+
+    context 'when file_name is invalid' do
+      it 'has a validation error rather than exploding' do
+        workfile = Workfile.build_for(:workspace => workspace, :owner => user, :file_name => 'a/test.sql')
+        workfile.save
+        workfile.should have_error_on(:file_name)
+      end
+    end
+
+  end
 end
