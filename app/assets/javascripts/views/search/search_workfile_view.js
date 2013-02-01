@@ -6,7 +6,8 @@ chorus.views.SearchWorkfile = chorus.views.SearchItemBase.extend({
         return {
             showUrl: this.model.showUrl(),
             iconUrl: this.model.iconUrl(),
-            workspaces: [this.model.workspace().attributes]
+            workspaces: [this.model.workspace().attributes],
+            tags: this.model.tags().models
         };
     },
 

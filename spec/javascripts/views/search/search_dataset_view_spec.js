@@ -93,5 +93,9 @@ describe("chorus.views.SearchDataset", function() {
             expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
             expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
         });
+
+        it("tags have links to the tag show page", function () {
+            expect(this.view.$('.item_tag_list a.tag_name:first')).toHaveHref("#/tags/tag1");
+        });
     });
 });
