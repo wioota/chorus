@@ -7,7 +7,11 @@
     }
 }
 
+$visualization_width : 940px;
+
 .visualization {
+    max-width: $visualization_width;
+
     .dialog_content {
         padding: 0;
     }
@@ -106,7 +110,7 @@
     }
 
     .chart_container{
-       width: 940px;
+       width: $visualization_width;
        height: 340px;
        padding: 0;
        margin: 0;
