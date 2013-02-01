@@ -14,7 +14,7 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
     },
 
     setup:function () {
-        chorus.PageEvents.subscribe("datasetSelected", this.setTableOrView, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("datasetSelected", this.setTableOrView, this));
     },
 
     postRender: function() {

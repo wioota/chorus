@@ -13,7 +13,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     setup: function() {
         this.setSchema(this.options.schema);
-        chorus.PageEvents.subscribe("workfile:changed", this.workfileChanged, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("workfile:changed", this.workfileChanged, this));
     },
 
     additionalContext: function() {

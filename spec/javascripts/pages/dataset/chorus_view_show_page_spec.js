@@ -9,8 +9,8 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
         this.datasetId = this.chorusView.get('id');
 
+        spyOn(chorus.pages.ChorusViewShowPage.prototype, "drawColumns").andCallThrough();
         this.page = new chorus.pages.ChorusViewShowPage(this.workspace.get("id"), this.datasetId);
-        spyOn(this.page, "drawColumns").andCallThrough();
     });
 
     describe("#initialize", function() {
@@ -226,7 +226,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
                 it("restores the original sidebar while hiding the secondarySidebar", function() {
                     expect(this.page.$('#sidebar .sidebar_content.primary')).not.toHaveClass('hidden');
-                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass('hidden');
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toExist();
                 });
 
                 it("removes all classes added when transform:sidebar is triggered", function() {

@@ -9,24 +9,18 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
-        this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("column:selected", this.addColumn, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this));
         this.chorusView = this.model.deriveChorusView();
         this.chorusView.aggregateColumnSet = this.options.aggregateColumnSet;
         this.bindings.add(this.chorusView, "change", this.render);
     },
 
     teardown: function() {
-        this.cleanup();
-        this._super("teardown");
-    },
-
-    cleanup: function() {
-        chorus.PageEvents.unsubscribe(this.selectedHandle);
-        chorus.PageEvents.unsubscribe(this.deselectedHandle);
         this.options.aggregateColumnSet.each(function(column) {
             delete column.selected;
         });
+        this._super("teardown");
     },
 
     postRender: function() {

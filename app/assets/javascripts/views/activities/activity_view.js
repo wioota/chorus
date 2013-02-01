@@ -43,14 +43,17 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     setupSubviews:function () {
-        this.commentList = new chorus.views.CommentList({ collection: this.model.comments() });
-        if (this.model.isUserGenerated()) {
-            this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
+        this.commentList = this.commentList || new chorus.views.CommentList({ collection: this.model.comments() });
+
+        if (!this.htmlContent) {
+            if (this.model.isUserGenerated()) {
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
+            }
+            if (this.model.hasCommitMessage()) {
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "commitMessage", attributeIsHtmlSafe: false});
+            }
         }
-        if (this.model.hasCommitMessage()) {
-            this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "commitMessage", attributeIsHtmlSafe: false});
-        }
-        this.failureContent = new chorus.views.ErrorDetails({model: this.model});
+        this.failureContent = this.failureContent || new chorus.views.ErrorDetails({model: this.model});
     },
 
     promote: function(e) {

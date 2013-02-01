@@ -114,8 +114,14 @@ window.Chorus = function chorus$Global() {
         if(index > -1) self.viewsToTearDown.splice(index, 1);
     };
 
+    var wrapRemove = function(element) {
+        return function () {
+            $(element).remove();
+        };
+    };
+
     self.menu = function(menuElement, options) {
-        self.afterNavigate(function() {$(menuElement).remove();});
+        self.afterNavigate(wrapRemove(menuElement));
 
         options = options || {};
         var classes = ((options.classes || "") + " tooltip-white").trim();

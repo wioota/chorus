@@ -1,5 +1,6 @@
 chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     templateName: "dataset_content_details",
+    constructorName: 'DatasetContentDetails',
     persistent: true,
 
     subviews: {

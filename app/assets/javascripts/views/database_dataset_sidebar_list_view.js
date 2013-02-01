@@ -53,7 +53,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.registerSubView(this.listview);
 
-        this.collection.bind("loaded fetchFailed", this.render, this);
+        this.bindings.add(this.collection, 'loaded fetchFailed', this.render);
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
     },
 

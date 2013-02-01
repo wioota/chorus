@@ -17,10 +17,10 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     setup: function() {
         this.showDownloadDialog = this.options.showDownloadDialog;
         this.dataset = this.options.dataset;
-        chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this);
-        chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
-        chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
-        chorus.PageEvents.subscribe("file:executionCancelled", this.hideSpinner, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this));
+        this.subscriptions.push(chorus.PageEvents.subscribe("file:executionCancelled", this.hideSpinner, this));
     },
 
     teardown: function() {

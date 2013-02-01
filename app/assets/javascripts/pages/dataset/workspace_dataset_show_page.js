@@ -37,7 +37,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
 
     bindCallbacks: function() {
         this._super('bindCallbacks');
-        chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
+        this.subscriptions.push(chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this));
     },
 
     constructSidebarForType: function(type) {
@@ -80,8 +80,9 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         this.mainContent.content.selectMulti = false;
         this.mainContent.content.showDatasetName = false;
         this.sidebar.disabled = false;
+
         if (this.secondarySidebar) {
-            this.secondarySidebar.cleanup();
+            this.secondarySidebar.teardown();
             delete this.secondarySidebar;
         }
         this.mainContent.content.render();

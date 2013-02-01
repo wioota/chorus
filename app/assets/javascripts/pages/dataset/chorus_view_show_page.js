@@ -1,6 +1,11 @@
 chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     constructorName: "ChorusViewShowPage",
 
+    setup: function() {
+        this._super("setup", arguments);
+        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this));
+    },
+
     makeModel: function(workspaceId, datasetId) {
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({id: workspaceId});
@@ -10,12 +15,13 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     },
 
     drawColumns: function() {
+        this.bindings.remove(this.mainContent.contentDetails);
         this._super('drawColumns');
-
         this.bindings.add(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
     },
 
     editChorusView: function() {
+        this.bindings.remove(this.mainContent.contentDetails);
         var sameHeader = this.mainContent.contentHeader;
 
         if (this.mainContent) {
@@ -26,8 +32,6 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
             contentHeader: sameHeader,
             contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
         });
-
-        this.subscriptions.push(chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this));
 
         this.renderSubview('mainContent');
     },
