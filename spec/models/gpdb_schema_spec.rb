@@ -383,7 +383,7 @@ describe GpdbSchema do
   end
 
   describe "#destroy" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
 
     it "should not delete the schema entry" do
       schema.destroy
