@@ -1,7 +1,7 @@
-chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
+chorus.pages.GpdbSchemaIndexPage = chorus.pages.Base.include(
     chorus.Mixins.InstanceCredentials.page
 ).extend({
-    constructorName: "SchemaIndexPage",
+    constructorName: "GpdbSchemaIndexPage",
     helpId: "instances",
 
     setup: function(databaseId) {

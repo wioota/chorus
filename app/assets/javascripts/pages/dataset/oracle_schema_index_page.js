@@ -3,6 +3,6 @@ chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.extend({
         this.dataSource = new chorus.models.OracleDataSource({id: oracleDataSourceId});
         this.collection = this.dataSource.schemas();
         this.collection.fetch();
-        this.dependOn(this.collection);
+        this.dependsOn(this.collection);
     }
 });
