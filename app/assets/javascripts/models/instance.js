@@ -6,22 +6,16 @@ chorus.models.Instance = chorus.models.Base.extend({
         return this._imagePrefix + 'icon_' + this.get('entityType') + '.png';
     },
 
-    _stateIconMap: {
-        "fault": "red.png",
-        "online": "green.png",
-        "offline": "yellow.png"
-    },
-
     isOnline: function() {
-        return this.get("state") === "online";
+        return this.get("online");
     },
 
     isOffline: function() {
-        return this.get("state") === "offline";
+        return !this.isOnline();
     },
 
     stateText: function() {
-        return t("instances.state." + (this.get("state") || "unknown"));
+        return t("instances.state." + (this.isOnline() ? 'online' : 'offline'));
     },
 
     version: function() {
@@ -29,7 +23,7 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     stateIconUrl: function() {
-        var filename = this._stateIconMap[this.get("state")] || "yellow.png";
+        var filename = this.isOnline() ? 'green.png' : 'yellow.png';
         return this._imagePrefix + filename;
     },
 

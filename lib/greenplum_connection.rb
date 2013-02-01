@@ -6,7 +6,7 @@ class GreenplumConnection < DataSourceConnection
     def error_type
       error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_sql_state) && @exception.wrapped_exception.get_sql_state
       case error_code
-        when '28P01' then :INVALID_PASSWORD
+        when /28.../ then :INVALID_PASSWORD
         when '3D000' then :DATABASE_MISSING
         when '53300' then :TOO_MANY_CONNECTIONS
         when /42.../ then :INVALID_STATEMENT

@@ -25,7 +25,7 @@ describe GpdbDataSourcePresenter, :type => :view do
       hash.should have_key(:id)
       hash.should have_key(:owner)
       hash.should have_key(:shared)
-      hash.should have_key(:state)
+      hash.should have_key(:online)
       hash.should have_key(:db_name)
       hash.should have_key(:description)
       hash.should have_key(:instance_provider)

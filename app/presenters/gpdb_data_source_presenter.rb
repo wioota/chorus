@@ -7,7 +7,7 @@ class GpdbDataSourcePresenter < Presenter
       :port => model.port,
       :id => model.id,
       :shared => model.shared,
-      :state => model.state,
+      :online => model.state == "online",
       :db_name => model.db_name,
       :description => model.description,
       :instance_provider => model.instance_provider,

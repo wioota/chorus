@@ -1101,8 +1101,8 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
           end
         end
 
-        context "when the error code is 28P01" do
-          let(:error_code) { '28P01' }
+        context "when the error code is 28xxx" do
+          let(:error_code) { '28abc' }
 
           it "returns :INVALID_PASSWORD" do
             error.error_type.should == :INVALID_PASSWORD

@@ -26,15 +26,18 @@ class InstanceStatusChecker
     @data_source.save!
   end
 
+  private
+
   def poll_data_source
     @data_source.version = get_data_source_version
     @data_source.state = "online"
+  rescue DataSourceConnection::Error => e
+    Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+    @data_source.state = e.error_type == :INVALID_PASSWORD ? "unauthorized" : "offline"
   rescue => e
     Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     @data_source.state = "offline"
   end
-
-  private
 
   def get_data_source_version
     if @data_source.is_a?(HadoopInstance)
@@ -45,9 +48,18 @@ class InstanceStatusChecker
   end
 
   def should_check
-    return true if @data_source.state == 'online' || @data_source.last_checked_at.blank?
+    return true if @data_source.last_checked_at.blank?
 
-    Time.current - @data_source.last_checked_at > 2.hours #except for authentication failures
+    time_between_checks =
+        case @data_source.state
+          when 'offline' then
+            2.hours
+          when 'unauthorized' then
+            24.hours
+          else
+            0  #still shouldn't check more often than instance_poll_interval_minutes
+        end
+    Time.current - @data_source.last_checked_at > time_between_checks
   end
 end
 

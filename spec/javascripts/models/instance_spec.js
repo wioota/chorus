@@ -10,21 +10,15 @@ describe("chorus.models.Instance", function() {
 
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
-            this.instance.set({ state: "offline" });
+            this.instance.set({ online: false });
             expect(this.instance.stateIconUrl()).toBe("/images/data_sources/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 
         it("works for online instances", function() {
-            this.instance.set({ state: "online" });
+            this.instance.set({ online: true });
             expect(this.instance.stateIconUrl()).toBe("/images/data_sources/green.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.online");
-        });
-
-        it("works for other instances", function() {
-            this.instance.set({ state: null });
-            expect(this.instance.stateIconUrl()).toBe("/images/data_sources/yellow.png");
-            expect(this.instance.stateText()).toMatchTranslation("instances.state.unknown");
         });
     });
 

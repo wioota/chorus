@@ -2,63 +2,75 @@ require 'spec_helper'
 
 describe InstanceStatusChecker do
   shared_examples :it_checks_a_data_source_if_due do |check_method|
-
-    define_method :check_and_reload do |data_source|
-      begin
-        InstanceStatusChecker.check(data_source)
-      rescue
-        # failed JDBC connections generate exceptions that should probably be handled by specific data_source checkers
-      ensure
-        data_source.reload
-      end
-    end
-
     before do
       offline_data_source.state = 'offline'
       [offline_data_source, online_data_source].each do |data_source|
-        data_source.last_online_at = last_online_at
         data_source.last_checked_at = last_checked_at
         data_source.save!
       end
     end
 
     context "when the data_source is online" do
-      let(:last_online_at) { nil }
       let(:last_checked_at) { nil }
 
       it "updates last_online_at" do
         expect {
-          check_and_reload(online_data_source)
+          InstanceStatusChecker.check(online_data_source)
         }.to change(online_data_source, :last_online_at)
       end
 
       it "updates last_checked_at and last_online_at" do
         expect {
-          check_and_reload(online_data_source)
+          InstanceStatusChecker.check(online_data_source)
         }.to change(online_data_source, :last_online_at)
       end
     end
 
     context "when the data_source was offline" do
       context "when the last checked time was more than two hours ago" do
-        let(:last_checked_at) { 1.year.ago }
-        let(:last_online_at) { nil }
+        let(:last_checked_at) { 3.hours.ago }
 
         it "checks the data_source" do
           expect {
-            check_and_reload(offline_data_source)
+            InstanceStatusChecker.check(offline_data_source)
           }.to change(offline_data_source, :last_checked_at)
         end
       end
 
       context "when last checked time was less than two hours ago" do
-        let(:last_checked_at) { 1.minutes.ago }
-        let(:last_online_at) { 1.year.ago }
+        let(:last_checked_at) { 1.hours.ago }
 
         it "does not check the data_source" do
           expect {
-            check_and_reload(offline_data_source)
+            InstanceStatusChecker.check(offline_data_source)
           }.not_to change(offline_data_source, :last_checked_at)
+        end
+      end
+
+      context " when the data_source is unauthorized" do
+        before do
+          offline_data_source.state = "unauthorized"
+          offline_data_source.save!
+        end
+
+        context "when the last checked time was more than 24 hours ago" do
+          let(:last_checked_at) { 25.hours.ago }
+
+          it "checks the data_source" do
+            expect {
+              InstanceStatusChecker.check(offline_data_source)
+            }.to change(offline_data_source, :last_checked_at)
+          end
+        end
+
+        context "when last checked time was less than 24 hours ago" do
+          let(:last_checked_at) { 23.hours.ago }
+
+          it "does not check the data_source" do
+            expect {
+              InstanceStatusChecker.check(offline_data_source)
+            }.not_to change(offline_data_source, :last_checked_at)
+          end
         end
       end
     end
@@ -121,7 +133,9 @@ describe InstanceStatusChecker do
 
       context "When connecting to the database fails" do
         before do
-          stub(connection).version { raise GreenplumConnection::DatabaseError.new }
+          error = GreenplumConnection::DatabaseError.new
+          stub(error).error_type { :GENERIC }
+          stub(connection).version { raise error }
         end
 
         it "does not raise an error" do
@@ -133,6 +147,20 @@ describe InstanceStatusChecker do
         it "should set the state to 'offline'" do
           InstanceStatusChecker.check(gpdb_data_source)
           gpdb_data_source.state.should == 'offline'
+        end
+      end
+
+      context "When the connection fails due to authentication" do
+        let(:error)   { GreenplumConnection::DatabaseError.new }
+
+        before do
+          stub(error).error_type {:INVALID_PASSWORD}
+          stub(connection).version { raise error }
+          InstanceStatusChecker.check(gpdb_data_source)
+        end
+
+        it "should set the state to 'unauthorized'" do
+          gpdb_data_source.state.should == 'unauthorized'
         end
       end
     end
