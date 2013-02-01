@@ -55,7 +55,7 @@
             } else {
                 this.instances = new chorus.collections.GpdbDataSourceSet();
                 this.bindings.add(this.instances, "loaded", this.instancesLoaded);
-                this.instances.attributes = {accessible: true};
+                this.instances.accessible = true;
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
 

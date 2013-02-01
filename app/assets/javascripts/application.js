@@ -30,6 +30,7 @@
 //= require_tree ./mixins
 //= require router
 //= require models
+//= require collections
 //= require views
 //= require pages
 //= require modals

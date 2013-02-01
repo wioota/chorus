@@ -23,8 +23,7 @@ chorus.views.KaggleUserList = chorus.views.SelectableList.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.selectedKaggleUsers = new chorus.collections.KaggleUserSet();
-        this.selectedKaggleUsers.attributes = this.collection.attributes;
+        this.selectedKaggleUsers = this.collection.clone().reset();
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
     },

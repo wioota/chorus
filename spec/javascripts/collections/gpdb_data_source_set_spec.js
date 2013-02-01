@@ -14,7 +14,7 @@ describe("chorus.collections.GpdbDataSourceSet", function() {
     });
 
     it("includes accessible=true when requested", function() {
-        this.collection.attributes = {accessible: true};
+        this.collection.attributes.accessible = true;
         expect(this.collection.urlParams().accessible).toBeTruthy();
     });
 

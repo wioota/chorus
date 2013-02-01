@@ -2,10 +2,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.importSchedules = rspecFixtures.datasetImportScheduleSet();
-        this.importSchedules.attributes = {
+        _.extend(this.importSchedules.attributes, {
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get("workspace").id
-        };
+        });
         this.importSchedule = this.importSchedules.at(0);
         this.importSchedule.set({
             datasetId: this.dataset.get('id'),

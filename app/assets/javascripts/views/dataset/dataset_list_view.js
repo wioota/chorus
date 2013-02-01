@@ -11,8 +11,7 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.selectedDatasets = new chorus.collections.DatasetSet();
-        this.selectedDatasets.attributes = this.collection.attributes;
+        this.selectedDatasets = this.collection.clone().reset();
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
     },

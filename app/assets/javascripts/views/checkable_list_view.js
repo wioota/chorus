@@ -13,9 +13,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.listItemOptions = this.options.listItemOptions || {};
 
         if (this.options.entityType) {
-            this.selectedModels = this.collection.clone();
-            this.selectedModels.reset();
-            this.selectedModels.attributes = this.collection.attributes;
+            this.selectedModels = this.collection.clone().reset();
         } else {
             this.selectedModels = new chorus.collections.Base();
         }
