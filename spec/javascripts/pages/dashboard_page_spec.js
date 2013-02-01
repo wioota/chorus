@@ -9,17 +9,11 @@ describe("chorus.pages.DashboardPage", function() {
     });
 
     it("fetches all the collections", function() {
-        spyOn(chorus.collections.UserSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.DataSourceSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.HadoopInstanceSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.GnipInstanceSet.prototype, "fetchAll").andCallThrough();
-        spyOn(chorus.collections.WorkspaceSet.prototype, "fetchAll").andCallThrough();
-        var page = new chorus.pages.DashboardPage();
-        expect(page.userSet.fetchAll).toHaveBeenCalled();
-        expect(page.dataSourceSet.fetchAll).toHaveBeenCalled();
-        expect(page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
-        expect(page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
-        expect(page.workspaceSet.fetchAll).toHaveBeenCalled();
+        expect(this.page.userSet).toHaveBeenFetched();
+        expect(this.page.dataSourceSet).toHaveBeenFetched();
+        expect(this.page.hadoopInstanceSet).toHaveBeenFetched();
+        expect(this.page.gnipInstanceSet).toHaveBeenFetched();
+        expect(this.page.workspaceSet).toHaveBeenFetched();
     });
 
     describe("#render", function() {
@@ -89,10 +83,6 @@ describe("chorus.pages.DashboardPage", function() {
                 rspecFixtures.hadoopInstance()
             ]);
 
-            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
-                rspecFixtures.gnipInstance(),
-                rspecFixtures.gnipInstance()
-            ]);
             this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
                 rspecFixtures.gnipInstance(),
                 rspecFixtures.gnipInstance()

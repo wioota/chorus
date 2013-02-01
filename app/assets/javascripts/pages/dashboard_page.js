@@ -72,7 +72,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
             this.mainContent = new chorus.views.Dashboard({
                 collection: this.workspaceSet,
-                gpdbDataSourceSet: this.arraySet
+                dataSourceSet: this.arraySet
             });
             this.render();
         }
