@@ -38,13 +38,13 @@ describe("chorus.pages.Base", function() {
         });
     });
 
-    describe("#dependsOn", function() {
+    describe("#handleFetchErrorsFor", function() {
         context("when resource is not found", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "dependentResourceNotFound");
-                this.page.dependsOn(this.model);
+                this.page.handleFetchErrorsFor(this.model);
             });
 
             it("calls dependentResourceNotFound", function() {
@@ -58,7 +58,7 @@ describe("chorus.pages.Base", function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "dependentResourceForbidden");
-                this.page.dependsOn(this.model);
+                this.page.handleFetchErrorsFor(this.model);
             });
 
             it("calls dependentResourceForbidden", function() {
@@ -73,7 +73,7 @@ describe("chorus.pages.Base", function() {
                 this.model = new chorus.models.Base();
                 spyOn(this.page, "unprocessableEntity");
                 spyOn(Backbone.history, 'loadUrl');
-                this.page.dependsOn(this.model);
+                this.page.handleFetchErrorsFor(this.model);
             });
 
             it("calls unprocessableEntity", function() {
@@ -86,7 +86,7 @@ describe("chorus.pages.Base", function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
                     this.model.serverErrors = { record: "INSTANCE_OVERLOADED" };
-                    this.page.dependsOn(this.model);
+                    this.page.handleFetchErrorsFor(this.model);
                 });
 
                 it("has the right translations", function() {
@@ -102,7 +102,7 @@ describe("chorus.pages.Base", function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
                     this.model.serverErrors = { message: "Bad things happened." };
-                    this.page.dependsOn(this.model);
+                    this.page.handleFetchErrorsFor(this.model);
                 });
 
                 it("displays the error message it was given", function() {
@@ -125,7 +125,7 @@ describe("chorus.pages.Base", function() {
         context("when the page depends on resources", function() {
             beforeEach(function() {
                 this.resource = rspecFixtures.user();
-                this.view.dependsOn(this.resource);
+                this.view.handleFetchErrorsFor(this.resource);
             });
 
             context("when the fetch returns not found", function() {
@@ -342,6 +342,49 @@ describe("chorus.pages.Base", function() {
 
         it("shows the help system", function() {
             expect(chorus.help).toHaveBeenCalled();
+        });
+    });
+
+    describe("loadWorkspace", function(){
+        beforeEach(function() {
+            this.workspace = rspecFixtures.workspace({id: 123});
+            this.page = new chorus.pages.Base();
+        });
+
+        it("should set workspaceId", function() {
+            this.page.loadWorkspace('123');
+            expect(this.page.workspaceId).toBe(123);
+        });
+
+        it("creates a workspace model", function() {
+            this.page.loadWorkspace('123');
+            expect(this.page.workspace.id).toBe('123');
+        });
+
+        it("fetches the workspace", function() {
+            this.page.loadWorkspace('123');
+            expect(this.server.lastFetchFor(this.workspace)).toBeDefined();
+        });
+
+        it("calls handleFetchErrorsFor on the workspace", function() {
+            spyOn(this.page, "handleFetchErrorsFor");
+            this.page.loadWorkspace('123');
+            expect(this.page.handleFetchErrorsFor).toHaveBeenCalledWith(this.page.workspace);
+        });
+
+        it("does not add the workspace to the required resources by default", function() {
+            this.page.loadWorkspace('123');
+            expect(this.page.requiredResources).not.toContain(this.page.workspace);
+        });
+
+        it("setting the fetch option to 'false' disables the fetch", function() {
+            this.page.loadWorkspace('123', {fetch: false});
+            expect(this.server.lastFetchFor(this.workspace)).toBeUndefined();
+        });
+
+        it("setting the requred option to 'true' adds the workspace to the required resources", function() {
+            this.page.loadWorkspace('123', {required: true});
+            expect(this.page.requiredResources).toContain(this.page.workspace);
         });
     });
 });

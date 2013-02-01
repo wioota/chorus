@@ -9,7 +9,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.hadoopInstance = new chorus.models.HadoopInstance({id: hadoopInstanceId});
         this.hadoopInstance.fetch();
 
-        this.dependsOn(this.hadoopInstance);
+        this.handleFetchErrorsFor(this.hadoopInstance);
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,

@@ -11,8 +11,8 @@ chorus.pages.GpdbSchemaIndexPage = chorus.pages.Base.include(
         this.database.fetch();
         this.collection.fetchAll();
 
-        this.dependsOn(this.database);
-        this.dependsOn(this.collection);
+        this.handleFetchErrorsFor(this.database);
+        this.handleFetchErrorsFor(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",

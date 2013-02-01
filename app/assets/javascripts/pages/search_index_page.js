@@ -16,7 +16,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         return attrs;
     },
 
-    setup: function() {
+    makeModel: function() {
         var searchParams = _.toArray(arguments);
         this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
         this.listenTo(this.model, "loaded", this.resourcesLoaded);

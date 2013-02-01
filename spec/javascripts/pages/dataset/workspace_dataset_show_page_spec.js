@@ -40,7 +40,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
     describe("#initialize", function() {
         it("sets the workspace id, for prioritizing search", function() {
-            expect(this.page.workspaceId).toBe('100');
+            expect(this.page.workspaceId).toBe(100);
         });
 
         it("sets requiredResources in the sidebar", function() {
@@ -53,7 +53,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         it("marks the workspace as a required resource", function() {
             expect(this.page.requiredResources.find(function(resource) {
-                return resource instanceof chorus.models.Workspace && resource.get("id") === '100';
+                return resource instanceof chorus.models.Workspace && resource.get("id") === "100";
             }, this)).toBeTruthy();
         });
 

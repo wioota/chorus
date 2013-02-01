@@ -2,12 +2,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     helpId: "workspace_summary",
 
     setup: function(workspaceId) {
-        this.workspaceId = workspaceId;
-        this.model = new chorus.models.Workspace({ id: workspaceId });
         this.bindings.add(this.model, "loaded", this.decideIfQuickstart);
-        this.dependsOn(this.model);
-        this.model.fetch();
-
         this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"});
         this.sidebar = new chorus.views.WorkspaceShowSidebar({model: this.model});
 
@@ -19,6 +14,11 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
 
         this.breadcrumbs.requiredResources.add(this.model);
         this.listenTo(this.model, 'saved', this.render);
+    },
+
+    makeModel: function(workspaceId) {
+        this.loadWorkspace(workspaceId, {required: true});
+        this.model = this.workspace;
     },
 
     decideIfQuickstart: function() {

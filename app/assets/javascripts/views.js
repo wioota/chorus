@@ -3,6 +3,11 @@ chorus.views.Bare = Backbone.View.include(
 ).extend({
         constructorName: "View",
 
+        preInitialize: function() {
+            this.makeModel.apply(this, arguments);
+            this.resource = this.model || this.collection;
+        },
+
         initialize: function initialize() {
             this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
@@ -22,7 +27,7 @@ chorus.views.Bare = Backbone.View.include(
         },
 
         _initializeHeaderAndBreadcrumbs: $.noop,
-        preInitialize: $.noop,
+        makeModel: $.noop,
         setup: $.noop,
         postRender: $.noop,
         bindCallbacks: $.noop,
@@ -354,15 +359,9 @@ chorus.views.Bare = Backbone.View.include(
 chorus.views.Bare.extend = chorus.classExtend;
 
 chorus.views.Base = chorus.views.Bare.extend({
-    makeModel: $.noop,
     collectionModelContext: $.noop,
     additionalContext: function() {
         return {};
-    },
-
-    preInitialize: function() {
-        this.makeModel.apply(this, arguments);
-        this.resource = this.model || this.collection;
     },
 
     bindCallbacks: function() {

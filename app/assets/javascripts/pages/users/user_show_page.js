@@ -5,7 +5,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
         this.model = new chorus.models.User({id: userId});
         this.model.fetch();
 
-        this.dependsOn(this.model);
+        this.handleFetchErrorsFor(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
             model: this.model,

@@ -17,7 +17,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         });
 
         it("sets the workspaceId, for prioritizing search", function() {
-            expect(this.page.workspaceId).toBe('4');
+            expect(this.page.workspaceId).toBe(4);
         });
 
         describe("when we are in quickstart mode", function() {

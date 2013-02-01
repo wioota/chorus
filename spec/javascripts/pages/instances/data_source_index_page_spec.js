@@ -6,22 +6,22 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();
     });
 
-    describe("calls the dependsOn function", function() {
+    describe("calls the handleFetchErrorsFor function", function() {
         beforeEach(function() {
-            this.originalDependsOn = chorus.pages.DataSourceIndexPage.dependsOn;
-            spyOn(chorus.pages.DataSourceIndexPage.prototype, 'dependsOn');
+            this.originalhandleFetchErrorsFor = chorus.pages.DataSourceIndexPage.handleFetchErrorsFor;
+            spyOn(chorus.pages.DataSourceIndexPage.prototype, 'handleFetchErrorsFor');
         });
 
-        it("dependsOn the data sources", function() {
+        it("handleFetchErrorsFor the data sources", function() {
             var page = new chorus.pages.DataSourceIndexPage();
-            expect(page.dependsOn.calls.length).toEqual(3);
-            expect(page.dependsOn.calls[0].args[0].constructor).toBe(chorus.collections.DataSourceSet);
-            expect(page.dependsOn.calls[1].args[0].constructor).toBe(chorus.collections.HadoopInstanceSet);
-            expect(page.dependsOn.calls[2].args[0].constructor).toBe(chorus.collections.GnipInstanceSet);
+            expect(page.handleFetchErrorsFor.calls.length).toEqual(3);
+            expect(page.handleFetchErrorsFor.calls[0].args[0].constructor).toBe(chorus.collections.DataSourceSet);
+            expect(page.handleFetchErrorsFor.calls[1].args[0].constructor).toBe(chorus.collections.HadoopInstanceSet);
+            expect(page.handleFetchErrorsFor.calls[2].args[0].constructor).toBe(chorus.collections.GnipInstanceSet);
         });
 
         afterEach(function() {
-            chorus.pages.DataSourceIndexPage.dependsOn = this.originalDependsOn;
+            chorus.pages.DataSourceIndexPage.handleFetchErrorsFor = this.originalhandleFetchErrorsFor;
         });
     });
 

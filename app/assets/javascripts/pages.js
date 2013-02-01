@@ -42,7 +42,7 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/unprocessableEntity");
     },
 
-    dependsOn: function(resource) {
+    handleFetchErrorsFor: function(resource) {
         this.bindings.add(resource, "resourceNotFound", this.dependentResourceNotFound);
         this.bindings.add(resource, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, resource));
         this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
@@ -65,8 +65,27 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#sub_nav": "subNav"
     },
 
+    loadWorkspace: function(workspaceId, options) {
+        var optionsWithDefaults = _.extend({
+            fetch: true,
+            required: false
+        }, options);
+        this.workspaceId = parseInt(workspaceId, 10);
+        this.workspace = new chorus.models.Workspace({id: workspaceId});
+        if (optionsWithDefaults.fetch) {
+            this.handleFetchErrorsFor(this.workspace);
+            this.workspace.fetch();
+        }
+        if (optionsWithDefaults.required) {
+            this.requiredResources.add(this.workspace);
+        }
+    },
+
     _initializeHeaderAndBreadcrumbs: function() {
         this.header = this.header || new chorus.views.Header();
+        if (this.workspaceId) {
+            this.header.workspaceId = this.workspaceId;
+        }
         var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs

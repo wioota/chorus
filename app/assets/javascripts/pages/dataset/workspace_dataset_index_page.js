@@ -3,16 +3,10 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     helpId: "datasets",
 
     setup: function(workspaceId) {
-        this.header.workspaceId = workspaceId;
-        this.workspace = new chorus.models.Workspace({id: workspaceId});
-        this.workspace.fetch();
-
-        this.dependsOn(this.workspace);
-
         this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("objectName");
         this.collection.fetch();
-        this.dependsOn(this.collection);
+        this.handleFetchErrorsFor(this.collection);
 
         this.subscribePageEvent("dataset:selected", function(dataset) {
             this.model = dataset;
@@ -89,6 +83,10 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
 
         this.listenTo(this.workspace, "loaded", this.workspaceLoaded);
         this.breadcrumbs.requiredResources.add(this.workspace);
+    },
+
+    makeModel: function(workspaceId) {
+        this.loadWorkspace(workspaceId);
     },
 
     crumbs: function() {

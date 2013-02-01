@@ -11,9 +11,9 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.instance.fetch();
         this.collection.fetchAll();
 
-        this.dependsOn(this.instance);
+        this.handleFetchErrorsFor(this.instance);
 
-        this.dependsOn(this.collection);
+        this.handleFetchErrorsFor(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             emptyTitleBeforeFetch: true,

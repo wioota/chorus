@@ -51,7 +51,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
 
         it("sets the workspace id, for prioritizing search", function() {
-            expect(this.page.workspaceId).toBe(this.workspace.get("id"));
+            expect(this.page.workspaceId.toString()).toBe(this.workspace.get("id"));
         });
 
         it("defaults to alphabetical sorting ascending", function() {

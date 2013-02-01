@@ -2,13 +2,9 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
     constructorName: "KaggleUserIndexPage",
     additionalClass: 'kaggle_user_list',
 
-    setup: function(workspaceId) {
-        this.workspaceId = workspaceId;
-        this.workspace = new chorus.models.Workspace({ id: workspaceId });
-        this.dependsOn(this.workspace);
-        this.workspace.fetch();
+    setup: function() {
         this.collection = new chorus.collections.KaggleUserSet([]);
-        this.dependsOn(this.collection);
+        this.handleFetchErrorsFor(this.collection);
         this.collection.fetch();
 
         this.mainContent = new chorus.views.MainContentList({
@@ -35,6 +31,10 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("filterKaggleUsers", this.filterKaggleUsers);
 
         this.breadcrumbs.requiredResources.add(this.workspace);
+    },
+
+    makeModel: function(workspaceId) {
+        this.loadWorkspace(workspaceId);
     },
 
     crumbs: function() {

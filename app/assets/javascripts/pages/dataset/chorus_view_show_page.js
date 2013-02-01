@@ -7,10 +7,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     },
 
     makeModel: function(workspaceId, datasetId) {
-        this.workspaceId = workspaceId;
-        this.workspace = new chorus.models.Workspace({id: workspaceId});
-        this.requiredResources.add(this.workspace);
-        this.workspace.fetch();
+        this.loadWorkspace(workspaceId);
         this.model = this.dataset = new chorus.models.ChorusView({ workspace: { id: workspaceId }, id: datasetId });
     },
 

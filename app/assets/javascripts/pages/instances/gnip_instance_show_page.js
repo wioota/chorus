@@ -3,7 +3,7 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
         this.model = new chorus.models.GnipInstance({id: id});
         this.model.fetch();
 
-        this.dependsOn(this.model);
+        this.handleFetchErrorsFor(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
             model: this.model,
