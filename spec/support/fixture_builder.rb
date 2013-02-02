@@ -78,20 +78,20 @@ FixtureBuilder.configure do |fbuilder|
     #Instances
     gpdb_data_source = FactoryGirl.create(:gpdb_data_source, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :db_name => "postgres", :owner => admin)
     fbuilder.name :default, gpdb_data_source
-    Events::DataSourceCreated.by(admin).add(:gpdb_data_source => gpdb_data_source)
+    Events::DataSourceCreated.by(admin).add(:data_source => gpdb_data_source)
 
     shared_instance = FactoryGirl.create(:gpdb_data_source, :name => "Shared", :owner => admin, :shared => true)
     owners_instance = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
 
-    @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:gpdb_data_source => owners_instance)
+    @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:data_source => owners_instance)
 
     FactoryGirl.create(:oracle_data_source, name: 'oracle')
 
     hadoop_instance = HadoopInstance.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
-    Events::HadoopInstanceCreated.by(admin).add(:gpdb_data_source => gpdb_data_source)
+    Events::HadoopInstanceCreated.by(admin).add(:hadoop_instance => hadoop_instance)
 
     fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
 
