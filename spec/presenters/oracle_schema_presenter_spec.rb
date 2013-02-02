@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OracleSchemaPresenter, :type => :view  do
+describe OracleSchemaPresenter, :type => :view do
   let(:schema) { FactoryGirl.create(:oracle_schema) }
   let(:presenter) { OracleSchemaPresenter.new(schema, view) }
   let(:hash) { presenter.to_hash }
@@ -9,6 +9,7 @@ describe OracleSchemaPresenter, :type => :view  do
     it 'includes the fields' do
       hash[:id].should == schema.id
       hash[:name].should == schema.name
+      hash[:entity_type].should == "oracle_schema"
     end
   end
 end

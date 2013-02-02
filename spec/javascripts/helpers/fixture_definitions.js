@@ -149,6 +149,10 @@ window.rspecFixtureDefinitions = {
 
     schemaSet: { unique: [ "id" ] },
 
+    oracleSchemaSet: {
+        collection: "SchemaSet"
+    },
+
     searchResult: {},
 
     tagSearchResult: {},

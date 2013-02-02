@@ -1,6 +1,5 @@
 class GpdbSchemaPresenter < Presenter
-
-  def to_hash
+    def to_hash
     {
         :id => model.id,
         :name => model.name,

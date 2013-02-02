@@ -32,5 +32,9 @@ describe DataSources::SchemasController do
 
       get :index, :data_source_id => data_source.to_param
     end
+
+    generate_fixture "oracleSchemaSet.json" do
+      get :index, :data_source_id => data_source.to_param
+    end
   end
 end

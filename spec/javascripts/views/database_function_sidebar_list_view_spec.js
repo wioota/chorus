@@ -57,7 +57,6 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                         rspecFixtures.schema({ name:"awesome_tables", id:"5" }),
                         rspecFixtures.schema({ name:"orphaned_tables", id:"6" })
                     ]);
-
                     this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet([
                         {
                             name:"a_laplace_transform",
