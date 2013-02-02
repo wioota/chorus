@@ -13,6 +13,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     setup: function() {
         this.search = this.options.search;
         this.entityType = this.options.entityType;
+        this.selectedModels = this.options.selectedModels;
         this.list = this.buildList();
     },
 
@@ -20,7 +21,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         return new chorus.views.CheckableList({
             collection: this.collection,
             entityViewType: chorus.views["Search" + _.classify(this.options.entityType)],
-            listItemOptions: {search: this.options.search}
+            listItemOptions: {search: this.options.search},
+            selectedModels: this.selectedModels
         });
     },
 

@@ -149,4 +149,31 @@ describe("chorus.views.SearchResultList", function() {
             });
         });
     });
+
+    describe("multiple selection", function() {
+        beforeEach(function() {
+            this.result = rspecFixtures.searchResult();
+            this.result.set({ query: "foo" });
+
+            this.instances = this.result.instances();
+            this.instances.pagination.records = 24;
+
+            this.selectedModels = new chorus.collections.Base();
+
+            this.view = new chorus.views.SearchResultList({
+                selectedModels: this.selectedModels,
+                entityType: "instance",
+                collection: this.instances,
+                search: this.result
+            });
+
+            this.view.render();
+            $('#jasmine_content').append(this.view.$el);
+        });
+        it("clicking a checkbox adds the model to the selectedModels", function() {
+            var instanceToClick = this.instances.at(0);
+            this.view.$(".instance_list li:first input[type=checkbox]").click();
+            expect(this.selectedModels.models).toEqual([instanceToClick]);
+        });
+    });
 });

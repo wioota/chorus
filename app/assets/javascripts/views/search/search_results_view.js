@@ -16,6 +16,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
+        this.selectedModels = new chorus.collections.Base();
+
         if (this.model.hdfs_entries().length) {
             this.hdfsList = this.buildListView('hdfs_entry', this.model.hdfs_entries());
         }
@@ -57,7 +59,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         return new chorus.views.SearchResultList({
             entityType: entityType,
             collection: collection,
-            search: this.model
+            search: this.model,
+            selectedModels: this.selectedModels
         });
     },
 

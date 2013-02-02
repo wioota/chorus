@@ -13,9 +13,9 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.listItemOptions = this.options.listItemOptions || {};
 
         if (this.options.entityType) {
-            this.selectedModels = this.collection.clone().reset();
+            this.selectedModels = this.options.selectedModels || this.collection.clone().reset();
         } else {
-            this.selectedModels = new chorus.collections.Base();
+            this.selectedModels = this.options.selectedModels || new chorus.collections.Base();
         }
 
         this.subscribePageEvent("selectAll", this.selectAll);

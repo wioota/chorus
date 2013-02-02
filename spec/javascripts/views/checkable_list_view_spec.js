@@ -13,6 +13,19 @@ describe("chorus.views.CheckableList", function() {
         spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
     });
 
+    describe("#setup", function() {
+        it("uses selectedModels if passed one", function() {
+           this.selectedModels = new chorus.collections.Base();
+            this.view = new chorus.views.CheckableList({
+                entityType: 'dataset',
+                entityViewType: chorus.views.Dataset,
+                collection: this.collection,
+                selectedModels: this.selectedModels
+            });
+            expect(this.view.selectedModels).toBe(this.selectedModels);
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();

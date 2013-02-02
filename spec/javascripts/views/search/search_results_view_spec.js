@@ -234,5 +234,18 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
         });
+
+        describe("multiple selection", function() {
+            it("starts with an empty set of selected models", function() {
+                expect(this.view.selectedModels.length).toEqual(0);
+            });
+
+            it("clicking a checkbox adds the model to the selectedModels", function() {
+                $('#jasmine_content').append(this.view.$el);
+                var workfileToClick = this.model.workfiles().at(1);
+                this.view.$(".workfile_list li input[type=checkbox]").eq(1).click();
+                expect(this.view.selectedModels.models).toEqual([workfileToClick]);
+            });
+        });
     });
 });
