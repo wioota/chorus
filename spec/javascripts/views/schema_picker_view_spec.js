@@ -511,6 +511,10 @@ describe("chorus.views.SchemaPicker", function() {
 
                                         itTriggersTheChangeEvent(true);
 
+                                        it("sets the selected schema", function() {
+                                            expect(this.view.selection.schema).toEqual(this.selectedSchema);
+                                        });
+
                                         context("un-choosing a schema", function() {
                                             beforeEach(function() {
                                                 this.view._chorusEventSpies["change"].reset();
@@ -527,6 +531,19 @@ describe("chorus.views.SchemaPicker", function() {
                                             });
 
                                             itTriggersTheChangeEvent(false);
+                                        });
+
+                                        describe("clicking the 'new schema' link", function() {
+                                            beforeEach(function() {
+                                                this.view._chorusEventSpies["change"].reset();
+                                                this.view.$(".schema a.new").click();
+                                            });
+
+                                            itTriggersTheChangeEvent(false);
+
+                                            it("should clear the selected schema", function() {
+                                                expect(this.view.selection.schema).toBeFalsy();
+                                            });
                                         });
 
                                         context("changing the database", function() {

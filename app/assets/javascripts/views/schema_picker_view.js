@@ -155,7 +155,7 @@
         createNewSchema:function (e) {
             e.preventDefault();
             this.trigger("clearErrors");
-            this.$('.schema select option:selected').prop("selected", false);
+            this.clearSelection("schema");
             this.setState({ schema: CREATE_NEW });
             this.$(".schema input.name").val("");
         },
