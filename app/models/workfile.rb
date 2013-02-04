@@ -1,7 +1,7 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
 
-  @@entity_types = Hash.new('ChorusWorkfile').merge!({
+  @@entity_subtypes = Hash.new('ChorusWorkfile').merge!({
      'alpine' => 'AlpineWorkfile'
   })
 
@@ -41,7 +41,7 @@ class Workfile < ActiveRecord::Base
   end
 
   def self.build_for(params)
-    klass = @@entity_types[params[:entity_type]].constantize
+    klass = @@entity_subtypes[params[:entity_subtype]].constantize
     workfile = klass.new(params, :as => :create)
   end
 

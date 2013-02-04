@@ -182,10 +182,10 @@ describe WorkfilesController do
       end
     end
 
-    context 'when entity_type is alpine' do
+    context 'when entity_subtype is alpine' do
       let(:params) do
         {
-            :entity_type => 'alpine',
+            :entity_subtype => 'alpine',
             :workspace_id => workspace.to_param,
             :file_name => 'something',
             :alpine_id => '42'
