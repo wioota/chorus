@@ -2,24 +2,26 @@ require 'spec_helper'
 
 describe Properties do
   describe '.load_file' do
-    let(:translation_string) { <<-EOF
-    quux=Non-nested
-    test.foo=Bar
-    test.bar.baz=Stuff
-    types.number=42
-    types.negative=-7
-    types.decimal=-7.5
-    types.true=true
-    types.false=false
+    let(:translation_string) {str = <<-EOF
+      quux=Non-nested
+      test.foo=Bar
+      test.bar.baz=Stuff
+      types.number=42
+      types.negative=-7
+      types.decimal=-7.5
+      types.true=true
+      types.false=false
 
-    #I am a comment
-    #comment= comment_value
-    multiline=\\
-        line2\\
-        line3
-    value_with_equal_sign=1+1=2
-    whitespace = a_value
-    EOF
+      #I am a comment
+      #comment= comment_value
+      multiline=\\
+          line2\\
+          line3
+      value_with_equal_sign=1+1=2
+      EOF
+
+      str << "whitespace = a_value  "
+      str
     }
 
     let(:hash) {

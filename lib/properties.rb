@@ -5,7 +5,7 @@ module Properties
       match = line.match(/\s*(?<key>[^=\s]*)\s*=\s*(?<value>.*)/)
       next unless match
       keys = match["key"].split(".")
-      val = type_cast(match["value"])
+      val = type_cast(match["value"].strip)
 
       parent = result
       keys.first(keys.length-1).each do |key|
