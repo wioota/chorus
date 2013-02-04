@@ -8,6 +8,9 @@ elsif ChorusConfig.instance.oracle_driver_expected_but_missing?
   Rails.logger.warn "Oracle driver ojdbc6.jar not found"
 end
 
+# copied most of this implementation into DataSourceConnection.stream_dataset
+# if Oracle datasets define an #all_rows_sql method like Gpdb equivalents, stream_dataset should just work,
+# and this class can be deleted/merged into the regular DatasetStreamer
 class OracleDatasetStreamer
   def enum
     Enumerator.new do |result|

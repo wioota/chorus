@@ -50,8 +50,10 @@ describe DatasetStreamer, :greenplum_integration do
     context "for connection errors" do
       it "returns the error message" do
         any_instance_of(GpdbSchema) do |schema|
-          stub(schema).with_gpdb_connection(anything) {
-            raise ActiveRecord::JDBCError, "Some friendly error message"
+          stub(schema).connect_with(anything) {
+            stub(Object.new).stream_dataset.with_any_args {
+              raise GreenplumConnection::DatabaseError, StandardError.new("Some friendly error message")
+            }
           }
         end
 
@@ -68,15 +70,6 @@ describe DatasetStreamer, :greenplum_integration do
         enumerator = streamer.enum
         enumerator.next.should == "The requested dataset contains no rows"
         finish_enumerator(enumerator)
-      end
-    end
-
-    context "testing checking in connections" do
-      it "does not leak connections" do
-        conn_size = ActiveRecord::Base.connection_pool.send(:active_connections).size
-        enum = streamer.enum
-        finish_enumerator(enum)
-        ActiveRecord::Base.connection_pool.send(:active_connections).size.should == conn_size
       end
     end
 

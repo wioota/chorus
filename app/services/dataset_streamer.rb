@@ -7,34 +7,29 @@ class DatasetStreamer
     self.row_limit = row_limit
   end
 
-  def format(hash, row_number)
+  def format(hash, first_row_flag)
     results = ''
-    results << hash.keys.to_csv if row_number == 1
+    results << hash.keys.to_csv if first_row_flag
     results << hash.values.to_csv
     results
   end
 
   def enum
-    row_number = 0
-    account = dataset.gpdb_data_source.account_for_user!(user)
+    first_row_flag = true
 
+    conn = dataset.schema.connect_as(user)
     Enumerator.new do |y|
       begin
-        dataset.schema.with_gpdb_connection(account) do |conn|
-          ActiveRecord::Base.each_row_by_sql(dataset.all_rows_sql(row_limit), :connection => conn) do |row|
-            row_number += 1
-            y << format(row, row_number)
-          end
-
-          if (row_number == 0)
-            y << "The requested dataset contains no rows"
-          end
+        conn.stream_dataset(dataset, row_limit) do |row|
+          y << format(row, first_row_flag)
+          first_row_flag = false
+        end
+        if (first_row_flag)
+          y << "The requested dataset contains no rows"
         end
       rescue Exception => e
         y << e.message
       end
-
-      ActiveRecord::Base.connection.close
     end
   end
 end

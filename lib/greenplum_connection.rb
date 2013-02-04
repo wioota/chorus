@@ -252,13 +252,6 @@ class GreenplumConnection < DataSourceConnection
       true
     end
 
-    def stream_table(table_name, limit = nil, &block)
-      sql = "SELECT * FROM \"#{table_name}\""
-      sql = sql + " LIMIT #{limit}" if limit
-      with_connection { @connection.fetch(sql).each(&block) }
-      true
-    end
-
     def test_transaction
       connect!
       result = nil

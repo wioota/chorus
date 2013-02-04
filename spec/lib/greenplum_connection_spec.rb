@@ -747,13 +747,18 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#stream_table" do
+    describe "#stream_dataset" do
+      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:dataset) {
+        GpdbTable.new(:name => 'thing', :schema => GpdbSchema.find_by_name(schema_name))
+      }
+
       before do
         @db = Sequel.connect(db_url)
         @db.execute("SET search_path TO '#{schema_name}'")
-        @db.execute("CREATE TABLE thing (one integer, two integer)")
-        @db.execute("INSERT INTO thing VALUES (1, 2)")
-        @db.execute("INSERT INTO thing VALUES (3, 4)")
+        @db.execute("CREATE TABLE thing (one integer, two integer, three timestamp with time zone, fourth timestamp)")
+        @db.execute("INSERT INTO thing VALUES (1, 2, '1999-01-08 04:05:06 -8:00', '1999-01-08 04:05:06')")
+        @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', '1999-07-08 04:05:06')")
       end
 
       after do
@@ -762,7 +767,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       let(:subject) {
-        connection.stream_table('thing') do |row|
+        connection.stream_dataset(dataset) do |row|
           true
         end
       }
@@ -772,21 +777,22 @@ describe GreenplumConnection, :greenplum_integration do
 
       it "streams all rows of the database" do
         bucket = []
-        connection.stream_table('thing') do |row|
+        connection.stream_dataset(dataset) do |row|
           bucket << row
         end
 
-        bucket.should == @db.fetch('SELECT * FROM thing').all
+        bucket.should == [{:one=>"1", :two=>"2", :three=>"1999-01-08 04:05:06-08", :fourth=>"1999-01-08 04:05:06"},
+                          {:one=>"3", :two=>"4", :three=>"1999-07-08 00:05:06-07", :fourth=>"1999-07-08 04:05:06"}]
       end
 
       context "when a limit is provided" do
         it "only processes part of the table" do
           bucket = []
-          connection.stream_table('thing', 1) do |row|
+          connection.stream_dataset(dataset, 1) do |row|
             bucket << row
           end
 
-          bucket.should == @db.fetch('SELECT * FROM thing LIMIT 1').all
+          bucket.should == [{:one=>"1", :two=>"2", :three=>"1999-01-08 04:05:06-08", :fourth=>"1999-01-08 04:05:06"}]
         end
       end
     end
