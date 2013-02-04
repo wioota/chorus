@@ -19,11 +19,18 @@ describe 'adding a tag to a workfile' do
       page.should have_selector("#tag_editor", :visible => true)
       fill_in 'tag_editor', :with => 'new_tag'
       find('.tag_editor').native.send_keys(:return)
+
+      fill_in 'tag_editor', :with => 'comma_separated_tag_1,comma_separated_tag_2'
+      find('.tag_editor').native.send_keys(:return)
     end
 
     visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
     within '.content_header' do
       page.should have_content 'new_tag'
+
+      page.should have_content 'comma_separated_tag_1'
+      page.should have_content 'comma_separated_tag_2'
+      page.should_not have_content 'comma_separated_tag_1,comma_separated_tag_2'
     end
   end
 

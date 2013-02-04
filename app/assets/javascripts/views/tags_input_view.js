@@ -120,11 +120,9 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         return valid;
     },
 
-    restoreInvalidTag: function(e) {
-        if(this.invalidTagName) {
-            this.input.val(this.invalidTagName);
-            this.invalidTagName = "";
-       }
+    restoreInvalidTag: function(e, tag) {
+        this.input.val(tag || this.invalidTagName);
+        this.invalidTagName = "";
     },
 
     additionalContext: function() {

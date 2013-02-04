@@ -27,4 +27,51 @@ describe("textext extensions", function() {
             expect(setSuggestions).toHaveBeenCalledWith(jasmine.any(Object), {result: [{name: 'bar'}]});
         });
     });
+
+    describe("getFormData", function() {
+        beforeEach(function() {
+            this.triggerSpy = jasmine.createSpy('triggerSpy');
+
+            var self = this;
+            this.context = {
+                getWeightedEventResponse: function () {
+                    return {
+                        input: self.input,
+                        form: []
+                    };
+                },
+                trigger: this.triggerSpy
+            };
+
+            this.getFormData = $.fn.textext.TextExt.prototype.getFormData;
+        });
+
+        context("when the user enters an arbitrary character", function() {
+            beforeEach(function() {
+                this.input = "abc";
+            });
+
+            it("does not push a new tag", function() {
+                $.proxy(this.getFormData, this.context)();
+
+                expect(this.triggerSpy).toHaveBeenCalledWith('setFormData', []);
+                expect(this.triggerSpy).toHaveBeenCalledWith('setInputData', 'abc');
+            });
+        });
+
+        context("when the user enters a comma", function() {
+            beforeEach(function() {
+                this.input = "abc,";
+            });
+
+            it("pushes the new tag to the form", function() {
+                $.proxy(this.getFormData, this.context)();
+
+                expect(this.triggerSpy).toHaveBeenCalledWith('setFormData', [
+                    {name: 'abc'}
+                ]);
+                expect(this.triggerSpy).toHaveBeenCalledWith('setInputData', '');
+            });
+        });
+    });
 });

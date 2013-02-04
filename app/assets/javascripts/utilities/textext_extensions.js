@@ -93,13 +93,16 @@
 
     TextExt.prototype.getFormData = function(keyCode) {
         var self = this,
-            data = self.getWeightedEventResponse('getFormData', keyCode || 0)
-            ;
+            data = self.getWeightedEventResponse('getFormData', keyCode || 0);
+
+        var input = data['input'];
+        if ("," === input.charAt(input.length - 1)) {
+            var tag = input.substr(0, input.length - 1);
+            if(tag.length > 0) data['form'].push({name: tag});
+            input = "";
+        }
 
         self.trigger('setFormData'  , data['form']);
-
-        if (keyCode === 13 || keyCode === 108) {
-            self.trigger('setInputData' , data['input']);
-        }
+        self.trigger('setInputData' , input);
     };
 })();
