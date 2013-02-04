@@ -69,6 +69,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             });
         })();
 
+        chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
+
         this.views = {
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
