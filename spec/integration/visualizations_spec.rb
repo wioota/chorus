@@ -2,8 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 #These tests actually create the charts from the instances view. Need to write separate tests for visualization from sandbox
 
-# Chore 43782465 removes this pending
-pending "Visualizations", :greenplum_integration do
+describe "Visualizations", :greenplum_integration do
   let(:instance) { InstanceIntegration.real_gpdb_data_source }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name("test_schema") }
@@ -13,6 +12,8 @@ pending "Visualizations", :greenplum_integration do
   let(:workspace) { workspaces(:image) }
 
   before do
+    pending "TODO: #43782465 removes this pending"
+
     pa "**** Environment Variables before accessing instance **** "
     pa ENV.inspect
     pa "*** REAL_GPDB_HOST before accessing instance *** "
