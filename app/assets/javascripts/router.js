@@ -47,7 +47,7 @@
             ["workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
             ["data_sources", "DataSourceIndex"],
             ["data_sources/:dataSourceId/databases", "DatabaseIndex"],
-            ["databases/:databaseId", "SchemaIndex"],
+            ["databases/:databaseId", "GpdbSchemaIndex"],
             ["schemas/:schemaId", "SchemaBrowse"],
             ["datasets/:id", "DatasetShow"],
             ["gnip_instances/:id", "GnipInstanceShow"],

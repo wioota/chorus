@@ -25,4 +25,19 @@ describe "Data Sources", :greenplum_integration do
       find(".data_source ul").should have_content("new_gpdb_data_source")
     end
   end
+
+  describe "viewing an Oracle data source" do
+    let(:database) { InstanceIntegration.real_database }
+
+    before do
+      login(users(:admin))
+      visit("#/databases/#{database.id}")
+    end
+
+    it "shows a list of the data source's databases" do
+      database.schemas.each do |schema|
+        page.should have_content schema.name
+      end
+    end
+  end
 end
