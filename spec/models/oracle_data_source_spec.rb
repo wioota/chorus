@@ -56,6 +56,7 @@ describe OracleDataSource do
   describe "#refresh_schemas" do
     let(:instance) { data_sources(:oracle) }
     let(:connection) { Object.new }
+    let!(:new_schema) { instance.schemas.create(:name => 'test_schema') }
 
     before do
       mock(OracleConnection).new(anything) {
@@ -72,11 +73,7 @@ describe OracleDataSource do
     end
 
     it "updates the data sources schemas" do
-      instance.schemas.should be_empty
-      instance.schemas.create(:name => 'test_schema')
-      instance.refresh_schemas
-
-      instance.reload.schemas.map(&:name).should == ["schema_one", "schema_two"]
+      expect { instance.refresh_schemas }.to change(new_schema, :stale_at)
     end
   end
 end

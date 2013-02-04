@@ -1,4 +1,6 @@
 class OracleSchema < Schema
+  include Stale
+
   attr_accessible :data_source
 
   belongs_to :data_source, {

@@ -27,7 +27,7 @@ class OracleDataSource < DataSource
 
     schemas.each do |schema|
       unless actual_schema_names.delete schema.name
-        schema.destroy
+        schema.mark_stale!
       end
     end
 
@@ -35,7 +35,7 @@ class OracleDataSource < DataSource
       schemas.create(:name => name)
     end
 
-    schemas
+    schemas.not_stale
   end
 
   private
