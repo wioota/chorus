@@ -4,7 +4,10 @@ chorus.collections.GpdbDataSourceSet = chorus.collections.Base.extend({
     urlTemplate: "data_sources/",
 
     urlParams: function() {
-        return _.extend(this._super('urlParams') || {}, {accessible: this.attributes.accessible});
+        return _.extend(this._super('urlParams') || {}, {
+            accessible: this.attributes.accessible,
+            entityType: "gpdb_data_source"
+        });
     },
 
     comparator: function(instance) {

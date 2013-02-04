@@ -18,10 +18,22 @@ describe DataSourcesController do
 
     it_behaves_like "a paginated list"
 
-    it "returns all gpdb instances (online and offline) that the user can access when accessible is passed" do
+    it "returns all data sources (online and offline) that the user can access when accessible is passed" do
       get :index, :accessible => "true"
       response.code.should == "200"
       decoded_response.map(&:id).should include(data_sources(:offline).id)
+    end
+
+    describe "filtering by type" do
+      it "filters by gpdb data sources" do
+        get :index, :entity_type => "gpdb_data_source"
+        decoded_response.map(&:id).should =~ GpdbDataSource.all.map(&:id)
+      end
+
+      it "filters by oracle data sources" do
+        get :index, :entity_type => "oracle_data_source"
+        decoded_response.map(&:id).should =~ OracleDataSource.all.map(&:id)
+      end
     end
   end
 

@@ -13,6 +13,10 @@ describe("chorus.collections.GpdbDataSourceSet", function() {
         expect(this.collection.urlParams().accessible).toBeFalsy();
     });
 
+    it("specifies an entity type when fetching", function() {
+        expect(this.collection.urlParams().entityType).toBe("gpdb_data_source");
+    });
+
     it("includes accessible=true when requested", function() {
         this.collection.attributes.accessible = true;
         expect(this.collection.urlParams().accessible).toBeTruthy();
