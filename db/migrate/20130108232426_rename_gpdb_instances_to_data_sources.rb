@@ -2,7 +2,7 @@ class RenameGpdbInstancesToDataSources < ActiveRecord::Migration
   def up
     add_column :gpdb_instances, :type, :string
     rename_table :gpdb_instances, :data_sources
-    DataSource.update_all :type => 'GpdbInstance'
+    update "UPDATE data_sources SET type = 'GpdbInstance'"
 
     rename_index :data_sources, 'index_gpdb_instances_on_owner_id', 'index_data_sources_on_owner_id'
 
