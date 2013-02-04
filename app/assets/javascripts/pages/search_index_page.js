@@ -81,7 +81,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             content: new chorus.views.SearchResults({ model: this.model })
         });
         if (this.search.isPaginated() && !this.search.workspace()) {
-            this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult"});
+            this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", multiSelect: true});
             this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true });
         }
 
@@ -93,6 +93,18 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             instance: new chorus.views.InstanceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
+        });
 
         // explicitly set up bindings after initializing sidebar collection
         this.subscribePageEvent("hdfs_entry:selected", this.hdfsSelected);

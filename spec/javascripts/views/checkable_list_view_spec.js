@@ -48,10 +48,17 @@ describe("chorus.views.CheckableList", function() {
 
     function expectItemChecked(expectedModels) {
         expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-        var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
+        var lastTwoCalls = chorus.PageEvents.broadcast.calls.slice(-2);
+        var eventName = lastTwoCalls[0].args[0];
+
+        expect(eventName).toBe("checked");
+        var collection = lastTwoCalls[0].args[1];
+        expect(collection).toBeA(chorus.collections.DatasetSet);
+
+        eventName = lastTwoCalls[1].args[0];
         expect(eventName).toBe("dataset:checked");
 
-        var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
+        collection = lastTwoCalls[1].args[1];
         expect(collection).toBeA(chorus.collections.DatasetSet);
         expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
     }

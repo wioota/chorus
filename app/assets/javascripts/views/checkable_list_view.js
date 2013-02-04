@@ -72,6 +72,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
             this.selectedModels.remove(model);
         }
 
+        chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName+":checked", this.selectedModels);
     },
 
@@ -82,6 +83,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     selectNone: function() {
         this.selectedModels.reset();
         this.$("> li input[type=checkbox]").prop("checked", false).change();
+        chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },
 
