@@ -212,4 +212,12 @@ describe("chorus.views.Dataset", function() {
             expect(this.dataset.fetch).toHaveBeenCalled();
         });
     });
+
+    describe("presenting tags", function() {
+        beforeEach(function() {
+            this.model = this.dataset;
+        });
+
+        itBehavesLike.ItPresentsModelWithTags();
+    });
 });

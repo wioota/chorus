@@ -29,32 +29,7 @@ describe("chorus.views.Workfile", function() {
         });
     });
 
-    context("when the workfile has tags", function () {
-        beforeEach(function () {
-            this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
-            this.view.render();
-        });
-
-        it("should show a list of tags", function () {
-            expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
-            expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
-        });
-
-        it("tags should link to the tag show page", function () {
-            expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/tags/tag1");
-        });
-
-        describe("when tags are scoped to a workfile", function() {
-            beforeEach(function() {
-                this.view = new chorus.views.Workfile({ model: this.model, tagWorkspaceId: 123 });
-                this.view.render();
-            });
-
-            it("tags link to the workspace-specific tag show page", function() {
-                expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/workspaces/123/tags/tag1");
-            });
-        });
-    });
+    itBehavesLike.ItPresentsModelWithTags();
 
     context("when the workfile has one comment", function() {
         beforeEach(function() {

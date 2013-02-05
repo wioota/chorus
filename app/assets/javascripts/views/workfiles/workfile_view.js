@@ -1,4 +1,4 @@
-chorus.views.Workfile = chorus.views.Base.extend({
+chorus.views.Workfile = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     templateName:"workfile",
     tagName: "li",
 
@@ -29,8 +29,8 @@ chorus.views.Workfile = chorus.views.Base.extend({
         ctx.tableauWorkbook = this.model.get('fileType') === 'tableau_workbook';
         ctx.tableauIcon = chorus.helpers.tableauIcon();
         ctx.checkable = this.options.checkable;
-        ctx.tags = this.model.tags().models;
-        ctx.tagWorkspaceId = this.options.tagWorkspaceId;
+
+        _.extend(ctx, this.additionalContextForTags());
 
         var lastComment = this.model.lastComment();
         if (lastComment) {

@@ -1,4 +1,4 @@
-chorus.views.Dataset = chorus.views.Base.extend({
+chorus.views.Dataset = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     templateName: "dataset",
     tagName: "li",
 
@@ -39,7 +39,6 @@ chorus.views.Dataset = chorus.views.Base.extend({
         // For database objects that are not in workspaces, active workspace is undefined, but the dataset should be viewable
         var viewable = this.options.activeWorkspace !== false;
 
-
         var ctx = {
             dataset: this.model.asWorkspaceDataset(),
             showUrl: this.model.showUrl(),
@@ -48,9 +47,10 @@ chorus.views.Dataset = chorus.views.Base.extend({
             humanizedImportFrequency: chorus.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.workspacesAssociated(),
             viewable: viewable,
-            checkable: this.options.checkable,
-            tags: this.model.tags().models
+            checkable: this.options.checkable
         };
+
+        _.extend(ctx, this.additionalContextForTags());
 
         if (recentComment) {
             var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"));
