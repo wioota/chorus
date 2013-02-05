@@ -139,6 +139,9 @@
 
     .color-swatch-item {
         position: relative;
+        display: inline-block;
+        width: 382px;
+        margin: 8px;
 
         .color-swatch {
             width: 24px;

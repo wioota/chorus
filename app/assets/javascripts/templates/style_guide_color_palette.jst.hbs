@@ -1,8 +1,6 @@
-<ul>
-    {{#keyValue colors}}
-        <li class="color-swatch-item">
-            <div class="color-swatch" style="background-color:{{value}}"></div>
-            <span class="color-swatch-name">{{key}}</span>
-        </li>
-    {{/keyValue}}
-</ul>
+{{#keyValue colors}}
+    <div class="color-swatch-item">
+        <div class="color-swatch" style="background-color:{{value}}"></div>
+        <span class="color-swatch-name">{{key}}</span>
+    </div>
+{{/keyValue}}
