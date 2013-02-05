@@ -140,6 +140,27 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             });
         })();
 
+        models.user = new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}});
+        models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
+        models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
+
+        models.activity = new chorus.models.Activity({
+            "action": "GreenplumInstanceChangedOwner",
+            "actor": models.user,
+            "gpdbDataSource": models.greenplumDataSource,
+            "newOwner": models.otherUser,
+            "timestamp": "2013-01-31T20:14:27Z"
+        });
+
+        models.otherActivity = new chorus.models.Activity({
+            "action": "WorkfileCreated",
+            "actor": models.user,
+            "workfile": models.workfile,
+            "commitMessage": "I am committed to this workfile",
+            "workspace": models.workspace,
+            "timestamp": "2013-01-31T20:14:27Z"
+        });
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return models;
@@ -169,13 +190,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.workfileSet.loaded = true;
 
         collections.loadingCollection = new chorus.collections.UserSet();
-        collections.userCollection = new chorus.collections.UserSet([
-            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}}),
-            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}}),
-            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}})
-        ]);
-
+        collections.userCollection = new chorus.collections.UserSet([models.user, models.otherUser, models.thirdUser]);
         collections.userCollection.loaded = true;
+
+        collections.activitySet = new chorus.collections.ActivitySet([models.activity, models.otherActivity]);
+        collections.activitySet.loaded = true;
 
         return collections;
     },
@@ -461,6 +480,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Workspace List": new chorus.views.MainContentList({
                 collection: collections.workspaceSet,
                 modelClass: "Workspace"
+            }),
+
+            "Activity List": new chorus.views.ActivityList({
+                collection: collections.activitySet
             })
         };
     },
