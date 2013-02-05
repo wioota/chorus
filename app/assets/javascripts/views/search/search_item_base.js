@@ -1,4 +1,4 @@
-chorus.views.SearchItemBase = chorus.views.Base.extend({
+chorus.views.SearchItemBase = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     tagName: "li",
     additionalClass: "result_item",
 
@@ -6,6 +6,10 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
         "click a.show_more_comments": "showMoreComments",
         "click a.show_fewer_comments": "showFewerComments",
         "click": "itemSelected"
+    },
+
+    additionalContext: function() {
+        return this.additionalContextForTags();
     },
 
     postRender: function() {

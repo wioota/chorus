@@ -21,7 +21,10 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         return new chorus.views.CheckableList({
             collection: this.collection,
             entityViewType: chorus.views["Search" + _.classify(this.options.entityType)],
-            listItemOptions: {search: this.options.search},
+            listItemOptions: {
+                search: this.options.search,
+                workspaceIdForTagLink: this.options.search.get('workspaceId')
+            },
             selectedModels: this.selectedModels
         });
     },

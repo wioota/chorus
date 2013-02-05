@@ -71,6 +71,8 @@ describe("chorus.views.SearchWorkfile", function() {
         });
     });
 
+    itBehavesLike.ItPresentsModelWithTags();
+
     xdescribe("shows version commit messages in the comments area", function() {
         beforeEach(function() {
             this.view.model.set({

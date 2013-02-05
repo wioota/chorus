@@ -21,7 +21,7 @@ jasmine.sharedExamples.ItPresentsModelWithTags = function() {
 
         describe("when show tags in the context of a workspace", function() {
             beforeEach(function() {
-                view = new this.view.constructor({ model: this.model, tagWorkspaceId: 123 });
+                view = new this.view.constructor({ model: this.model, workspaceIdForTagLink: 123 });
                 view.render();
             });
 

@@ -2,7 +2,7 @@
 <div class="item_tag_list">
     {{t "tag_list.title"}}:
     {{#each tags}}
-      <a class="tag_name" href="{{this.showUrl ../tagWorkspaceId}}">{{this.name}}</a>
+      <a class="tag_name" href="{{this.showUrl ../workspaceIdForTagLink}}">{{this.name}}</a>
     {{/each}}
 </div>
 {{/if}}

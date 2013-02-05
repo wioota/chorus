@@ -83,6 +83,8 @@ describe("chorus.views.SearchDataset", function() {
         expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes));
     });
 
+    itBehavesLike.ItPresentsModelWithTags();
+
     context("when the dataset has tags", function () {
         beforeEach(function () {
             this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);

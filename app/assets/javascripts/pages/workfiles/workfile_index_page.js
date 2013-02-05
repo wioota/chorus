@@ -15,7 +15,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             title: t("workfiles.title"),
             checkable: true,
             contentDetailsOptions: { multiSelect: true },
-            contentOptions: {listItemOptions: {tagWorkspaceId: this.workspace.id} },
+            contentOptions: {listItemOptions: {workspaceIdForTagLink: this.workspace.id} },
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),

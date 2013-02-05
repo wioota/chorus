@@ -76,8 +76,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
         });
 
-        it("passes the tagWorkspaceId option as listItemOptions to the main content options", function() {
-            expect(this.page.mainContent.content.options.listItemOptions.tagWorkspaceId).toBe(this.workspace.id);
+        it("passes the workspaceIdForTagLink option as listItemOptions to the main content options", function() {
+            expect(this.page.mainContent.content.options.listItemOptions.workspaceIdForTagLink).toBe(this.workspace.id);
         });
     });
 

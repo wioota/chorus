@@ -3,12 +3,11 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
     templateName: "search_dataset",
 
     additionalContext: function() {
-        var context = {
+        var context = _.extend(this._super("additionalContext"), {
             dataset: this.model.asWorkspaceDataset(),
             showUrl: this.model.showUrl(),
-            iconUrl: this.model.iconUrl(),
-            tags: this.model.tags().models
-        };
+            iconUrl: this.model.iconUrl()
+        });
 
         var workspaces;
         if (this.model.get("workspaces")) {

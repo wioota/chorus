@@ -3,12 +3,11 @@ chorus.views.SearchWorkfile = chorus.views.SearchItemBase.extend({
     templateName: "search_workfile",
 
     additionalContext: function () {
-        return {
+        return _.extend(this._super("additionalContext"), {
             showUrl: this.model.showUrl(),
             iconUrl: this.model.iconUrl(),
-            workspaces: [this.model.workspace().attributes],
-            tags: this.model.tags().models
-        };
+            workspaces: [this.model.workspace().attributes]
+        });
     },
 
     makeCommentList: function (){

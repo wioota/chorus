@@ -2,7 +2,10 @@ describe("chorus.views.SearchResultList", function() {
     context("body", function() {
         beforeEach(function() {
             this.result = rspecFixtures.searchResult();
-            this.result.set({ query: "foo" });
+            this.result.set({
+                query: "foo",
+                workspaceId: 123
+            });
 
             var instances = this.result.instances();
             instances.pagination.records = 24;
@@ -18,6 +21,10 @@ describe("chorus.views.SearchResultList", function() {
 
         it("has a list element for each model in the collection", function() {
             expect(this.view.$('li').length).toBe(3);
+        });
+
+        it("passes the workspace id for tag links as an option to the item views", function() {
+             expect(this.view.list.options.listItemOptions.workspaceIdForTagLink).toBe(123);
         });
     });
 
@@ -112,7 +119,8 @@ describe("chorus.views.SearchResultList", function() {
                         collection.pagination = { records: 0 };
                         this.view = new chorus.views.SearchResultList({
                             collection: collection,
-                            entityType: "user"
+                            entityType: "user",
+                            search: rspecFixtures.searchResult()
                         });
 
                         this.view.render();
