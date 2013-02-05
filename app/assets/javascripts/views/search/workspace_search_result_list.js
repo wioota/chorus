@@ -19,7 +19,11 @@
             constructorName: "WorkspaceSearchResultCheckableList",
             makeListItemView: function(model) {
                 var viewConstructor = viewConstructorMap[model.get("entityType")];
-                return new viewConstructor({ model: model, search: this.listItemOptions.search });
+                return new viewConstructor({
+                    model: model,
+                    search: this.listItemOptions.search,
+                    workspaceIdForTagLink: this.listItemOptions.search.get('workspaceId')
+                });
             }
         }),
 

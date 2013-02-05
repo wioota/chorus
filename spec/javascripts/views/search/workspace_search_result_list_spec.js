@@ -13,6 +13,10 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
         this.view.render();
     });
 
+    it("passes the workspace id for tag links as an option to the item views", function() {
+        expect(this.view.list.liViews[0].options.workspaceIdForTagLink).toBe("10001");
+    });
+
     it("renders the right type of search result view for each result item", function() {
         var listItems = this.view.$("li");
         expect(this.view.$("li.search_workfile")).toExist();
