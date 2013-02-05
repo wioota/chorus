@@ -43,10 +43,6 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
             return;
         }
 
-        this.subscribePageEvent("file:autosaved", function () {
-            this.model && this.model.trigger("invalidated");
-        });
-
         var contentView = new chorus.views.WorkfileContent.buildFor(this.model);
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,

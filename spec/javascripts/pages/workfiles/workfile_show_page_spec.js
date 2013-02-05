@@ -164,18 +164,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
 
-        context("when the content broadcasts file:autosaved", function() {
-            beforeEach(function() {
-                this.page.render();
-                spyOnEvent(this.page.model, "invalidated");
-                chorus.PageEvents.broadcast("file:autosaved");
-            });
-
-            it("triggers invalidated on the model", function() {
-                expect("invalidated").toHaveBeenTriggeredOn(this.page.model);
-            });
-        });
-
         describe("breadcrumbs", function() {
             it("renders home > Workspaces > {workspace name} > All work files > {workfile name}", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");

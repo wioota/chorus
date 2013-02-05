@@ -84,7 +84,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     saveDraft: function() {
         this.stopTimer();
-        this.trigger("autosaved");
+        chorus.PageEvents.broadcast("file:autosaved");
         this.model.content(this.editor.getValue(), {silent: true});
         var overrides = {};
         if (this.model.get("hasDraft")) {
@@ -154,9 +154,6 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.model, pageCollection: this.collection });
         this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
         this.bindings.add(this.dialog.model, "change", this.render);
-        this.bindings.add(this.dialog.model, "autosaved", function() {
-            this.trigger("autosaved", "workfile.content_details.save");
-        });
     }
 });
 
