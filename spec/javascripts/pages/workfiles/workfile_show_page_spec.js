@@ -148,7 +148,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     name: "Cool Workspace"
                 }});
 
-            this.spy = spyOn(chorus.views.DatabaseFunctionSidebarList.prototype, "forwardEvent").andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
             this.server.completeFetchFor(this.model);
         });

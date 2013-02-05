@@ -1,12 +1,6 @@
 chorus.Mixins.Events = {
-    forwardEvent: function(eventName, target) {
-        this.bind(eventName, function() {
-            var args = _.toArray(arguments);
-            args.unshift(eventName);
-            target.trigger.apply(target, args);
-        });
-    },
 
+    //Only bind if that triple doesn't yet exist.
     bindOnce: function(eventName, callback, context) {
         var callbacksForThisEvent = this._events && this._events[eventName];
         if (callbacksForThisEvent){

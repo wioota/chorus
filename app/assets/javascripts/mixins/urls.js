@@ -1,4 +1,6 @@
 chorus.Mixins.Urls = {
+
+    //Build the link url for a model based on the urlTemplate method on that model.
     showUrl: function() {
         if (this.isDeleted()) return null;
 
