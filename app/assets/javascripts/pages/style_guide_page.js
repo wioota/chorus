@@ -29,14 +29,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     buildModels: function() {
         var models = {};
 
-        models.workspace = new chorus.models.Workspace({ name: "Some Workspace", description: "One awesome workspace", owner: {firstName: "Bob", lastName: "Lablaw"}, "public": true, archivedAt: null});
+        models.workspace = new chorus.models.Workspace({ name: "Some Workspace", summary: "One awesome workspace", owner: {firstName: "Bob", lastName: "Lablaw"}, "public": true, archivedAt: null});
         models.workspace.loaded = true;
         models.workspace._sandbox = new chorus.models.Sandbox();
 
-        models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", description: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
+        models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         models.privateWorkspace.loaded = true;
 
-        models.archivedWorkspace = new chorus.models.Workspace({ name: "Archived Workspace", description: "Lots of secrets here", owner: {firstName: "The", lastName: "Past"}, "public": false, archiver: {firstName: "Mr", lastName: "Archiver"}, archivedAt: "1985-07-21T06:21:02Z"});
+        models.archivedWorkspace = new chorus.models.Workspace({ name: "Archived Workspace", summary: "old data", owner: {firstName: "The", lastName: "Past"}, "public": false, archiver: {firstName: "Mr", lastName: "Archiver"}, archivedAt: "1985-07-21T06:21:02Z"});
         models.archivedWorkspace.loaded = true;
 
 
@@ -159,6 +159,24 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "commitMessage": "I am committed to this workfile",
             "workspace": models.workspace,
             "timestamp": "2013-01-31T20:14:27Z"
+        });
+
+        models.searchResult = new chorus.models.SearchResult({
+            users: {
+                results: [models.user.set({ highlightedAttributes: {
+                    "lastName": [
+                        "<em>Danger</em>"
+                    ]
+                }})],
+                numFound: 14
+            },
+
+            workspaces: {
+                results: [models.workspace.set({ highlightedAttributes: {
+                    "summary": ["<em>Danger</em> Zone!!"]
+                }})],
+                numFound: 1
+            }
         });
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
@@ -484,6 +502,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Activity List": new chorus.views.ActivityList({
                 collection: collections.activitySet
+            }),
+
+            "Search Result List": new chorus.views.SearchResults({
+                model: models.searchResult
             })
         };
     },
