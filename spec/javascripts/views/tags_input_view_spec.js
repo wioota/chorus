@@ -104,28 +104,54 @@ describe("chorus.views.TagsInput", function() {
     });
 
     describe("when an invalid tag is entered", function() {
-        var longString;
-        beforeEach(function() {
-            longString = _.repeat("a", 101);
-            enterTag(view, longString);
+        context("when the tag is too long", function() {
+            var longString = _.repeat("a", 101);
+            beforeEach(function() {
+                enterTag(view, longString);
+            });
+
+            it("does not create a new tag", function() {
+                expect(view.$(".text-tag").length).toBe(3);
+                expect(this.addedSpy).not.toHaveBeenCalled();
+            });
+
+            it("does not remove the text from the input", function() {
+                expect(input.val()).toBe(longString);
+            });
+
+            it("shows an error message", function() {
+                expect(input).toHaveClass("has_error");
+            });
+
+            it("entering a valid tag clears the error class", function() {
+                enterTag(view, "new-tag");
+                expect(input).not.toHaveClass("has_error");
+            });
         });
 
-        it("does not create a new tag", function() {
-            expect(view.$(".text-tag").length).toBe(3);
-            expect(this.addedSpy).not.toHaveBeenCalled();
-        });
+        context("when the tag contains a ~", function() {
+            var badTag = "some~tag";
+            beforeEach(function() {
+                enterTag(view, badTag);
+            });
 
-        it("does not remove the text from the input", function() {
-            expect(input.val()).toBe(longString);
-        });
+            it("does not create a new tag", function() {
+                expect(view.$(".text-tag").length).toBe(3);
+                expect(this.addedSpy).not.toHaveBeenCalled();
+            });
 
-        it("shows an error message", function() {
-            expect(input).toHaveClass("has_error");
-        });
+            it("does not remove the text from the input", function() {
+                expect(input.val()).toBe(badTag);
+            });
 
-        it("entering a valid tag clears the error class", function() {
-            enterTag(view, "new-tag");
-            expect(input).not.toHaveClass("has_error");
+            it("shows an error message", function() {
+                expect(input).toHaveClass("has_error");
+            });
+
+            it("entering a valid tag clears the error class", function() {
+                enterTag(view, "new-tag");
+                expect(input).not.toHaveClass("has_error");
+            });
         });
     });
 

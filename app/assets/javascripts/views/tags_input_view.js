@@ -113,7 +113,11 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             valid = false;
             this.keepInvalidTagName = true;
             this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
-        } else if (tagName.length === 0) {
+        } else if(tagName.indexOf("~") !== -1) {
+            valid = false;
+            this.keepInvalidTagName = true;
+            this.markInputAsInvalid(this.input, t("field_error.INVALID_CHARACTER", {field: "Tag", character: "~"}), false);
+        } else if(tagName.length === 0) {
             valid = false;
         }
 
