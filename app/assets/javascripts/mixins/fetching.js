@@ -55,6 +55,8 @@
         underscoreKeys: transformKeys(_.underscored),
         camelizeKeys: transformKeys(_.camelize),
 
+        //Use Chorus custom success and error callbacks for calls to model/collection `fetch`
+        //Then calls super
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});

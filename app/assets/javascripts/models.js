@@ -17,6 +17,7 @@ chorus.models = {
                 return this.get("isDeleted") && (this.get("isDeleted") === true || this.get("isDeleted") === "true");
             },
 
+            //Build the url for a model based on the urlTemplate in the model's context.
             url: function(options) {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
                 var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType });
@@ -120,6 +121,7 @@ chorus.models = {
                 this.errors[attr] = this.errors[attr] || t((custom_key || message_key), vars);
             },
 
+            //Client-side model validation used to verify that `attr` is present in `newAttrs` and is not blank/whitespace.
             require: function(attr, newAttrs, messageKey) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 
@@ -223,6 +225,8 @@ chorus.models = {
                 return new Handlebars.SafeString(highlightedModel.name());
             },
 
+            //When the `paramsToSave` attribute is set on a model, the JSON version of the model only includes the white-listed attributes.
+            //When the `paramsToIgnore` attribute is set and `paramsToSave` is not, the JSON version of the model explicitly excludes the rejected attributes.
             toJSON: function() {
                 var paramsToSave = this.paramsToSave;
                 var paramsToIgnore = this.paramsToIgnore;
@@ -264,6 +268,7 @@ chorus.models = {
                 return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
             },
 
+            //return changes on this model since the last save.
             unsavedChanges: function() {
                 this._savedAttributes = this._savedAttributes || {};
                 var changes = {};
