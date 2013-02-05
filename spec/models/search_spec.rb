@@ -196,7 +196,8 @@ describe Search do
 
     describe "tag search" do
       let(:tag) { ActsAsTaggableOn::Tag.named("alpha").first }
-      let(:search) { Search.new(user, :tag => true, :query => tag.name) }
+      let(:params) { { :tag => true, :query => tag.name } }
+      let(:search) { Search.new(user, params) }
 
       before do
         any_instance_of(Sunspot::Search::AbstractSearch) do |search|
@@ -208,6 +209,19 @@ describe Search do
         search.models
         Sunspot.session.should have_search_params(:with, :tag_ids, tag.id)
         Sunspot.session.should_not have_search_params(:fulltext, tag.name)
+      end
+
+      describe "with a workspace_id" do
+        let(:search) { Search.new(user, params.merge(:workspace_id => 7)) }
+
+        it "performs a secondary search to pull back workfiles and datasets within the workspace" do
+          search.models
+          Sunspot.session.searches.length.should == 2
+          last_search = Sunspot.session.searches.last
+          last_search.should have_search_params(:with, :workspace_id, 7)
+          last_search.should have_search_params(:with, :tag_ids, tag.id)
+          last_search.should_not have_search_params(:fulltext, tag.name)
+        end
       end
 
       context "when tag does not exist" do

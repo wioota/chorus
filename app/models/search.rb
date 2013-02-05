@@ -1,7 +1,7 @@
 class Search
   include ActiveModel::Validations
   include ChorusApiValidationFormat
-  attr_accessor :query, :page, :per_page, :workspace_id, :search_type, :is_tag, :tag, :entity_type
+  attr_accessor :query, :page, :per_page, :workspace_id, :search_type, :tag_param, :tag, :entity_type
   attr_reader :current_user
   attr_writer :per_type
 
@@ -13,8 +13,8 @@ class Search
     self.per_type = params[:per_type]
     self.workspace_id = params[:workspace_id]
     self.search_type = params[:search_type]
-    self.is_tag = params[:tag].to_s == 'true'
-    self.tag = ActsAsTaggableOn::Tag.named(query).first if is_tag
+    self.tag_param = params[:tag].to_s == 'true'
+    self.tag = ActsAsTaggableOn::Tag.named(query).first if is_tag_search?
     if per_type > 0
       self.per_page = 100
     else
@@ -22,6 +22,10 @@ class Search
       self.per_page = params[:per_page] || 50
     end
     self.entity_type = params[:entity_type]
+  end
+  
+  def is_tag_search?
+    !!tag_param
   end
 
   def models_to_search
@@ -131,7 +135,7 @@ class Search
   private
 
   def tag_missing?
-    is_tag && tag.nil?
+    is_tag_search? && tag.nil?
   end
   
   def count_using_facets?
@@ -160,7 +164,7 @@ class Search
   def workspace_specific_results
     return unless workspace_id.present?
     @workspace_specific_results ||= begin
-      options = {:workspace_id => workspace_id, :query => query}
+      options = {:workspace_id => workspace_id, :query => query, :tag => is_tag_search?}
       options.merge!(:entity_type => entity_type) if entity_type
       options.merge!(:per_page => per_type) if per_type > 0
       WorkspaceSearch.new(current_user, options)
@@ -180,7 +184,7 @@ class Search
         truncate
       end
 
-      if is_tag
+      if is_tag_search?
         with :tag_ids, tag.id
       else
         fulltext query do

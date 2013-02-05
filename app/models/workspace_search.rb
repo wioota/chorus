@@ -7,11 +7,6 @@ class WorkspaceSearch < Search
     super & [Workspace, Workfile, Dataset]
   end
 
-  def initialize(current_user, params = {})
-    super
-    @workspace_id = params[:workspace_id]
-  end
-
   def build_search
     super.build do
       any_of do
