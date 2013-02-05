@@ -186,6 +186,22 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                         expect(dialog.datasets).toBe(this.page.multiSelectSidebarMenu.selectedModels);
                     });
                 });
+
+                it("has an action to edit tags", function() {
+                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                });
+
+                describe("clicking the 'edit_tags' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.edit_tags").click();
+                    });
+
+                    it("launches the dialog for editing tags", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
             });
         });
     });

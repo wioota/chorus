@@ -19,11 +19,15 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
             actions: [
-                '<a class="associate">{{t "actions.associate_with_another_workspace"}}</a>'
+                '<a class="associate">{{t "actions.associate_with_another_workspace"}}</a>',
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
             ],
             actionEvents: {
                 'click .associate': _.bind(function() {
                     new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.multiSelectSidebarMenu.selectedModels, activeOnly: true}).launchModal();
+                }, this),
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
                 }, this)
             }
         });
