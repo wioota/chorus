@@ -17,8 +17,8 @@ describe GpdbSchemaPresenter, :type => :view do
       hash[:refreshed_at].should == schema.refreshed_at
       hash[:dataset_count].should == schema.active_tables_and_views.count
       hash[:database][:id].should == schema.database.id
-      hash[:database][:instance][:id].should == schema.gpdb_data_source.id
-      hash[:database][:instance][:name].should == schema.gpdb_data_source.name
+      hash[:database][:instance][:id].should == schema.data_source.id
+      hash[:database][:instance][:name].should == schema.data_source.name
     end
   end
 end

@@ -35,7 +35,7 @@ module Gpdb
     end
 
     def self.url(database, account)
-      "jdbc:postgresql://#{database.gpdb_data_source.host}:#{database.gpdb_data_source.port}/#{database.name}?user=#{account.db_username}&password=#{account.db_password}"
+      "jdbc:postgresql://#{database.data_source.host}:#{database.data_source.port}/#{database.name}?user=#{account.db_username}&password=#{account.db_password}"
     end
 
     def self.connection_params(gpdb_data_source, account, database_name)

@@ -72,7 +72,7 @@ FactoryGirl.define do
 
   factory :gpdb_database do
     sequence(:name) { |n| "database#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    gpdb_data_source
+    association :data_source, :factory => :gpdb_data_source
   end
 
   factory :gpdb_schema do

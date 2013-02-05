@@ -6,7 +6,7 @@ describe SandboxesController do
   let(:owner) { gpdb_data_source.owner }
   let(:sandbox) { schemas(:default) }
   let(:database) { sandbox.database }
-  let(:gpdb_data_source) { database.gpdb_data_source }
+  let(:gpdb_data_source) { database.data_source }
   let(:workspace) { workspaces(:no_sandbox) }
   before do
     log_in owner
@@ -46,7 +46,7 @@ describe SandboxesController do
 
       it 'calls create_schema' do
         any_instance_of(GpdbDatabase) do |db|
-          stub(db).create_schema("create_new_schema", database.gpdb_data_source.owner) do |name|
+          stub(db).create_schema("create_new_schema", database.data_source.owner) do |name|
             database.schemas.create!({:name => name}, :without_protection => true)
           end
         end
@@ -97,7 +97,7 @@ describe SandboxesController do
       it 'does not call create_schema if the schema is public' do
         any_instance_of(GpdbDataSource) do |instance_double|
           stub(instance_double).create_database('new_database', gpdb_data_source.owner) do |name|
-            database = FactoryGirl.create :gpdb_database, :name => name, :gpdb_data_source => gpdb_data_source
+            database = FactoryGirl.create :gpdb_database, :name => name, :data_source => gpdb_data_source
             schema = FactoryGirl.create :gpdb_schema, :name => 'public', :database => database
             database
           end

@@ -1,7 +1,7 @@
 shared_examples "dataset presenter" do |dataset_factory_name|
   before do
     gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "instance1")
-    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :gpdb_data_source => gpdb_data_source)
+    database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :data_source => gpdb_data_source)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     @dataset = FactoryGirl.build(dataset_factory_name,
       :id => 321,

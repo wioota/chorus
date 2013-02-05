@@ -1,9 +1,11 @@
-class PreviewsController < GpdbController
+class PreviewsController < ApplicationController
+  include DataSourceAuth
+
   wrap_parameters :task, :exclude => [:id, :dataset_id]
 
   def create
     dataset = Dataset.find(params[:dataset_id])
-    instance_account = authorized_gpdb_account(dataset)
+    instance_account = authorized_account(dataset)
 
     result = SqlExecutor.preview_dataset(dataset, instance_account, params[:task][:check_id])
     present(result, :status => :created)
@@ -11,7 +13,7 @@ class PreviewsController < GpdbController
 
   def destroy
     dataset = Dataset.find(params[:dataset_id])
-    instance_account = authorized_gpdb_account(dataset)
+    instance_account = authorized_account(dataset)
 
     SqlExecutor.cancel_query(dataset, instance_account, params[:id])
     head :ok
@@ -20,7 +22,7 @@ class PreviewsController < GpdbController
   def preview_sql
     task = params[:task]
     schema = GpdbSchema.find(task[:schema_id])
-    instance_account = authorized_gpdb_account(schema)
+    instance_account = authorized_account(schema)
 
     sql_without_semicolon = task[:query].gsub(';', '')
     sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view;"

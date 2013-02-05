@@ -158,7 +158,7 @@ describe ChorusView do
     let(:chorus_view) { datasets(:executable_chorus_view) }
     let(:schema) { chorus_view.schema }
     let(:database) { schema.database }
-    let(:gpdb_data_source) { database.gpdb_data_source }
+    let(:gpdb_data_source) { database.data_source }
     let(:account) { gpdb_data_source.owner_account }
     let(:user) { account.owner }
     let(:connection) { Object.new }

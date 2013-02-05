@@ -6,7 +6,7 @@ class GpdbDataSource < DataSource
 
   validates_with DataSourceNameValidator
 
-  has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy
+  has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy, :foreign_key => "data_source_id"
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
@@ -128,7 +128,7 @@ class GpdbDataSource < DataSource
     account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
   end
 
-  def gpdb_data_source
+  def data_source
     self
   end
 

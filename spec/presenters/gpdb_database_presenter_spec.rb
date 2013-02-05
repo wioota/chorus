@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GpdbDatabasePresenter, :type => :view do
   before(:each) do
-    database = FactoryGirl.build(:gpdb_database, name: "abc", id: 456, gpdb_data_source: FactoryGirl.build(:gpdb_data_source, :id => 123))
+    database = FactoryGirl.build(:gpdb_database, name: "abc", id: 456, data_source: FactoryGirl.build(:gpdb_data_source, :id => 123))
     @presenter = GpdbDatabasePresenter.new(database, view)
   end
 

@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe GpdbTable do
   let(:table) { datasets(:table) }
-  let(:account) { table.gpdb_data_source.owner_account }
-  let(:user) { table.gpdb_data_source.owner }
+  let(:account) { table.data_source.owner_account }
+  let(:user) { table.data_source.owner }
   let(:connection) { Object.new }
 
   before do

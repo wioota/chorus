@@ -1,4 +1,6 @@
-class DatasetDownloadsController < GpdbController
+class DatasetDownloadsController < ApplicationController
+  include DataSourceAuth
+
   def show
     dataset = Dataset.find(params[:dataset_id])
     @streamer = DatasetStreamer.new(dataset, current_user, params[:row_limit])

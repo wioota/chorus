@@ -1,6 +1,9 @@
-class ColumnController < GpdbController
+class ColumnController < ApplicationController
+  include DataSourceAuth
+
+
   def index
     dataset = Dataset.find(params[:dataset_id])
-    present paginate GpdbColumn.columns_for(authorized_gpdb_account(dataset), dataset)
+    present paginate GpdbColumn.columns_for(authorized_account(dataset), dataset)
   end
 end

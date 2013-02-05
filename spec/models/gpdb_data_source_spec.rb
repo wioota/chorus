@@ -125,7 +125,7 @@ describe GpdbDataSource do
         expect do
           gpdb_data_source.create_database("new_database", account.owner).tap do |database|
             database.name.should == "new_database"
-            database.gpdb_data_source.should == gpdb_data_source
+            database.data_source.should == gpdb_data_source
           end
         end.to change(GpdbDatabase, :count).by_at_least(1)
         exec_on_gpdb("select datname from pg_database where datname = 'new_database';").should_not be_empty
@@ -268,7 +268,7 @@ describe GpdbDataSource do
 
   describe "#used_by_workspaces" do
     let!(:gpdb_data_source) { FactoryGirl.create :gpdb_data_source }
-    let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :gpdb_data_source => gpdb_data_source, :name => 'db') }
+    let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :data_source => gpdb_data_source, :name => 'db') }
     let!(:gpdb_schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => gpdb_database) }
     let!(:workspace1) { FactoryGirl.create(:workspace, :name => "Z_workspace", :sandbox => gpdb_schema) }
     let!(:workspace2) { FactoryGirl.create(:workspace, :name => "a_workspace", :sandbox => gpdb_schema, :public => false) }

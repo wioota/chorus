@@ -204,43 +204,9 @@ describe GpdbSchema do
     end
   end
 
-  describe ".find_and_verify_in_source" do
-    let(:schema) { schemas(:public) }
-    let(:database) { schema.database }
-    let(:user) { users(:owner) }
-    let(:connection) { Object.new }
-
-    before do
-      mock(database).connect_as(anything) { connection }
-      stub(GpdbSchema).find(schema.id) { schema }
-    end
-
-    context "when it exists in the source database" do
-      before do
-        mock(connection).schema_exists?(anything) { true }
-      end
-
-      it "returns the schema" do
-        described_class.find_and_verify_in_source(schema.id, user).should == schema
-      end
-    end
-
-    context "when it does not exist in the source database" do
-      before do
-        mock(connection).schema_exists?(anything) { false }
-      end
-
-      it "should raise ActiveRecord::RecordNotFound exception" do
-        expect {
-          described_class.find_and_verify_in_source(schema.id, user)
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
-
   describe "#stored_functions" do
     let(:schema) { schemas(:public) }
-    let(:account) { schema.database.gpdb_data_source.owner_account }
+    let(:account) { schema.database.data_source.owner_account }
     let(:connection) { Object.new }
 
     before do
@@ -329,8 +295,8 @@ describe GpdbSchema do
 
     it "should create a Greenplum SchemaConnection" do
       mock(GreenplumConnection).new({
-                                                          :host => schema.gpdb_data_source.host,
-                                                          :port => schema.gpdb_data_source.port,
+                                                          :host => schema.data_source.host,
+                                                          :port => schema.data_source.port,
                                                           :username => account.db_username,
                                                           :password => account.db_password,
                                                           :database => schema.database.name,

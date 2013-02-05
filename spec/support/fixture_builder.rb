@@ -106,7 +106,7 @@ FixtureBuilder.configure do |fbuilder|
 
 
     # Datasets
-    default_database = FactoryGirl.create(:gpdb_database, :gpdb_data_source => owners_instance, :name => 'default')
+    default_database = FactoryGirl.create(:gpdb_database, :data_source => owners_instance, :name => 'default')
     default_schema = FactoryGirl.create(:gpdb_schema, :name => 'default', :database => default_database)
     FactoryGirl.create(:gpdb_schema, :name => "public", :database => default_database)
     default_table = FactoryGirl.create(:gpdb_table, :name => "table", :schema => default_schema)
@@ -124,11 +124,11 @@ FixtureBuilder.configure do |fbuilder|
     tagged.save!
 
     # Search setup
-    searchquery_database = FactoryGirl.create(:gpdb_database, :gpdb_data_source => owners_instance, :name => 'searchquery_database')
+    searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_instance, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
     searchquery_table = FactoryGirl.create(:gpdb_table, :name => "searchquery_table", :schema => searchquery_schema)
 
-    shared_search_database = FactoryGirl.create(:gpdb_database, :gpdb_data_source => shared_instance, :name => 'shared_database')
+    shared_search_database = FactoryGirl.create(:gpdb_database, :data_source => shared_instance, :name => 'shared_database')
     shared_search_schema = FactoryGirl.create(:gpdb_schema, :name => 'shared_schema', :database => shared_search_database)
     FactoryGirl.create(:gpdb_table, :name => "searchquery_shared_table", :schema => shared_search_schema)
 
@@ -476,7 +476,7 @@ FixtureBuilder.configure do |fbuilder|
       chorus_gpdb42_instance.refresh_databases
       GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(InstanceIntegration.database_name), :refresh_all => true)
 
-      test_database = GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)
+      test_database = GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)
       test_schema = test_database.schemas.find_by_name('test_schema')
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local-greenplum", :sandbox => test_schema}, :without_protection => true)

@@ -23,7 +23,7 @@ describe GpdbDatabase do
         it 'does not allow two databases with the same name' do
           new_database = FactoryGirl.build(:gpdb_database,
                                            :name => existing.name,
-                                           :gpdb_data_source => existing.gpdb_data_source)
+                                           :data_source => existing.data_source)
           new_database.should_not be_valid
           new_database.should have_error_on(:name).with_message(:taken)
         end
@@ -56,7 +56,7 @@ describe GpdbDatabase do
 
       databases.length.should == 4
       databases.map { |db| db.name }.should =~ db_names
-      databases.map { |db| db.gpdb_data_source_id }.uniq.should == [gpdb_data_source.id]
+      databases.map { |db| db.data_source_id }.uniq.should == [gpdb_data_source.id]
     end
 
     it "returns a list of GpdbDatabase objects" do
@@ -159,8 +159,8 @@ describe GpdbDatabase do
   describe ".create_schema" do
     context "using a real greenplum instance", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
-      let(:instance) { database.gpdb_data_source }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:instance) { database.data_source }
 
       after do
         exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
@@ -215,7 +215,7 @@ describe GpdbDatabase do
 
   describe "#connect_with" do
     let(:database) { gpdb_databases(:default) }
-    let(:instance) { database.gpdb_data_source }
+    let(:instance) { database.data_source }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
@@ -233,7 +233,7 @@ describe GpdbDatabase do
 
   describe "#with_gpdb_connection", :greenplum_integration do
     it "raises GreenplumConnection::ObjectNotFound when the database does not exist" do
-      database = FactoryGirl.create(:gpdb_database, :gpdb_data_source => InstanceIntegration.real_gpdb_data_source, :name => 'i_dont_exist')
+      database = FactoryGirl.create(:gpdb_database, :data_source => InstanceIntegration.real_gpdb_data_source, :name => 'i_dont_exist')
 
       expect {
         database.with_gpdb_connection(InstanceIntegration.real_gpdb_account) {}
@@ -267,7 +267,7 @@ describe GpdbDatabase do
     end
 
     it "does not destroy instance accounts (but secretly deletes the join model)" do
-      database.instance_accounts << database.gpdb_data_source.accounts.first
+      database.instance_accounts << database.data_source.accounts.first
       instance_accounts = database.reload.instance_accounts
 
       instance_accounts.length.should > 0

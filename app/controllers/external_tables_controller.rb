@@ -1,4 +1,6 @@
-class ExternalTablesController < GpdbController
+class ExternalTablesController < ApplicationController
+  include DataSourceAuth
+
   wrap_parameters :hdfs_external_table, :exclude => []
 
   def create
@@ -11,7 +13,7 @@ class ExternalTablesController < GpdbController
       return
     end
 
-    account = authorized_gpdb_account(workspace.sandbox)
+    account = authorized_account(workspace.sandbox)
     database = workspace.sandbox.connect_with(account)
 
     file_pattern =

@@ -9,7 +9,7 @@ describe CsvImporter do
   let(:destination_dataset) { FactoryGirl.build :gpdb_table, :name => csv_file.to_table }
 
   describe "with a real database connection", :greenplum_integration do
-    let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)}
+    let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
     let(:account) { InstanceIntegration.real_gpdb_account }
@@ -317,7 +317,7 @@ describe CsvImporter do
       file.update_attributes :new_table => false
       file
     end
-    let(:instance_account) { csv_file.workspace.sandbox.gpdb_data_source.account_for_user!(csv_file.user) }
+    let(:instance_account) { csv_file.workspace.sandbox.data_source.account_for_user!(csv_file.user) }
 
     describe "after creating the csv file" do
       it "performs a refresh and returns the dataset matching the import table name" do

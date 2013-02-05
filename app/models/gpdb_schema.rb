@@ -24,7 +24,7 @@ class GpdbSchema < Schema
             :uniqueness => { :scope => [:parent_type, :parent_id] },
             :format => /^[^\/?&]*$/
 
-  delegate :gpdb_data_source, :account_for_user!, :to => :database
+  delegate :data_source, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
 
@@ -62,13 +62,7 @@ class GpdbSchema < Schema
   end
 
   def accessible_to(user)
-    database.gpdb_data_source.accessible_to(user)
-  end
-
-  def self.find_and_verify_in_source(schema_id, user)
-    schema = GpdbSchema.find(schema_id)
-    raise ActiveRecord::RecordNotFound unless schema.verify_in_source(user)
-    schema
+    database.data_source.accessible_to(user)
   end
 
   def verify_in_source(user)
@@ -122,13 +116,13 @@ class GpdbSchema < Schema
   end
 
   def connect_as(user)
-    connect_with(gpdb_data_source.account_for_user!(user))
+    connect_with(data_source.account_for_user!(user))
   end
 
   def connect_with(account)
     ::GreenplumConnection.new(
-        :host => gpdb_data_source.host,
-        :port => gpdb_data_source.port,
+        :host => data_source.host,
+        :port => data_source.port,
         :username => account.db_username,
         :password => account.db_password,
         :database => database.name,

@@ -31,7 +31,7 @@ describe GpdbTableAccess do
 
       before do
         any_instance_of(GpdbDataSourceAccess) do |instance|
-          stub(instance).can? :show, gpdb_table.gpdb_data_source { false }
+          stub(instance).can? :show, gpdb_table.data_source { false }
         end
       end
 

@@ -103,7 +103,7 @@ describe CsvFile do
     let(:csv_file) { CsvFile.first }
     let(:account) { InstanceIntegration.real_gpdb_account }
     let(:user) { account.owner }
-    let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id!(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)}
+    let(:database) { GpdbDatabase.find_by_name_and_data_source_id!(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)}
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:workspace) { workspaces(:public) }
 

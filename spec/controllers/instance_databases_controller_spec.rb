@@ -61,15 +61,15 @@ describe InstanceDatabasesController do
     let(:database) { gpdb_databases(:default) }
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, database.gpdb_data_source)
+      mock(subject).authorize!(:show_contents, database.data_source)
       get :show, :id => database.to_param
     end
 
     it "renders the database" do
       get :show, :id => database.to_param
       response.code.should == "200"
-      decoded_response.instance.id.should == database.gpdb_data_source.id
-      decoded_response.instance.name.should == database.gpdb_data_source.name
+      decoded_response.instance.id.should == database.data_source.id
+      decoded_response.instance.name.should == database.data_source.name
       decoded_response.id.should == database.id
       decoded_response.name.should == database.name
     end

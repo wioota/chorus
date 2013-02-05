@@ -6,7 +6,7 @@ resource "Workspaces" do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:gpdb_data_source) { database.gpdb_data_source}
+  let(:gpdb_data_source) { database.data_source}
   let(:instance_id) { gpdb_data_source.id }
   let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }

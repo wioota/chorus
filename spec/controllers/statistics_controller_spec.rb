@@ -9,7 +9,7 @@ describe StatisticsController do
 
   context "#show" do
     let(:schema) { schemas(:default) }
-    let(:instance_account) { schema.database.gpdb_data_source.owner_account }
+    let(:instance_account) { schema.database.data_source.owner_account }
     let!(:table) { datasets(:table) }
 
     let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table").to_sql }

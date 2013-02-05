@@ -4,7 +4,7 @@ describe ExternalTablesController do
   let(:user) { users(:the_collaborator) }
   let(:workspace) { workspaces(:public) }
 
-  let!(:instance_account) { sandbox.gpdb_data_source.account_for_user!(user) }
+  let!(:instance_account) { sandbox.data_source.account_for_user!(user) }
   let(:sandbox) { schemas(:default) }
 
   let(:hadoop_instance) { hadoop_instances(:hadoop) }

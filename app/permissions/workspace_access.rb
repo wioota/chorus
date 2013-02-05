@@ -24,7 +24,7 @@ class WorkspaceAccess < AdminFullAccess
   def update?(workspace)
     return false unless workspace.member?(current_user)
     if workspace.sandbox_id_changed? && workspace.sandbox_id
-      return false unless workspace.owner == current_user && context.can?(:show_contents, workspace.sandbox.gpdb_data_source)
+      return false unless workspace.owner == current_user && context.can?(:show_contents, workspace.sandbox.data_source)
     end
 
     effective_owner_id = workspace.owner_id_changed? ? workspace.owner_id_was : workspace.owner_id

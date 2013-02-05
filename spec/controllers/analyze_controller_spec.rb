@@ -4,7 +4,7 @@ describe AnalyzeController do
   ignore_authorization!
   let(:user) { users(:the_collaborator) }
   let(:gpdb_table) { datasets(:table) }
-  let(:gpdb_data_source) { gpdb_table.gpdb_data_source }
+  let(:gpdb_data_source) { gpdb_table.data_source }
   let(:account) { gpdb_data_source.account_for_user!(user) }
 
   before do
@@ -20,7 +20,7 @@ describe AnalyzeController do
     end
 
     it "uses authentication" do
-      mock(subject).authorize! :show_contents, gpdb_table.gpdb_data_source
+      mock(subject).authorize! :show_contents, gpdb_table.data_source
       post :create, :table_id => gpdb_table.to_param
     end
 

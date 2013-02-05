@@ -9,7 +9,7 @@ class Dataset < ActiveRecord::Base
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
   has_many :tableau_workbook_publications, :dependent => :destroy
-  delegate :gpdb_data_source, :account_for_user!, :to => :schema
+  delegate :data_source, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :schema
   validates_presence_of :name
@@ -33,7 +33,6 @@ class Dataset < ActiveRecord::Base
 
   delegate :with_gpdb_connection, :to => :schema
   delegate :connect_with, :to => :schema
-  delegate :gpdb_data_source, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
 
@@ -59,7 +58,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def accessible_to(user)
-    schema.database.gpdb_data_source.accessible_to(user)
+    schema.database.data_source.accessible_to(user)
   end
 
   def found_in_workspace_id
@@ -180,7 +179,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def table_description
-    DatasetStatistics.for_dataset(self, schema.database.gpdb_data_source.owner_account).description
+    DatasetStatistics.for_dataset(self, schema.database.data_source.owner_account).description
   rescue
     nil
   end
@@ -198,7 +197,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_data
-    @column_data ||= GpdbColumn.columns_for(schema.database.gpdb_data_source.owner_account, self)
+    @column_data ||= GpdbColumn.columns_for(schema.database.data_source.owner_account, self)
   end
 
   def query_setup_sql

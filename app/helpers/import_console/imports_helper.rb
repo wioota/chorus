@@ -5,7 +5,7 @@ module ImportConsole::ImportsHelper
 
   def instance_description_for_schema(schema)
     if schema
-      instance = schema.gpdb_data_source
+      instance = schema.data_source
       if instance
         instance.host + ":" + instance.port.to_s
       else

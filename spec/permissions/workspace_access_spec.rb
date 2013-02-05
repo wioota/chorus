@@ -109,7 +109,7 @@ describe WorkspaceAccess do
           it "allows update" do
             schema = schemas(:other_schema)
             any_instance_of(GpdbDataSourceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.gpdb_data_source) { true }
+              mock(instance_access).show_contents?(schema.data_source) { true }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_true
@@ -120,7 +120,7 @@ describe WorkspaceAccess do
           it "does not allow update" do
             schema = schemas(:other_schema)
             any_instance_of(GpdbDataSourceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.gpdb_data_source) { false }
+              mock(instance_access).show_contents?(schema.data_source) { false }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_false

@@ -18,7 +18,7 @@ describe SchemasController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:show_contents, schema.gpdb_data_source)
+      mock(subject).authorize!(:show_contents, schema.data_source)
       get :show, :id => schema.to_param
     end
 

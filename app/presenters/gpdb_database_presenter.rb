@@ -4,7 +4,7 @@ class GpdbDatabasePresenter < Presenter
     {
       :id => model.id,
       :name => model.name,
-      :instance => present(model.gpdb_data_source),
+      :instance => present(model.data_source),
       :entity_type => model.entity_type_name
     }
   end

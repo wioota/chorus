@@ -31,7 +31,7 @@ describe GpdbViewAccess do
 
       before do
         any_instance_of(GpdbDataSourceAccess) do |instance|
-          stub(instance).can? :show, gpdb_view.gpdb_data_source { false }
+          stub(instance).can? :show, gpdb_view.data_source { false }
         end
       end
 

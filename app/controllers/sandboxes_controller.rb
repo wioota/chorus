@@ -17,7 +17,7 @@ class SandboxesController < ApplicationController
             database = GpdbDatabase.find(attributes[:database_id])
           end
 
-          GpdbSchema.refresh(database.gpdb_data_source.account_for_user!(current_user), database)
+          GpdbSchema.refresh(database.data_source.account_for_user!(current_user), database)
 
           create_schema = attributes[:schema_name] && attributes[:schema_name] != 'public'
           if create_schema

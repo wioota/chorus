@@ -1,4 +1,6 @@
-class DataSourcesController < GpdbController
+class DataSourcesController < ApplicationController
+  include DataSourceAuth
+
   wrap_parameters :data_source, :exclude => []
 
   def index

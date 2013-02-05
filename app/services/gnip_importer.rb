@@ -146,7 +146,7 @@ class GnipImporter
 
   def account
     @account ||= begin
-      workspace.sandbox.gpdb_data_source.account_for_user!(user)
+      workspace.sandbox.data_source.account_for_user!(user)
     end
   end
 end

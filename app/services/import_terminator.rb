@@ -30,7 +30,7 @@ class ImportTerminator < DelegateClass(Import)
 
   def terminate_process(type)
     database = manager.database(type)
-    database_description = "database #{database.name} on instance #{database.gpdb_data_source.name}"
+    database_description = "database #{database.name} on instance #{database.data_source.name}"
 
     if manager.busy?(type)
       log "Found running #{type} running on #{database_description}"

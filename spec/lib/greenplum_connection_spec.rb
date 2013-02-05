@@ -748,7 +748,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe "#stream_dataset" do
-      let(:database) { GpdbDatabase.find_by_name_and_gpdb_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
       let(:dataset) {
         GpdbTable.new(:name => 'thing', :schema => GpdbSchema.find_by_name(schema_name))
       }

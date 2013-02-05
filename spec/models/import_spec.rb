@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Import, :greenplum_integration do
-  let(:user)  { schema.gpdb_data_source.owner }
+  let(:user)  { schema.data_source.owner }
   let(:workspace) { workspaces(:real) }
   let(:database) { InstanceIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
