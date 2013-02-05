@@ -1,5 +1,13 @@
 # encoding: UTF-8
 
+class ActiveRecord::Base
+  @@shared_connection = nil
+
+  def self.connection
+    @@shared_connection ||= retrieve_connection
+  end
+end
+
 module Capybara
   module Helpers
     class << self
@@ -46,5 +54,10 @@ module CapybaraHelpers
     page.execute_script("$('#{selector}').val('#{value}')")
     page.execute_script("$('#{selector}').selectmenu('refresh')")
     page.execute_script("$('#{selector}').change()")
+  end
+
+  def wait_for_page_load
+    page.should have_selector(".main_content")
+    page.should have_no_selector(".loading_section")
   end
 end

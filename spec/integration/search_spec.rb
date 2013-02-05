@@ -13,8 +13,7 @@ describe "Search" do
 
   before do
     login(users(:owner))
-    page.should have_selector(".main_content")
-    page.should have_no_selector(".loading_section")
+    wait_for_page_load
     fill_in 'search_text', :with => 'searchquery'
     find('.chorus_search_container>input').native.send_keys(:return)
     current_route.should == "search/searchquery"
