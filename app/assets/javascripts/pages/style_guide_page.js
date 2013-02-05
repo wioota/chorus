@@ -74,6 +74,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "objectType": "TABLE"
         });
 
+        models.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
+        models.datasetSet.loaded = true;
+
         //necessary for collection views down at the bottom
         models.loadingCollection = new chorus.collections.UserSet();
         models.userCollection = new chorus.collections.UserSet([
@@ -171,8 +174,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 ]
             }),
 
-            "Dataset list": new chorus.views.DatasetList({
-                collection: new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")})
+            "Dataset list": new chorus.views.MainContentList({
+                collection: models.datasetSet,
+                modelClass: "Dataset"
             }),
 
             "Data Table": new chorus.views.TaskDataTable({
@@ -370,7 +374,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         var self = this;
         _.each(this.views, function(view, name) {
             $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>");
-            view.el = self.$(".view_guts:last")[0];
+            view.$el = self.$(".view_guts:last");
+            view.el = view.$el[0];
             view.delegateEvents();
             view.render();
         });
