@@ -87,25 +87,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "objectType": "TABLE"
         });
 
-        models.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
-        models.datasetSet.loaded = true;
-
-        models.databaseSet = new chorus.collections.DatabaseSet([models.database, models.otherDatabase]);
-        models.databaseSet.loaded = true;
-
-        models.schemaSet = new chorus.collections.SchemaSet([models.schema, models.otherSchema]);
-        models.schemaSet.loaded = true;
-
-
-        models.loadingCollection = new chorus.collections.UserSet();
-        models.userCollection = new chorus.collections.UserSet([
-            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}}),
-            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}}),
-            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}})
-        ]);
-
-        models.userCollection.loaded = true;
-
         models.task = (function() {
             var animals = ['aardvark', 'bat', 'cheetah'];
             var columns = [
@@ -132,7 +113,31 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         return models;
     },
 
-    buildViews: function(models) {
+    buildCollections: function(models) {
+        var collections = {};
+
+        collections.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
+        collections.datasetSet.loaded = true;
+
+        collections.databaseSet = new chorus.collections.DatabaseSet([models.database, models.otherDatabase]);
+        collections.databaseSet.loaded = true;
+
+        collections.schemaSet = new chorus.collections.SchemaSet([models.schema, models.otherSchema]);
+        collections.schemaSet.loaded = true;
+
+        collections.loadingCollection = new chorus.collections.UserSet();
+        collections.userCollection = new chorus.collections.UserSet([
+            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}}),
+            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}}),
+            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}})
+        ]);
+
+        collections.userCollection.loaded = true;
+
+        return collections;
+    },
+
+    buildViews: function(models, collections) {
         this.views = {
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
@@ -164,49 +169,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "New Note Dialog": new chorus.dialogs.NotesNew(),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
-
-            "List Page (loading)": new chorus.views.MainContentList({modelClass: "User", collection: models.loadingCollection}),
-
-            "List Page": new chorus.views.MainContentList({
-                modelClass: "User",
-                collection: models.userCollection,
-                linkMenus: {
-                    sort: {
-                        title: t("users.header.menu.sort.title"),
-                        options: [
-                            {data: "firstName", text: t("users.header.menu.sort.first_name")},
-                            {data: "lastName", text: t("users.header.menu.sort.last_name")}
-                        ],
-                        event: "sort",
-                        chosen: "lastName"
-                    }
-                },
-                buttons: [
-                    {
-                        url: "#/users/new",
-                        text: "Create Thing"
-                    },
-                    {
-                        url: "#/users/new",
-                        text: "Create Other Thing"
-                    }
-                ]
-            }),
-
-            "Dataset list": new chorus.views.MainContentList({
-                collection: models.datasetSet,
-                modelClass: "Dataset"
-            }),
-
-            "Database list": new chorus.views.MainContentList({
-                collection: models.databaseSet,
-                modelClass: "Database"
-            }),
-
-            "Schema list": new chorus.views.MainContentList({
-                collection: models.schemaSet,
-                modelClass: "Schema"
-            }),
 
             "Data Table": new chorus.views.TaskDataTable({
                 model: new chorus.models.WorkfileExecutionTask({ result: {
@@ -388,13 +350,60 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 })
             }),
 
-            "Color Palette": new chorus.views.ColorPaletteView()
+            "Color Palette": new chorus.views.ColorPaletteView(),
+
+            "List Page (loading)": new chorus.views.MainContentList({modelClass: "User", collection: collections.loadingCollection}),
+
+            "List Page": new chorus.views.MainContentList({
+                modelClass: "User",
+                collection: collections.userCollection,
+                linkMenus: {
+                    sort: {
+                        title: t("users.header.menu.sort.title"),
+                        options: [
+                            {data: "firstName", text: t("users.header.menu.sort.first_name")},
+                            {data: "lastName", text: t("users.header.menu.sort.last_name")}
+                        ],
+                        event: "sort",
+                        chosen: "lastName"
+                    }
+                },
+                buttons: [
+                    {
+                        url: "#/users/new",
+                        text: "Create Thing"
+                    },
+                    {
+                        url: "#/users/new",
+                        text: "Create Other Thing"
+                    }
+                ]
+            }),
+
+            "Dataset list": new chorus.views.MainContentList({
+                collection: collections.datasetSet,
+                modelClass: "Dataset"
+            }),
+
+            "Database list": new chorus.views.MainContentList({
+                collection: collections.databaseSet,
+                modelClass: "Database"
+            }),
+
+            "Schema list": new chorus.views.MainContentList({
+                collection: collections.schemaSet,
+                modelClass: "Schema"
+            })
         };
     },
 
     initialize: function() {
         _.defer(_.bind(this.render, this));
-        this.buildViews(this.buildModels());
+
+        var models = this.buildModels();
+        var collections = this.buildCollections(models);
+
+        this.buildViews(models, collections);
     },
 
     render: function() {
