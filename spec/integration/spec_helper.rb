@@ -19,6 +19,7 @@ Capybara.default_driver = :selenium
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
 Capybara.save_and_open_page_path = ENV['WORKSPACE']
+Capybara.default_wait_time = 20
 
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
 
@@ -63,8 +64,6 @@ RSpec.configure do |config|
   config.include CleditorHelpers
   config.include InstanceIntegration
   config.include CapybaraHelpers
-
-  Capybara.default_wait_time = 20
 end
 
 # capybara-screenshot must be included after the rspec after hook calling Capybara.reset_sessions! (see above)

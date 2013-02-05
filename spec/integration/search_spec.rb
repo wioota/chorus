@@ -13,8 +13,11 @@ describe "Search" do
 
   before do
     login(users(:owner))
+    page.should have_selector(".main_content")
+    page.should have_no_selector(".loading_section")
     fill_in 'search_text', :with => 'searchquery'
     find('.chorus_search_container>input').native.send_keys(:return)
+    current_route.should == "search/searchquery"
   end
 
   describe "global search" do
@@ -33,7 +36,9 @@ describe "Search" do
 
   shared_examples "model specific search" do
     it "searches for only one model" do
-      find('a', :text => "All Results", :visible => true).click
+      within '.content_header' do
+        find('a', :text => "All Results", :visible => true).click
+      end
       within ".link_menu.type .menu" do
         click_link model_link
       end

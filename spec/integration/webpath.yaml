@@ -1,32 +1,3 @@
-admin:
-  login: edcadmin
-  password: secret
-
-login_route: '/#/login'
-new_user_route: '/#/users/new'
-homepage: '#/'
-
-user:
-  route: '#/users'
-  first_name: Joe
-  last_name: Blow
-  email: '@blow.com'
-  password: password
-
-user_menu:
-  menu: '.header .username a'
-  profile:
-  signout: '.menu.popup_username a[href="#/logout"]'
-
-instance:
-  route: '#/data_sources'
-  new_btn: 'button[data-dialog=InstancesNew]'
-  list: '.instance_list'
-
-workspace:
-  route: '#/workspaces'
-  new: 'Create Workspace'
-
 #Pivotal GPDB instances
 gpdb_data_source_db:
   gpdb_host: chorus-gpdb40.sf.pivotallabs.com

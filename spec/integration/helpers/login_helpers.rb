@@ -3,15 +3,14 @@ module LoginHelpers
     URI.parse(current_url).fragment
   end
 
-  def login(userOrUsername, password = FixtureBuilder.password)
-    username = userOrUsername.is_a?(String) ? userOrUsername : userOrUsername.username
-    visit(WEBPATH['login_route'])
-    fill_in 'username', :with => username
+  def login(user, password = FixtureBuilder.password)
+    visit("/#/login")
+    page.should have_selector("form.login")
+    fill_in 'username', :with => user.username
     fill_in 'password', :with => password
     click_button "Login"
 
-    page.should have_no_selector(".loading_section")
-    page.should have_content("Recent Activity")
+    page.find(".header .username").should have_content(user.first_name)
   end
 
   def logout
