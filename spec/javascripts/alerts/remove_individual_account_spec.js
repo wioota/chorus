@@ -1,11 +1,11 @@
 describe("chorus.alerts.RemoveIndividualAccount", function() {
     beforeEach(function() {
-        this.alert = new chorus.alerts.RemoveIndividualAccount({instanceName: "someInstance", name: "joey boy"});
+        this.alert = new chorus.alerts.RemoveIndividualAccount({dataSourceName: "someInstance", name: "joey boy"});
         this.alert.render();
     });
 
     it("displays the confirmation message", function() {
-        expect(this.alert.$("h1").text().trim()).toMatchTranslation("instances.remove_individual_account.title", {instanceName: "someInstance", userName: "joey boy"});
+        expect(this.alert.$("h1").text().trim()).toMatchTranslation("instances.remove_individual_account.title", {dataSourceName: "someInstance", userName: "joey boy"});
         expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.remove_individual_account.remove");
     });
 

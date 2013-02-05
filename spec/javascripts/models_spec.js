@@ -1019,9 +1019,22 @@ describe("chorus.models.Base", function() {
 
        context("when the attributes has completeJson set to true", function() {
            it("sets the model as loaded", function() {
-               this.model = new chorus.models.Base();
-               this.model.set({completeJson: true});
-               expect(this.model.loaded).toBeTruthy();
+               var model = new chorus.models.Base();
+               model.set({completeJson: true});
+               expect(model.loaded).toBeTruthy();
+           });
+
+           it("sets the status code to no content if not already set", function() {
+               var model = new chorus.models.Base();
+               model.set({completeJson: true});
+               expect(model.statusCode).toBe(204);
+           });
+
+           it("sets leave the status code alone if already set", function() {
+               var model = new chorus.models.Base();
+               model.statusCode = 123;
+               model.set({completeJson: true});
+               expect(model.statusCode).toBe(123);
            });
        });
 

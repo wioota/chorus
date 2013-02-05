@@ -219,6 +219,9 @@ describe("chorus.collections.Base", function() {
                 });
                 this.collection.bind("loaded", this.loadedListener);
 
+                this.serverRespondedSpy = jasmine.createSpy("serverResponded");
+                this.collection.bind("serverResponded", this.serverRespondedSpy);
+
                 this.server.fetches()[0].succeed([
                     { foo: "first" },
                     { foo: "second" }
@@ -255,6 +258,10 @@ describe("chorus.collections.Base", function() {
 
             it("triggers the loaded event once", function() {
                 expect(this.loadedListener.callCount).toBe(1);
+            });
+
+            it("triggers serverResponded once", function() {
+               expect(this.serverRespondedSpy.callCount).toBe(1);
             });
 
             it("triggers the loaded event after all models are in the collection", function() {

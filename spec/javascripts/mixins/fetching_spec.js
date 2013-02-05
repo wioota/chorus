@@ -49,7 +49,10 @@ describe("chorus.Mixins.Fetching", function() {
             context("and there are no more results to fetch", function() {
                 beforeEach(function() {
                     this.collection.fetch();
-                    this.server.completeFetchFor(this.collection, [{}, {}], undefined, {page: 1, total: 1, records: 2});
+                    this.server.completeFetchFor(this.collection, [
+                        {},
+                        {}
+                    ], undefined, {page: 1, total: 1, records: 2});
                     this.server.reset();
                     this.collection.fetchAllIfNotLoaded();
                 });
@@ -62,7 +65,10 @@ describe("chorus.Mixins.Fetching", function() {
             context("and there are more results to fetch", function() {
                 beforeEach(function() {
                     this.collection.fetch();
-                    this.server.completeFetchFor(this.collection, [{}, {}], undefined, {page: 1, total: 2, records: 4});
+                    this.server.completeFetchFor(this.collection, [
+                        {},
+                        {}
+                    ], undefined, {page: 1, total: 2, records: 4});
                     this.server.reset();
                     this.collection.fetchAllIfNotLoaded();
                 });
@@ -73,10 +79,16 @@ describe("chorus.Mixins.Fetching", function() {
                 });
 
                 it("finishes once there are more pages", function() {
-                    this.server.completeFetchAllFor(this.collection, [{}, {}], {page: 1}, {page: 1, total: 2, records: 4});
+                    this.server.completeFetchAllFor(this.collection, [
+                        {},
+                        {}
+                    ], {page: 1}, {page: 1, total: 2, records: 4});
                     expect(this.collection.loaded).toBeFalsy();
 
-                    this.server.completeFetchAllFor(this.collection, [{}, {}], {page: 2}, {page: 2, total: 2, records: 4});
+                    this.server.completeFetchAllFor(this.collection, [
+                        {},
+                        {}
+                    ], {page: 2}, {page: 2, total: 2, records: 4});
                     expect(this.collection.loaded).toBeTruthy();
                     expect(this.server.lastFetchAllFor(this.collection, {page: 3})).toBeUndefined();
                 });
@@ -180,8 +192,6 @@ describe("chorus.Mixins.Fetching", function() {
                 status: "ok",
                 foo: "bar",
                 response: { hi_there: { youre_cool: true } }
-            }, {
-                status: 200
             })).toEqual({
                     hiThere: { youreCool: true }
                 });
@@ -304,7 +314,8 @@ describe("chorus.Mixins.Fetching", function() {
                 });
 
                 it("should not trigger the 'resourceNotFound' event", function() {
-                    this.resource.respondToErrors(404, { notFound: function() {} });
+                    this.resource.respondToErrors(404, { notFound: function() {
+                    } });
                     expect(this.resource.trigger).not.toHaveBeenCalledWith("resourceNotFound");
                 });
             });
@@ -328,7 +339,8 @@ describe("chorus.Mixins.Fetching", function() {
                 });
 
                 it("should not trigger the 'unprocessableEntity' event", function() {
-                    this.resource.respondToErrors(422, { unprocessableEntity: function() {} });
+                    this.resource.respondToErrors(422, { unprocessableEntity: function() {
+                    } });
                     expect(this.resource.trigger).not.toHaveBeenCalledWith("unprocessableEntity");
                 });
             });
@@ -346,77 +358,163 @@ describe("chorus.Mixins.Fetching", function() {
         });
     });
 
-    describe('#fetch', function(){
-        beforeEach(function(){
+    describe('#fetch', function() {
+        beforeEach(function() {
             this.errorSpy = jasmine.createSpy("error");
             this.successSpy = jasmine.createSpy("success");
             this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
             this.loadedSpy = jasmine.createSpy("loaded");
+            this.serverRespondedSpy = jasmine.createSpy("serverResponded");
 
             this.resource.bind("fetchFailed", this.fetchFailedSpy);
             this.resource.bind("loaded", this.loadedSpy);
-
-            this.resource.fetch({
-                success: this.successSpy,
-                error: this.errorSpy
-            });
+            this.resource.bind("serverResponded", this.serverRespondedSpy);
         });
 
-        context('when the fetch succeeds', function(){
-            beforeEach(function(){
-                this.server.lastFetchFor(this.resource).respondJson(200, { response: {someResponse: 'OK'}});
-            });
-
-            it('sets the attributes on the resource', function(){
-                expect(this.resource.get('someResponse')).toEqual('OK');
-            });
-        });
-
-        context('when the xhr only includes errors', function() {
-            beforeEach(function(){
-                this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' });
-            });
-
-            it('populates the server errors', function(){
-                expect(this.resource.serverErrors).not.toBeEmpty();
-            });
-
-            it("triggers the 'fetchFailed' event on the resource", function() {
-                expect(this.fetchFailedSpy).toHaveBeenCalled();
-                expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
-            });
-
-            it('doesnt set loaded on the model', function(){
-                expect(this.resource.loaded).toBeFalsy();
-            });
-        });
-
-        context('when the xhr includes errors and real data', function(){
-            beforeEach(function(){
-                this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' }, { attribute_name: 'value' });
-            });
-
-            it('populates the server errors', function(){
-                expect(this.resource.serverErrors).not.toBeEmpty();
-            });
-
-            it("includes object data", function(){
-                expect(this.resource.get('attributeName')).toEqual('value');
-            });
-
-            it('sets loaded on the model', function(){
-                expect(this.resource.loaded).toBeTruthy();
-            });
-        });
-
-        context("when there is an error with a single space in the response text", function() {
+        context("with silent: false", function() {
             beforeEach(function() {
-                this.server.lastFetch().respond(401, {'Content-Type': 'application/json'}, " ");
+                this.resource.fetch({
+                    success: this.successSpy,
+                    error: this.errorSpy
+                });
             });
 
-            it("does not crash", function() {
-                expect(this.fetchFailedSpy).toHaveBeenCalled();
+            var itShouldTriggerServerRespondedAndSetStatusCodeTo = function(code) {
+                it("triggers serverResponded and loaded", function() {
+                    expect(this.serverRespondedSpy).toHaveBeenCalled();
+                });
+
+                it("sets statusCode on the resource", function() {
+                    expect(this.resource.statusCode).toBe(code);
+                });
+            };
+
+            context('when the fetch succeeds', function() {
+                beforeEach(function() {
+                    this.server.lastFetchFor(this.resource).respondJson(200, { response: {someResponse: 'OK'}});
+                });
+
+                it('sets the attributes on the resource', function() {
+                    expect(this.resource.get('someResponse')).toEqual('OK');
+                });
+
+                it("triggers loaded", function() {
+                    expect(this.loadedSpy).toHaveBeenCalled();
+                });
+
+                itShouldTriggerServerRespondedAndSetStatusCodeTo(200);
             });
+
+            context('when the xhr only includes errors', function() {
+                beforeEach(function() {
+                    this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' });
+                });
+
+                it('populates the server errors', function() {
+                    expect(this.resource.serverErrors).not.toBeEmpty();
+                });
+
+                it("triggers the 'fetchFailed' event on the resource", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+                });
+
+                it('doesnt set loaded on the model', function() {
+                    expect(this.resource.loaded).toBeFalsy();
+                });
+
+                itShouldTriggerServerRespondedAndSetStatusCodeTo(422);
+
+            });
+
+            context('when the xhr includes errors and real data', function() {
+                beforeEach(function() {
+                    this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' }, { attribute_name: 'value' });
+                });
+
+                it('populates the server errors', function() {
+                    expect(this.resource.serverErrors).not.toBeEmpty();
+                });
+
+                it("includes object data", function() {
+                    expect(this.resource.get('attributeName')).toEqual('value');
+                });
+
+                it('sets loaded on the model', function() {
+                    expect(this.resource.loaded).toBeTruthy();
+                });
+            });
+
+            context("when there is an error with a single space in the response text", function() {
+                beforeEach(function() {
+                    this.server.lastFetch().respond(401, {'Content-Type': 'application/json'}, " ");
+                });
+
+                it("does not crash", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                });
+
+                itShouldTriggerServerRespondedAndSetStatusCodeTo(401);
+            });
+
+        });
+
+        context("with silent: true", function() {
+            beforeEach(function() {
+                this.resource.fetch({
+                    success: this.successSpy,
+                    error: this.errorSpy,
+                    silent: true
+                });
+            });
+
+            context('when the fetch succeeds', function() {
+                beforeEach(function() {
+                    spyOnEvent(this.resource, "serverResponded");
+                    this.server.lastFetchFor(this.resource).respondJson(200, { response: {someResponse: 'OK'}});
+                });
+
+                it('sets the attributes on the resource', function() {
+                    expect(this.resource.get('someResponse')).toEqual('OK');
+                });
+
+                it("doesn't trigger anything", function() {
+                    expect(this.serverRespondedSpy).not.toHaveBeenCalled();
+                    expect(this.loadedSpy).not.toHaveBeenCalled();
+                });
+
+                it("sets statusCode on the model", function() {
+                    expect(this.resource.statusCode).toBe(200);
+                });
+            });
+
+            context('when the fetch fails', function() {
+                beforeEach(function() {
+                    this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' });
+                });
+
+                it('populates the server errors', function() {
+                    expect(this.resource.serverErrors).not.toBeEmpty();
+                });
+
+                it("triggers the 'fetchFailed' event on the resource", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+                });
+
+                it('doesnt set loaded on the model', function() {
+                    expect(this.resource.loaded).toBeFalsy();
+                });
+
+                it("does not trigger 'serverResponded'", function() {
+                   expect(this.serverRespondedSpy).not.toHaveBeenCalled();
+                });
+
+                it("sets the statusCode on the resource", function() {
+                   expect(this.resource.statusCode).toBe(422);
+                });
+            });
+
         });
     });
 });

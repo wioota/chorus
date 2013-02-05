@@ -310,7 +310,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
             this.schema.set({
                 instanceId: '51',
-                instanceName: "bob_the_instance",
+                dataSourceName: "bob_the_instance",
                 databaseId: '52',
                 databaseName: "bar",
                 name: "wow"

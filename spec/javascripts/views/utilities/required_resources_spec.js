@@ -33,70 +33,71 @@ describe("chorus.RequiredResources", function() {
             expect('add').toHaveBeenTriggeredOn(this.requiredResources);
         });
 
-        it("should bind verifyResourcesLoaded to the loaded event of the resource", function() {
-            this.model.loaded = false;
+        it("should bind verifyResourcesResponded to the serverResponded event of the resource", function() {
+            delete this.model.statusCode;
 
-            spyOn(this.requiredResources, 'verifyResourcesLoaded');
+            spyOn(this.requiredResources, 'verifyResourcesResponded');
             this.requiredResources.add(this.model);
-            this.model.trigger("loaded");
-            expect(this.requiredResources.verifyResourcesLoaded).toHaveBeenCalled();
+            this.model.trigger("serverResponded");
+            expect(this.requiredResources.verifyResourcesResponded).toHaveBeenCalled();
         });
     });
 
-    describe("when a required resource gets loaded", function() {
-        context("when all resources have been loaded", function() {
-            it("should trigger the allResourcesLoaded event", function() {
-                this.model.loaded = false;
+    describe("when a required fetch responds", function() {
+        context("when all resource fetches have responded", function() {
+            it("should trigger the allResourcesResponded event", function() {
+                delete this.model.statusCode;
 
-                spyOnEvent(this.requiredResources, 'allResourcesLoaded');
+                spyOnEvent(this.requiredResources, 'allResourcesResponded');
                 this.requiredResources.add(this.model);
 
-                this.model.loaded = true;
-                this.model.trigger("loaded");
+                this.model.statusCode = 422;
+                this.model.trigger("serverResponded");
 
-                expect("allResourcesLoaded").toHaveBeenTriggeredOn(this.requiredResources);
+                expect("allResourcesResponded").toHaveBeenTriggeredOn(this.requiredResources);
             });
         });
 
-        context("when all resources have not yet been loaded", function() {
-            it("should not trigger the allResourcesLoaded event", function() {
+        context("when all resources have not yet been fetched", function() {
+            it("should not trigger the allResourcesResponded event", function() {
                 var otherModel = rspecFixtures.dataset();
 
-                this.model.loaded = otherModel.loaded = false;
+                delete this.model.statusCode;
+                delete otherModel.statusCode;
 
-                spyOnEvent(this.requiredResources, 'allResourcesLoaded');
+                spyOnEvent(this.requiredResources, 'allResourcesResponded');
                 this.requiredResources.add(this.model);
                 this.requiredResources.add(otherModel);
 
-                this.model.loaded = true;
-                this.model.trigger("loaded");
+                this.model.statusCode = 422;
+                this.model.trigger("serverResponded");
 
-                expect("allResourcesLoaded").not.toHaveBeenTriggeredOn(this.requiredResources);
+                expect("allResourcesResponded").not.toHaveBeenTriggeredOn(this.requiredResources);
             });
         });
     });
 
 
-    describe("allLoaded", function() {
+    describe("allResponded", function() {
         beforeEach(function() {
             this.requiredResources.reset([this.model, this.collection]);
         });
         
-        it('returns true if all objects are loaded', function() {
-            this.model.loaded = true;
-            this.collection.loaded = true;
-            expect(this.requiredResources.allLoaded()).toBeTruthy();
+        it('returns true if all objects have responded', function() {
+            this.model.statusCode = 422;
+            this.collection.statusCode = 200;
+            expect(this.requiredResources.allResponded()).toBeTruthy();
         });
 
-        it('returns false if one is not loaded', function() {
-            this.model.loaded = true;
-            this.collection.loaded = false;
-            expect(this.requiredResources.allLoaded()).toBeFalsy();
+        it('returns false if one has not responded', function() {
+            this.model.statusCode = 200;
+            delete this.collection.statusCode;
+            expect(this.requiredResources.allResponded()).toBeFalsy();
         });
 
         it('returns true if empty', function() {
             this.requiredResources.reset();
-            expect(this.requiredResources.allLoaded()).toBeTruthy();
+            expect(this.requiredResources.allResponded()).toBeTruthy();
         });
     });
 

@@ -140,9 +140,6 @@ describe("chorus.views.DatabaseSidebarList", function() {
         beforeEach(function() {
             this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([]);
-            this.collection.serverErrors = [
-                {message: "Account map needed"}
-            ];
 
             var subclass = chorus.views.DatabaseSidebarList.extend({
                 templateName: "database_dataset_sidebar_list"
@@ -151,17 +148,13 @@ describe("chorus.views.DatabaseSidebarList", function() {
             this.view = new subclass({collection: this.collection, schema: this.schema });
 
             spyOn(this.view, "postRender").andCallThrough();
-            this.server.completeFetchFor(this.schema.database().schemas(), [
-                this.schema,
-                rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
-                rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
-            ]);
+            this.server.lastFetchAllFor(this.schema.database().schemas()).failForbidden();
         });
 
         it("should show the missing credentials error messages", function() {
             expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                 linkText: t("dataset.credentials.missing.linkText"),
-                instanceName: this.schema.database().instance().name()
+                dataSourceName: this.schema.database().instance().name()
             });
         });
     });

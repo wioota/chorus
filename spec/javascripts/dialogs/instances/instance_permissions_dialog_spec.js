@@ -518,7 +518,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("shows a toast message", function() {
                         expect(chorus.toast).toHaveBeenCalledWith("instances.remove_individual_account.toast", {
-                            instanceName: "myInstance",
+                            dataSourceName: "myInstance",
                             userName: "jim aardvark"
                         });
                     });

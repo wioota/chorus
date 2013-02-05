@@ -168,8 +168,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         }
 
         var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
-        var instanceName = this.resource.instance().name();
-        return chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
+        var dataSourceName = this.resource.instance().name();
+        return chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, dataSourceName: dataSourceName });
     },
 
     noCredentials: function() {

@@ -1,9 +1,9 @@
 chorus.RequiredResources = chorus.collections.Base.extend({
     constructorName: "RequiredResources",
 
-    allLoaded: function() {
+    allResponded: function() {
         return _.all(this.models, function(resource) {
-            return resource.loaded;
+            return resource.statusCode;
         });
     },
 
@@ -13,15 +13,15 @@ chorus.RequiredResources = chorus.collections.Base.extend({
 
         resources = _.isArray(resources) ? resources.slice() : [resources];
         _.each(resources, _.bind(function (resource) {
-            if(!resource.loaded) {
-                this.listenTo(resource, 'loaded', this.verifyResourcesLoaded);
+            if(!resource.statusCode) {
+                this.listenTo(resource, 'serverResponded', this.verifyResourcesResponded);
             }
         }, this));
     },
 
-    verifyResourcesLoaded: function() {
-        if (this.allLoaded()) {
-            this.trigger("allResourcesLoaded");
+    verifyResourcesResponded: function() {
+        if (this.allResponded()) {
+            this.trigger("allResourcesResponded");
         }
     },
 

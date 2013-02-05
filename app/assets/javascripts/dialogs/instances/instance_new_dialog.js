@@ -91,7 +91,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model);
-        chorus.toast('instances.add.toast', {instanceName: this.model.name()});
+        chorus.toast('instances.add.toast', {dataSourceName: this.model.name()});
         this.closeModal();
     },
 

@@ -2,19 +2,16 @@ describe("chorus.views.Base", function() {
     describe("initialize", function() {
         describe("resourcesLoaded", function() {
             beforeEach(function() {
-                this.model1 = new chorus.models.Base();
-                this.model2 = new chorus.models.Base();
-                spyOn(this.model1, 'url').andReturn('/foo/bar');
-                spyOn(this.model2, 'url').andReturn('/foo/quux');
+                this.model = new chorus.models.Base();
+                spyOn(this.model, 'url').andReturn('/foo/bar');
                 spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
                 spyOn(chorus.views.Base.prototype, 'render');
             });
 
             context("when the resources are already loaded", function() {
                 beforeEach(function() {
-                    this.model1.loaded = true;
-                    this.model2.loaded = true;
-                    this.view = new chorus.views.Base({requiredResources: [this.model1, this.model2]});
+                    spyOn(chorus.RequiredResources.prototype, 'allResponded').andReturn(true);
+                    this.view = new chorus.views.Base({requiredResources: this.model});
                 });
 
                 it("calls resourcesLoaded during initialization", function() {
@@ -24,11 +21,8 @@ describe("chorus.views.Base", function() {
 
             context("when the resources are not loaded", function() {
                 beforeEach(function() {
-                    this.model1.loaded = false;
-                    this.model2.loaded = false;
-                    this.model1.fetch();
-                    this.model2.fetch();
-                    this.view = new chorus.views.Base({requiredResources: [this.model1, this.model2]});
+                    spyOn(chorus.RequiredResources.prototype, 'allResponded').andReturn(false);
+                    this.view = new chorus.views.Base({requiredResources: this.model});
                 });
 
                 it("does not call resourcesLoaded during initialization", function() {
@@ -37,8 +31,7 @@ describe("chorus.views.Base", function() {
 
                 describe("once it has been loaded", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.model1);
-                        this.server.completeFetchFor(this.model2);
+                        this.view.requiredResources.trigger('allResourcesResponded');
                     });
 
                     it("calls resourcesLoaded after model has been loaded", function() {
@@ -327,7 +320,7 @@ describe("chorus.views.Base", function() {
 
                         context("and the required resources are loaded", function() {
                             beforeEach(function() {
-                                this.subviewModel.loaded = true;
+                                this.subviewModel.statusCode = 422;
                                 this.view.render();
                             });
 
@@ -1043,7 +1036,7 @@ describe("chorus.views.Base", function() {
 
                 context("when required resources are not loaded", function() {
                     beforeEach(function() {
-                        spyOn(this.view.requiredResources, 'allLoaded').andReturn(false);
+                        spyOn(this.view.requiredResources, 'allResponded').andReturn(false);
                         $(this.view.el).text('Old');
                         this.view.render();
                     });
@@ -1076,16 +1069,16 @@ describe("chorus.views.Base", function() {
                     beforeEach(function() {
                         this.resource = rspecFixtures.user();
                         this.view.requiredResources.push(this.resource);
-                        spyOn(this.view.requiredResources, 'allLoaded');
+                        spyOn(this.view.requiredResources, 'allResponded');
                     });
 
                     it("returns true if the resources are not yet loaded", function() {
-                        this.view.requiredResources.allLoaded.andReturn(false);
+                        this.view.requiredResources.allResponded.andReturn(false);
                         expect(this.view.displayLoadingSection()).toBeTruthy();
                     });
 
                     it("returns false if the resources are loaded", function() {
-                        this.view.requiredResources.allLoaded.andReturn(true);
+                        this.view.requiredResources.allResponded.andReturn(true);
                         expect(this.view.displayLoadingSection()).toBeFalsy();
                     });
                 });

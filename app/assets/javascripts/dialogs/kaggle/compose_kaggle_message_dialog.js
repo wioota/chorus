@@ -145,7 +145,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     },
 
     columnsLoaded: function() {
-        if (!this.requiredDatasets.allLoaded()) {
+        if (!this.requiredDatasets.allResponded()) {
             return;
         }
 

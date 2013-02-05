@@ -8,13 +8,13 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             objectType:"TABLE",
             id:"abc"
         });
-        this.instanceName = "john";
+        this.dataSourceName = "john";
         var dataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName:"original",
             schema:{
                 database:{
                     instance:{
-                        name:this.instanceName,
+                        name:this.dataSourceName,
                         id:11
                     }
                 }

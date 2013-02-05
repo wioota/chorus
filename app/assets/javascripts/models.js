@@ -296,6 +296,7 @@ chorus.models = {
                 var result = Backbone.Model.prototype.set.apply(this, [attrs, options]);
                 if(attrs && attrs.completeJson) {
                     this.loaded = true;
+                    this.statusCode = this.statusCode || 204;
                 }
                 return result;
             }

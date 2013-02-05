@@ -6,6 +6,7 @@ describe("chorus.views.DatasetShowContentHeader", function() {
             ]
         });
         this.model.loaded = false;
+        delete this.model.statusCode;
         this.model.fetch();
         this.view = new chorus.views.DatasetShowContentHeader({model: this.model});
         this.view.render();

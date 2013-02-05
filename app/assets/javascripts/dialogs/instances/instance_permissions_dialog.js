@@ -322,7 +322,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
         var alert = new chorus.alerts.RemoveIndividualAccount(
             {
-                instanceName: this.instance.get("name"),
+                dataSourceName: this.instance.get("name"),
                 name: selectedUser.displayName()
             });
 
@@ -339,7 +339,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         }, this);
         this.bindings.add(account, "destroy", function() {
             chorus.toast("instances.remove_individual_account.toast", {
-                instanceName: this.instance.get("name"),
+                dataSourceName: this.instance.get("name"),
                 userName: selectedUser.displayName()
             });
             this.collection.fetch();

@@ -26,6 +26,14 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         var ctx = this._super("additionalContext", arguments);
         ctx.isWorkspaceSchema = (this.schema && this.schema.get("id") === "workspaceSchema");
         ctx.error = this.collection && this.collection.serverErrors && this.collection.serverErrors.message;
+        if (this.collection && this.collection.statusCode === 403 && this.schemas.statusCode === 200) {
+            ctx.noCredentials = true;
+            ctx.noCredentialsWarning = t('dataset.credentials.insufficient',
+                {
+                    dataSourceName: this.schema.database().instance().name(),
+                    schemaName: this.schema.name()
+                });
+        }
         return ctx;
     },
 
@@ -53,7 +61,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.registerSubView(this.listview);
 
-        this.bindings.add(this.collection, 'loaded fetchFailed', this.render);
+        this.bindings.add(this.collection, 'serverResponded', this.render);
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
     },
 

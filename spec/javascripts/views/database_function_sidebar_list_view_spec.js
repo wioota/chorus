@@ -193,17 +193,11 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
             });
 
             context("when the functions fail to load", function () {
-                context("fail with Forbidden error", function () {
+                context("fails with forbidden", function () {
                     beforeEach(function () {
-                        this.server.completeFetchFor(this.schema.database().schemas(), [
-                            this.schema,
-                            rspecFixtures.schema({ name:"awesome_tables", id:"5" }),
-                            rspecFixtures.schema({ name:"orphaned_tables", id:"6" })
-                        ]);
+                        this.server.lastFetchFor(this.schema.database().schemas()).failForbidden();
 
-                        this.server.lastFetchFor(this.view.collection).failForbidden([
-                            {message: "Account map needed yo"}
-                        ]);
+                        this.server.lastFetchFor(this.view.collection).failForbidden();
                     });
 
                     it("does not show the loading spinner", function () {
@@ -220,7 +214,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                     });
                 });
 
-                context("fail with unprocessible entity", function () {
+                context("fails with unprocessable entity", function () {
                     beforeEach(function () {
                         this.server.completeFetchFor(this.schema.database().schemas(), [
                             this.schema,

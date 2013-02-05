@@ -55,6 +55,17 @@ describe("chorus.collections.FilteringCollection", function() {
         });
     });
 
+    describe("when the child collection's fetch responds", function () {
+        it("updates it's status code and triggers 'serverResponded'", function () {
+            var loaded = jasmine.createSpy('serverResponded');
+            this.collection.on('serverResponded', loaded);
+            this.childCollection.statusCode = 123;
+            this.childCollection.trigger('serverResponded');
+            expect(loaded).toHaveBeenCalled();
+            expect(this.collection.statusCode).toBe(123);
+        });
+    });
+
     describe("when the child collection is reset", function () {
         beforeEach(function () {
             this.childCollection.add(this.extraModel, {silent: true});

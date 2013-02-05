@@ -283,7 +283,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
                         expect(chorus.toast).toHaveBeenCalledWith('instances.add.toast',
-                            {instanceName: this.dialog.model.name()});
+                            {dataSourceName: this.dialog.model.name()});
                     });
 
                     it("publishes the 'instance:added' page event with the new instance's id", function() {

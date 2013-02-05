@@ -4,6 +4,7 @@ describe("chorus.views.TagBox", function() {
             tags: []
         });
         this.model.loaded = false;
+        delete this.model.statusCode;
         this.model.fetch();
         this.view = new chorus.views.TagBox({model: this.model});
 

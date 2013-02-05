@@ -130,7 +130,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.view.render();
                 expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                     linkText: t("dataset.credentials.missing.linkText"),
-                    instanceName: this.dataset.instance().name()
+                    dataSourceName: this.dataset.instance().name()
                 });
             });
 

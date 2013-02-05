@@ -267,12 +267,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
         });
 
         context("if the tables and views fetch fails", function () {
-            context("when the user doesn't have an account for the sandbox", function () {
+            context("when the user doesn't have an account for the data source", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(this.schema.database().schemas());
-                    this.server.lastFetchFor(this.schema.datasets()).failForbidden([
-                        {message:"Account map needed"}
-                    ]);
+                    this.server.lastFetchFor(this.schema.database().schemas()).failForbidden();
+                    this.server.lastFetchFor(this.schema.datasets()).failForbidden();
                     this.view.render();
                 });
 
@@ -283,6 +281,22 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
                 it("launches the correct dialog when the 'click here' credentials link is clicked", function () {
                     this.view.$('.no_credentials .add_credentials').click();
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
+                });
+            });
+
+            context("when the user's account doesn't have access to the schema", function() {
+                beforeEach(function () {
+                    this.server.completeFetchFor(this.schema.database().schemas());
+                    this.server.lastFetchFor(this.schema.datasets()).failForbidden();
+                    this.view.render();
+                });
+
+                it("does not show the loading spinner", function () {
+                    expect(this.view.$(".loading_section")).not.toExist();
+                });
+
+                it("shows the insufficient credentials warning", function() {
+                   expect(this.view.$(".no_credentials")).toContainTranslation("dataset.credentials.insufficient", {dataSourceName: this.schema.database().instance().name(), schemaName: this.schema.name()});
                 });
             });
 

@@ -360,16 +360,16 @@
             var database = schema.database();
 
             var schemaPieces = [];
-            var instanceName = instance.name();
+            var dataSourceName = instance.name();
             var databaseName = chorus.helpers.withSearchResults(database).name();
             var schemaName = chorus.helpers.withSearchResults(schema).name();
 
             if (dataset.get('hasCredentials') === false) {
-                schemaPieces.push(instanceName);
+                schemaPieces.push(dataSourceName);
                 schemaPieces.push(databaseName);
                 schemaPieces.push(schemaName);
             } else {
-                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instanceName, {"class": "instance"}).toString());
+                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), dataSourceName, {"class": "instance"}).toString());
                 schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
                 schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString());
             }

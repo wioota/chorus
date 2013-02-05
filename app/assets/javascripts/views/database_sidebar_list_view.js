@@ -22,7 +22,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 schemaAssociated: false
             };
         } else {
-            var errorMessage = this.collection && this.collection.serverErrors && this.collection.serverErrors[0] && this.collection.serverErrors[0].message;
             return {
                 schemaAssociated: true,
                 schemaName: this.schema && this.schema.get("name"),
@@ -34,10 +33,10 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                         isCurrent: this.schema.get('id') === schema.get('id')
                     };
                 }, this),
-                noCredentials: errorMessage && errorMessage.match(/Account.*map.*needed/),
+                noCredentials: this.schemas.statusCode === 403,
                 noCredentialsWarning: chorus.helpers.safeT("dataset.credentials.missing.body", {
                     linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
-                    instanceName: this.schema.database().instance().name()
+                    dataSourceName: this.schema.database().instance().name()
                 })
             };
         }

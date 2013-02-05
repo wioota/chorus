@@ -40,12 +40,14 @@
         },
 
         makeSuccessFunction: function(options, success) {
-            return function(collection, data, xhr) {
+            return function(resource, data, fetchOptions) {
+                resource.statusCode = 200;
                 if (!options.silent) {
-                    collection.trigger('loaded');
+                    resource.trigger('loaded');
+                    resource.trigger('serverResponded');
                 }
                 if (success) {
-                    success(collection, data, xhr);
+                    success(resource, data, fetchOptions);
                 }
             };
         },
@@ -60,7 +62,7 @@
             var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
             options.error = function(collection_or_model, xhr) {
-                collection_or_model.handleRequestFailure("fetchFailed", xhr);
+                collection_or_model.handleRequestFailure("fetchFailed", xhr, options);
                 if (error) error(collection_or_model, xhr);
             };
 
@@ -69,7 +71,7 @@
             }, this));
         },
 
-        parse: function(data, xhr) {
+        parse: function(data) {
             this.loaded = true;
             this.pagination = data.pagination;
             delete this.serverErrors;
@@ -94,19 +96,22 @@
         respondToErrors: function(status, options) {
             options = options || {};
 
-            status = parseInt(status, 10);
-            if (status === 401) {
+            this.statusCode = parseInt(status, 10);
+            if (this.statusCode === 401) {
                 chorus.session.trigger("needsLogin");
-            } else if (status === 403) {
+            } else if (this.statusCode === 403) {
                 this.trigger("resourceForbidden");
-            } else if (status === 404) {
+            } else if (this.statusCode === 404) {
                 options.notFound ? options.notFound() : this.trigger("resourceNotFound");
-            } else if (status === 422) {
+            } else if (this.statusCode === 422) {
                 options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
-            } else if (status === 500) {
+            } else if (this.statusCode === 500) {
                 var toastOpts = {};
                 if(window.INTEGRATION_MODE) { toastOpts.sticky = true; }
                 chorus.toast("server_error", {toastOpts: toastOpts});
+            }
+            if (!options.silent) {
+                this.trigger('serverResponded');
             }
         }
     };

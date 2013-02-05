@@ -21,7 +21,7 @@ chorus.views.Bare = Backbone.View.include(
             this.bindCallbacks();
             this.bindHotkeys();
 
-            if (this.requiredResources.length !== 0 && this.requiredResources.allLoaded()) {
+            if (this.requiredResources.length !== 0 && this.requiredResources.allResponded()) {
                 this.resourcesLoaded();
             }
         },
@@ -116,7 +116,7 @@ chorus.views.Bare = Backbone.View.include(
 
             this.requiredResources = new chorus.RequiredResources();
 
-            this.listenTo(this.requiredResources, 'allResourcesLoaded', function() {
+            this.listenTo(this.requiredResources, 'allResourcesResponded', function() {
                 this.resourcesLoaded();
                 this.render();
             });
@@ -146,7 +146,7 @@ chorus.views.Bare = Backbone.View.include(
 
             var evaluatedContext = {};
             if (!this.displayLoadingSection()) {
-                if (!this.requiredResources.allLoaded()) {
+                if (!this.requiredResources.allResponded()) {
                     return this;
                 }
                 // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
@@ -199,7 +199,7 @@ chorus.views.Bare = Backbone.View.include(
                         element.replaceWith(view.el);
                     }
 
-                    if (!view.requiredResources || view.requiredResources.allLoaded()) {
+                    if (!view.requiredResources || view.requiredResources.allResponded()) {
                         view.render();
                     }
                     view.delegateEvents();
@@ -419,7 +419,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             return false;
         }
         if (this.requiredResources.length > 0) {
-            return !this.requiredResources.allLoaded();
+            return !this.requiredResources.allResponded();
         } else {
             return this.resource && !this.resource.loaded;
         }

@@ -11,6 +11,7 @@ chorus.collections.FilteringCollection = chorus.collections.Base.extend({
         }
         this.attributes.collection.on('reset loaded', this.updateCollection, this);
         this.attributes.collection.on('loaded', this.markLoaded, this);
+        this.attributes.collection.on('serverResponded', this.markResponded, this);
         this.updateCollection();
     },
 
@@ -23,6 +24,11 @@ chorus.collections.FilteringCollection = chorus.collections.Base.extend({
     markLoaded: function () {
         this.loaded = true;
         this.trigger('loaded');
+    },
+
+    markResponded: function() {
+        this.statusCode = this.attributes.collection.statusCode;
+        this.trigger('serverResponded');
     },
 
     updateCollection: function () {

@@ -104,6 +104,7 @@ chorus.collections = {
                             if (page >= total) {
                                 collection.trigger("reset", collection);
                                 collection.trigger("loaded");
+                                collection.trigger("serverResponded");
                             } else {
                                 collection.loaded = false;
                                 fetchPage.call(collection, page + 1);
@@ -112,6 +113,7 @@ chorus.collections = {
                         error: function(collection) {
                             collection.trigger("reset", collection);
                             collection.trigger("loaded");
+                            collection.trigger("serverResponded");
                         }
                     });
                 };
