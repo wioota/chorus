@@ -20,23 +20,37 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when the given workfile is a SQL file", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.sql();
-                spyOn(chorus.views, "ArchivedWorkfileContentDetails");
-                spyOn(chorus.views, "SqlWorkfileContentDetails");
             });
 
             context("when its workspace is active (not archived)", function() {
-                it("instantiates a SqlWorkfileContentDetails view with the given workfile", function() {
-                    spyOn(this.model.workspace(), 'isActive').andReturn(true);
-                    chorus.views.WorkfileContentDetails.buildFor(this.model);
-                    expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                context("when the workspace is updateable", function() {
+                    beforeEach(function() {
+                        spyOn(this.model.workspace(), 'canUpdate').andReturn(true);
+                        spyOn(this.model.workspace(), 'isActive').andReturn(true);
+                    });
+
+                    it("instantiates a SqlWorkfileContentDetails view", function() {
+                        var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                        expect(contentDetails).toBeA(chorus.views.SqlWorkfileContentDetails);
+                    });
+                });
+                context("when the workspace is not updateable", function() {
+                    beforeEach(function() {
+                        spyOn(this.model.workspace(), 'canUpdate').andReturn(false);
+                    });
+
+                    it("instantiates a ReadOnlyWorkfileContentDetails", function() {
+                        var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                        expect(contentDetails).toBeA(chorus.views.ReadOnlyWorkfileContentDetails);
+                    });
                 });
             });
 
             context("when its workspace is archived", function() {
-                it("instantiates a ArchivedWorkfileContentDetails view with the given workfile", function() {
+                it("instantiates a ArchivedWorkfileContentDetails view", function() {
                     spyOn(this.model.workspace(), 'isActive').andReturn(false);
-                    chorus.views.WorkfileContentDetails.buildFor(this.model);
-                    expect(chorus.views.ArchivedWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                    var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                    expect(contentDetails).toBeA(chorus.views.ArchivedWorkfileContentDetails);
                 });
             });
         });
@@ -48,7 +62,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates an AlpineWorkfileContentDetails view with the given workfile", function() {
+            it("instantiates an AlpineWorkfileContentDetails view", function() {
                 expect(this.view).toBeA(chorus.views.AlpineWorkfileContentDetails);
             });
         });
@@ -60,7 +74,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates an TableauWorkfileContentDetails view with the given workfile", function() {
+            it("instantiates an TableauWorkfileContentDetails view", function() {
                 expect(this.view).toBeA(chorus.views.TableauWorkfileContentDetails);
             });
         });
@@ -68,25 +82,22 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when the workfile is a binary file", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.binary();
-                spyOn(chorus.views, "BinaryWorkfileContentDetails");
-                chorus.views.WorkfileContentDetails.buildFor(this.model);
+                this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates a BinaryWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.BinaryWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+            it("instantiates a BinaryWorkfileContentDetails view", function() {
+                expect(this.view).toBeA(chorus.views.BinaryWorkfileContentDetails);
             });
         });
 
         context("when given anything else", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.text();
-                spyOn(chorus.views, "WorkfileContentDetails");
-                chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
-                chorus.views.WorkfileContentDetails.buildFor(this.model);
+                this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates an WorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.WorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+            it("instantiates an WorkfileContentDetails view", function() {
+                expect(this.view).toBeA(chorus.views.WorkfileContentDetails);
             });
         });
     });
