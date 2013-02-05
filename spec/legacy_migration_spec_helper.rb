@@ -37,8 +37,8 @@ RSpec.configure do |config|
     end
 
     any_instance_of(WorkfileMigrator::LegacyFilePath) do |p|
-      # Stub everything with a PNG so paperclip doesn't blow up
-      stub(p).path { Rails.root.join "spec/fixtures/small2.png" }
+      # Stub everything with a text file so paperclip doesn't blow up
+      stub(p).path { Rails.root.join "spec/fixtures/some.txt" }
     end
 
     # quiet the tests

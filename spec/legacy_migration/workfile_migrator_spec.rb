@@ -204,7 +204,8 @@ WHERE edc_work_file.id = '#{legacy_workfile["id"]}'
         it "attaches the legacy workfile draft content to the new workfile draft model" do
           @legacy_drafts.each do |legacy_draft|
             new_draft = WorkfileDraft.find_by_legacy_id(legacy_draft["id"])
-            new_draft.content.should be_present
+            fake_file = File.new(Rails.root.join "spec/fixtures/some.txt")
+            new_draft.content.should == fake_file.read
           end
         end
       end

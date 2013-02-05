@@ -177,7 +177,7 @@ class WorkfileMigrator < AbstractMigrator
             WHERE edc_workfile_draft.id = '#{workfile_draft.legacy_id}';
           ").first
           path = LegacyFilePath.new(options[:workfile_path], "workfile", row["workspace_id"], row["draft_file_id"])
-          workfile_draft.content = StringIO.new(File.read(path.path))
+          workfile_draft.content = File.read(path.path)
           workfile_draft.save(:validate => false)
         end
 
