@@ -1,5 +1,9 @@
 (function () {
-    var colors = {
+    /*  Copy these directly from common.scss and use regex replace
+        (\$[^ \s]*)\s*: ([^\s]*);  ------------------>   "$1": "$2",
+    */
+
+    var backgroundColors = {
         "$body-background-color": "#EAEFF6",
         "$body-glow-color ": "#C8DCED",
         "$shaded-background-color": "#E1E5E9",
@@ -29,12 +33,45 @@
         "$tab-gradient-color ": "#D5E0EB"
     };
 
+    var borderColors = {
+        "$border-color": "#D0D0D0",
+        "$weak-header-border-color": "#bebfc9",
+        "$subheader-border-color": "#D1D4D7",
+        "$subheader-border-color-dark": "#A4A6A8",
+        "$guts-border-color": "#CCD2D7",
+        "$pagination-border-color": "#A4A6A8",
+        "$menu-border-color": "#B0B0B0",
+        "$header-border-color": "#8A97A2",
+        "$list-border-color": "#B9BBBD",
+        "$content-details-action-link-border-color": "#98B675",
+        "$results-console-border-color": "#88A8D3",
+        "$type-ahead-result-border-color": "#A5A6A8"
+    };
+
+    var textColors = {
+        "$color-text1": "black",
+        "$color-text2": "#5f5f5f",
+        "$color-text3": "#7D7D7D",
+        "$color-text4": "#959595",
+        "$color-text5": "#464646",
+        "$error-text-color": "white",
+        "$error-color": "white",
+        "$link-color": "#2c95dd",
+        "$content-header-link-color": "$color-text4",
+        "$content-details-action-link-color": "#4E7225",
+        "$content-details-create-bar-link-color": "#608437"
+    };
+
     chorus.views.ColorPaletteView = chorus.views.Base.extend({
         constructorName: "StyleGuideColorPaletteView",
         templateName:"style_guide_color_palette",
 
         context:function () {
-            return { colors: colors };
+            return {
+                backgroundColors: backgroundColors,
+                borderColors: borderColors,
+                textColors: textColors
+            };
         }
     });
 })();
