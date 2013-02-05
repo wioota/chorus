@@ -41,18 +41,35 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "name": "my first tag"
         });
 
-        models.instance = new chorus.models.Instance({
-            "name": "Owners"
+        models.greenplumDataSource = new chorus.models.GpdbDataSource({
+            "name": "Greenplum Data Source",
+            "online": true
+        });
+
+        models.oracleDataSource = new chorus.models.OracleDataSource({
+            "name": "Oracle Data Source",
+            "online": false
+        });
+
+        models.hadoopInstance = new chorus.models.HadoopInstance({
+            name: "Angry Elephant",
+            online: true
+        });
+
+        models.gnipInstance = new chorus.models.GnipInstance({
+            name: "Some Gnip Source",
+            online: true,
+            entityType: "gnip_instance"
         });
 
         models.database = new chorus.models.Database({
             "name": "Some database",
-            "instance": models.instance
+            "instance": models.greenplumDataSource
         });
 
         models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "instance": models.instance
+            "instance": models.greenplumDataSource
         });
 
         models.schema = new chorus.models.Schema({
@@ -124,6 +141,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         collections.schemaSet = new chorus.collections.SchemaSet([models.schema, models.otherSchema]);
         collections.schemaSet.loaded = true;
+
+        collections.dataSourceSet = new chorus.collections.DataSourceSet([models.oracleDataSource, models.greenplumDataSource]);
+        collections.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([models.hadoopInstance]);
+        collections.gnipInstanceSet = new chorus.collections.GnipInstanceSet([models.gnipInstance]);
+        collections.dataSourceSet.loaded = collections.hadoopInstanceSet.loaded = collections.gnipInstanceSet.loaded = true;
 
         collections.loadingCollection = new chorus.collections.UserSet();
         collections.userCollection = new chorus.collections.UserSet([
@@ -393,7 +415,20 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Schema list": new chorus.views.MainContentList({
                 collection: collections.schemaSet,
                 modelClass: "Schema"
-            })
+            }),
+
+            "Data source list": (function() {
+                var options = {
+                    dataSources: collections.dataSourceSet,
+                    hadoopInstances: collections.hadoopInstanceSet,
+                    gnipInstances: collections.gnipInstanceSet
+                };
+
+                return new chorus.views.MainContentView({
+                    contentDetails: new chorus.views.InstanceIndexContentDetails(options),
+                    content: new chorus.views.InstanceList(options)
+                });
+            })()
         };
     },
 
@@ -423,7 +458,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         return this;
     },
 
-//    Used to ensure scrolling works after re-rendering dialog
+    // Used to ensure scrolling works after re-rendering dialog
     enableScrolling: function() {
         $("body").css("overflow", "visible");
     }
