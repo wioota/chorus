@@ -104,6 +104,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "objectType": "TABLE"
         });
 
+        models.workfile = new chorus.models.Workfile({
+            "fileName": "Some workfile"
+        });
+
+        models.otherWorkfile = new chorus.models.Workfile({
+            "fileName": "Other workfile.sql"
+        });
+
         models.task = (function() {
             var animals = ['aardvark', 'bat', 'cheetah'];
             var columns = [
@@ -146,6 +154,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([models.hadoopInstance]);
         collections.gnipInstanceSet = new chorus.collections.GnipInstanceSet([models.gnipInstance]);
         collections.dataSourceSet.loaded = collections.hadoopInstanceSet.loaded = collections.gnipInstanceSet.loaded = true;
+
+        collections.workfileSet = new chorus.collections.WorkfileSet([models.workfile, models.otherWorkfile]);
+        collections.workfileSet.loaded = true;
 
         collections.loadingCollection = new chorus.collections.UserSet();
         collections.userCollection = new chorus.collections.UserSet([
@@ -404,7 +415,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Dataset list": new chorus.views.MainContentList({
                 collection: collections.datasetSet,
-                modelClass: "Dataset"
+                modelClass: "Dataset",
+                checkable: true
             }),
 
             "Database list": new chorus.views.MainContentList({
@@ -428,7 +440,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     contentDetails: new chorus.views.InstanceIndexContentDetails(options),
                     content: new chorus.views.InstanceList(options)
                 });
-            })()
+            })(),
+
+            "Workfile list": new chorus.views.MainContentList({
+                collection: collections.workfileSet,
+                modelClass: "Workfile",
+                checkable: true
+            })
         };
     },
 
