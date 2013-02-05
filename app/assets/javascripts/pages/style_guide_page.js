@@ -29,9 +29,16 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     buildModels: function() {
         var models = {};
 
-        models.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
+        models.workspace = new chorus.models.Workspace({ name: "Some Workspace", description: "One awesome workspace", owner: {firstName: "Bob", lastName: "Lablaw"}, "public": true, archivedAt: null});
         models.workspace.loaded = true;
         models.workspace._sandbox = new chorus.models.Sandbox();
+
+        models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", description: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
+        models.privateWorkspace.loaded = true;
+
+        models.archivedWorkspace = new chorus.models.Workspace({ name: "Archived Workspace", description: "Lots of secrets here", owner: {firstName: "The", lastName: "Past"}, "public": false, archiver: {firstName: "Mr", lastName: "Archiver"}, archivedAt: "1985-07-21T06:21:02Z"});
+        models.archivedWorkspace.loaded = true;
+
 
         models.instanceAccount = new chorus.models.InstanceAccount();
 
@@ -140,6 +147,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     buildCollections: function(models) {
         var collections = {};
+
+        collections.workspaceSet = new chorus.collections.WorkspaceSet([models.workspace, models.privateWorkspace, models.archivedWorkspace]);
+        collections.workspaceSet.loaded = true;
 
         collections.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
         collections.datasetSet.loaded = true;
@@ -446,6 +456,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 collection: collections.workfileSet,
                 modelClass: "Workfile",
                 checkable: true
+            }),
+
+            "Workspace List": new chorus.views.MainContentList({
+                collection: collections.workspaceSet,
+                modelClass: "Workspace"
             })
         };
     },
