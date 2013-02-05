@@ -39,6 +39,21 @@ describe("chorus.views.Workfile", function() {
             expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
             expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
         });
+
+        it("tags should link to the tag show page", function () {
+            expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/tags/tag1");
+        });
+
+        describe("when tags are scoped to a workfile", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Workfile({ model: this.model, tagWorkspaceId: 123 });
+                this.view.render();
+            });
+
+            it("tags link to the workspace-specific tag show page", function() {
+                expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/workspaces/123/tags/tag1");
+            });
+        });
     });
 
     context("when the workfile has one comment", function() {

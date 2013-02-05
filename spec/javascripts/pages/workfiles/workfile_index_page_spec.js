@@ -75,6 +75,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         it("passes the multiSelect option to the list content details", function() {
             expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
         });
+
+        it("passes the tagWorkspaceId option as listItemOptions to the main content options", function() {
+            expect(this.page.mainContent.content.options.listItemOptions.tagWorkspaceId).toBe(this.workspace.id);
+        });
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {

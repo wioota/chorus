@@ -45,6 +45,8 @@
             ["workspaces/:workspaceId/kaggle", "KaggleUserIndex"],
             ["workspaces/:workspaceId/search/:query", "WorkspaceSearchIndex"],
             ["workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
+            ["workspaces/:workspaceId/tags/:name", "WorkspaceTagShow"],
+            ["workspaces/:workspaceId/tags/:scope/:entityType/:name", "WorkspaceTagShow"],
             ["data_sources", "DataSourceIndex"],
             ["data_sources/:dataSourceId/databases", "DatabaseIndex"],
             ["databases/:databaseId", "GpdbSchemaIndex"],

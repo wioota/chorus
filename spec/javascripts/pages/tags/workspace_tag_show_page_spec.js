@@ -1,56 +1,74 @@
-describe("chorus.pages.WorkspaceSearchIndexPage", function() {
+describe("chorus.pages.WorkspaceTagShowPage", function() {
+    var tag, page, workspace;
     beforeEach(function() {
-        this.workspaceId = '101';
-        this.query = 'foo';
-        this.page = new chorus.pages.WorkspaceSearchIndexPage(this.workspaceId, "this_workspace", "all", this.query);
+        workspace = rspecFixtures.workspace({id: 101});
+        tag = new chorus.models.Tag({name: "tag-name"});
+        page = new chorus.pages.WorkspaceTagShowPage(workspace.id, "this_workspace", "all", tag.name());
     });
 
-    it("fetches the right search result", function() {
-        expect(this.page.search.get("query")).toBe("foo");
-        expect(this.page.search.get("workspaceId")).toBe("101");
+    describe("breadcrumbs", function() {
+        beforeEach(function() {
+            page.render();
+        });
+
+        it("displays the Tags breadcrumb", function() {
+            var breadcrumbs = page.$("#breadcrumbs .breadcrumb a");
+
+            expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
+            expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
+
+            expect(breadcrumbs.eq(1).attr("href")).toBe("#/tags");
+            expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.tags"));
+
+            expect(page.$("#breadcrumbs .breadcrumb .slug")).toContainText(tag.name());
+        });
+    });
+
+    it("searches tags", function() {
+        expect(page.search.get("isTag")).toBeTruthy();
     });
 
     it("fetches the workspace", function() {
-        expect(this.page.search.workspace()).toHaveBeenFetched();
+        expect(page.search.workspace()).toHaveBeenFetched();
     });
 
     it("has no required resources", function() {
-       expect(this.page.requiredResources.length).toBe(0);
+        expect(page.requiredResources.length).toBe(0);
     });
 
-    describe("when the workspace and search are fetched", function() {
+    describe("when the workspace and tagged objects are fetched", function() {
         context("when the search is scoped", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, { thisWorkspace: { docs: [], numFound: 0 }});
-                this.server.completeFetchFor(this.page.search.workspace(), { id: "101", name: "Bob the workspace" });
+                this.server.completeFetchFor(page.search, { thisWorkspace: { docs: [], numFound: 0 }});
+                this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
             });
 
-            it("includes the workspace in the breadcrumbs", function() {
-                var crumbs = this.page.$("#breadcrumbs li");
+            xit("includes the workspace in the breadcrumbs", function() {
+                var crumbs = page.$("#breadcrumbs li");
                 expect(crumbs.length).toBe(3);
                 expect(crumbs.eq(0)).toContainTranslation("breadcrumbs.home");
                 expect(crumbs.eq(1).text().trim()).toBe("Bob the workspace");
-                expect(crumbs.eq(1).find("a")).toHaveHref(this.page.search.workspace().showUrl());
+                expect(crumbs.eq(1).find("a")).toHaveHref(page.search.workspace().showUrl());
                 expect(crumbs.eq(2)).toContainTranslation("breadcrumbs.search_results");
             });
 
             it("disables the 'instances', 'people', 'hdfs entries' and 'workspaces' options in the filter menu", function() {
-                var menuOptions = this.page.$(".default_content_header .link_menu.type li");
-                expect(menuOptions.find("a").length).toBe(4);
+                var menuOptions = page.$(".default_content_header .link_menu.type li");
+                expect(menuOptions.find("a").length).toBe(3);
 
                 expect(menuOptions.filter("[data-type=instance]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=workspace]")).not.toContain("a");
                 expect(menuOptions.filter("[data-type=hdfs_entry]")).not.toContain("a");
+                expect(menuOptions.filter("[data-type=attachment]")).not.toContain("a");
 
-                expect(menuOptions.filter("[data-type=attachment]")).toContain("a");
                 expect(menuOptions.filter("[data-type=workfile]")).toContain("a");
                 expect(menuOptions.filter("[data-type=dataset]")).toContain("a");
                 expect(menuOptions.filter("[data-type=all]")).toContain("a");
             });
 
             it("has the 'this workspace' option in the 'Search in' menu", function() {
-                var searchInMenu = this.page.$(".default_content_header .search_in");
+                var searchInMenu = page.$(".default_content_header .search_in");
                 var searchInOptions = searchInMenu.find(".menu li");
 
                 expect(searchInOptions.length).toBe(3);
@@ -64,13 +82,13 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
         context("when searching all of chorus", function() {
             beforeEach(function() {
                 this.server.reset();
-                this.page = new chorus.pages.WorkspaceSearchIndexPage(this.workspaceId, this.query);
-                this.server.completeFetchFor(this.page.search, { thisWorkspace: { docs: [], numFound: 0 }});
-                this.server.completeFetchFor(this.page.search.workspace(), { id: "101", name: "Bob the workspace" });
+                page = new chorus.pages.WorkspaceTagShowPage(workspace.id, this.query);
+                this.server.completeFetchFor(page.search, { thisWorkspace: { docs: [], numFound: 0 }});
+                this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
             });
 
             it("enables all options in the filter menu", function() {
-                var menuOptions = this.page.$(".default_content_header li");
+                var menuOptions = page.$(".default_content_header li");
 
                 expect(menuOptions.filter("[data-type=instance]")).toContain("a");
                 expect(menuOptions.filter("[data-type=user]")).toContain("a");
@@ -84,17 +102,17 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
 
         context("called resourcesLoaded only when both workspace and search fetches completes", function () {
             beforeEach(function () {
-                this.server.completeFetchFor(this.page.search.workspace(), { id: "101", name: "Bob the workspace" });
+                this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
             });
 
             it("doesn't create mainContentView", function () {
-                expect(this.page.mainContent).toBeUndefined();
+                expect(page.mainContent).toBeUndefined();
             });
 
             it("includes a section for every type of item when both fetches completes", function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
 
-                var sections = this.page.$(".search_result_list ul");
+                var sections = page.$(".search_result_list ul");
                 expect(sections.filter(".user_list.selectable")).toExist();
                 expect(sections.filter(".workfile_list.selectable")).toExist();
                 expect(sections.filter(".attachment_list.selectable")).toExist();
@@ -107,6 +125,6 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
     });
 
     it("sets the workspace id, for prioritizing search", function() {
-        expect(this.page.workspaceId).toBe('101');
+        expect(page.workspaceId).toBe(101);
     });
 });

@@ -7,7 +7,8 @@ describe("chorus.views.CheckableList", function() {
         this.view = new chorus.views.CheckableList({
             entityType: 'dataset',
             entityViewType: chorus.views.Dataset,
-            collection: this.collection
+            collection: this.collection,
+            listItemOptions: {itemOption: 123}
         });
 
         spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
@@ -43,6 +44,10 @@ describe("chorus.views.CheckableList", function() {
         it("selects the first item", function() {
             expect(this.view.$("> li").eq(0)).toHaveClass("selected");
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", this.collection.at(0));
+        });
+
+        it("sets the list item options on the child list item views", function() {
+            expect(this.view.liViews[0].options.itemOption).toBe(123);
         });
     });
 

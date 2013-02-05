@@ -8,8 +8,9 @@ chorus.pages.TagShowPage = chorus.pages.SearchIndexPage.extend({
         ];
     },
 
-    setup: function(name) {
-        this._super("setup", arguments);
+    makeModel: function() {
+        var name = Array.prototype.slice.call(arguments, -1)[0];
+        this._super("makeModel", arguments);
         this.tagModel = new chorus.models.Tag({name: name});
     },
 

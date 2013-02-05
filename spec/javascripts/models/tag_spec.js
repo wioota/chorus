@@ -19,6 +19,12 @@ describe("chorus.models.tag", function() {
             expect(this.tag.showUrl()).toBe("#/tags/" + this.tag.name());
         });
 
+        describe("when a workspaceId is provided", function() {
+            it("shows the URL for the tag scoped to the workspace", function() {
+                expect(this.tag.showUrl(123)).toBe("#/workspaces/123/tags/" + this.tag.name());
+            });
+        });
+
         describe("when the tag name has special characters", function() {
             beforeEach(function() {
                 this.tag.set({ name: '!@#$%^&*()"'});

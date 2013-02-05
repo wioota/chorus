@@ -30,6 +30,7 @@ chorus.views.Workfile = chorus.views.Base.extend({
         ctx.tableauIcon = chorus.helpers.tableauIcon();
         ctx.checkable = this.options.checkable;
         ctx.tags = this.model.tags().models;
+        ctx.tagWorkspaceId = this.options.tagWorkspaceId;
 
         var lastComment = this.model.lastComment();
         if (lastComment) {
