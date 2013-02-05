@@ -366,21 +366,22 @@ chorus.views.Base = chorus.views.Bare.extend({
 
     bindCallbacks: function() {
         if (this.resource) {
-            this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
-            this.bindings.add(this.resource, "validated", this.clearErrors);
+            this.listenTo(this.resource, "saveFailed validationFailed", this.showErrors);
+            this.listenTo(this.resource, "validated", this.clearErrors);
             if (!this.persistent) {
-                this.bindings.add(this.resource, "change reset sort", this.render);
+                this.listenTo(this.resource, "change reset sort", this.render);
             }
         }
     },
 
     unbindCallbacks: function() {
         if(this.resource) {
-            this.bindings.remove(this.resource, "saveFailed", this.showErrors);
-            this.bindings.remove(this.resource, "validationFailed", this.showErrors);
-            this.bindings.remove(this.resource, "validated", this.clearErrors);
-            this.bindings.remove(this.resource, "change", this.render);
-            this.bindings.remove(this.resource, "reset", this.render);
+            this.stopListening(this.resource, "saveFailed", this.showErrors);
+            this.stopListening(this.resource, "validationFailed", this.showErrors);
+            this.stopListening(this.resource, "validated", this.clearErrors);
+            this.stopListening(this.resource, "change", this.render);
+            this.stopListening(this.resource, "reset", this.render);
+            this.stopListening(this.resource, "sort", this.render);
         }
     },
 
