@@ -46,13 +46,26 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         });
 
         models.database = new chorus.models.Database({
-            "name": "default",
+            "name": "Some database",
+            "instance": models.instance
+        });
+
+        models.otherDatabase = new chorus.models.Database({
+            "name": "Another database",
             "instance": models.instance
         });
 
         models.schema = new chorus.models.Schema({
-            "name": "default",
-            "database": models.database
+            "name": "Some schema",
+            "database": models.database,
+            "datasetCount": 3,
+            "refreshedAt": true
+        });
+        
+        models.otherSchema = new chorus.models.Schema({
+           "name": "Other schema",
+            "database": models.database,
+            refreshedAt: null
         });
 
         models.dataset = new chorus.models.Dataset({
@@ -77,12 +90,18 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
         models.datasetSet.loaded = true;
 
-        //necessary for collection views down at the bottom
+        models.databaseSet = new chorus.collections.DatabaseSet([models.database, models.otherDatabase]);
+        models.databaseSet.loaded = true;
+
+        models.schemaSet = new chorus.collections.SchemaSet([models.schema, models.otherSchema]);
+        models.schemaSet.loaded = true;
+
+
         models.loadingCollection = new chorus.collections.UserSet();
         models.userCollection = new chorus.collections.UserSet([
-            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1"}),
-            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2"}),
-            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3"})
+            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}}),
+            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}}),
+            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}})
         ]);
 
         models.userCollection.loaded = true;
@@ -177,6 +196,16 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Dataset list": new chorus.views.MainContentList({
                 collection: models.datasetSet,
                 modelClass: "Dataset"
+            }),
+
+            "Database list": new chorus.views.MainContentList({
+                collection: models.databaseSet,
+                modelClass: "Database"
+            }),
+
+            "Schema list": new chorus.views.MainContentList({
+                collection: models.schemaSet,
+                modelClass: "Schema"
             }),
 
             "Data Table": new chorus.views.TaskDataTable({
