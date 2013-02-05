@@ -26,29 +26,65 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     tagName: "ul",
     className: "views",
 
-    initialize: function() {
-        _.defer(_.bind(this.render, this));
-        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
-        this.workspace.loaded = true;
-        this.workspace._sandbox = new chorus.models.Sandbox();
-        this.instanceAccount = new chorus.models.InstanceAccount();
-        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"});
+    buildModels: function() {
+        var models = {};
 
-        //ChartTask require a dataset
-        this.dataset = new chorus.models.Dataset({ id : 1});
-        this.dataset.loaded = true;
+        models.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
+        models.workspace.loaded = true;
+        models.workspace._sandbox = new chorus.models.Sandbox();
+
+        models.instanceAccount = new chorus.models.InstanceAccount();
+
+        models.subNav = new chorus.views.SubNav({model: models.workspace, tab: "workfiles"});
+
+        models.tag = new chorus.models.Tag({
+            "name": "my first tag"
+        });
+
+        models.instance = new chorus.models.Instance({
+            "name": "Owners"
+        });
+
+        models.database = new chorus.models.Database({
+            "name": "default",
+            "instance": models.instance
+        });
+
+        models.schema = new chorus.models.Schema({
+            "name": "default",
+            "database": models.database
+        });
+
+        models.dataset = new chorus.models.Dataset({
+            "type": "SOURCE_TABLE",
+            "objectName": "table",
+            "schema": models.schema,
+            "entityType": "dataset",
+            "objectType": "TABLE"
+        });
+
+        models.otherDataset = new chorus.models.Dataset({
+            "type": "SOURCE_TABLE",
+            "objectName": "other table",
+            "schema": models.schema,
+            "tags": [
+                models.tag
+            ],
+            "entityType": "dataset",
+            "objectType": "TABLE"
+        });
 
         //necessary for collection views down at the bottom
-        this.loadingCollection = new chorus.collections.UserSet();
-        this.userCollection = new chorus.collections.UserSet([
+        models.loadingCollection = new chorus.collections.UserSet();
+        models.userCollection = new chorus.collections.UserSet([
             new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1"}),
             new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2"}),
             new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3"})
         ]);
 
-        this.userCollection.loaded = true;
+        models.userCollection.loaded = true;
 
-        this.task = (function() {
+        models.task = (function() {
             var animals = ['aardvark', 'bat', 'cheetah'];
             var columns = [
                 { name: "id" },
@@ -71,6 +107,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
+        return models;
+    },
+
+    buildViews: function(models) {
         this.views = {
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
@@ -80,7 +120,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 ]
             }),
 
-            "Sub Nav": new chorus.views.SubNav({model: this.workspace, tab: "summary"}),
+            "Sub Nav": new chorus.views.SubNav({model: models.workspace, tab: "summary"}),
 
             "Link Menu": new chorus.views.LinkMenu({title: "Link Menu", options: [
                 {data: "first", text: "Text of first option"},
@@ -93,7 +133,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 content: new chorus.views.StaticTemplate("ipsum")
             }),
 
-            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: this.instanceAccount, pageModel: this.workspace}),
+            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: models.instanceAccount, pageModel: models.workspace}),
 
             "Change Password Dialog": new chorus.dialogs.ChangePassword(),
 
@@ -103,11 +143,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
 
-            "List Page (loading)": new chorus.views.MainContentList({modelClass: "User", collection: this.loadingCollection}),
+            "List Page (loading)": new chorus.views.MainContentList({modelClass: "User", collection: models.loadingCollection}),
 
             "List Page": new chorus.views.MainContentList({
                 modelClass: "User",
-                collection: this.userCollection,
+                collection: models.userCollection,
                 linkMenus: {
                     sort: {
                         title: t("users.header.menu.sort.title"),
@@ -129,6 +169,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         text: "Create Other Thing"
                     }
                 ]
+            }),
+
+            "Dataset list": new chorus.views.DatasetList({
+                collection: new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")})
             }),
 
             "Data Table": new chorus.views.TaskDataTable({
@@ -186,7 +230,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bucket: 'march', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 35, percentage: "10.12" },
                         { bucket: 'april', min: 2, firstQuartile: 3, median: 8, thirdQuartile: 9, max: 15, percentage: "30%" }
                     ],
-                    dataset: this.dataset
+                    dataset: models.dataset
                 }),
                 x: 'animal',
                 y: 'value'
@@ -207,7 +251,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bucket: "Zero", count: 0 }
                     ],
                     "chart[yAxis]": "Custom y Axis Title",
-                    dataset: this.dataset
+                    dataset: models.dataset
                 })
             }),
 
@@ -226,7 +270,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bin: [8, 10], frequency: 20 }
                     ],
                     "chart[xAxis]": "Custom x Axis Title",
-                    dataset: this.dataset
+                    dataset: models.dataset
                 })
             }),
 
@@ -242,11 +286,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { "name": "yLabel", "typeCategory": "STRING" }
                     ],
 
-                    rows:[
-                        {yLabel:[30,64.83],xLabel:[200001,366667.5],value:27952,y:1,x:1},
-                        {yLabel:[64.83,99.67],xLabel:[200001,366667.5],value:27719,y:2,x:1},
-                        {yLabel:[99.67,134.5],xLabel:[200001,366667.5],value:27714,y:3,x:1},
-                        {yLabel:[134.5,169.33],xLabel:[200001,366667.5],value:27523,y:4,x:1},
+                    rows: [
+                        {yLabel: [30, 64.83], xLabel: [200001, 366667.5], value: 27952, y: 1, x: 1},
+                        {yLabel: [64.83, 99.67], xLabel: [200001, 366667.5], value: 27719, y: 2, x: 1},
+                        {yLabel: [99.67, 134.5], xLabel: [200001, 366667.5], value: 27714, y: 3, x: 1},
+                        {yLabel: [134.5, 169.33], xLabel: [200001, 366667.5], value: 27523, y: 4, x: 1},
                         {yLabel: [169.33, 204.17], xLabel: [366667.5, 533334], value: 27926, y: 5, x: 2},
                         {yLabel: [204.17, 239], xLabel: [366667.5, 533334], value: 27738, y: 6, x: 2},
                         {yLabel: [30, 64.83], xLabel: [533334, 700000.5], value: 27801, y: 1, x: 3},
@@ -274,7 +318,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         {yLabel: [169.33, 204.17], xLabel: [1033333.5, 1200000], value: 27951, y: 5, x: 6},
                         {yLabel: [204.17, 239], xLabel: [1033333.5, 1200000], value: 26807, y: 6, x: 6}
                     ],
-                    dataset: this.dataset
+                    dataset: models.dataset
                 })
             }),
 
@@ -307,11 +351,17 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     xAxis: "Day of the Week",
                     yAxis: "Parties",
                     timeType: "date",
-                    dataset: this.dataset
+                    dataset: models.dataset
                 })
-            })
+            }),
 
+            "Color Palette": new chorus.views.ColorPaletteView()
         };
+    },
+
+    initialize: function() {
+        _.defer(_.bind(this.render, this));
+        this.buildViews(this.buildModels());
     },
 
     render: function() {

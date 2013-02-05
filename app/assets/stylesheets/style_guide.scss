@@ -137,4 +137,20 @@
         }
     }
 
+    .color-swatch-item {
+        position: relative;
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            border: 1px solid black;
+            margin: 8px;
+        }
+
+        .color-swatch-name {
+            position: absolute;
+            top: 13px;
+        }
+    }
 }
