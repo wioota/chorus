@@ -61,26 +61,50 @@ describe 'adding a tag to a workfile' do
 end
 
 describe 'viewing all the entities sharing a specific tag' do
-  let(:workfile) {workfiles(:public)}
-  let(:workspace) {workfile.workspace}
   let(:tag) { ActsAsTaggableOn::Tag.find_by_name('crazy_tag') }
 
-  before do
-    login(users(:admin))
-    workfile.tag_list = 'crazy_tag'
-    workfile.save!
+  describe "when clicking a tag on a workfile" do
+    let(:workfile) {workfiles(:public)}
+    let(:workspace) {workfile.workspace}
+
+    before do
+      login(users(:admin))
+      workfile.tag_list = 'crazy_tag'
+      workfile.save!
+      Sunspot.commit
+    end
+
+    it "shows a list of tagged objects scoped to a workspace that includes the tagged workfile" do
+      visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
+
+      find('span', :text => 'crazy_tag').click
+      current_route.should == "/workspaces/#{workspace.id}/tags/crazy_tag"
+
+      page.should have_content("crazy_tag")
+
+      page.should have_content(workfile.file_name)
+    end
   end
 
-  it "shows list of tagged objects" do
-    visit("#/workspaces/#{workspace.id}/workfiles/#{workfile.id}")
+  describe "when clicking a tag on a source dataset" do
+    let(:dataset) { InstanceIntegration.real_gpdb_data_source.datasets.find_by_name("base_table1")}
 
-    find('span', :text => 'crazy_tag').click
-    current_route.should == "/tags/crazy_tag"
+    before do
+      login(users(:admin))
+      dataset.tag_list = 'crazy_tag'
+      dataset.save!
+      Sunspot.commit
+    end
 
-    page.should have_content("crazy_tag")
+    it "shows a list of tagged objects that includes the tagged dataset" do
+      visit("#/datasets/#{dataset.id}")
 
-    pending "#39968421: need to implement tag show page"
+      find('span', :text => 'crazy_tag').click
+      current_route.should == "/tags/crazy_tag"
 
-    page.should have_content(workfile.file_name)
+      page.should have_content("crazy_tag")
+
+      page.should have_content(dataset.name)
+    end
   end
 end

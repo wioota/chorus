@@ -7,7 +7,10 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
     },
 
     setup: function() {
-        this.tagBox = new chorus.views.TagBox({model: this.model});
+        this.tagBox = new chorus.views.TagBox({
+            model: this.model,
+            workspaceIdForTagLink: this.options.workspaceId
+        });
         this.requiredResources.add(this.model);
     },
 

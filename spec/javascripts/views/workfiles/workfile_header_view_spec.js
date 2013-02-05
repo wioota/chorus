@@ -1,7 +1,8 @@
 describe("chorus.views.WorkfileHeader", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.sql({
-            tags: [{name: "alpha"}]
+            tags: [{name: "alpha"}],
+            workspace: {id: 123}
         });
         this.view = new chorus.views.WorkfileHeader({model: this.model});
     });
@@ -13,6 +14,10 @@ describe("chorus.views.WorkfileHeader", function() {
 
         it("has tags", function() {
             expect(this.view.$('.text-tags')).toContainText("alpha");
+        });
+
+        it("has passes the workspace id for tag links to the tag box", function() {
+            expect(this.view.tagBox.options.workspaceIdForTagLink).toBe(123);
         });
     });
 });

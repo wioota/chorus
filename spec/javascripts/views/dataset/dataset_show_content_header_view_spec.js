@@ -8,7 +8,10 @@ describe("chorus.views.DatasetShowContentHeader", function() {
         this.model.loaded = false;
         delete this.model.statusCode;
         this.model.fetch();
-        this.view = new chorus.views.DatasetShowContentHeader({model: this.model});
+        this.view = new chorus.views.DatasetShowContentHeader({
+            model: this.model,
+            workspaceId: 123
+        });
         this.view.render();
     });
 
@@ -29,6 +32,10 @@ describe("chorus.views.DatasetShowContentHeader", function() {
 
         it("renders the list of tags", function() {
             expect(this.view.$('.text-tags')).toContainText("alpha");
+        });
+
+        it("has a workspace id for the tagbox", function() {
+            expect(this.view.tagBox.options.workspaceIdForTagLink).toBe(123);
         });
     });
 });

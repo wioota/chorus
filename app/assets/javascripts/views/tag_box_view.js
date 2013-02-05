@@ -12,8 +12,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.bindings.add(this.tags, "remove", this.saveTags);
     },
 
-    navigateToTagShowPage: function(tag) {
-        chorus.router.navigate("#//tags/" + encodeURIComponent(tag.get('name')));
+   navigateToTagShowPage: function(tag) {
+       // this ensures url fragment has an initial slash in browser address bar
+       var url = tag.showUrl(this.options.workspaceIdForTagLink).replace("#","#/");
+       chorus.router.navigate(url);
     },
 
     resourcesLoaded: function() {

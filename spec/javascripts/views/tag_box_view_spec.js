@@ -78,6 +78,20 @@ describe("chorus.views.TagBox", function() {
                 expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/beta');
             });
 
+            describe("when a workspace is specified", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.TagBox({model: this.model, workspaceIdForTagLink: 123});
+                    this.view.render();
+                    $('#jasmine_content').append(this.view.el);
+                });
+
+                it('opens the tag show page', function() {
+                    spyOn(chorus.router, "navigate");
+                    this.view.$('.text-label').eq(1).click();
+                    expect(chorus.router.navigate).toHaveBeenCalledWith('#//workspaces/123/tags/beta');
+                });
+            });
+
             describe("when the tag name has special characters", function() {
                 beforeEach(function() {
                     this.view.tags.add({name: '!@#$%^&*()"'});
@@ -87,7 +101,7 @@ describe("chorus.views.TagBox", function() {
                 it('uri encodes the url', function() {
                     spyOn(chorus.router, "navigate");
                     this.view.$('.text-label').eq(3).click();
-                    expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/!%40%23%24%25%5E%26*()%22');
+                    expect(chorus.router.navigate).toHaveBeenCalledWith('#//tags/!@%23$%25%5E&*()%22');
                 });
             });
         });

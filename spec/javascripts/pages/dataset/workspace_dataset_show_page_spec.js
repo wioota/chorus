@@ -198,6 +198,10 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                     expect(this.page.$(".content_header.has_import")).not.toExist();
                 });
             });
+
+            it("has a workspace id", function() {
+                expect(this.page.mainContent.contentHeader.options.workspaceId).toBe('100');
+            });
         });
     });
 });

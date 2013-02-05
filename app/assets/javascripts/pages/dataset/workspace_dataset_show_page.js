@@ -94,6 +94,9 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
     },
 
     getHeaderView: function(options) {
-        return new chorus.views.DatasetShowContentHeader(_.extend({showLocation: true}, options));
+        return new chorus.views.DatasetShowContentHeader(_.extend({
+            showLocation: true,
+            workspaceId: this.workspace.id
+        }, options));
     }
 });
