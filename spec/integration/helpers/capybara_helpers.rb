@@ -1,13 +1,5 @@
 # encoding: UTF-8
 
-class ActiveRecord::Base
-  @@shared_connection = nil
-
-  def self.connection
-    @@shared_connection ||= retrieve_connection
-  end
-end
-
 module Capybara
   module Helpers
     class << self
