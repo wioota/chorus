@@ -332,6 +332,14 @@ describe User do
       }.to change(ImportSchedule, :count).by(-1)
     end
 
+    it "deletes associated instance accounts" do
+      user = users(:the_collaborator)
+      user.instance_accounts.count.should == 2
+      expect {
+        user.destroy
+      }.to change(InstanceAccount, :count).by(-2)
+    end
+
     it "should not delete the database entry" do
       user.destroy
       User.find_with_destroyed(user.id).should_not be_nil
