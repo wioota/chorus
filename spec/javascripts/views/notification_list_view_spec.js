@@ -28,7 +28,8 @@ describe("chorus.views.NotificationList", function() {
             expect(this.view.$('li').find('.publish').length).toEqual(0);
         });
 
-        it("highlights the unread notifications", function() {
+        // https://www.pivotaltracker.com/projects/524573/stories/43966341
+        xit("highlights the unread notifications", function() {
             expect(this.view.$("li:eq(0)")).toHaveClass("unread");
             expect(this.view.$("li:eq(1)")).toHaveClass("unread");
             expect(this.view.$("li:eq(2)")).toHaveClass("unread");
