@@ -13,6 +13,10 @@
             return self.opts('ajax.existingTagCollection').containsTag(tag.name);
         });
 
+        if(query.trim().length > 0 && !_.any(result, function(tag) { return tag.name === query; })) {
+            result.unshift({suggestionText: query + " (" + t("tags.create_new") + ")", name: query});
+        }
+
         self.trigger('setSuggestions', { result : result });
     };
 
@@ -54,8 +58,7 @@
     TextExtAutocomplete.prototype.onShowDropdown = function(e, renderCallback)
     {
         var self        = this,
-            suggestions = self._suggestions
-            ;
+            suggestions = self._suggestions;
 
         if(!suggestions)
             return self.trigger('getSuggestions');

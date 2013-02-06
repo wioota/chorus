@@ -36,7 +36,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             },
             autocomplete: {
                 render: function(suggestion) {
-                    return Handlebars.Utils.escapeExpression(suggestion.name);
+                    return Handlebars.Utils.escapeExpression(suggestion.suggestionText || suggestion.name);
                 },
                 dropdown: {
                     maxHeight: '200px'

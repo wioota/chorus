@@ -216,7 +216,7 @@ describe("chorus.views.TagsInput", function() {
             event.keyCode = 115; // s
             input.trigger(event);
             waitsFor(_.bind(function() {
-                return this.server.requests.length > 1;
+                return this.server.requests.length > 0;
             }, this));
         });
 
@@ -226,6 +226,37 @@ describe("chorus.views.TagsInput", function() {
             ]);
             expect($(view.el).html()).toContain("&lt;script&gt;foo&lt;/script&gt;");
             expect($(view.el).html()).not.toContain('<script>foo</script>');
+        });
+
+        context("when the text entered is not an existing tag", function(){
+            beforeEach(function() {
+                this.server.lastFetch().succeed([{name: 'anotherTag'}]);
+            });
+
+            it("show '(Create new)' next to it in the suggestion list", function() {
+                expect($(view.el).html()).toContain("s (" + t("tags.create_new") + ")");
+            });
+
+           context("when the user selects the suggestion", function(){
+               beforeEach(function() {
+                    view.$("div.text-suggestion").eq(0).click();
+               });
+
+              it("adds a tag with the text entered by the user (without '(Create new)')", function(){
+                  expect(this.addedSpy.mostRecentCall.args[0].get("name")).toEqual("s");
+              });
+           });
+        });
+
+        context("when the text entered is an existing tag", function(){
+            beforeEach(function() {
+                this.server.lastFetch().succeed([{name: 's'}]);
+            });
+
+            it("doesn't show '(Create new)' next to it in the suggestion list", function() {
+                expect($(view.el).html()).toContain("s");
+                expect($(view.el).html()).not.toContainTranslation("tags.create_new");
+            });
         });
     });
 
