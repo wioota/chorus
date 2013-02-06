@@ -20,6 +20,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
 
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
+        this.subscribePageEvent("checked", this.refreshCheckboxesFromSelectedModels);
 
         this._super("setup", arguments);
     },
@@ -62,27 +63,47 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
 
-        clickedLi.toggleClass("checked", isChecked);
-
         if (isChecked) {
-            if (!this.selectedModels.contains(model)) {
+            if (!this.findSelectedModel(model)) {
                 this.selectedModels.add(model);
             }
         } else {
-            this.selectedModels.remove(model);
+            var match = this.findSelectedModel(model);
+            this.selectedModels.remove(match);
         }
 
         chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName+":checked", this.selectedModels);
     },
 
+    findSelectedModel: function(model) {
+        return this.selectedModels.findWhere({
+            entityType: model.get('entityType'),
+            id: model.get('id')
+        });
+    },
+    
+    refreshCheckboxesFromSelectedModels: function(models) {
+        _.each(this.liViews, _.bind(function(li, index) {
+            var model = this.collection.at(index);
+            if (this.findSelectedModel(model)) {
+                li.$el.addClass("checked");
+                li.$('input[type=checkbox]').prop("checked", true);
+            } else {
+                li.$el.removeClass("checked");
+                li.$('input[type=checkbox]').prop("checked", false);
+            }
+        }, this));
+    },
+
     selectAll: function() {
-        this.$("> li input[type=checkbox]").prop("checked", true).change();
+        this.selectedModels.reset(this.collection.models);
+        chorus.PageEvents.broadcast("checked", this.selectedModels);
+        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },
 
     selectNone: function() {
         this.selectedModels.reset();
-        this.$("> li input[type=checkbox]").prop("checked", false).change();
         chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },

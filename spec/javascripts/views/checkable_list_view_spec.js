@@ -1,8 +1,8 @@
 describe("chorus.views.CheckableList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
-            rspecFixtures.dataset(),
-            rspecFixtures.dataset()
+            rspecFixtures.dataset({id: 123}),
+            rspecFixtures.dataset({id: 456})
         ], {schemaId: "3"});
         this.view = new chorus.views.CheckableList({
             entityType: 'dataset',
@@ -128,7 +128,6 @@ describe("chorus.views.CheckableList", function() {
                 it("un-checks all of the items", function() {
                     expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
                     expect(this.view.$("li.checked").length).toBe(0);
-
                 });
 
                 it("broadcasts the '{{eventName}}:checked' page event with an empty collection", function() {
@@ -137,5 +136,15 @@ describe("chorus.views.CheckableList", function() {
             });
         });
 
+    });
+
+    describe("when another list view broadcasts that it has updated the set of checked items", function() {
+       it("refreshes the view from the set of the checked items", function() {
+           this.view.render();
+           this.view.selectedModels.reset(this.collection.models.slice(1));
+           chorus.PageEvents.broadcast("checked", this.view.selectedModels);
+           expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
+           expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
+       });
     });
 });
