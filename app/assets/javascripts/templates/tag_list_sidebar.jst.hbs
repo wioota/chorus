@@ -1,11 +1,13 @@
-<div class="tag_title">
-    {{name}}
-</div>
+{{#hasTag}}
+    <div class="tag_title">
+        {{name}}
+    </div>
 
-<div class="actions">
-    {{#ifAdmin}}
-    <ul>
-        <li><a href="#" class="delete_tag_link">{{t "tag_list.delete.button"}}</a></li>
-    </ul>
-    {{/ifAdmin}}
-</div>
+    <div class="actions">
+        {{#ifAdmin}}
+        <ul>
+            <li><a href="#" class="delete_tag_link">{{t "tag_list.delete.button"}}</a></li>
+        </ul>
+        {{/ifAdmin}}
+    </div>
+{{/hasTag}}

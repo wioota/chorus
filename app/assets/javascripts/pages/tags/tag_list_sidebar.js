@@ -11,10 +11,15 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
             this.tag = tag;
             this.render();
         });
+        this.subscribePageEvent('tag:deselected', function() {
+            this.tag = null;
+            this.render();
+        });
     },
 
     additionalContext: function() {
         return {
+            hasTag: this.tag !== null,
             name: this.tag && this.tag.get('name')
         };
     },

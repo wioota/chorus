@@ -10,6 +10,12 @@ describe("chorus.views.TagListSidebar", function() {
         expect(this.view.$el).toContainText('Hello');
     });
 
+    it("is empty if no tag is select", function() {
+        chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+        chorus.PageEvents.broadcast('tag:deselected');
+        expect(this.view.$el.html().trim()).toEqual('');
+    });
+
     describe("delete tag link", function() {
         context("user is admin", function() {
             beforeEach(function() {
