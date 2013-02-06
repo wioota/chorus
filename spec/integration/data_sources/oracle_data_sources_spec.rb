@@ -52,6 +52,7 @@ describe "Data Source", :oracle_integration do
     let(:data_source) { schema.data_source }
 
     before do
+      pending "in progess"
       schema.datasets.size.should > 0
       login(users(:admin))
       visit("#/data_sources/#{data_source.id}/schemas")
@@ -59,7 +60,6 @@ describe "Data Source", :oracle_integration do
     end
 
     it "should show a list of the datasets in the schema" do
-      pending "in progess"
       schema.datasets.each do |dataset|
         page.should have_content dataset.name
       end
