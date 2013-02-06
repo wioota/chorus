@@ -23,13 +23,17 @@ module SearchExtensions
       types
     end
 
-    def searchable_model *args, &block
-      searchable(*args, &block) if block_given?
+    def searchable_model options = {}, &block
+      searchable(options, &block) if block_given?
       searchable do
         integer :tag_ids, :multiple => true if taggable?
         string :grouping_id
         string :type_name
         string :security_type_name, :multiple => true
+        name_for_sort = options[:name_for_sort] || :name
+        string :sort_name do
+          send(name_for_sort).downcase if respond_to?(name_for_sort)
+        end
       end
     end
 

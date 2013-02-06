@@ -32,7 +32,7 @@ class Workfile < ActiveRecord::Base
   delegate :member_ids, :public, :to => :workspace
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable_model do
+  searchable_model :name_for_sort => :file_name do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     integer :workspace_id, :multiple => true

@@ -186,6 +186,7 @@ class Search
 
       if is_tag_search?
         with :tag_ids, tag.id
+        order_by :sort_name
       else
         fulltext query do
           highlight :max_snippets => 100

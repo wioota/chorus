@@ -211,6 +211,11 @@ describe Search do
         Sunspot.session.should_not have_search_params(:fulltext, tag.name)
       end
 
+      it "orders by sort_name" do
+        search.models
+        Sunspot.session.should have_search_params(:order_by, :sort_name)
+      end
+
       describe "with a workspace_id" do
         let(:search) { Search.new(user, params.merge(:workspace_id => 7)) }
 
@@ -632,6 +637,24 @@ describe Search do
       it "returns models with the specified tag" do
         create_and_record_search(owner, :query => tag.name, :tag => true, :per_type => 1) do |search|
           search.models[:workfiles].first.tags.should include tag
+        end
+      end
+
+      it "returns workfiles sorted by file_name" do
+        query_params = { :query => "test_file_name_sort", :tag => true }
+        record_with_vcr do
+          FactoryGirl.create :workfile, :file_name => "test_sort1.sql", :tag_list => "test_file_name_sort"
+          FactoryGirl.create :workfile, :file_name => "test_sort2.sql", :tag_list => "test_file_name_sort"
+          Workfile.solr_reindex
+          search = Search.new(owner, query_params)
+          search.workfiles.should be_sorted_by :file_name
+
+          # changing the file names changes the order
+          search.workfiles.second.update_attributes(:file_name => "aaa_" + search.workfiles.second.file_name)
+          Workfile.solr_reindex
+
+          search = Search.new(owner, query_params)
+          search.workfiles.should be_sorted_by :file_name
         end
       end
     end
