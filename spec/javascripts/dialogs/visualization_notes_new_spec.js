@@ -52,6 +52,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
             beforeEach(function() {
                 this.dialog.$("textarea[name=body]").val("The body of a note");
                 this.dialog.$("form").trigger("submit");
+                spyOnEvent(this.dialog.pageModel, "invalidated");
                 this.server.completeSaveFor(this.dialog.model, _.extend({id: 2}, this.dialog.model.attributes));
             });
 
@@ -70,9 +71,8 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                     this.server.lastCreate().succeed();
                 });
 
-                it("refreshes the dataset's activity stream after the v11n attachment has been saved", function() {
-                    this.server.lastCreate().succeed();
-                    expect(this.dialog.pageModel.activities()).toHaveBeenFetched();
+                it("triggers invalidated on the dataset (to refresh the dataset's activity stream) after the v11n attachment has been saved", function() {
+                    expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
                 });
 
                 it("pops toast", function() {
