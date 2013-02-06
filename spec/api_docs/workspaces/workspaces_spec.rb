@@ -17,7 +17,7 @@ resource "Workspaces" do
 
   before do
     log_in user
-    stub(Dataset).refresh.with_any_args { |account, schema, options| schema.datasets }
+    stub(GpdbDataset).refresh.with_any_args { |account, schema, options| schema.datasets }
   end
 
   get "/workspaces" do
