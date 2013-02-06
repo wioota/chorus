@@ -218,7 +218,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     },
 
     buildViews: function(models, collections) {
-        this.views = {
+        return {
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
                     { label: t("breadcrumbs.home"), url: "#/" },
@@ -239,14 +239,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
                 content: new chorus.views.StaticTemplate("ipsum")
             }),
-
-            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: models.instanceAccount, pageModel: models.workspace}),
-
-            "Change Password Dialog": new chorus.dialogs.ChangePassword(),
-
-            "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
-
-            "New Note Dialog": new chorus.dialogs.NotesNew(),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
 
@@ -510,26 +502,47 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         };
     },
 
+    buildDialogs: function(models, collections) {
+        return {
+            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: models.instanceAccount, pageModel: models.workspace}),
+
+            "Instance Account Dialog": new chorus.dialogs.InstanceAccount({
+                title: t("instances.account.add.title"),
+                instance: models.greenplumDataSource
+            }),
+
+            "Change Password Dialog": new chorus.dialogs.ChangePassword(),
+
+            "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
+
+            "New Note Dialog": new chorus.dialogs.NotesNew()
+        };
+    },
+
     initialize: function() {
         _.defer(_.bind(this.render, this));
 
         var models = this.buildModels();
         var collections = this.buildCollections(models);
 
-        this.buildViews(models, collections);
+        this.views = this.buildViews(models, collections);
+        this.dialogs = this.buildDialogs(models, collections);
+    },
+
+    renderViews: function(views) {
+        var self = this;
+        _.each(views, function(view, name) {
+            $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>");
+            view.setElement(self.$(".view_guts:last"));
+            view.render();
+        });
     },
 
     render: function() {
         $(this.el).empty();
 
-        var self = this;
-        _.each(this.views, function(view, name) {
-            $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>");
-            view.$el = self.$(".view_guts:last");
-            view.el = view.$el[0];
-            view.delegateEvents();
-            view.render();
-        });
+        this.renderViews(this.views);
+        this.renderViews(this.dialogs);
 
         setInterval(this.enableScrolling, 100);
 
