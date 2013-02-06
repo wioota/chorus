@@ -15,5 +15,6 @@ module LoginHelpers
 
   def logout
     visit("/#/logout")
+    page.should have_selector("form.login")
   end
 end

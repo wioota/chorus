@@ -12,8 +12,6 @@ describe "Visualizations", :greenplum_integration do
   let(:workspace) { workspaces(:image) }
 
   before do
-    pending "TODO: #43782465 removes this pending"
-
     pa "**** Environment Variables before accessing instance **** "
     pa ENV.inspect
     pa "*** REAL_GPDB_HOST before accessing instance *** "
@@ -40,6 +38,10 @@ describe "Visualizations", :greenplum_integration do
     click_button "Visualize"
   end
 
+  after do
+    logout
+  end
+
   shared_examples "a visualization" do
     it "should create a chart" do
       find(".chart_icon.#{chart_type}").click
@@ -56,6 +58,7 @@ describe "Visualizations", :greenplum_integration do
         # but Selenium does not support this. Add assertion if we move to different driver.
         click_button "Close"
       end
+      sleep 1
     end
   end
 
