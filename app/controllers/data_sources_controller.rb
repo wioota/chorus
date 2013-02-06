@@ -17,25 +17,10 @@ class DataSourcesController < ApplicationController
 
   def create
     entity_type = params[:data_source].delete(:entity_type)
-
-    if entity_type == "gpdb_data_source"
-      created_gpdb_data_source = current_user.gpdb_data_sources.create!(params[:data_source], :as => :create)
-      QC.enqueue_if_not_queued("GpdbDataSource.refresh", created_gpdb_data_source.id, 'new' => true)
-      present created_gpdb_data_source, :status => :created
-
-    elsif entity_type == "oracle_data_source"
-      unless ChorusConfig.instance.oracle_configured?
-        raise ApiValidationError.new(:oracle, :not_configured)
-      end
-      created_oracle_data_source = current_user.oracle_data_sources.new(params[:data_source])
-      created_oracle_data_source.shared = true
-      created_oracle_data_source.save!
-
-      present created_oracle_data_source, :status => :created
-    else
-      raise ApiValidationError.new(:entity_type, :invalid)
-    end
+    data_source = DataSource.create_for_entity_type(entity_type, current_user, params[:data_source])
+    present data_source, :status => :created
   end
+
 
   def update
     data_source = DataSource.find(params[:id])

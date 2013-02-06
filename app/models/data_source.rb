@@ -18,7 +18,6 @@ class DataSource < ActiveRecord::Base
   after_create :create_instance_created_event, :if => :current_user
   validates_with DataSourceNameValidator
 
-
   def self.by_type(entity_type)
     if entity_type == "gpdb_data_source"
       where(type: "GpdbDataSource")
@@ -26,6 +25,27 @@ class DataSource < ActiveRecord::Base
       where(type: "OracleDataSource")
     else
       self
+    end
+  end
+
+  def self.accessible_to(user)
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
+          owned: user.id,
+          with_membership: user.instance_accounts.pluck(:instance_id)
+    )
+  end
+
+  def self.refresh_databases instance_id
+    find(instance_id).refresh_databases
+  end
+
+  def self.create_for_entity_type(entity_type, user, data_source_hash)
+    if entity_type == "gpdb_data_source"
+      GpdbDataSource.create_for_user(user, data_source_hash)
+    elsif entity_type == "oracle_data_source"
+      OracleDataSource.create_for_user(user, data_source_hash)
+    else
+      raise ApiValidationError.new(:entity_type, :invalid)
     end
   end
 
@@ -44,17 +64,6 @@ class DataSource < ActiveRecord::Base
     connect_with(owner_account)
   end
 
-  def self.accessible_to(user)
-    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
-          owned: user.id,
-          with_membership: user.instance_accounts.pluck(:instance_id)
-    )
-  end
-
-  def self.refresh_databases instance_id
-    find(instance_id).refresh_databases
-  end
-
   private
 
   def account_owned_by(user)
@@ -64,4 +73,5 @@ class DataSource < ActiveRecord::Base
   def create_instance_created_event
     Events::DataSourceCreated.by(current_user).add(:data_source => self)
   end
+
 end

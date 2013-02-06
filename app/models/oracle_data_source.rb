@@ -8,6 +8,17 @@ class OracleDataSource < DataSource
 
   has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
 
+  def self.create_for_user(user, data_source_hash)
+    unless ChorusConfig.instance.oracle_configured?
+      raise ApiValidationError.new(:oracle, :not_configured)
+    end
+
+    data_source = user.oracle_data_sources.new(data_source_hash)
+    data_source.shared = true
+    data_source.save!
+    data_source
+  end
+
   def connect_with(account)
     OracleConnection.new(
         :username => account.db_username,

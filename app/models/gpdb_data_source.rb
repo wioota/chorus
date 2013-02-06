@@ -32,6 +32,12 @@ class GpdbDataSource < DataSource
     instance.datasets(:reload => true).each(&:solr_index)
   end
 
+  def self.create_for_user(user, data_source_hash)
+    data_source = user.gpdb_data_sources.create!(data_source_hash, :as => :create)
+    QC.enqueue_if_not_queued("GpdbDataSource.refresh", data_source.id, 'new' => true)
+    data_source
+  end
+
   def solr_reindex_later
     QC.enqueue_if_not_queued('GpdbDataSource.reindex_instance', id)
   end
