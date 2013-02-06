@@ -42,7 +42,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         if (this.model.workspaceItems().length) {
             this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
                 collection: this.model.workspaceItems(),
-                search: this.model
+                search: this.model,
+                selectedModels: this.selectedModels
             });
         }
     },

@@ -15,6 +15,11 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         this.entityType = this.options.entityType;
         this.selectedModels = this.options.selectedModels;
         this.list = this.buildList();
+        this.subscribePageEvent("selected", this.saveSearchSelection, this);
+    },
+
+    saveSearchSelection: function(model) {
+        this.search.selectedItem = model;
     },
 
     buildList: function() {
@@ -22,7 +27,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             collection: this.collection,
             entityViewType: chorus.views["Search" + _.classify(this.options.entityType)],
             listItemOptions: {
-                search: this.options.search,
                 workspaceIdForTagLink: this.options.search.get('workspaceId')
             },
             selectedModels: this.selectedModels

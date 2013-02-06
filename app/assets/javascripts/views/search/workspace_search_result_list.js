@@ -30,6 +30,7 @@
         buildList: function() {
             return new this.listClass({
                 collection: this.collection,
+                selectedModels: this.selectedModels,
                 listItemOptions: {search: this.options.search}
             });
         },

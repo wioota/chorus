@@ -4,8 +4,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend(chorus.Mixins.TagsContext
 
     events: {
         "click a.show_more_comments": "showMoreComments",
-        "click a.show_fewer_comments": "showFewerComments",
-        "click": "itemSelected"
+        "click a.show_fewer_comments": "showFewerComments"
     },
 
     additionalContext: function() {
@@ -57,13 +56,5 @@ chorus.views.SearchItemBase = chorus.views.Base.extend(chorus.Mixins.TagsContext
         evt && evt.preventDefault();
         this.$(".has_more_comments").removeClass("hidden");
         this.$(".more_comments").addClass("hidden");
-    },
-
-    itemSelected: function(evt) {
-        var preSelected = $(evt.target).hasClass("selected");
-        if(!preSelected) {
-            this.options.search.selectedItem = this.model;
-            chorus.PageEvents.broadcast(this.model.eventType() + ":selected", this.model);
-        }
     }
 });

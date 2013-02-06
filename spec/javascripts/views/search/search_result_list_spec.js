@@ -158,7 +158,7 @@ describe("chorus.views.SearchResultList", function() {
         });
     });
 
-    describe("multiple selection", function() {
+    describe("selection", function() {
         beforeEach(function() {
             this.result = rspecFixtures.searchResult();
             this.result.set({ query: "foo" });
@@ -178,10 +178,18 @@ describe("chorus.views.SearchResultList", function() {
             this.view.render();
             $('#jasmine_content').append(this.view.$el);
         });
-        it("clicking a checkbox adds the model to the selectedModels", function() {
-            var instanceToClick = this.instances.at(0);
-            this.view.$(".instance_list li:first input[type=checkbox]").click();
-            expect(this.selectedModels.models).toEqual([instanceToClick]);
+
+        it("clicking a row sets the selectedItem for the search model", function() {
+            this.view.$(".instance_list li:nth-child(2)").click();
+            expect(this.result.selectedItem).toEqual(this.instances.at(1));
+        });
+
+        describe("multiple selection", function() {
+            it("clicking a checkbox adds the model to the selectedModels", function() {
+                var instanceToClick = this.instances.at(0);
+                this.view.$(".instance_list li:first input[type=checkbox]").click();
+                expect(this.selectedModels.models).toEqual([instanceToClick]);
+            });
         });
     });
 });
