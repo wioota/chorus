@@ -1,9 +1,8 @@
 require 'spec_helper'
 
-describe DatasetStreamer, :greenplum_integration do
-  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
-  let(:dataset) { database.find_dataset_in_schema("base_table1", "test_schema") }
-  let(:user) { InstanceIntegration.real_gpdb_account.owner }
+describe DatasetStreamer do
+  let(:dataset) { datasets(:table) }
+  let(:user) { users(:owner) }
   let(:streamer) { DatasetStreamer.new(dataset, user) }
   let(:row_limit) { nil }
 
@@ -43,7 +42,6 @@ describe DatasetStreamer, :greenplum_integration do
           :id => 1, :double_quotes => %Q{with"double"quotes}, :single_quotes => %Q{with'single'quotes}, :comma => %Q{with,comma}
         }]
       }
-      let(:dataset) { database.find_dataset_in_schema("stream_table_with_quotes", "test_schema3") }
 
       it "escapes quotes in the csv" do
         enumerator = streamer.enum
@@ -80,7 +78,6 @@ describe DatasetStreamer, :greenplum_integration do
     end
 
     context "for a dataset with no rows" do
-      let(:dataset) { database.find_dataset_in_schema("stream_empty_table", "test_schema3") }
       let(:streamed_data) { [] }
 
       it "returns the error message" do

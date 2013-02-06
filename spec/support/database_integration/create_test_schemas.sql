@@ -228,17 +228,6 @@ CREATE SCHEMA test_schema3;
   INSERT INTO heatmap_table VALUES ( 9, 6, 6, 'green');
   ANALYZE heatmap_table;
 
-  CREATE TABLE stream_table_with_quotes
-  (id integer, col1 text, col2 text, col3 text)
-  DISTRIBUTED BY (id);
-  INSERT INTO stream_table_with_quotes VALUES ( 1, 'with"double"quotes', 'with''single''quotes', 'with,comma');
-  ANALYZE stream_table_with_quotes;
-
-  CREATE TABLE stream_empty_table
-  (id integer, col1 text, col2 text, col3 text)
-  DISTRIBUTED BY (id);
-
-
 CREATE SCHEMA test_gpfdist_schema;
     SET search_path TO 'test_gpfdist_schema';
 
