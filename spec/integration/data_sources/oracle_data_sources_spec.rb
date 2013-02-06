@@ -39,6 +39,7 @@ describe "Data Source", :oracle_integration do
     end
 
     it "shows a list of the data source's schemas" do
+      pending "https://www.pivotaltracker.com/projects/524573/stories/43956745"
       wait_for_page_load
       data_source.refresh_schemas.each do |schema|
         page.should have_content schema.name
