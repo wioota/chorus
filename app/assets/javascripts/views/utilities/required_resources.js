@@ -1,3 +1,8 @@
+//A view with requiredResources won't render until those resources have triggered "serverResponded".
+//Adding a resource to requiredResources causes a listener to be set up for that resource.
+//When all resources have triggered "serverResponded", requiredResource triggers the "allResourcesResponded" event.
+//This event is listenedTo by the view, which then calls render and any other commands in the resourcesLoaded method.
+
 chorus.RequiredResources = chorus.collections.Base.extend({
     constructorName: "RequiredResources",
 

@@ -3,6 +3,17 @@ chorus.views.Bare = Backbone.View.include(
 ).extend({
         constructorName: "View",
 
+        //The order in which setup methods are called on views is as follows:
+        // - _configure
+        // - _ensureElement
+        // - initialize
+        // -> preInitialize
+        // -> -> makeModel
+        // -> _initializeHeaderAndBreadcrumbs
+        // -> setup
+        // -> bindCallbacks
+        // -> bindHotKeys
+        // - delegateEvents
         preInitialize: function() {
             this.makeModel.apply(this, arguments);
             this.resource = this.model || this.collection;
@@ -36,6 +47,11 @@ chorus.views.Bare = Backbone.View.include(
         resourcesLoaded: $.noop,
         displayLoadingSection: $.noop,
 
+        //Subviews that don't require any configuration should be included in the subviews hash.
+        //Subviews can also be manually added (for example within callbacks) using this.registerSubView(view)
+        // in the parent view after creating the new view
+        //
+        //See wiki
         registerSubView: function(view) {
             if (_.indexOf(this.subViewObjects, view) === -1) {
                 this.subViewObjects.push(view);
@@ -51,6 +67,7 @@ chorus.views.Bare = Backbone.View.include(
 
         torndown: false,
 
+        // Remove a view from the dom, unbind any events, and hopefully remove it from memory.
         teardown: function(preserveContainer) {
             this.torndown = true;
 
@@ -107,6 +124,7 @@ chorus.views.Bare = Backbone.View.include(
         context: {},
         subviews: {},
 
+        //Sets backbone view options and creates a listener for completion of requiredResources
         _configure: function(options) {
             var backboneOptions = [{}];
             if (arguments.length > 0 && _.isObject(arguments[0])) {
@@ -124,6 +142,7 @@ chorus.views.Bare = Backbone.View.include(
             this.requiredResources.reset(options.requiredResources);
         },
 
+        //Creates a modal of a given type and launches it.
         createModal: function(e, modalType) {
             e.preventDefault();
             var button = $(e.target).closest("button, a");
@@ -141,6 +160,8 @@ chorus.views.Bare = Backbone.View.include(
             this.createModal(e, "alert");
         },
 
+        //Render the view and all subviews, if all requiredResources have responded from the server
+        //Calls pre/postRender
         render: function render() {
             this.preRender();
 
@@ -364,6 +385,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         return {};
     },
 
+    //Bind various callbacks to the view's resource (model or collection)
     bindCallbacks: function() {
         if (this.resource) {
             this.listenTo(this.resource, "saveFailed validationFailed", this.showErrors);
@@ -374,6 +396,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
+    //Remove default bindings from view
     unbindCallbacks: function() {
         if(this.resource) {
             this.stopListening(this.resource, "saveFailed", this.showErrors);
@@ -385,6 +408,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
+    //A JSON object with view attributes for handlebars to render within.
     context: function context(resource) {
         resource = resource || this.resource;
         var ctx;

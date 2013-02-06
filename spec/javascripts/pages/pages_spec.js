@@ -10,14 +10,13 @@ describe("chorus.pages.Base", function() {
 
     describe("initialize", function() {
         beforeEach(function() {
-            spyOn(chorus.user, "bind");
-            spyOn($.fn, "bind").andCallThrough();
+            spyOn(chorus.pages.Base.prototype, "listenTo");
             this.view = new chorus.pages.Base();
             this.view.mainContent = stubView();
         });
 
         it("binds to change on chorus.user", function() {
-            expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
+            expect(this.view.listenTo).toHaveBeenCalledWith(chorus.user, "change", this.view.render);
         });
 
         context("when the page already has a header", function() {

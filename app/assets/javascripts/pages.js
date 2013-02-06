@@ -1,6 +1,6 @@
 chorus.pages.Bare = chorus.views.Bare.extend({
     bindCallbacks: function() {
-        if (chorus.user) this.bindings.add(chorus.user, "change", this.render);
+        if (chorus.user) this.listenTo(chorus.user, "change", this.render);
     },
 
     dependentResourceNotFound: function() {
@@ -43,9 +43,9 @@ chorus.pages.Bare = chorus.views.Bare.extend({
     },
 
     handleFetchErrorsFor: function(resource) {
-        this.bindings.add(resource, "resourceNotFound", this.dependentResourceNotFound);
-        this.bindings.add(resource, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, resource));
-        this.bindings.add(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
+        this.listenTo(resource, "resourceNotFound", this.dependentResourceNotFound);
+        this.listenTo(resource, "resourceForbidden", _.bind(this.dependentResourceForbidden, this, resource));
+        this.listenTo(resource, "unprocessableEntity", _.bind(this.unprocessableEntity, this, resource));
     },
 
     failurePageOptions: function() {}
@@ -65,6 +65,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#sub_nav": "subNav"
     },
 
+    //Load a workspace for a page into page.workspace.  fetch and set as a requiredResource based on options.
     loadWorkspace: function(workspaceId, options) {
         var optionsWithDefaults = _.extend({
             fetch: true,
@@ -81,6 +82,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         }
     },
 
+    //Instantiate and attached the header and breadcrumb views for the page.
     _initializeHeaderAndBreadcrumbs: function() {
         this.header = this.header || new chorus.views.Header();
         if (this.workspaceId) {
