@@ -1,6 +1,6 @@
 require 'dataset'
 
-class GpdbView < Dataset
+class GpdbView < GpdbDataset
   attr_accessible :query
 
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :active_tables_and_views_count

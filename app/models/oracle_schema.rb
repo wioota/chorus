@@ -12,4 +12,19 @@ class OracleSchema < Schema
 
   validates :data_source, :presence => true
   validates :name, :presence => true, :uniqueness => { :scope => [:parent_id, :parent_type] }
+
+  def connect_with(account)
+    ::OracleConnection.new(
+        :username => account.db_username,
+        :password => account.db_password,
+        :host => data_source.host,
+        :port => data_source.port,
+        :database => data_source.db_name,
+        :schema => name
+    )
+  end
+
+  def class_for_type(type)
+    type == 't' ? OracleTable : OracleView
+  end
 end

@@ -1,0 +1,3 @@
+class OracleView < Dataset
+
+end

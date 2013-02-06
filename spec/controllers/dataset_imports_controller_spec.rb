@@ -263,9 +263,8 @@ describe DatasetImportsController do
 
         context "when there's duplicate columns ( only in Chorus View )" do
           before do
-            any_instance_of(Dataset) do |dataset|
-              mock(dataset).check_duplicate_column.with_any_args {}
-            end
+            stub(Dataset).find(src_table.to_param) { src_table }
+            mock(src_table).check_duplicate_column.with_any_args {}
           end
           it "should check for duplicate columns" do
             post :create, attributes
@@ -284,7 +283,7 @@ describe DatasetImportsController do
 
         context "when destination dataset is consistent with source" do
           before do
-            any_instance_of(Dataset) do |d|
+            any_instance_of(GpdbTable) do |d|
               stub(d).dataset_consistent? { true }
             end
             any_instance_of(Import) do |d|
@@ -320,7 +319,7 @@ describe DatasetImportsController do
         end
 
         it "throws an error if table structure is not consistent" do
-          any_instance_of(Dataset) do |d|
+          any_instance_of(GpdbTable) do |d|
             stub(d).dataset_consistent? { false }
           end
           any_instance_of(Import) do |d|

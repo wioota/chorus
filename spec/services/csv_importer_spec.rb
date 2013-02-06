@@ -9,7 +9,7 @@ describe CsvImporter do
   let(:destination_dataset) { FactoryGirl.build :gpdb_table, :name => csv_file.to_table }
 
   describe "with a real database connection", :greenplum_integration do
-    let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)}
+    let(:database) { InstanceIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
     let(:account) { InstanceIntegration.real_gpdb_account }
@@ -40,7 +40,7 @@ describe CsvImporter do
       end
 
       it "creates an import" do
-        mock.proxy(CsvImporter).new(csv_file.id, file_import_created_event.id)
+        mock.proxy(CsvImporter).new(is_a(CsvFile), file_import_created_event.id)
         subject
       end
 
@@ -65,7 +65,7 @@ describe CsvImporter do
     end
 
     describe "#import" do
-      let(:csv_importer) { CsvImporter.new(csv_file.id, file_import_created_event.id) }
+      let(:csv_importer) { CsvImporter.new(csv_file, file_import_created_event.id) }
 
       it "imports the data" do
         csv_importer.import
@@ -321,8 +321,8 @@ describe CsvImporter do
 
     describe "after creating the csv file" do
       it "performs a refresh and returns the dataset matching the import table name" do
-        mock(Dataset).refresh(instance_account, csv_file.workspace.sandbox)
-        importer = CsvImporter.new(csv_file.id,  file_import_created_event.id)
+        mock(csv_file.workspace.sandbox).refresh_datasets(instance_account)
+        importer = CsvImporter.new(csv_file,  file_import_created_event.id)
         importer.destination_dataset.name.should == csv_file.to_table
       end
     end

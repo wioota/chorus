@@ -34,7 +34,7 @@ class ExternalTablesController < ApplicationController
       :name => table_params[:table_name],
     )
     if e.save
-      Dataset.refresh(account, workspace.sandbox)
+      workspace.sandbox.refresh_datasets(account)
       dataset = workspace.sandbox.reload.datasets.find_by_name!(table_params[:table_name])
       create_event(dataset, workspace, hdfs_entry, table_params)
       render :json => {}, :status => :ok

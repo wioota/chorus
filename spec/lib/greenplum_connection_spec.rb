@@ -286,7 +286,6 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   describe "DatabaseMethods" do
-    let(:connection) { GreenplumConnection.new(details) }
     describe "#schemas" do
       let(:schema_list_sql) do
         <<-SQL
@@ -380,7 +379,6 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   describe "InstanceMethods" do
-    let(:connection) { GreenplumConnection.new(details) }
     let(:database_name) { 'postgres' }
 
     describe "#databases" do

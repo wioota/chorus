@@ -12,8 +12,8 @@ describe StatisticsController do
     let(:instance_account) { schema.database.data_source.owner_account }
     let!(:table) { datasets(:table) }
 
-    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table").to_sql }
-    let(:partition_data_sql) { Dataset::Query.new(schema).partition_data_for_dataset(["table"]).to_sql }
+    let(:metadata_sql) { GpdbDataset::Query.new(schema).metadata_for_dataset("table").to_sql }
+    let(:partition_data_sql) { GpdbDataset::Query.new(schema).partition_data_for_dataset(["table"]).to_sql }
     let(:metadata_info) {
       {
           'name' => 'table',

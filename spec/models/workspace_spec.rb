@@ -160,8 +160,8 @@ describe Workspace do
 
         context "when the sandbox has tables" do
           before do
-            stub(Dataset).refresh(account, schema, anything) { [sandbox_table, sandbox_view] }
-            stub(Dataset).total_entries(account, schema, anything) { 142 }
+            stub(GpdbDataset).visible_to(account, schema, anything) { [sandbox_table, sandbox_view] }
+            stub(GpdbDataset).total_entries(account, schema, anything) { 142 }
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
@@ -183,10 +183,10 @@ describe Workspace do
             before do
               options ={:type => "SANDBOX_TABLE",
                         :tables_only => true }
-              mock(Dataset).refresh(account, schema, options) {
+              mock(GpdbDataset).visible_to(account, schema, options) {
                 [sandbox_table]
               }
-              mock(Dataset).total_entries(account, schema, options) { 141 }
+              mock(GpdbDataset).total_entries(account, schema, options) { 141 }
 
             end
 
@@ -199,8 +199,8 @@ describe Workspace do
 
         context "when there are no datasets for this workspace" do
           before do
-            stub(Dataset).refresh(account, schema, anything) { [] }
-            stub(Dataset).total_entries(account, schema, anything) { 0 }
+            stub(GpdbDataset).visible_to(account, schema, anything) { [] }
+            stub(GpdbDataset).total_entries(account, schema, anything) { 0 }
           end
 
           it "returns no results" do

@@ -40,7 +40,7 @@ describe GpTableCopier, :greenplum_integration do
       execute("drop table if exists \"#{source_table_name}\";")
       execute("drop table if exists \"#{destination_table_name}\";")
       execute("create table \"#{source_table_name}\"(#{table_def}) #{distrib_def};")
-      Dataset.refresh(account, schema)
+      schema.refresh_datasets(account)
       if add_rows
         execute("insert into \"#{source_table_name}\"(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
         execute("insert into \"#{source_table_name}\"(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
@@ -65,7 +65,7 @@ describe GpTableCopier, :greenplum_integration do
       before do
         execute("create table \"#{destination_table_name}\"(#{table_def}) #{distrib_def};")
         execute("insert into \"#{destination_table_name}\"(id, name, id2, id3) values (11, 'marsbar-1', 31, 51);")
-        Dataset.refresh(account, schema)
+        schema.refresh_datasets(account)
       end
 
       context "when truncate is false" do
@@ -145,7 +145,7 @@ describe GpTableCopier, :greenplum_integration do
 
         before do
           execute("create table \"#{destination_table_name}\"(#{table_def}) DISTRIBUTED RANDOMLY;")
-          Dataset.refresh(account, schema)
+          schema.refresh_datasets(account)
         end
 
         it "should still work" do

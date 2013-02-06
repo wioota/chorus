@@ -80,7 +80,7 @@ describe GnipImporter do
         mock(c).fetch { resource_urls }
       end
 
-      stub(Dataset).refresh(anything, workspace.sandbox) do
+      stub(workspace.sandbox).refresh_datasets(anything) do
         FactoryGirl.create(:gpdb_table, :name => "foobar", :schema => workspace.sandbox)
       end
     end

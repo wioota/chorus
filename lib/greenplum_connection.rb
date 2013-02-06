@@ -24,7 +24,6 @@ class GreenplumConnection < DataSourceConnection
 
   class ObjectNotFound < StandardError; end
   class SqlPermissionDenied < StandardError; end
-  class QueryError < StandardError; end
 
   @@gpdb_login_timeout = 10
 

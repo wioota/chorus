@@ -109,12 +109,12 @@ module InstanceIntegration
     database = GpdbDatabase.find_by_name(InstanceIntegration.database_name)
     GpdbSchema.refresh(account, database)
     gpdb_schema = database.schemas.find_by_name('test_schema')
-    Dataset.refresh(account, gpdb_schema)
+    gpdb_schema.refresh_datasets(account)
 
     database_without_public_schema = GpdbDatabase.find_by_name("#{InstanceIntegration.database_name}_priv")
     GpdbSchema.refresh(account, database_without_public_schema)
     gpdb_schema_without_public_schema = database_without_public_schema.schemas.find_by_name('non_public_schema')
-    Dataset.refresh(account, gpdb_schema_without_public_schema)
+    gpdb_schema_without_public_schema.refresh_datasets(account)
 
     account
   end
@@ -139,6 +139,10 @@ module InstanceIntegration
 
   def self.real_oracle_data_source
     OracleDataSource.find_by_host(oracle_hostname)
+  end
+
+  def self.real_oracle_schema
+    real_oracle_data_source.schemas.find_by_name(oracle_schema_name)
   end
 
   def self.real_database
@@ -175,6 +179,10 @@ module InstanceIntegration
 
   def self.oracle_db_name
     oracle_config['db_name']
+  end
+
+  def self.oracle_schema_name
+    oracle_config['schema_name']
   end
 
   private

@@ -122,9 +122,9 @@ describe GpdbSchema do
       database.schemas.where(:name => "new_schema").should exist
     end
 
-    it "passes the options Dataset.refresh" do
+    it "refreshes all Datasets when :refresh_all is true, passing the options to schema refresh_datasets" do
       options = {:dostuff => true, :refresh_all => true}
-      mock(Dataset).refresh(account, anything, options)
+      mock(GpdbDataset).refresh(account, anything, options).times(2)
       GpdbSchema.refresh(account, database, options)
     end
 
@@ -133,17 +133,6 @@ describe GpdbSchema do
       expect {
         GpdbSchema.refresh(account, database)
       }.not_to change(GpdbSchema, :count)
-    end
-
-    it "does not refresh existing Datasets" do
-      GpdbSchema.refresh(account, database)
-      dont_allow(Dataset).refresh.with_any_args
-      GpdbSchema.refresh(account, database)
-    end
-
-    it "refreshes all Datasets when :refresh_all is true" do
-      mock(Dataset).refresh.with_any_args.twice
-      GpdbSchema.refresh(account, database, :refresh_all => true)
     end
 
     it "marks schema as stale if it does not exist" do
@@ -391,6 +380,14 @@ describe GpdbSchema do
       workfiles.each do |workfile|
         workfile.reload.execution_schema_id.should be_nil
       end
+    end
+  end
+
+  describe "#class_for_type" do
+    let(:schema) { schemas(:default) }
+    it "should return GpdbTable and GpdbView correctly" do
+      schema.class_for_type('r').should == GpdbTable
+      schema.class_for_type('v').should == GpdbView
     end
   end
 end

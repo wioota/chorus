@@ -26,7 +26,7 @@ describe "Data Sources", :greenplum_integration do
     end
   end
 
-  describe "viewing an Oracle data source" do
+  describe "viewing a Greenplum data source" do
     let(:database) { InstanceIntegration.real_database }
 
     before do

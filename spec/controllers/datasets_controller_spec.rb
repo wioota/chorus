@@ -17,10 +17,10 @@ describe DatasetsController do
       let(:dataset2) { datasets(:view) }
       let(:dataset3) { datasets(:other_table) }
       before do
-        stub(Dataset).visible_to(is_a(InstanceAccount), schema, options) do
+        stub(GpdbDataset).visible_to(is_a(InstanceAccount), schema, options) do
           [dataset1, dataset2, dataset3]
         end
-        stub(Dataset).total_entries { 122 }
+        stub(GpdbDataset).total_entries { 122 }
         stub(table).add_metadata!(instance_account)
       end
 
@@ -33,7 +33,7 @@ describe DatasetsController do
           response.code.should == "200"
           decoded_response.length.should == 3
           decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
-          schema.datasets.size > decoded_response.size #Testing that controller shows a subset of datasets
+          schema.datasets.size.should > decoded_response.size #Testing that controller shows a subset of datasets
         end
 
         context "pagination" do

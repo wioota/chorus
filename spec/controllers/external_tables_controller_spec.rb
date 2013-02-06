@@ -21,8 +21,10 @@ describe ExternalTablesController do
       end
 
       # Please get rid of me
-      stub(Dataset).refresh do
-        workspace.sandbox.datasets.create!(:name => 'tablefromhdfs')
+      any_instance_of(Schema) do |schema|
+        stub(schema).refresh_datasets do
+          workspace.sandbox.datasets.create!(:name => 'tablefromhdfs')
+        end
       end
     end
 

@@ -688,7 +688,7 @@ end
 describe "SearchExtensions" do
   describe "security_type_name" do
     it "returns an array including the type_name of all ancestors" do
-      ChorusView.security_type_name.should =~ [ChorusView.type_name, Dataset.type_name]
+      ChorusView.security_type_name.should =~ [ChorusView.type_name, GpdbDataset.type_name, Dataset.type_name]
     end
 
     it "instances behave the same way" do

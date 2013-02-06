@@ -122,22 +122,6 @@ class GpdbDataSource < DataSource
     accounts.pluck(:db_username)
   end
 
-  def account_for_user(user)
-    if shared?
-      owner_account
-    else
-      account_owned_by(user)
-    end
-  end
-
-  def account_for_user!(user)
-    account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
-  end
-
-  def data_source
-    self
-  end
-
   def self.refresh(id, options={})
     symbolized_options = options.symbolize_keys
     symbolized_options[:new] = symbolized_options[:new].to_s == "true" if symbolized_options[:new]

@@ -1,6 +1,6 @@
 require 'dataset'
 
-class ChorusView < Dataset
+class ChorusView < GpdbDataset
   include SharedSearch
 
   attr_accessible :query, :object_name, :schema_id, :workspace_id
@@ -80,7 +80,7 @@ class ChorusView < Dataset
   end
 
   def convert_to_database_view(name, user)
-    view = schema.datasets.views.build(:name => name)
+    view = schema.views.build(:name => name)
     view.query = query
 
     if schema.connect_as(user).view_exists?(name)

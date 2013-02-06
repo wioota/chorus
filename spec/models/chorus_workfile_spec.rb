@@ -91,7 +91,7 @@ describe ChorusWorkfile do
       let(:workfile) { ChorusWorkfile.build_for(attributes).tap{ |w| w.save! } }
 
       before do
-        workspace.sandbox = Schema.first
+        workspace.sandbox = schemas(:default)
         workspace.save!
       end
 

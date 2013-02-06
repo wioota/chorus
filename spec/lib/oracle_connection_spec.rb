@@ -13,13 +13,16 @@ describe OracleConnection, :oracle_integration do
   let(:db_url) { "jdbc:oracle:thin:#{username}/#{password}@//#{host}:#{port}/#{db_name}" }
   let(:db) { Sequel.connect(db_url) }
 
-  let(:connection) { OracleConnection.new(
-      :host => host,
-      :username => username,
-      :password => password,
-      :port => port,
-      :database => db_name
-  ) }
+  let(:details) {
+    {
+        :host => host,
+        :username => username,
+        :password => password,
+        :port => port,
+        :database => db_name
+    }
+  }
+  let(:connection) { OracleConnection.new(details) }
 
   before do
     stub.proxy(Sequel).connect.with_any_args
@@ -52,7 +55,7 @@ describe OracleConnection, :oracle_integration do
 
   describe "#schemas" do
     let(:schema_blacklist) {
-      ["OBE", "SCOTT", "DIP", "ORACLE_OCM", "XS$NULL", "MDDATA", "SPATIAL_WFS_ADMIN_USR", "SPATIAL_CSW_ADMIN_USR", "TESTUSER2", "IX", "SH", "PM", "BI", "DEMO", "HR1", "OE1", "XDBPM", "XDBEXT", "XFILES", "APEX_PUBLIC_USER", "TIMESTEN", "CACHEADM", "PLS", "TTHR", "APEX_REST_PUBLIC_USER", "APEX_LISTENER", "OE", "HR", "HR_TRIG", "PHPDEMO", "APPQOSSYS", "WMSYS", "OWBSYS_AUDIT", "OWBSYS", "SYSMAN", "EXFSYS", "CTXSYS", "XDB", "ANONYMOUS", "OLAPSYS", "APEX_040200", "ORDSYS", "ORDDATA", "ORDPLUGINS", "FLOWS_FILES", "SI_INFORMTN_SCHEMA", "MDSYS", "DBSNMP", "OUTLN", "MGMT_VIEW", "SYSTEM", "SYS"]
+      ["OBE", "SCOTT", "DIP", "ORACLE_OCM", "XS$NULL", "MDDATA", "SPATIAL_WFS_ADMIN_USR", "SPATIAL_CSW_ADMIN_USR", "IX", "SH", "PM", "BI", "DEMO", "HR1", "OE1", "XDBPM", "XDBEXT", "XFILES", "APEX_PUBLIC_USER", "TIMESTEN", "CACHEADM", "PLS", "TTHR", "APEX_REST_PUBLIC_USER", "APEX_LISTENER", "OE", "HR", "HR_TRIG", "PHPDEMO", "APPQOSSYS", "WMSYS", "OWBSYS_AUDIT", "OWBSYS", "SYSMAN", "EXFSYS", "CTXSYS", "XDB", "ANONYMOUS", "OLAPSYS", "APEX_040200", "ORDSYS", "ORDDATA", "ORDPLUGINS", "FLOWS_FILES", "SI_INFORMTN_SCHEMA", "MDSYS", "DBSNMP", "OUTLN", "MGMT_VIEW", "SYSTEM", "SYS"]
     }
 
     let(:schema_list_sql) {
@@ -66,6 +69,41 @@ describe OracleConnection, :oracle_integration do
 
     let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:name] } }
     let(:subject) { connection.schemas }
+
+    it_should_behave_like "a well behaved database query"
+  end
+
+  describe "#schema_exists?" do
+    let(:schema_name) { InstanceIntegration.oracle_schema_name }
+    let(:subject) { connection.schema_exists?(schema_name) }
+    let(:expected) { true }
+
+    it_should_behave_like "a well behaved database query"
+
+    context "when the schema doesn't exist" do
+      let(:schema_name) { "does_not_exist" }
+
+      it 'returns false' do
+        connection.schema_exists?(schema_name).should be_false
+      end
+    end
+  end
+
+  describe "#datasets" do
+    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+    let(:schema_name) { InstanceIntegration.oracle_schema_name }
+    let(:dataset_list_sql) {
+      <<-SQL
+        SELECT * FROM (
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+          UNION
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}')
+        ORDER BY name
+      SQL
+    }
+
+    let(:expected) { db.fetch(dataset_list_sql).all }
+    let(:subject) { connection.datasets }
 
     it_should_behave_like "a well behaved database query"
   end

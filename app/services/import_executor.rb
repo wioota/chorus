@@ -48,7 +48,7 @@ class ImportExecutor < DelegateClass(Import)
   def refresh_schema
     # update rails db for new dataset
     destination_account = sandbox.database.data_source.account_for_user!(user)
-    Dataset.refresh(destination_account, sandbox) rescue ActiveRecord::JDBCError
+    sandbox.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
   end
 
   def update_status(status, message = nil)
@@ -76,7 +76,7 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def create_passed_event_and_notification
-    event = Events::DatasetImportSuccess.by(user).add(
+    Events::DatasetImportSuccess.by(user).add(
         :workspace => workspace,
         :dataset => destination_dataset,
         :source_dataset => source_dataset

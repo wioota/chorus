@@ -14,10 +14,11 @@ class GpdbSchema < Schema
   }
 
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
-  has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
   has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_schema_id, :dependent => :nullify
+  has_many :views, :source => :datasets, :class_name => 'GpdbView', :foreign_key => :schema_id
+  has_many :tables, :source => :datasets, :class_name => 'GpdbTable', :foreign_key => :schema_id
 
   validates :name,
             :presence => true,
@@ -32,16 +33,12 @@ class GpdbSchema < Schema
     found_schemas = []
 
     database.connect_with(account).schemas.each do |name|
-      begin
       schema = database.schemas.find_or_initialize_by_name(name)
       next if schema.invalid?
       schema.stale_at = nil
       schema.save!
-      Dataset.refresh(account, schema, options) if options[:refresh_all]
+      GpdbDataset.refresh(account, schema, options) if options[:refresh_all]
       found_schemas << schema
-      #rescue ActiveRecord::StatementInvalid => e
-      #  Chorus.log_error "Could not refresh schema #{row['schema_name']}: #{e.message} on #{e.backtrace[0]}"
-      end
     end
 
     found_schemas
@@ -63,10 +60,6 @@ class GpdbSchema < Schema
 
   def accessible_to(user)
     database.data_source.accessible_to(user)
-  end
-
-  def verify_in_source(user)
-    database.connect_as(user).schema_exists?(name)
   end
 
   def stored_functions(account)
@@ -114,11 +107,6 @@ class GpdbSchema < Schema
       yield conn
     end
   end
-
-  def connect_as(user)
-    connect_with(data_source.account_for_user!(user))
-  end
-
   def connect_with(account)
     ::GreenplumConnection.new(
         :host => data_source.host,
@@ -129,6 +117,10 @@ class GpdbSchema < Schema
         :schema => name,
         :logger => Rails.logger
     )
+  end
+
+  def class_for_type(type)
+    type == 'r' ? GpdbTable : GpdbView
   end
 
   private

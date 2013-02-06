@@ -64,6 +64,37 @@ class DataSource < ActiveRecord::Base
     connect_with(owner_account)
   end
 
+  def self.accessible_to(user)
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
+          owned: user.id,
+          with_membership: user.instance_accounts.pluck(:instance_id)
+    )
+  end
+
+  def self.refresh_databases instance_id
+    find(instance_id).refresh_databases
+  end
+
+  def connect_as(user)
+    connect_with(account_for_user!(user))
+  end
+
+  def account_for_user(user)
+    if shared?
+      owner_account
+    else
+      account_owned_by(user)
+    end
+  end
+
+  def account_for_user!(user)
+    account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
+  end
+
+  def data_source
+    self
+  end
+
   private
 
   def account_owned_by(user)

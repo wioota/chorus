@@ -145,14 +145,14 @@ class Workspace < ActiveRecord::Base
     unlimited_options.delete(:limit)
     with_filtered_datasets(current_user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
       count = datasets.map(&:count).reduce(0, :+)
-      count += Dataset.total_entries(account, sandbox, new_options) unless skip_sandbox
+      count += GpdbDataset.total_entries(account, sandbox, new_options) unless skip_sandbox
       count
     end
   end
 
   def datasets(current_user, options = {})
     with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
-      datasets << Dataset.visible_to(account, sandbox, new_options) unless skip_sandbox
+      datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
       if datasets.count == 1 && !datasets.first.is_a?(Array) # return intact relations for optimization
         datasets.first
       else

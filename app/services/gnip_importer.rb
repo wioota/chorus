@@ -11,7 +11,7 @@ class GnipImporter
   validate :validate_schema_and_table
   validate :workspace_must_have_sandbox
 
-  attr_accessor :table_name, :gnip_instance_id, :workspace_id, :workspace, :user_id, :user, :event_id
+  attr_accessor :table_name, :gnip_instance_id, :workspace, :user_id, :user, :event_id
 
   def self.import_to_table(table_name, gnip_instance_id, workspace_id, user_id, event_id)
     importer = new(table_name, gnip_instance_id, workspace_id, user_id, event_id)
@@ -21,7 +21,6 @@ class GnipImporter
   def initialize(table_name, gnip_instance_id, workspace_id, user_id, event_id)
     self.table_name = table_name
     self.gnip_instance_id = gnip_instance_id
-    self.workspace_id = workspace_id
     self.user_id = user_id
     self.user = User.find(user_id)
     self.event_id = event_id
@@ -78,7 +77,7 @@ class GnipImporter
     raise GnipException, JSON.parse($&)["reason"] if url =~ /^.*\"status\":\"error\".*$/
     result = stream.to_result_in_batches([url])
     csv_file = create_csv_file(result, first_time)
-    csv_importer = CsvImporter.new(csv_file.id, event_id)
+    csv_importer = CsvImporter.new(csv_file, event_id)
     csv_importer.import
   rescue => e
     cleanup_table
@@ -140,7 +139,7 @@ class GnipImporter
   end
 
   def destination_dataset
-    Dataset.refresh(account, workspace.sandbox)
+    workspace.sandbox.refresh_datasets(account)
     workspace.sandbox.datasets.find_by_name(table_name)
   end
 

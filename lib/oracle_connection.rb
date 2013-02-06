@@ -63,19 +63,39 @@ class OracleConnection < DataSourceConnection
     with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:name] } }
   end
 
+  def schema_exists?(name)
+    schemas.include? name
+  end
+
+  def datasets
+    with_connection { @connection.fetch(DATASETS_SQL, :schema => schema_name).all}
+  end
+
   private
+
+  def schema_name
+    @settings[:schema]
+  end
 
   SCHEMAS_SQL = <<-SQL
       SELECT DISTINCT OWNER as name
       FROM ALL_OBJECTS
       WHERE OBJECT_TYPE IN ('TABLE', 'VIEW') AND OWNER NOT IN ('OBE', 'SCOTT', 'DIP',
         'ORACLE_OCM', 'XS$NULL', 'MDDATA', 'SPATIAL_WFS_ADMIN_USR', 'SPATIAL_CSW_ADMIN_USR',
-        'TESTUSER2', 'IX', 'SH', 'PM', 'BI', 'DEMO', 'HR1', 'OE1', 'XDBPM', 'XDBEXT', 'XFILES',
+        'IX', 'SH', 'PM', 'BI', 'DEMO', 'HR1', 'OE1', 'XDBPM', 'XDBEXT', 'XFILES',
         'APEX_PUBLIC_USER', 'TIMESTEN', 'CACHEADM', 'PLS', 'TTHR', 'APEX_REST_PUBLIC_USER',
         'APEX_LISTENER', 'OE', 'HR', 'HR_TRIG', 'PHPDEMO', 'APPQOSSYS', 'WMSYS', 'OWBSYS_AUDIT',
         'OWBSYS', 'SYSMAN', 'EXFSYS', 'CTXSYS', 'XDB', 'ANONYMOUS', 'OLAPSYS', 'APEX_040200',
         'ORDSYS', 'ORDDATA', 'ORDPLUGINS', 'FLOWS_FILES', 'SI_INFORMTN_SCHEMA', 'MDSYS',
         'DBSNMP', 'OUTLN', 'MGMT_VIEW', 'SYSTEM', 'SYS')
+  SQL
+
+  DATASETS_SQL = <<-SQL
+        SELECT * FROM (
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = :schema
+          UNION
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = :schema)
+        ORDER BY name
   SQL
 
   def db_url

@@ -1,0 +1,3 @@
+class OracleTable < Dataset
+
+end

@@ -56,7 +56,7 @@ describe OracleDataSource do
   describe "#refresh_schemas" do
     let(:instance) { data_sources(:oracle) }
     let(:connection) { Object.new }
-    let!(:new_schema) { instance.schemas.create(:name => 'test_schema') }
+    let!(:stale_schema) { instance.schemas.create(:name => 'test_schema') }
 
     before do
       mock(OracleConnection).new(anything) {
@@ -68,12 +68,12 @@ describe OracleDataSource do
 
     it "returns the OracleSchemas in the data source" do
       schemas = instance.refresh_schemas
-      schemas.map(&:name).should == ["schema_one", "schema_two"]
-      schemas.reject { |schema| schema.class == OracleSchema }.length == 0
+      schemas.map(&:name).should =~ ["schema_one", "schema_two"]
+      schemas.all { |schema| schema.class == OracleSchema }.should be_true
     end
 
     it "updates the data sources schemas" do
-      expect { instance.refresh_schemas }.to change(new_schema, :stale_at)
+      expect { instance.refresh_schemas }.to change(stale_schema, :stale_at)
     end
   end
 end

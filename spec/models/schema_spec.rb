@@ -1,14 +1,15 @@
 require 'spec_helper'
 
 describe Schema do
+  let(:user) { users(:owner) }
+  let(:schema) { schemas(:public) }
+
   describe ".find_and_verify_in_source" do
-    let(:schema) { schemas(:public) }
-    let(:database) { schema.database }
-    let(:user) { users(:owner) }
+    let(:parent) { schema.parent }
     let(:connection) { Object.new }
 
     before do
-      mock(database).connect_as(anything) { connection }
+      mock(parent).connect_as(anything) { connection }
       stub(Schema).find(schema.id) { schema }
     end
 
@@ -34,4 +35,209 @@ describe Schema do
       end
     end
   end
+
+  describe "#verify_in_source" do
+    let(:connection) { Object.new }
+    it "calls #schema_exists? on its parent's connection" do
+      mock(schema.parent).connect_as(user) { connection }
+      mock(connection).schema_exists?(schema.name) { "goober" }
+
+      schema.verify_in_source(user).should == 'goober'
+    end
+  end
+
+  context "#refresh_datasets" do
+    let(:connection) { Object.new }
+    let(:options) { {} }
+    let(:account) { "foo" }
+    let(:dataset) { datasets(:table) }
+    let(:schema) { dataset.schema }
+
+    before do
+      stub(schema).connect_with(account) { connection }
+      mock(connection).datasets(options).at_least(1) { found_datasets.map(&:clone) }
+    end
+
+    context "refresh once, without mark_stale flag" do
+      let(:found_datasets) do
+        [
+            {:type => "r", :name => dataset.name, :master_table => 't'},
+            {:type => "v", :name => "new_view", :master_table => 'f'},
+            {:type => "r", :name => "new_table", :master_table => 't'}
+        ]
+      end
+
+      before do
+        mock(schema).class_for_type('v').at_least(1) { GpdbDataset }
+        mock(schema).class_for_type('r').at_least(1) { GpdbTable }
+      end
+
+      it "creates new copies of the datasets in our db" do
+        expect do
+          schema.refresh_datasets(account)
+        end.to change(Dataset, :count).by(2)
+        new_table = schema.datasets.find_by_name('new_table')
+        new_view = schema.datasets.find_by_name('new_view')
+        new_table.should be_a GpdbTable
+        new_table.master_table.should be_true
+        new_view.should be_a GpdbDataset
+        new_view.master_table.should be_false
+      end
+
+      it "returns the list of datasets" do
+        datasets = schema.refresh_datasets(account)
+        datasets.map(&:name).should match_array(['table', 'new_table', 'new_view'])
+      end
+
+      it "sets the refreshed_at timestamp" do
+        expect {
+          schema.refresh_datasets(account)
+        }.to change(schema, :refreshed_at)
+      end
+
+      context "when a limit and sort are passed to refresh" do
+        let(:options) { {:limit => 2, :sort => [{"lower(relname)" => "asc"}]} }
+
+        it "passes limit and sort to greenplum connection" do
+          schema.refresh_datasets(account, options)
+        end
+      end
+
+      context "when trying to create a duplicate record" do
+        let(:duped_dataset) { Dataset.new({:name => dataset.name, :schema_id => schema.id}, :without_protection => true) }
+        before do
+          stub.proxy(GpdbTable).find_or_initialize_by_name_and_schema_id(anything, anything) do |table|
+            table.persisted? ? duped_dataset : table
+          end
+        end
+
+        it "keeps going when caught by rails validations" do
+          expect { schema.refresh_datasets(account) }.to change { GpdbTable.count }.by(1)
+          schema.datasets.find_by_name('new_table').should be_present
+          schema.datasets.find_by_name('new_view').should be_present
+        end
+
+        it "keeps going when not caught by rails validations" do
+          mock(duped_dataset).save! { raise ActiveRecord::RecordNotUnique.new("boooo!", Exception.new) }
+
+          expect { schema.refresh_datasets(account) }.to change { GpdbTable.count }.by(1)
+          schema.datasets.find_by_name('new_table').should be_present
+          schema.datasets.find_by_name('new_view').should be_present
+        end
+
+        it "returns the list of datasets without duplicates" do
+          mock(duped_dataset).save! { raise ActiveRecord::RecordInvalid.new(duped_dataset) }
+
+          datasets = schema.refresh_datasets(account)
+          datasets.size.should == 2
+          datasets.map(&:name).should match_array(['new_table', 'new_view'])
+        end
+      end
+
+      it "does not re-create datasets that already exist in our database" do
+        expect do
+          schema.refresh_datasets(account)
+        end.to change(Dataset, :count).by(2)
+        expect {
+          schema.refresh_datasets(account)
+        }.to_not change(Dataset, :count)
+      end
+
+      it "does not reindex unmodified datasets" do
+        schema.refresh_datasets(account)
+        dont_allow(Sunspot).index.with_any_args
+        schema.refresh_datasets(account)
+      end
+    end
+
+    context "with stale records that now exist" do
+      before do
+        dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)
+        mock(schema).class_for_type('r') { GpdbTable }
+      end
+
+      let(:found_datasets) { [{:type => "r", :name => dataset.name, :master_table => 't'}] }
+
+      it "clears the stale flag" do
+        schema.refresh_datasets(account)
+        dataset.reload.should_not be_stale
+      end
+
+      it "increments the dataset counter on the schema" do
+        expect do
+          schema.refresh_datasets(account)
+        end.to change { dataset.schema.reload.active_tables_and_views.count }.by(1)
+      end
+    end
+
+    context "with records missing" do
+      let(:found_datasets) { [] }
+
+      it "mark missing records as stale" do
+        schema.refresh_datasets(account, :mark_stale => true)
+
+        dataset.reload.should be_stale
+        dataset.stale_at.should be_within(5.seconds).of(Time.current)
+      end
+
+      it "decrements the dataset counter on the schema" do
+        cached_before = dataset.schema.active_tables_and_views_count
+        not_stale_before = schema.active_tables_and_views.not_stale.count
+        schema.refresh_datasets(account, :mark_stale => true)
+        cached_after = dataset.schema.reload.active_tables_and_views_count
+        not_stale_after = schema.active_tables_and_views.not_stale.count
+
+        (not_stale_before - not_stale_after).should == cached_before - cached_after
+      end
+
+      it "does not update stale_at time" do
+        dataset.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+        schema.refresh_datasets(account, :mark_stale => true)
+
+        dataset.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+      end
+
+      it "does not mark missing records if option not set" do
+        schema.refresh_datasets(account)
+
+        dataset.should_not be_stale
+      end
+    end
+
+    context "with force_index option set" do
+      let(:found_datasets) do
+        [
+            {:type => "r", :name => dataset.name, :master_table => 't'},
+            {:type => "v", :name => "new_view", :master_table => 'f'},
+            {:type => "r", :name => "new_table", :master_table => 't'}
+        ]
+      end
+
+      before do
+        mock(schema).class_for_type('v').at_least(1) { GpdbDataset }
+        mock(schema).class_for_type('r').at_least(1) { GpdbTable }
+      end
+
+      it "reindexes unmodified datasets" do
+        schema.refresh_datasets(account)
+        mock(Sunspot).index(is_a(Dataset)).times(3)
+        schema.refresh_datasets(account, :force_index => true)
+      end
+    end
+
+    context "when the DataSourceConnection has a problem" do
+      let(:found_datasets) { raise DataSourceConnection::Error }
+
+      it "should return an empty array" do
+        schema.refresh_datasets(account).should == []
+      end
+
+      it "should still mark the schema as refreshed" do
+        expect {
+          schema.refresh_datasets(account)
+        }.to change(schema, :refreshed_at)
+      end
+    end
+  end
+
 end

@@ -46,4 +46,23 @@ describe "Data Source", :oracle_integration do
       end
     end
   end
+
+  describe "clicking on an Oracle schema" do
+    let(:schema) { InstanceIntegration.real_oracle_schema }
+    let(:data_source) { schema.data_source }
+
+    before do
+      schema.datasets.size.should > 0
+      login(users(:admin))
+      visit("#/data_sources/#{data_source.id}/schemas")
+      find(:xpath, "//a[text()='#{schema.name}']").click
+    end
+
+    it "should show a list of the datasets in the schema" do
+      pending "in progess"
+      schema.datasets.each do |dataset|
+        page.should have_content dataset.name
+      end
+    end
+  end
 end

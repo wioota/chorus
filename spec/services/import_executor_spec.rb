@@ -90,8 +90,12 @@ describe ImportExecutor do
       end
 
       it "refreshes the schema" do
-        mock(Dataset).refresh(sandbox.database.data_source.account_for_user!(user), sandbox)
+        refreshed = false
+        any_instance_of(Schema) do |schema|
+          stub(schema).refresh_datasets(sandbox.database.data_source.account_for_user!(user)) { refreshed = true }
+        end
         send(trigger)
+        refreshed.should == true
       end
 
       it "updates the destination dataset id" do
@@ -131,8 +135,10 @@ describe ImportExecutor do
 
       context "when dataset refresh fails" do
         before do
-          mock(Dataset).refresh.with_any_args do
-            raise ActiveRecord::JDBCError, "refresh failed -- oh no!"
+          any_instance_of(Schema) do |schema|
+            stub(schema).refresh_datasets.with_any_args do
+              raise ActiveRecord::JDBCError, "refresh failed -- oh no!"
+            end
           end
         end
 
@@ -149,7 +155,9 @@ describe ImportExecutor do
 
       context "when new table cannot be found" do
         before do
-          stub(Dataset).refresh.with_any_args { [] }
+          any_instance_of(Schema) do |schema|
+            stub(schema).refresh_datasets.with_any_args { [] }
+          end
         end
 
         it "still creates a DatasetImportSuccess event with an empty dataset link" do
@@ -238,8 +246,10 @@ describe ImportExecutor do
     end
 
     before do
-      stub(Dataset).refresh.with_any_args do
-        FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
+      any_instance_of(Schema) do |schema|
+        stub(schema).refresh_datasets.with_any_args do
+          FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
+        end
       end
     end
 
@@ -345,8 +355,10 @@ describe ImportExecutor do
   describe ".cancel" do
     before do
       mock(ImportTerminator).terminate(import)
-      stub(Dataset).refresh.with_any_args do
-        FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
+      any_instance_of(Schema) do |schema|
+        stub(schema).refresh_datasets.with_any_args do
+          FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
+        end
       end
     end
 

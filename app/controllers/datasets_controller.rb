@@ -8,8 +8,8 @@ class DatasetsController < ApplicationController
     options = {}
     options[:name_filter] = params[:filter] if params[:filter]
 
-    datasets = Dataset.visible_to(account, schema, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
-    params.merge!(:total_entries => Dataset.total_entries(account, schema, options))
+    datasets = GpdbDataset.visible_to(account, schema, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
+    params.merge!(:total_entries => GpdbDataset.total_entries(account, schema, options))
 
     present paginate(datasets)
   end

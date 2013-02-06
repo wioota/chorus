@@ -24,6 +24,8 @@ class DataSourceConnection
     end
   end
 
+  class QueryError < StandardError; end
+
   def fetch(sql, parameters = {})
     with_connection { @connection.fetch(sql, parameters).all }
   end

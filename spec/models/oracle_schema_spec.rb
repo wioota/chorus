@@ -37,4 +37,12 @@ describe OracleSchema do
     end
 
   end
+
+  describe "#class_for_type" do
+    let(:schema) { schemas(:oracle) }
+    it "should return OracleTable and OracleView correctly" do
+      schema.class_for_type('t').should == OracleTable
+      schema.class_for_type('v').should == OracleView
+    end
+  end
 end

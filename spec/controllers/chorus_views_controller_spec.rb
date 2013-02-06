@@ -35,9 +35,9 @@ describe ChorusViewsController, :greenplum_integration do
       it "creates a chorus view" do
         expect {
           post :create, options
-        }.to change { Dataset.chorus_views.count}.by(1)
+        }.to change { GpdbDataset.chorus_views.count}.by(1)
 
-        chorus_view = Dataset.chorus_views.last
+        chorus_view = GpdbDataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
         chorus_view.workspace.should == workspace
 
@@ -83,7 +83,7 @@ describe ChorusViewsController, :greenplum_integration do
       it "creates a chorus view" do
         post :create, options
 
-        chorus_view = Dataset.chorus_views.last
+        chorus_view = GpdbDataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
         chorus_view.workspace.should == workspace
 
@@ -132,9 +132,9 @@ describe ChorusViewsController, :greenplum_integration do
     let(:options) { { :id => chorus_view.id, :object_name => 'duplicate_chorus_view' } }
 
     it "duplicate the chorus view" do
-      expect { post :duplicate, options }.to change(Dataset.chorus_views, :count).by(1)
+      expect { post :duplicate, options }.to change(GpdbDataset.chorus_views, :count).by(1)
 
-      new_chorus_view = Dataset.chorus_views.last
+      new_chorus_view = GpdbDataset.chorus_views.last
       new_chorus_view.name.should == "duplicate_chorus_view"
       chorus_view.workspace.bound_datasets.should_not include(new_chorus_view)
 
@@ -153,7 +153,7 @@ describe ChorusViewsController, :greenplum_integration do
     it "creates an event" do
       post :duplicate, options
 
-      new_chorus_view = Dataset.chorus_views.last
+      new_chorus_view = GpdbDataset.chorus_views.last
 
       the_event = Events::Base.last
       the_event.action.should == "ChorusViewCreated"
@@ -275,9 +275,8 @@ describe ChorusViewsController, :greenplum_integration do
       it "creates a database view" do
         expect {
           post :convert, :id => chorus_view.to_param, :object_name => "Gretchen", :workspace_id => workspace.id
+          response.should be_success
         }.to change(GpdbView, :count).by(1)
-
-        response.should be_success
       end
 
       it "creates an event" do

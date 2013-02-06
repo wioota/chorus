@@ -6,14 +6,14 @@ class CsvImporter
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
 
   def self.import_file(csv_file_id, import_created_event_id)
-    csv_importer = new(csv_file_id, import_created_event_id)
+    csv_importer = new(CsvFile.find(csv_file_id), import_created_event_id)
     csv_importer.import_with_events
   ensure
     csv_importer.csv_file.destroy
   end
 
-  def initialize(csv_file_id, import_created_event_id)
-    self.csv_file = CsvFile.find(csv_file_id)
+  def initialize(csv_file, import_created_event_id)
+    self.csv_file = csv_file
     self.import_created_event_id = import_created_event_id
     self.schema = csv_file.workspace.sandbox
     self.account = schema.data_source.account_for_user!(csv_file.user)
@@ -49,7 +49,7 @@ class CsvImporter
         copy_manager = org.postgresql.copy.CopyManager.new(connection.raw_connection.connection)
         sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
         copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
-        Dataset.refresh(account, schema)
+        schema.refresh_datasets(account)
       rescue Exception => e
         schema.connect_with(account).drop_table(csv_file.to_table) if csv_file.new_table && it_exists == false
         raise e
@@ -112,7 +112,7 @@ class CsvImporter
   end
 
   def destination_dataset
-    Dataset.refresh(account, schema)
+    schema.refresh_datasets(account)
     schema.datasets.find_by_name(csv_file.to_table)
   end
 

@@ -29,7 +29,7 @@ describe SchemasController do
     end
 
     it "verifies the schema exists" do
-      mock.proxy(GpdbSchema).find_and_verify_in_source(schema.id.to_s, user)
+      mock.proxy(Schema).find_and_verify_in_source(schema.id.to_s, user)
       get :show, :id => schema.to_param
       response.code.should == "200"
     end
@@ -47,7 +47,7 @@ describe SchemasController do
 
     context "when the schema is not in GPDB" do
       it "should raise an error" do
-        stub(GpdbSchema).find_and_verify_in_source(schema.id.to_s, user) { raise ActiveRecord::RecordNotFound.new }
+        stub(Schema).find_and_verify_in_source(schema.id.to_s, user) { raise ActiveRecord::RecordNotFound.new }
 
         get :show, :id => schema.to_param
 
