@@ -181,6 +181,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }
         });
 
+        models.chorusView = new chorus.models.ChorusView(models.dataset);
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return models;
@@ -528,9 +530,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 directoryName: "some directory"
             }),
 
-            "Edit Note Dialog": new chorus.dialogs.EditNote({ activity: models.activity }),
+            "Edit Note Dialog": new chorus.dialogs.EditNote({
+                activity: models.activity
+            }),
 
-            "Edit Tags Dialog": new chorus.dialogs.EditTags({collection: collections.workfileSet})
+            "Edit Tags Dialog": new chorus.dialogs.EditTags({
+                collection: collections.workfileSet
+            }),
+
+            "Insights New Dialog": new chorus.dialogs.InsightsNew(),
+
+            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({
+                collection: collections.workspaceSet
+            }),
+
+            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({
+                model: models.chorusView
+            })
         };
     },
 
