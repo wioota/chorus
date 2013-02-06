@@ -19,6 +19,16 @@ class DataSource < ActiveRecord::Base
   validates_with DataSourceNameValidator
 
 
+  def self.by_type(entity_type)
+    if entity_type == "gpdb_data_source"
+      where(type: "GpdbDataSource")
+    elsif entity_type == "oracle_data_source"
+      where(type: "OracleDataSource")
+    else
+      self
+    end
+  end
+
   def valid_db_credentials?(account)
     success = true
     connection = connect_with(account).connect!

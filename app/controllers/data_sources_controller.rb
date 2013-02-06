@@ -4,19 +4,9 @@ class DataSourcesController < ApplicationController
   wrap_parameters :data_source, :exclude => []
 
   def index
-    klass = if params[:entity_type] == "gpdb_data_source"
-      GpdbDataSource
-    elsif params[:entity_type] == "oracle_data_source"
-      OracleDataSource
-    else
-      DataSource
-    end
+    data_sources = DataSource.by_type(params[:entity_type])
+    data_sources.accessible_to(current_user) if params[:accessible]
 
-    data_sources = if params[:accessible]
-      klass.accessible_to(current_user)
-    else
-      klass.all
-    end
     present paginate data_sources
   end
 
