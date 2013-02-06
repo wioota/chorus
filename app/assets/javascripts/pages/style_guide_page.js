@@ -144,6 +144,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
         models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
+        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hadoopInstance: models.hadoopInstance});
+
         models.activity = new chorus.models.Activity({
             "action": "GreenplumInstanceChangedOwner",
             "actor": models.user,
@@ -210,6 +212,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.loadingCollection = new chorus.collections.UserSet();
         collections.userCollection = new chorus.collections.UserSet([models.user, models.otherUser, models.thirdUser]);
         collections.userCollection.loaded = true;
+
+        collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([models.hdfsFile], {hadoopInstance: models.hadoopInstance});
 
         collections.activitySet = new chorus.collections.ActivitySet([models.activity, models.otherActivity]);
         collections.activitySet.loaded = true;
@@ -515,7 +519,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
 
-            "New Note Dialog": new chorus.dialogs.NotesNew()
+            "New Note Dialog": new chorus.dialogs.NotesNew(),
+
+            "Comment Dialog": new chorus.dialogs.Comment(),
+
+            "Create Directory External Table from HDFS Dialog": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
+                collection: collections.CsvHdfsFileSet,
+                directoryName: "some directory"
+            })
         };
     },
 
