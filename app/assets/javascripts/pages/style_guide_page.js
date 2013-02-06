@@ -181,7 +181,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }
         });
 
-        models.chorusView = new chorus.models.ChorusView(models.dataset);
+        models.chorusView = new chorus.models.ChorusView(models.dataset.set({query: "SELECT * FROM everywhere;"}));
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
@@ -540,13 +540,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Insights New Dialog": new chorus.dialogs.InsightsNew(),
 
-            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({
-                collection: collections.workspaceSet
-            }),
+            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({collection: collections.workspaceSet}),
 
-            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({
-                model: models.chorusView
-            })
+            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: models.chorusView}),
+
+            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: models.dataset })
         };
     },
 
