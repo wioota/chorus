@@ -62,6 +62,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         });
         textextInput.bind('commaKeyUp', function(e, data) {
             textextInput.trigger("setInputData", "");
+            textextInput.trigger("getSuggestions");
         });
     },
 

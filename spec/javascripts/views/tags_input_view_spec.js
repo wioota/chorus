@@ -282,19 +282,36 @@ describe("chorus.views.TagsInput", function() {
 
         describe("on comma key up afterwards", function() {
             beforeEach(function() {
+                this.getSuggestionsSpy = jasmine.createSpy("onGetSuggestions");
+                this.input.on("getSuggestions", this.getSuggestionsSpy);
+
                 var up = $.Event('commaKeyUp');
                 up.keyCode = 188; // ,
                 this.input.trigger(up);
             });
 
+            afterEach(function() {
+                waitsFor(_.bind(function() {
+                    return this.server.requests.length > 0;
+                }, this));
+                runs(_.bind(function() {
+                    this.server.lastFetch().succeed();
+                }, this));
+            });
+
             it("clears the input field", function() {
                 expect(this.input.val()).toEqual("");
+            });
+
+            it("triggers the getSuggestions event", function() {
+                expect(this.getSuggestionsSpy).toHaveBeenCalled();
             });
         });
     });
 
     describe("autocomplete", function() {
         var input;
+
         beforeEach(function() {
             var suggestions = rspecFixtures.tagSetJson({
                 response: [{name: "alpha"}, {name: "beta"}, {name: "gamma"}]
