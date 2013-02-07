@@ -1,6 +1,6 @@
 # Server Settings
 
-public_url = http://mycomputer.example.com
+public_url = mycomputer.example.com
 server_port = 8080
 postgres_port = 8543
 solr_port = 8983

@@ -35,6 +35,10 @@ class DataSource < ActiveRecord::Base
     )
   end
 
+  def accessible_to(user)
+    DataSource.accessible_to(user).include?(self)
+  end
+
   def self.refresh_databases instance_id
     find(instance_id).refresh_databases
   end
@@ -62,17 +66,6 @@ class DataSource < ActiveRecord::Base
 
   def connect_as_owner
     connect_with(owner_account)
-  end
-
-  def self.accessible_to(user)
-    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
-          owned: user.id,
-          with_membership: user.instance_accounts.pluck(:instance_id)
-    )
-  end
-
-  def self.refresh_databases instance_id
-    find(instance_id).refresh_databases
   end
 
   def connect_as(user)

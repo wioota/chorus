@@ -86,6 +86,16 @@ FactoryGirl.define do
     association :data_source, :factory => :oracle_data_source
   end
 
+  factory :oracle_table do
+    sequence(:name) { |n| "table#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    association :schema, :factory => :oracle_schema
+  end
+
+  factory :oracle_view do
+    sequence(:name) { |n| "view#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    association :schema, :factory => :oracle_schema
+  end
+
   factory :gpdb_table do
     sequence(:name) { |n| "table#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema

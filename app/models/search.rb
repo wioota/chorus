@@ -107,20 +107,20 @@ class Search
 
   def num_found
     @num_found ||= begin
-      num_found = Hash.new(0)
+      found_so_far = Hash.new(0)
 
-      return num_found if tag_missing?
+      return found_so_far if tag_missing?
 
       if count_using_facets?
         search.facet(:type_name).rows.each do |facet|
-          num_found[class_name_to_key(facet.value)] = facet.count
+          found_so_far[class_name_to_key(facet.value)] = facet.count
         end
       else
-        num_found[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
+        found_so_far[class_name_to_key(models_to_search.first.type_name)] = search.group(:grouping_id).total
       end
 
-      num_found[:this_workspace] = workspace_specific_results.num_found if workspace_specific_results
-      num_found
+      found_so_far[:this_workspace] = workspace_specific_results.num_found if workspace_specific_results
+      found_so_far
     end
   end
 

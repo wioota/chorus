@@ -145,7 +145,7 @@ class Workspace < ActiveRecord::Base
     unlimited_options.delete(:limit)
     with_filtered_datasets(current_user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
       count = datasets.map(&:count).reduce(0, :+)
-      count += GpdbDataset.total_entries(account, sandbox, new_options) unless skip_sandbox
+      count += sandbox.dataset_count(account, new_options) unless skip_sandbox
       count
     end
   end

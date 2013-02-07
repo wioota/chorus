@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe GpdbTablePresenter, :type => :view do
+describe OracleTablePresenter, :type => :view do
   let(:table) { datasets(:table) }
-  let(:presenter) { GpdbTablePresenter.new(table, view) }
+  let(:presenter) { OracleTablePresenter.new(table, view) }
 
   before(:each) do
     set_current_user(users(:admin))
@@ -16,6 +16,5 @@ describe GpdbTablePresenter, :type => :view do
     end
   end
 
-  it_behaves_like "dataset presenter", :gpdb_table
-  it_behaves_like "dataset presenter with workspace", :gpdb_table
+  it_behaves_like "dataset presenter", :oracle_table
 end

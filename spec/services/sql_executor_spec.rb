@@ -147,7 +147,7 @@ describe SqlExecutor do
         stub.proxy(ChorusConfig.instance).[](anything)
         stub(ChorusConfig.instance).[]('default_preview_row_limit') { nil }
         mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 500)
-        SqlExecutor.preview_dataset(Dataset.first, Object.new, Object.new)
+        SqlExecutor.preview_dataset(datasets(:table), Object.new, Object.new)
       end
     end
   end

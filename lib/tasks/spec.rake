@@ -22,13 +22,8 @@ unless Rails.env.production?
   end
   task :spec => [:data_source_host_check_stale]
 
-  desc 'Run legacy migration specs'
-  RSpec::Core::RakeTask.new('spec:legacy_migration') do |t|
-    t.pattern = 'spec/legacy_migration/**/*_spec.rb'
-  end
-
-  desc 'Run all backend specs including legacy migration and api doc specs'
-  task :all => [:spec, :api_docs, 'spec:legacy_migration']
+  desc 'Run all backend specs including api doc specs'
+  task :all => [:spec, :api_docs]
 
   desc 'Run Capybara integration specs'
   RSpec::Core::RakeTask.new('spec:integration') do |t|

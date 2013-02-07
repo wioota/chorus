@@ -13,14 +13,8 @@ class GpdbDataset < Dataset
   delegate :with_gpdb_connection, :to => :schema
   delegate :connect_with, :to => :schema
 
-  acts_as_taggable
-
   def instance_account_ids
     schema.database.instance_account_ids
-  end
-
-  def accessible_to(user)
-    schema.database.data_source.accessible_to(user)
   end
 
   def found_in_workspace_id
@@ -28,7 +22,7 @@ class GpdbDataset < Dataset
   end
 
   def self.total_entries(account, schema, options = {})
-    schema.connect_with(account).datasets_count options
+    schema.dataset_count account, options
   end
 
   def self.refresh(account, schema, options = {})
@@ -98,10 +92,6 @@ class GpdbDataset < Dataset
 
       another_column && another_column.data_type == column.data_type
     end
-  end
-
-  def type_name
-    'Dataset'
   end
 
   def preview_sql
@@ -190,10 +180,6 @@ class GpdbDataset < Dataset
     schema.with_gpdb_connection(account) do |conn|
       conn.select_all(Query.new(schema).send(query_method, name).to_sql)
     end.first
-  end
-
-  def entity_type_name
-    'dataset'
   end
 
   def as_sequel

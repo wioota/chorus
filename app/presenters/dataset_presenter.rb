@@ -72,6 +72,7 @@ class DatasetPresenter < Presenter
   end
 
   def tableau_workbooks_hash
+    return {} unless has_tableau_workbooks?
     return {:tableau_workbooks => []} if rendering_activities?
     tableau_workbooks = model.tableau_workbook_publications.map do |workbook|
       { :id => workbook.id,
@@ -83,4 +84,7 @@ class DatasetPresenter < Presenter
     { :tableau_workbooks => tableau_workbooks }
   end
 
+  def has_tableau_workbooks?
+    false
+  end
 end

@@ -12,51 +12,66 @@ describe DatasetsController do
   end
 
   context "#index" do
-    context "with stubbed greenplum" do
-      let(:dataset1) { datasets(:table) }
-      let(:dataset2) { datasets(:view) }
-      let(:dataset3) { datasets(:other_table) }
-      before do
-        stub(GpdbDataset).visible_to(is_a(InstanceAccount), schema, options) do
-          [dataset1, dataset2, dataset3]
-        end
-        stub(GpdbDataset).total_entries { 122 }
-        stub(table).add_metadata!(instance_account)
-      end
-
-      context "without any filter " do
-        let(:options) { {:limit => per_page} }
-        let(:per_page) { 50 }
-        it "should retrieve authorized db objects for a schema" do
-          get :index, :schema_id => schema.to_param
-
-          response.code.should == "200"
-          decoded_response.length.should == 3
-          decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
-          schema.datasets.size.should > decoded_response.size #Testing that controller shows a subset of datasets
+    context "with stubbed datasource" do
+      shared_examples :works do
+        before do
+          stub(Schema).find(schema.id.to_s) { schema }
+          stub(schema).refresh_datasets(anything, options) do
+            [dataset1, dataset2, dataset3]
+          end
+          stub(schema).dataset_count { 122 }
         end
 
-        context "pagination" do
-          let(:per_page) { 1 }
+        context "without any filter " do
+          let(:options) { {:limit => per_page} }
+          let(:per_page) { 50 }
+          it "should retrieve authorized db objects for a schema" do
+            get :index, :schema_id => schema.to_param
 
-          it "should paginate results" do
-            get :index, :schema_id => schema.to_param, :per_page => per_page
-            decoded_response.length.should == 1
+            response.code.should == "200"
+            decoded_response.length.should == 3
+            decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
+          end
+
+          context "pagination" do
+            let(:per_page) { 1 }
+
+            it "should paginate results" do
+              get :index, :schema_id => schema.to_param, :per_page => per_page
+              decoded_response.length.should == 1
+            end
+          end
+
+          it "should sort db objects by name" do
+            get :index, :schema_id => schema.to_param
+            # stub checks for valid SQL with sorting
           end
         end
 
-        it "should sort db objects by name" do
-          get :index, :schema_id => schema.to_param
-          # stub checks for valid SQL with sorting
+        context "with filter" do
+          let(:options) { {:name_filter => 'view', :limit => 50} }
+          it "should filter db objects by name" do
+            get :index, :schema_id => schema.to_param, :filter => 'view'
+            # stub checks for valid SQL with sorting and filtering
+          end
         end
       end
 
-      context "with filter" do
-        let(:options) { {:name_filter => 'view', :limit => 50} }
-        it "should filter db objects by name" do
-          get :index, :schema_id => schema.to_param, :filter => 'view'
-          # stub checks for valid SQL with sorting and filtering
-        end
+      context "for an oracle schema" do
+        let(:dataset1) { datasets(:oracle_table) }
+        let(:dataset2) { datasets(:oracle_view) }
+        let(:dataset3) { datasets(:other_oracle_table) }
+        let(:schema) { schemas(:oracle) }
+
+        it_should_behave_like :works
+      end
+
+      context "for a greenplum schema" do
+        let(:dataset1) { datasets(:table) }
+        let(:dataset2) { datasets(:view) }
+        let(:dataset3) { datasets(:other_table) }
+
+        it_should_behave_like :works
       end
     end
 

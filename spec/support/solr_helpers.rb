@@ -9,7 +9,7 @@ module SolrHelpers
         GpdbColumn.new(:name => 'comment-search-2', :description => 'searchquery comment 2')
       ]
     }
-    any_instance_of(Dataset) do |ds|
+    any_instance_of(GpdbDataset) do |ds|
       stub(ds).table_description { "searchquery" }
     end
     VCR.use_cassette('search_solr_index') do

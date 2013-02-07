@@ -347,11 +347,14 @@ describe Search do
     describe "datasets" do
       it "includes the highlighted attributes" do
         create_and_record_search do |search|
-          dataset = search.datasets.first
-          dataset.highlighted_attributes.length.should == 6
+          dataset = search.datasets.find { |dataset| dataset.name == 'searchquery_table' }
           dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
           dataset.highlighted_attributes[:database_name][0].should == "<em>searchquery</em>_database"
           dataset.highlighted_attributes[:schema_name][0].should == "<em>searchquery</em>_schema"
+          dataset.highlighted_attributes.should have_key(:table_description)
+          dataset.highlighted_attributes.should have_key(:column_description)
+          dataset.highlighted_attributes.should have_key(:column_name)
+          dataset.highlighted_attributes.length.should == 6
         end
       end
 

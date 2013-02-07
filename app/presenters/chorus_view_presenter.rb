@@ -9,6 +9,10 @@ class ChorusViewPresenter < DatasetPresenter
     })
   end
 
+  def has_tableau_workbooks?
+    true
+  end
+
   def thetype
     "CHORUS_VIEW"
   end

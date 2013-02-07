@@ -334,10 +334,10 @@ describe User do
 
     it "deletes associated instance accounts" do
       user = users(:the_collaborator)
-      user.instance_accounts.count.should == 2
+      user.instance_accounts.count.should == 3
       expect {
         user.destroy
-      }.to change(InstanceAccount, :count).by(-2)
+      }.to change(InstanceAccount, :count).by(-3)
     end
 
     it "should not delete the database entry" do

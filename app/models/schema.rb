@@ -2,7 +2,7 @@ class Schema < ActiveRecord::Base
   attr_accessible :name, :type
   belongs_to :parent, :polymorphic => true
   has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
-
+  delegate :accessible_to, :to => :parent
 
   def self.find_and_verify_in_source(schema_id, user)
     schema = find(schema_id)
@@ -22,9 +22,9 @@ class Schema < ActiveRecord::Base
     found_datasets = []
     mark_stale = options.delete(:mark_stale)
     force_index = options.delete(:force_index)
-    datasets_in_gpdb = connect_with(account).datasets(options)
+    datasets_in_data_source = connect_with(account).datasets(options)
 
-    datasets_in_gpdb.each do |attrs|
+    datasets_in_data_source.each do |attrs|
       klass = class_for_type attrs.delete(:type)
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs[:name], id)
       attrs.merge!(:stale_at => nil) if dataset.stale?
@@ -54,5 +54,9 @@ class Schema < ActiveRecord::Base
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
     found_datasets
+  end
+
+  def dataset_count(account, options={})
+    connect_with(account).datasets_count options
   end
 end

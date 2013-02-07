@@ -9,8 +9,10 @@ resource "Workspaces" do
 
   before do
     log_in user
-    stub(GpdbDataset).refresh.with_any_args { |account, schema, options| schema.datasets }
-    stub(GpdbDataset).total_entries.with_any_args { |account, schema, options| schema.datasets.count }
+    any_instance_of(Schema) do |schema|
+      stub(schema).refresh_datasets.with_any_args { workspace.sandbox.datasets }
+      stub(schema).dataset_count.with_any_args { workspace.sandbox.datasets.count }
+    end
   end
 
   get "/workspaces/:workspace_id/datasets" do

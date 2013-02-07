@@ -1,15 +1,22 @@
 require 'spec_helper'
 
 describe DatasetPresenter, :type => :view do
+  class WithTableauPresenter < DatasetPresenter
+    def has_tableau_workbooks?
+      true
+    end
+  end
+
   before do
     @user = FactoryGirl.create :user
     set_current_user(@user)
   end
 
   it_behaves_like "dataset presenter", :gpdb_table
+  it_behaves_like "dataset presenter with workspace", :gpdb_table
 
   let(:workspace) { FactoryGirl.create :workspace }
-  let(:presenter) { described_class.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
+  let(:presenter) { WithTableauPresenter.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
   let(:activity_stream) { nil }
   let(:hash) { presenter.to_hash }
 
@@ -39,6 +46,14 @@ describe DatasetPresenter, :type => :view do
       hash[:tableau_workbooks][0][:id].should == workbook.id
       hash[:tableau_workbooks][0][:name].should == workbook.name
       hash[:tableau_workbooks][0][:url].should == workbook.workbook_url
+    end
+
+    context "when the presenter doesn't support tableau workbooks" do
+      let(:presenter) { DatasetPresenter.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
+
+      it "should not include the tableau workbooks key" do
+        hash.should_not have_key(:tableau_workbooks)
+      end
     end
   end
 

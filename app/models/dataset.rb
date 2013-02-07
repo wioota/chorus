@@ -32,6 +32,10 @@ class Dataset < ActiveRecord::Base
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
 
+  delegate :accessible_to, :to => :schema
+
+  acts_as_taggable
+
   def self.add_search_permissions(current_user, search)
     search.build do
       any_of do
@@ -96,5 +100,13 @@ class Dataset < ActiveRecord::Base
       raise ActiveRecord::RecordNotFound
     end
     dataset
+  end
+
+  def entity_type_name
+    'dataset'
+  end
+
+  def type_name
+    'Dataset'
   end
 end

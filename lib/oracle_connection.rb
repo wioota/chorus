@@ -67,8 +67,12 @@ class OracleConnection < DataSourceConnection
     schemas.include? name
   end
 
-  def datasets
+  def datasets(options={})
     with_connection { @connection.fetch(DATASETS_SQL, :schema => schema_name).all}
+  end
+
+  def datasets_count(options={})
+    -1
   end
 
   private

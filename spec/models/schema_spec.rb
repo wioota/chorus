@@ -46,7 +46,7 @@ describe Schema do
     end
   end
 
-  context "#refresh_datasets" do
+  describe "#refresh_datasets" do
     let(:connection) { Object.new }
     let(:options) { {} }
     let(:account) { "foo" }
@@ -240,4 +240,20 @@ describe Schema do
     end
   end
 
+  describe "#dataset_count" do
+    let(:connection) { Object.new }
+    let(:options) { {} }
+    let(:account) { "foo" }
+    let(:schema) { schemas(:default) }
+
+    before do
+      connection = Object.new
+      stub(schema).connect_with(account) { connection }
+      stub(connection).datasets_count(options) { 3 }
+    end
+
+    it "returns the number of total entries" do
+      schema.dataset_count(account, options).should == 3
+    end
+  end
 end

@@ -161,7 +161,7 @@ describe Workspace do
         context "when the sandbox has tables" do
           before do
             stub(GpdbDataset).visible_to(account, schema, anything) { [sandbox_table, sandbox_view] }
-            stub(GpdbDataset).total_entries(account, schema, anything) { 142 }
+            stub(schema).dataset_count(account, anything) { 142 }
           end
 
           it "includes datasets in the workspace's sandbox and all of its bound datasets" do
@@ -186,7 +186,7 @@ describe Workspace do
               mock(GpdbDataset).visible_to(account, schema, options) {
                 [sandbox_table]
               }
-              mock(GpdbDataset).total_entries(account, schema, options) { 141 }
+              stub(schema).dataset_count(account, options) { 141 }
 
             end
 
@@ -200,7 +200,7 @@ describe Workspace do
         context "when there are no datasets for this workspace" do
           before do
             stub(GpdbDataset).visible_to(account, schema, anything) { [] }
-            stub(GpdbDataset).total_entries(account, schema, anything) { 0 }
+            stub(schema).dataset_count(account, anything) { 0 }
           end
 
           it "returns no results" do

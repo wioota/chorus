@@ -22,4 +22,5 @@ describe GpdbViewPresenter, :type => :view do
   end
 
   it_behaves_like "dataset presenter", :gpdb_view
+  it_behaves_like "dataset presenter with workspace", :gpdb_view
 end

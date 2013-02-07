@@ -174,17 +174,6 @@ describe GpdbDataset do
     end
   end
 
-  describe '#accessible_to' do
-    it 'returns true if the user can access the gpdb instance' do
-      owner = account.owner
-      any_instance_of(GpdbDataSource) do |instance|
-        mock(instance).accessible_to(owner) { true }
-      end
-
-      dataset.accessible_to(owner).should be_true
-    end
-  end
-
   describe "#destroy" do
     let(:dataset) { datasets(:table) }
 

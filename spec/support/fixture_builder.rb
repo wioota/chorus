@@ -87,8 +87,11 @@ FixtureBuilder.configure do |fbuilder|
 
     @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:data_source => owners_instance)
 
-    oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle')
+    oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: the_collaborator)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
+    FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
+    FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
+    FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
 
     hadoop_instance = HadoopInstance.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
     fbuilder.name :hadoop, hadoop_instance
@@ -504,6 +507,7 @@ FixtureBuilder.configure do |fbuilder|
     if ENV['ORACLE_HOST']
       real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => InstanceIntegration.oracle_hostname, :port => InstanceIntegration.oracle_port, :db_name => InstanceIntegration.oracle_db_name, :db_username => InstanceIntegration.oracle_username, :db_password => InstanceIntegration.oracle_password)
       real_oracle_data_source.refresh_schemas
+      InstanceIntegration.real_oracle_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
     end
 
     #Notification

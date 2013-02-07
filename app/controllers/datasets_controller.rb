@@ -2,14 +2,14 @@ class DatasetsController < ApplicationController
   include DataSourceAuth
 
   def index
-    schema = GpdbSchema.find(params[:schema_id])
+    schema = Schema.find(params[:schema_id])
     account = authorized_account(schema)
 
     options = {}
     options[:name_filter] = params[:filter] if params[:filter]
 
-    datasets = GpdbDataset.visible_to(account, schema, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
-    params.merge!(:total_entries => GpdbDataset.total_entries(account, schema, options))
+    datasets = schema.refresh_datasets(account, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
+    params.merge!(:total_entries => schema.dataset_count(account, options))
 
     present paginate(datasets)
   end

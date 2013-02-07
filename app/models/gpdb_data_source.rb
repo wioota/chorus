@@ -58,10 +58,6 @@ class GpdbDataSource < DataSource
     workspaces.workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
-  def accessible_to(user)
-    GpdbDataSource.accessible_to(user).include?(self)
-  end
-
   def connect_with(account)
     GreenplumConnection.new(
         :username => account.db_username,

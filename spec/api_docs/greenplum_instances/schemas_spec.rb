@@ -15,8 +15,10 @@ resource "Greenplum DB: schemas" do
   before do
     log_in owner
     stub(GpdbSchema).refresh(owner_account, database) { [db_schema] }
-    stub(GpdbDataset).refresh(owner_account, db_schema, { :limit=>50 }) { [table, view] }
-    stub(GpdbDataset).total_entries(owner_account, db_schema, {}) { 13 }
+    any_instance_of(Schema) do |schema|
+      stub(schema).refresh_datasets(owner_account, :limit => 50) { [table, view] }
+      stub(schema).dataset_count(owner_account, {}) { 13 }
+    end
     stub(Dataset).add_metadata!(anything, owner_account)
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).verify_in_source { true }
