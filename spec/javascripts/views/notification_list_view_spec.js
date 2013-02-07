@@ -28,12 +28,14 @@ describe("chorus.views.NotificationList", function() {
             expect(this.view.$('li').find('.publish').length).toEqual(0);
         });
 
-        // https://www.pivotaltracker.com/projects/524573/stories/43966341
-        xit("highlights the unread notifications", function() {
-            expect(this.view.$("li:eq(0)")).toHaveClass("unread");
-            expect(this.view.$("li:eq(1)")).toHaveClass("unread");
-            expect(this.view.$("li:eq(2)")).toHaveClass("unread");
-            expect(this.view.$("li:eq(3)")).not.toHaveClass("unread");
+        it("highlights the unread notifications", function() {
+            this.collection.each(function(model, i) {
+                if (model.get("unread")) {
+                    expect(this.view.$("li:eq("+i+")")).toHaveClass("unread");
+                } else {
+                    expect(this.view.$("li:eq("+i+")")).not.toHaveClass("unread");
+                }
+            }, this);
         });
 
         it("passes the 'isNotification' option to the activity views", function() {

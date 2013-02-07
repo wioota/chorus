@@ -508,15 +508,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
-    Timecop.travel(Time.current + 1)
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
-    Timecop.travel(Time.current + 1)
     @notification2 = Notification.create!({:recipient => owner, :event => notes[1]}, :without_protection => true)
-    Timecop.travel(Time.current + 1)
     @notification3 = Notification.create!({:recipient => owner, :event => notes[2]}, :without_protection => true)
-    Timecop.travel(Time.current + 1)
     @notification4 = Notification.create!({:recipient => owner, :event => notes[3]}, :without_protection => true)
-    Timecop.return
 
     bad_workfiles = ChorusWorkfile.select { |x| x.versions.empty? && x.class.name != "LinkedTableauWorkfile" }
     if !bad_workfiles.empty?
