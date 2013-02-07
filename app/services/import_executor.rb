@@ -95,7 +95,7 @@ class ImportExecutor < DelegateClass(Import)
     import_created_event = find_dataset_import_created_event(source_dataset_id, workspace_id, reference_id, reference_type)
 
     if import_created_event
-      import_created_event.dataset = sandbox.datasets.find_by_name(to_table)
+      import_created_event.dataset = find_destination_dataset
       import_created_event.save!
     end
   end

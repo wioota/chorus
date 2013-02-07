@@ -65,11 +65,29 @@ describe ImportExecutor do
         }.to change(Events::DatasetImportSuccess, :count).by(1)
 
         event = Events::DatasetImportSuccess.last
+
         event.actor.should == user
-        event.dataset.name.should == destination_table_name
-        event.dataset.schema.should == sandbox
         event.workspace.should == workspace
         event.source_dataset.should == source_dataset
+      end
+
+      it "creates a DatasetImportSucess with the correct dataset" do
+        # Make sure event doesn't reference rogue ChorusView with the same name
+        FactoryGirl.create(:chorus_view,
+                           :name => destination_table_name,
+                           :schema => sandbox,
+                           :workspace => workspace)
+
+        expect {
+          send(trigger)
+        }.to change(Dataset, :count).by(1)
+
+        dataset = Dataset.last
+
+        event = Events::DatasetImportSuccess.last
+        event.dataset.name.should == destination_table_name
+        event.dataset.schema.should == sandbox
+        event.dataset.id.should == dataset.id
       end
 
       it "creates a notification" do

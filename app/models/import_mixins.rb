@@ -41,8 +41,12 @@ module ImportMixins
     end
   end
 
+  def find_destination_dataset
+    sandbox.datasets.tables.find_by_name(to_table)
+  end
+
   def set_destination_dataset_id
-    self.destination_dataset = sandbox.datasets.find_by_name(to_table)
+    self.destination_dataset = find_destination_dataset
   end
 
   included do
