@@ -27,10 +27,10 @@ pushd nginx-1.2.2
 unamestr=`uname`
 if [[ "$unamestr" == 'Darwin' ]]; then
     os_friendly_name='OSX'
-    ./configure --with-pcre="../dependencies/pcre-8.31" --with-pcre-opt="-arch i386" --with-zlib="../dependencies/zlib-1.2.7" --with-zlib-opt="-arch i386" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0 -arch i386" --with-ld-opt="-static-libgcc -lc -lcrypto -arch i386" --with-http_gzip_static_module --with-http_ssl_module
+    ./configure --with-pcre="../dependencies/pcre-8.31" --with-pcre-opt="-arch i386" --with-zlib="../dependencies/zlib-1.2.7" --with-zlib-opt="-arch i386" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0 -arch i386" --with-ld-opt="-static-libgcc -lc -lcrypto -arch i386" --with-http_gzip_static_module --with-http_ssl_module --with-ipv6
 else
     os_friendly_name='Linux'
-   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module --with-http_ssl_module
+   ./configure --with-pcre="../dependencies/pcre-8.31" --with-zlib="../dependencies/zlib-1.2.7" --with-openssl="../dependencies/openssl-0.9.8r" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module --with-http_ssl_module --with-ipv6
 fi
 
 make
