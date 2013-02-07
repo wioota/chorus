@@ -125,9 +125,9 @@ class GpTableCopier
     %Q{"#{table.table}"."#{table.column}"}
   end
 
-    def destination_table_fullname
-      qualified_table_name(destination_table)
-    end
+  def destination_table_fullname
+    qualified_table_name(destination_table)
+  end
 
   def destination_table
     attributes[:to_table]
