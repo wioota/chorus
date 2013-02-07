@@ -27,7 +27,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
                 39  : 'right',
                 40  : 'down!',
                 46  : 'delete',
-                108 : 'numpadEnter'
+                108 : 'numpadEnter',
+                188 : 'comma'
             },
             ajax: {
                 url: '/tags',
@@ -56,6 +57,12 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         textextInput.bind('tagClick', _.bind(function(e, tag, value, callback) {
             this.trigger("tag:click", value.model);
         }, this));
+        textextInput.bind('commaKeyDown', function(e, data) {
+            textextInput.trigger("enterKeyPress", e, data);
+        });
+        textextInput.bind('commaKeyUp', function(e, data) {
+            textextInput.trigger("setInputData", "");
+        });
     },
 
     resizeTextExt: function() {

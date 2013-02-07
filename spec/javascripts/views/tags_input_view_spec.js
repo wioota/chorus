@@ -263,6 +263,36 @@ describe("chorus.views.TagsInput", function() {
         });
     });
 
+    describe("on comma key down", function() {
+        beforeEach(function() {
+            this.input = view.$('input.tag_editor');
+            this.enterKeyPressSpy = jasmine.createSpy("onEnterKeyPress");
+            this.input.on("enterKeyPress", this.enterKeyPressSpy);
+
+            var down = $.Event('commaKeyDown');
+            down.keyCode = 188; // ,
+            this.input.trigger(down);
+
+            this.input.val(',');
+        });
+
+        it("behaves like enter key press", function() {
+            expect(this.enterKeyPressSpy).toHaveBeenCalled();
+        });
+
+        describe("on comma key up afterwards", function() {
+            beforeEach(function() {
+                var up = $.Event('commaKeyUp');
+                up.keyCode = 188; // ,
+                this.input.trigger(up);
+            });
+
+            it("clears the input field", function() {
+                expect(this.input.val()).toEqual("");
+            });
+        });
+    });
+
     describe("autocomplete", function() {
         var input;
         beforeEach(function() {
