@@ -57,11 +57,10 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         textextInput.bind('tagClick', _.bind(function(e, tag, value, callback) {
             this.trigger("tag:click", value.model);
         }, this));
-        textextInput.bind('commaKeyDown', function(e, data) {
-            textextInput.trigger("enterKeyPress", e, data);
-        });
         textextInput.bind('commaKeyUp', function(e, data) {
+            textextInput.trigger("enterKeyPress", e, data);
             textextInput.trigger("setInputData", "");
+            // Trigger getSuggestions to fix a bug where a "," suggestion would show up for "Create new" option.
             textextInput.trigger("getSuggestions");
         });
     },

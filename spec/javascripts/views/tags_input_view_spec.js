@@ -263,49 +263,41 @@ describe("chorus.views.TagsInput", function() {
         });
     });
 
-    describe("on comma key down", function() {
+    describe("on comma key up", function() {
         beforeEach(function() {
             this.input = view.$('input.tag_editor');
             this.enterKeyPressSpy = jasmine.createSpy("onEnterKeyPress");
             this.input.on("enterKeyPress", this.enterKeyPressSpy);
 
-            var down = $.Event('commaKeyDown');
-            down.keyCode = 188; // ,
-            this.input.trigger(down);
-
             this.input.val(',');
+
+            this.getSuggestionsSpy = jasmine.createSpy("onGetSuggestions");
+            this.input.on("getSuggestions", this.getSuggestionsSpy);
+
+            var up = $.Event('commaKeyUp');
+            up.keyCode = 188; // ,
+            this.input.trigger(up);
+        });
+
+        afterEach(function() {
+            waitsFor(_.bind(function() {
+                return this.server.requests.length > 0;
+            }, this));
+            runs(_.bind(function() {
+                this.server.lastFetch().succeed();
+            }, this));
         });
 
         it("behaves like enter key press", function() {
             expect(this.enterKeyPressSpy).toHaveBeenCalled();
         });
 
-        describe("on comma key up afterwards", function() {
-            beforeEach(function() {
-                this.getSuggestionsSpy = jasmine.createSpy("onGetSuggestions");
-                this.input.on("getSuggestions", this.getSuggestionsSpy);
+        it("clears the input field", function() {
+            expect(this.input.val()).toEqual("");
+        });
 
-                var up = $.Event('commaKeyUp');
-                up.keyCode = 188; // ,
-                this.input.trigger(up);
-            });
-
-            afterEach(function() {
-                waitsFor(_.bind(function() {
-                    return this.server.requests.length > 0;
-                }, this));
-                runs(_.bind(function() {
-                    this.server.lastFetch().succeed();
-                }, this));
-            });
-
-            it("clears the input field", function() {
-                expect(this.input.val()).toEqual("");
-            });
-
-            it("triggers the getSuggestions event", function() {
-                expect(this.getSuggestionsSpy).toHaveBeenCalled();
-            });
+        it("triggers the getSuggestions event", function() {
+            expect(this.getSuggestionsSpy).toHaveBeenCalled();
         });
     });
 
