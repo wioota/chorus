@@ -36,16 +36,15 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace
 
-    finder = Workfile.order(workfile_sort(params[:order])).includes(:latest_workfile_version)
+    workfiles = workspace.workfiles.order_by(params[:order]).includes(:latest_workfile_version)
 
     if params.has_key?(:file_type)
-      workfiles = finder.find_all_by_workspace_id_and_content_type(workspace, params[:file_type].downcase)
-    else
-      workfiles = finder.find_all_by_workspace_id(workspace)
+      workfiles = workfiles.with_file_type(params[:file_type])
     end
 
     present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true}
   end
+
 
   def destroy
     workfile = Workfile.find(params[:id])
@@ -53,15 +52,5 @@ class WorkfilesController < ApplicationController
 
     workfile.destroy
     render :json => {}
-  end
-
-  private
-
-  def workfile_sort(column_name)
-    if column_name.blank? || column_name == "file_name"
-      "lower(file_name)"
-    else
-      "updated_at"
-    end
   end
 end

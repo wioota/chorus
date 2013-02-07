@@ -45,6 +45,19 @@ class Workfile < ActiveRecord::Base
     workfile = klass.new(params, :as => :create)
   end
 
+  def self.with_file_type(file_type)
+    where(content_type: file_type.downcase)
+  end
+
+  def self.order_by(column_name)
+    if column_name.blank? || column_name == "file_name"
+      order("lower(file_name)")
+    else
+      order("updated_at")
+    end
+  end
+
+
   def self.type_name
     'Workfile'
   end
