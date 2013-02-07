@@ -12,26 +12,11 @@ describe "Visualizations", :greenplum_integration do
   let(:workspace) { workspaces(:image) }
 
   before do
-    pa "**** Environment Variables before accessing instance **** "
-    pa ENV.inspect
-    pa "*** REAL_GPDB_HOST before accessing instance *** "
-    pa InstanceIntegration::REAL_GPDB_HOST
+    pending "https://www.pivotaltracker.com/projects/524573/stories/43782465"
     login(users(:admin))
     visit("#/data_sources")
     find("a", :text => /^#{instance.name}$/).click
-
-    pa "**** Environment Variables after accessing instance **** "
-    pa ENV.inspect
-    pa "*** REAL_GPDB_HOST after accessing instance *** "
-    pa InstanceIntegration::REAL_GPDB_HOST
-
     find("a", :text => /^#{database.name}$/).click
-
-    pa "**** Environment Variables after accessing database **** "
-    pa ENV.inspect
-    pa "*** REAL_GPDB_HOST after accessing database *** "
-    pa InstanceIntegration::REAL_GPDB_HOST
-
     find("a", :text => /^#{schema.name}$/).click
     find("a", :text => /^#{table.name}$/).click
     find(".list li.selected").click
