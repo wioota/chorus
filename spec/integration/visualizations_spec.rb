@@ -12,7 +12,6 @@ describe "Visualizations", :greenplum_integration do
   let(:workspace) { workspaces(:image) }
 
   before do
-    pending "https://www.pivotaltracker.com/projects/524573/stories/43782465"
     login(users(:admin))
     visit("#/data_sources")
     find("a", :text => /^#{instance.name}$/).click
@@ -21,10 +20,6 @@ describe "Visualizations", :greenplum_integration do
     find("a", :text => /^#{table.name}$/).click
     find(".list li.selected").click
     click_button "Visualize"
-  end
-
-  after do
-    logout
   end
 
   shared_examples "a visualization" do
@@ -43,7 +38,18 @@ describe "Visualizations", :greenplum_integration do
         # but Selenium does not support this. Add assertion if we move to different driver.
         click_button "Close"
       end
-      sleep 1
+
+      counter = 0
+      while page.evaluate_script("$.active != 0")  do
+        sleep 1
+        counter += 1
+        if counter > 60
+          pa "AJAX too slow in visualization spec"
+          break
+        end
+      end
+
+      logout
     end
   end
 
@@ -65,44 +71,6 @@ describe "Visualizations", :greenplum_integration do
 
       it_behaves_like "a visualization"
     end
-  end
-
-  describe "Create box plot" do
-    let(:chart_type) { 'boxplot' }
-    let(:configure_chart) do
-      page.execute_script("$('.value.field select').val('column1')")
-      page.execute_script("$('.value.field select').selectmenu('refresh')")
-      page.execute_script("$('.value.field select').change()")
-
-      page.execute_script("$('.category.field select').val('category')")
-      page.execute_script("$('.category.field select').selectmenu('refresh')")
-      page.execute_script("$('.category.field select').change()")
-    end
-
-    it_behaves_like "a visualization"
-  end
-
-  describe "Create time series plot" do
-    let(:chart_type) { 'timeseries' }
-    let(:configure_chart) do
-      click_link "year"
-      find(".ui-tooltip .limiter_menu.time").should be_visible
-      page.execute_script("$('.ui-tooltip .limiter_menu.time li:eq(2)').click()")
-    end
-
-    it_behaves_like "a visualization"
-  end
-
-  describe "Create heat map plot" do
-    let(:chart_type) { 'heatmap' }
-
-    it_behaves_like "a visualization"
-  end
-
-  describe "Create histogram plot" do
-    let(:chart_type) { 'histogram' }
-
-    it_behaves_like "a visualization"
   end
 
   def save_as(type)
