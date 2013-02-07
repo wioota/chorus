@@ -59,25 +59,53 @@ describe("chorus.views.TagsInput", function() {
     describe("when a valid tag is entered", function() {
         var tagName;
         beforeEach(function() {
-            tagName = _.repeat("a", 100);
             spyOn(view, "focusInput");
-            enterTag(view, tagName);
         });
 
-        it("creates a new tag", function() {
-            expect(view.$(".text-tag").length).toBe(4);
+        context("when the tag doesn't contain a ,", function() {
+            beforeEach(function() {
+                tagName = _.repeat("a", 100);
+                enterTag(view, tagName);
+            });
+
+            it("creates a new tag", function() {
+                expect(view.$(".text-tag").length).toBe(4);
+            });
+
+            it("removes the text from the input", function() {
+                expect(view.$('input').val()).toBe("");
+            });
+
+            it("adds the tag to the tagset", function() {
+                expect(this.addedSpy).toHaveBeenCalled();
+            });
+
+            it("sets the focus on the tag input", function() {
+                expect(view.focusInput).toHaveBeenCalled();
+            });
         });
 
-        it("removes the text from the input", function() {
-            expect(view.$('input').val()).toBe("");
-        });
+        context("when the tag contains a ,", function() {
+            var tagTeam = "some,tag";
+            beforeEach(function() {
+                enterTag(view, tagTeam);
+            });
 
-        it("adds the tag to the tagset", function() {
-            expect(this.addedSpy).toHaveBeenCalled();
-        });
+            it("creates two tags", function() {
+                expect(view.$(".text-tag").length).toBe(5);
+            });
 
-        it("sets the focus on the tag input", function() {
-            expect(view.focusInput).toHaveBeenCalled();
+            it("removes the text from the input", function() {
+                expect(view.$('input').val()).toBe("");
+            });
+
+            it("adds the tag to the tagset", function() {
+                expect(this.addedSpy.callCount).toBe(2);
+            });
+
+            it("sets the focus on the tag input", function() {
+                expect(view.focusInput).toHaveBeenCalled();
+            });
         });
     });
 
@@ -117,31 +145,6 @@ describe("chorus.views.TagsInput", function() {
 
             it("does not remove the text from the input", function() {
                 expect(input.val()).toBe(longString);
-            });
-
-            it("shows an error message", function() {
-                expect(input).toHaveClass("has_error");
-            });
-
-            it("entering a valid tag clears the error class", function() {
-                enterTag(view, "new-tag");
-                expect(input).not.toHaveClass("has_error");
-            });
-        });
-
-        context("when the tag contains a ~", function() {
-            var badTag = "some~tag";
-            beforeEach(function() {
-                enterTag(view, badTag);
-            });
-
-            it("does not create a new tag", function() {
-                expect(view.$(".text-tag").length).toBe(3);
-                expect(this.addedSpy).not.toHaveBeenCalled();
-            });
-
-            it("does not remove the text from the input", function() {
-                expect(input.val()).toBe(badTag);
             });
 
             it("shows an error message", function() {

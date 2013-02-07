@@ -64,7 +64,9 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     updateTags: function(e, tags) {
         if(tags.length > this.tags.length) {
-            this.addTag(_.last(tags));
+            for(var i = this.tags.length; i < tags.length; ++i) {
+                this.addTag(tags[i]);
+            }
         } else if(tags.length < this.tags.length) {
             this.removeMissingTag(tags);
         }

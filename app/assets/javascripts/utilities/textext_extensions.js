@@ -34,6 +34,17 @@
         if(!tags || tags.length === 0)
             return;
 
+        tags = _.flatten(_.inject(tags, function(results, tag) {
+            if(tag.name.indexOf(',') >= 0) {
+                results.push(_.map(tag.name.split(","), function(name) {
+                    return { name: name };
+                }));
+            } else {
+                results.push(tag);
+            }
+            return results;
+        }, []));
+
         var self      = this,
             core      = self.core(),
             container = self.containerElement(),
@@ -90,22 +101,5 @@
         self.clearSelected();
         prev.addClass("text-selected");
         self.scrollSuggestionIntoView(prev);
-    };
-
-    var TextExt = $.fn.textext.TextExt;
-
-    TextExt.prototype.getFormData = function(keyCode) {
-        var self = this,
-            data = self.getWeightedEventResponse('getFormData', keyCode || 0);
-
-        var input = data['input'];
-        if ("," === input.charAt(input.length - 1)) {
-            var tag = input.substr(0, input.length - 1);
-            if(tag.length > 0) data['form'].push({name: tag});
-            input = "";
-        }
-
-        self.trigger('setFormData'  , data['form']);
-        self.trigger('setInputData' , input);
     };
 })();
