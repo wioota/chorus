@@ -98,19 +98,11 @@ class GreenplumConnection < DataSourceConnection
     raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
-  private
-
-  def logger_options
-    if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
-    else
-      {}
-    end
-  end
-
   def with_connection(options = {})
     # do this before creating connection, because it calls with_connection
     include_public_schema = options[:include_public_schema_in_search_path] && schema_exists?("public")
+
+    destroy_connection_on_exit = @connection.nil?
 
     connect!
 
@@ -128,7 +120,17 @@ class GreenplumConnection < DataSourceConnection
   rescue Sequel::DatabaseError => e
     raise GreenplumConnection::DatabaseError.new(e)
   ensure
-    disconnect
+    disconnect if destroy_connection_on_exit
+  end
+
+  private
+
+  def logger_options
+    if @settings[:logger]
+      { :logger => @settings[:logger], :sql_log_level => :debug }
+    else
+      {}
+    end
   end
 
   def quote_identifier(identifier)

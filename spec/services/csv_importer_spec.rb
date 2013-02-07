@@ -67,8 +67,10 @@ describe CsvImporter do
     describe "#import" do
       let(:csv_importer) { CsvImporter.new(csv_file, file_import_created_event.id) }
 
-      it "imports the data" do
-        csv_importer.import
+      it "does not explode" do
+        expect {
+          csv_importer.import
+        }.not_to raise_error
       end
     end
 
@@ -330,7 +332,7 @@ describe CsvImporter do
     describe "when the import is successful" do
       before do
         # skip database connection
-        any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection }
+        any_instance_of(GpdbSchema) { |schema| stub(schema).connect_as }
 
         # fake out dataset refresh and search for new dataset
         any_instance_of(CsvImporter) do |importer|
@@ -393,7 +395,7 @@ describe CsvImporter do
       before do
         @error = 'ActiveRecord::JDBCError: ERROR: relation "test" already exists: CREATE TABLE test(a float, b float, c float);'
         exception = ActiveRecord::StatementInvalid.new(@error)
-        any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection { raise exception } }
+        any_instance_of(GpdbSchema) { |schema| stub(schema).connect_as { raise exception } }
         any_instance_of(CsvImporter) do |importer|
           stub(importer).destination_dataset { destination_dataset }
         end

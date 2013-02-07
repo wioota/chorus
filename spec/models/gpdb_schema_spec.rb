@@ -281,18 +281,34 @@ describe GpdbSchema do
   describe "#connect_with" do
     let(:schema) { schemas(:public) }
     let(:account) { instance_accounts(:unauthorized) }
+    let(:mockConnection) { {} }
+
+    before do
+      mock(GreenplumConnection).new({
+                                        :host => schema.data_source.host,
+                                        :port => schema.data_source.port,
+                                        :username => account.db_username,
+                                        :password => account.db_password,
+                                        :database => schema.database.name,
+                                        :schema => schema.name,
+                                        :logger => Rails.logger
+                                    }) {
+        mockConnection
+      }
+    end
 
     it "should create a Greenplum SchemaConnection" do
-      mock(GreenplumConnection).new({
-                                                          :host => schema.data_source.host,
-                                                          :port => schema.data_source.port,
-                                                          :username => account.db_username,
-                                                          :password => account.db_password,
-                                                          :database => schema.database.name,
-                                                          :schema => schema.name,
-                                                          :logger => Rails.logger
-                                                      })
       schema.connect_with(account)
+    end
+
+    it "passes a connected connection a block" do
+      stub(mockConnection).with_connection.yields(mockConnection)
+      expect {
+        schema.connect_with(account) do |connection|
+          connection.should == mockConnection
+          throw :ran_block
+        end
+      }.to throw_symbol :ran_block
     end
   end
 

@@ -107,8 +107,9 @@ class GpdbSchema < Schema
       yield conn
     end
   end
+
   def connect_with(account)
-    ::GreenplumConnection.new(
+    connection = ::GreenplumConnection.new(
         :host => data_source.host,
         :port => data_source.port,
         :username => account.db_username,
@@ -117,6 +118,14 @@ class GpdbSchema < Schema
         :schema => name,
         :logger => Rails.logger
     )
+
+    if block_given?
+      connection.with_connection do
+        yield connection
+      end
+    else
+      connection
+    end
   end
 
   def class_for_type(type)

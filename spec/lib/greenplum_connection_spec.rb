@@ -90,6 +90,33 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
+  describe "#with_connection" do
+    before do
+      mock.proxy(Sequel).connect(db_url, :test => true)
+    end
+
+    context "with valid credentials" do
+      it "connects for the duration of the given block" do
+        expect {
+          connection.with_connection do
+            connection.should be_connected
+            throw :ran_block
+          end
+        }.to throw_symbol :ran_block
+        connection.should_not be_connected
+      end
+
+      it "can be nested" do
+        connection.with_connection do
+          connection.with_connection do
+            connection.should be_connected
+          end
+        end
+        connection.should_not be_connected
+      end
+    end
+  end
+
   describe "#fetch" do
     let(:sql) { "SELECT 1 AS answer" }
     let(:parameters) { {} }

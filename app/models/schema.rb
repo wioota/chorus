@@ -14,8 +14,8 @@ class Schema < ActiveRecord::Base
     parent.connect_as(user).schema_exists?(name)
   end
 
-  def connect_as(user)
-    connect_with(data_source.account_for_user!(user))
+  def connect_as(user, &block)
+    connect_with(data_source.account_for_user!(user), &block)
   end
 
   def refresh_datasets(account, options = {})

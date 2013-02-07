@@ -35,23 +35,24 @@ class CsvImporter
     self.import_record = create_csv_import
 
     raise StandardError, "CSV file cannot be imported" unless csv_file.ready_to_import?
-    schema.with_gpdb_connection(account) do |connection|
+    schema.connect_as(csv_file.user) do |connection|
       begin
         it_exists = check_if_table_exists(csv_file.to_table, csv_file)
         if csv_file.new_table
-          connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
+          connection.prepare_and_execute_statement("CREATE TABLE #{csv_file.to_table}(#{create_table_sql})")
         end
 
-        if csv_file.truncate
-          schema.connect_with(account).truncate_table(csv_file.to_table)
-        end
+        connection.truncate_table(csv_file.to_table) if csv_file.truncate
 
-        copy_manager = org.postgresql.copy.CopyManager.new(connection.raw_connection.connection)
-        sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
-        copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
+        connection.connect!.synchronize do |jdbc_conn|
+          copy_manager = org.postgresql.copy.CopyManager.new(jdbc_conn)
+          destination_table_name = %Q{"#{schema.name}"."#{csv_file.to_table}"}
+          sql = "COPY #{destination_table_name}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
+          copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path))
+        end
         schema.refresh_datasets(account)
       rescue Exception => e
-        schema.connect_with(account).drop_table(csv_file.to_table) if csv_file.new_table && it_exists == false
+        schema.connect_as(csv_file.user).drop_table(csv_file.to_table) if csv_file.new_table && it_exists == false
         raise e
       end
     end
