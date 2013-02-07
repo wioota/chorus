@@ -2,7 +2,6 @@ require 'stale'
 
 class GpdbDataset < Dataset
   has_many :tableau_workbook_publications, :dependent => :destroy, :foreign_key => :dataset_id
-  delegate :data_source, :account_for_user!, :to => :schema
   delegate :definition, :to => :statistics
 
   attr_accessor :statistics

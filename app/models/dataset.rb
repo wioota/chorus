@@ -32,7 +32,7 @@ class Dataset < ActiveRecord::Base
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
 
-  delegate :accessible_to, :to => :schema
+  delegate :data_source, :accessible_to, :to => :schema
 
   acts_as_taggable
 
