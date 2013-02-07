@@ -455,6 +455,9 @@
             if (comment.isComment) {
                 return t("search.supporting_message_types.comment");
             }
+            if (comment.isVersionComment) {
+                return t("search.supporting_message_types.version_comment");
+            }
             return t("search.supporting_message_types.note");
         },
 

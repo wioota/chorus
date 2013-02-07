@@ -97,6 +97,13 @@ describe WorkfileVersion do
     end
   end
 
+  describe "indexing" do
+    it "reindexes the workfile after saving" do
+      mock(workfile).solr_index
+      version.save
+    end
+  end
+
   describe "#Update_content" do
     context "when the version is the latest version" do
       before do

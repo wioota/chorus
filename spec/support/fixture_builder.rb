@@ -265,6 +265,8 @@ FixtureBuilder.configure do |fbuilder|
 
       private_search_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Search Private", :description => "searchquery", :owner => owner, :workspace => search_private_workspace, :execution_schema => searchquery_schema, :versions_attributes => [{:contents => file}])
       public_search_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "Search Public", :description => "searchquery", :owner => owner, :workspace => search_public_workspace, :versions_attributes => [{:contents => file}])
+      FactoryGirl.create(:workfile_version, :workfile => public_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file, :commit_message => "Committed to searchquery")
+
       tagged_workfile = FactoryGirl.create(:chorus_workfile, :file_name => 'tagged', :owner => owner, :workspace => public_workspace, :versions_attributes => [{:contents => file}])
       tagged_workfile.tag_list = "alpha,beta"
       tagged_workfile.save!

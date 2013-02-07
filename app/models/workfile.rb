@@ -19,6 +19,7 @@ class Workfile < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
   has_many :comments, :through => :events
+  has_many :versions, :class_name => 'WorkfileVersion'
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
 
@@ -35,6 +36,9 @@ class Workfile < ActiveRecord::Base
   searchable_model :name_for_sort => :file_name do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :version_comments, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST do
+      versions.map { |version| version.commit_message }
+    end
     integer :workspace_id, :multiple => true
     integer :member_ids, :multiple => true
     boolean :public

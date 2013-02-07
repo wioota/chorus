@@ -20,7 +20,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         beforeEach(function() {
             spyOn(Backbone.Model.prototype, "save").andCallThrough();
             this.workfile.set({"content": "new blood"});
-            this.dialog.$("[name=commitMessage]").val("new commit");
+            this.dialog.$("[name=commitMessage]").val('<script> "new commit" </script>');
             this.dialog.$("form").submit();
         });
 
@@ -28,8 +28,10 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
             expect(this.dialog.model).toBeA(chorus.models.Workfile);
         });
 
-        it("sets commit message on the model", function() {
-            expect(this.dialog.model.get("commitMessage")).toBe("new commit");
+        it("sets the escaped commit message on the model", function() {
+            expect(this.dialog.model.get("commitMessage")).toContain('new commit');
+            expect(this.dialog.model.get("commitMessage")).toContain('script');
+            expect(this.dialog.model.get("commitMessage")).not.toContain('<script>');
         });
 
         it("saves the model with the fields from the form with the correct post url", function() {

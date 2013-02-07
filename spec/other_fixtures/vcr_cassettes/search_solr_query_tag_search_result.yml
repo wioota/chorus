@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>33,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
         asc'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
         OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
         OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''tag_ids_im:1000000'',''type_name_s:(User
@@ -37,7 +37,7 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''ChorusWorkfile
         1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
         1000011'',''file_name_texts''=>[''tagged''],''description_texts''=>[''A nice
-        description'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',1]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+        description''],''version_comments_texts''=>['''']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',1]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
-  recorded_at: Thu, 07 Feb 2013 20:26:47 GMT
+  recorded_at: Thu, 07 Feb 2013 22:54:11 GMT
 recorded_with: VCR 2.3.0

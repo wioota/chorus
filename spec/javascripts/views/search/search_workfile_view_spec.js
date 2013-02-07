@@ -73,11 +73,11 @@ describe("chorus.views.SearchWorkfile", function() {
 
     itBehavesLike.ItPresentsModelWithTags();
 
-    xdescribe("shows version commit messages in the comments area", function() {
+    describe("shows version commit messages in the comments area", function() {
         beforeEach(function() {
             this.view.model.set({
                 highlightedAttributes: {
-                    commitMessage: [
+                    versionComments: [
                         "this is a <em>cool</em> version",
                         "this is a <em>cooler</em> version"
                     ]}
@@ -86,7 +86,7 @@ describe("chorus.views.SearchWorkfile", function() {
         });
 
         it("looks correct", function() {
-            expect(this.view.$('.more_comments .comment:eq(2) .comment_type').text().trim()).toBe('');
+            expect(this.view.$('.more_comments .comment:eq(2) .comment_type').text().trim()).toBe('Version Comment:');
             expect(this.view.$('.more_comments .comment:eq(2) .comment_content').html()).toContain("this is a <em>cooler</em> version");
         });
     });

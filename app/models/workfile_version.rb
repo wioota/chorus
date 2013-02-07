@@ -14,6 +14,10 @@ class WorkfileVersion < ActiveRecord::Base
   before_save :fix_workfile_association, :on => :create
   before_validation :init_version_number, :on => :create
 
+  after_save do
+    workfile.solr_index
+  end
+
   after_validation :clean_content_errors
 
   validates_attachment_size :contents, :less_than => ChorusConfig.instance['file_sizes_mb']['workfiles'].megabytes, :message => :file_size_exceeded

@@ -80,6 +80,7 @@ describe Workfile do
     it "indexes text fields" do
       Workfile.should have_searchable_field :file_name
       Workfile.should have_searchable_field :description
+      Workfile.should have_searchable_field :version_comments
     end
   end
 
