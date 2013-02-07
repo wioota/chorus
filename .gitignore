@@ -84,3 +84,7 @@ GREENPLUM_IP
 # Ignore oracle jar
 ojdbc*.jar
 /lib/libraries
+
+# Ignore integration screenshots
+screenshot*.png
+screenshot*.html
