@@ -23,6 +23,7 @@ describe "500 Internal Server Error" do
       File.delete path
       File.exists?(path).should be_false
 
+      wait_for_page_load
       click_link "some.txt"
       page.should have_no_content("some.txt")
 
