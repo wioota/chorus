@@ -66,8 +66,6 @@ describe ImportTerminator, :greenplum_integration do
 
       context "when both reader and writer pipes are stuck" do
         before do
-          pending "https://www.pivotaltracker.com/projects/524573/stories/43961457"
-
           any_instance_of(GpTableCopier) do |copier|
             stub(copier).use_gp_pipe? { true }
           end
@@ -109,12 +107,6 @@ describe ImportTerminator, :greenplum_integration do
           expect(log_for {
             ImportTerminator.terminate(import)
           }).to match /Found running writer/
-        end
-
-        it "allows the chorus worker to finish" do
-          ImportTerminator.terminate(import)
-          @runner.join(5).should_not be_nil
-          @runner = nil
         end
       end
 
