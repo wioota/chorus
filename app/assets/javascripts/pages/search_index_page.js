@@ -20,7 +20,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         var searchParams = _.toArray(arguments);
         this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
         this.listenTo(this.model, "loaded", this.resourcesLoaded);
-        this.listenTo(this.model, "unprocessableEntity", this.unprocessableEntity);
+        this.handleFetchErrorsFor(this.model);
         this.model.fetch();
     },
 

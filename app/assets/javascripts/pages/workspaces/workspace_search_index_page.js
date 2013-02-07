@@ -36,7 +36,12 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
         this.workspaceId = this.search.get("workspaceId");
+    },
+
+    setup: function() {
+        this._super("setup", arguments);
         this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
+        this.breadcrumbs.requiredResources.add(this.search.workspace());
         this.search.workspace().fetch();
     },
 

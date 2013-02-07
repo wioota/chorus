@@ -22,13 +22,17 @@ chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
     makeModel: function(workspaceId) {
         this.workspaceId = workspaceId;
         this._super("makeModel", Array.prototype.slice.call(arguments, 1));
-        this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
-        this.search.workspace().fetch();
     },
 
     parseSearchParams: function(searchParams) {
         return _.extend(this._super("parseSearchParams", [ searchParams ]), {
             workspaceId: this.workspaceId });
+    },
+
+    setup: function() {
+        this.breadcrumbs.requiredResources.add(this.search.workspace());
+        this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
+        this.search.workspace().fetch();
     },
 
     resourcesLoaded: function() {

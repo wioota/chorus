@@ -8,7 +8,8 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
 
     describe("breadcrumbs", function() {
         beforeEach(function() {
-            page.render();
+            this.server.completeFetchFor(page.search, { thisWorkspace: { docs: [], numFound: 0 }});
+            this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
         });
 
         it("displays the Tags breadcrumb", function() {
