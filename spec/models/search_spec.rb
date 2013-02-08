@@ -641,6 +641,7 @@ describe Search do
         create_and_record_search(owner, :query => tag.name, :tag => true, :per_type => 1) do |search|
           search.models[:workfiles].first.tags.should include tag
           search.models[:datasets].first.tags.should include tag
+          search.models[:workspaces].first.tags.should include tag
         end
       end
 
