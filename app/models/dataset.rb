@@ -14,6 +14,8 @@ class Dataset < ActiveRecord::Base
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
 
+  acts_as_taggable  # must be above searchable
+
   searchable_model :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
@@ -33,8 +35,6 @@ class Dataset < ActiveRecord::Base
   attr_accessible :name
 
   delegate :data_source, :accessible_to, :to => :schema
-
-  acts_as_taggable
 
   def self.add_search_permissions(current_user, search)
     search.build do

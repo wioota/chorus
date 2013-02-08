@@ -157,8 +157,9 @@ FixtureBuilder.configure do |fbuilder|
     note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
     note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
 
-    # Search Database Instance Accounts
+    # Search Database Instance Accounts For Solr Permissions
     searchquery_database.instance_accounts << owner_instance_account
+    default_database.instance_accounts << owner_instance_account
     shared_search_database.instance_accounts << @shared_instance_account
 
     #Workspaces

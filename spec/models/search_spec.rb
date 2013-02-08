@@ -640,6 +640,7 @@ describe Search do
       it "returns models with the specified tag" do
         create_and_record_search(owner, :query => tag.name, :tag => true, :per_type => 1) do |search|
           search.models[:workfiles].first.tags.should include tag
+          search.models[:datasets].first.tags.should include tag
         end
       end
 
