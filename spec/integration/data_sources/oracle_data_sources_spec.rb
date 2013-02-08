@@ -52,7 +52,6 @@ describe "Data Source", :oracle_integration do
     let(:data_source) { schema.data_source }
 
     before do
-      pending "in progess"
       schema.datasets.size.should > 0
       login(users(:admin))
       visit("#/data_sources/#{data_source.id}/schemas")

@@ -68,7 +68,19 @@ class OracleConnection < DataSourceConnection
   end
 
   def datasets(options={})
-    with_connection { @connection.fetch(DATASETS_SQL, :schema => schema_name).all}
+    with_connection do
+      table_query = @connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:owner => schema_name)
+      view_query = @connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:owner => schema_name)
+      if options[:name_filter]
+        table_query = table_query.where(["REGEXP_LIKE(TABLE_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
+        view_query = view_query.where(["REGEXP_LIKE(VIEW_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
+      end
+      datasets_query = table_query
+      unless options[:tables_only]
+        datasets_query = datasets_query.union(view_query)
+      end
+      datasets_query.order(:name).limit(options[:limit]).all
+    end
   end
 
   def datasets_count(options={})
@@ -95,11 +107,14 @@ class OracleConnection < DataSourceConnection
   SQL
 
   DATASETS_SQL = <<-SQL
+      SELECT * FROM (
         SELECT * FROM (
-          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = :schema
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = :schema AND REGEXP_LIKE(TABLE_NAME, :name_filter, 'i')
           UNION
-          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = :schema)
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = :schema AND REGEXP_LIKE(VIEW_NAME, :name_filter, 'i'))
         ORDER BY name
+      )
+      WHERE rownum <= :limit
   SQL
 
   def db_url

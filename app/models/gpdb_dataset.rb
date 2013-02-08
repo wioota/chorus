@@ -4,8 +4,6 @@ class GpdbDataset < Dataset
   has_many :tableau_workbook_publications, :dependent => :destroy, :foreign_key => :dataset_id
   delegate :definition, :to => :statistics
 
-  attr_accessor :statistics
-
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
 

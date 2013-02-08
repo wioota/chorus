@@ -97,7 +97,8 @@ describe OracleConnection, :oracle_integration do
         SELECT * FROM (
           SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
           UNION
-          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}')
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
+        )
         ORDER BY name
       SQL
     }
@@ -106,6 +107,87 @@ describe OracleConnection, :oracle_integration do
     let(:subject) { connection.datasets }
 
     it_should_behave_like "a well behaved database query"
+
+    context "when the user doesn't have access to the schema" do
+      it "should raise a SqlPermissionDenied"
+    end
+
+    context "when a limit is passed" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT * FROM (
+          SELECT * FROM (
+            SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
+            UNION
+            SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+          )
+          ORDER BY name
+        )
+        WHERE rownum <= 2
+        SQL
+      }
+
+      let(:expected) { db.fetch(dataset_list_sql).all }
+      let(:subject) { connection.datasets(:limit => 2) }
+
+      it_should_behave_like "a well behaved database query"
+    end
+
+    context "when a name filter is passed" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT * FROM (
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
+          UNION
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i'))
+        ORDER BY name
+        SQL
+      }
+      let(:expected) { db.fetch(dataset_list_sql).all }
+      let(:subject) { connection.datasets(:name_filter => 'nEWer') }
+
+      it_should_behave_like "a well behaved database query"
+    end
+
+    context "when showing only tables" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+        ORDER BY name
+        SQL
+      }
+      let(:expected) { db.fetch(dataset_list_sql).all }
+      let(:subject) { connection.datasets(:tables_only => true) }
+
+      it_should_behave_like "a well behaved database query"
+    end
+
+    context "when multiple options are passed" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT * FROM (
+          SELECT * FROM (
+            SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
+            UNION
+            SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i'))
+          ORDER BY name
+        )
+        WHERE rownum <= 1
+        SQL
+      }
+      let(:expected) { db.fetch(dataset_list_sql).all }
+      let(:subject) { connection.datasets(:name_filter => 'nEWer', :limit => 1) }
+
+      it_should_behave_like "a well behaved database query"
+    end
+  end
+
+  describe "#datasets_count" do
+    it "should work"
+  end
+
+  describe "#metadata_for_dataset" do
+    it "should work"
   end
 
   describe "#version" do
