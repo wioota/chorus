@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
   before_filter :extend_expiration
+  rescue_from 'ActionController::MissingFile', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
   rescue_from 'ApiValidationError', :with => :render_not_valid
