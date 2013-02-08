@@ -58,6 +58,32 @@ describe("chorus.views.ActivityListHeader", function() {
             });
 
             describe("#render", function() {
+                context("when there is no tagBox subview in options", function() {
+                    it("does not show a tag_box element", function() {
+                        expect(this.view.$('.tag_box')).not.toExist();
+                    });
+                });
+
+                context("when it has a tag box subview in options", function() {
+                    beforeEach(function() {
+                        this.workspace = rspecFixtures.workspace(
+                            {tags: [{name: 'alpha'}]
+                        });
+                        this.view = new chorus.views.ActivityListHeader({
+                            model: this.workspace,
+                            allTitle: "the_all_title_i_passed",
+                            insightsTitle: "the_insights_title_i_passed",
+                            tagBox: new chorus.views.TagBox({model: this.workspace})
+                        });
+                        this.server.completeFetchFor(this.view.insightsCount, [], {}, {page: 1, total: null, records: 5});
+                        this.view.render();
+                    });
+
+                    it("has tags", function() {
+                        expect(this.view.$('.text-tags')).toContainText("alpha");
+                    });
+                });
+
                 context("when insights mode is true", function() {
                     beforeEach(function() {
                         this.view.collection.attributes.insights = true;

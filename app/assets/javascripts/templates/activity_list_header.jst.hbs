@@ -13,5 +13,10 @@
     {{#if iconUrl}}
         <img src="{{iconUrl}}"/>
     {{/if}}
-    <h1 title="{{title}}">{{title}}</h1>
+    <div class="right_of_image">
+        <h1 title="{{title}}">{{title}}</h1>
+        {{#if tagBox}}
+             <div class="tag_box"></div>
+        {{/if}}
+    </div>
 </div>

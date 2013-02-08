@@ -8,6 +8,10 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         "click .insights": "onInsightsClicked"
     },
 
+    subviews: {
+        '.tag_box': 'tagBox'
+    },
+
     setup: function() {
         this.subscribePageEvent("note:deleted", this.updateInsightCount);
         this.subscribePageEvent("insight:promoted", this.updateInsightCount);
@@ -25,6 +29,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
         this.allTitle = this.options.allTitle;
         this.insightsTitle = this.options.insightsTitle;
+        this.tagBox = this.options.tagBox;
     },
 
     additionalContext: function() {
@@ -32,7 +37,8 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
             title: this.pickTitle(),
             showInsights: this.collection.attributes.insights,
             insightCount: this.insightsCount.totalRecordCount(),
-            iconUrl: this.model && this.model.defaultIconUrl()
+            iconUrl: this.model && this.model.defaultIconUrl(),
+            tagBox: this.tagBox
         };
     },
 

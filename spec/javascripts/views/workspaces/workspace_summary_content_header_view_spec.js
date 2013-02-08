@@ -1,9 +1,7 @@
 describe("chorus.views.WorkspaceSummaryContentHeader", function() {
     beforeEach(function() {
         stubDefer();
-        this.workspace = rspecFixtures.workspace({
-            tags: [{name: 'alpha'}]
-        });
+        this.workspace = rspecFixtures.workspace();
         this.workspace.loaded = true;
         this.view = new chorus.views.WorkspaceSummaryContentHeader({model: this.workspace});
     });
@@ -25,10 +23,6 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
 
         it("fills the activityListHeader subview", function() {
             expect(this.view.$(".activity_list_header")).not.toBeEmpty();
-        });
-
-        it("has tags", function() {
-            expect(this.view.$('.text-tags')).toContainText("alpha");
         });
 
         it("has a truncated text view with the workspace's summary", function() {
@@ -66,6 +60,14 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             this.server.completeFetchFor(this.view.activityListHeader.insightsCount, [], {}, { records: 5 });
 
             expect(this.view.$(".activity_list_header h1")).toContainText("super workspace");
+        });
+    });
+
+    describe("#resourcesLoaded", function() {
+        it("passes a TagBox to activityListHeader", function() {
+            this.view.resourcesLoaded();
+            expect(this.view.activityListHeader.options.tagBox.options.model).toBe(this.workspace);
+            expect(this.view.activityListHeader.options.tagBox.options.workspaceIdForTagLink).toBe(this.workspace.id);
         });
     });
 });
