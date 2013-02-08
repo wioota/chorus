@@ -76,16 +76,8 @@ class GpdbDatabase < ActiveRecord::Base
     connect_with(data_source.account_for_user!(user))
   end
 
-  def connect_with(account)
-    options = {
-        :host => data_source.host,
-        :port => data_source.port,
-        :username => account.db_username,
-        :password => account.db_password,
-        :database => name,
-        :logger => Rails.logger
-    }
-    GreenplumConnection.new(options)
+  def connect_with(account, options = {}, &block)
+    data_source.connect_with account, options.merge({:database => name }), &block
   end
 
   private

@@ -58,15 +58,29 @@ class GpdbDataSource < DataSource
     workspaces.workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
-  def connect_with(account)
-    GreenplumConnection.new(
+  def accessible_to(user)
+    GpdbDataSource.accessible_to(user).include?(self)
+  end
+
+  def connect_with(account, options = {})
+    params = {
         :username => account.db_username,
         :password => account.db_password,
         :host => host,
         :port => port,
         :database => db_name,
         :logger => Rails.logger
-    )
+    }.merge(options)
+
+    connection = GreenplumConnection.new params
+
+    if block_given?
+      connection.with_connection do
+        yield connection
+      end
+    else
+      connection
+    end
   end
 
   def refresh_databases(options ={})
