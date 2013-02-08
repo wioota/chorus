@@ -5,13 +5,18 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 
     subviews: {
         ".truncated_summary": "truncatedSummary",
-        ".activity_list_header": "activityListHeader"
+        ".activity_list_header": "activityListHeader",
+        '.tag_box': 'tagBox'
     },
 
     setup: function() {
         this.model.activities().fetchIfNotLoaded();
         this.requiredResources.push(this.model);
         this.listenTo(this.model, "saved", this.updateHeaderAndActivityList);
+        this.tagBox = new chorus.views.TagBox({
+            model: this.model,
+            workspaceIdForTagLink: this.model.id
+        });
     },
 
     updateHeaderAndActivityList: function() {

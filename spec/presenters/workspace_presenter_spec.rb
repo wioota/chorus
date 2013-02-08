@@ -31,6 +31,7 @@ describe WorkspacePresenter, :type => :view do
       hash.should have_key(:has_added_sandbox)
       hash.should have_key(:has_changed_settings)
       hash.should have_key(:sandbox_info)
+      hash.should have_key(:tags)
       hash.should_not have_key(:number_of_insights)
       hash.should_not have_key(:number_of_comments)
       hash.should_not have_key(:latest_comment_list)
@@ -62,6 +63,15 @@ describe WorkspacePresenter, :type => :view do
     it "sanitizes summary" do
       workspace.summary = "<script>alert('got your cookie')</script>"
       hash[:summary].should_not match "<"
+    end
+
+    context "when the workspace has tags" do
+      let(:workspace) { workspaces(:tagged) }
+
+      it 'includes the tags' do
+        hash[:tags].count.should be > 0
+        hash[:tags].should == Presenter.present(workspace.tags, @view)
+      end
     end
 
     context "when rendering an activity stream" do

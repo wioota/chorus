@@ -1,7 +1,9 @@
 describe("chorus.views.WorkspaceSummaryContentHeader", function() {
     beforeEach(function() {
         stubDefer();
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = rspecFixtures.workspace({
+            tags: [{name: 'alpha'}]
+        });
         this.workspace.loaded = true;
         this.view = new chorus.views.WorkspaceSummaryContentHeader({model: this.workspace});
     });
@@ -23,6 +25,10 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
 
         it("fills the activityListHeader subview", function() {
             expect(this.view.$(".activity_list_header")).not.toBeEmpty();
+        });
+
+        it("has tags", function() {
+            expect(this.view.$('.text-tags')).toContainText("alpha");
         });
 
         it("has a truncated text view with the workspace's summary", function() {

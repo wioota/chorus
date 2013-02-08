@@ -21,6 +21,7 @@ class WorkspacePresenter < Presenter
               :has_added_workfile => model.has_added_workfile,
               :has_added_sandbox => model.has_added_sandbox,
               :has_changed_settings => model.has_changed_settings,
+              :tags => present(model.tags, @options),
               :sandbox_info => present(model.sandbox)
           }.merge(latest_comments_hash)
       )
