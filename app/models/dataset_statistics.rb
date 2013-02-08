@@ -23,6 +23,7 @@ class DatasetStatistics
 
   def initialize(row)
     return unless row
+    row = row.with_indifferent_access
 
     @definition   = row['definition']
     @description  = row['description']

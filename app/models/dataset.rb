@@ -30,8 +30,7 @@ class Dataset < ActiveRecord::Base
                                {:type => :integer, :name => :instance_account_ids, :options => {:multiple => true}},
                                {:type => :integer, :name => :found_in_workspace_id, :options => {:multiple => true}}
                            ]
-
-  attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
+  attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index, :statistics
   attr_accessible :name
 
   delegate :data_source, :accessible_to, :to => :schema
@@ -100,6 +99,10 @@ class Dataset < ActiveRecord::Base
       raise ActiveRecord::RecordNotFound
     end
     dataset
+  end
+
+  def add_metadata!(account)
+    @statistics = DatasetStatistics.new(schema.connect_with(account).metadata_for_dataset(name))
   end
 
   def entity_type_name
