@@ -89,7 +89,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             hdfs: new chorus.views.HdfsEntrySidebar(),
             user: new chorus.views.UserSidebar({listMode: true}),
             workspace: new chorus.views.WorkspaceListSidebar(),
-            dataset: new chorus.views.DatasetSidebar({listMode: true}),
+            dataset: new chorus.views.DatasetSidebar({listMode: true, searchPage: true}),
             instance: new chorus.views.InstanceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };

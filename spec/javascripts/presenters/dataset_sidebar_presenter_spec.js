@@ -1,3 +1,26 @@
+function itBehavesLikeARegularDataset(presenter) {
+    expect(presenter.canExport()).toBeFalsy();
+    expect(presenter.hasImport()).toBeFalsy();
+    expect(presenter.displayEntityType()).toEqual("table");
+    expect(presenter.isChorusView()).toBeFalsy();
+    expect(presenter.noCredentials()).toBeFalsy();
+    expect(presenter.noCredentialsWarning()).toBeTruthy();
+    expect(presenter.typeString()).toBeTruthy();
+    expect(presenter.workspaceId()).toBeFalsy();
+    expect(presenter.realWorkspace()).toBeFalsy();
+    expect(presenter.hasSandbox()).toBeFalsy();
+    expect(presenter.activeWorkspace()).toBeFalsy();
+    expect(presenter.isDeleteable()).toBeFalsy();
+    expect(presenter.isImportConfigLoaded()).toBeFalsy();
+    expect(presenter.hasSchedule()).toBeFalsy();
+    expect(presenter.nextImport()).toBeFalsy();
+    expect(presenter.inProgressText()).toBeFalsy();
+    expect(presenter.importInProgress()).toBeFalsy();
+    expect(presenter.importFailed()).toBeFalsy();
+    expect(presenter.lastImport()).toBeFalsy();
+    expect(presenter.canAnalyze()).toBeTruthy();
+}
+
 describe("chorus.presenters.DatasetSidebar", function() {
     describe("ellipsize", function() {
         it("ellipsizes a long string", function() {
@@ -29,27 +52,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
             });
 
             it("returns everything", function() {
-                expect(presenter.canExport()).toBeFalsy();
-                expect(presenter.hasImport()).toBeFalsy();
-                expect(presenter.displayEntityType()).toEqual("table");
-                expect(presenter.isChorusView()).toBeFalsy();
-                expect(presenter.noCredentials()).toBeFalsy();
-                expect(presenter.noCredentialsWarning()).not.toBeEmpty();
-                expect(presenter.typeString()).not.toBeEmpty();
-                expect(presenter.workspaceId()).not.toBeEmpty();
-                expect(presenter.hasSandbox()).toBeFalsy();
-                expect(presenter.activeWorkspace()).toBeFalsy();
-                expect(presenter.isDeleteable()).toBeFalsy();
-                expect(presenter.deleteMsgKey()).not.toBeEmpty();
-                expect(presenter.deleteTextKey()).not.toBeEmpty();
-                expect(presenter.isImportConfigLoaded()).toBeFalsy();
-                expect(presenter.hasSchedule()).toBeFalsy();
-                expect(presenter.nextImport()).toBeFalsy();
-                expect(presenter.inProgressText()).not.toBeEmpty();
-                expect(presenter.importInProgress()).not.toBeEmpty();
-                expect(presenter.importFailed()).not.toBeEmpty();
-                expect(presenter.lastImport()).not.toBeEmpty();
-                expect(presenter.canAnalyze()).not.toBeEmpty();
+                itBehavesLikeARegularDataset(presenter);
+                expect(presenter.deleteMsgKey()).toBeTruthy();
+                expect(presenter.deleteTextKey()).toBeTruthy();
             });
 
             describe("#nextImport", function(){
@@ -297,6 +302,17 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.hasSandbox()).toBeTruthy();
                 expect(presenter.workspaceId()).not.toBeEmpty();
                 expect(presenter.activeWorkspace()).toBeTruthy();
+            });
+
+            context("when the searchPage option is true", function() {
+                var presenter;
+                beforeEach(function() {
+                    presenter = new chorus.presenters.DatasetSidebar(resource, {searchPage: true});
+                });
+
+                it("returns everything", function() {
+                    itBehavesLikeARegularDataset(presenter);
+                });
             });
         });
     });

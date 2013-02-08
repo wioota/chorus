@@ -44,7 +44,12 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     isDeleteable: function() {
-        return this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
+        return !this.options.searchPage && this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
+    },
+
+    realWorkspace: function() {
+        // this.workspace gets overriden by options hash passed by pages.
+        return this.options.searchPage ? null : this.resource.workspace();
     },
 
     workspaceId: function() {
@@ -56,7 +61,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     hasWorkspace: function() {
-        return this.resource && this.resource.workspace();
+        return this.resource && this.realWorkspace();
     },
 
     activeWorkspace: function() {
@@ -201,7 +206,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canExport: function canExport() {
-        return this.resource && this.resource.canExport();
+        return !this.options.searchPage && this.resource && this.resource.canExport();
     },
 
     _linkToModel: function(model) {

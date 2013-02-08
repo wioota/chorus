@@ -461,4 +461,15 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
         });
     });
+
+    describe(".resourcesLoaded", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.SearchIndexPage(this.query);
+            this.page.resourcesLoaded();
+        });
+
+        it("sets the searchPage option for DatasetSidebar to true", function() {
+            expect(this.page.sidebars.dataset.options.searchPage).toEqual(true);
+        });
+    });
 });
