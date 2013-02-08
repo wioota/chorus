@@ -79,6 +79,12 @@ class OracleConnection < DataSourceConnection
     end
   end
 
+  def metadata_for_dataset(dataset_name)
+    with_connection do
+      @connection.fetch("SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = :table_name", :table_name => dataset_name).first
+    end
+  end
+
   private
 
   def datasets_query(options)

@@ -108,10 +108,6 @@ describe OracleConnection, :oracle_integration do
 
     it_should_behave_like "a well behaved database query"
 
-    context "when the user doesn't have access to the schema" do
-      it "should raise a SqlPermissionDenied"
-    end
-
     context "when a limit is passed" do
       let(:dataset_list_sql) {
         <<-SQL
@@ -201,10 +197,6 @@ describe OracleConnection, :oracle_integration do
 
     it_should_behave_like "a well behaved database query"
 
-    context "when the user doesn't have access to the schema" do
-      it "should raise a SqlPermissionDenied"
-    end
-
     context "when a name filter is passed" do
       let(:dataset_list_sql) {
         <<-SQL
@@ -235,7 +227,15 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe "#metadata_for_dataset" do
-    it "should work"
+    let(:metadata_sql) {
+      <<-SQL
+      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWERTABLE'
+      SQL
+    }
+    let(:expected) { db.fetch(metadata_sql).first }
+    let(:subject) { connection.metadata_for_dataset('NEWERTABLE') }
+
+    it_should_behave_like "a well behaved database query"
   end
 
   describe "#version" do
