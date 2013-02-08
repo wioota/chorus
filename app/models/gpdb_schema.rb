@@ -99,15 +99,6 @@ class GpdbSchema < Schema
     nil
   end
 
-  def with_gpdb_connection(account, set_search=true)
-    database.with_gpdb_connection(account) do |conn|
-      if set_search
-        add_schema_to_search_path(conn)
-      end
-      yield conn
-    end
-  end
-
   def connect_with(account)
     connection = ::GreenplumConnection.new(
         :host => data_source.host,
@@ -133,12 +124,6 @@ class GpdbSchema < Schema
   end
 
   private
-
-  def add_schema_to_search_path(conn)
-    conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
-  rescue ActiveRecord::StatementInvalid
-    conn.schema_search_path = "#{conn.quote_column_name(name)}"
-  end
 
   def mark_schemas_as_stale
     if stale? && stale_at_changed?

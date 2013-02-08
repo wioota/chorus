@@ -9,7 +9,6 @@ class GpdbDataset < Dataset
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
 
-  delegate :with_gpdb_connection, :to => :schema
   delegate :connect_with, :to => :schema
 
   def instance_account_ids
@@ -176,9 +175,9 @@ class GpdbDataset < Dataset
   end
 
   def query_results(account, query_method)
-    schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(Query.new(schema).send(query_method, name).to_sql)
-    end.first
+    statement = Query.new(schema).send(query_method, name).to_sql
+    results = schema.connect_with(account).prepare_and_execute_statement(statement)
+    results.hashes.first
   end
 
   def as_sequel

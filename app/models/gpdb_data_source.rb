@@ -71,7 +71,7 @@ class GpdbDataSource < DataSource
 
   def refresh_databases(options ={})
     found_databases = []
-    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, db_name) { |conn| conn.select_all(database_and_role_sql) }
+    rows = connect_with(owner_account).prepare_and_execute_statement(database_and_role_sql).hashes
     database_account_groups = rows.inject({}) do |groups, row|
       groups[row["database_name"]] ||= []
       groups[row["database_name"]] << row["db_username"]

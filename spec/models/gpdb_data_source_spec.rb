@@ -323,60 +323,62 @@ describe GpdbDataSource do
       let(:account_with_access) { gpdb_data_source.owner_account }
       let(:account_without_access) { instance_accounts(:unauthorized) }
 
-      before do
-        stub_gpdb(gpdb_data_source.owner_account, gpdb_data_source.send(:database_and_role_sql) => [
-            {'database_name' => database.name, 'db_username' => account_with_access.db_username},
-            {'database_name' => 'something_new', 'db_username' => account_with_access.db_username}
-        ])
-      end
-
-      it "creates new databases" do
-        gpdb_data_source.databases.where(:name => 'something_new').should_not exist
-        gpdb_data_source.refresh_databases
-        gpdb_data_source.databases.where(:name => 'something_new').should exist
-      end
-
-      it "should not index databases that were just created" do
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", anything) do |method, id|
-          GpdbDatabase.find(id).name.should_not == 'something_new'
+      context "when database query is successful" do
+        before do
+          stub_gpdb(gpdb_data_source.owner_account, gpdb_data_source.send(:database_and_role_sql) => [
+              {'database_name' => database.name, 'db_username' => account_with_access.db_username},
+              {'database_name' => 'something_new', 'db_username' => account_with_access.db_username}
+          ])
         end
-        gpdb_data_source.refresh_databases
-      end
 
-      it "removes database_instance_accounts if they no longer exist" do
-        database.instance_accounts << account_without_access
-        gpdb_data_source.refresh_databases
-        database.instance_accounts.find_by_id(account_without_access.id).should be_nil
-      end
+        it "creates new databases" do
+          gpdb_data_source.databases.where(:name => 'something_new').should_not exist
+          gpdb_data_source.refresh_databases
+          gpdb_data_source.databases.where(:name => 'something_new').should exist
+        end
 
-      it "marks databases as stale if they no longer exist" do
-        missing_database.should_not be_stale
-        gpdb_data_source.refresh_databases(:mark_stale => true)
-        missing_database.reload.should be_stale
-        missing_database.stale_at.should be_within(5.seconds).of(Time.current)
-      end
+        it "should not index databases that were just created" do
+          stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", anything) do |method, id|
+            GpdbDatabase.find(id).name.should_not == 'something_new'
+          end
+          gpdb_data_source.refresh_databases
+        end
 
-      it "does not mark databases as stale if flag not set" do
-        missing_database.should_not be_stale
-        gpdb_data_source.refresh_databases
-        missing_database.reload.should_not be_stale
-      end
+        it "removes database_instance_accounts if they no longer exist" do
+          database.instance_accounts << account_without_access
+          gpdb_data_source.refresh_databases
+          database.instance_accounts.find_by_id(account_without_access.id).should be_nil
+        end
 
-      it "clears the stale flag on databases if they are found again" do
-        database.update_attributes!({:stale_at => Time.current}, :without_protection => true)
-        gpdb_data_source.refresh_databases
-        database.reload.should_not be_stale
-      end
+        it "marks databases as stale if they no longer exist" do
+          missing_database.should_not be_stale
+          gpdb_data_source.refresh_databases(:mark_stale => true)
+          missing_database.reload.should be_stale
+          missing_database.stale_at.should be_within(5.seconds).of(Time.current)
+        end
 
-      it "does not update the stale_at time" do
-        missing_database.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
-        gpdb_data_source.refresh_databases(:mark_stale => true)
-        missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+        it "does not mark databases as stale if flag not set" do
+          missing_database.should_not be_stale
+          gpdb_data_source.refresh_databases
+          missing_database.reload.should_not be_stale
+        end
+
+        it "clears the stale flag on databases if they are found again" do
+          database.update_attributes!({:stale_at => Time.current}, :without_protection => true)
+          gpdb_data_source.refresh_databases
+          database.reload.should_not be_stale
+        end
+
+        it "does not update the stale_at time" do
+          missing_database.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+          gpdb_data_source.refresh_databases(:mark_stale => true)
+          missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+        end
       end
 
       context "when the instance is not available" do
         before do
-          stub(Gpdb::ConnectionBuilder).connect! { raise ActiveRecord::JDBCError.new("Broken!") }
+          stub_gpdb_fail
         end
 
         it "marks all the associated databases as stale if the flag is set" do

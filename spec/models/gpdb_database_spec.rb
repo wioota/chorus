@@ -231,16 +231,6 @@ describe GpdbDatabase do
     end
   end
 
-  describe "#with_gpdb_connection", :greenplum_integration do
-    it "raises GreenplumConnection::ObjectNotFound when the database does not exist" do
-      database = FactoryGirl.create(:gpdb_database, :data_source => InstanceIntegration.real_gpdb_data_source, :name => 'i_dont_exist')
-
-      expect {
-        database.with_gpdb_connection(InstanceIntegration.real_gpdb_account) {}
-      }.to raise_error(GreenplumConnection::ObjectNotFound, /database.*does not exist/)
-    end
-  end
-
   describe "#destroy" do
     let(:database) { gpdb_databases(:default) }
 
