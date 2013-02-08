@@ -68,6 +68,20 @@ class OracleConnection < DataSourceConnection
   end
 
   def datasets(options={})
+    datasets_query(options) do |query|
+      query.order(:name).limit(options[:limit]).all
+    end
+  end
+
+  def datasets_count(options={})
+    datasets_query(options) do |query|
+      query.count
+    end
+  end
+
+  private
+
+  def datasets_query(options)
     with_connection do
       table_query = @connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:owner => schema_name)
       view_query = @connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:owner => schema_name)
@@ -79,15 +93,10 @@ class OracleConnection < DataSourceConnection
       unless options[:tables_only]
         datasets_query = datasets_query.union(view_query)
       end
-      datasets_query.order(:name).limit(options[:limit]).all
+
+      yield datasets_query
     end
   end
-
-  def datasets_count(options={})
-    -1
-  end
-
-  private
 
   def schema_name
     @settings[:schema]

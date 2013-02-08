@@ -169,7 +169,8 @@ describe OracleConnection, :oracle_integration do
           SELECT * FROM (
             SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
             UNION
-            SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i'))
+            SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i')
+          )
           ORDER BY name
         )
         WHERE rownum <= 1
@@ -183,7 +184,54 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe "#datasets_count" do
-    it "should work"
+    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+    let(:schema_name) { InstanceIntegration.oracle_schema_name }
+    let(:dataset_list_sql) {
+      <<-SQL
+        SELECT count(*) FROM (
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+          UNION
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
+        )
+      SQL
+    }
+
+    let(:expected) { db.fetch(dataset_list_sql).single_value }
+    let(:subject) { connection.datasets_count }
+
+    it_should_behave_like "a well behaved database query"
+
+    context "when the user doesn't have access to the schema" do
+      it "should raise a SqlPermissionDenied"
+    end
+
+    context "when a name filter is passed" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT count(*) FROM (
+          SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
+          UNION
+          SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i')
+        )
+        SQL
+      }
+      let(:expected) { db.fetch(dataset_list_sql).single_value }
+      let(:subject) { connection.datasets_count(:name_filter => 'nEWer') }
+
+      it_should_behave_like "a well behaved database query"
+    end
+
+    context "when showing only tables" do
+      let(:dataset_list_sql) {
+        <<-SQL
+        SELECT count(*) FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+        SQL
+      }
+      let(:expected) { db.fetch(dataset_list_sql).single_value }
+      let(:subject) { connection.datasets_count(:tables_only => true) }
+
+      it_should_behave_like "a well behaved database query"
+    end
   end
 
   describe "#metadata_for_dataset" do
