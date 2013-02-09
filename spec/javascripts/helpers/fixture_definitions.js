@@ -143,15 +143,21 @@ window.rspecFixtureDefinitions = {
 
     notificationSet: {},
 
+    oracleSchema: {
+        unique: ['id'],
+        model: 'Schema'
+    },
+
+    oracleSchemaSet: {
+        collection: "SchemaSet"
+    },
+
     schema: { unique: [ "id", "database.id", "database.instance.id" ] },
 
     schemaFunctionSet: {},
 
     schemaSet: { unique: [ "id" ] },
 
-    oracleSchemaSet: {
-        collection: "SchemaSet"
-    },
 
     searchResult: {},
 

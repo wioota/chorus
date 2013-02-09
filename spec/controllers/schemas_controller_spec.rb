@@ -12,7 +12,7 @@ describe SchemasController do
   describe "#show" do
     let(:schema) { schemas(:default) }
     before do
-      any_instance_of(GpdbSchema) do |schema|
+      any_instance_of(Schema) do |schema|
         stub(schema).verify_in_source { true }
       end
     end
@@ -43,6 +43,11 @@ describe SchemasController do
 
     generate_fixture "schema.json" do
       get :show, :id => schema.to_param
+    end
+
+    generate_fixture "oracleSchema.json" do
+      log_in users(:the_collaborator)
+      get :show, :id => schemas(:oracle).to_param
     end
 
     context "when the schema is not in GPDB" do

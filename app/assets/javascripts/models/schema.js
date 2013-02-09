@@ -12,7 +12,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     datasets: function() {
-        if (!this._datasets) {
+        if(!this._datasets) {
             this._datasets = new chorus.collections.DatasetSet([], { schemaId: this.id });
         }
         return this._datasets;
@@ -26,8 +26,23 @@ chorus.models.Schema = chorus.models.Base.extend({
         return database;
     },
 
+    instance: function() {
+        var instance = this._instance;
+        if(!this._instance) {
+            if(this.has('instance')) {
+                instance = new chorus.models.Instance(this.get('instance'));
+            } else {
+                instance = this.database().instance();
+            }
+        }
+        if(this.loaded) {
+            this._instance = instance;
+        }
+        return instance;
+    },
+
     canonicalName: function() {
-        return [this.database().instance().name(), this.database().name(), this.name()].join(".");
+        return _.compact([this.instance().name(), this.database().name(), this.name()]).join(".");
     },
 
     isEqualToSchema: function(other) {

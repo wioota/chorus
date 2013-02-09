@@ -10,6 +10,8 @@ describe OracleSchemaPresenter, :type => :view do
       hash[:id].should == schema.id
       hash[:name].should == schema.name
       hash[:entity_type].should == "oracle_schema"
+      hash[:instance][:id].should == schema.data_source.id
+      hash[:instance][:name].should == schema.data_source.name
     end
   end
 end

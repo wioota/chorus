@@ -15,7 +15,7 @@ describe("chorus.models.Schema", function() {
         });
 
         describe("#datasets", function() {
-            it("should return a DataaseObjectSet", function() {
+            it("should return a DatabaseObjectSet", function() {
                 expect(this.model.datasets()).toBeA(chorus.collections.DatasetSet);
             });
 
@@ -46,16 +46,24 @@ describe("chorus.models.Schema", function() {
     });
 
     describe("#canonicalName", function() {
-        beforeEach(function() {
-            this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
+        describe("when the schema is an oracle schema", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.oracleSchema({name: "schema", instance: {name: "instance"}});
+            });
+
+            it("should create the canonical name", function() {
+                expect(this.model.canonicalName()).toBe("instance.schema");
+            });
         });
 
-        it("should create the canonical name", function() {
-            expect(this.model.canonicalName()).toBe("instance.database.schema");
-        });
+        describe("when the schema is a gpdb schema", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
+            });
 
-        it("memoizes", function() {
-            expect(this.model.database()).toBe(this.model.database());
+            it("should create the canonical name", function() {
+                expect(this.model.canonicalName()).toBe("instance.database.schema");
+            });
         });
     });
 
@@ -85,6 +93,44 @@ describe("chorus.models.Schema", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.database().id);
             expect(this.database.instance().id).toBe(this.model.get("database").instance.id);
+        });
+
+        it("memoizes", function() {
+            expect(this.model.database()).toBe(this.model.database());
+        });
+    });
+
+    describe("#instance", function() {
+        context("for an oracle schema", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.oracleSchema({name: "schema", instance: {name: "instance", id: 45}});
+                expect(this.model.get('database')).toBeUndefined();
+            });
+
+            it("returns the instance directly", function() {
+                expect(this.model.instance().name()).toEqual('instance');
+                expect(this.model.instance().id).toEqual(45);
+            });
+
+            it("memoizes", function() {
+                expect(this.model.instance()).toBe(this.model.instance());
+            });
+        });
+
+        context("for a gpdb schema", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance", id: 42}}});
+                expect(this.model.get('instance')).toBeUndefined();
+            });
+
+            it("returns the instance directly", function() {
+                expect(this.model.instance().name()).toEqual('instance');
+                expect(this.model.instance().id).toEqual(42);
+            });
+
+            it("memoizes", function() {
+                expect(this.model.instance()).toBe(this.model.instance());
+            });
         });
     });
 });
