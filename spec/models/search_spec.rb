@@ -645,7 +645,7 @@ describe Search do
         end
       end
 
-      it "returns workfiles sorted by file_name" do
+      xit "returns workfiles sorted by file_name" do
         query_params = { :query => "test_file_name_sort", :tag => true }
         record_with_vcr do
           FactoryGirl.create :workfile, :file_name => "test_sort1.sql", :tag_list => "test_file_name_sort"
