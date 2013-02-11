@@ -37,6 +37,24 @@ describe DatasetImportsController do
       end
     end
 
+    context "for a chorus view" do
+      let(:workspace) { import_three.workspace }
+      let(:destination_dataset) { FactoryGirl.create :chorus_view, :name => 'new_table_for_import', :workspace => workspace }
+
+      it "doesn't find imports where the chorus view has the same name as a destination table" do
+        get :index, :workspace_id => workspace.id, :dataset_id => destination_dataset.id
+        response.should be_success
+        decoded_response.length.should == 0
+      end
+
+      it "does return imports where the chorus view is the source" do
+        source_dataset.type = "ChorusView"
+        source_dataset.save!
+        get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+        decoded_response.length.should == 3
+      end
+    end
+
     it "authorizes" do
       log_in users(:default)
       get :index, :workspace_id => workspaces(:private).id, :dataset_id => source_dataset.id

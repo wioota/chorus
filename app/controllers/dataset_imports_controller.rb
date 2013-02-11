@@ -6,8 +6,13 @@ class DatasetImportsController < ApplicationController
     authorize! :show, workspace
 
     table = Dataset.find(params[:dataset_id])
-    imports = Import.where('source_dataset_id = ? OR (to_table = ? AND workspace_id = ?)',
-                           table.id, table.name, workspace.id).order('created_at DESC')
+    if (table.is_a?(ChorusView))
+      imports = Import.where('source_dataset_id = ?',
+                             table.id).order('created_at DESC')
+    else
+      imports = Import.where('source_dataset_id = ? OR (to_table = ? AND workspace_id = ?)',
+                             table.id, table.name, workspace.id).order('created_at DESC')
+    end
     present paginate imports
   end
 
@@ -42,8 +47,8 @@ class DatasetImportsController < ApplicationController
 
     import = src_table.imports.new(import_params)
 
-    import.workspace    = workspace
-    import.user         = current_user
+    import.workspace = workspace
+    import.user = current_user
 
     if import.save
       import.create_import_event
