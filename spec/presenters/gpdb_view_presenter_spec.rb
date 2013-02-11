@@ -7,8 +7,7 @@ describe GpdbViewPresenter, :type => :view do
     gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "instance1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :data_source => gpdb_data_source)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
-    statistics = DatasetStatistics.new( :definition => "select * from everybody" )
-    db_view = FactoryGirl.build(:gpdb_view, :id => 321, :name => "view1", :schema => schema, :statistics => statistics)
+    db_view = FactoryGirl.build(:gpdb_view, :id => 321, :name => "view1", :schema => schema)
 
     @presenter = GpdbViewPresenter.new(db_view, view)
   end

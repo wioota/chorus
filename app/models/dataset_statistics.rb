@@ -3,6 +3,11 @@ class DatasetStatistics
               :last_analyzed, :disk_size, :partition_count
 
   def self.build_for(dataset, account)
+    if dataset.kind_of?(ChorusView)
+      result = dataset.schema.connect_with(account).prepare_and_execute_statement(dataset.query, :describe_only => true)
+      return self.new('column_count' => result.columns.count)
+    end
+
     connection = dataset.schema.connect_with(account)
     metadata = connection.metadata_for_dataset(dataset.name)
 

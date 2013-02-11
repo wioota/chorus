@@ -99,11 +99,6 @@ class ChorusView < GpdbDataset
     end
   end
 
-  def add_metadata!(account)
-    result = connect_with(account).prepare_and_execute_statement(query, :describe_only => true)
-    @statistics = DatasetStatistics.new('column_count' => result.columns.count)
-  end
-
   def verify_in_source(user)
     true
   end

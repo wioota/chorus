@@ -72,5 +72,22 @@ describe DatasetStatistics do
       mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
       DatasetStatistics.build_for(dataset, account).last_analyzed.should be_nil
     end
+
+    context "for a ChorusView" do
+      let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 2, 3, 4, 5") }
+
+      before do
+        stub(connection).prepare_and_execute_statement('select 1, 2, 3, 4, 5' ,:describe_only => true) {
+          obj = Object.new
+          stub(obj).columns { obj }
+          stub(obj).count { 5 }
+          obj
+        }
+      end
+
+      it "retrieves the column count" do
+        DatasetStatistics.build_for(chorus_view, account).column_count.should == 5
+      end
+    end
   end
 end
