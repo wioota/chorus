@@ -37,8 +37,16 @@ class OracleConnection < DataSourceConnection
     @settings = details
   end
 
+  def logger_options
+    if @settings[:logger]
+      { :logger => @settings[:logger], :sql_log_level => :debug }
+    else
+      {}
+    end
+  end
+
   def connect!
-    @connection ||= Sequel.connect(db_url, :test => true)
+    @connection ||= Sequel.connect(db_url, logger_options.merge({:test => true}))
   rescue Sequel::DatabaseError => e
     raise OracleConnection::DatabaseError.new(e)
   end
@@ -65,6 +73,16 @@ class OracleConnection < DataSourceConnection
 
   def schema_exists?(name)
     schemas.include? name
+  end
+
+  def table_exists?(name)
+    with_connection { @connection.table_exists?("#{schema_name}__#{name.to_s}".to_sym) }
+  end
+
+  def view_exists?(name)
+    with_connection do
+      @connection[:ALL_VIEWS].select(:VIEW_NAME).where(:OWNER => schema_name, :VIEW_NAME => name).first.present?
+    end
   end
 
   def datasets(options={})

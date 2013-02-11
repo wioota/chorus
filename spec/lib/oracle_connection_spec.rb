@@ -19,7 +19,8 @@ describe OracleConnection, :oracle_integration do
         :username => username,
         :password => password,
         :port => port,
-        :database => db_name
+        :database => db_name,
+        :logger => Rails.logger
     }
   }
   let(:connection) { OracleConnection.new(details) }
@@ -89,28 +90,36 @@ describe OracleConnection, :oracle_integration do
     end
   end
 
-  describe "#datasets" do
-    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+  describe "#version" do
+    it "returns the Oracle connection" do
+      connection.version.should == '11.2.0.2.0'
+    end
+  end
+
+  describe "methods within a schema" do
     let(:schema_name) { InstanceIntegration.oracle_schema_name }
-    let(:dataset_list_sql) {
-      <<-SQL
+    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+
+    describe "#datasets" do
+      let(:dataset_list_sql) {
+        <<-SQL
         SELECT * FROM (
           SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
           UNION
           SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
         )
         ORDER BY name
-      SQL
-    }
+        SQL
+      }
 
-    let(:expected) { db.fetch(dataset_list_sql).all }
-    let(:subject) { connection.datasets }
+      let(:expected) { db.fetch(dataset_list_sql).all }
+      let(:subject) { connection.datasets }
 
-    it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well behaved database query"
 
-    context "when a limit is passed" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when a limit is passed" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT * FROM (
           SELECT * FROM (
             SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
@@ -120,47 +129,47 @@ describe OracleConnection, :oracle_integration do
           ORDER BY name
         )
         WHERE rownum <= 2
-        SQL
-      }
+          SQL
+        }
 
-      let(:expected) { db.fetch(dataset_list_sql).all }
-      let(:subject) { connection.datasets(:limit => 2) }
+        let(:expected) { db.fetch(dataset_list_sql).all }
+        let(:subject) { connection.datasets(:limit => 2) }
 
-      it_should_behave_like "a well behaved database query"
-    end
+        it_should_behave_like "a well behaved database query"
+      end
 
-    context "when a name filter is passed" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when a name filter is passed" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT * FROM (
           SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
           UNION
           SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i'))
         ORDER BY name
-        SQL
-      }
-      let(:expected) { db.fetch(dataset_list_sql).all }
-      let(:subject) { connection.datasets(:name_filter => 'nEWer') }
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).all }
+        let(:subject) { connection.datasets(:name_filter => 'nEWer') }
 
-      it_should_behave_like "a well behaved database query"
-    end
+        it_should_behave_like "a well behaved database query"
+      end
 
-    context "when showing only tables" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when showing only tables" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
         ORDER BY name
-        SQL
-      }
-      let(:expected) { db.fetch(dataset_list_sql).all }
-      let(:subject) { connection.datasets(:tables_only => true) }
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).all }
+        let(:subject) { connection.datasets(:tables_only => true) }
 
-      it_should_behave_like "a well behaved database query"
-    end
+        it_should_behave_like "a well behaved database query"
+      end
 
-    context "when multiple options are passed" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when multiple options are passed" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT * FROM (
           SELECT * FROM (
             SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
@@ -170,77 +179,122 @@ describe OracleConnection, :oracle_integration do
           ORDER BY name
         )
         WHERE rownum <= 1
-        SQL
-      }
-      let(:expected) { db.fetch(dataset_list_sql).all }
-      let(:subject) { connection.datasets(:name_filter => 'nEWer', :limit => 1) }
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).all }
+        let(:subject) { connection.datasets(:name_filter => 'nEWer', :limit => 1) }
 
-      it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well behaved database query"
+      end
     end
-  end
 
-  describe "#datasets_count" do
-    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
-    let(:schema_name) { InstanceIntegration.oracle_schema_name }
-    let(:dataset_list_sql) {
-      <<-SQL
+    describe "#datasets_count" do
+      let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+      let(:schema_name) { InstanceIntegration.oracle_schema_name }
+      let(:dataset_list_sql) {
+        <<-SQL
         SELECT count(*) FROM (
           SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
           UNION
           SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
         )
-      SQL
-    }
+        SQL
+      }
 
-    let(:expected) { db.fetch(dataset_list_sql).single_value }
-    let(:subject) { connection.datasets_count }
+      let(:expected) { db.fetch(dataset_list_sql).single_value }
+      let(:subject) { connection.datasets_count }
 
-    it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well behaved database query"
 
-    context "when a name filter is passed" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when a name filter is passed" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT count(*) FROM (
           SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
           UNION
           SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i')
         )
-        SQL
-      }
-      let(:expected) { db.fetch(dataset_list_sql).single_value }
-      let(:subject) { connection.datasets_count(:name_filter => 'nEWer') }
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).single_value }
+        let(:subject) { connection.datasets_count(:name_filter => 'nEWer') }
 
-      it_should_behave_like "a well behaved database query"
-    end
+        it_should_behave_like "a well behaved database query"
+      end
 
-    context "when showing only tables" do
-      let(:dataset_list_sql) {
-        <<-SQL
+      context "when showing only tables" do
+        let(:dataset_list_sql) {
+          <<-SQL
         SELECT count(*) FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).single_value }
+        let(:subject) { connection.datasets_count(:tables_only => true) }
+
+        it_should_behave_like "a well behaved database query"
+      end
+    end
+
+    describe "#metadata_for_dataset" do
+      let(:metadata_sql) {
+        <<-SQL
+      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWERTABLE'
         SQL
       }
-      let(:expected) { db.fetch(dataset_list_sql).single_value }
-      let(:subject) { connection.datasets_count(:tables_only => true) }
+      let(:expected) { db.fetch(metadata_sql).first }
+      let(:subject) { connection.metadata_for_dataset('NEWERTABLE') }
 
       it_should_behave_like "a well behaved database query"
     end
-  end
 
-  describe "#metadata_for_dataset" do
-    let(:metadata_sql) {
-      <<-SQL
-      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWERTABLE'
-      SQL
-    }
-    let(:expected) { db.fetch(metadata_sql).first }
-    let(:subject) { connection.metadata_for_dataset('NEWERTABLE') }
+    describe "#table_exists?" do
+      let(:subject) { connection.table_exists?(table_name) }
+      let(:expected) { true }
 
-    it_should_behave_like "a well behaved database query"
-  end
+      context "when the table exists" do
+        let(:table_name) { "NEWTABLE" }
 
-  describe "#version" do
-    it "returns the Oracle connection" do
-      connection.version.should == '11.2.0.2.0'
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "when the table doesn't exist" do
+        let(:table_name) { "MISSING_TABLE" }
+        let(:expected) { false }
+
+        it_should_behave_like "a well behaved database query"
+      end
+
+      context "when the table name given is nil" do
+        let(:table_name) { nil }
+        let(:expected) { false }
+
+        it_should_behave_like "a well behaved database query"
+      end
+    end
+
+    describe "#view_exists?" do
+      let(:subject) { connection.view_exists?(view_name) }
+
+      context "when the view exists" do
+        let(:expected) { true }
+        let(:view_name) { "NEWVIEW" }
+
+        it_behaves_like 'a well behaved database query'
+      end
+
+      context "when the view doesn't exist" do
+        let(:view_name) { "MISSING_VIEW" }
+        let(:expected) { false }
+
+        it_behaves_like 'a well behaved database query'
+      end
+
+      context "when the view name given is nil" do
+        let(:view_name) { nil }
+        let(:expected) { false }
+
+        it_behaves_like 'a well behaved database query'
+      end
     end
   end
 
@@ -264,7 +318,7 @@ describe OracleConnection, :oracle_integration do
         end
 
         context "when the error code is 12514" do
-          let(:error_code) { 12514}
+          let(:error_code) { 12514 }
 
           it "returns :DATABASE_MISSING" do
             error.error_type.should == :DATABASE_MISSING
