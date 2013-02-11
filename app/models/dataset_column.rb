@@ -1,6 +1,6 @@
 require_relative 'gpdb_column_statistics'
 
-class GpdbColumn
+class DatasetColumn
   attr_accessor :data_type, :description, :ordinal_position, :statistics, :name, :statistics
 
   def self.columns_for(account, dataset)
@@ -11,7 +11,7 @@ class GpdbColumn
     columns_with_stats = table.connect_with(account).column_info(table.name, table.query_setup_sql)
 
     columns_with_stats.map.with_index do |raw_row_data, i|
-      column = GpdbColumn.new({
+      column = DatasetColumn.new({
         :name => raw_row_data[:attname],
         :data_type => raw_row_data[:format_type],
         :description => raw_row_data[:description],

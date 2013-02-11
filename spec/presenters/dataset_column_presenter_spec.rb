@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe GpdbColumnPresenter, :type => :view do
-  let(:gpdb_column) { GpdbColumn.new(:name => "column1", :data_type => type_string, :description => 'nothing') }
+describe DatasetColumnPresenter, :type => :view do
+  let(:gpdb_column) { DatasetColumn.new(:name => "column1", :data_type => type_string, :description => 'nothing') }
   let(:type_string) { "smallint" }
 
-  subject { GpdbColumnPresenter.new(gpdb_column, view) }
+  subject { DatasetColumnPresenter.new(gpdb_column, view) }
 
   describe "#to_hash" do
     it "includes the column's basic information" do

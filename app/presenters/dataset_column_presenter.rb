@@ -1,4 +1,4 @@
-class GpdbColumnPresenter < Presenter
+class DatasetColumnPresenter < Presenter
   include DbTypesToChorus
 
   def to_hash

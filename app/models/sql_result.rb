@@ -1,4 +1,4 @@
-require_relative 'gpdb_column'
+require_relative 'dataset_column'
 
 class SqlResult
   attr_reader :columns, :rows
@@ -43,7 +43,7 @@ class SqlResult
   end
 
   def add_column(name, type)
-    @columns << GpdbColumn.new(:name => name, :data_type => type)
+    @columns << DatasetColumn.new(:name => name, :data_type => type)
   end
 
   def add_row(row)

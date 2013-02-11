@@ -64,7 +64,7 @@ class GpdbDataset < Dataset
   end
 
   def column_data
-    @column_data ||= GpdbColumn.columns_for(schema.database.data_source.owner_account, self)
+    @column_data ||= DatasetColumn.columns_for(schema.database.data_source.owner_account, self)
   end
 
   def query_setup_sql

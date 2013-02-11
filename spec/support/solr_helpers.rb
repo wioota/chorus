@@ -1,12 +1,12 @@
 module SolrHelpers
 
   def reindex_solr_fixtures
-    stub(GpdbColumn).columns_for.with_any_args {
-      [ GpdbColumn.new(:name => 'searchquery'),
-        GpdbColumn.new(:name => 'searchquery 2'),
-        GpdbColumn.new(:name => 'non-search'),
-        GpdbColumn.new(:name => 'comment-search', :description => 'searchquery comment 1'),
-        GpdbColumn.new(:name => 'comment-search-2', :description => 'searchquery comment 2')
+    stub(DatasetColumn).columns_for.with_any_args {
+      [ DatasetColumn.new(:name => 'searchquery'),
+        DatasetColumn.new(:name => 'searchquery 2'),
+        DatasetColumn.new(:name => 'non-search'),
+        DatasetColumn.new(:name => 'comment-search', :description => 'searchquery comment 1'),
+        DatasetColumn.new(:name => 'comment-search-2', :description => 'searchquery comment 2')
       ]
     }
     any_instance_of(GpdbDataset) do |ds|

@@ -54,7 +54,7 @@ class ChorusView < GpdbDataset
 
   def check_duplicate_column(user)
     account = data_source.account_for_user!(user)
-    GpdbColumn.columns_for(account, self)
+    DatasetColumn.columns_for(account, self)
   end
 
   def query_setup_sql

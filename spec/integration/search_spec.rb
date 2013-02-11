@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Search" do
   before :all do
-    stub(GpdbColumn).columns_for.with_any_args {
+    stub(DatasetColumn).columns_for.with_any_args {
       []
     }
     Sunspot.searchable.each do |model|

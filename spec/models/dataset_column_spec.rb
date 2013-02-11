@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe GpdbColumn do
+describe DatasetColumn do
   describe ".columns_for" do
-    subject { GpdbColumn.columns_for(account, dataset) }
+    subject { DatasetColumn.columns_for(account, dataset) }
 
     let(:connection) { Object.new }
     let(:account) { Object.new }
@@ -79,24 +79,24 @@ describe GpdbColumn do
 
   describe "#number_or_time?" do
     it "is true if it is a numeric column" do
-      GpdbColumn.new(:data_type => "integer").should be_number_or_time
-      GpdbColumn.new(:data_type => "numeric").should be_number_or_time
-      GpdbColumn.new(:data_type => "double precision").should be_number_or_time
+      DatasetColumn.new(:data_type => "integer").should be_number_or_time
+      DatasetColumn.new(:data_type => "numeric").should be_number_or_time
+      DatasetColumn.new(:data_type => "double precision").should be_number_or_time
     end
 
     it "is true if it is a time column" do
-      GpdbColumn.new(:data_type => "date").should be_number_or_time
-      GpdbColumn.new(:data_type => "time with time zone").should be_number_or_time
-      GpdbColumn.new(:data_type => "timestamp with time zone").should be_number_or_time
+      DatasetColumn.new(:data_type => "date").should be_number_or_time
+      DatasetColumn.new(:data_type => "time with time zone").should be_number_or_time
+      DatasetColumn.new(:data_type => "timestamp with time zone").should be_number_or_time
     end
 
     it "is false otherwise" do
-      GpdbColumn.new(:data_type => "text").should_not be_number_or_time
+      DatasetColumn.new(:data_type => "text").should_not be_number_or_time
     end
   end
 
   describe "#simplified_type" do
-    subject { GpdbColumn.new(:data_type => type_string) }
+    subject { DatasetColumn.new(:data_type => type_string) }
 
     def self.it_simplifies_type(type, simplified_type)
       context "with a '#{type}' column" do

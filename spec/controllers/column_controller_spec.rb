@@ -15,10 +15,10 @@ describe ColumnController do
       before do
         fake_account = Object.new
         stub(subject).account_for_current_user(table) { fake_account }
-        stub(GpdbColumn).columns_for(fake_account, table) do
+        stub(DatasetColumn).columns_for(fake_account, table) do
           [
-              GpdbColumn.new(:name => 'email', :data_type => 'varchar(255)', :description => 'it must be present'),
-              GpdbColumn.new(:name => 'age', :data_type => 'integer', :description => 'nothing'),
+              DatasetColumn.new(:name => 'email', :data_type => 'varchar(255)', :description => 'it must be present'),
+              DatasetColumn.new(:name => 'age', :data_type => 'integer', :description => 'nothing'),
           ]
         end
       end
@@ -43,7 +43,7 @@ describe ColumnController do
     context "with real data", :greenplum_integration do
       let(:account) { InstanceIntegration.real_gpdb_account }
       let(:user) { account.owner }
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:database) { InstanceIntegration.real_database }
       let(:dataset) {database.find_dataset_in_schema('base_table1', 'test_schema')}
 
       before do
