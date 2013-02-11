@@ -166,7 +166,7 @@ describe ConfigMigrator do
 
     describe 'workfile max size' do
       let(:workfile_max_size) { config_22['file_sizes_mb']['workfiles'] }
-      let(:csv_import_max_size) { config_22['file_sizes_mb']['csv_import'] }
+      let(:csv_import_max_size) { config_22['file_sizes_mb']['csv_imports'] }
 
       context 'when no units are given' do
         # Defaults to bytes.

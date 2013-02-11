@@ -56,7 +56,7 @@ class ConfigMigrator
   end
 
   def migrate_workfile_max_size
-    %w{file_sizes_mb.workfiles file_sizes_mb.csv_import}.each do |key|
+    %w{file_sizes_mb.workfiles file_sizes_mb.csv_imports}.each do |key|
       migrate_value('chorus.workfile.max_file_size', key) do |old_value|
         case old_value
           when /G$/ then
