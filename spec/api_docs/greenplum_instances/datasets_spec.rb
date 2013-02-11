@@ -25,8 +25,6 @@ resource "Greenplum DB: datasets" do
     stub(DatasetColumn).columns_for.with_any_args { [FactoryGirl.build(:dataset_column), FactoryGirl.build(:dataset_column)] }
     any_instance_of(GpdbTable) do |dataset|
       stub(dataset).verify_in_source(anything) { true }
-      stub(dataset).add_metadata!.with_any_args { statistics }
-      stub(dataset).statistics.with_any_args { statistics }
     end
 
     stub(SqlExecutor).cancel_query.with_any_args { status }
@@ -74,6 +72,14 @@ resource "Greenplum DB: datasets" do
 
   get "/datasets/:dataset_id/statistics" do
     parameter :dataset_id, "The id of a dataset"
+
+    before do
+      stub(DatasetStatistics).build_for(
+          satisfy { |arg| arg.id == dataset.id && arg.class == GpdbTable },
+          satisfy { |arg| arg.id == owner_account.id && arg.class == InstanceAccount }
+      ).returns(statistics)
+    end
+
     example_request "Get statistics for a dataset" do
       status.should == 200
     end
