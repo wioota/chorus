@@ -645,21 +645,27 @@ describe Search do
         end
       end
 
-      xit "returns workfiles sorted by file_name" do
-        query_params = { :query => "test_file_name_sort", :tag => true }
+      it "returns workfiles sorted by file_name" do
+        query_params = { :query => "tagSort", :tag => true }
         record_with_vcr do
-          FactoryGirl.create :workfile, :file_name => "test_sort1.sql", :tag_list => "test_file_name_sort"
-          FactoryGirl.create :workfile, :file_name => "test_sort2.sql", :tag_list => "test_file_name_sort"
-          Workfile.solr_reindex
+          public_workfile = workfiles(:public)
+          tagged_workfile = workfiles(:tagged)
+
+          [public_workfile, tagged_workfile].each do |w|
+            w.tag_list = "tagSort"
+            w.save!
+          end
+          Sunspot.commit
+
           search = Search.new(owner, query_params)
-          search.workfiles.should be_sorted_by :file_name
+          search.workfiles.should be_sorted_by :file_name, true
 
           # changing the file names changes the order
           search.workfiles.second.update_attributes(:file_name => "aaa_" + search.workfiles.second.file_name)
-          Workfile.solr_reindex
+          Sunspot.commit
 
           search = Search.new(owner, query_params)
-          search.workfiles.should be_sorted_by :file_name
+          search.workfiles.should be_sorted_by :file_name, true
         end
       end
     end
