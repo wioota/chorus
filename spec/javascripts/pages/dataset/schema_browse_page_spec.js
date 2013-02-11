@@ -85,19 +85,44 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         });
 
         it("has the right breadcrumbs", function() {
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
+            var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
+            expect(breadcrumbs.eq(0)).toHaveHref("#/");
+            expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/data_sources");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toContainTranslation("breadcrumbs.instances");
+            expect(breadcrumbs.eq(1)).toHaveHref("#/data_sources");
+            expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText("AnInstance");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.schema.database().instance().showUrl());
+            expect(breadcrumbs.eq(2)).toContainText("AnInstance");
+            expect(breadcrumbs.eq(2)).toHaveHref(this.schema.database().instance().showUrl());
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText("Foo%");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.schema.database().showUrl());
+            expect(breadcrumbs.eq(3)).toContainText("Foo%");
+            expect(breadcrumbs.eq(3)).toHaveHref(this.schema.database().showUrl());
 
             expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
+        });
+
+        context("when the schema has only an associated data source and not a database", function() {
+            beforeEach(function() {
+                this.schema = rspecFixtures.oracleSchema({id: "789", name: "Bar/", instance: {id: "123", name: "AnInstance"}});
+                this.page = new chorus.pages.SchemaBrowsePage("789");
+                this.server.completeFetchFor(this.schema);
+            });
+
+            it ("shows the breadcrumbs without the database", function() {
+                var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
+                expect(breadcrumbs.length).toBe(3);
+
+                expect(breadcrumbs.eq(0)).toHaveHref("#/");
+                expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
+
+                expect(breadcrumbs.eq(1)).toHaveHref("#/data_sources");
+                expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
+
+                expect(breadcrumbs.eq(2)).toContainText("AnInstance");
+                expect(breadcrumbs.eq(2)).toHaveHref(this.schema.instance().showUrl());
+
+                expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
+            });
         });
 
         it("has the right title", function() {

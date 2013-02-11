@@ -53,13 +53,16 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     },
 
     crumbs: function() {
-        return [
+        var crumbs = [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.instances"), url: '#/data_sources'},
-            {label: this.schema.database().instance().name(), url: this.schema.database().instance().showUrl()},
-            {label: this.schema.database().name(), url: this.schema.database().showUrl() },
-            {label: this.schema.name()}
+            {label: this.schema.instance().name(), url: this.schema.instance().showUrl() }
         ];
+        if (this.schema.database().name()) {
+            crumbs.push({label: this.schema.database().name(), url: this.schema.database().showUrl() });
+        }
+        crumbs.push({label: this.schema.name()});
+        return crumbs;
     },
 
     schemaLoaded: function() {
