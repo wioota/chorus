@@ -4,9 +4,13 @@ describe "Data Source", :oracle_integration do
   include DataSourceHelpers
   include InstanceIntegration
 
+  let(:user) { users(:owner) }
+  before do
+    login user
+  end
+
   describe "adding an oracle data source" do
     before do
-      login(users(:admin))
       visit("#/data_sources")
       click_button "Add Data Source"
     end
@@ -33,7 +37,6 @@ describe "Data Source", :oracle_integration do
     let(:data_source) { InstanceIntegration.real_oracle_data_source }
 
     before do
-      login(users(:admin))
       visit("#/data_sources")
       click_on data_source.name
     end
@@ -53,7 +56,6 @@ describe "Data Source", :oracle_integration do
 
     before do
       schema.datasets.size.should > 0
-      login(users(:admin))
       visit("#/data_sources/#{data_source.id}/schemas")
       find(:xpath, "//a[text()='#{schema.name}']").click
     end
