@@ -62,6 +62,7 @@ class CsvImporter
     import_record.success = false
     raise ImportFailed.new(e.message)
   ensure
+    import_record.destination_dataset = destination_dataset
     import_record.finished_at = Time.current
     import_record.save!(:validate => false)
   end
@@ -113,7 +114,6 @@ class CsvImporter
   end
 
   def destination_dataset
-    schema.refresh_datasets(account)
     schema.datasets.tables.find_by_name(csv_file.to_table)
   end
 

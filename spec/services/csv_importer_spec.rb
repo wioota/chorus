@@ -76,8 +76,10 @@ describe CsvImporter do
 
     describe "#import_with_events" do
       context "when the target table does not exist" do
-        it "creates a new table with data from the csv file" do
+        before do
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
+        end
+        it "creates a new table with data from the csv file" do
 
           result = schema.connect_with(account).fetch(<<-SQL)
             SELECT *
@@ -88,6 +90,10 @@ describe CsvImporter do
           result[0].should == {:id => 1, :where => "foo"}
           result[1].should == {:id => 2, :where => "bar"}
           result[2].should == {:id => 3, :where => "baz"}
+        end
+
+        it "puts the newly-created destination dataset in the import" do
+          Import.last.destination_dataset.should == destination_dataset
         end
       end
 
@@ -322,8 +328,7 @@ describe CsvImporter do
     let(:instance_account) { csv_file.workspace.sandbox.data_source.account_for_user!(csv_file.user) }
 
     describe "after creating the csv file" do
-      it "performs a refresh and returns the dataset matching the import table name" do
-        mock(csv_file.workspace.sandbox).refresh_datasets(instance_account)
+      it "has a destination dataset matching the import table name" do
         importer = CsvImporter.new(csv_file,  file_import_created_event.id)
         importer.destination_dataset.name.should == csv_file.to_table
       end
