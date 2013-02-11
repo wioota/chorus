@@ -13,4 +13,9 @@ describe("chorus.models.DynamicInstance", function() {
         var model = new chorus.models.DynamicInstance({entityType: "gnip_instance"});
         expect(model).toBeA(chorus.models.GnipInstance);
     });
+
+    it("should return an oracle instance when the entity_type is oracle_data_source", function() {
+        var model = new chorus.models.DynamicInstance({entityType: "oracle_data_source"});
+        expect(model).toBeA(chorus.models.OracleDataSource);
+    });
 });

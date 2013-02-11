@@ -49,7 +49,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     instance: function() {
-        return this.database().instance();
+        return this.schema().instance();
     },
 
     database: function() {

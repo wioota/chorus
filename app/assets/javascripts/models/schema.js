@@ -30,7 +30,7 @@ chorus.models.Schema = chorus.models.Base.extend({
         var instance = this._instance;
         if(!this._instance) {
             if(this.has('instance')) {
-                instance = new chorus.models.Instance(this.get('instance'));
+                instance = new chorus.models.DynamicInstance(this.get('instance'));
             } else {
                 instance = this.database().instance();
             }

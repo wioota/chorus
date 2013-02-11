@@ -13,18 +13,18 @@ describe DatasetsController do
 
   context "#index" do
     context "with stubbed datasource" do
-      shared_examples :works do
-        before do
-          stub(Schema).find(schema.id.to_s) { schema }
-          stub(schema).refresh_datasets(anything, options) do
-            [dataset1, dataset2, dataset3]
-          end
-          stub(schema).dataset_count { 122 }
+      before do
+        stub(Schema).find(schema.id.to_s) { schema }
+        stub(schema).refresh_datasets(anything, options) do
+          [dataset1, dataset2, dataset3]
         end
+        stub(schema).dataset_count { 122 }
+      end
+      let(:options) { {:limit => per_page} }
+      let(:per_page) { 50 }
 
-        context "without any filter " do
-          let(:options) { {:limit => per_page} }
-          let(:per_page) { 50 }
+      shared_examples :works do
+        context "without any filter" do
           it "should retrieve authorized db objects for a schema" do
             get :index, :schema_id => schema.to_param
 
@@ -64,6 +64,11 @@ describe DatasetsController do
         let(:schema) { schemas(:oracle) }
 
         it_should_behave_like :works
+
+        it "should save a single dataset fixture until the show page works", :fixture do
+          get :index, :schema_id => schema.to_param
+          save_fixture "oracleDataset.json", { :response => response.decoded_body["response"].first }
+        end
       end
 
       context "for a greenplum schema" do

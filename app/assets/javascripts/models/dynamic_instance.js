@@ -3,7 +3,8 @@ chorus.models.DynamicInstance = function(instanceJson) {
         instance: 'GpdbDataSource',
         gpdb_data_source: 'GpdbDataSource',
         hadoop_instance: 'HadoopInstance',
-        gnip_instance: 'GnipInstance'
+        gnip_instance: 'GnipInstance',
+        oracle_data_source: 'OracleDataSource'
     };
 
     if (!chorus.models[typeMap[instanceJson.entityType]]) {

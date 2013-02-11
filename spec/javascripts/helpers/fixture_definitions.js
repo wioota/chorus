@@ -143,6 +143,11 @@ window.rspecFixtureDefinitions = {
 
     notificationSet: {},
 
+    oracleDataset: {
+        unique: ["id"],
+        model: 'Dataset'
+    },
+
     oracleSchema: {
         unique: ['id'],
         model: 'Schema'

@@ -354,10 +354,9 @@
 
         datasetLocation: function(dataset, label) {
             label = _.isString(label) ? label : "dataset.from";
-            var highlightedDataset = chorus.helpers.withSearchResults(dataset);
             var instance = dataset.instance();
             var schema = dataset.schema();
-            var database = schema.database();
+            var database = dataset.database();
 
             var schemaPieces = [];
             var dataSourceName = instance.name();
@@ -366,11 +365,15 @@
 
             if (dataset.get('hasCredentials') === false) {
                 schemaPieces.push(dataSourceName);
-                schemaPieces.push(databaseName);
+                if (databaseName.toString()) {
+                    schemaPieces.push(databaseName);
+                }
                 schemaPieces.push(schemaName);
             } else {
                 schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), dataSourceName, {"class": "instance"}).toString());
-                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
+                if (databaseName.toString()) {
+                    schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
+                }
                 schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString());
             }
             return new Handlebars.SafeString($("<span></span>").html(t(label, {location: schemaPieces.join('.')})).outerHtml());

@@ -889,6 +889,23 @@ describe("handlebars", function () {
                 expect($(this.result).find('em').length).toBe(2);
             });
 
+            context("when the dataset's schema directly belongs to an instance", function() {
+                beforeEach(function() {
+                    this.model = rspecFixtures.oracleDataset();
+                    this.result = $(Handlebars.helpers.datasetLocation(this.model).toString());
+                });
+
+                it("doesn't include a database name", function() {
+                    var instance = this.model.instance();
+                    expect(this.result.find("a.instance")).toContainText(instance.name());
+                    expect(this.result.find("a.instance")).toHaveHref(instance.showUrl());
+
+                    expect(this.result.find("a.database")).not.toExist();
+
+                    expect(this.result.find("a.schema")).toContainText(this.model.schema().name());
+                    expect(this.result.find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
+                });
+            });
 
             context("when credentials are not present", function () {
                 beforeEach(function () {
