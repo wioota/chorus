@@ -7,8 +7,6 @@ class GpdbDataset < Dataset
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
 
-  delegate :connect_with, :to => :schema
-
   def instance_account_ids
     schema.database.instance_account_ids
   end
@@ -65,10 +63,6 @@ class GpdbDataset < Dataset
 
   def column_data
     @column_data ||= DatasetColumn.columns_for(schema.database.data_source.owner_account, self)
-  end
-
-  def query_setup_sql
-    ""
   end
 
   def scoped_name

@@ -33,7 +33,7 @@ class Dataset < ActiveRecord::Base
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index, :statistics
   attr_accessible :name
 
-  delegate :data_source, :accessible_to, :to => :schema
+  delegate :data_source, :accessible_to, :connect_with, :to => :schema
 
   def self.add_search_permissions(current_user, search)
     search.build do
@@ -103,6 +103,10 @@ class Dataset < ActiveRecord::Base
 
   def add_metadata!(account)
     @statistics = DatasetStatistics.new(schema.connect_with(account).metadata_for_dataset(name))
+  end
+
+  def query_setup_sql
+    ""
   end
 
   def entity_type_name

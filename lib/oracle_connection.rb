@@ -99,7 +99,22 @@ class OracleConnection < DataSourceConnection
 
   def metadata_for_dataset(dataset_name)
     with_connection do
-      @connection.fetch("SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = :table_name", :table_name => dataset_name).first
+      @connection.fetch(<<-SQL, :table_name => dataset_name, :schema_name => schema_name).first
+        SELECT COUNT(*) AS column_count
+        FROM ALL_TAB_COLUMNS
+        WHERE TABLE_NAME = :table_name AND OWNER = :schema_name
+      SQL
+    end
+  end
+
+  def column_info(table_name, setup_sql)
+    with_connection do
+      @connection.fetch(<<-SQL, :table => table_name, :schema => schema_name).all
+        SELECT COLUMN_NAME as attname, DATA_TYPE as format_type
+        FROM ALL_TAB_COLUMNS
+        WHERE TABLE_NAME = :table AND OWNER = :schema
+        ORDER BY attname
+      SQL
     end
   end
 

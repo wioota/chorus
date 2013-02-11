@@ -238,11 +238,11 @@ describe OracleConnection, :oracle_integration do
     describe "#metadata_for_dataset" do
       let(:metadata_sql) {
         <<-SQL
-      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWERTABLE'
+      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWTABLE' AND OWNER = 'TESTUSER'
         SQL
       }
       let(:expected) { db.fetch(metadata_sql).first }
-      let(:subject) { connection.metadata_for_dataset('NEWERTABLE') }
+      let(:subject) { connection.metadata_for_dataset('NEWTABLE') }
 
       it_should_behave_like "a well behaved database query"
     end
@@ -295,6 +295,25 @@ describe OracleConnection, :oracle_integration do
 
         it_behaves_like 'a well behaved database query'
       end
+    end
+
+    describe "#column_info" do
+      let(:table_name) { "NEWERTABLE" }
+      let(:columns_sql) do
+        <<-SQL
+          SELECT COLUMN_NAME as attname, DATA_TYPE as format_type
+          FROM ALL_TAB_COLUMNS
+          WHERE TABLE_NAME = :table AND OWNER = :schema
+          ORDER BY attname
+        SQL
+      end
+      let(:expected) do
+        db.fetch(columns_sql, :schema => schema_name, :table => table_name).all
+      end
+
+      let(:subject) { connection.column_info(table_name, 'ignored setup sql to be consistent with other datasource connections') }
+
+      it_should_behave_like "a well behaved database query"
     end
   end
 
