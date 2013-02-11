@@ -114,7 +114,7 @@ class CsvImporter
 
   def destination_dataset
     schema.refresh_datasets(account)
-    schema.datasets.find_by_name(csv_file.to_table)
+    schema.datasets.tables.find_by_name(csv_file.to_table)
   end
 
   # column_mapping is direct postgresql types

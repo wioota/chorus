@@ -435,6 +435,20 @@ describe CsvImporter do
     end
   end
 
+  describe "#destination_dataset" do
+    let(:database) { InstanceIntegration.real_database }
+    let(:schema) { database.schemas.find_by_name('test_schema') }
+    let(:user) { account.owner }
+    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema, :owner => user, :name => "test_csv_workspace") }
+    let(:error_on_import) { false }
+    let!(:chorus_view) { FactoryGirl.create :chorus_view, :name => table_name, :schema => schema }
+    it "doesn't return chorus views with the same name" do
+      importer = CsvImporter.new(csv_file, file_import_created_event.id)
+      importer.destination_dataset.should_not be_a ChorusView
+    end
+  end
+
   def create_csv_file(options = {})
     defaults = {
         :contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
