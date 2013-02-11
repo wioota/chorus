@@ -7,7 +7,7 @@ describe DatasetStatistics do
           'column_count' => '4',
           'row_count' => '23',
           'table_type' => 'BASE_TABLE',
-          'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+          'last_analyzed' => Time.parse('2012-06-06 23:02:42.40264+00'),
           'disk_size' => '230',
           'partition_count' => '2'
     })}
@@ -23,7 +23,54 @@ describe DatasetStatistics do
     end
   end
 
-  it "doesn't crash when it is being initialized with nil" do
-    fail = DatasetStatistics.new(nil)
+  describe ".build_for" do
+     let(:account) { users(:owner) }
+     let(:dataset) { datasets(:table) }
+     let!(:schema) { dataset.schema }
+     let(:fake_statistics) {
+      {
+          'name' => dataset.name,
+          'description' => 'table1 is cool',
+          'definition' => nil,
+          'column_count' => '3',
+          'row_count' => '5',
+          'table_type' => 'BASE_TABLE',
+          'last_analyzed' => Time.parse('2012-06-06 23:02:42.40264+00'),
+          'disk_size' => '500',
+          'partition_count' => '6'
+      }
+    }
+
+    let(:connection) { Object.new }
+
+    before do
+      stub(dataset).schema { schema }
+      stub(schema).connect_with(account) { connection }
+    end
+
+    it "fills in the 'description' attribute of each db object in the relation" do
+      mock(connection).metadata_for_dataset(dataset.name) { fake_statistics }
+      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      mock.proxy(DatasetStatistics).new(fake_statistics)
+      DatasetStatistics.build_for(dataset, account).should be_a(DatasetStatistics)
+    end
+
+    it "adds the partition size to the disk size" do
+      mock(connection).metadata_for_dataset(dataset.name) { fake_statistics }
+      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      stats = DatasetStatistics.build_for(dataset, account)
+      stats.disk_size.should == 543
+    end
+
+    it "returns nil when metadata returns nil" do
+      mock(connection).metadata_for_dataset(dataset.name) { nil }
+      DatasetStatistics.build_for(dataset, account).should be_nil
+    end
+
+    it "handles nil last analyzed values (for views)" do
+      mock(connection).metadata_for_dataset(dataset.name) { fake_statistics.merge('last_analyzed' => nil) }
+      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      DatasetStatistics.build_for(dataset, account).last_analyzed.should be_nil
+    end
   end
 end

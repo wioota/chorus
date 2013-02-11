@@ -7,43 +7,38 @@ describe StatisticsController do
     log_in user
   end
 
-  context "#show" do
+  describe "#show" do
     let(:schema) { schemas(:default) }
     let(:instance_account) { schema.database.data_source.owner_account }
     let!(:table) { datasets(:table) }
 
-    let(:metadata_sql) { GpdbDataset::Query.new(schema).metadata_for_dataset("table").to_sql }
-    let(:partition_data_sql) { GpdbDataset::Query.new(schema).partition_data_for_dataset(["table"]).to_sql }
-    let(:metadata_info) {
-      {
+    let(:statistics) {
+      DatasetStatistics.new(
           'name' => 'table',
           'description' => 'a description',
           'definition' => nil,
           'column_count' => '3',
           'row_count' => '5',
           'table_type' => 'BASE_TABLE',
-          'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+          'last_analyzed' => Time.parse('2012-06-06 23:02:42.40264+00'),
           'disk_size' => '500',
           'partition_count' => '6'
-      }
-    }
-
-    let(:partitiondata_info) {
-      {
-          'disk_size' => '120000'
-      }
+      )
     }
 
     context "with fake gpdb" do
+      def matches_model(expected_model)
+        satisfy { |actual_model|
+          actual_model.is_a?(expected_model.class) && actual_model.id == expected_model.id
+        }
+      end
+
       before do
-        stub_gpdb(instance_account,
-                  metadata_sql => [
-                      metadata_info
-                  ],
-                  partition_data_sql => [
-                      partitiondata_info
-                  ]
-        )
+        stub(DatasetStatistics).build_for(
+            matches_model(table),
+            matches_model(instance_account)) {
+          statistics
+        }
       end
 
       it "should retrieve the db object for a schema" do
@@ -70,7 +65,7 @@ describe StatisticsController do
               'column_count' => '3',
               'row_count' => '5',
               'table_type' => 'BASE_TABLE',
-              'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+              'last_analyzed' => Time.parse('2012-06-06 23:02:42.40264+00').utc,
               'disk_size' => '500',
               'partition_count' => '6',
               'definition' => 'Bobby DROP TABLES;'

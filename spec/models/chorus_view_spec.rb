@@ -217,17 +217,4 @@ describe ChorusView do
       chorus_view.check_duplicate_column(user).should be_true
     end
   end
-
-  describe '#add_metadata!(account)', :greenplum_integration do
-    let(:schema) { database.schemas.find_by_name('test_schema') }
-    let(:database) { InstanceIntegration.real_database }
-    let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :query => "select 1, 2, 3, 4, 5") }
-    let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
-    let(:account) { gpdb_data_source.owner_account }
-
-    it "retrieves the statistics" do
-      chorus_view.add_metadata!(account)
-      chorus_view.statistics.column_count.should == 5
-    end
-  end
 end

@@ -4,7 +4,7 @@ describe GreenplumConnection, :greenplum_integration do
   let(:username) { InstanceIntegration.greenplum_username }
   let(:password) { InstanceIntegration.greenplum_password }
   let(:database_name) { InstanceIntegration.database_name }
-  let(:the_host) { InstanceIntegration.greenplum_hostname }
+  let(:hostname) { InstanceIntegration.greenplum_hostname }
   let(:port) { InstanceIntegration.greenplum_port }
   let(:db_url) {
     query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
@@ -20,11 +20,12 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   let(:details) { {
-      :host => the_host,
+      :host => hostname,
       :username => username,
       :password => password,
       :port => port,
-      :database => database_name
+      :database => database_name,
+      :logger => Rails.logger
   } }
 
   let(:connection) { GreenplumConnection.new(details) }
@@ -33,6 +34,7 @@ describe GreenplumConnection, :greenplum_integration do
     context "when a logger is not provided" do
       before do
         mock.proxy(Sequel).connect(db_url, :test => true)
+        details.delete :logger
       end
 
       context "with valid credentials" do
@@ -52,7 +54,7 @@ describe GreenplumConnection, :greenplum_integration do
 
       let(:details) {
         {
-            :host => the_host,
+            :host => hostname,
             :username => username,
             :password => password,
             :port => port,
@@ -92,7 +94,7 @@ describe GreenplumConnection, :greenplum_integration do
 
   describe "#with_connection" do
     before do
-      mock.proxy(Sequel).connect(db_url, :test => true)
+      mock.proxy(Sequel).connect(db_url, satisfy { |options| options[:test] } )
     end
 
     context "with valid credentials" do
@@ -185,7 +187,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       describe "when including the public schema in the search path" do
-        let(:options) { { :include_public_schema_in_search_path => true } }
+        let(:options) { {:include_public_schema_in_search_path => true} }
 
         it "finds the the table in the public schema" do
           expect {
@@ -792,7 +794,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       let(:subject) {
-        connection.stream_dataset(dataset) do |row|
+        connection.stream_dataset(dataset) do
           true
         end
       }
@@ -806,8 +808,8 @@ describe GreenplumConnection, :greenplum_integration do
           bucket << row
         end
 
-        bucket.should == [{:one=>"1", :two=>"2", :three=>"1999-01-08 04:05:06-08", :fourth=>"1999-01-08 04:05:06"},
-                          {:one=>"3", :two=>"4", :three=>"1999-07-08 00:05:06-07", :fourth=>"1999-07-08 04:05:06"}]
+        bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"},
+                          {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "1999-07-08 04:05:06"}]
       end
 
       context "when a limit is provided" do
@@ -817,7 +819,7 @@ describe GreenplumConnection, :greenplum_integration do
             bucket << row
           end
 
-          bucket.should == [{:one=>"1", :two=>"2", :three=>"1999-01-08 04:05:06-08", :fourth=>"1999-01-08 04:05:06"}]
+          bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"}]
         end
       end
     end
@@ -1080,6 +1082,35 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
         end
 
         it_should_behave_like "a well behaved database query"
+      end
+    end
+
+    describe "#metadata_for_dataset" do
+      let(:dataset_name) { "metadata_table_new" }
+
+      before do
+        connection.drop_table dataset_name
+        connection.prepare_and_execute_statement(<<-SQL)
+          create table #{dataset_name} ("id" integer, "name" text);
+          insert into #{dataset_name} (id, name) values (1, 'marsbar');
+          insert into #{dataset_name} (id, name) values (2, 'kitkat');
+          insert into #{dataset_name} (id, name) values (3, 'kitkat');
+          comment on table #{dataset_name} is 'Im a table';
+          analyze #{dataset_name};
+        SQL
+      end
+
+      it "returns statistics for a dataset" do
+        row = connection.metadata_for_dataset(dataset_name)
+        row[:name].should == "metadata_table_new"
+        row[:description].should == "Im a table"
+        row[:column_count].should == 2
+        row[:row_count].should == 3
+        row[:table_type].should == "BASE_TABLE"
+        row[:last_analyzed].should_not be_nil
+        row[:disk_size].to_i.should > 0
+        row[:partition_count].should == 0
+        row[:definition].should be_nil
       end
     end
   end

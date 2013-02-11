@@ -27,6 +27,7 @@ describe OracleConnection, :oracle_integration do
 
   before do
     stub.proxy(Sequel).connect.with_any_args
+    details.delete(:logger)
   end
 
   describe "#connect!" do

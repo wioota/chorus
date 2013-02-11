@@ -140,23 +140,4 @@ describe Dataset do
       end
     end
   end
-
-  describe "#add_metadata!" do
-    let(:table) { datasets(:oracle_table) }
-    let(:schema) { table.schema }
-    let(:account) { 'hi' }
-    let(:connection) { Object.new }
-
-    before do
-      stub(schema).connect_with(account) { connection }
-      stub(connection).metadata_for_dataset(table.name) { {:column_count => 13} }
-    end
-
-    it "should add statistics with just column count" do
-      table.add_metadata! account
-
-      table.statistics.should be_a(DatasetStatistics)
-      table.statistics.column_count.should == 13
-    end
-  end
 end
