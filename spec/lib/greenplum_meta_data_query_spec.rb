@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe GreenplumConnection::Query, :greenplum_integration do
+describe GreenplumMetaDataQuery, :greenplum_integration do
   let(:account) { InstanceIntegration.real_gpdb_account }
   let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   subject do
-    GreenplumConnection::Query.new(schema.name, table)
+    GreenplumMetaDataQuery.new(schema.name, table)
   end
 
   let(:rows) do
