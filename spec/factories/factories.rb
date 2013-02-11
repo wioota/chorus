@@ -116,7 +116,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :gpdb_column do
+  factory :dataset_column do
     sequence(:name) { |n| "column#{n}" }
     data_type "text"
     description "A nice description"
