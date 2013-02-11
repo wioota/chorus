@@ -31,7 +31,7 @@ describe OracleConnection, :oracle_integration do
 
   describe "#connect!" do
     it "should connect" do
-      mock.proxy(Sequel).connect(db_url, :test => true)
+      mock.proxy(Sequel).connect(db_url, hash_including(:test => true))
 
       connection.connect!
       connection.connected?.should be_true
