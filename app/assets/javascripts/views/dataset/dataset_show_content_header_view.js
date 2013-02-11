@@ -31,5 +31,13 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
         if (this.model.importFrequency && this.model.importFrequency()) {
             $(this.el).addClass('has_import');
         }
+        chorus.menu(this.$('.found_in .open_other_menu'), {
+            content: this.$('.found_in .other_menu'),
+            classes: "found_in_other_workspaces_menu"
+        });
+        chorus.menu(this.$('.published_to .open_other_menu'), {
+            content: this.$('.published_to .other_menu'),
+            classes: "found_in_other_workspaces_menu"
+        });
     }
 });

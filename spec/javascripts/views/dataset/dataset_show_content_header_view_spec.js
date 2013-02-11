@@ -1,9 +1,11 @@
 describe("chorus.views.DatasetShowContentHeader", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workspaceDataset.sourceTable({
+        this.model = rspecFixtures.dataset({
             tags: [
                 {name: "alpha"}
-            ]
+            ],
+            associatedWorkspaces: [rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson()],
+            tableauWorkbooks: [rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes]
         });
         this.model.loaded = false;
         delete this.model.statusCode;
@@ -12,6 +14,8 @@ describe("chorus.views.DatasetShowContentHeader", function() {
             model: this.model,
             workspaceId: 123
         });
+        this.qtipSpy = stubQtip();
+
         this.view.render();
     });
 
@@ -36,6 +40,54 @@ describe("chorus.views.DatasetShowContentHeader", function() {
 
         it("has a workspace id for the tagbox", function() {
             expect(this.view.tagBox.options.workspaceIdForTagLink).toBe(123);
+        });
+
+        describe("tableau publishing details", function() {
+            it("is in the custom header", function() {
+                expect(this.view.$('.published_to')).toExist();
+            });
+
+            it("qtip-ifies the other_menu", function() {
+                this.view.$('.published_to .open_other_menu').click();
+                expect(this.qtipSpy).toHaveVisibleQtip();
+                expect(this.qtipSpy.find('li').length).toBe(2);
+            });
+
+            context("when the dataset has not been published to tableau", function() {
+                beforeEach(function() {
+                    delete this.view.model._tableauWorkbooks;
+                    this.view.model.unset("tableauWorkbooks");
+                });
+
+                it("renders successfully, without the tableau workbook section", function() {
+                    this.view.render();
+                    expect(this.view.$('.published_to')).not.toExist();
+                });
+            });
+        });
+
+        describe("workspace usage", function() {
+            it("is in the custom header", function() {
+                expect(this.view.$('.found_in')).toExist();
+            });
+
+            it("qtip-ifies the other_menu", function() {
+                this.view.$('.found_in .open_other_menu').click();
+                expect(this.qtipSpy).toHaveVisibleQtip();
+                expect(this.qtipSpy.find('li').length).toBe(2);
+            });
+
+            context("when the tabular data is not used in any workspace", function() {
+                beforeEach(function() {
+                    delete this.view.model._workspaceAssociated;
+                    this.view.model.unset("associatedWorkspaces");
+                });
+
+                it("renders successfully, without the workspace usage section", function() {
+                    this.view.render();
+                    expect(this.view.$('.found_in')).not.toExist();
+                });
+            });
         });
     });
 });
