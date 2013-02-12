@@ -314,6 +314,56 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
+  describe "InstanceMethods" do
+    let(:database_name) { 'postgres' }
+
+    describe "#databases" do
+      let(:database_list_sql) do
+        <<-SQL
+          SELECT
+            datname
+          FROM
+            pg_database
+          WHERE
+            datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
+            ORDER BY lower(datname) ASC
+        SQL
+      end
+
+      let(:expected) { db.fetch(database_list_sql).all.collect { |row| row[:datname] } }
+      let(:subject) { connection.databases }
+
+      it_should_behave_like "a well-behaved database query"
+    end
+
+    describe '#version' do
+      let(:expected) { db.fetch('select version()').first[:version].match(/Greenplum Database ([\d\.]*)/)[1] }
+      let(:subject) { connection.version }
+
+      it_should_behave_like "a well-behaved database query"
+    end
+
+    describe "#create_database" do
+      let(:new_database_name) { "foobarbaz" }
+      let(:subject) { connection.create_database("foobarbaz") }
+      let(:expected) { true }
+
+      after do
+        db = Sequel.connect(db_url)
+        db.execute("drop database if exists #{new_database_name}")
+        db.disconnect
+      end
+
+      it_should_behave_like "a well-behaved database query"
+
+      it "adds a database" do
+        expect {
+          connection.create_database(new_database_name)
+        }.to change { connection.databases }
+      end
+    end
+  end
+
   describe "DatabaseMethods" do
     describe "#schemas" do
       let(:schema_list_sql) do
@@ -404,36 +454,6 @@ describe GreenplumConnection, :greenplum_integration do
           }.to_not raise_error
         end
       end
-    end
-  end
-
-  describe "InstanceMethods" do
-    let(:database_name) { 'postgres' }
-
-    describe "#databases" do
-      let(:database_list_sql) do
-        <<-SQL
-          SELECT
-            datname
-          FROM
-            pg_database
-          WHERE
-            datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
-            ORDER BY lower(datname) ASC
-        SQL
-      end
-
-      let(:expected) { db.fetch(database_list_sql).all.collect { |row| row[:datname] } }
-      let(:subject) { connection.databases }
-
-      it_should_behave_like "a well-behaved database query"
-    end
-
-    describe '#version' do
-      let(:expected) { db.fetch('select version()').first[:version].match(/Greenplum Database ([\d\.]*)/)[1] }
-      let(:subject) { connection.version }
-
-      it_should_behave_like "a well-behaved database query"
     end
   end
 

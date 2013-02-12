@@ -112,65 +112,37 @@ describe GpdbDataSource do
   end
 
   describe "#create_database" do
-    context "using a real remote greenplum instance", :greenplum_integration do
-      let(:account) { GreenplumIntegration.real_account }
-      let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
+    let(:connection) { Object.new }
+    let(:data_source) { data_sources(:default) }
+    let(:user) { "hiya" }
+    let(:database_name) { "things" }
 
-      after do
-        exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
-        exec_on_gpdb('DROP DATABASE IF EXISTS "invalid/"')
-      end
-
-      it "creates the database" do
-        expect do
-          gpdb_data_source.create_database("new_database", account.owner).tap do |database|
-            database.name.should == "new_database"
-            database.data_source.should == gpdb_data_source
-          end
-        end.to change(GpdbDatabase, :count).by_at_least(1)
-        exec_on_gpdb("select datname from pg_database where datname = 'new_database';").should_not be_empty
-      end
-
-      it "raises an error if a database with the same name already exists" do
-        expect {
-          gpdb_data_source.create_database(gpdb_data_source.databases.last.name, account.owner)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it 'raises an error if the database name is invalid' do
-        expect {
-          gpdb_data_source.create_database('invalid/', account.owner)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      def exec_on_gpdb(sql)
-        Gpdb::ConnectionBuilder.connect!(gpdb_data_source, account) do |connection|
-          connection.exec_query(sql)
-        end
-      end
+    before do
+      stub(data_source).connect_as(user) { connection }
+      stub(data_source).refresh_databases { data_source.databases.create(:name => database_name) }
     end
 
-    context "when gpdb connection is broken" do
-      let(:gpdb_data_source) { data_sources(:owners) }
-      let(:user) { users(:owner) }
+    it "should create the database" do
+      mock(connection).create_database(database_name)
+      expect do
+        data_source.create_database(database_name, user).name.should == database_name
+      end.to change(GpdbDatabase, :count).by(1)
+    end
 
+    context "when the database is invalid" do
       before do
-        mock(Gpdb::ConnectionBuilder).connect!.with_any_args { raise ActiveRecord::JDBCError.new('quack') }
+        any_instance_of(GpdbDatabase) do |database|
+          stub(database).valid? { false }
+        end
       end
 
-      it "raises an error" do
-        expect {
-          gpdb_data_source.create_database("bobs_database_new", user)
-        }.to raise_error(ActiveRecord::JDBCError) { |error|
-          error.message.should match "quack"
-        }
-      end
-
-      it "does not create a database entry" do
-        expect {
-          gpdb_data_source.create_database("bobs_database_new", user)
-        }.to raise_error(ActiveRecord::JDBCError)
-        gpdb_data_source.databases.find_by_name("bobs_database_new").should be_nil
+      it "should not create a database" do
+        dont_allow(connection).create_database.with_any_args
+        expect do
+          expect do
+            data_source.create_database(database_name, user)
+          end.to raise_error(ActiveRecord::RecordInvalid)
+        end.not_to change(GpdbDatabase, :count)
       end
     end
   end

@@ -191,6 +191,11 @@ class GreenplumConnection < DataSourceConnection
       end
     end
 
+    def create_database(database_name)
+      with_connection { @connection.execute("CREATE DATABASE #{quote_identifier(database_name)}") }
+      true
+    end
+
     private
 
     DATABASES_SQL = <<-SQL

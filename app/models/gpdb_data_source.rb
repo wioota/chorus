@@ -123,7 +123,7 @@ class GpdbDataSource < DataSource
     new_db = databases.build(:name => name)
     raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
 
-    create_database_in_instance(name, current_user)
+    connect_as(current_user).create_database(name)
     refresh_databases
     databases.find_by_name!(name)
   end
@@ -171,13 +171,6 @@ class GpdbDataSource < DataSource
   end
 
   private
-
-  def create_database_in_instance(name, current_user)
-    Gpdb::ConnectionBuilder.connect!(self, account_for_user!(current_user)) do |conn|
-      sql = "CREATE DATABASE #{conn.quote_column_name(name)}"
-      conn.exec_query(sql)
-    end
-  end
 
   def database_and_role_sql
     roles = Arel::Table.new("pg_catalog.pg_roles", :as => "r")
