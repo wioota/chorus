@@ -907,6 +907,16 @@ describe("handlebars", function () {
                 });
             });
 
+            context("when the dataset's schema has not been loaded correctly", function () {
+                beforeEach(function() {
+                    this.model = new chorus.models.Dataset();
+                });
+
+                it("returns the empty string", function() {
+                    expect(Handlebars.helpers.datasetLocation(this.model).toString()).toEqual("");
+                });
+            });
+
             context("when credentials are not present", function () {
                 beforeEach(function () {
                     this.model = rspecFixtures.dataset({hasCredentials:false});

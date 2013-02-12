@@ -55,14 +55,15 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
         },
 
         crumbs: function() {
-            return [
+            if (!this.dataset.schema()) return [];
+            return _.compact([
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/data_sources'},
-                {label: this.dataset.instance().name(), url: this.dataset.instance().databases().showUrl() },
-                {label: this.dataset.database().name(), url: this.dataset.database().showUrl() },
+                {label: this.dataset.instance().name(), url: this.dataset.instance().showUrl() },
+                this.dataset.database() && {label: this.dataset.database().name(), url: this.dataset.database().showUrl() },
                 {label: this.dataset.schema().name(), url: this.dataset.schema().showUrl()},
                 {label: this.dataset.name()}
-            ];
+            ]);
         },
 
         makeModel: function(datasetId) {

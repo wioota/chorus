@@ -25,7 +25,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     describe("pre-populating the current schema", function() {
         beforeEach(function() {
-            this.executionSchema = new chorus.models.Schema({id: 321});
+            this.executionSchema = rspecFixtures.schema({id: 321});
             this.model = rspecFixtures.workfile.sql();
             this.model._executionSchema = this.executionSchema;
             this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });

@@ -19,7 +19,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     database: function() {
-        var database = this._database || new chorus.models.Database(this.get("database"));
+        var database = this._database || (this.get("database") && new chorus.models.Database(this.get("database")));
         if(this.loaded) {
             this._database = database;
         }
@@ -42,7 +42,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     canonicalName: function() {
-        return _.compact([this.instance().name(), this.database().name(), this.name()]).join(".");
+        return _.compact([this.instance().name(), this.database() && this.database().name(), this.name()]).join(".");
     },
 
     isEqualToSchema: function(other) {

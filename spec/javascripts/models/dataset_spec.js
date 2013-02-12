@@ -402,7 +402,7 @@ describe("chorus.models.Dataset", function() {
         context("with a new chorus view", function() {
             beforeEach(function() {
                 var sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
-                this.dataset = new chorus.models.ChorusView({
+                this.dataset = rspecFixtures.workspaceDataset.chorusView({
                     query: "select * from hello_world",
                     objectName: "my_chorusview"
                 });

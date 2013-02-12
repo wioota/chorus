@@ -76,7 +76,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     schema: function() {
-        var schema = this._schema || new chorus.models.Schema(this.get("schema"));
+        var schema = this._schema || this.get("schema") && new chorus.models.Schema(this.get("schema"));
         if(this.loaded) {
             this._schema = schema;
         }

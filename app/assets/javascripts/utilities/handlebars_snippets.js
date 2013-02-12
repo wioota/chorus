@@ -354,13 +354,14 @@
 
         datasetLocation: function(dataset, label) {
             label = _.isString(label) ? label : "dataset.from";
+            if (!dataset.schema()) return "";
             var instance = dataset.instance();
             var schema = dataset.schema();
             var database = dataset.database();
 
             var schemaPieces = [];
             var dataSourceName = instance.name();
-            var databaseName = chorus.helpers.withSearchResults(database).name();
+            var databaseName = (database && chorus.helpers.withSearchResults(database).name()) || "";
             var schemaName = chorus.helpers.withSearchResults(schema).name();
 
             if (dataset.get('hasCredentials') === false) {

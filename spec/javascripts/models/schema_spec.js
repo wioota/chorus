@@ -98,6 +98,16 @@ describe("chorus.models.Schema", function() {
         it("memoizes", function() {
             expect(this.model.database()).toBe(this.model.database());
         });
+
+        describe("when no database attribute exists", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.oracleSchema();
+            });
+
+            it("returns undefined", function() {
+                expect(this.model.database()).toBeUndefined();
+            });
+        });
     });
 
     describe("#instance", function() {
