@@ -233,13 +233,9 @@ describe OracleConnection, :oracle_integration do
     end
 
     describe "#metadata_for_dataset" do
-      let(:metadata_sql) {
-        <<-SQL
-      SELECT COUNT(*) AS column_count FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = 'NEWTABLE' AND OWNER = 'TESTUSER'
-        SQL
-      }
-      let(:expected) { db.fetch(metadata_sql).first }
-      let(:subject) { connection.metadata_for_dataset('NEWTABLE') }
+      let(:schema_name) { OracleIntegration.schema_name }
+      let(:expected) { { :column_count => 2 } }
+      let(:subject) { connection.metadata_for_dataset('TWO_COLUMN_TABLE') }
 
       it_should_behave_like "a well-behaved database query"
     end

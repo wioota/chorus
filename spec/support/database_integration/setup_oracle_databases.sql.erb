@@ -1,4 +1,5 @@
 CREATE USER <%= schema_name %> IDENTIFIED BY "oracle";
 CREATE TABLE <%= schema_name %>.NEWTABLE ("id" NUMBER);
 CREATE TABLE <%= schema_name %>.NEWERTABLE ("id" NUMBER);
-CREATE VIEW <%= schema_name %>.NEWVIEW AS SELECT * FROM <%= schema_name %>.NEWERTABLE
+CREATE VIEW <%= schema_name %>.NEWVIEW AS SELECT * FROM <%= schema_name %>.NEWERTABLE;
+CREATE TABLE <%= schema_name %>.TWO_COLUMN_TABLE ("id" NUMBER, "column2" NUMBER)
