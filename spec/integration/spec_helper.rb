@@ -61,9 +61,9 @@ RSpec.configure do |config|
 
   config.include LoginHelpers
   config.include CleditorHelpers
-  config.include GreenplumIntegration
-  config.include OracleIntegration
-  config.include HadoopIntegration
+  config.include GreenplumIntegration, :greenplum_integration => true
+  config.include OracleIntegration, :oracle_integration => true
+  config.include HadoopIntegration, :hadoop_integration => true
   config.include CapybaraHelpers
 end
 

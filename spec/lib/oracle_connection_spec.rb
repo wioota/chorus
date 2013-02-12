@@ -1,16 +1,12 @@
 require 'spec_helper'
 
 describe OracleConnection, :oracle_integration do
-  before(:all) do
-    require Rails.root + 'lib/libraries/ojdbc6.jar'
-  end
-
   let(:username) { OracleIntegration.username }
   let(:password) { OracleIntegration.password }
   let(:db_name) { OracleIntegration.db_name }
   let(:host) { OracleIntegration.hostname }
   let(:port) { OracleIntegration.port }
-  let(:db_url) { "jdbc:oracle:thin:#{username}/#{password}@//#{host}:#{port}/#{db_name}" }
+  let(:db_url) { OracleIntegration.db_url }
   let(:db) { Sequel.connect(db_url) }
 
   let(:details) {
@@ -72,7 +68,7 @@ describe OracleConnection, :oracle_integration do
     let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:name] } }
     let(:subject) { connection.schemas }
 
-    it_should_behave_like "a well behaved database query"
+    it_should_behave_like "a well-behaved database query"
   end
 
   describe "#schema_exists?" do
@@ -80,7 +76,7 @@ describe OracleConnection, :oracle_integration do
     let(:subject) { connection.schema_exists?(schema_name) }
     let(:expected) { true }
 
-    it_should_behave_like "a well behaved database query"
+    it_should_behave_like "a well-behaved database query"
 
     context "when the schema doesn't exist" do
       let(:schema_name) { "does_not_exist" }
@@ -116,7 +112,7 @@ describe OracleConnection, :oracle_integration do
       let(:expected) { db.fetch(dataset_list_sql).all }
       let(:subject) { connection.datasets }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       context "when a limit is passed" do
         let(:dataset_list_sql) {
@@ -136,7 +132,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).all }
         let(:subject) { connection.datasets(:limit => 2) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when a name filter is passed" do
@@ -152,7 +148,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).all }
         let(:subject) { connection.datasets(:name_filter => 'nEWer') }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when showing only tables" do
@@ -165,7 +161,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).all }
         let(:subject) { connection.datasets(:tables_only => true) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when multiple options are passed" do
@@ -185,7 +181,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).all }
         let(:subject) { connection.datasets(:name_filter => 'nEWer', :limit => 1) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -205,7 +201,7 @@ describe OracleConnection, :oracle_integration do
       let(:expected) { db.fetch(dataset_list_sql).single_value }
       let(:subject) { connection.datasets_count }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       context "when a name filter is passed" do
         let(:dataset_list_sql) {
@@ -220,7 +216,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).single_value }
         let(:subject) { connection.datasets_count(:name_filter => 'nEWer') }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when showing only tables" do
@@ -232,7 +228,7 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { db.fetch(dataset_list_sql).single_value }
         let(:subject) { connection.datasets_count(:tables_only => true) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -245,7 +241,7 @@ describe OracleConnection, :oracle_integration do
       let(:expected) { db.fetch(metadata_sql).first }
       let(:subject) { connection.metadata_for_dataset('NEWTABLE') }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
 
     describe "#table_exists?" do
@@ -255,21 +251,21 @@ describe OracleConnection, :oracle_integration do
       context "when the table exists" do
         let(:table_name) { "NEWTABLE" }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when the table doesn't exist" do
         let(:table_name) { "MISSING_TABLE" }
         let(:expected) { false }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when the table name given is nil" do
         let(:table_name) { nil }
         let(:expected) { false }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -280,21 +276,21 @@ describe OracleConnection, :oracle_integration do
         let(:expected) { true }
         let(:view_name) { "NEWVIEW" }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
 
       context "when the view doesn't exist" do
         let(:view_name) { "MISSING_VIEW" }
         let(:expected) { false }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
 
       context "when the view name given is nil" do
         let(:view_name) { nil }
         let(:expected) { false }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
     end
 
@@ -314,7 +310,7 @@ describe OracleConnection, :oracle_integration do
 
       let(:subject) { connection.column_info(table_name, 'ignored setup sql to be consistent with other datasource connections') }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
   end
 

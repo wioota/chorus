@@ -125,7 +125,7 @@ describe GreenplumConnection, :greenplum_integration do
     let(:subject) { connection.fetch(sql) }
     let(:expected) { [{:answer => 1}] }
 
-    it_should_behave_like "a well behaved database query"
+    it_should_behave_like "a well-behaved database query"
 
     context "with SQL parameters" do
       let(:sql) { "SELECT :num AS answer" }
@@ -142,7 +142,7 @@ describe GreenplumConnection, :greenplum_integration do
     let(:subject) { connection.fetch_value(sql) }
     let(:expected) { 1 }
 
-    it_should_behave_like "a well behaved database query"
+    it_should_behave_like "a well-behaved database query"
 
     it "returns nil for an empty set" do
       sql = "SELECT * FROM (SELECT * FROM (SELECT 1 as column1) AS set1 WHERE column1 = 2) AS empty"
@@ -156,7 +156,7 @@ describe GreenplumConnection, :greenplum_integration do
     let(:subject) { connection.execute(sql) }
     let(:expected) { true }
 
-    it_should_behave_like "a well behaved database query"
+    it_should_behave_like "a well-behaved database query"
   end
 
   describe "#prepare_and_execute_statement" do
@@ -331,7 +331,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:schema_name] } }
       let(:subject) { connection.schemas }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
 
     describe "#schema_exists?" do
@@ -339,7 +339,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) { connection.schema_exists?(schema_name) }
       let(:expected) { true }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       context "when the schema doesn't exist" do
         let(:schema_name) { "does_not_exist" }
@@ -361,7 +361,7 @@ describe GreenplumConnection, :greenplum_integration do
         db.disconnect
       end
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       it "adds a schema" do
         expect {
@@ -386,7 +386,7 @@ describe GreenplumConnection, :greenplum_integration do
           db.disconnect
         end
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
 
         it "drops it" do
           connection.schema_exists?(schema_to_drop).should == true
@@ -426,14 +426,14 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { db.fetch(database_list_sql).all.collect { |row| row[:datname] } }
       let(:subject) { connection.databases }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
 
     describe '#version' do
       let(:expected) { db.fetch('select version()').first[:version].match(/Greenplum Database ([\d\.]*)/)[1] }
       let(:subject) { connection.version }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
   end
 
@@ -464,7 +464,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { db.fetch(schema_functions_sql).all }
       let(:subject) { connection.functions }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
 
     describe "#disk_space_used" do
@@ -480,7 +480,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { db.fetch(disk_space_sql).single_value }
       let(:subject) { connection.disk_space_used }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
     end
 
     describe '#create_view' do
@@ -494,7 +494,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) { connection.create_view('a_new_db_view', 'select 1;') }
       let(:expected) { true }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       it 'creates a view' do
         expect {
@@ -541,7 +541,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
       let(:expected) { true }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       it 'creates an external table' do
         expect {
@@ -581,12 +581,12 @@ describe GreenplumConnection, :greenplum_integration do
       context "when the table exists" do
         let(:table_name) { "different_names_table" }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
 
         context 'when the table has weird chars in the name' do
           let(:table_name) { %Q(7_`~!@#\$%^&*()+=[]{}|\\;:',<.>/?) }
 
-          it_should_behave_like "a well behaved database query" #regression
+          it_should_behave_like "a well-behaved database query" #regression
         end
       end
 
@@ -594,14 +594,14 @@ describe GreenplumConnection, :greenplum_integration do
         let(:table_name) { "please_dont_exist" }
         let(:expected) { false }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when the table name given is nil" do
         let(:table_name) { nil }
         let(:expected) { false }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -611,21 +611,21 @@ describe GreenplumConnection, :greenplum_integration do
         let(:expected) { true }
         let(:view_name) { "view1" }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
 
       context "when the view doesn't exist" do
         let(:view_name) { "please_dont_exist" }
         let(:expected) { false }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
 
       context "when the view name given is nil" do
         let(:view_name) { nil }
         let(:expected) { false }
 
-        it_behaves_like 'a well behaved database query'
+        it_behaves_like 'a well-behaved database query'
       end
     end
 
@@ -673,7 +673,7 @@ describe GreenplumConnection, :greenplum_integration do
           db.disconnect
         end
 
-        it_behaves_like "a well behaved database query"
+        it_behaves_like "a well-behaved database query"
 
         it "should drop a table" do
           connection.table_exists?(table_to_drop).should == true
@@ -717,7 +717,7 @@ describe GreenplumConnection, :greenplum_integration do
           db.disconnect
         end
 
-        it_behaves_like "a well behaved database query"
+        it_behaves_like "a well-behaved database query"
 
         it "should truncate a table" do
           expect {
@@ -735,7 +735,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) { connection.fetch(sql) }
       let(:expected) { [{:answer => 1}] }
 
-      it_behaves_like "a well behaved database query"
+      it_behaves_like "a well-behaved database query"
 
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
@@ -762,7 +762,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { 1 }
       let(:schema_name) { "test_schema_with_\"_" }
 
-      it_behaves_like "a well behaved database query"
+      it_behaves_like "a well-behaved database query"
 
       it "sets the search path before any query" do
         stub.proxy(Sequel).connect do |connection|
@@ -800,7 +800,7 @@ describe GreenplumConnection, :greenplum_integration do
       }
       let(:expected) { true }
 
-      it_behaves_like "a well behaved database query"
+      it_behaves_like "a well-behaved database query"
 
       it "streams all rows of the database" do
         bucket = []
@@ -830,7 +830,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) { connection.execute(sql) }
       let(:expected) { true }
 
-      it_behaves_like "a well behaved database query"
+      it_behaves_like "a well-behaved database query"
     end
 
     describe "#transaction" do
@@ -842,7 +842,7 @@ describe GreenplumConnection, :greenplum_integration do
 
       let(:expected) { 1 }
 
-      it_behaves_like "a well behaved database query"
+      it_behaves_like "a well-behaved database query"
 
       it 'rolls back all database operations' do
         connection.test_transaction do |conn|
@@ -868,7 +868,7 @@ ORDER BY lower(replace(relname,'_', '')) ASC
       let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
       let(:subject) { connection.datasets }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       context "when the user doesn't have permission to the schema" do
         let(:subject) { connection.datasets }
@@ -913,7 +913,7 @@ LIMIT 2
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
         let(:subject) { connection.datasets(:limit => 2) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when a name filter is passed" do
@@ -932,7 +932,7 @@ ORDER BY lower(replace(relname,'_', '')) ASC
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
         let(:subject) { connection.datasets(:name_filter => 'cANdy') }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when only showing tables" do
@@ -950,7 +950,7 @@ ORDER BY lower(replace(relname,'_', '')) ASC
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
         let(:subject) { connection.datasets(:tables_only => true) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "when multiple options are passed" do
@@ -970,7 +970,7 @@ LIMIT 2
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
         let(:subject) { connection.datasets(:name_filter => 'caNDy', :limit => 2) }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -988,7 +988,7 @@ AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid
       let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
       let(:subject) { connection.datasets_count }
 
-      it_should_behave_like "a well behaved database query"
+      it_should_behave_like "a well-behaved database query"
 
       context "when the user doesn't have permission to the schema" do
         let(:subject) { connection.datasets_count }
@@ -1032,7 +1032,7 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
         let(:subject) { connection.datasets_count(:name_filter => 'cANdy') }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 
@@ -1068,7 +1068,7 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
       context "with no setup sql" do
         let(:subject) { connection.column_info(table_name, '') }
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
 
       context "with setup sql for a temp view" do
@@ -1081,7 +1081,7 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
           end
         end
 
-        it_should_behave_like "a well behaved database query"
+        it_should_behave_like "a well-behaved database query"
       end
     end
 

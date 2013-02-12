@@ -25,7 +25,8 @@ class OracleDataSource < DataSource
         :password => account.db_password,
         :host => host,
         :port => port,
-        :database => db_name
+        :database => db_name,
+        :logger => Rails.logger
     )
   end
 

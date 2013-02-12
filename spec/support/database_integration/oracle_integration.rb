@@ -4,6 +4,8 @@ require 'yaml'
 require 'socket'
 
 module OracleIntegration
+  require Rails.root + 'lib/libraries/ojdbc6.jar'
+
   def self.hostname
     ENV['ORACLE_HOST']
   end
@@ -25,7 +27,7 @@ module OracleIntegration
   end
 
   def self.schema_name
-    oracle_config['schema_name']
+    "test_#{Socket.gethostname.gsub('.', '_')}_#{Rails.env}".upcase
   end
 
   def self.real_data_source
@@ -34,6 +36,27 @@ module OracleIntegration
 
   def self.real_schema
     real_data_source.schemas.find_by_name(schema_name)
+  end
+
+  def self.db_url
+    "jdbc:oracle:thin:#{username}/#{password}@//#{hostname}:#{port}/#{db_name}"
+  end
+
+  def self.setup_test_schemas
+    sql = ERB.new(File.read(Rails.root.join "spec/support/database_integration/setup_oracle_databases.sql.erb")).result(binding)
+    begin
+      execute_sql("DROP USER #{schema_name} CASCADE")
+    rescue Exception
+    end
+    execute_sql(sql)
+  end
+
+  def self.execute_sql(sql)
+    Sequel.connect(db_url, :logger => Rails.logger) do |database_connection|
+      sql.split(";").each do |line|
+       database_connection.run(line)
+      end
+    end
   end
 
   private

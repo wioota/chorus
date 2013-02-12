@@ -41,7 +41,6 @@ describe "Search" do
       within ".link_menu.type .menu" do
         click_link model_link
       end
-      puts "checking for Show #{model_link}"
       page.should have_content("Show #{model_link}")
       current_route.should == "search/all/#{model_type}/searchquery"
       within "div.main_content" do

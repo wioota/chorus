@@ -1,4 +1,3 @@
-require 'erb'
 require 'pathname'
 require_relative '../../lib/properties'
 
