@@ -31,8 +31,7 @@ class DataSourceConnection
   end
 
   def fetch_value(sql)
-    result = with_connection { @connection.fetch(sql).limit(1).first }
-    result && result.first[1]
+    with_connection { @connection.fetch(sql).single_value }
   end
 
   def execute(sql)

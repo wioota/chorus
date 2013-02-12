@@ -94,7 +94,7 @@ describe GreenplumConnection, :greenplum_integration do
 
   describe "#with_connection" do
     before do
-      mock.proxy(Sequel).connect(db_url, satisfy { |options| options[:test] } )
+      mock.proxy(Sequel).connect(db_url, satisfy { |options| options[:test] })
     end
 
     context "with valid credentials" do
@@ -1085,32 +1085,65 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
       end
     end
 
-    describe "#metadata_for_dataset" do
-      let(:dataset_name) { "metadata_table_new" }
+    describe "#partitions_disk_size" do
+      let(:dataset_name) { "master_table1" }
 
-      before do
-        connection.drop_table dataset_name
-        connection.prepare_and_execute_statement(<<-SQL)
-          create table #{dataset_name} ("id" integer, "name" text);
-          insert into #{dataset_name} (id, name) values (1, 'marsbar');
-          insert into #{dataset_name} (id, name) values (2, 'kitkat');
-          insert into #{dataset_name} (id, name) values (3, 'kitkat');
-          comment on table #{dataset_name} is 'Im a table';
-          analyze #{dataset_name};
-        SQL
+      it "should calculate the total disk size" do
+        connection.partitions_disk_size(dataset_name).should > 0
+      end
+    end
+
+    describe "#metadata_for_dataset" do
+      context "a base table" do
+        let(:dataset_name) { "base_table1" }
+
+        it "returns statistics for a dataset" do
+          row = connection.metadata_for_dataset(dataset_name)
+          row[:name].should == "base_table1"
+          row[:description].should == "comment on base_table1"
+          row[:column_count].should == 5
+          row[:row_count].should be 9
+          row[:last_analyzed].should_not be_nil
+          row[:partition_count].should == 0
+          row[:definition].should be_nil
+          row[:table_type].should == "BASE_TABLE"
+          row[:disk_size].should > 0
+        end
       end
 
-      it "returns statistics for a dataset" do
-        row = connection.metadata_for_dataset(dataset_name)
-        row[:name].should == "metadata_table_new"
-        row[:description].should == "Im a table"
-        row[:column_count].should == 2
-        row[:row_count].should == 3
-        row[:table_type].should == "BASE_TABLE"
-        row[:last_analyzed].should_not be_nil
-        row[:disk_size].to_i.should > 0
-        row[:partition_count].should == 0
-        row[:definition].should be_nil
+      context "crazy table name" do
+        let(:dataset_name) { '7_`~!@#$%^&*()+=[]{}|\;:\',<.>/?' }
+
+        it "should return 'unknown' disk_size" do
+          row = connection.metadata_for_dataset(dataset_name)
+          row[:name].should == dataset_name
+          row[:disk_size].should == 'unknown'
+        end
+      end
+
+      context "a master table" do
+        let(:dataset_name) { "master_table1" }
+
+        it "returns statistics for a dataset" do
+          row = connection.metadata_for_dataset(dataset_name)
+          row[:name].should == "master_table1"
+          row[:partition_count].should == 7
+          row[:table_type].should == "MASTER_TABLE"
+        end
+      end
+
+      context "a view" do
+        let(:dataset_name) { "view1" }
+
+        it "returns statistics for a dataset" do
+          row = connection.metadata_for_dataset(dataset_name)
+          row[:name].should == "view1"
+          row[:description].should == "comment on view1"
+          row[:column_count].should == 5
+          row[:definition].should_not be_nil
+          row[:table_type].should == "VIEW"
+          row[:disk_size].should == 0
+        end
       end
     end
   end

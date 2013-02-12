@@ -1,5 +1,4 @@
 require_relative 'data_source_connection'
-require_relative 'greenplum_meta_data_query'
 require_relative '../app/models/sql_result'
 
 class GreenplumConnection < DataSourceConnection
@@ -292,14 +291,64 @@ class GreenplumConnection < DataSourceConnection
       end
     end
 
-    def partition_data_for_dataset(table_name)
-      query = GreenplumMetaDataQuery.new(schema_name, table_name).partition_data_for_dataset
-      fetch(query.to_sql).first
+    def partitions_disk_size(table_name)
+      with_connection do
+        partitions = @connection[:pg_partitions]
+        query = partitions.where(:tablename => table_name, :schemaname => schema_name)
+        query.sum { pg_total_relation_size(partitiontablename) }
+      end
     end
 
     def metadata_for_dataset(table_name)
-      query = GreenplumMetaDataQuery.new(schema_name, table_name).metadata_query
-      fetch(query.to_sql).first
+      with_connection do
+        relations = @connection.from(:pg_catalog__pg_class => :relations)
+        schema_query = @connection.from(:pg_namespace => :schemas).where(:nspname => schema_name).select(:oid)
+        relations_in_schema = relations.where(:relnamespace => schema_query)
+        query = relations_in_schema.where(:relations__relname => table_name)
+
+        # Is it a view?
+        query = query.left_outer_join(:pg_views, :viewname => :relname)
+
+        # Is it an external table?
+        query = query.left_outer_join(:pg_exttable, :pg_exttable__reloid => :relations__oid)
+
+        # Last analyzed time
+        query = query.left_outer_join(:pg_stat_last_operation, :objid => :relations__oid, :staactionname => 'ANALYZE')
+
+        query = query.select(:relations__reltuples => :row_count, :relations__relname => :name,
+                             :pg_views__definition => :definition, :relations__relnatts => :column_count,
+                             :pg_stat_last_operation__statime => :last_analyzed)
+
+        partition_count_query = @connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
+        query = query.select_append(partition_count_query => :partition_count)
+
+        query = query.select_append { obj_description(relations__oid).as('description') }
+
+        table_type = Sequel.case(
+              [
+                  [{:relations__relhassubclass => 't'}, 'MASTER_TABLE'],
+                  [{:relations__relkind => 'v'}, 'VIEW'],
+                  [{:pg_exttable__location => nil}, 'BASE_TABLE'],
+                  [Sequel.lit("position('gphdfs' in pg_exttable.location[1]) > 0"), 'HD_EXT_TABLE']
+              ],
+              'EXT_TABLE'
+          )
+        query = query.select_append(table_type => :table_type)
+
+        disk_size = Sequel.case(
+            [
+                [Sequel.lit("position('''' in relations.relname) > 0"), 'unknown'],
+                [Sequel.lit("position('\\\\' in relations.relname) > 0"), 'unknown']
+            ],
+            Sequel.cast(Sequel.lit("pg_total_relation_size(relations.oid)"), String)
+        )
+        query = query.select_append(disk_size => :disk_size)
+
+        result = query.first
+        result[:row_count] = result[:row_count].to_i
+        result[:disk_size] = result[:disk_size].to_i unless result[:disk_size] == 'unknown'
+        result
+      end
     end
 
     private

@@ -87,6 +87,12 @@
     PARTITION BY RANGE(some_int)
     ( START (1::integer) END (8::integer) EVERY (1::integer));
   COMMENT ON TABLE master_table1 IS 'comment on master_table1';
+  INSERT INTO master_table1 VALUES(1, 1);
+  INSERT INTO master_table1 VALUES(2, 3);
+  INSERT INTO master_table1 VALUES(3, 4);
+  INSERT INTO master_table1 VALUES(4, 5);
+  INSERT INTO master_table1 VALUES(5, 6);
+  INSERT INTO master_table1 VALUES(6, 7);
   ANALYZE master_table1;
 
   CREATE TABLE public.table_in_public (id integer);
