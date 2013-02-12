@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe GpTableCopier, :greenplum_integration do
-  let(:account) { InstanceIntegration.real_gpdb_account }
+  let(:account) { GreenplumIntegration.real_account }
   let(:user) { account.owner }
-  let(:database) { InstanceIntegration.real_database }
+  let(:database) { GreenplumIntegration.real_database }
   let(:instance) { database.data_source }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:source_table_name) { "src_table" }

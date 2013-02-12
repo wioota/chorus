@@ -109,7 +109,7 @@ describe 'viewing all the entities sharing a specific tag' do
   end
 
   describe "when clicking a tag on a source dataset" do
-    let(:dataset) { InstanceIntegration.real_gpdb_data_source.datasets.find_by_name("base_table1")}
+    let(:dataset) { GreenplumIntegration.real_data_source.datasets.find_by_name("base_table1")}
 
     before do
       login(users(:admin))

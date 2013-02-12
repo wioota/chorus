@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe ImportSchedule, :greenplum_integration do
   let(:import_schedule) { import_schedules(:default) }
-  let(:database) { InstanceIntegration.real_database }
+  let(:database) { GreenplumIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:user) { schema.data_source.owner }
-  let(:account) { InstanceIntegration.real_gpdb_account }
-  let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+  let(:account) { GreenplumIntegration.real_account }
+  let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
   let(:workspace) { workspaces(:public) }
 
   before do

@@ -22,7 +22,7 @@ describe VisualizationsController do
       end
 
       describe "fixtures", :greenplum_integration do
-        let(:account) { InstanceIntegration.real_gpdb_account }
+        let(:account) { GreenplumIntegration.real_account }
         before do
           log_in account.owner
         end

@@ -6,7 +6,7 @@ describe "External Tables", :greenplum_integration do
 
     before do
       admin = users(:admin)
-      admin.owned_workspaces.create!({:name => "integration_with_sandbox", :sandbox => InstanceIntegration.real_database.schemas.first, :public => true}, :without_protection => true)
+      admin.owned_workspaces.create!({:name => "integration_with_sandbox", :sandbox => GreenplumIntegration.real_database.schemas.first, :public => true}, :without_protection => true)
 
       any_instance_of(ExternalTable) do |table|
         stub(table).save { true }

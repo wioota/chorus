@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'java'
 
 describe Hdfs::QueryService, :hdfs_integration do
-  let(:hdfs_params) { InstanceIntegration.instance_config_for_hadoop }
+  let(:hdfs_params) { HadoopIntegration.instance_config }
   before do
     devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
     com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull

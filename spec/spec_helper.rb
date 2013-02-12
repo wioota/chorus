@@ -103,7 +103,7 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
-  config.include InstanceIntegration, :greenplum_integration => true
+  config.include GreenplumIntegration, :greenplum_integration => true
   config.include SunspotMatchers
   config.include SolrHelpers
   config.extend ApiDocHelper, :api_doc_dsl => :endpoint

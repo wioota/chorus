@@ -5,11 +5,11 @@ describe OracleConnection, :oracle_integration do
     require Rails.root + 'lib/libraries/ojdbc6.jar'
   end
 
-  let(:username) { InstanceIntegration.oracle_username }
-  let(:password) { InstanceIntegration.oracle_password }
-  let(:db_name) { InstanceIntegration.oracle_db_name }
-  let(:host) { InstanceIntegration.oracle_hostname }
-  let(:port) { InstanceIntegration.oracle_port }
+  let(:username) { OracleIntegration.username }
+  let(:password) { OracleIntegration.password }
+  let(:db_name) { OracleIntegration.db_name }
+  let(:host) { OracleIntegration.hostname }
+  let(:port) { OracleIntegration.port }
   let(:db_url) { "jdbc:oracle:thin:#{username}/#{password}@//#{host}:#{port}/#{db_name}" }
   let(:db) { Sequel.connect(db_url) }
 
@@ -76,7 +76,7 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe "#schema_exists?" do
-    let(:schema_name) { InstanceIntegration.oracle_schema_name }
+    let(:schema_name) { OracleIntegration.schema_name }
     let(:subject) { connection.schema_exists?(schema_name) }
     let(:expected) { true }
 
@@ -98,7 +98,7 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe "methods within a schema" do
-    let(:schema_name) { InstanceIntegration.oracle_schema_name }
+    let(:schema_name) { OracleIntegration.schema_name }
     let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
 
     describe "#datasets" do
@@ -191,7 +191,7 @@ describe OracleConnection, :oracle_integration do
 
     describe "#datasets_count" do
       let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
-      let(:schema_name) { InstanceIntegration.oracle_schema_name }
+      let(:schema_name) { OracleIntegration.schema_name }
       let(:dataset_list_sql) {
         <<-SQL
         SELECT count(*) FROM (

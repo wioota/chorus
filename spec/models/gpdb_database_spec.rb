@@ -92,7 +92,7 @@ describe GpdbDatabase do
   end
 
   context "refresh using a real greenplum instance", :greenplum_integration do
-    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:account) { GreenplumIntegration.real_account }
 
     it "sorts the database by name in ASC order" do
       results = GpdbDatabase.refresh(account)
@@ -158,8 +158,8 @@ describe GpdbDatabase do
 
   describe ".create_schema" do
     context "using a real greenplum instance", :greenplum_integration do
-      let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:account) { GreenplumIntegration.real_account }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
       let(:instance) { database.data_source }
 
       after do

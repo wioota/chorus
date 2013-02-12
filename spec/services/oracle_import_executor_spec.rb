@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe OracleImportExecutor do
   let(:user) { users(:admin) }
-  let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
+  let(:schema) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema') }
   let(:table_name) { "foo" }
   let(:url) { "http://example.com/" }
 

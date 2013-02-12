@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Visualization::Timeseries, :greenplum_integration do
-  let(:account) { InstanceIntegration.real_gpdb_account }
+  let(:account) { GreenplumIntegration.real_account }
   let(:filters) { [%Q{"#{dataset.name}"."time_value" > '2012-03-03'},
                    %Q{"#{dataset.name}"."column1" < 5}] }
 
@@ -16,7 +16,7 @@ describe Visualization::Timeseries, :greenplum_integration do
   end
 
   context "blah" do
-    let(:test_schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
+    let(:test_schema) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema') }
     let(:filters) { [] }
     let(:dataset) {
       d = datasets(:executable_chorus_view)
@@ -37,7 +37,7 @@ describe Visualization::Timeseries, :greenplum_integration do
     end
 
     context "with a table" do
-      let(:database) { InstanceIntegration.real_database }
+      let(:database) { GreenplumIntegration.real_database }
       let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
 
       context "with no filter" do

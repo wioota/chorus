@@ -1,18 +1,18 @@
 require 'spec_helper'
 
 describe GreenplumConnection, :greenplum_integration do
-  let(:username) { InstanceIntegration.greenplum_username }
-  let(:password) { InstanceIntegration.greenplum_password }
-  let(:database_name) { InstanceIntegration.database_name }
-  let(:hostname) { InstanceIntegration.greenplum_hostname }
-  let(:port) { InstanceIntegration.greenplum_port }
+  let(:username) { GreenplumIntegration.username }
+  let(:password) { GreenplumIntegration.password }
+  let(:database_name) { GreenplumIntegration.database_name }
+  let(:hostname) { GreenplumIntegration.hostname }
+  let(:port) { GreenplumIntegration.port }
   let(:db_url) {
     query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params
   }
 
   before :all do
-    InstanceIntegration.setup_gpdb
+    GreenplumIntegration.setup_gpdb
   end
 
   before do
@@ -196,7 +196,7 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         context "when the database does not have a public schema" do
-          let(:database_name) { InstanceIntegration.database_name << "_wo_pub" }
+          let(:database_name) { GreenplumIntegration.database_name << "_wo_pub" }
           let(:sql) { "SELECT 1" }
 
           it "does not raise an error" do
@@ -775,7 +775,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe "#stream_dataset" do
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
       let(:dataset) {
         GpdbTable.new(:name => 'thing', :schema => GpdbSchema.find_by_name(schema_name))
       }

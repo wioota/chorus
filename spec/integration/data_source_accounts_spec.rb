@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Data Source Permissions" do
-  let(:the_data_source) { InstanceIntegration.real_gpdb_data_source }
+  let(:the_data_source) { GreenplumIntegration.real_data_source }
   let(:no_access_user) { users(:default) }
   let(:owner) { users(:admin)}
 
@@ -30,8 +30,8 @@ describe "Data Source Permissions" do
     click_button "Add Account"
     select_item('#select_new_instance_account_owner', no_access_user.id)
     within "li.editing" do
-      fill_in "dbUsername", :with => InstanceIntegration.greenplum_username
-      fill_in "dbPassword", :with => InstanceIntegration.greenplum_password
+      fill_in "dbUsername", :with => GreenplumIntegration.username
+      fill_in "dbPassword", :with => GreenplumIntegration.password
       click_link "Save Changes"
     end
   end

@@ -82,7 +82,7 @@ describe DatasetsController do
 
     context "with real greenplum", :greenplum_integration do
       let(:user) { users(:admin) }
-      let(:schema) { InstanceIntegration.real_database.schemas.find_by_name('test_schema') }
+      let(:schema) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema') }
 
       context "when searching" do
         before do

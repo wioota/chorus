@@ -2,7 +2,7 @@ require_relative '../spec_helper'
 
 describe "Data Source", :oracle_integration do
   include DataSourceHelpers
-  include InstanceIntegration
+  include GreenplumIntegration
 
   let(:user) { users(:owner) }
   before do
@@ -34,7 +34,7 @@ describe "Data Source", :oracle_integration do
   end
 
   describe "clicking on an Oracle data source" do
-    let(:data_source) { InstanceIntegration.real_oracle_data_source }
+    let(:data_source) { OracleIntegration.real_data_source }
 
     before do
       visit("#/data_sources")
@@ -51,7 +51,7 @@ describe "Data Source", :oracle_integration do
   end
 
   describe "clicking on an Oracle schema" do
-    let(:schema) { InstanceIntegration.real_oracle_schema }
+    let(:schema) { OracleIntegration.real_schema }
     let(:data_source) { schema.data_source }
 
     before do

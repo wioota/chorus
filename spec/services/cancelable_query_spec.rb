@@ -39,7 +39,7 @@ describe CancelableQuery do
     let(:check_id) { '54321' }
 
     describe "with a real database connection", :greenplum_integration do
-      let(:account) { InstanceIntegration.real_gpdb_account }
+      let(:account) { GreenplumIntegration.real_account }
       let(:gpdb_data_source) { account.instance }
 
       it "cancels the query and throws a query error when the query is cancelled" do

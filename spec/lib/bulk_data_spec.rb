@@ -87,7 +87,7 @@ describe BulkData do
     it "adds a sandbox to all workspaces" do
       expect {
         expect {
-          BulkData.add_sandboxes(user_name, InstanceIntegration.real_gpdb_data_source.name)
+          BulkData.add_sandboxes(user_name, GreenplumIntegration.real_data_source.name)
         }.to change { Workspace.where(:sandbox_id => nil).count }.by_at_most(-2)
       }.to change { Events::WorkspaceAddSandbox.count }.by_at_least(2)
     end

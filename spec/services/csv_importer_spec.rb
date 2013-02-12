@@ -9,10 +9,10 @@ describe CsvImporter do
   let(:destination_dataset) { FactoryGirl.build :gpdb_table, :name => csv_file.to_table }
 
   describe "with a real database connection", :greenplum_integration do
-    let(:database) { InstanceIntegration.real_database }
+    let(:database) { GreenplumIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
-    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:account) { GreenplumIntegration.real_account }
     let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema, :owner => user, :name => "test_csv_workspace") }
     let(:error_on_import) { false }
 
@@ -441,10 +441,10 @@ describe CsvImporter do
   end
 
   describe "#destination_dataset" do
-    let(:database) { InstanceIntegration.real_database }
+    let(:database) { GreenplumIntegration.real_database }
     let(:schema) { database.schemas.find_by_name('test_schema') }
     let(:user) { account.owner }
-    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:account) { GreenplumIntegration.real_account }
     let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema, :owner => user, :name => "test_csv_workspace") }
     let(:error_on_import) { false }
     let!(:chorus_view) { FactoryGirl.create :chorus_view, :name => table_name, :schema => schema }

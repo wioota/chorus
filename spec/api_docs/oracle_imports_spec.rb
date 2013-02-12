@@ -18,7 +18,7 @@ resource "OracleImports" do
     required_parameters :schema_id, :table_name
 
     let(:table_name) { "foo" }
-    let(:schema_id) { InstanceIntegration.real_database.schemas.find_by_name('test_schema').id }
+    let(:schema_id) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema').id }
 
     example_request "Create an Oracle Import" do
       status.should == 201

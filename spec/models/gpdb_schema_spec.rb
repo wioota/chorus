@@ -183,8 +183,8 @@ describe GpdbSchema do
   end
 
   context "refresh returns the list of schemas", :greenplum_integration do
-    let(:account) { InstanceIntegration.real_gpdb_account }
-    let(:database) { GpdbDatabase.find_by_name(InstanceIntegration.database_name) }
+    let(:account) { GreenplumIntegration.real_account }
+    let(:database) { GpdbDatabase.find_by_name(GreenplumIntegration.database_name) }
 
     it "returns the sorted list of schemas" do
       schemas = GpdbSchema.refresh(account, database)

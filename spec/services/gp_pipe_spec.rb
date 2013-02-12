@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe GpPipe, :greenplum_integration do
-  let(:instance_account) { InstanceIntegration.real_gpdb_account }
+  let(:instance_account) { GreenplumIntegration.real_account }
   let(:user) { instance_account.owner }
-  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
   let(:schema_name) { 'test_gpfdist_schema' }
   let(:schema) { database.schemas.find_by_name(schema_name) }
   let(:destination_table_fullname) { %Q{"#{sandbox.name}"."#{destination_table_name}"}}

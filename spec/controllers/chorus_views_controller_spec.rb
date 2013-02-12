@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ChorusViewsController, :greenplum_integration do
-  let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+  let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
   let(:account) { gpdb_data_source.owner_account }
   let(:user) { account.owner }
-  let(:database) { InstanceIntegration.real_database }
+  let(:database) { GreenplumIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:public) }
   let(:dataset) { datasets(:table) }

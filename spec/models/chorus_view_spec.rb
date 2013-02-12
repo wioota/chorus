@@ -6,10 +6,10 @@ describe ChorusView do
     it { should validate_presence_of(:query) }
 
     describe "#validate_query", :greenplum_integration do
-      let(:database) { InstanceIntegration.real_database }
+      let(:database) { GreenplumIntegration.real_database }
       let(:schema) { database.schemas.find_by_name('public') }
-      let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+      let(:account) { GreenplumIntegration.real_account }
+      let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
       let(:workspace) { workspaces(:public)}
       let(:user) { users(:the_collaborator) }
       let(:chorus_view) { FactoryGirl.build(:chorus_view, :schema => schema, :workspace => workspace) }

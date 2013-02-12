@@ -27,7 +27,7 @@ describe "Data Sources", :greenplum_integration do
   end
 
   describe "viewing a Greenplum data source" do
-    let(:database) { InstanceIntegration.real_database }
+    let(:database) { GreenplumIntegration.real_database }
 
     before do
       login(users(:admin))

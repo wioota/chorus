@@ -1,4 +1,4 @@
-require_relative "./database_integration/instance_integration"
+require_relative "./database_integration/greenplum_integration"
 require 'rr'
 
 def FixtureBuilder.password
@@ -23,7 +23,7 @@ FixtureBuilder.configure do |fbuilder|
     record['username'].downcase
   end
 
-  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{InstanceIntegration::REAL_GPDB_HOST}_#{Rails.env}.yml"
+  fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{GreenplumIntegration.hostname}_#{Rails.env}.yml"
 
   # now declare objects
   fbuilder.factory do
@@ -472,19 +472,19 @@ FixtureBuilder.configure do |fbuilder|
     RR.reset
 
     if ENV['GPDB_HOST']
-      chorus_gpdb40_instance = FactoryGirl.create(:gpdb_data_source, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
-      chorus_gpdb41_instance = FactoryGirl.create(:gpdb_data_source, InstanceIntegration.instance_config_for_gpdb("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
-      chorus_gpdb42_instance = FactoryGirl.create(:gpdb_data_source, InstanceIntegration.instance_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:name => InstanceIntegration::greenplum_hostname, :owner => admin))
+      chorus_gpdb40_instance = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+      chorus_gpdb41_instance = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+      chorus_gpdb42_instance = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => admin))
 
       @chorus_gpdb42_test_superuser = chorus_gpdb42_instance.account_for_user(admin)
 
-      FactoryGirl.create(:instance_account, InstanceIntegration.account_config_for_gpdb(InstanceIntegration::REAL_GPDB_HOST).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
+      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
 
-      InstanceIntegration.refresh_chorus
+      GreenplumIntegration.refresh_chorus
       chorus_gpdb42_instance.refresh_databases
-      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(InstanceIntegration.database_name), :refresh_all => true)
+      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GreenplumIntegration.database_name), :refresh_all => true)
 
-      test_database = GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source)
+      test_database = GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)
       test_schema = test_database.schemas.find_by_name('test_schema')
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local-greenplum", :sandbox => test_schema}, :without_protection => true)
@@ -505,13 +505,13 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['HADOOP_HOST']
-      @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => InstanceIntegration.instance_config_for_hadoop['host'], :port => InstanceIntegration.instance_config_for_hadoop['port'])
+      @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => HadoopIntegration.instance_config['host'], :port => HadoopIntegration.instance_config['port'])
     end
 
     if ENV['ORACLE_HOST']
-      real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => InstanceIntegration.oracle_hostname, :port => InstanceIntegration.oracle_port, :db_name => InstanceIntegration.oracle_db_name, :db_username => InstanceIntegration.oracle_username, :db_password => InstanceIntegration.oracle_password)
+      real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => OracleIntegration.hostname, :port => OracleIntegration.port, :db_name => OracleIntegration.db_name, :db_username => OracleIntegration.username, :db_password => OracleIntegration.password)
       real_oracle_data_source.refresh_schemas
-      InstanceIntegration.real_oracle_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
+      OracleIntegration.real_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
     end
 
     #Notification

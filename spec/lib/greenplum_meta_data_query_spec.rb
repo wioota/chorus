@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe GreenplumMetaDataQuery, :greenplum_integration do
-  let(:account) { InstanceIntegration.real_gpdb_account }
-  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+  let(:account) { GreenplumIntegration.real_account }
+  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
   let(:schema) { database.schemas.find_by_name('test_schema') }
 
   subject do
@@ -23,8 +23,8 @@ describe GreenplumMetaDataQuery, :greenplum_integration do
     end
 
     context "when 'public' schema does not exist" do
-      let(:database_name) { "#{InstanceIntegration.database_name}_priv" }
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:database_name) { "#{GreenplumIntegration.database_name}_priv" }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(database_name, GreenplumIntegration.real_data_source) }
       let(:schema) { database.schemas.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM non_public_base_table1" }
 

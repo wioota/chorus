@@ -113,8 +113,8 @@ describe GpdbDataSource do
 
   describe "#create_database" do
     context "using a real remote greenplum instance", :greenplum_integration do
-      let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:gpdb_data_source) { InstanceIntegration.real_gpdb_data_source }
+      let(:account) { GreenplumIntegration.real_account }
+      let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
 
       after do
         exec_on_gpdb('DROP DATABASE IF EXISTS "new_database"')
@@ -296,9 +296,9 @@ describe GpdbDataSource do
 
   describe "refresh_databases", :greenplum_integration do
     context "with database integration" do
-      let(:account_with_access) { InstanceIntegration.real_gpdb_account }
+      let(:account_with_access) { GreenplumIntegration.real_account }
       let(:gpdb_data_source) { account_with_access.instance }
-      let(:database) { InstanceIntegration.real_database }
+      let(:database) { GreenplumIntegration.real_database }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_dataset_permissions" do
         mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", database.id)
@@ -412,7 +412,7 @@ describe GpdbDataSource do
   end
 
   describe "#databases", :greenplum_integration do
-    let(:account) { InstanceIntegration.real_gpdb_account }
+    let(:account) { GreenplumIntegration.real_account }
 
     it "should not include the 'template0' database" do
       account.instance.databases.map(&:name).should_not include "template0"
@@ -521,7 +521,7 @@ describe GpdbDataSource do
   end
 
   describe "DataSource Behaviors", :greenplum_integration do
-    let(:instance) { InstanceIntegration.real_gpdb_data_source }
+    let(:instance) { GreenplumIntegration.real_data_source }
     let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
 
     it_should_behave_like "DataSource"

@@ -41,9 +41,9 @@ describe ColumnController do
     end
 
     context "with real data", :greenplum_integration do
-      let(:account) { InstanceIntegration.real_gpdb_account }
+      let(:account) { GreenplumIntegration.real_account }
       let(:user) { account.owner }
-      let(:database) { InstanceIntegration.real_database }
+      let(:database) { GreenplumIntegration.real_database }
       let(:dataset) {database.find_dataset_in_schema('base_table1', 'test_schema')}
 
       before do

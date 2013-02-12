@@ -36,7 +36,9 @@ Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
 FactoryGirl.find_definitions
 require "#{Rails.root}/spec/support/fixture_builder.rb"
-require "#{Rails.root}/spec/support/database_integration/instance_integration.rb"
+require "#{Rails.root}/spec/support/database_integration/greenplum_integration.rb"
+require "#{Rails.root}/spec/support/database_integration/oracle_integration.rb"
+require "#{Rails.root}/spec/support/database_integration/hadoop_integration.rb"
 require Rails.root.join('spec/external_service_detector.rb').to_s
 
 RSpec.configure do |config|
@@ -62,7 +64,8 @@ RSpec.configure do |config|
 
   config.include LoginHelpers
   config.include CleditorHelpers
-  config.include InstanceIntegration
+  config.include GpdbGreenplumIntegration
+  config.include OracleGreenplumIntegration
   config.include CapybaraHelpers
 end
 

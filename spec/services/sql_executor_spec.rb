@@ -5,8 +5,8 @@ describe SqlExecutor do
 
   describe "#preview_dataset" do
     context "with live data", :greenplum_integration do
-      let(:account) { InstanceIntegration.real_gpdb_account }
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(InstanceIntegration.database_name, InstanceIntegration.real_gpdb_data_source) }
+      let(:account) { GreenplumIntegration.real_account }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
       let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
 
       subject { SqlExecutor.preview_dataset(table, account, check_id) }

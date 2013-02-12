@@ -3,8 +3,8 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Sandbox", :greenplum_integration do
 
   let(:workspace) { workspaces(:private_with_no_collaborators) }
-  let(:instance) { InstanceIntegration.real_gpdb_data_source }
-  let(:database) { InstanceIntegration.real_database }
+  let(:instance) { GreenplumIntegration.real_data_source }
+  let(:database) { GreenplumIntegration.real_database }
   let(:schema) { database.schemas.first }
 
   before do
