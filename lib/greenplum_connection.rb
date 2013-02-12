@@ -123,6 +123,11 @@ class GreenplumConnection < DataSourceConnection
     disconnect if destroy_connection_on_exit
   end
 
+  def db_url
+    query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
+    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+  end
+
   private
 
   def logger_options
@@ -135,11 +140,6 @@ class GreenplumConnection < DataSourceConnection
 
   def quote_identifier(identifier)
     @connection.send(:quote_identifier, identifier)
-  end
-
-  def db_url
-    query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
   end
 
   module DatabaseMethods

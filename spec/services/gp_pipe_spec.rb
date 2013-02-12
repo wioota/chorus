@@ -10,10 +10,10 @@ describe GpPipe, :greenplum_integration do
 
   let(:log_options) { {:logger => Rails.logger } } # enable logging
 
-  let(:source_database_url) { Gpdb::ConnectionBuilder.url(database, instance_account) }
+  let(:source_database_url) { database.connect_with(instance_account).db_url }
   let(:source_database) { Sequel.connect(source_database_url, log_options) }
 
-  let(:destination_database_url) { Gpdb::ConnectionBuilder.url(database, instance_account) }
+  let(:destination_database_url) { database.connect_with(instance_account).db_url }
   let(:destination_database) { Sequel.connect(destination_database_url, log_options) }
 
   let(:source_table) { "candy" }

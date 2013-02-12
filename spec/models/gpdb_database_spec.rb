@@ -157,58 +157,37 @@ describe GpdbDatabase do
   end
 
   describe ".create_schema" do
-    context "using a real greenplum instance", :greenplum_integration do
-      let(:account) { GreenplumIntegration.real_account }
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
-      let(:instance) { database.data_source }
+    let(:connection) { Object.new }
+    let(:database) { gpdb_databases(:default) }
+    let(:user) { users(:owner) }
+    let(:schema_name) { "stuff" }
 
-      after do
-        exec_on_gpdb('DROP SCHEMA IF EXISTS "my_new_schema"')
-        exec_on_gpdb('DROP SCHEMA IF EXISTS "invalid!"')
-      end
-
-      it "creates the schema" do
-
-        database.create_schema("my_new_schema", account.owner).tap do |schema|
-          schema.name.should == "my_new_schema"
-          schema.database.should == database
-        end
-
-        database.schemas.find_by_name("my_new_schema").should_not be_nil
-
-        exec_on_gpdb("select * from pg_namespace where nspname = 'my_new_schema';") do |result|
-          result[0]["nspname"].should == "my_new_schema"
-        end
-      end
-
-      it 'raises an error if a schema with the same name already exists' do
-        expect {
-          database.create_schema(database.schemas.last.name, account.owner)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it 'raises an error if the schema name is invalid' do
-        expect {
-          database.create_schema('invalid/', account.owner)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-      def exec_on_gpdb(sql)
-        Gpdb::ConnectionBuilder.connect!(instance, account, database.name) do |connection|
-          result = connection.exec_query(sql)
-          block_given? ? yield(result) : result
-        end
-      end
+    before do
+      stub(database).connect_as(user) { connection }
+      stub(GpdbSchema).refresh.with_any_args { database.schemas.create(:name => schema_name) }
     end
 
-    context "when gpdb connection is broken" do
-      let(:database) { gpdb_databases(:default) } #not a real db
-      let(:user) { users(:owner) }
+    it "should create the schema" do
+      mock(connection).create_schema(schema_name)
+      expect {
+        database.create_schema(schema_name, user).name.should == schema_name
+      }.to change(GpdbSchema, :count).by(1)
+    end
 
-      it "does not create a local database" do
-        expect {
-          database.create_schema("my_new_schema", user)
-        }.to raise_error(GreenplumConnection::DatabaseError)
-        database.schemas.find_by_name("my_new_schema").should be_nil
+    context "when the schema is invalid" do
+      before do
+        any_instance_of(GpdbSchema) do |schema|
+          stub(schema).valid? { false }
+        end
+      end
+
+      it "should not create the database" do
+        dont_allow(connection).create_schema.with_any_args
+        expect do
+          expect do
+            database.create_schema(schema_name, user)
+          end.to raise_error(ActiveRecord::RecordInvalid)
+        end.not_to change(GpdbSchema, :count)
       end
     end
   end

@@ -25,7 +25,7 @@ describe ImportTerminator, :greenplum_integration do
     let(:sandbox) { workspace.sandbox }
     let(:destination_table_name) { "forever_table" }
     let(:destination_table_fullname) { %Q{"#{sandbox.name}"."#{destination_table_name}"}}
-    let(:destination_database_url) { Gpdb::ConnectionBuilder.url(database, instance_account) }
+    let(:destination_database_url) { database.connect_with(instance_account).db_url }
 
     let!(:import) do
       FactoryGirl.create :import, {

@@ -6,7 +6,7 @@ describe ImportExecutor do
   let(:workspace) { workspaces(:public) }
   let(:sandbox) { workspace.sandbox }
   let(:destination_table_name) { "dst_table" }
-  let(:database_url) { Gpdb::ConnectionBuilder.url(sandbox.database, account) }
+  let(:database_url) { sandbox.database.connect_with(account).db_url }
   let(:account) { sandbox.data_source.account_for_user!(user) }
 
   let!(:dataset_import_created_event) do

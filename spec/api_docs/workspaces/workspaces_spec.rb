@@ -71,9 +71,7 @@ resource "Workspaces" do
     let(:user) { gpdb_data_source.owner }
 
     after do
-      Gpdb::ConnectionBuilder.connect!(gpdb_data_source, gpdb_data_source.owner_account) do |conn|
-        conn.exec_query("DROP DATABASE IF EXISTS #{database_name};")
-      end
+      gpdb_data_source.connect_with(gpdb_data_source.owner_account).execute("DROP DATABASE IF EXISTS #{database_name}")
     end
 
     example_request "Add a sandbox by creating a new schema in a new database" do

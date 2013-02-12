@@ -93,24 +93,6 @@ describe ApplicationController do
       decoded_errors.fields.query.INVALID.message.should == "broken!"
     end
 
-    it "returns error 422 when an Gpdb::InstanceOverloaded error is raised" do
-      stub(controller).index { raise Gpdb::InstanceOverloaded }
-
-      get :index
-
-      response.code.should == "422"
-      decoded_errors.record.should == "INSTANCE_OVERLOADED"
-    end
-
-    it "returns error 422 when an Gpdb::InstanceUnreachable error is raised" do
-      stub(controller).index { raise Gpdb::InstanceUnreachable }
-
-      get :index
-
-      response.code.should == "422"
-      decoded_errors.record.should == "INSTANCE_UNREACHABLE"
-    end
-
     it "returns error 503 when an SearchExtensions::SolrUnreachable error is raised" do
       stub(controller).index { raise SearchExtensions::SolrUnreachable }
 

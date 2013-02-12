@@ -17,8 +17,6 @@ class ApplicationController < ActionController::Base
   rescue_from 'ApiValidationError', :with => :render_not_valid
   rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
-  rescue_from 'Gpdb::InstanceOverloaded', :with => :render_instance_overloaded_error
-  rescue_from 'Gpdb::InstanceUnreachable', :with => :render_instance_unreachable_error
   rescue_from 'DataSourceConnection::Error', :with => :render_database_error
   rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
@@ -83,14 +81,6 @@ class ApplicationController < ActionController::Base
     present_errors({:fields => {:general =>
                                     {:GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
-  end
-
-  def render_instance_overloaded_error(e)
-    present_errors({:record => :INSTANCE_OVERLOADED}, :status => :unprocessable_entity)
-  end
-
-  def render_instance_unreachable_error(e)
-    present_errors({:record => :INSTANCE_UNREACHABLE}, :status => :unprocessable_entity)
   end
 
   def render_solr_unreachable_error(e)

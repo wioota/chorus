@@ -27,8 +27,8 @@ describe GpTableCopier, :greenplum_integration do
   let(:log_options) { { :logger => Rails.logger } } # Enable logging
   # let(:log_options) { {} } # Disable logging
   let(:gpdb_database) { Sequel.connect(gpdb_database_url, log_options) }
-  let(:gpdb_database_url) { Gpdb::ConnectionBuilder.url(database, account) }
-  let(:test_gpdb_database) { Sequel.connect(Gpdb::ConnectionBuilder.url(database, account)) }
+  let(:gpdb_database_url) { database.connect_with(account).db_url }
+  let(:test_gpdb_database) { Sequel.connect(gpdb_database_url) }
   let(:add_rows) { true }
   let(:workspace) { FactoryGirl.create :workspace, :owner => user, :sandbox => sandbox }
   let(:import) { imports(:two) }

@@ -42,7 +42,7 @@ class ImportExecutor < DelegateClass(Import)
 
   def get_database_url(db)
     account = db.data_source.account_for_user!(user)
-    Gpdb::ConnectionBuilder.url(db, account)
+    db.connect_with(account).db_url
   end
 
   def refresh_schema
