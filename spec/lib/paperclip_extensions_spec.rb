@@ -1,7 +1,9 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 describe Paperclip do
-  class UploadedFile < OpenStruct; end
+  class UploadedFile < OpenStruct;
+  end
 
   context "UploadedFileAdapter#content_type" do
     it "get the content type for text file" do
@@ -88,6 +90,42 @@ describe Paperclip do
       g = Paperclip::Geometry.from_file(o)
       g.width.should == 5
       g.height.should == 7
+    end
+  end
+
+  context "Filesystem#flush_deletes" do
+    include FakeFS::SpecHelpers
+
+    class PaperclippedThing < ActiveRecord::Base
+      self.table_name = 'csv_files'
+      has_attached_file :contents, :path => "/symlink/:class/:id/:basename.:extension"
+    end
+
+    let(:file_upload) do
+      file = FakeFileUpload.new("select 1;")
+      file.content_type = "text/sql"
+      file.original_filename = "filename.sql"
+      file
+    end
+
+    let(:paperclip_model) do
+      model = PaperclippedThing.new({:contents => file_upload}, :without_protection => true)
+      model.save!
+      model
+    end
+
+    before do
+      FileUtils.mkdir_p "/real_directory"
+      FileUtils.ln_s("/real_directory", "/symlink")
+    end
+
+    it "does not delete symlinks" do
+      model = paperclip_model
+      File.exists?("/symlink/#{model.class.name.pluralize.underscore}/#{model.id}/filename.sql").should be_true
+      paperclip_model.destroy
+
+      File.exists?("/symlink/#{model.class.name.pluralize.underscore}/#{model.id}/filename.sql").should be_false
+      File.exists?("/symlink").should be_true
     end
   end
 end
