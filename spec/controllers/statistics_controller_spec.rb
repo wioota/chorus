@@ -56,20 +56,18 @@ describe StatisticsController do
         get :show, :dataset_id => table.to_param
       end
 
-      context "generating statistics for a chorus view" do
-        let(:metadata_info) {
-          {
-              'name' => 'table',
+      context "generating statistics for a view" do
+        let(:statistics) {
+          DatasetStatistics.new(
               'description' => 'a description',
-              'definition' => nil,
               'column_count' => '3',
-              'row_count' => '5',
-              'table_type' => 'BASE_TABLE',
-              'last_analyzed' => Time.parse('2012-06-06 23:02:42.40264+00').utc,
-              'disk_size' => '500',
-              'partition_count' => '6',
+              'row_count' => '0',
+              'table_type' => 'VIEW',
+              'last_analyzed' => nil,
+              'disk_size' => '0',
+              'partition_count' => '0',
               'definition' => 'Bobby DROP TABLES;'
-          }
+          )
         }
 
         generate_fixture "datasetStatisticsView.json" do
