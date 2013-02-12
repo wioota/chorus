@@ -20,7 +20,7 @@ module GreenplumIntegration
 
     sql = sql_read.gsub('gpdb_test_database', GreenplumIntegration.database_name)
 
-    database_string = "jdbc:postgresql://#{host}:#{port}/#{database}?user=#{username}&password=#{password}"
+    database_string = "jdbc:postgresql://#{hostname}:#{port}/#{database}?user=#{username}&password=#{password}"
     Sequel.connect(database_string) do |database_connection|
       database_connection.run(sql)
     end
