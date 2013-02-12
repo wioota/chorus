@@ -3,7 +3,7 @@ class WorkspaceDatasetsController < ApplicationController
   def index
     authorize! :show, workspace
     options = {
-        :entitySubtype => params[:entitySubtype],
+        :entity_subtype => params[:entity_subtype],
         :database_id => params[:database_id],
         :limit => params[:page].to_i * params[:per_page].to_i
     }.reject { |k, v| v.nil? }

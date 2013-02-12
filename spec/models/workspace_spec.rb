@@ -169,19 +169,19 @@ describe Workspace do
             workspace.dataset_count(user).should == 1 + 2 + 142
           end
 
-          it "filters by entitySubtype" do
-            workspace.datasets(user, { :entitySubtype => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
-            workspace.dataset_count(user, { :entitySubtype => "SANDBOX_DATASET" }).should == 142
-            workspace.datasets(user, { :entitySubtype => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
-            workspace.dataset_count(user, { :entitySubtype => "CHORUS_VIEW" }).should == 2
-            workspace.datasets(user, { :entitySubtype => "SOURCE_TABLE" }).to_a.should =~ [source_table]
-            workspace.datasets(user, { :entitySubtype => "NON_CHORUS_VIEW" }).to_a.should =~ [sandbox_table, sandbox_view, source_table]
-            workspace.dataset_count(user, { :entitySubtype => "SOURCE_TABLE" }).should == 1
+          it "filters by entity_subtype" do
+            workspace.datasets(user, { :entity_subtype => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
+            workspace.dataset_count(user, { :entity_subtype => "SANDBOX_DATASET" }).should == 142
+            workspace.datasets(user, { :entity_subtype => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
+            workspace.dataset_count(user, { :entity_subtype => "CHORUS_VIEW" }).should == 2
+            workspace.datasets(user, { :entity_subtype => "SOURCE_TABLE" }).to_a.should =~ [source_table]
+            workspace.datasets(user, { :entity_subtype => "NON_CHORUS_VIEW" }).to_a.should =~ [sandbox_table, sandbox_view, source_table]
+            workspace.dataset_count(user, { :entity_subtype => "SOURCE_TABLE" }).should == 1
           end
 
           describe "filtering by sandbox table" do
             before do
-              options ={:entitySubtype => "SANDBOX_TABLE",
+              options ={:entity_subtype => "SANDBOX_TABLE",
                         :tables_only => true }
               mock(GpdbDataset).visible_to(account, schema, options) {
                 [sandbox_table]
@@ -191,8 +191,8 @@ describe Workspace do
             end
 
             it "filters out views" do
-              workspace.datasets(user, { :entitySubtype => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
-              workspace.dataset_count(user, { :entitySubtype => "SANDBOX_TABLE" }).should == 141
+              workspace.datasets(user, { :entity_subtype => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
+              workspace.dataset_count(user, { :entity_subtype => "SANDBOX_TABLE" }).should == 141
             end
           end
         end
@@ -204,9 +204,9 @@ describe Workspace do
           end
 
           it "returns no results" do
-            workspace.datasets(user, { :entitySubtype => "SANDBOX_TABLE" }).should =~ []
-            workspace.datasets(user, { :entitySubtype => "SANDBOX_DATASET" }).should =~ []
-            workspace.dataset_count(user, { :entitySubtype => "SANDBOX_DATASET" }).should == 0
+            workspace.datasets(user, { :entity_subtype => "SANDBOX_TABLE" }).should =~ []
+            workspace.datasets(user, { :entity_subtype => "SANDBOX_DATASET" }).should =~ []
+            workspace.dataset_count(user, { :entity_subtype => "SANDBOX_DATASET" }).should == 0
           end
         end
       end

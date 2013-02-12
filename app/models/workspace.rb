@@ -100,14 +100,14 @@ class Workspace < ActiveRecord::Base
   end
 
   def filtered_datasets(current_user, options = {})
-    entitySubtype = options[:entitySubtype] if options
+    entity_subtype = options[:entity_subtype] if options
     database_id = options[:database_id] if options
 
     scoped_bound_datasets = scope_to_database(bound_datasets, database_id)
     scoped_chorus_views = scope_to_database(chorus_views, database_id)
 
     datasets = []
-    case entitySubtype
+    case entity_subtype
       when "SANDBOX_TABLE", "SANDBOX_DATASET" then
       when "CHORUS_VIEW" then
         datasets << chorus_views
@@ -127,16 +127,16 @@ class Workspace < ActiveRecord::Base
   end
 
   def with_filtered_datasets(current_user, options = {})
-    entitySubtype = options[:entitySubtype]
+    entity_subtype = options[:entity_subtype]
     database_id = options[:id]
 
     extra_options = {}
-    extra_options.merge! :tables_only => true if entitySubtype == "SANDBOX_TABLE"
+    extra_options.merge! :tables_only => true if entity_subtype == "SANDBOX_TABLE"
 
     account = sandbox && sandbox.database.account_for_user(current_user)
     skip_sandbox = !account ||
         database_id && (database_id != sandbox.database_id) ||
-        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entitySubtype)
+        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype)
 
     datasets = filtered_datasets(current_user, options)
     yield datasets, options.merge(extra_options), account, skip_sandbox

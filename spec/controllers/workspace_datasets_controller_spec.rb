@@ -65,9 +65,9 @@ describe WorkspaceDatasetsController do
       end
 
       it "filters db objects by type" do
-        options = {:type => "SANDBOX_TABLE", :limit => 50}
+        options = {:entity_subtype => "SANDBOX_TABLE", :limit => 50}
         mock(workspace).datasets(user, options) { the_datasets }
-        get :index, :workspace_id => workspace.to_param, :type => 'SANDBOX_TABLE'
+        get :index, :workspace_id => workspace.to_param, :entity_subtype => 'SANDBOX_TABLE'
       end
 
       it "asks for datasets only from the selected database" do
@@ -326,11 +326,11 @@ describe WorkspaceDatasetsController do
 
     context "when filtering on a dataset type" do
       before do
-        get :index, :workspace_id => workspace.to_param, :page => "1", :per_page => "5", :type => type
+        get :index, :workspace_id => workspace.to_param, :page => "1", :per_page => "5", :entity_subtype => entity_subtype
       end
 
       context "sandbox datasets" do
-        let(:type) { "SANDBOX_DATASET" }
+        let(:entity_subtype) { "SANDBOX_DATASET" }
 
         it "presents the correct count / pagination information" do
           decoded_pagination.records.should == workspace.sandbox.active_tables_and_views.size
@@ -339,7 +339,7 @@ describe WorkspaceDatasetsController do
       end
 
       context "chorus views" do
-        let(:type) { "CHORUS_VIEW" }
+        let(:entity_subtype) { "CHORUS_VIEW" }
         it "presents the correct count / pagination information" do
           decoded_pagination.records.should == workspace.chorus_views.size
           decoded_pagination.total.should == (workspace.chorus_views.size/5.0).ceil
@@ -347,7 +347,7 @@ describe WorkspaceDatasetsController do
       end
 
       context "source datasets" do
-        let(:type) { "SOURCE_TABLE" }
+        let(:entity_subtype) { "SOURCE_TABLE" }
         it "presents the correct count / pagination information" do
           decoded_pagination.records.should == 1
           decoded_pagination.total.should == 1
