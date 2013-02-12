@@ -1,3 +1,5 @@
+require 'fakefs/spec_helpers'
+
 module FakeFS
   class FakeDir
     def delete(node = self)
