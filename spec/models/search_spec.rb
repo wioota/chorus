@@ -348,12 +348,9 @@ describe Search do
       it "includes the highlighted attributes" do
         dataset = datasets(:searchquery_table)
         stub(dataset).table_description { "searchquery description" }
-        stub(GpdbColumn).columns_for.with_any_args {
-            [
-              #GpdbColumn.new(:name => 'searchquery'),
-              GpdbColumn.new(:name => 'non-search'),
-              GpdbColumn.new(:name => 'searchquery', :description => 'searchquery comment 1')
-            ]
+        stub(DatasetColumn).columns_for.with_any_args {
+            [ DatasetColumn.new(:name => 'non-search'),
+              DatasetColumn.new(:name => 'searchquery', :description => 'searchquery comment 1') ]
         }
 
         create_and_record_search do |search|
