@@ -2,15 +2,12 @@ module SolrHelpers
 
   def reindex_solr_fixtures
     stub(DatasetColumn).columns_for.with_any_args {
-      [ DatasetColumn.new(:name => 'searchquery'),
-        DatasetColumn.new(:name => 'searchquery 2'),
-        DatasetColumn.new(:name => 'non-search'),
-        DatasetColumn.new(:name => 'comment-search', :description => 'searchquery comment 1'),
-        DatasetColumn.new(:name => 'comment-search-2', :description => 'searchquery comment 2')
+      [ DatasetColumn.new(:name => 'bogus'),
+        DatasetColumn.new(:name => 'bogus 2')
       ]
     }
     any_instance_of(GpdbDataset) do |ds|
-      stub(ds).table_description { "searchquery" }
+      stub(ds).table_description { "bogus" }
     end
     VCR.use_cassette('search_solr_index') do
       Sunspot.session = Sunspot.session.original_session

@@ -346,14 +346,25 @@ describe Search do
 
     describe "datasets" do
       it "includes the highlighted attributes" do
+        dataset = datasets(:searchquery_table)
+        stub(dataset).table_description { "searchquery description" }
+        stub(GpdbColumn).columns_for.with_any_args {
+            [
+              #GpdbColumn.new(:name => 'searchquery'),
+              GpdbColumn.new(:name => 'non-search'),
+              GpdbColumn.new(:name => 'searchquery', :description => 'searchquery comment 1')
+            ]
+        }
+
         create_and_record_search do |search|
+          dataset.solr_index!
           dataset = search.datasets.find { |dataset| dataset.name == 'searchquery_table' }
           dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
           dataset.highlighted_attributes[:database_name][0].should == "<em>searchquery</em>_database"
           dataset.highlighted_attributes[:schema_name][0].should == "<em>searchquery</em>_schema"
           dataset.highlighted_attributes.should have_key(:table_description)
-          dataset.highlighted_attributes.should have_key(:column_description)
           dataset.highlighted_attributes.should have_key(:column_name)
+          dataset.highlighted_attributes.should have_key(:column_description)
           dataset.highlighted_attributes.length.should == 6
         end
       end

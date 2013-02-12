@@ -29,12 +29,12 @@ http_interactions:
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
         AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''ChorusView
-        1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4.1852274,''docs''=>[{''id''=>''Comment
-        1000004'',''body_texts''=>[''commentsearch''],''score''=>4.1852274}]}},{''groupValue''=>''GpdbTable
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.615767,''docs''=>[{''id''=>''Comment
-        1000003'',''body_texts''=>[''commentsearch ftw''],''score''=>2.615767}]}}]}},''highlighting''=>{''Comment
+        1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4.190623,''docs''=>[{''id''=>''Comment
+        1000004'',''body_texts''=>[''commentsearch''],''score''=>4.190623}]}},{''groupValue''=>''GpdbTable
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2.6191392,''docs''=>[{''id''=>''Comment
+        1000003'',''body_texts''=>[''commentsearch ftw''],''score''=>2.6191392}]}}]}},''highlighting''=>{''Comment
         1000004''=>{''body_texts''=>[''@@@hl@@@commentsearch@@@endhl@@@'']},''Comment
         1000003''=>{''body_texts''=>[''@@@hl@@@commentsearch@@@endhl@@@ ftw'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 07 Feb 2013 20:30:07 GMT
+  recorded_at: Mon, 11 Feb 2013 22:27:28 GMT
 recorded_with: VCR 2.3.0
