@@ -19,7 +19,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     isChorusView: function() {
-        return this.get("type") === "CHORUS_VIEW";
+        return this.get("entitySubtype") === "CHORUS_VIEW";
     },
 
     iconUrl: function() {
@@ -35,7 +35,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     },
 
     isSandbox: function() {
-        return this.get("type") === "SANDBOX_TABLE";
+        return this.get("entitySubtype") === "SANDBOX_TABLE";
     },
 
     deriveChorusView: function() {

@@ -25,7 +25,7 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
         this._super('initialize');
         this.joins = [];
         this.sourceObjectColumns = [];
-        this.attributes.type = "CHORUS_VIEW";
+        this.attributes.entitySubtype = "CHORUS_VIEW";
         this.attributes.objectType = "CHORUS_VIEW";
     },
 

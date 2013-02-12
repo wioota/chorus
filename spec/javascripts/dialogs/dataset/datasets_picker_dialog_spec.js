@@ -53,7 +53,7 @@ describe("chorus.dialogs.DatasetsPicker", function() {
 
             it("only shows real sandbox tables (no hdfs, source, externals, views)", function() {
                 _.each(dialog.collection.models, function(model) {
-                    expect(model.get("type")).toBe("SANDBOX_TABLE");
+                    expect(model.get("entitySubtype")).toBe("SANDBOX_TABLE");
                 });
             });
 

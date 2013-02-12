@@ -416,11 +416,11 @@
 
         humanizedDatasetType: function(dataset, statistics) {
             if (!dataset) { return ""; }
-            var keys = ["dataset.types", dataset.type];
+            var keys = ["dataset.types", dataset.entitySubtype];
             if (statistics instanceof chorus.models.DatasetStatistics && statistics.get("objectType")) {
                 keys.push(statistics.get("objectType"));
             }
-            else if (dataset.type === "CHORUS_VIEW" || dataset.type === "SOURCE_TABLE")
+            else if (dataset.entitySubtype === "CHORUS_VIEW" || dataset.entitySubtype === "SOURCE_TABLE")
             {
                 keys.push(dataset.objectType);
             }

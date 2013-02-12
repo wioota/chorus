@@ -2,10 +2,10 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.DatasetSet([
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
         this.view = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.view.render();

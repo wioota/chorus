@@ -20,8 +20,8 @@ chorus.models.Dataset = chorus.models.Base.include(
         this.bind("change:associatedWorkspaces", this.invalidateWorkspacesAssociated, this);
         this.bind("change:tableauWorkbooks", this.invalidateTableauWorkbooks, this);
 
-        if (!this.has("type")) {
-            this.set({type: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
+        if (!this.has("entitySubtype")) {
+            this.set({entitySubtype: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
         }
     },
 
@@ -30,8 +30,8 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isDeleteable: function() {
-        var type = this.get("type");
-        return type && (type === "SOURCE_TABLE" || type === "CHORUS_VIEW");
+        var entitySubtype = this.get("entitySubtype");
+        return entitySubtype && (entitySubtype === "SOURCE_TABLE" || entitySubtype === "CHORUS_VIEW");
     },
 
     columns: function(options) {
@@ -137,7 +137,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     iconUrl: function(options) {
         var size = (options && options.size) || "large";
-        var name = this.constructor.iconMap[this.get("type")][this.get("objectType")];
+        var name = this.constructor.iconMap[this.get("entitySubtype")][this.get("objectType")];
         return "/images/" + name + "_" + size + ".png";
     },
 
@@ -331,7 +331,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     humanType: function() {
-      return t(['dataset.types',this.get("type"),this.get("objectType")].join("."));
+      return t(['dataset.types',this.get("entitySubtype"),this.get("objectType")].join("."));
     },
 
     importFrequency: $.noop

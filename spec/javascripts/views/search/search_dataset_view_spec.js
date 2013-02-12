@@ -41,7 +41,7 @@ describe("chorus.views.SearchDataset", function() {
 
     context("when the search results include a chorus view", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { name: "Chorus View Thing" }, type: "CHORUS_VIEW" });
+            this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { name: "Chorus View Thing" }, entitySubtype: "CHORUS_VIEW" });
             this.view = new chorus.views.SearchDataset({model: this.model});
             this.view.render();
         });

@@ -109,7 +109,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for chorusView", function() {
             var chorusView = _.find(this.results, function(result) {
-                return result.get("entityType") === 'dataset' && result.get("type") === 'CHORUS_VIEW';
+                return result.get("entityType") === 'dataset' && result.get("entitySubtype") === 'CHORUS_VIEW';
             });
             var resultIndex = this.results.indexOf(chorusView);
             var result = this.view.$("li.result:eq("+ resultIndex +")");

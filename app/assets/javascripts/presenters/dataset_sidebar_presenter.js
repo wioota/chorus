@@ -33,7 +33,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             }
         };
 
-        var resourceType = this.resource && this.resource.get("type");
+        var resourceType = this.resource && this.resource.get("entitySubtype");
         var resourceObjectType = this.resource && this.resource.get("objectType");
 
         var rescue = {};

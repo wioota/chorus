@@ -23,7 +23,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
         context("when the dataset is a chorus view", function() {
           beforeEach(function() {
-              this.dataset.set({type: "CHORUS_VIEW"});
+              this.dataset.set({entitySubtype: "CHORUS_VIEW"});
           });
 
           it("has the right showUrl", function() {
@@ -41,7 +41,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     });
 
     it("has the right chorus view url", function() {
-        this.dataset.set({type: "CHORUS_VIEW"});
+        this.dataset.set({entitySubtype: "CHORUS_VIEW"});
         expect(this.dataset.url({ method : "delete"})).toMatchUrl("/chorus_views/1011");
         expect(this.dataset.url({ method : "update"})).toMatchUrl("/chorus_views/1011");
         expect(this.dataset.url({ method : "get"})).toMatchUrl("/workspaces/44/datasets/1011");
@@ -72,7 +72,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#isChorusView", function() {
         context("when the dataset is a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({type: "CHORUS_VIEW", query: "SELECT * FROM whatever"});
+                this.dataset.set({entitySubtype: "CHORUS_VIEW", query: "SELECT * FROM whatever"});
             });
 
             it("should return true", function() {
@@ -113,7 +113,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#statistics", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "CHORUS_VIEW" });
+                this.dataset.set({ entitySubtype: "CHORUS_VIEW" });
             });
 
             it("sets the workspace info into the statistics object", function() {
@@ -129,7 +129,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#activities", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "CHORUS_VIEW" });
+                this.dataset.set({ entitySubtype: "CHORUS_VIEW" });
             });
 
             it("sets the workspace info into the ActivitySet object", function() {
@@ -139,7 +139,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
         context("for a non-chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ type: "SANDBOX_TABLE" });
+                this.dataset.set({ entitySubtype: "SANDBOX_TABLE" });
             });
 
             it("does not set the workspace info into the ActivitySet object", function() {

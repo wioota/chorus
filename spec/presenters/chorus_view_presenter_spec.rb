@@ -12,7 +12,7 @@ describe ChorusViewPresenter, :type => :view do
   it "hash should have attributes" do
     hash[:id].should_not be_nil
     hash[:object_name].should == "chorus_view"
-    hash[:type].should == "CHORUS_VIEW"
+    hash[:entity_subtype].should == "CHORUS_VIEW"
     hash[:object_type].should == "CHORUS_VIEW"
     hash[:query].should == "select * from a_table"
     hash[:is_deleted].should be_false

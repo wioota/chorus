@@ -18,7 +18,7 @@ chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
             type = li.data("type"),
             name = li.data("name").toString();
 
-        var dataset = this.collection.findWhere({ type:type, objectName: name });
+        var dataset = this.collection.findWhere({ entitySubtype:type, objectName: name });
         chorus.PageEvents.broadcast("datasetSelected", dataset);
     },
 
@@ -39,7 +39,7 @@ chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
         return {
             cid: model.cid,
             name: model.name(),
-            type: model.get("type"),
+            type: model.get("entitySubtype"),
             fullName: model.toText(),
             iconUrl: model.iconUrl({size: "small"})
         };

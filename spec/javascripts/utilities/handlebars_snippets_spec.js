@@ -970,7 +970,7 @@ describe("handlebars", function () {
                 });
 
                 it("returns the correct dataset type translation", function() {
-                    Handlebars.helpers.humanizedDatasetType({ type: "type" }, rspecFixtures.datasetStatisticsTable({ objectType: "objectType" }));
+                    Handlebars.helpers.humanizedDatasetType({ entitySubtype: "type" }, rspecFixtures.datasetStatisticsTable({ objectType: "objectType" }));
                     expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType");
                 });
             });

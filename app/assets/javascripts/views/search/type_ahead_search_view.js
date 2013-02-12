@@ -28,7 +28,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     },
 
     entityTypeForResult: function(result) {
-        if(result.get('entityType') === 'dataset' && result.get('type') === 'CHORUS_VIEW') {
+        if(result.get('entityType') === 'dataset' && result.get('entitySubtype') === 'CHORUS_VIEW') {
             return 'chorusView';
         }
         return result.get('entityType');

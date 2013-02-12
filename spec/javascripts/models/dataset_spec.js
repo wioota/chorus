@@ -72,19 +72,19 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#initialize", function() {
-        it("doesn't override type when type already exists", function() {
-            var model = new chorus.models.Dataset({ type: "foo"});
-            expect(model.get("type")).toBe("foo");
+        it("doesn't override type when entitySubtype already exists", function() {
+            var model = new chorus.models.Dataset({ entitySubtype: "foo"});
+            expect(model.get("entitySubtype")).toBe("foo");
         });
 
-        it("sets type to datasetType if datasetType exists", function() {
+        it("sets entitySubtype to datasetType if datasetType exists", function() {
             var model = new chorus.models.Dataset({ datasetType: "foo"});
-            expect(model.get("type")).toBe("foo");
+            expect(model.get("entitySubtype")).toBe("foo");
         });
 
-        it("sets type to SOURCE_TABLE if neither type nor datasetType exists", function() {
+        it("sets entitySubtype to SOURCE_TABLE if neither entitySubtype nor datasetType exists", function() {
             var model = new chorus.models.Dataset({});
-            expect(model.get("type")).toBe("SOURCE_TABLE");
+            expect(model.get("entitySubtype")).toBe("SOURCE_TABLE");
         });
     });
 
@@ -154,7 +154,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(mediumIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ type: type, objectType: objectType});
+                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl({ size: "medium" })).toBe("/images/" + filename);
 
                     });
@@ -167,7 +167,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(largeIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ type: type, objectType: objectType});
+                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl({ size: "large" })).toBe("/images/" + filename);
 
                     });
@@ -180,7 +180,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(largeIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ type: type, objectType: objectType});
+                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl()).toBe("/images/" + filename);
 
                     });

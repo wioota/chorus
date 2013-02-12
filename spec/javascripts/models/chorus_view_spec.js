@@ -39,7 +39,7 @@ describe("chorus.models.ChorusView", function() {
     it("initializes its 'type' and 'object type' attributes correctly", function() {
         var model = new chorus.models.ChorusView();
         expect(model).toHaveAttrs({
-            type: "CHORUS_VIEW",
+            entitySubtype: "CHORUS_VIEW",
             objectType: "CHORUS_VIEW"
         });
     });

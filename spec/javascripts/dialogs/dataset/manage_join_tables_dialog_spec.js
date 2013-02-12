@@ -4,7 +4,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
         stubModals();
         this.originalDataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName:"original",
-            type:"SOURCE_TABLE",
+            entitySubtype:"SOURCE_TABLE",
             objectType:"TABLE",
             id:"abc"
         });
@@ -19,7 +19,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                     }
                 }
             },
-            type:"SOURCE_TABLE",
+            entitySubtype:"SOURCE_TABLE",
             objectType:"TABLE",
             id:"abc"
         });
@@ -52,21 +52,21 @@ describe("chorus.dialogs.ManageJoinTables", function () {
 
             this.dataset1 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName:"cats",
-                type:"SOURCE_TABLE",
+                entitySubtype:"SOURCE_TABLE",
                 objectType:"VIEW",
                 id:'"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
             this.dataset2 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName:"dogs",
-                type:"SOURCE_TABLE",
+                entitySubtype:"SOURCE_TABLE",
                 objectType:"TABLE",
                 id:'"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
             this.dataset3 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName:"lions",
-                type:"SOURCE_TABLE",
+                entitySubtype:"SOURCE_TABLE",
                 objectType:"VIEW",
                 id:'"10000"|"dca_demo"|"ddemo"|"VIEW"|"lions"'
             });
@@ -119,8 +119,8 @@ describe("chorus.dialogs.ManageJoinTables", function () {
 
             it("fetches filtered database objects", function () {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                    "/schemas/" + this.schema.id + "/datasets?type=meta&filter=a+query&page=1&per_page=9",
-                    { paramsToIgnore:["page", "per_page", "type"] }
+                    "/schemas/" + this.schema.id + "/datasets?entity_subtype=meta&filter=a+query&page=1&per_page=9",
+                    { paramsToIgnore:["page", "per_page", "entity_subtype"] }
                 );
             });
 
@@ -195,7 +195,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                         it("fetches the datasets in the schema's database, associated with the workspace", function () {
                             var database = this.chorusView.schema().database();
                             var datasetsInDatabase = this.chorusView.workspace().datasetsInDatabase(database);
-                            datasetsInDatabase.attributes.type = "NON_CHORUS_VIEW";
+                            datasetsInDatabase.attributes.entitySubtype = "NON_CHORUS_VIEW";
                             expect(datasetsInDatabase).toHaveBeenFetched();
                         });
 

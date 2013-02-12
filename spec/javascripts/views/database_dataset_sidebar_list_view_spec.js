@@ -196,10 +196,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
                     spyOn(this.view, 'closeQtip');
 
                     this.server.completeFetchFor(this.schema.datasets(), [
-                        rspecFixtures.dataset({ objectName:"Data1", type:"SANDBOX_TABLE", objectType:"VIEW" }),
-                        rspecFixtures.dataset({ objectName:"zebra", type:"SANDBOX_TABLE", objectType:"VIEW" }),
-                        rspecFixtures.dataset({ objectName:"Data2", type:"SANDBOX_TABLE", objectType:"TABLE" }),
-                        rspecFixtures.dataset({ objectName:"1234", type:"SANDBOX_TABLE", objectType:"TABLE" })
+                        rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" }),
+                        rspecFixtures.dataset({ objectName:"zebra", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" }),
+                        rspecFixtures.dataset({ objectName:"Data2", entitySubtype:"SANDBOX_TABLE", objectType:"TABLE" }),
+                        rspecFixtures.dataset({ objectName:"1234", entitySubtype:"SANDBOX_TABLE", objectType:"TABLE" })
                     ]);
 
                     this.server.completeFetchFor(this.schema.database().schemas());

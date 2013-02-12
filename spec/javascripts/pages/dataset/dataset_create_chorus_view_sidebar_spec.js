@@ -263,7 +263,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("constructs a ChorusView and reveals the naming dialog", function() {
                 expect(chorus.dialogs.VerifyChorusView).toHaveBeenCalled();
                 expect(this.launchModalSpy).toHaveBeenCalled();
-                expect(this.chorusView.get("type")).toBe("CHORUS_VIEW");
+                expect(this.chorusView.get("entitySubtype")).toBe("CHORUS_VIEW");
                 expect(this.chorusView.get("query")).toBe("SELECT * FROM FOO");
                 expect(this.chorusView.get("objectType")).toBe("CHORUS_VIEW");
             });

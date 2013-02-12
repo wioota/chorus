@@ -16,7 +16,7 @@ shared_examples "dataset presenter" do |dataset_factory_name|
   it "includes gpdb database object fields" do
     hash[:id].should == 321
     hash[:object_name].should == "object1"
-    hash[:type].should == "SOURCE_TABLE"
+    hash[:entity_subtype].should == "SOURCE_TABLE"
     hash[:associated_workspaces].should_not be_nil
 
     schema = hash[:schema]

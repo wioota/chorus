@@ -87,7 +87,7 @@ describe DatasetPresenter, :type => :view do
       end
 
       it "has the correct type" do
-        hash[:type].should == 'SANDBOX_TABLE'
+        hash[:entity_subtype].should == 'SANDBOX_TABLE'
       end
 
       it "includes comments fields" do
@@ -140,7 +140,7 @@ describe DatasetPresenter, :type => :view do
       end
 
       it "has the correct type and frequency" do
-        hash[:type].should == 'SOURCE_TABLE'
+        hash[:entity_subtype].should == 'SOURCE_TABLE'
         hash[:frequency].should == import_schedule.frequency
       end
     end
