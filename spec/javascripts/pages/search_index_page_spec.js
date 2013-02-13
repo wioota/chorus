@@ -182,15 +182,20 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 describe("clicking on a tabular data search result", function() {
                     beforeEach(function() {
-                        this.datasetLIs.eq(2).trigger("click");
+                        this.datasetLIs.eq(1).trigger("click");
+                        this.dataset = this.page.model.datasets().at(1);
+                        //The sidebar requires extra setup for a chorus view
+                        expect(this.dataset.isChorusView()).toBeFalsy();
                     });
 
                     it("selects that tabular data item", function() {
-                        expect(this.datasetLIs.eq(2)).toHaveClass("selected");
+                        expect(this.datasetLIs.eq(1)).toHaveClass("selected");
                     });
 
                     it("shows the tabular data item in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("typeahead_gpdb_table");
+                        var name = this.dataset.name();
+                        expect(name.length).toBeGreaterThan(0);
+                        expect(this.page.sidebar.$(".info .name")).toHaveText(name);
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
