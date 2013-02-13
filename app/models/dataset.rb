@@ -109,6 +109,10 @@ class Dataset < ActiveRecord::Base
     ""
   end
 
+  def all_rows_sql(limit = nil)
+    Arel::Table.new(name).project('*').take(limit).to_sql
+  end
+
   def entity_type_name
     'dataset'
   end

@@ -86,10 +86,6 @@ class GpdbDataset < Dataset
     all_rows_sql
   end
 
-  def all_rows_sql(limit = nil)
-    Arel::Table.new(name).project('*').take(limit).to_sql
-  end
-
   def as_sequel
     Sequel.qualify(schema.name, name)
   end
