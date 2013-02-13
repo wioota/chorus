@@ -1,0 +1,2 @@
+class OracleDataset < Dataset
+end

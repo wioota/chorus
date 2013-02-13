@@ -1,8 +1,4 @@
-class OracleTable < Dataset
-  belongs_to :schema, :class_name => 'OracleSchema', :counter_cache => :active_tables_and_views_count
-
-  after_update :update_counter_cache
-
+class OracleTable < OracleDataset
   def verify_in_source(user)
     schema.connect_as(user).table_exists?(name)
   end

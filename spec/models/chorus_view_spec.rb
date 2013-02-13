@@ -217,4 +217,22 @@ describe ChorusView do
       chorus_view.check_duplicate_column(user).should be_true
     end
   end
+
+  describe "counter cache" do
+    let(:schema) { schemas(:default) }
+
+    it "should not affect the execution schema's active_tables_and_views counter cache" do
+      expect {
+        FactoryGirl.create(:chorus_view, :schema => schema)
+        schema.reload
+      }.not_to change(schema, :active_tables_and_views_count)
+
+      cv = FactoryGirl.create(:chorus_view, :schema => schema)
+
+      expect {
+        cv.delete
+        schema.reload
+      }.not_to change(schema, :active_tables_and_views_count)
+    end
+  end
 end

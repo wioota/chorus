@@ -12,9 +12,6 @@ class OracleSchema < Schema
   }
 
   validates :data_source, :presence => true
-  validates :name, :presence => true, :uniqueness => { :scope => [:parent_id, :parent_type] }
-  has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
-           :conditions => ['stale_at IS NULL']
 
   def connect_with(account)
     ::OracleConnection.new(

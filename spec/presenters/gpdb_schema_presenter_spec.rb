@@ -20,5 +20,12 @@ describe GpdbSchemaPresenter, :type => :view do
       hash[:database][:instance][:id].should == schema.data_source.id
       hash[:database][:instance][:name].should == schema.data_source.name
     end
+
+    it "uses the cached counters for the dataset count" do
+      expect {
+        Schema.increment_counter(:active_tables_and_views_count, schema.id)
+        schema.reload
+      }.to change{presenter.to_hash[:dataset_count]}.by(1)
+    end
   end
 end

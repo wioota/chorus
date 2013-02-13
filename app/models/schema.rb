@@ -4,6 +4,13 @@ class Schema < ActiveRecord::Base
   has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   delegate :accessible_to, :to => :parent
 
+  has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
+           :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+
+  validates :name,
+            :presence => true,
+            :uniqueness => { :scope => [:parent_type, :parent_id] }
+
   def self.find_and_verify_in_source(schema_id, user)
     schema = find(schema_id)
     raise ActiveRecord::RecordNotFound unless schema.verify_in_source(user)
