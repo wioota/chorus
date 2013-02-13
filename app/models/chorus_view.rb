@@ -44,7 +44,7 @@ class ChorusView < Dataset
       begin
         jdbc_conn.setAutoCommit(false)
 
-        s.set_max_rows(0)
+        s.set_max_rows(1)
         s.execute
 
       rescue java::sql::SQLException => e
