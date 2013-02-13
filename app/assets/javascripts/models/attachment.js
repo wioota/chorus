@@ -84,7 +84,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
         if(!this._dataset) {
             var dataset = this.get("dataset");
             if(dataset) {
-                if (dataset.type === "CHORUS_VIEW") {
+                if (dataset.entitySubtype === "CHORUS_VIEW") {
                     this._dataset = new chorus.models.ChorusView(dataset);
                 } else if(_.isEmpty(this.get("workspace"))) {
                     this._dataset = new chorus.models.Dataset(dataset);

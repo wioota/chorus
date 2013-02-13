@@ -19,5 +19,4 @@ class DatasetsController < ApplicationController
     table = Dataset.find_and_verify_in_source(params[:id].to_i, current_user)
     present table
   end
-
 end

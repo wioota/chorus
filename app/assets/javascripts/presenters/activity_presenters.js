@@ -409,7 +409,7 @@
 
         datasetType: function(self) {
             var type = self.model.dataset().metaType();
-            return t("dataset.types." + type);
+            return t("dataset.entitySubtypes." + type);
         },
 
         tableauWorkbookLink: function(self) {
@@ -469,7 +469,7 @@
 
         chorusViewSourceType: function(self) {
             var model = chorusViewSourceModel(self);
-            return model.get("fileName") ? "workfile" : t("dataset.types." + chorusViewSourceModel(self).metaType());
+            return model.get("fileName") ? "workfile" : t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
         },
 
         versionLink: function(self) {

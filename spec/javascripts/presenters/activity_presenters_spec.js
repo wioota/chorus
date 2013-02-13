@@ -662,7 +662,7 @@ describe("chorus.presenters.Activity", function() {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                    datasetType: t("dataset.types.view")
+                    datasetType: t("dataset.entitySubtypes.view")
                 }
             );
         });
@@ -785,7 +785,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.FileImportSuccess.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
-                    datasetType: t("dataset.types.table"),
+                    datasetType: t("dataset.entitySubtypes.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -810,7 +810,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.DatasetImportSuccess.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                    datasetType: t("dataset.types.table"),
+                    datasetType: t("dataset.entitySubtypes.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -833,7 +833,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.FileImportFailed.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
-                    datasetType: t("dataset.types.table"),
+                    datasetType: t("dataset.entitySubtypes.table"),
                     destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -860,7 +860,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.DatasetImportFailed.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                    datasetType: t("dataset.types.table"),
+                    datasetType: t("dataset.entitySubtypes.table"),
                     destObjectOrName: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
@@ -1024,7 +1024,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.NOTE.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     noteObjectLink: linkTo(dataset.showUrl(), dataset.name()),
-                    noteObjectType: t("dataset.types.table")
+                    noteObjectType: t("dataset.entitySubtypes.table")
                 }
             );
         });
@@ -1049,7 +1049,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.NOTE.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     noteObjectLink: linkTo(dataset.showUrl(), dataset.name()),
-                    noteObjectType: t("dataset.types.table"),
+                    noteObjectType: t("dataset.entitySubtypes.table"),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
             );
@@ -1202,7 +1202,7 @@ describe("chorus.presenters.Activity", function() {
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                 importType: model.get("importType"),
                 importSourceLink: model.get("fileName"),
-                datasetType: t("dataset.types.table"),
+                datasetType: t("dataset.entitySubtypes.table"),
                 destObjectOrName: "table"
             };
         });
@@ -1357,7 +1357,7 @@ describe("chorus.presenters.Activity", function() {
                 actorLink: linkTo(actor.showUrl(), actor.name()),
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                 importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                datasetType: t("dataset.types.table"),
+                datasetType: t("dataset.entitySubtypes.table"),
                 destObjectOrName: linkTo(dataset.showUrl(), dataset.name())
             };
         });
@@ -1397,7 +1397,7 @@ describe("chorus.presenters.Activity", function() {
                         "activity.header.DatasetImportCreated.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                            datasetType: t("dataset.types.table"),
+                            datasetType: t("dataset.entitySubtypes.table"),
                             destObjectOrName: linkTo(dataset.showUrl(), dataset.name()),
                             workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                     }
@@ -1421,7 +1421,7 @@ describe("chorus.presenters.Activity", function() {
                 actorLink: linkTo(actor.showUrl(), actor.name()),
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                 importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                datasetType: t("dataset.types.table"),
+                datasetType: t("dataset.entitySubtypes.table"),
                 destObjectOrName: linkTo(dataset.showUrl(), dataset.name())
             };
         });
@@ -1460,7 +1460,7 @@ describe("chorus.presenters.Activity", function() {
                         "activity.header.ImportScheduleUpdated.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                            datasetType: t("dataset.types.table"),
+                            datasetType: t("dataset.entitySubtypes.table"),
                             destObjectOrName: linkTo(dataset.showUrl(), dataset.name()),
                             workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                         }
@@ -1484,7 +1484,7 @@ describe("chorus.presenters.Activity", function() {
                 actorLink: linkTo(actor.showUrl(), actor.name()),
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                 importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                datasetType: t("dataset.types.table"),
+                datasetType: t("dataset.entitySubtypes.table"),
                 destObjectOrName: linkTo(dataset.showUrl(), dataset.name())
             };
         });
@@ -1523,7 +1523,7 @@ describe("chorus.presenters.Activity", function() {
                         "activity.header.ImportScheduleDeleted.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                            datasetType: t("dataset.types.table"),
+                            datasetType: t("dataset.entitySubtypes.table"),
                             destObjectOrName: linkTo(dataset.showUrl(), dataset.name()),
                             workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                         }
@@ -1548,7 +1548,7 @@ describe("chorus.presenters.Activity", function() {
                 this.translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
-                    chorusViewSourceType: t("dataset.types.table"),
+                    chorusViewSourceType: t("dataset.entitySubtypes.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 };
@@ -1590,7 +1590,7 @@ describe("chorus.presenters.Activity", function() {
                 this.translation_params = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     chorusViewSourceLink: linkTo(sourceObject.showUrl(), sourceObject.name()),
-                    chorusViewSourceType: t("dataset.types.query"),
+                    chorusViewSourceType: t("dataset.entitySubtypes.query"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 };
@@ -1751,7 +1751,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.TableauWorkbookPublished.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                    datasetType: t("dataset.types.query"),
+                    datasetType: t("dataset.entitySubtypes.query"),
                     tableauWorkbookLink: "<a href='http://example.com/workbooks/fancy_workbook' target='_blank'>fancy_workbook</a>",
                     tableauProjectLink: "<a href='http://defaultproject.com' target='_blank'>default</a>"
                 }
@@ -1779,7 +1779,7 @@ describe("chorus.presenters.Activity", function() {
                 "activity.header.TableauWorkfileCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                    datasetType: t("dataset.types.query"),
+                    datasetType: t("dataset.entitySubtypes.query"),
                     workfileLink: linkTo(workfile.showUrl(), workfile.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }

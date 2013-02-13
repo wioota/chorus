@@ -331,7 +331,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     humanType: function() {
-      return t(['dataset.types',this.get("entitySubtype"),this.get("objectType")].join("."));
+      return t(['dataset.entitySubtypes',this.get("entitySubtype"),this.get("objectType")].join("."));
     },
 
     importFrequency: $.noop

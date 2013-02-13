@@ -222,7 +222,7 @@ describe("chorus.models.Attachment", function() {
 
         context("ChorusView", function() {
             beforeEach(function() {
-                this.model.get('dataset')['type'] = "CHORUS_VIEW";
+                this.model.get('dataset')['entitySubtype'] = "CHORUS_VIEW";
                 this.dataset = this.model.dataset();
             });
 

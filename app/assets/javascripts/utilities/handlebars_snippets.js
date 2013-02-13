@@ -416,7 +416,7 @@
 
         humanizedDatasetType: function(dataset, statistics) {
             if (!dataset) { return ""; }
-            var keys = ["dataset.types", dataset.entitySubtype];
+            var keys = ["dataset.entitySubtypes", dataset.entitySubtype];
             if (statistics instanceof chorus.models.DatasetStatistics && statistics.get("objectType")) {
                 keys.push(statistics.get("objectType"));
             }

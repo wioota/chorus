@@ -947,19 +947,19 @@ describe("handlebars", function () {
                 it("returns Chorus view if dataset is Chorus_view", function () {
                     this.chorusView = rspecFixtures.workspaceDataset.chorusView();
                     Handlebars.helpers.humanizedDatasetType(this.chorusView.attributes);
-                    expect(window.t).toHaveBeenCalledWith('dataset.types.CHORUS_VIEW.CHORUS_VIEW');
+                    expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.CHORUS_VIEW.CHORUS_VIEW');
                 });
 
                 it("returns Source Table", function() {
                     this.sourceTable = rspecFixtures.workspaceDataset.sourceTable();
                     Handlebars.helpers.humanizedDatasetType(this.sourceTable.attributes);
-                    expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.TABLE');
+                    expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SOURCE_TABLE.TABLE');
                 });
 
                 it("returns Source View", function() {
                     this.sourceView = rspecFixtures.workspaceDataset.sourceView();
                     Handlebars.helpers.humanizedDatasetType(this.sourceView.attributes);
-                    expect(window.t).toHaveBeenCalledWith('dataset.types.SOURCE_TABLE.VIEW');
+                    expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SOURCE_TABLE.VIEW');
                 });
             });
 
@@ -971,7 +971,7 @@ describe("handlebars", function () {
 
                 it("returns the correct dataset type translation", function() {
                     Handlebars.helpers.humanizedDatasetType({ entitySubtype: "type" }, rspecFixtures.datasetStatisticsTable({ objectType: "objectType" }));
-                    expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType");
+                    expect(window.t).toHaveBeenCalledWith("dataset.entitySubtypes.type.objectType");
                 });
             });
         });
