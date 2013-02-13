@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=hippopotomous&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+version_comments_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000012+OR+1000003+OR+1000002%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000012+OR+1000003+OR+1000002%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=hippopotomous&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+version_comments_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>20,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -33,12 +33,12 @@ http_interactions:
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
+        AND -instance_account_ids_im:(1000001 OR 1000012 OR 1000003 OR 1000002))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
+        AND -instance_account_ids_im:(1000001 OR 1000012 OR 1000003 OR 1000002))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:35:43 GMT
+  recorded_at: Wed, 13 Feb 2013 01:56:48 GMT
 recorded_with: VCR 2.3.0

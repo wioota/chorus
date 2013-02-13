@@ -29,6 +29,8 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                     return new chorus.models.GnipInstance(result);
                 case "attachment":
                     return new chorus.models.Attachment(result);
+                case "tag":
+                    return new chorus.models.Tag(result);
                 default:
                     break;
             }

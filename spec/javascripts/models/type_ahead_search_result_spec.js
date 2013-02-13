@@ -15,7 +15,8 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'gnip_instance',
                 'user',
                 'workfile',
-                'dataset'
+                'dataset',
+                'tag'
             ].sort();
             expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes);
         });

@@ -1,5 +1,6 @@
 chorus.models.Tag = chorus.models.Base.extend({
     constructorName: 'Tag',
+    entityType: 'tag',
     urlTemplate: "tags/{{id}}",
     showUrlTemplate: function(workspaceId) {
         if(workspaceId) {
