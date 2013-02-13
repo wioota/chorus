@@ -18,7 +18,7 @@ class GpdbDatabase < ActiveRecord::Base
 
   before_save :mark_schemas_as_stale
   after_destroy { instance_accounts.clear }
-  delegate :account_for_user!, :account_for_user, :to => :data_source
+  delegate :account_for_user!, :account_for_user, :accessible_to, :to => :data_source
 
   DATABASE_NAMES_SQL = <<-SQL
   SELECT

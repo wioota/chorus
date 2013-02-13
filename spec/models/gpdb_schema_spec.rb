@@ -150,7 +150,9 @@ describe GpdbSchema do
 
     it "does not update the stale_at time" do
       missing_schema = database.schemas.where("id <> #{schema.id}").first
-      missing_schema.update_attributes({:stale_at => 1.year.ago}, :without_protection => true)
+      Timecop.freeze(1.year.ago) do
+        missing_schema.mark_stale!
+      end
       GpdbSchema.refresh(account, database, :mark_stale => true)
       missing_schema.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
     end
@@ -269,7 +271,7 @@ describe GpdbSchema do
     describe "before_save" do
       describe "#mark_datasets_as_stale" do
         it "if the schema has become stale, datasets will also be marked as stale" do
-          schema.update_attributes!({:stale_at => Time.current}, :without_protection => true)
+          schema.mark_stale!
           dataset = schema.datasets.views_tables.first
           dataset.should be_stale
           dataset.stale_at.should be_within(5.seconds).of(Time.current)
@@ -331,8 +333,7 @@ describe GpdbSchema do
       schema.active_tables_and_views.should include(table)
 
       expect {
-        table.stale_at = Time.now
-        table.save!
+        table.mark_stale!
       }.to change { schema.reload.active_tables_and_views.size }.by(-1)
       schema.active_tables_and_views.should_not include(table)
     end
@@ -346,8 +347,7 @@ describe GpdbSchema do
       schema.active_tables_and_views.should include(view)
 
       expect {
-        view.stale_at = Time.now
-        view.save!
+        view.mark_stale!
       }.to change { schema.reload.active_tables_and_views.size }.by(-1)
       schema.active_tables_and_views.should_not include(view)
     end

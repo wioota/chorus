@@ -5,6 +5,7 @@ class GpdbSchema < Schema
   include SoftDelete
 
   attr_accessible :database
+  alias_attribute :parent, :database
 
   belongs_to :database, {
       :polymorphic => true,
@@ -48,18 +49,13 @@ class GpdbSchema < Schema
   ensure
     if options[:mark_stale]
       (database.schemas.not_stale - found_schemas).each do |schema|
-        schema.stale_at = Time.current
-        schema.save!
+        schema.mark_stale!
       end
     end
   end
 
   def self.visible_to(*args)
     refresh(*args)
-  end
-
-  def accessible_to(user)
-    database.data_source.accessible_to(user)
   end
 
   def stored_functions(account)

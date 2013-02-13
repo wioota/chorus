@@ -2,6 +2,7 @@ class OracleSchema < Schema
   include Stale
 
   attr_accessible :data_source
+  alias_attribute :parent, :data_source
 
   belongs_to :data_source, {
       :polymorphic => true,
@@ -12,6 +13,8 @@ class OracleSchema < Schema
 
   validates :data_source, :presence => true
   validates :name, :presence => true, :uniqueness => { :scope => [:parent_id, :parent_type] }
+  has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
+           :conditions => ['stale_at IS NULL']
 
   def connect_with(account)
     ::OracleConnection.new(

@@ -111,4 +111,14 @@ class Dataset < ActiveRecord::Base
   def type_name
     'Dataset'
   end
+
+  def update_counter_cache
+    if changed_attributes.include?('stale_at')
+      if stale?
+        Schema.decrement_counter(:active_tables_and_views_count, schema_id)
+      else
+        Schema.increment_counter(:active_tables_and_views_count, schema_id)
+      end
+    end
+  end
 end

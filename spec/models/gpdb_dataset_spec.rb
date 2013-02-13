@@ -85,13 +85,11 @@ describe GpdbDataset do
 
     it "un-indexes the dataset when it becomes stale" do
       mock(dataset).solr_remove_from_index
-      dataset.stale_at = Time.current
-      dataset.save!
+      dataset.mark_stale!
     end
 
     it "re-indexes the dataset when it becomes un stale" do
-      dataset.stale_at = Time.current
-      dataset.save!
+      dataset.mark_stale!
       mock(dataset).solr_index
       dataset.stale_at = nil
       dataset.save!

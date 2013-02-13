@@ -9,7 +9,11 @@ module Stale
     stale_at.present?
   end
 
+
   def mark_stale!
-    touch :stale_at unless stale?
+    unless stale?
+      self.stale_at = Time.now.utc
+      save!
+    end
   end
 end

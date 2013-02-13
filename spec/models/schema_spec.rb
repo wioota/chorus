@@ -152,7 +152,7 @@ describe Schema do
 
     context "with stale records that now exist" do
       before do
-        dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true)
+        dataset.mark_stale!
         mock(schema).class_for_type('r') { GpdbTable }
       end
 
@@ -191,7 +191,9 @@ describe Schema do
       end
 
       it "does not update stale_at time" do
-        dataset.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+        Timecop.freeze(1.year.ago) do
+          dataset.mark_stale!
+        end
         schema.refresh_datasets(account, :mark_stale => true)
 
         dataset.reload.stale_at.should be_within(5.seconds).of(1.year.ago)

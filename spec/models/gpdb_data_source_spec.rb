@@ -336,13 +336,15 @@ describe GpdbDataSource do
         end
 
         it "clears the stale flag on databases if they are found again" do
-          database.update_attributes!({:stale_at => Time.current}, :without_protection => true)
+          database.mark_stale!
           gpdb_data_source.refresh_databases
           database.reload.should_not be_stale
         end
 
         it "does not update the stale_at time" do
-          missing_database.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+          Timecop.freeze(1.year.ago) do
+            missing_database.mark_stale!
+          end
           gpdb_data_source.refresh_databases(:mark_stale => true)
           missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
         end

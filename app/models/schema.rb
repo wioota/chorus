@@ -46,7 +46,7 @@ class Schema < ActiveRecord::Base
     if mark_stale
       raise "You should not use mark_stale and limit at the same time" if options[:limit]
       (datasets.not_stale - found_datasets).each do |dataset|
-        dataset.update_attributes!({:stale_at => Time.current}, :without_protection => true) unless dataset.is_a? ChorusView
+        dataset.mark_stale! unless dataset.is_a? ChorusView
       end
     end
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe OracleTablePresenter, :type => :view do
-  let(:table) { datasets(:table) }
+  let(:table) { datasets(:oracle_table) }
   let(:presenter) { OracleTablePresenter.new(table, view) }
 
   before(:each) do
@@ -16,5 +16,5 @@ describe OracleTablePresenter, :type => :view do
     end
   end
 
-  it_behaves_like "dataset presenter", :oracle_table
+  it_behaves_like "oracle dataset presenter", :oracle_table
 end

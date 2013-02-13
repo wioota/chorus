@@ -16,5 +16,5 @@ describe OracleViewPresenter, :type => :view do
     end
   end
 
-  it_behaves_like "dataset presenter", :oracle_view
+  it_behaves_like "oracle dataset presenter", :oracle_view
 end

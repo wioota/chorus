@@ -150,7 +150,7 @@ describe HdfsEntry do
 
       it "marks stale entries as not stale if they reappear" do
         HdfsEntry.list('/', hadoop_instance)
-        hadoop_instance.hdfs_entries.where("parent_id IS NOT NULL").update_all(:stale_at => Time.current)
+        hadoop_instance.hdfs_entries.where("parent_id IS NOT NULL").each(&:mark_stale!)
         HdfsEntry.list('/', hadoop_instance)
         hadoop_instance.hdfs_entries.where("stale_at IS NOT NULL").length.should == 0
       end
@@ -307,7 +307,8 @@ describe HdfsEntry do
     end
 
     it "does not index stale records" do
-      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :stale_at => Time.current, :is_directory => false}, :without_protection => true)
+      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :is_directory => false}, :without_protection => true)
+      hdfs_entry.mark_stale!
       dont_allow(hdfs_entry).solr_index
       hdfs_entry.save!
     end
