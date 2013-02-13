@@ -35,4 +35,26 @@ describe Tag do
       Tag.named_like("'drop tables").to_sql.should match /\(name ILIKE '%''drop tables%'\)/
     end
   end
+
+  describe "counter cache" do
+    let(:tag) { Tag.create!(:name => "foobar") }
+    let(:model_1) { workfiles(:public) }
+    let(:model_2) { workspaces(:public) }
+
+    it "knows how many taggings it has" do
+      expect do
+        model_1.tags << tag
+        model_2.tags << tag
+      end.to change { tag.reload.taggings_count }.by(2)
+    end
+
+    it "resets the tag count" do
+      model_1.tags << tag
+      model_2.tags << tag
+
+      tag.reload.update_attribute(:taggings_count, 0)
+
+      expect { Tag.reset_counters }.to change { tag.reload.taggings_count }.to(2)
+    end
+  end
 end

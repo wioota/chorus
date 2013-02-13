@@ -15,6 +15,6 @@ class Tag < ActiveRecord::Base
   end
 
   def self.reset_counters
-    # TODO
+    find_each { |tag| tag.update_attribute(:taggings_count, tag.taggings.count) }
   end
 end
