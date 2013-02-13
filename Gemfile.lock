@@ -212,8 +212,8 @@ GEM
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
     jshint_on_rails (1.0.2)
-    json (1.7.6)
-    json (1.7.6-java)
+    json (1.7.7)
+    json (1.7.7-java)
     libwebsocket (0.1.5)
       addressable
     license_finder (0.7.0)
