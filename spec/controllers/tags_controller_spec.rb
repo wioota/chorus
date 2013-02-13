@@ -11,9 +11,9 @@ describe TagsController do
     it_behaves_like "a paginated list"
 
     it "should sort the results alphabetically regardless of case" do
-      ActsAsTaggableOn::Tag.create(:name => 'btag')
-      ActsAsTaggableOn::Tag.create(:name => 'Atag')
-      ActsAsTaggableOn::Tag.create(:name => 'atag')
+      Tag.create(:name => 'btag')
+      Tag.create(:name => 'Atag')
+      Tag.create(:name => 'atag')
 
       get :index
 
@@ -36,7 +36,7 @@ describe TagsController do
     context "with no query" do
       it "should show all tags" do
         mock_present do |collection|
-          collection.should == ActsAsTaggableOn::Tag.all
+          collection.should == Tag.all.sort { |a, b| a.name <=> b.name }
         end
 
         get :index
@@ -58,18 +58,18 @@ describe TagsController do
   describe 'delete' do
     let(:dataset) { datasets(:tagged) }
     let(:workfile) { workfiles(:tagged) }
-    let(:tag) { ActsAsTaggableOn::Tag.where(:name => 'alpha').first }
+    let(:tag) { Tag.where(:name => 'alpha').first }
 
     it 'should delete the tag' do
-      dataset.tag_list.should include(tag.name)
-      workfile.tag_list.should include(tag.name)
+      dataset.tags.map(&:name).should include(tag.name)
+      workfile.tags.map(&:name).should include(tag.name)
 
       delete :destroy, :id => tag.id
       response.code.should == "200"
 
-      ActsAsTaggableOn::Tag.where(:name => 'alpha').should be_empty
-      dataset.reload.tag_list.should_not include(tag.name)
-      workfile.reload.tag_list.should_not include(tag.name)
+      Tag.where(:name => 'alpha').should be_empty
+      dataset.reload.tags.map(&:name).should_not include(tag.name)
+      workfile.reload.tags.map(&:name).should_not include(tag.name)
     end
 
     context "when the tag with the specified ID does not exist" do

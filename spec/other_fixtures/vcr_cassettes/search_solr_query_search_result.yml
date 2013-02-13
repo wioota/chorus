@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>24,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>179,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -38,87 +38,74 @@ http_interactions:
         AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>29,''ngroups''=>28,''groups''=>[{''groupValue''=>''GpdbTable
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.1403947E10,''docs''=>[{''id''=>''GpdbTable
-        1000010'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''searchquery
-        2'',''non-search'',''comment-search'',''comment-search-2''],''score''=>1.1403947E10}]}},{''groupValue''=>''GpdbTable
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.1403947E10,''docs''=>[{''id''=>''GpdbTable
-        1000011'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''searchquery'',''searchquery
-        2'',''non-search'',''comment-search'',''comment-search-2''],''score''=>1.1403947E10}]}},{''groupValue''=>''GpdbTable
-        1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.1403947E10,''docs''=>[{''id''=>''GpdbTable
-        1000012'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''typeahead_gpdb_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''searchquery
-        2'',''non-search'',''comment-search'',''comment-search-2''],''score''=>1.1403947E10}]}},{''groupValue''=>''User
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4476265.5,''docs''=>[{''id''=>''User
-        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@bartell.info''],''last_name_texts''=>[''Little''],''score''=>4476265.5}]}},{''groupValue''=>''LinkedTableauWorkfile
-        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4476265.5,''docs''=>[{''id''=>''LinkedTableauWorkfile
-        1000002'',''file_name_texts''=>[''searchquery''],''score''=>4476265.5}]}},{''groupValue''=>''ChorusWorkfile
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2557866.0,''docs''=>[{''id''=>''ChorusWorkfile
+        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>30,''ngroups''=>29,''groups''=>[{''groupValue''=>''User
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4501226.5,''docs''=>[{''id''=>''User
+        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@berge.info''],''last_name_texts''=>[''Swift''],''score''=>4501226.5}]}},{''groupValue''=>''LinkedTableauWorkfile
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4501226.5,''docs''=>[{''id''=>''LinkedTableauWorkfile
+        1000002'',''file_name_texts''=>[''searchquery''],''score''=>4501226.5}]}},{''groupValue''=>''ChorusWorkfile
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2572129.5,''docs''=>[{''id''=>''ChorusWorkfile
         1000010'',''file_name_texts''=>[''Search Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>['''',''Committed
-        to searchquery''],''score''=>2557866.0}]}},{''groupValue''=>''GpdbDataSource
-        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1729141.6,''docs''=>[{''id''=>''GpdbDataSource
+        to searchquery''],''score''=>2572129.5}]}},{''groupValue''=>''GpdbDataSource
+        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>1749365.8,''docs''=>[{''id''=>''GpdbDataSource
         1000000'',''name_texts''=>[''searchquery''],''description_texts''=>[''Just
-        for searchquery and greenplumsearch''],''score''=>1729141.6},{''id''=>''Events::NoteOnGreenplumInstance
-        1000033'',''body_texts''=>[''i love searchquery''],''score''=>2.439371}]}},{''groupValue''=>''Attachment
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''Attachment
-        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>1235101.1}]}},{''groupValue''=>''Attachment
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''Attachment
-        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>1235101.1}]}},{''groupValue''=>''Attachment
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''Attachment
-        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>1235101.1}]}},{''groupValue''=>''Attachment
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''Attachment
-        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>1235101.1}]}},{''groupValue''=>''Attachment
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''Attachment
-        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>1235101.1}]}},{''groupValue''=>''HadoopInstance
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1235101.1,''docs''=>[{''id''=>''HadoopInstance
+        for searchquery and greenplumsearch''],''score''=>1749365.8},{''id''=>''Events::NoteOnGreenplumInstance
+        1000033'',''body_texts''=>[''i love searchquery''],''score''=>2.4529738}]}},{''groupValue''=>''Attachment
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''Attachment
+        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>1249547.0}]}},{''groupValue''=>''Attachment
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''Attachment
+        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>1249547.0}]}},{''groupValue''=>''Attachment
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''Attachment
+        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>1249547.0}]}},{''groupValue''=>''Attachment
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''Attachment
+        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>1249547.0}]}},{''groupValue''=>''Attachment
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''Attachment
+        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>1249547.0}]}},{''groupValue''=>''GpdbTable
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''GpdbTable
+        1000010'',''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>1249547.0}]}},{''groupValue''=>''HadoopInstance 1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1249547.0,''docs''=>[{''id''=>''HadoopInstance
         1000000'',''name_texts''=>[''searchquery_hadoop''],''description_texts''=>[''searchquery
-        for the hadoop instance''],''score''=>1235101.1}]}},{''groupValue''=>''Attachment
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>988080.94,''docs''=>[{''id''=>''Attachment
-        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>988080.94}]}},{''groupValue''=>''Attachment
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>988080.94,''docs''=>[{''id''=>''Attachment
-        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>988080.94}]}},{''groupValue''=>''ChorusView
-        1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>988080.94,''docs''=>[{''id''=>''ChorusView
-        1000016'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''searchquery_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        searchquery from a_table''],''score''=>988080.94}]}},{''groupValue''=>''ChorusView
-        1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>864570.8,''docs''=>[{''id''=>''ChorusView
-        1000017'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''searchquery_chorus_view_private''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        searchquery from a_table''],''score''=>864570.8}]}},{''groupValue''=>''ChorusView
-        1000013'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>509397.47,''docs''=>[{''id''=>''ChorusView
-        1000013'',''column_description_texts''=>[''searchquery comment 1'',''searchquery
-        comment 2''],''name_texts''=>[''typeahead_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        1''],''score''=>509397.47}]}},{''groupValue''=>''HdfsEntry 1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4371.353,''docs''=>[{''id''=>''HdfsEntry
-        1000002'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''searchquery''],''score''=>4371.353}]}},{''groupValue''=>''Workspace
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2605.162,''docs''=>[{''id''=>''Workspace
-        1000008'',''name_texts''=>[''Public''],''summary_texts''=>[''searchquery''],''score''=>2605.162}]}},{''groupValue''=>''Workspace
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2605.162,''docs''=>[{''id''=>''Workspace
-        1000009'',''name_texts''=>[''Private''],''summary_texts''=>[''searchquery''],''score''=>2605.162}]}},{''groupValue''=>''Workspace
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2605.162,''docs''=>[{''id''=>''Workspace
-        1000010'',''name_texts''=>[''Search Public''],''summary_texts''=>[''searchquery''],''score''=>2605.162}]}},{''groupValue''=>''Workspace
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2605.162,''docs''=>[{''id''=>''Workspace
-        1000011'',''name_texts''=>[''Search Private''],''summary_texts''=>[''searchquery''],''score''=>2605.162}]}},{''groupValue''=>''ChorusWorkfile
-        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2305.588,''docs''=>[{''id''=>''ChorusWorkfile
-        1000007'',''file_name_texts''=>[''Private''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2305.588}]}},{''groupValue''=>''ChorusWorkfile
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2305.588,''docs''=>[{''id''=>''ChorusWorkfile
-        1000008'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2305.588}]}},{''groupValue''=>''ChorusWorkfile
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2305.588,''docs''=>[{''id''=>''ChorusWorkfile
-        1000009'',''file_name_texts''=>[''Search Private''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2305.588}]}},{''groupValue''=>''Workspace
-        1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1116.498,''docs''=>[{''id''=>''Workspace
+        for the hadoop instance''],''score''=>1249547.0}]}},{''groupValue''=>''Attachment
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>999637.56,''docs''=>[{''id''=>''Attachment
+        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>999637.56}]}},{''groupValue''=>''Attachment
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>999637.56,''docs''=>[{''id''=>''Attachment
+        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>999637.56}]}},{''groupValue''=>''GpdbTable
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>999637.56,''docs''=>[{''id''=>''GpdbTable
+        1000011'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>999637.56}]}},{''groupValue''=>''ChorusView 1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>999637.56,''docs''=>[{''id''=>''ChorusView
+        1000017'',''name_texts''=>[''searchquery_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        searchquery from a_table''],''score''=>999637.56}]}},{''groupValue''=>''ChorusView
+        1000018'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>874682.9,''docs''=>[{''id''=>''ChorusView
+        1000018'',''name_texts''=>[''searchquery_chorus_view_private''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        searchquery from a_table''],''score''=>874682.9}]}},{''groupValue''=>''HdfsEntry
+        1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4395.729,''docs''=>[{''id''=>''HdfsEntry
+        1000002'',''name_texts''=>[''result.txt''],''parent_name_texts''=>[''searchquery''],''score''=>4395.729}]}},{''groupValue''=>''Workspace
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2627.4165,''docs''=>[{''id''=>''Workspace
+        1000008'',''name_texts''=>[''Public''],''summary_texts''=>[''searchquery''],''score''=>2627.4165}]}},{''groupValue''=>''Workspace
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2627.4165,''docs''=>[{''id''=>''Workspace
+        1000009'',''name_texts''=>[''Private''],''summary_texts''=>[''searchquery''],''score''=>2627.4165}]}},{''groupValue''=>''Workspace
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2627.4165,''docs''=>[{''id''=>''Workspace
+        1000010'',''name_texts''=>[''Search Public''],''summary_texts''=>[''searchquery''],''score''=>2627.4165}]}},{''groupValue''=>''Workspace
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2627.4165,''docs''=>[{''id''=>''Workspace
+        1000011'',''name_texts''=>[''Search Private''],''summary_texts''=>[''searchquery''],''score''=>2627.4165}]}},{''groupValue''=>''ChorusWorkfile
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2327.1736,''docs''=>[{''id''=>''ChorusWorkfile
+        1000007'',''file_name_texts''=>[''Private''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2327.1736}]}},{''groupValue''=>''ChorusWorkfile
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2327.1736,''docs''=>[{''id''=>''ChorusWorkfile
+        1000008'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2327.1736}]}},{''groupValue''=>''ChorusWorkfile
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2327.1736,''docs''=>[{''id''=>''ChorusWorkfile
+        1000009'',''file_name_texts''=>[''Search Private''],''description_texts''=>[''searchquery''],''version_comments_texts''=>[''''],''score''=>2327.1736}]}},{''groupValue''=>''GpdbTable
+        1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1876.7261,''docs''=>[{''id''=>''GpdbTable
+        1000012'',''name_texts''=>[''typeahead_gpdb_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>1876.7261}]}},{''groupValue''=>''GpdbTable 1000014'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1876.7261,''docs''=>[{''id''=>''GpdbTable
+        1000014'',''name_texts''=>[''some_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>1876.7261}]}},{''groupValue''=>''ChorusView 1000013'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1876.7261,''docs''=>[{''id''=>''ChorusView
+        1000013'',''name_texts''=>[''typeahead_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        1''],''score''=>1876.7261}]}},{''groupValue''=>''Workspace 1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1126.0356,''docs''=>[{''id''=>''Workspace
         1000005'',''name_texts''=>[''Public with no collaborators except collaborator''],''summary_texts''=>[''searchquery
-        can see I guess''],''score''=>1116.498}]}},{''groupValue''=>''GnipInstance
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>988.1091,''docs''=>[{''id''=>''GnipInstance
+        can see I guess''],''score''=>1126.0356}]}},{''groupValue''=>''GnipInstance
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>997.3601,''docs''=>[{''id''=>''GnipInstance
         1000000'',''name_texts''=>[''default''],''description_texts''=>[''a searchquery
-        example gnip account''],''score''=>988.1091}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',7,''Dataset'',6,''Workfile'',5,''Workspace'',5,''Instance'',3,''HdfsEntry'',1,''User'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''GpdbTable
-        1000010''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_table''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''column_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'',''@@@hl@@@searchquery@@@endhl@@@
-        2'']},''GpdbTable 1000011''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''column_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'',''@@@hl@@@searchquery@@@endhl@@@
-        2'']},''GpdbTable 1000012''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''column_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'',''@@@hl@@@searchquery@@@endhl@@@
-        2'']},''User 1000006''=>{''first_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''LinkedTableauWorkfile
+        example gnip account''],''score''=>997.3601}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Attachment'',7,''Dataset'',7,''Workfile'',5,''Workspace'',5,''Instance'',3,''HdfsEntry'',1,''User'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        1000006''=>{''first_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''LinkedTableauWorkfile
         1000002''=>{''file_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''ChorusWorkfile
         1000010''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''version_comments_texts''=>[''Committed
         to @@@hl@@@searchquery@@@endhl@@@'']},''GpdbDataSource 1000000''=>{''description_texts''=>[''Just
@@ -128,19 +115,17 @@ http_interactions:
         1000004''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace'']},''Attachment
         1000006''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workfile'']},''Attachment
         1000008''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_dataset'']},''Attachment
-        1000009''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''HadoopInstance
+        1000009''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''GpdbTable
+        1000010''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_table''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''HadoopInstance
         1000000''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@ for the
         hadoop instance''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hadoop'']},''Attachment
         1000010''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hdfs_file'']},''Attachment
-        1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace_dataset'']},''ChorusView
-        1000016''=>{''query_texts''=>[''select @@@hl@@@searchquery@@@endhl@@@ from
-        a_table''],''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
+        1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace_dataset'']},''GpdbTable
+        1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table'']},''ChorusView
         1000017''=>{''query_texts''=>[''select @@@hl@@@searchquery@@@endhl@@@ from
-        a_table''],''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view_private''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
-        1000013''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
-        comment 1'',''@@@hl@@@searchquery@@@endhl@@@ comment 2''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''HdfsEntry
+        a_table''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
+        1000018''=>{''query_texts''=>[''select @@@hl@@@searchquery@@@endhl@@@ from
+        a_table''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view_private''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''HdfsEntry
         1000002''=>{''parent_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
         1000008''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
         1000009''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
@@ -148,10 +133,13 @@ http_interactions:
         1000011''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''ChorusWorkfile
         1000007''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''ChorusWorkfile
         1000008''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''ChorusWorkfile
-        1000009''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''Workspace
+        1000009''=>{''description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'']},''GpdbTable
+        1000012''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''GpdbTable
+        1000014''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
+        1000013''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''Workspace
         1000005''=>{''summary_texts''=>[''@@@hl@@@searchquery@@@endhl@@@ can see I
         guess'']},''GnipInstance 1000000''=>{''description_texts''=>[''a @@@hl@@@searchquery@@@endhl@@@
         example gnip account'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 07 Feb 2013 22:54:07 GMT
+  recorded_at: Tue, 12 Feb 2013 21:35:35 GMT
 recorded_with: VCR 2.3.0

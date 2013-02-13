@@ -14,7 +14,7 @@ class Search
     self.workspace_id = params[:workspace_id]
     self.search_type = params[:search_type]
     self.tag_param = params[:tag].to_s == 'true'
-    self.tag = ActsAsTaggableOn::Tag.named(query).first if is_tag_search?
+    self.tag = Tag.find_by_name(query) if is_tag_search?
     if per_type > 0
       self.per_page = 100
     else
@@ -35,7 +35,7 @@ class Search
   end
 
   def models_with_tags
-    models_to_search.select &:taggable?
+    models_to_search.select { |m| m.taggable? }
   end
 
   def search

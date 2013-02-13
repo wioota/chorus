@@ -619,4 +619,6 @@ describe Workspace do
       end
     end
   end
+
+  it_should_behave_like "taggable models", [:workspaces, :public]
 end

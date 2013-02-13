@@ -195,7 +195,7 @@ describe Search do
     end
 
     describe "tag search" do
-      let(:tag) { ActsAsTaggableOn::Tag.named("alpha").first }
+      let(:tag) { Tag.find_by_name("alpha") }
       let(:params) { { :tag => true, :query => tag.name } }
       let(:search) { Search.new(user, params) }
 
@@ -287,7 +287,7 @@ describe Search do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 3
-          search.num_found[:datasets].should == 6
+          search.num_found[:datasets].should == 7
         end
       end
 
@@ -301,7 +301,7 @@ describe Search do
       it "includes the number of workspace specific results found" do
         workspace = workspaces(:search_public)
         create_and_record_search(owner, :query => 'searchquery', :workspace_id => workspace.id) do |search|
-          search.num_found[:this_workspace].should == 7
+          search.num_found[:this_workspace].should == 8
         end
       end
     end
@@ -375,7 +375,7 @@ describe Search do
 
       it "returns the Dataset objects found" do
         create_and_record_search do |search|
-          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private)]
+          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private), datasets(:searchable_tag)]
         end
       end
 
@@ -643,7 +643,7 @@ describe Search do
     end
 
     describe "tag search" do
-      let(:tag) { ActsAsTaggableOn::Tag.named("alpha").first }
+      let(:tag) { Tag.find_by_name("alpha") }
 
       it "returns models with the specified tag" do
         create_and_record_search(owner, :query => tag.name, :tag => true, :per_type => 1) do |search|

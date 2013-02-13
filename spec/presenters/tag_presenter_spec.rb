@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TagPresenter, :type => :view do
   let(:presenter)  { TagPresenter.new(tag, view) }
-  let(:tag) { ActsAsTaggableOn::Tag.find_by_name('alpha') }
+  let(:tag) { Tag.find_by_name('alpha') }
 
   describe "#to_hash" do
     let(:hash) { presenter.to_hash }

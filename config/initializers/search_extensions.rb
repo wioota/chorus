@@ -24,9 +24,11 @@ module SearchExtensions
     end
 
     def searchable_model options = {}, &block
+      model_context = self
+
       searchable(options, &block) if block_given?
       searchable do
-        integer :tag_ids, :multiple => true if taggable?
+        integer(:tag_ids, :multiple => true) if model_context.taggable?
         string :grouping_id
         string :type_name
         string :security_type_name, :multiple => true

@@ -83,7 +83,7 @@ describe 'add a tag' do
 end
 
 describe 'viewing all the entities sharing a specific tag' do
-  let(:tag) { ActsAsTaggableOn::Tag.find_by_name('crazy_tag') }
+  let(:tag) { Tag.find_by_name('crazy_tag') }
 
   describe "when clicking a tag on a workfile" do
     let(:workfile) {workfiles(:public)}

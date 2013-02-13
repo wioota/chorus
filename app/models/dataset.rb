@@ -1,6 +1,7 @@
 class Dataset < ActiveRecord::Base
   include Stale
   include SoftDelete
+  include TaggableBehavior
 
   belongs_to :schema
   validates_presence_of :schema
@@ -13,8 +14,6 @@ class Dataset < ActiveRecord::Base
   has_many :comments, :through => :events
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
-
-  acts_as_taggable  # must be above searchable
 
   searchable_model :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST

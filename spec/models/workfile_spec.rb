@@ -141,4 +141,6 @@ describe Workfile do
     end
 
   end
+
+  it_should_behave_like "taggable models", [:workfiles, :public]
 end

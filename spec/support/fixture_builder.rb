@@ -126,7 +126,7 @@ FixtureBuilder.configure do |fbuilder|
     source_view = FactoryGirl.create(:gpdb_view, :name => "source_view", :schema => other_schema)
 
     tagged = FactoryGirl.create(:gpdb_table, :name => 'tagged', :schema => default_schema)
-    tagged.tag_list = ['alpha']
+    tagged.tag_list = 'alpha'
     tagged.save!
 
     # Search setup
@@ -158,6 +158,10 @@ FixtureBuilder.configure do |fbuilder|
 
     note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
     note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
+
+    tagged_table = FactoryGirl.create(:gpdb_table, :name => "searchable_tag", :schema => searchquery_schema)
+    tagged_table.tag_list = "typeahead"
+    tagged_table.save!
 
     # Search Database Instance Accounts For Solr Permissions
     searchquery_database.instance_accounts << owner_instance_account

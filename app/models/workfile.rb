@@ -1,11 +1,10 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
+  include TaggableBehavior
 
   @@entity_subtypes = Hash.new('ChorusWorkfile').merge!({
      'alpine' => 'AlpineWorkfile'
   })
-
-  acts_as_taggable
 
   attr_accessible :description, :file_name, :as => [:default, :create]
   attr_accessible :owner, :workspace, :as => :create
