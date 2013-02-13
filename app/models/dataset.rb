@@ -113,6 +113,10 @@ class Dataset < ActiveRecord::Base
     Arel::Table.new(name).project('*').take(limit).to_sql
   end
 
+  def as_sequel
+    Sequel.qualify(schema.name, name)
+  end
+
   def entity_type_name
     'dataset'
   end

@@ -60,6 +60,10 @@ class OracleConnection < DataSourceConnection
     @connection = nil
   end
 
+  def db_url
+    "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
+  end
+
   def version
     connect!
     result = @connection.fetch(%Q{select * from v$version where banner like 'Oracle%'}).first.first[1]
@@ -164,10 +168,6 @@ class OracleConnection < DataSourceConnection
       )
       WHERE rownum <= :limit
   SQL
-
-  def db_url
-    "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
-  end
 
   def with_connection(options = {})
     connect!

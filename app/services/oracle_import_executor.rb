@@ -8,6 +8,7 @@ class OracleImportExecutor
 
   def run
     #get column names from oracle table
+    columns = DatasetColumn.columns_for(@schema.account_for_user!(@user), @dataset)
 
     #create external table to stream oracle data into
     @schema.connect_as(@user).create_external_table({

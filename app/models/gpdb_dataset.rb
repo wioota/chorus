@@ -86,10 +86,6 @@ class GpdbDataset < Dataset
     all_rows_sql
   end
 
-  def as_sequel
-    Sequel.qualify(schema.name, name)
-  end
-
   private
 
   def create_import_event(params, user)

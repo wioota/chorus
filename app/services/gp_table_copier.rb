@@ -27,16 +27,22 @@ class GpTableCopier
 
   def start
     copier = self
-    if use_gp_pipe?
+    if oracle_import?
+      copier = OracleTableCopier.new(self)
+    elsif use_gp_pipe?
       copier = GpPipe.new(self)  # delegate cross-database copies to a GpPipe instance
     end
 
-    initialize_table
+    copier.initialize_table
 
     copier.run
   rescue Exception => e
     destination_connection << "DROP TABLE IF EXISTS #{destination_table_fullname}" if table_created?
     raise ImportFailed, e.message
+  end
+
+  def oracle_import?
+    source_database_url =~ /oracle/i
   end
 
   def source_connection
@@ -45,7 +51,8 @@ class GpTableCopier
 
   def create_source_connection
     connection = Sequel.connect(source_database_url, logger_options)
-    connection << %Q{set search_path to "#{source_schema_name}";}
+    connection << %Q{set search_path to "#{source_schema_name}";} unless oracle_import?
+    connection
   end
 
   def create_destination_connection
@@ -161,24 +168,31 @@ class GpTableCopier
     attributes[:truncate].to_s == "true"
   end
 
-  def table_definition
-    @table_definition || begin
-      # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
-      rows = source_connection.fetch(describe_table)
-      rows.map { |col_def| "\"#{col_def[:column_name]}\" #{col_def[:data_type]}" }.join(", ")
-    end
+  def load_table_definition
+    # No way of testing ordinal position clause since we can't reproduce an out of order result from the following query
+    rows = source_connection.fetch(describe_table)
+    rows.map { |col_def| "\"#{col_def[:column_name]}\" #{col_def[:data_type]}" }.join(", ")
   end
 
-  def table_definition_with_keys
-    @table_definition_with_keys ||= begin
-      if chorus_view?
-        primary_key_rows = []
-      else
-        primary_key_rows = source_connection.fetch(primary_key_sql)
-      end
-      primary_key_clause = primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
-      table_definition + primary_key_clause
+  def table_definition
+    @table_definition ||= load_table_definition
     end
+
+  def table_definition_with_keys
+    table_definition + primary_key_clause
+  end
+
+  def load_primary_key_clause
+    if chorus_view?
+      primary_key_rows = []
+    else
+      primary_key_rows = source_connection.fetch(primary_key_sql)
+    end
+    primary_key_rows.empty? ? '' : ", PRIMARY KEY(#{quote_and_join(primary_key_rows)})"
+  end
+
+  def primary_key_clause
+    @primary_key_clause ||= load_primary_key_clause
   end
 
   def source_table_path

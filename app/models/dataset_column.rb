@@ -4,11 +4,7 @@ class DatasetColumn
   attr_accessor :data_type, :description, :ordinal_position, :statistics, :name, :statistics
 
   def self.columns_for(account, dataset)
-    self.columns_for_table(account, dataset)
-  end
-
-  def self.columns_for_table(account, table)
-    columns_with_stats = table.connect_with(account).column_info(table.name, table.query_setup_sql)
+    columns_with_stats = dataset.connect_with(account).column_info(dataset.name, dataset.query_setup_sql)
 
     columns_with_stats.map.with_index do |raw_row_data, i|
       column = DatasetColumn.new({
