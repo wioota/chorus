@@ -19,7 +19,7 @@ describe DatasetDownloadsController do
 
       it "streams the data into the template" do
         any_instance_of(DatasetStreamer) do |streamer|
-          mock(streamer).enum { "i am the enum" }
+          mock(streamer).enum(true) { "i am the enum" }
         end
         get :show, :dataset_id => table.to_param, :format => 'csv'
         response.body.should == 'i am the enum'
@@ -41,6 +41,14 @@ describe DatasetDownloadsController do
         get :show, :dataset_id => table.to_param, :format => 'csv'
         response.headers["Cache-Control"].should == 'no-cache'
         response.headers["Transfer-Encoding"].should == 'chunked'
+      end
+
+      it "should get a headerless enumerator when told" do
+        streamer = Object.new
+        stub(DatasetStreamer).new.with_any_args { streamer }
+        mock(streamer).enum(false) { "foo" }
+        get :show, :dataset_id => table.to_param, :format => 'csv', :header => 'false'
+        response.body.should == "foo"
       end
     end
 

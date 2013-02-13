@@ -36,6 +36,10 @@ describe DatasetStreamer do
       check_enumerator(streamer.enum)
     end
 
+    it "should not yield the header row when told not to" do
+      check_enumerator(streamer.enum(false), false)
+    end
+
     context "with quotes in the data" do
       let(:streamed_data) {
         [{
@@ -87,12 +91,17 @@ describe DatasetStreamer do
       end
     end
 
-    def check_enumerator(enumerator)
+    def check_enumerator(enumerator, show_headers=true)
       next_result = enumerator.next
       header_row, first_result = next_result.split("\n",2)
-      header_row.should == "id,something"
+      if show_headers
+        header_row.should == "id,something"
+      else
+        header_row.should_not == "id,something"
+        first_result = header_row
+      end
 
-      first_result.should == "#{streamed_data[0][:id]},#{streamed_data[0][:something]}\n"
+      first_result.should == "#{streamed_data[0][:id]},#{streamed_data[0][:something]}#{show_headers ? "\n" : ""}"
       streamed_data.each_with_index do |row_data, index|
         next if index == 0
         enumerator.next.should == "#{row_data[:id]},#{row_data[:something]}\n"

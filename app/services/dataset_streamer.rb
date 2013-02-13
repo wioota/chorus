@@ -14,17 +14,15 @@ class DatasetStreamer
     results
   end
 
-  def enum
-    first_row_flag = true
-
+  def enum(show_headers = true)
     conn = dataset.schema.connect_as(user)
     Enumerator.new do |y|
       begin
         conn.stream_dataset(dataset, row_limit) do |row|
-          y << format(row, first_row_flag)
-          first_row_flag = false
+          y << format(row, show_headers)
+          show_headers = false
         end
-        if (first_row_flag)
+        if show_headers
           y << "The requested dataset contains no rows"
         end
       rescue Exception => e
