@@ -25,9 +25,7 @@ module SolrHelpers
     VCR.use_cassette('search_solr_index') do
       Sunspot.session = Sunspot.session.original_session
       Sunspot.session.remove_all
-      searchables = Sunspot.searchable
-      stub(searchables.select { |model| model.name == searchquery_dataset.name }.first).table_description { "searchquery table description" }
-      searchables.each do |model|
+      Sunspot.searchable.each do |model|
         model.solr_index(:batch_commit => false)
       end
       Sunspot.commit
