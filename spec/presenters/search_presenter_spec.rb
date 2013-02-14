@@ -71,26 +71,24 @@ describe SearchPresenter, :type => :view do
       end
 
       it "includes the right dataset keys" do
+        dataset = datasets(:searchquery_table)
+
         @hash.should have_key(:datasets)
         datasets_hash = @hash[:datasets]
         datasets_hash.should have_key(:numFound)
         datasets_hash.should have_key(:results)
-        table_hash = datasets_hash[:results][0]
+
+        table_hash = datasets_hash[:results].select { |hash| hash[:object_name] == dataset.name }.first
         table_hash.should have_key(:highlighted_attributes)
         table_hash[:highlighted_attributes].should have_key(:object_name)
+
         table_hash[:columns][0].should have_key(:highlighted_attributes)
         table_hash[:columns][0][:highlighted_attributes].should have_key(:body)
-        table_hash[:columns][1].should have_key(:highlighted_attributes)
+        table_hash[:columns].size.should == 2
 
         table_hash[:column_descriptions][0][:highlighted_attributes].should have_key(:body)
-        table_hash[:column_descriptions][1][:highlighted_attributes].should have_key(:body)
+        table_hash[:column_descriptions].size.should == 2
         table_hash[:table_description][0][:highlighted_attributes].should have_key(:body)
-
-        table_hash[:highlighted_attributes].should_not have_key(:name)
-        table_hash[:highlighted_attributes].should_not have_key(:database_name)
-        table_hash[:highlighted_attributes].should_not have_key(:schema_name)
-        table_hash[:highlighted_attributes].should_not have_key(:column_name)
-        table_hash[:highlighted_attributes].should_not have_key(:column_description)
 
         table_hash[:entity_type].should == 'dataset'
       end
