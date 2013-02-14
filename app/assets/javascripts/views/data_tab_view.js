@@ -58,7 +58,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
 
         this.bindings.add(this.collection, "searched", this.onSearchComplete);
         this.listview && this.listview.teardown();
-        this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
+        this.listview = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.registerSubView(this.listview);
 
         this.bindings.add(this.collection, 'serverResponded', this.render);

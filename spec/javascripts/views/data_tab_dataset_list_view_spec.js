@@ -1,4 +1,4 @@
-describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
+describe("chorus.views.DataTabDatasetList", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.DatasetSet([
@@ -7,7 +7,7 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
             rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
             rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
-        this.view = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
+        this.view = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.view.render();
     });
 
