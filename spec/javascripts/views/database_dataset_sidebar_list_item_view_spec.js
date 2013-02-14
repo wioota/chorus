@@ -25,22 +25,6 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
             expect(this.view.$("li").length).toBe(4);
         });
 
-        it("renders the correct data-fullname for each item", function() {
-            var $lis = this.view.$("li");
-            expect($lis.eq(0).data("fullname")).toBe('schema_name."1234"');
-            expect($lis.eq(1).data("fullname")).toBe('schema_name."Data1"');
-            expect($lis.eq(2).data("fullname")).toBe('schema_name."Data2"');
-            expect($lis.eq(3).data("fullname")).toBe("schema_name.zebra");
-        });
-
-        it("renders appropriate icon for each item in the collection", function() {
-            var $lis = this.view.$("li img");
-            expect($lis.eq(0)).toHaveAttr("src", "/images/sandbox_table_small.png");
-            expect($lis.eq(1)).toHaveAttr("src", "/images/sandbox_view_small.png");
-            expect($lis.eq(2)).toHaveAttr("src", "/images/sandbox_table_small.png");
-            expect($lis.eq(3)).toHaveAttr("src", "/images/sandbox_view_small.png");
-        });
-
         describe("clicking on a dataset item", function () {
             beforeEach(function() {
                 this.view.$("li a").eq(0).click();
