@@ -862,6 +862,12 @@ describe GreenplumConnection, :greenplum_integration do
 
       it_behaves_like "a well-behaved database query"
 
+      it "sets the search path on the database connection" do
+        sequel_connection = connection.connect!
+        mock.proxy(sequel_connection).execute('SET search_path TO "test_schema"')
+        connection.validate_query('SELECT 1')
+      end
+
       it "catches SQL errors" do
         expect {
           connection.validate_query('SELECT WHEREuwiuwiue12321')
