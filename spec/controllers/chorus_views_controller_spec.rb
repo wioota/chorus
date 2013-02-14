@@ -35,12 +35,15 @@ describe ChorusViewsController, :greenplum_integration do
       it "creates a chorus view" do
         expect {
           post :create, options
-        }.to change { GpdbDataset.chorus_views.count}.by(1)
+        }.to change { GpdbDataset.chorus_views.count }.by(1)
 
         chorus_view = GpdbDataset.chorus_views.last
         chorus_view.name.should == "my_chorus_view"
         chorus_view.workspace.should == workspace
+      end
 
+      it "presents the new Chorus View" do
+        post :create, options
         response.code.should == "201"
         decoded_response[:query].should == "Select * from base_table1"
         decoded_response[:schema][:id].should == schema.id

@@ -853,21 +853,31 @@ describe GreenplumConnection, :greenplum_integration do
       it_behaves_like "a well-behaved database query"
     end
 
-    describe "#transaction" do
+    describe "#validate_query" do
       let(:subject) {
-        connection.test_transaction do |conn|
-          conn.fetch_value('SELECT 1')
-        end
+        connection.validate_query('SELECT * FROM base_table1')
       }
 
-      let(:expected) { 1 }
+      let(:expected) { true }
 
       it_behaves_like "a well-behaved database query"
 
-      it 'rolls back all database operations' do
-        connection.test_transaction do |conn|
-          conn.execute('create table test_transaction()')
-        end
+      it "catches SQL errors" do
+        expect {
+          connection.validate_query('SELECT WHEREuwiuwiue12321')
+        }.to raise_error(GreenplumConnection::DatabaseError)
+      end
+
+      it "doesn't allow for queries with multiple results" do
+        expect {
+          connection.validate_query('SELECT 1; SELECT 2;')
+        }.to raise_error(GreenplumConnection::DatabaseError)
+      end
+
+      it "doesn't allow statements that don't return results" do
+        expect {
+          connection.validate_query('create table test_transaction()')
+        }.to raise_error(GreenplumConnection::DatabaseError)
 
         connection.table_exists?('test_transaction').should_not be_true
       end
@@ -1185,6 +1195,14 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
       context "when the wrapped error has a sql state error code" do
         before do
           stub(sequel_exception.wrapped_exception).get_sql_state { error_code }
+        end
+
+        it "handles unwrapped exceptions" do
+          unwrapped_exception = StandardError.new("I am a message")
+          stub(unwrapped_exception).get_sql_state { '3D000' }
+          exception = GreenplumConnection::DatabaseError.new(unwrapped_exception)
+
+          exception.error_type.should == :DATABASE_MISSING
         end
 
         context "when the error code is 3D000" do

@@ -4,7 +4,6 @@ require_relative '../app/models/sql_result'
 class GreenplumConnection < DataSourceConnection
   class DatabaseError < Error
     def error_type
-      error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_sql_state) && @exception.wrapped_exception.get_sql_state
       case error_code
         when /28.../ then :INVALID_PASSWORD
         when '3D000' then :DATABASE_MISSING
@@ -19,6 +18,14 @@ class GreenplumConnection < DataSourceConnection
 
     def sanitize_message(message)
       message.gsub /(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx'
+    end
+
+    def error_code
+      if @exception.respond_to?(:get_sql_state)
+        @exception.get_sql_state
+      else
+        @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_sql_state) && @exception.wrapped_exception.get_sql_state
+      end
     end
   end
 
@@ -258,18 +265,30 @@ class GreenplumConnection < DataSourceConnection
       true
     end
 
-    def test_transaction
+    def validate_query(query)
       connect!
-      result = nil
 
-      @connection.transaction(:rollback => :always) do
-        result = yield self
+      if schema_name
+        search_path = "SET search_path TO #{quote_identifier(schema_name)}"
+        search_path << ", public"
+        @connection.default_schema = schema_name
+        @connection.execute(search_path)
+      end
+
+      @connection.synchronize do |jdbc_conn|
+        jdbc_conn.auto_commit = false
+
+        statement = jdbc_conn.prepare_statement(query)
+        statement.max_rows = 1
+        statement.execute_query
       end
 
       disconnect
-      result
+      true
+    rescue Java::OrgPostgresqlUtil::PSQLException => e
+      raise GreenplumConnection::DatabaseError.new(e)
     rescue Sequel::DatabaseError => e
-      raise GreenplumConnection::DatabaseError.new(e) unless e.message =~ /transaction is aborted/
+      raise GreenplumConnection::DatabaseError.new(e)
     ensure
       disconnect
     end

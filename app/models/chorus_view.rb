@@ -36,12 +36,11 @@ class ChorusView < GpdbDataset
       errors.add(:query, :multiple_result_sets)
       return
     end
-    schema.connect_as(current_user).test_transaction do |conn|
-      begin
-        conn.fetch_value(query_without_comments.gsub ";", "")
-      rescue GreenplumConnection::DatabaseError => e
-        errors.add(:query, :generic, {:message => e.message})
-      end
+
+    begin
+      schema.connect_as(current_user).validate_query(query_without_comments.gsub(";", ""))
+    rescue GreenplumConnection::DatabaseError => e
+      errors.add(:query, :generic, {:message => e.message})
     end
   end
 
