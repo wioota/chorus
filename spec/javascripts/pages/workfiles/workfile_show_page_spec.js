@@ -240,9 +240,9 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
 
             it("does not change the sidebar dataset list", function() {
-                this.page.sidebar.tabs.datasets_and_columns.datasetList.schema = rspecFixtures.schema({id: 4});
+                this.page.sidebar.tabs.data.schema = rspecFixtures.schema({id: 4});
                 changeWorkfileVersion(2, this.model, this.server);
-                expect(this.page.sidebar.tabs.datasets_and_columns.datasetList.schema.id).toEqual(4);
+                expect(this.page.sidebar.tabs.data.schema.id).toEqual(4);
             });
         });
 

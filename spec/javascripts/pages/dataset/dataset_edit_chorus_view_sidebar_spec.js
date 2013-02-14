@@ -28,12 +28,12 @@ describe("chorus.views.DatasetEditChorusViewSidebar", function() {
         });
 
         it("should have a dataset tab", function() {
-            expect(this.view.$('.tab_control .dataset_and_column_list')).toExist();
-            expect(this.view.tabs.datasets_and_columns).toBeA(chorus.views.DatasetAndColumnList);
+            expect(this.view.$('.tab_control .data_tab')).toExist();
+            expect(this.view.tabs.data).toBeA(chorus.views.DataTab);
         });
 
         it("sets the default tab to data tab", function () {
-            expect(this.view.$(".tab_control .selected")).toContainTranslation("tabs.datasets_and_columns");
+            expect(this.view.$(".tab_control .selected")).toContainTranslation("tabs.data");
         });
     });
 });
