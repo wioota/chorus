@@ -3,7 +3,7 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
     constructorName: 'DatasetAndColumnList',
 
     subviews: {
-        ".database_dataset_list": "datasetList",
+        ".data_tab": "datasetList",
         ".database_column_list": "columnList"
     },
 
@@ -13,12 +13,12 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
 
         this.subscribePageEvent("datasetSelected", function(tableOrView) {
             this.$(".database_column_list").removeClass("hidden");
-            this.$(".database_dataset_list").addClass("hidden");
+            this.$(".data_tab").addClass("hidden");
         });
 
         this.bindings.add(this.columnList, "back", function() {
             this.$("input.search").val("");
-            this.$(".database_dataset_list").removeClass("hidden");
+            this.$(".data_tab").removeClass("hidden");
             this.$(".database_column_list").addClass("hidden");
             chorus.PageEvents.broadcast("dataset:back");
         });

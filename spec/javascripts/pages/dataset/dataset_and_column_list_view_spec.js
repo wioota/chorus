@@ -4,11 +4,11 @@ describe("chorus.views.DatasetAndColumnList", function() {
         this.dataset = rspecFixtures.workspaceDataset.chorusView();
         this.view = new chorus.views.DatasetAndColumnList({ model: this.dataset.schema() });
         this.view.render();
-        this.view.$(".database_dataset_list input.search").val("searching for a table...");
+        this.view.$(".data_tab input.search").val("searching for a table...");
     });
 
     it("shows the dataset list view", function() {
-        expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+        expect(this.view.$(".data_tab")).not.toHaveClass("hidden");
     });
 
     it("hides the column list view", function() {
@@ -31,7 +31,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
         });
 
         it("hides the dataset list", function() {
-            expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
+            expect(this.view.$(".data_tab")).toHaveClass("hidden");
         });
 
         it("shows the column list", function() {
@@ -45,7 +45,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
             });
 
             it("clears the search text", function() {
-                expect(this.view.$(".database_dataset_list input.search").val()).toBe("");
+                expect(this.view.$(".data_tab input.search").val()).toBe("");
             });
 
             it("should hide the column list", function() {
@@ -53,7 +53,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
             });
 
             it("should show the dataset list", function() {
-                expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+                expect(this.view.$(".data_tab")).not.toHaveClass("hidden");
             });
 
             it("should broadcast a dataset:back", function() {
@@ -62,7 +62,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
 
             describe("clicking a table again", function() {
                 beforeEach(function() {
-                    this.view.$(".database_dataset_list li").click();
+                    this.view.$(".data_tab li").click();
                     this.server.completeAllFetches();
                 });
 

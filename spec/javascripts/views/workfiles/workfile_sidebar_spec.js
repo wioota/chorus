@@ -16,9 +16,9 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(this.workfile.activities()).toHaveBeenFetched();
             });
 
-            context("when the dataset:back event is broadcast", function() {
+            xcontext("when the data tab resizes", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:back");
+                    //TODO
                 });
 
                 it("calls recalculate scrolling", function() {
@@ -55,16 +55,6 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(this.view.$('.tab_control .activity_list')).toExist();
                 expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);
             });
-
-            context("when a dataset is selected", function() {
-                beforeEach(function() {
-                    var sandboxTable = rspecFixtures.workspaceDataset.datasetTable();
-                    chorus.PageEvents.broadcast("datasetSelected", sandboxTable);
-                });
-                it("should scroll to the top", function() {
-                    expect(this.view.jumpToTop).toHaveBeenCalled();
-                });
-            });
         });
 
         context("with a non-sql workfile", function() {
@@ -89,7 +79,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             it("should not have function or dataset tabs", function() {
                 expect(this.view.$('.tab_control .activity_list')).toExist();
                 expect(this.view.$('.tab_control .database_function_list')).not.toExist();
-                expect(this.view.$('.tab_control .database_dataset_list')).not.toExist();
+                expect(this.view.$('.tab_control .data_tab')).not.toExist();
             });
 
             it("displays a link to copy the workfile to another workspace", function() {
@@ -179,7 +169,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("should not show the functions or data tab", function() {
-                expect(this.view.$(".tab_control .database_dataset_list")).not.toExist();
+                expect(this.view.$(".tab_control .data_tab")).not.toExist();
                 expect(this.view.$(".tab_control .database_function_list")).not.toExist();
             });
         });
@@ -320,7 +310,7 @@ describe("chorus.views.WorkfileSidebar", function() {
         });
 
         it("shows the schema tabs", function() {
-            expect(this.view.tabs.tabNames).toEqual(["datasets_and_columns","database_function_list","activity"]);
+            expect(this.view.tabs.tabNames).toEqual(["data","database_function_list","activity"]);
         });
     });
 

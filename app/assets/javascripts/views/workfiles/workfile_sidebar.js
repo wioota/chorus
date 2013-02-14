@@ -43,9 +43,6 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 this.subscribePageEvent("workfile_version:deleted", this.versionDestroyed);
             }
 
-            this.subscribePageEvent("datasetSelected", this.jumpToTop);
-            this.subscribePageEvent("dataset:back", this.recalculateScrolling);
-
             this.tabs.activity = new chorus.views.ActivityList({
                 collection:this.collection,
                 additionalClass:"sidebar",
@@ -64,10 +61,10 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     modelLoaded:function () {
         if (this.options.showSchemaTabs && this.model.isSql() && this.model.workspace().isActive()) {
-            this.tabs.tabNames = ["datasets_and_columns","database_function_list","activity"];
+            this.tabs.tabNames = ["data","database_function_list","activity"];
             var schema = this.model.executionSchema();
             this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: schema });
-            this.tabs.datasets_and_columns = this.tabs.datasets_and_columns || new chorus.views.DatasetAndColumnList({ model: schema });
+            this.tabs.data = this.tabs.data || new chorus.views.DataTab({ schema: schema });
         } else {
             this.tabs.tabNames = ["activity"];
         }
