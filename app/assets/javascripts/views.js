@@ -494,7 +494,7 @@ chorus.views.Base = chorus.views.Bare.extend({
 
     clearErrors: function() {
         this.clearPopupErrors();
-        this.$(".errors").empty();
+        this.$(".errors").empty().addClass("hidden");
     },
 
     clearPopupErrors: function() {

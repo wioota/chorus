@@ -38,6 +38,10 @@ describe("errors", function() {
             it("removes the error div content", function() {
                 expect($("#jasmine_content .errors")).toBeEmpty();
             });
+
+            it("adds the hidden class", function() {
+                expect($("#jasmine_content .errors")).toHaveClass("hidden");
+            });
         });
     });
 });

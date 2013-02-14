@@ -203,7 +203,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
         var alert = new this.alertClass({model: this.errorSource});
         alert.launchModal();
-        $(".errors").addClass("hidden");
+        this.$(".errors").addClass("hidden");
     },
 
     showTitle: function(e) {

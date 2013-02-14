@@ -549,7 +549,7 @@ describe("chorus.views.Base", function() {
         beforeEach(function() {
             this.view = new chorus.views.Base({ model: this.model });
             this.view.template = function() {
-                return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
+                return "<form><input name='foo'/><input name='bar'/><input name='whiz'/><div class='errors'></div></form>";
             };
             this.view.model = new chorus.models.Base();
             this.view.model.errors = { foo: "you need a foo" };
@@ -596,6 +596,26 @@ describe("chorus.views.Base", function() {
             });
         });
 
+        context("with a model with server errors", function() {
+            beforeEach(function() {
+                this.view.model.serverErrors = {
+                    fields: {
+                        database: {
+                            GENERIC: {
+                                message: "error!"
+                            }
+                        }
+                    }
+                };
+                this.view.showErrors();
+            });
+
+            it("it generates a visible error", function() {
+                expect(this.view.$(".errors")).not.toHaveClass("hidden");
+                expect(this.view.$(".errors")).toContainText("error!");
+            });
+        });
+
         context("given a different model as a parameter", function() {
             beforeEach(function() {
                 this.otherModel = new chorus.models.Base();
@@ -621,6 +641,7 @@ describe("chorus.views.Base", function() {
                 expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
                 expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
                 expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
+                expect(this.view.$(".errors")).toHaveClass("hidden");
             });
         });
     });

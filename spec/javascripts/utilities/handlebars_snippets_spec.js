@@ -1090,9 +1090,9 @@ describe("handlebars", function () {
                     this.context = {};
                 });
 
-                it("renders an empty div", function () {
+                it("renders a hidden empty div", function () {
                     var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
-                    expect(el).toBe('<div class="errors"></div>');
+                    expect(el).toBe('<div class="errors hidden"></div>');
                 });
             });
 
