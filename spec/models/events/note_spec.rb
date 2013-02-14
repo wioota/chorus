@@ -319,7 +319,7 @@ describe Events::Note do
       gpdb_data_source = data_sources(:default)
       note = Events::Note.build_for(gpdb_data_source, {
           :body => "Some crazy content",
-          :entity_type => "data_source"
+          :entity_type => "gpdb_data_source"
       })
 
       note.save!
