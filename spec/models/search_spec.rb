@@ -347,12 +347,6 @@ describe Search do
     describe "datasets" do
       it "includes the highlighted attributes" do
         dataset = datasets(:searchquery_table)
-        stub(dataset).table_description { "searchquery description" }
-        stub(DatasetColumn).columns_for.with_any_args {
-            [ DatasetColumn.new(:name => 'non-search'),
-              DatasetColumn.new(:name => 'searchquery', :description => 'searchquery comment 1') ]
-        }
-
         create_and_record_search do |search|
           dataset.solr_index!
           dataset = search.datasets.find { |dataset| dataset.name == 'searchquery_table' }
