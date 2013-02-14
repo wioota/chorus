@@ -10,7 +10,9 @@ class NotesController < ApplicationController
     authorize! :create_note_on, model
     note_params[:body] = sanitize(note_params[:body])
 
-    note = Events::Note.create_on_model(model, note_params, current_user)
+    note = Events::Note.build_for(model, note_params)
+
+    note.save!
 
     (note_params[:recipients] || []).each do |recipient_id|
       Notification.create!(:recipient_id => recipient_id, :event_id => note.id)

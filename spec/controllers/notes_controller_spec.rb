@@ -14,19 +14,20 @@ describe NotesController do
     let(:attributes) { { :entity_type => entity_type, :entity_id => entity_id, :body => "I'm a note" } }
 
     it "creates a note on the model specified by the 'entity_type' and 'entity_id'" do
-      mock(Events::Note).create_on_model(model, attributes.stringify_keys, user)
-      post :create, attributes
+      mock.proxy(Events::Note).build_for(model, attributes.stringify_keys)
+      expect {
+        post :create, attributes
+      }.to change(Events::Note, :count).by(1)
       response.code.should == "201"
     end
 
     it "sanitizes the body of note" do
-      mock(Events::Note).create_on_model(model, attributes.merge(:body => "<b>not evil</b>").stringify_keys, user)
+      mock.proxy(Events::Note).build_for(model, attributes.merge(:body => "<b>not evil</b>").stringify_keys)
       post :create, attributes.merge!(:body => "<b>not evil</b><script>alert('Evil!')</script>")
       response.code.should == "201"
     end
 
     it "uses authorization" do
-      mock(Events::Note).create_on_model(model, attributes.stringify_keys, user)
       mock(controller).authorize!(:create_note_on, model)
       post :create, attributes
     end

@@ -68,7 +68,8 @@ describe Workfile do
       let(:author) { workfile.owner }
 
       it "should return notes" do
-        note = Events::NoteOnWorkfile.by(author).add(:workfile => workfile, :body => "note on a workfile", :workspace => workfile.workspace)
+        set_current_user(author)
+        note = Events::NoteOnWorkfile.create!({:note_target => workfile, :body => "note on a workfile"}, :as => :create)
         workfile.reload
         workfile.notes.first.should be_a(Events::NoteOnWorkfile)
         workfile.notes.should == [note]

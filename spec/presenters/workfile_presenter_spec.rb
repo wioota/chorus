@@ -60,10 +60,10 @@ describe WorkfilePresenter, :type => :view do
       before do
         workfile.events.clear
         Timecop.freeze yesterday do
-          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note for yesterday')
+          Events::NoteOnWorkfile.create!({:note_target => workfile, :body => 'note for yesterday'}, :as => :create)
         end
         Timecop.freeze today do
-          Events::NoteOnWorkfile.by(user).add(:workspace => workspace, :workfile => workfile, :body => 'note for today')
+          Events::NoteOnWorkfile.create!({:workfile => workfile, :body => 'note for today'}, :as => :create)
         end
         workfile.reload
       end

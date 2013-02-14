@@ -1,6 +1,7 @@
 require_relative "./database_integration/greenplum_integration"
 require_relative "./database_integration/oracle_integration"
 require_relative "./database_integration/hadoop_integration"
+require_relative "./current_user"
 require 'rr'
 
 def FixtureBuilder.password
@@ -29,6 +30,7 @@ FixtureBuilder.configure do |fbuilder|
 
   # now declare objects
   fbuilder.factory do
+    extend CurrentUserHelpers
     extend RR::Adapters::RRMethods
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
 
@@ -156,8 +158,10 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead_' + model.to_s)
     end
 
-    note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => typeahead_instance, :body => 'i exist only for my attachments', :created_at => '2010-01-01 02:00')
-    note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
+    with_current_user(owner) do
+      note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.create!({:note_target => typeahead_instance, :body => 'i exist only for my attachments'}, :as => :create)
+      note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
+    end
 
     tagged_table = FactoryGirl.create(:gpdb_table, :name => "searchable_tag", :schema => searchquery_schema)
     tagged_table.tag_list = "typeahead"
@@ -287,15 +291,22 @@ FixtureBuilder.configure do |fbuilder|
       sql_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace, :execution_schema => public_workspace.sandbox, :versions_attributes => [{:contents => file}])
       fbuilder.name :sql, sql_workfile
 
-      Events::NoteOnWorkfile.by(owner).add(:workspace => sql_workfile.workspace, :workfile => sql_workfile, :body => 'note on workfile')
+      with_current_user(owner) do
+        Events::NoteOnWorkfile.create!({:note_target => sql_workfile, :body => 'note on workfile'}, :as => :create)
+      end
 
       @no_collaborators_creates_private_workfile = Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace, :commit_message => "Fix all the bugs!")
       @public_workfile_created = Events::WorkfileCreated.by(owner).add(:workfile => public_workfile, :workspace => public_workspace, :commit_message => "There be dragons!")
       @private_workfile_created = Events::WorkfileCreated.by(owner).add(:workfile => private_workfile, :workspace => private_workspace, :commit_message => "Chorus chorus chorus, i made you out of clay")
       Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_public, :workspace => no_collaborators_public_workspace, :commit_message => "Chorus chorus chorus, with chorus I will play")
 
-      @note_on_public_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => public_workfile, :body => 'notesearch forever')
-      @note_on_no_collaborators_private_workfile = Events::NoteOnWorkfile.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :body => 'notesearch never')
+      with_current_user(owner) do
+        @note_on_public_workfile = Events::NoteOnWorkfile.create!({:note_target => public_workfile, :body => 'notesearch forever'}, :as => :create)
+      end
+
+      with_current_user(no_collaborators) do
+        @note_on_no_collaborators_private_workfile = Events::NoteOnWorkfile.create!({:note_target => no_collaborators_private, :body => 'notesearch never'}, :as => :create)
+      end
       Events::WorkfileUpgradedVersion.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :commit_message => 'commit message', :version_id => no_collaborators_workfile_version.id.to_s, :version_num => "1")
 
       Events::WorkfileVersionDeleted.by(owner).add(:workspace => public_workspace, :workfile => public_workfile, :version_num => "15")
@@ -338,7 +349,6 @@ FixtureBuilder.configure do |fbuilder|
 
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                   :import_schedule => import_schedule,
-                  :created_at => Time.current,
                   :source_dataset_id => default_table.id)
     fbuilder.name :three, import
 
@@ -375,58 +385,54 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :unimported, unimported_csv_file
 
     #Notes
-    note_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => gpdb_data_source, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
-    fbuilder.name :note_on_greenplum, note_on_greenplum
-    insight_on_greenplum = Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => gpdb_data_source, :body => 'i am an insight with greenpluminsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
-    fbuilder.name :insight_on_greenplum, insight_on_greenplum
-    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => gpdb_data_source, :body => 'i love searchquery', :created_at => '2010-01-01 02:01')
-    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => shared_instance, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02')
-    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => shared_instance, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03')
-    Events::NoteOnGreenplumInstance.by(owner).add(:gpdb_data_source => shared_instance, :body => 'really really?', :created_at => '2010-01-01 02:04')
-    note_on_hadoop_instance = Events::NoteOnHadoopInstance.by(owner).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
-    fbuilder.name :note_on_hadoop_instance, note_on_hadoop_instance
-    note_on_hdfs_file = Events::NoteOnHdfsFile.by(owner).add(:hdfs_file => @hdfs_file, :body => 'hhhhhhaaaadooooopppp')
-    fbuilder.name :note_on_hdfs_file, note_on_hdfs_file
-    note_on_workspace = Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'Come see my awesome workspace!')
-    fbuilder.name :note_on_workspace, note_on_workspace
-    note_on_workfile = Events::NoteOnWorkfile.by(owner).add(:workspace => public_workspace, :workfile => text_workfile, :body => "My awesome workfile")
-    fbuilder.name :note_on_workfile, note_on_workfile
-    note_on_gnip_instance = Events::NoteOnGnipInstance.by(owner).add(:gnip_instance => gnip_instance, :body => 'i am a comment with gnipsearch in me', :created_at => '2010-01-01 02:00')
-    fbuilder.name :note_on_gnip_instance, note_on_gnip_instance
-    insight_on_gnip_instance = Events::NoteOnGnipInstance.by(owner).add(:gnip_instance => gnip_instance, :body => 'i am an insight with gnipinsight in me', :created_at => '2010-01-01 02:00', :insight => true, :promotion_time => '2010-01-01 02:00', :promoted_by => owner)
-    fbuilder.name :insight_on_gnip_instance, insight_on_gnip_instance
+    with_current_user(owner) do
+      @note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i am a comment with greenplumsearch in me'}, :as => :create)
+      insight_on_greenplum = Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i am an insight with greenpluminsight in me', :insight => true}, :as => :create)
+      fbuilder.name :insight_on_greenplum, insight_on_greenplum
+      Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i love searchquery'}, :as => :create)
+      Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'is this a greenplumsearch instance?'}, :as => :create)
+      Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'no, not greenplumsearch'}, :as => :create)
+      Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'really really?'}, :as => :create)
+      @note_on_hadoop_instance = Events::NoteOnHadoopInstance.create!({:note_target => hadoop_instance, :body => 'hadoop-idy-doop'}, :as => :create)
+      @note_on_hdfs_file = Events::NoteOnHdfsFile.create!({:note_target => @hdfs_file, :body => 'hhhhhhaaaadooooopppp'}, :as => :create)
+      @note_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'Come see my awesome workspace!'}, :as => :create)
+      @note_on_workfile = Events::NoteOnWorkfile.create!({:note_target => text_workfile, :body => "My awesome workfile"}, :as => :create)
+      @note_on_gnip_instance = Events::NoteOnGnipInstance.create!({:note_target => gnip_instance, :body => 'i am a comment with gnipsearch in me'}, :as => :create)
+      @insight_on_gnip_instance = Events::NoteOnGnipInstance.create!({:note_target => gnip_instance, :body => 'i am an insight with gnipinsight in me', :insight => true}, :as => :create)
+  
+      Events::NoteOnDataset.create!({:note_target => default_table, :body => 'Note on dataset'}, :as => :create)
+      Events::NoteOnWorkspaceDataset.create!({:note_target => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset'}, :as => :create)
+      @note_on_dataset = Events::NoteOnDataset.create!({:dataset => searchquery_table, :body => 'notesearch ftw'}, :as => :create)
+      @insight_on_dataset = Events::NoteOnDataset.create!({:dataset => searchquery_table, :body => 'insightsearch ftw'}, :as => :create)
+      @insight_on_dataset.promote_to_insight
+      @note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.create!({:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
+      @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.create!({:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
+      @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.create!({:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
+  
+      fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.create!({:workspace => public_workspace, :body => 'notesearch forever'}, :as => :create)
+    end
+    
+    Events::FileImportSuccess.by(the_collaborator).create!(:dataset => default_table, :workspace => public_workspace)
 
-    Events::NoteOnDataset.by(owner).add(:dataset => default_table, :body => 'Note on dataset')
-    Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset')
-    Events::FileImportSuccess.by(the_collaborator).add(:dataset => default_table, :workspace => public_workspace)
-    note_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'notesearch ftw')
-    fbuilder.name :note_on_dataset, note_on_dataset
-    insight_on_dataset = Events::NoteOnDataset.by(owner).add(:dataset => searchquery_table, :body => 'insightsearch ftw')
-    insight_on_dataset.promote_to_insight(owner)
-    fbuilder.name :insight_on_dataset, insight_on_dataset
-    note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch')
-    @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
-    @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.by(owner).add(:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch')
-
-    fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.by(owner).add(:workspace => public_workspace, :body => 'notesearch forever')
-    note_on_no_collaborators_private = Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :body => 'notesearch never')
-    fbuilder.name :note_on_no_collaborators_private, note_on_no_collaborators_private
-    fbuilder.name :note_on_no_collaborators_public, Events::NoteOnWorkspace.by(no_collaborators).add(:workspace => no_collaborators_public_workspace, :body => 'some stuff')
+    with_current_user(no_collaborators) do
+      @note_on_no_collaborators_private = Events::NoteOnWorkspace.create!({:note_target => no_collaborators_private_workspace, :body => 'notesearch never'}, :as => :create)
+      @note_on_no_collaborators_public = Events::NoteOnWorkspace.create!({:note_target => no_collaborators_public_workspace, :body => 'some stuff'}, :as => :create)
+    end
 
     #Comments
-    comment_on_note_on_greenplum = Comment.create!({:body => "Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => owner.id})
+    comment_on_note_on_greenplum = Comment.create!({:body => "Comment on Note on Greenplum", :event_id => @note_on_greenplum.id, :author_id => owner.id})
     fbuilder.name :comment_on_note_on_greenplum, comment_on_note_on_greenplum
 
-    second_comment_on_note_on_greenplum = Comment.create!({:body => "2nd Comment on Note on Greenplum", :event_id => note_on_greenplum.id, :author_id => the_collaborator.id})
+    second_comment_on_note_on_greenplum = Comment.create!({:body => "2nd Comment on Note on Greenplum", :event_id => @note_on_greenplum.id, :author_id => the_collaborator.id})
     fbuilder.name :second_comment_on_note_on_greenplum, second_comment_on_note_on_greenplum
 
     fbuilder.name :comment_on_note_on_no_collaborators_private,
-                  Comment.create!({:body => "Comment on no collaborators private", :event_id => note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
+                  Comment.create!({:body => "Comment on no collaborators private", :event_id => @note_on_no_collaborators_private.id, :author_id => no_collaborators.id})
 
-    comment_on_note_on_dataset = Comment.create!({:body => "commentsearch ftw", :event_id => note_on_dataset.id, :author_id => owner.id})
+    comment_on_note_on_dataset = Comment.create!({:body => "commentsearch ftw", :event_id => @note_on_dataset.id, :author_id => owner.id})
     fbuilder.name :comment_on_note_on_dataset, comment_on_note_on_dataset
 
-    Comment.create!({:body => "commentsearch", :event_id => note_on_chorus_view_private.id, :author_id => owner.id})
+    Comment.create!({:body => "commentsearch", :event_id => @note_on_chorus_view_private.id, :author_id => owner.id})
 
 
     #Events
@@ -462,18 +468,18 @@ FixtureBuilder.configure do |fbuilder|
     Timecop.return
 
     #NotesAttachment
-    @sql = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql')))
-    @image = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png')))
-    @attachment = note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance')))
-    @attachment_workspace = note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
-    @attachment_private_workspace = note_on_no_collaborators_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
-    @attachment_workfile = note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile')))
+    @sql = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql')))
+    @image = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png')))
+    @attachment = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance')))
+    @attachment_workspace = @note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
+    @attachment_private_workspace = @note_on_no_collaborators_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
+    @attachment_workfile = @note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile')))
     @attachment_private_workfile = @note_on_no_collaborators_private_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
-    @attachment_dataset = note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset')))
-    @attachment_hadoop = note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
-    @attachment_hdfs = note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
+    @attachment_dataset = @note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset')))
+    @attachment_hadoop = @note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
+    @attachment_hdfs = @note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
     @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
-    @attachment_on_chorus_view = note_on_chorus_view_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'attachmentsearch')))
+    @attachment_on_chorus_view = @note_on_chorus_view_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'attachmentsearch')))
 
     RR.reset
 

@@ -8,7 +8,7 @@ class WorkspaceAccess < AdminFullAccess
   end
 
   def show?(workspace)
-    workspace.public || workspace.member?(current_user)
+    workspace.visible_to?(current_user)
   end
 
   def destroy?(workspace)

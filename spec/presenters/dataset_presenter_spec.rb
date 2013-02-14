@@ -109,7 +109,7 @@ describe DatasetPresenter, :type => :view do
       end
 
       context "when it has comments" do
-        let!(:dataset_note) { Events::NoteOnDataset.by(@user).add(:dataset => dataset, :body => 'Note on dataset') }
+        let!(:dataset_note) { Events::NoteOnDataset.create!({:note_target => dataset, :body => 'Note on dataset'}, :as => :create) }
 
         it "presents the most recent note" do
           hash[:recent_comments].count.should == 1

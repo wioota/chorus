@@ -5,59 +5,50 @@ module Events
   class Note < Base
     include SearchableHtml
 
+    @@entity_subtypes = {
+        'data_source' => 'Events::NoteOnGreenplumInstance'
+    }
+
     validates_presence_of :actor_id
     validate :no_note_on_archived_workspace, :on => :create
+    validates_presence_of :workspace, :if => :has_workspace?
 
     searchable_html :body
     searchable_model
 
-    attr_accessible :dataset_ids, :workfile_ids
+    attr_accessible :note_target, :workspace_id, :is_insight, :insight, :as => :create
+    attr_accessible :dataset_ids, :workfile_ids, :as => [:create, :default]
 
     has_additional_data :body
 
     delegate :grouping_id, :type_name, :security_type_name, :to => :primary_target
 
-    def self.create_on_model(model, params, creator)
-      body = params[:body]
-      workspace_id = params[:workspace_id]
-      insight = params[:is_insight]
+    before_validation :set_promoted_info, :if => lambda { insight && insight_changed? }
+    before_validation :set_actor, :if => :current_user
 
-      if model.kind_of?(Dataset)
-        entity_type = 'dataset'
-      elsif model.kind_of?(Workfile)
-        entity_type = 'workfile'
-      elsif model.kind_of?(HdfsEntry)
-        entity_type = 'hdfs_file'
-      else
-        entity_type = model.class.name.underscore
+    after_create :create_activities
+
+    alias_attribute :is_insight, :insight
+
+    def self.build_for(model, params)
+      params[:note_target] = model
+
+      event_class = @@entity_subtypes[params[:entity_type]].try(:constantize)
+      unless event_class
+        model_type = params[:entity_type]
+        model_type = 'workspace_dataset' if (model_type == 'dataset') && params[:workspace_id]
+
+        event_class = Events.const_get "note_on_#{model_type}".classify
       end
-
-      event_params = {
-        entity_type => model,
-        "body" => body,
-        'dataset_ids' => params[:dataset_ids],
-        'workfile_ids' => params[:workfile_ids],
-        'insight' => insight
-      }
-
-      if insight
-        event_params["promoted_by"] = creator
-        event_params["promotion_time"] = Time.current
-      end
-
-      event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
-      event_class = event_class_for_model(model, workspace_id)
-      event_class.by(creator).add(event_params)
+      event_class.new(params, :as => :create)
     end
 
     def self.insights
       where(:insight => true)
     end
 
-    def promote_to_insight(actor)
+    def promote_to_insight
       self.insight = true
-      self.promoted_by = actor
-      touch(:promotion_time)
       save!
     end
 
@@ -66,10 +57,28 @@ module Events
       save!
     end
 
+    def note_target=(model)
+      self.target1 = model
+    end
+
     private
 
+    def has_workspace?
+      false
+    end
+
     def no_note_on_archived_workspace
-      errors.add(:workspace, :generic, {:message => "Can not add a note on an archived workspace"}) if workspace.present? && workspace.archived?
+      errors.add(:workspace, :archived) if workspace.present? && workspace.archived?
+    end
+
+    def set_promoted_info
+      self.promoted_by = current_user
+      self.promotion_time = Time.current
+      true
+    end
+
+    def set_actor
+      self.actor = current_user
     end
 
     class << self
@@ -78,27 +87,6 @@ module Events
       def include_shared_search_fields(target_name)
         klass = ModelMap.class_from_type(target_name.to_s)
         define_shared_search_fields(klass.shared_search_fields, target_name)
-      end
-
-      def event_class_for_model(model, workspace_id)
-        case model
-          when GpdbDataSource
-            Events::NoteOnGreenplumInstance
-          when GnipInstance
-            Events::NoteOnGnipInstance
-          when HadoopInstance
-            Events::NoteOnHadoopInstance
-          when Workspace
-            Events::NoteOnWorkspace
-          when Workfile
-            Events::NoteOnWorkfile
-          when HdfsEntry
-            Events::NoteOnHdfsFile
-          when Dataset
-            workspace_id ? Events::NoteOnWorkspaceDataset : Events::NoteOnDataset
-          else
-            raise StandardError, "Unknown model type #{model.class.name}"
-        end
       end
     end
   end

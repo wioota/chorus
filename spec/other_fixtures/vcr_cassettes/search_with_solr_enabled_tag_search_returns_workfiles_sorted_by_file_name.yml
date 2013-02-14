@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000008</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000003</field><field name="grouping_id_s">ChorusWorkfile 1000008</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">public</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field><field boost="1000" name="version_comments_texts"/></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
     headers:
       content-type:
       - text/xml
@@ -22,15 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 20:23:21 GMT
+  recorded_at: Mon, 11 Feb 2013 19:51:12 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000000</field><field name="tag_ids_im">1000002</field><field name="tag_ids_im">1000003</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">tagged</field><field boost="1000000" name="file_name_texts">tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000008</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000008</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">public</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field><field boost="1000" name="version_comments_texts"/></doc></add>
     headers:
       content-type:
       - text/xml
@@ -47,9 +47,34 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 20:23:21 GMT
+  recorded_at: Mon, 11 Feb 2013 22:28:20 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">tagged</field><field boost="1000000" name="file_name_texts">tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version: '1.1'
+  recorded_at: Mon, 11 Feb 2013 22:28:20 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -74,13 +99,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 20:23:21 GMT
+  recorded_at: Mon, 11 Feb 2013 22:28:20 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000000</field><field name="tag_ids_im">1000002</field><field name="tag_ids_im">1000003</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">aaa_tagged</field><field boost="1000000" name="file_name_texts">aaa_tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">aaa_tagged</field><field boost="1000000" name="file_name_texts">aaa_tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
     headers:
       content-type:
       - text/xml
@@ -97,9 +122,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 20:23:21 GMT
+  recorded_at: Mon, 11 Feb 2013 22:28:20 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -122,9 +147,134 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 20:23:21 GMT
+  recorded_at: Mon, 11 Feb 2013 22:28:20 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000008</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000008</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">public</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field><field boost="1000" name="version_comments_texts"/></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 00:43:52 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">tagged</field><field boost="1000000" name="file_name_texts">tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 00:43:52 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 00:43:52 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">aaa_tagged</field><field boost="1000000" name="file_name_texts">aaa_tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 00:43:52 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 00:43:52 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -147,9 +297,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -172,9 +322,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -197,9 +347,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -222,9 +372,51 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000003&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
+        asc'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
+        OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
+        OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''tag_ids_im:1000003'',''type_name_s:(User
+        OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
+        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
+        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
+        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
+        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''ChorusWorkfile
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
+        1000008'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>['''']}]}},{''groupValue''=>''ChorusWorkfile
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
+        1000011'',''file_name_texts''=>[''tagged''],''description_texts''=>[''A nice
+        description''],''version_comments_texts''=>['''']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+    http_version: '1.1'
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -247,201 +439,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:05:30 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Tag 1000009</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">tagSort</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:50 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000008</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000009</field><field name="grouping_id_s">ChorusWorkfile 1000008</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">public</field><field boost="1000000" name="file_name_texts">Public</field><field boost="1000" name="description_texts">searchquery</field><field boost="1000" name="version_comments_texts"/></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:50 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000009</field><field name="tag_ids_im">1000000</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">tagged</field><field boost="1000000" name="file_name_texts">tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:50 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:50 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/select?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000009&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
-    headers:
-      content-type:
-      - application/x-www-form-urlencoded; charset=UTF-8
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
-        asc'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
-        OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
-        OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''tag_ids_im:1000009'',''type_name_s:(User
-        OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000003 OR 1000012))'',''-(security_type_name_sm:ChorusView
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''ChorusWorkfile
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
-        1000008'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>['''']}]}},{''groupValue''=>''ChorusWorkfile
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
-        1000011'',''file_name_texts''=>[''tagged''],''description_texts''=>[''A nice
-        description''],''version_comments_texts''=>['''']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2]},''facet_dates''=>{},''facet_ranges''=>{}}}'
-    http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:50 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">ChorusWorkfile 1000011</field><field name="type">ChorusWorkfile</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">ChorusWorkfile</field><field name="workspace_id_im">1000008</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">true</field><field name="tag_ids_im">1000009</field><field name="tag_ids_im">1000000</field><field name="tag_ids_im">1000002</field><field name="grouping_id_s">ChorusWorkfile 1000011</field><field name="type_name_s">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="security_type_name_sm">Workfile</field><field name="sort_name_s">aaa_tagged</field><field boost="1000000" name="file_name_texts">aaa_tagged</field><field boost="1000" name="description_texts">A nice description</field><field boost="1000" name="version_comments_texts"/></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:51 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -464,15 +464,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>14}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:51 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000009&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000003&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -492,7 +492,7 @@ http_interactions:
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
         asc'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
         OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
-        OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''tag_ids_im:1000009'',''type_name_s:(User
+        OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''tag_ids_im:1000003'',''type_name_s:(User
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
@@ -508,5 +508,5 @@ http_interactions:
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
         1000008'',''file_name_texts''=>[''Public''],''description_texts''=>[''searchquery''],''version_comments_texts''=>['''']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:40:51 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:41 GMT
 recorded_with: VCR 2.3.0

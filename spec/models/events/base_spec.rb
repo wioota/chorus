@@ -185,7 +185,7 @@ describe Events::Base do
     describe "workspace" do
       it "still has access to the workspace" do
         workspace = Workspace.last
-        event = Events::Base.create!(:workspace => workspace)
+        event = Events::Base.create!({:workspace => workspace}, :as => :create)
         workspace.destroy
         event.reload.workspace.should == workspace
       end
@@ -194,7 +194,7 @@ describe Events::Base do
     describe "actor" do
       it "still has access to the actor" do
         actor = users(:not_a_member)
-        event = Events::Base.create!(:actor => actor)
+        event = Events::Base.create!({:actor => actor}, :as => :create)
         actor.destroy
         event.reload.actor.should == actor
       end

@@ -23,10 +23,12 @@ describe Events::NoteAccess do
 
     context "when the note is on a workspace and the current user is the workspace owner" do
       let!(:note) do
-        Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
-            :workspace => workspaces(:public),
-            :body => "hi"
-        )
+        with_current_user(users(:no_collaborators)) do
+          Events::NoteOnWorkspace.create!({
+              :note_target => workspaces(:public),
+              :body => "hi"
+          }, :as => :create)
+        end
       end
 
       it "returns true" do
@@ -37,10 +39,12 @@ describe Events::NoteAccess do
 
     context "when the note is on a model not visible to the user" do
       let!(:note) do
-        Events::NoteOnWorkspace.by(users(:owner)).create(
-            :workspace => workspaces(:private),
-            :body => "You can't see me"
-        )
+        with_current_user(users(:owner)) do
+          Events::NoteOnWorkspace.create!({
+              :note_target => workspaces(:private),
+              :body => "You can't see me"
+          }, :as => :create)
+        end
       end
 
       it "fails" do
@@ -71,10 +75,12 @@ describe Events::NoteAccess do
 
     context "when the note is on a workspace and the current user is the workspace owner" do
       let(:note) do
-        Events::NoteOnWorkspace.by(users(:no_collaborators)).create(
-            :workspace => workspaces(:public),
-            :body => "hi"
-        )
+        with_current_user(users(:no_collaborators)) do
+          Events::NoteOnWorkspace.create!({
+              :note_target => workspaces(:public),
+              :body => "hi"
+          }, :as => :create)
+        end
       end
 
       it "returns true" do

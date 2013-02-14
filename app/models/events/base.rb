@@ -24,7 +24,7 @@ module Events
     serialize :additional_data, JsonHashSerializer
 
     class_attribute :entities_that_get_activities, :target_names, :object_translations
-    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data, :insight, :promotion_time, :promoted_by
+    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data, :as => :create
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
     has_many :notifications, :foreign_key => :event_id, :dependent => :destroy
@@ -60,7 +60,7 @@ module Events
     end
 
     def self.add(params)
-      create!(params).tap { |event| event.create_activities }
+      create!(params, :as => :create).tap { |event| event.create_activities }
     end
 
     def self.presenter_class
@@ -127,7 +127,7 @@ module Events
     def self.has_targets(*target_names)
       options = target_names.extract_options!
       self.target_names = target_names
-      self.attr_accessible(*target_names)
+      self.attr_accessible(*target_names, :as => [:create])
 
       target_names.each_with_index do |name, i|
         alias_getter_and_setter("target#{i+1}", name, options)

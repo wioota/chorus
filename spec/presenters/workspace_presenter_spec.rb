@@ -102,7 +102,7 @@ describe WorkspacePresenter, :type => :view do
         let(:event) do
           evt = nil
           Timecop.freeze(8.days.ago) do
-            evt = Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body', :actor => user)
+            evt = Events::NoteOnWorkspace.create!({:note_target => workspace, :body => 'event body'}, :as => :create)
           end
           evt
         end
@@ -112,11 +112,11 @@ describe WorkspacePresenter, :type => :view do
             @comment = Comment.create!(:body => 'comment body of event', :author_id => user.id, :event_id => event.id)
           end
           Timecop.freeze(1.minute.ago) do
-            insight = Events::NoteOnWorkspace.create(:workspace => workspace, :body => 'insight body', :actor => user, :insight => true)
+            insight = Events::NoteOnWorkspace.create!({:note_target => workspace, :body => 'insight body', :insight => true}, :as => :create)
             Comment.create!(:body => 'comment body of insight', :author_id => user.id, :event_id => insight.id)
             Comment.create!(:body => 'comment body of insight 2', :author_id => user.id, :event_id => insight.id)
-            @event_to_be_promoted = Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -1', :actor => user)
-            Events::NoteOnWorkspace.create!(:workspace => workspace, :body => 'event body -2', :actor => user)
+            @event_to_be_promoted = Events::NoteOnWorkspace.create!({:note_target => workspace, :body => 'event body -1'}, :as => :create)
+            Events::NoteOnWorkspace.create!({:note_target => workspace, :body => 'event body -2'}, :as => :create)
           end
           @event_to_be_promoted.insight = true
           @event_to_be_promoted.save!

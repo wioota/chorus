@@ -9,9 +9,9 @@ describe Events::Note do
   let(:gpdb_data_source) { data_sources(:default) }
   let(:hadoop_instance) { hadoop_instances(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
-  let(:workspace) { workspaces(:private_with_no_collaborators) }
-  let(:workfile) { workfiles(:public)}
-  let(:tableau_workfile) { workfiles(:tableau)}
+  let(:workspace) { workspaces(:public) }
+  let(:workfile) { workfiles(:public) }
+  let(:tableau_workfile) { workfiles(:tableau) }
   let(:dataset) { datasets(:table) }
   let(:hdfs_entry) do
     hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
@@ -41,11 +41,11 @@ describe Events::Note do
 
   describe "NoteOnGreenplumInstance" do
     subject do
-      Events::NoteOnGreenplumInstance.add(
+      Events::NoteOnGreenplumInstance.create!({
           :actor => actor,
           :gpdb_data_source => gpdb_data_source,
           :body => "This is the body"
-      )
+      }, :as => :create)
     end
 
     its(:gpdb_data_source) { should == gpdb_data_source }
@@ -58,11 +58,11 @@ describe Events::Note do
 
   describe "NoteOnHadoopInstance" do
     subject do
-      Events::NoteOnHadoopInstance.add(
+      Events::NoteOnHadoopInstance.create!({
           :actor => actor,
           :hadoop_instance => hadoop_instance,
           :body => "This is the body"
-      )
+      }, :as => :create)
     end
 
     it "sets the instance set correctly" do
@@ -83,11 +83,11 @@ describe Events::Note do
 
   describe "NoteOnHdfsFile" do
     subject do
-      Events::NoteOnHdfsFile.add(
+      Events::NoteOnHdfsFile.create!({
           :actor => actor,
           :hdfs_file => hdfs_entry,
           :body => "This is the text of the note"
-      )
+      }, :as => :create)
     end
 
     its(:hdfs_file) { should == hdfs_entry }
@@ -100,11 +100,11 @@ describe Events::Note do
 
   describe "NoteOnWorkspace" do
     subject do
-      Events::NoteOnWorkspace.add(
-        :actor => actor,
-        :workspace => workspace,
-        :body => "This is the text of the note on the workspace"
-      )
+      Events::NoteOnWorkspace.new({
+          :actor => actor,
+          :workspace => workspace,
+          :body => "This is the text of the note on the workspace"
+      }, :as => :create)
     end
 
     its(:workspace) { should == workspace }
@@ -122,7 +122,7 @@ describe Events::Note do
     end
 
     it "is valid if the workspace later becomes archived" do
-      subject
+      subject.save!
       workspace.archived = 'true'
       workspace.archiver = actor
       workspace.save!
@@ -132,22 +132,27 @@ describe Events::Note do
   end
 
   describe "NoteOnWorkfile" do
+    let(:workspace) { nil }
     subject do
-      Events::NoteOnWorkfile.add(
-        :actor => actor,
-        :workfile => workfile,
-        :workspace => workspace,
-        :body => "This is the text’s of the note on the workfile"
-      )
+      Events::NoteOnWorkfile.create!({
+          :actor => actor,
+          :workfile => workfile,
+          :workspace => workspace,
+          :body => "This is the text’s of the note on the workfile"
+      }, :as => :create)
     end
 
     its(:workfile) { should == workfile }
     its(:targets) { should == {:workfile => workfile} }
     its(:additional_data) { should == {'body' => "This is the text’s of the note on the workfile"} }
 
-    it_creates_activities_for { [actor, workfile, workspace] }
+    it_creates_activities_for { [actor, workfile, workfile.workspace] }
     it_does_not_create_a_global_activity
-    it_behaves_like 'event associated with a workspace'
+
+    it "has an event on the workspace" do
+      subject
+      workfile.workspace.events.should include(subject)
+    end
 
     it "can access associated workfiles when they are deleted" do
       subject
@@ -155,20 +160,28 @@ describe Events::Note do
       subject.reload.workfile.should == workfile
       subject.workfile.should be_deleted
     end
+
+    describe "when a different workspace is passed" do
+      let(:workspace) { workspaces(:private) }
+
+      it "sets the workspace to the workspace of the workfile" do
+        subject.workspace.should == workfile.workspace
+      end
+    end
   end
 
   describe "NoteOnDataset" do
     subject do
-      Events::NoteOnDataset.add(
-        :actor => actor,
-        :dataset => dataset,
-        :body => "<3 <3 <3"
-      )
+      Events::NoteOnDataset.create!({
+          :actor => actor,
+          :dataset => dataset,
+          :body => "<3 <3 <3"
+      }, :as => :create)
     end
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:dataset => dataset} }
-    its(:additional_data) { should == { 'body' => "<3 <3 <3" } }
+    its(:additional_data) { should == {'body' => "<3 <3 <3"} }
 
     it_creates_activities_for { [actor, dataset] }
     it_creates_a_global_activity
@@ -176,17 +189,31 @@ describe Events::Note do
 
   describe "NoteOnWorkspaceDataset" do
     subject do
-      Events::NoteOnWorkspaceDataset.add(
-        :actor => actor,
-        :dataset => dataset,
-        :workspace => workspace,
-        :body => "<3 <3 <3"
-      )
+      Events::NoteOnWorkspaceDataset.create({
+          :actor => actor,
+          :dataset => dataset,
+          :workspace => workspace,
+          :body => "<3 <3 <3"
+      }, :as => :create)
     end
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:dataset => dataset, :workspace => workspace} }
-    its(:additional_data) { should == { 'body' => "<3 <3 <3" } }
+    its(:additional_data) { should == {'body' => "<3 <3 <3"} }
+
+    context "when workspace is private" do
+      let(:workspace) { workspaces(:private_with_no_collaborators) }
+
+      it "is not valid if the actor is not a member of a private workspace" do
+        subject.should_not be_valid
+        subject.should have_error_on(:workspace).with_message(:not_a_member)
+      end
+    end
+
+    it "is valid if the workspace is public" do
+      workspace.should be_public
+      subject.should be_valid
+    end
 
     it_creates_activities_for { [actor, dataset, workspace] }
     it_does_not_create_a_global_activity
@@ -194,11 +221,11 @@ describe Events::Note do
 
   describe "NoteOnGnipInstance" do
     subject do
-      Events::NoteOnGnipInstance.add(
+      Events::NoteOnGnipInstance.create!({
           :actor => actor,
           :gnip_instance => gnip_instance,
           :body => "This is the body"
-      )
+      }, :as => :create)
     end
 
     its(:gnip_instance) { should == gnip_instance }
@@ -221,7 +248,7 @@ describe Events::Note do
       let(:subclass1) do
         Class.new(Events::Note) { has_targets :workspace, :workfile }
       end
-      let(:note) { subclass1.new(:workspace => workspace, :workfile => workfile) }
+      let(:note) { subclass1.new({:workspace => workspace, :workfile => workfile}, :as => :create) }
 
       it "delegates grouping, type, and security fields to its first 'target'" do
         note.grouping_id.should == workspace.grouping_id
@@ -236,25 +263,28 @@ describe Events::Note do
   describe "#promote_to_insight" do
     let(:actor) { users(:owner) }
     let(:event) {
-      Events::NoteOnGreenplumInstance.add(
+      Events::NoteOnGreenplumInstance.create!({
           :actor => actor,
           :gpdb_data_source => gpdb_data_source,
           :body => "This is the body"
-      )
+      }, :as => :create)
     }
+    subject { event.promote_to_insight }
+    before do
+      set_current_user(actor)
+    end
 
-    subject { event.promote_to_insight(actor) }
     it { should be_true }
 
     it "saves the note" do
       expect {
-        event.promote_to_insight(actor)
+        event.promote_to_insight
       }.to change(event, :updated_at)
     end
 
     describe "it saves a note after promoting it to an insight" do
       subject do
-        event.promote_to_insight(actor)
+        event.promote_to_insight
         event.reload
       end
 
@@ -264,153 +294,186 @@ describe Events::Note do
     end
   end
 
-  describe "#create_on_model(model, body, creator)" do
+  describe "#build_for(model, params)" do
     let(:user) { users(:owner) }
+    before do
+      set_current_user(user)
+    end
 
     context "workspace is archived" do
-      it "does not create a note" do
-        workspace.archived_at = Time.current
-        workspace.archiver = user
-        workspace.save!
-        expect {
-          Events::Note.create_on_model(workfile, {
-              :body => "More crazy content",
-              :workspace_id => workspace.id
-          }, user)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+      it "builds a note with errors" do
+        workfile.workspace.archived_at = Time.current
+        workfile.workspace.archiver = user
+        workfile.workspace.save!
+        note = Events::Note.build_for(workfile, {
+            :body => "More crazy content",
+            :workspace_id => workspace.id,
+            :entity_type => "workfile"
+        })
+        note.should_not be_valid
+        note.should have_error_on(:workspace).with_message(:archived)
       end
     end
 
-    it "creates a note on a greenplum instance" do
+    it "builds a note on a greenplum instance" do
       gpdb_data_source = data_sources(:default)
-      expect {
-        Events::Note.create_on_model(gpdb_data_source, {
+      note = Events::Note.build_for(gpdb_data_source, {
           :body => "Some crazy content",
-        }, user)
-      }.to change(Events::Note, :count).by(1)
+          :entity_type => "data_source"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnGreenplumInstance"
-      last_note.gpdb_data_source.should == gpdb_data_source
-      last_note.body.should == "Some crazy content"
-      last_note.actor.should == user
+      note.save!
+      note.should be_a(Events::NoteOnGreenplumInstance)
+      note.gpdb_data_source.should == gpdb_data_source
+      note.body.should == "Some crazy content"
+      note.actor.should == user
     end
 
-    it "creates a note on a hadoop instance" do
+    it "builds a note on a hadoop instance" do
       hadoop_instance = hadoop_instances(:hadoop)
-      Events::Note.create_on_model(hadoop_instance, {
-          :body => "Some crazy content"
-      }, user)
+      note = Events::Note.build_for(hadoop_instance, {
+          :body => "Some crazy content",
+          :entity_type => "hadoop_instance"
+      })
 
-      last_note = Events::Note.last
-      last_note.hadoop_instance.should == hadoop_instance
-      last_note.action.should == "NoteOnHadoopInstance"
-      last_note.body.should == "Some crazy content"
-      last_note.actor.should == user
+      note.save!
+      note.hadoop_instance.should == hadoop_instance
+      note.should be_a(Events::NoteOnHadoopInstance)
+      note.body.should == "Some crazy content"
+      note.actor.should == user
     end
 
-    it "creates a note on an hdfs file" do
-      Events::Note.create_on_model(hdfs_entry, {
-        :body => "Some crazy content"
-      }, user)
+    it "builds a note on an hdfs file" do
+      note = Events::Note.build_for(hdfs_entry, {
+          :body => "Some crazy content",
+          :entity_type => "hdfs_file"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnHdfsFile"
-      last_note.actor.should == user
-      last_note.hdfs_file.hadoop_instance.should == hadoop_instance
-      last_note.hdfs_file.path.should == "/data/test.csv"
-      last_note.body.should == "Some crazy content"
+      note.save!
+      note.should be_a(Events::NoteOnHdfsFile)
+      note.actor.should == user
+      note.hdfs_file.hadoop_instance.should == hadoop_instance
+      note.hdfs_file.path.should == "/data/test.csv"
+      note.body.should == "Some crazy content"
     end
 
-    it "creates a note on a Gnip Instance" do
-      Events::Note.create_on_model(gnip_instance, {
-          :body => "Some crazy content"
-      }, user)
+    it "builds a note on a Gnip Instance" do
+      note = Events::Note.build_for(gnip_instance, {
+          :body => "Some crazy content",
+          :entity_type => "gnip_instance"
+      })
 
-      last_note = Events::Note.last
-      last_note.gnip_instance.should == gnip_instance
-      last_note.action.should == "NoteOnGnipInstance"
-      last_note.body.should == "Some crazy content"
-      last_note.actor.should == user
+      note.save!
+      note.gnip_instance.should == gnip_instance
+      note.should be_a(Events::NoteOnGnipInstance)
+      note.body.should == "Some crazy content"
+      note.actor.should == user
     end
 
-    it "creates a note on a workfile" do
-      Events::Note.create_on_model(workfile, {
-        :body => "Workfile content",
-        :workspace_id => workspace.id
-      }, user)
+    it "builds a note on a workfile" do
+      note = Events::Note.build_for(workfile, {
+          :body => "Workfile content",
+          :entity_type => "workfile"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnWorkfile"
-      last_note.actor.should == user
-      last_note.workfile.should == workfile
-      last_note.workspace.should == workspace
-      last_note.body.should == "Workfile content"
+      note.save!
+      note.should be_a(Events::NoteOnWorkfile)
+      note.actor.should == user
+      note.workfile.should == workfile
+      note.workspace.should == workfile.workspace
+      note.body.should == "Workfile content"
     end
 
-    it "creates a note on a tableau workfile" do
-      Events::Note.create_on_model(tableau_workfile, {
-        :body => "Workfile content",
-        :workspace_id => workspace.id
-      }, user)
+    it "builds a note on a tableau workfile" do
+      note = Events::Note.build_for(tableau_workfile, {
+          :body => "Workfile content",
+          :entity_type => "workfile"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnWorkfile"
-      last_note.actor.should == user
-      last_note.workfile.should == tableau_workfile
-      last_note.workspace.should == workspace
-      last_note.body.should == "Workfile content"
+      note.save!
+      note.should be_a(Events::NoteOnWorkfile)
+      note.actor.should == user
+      note.workfile.should == tableau_workfile
+      note.workspace.should == tableau_workfile.workspace
+      note.body.should == "Workfile content"
     end
 
-    it "creates a note on a dataset" do
-      Events::Note.create_on_model(dataset, {
-        :body => "Crazy dataset content",
-      }, user)
+    it "builds a note on a dataset" do
+      note = Events::Note.build_for(dataset, {
+          :body => "Crazy dataset content",
+          :entity_type => "dataset"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnDataset"
-      last_note.actor.should == user
-      last_note.dataset.should == dataset
-      last_note.body.should == "Crazy dataset content"
+      note.save!
+      note.should be_a(Events::NoteOnDataset)
+      note.actor.should == user
+      note.dataset.should == dataset
+      note.body.should == "Crazy dataset content"
     end
 
-    it "creates a note on a dataset in a workspace" do
-      Events::Note.create_on_model(dataset, {
-        :body => "Crazy workspace dataset content",
-        :workspace_id => workspace.id
-      }, user)
+    it "builds a note on a dataset in a workspace" do
+      note = Events::Note.build_for(dataset, {
+          :body => "Crazy workspace dataset content",
+          :workspace_id => workspace.id,
+          :entity_type => "dataset"
+      })
 
-      last_note = Events::Note.last
-      last_note.action.should == "NoteOnWorkspaceDataset"
-      last_note.actor.should == user
-      last_note.dataset == dataset
-      last_note.workspace == workspace
-      last_note.body.should == "Crazy workspace dataset content"
+      note.save!
+      note.should be_a(Events::NoteOnWorkspaceDataset)
+      note.actor.should == user
+      note.dataset == dataset
+      note.workspace == workspace
+      note.body.should == "Crazy workspace dataset content"
     end
 
     it "doesn't always create insights" do
-      Events::Note.create_on_model(dataset, {
-        :body => "Crazy workspace dataset content",
-        :workspace_id => workspace.id
-      }, user)
+      note = Events::Note.build_for(dataset, {
+          :body => "Crazy workspace dataset content",
+          :workspace_id => workspace.id,
+          :entity_type => "dataset"
+      })
 
-      last_note = Events::Note.last
-      last_note.insight.should_not == true
-      last_note.promoted_by.should == nil
-      last_note.promotion_time.should == nil
+      note.save!
+      note.insight.should_not == true
+      note.promoted_by.should == nil
+      note.promotion_time.should == nil
     end
 
-    it "creates an insight" do
-      Events::Note.create_on_model(dataset, {
-        :body => "Crazy workspace dataset content",
-        :workspace_id => workspace.id,
-        :is_insight => true,
-      }, user)
+    it "builds an insight" do
+      note = Events::Note.build_for(dataset, {
+          :body => "Crazy workspace dataset content",
+          :workspace_id => workspace.id,
+          :is_insight => true,
+          :entity_type => "dataset"
+      })
 
-      last_note = Events::Note.last
-      last_note.insight.should == true
-      last_note.promoted_by.should == user
-      last_note.promotion_time.should_not == nil
+      note.save!
+      note.insight.should == true
+      note.promoted_by.should == user
+      note.promotion_time.should_not == nil
+    end
+
+    it "uses the target workspace over the workspace_id" do
+      note = Events::Note.build_for(workfile, {
+          :body => "Workfile content",
+          :workspace_id => workspaces(:empty_workspace).id,
+          :entity_type => "workfile"
+      })
+
+      note.save!
+      note.workfile.should == workfile
+      note.workspace.should == workfile.workspace
+
+
+      note = Events::Note.build_for(workfile, {
+          :body => "Workfile content",
+          :workspace_id => workspaces(:empty_workspace).id,
+          :entity_type => "workfile"
+      })
+
+      note.save!
+      note.workfile.should == workfile
+      note.workspace.should == workfile.workspace
     end
   end
 end

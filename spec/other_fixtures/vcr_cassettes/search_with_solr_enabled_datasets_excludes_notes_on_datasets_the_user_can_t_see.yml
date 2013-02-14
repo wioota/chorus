@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -44,13 +44,13 @@ http_interactions:
         1000005'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4652001,''docs''=>[{''id''=>''Events::NoteOnWorkfile
         1000024'',''body_texts''=>[''notesearch never''],''score''=>1.4652001}]}},{''groupValue''=>''Workspace
         1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4652001,''docs''=>[{''id''=>''Events::NoteOnWorkspace
-        1000051'',''body_texts''=>[''notesearch forever''],''score''=>1.4652001}]}},{''groupValue''=>''Workspace
+        1000050'',''body_texts''=>[''notesearch forever''],''score''=>1.4652001}]}},{''groupValue''=>''Workspace
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.4652001,''docs''=>[{''id''=>''Events::NoteOnWorkspace
         1000052'',''body_texts''=>[''notesearch never''],''score''=>1.4652001}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2,''Workspace'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkfile
         1000023''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkfile
         1000024''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']},''Events::NoteOnWorkspace
-        1000051''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkspace
+        1000050''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NoteOnWorkspace
         1000052''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']}}}'
     http_version: '1.1'
-  recorded_at: Tue, 12 Feb 2013 21:39:49 GMT
+  recorded_at: Thu, 14 Feb 2013 02:01:02 GMT
 recorded_with: VCR 2.3.0

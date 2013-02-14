@@ -227,6 +227,10 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def visible_to?(user)
+    public? || member?(user)
+  end
+
   private
 
   def destroy_datasets_and_associations

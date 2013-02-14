@@ -6,7 +6,7 @@ class InsightsController < ApplicationController
   def create
     note_id = params[:insight][:note_id] || params[:note][:note_id]
     note = Events::Note.visible_to(current_user).find(note_id)
-    note.promote_to_insight current_user
+    note.promote_to_insight
     present note, :status => :created
   end
 

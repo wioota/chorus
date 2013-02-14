@@ -278,6 +278,9 @@ describe EventsController do
       generate_fixture "activity/#{filename}.json" do
         event = event_relation.last
         Activity.global.create!(:event => event)
+        if event.to_param == nil
+          "HI!"
+        end
         get :show, :id => event.to_param
       end
     end
