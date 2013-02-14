@@ -1,9 +1,10 @@
 describe("chorus.views.WorkspaceList", function() {
     beforeEach(function() {
-        this.activeWorkspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace"});
+        this.activeWorkspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace", tags:[{name: "tag"}]});
+
         this.archivedWorkspace = new chorus.models.Workspace({
             id: 2,
-            archivedAt: "2011-12-05T13:25:25Z",
+            archivedAt: Date.formatForApi((2).hours().ago()),
             name: "my archived workspace",
             archiver: { firstName: "John", lastName :"Henry"},
             summary: " this is an archived workspace"
@@ -29,20 +30,22 @@ describe("chorus.views.WorkspaceList", function() {
                 "this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace"
         });
 
-        this.collection = new chorus.collections.WorkspaceSet([
-            this.activeWorkspace,
-            this.archivedWorkspace,
-            this.privateWorkspace,
-            this.publicWorkspace,
-            this.archivedBigSummaryWorkspace
-        ]);
+        this.collection = new chorus.collections.WorkspaceSet();
 
         this.view = new chorus.views.WorkspaceList({collection: this.collection});
     });
 
-    describe("#render", function() {
+    describe("when the workspaces have loaded", function() {
         beforeEach(function() {
-            this.view.render();
+            this.collection.fetchAll();
+            this.server.completeFetchAllFor(this.collection, [
+                this.activeWorkspace.attributes,
+                this.archivedWorkspace.attributes,
+                this.privateWorkspace.attributes,
+                this.publicWorkspace.attributes,
+                this.archivedBigSummaryWorkspace.attributes
+            ]);
+
             this.activeEl = this.view.$("li[data-id=1]");
             this.archivedEl = this.view.$("li[data-id=2]");
             this.privateEl = this.view.$("li[data-id=3]");
@@ -90,6 +93,10 @@ describe("chorus.views.WorkspaceList", function() {
             expect(this.view.$(".truncated_text").length).toBe(5);
         });
 
+        it("shows the workspace's tags", function() {
+           expect(this.activeEl.find(".item_tag_list")).toContainText("tag");
+        });
+
         describe("archived workspace", function() {
             it("displays the active workspace icon for the active workspace", function() {
                 expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());
@@ -108,9 +115,6 @@ describe("chorus.views.WorkspaceList", function() {
             });
 
             it("displays archived relative time", function() {
-                var dateFormat = Date.formatForApi((2).hours().ago());
-                this.archivedWorkspace.set({"archivedAt": dateFormat});
-                this.view.render();
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });
         });

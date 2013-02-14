@@ -32,6 +32,7 @@ describe("chorus.views.SearchWorkspace", function() {
             name: "<em>ws</em>",
             summary: "<em>ws</em> <i>other text</i>"
         });
+        this.model.set("tags", [{ name: 'tag' }]);
         this.view = new chorus.views.SearchWorkspace({ model: this.model });
         this.view.render();
     });
@@ -54,6 +55,10 @@ describe("chorus.views.SearchWorkspace", function() {
 
     it("shows comments", function() {
         expect(this.view.$(".comments .comment").length).toBe(1);
+    });
+
+    it("shows tags", function() {
+       expect(this.view.$('.item_tag_list')).toContainText('tag');
     });
 
     context("the description does not contain the search string", function() {

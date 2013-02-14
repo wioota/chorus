@@ -11,7 +11,8 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
             archiverUrl: model.archiver().showUrl(),
             archiverFullName: model.archiver().displayName(),
             ownerFullName: model.owner().displayName(),
-            active: model.isActive()
+            active: model.isActive(),
+            tags: model.tags().models
         };
     },
 
