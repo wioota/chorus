@@ -6,7 +6,7 @@ module Events
     include SearchableHtml
 
     @@entity_subtypes = {
-        'data_source' => 'Events::NoteOnGreenplumInstance'
+        'gpdb_data_source' => 'Events::NoteOnGreenplumInstance'
     }
 
     validates_presence_of :actor_id
