@@ -68,15 +68,15 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.tables
-    where("type LIKE '%Table'")
+    where("datasets.type LIKE '%Table'")
   end
 
   def self.views
-    views_tables.where("type LIKE '%View'")
+    views_tables.where("datasets.type LIKE '%View'")
   end
 
   def self.views_tables
-    where("type <> 'ChorusView'")
+    where("datasets.type <> 'ChorusView'")
   end
 
   def self.chorus_views

@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Dataset", :database_integration do
   let(:the_data_source) { GreenplumIntegration.real_data_source }
-  let(:dataset) { the_data_source.datasets.first }
+  let(:dataset) { the_data_source.datasets.views_tables.first }
   let(:owner) { users(:admin) }
   let(:workspace) { owner.workspaces.first }
 
