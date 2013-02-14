@@ -32,7 +32,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             spyOn(this.collection.models[0], 'toText').andReturn('object1');
             spyOn(this.collection.models[1], 'toText').andReturn('object2');
             var subclass = chorus.views.DatabaseSidebarList.extend({
-                templateName: "database_dataset_sidebar_list"
+                templateName: "data_tab"
             });
 
             this.view = new subclass({collection: this.collection, schema: this.schema });
@@ -142,7 +142,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             this.collection = new chorus.collections.Base([]);
 
             var subclass = chorus.views.DatabaseSidebarList.extend({
-                templateName: "database_dataset_sidebar_list"
+                templateName: "data_tab"
             });
 
             this.view = new subclass({collection: this.collection, schema: this.schema });

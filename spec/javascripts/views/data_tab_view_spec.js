@@ -1,10 +1,10 @@
-describe("chorus.views.DatabaseDatasetSidebarList", function () {
+describe("chorus.views.DataTab", function () {
     beforeEach(function () {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
 
         chorus.page = { workspace:rspecFixtures.workspace({name:"new_workspace"}) };
         this.schema = chorus.page.workspace.sandbox().schema();
-        this.view = new chorus.views.DatabaseDatasetSidebarList({schema:this.schema});
+        this.view = new chorus.views.DataTab({schema:this.schema});
 
         stubDefer();
         this.modalSpy = stubModals();
@@ -160,7 +160,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function () {
 
     context("when there's no schema associated", function () {
         beforeEach(function () {
-            this.view = new chorus.views.DatabaseDatasetSidebarList({schema:null});
+            this.view = new chorus.views.DataTab({schema:null});
             this.view.render();
         });
 

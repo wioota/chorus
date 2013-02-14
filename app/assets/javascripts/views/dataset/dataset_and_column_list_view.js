@@ -8,7 +8,7 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.model });
+        this.datasetList = new chorus.views.DataTab({ schema: this.model });
         this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.model });
 
         this.subscribePageEvent("datasetSelected", function(tableOrView) {

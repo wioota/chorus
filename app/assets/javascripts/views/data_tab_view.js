@@ -1,6 +1,6 @@
-chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.extend({
-    constructorName: "DatabaseDatasetSidebarListView",
-    templateName:"database_dataset_sidebar_list",
+chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
+    constructorName: "DataTabView",
+    templateName:"data_tab",
     useLoadingSection:true,
 
     subviews: {
