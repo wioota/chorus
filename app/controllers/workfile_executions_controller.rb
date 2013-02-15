@@ -4,21 +4,21 @@ class WorkfileExecutionsController < ApplicationController
   require_params :id, :only => :destroy, :field_name => :check_id
 
   def create
-    account = @schema.account_for_user! current_user
-    result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
-
-    @workfile.execution_schema = @schema
-    @workfile.save!
-    if params[:download] && !result.canceled?
+    if params[:download]
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"
       response.headers["Cache-Control"] = 'no-cache'
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
-      self.response_body = CsvWriter.to_csv_as_stream(result.columns.map(&:name), result.rows)
+      self.response_body = SqlStreamer.new(@schema, params[:sql], current_user, row_limit).enum
     else
+      account = @schema.account_for_user! current_user
+      result = SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql], :limit => row_limit)
       present result
     end
+
+    @workfile.execution_schema = @schema
+    @workfile.save!
   end
 
   def destroy

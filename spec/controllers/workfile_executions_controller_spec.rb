@@ -83,11 +83,12 @@ describe WorkfileExecutionsController do
           result.add_row([7,8,9])
         }
       }
+      let(:user) { users(:owner) }
       before do
-        log_in users(:owner)
+        log_in user
 
-        mock(SqlExecutor).execute_sql.with_any_args {
-          sql_result
+        mock.proxy(SqlStreamer).new(workspace.sandbox, sql, user, anything) { |streamer|
+          mock(streamer).enum { 'response' }
         }
       end
 
@@ -98,24 +99,9 @@ describe WorkfileExecutionsController do
         response.headers['Content-Type'].should == 'text/csv'
       end
 
-      it "returns a CSV file" do
+      it "returns the streamer response" do
         post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
-        response.body.should == "a,b,c\n1,2,3\n4,5,6\n7,8,9\n"
-      end
-
-      context "when the query is cancelled" do
-        let(:sql_result) do
-          SqlResult.new.tap do |result|
-            result.warnings << "Canceled"
-          end
-        end
-
-        it "should not present as an attachment" do
-          dont_allow(CsvWriter).to_csv_as_stream.with_any_args
-          post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
-          response.headers.should_not have_key('Content-Disposition')
-          response.headers['Content-Type'].should =~ /application\/json/
-        end
+        response.body.should == 'response'
       end
     end
 
