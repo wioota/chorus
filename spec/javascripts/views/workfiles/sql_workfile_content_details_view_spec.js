@@ -71,6 +71,13 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("should disable the 'Save' button", function() {
                     expect(this.view.$(".save button")).toBeDisabled();
                 });
+
+                it("should disable the 'change' button", function(){
+                    var modalSpy = stubModals();
+                    expect(this.view.$(".change_workfile_schema")).toHaveClass("disabled");
+                    this.view.$(".change_workfile_schema").click();
+                    expect(modalSpy).not.toHaveModal(chorus.dialogs.ChangeWorkfileSchema);
+                });
             });
 
             context("when user has read, commenting, update permissions ", function() {

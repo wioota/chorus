@@ -36,6 +36,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         if (!this.model.workspace().isActive() || !this.model.workspace().canUpdate()) {
             this.$(".run_file").attr("disabled", "disabled");
             this.$(".save button").attr("disabled", "disabled");
+            this.$(".change_workfile_schema").addClass("disabled");
         }
 
         if (!this.hasValidExecutionSchema()) {
@@ -122,9 +123,12 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     changeWorkfileSchema: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast("file:saveDraft");
-        this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
-        this.dialog.launchModal();
+
+        if (this.model.workspace().isActive() && this.model.workspace().canUpdate()) {
+            chorus.PageEvents.broadcast("file:saveDraft");
+            this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
+            this.dialog.launchModal();
+        }
     }
 });
 

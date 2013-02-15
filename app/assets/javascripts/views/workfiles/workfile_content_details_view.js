@@ -129,11 +129,11 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
         if (model.isSql()) {
             if (model.workspace().isActive()) {
-                if (model.workspace().canUpdate()) {
+//                if (model.workspace().canUpdate()) {
                     return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
-                } else {
-                    return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
-                }
+//                } else {
+//                    return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
+//                }
             } else {
                 return new chorus.views.ArchivedWorkfileContentDetails({ model:model });
             }
