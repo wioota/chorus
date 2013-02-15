@@ -41,7 +41,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
                     it("instantiates a ReadOnlyWorkfileContentDetails", function() {
                         var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
-                        expect(contentDetails).toBeA(chorus.views.ReadOnlyWorkfileContentDetails);
+                        expect(contentDetails).toBeA(chorus.views.SqlWorkfileContentDetails);
                     });
                 });
             });
