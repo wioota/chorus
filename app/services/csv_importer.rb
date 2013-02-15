@@ -76,7 +76,7 @@ class CsvImporter
     )
     i.workspace_id = csv_file.workspace_id
     i.user_id = csv_file.user_id
-    i.save!
+    i.save
     i
   end
 
