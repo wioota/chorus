@@ -24,8 +24,8 @@ describe SqlResultPresenter, :type => :view do
   describe "#to_hash" do
     it "presents the columns" do
       hash[:columns].should == [
-          DatasetColumnPresenter.new(DatasetColumn.new({:name => "size", :data_type => "real"}), view).presentation_hash,
-          DatasetColumnPresenter.new(DatasetColumn.new({:name => "is_cool", :data_type => "boolean"}), view).presentation_hash
+          GpdbDatasetColumnPresenter.new(GpdbDatasetColumn.new({:name => "size", :data_type => "real"}), view).presentation_hash,
+          GpdbDatasetColumnPresenter.new(GpdbDatasetColumn.new({:name => "is_cool", :data_type => "boolean"}), view).presentation_hash
       ]
     end
 
