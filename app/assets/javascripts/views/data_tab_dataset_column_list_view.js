@@ -1,6 +1,6 @@
-chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend({
-    constructorName: "DatabaseColumnSidebarListView",
-    templateName:"database_column_sidebar_list",
+chorus.views.DataTabDatasetColumnList = chorus.views.DatabaseSidebarList.extend({
+    constructorName: "DataTabDatasetColumnListView",
+    templateName:"data_tab_dataset_column_list",
     useLoadingSection:true,
 
     events:{

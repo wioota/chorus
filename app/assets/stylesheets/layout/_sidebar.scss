@@ -217,7 +217,7 @@ body .ui-draggable-dragging {
                 margin: 4px 0px 17px 20px;
             }
 
-            .database_function_sidebar_list, .data_tab, .database_column_sidebar_list {
+            .database_function_sidebar_list, .data_tab, .data_tab_dataset_column_list {
                 ul {
                     margin-top: 10px;
                 }
@@ -279,7 +279,7 @@ body .ui-draggable-dragging {
                 }
             }
 
-            .database_column_sidebar_list {
+            .data_tab_dataset_column_list {
                 .context {
                     line-height: 1.2;
                     .table, .schema {

@@ -1,8 +1,8 @@
-describe("chorus.views.DatabaseColumnSidebarList", function() {
+describe("chorus.views.DataTabDatasetColumnList", function() {
     describe("initialization", function() {
         context("when there is no sandbox", function() {
             beforeEach(function() {
-                this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: undefined });
+                this.view = new chorus.views.DataTabDatasetColumnList({ sandbox: undefined });
             });
 
             it("should not crash", function() {
@@ -13,7 +13,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: rspecFixtures.workspace().sandbox() });
+            this.view = new chorus.views.DataTabDatasetColumnList({ sandbox: rspecFixtures.workspace().sandbox() });
             this.view.render();
         });
 
