@@ -1,6 +1,4 @@
 class DatasetColumnPresenter < Presenter
-  include DbTypesToChorus
-
   def to_hash
     {
       :name => model.name,

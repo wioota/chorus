@@ -1,4 +1,4 @@
-module DbTypesToChorus
+module PostgresDbTypesToChorus
   MISCELLANEOUS_TYPES = [/\[\]/, "box", "cidr", "circle", "inet", "lseg", "macaddr", "money", "path", "point", "polygon"]
 
   def to_category(data_type)

@@ -1,6 +1,6 @@
 module Visualization
   class BoxplotPresenter < Presenter
-    include DbTypesToChorus
+    include PostgresDbTypesToChorus
     
     def to_hash
       {

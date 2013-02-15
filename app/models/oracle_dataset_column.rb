@@ -1,0 +1,2 @@
+class OracleDatasetColumn < DatasetColumn
+end

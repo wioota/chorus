@@ -59,5 +59,25 @@ describe ColumnController do
         save_fixture "databaseColumn.json", { :response => response.decoded_body["response"].first }
       end
     end
+
+    context "with real oracle data", :oracle_integration do
+      let(:user) { users(:owner) }
+      let(:account) { OracleIntegration.real_account }
+      #let(:user) { User.find_by_nameOracleIntegration.user }
+      let(:schema) { OracleIntegration.real_schema }
+      let(:data_source) { OracleIntegration.real_data_source }
+      let(:dataset) { schema.datasets.find_by_name("TWO_COLUMN_TABLE") }
+
+      before do
+        schema.refresh_datasets(data_source.owner_account)
+      end
+
+      it "presents oracle dataset columns" do
+        mock_present do |column_set|
+          column_set.first.should be_a OracleDatasetColumn
+        end
+        get :index, :dataset_id => dataset.to_param
+      end
+    end
   end
 end

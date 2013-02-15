@@ -1,27 +1,18 @@
-require_relative 'gpdb_column_statistics'
-
 class DatasetColumn
   attr_accessor :data_type, :description, :ordinal_position, :statistics, :name, :statistics
 
   def self.columns_for(account, dataset)
-    columns_with_stats = dataset.connect_with(account).column_info(dataset.name, dataset.query_setup_sql)
+    column_class = dataset.column_type.constantize
+    columns = dataset.connect_with(account).column_info(dataset.name, dataset.query_setup_sql)
 
-    columns_with_stats.map.with_index do |raw_row_data, i|
-      column = DatasetColumn.new({
+    columns.map.with_index do |raw_row_data, i|
+      column = column_class.new({
         :name => raw_row_data[:attname],
         :data_type => raw_row_data[:format_type],
         :description => raw_row_data[:description],
         :ordinal_position => i + 1
       })
-      params = []
-      params << raw_row_data[:null_frac]
-      params << raw_row_data[:n_distinct]
-      params << raw_row_data[:most_common_vals]
-      params << raw_row_data[:most_common_freqs]
-      params << raw_row_data[:histogram_bounds]
-      params << raw_row_data[:reltuples]
-      params << column.number_or_time?
-      column.statistics = GpdbColumnStatistics.new(*params)
+      column.add_statistics!(raw_row_data)
       column
     end
   end
@@ -33,12 +24,7 @@ class DatasetColumn
     @ordinal_position = attributes[:ordinal_position]
   end
 
-  def simplified_type
-    @simplified_type ||= ActiveRecord::ConnectionAdapters::PostgreSQLColumn.new(name, nil, data_type, nil).type
-  end
-
-  def number_or_time?
-    [:decimal, :integer, :float, :date, :time, :datetime].include? simplified_type
+  def add_statistics!(*)
   end
 
   def entity_type_name

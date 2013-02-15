@@ -86,6 +86,10 @@ class GpdbDataset < Dataset
     all_rows_sql
   end
 
+  def column_type
+    "DatasetColumn"
+  end
+
   private
 
   def create_import_event(params, user)

@@ -1,29 +1,28 @@
 require 'spec_helper'
 
-describe DatasetColumn do
+describe OracleDatasetColumn do
   describe ".columns_for" do
-    subject { DatasetColumn.columns_for(account, dataset) }
+    subject { described_class.columns_for(account, dataset) }
 
     let(:connection) { Object.new }
     let(:account) { Object.new }
-    let(:dataset) { OpenStruct.new({:name => 'hiya_bob', :query_setup_sql => "select yo from bar;", :column_type => "DatasetColumn"}) }
-
+    let(:dataset) { OpenStruct.new({:name => 'hiya_bob', :query_setup_sql => "select yo from bar;", :column_type => "OracleDatasetColumn"}) }
     let(:column_with_stats) do
       [
           {
               :attname => 'id',
               :format_type => 'integer',
-              :description => nil
+              :description => nil,
           },
           {
               :attname => 'column1',
               :format_type => 'integer',
-              :description => 'comment on column1'
+              :description => 'comment on column1',
           },
           {
               :attname => 'timecolumn',
               :format_type => 'timestamp without time zone',
-              :description => 'comment on timecolumn'
+              :description => 'comment on timecolumn',
           }
       ]
     end
@@ -33,8 +32,8 @@ describe DatasetColumn do
       stub(dataset).connect_with(account) { connection }
     end
 
-    it "returns dataset columns" do
-      subject.first.should be_a DatasetColumn
+    it "returns oracle specific columns" do
+      subject.first.should be_a OracleDatasetColumn
     end
 
     it "gets the column information for table users" do
@@ -45,6 +44,11 @@ describe DatasetColumn do
       column1.data_type.should eq('integer')
       column1.description.should == 'comment on column1'
       column1.ordinal_position.should eq(2)
+    end
+
+    it "returns no column statistics for table users" do
+      column1 = subject[1]
+      column1.statistics.should be_nil
     end
   end
 end

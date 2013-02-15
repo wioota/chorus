@@ -1,6 +1,6 @@
 module Visualization
   class FrequencyPresenter < Presenter
-    include DbTypesToChorus
+    include PostgresDbTypesToChorus
 
     def to_hash
       {

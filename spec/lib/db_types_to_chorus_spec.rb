@@ -1,13 +1,11 @@
 require 'spec_helper'
-require 'db_types_to_chorus'
-
-
+require 'postgres_db_types_to_chorus'
 
 describe "DbTypesToChorus" do
   describe "#type_category" do
     before do
       class TestFubar
-        include DbTypesToChorus
+        include PostgresDbTypesToChorus
       end
     end
 

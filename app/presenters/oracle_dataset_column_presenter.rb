@@ -1,0 +1,3 @@
+class OracleDatasetColumnPresenter < DatasetColumnPresenter
+  include OracleDbTypesToChorus
+end

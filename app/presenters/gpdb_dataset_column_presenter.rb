@@ -1,0 +1,3 @@
+class GpdbDatasetColumnPresenter < DatasetColumnPresenter
+  include PostgresDbTypesToChorus
+end
