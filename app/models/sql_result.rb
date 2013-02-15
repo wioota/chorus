@@ -43,7 +43,7 @@ class SqlResult
   end
 
   def add_column(name, type)
-    @columns << DatasetColumn.new(:name => name, :data_type => type)
+    @columns << GpdbDatasetColumn.new(:name => name, :data_type => type)
   end
 
   def add_row(row)

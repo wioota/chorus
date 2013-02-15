@@ -28,6 +28,6 @@ class DatasetColumn
   end
 
   def entity_type_name
-    'gpdb_column'
+    'database_column'
   end
 end

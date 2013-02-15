@@ -87,7 +87,7 @@ class GpdbDataset < Dataset
   end
 
   def column_type
-    "DatasetColumn"
+    "GpdbDatasetColumn"
   end
 
   private

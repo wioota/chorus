@@ -20,5 +20,4 @@ class GpdbDatasetColumn < DatasetColumn
   def number_or_time?
     [:decimal, :integer, :float, :date, :time, :datetime].include? simplified_type
   end
-
 end

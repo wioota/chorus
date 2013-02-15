@@ -17,8 +17,8 @@ describe ColumnController do
         stub(subject).account_for_current_user(table) { fake_account }
         stub(DatasetColumn).columns_for(fake_account, table) do
           [
-              DatasetColumn.new(:name => 'email', :data_type => 'varchar(255)', :description => 'it must be present'),
-              DatasetColumn.new(:name => 'age', :data_type => 'integer', :description => 'nothing'),
+              GpdbDatasetColumn.new(:name => 'email', :data_type => 'varchar(255)', :description => 'it must be present'),
+              GpdbDatasetColumn.new(:name => 'age', :data_type => 'integer', :description => 'nothing'),
           ]
         end
       end
@@ -48,6 +48,13 @@ describe ColumnController do
 
       before do
         dataset.analyze(account)
+      end
+
+      it "presents gpdb dataset columns" do
+        mock_present do |column_set|
+          column_set.first.should be_a GpdbDatasetColumn
+        end
+        get :index, :dataset_id => dataset.to_param
       end
 
       generate_fixture "databaseColumnSet.json" do
