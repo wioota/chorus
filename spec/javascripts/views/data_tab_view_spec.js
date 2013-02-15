@@ -183,6 +183,7 @@ describe("chorus.views.DataTab", function () {
         context("after the tables and views are loaded", function () {
             beforeEach(function () {
                 this.schema.datasets().loaded = true;
+                this.qtip = stubQtip("li");
                 this.view.render();
             });
 
@@ -192,7 +193,6 @@ describe("chorus.views.DataTab", function () {
 
             context("and some data was fetched", function () {
                 beforeEach(function () {
-                    this.qtip = stubQtip("li");
                     spyOn(this.view, 'closeQtip');
 
                     this.server.completeFetchFor(this.schema.datasets(), [
@@ -205,7 +205,27 @@ describe("chorus.views.DataTab", function () {
                     this.server.completeFetchFor(this.schema.database().schemas());
                 });
 
-                jasmine.sharedExamples.DatabaseSidebarList();
+                it("should have a collection defined", function() {
+                    expect(this.view.collection).toBeTruthy();
+                });
+
+                it("should have the fullname on the list elements", function() {
+                    expect(this.view.$('ul.list li')).toExist();
+                    expect(this.view.$('ul.list li').data('fullname')).toBeTruthy();
+                });
+
+                it("should make the list elements draggable", function() {
+                    spyOn($.fn, "draggable");
+                    this.view.render();
+                    expect($.fn.draggable).toHaveBeenCalledOnSelector("ul.list li");
+                });
+
+                it("the draggable helper has the name of the table", function() {
+                    var $li = this.view.$("ul.list li:eq(0)");
+                    var helper = this.view.dragHelper({currentTarget: $li});
+                    expect(helper).toHaveClass("drag_helper");
+                    expect(helper).toContainText($li.data("name"));
+                });
 
                 context("when hovering over an li", function () {
                     beforeEach(function () {
@@ -214,26 +234,6 @@ describe("chorus.views.DataTab", function () {
 
                     it("has the insert text in the insert arrow", function () {
                         expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert');
-                    });
-
-                    context("when clicking the insert arrow", function () {
-                        beforeEach(function () {
-                            this.qtip.find("a").click();
-                        });
-
-                        it("broadcasts a file:insertText with the string representation", function () {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.view.collection.at(1).toText());
-                        });
-                    });
-
-                    context("when clicking a link within the li", function () {
-                        beforeEach(function () {
-                            this.view.$('.list li:eq(1) a').click();
-                        });
-
-                        it("closes the open insert arrow", function () {
-                            expect(this.view.closeQtip).toHaveBeenCalled();
-                        });
                     });
 
                     context("when scrolling", function () {

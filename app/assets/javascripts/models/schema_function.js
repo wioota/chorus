@@ -19,7 +19,7 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
     },
 
     getFunctionArguments: function() {
-        var argNames = this.get('argNames');
+        var argNames = this.get('argNames') || [];
         return _.map(this.get('argTypes'), function(argType, index) {
             var argName = argNames[index] || "arg" + (index + 1);
             return argType + ' ' + argName;

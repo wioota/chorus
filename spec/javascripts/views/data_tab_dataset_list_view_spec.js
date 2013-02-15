@@ -18,22 +18,11 @@ describe("chorus.views.DataTabDatasetList", function() {
     context("when the collection is loaded", function() {
         beforeEach(function() {
             this.collection.loaded = true;
-            this.view.render();
+            this.collection.trigger('reset');
         });
 
         it("renders an li for each item in the list", function() {
             expect(this.view.$("li").length).toBe(4);
-        });
-
-        describe("clicking on a dataset item", function () {
-            beforeEach(function() {
-                this.view.$("li a").eq(0).click();
-            });
-
-            it("broadcasts a 'datasetSelected' event, with the view", function() {
-                var clickedDataset = this.view.collection.findWhere({objectName: this.collection.at(0).get("objectName")});
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", clickedDataset);
-            });
         });
 
         describe("pagination", function() {
@@ -76,6 +65,12 @@ describe("chorus.views.DataTabDatasetList", function() {
                     expect(this.view.$("a.more")).not.toExist();
                 });
             });
+        });
+
+        it("does not destroy the subviews on render", function() {
+            var originalViews = this.view.datasetViews;
+            this.view.render();
+            expect(this.view.datasetViews).toEqual(originalViews);
         });
     });
 });

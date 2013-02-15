@@ -51,6 +51,13 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     postRender: function() {
+        this.setupSchemaMenu();
+        this.setupQTip();
+        this.closeQtipOnScroll();
+        this.setupDragging();
+    },
+
+    setupSchemaMenu: function() {
         chorus.menu(this.$(".context a"), {
             content: this.$(".schema_menu_container").html(),
             container: $('#sidebar_wrapper'),
@@ -67,7 +74,9 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 }
             }
         });
+    },
 
+    setupQTip: function() {
         this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
         this.$("li").qtip("destroy");
         this.$("li").qtip({
@@ -111,12 +120,16 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 }
             }
         });
+    },
 
+    closeQtipOnScroll: function() {
         chorus.page && chorus.page.sidebar && chorus.page.sidebar.bind("scroll", _.bind(function() {
             $(".hover").removeClass("hover");
             this.closeQtip();
         }, this));
+    },
 
+     setupDragging: function() {
         this.$("ul.list li").draggable({
             cursor: "move",
             containment: "window",

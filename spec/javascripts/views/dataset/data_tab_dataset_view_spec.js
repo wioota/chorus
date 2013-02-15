@@ -2,7 +2,9 @@ describe("chorus.views.DataTabDataset", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" });
         this.view = new chorus.views.DataTabDataset({model: this.dataset});
+        this.qtip = stubQtip();
         this.view.render();
+        spyOn(chorus.PageEvents, "broadcast");
     });
 
     it("adds the correct data attribute for fullname", function() {
@@ -18,5 +20,36 @@ describe("chorus.views.DataTabDataset", function() {
 
     it("renders the name of the dataset", function() {
         expect(this.view.$(".name")).toContainText("1234");
+    });
+
+    context("when hovering over an li", function () {
+        beforeEach(function () {
+            this.view.$el.mouseenter();
+        });
+
+        it("has the insert text in the insert arrow", function () {
+            expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert');
+        });
+
+        context("when clicking the insert arrow", function () {
+            beforeEach(function () {
+                this.qtip.find("a").click();
+            });
+
+            it("broadcasts a file:insertText with the string representation", function () {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.dataset.toText());
+            });
+        });
+
+        context("when clicking the name link within the li", function () {
+            beforeEach(function () {
+                spyOn(jQuery.Event.prototype, 'preventDefault');
+                this.view.$('.name a').click();
+            });
+
+            it("prevents the click from causing a navigation", function() {
+                expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
+            });
+        });
     });
 });

@@ -51,5 +51,12 @@ describe("chorus.models.SchemaFunction", function() {
                 });
             });
         });
+
+        context("when the function arguments are unnamed", function() {
+            it("sets the arguments names to argN correctly", function() {
+                this.model.set({ argNames: null });
+                expect(this.model.formattedArgumentList()).toBe("(Int arg1, Bool arg2)");
+            });
+        });
     });
 });

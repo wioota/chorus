@@ -4,22 +4,34 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
     useLoadingSection: true,
 
     events: {
-        "click li a"    : "datasetSelected",
         "click a.more"  : "fetchMoreDatasets"
     },
 
     setup: function() {
-        this.bindings.add(this.collection, "reset", this.render);
+        this.bindings.add(this.collection, "reset", this.rebuildDatasetViews);
+        this.datasetViews = [];
     },
 
-    datasetSelected: function (e) {
-        e.preventDefault();
-        var li = $(e.currentTarget).closest("li"),
-            type = li.data("type"),
-            name = li.data("name").toString();
+    postRender: function() {
+        _.each(this.datasetViews, function(view) {
+            this.$("ul").append(view.render().$el);
+            view.delegateEvents();
+        }, this);
+    },
 
-        var dataset = this.collection.findWhere({ entitySubtype:type, objectName: name });
-        chorus.PageEvents.broadcast("datasetSelected", dataset);
+    rebuildDatasetViews: function() {
+        _.each(this.datasetViews, function(view) {
+            view.teardown();
+        });
+
+        this.datasetViews = [];
+        this.collection.each(function(model) {
+            var datasetView = new chorus.views.DataTabDataset({model: model});
+            this.datasetViews.push(datasetView);
+            this.registerSubView(datasetView);
+        }, this);
+
+        this.render();
     },
 
     fetchMoreDatasets: function(e) {
@@ -33,16 +45,6 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
             ctx.showMoreLink = this.collection.pagination.page < this.collection.pagination.total;
         }
         return ctx;
-    },
-
-    collectionModelContext: function(model) {
-        return {
-            cid: model.cid,
-            name: model.name(),
-            type: model.get("entitySubtype"),
-            fullName: model.toText(),
-            iconUrl: model.iconUrl({size: "small"})
-        };
     },
 
     displayLoadingSection: function () {
