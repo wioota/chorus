@@ -86,33 +86,16 @@ describe("chorus.views.DatasetList", function() {
         describe("select all and select none", function() {
             context("when the selectAll page event is recieved", function() {
                 beforeEach(function() {
-                    spyOn(this.collection, 'fetchAll').andCallThrough();
                     chorus.PageEvents.broadcast("selectAll");
                 });
 
-                it("fetches all of the datasets", function() {
-                    var fetch = this.server.lastFetchFor(this.collection);
-                    expect(fetch.url).toContainQueryParams({ per_page: 1000 });
+                it("checks all of the datasets", function() {
+                    expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
+                    expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
                 });
 
-                describe("when the fetch completes", function() {
-                    beforeEach(function() {
-                        this.allDatasets = this.collection.models.concat([
-                            rspecFixtures.workspaceDataset.datasetTable(),
-                            rspecFixtures.workspaceDataset.datasetTable(),
-                            rspecFixtures.workspaceDataset.datasetTable()
-                        ]);
-                        this.server.completeFetchAllFor(this.collection, this.allDatasets);
-                    });
-
-                    it("checks all of the datasets", function() {
-                        expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
-                        expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
-                    });
-
-                    it("broadcasts the 'dataset:checked' page event with a collection of all datasets", function() {
-                        expectDatasetChecked(this.allDatasets);
-                    });
+                it("broadcasts the 'dataset:checked' page event with a collection of all datasets", function() {
+                    expectDatasetChecked(this.collection.models);
                 });
 
                 context("when the selectNone page event is received", function() {

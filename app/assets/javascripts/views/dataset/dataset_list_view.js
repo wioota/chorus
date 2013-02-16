@@ -12,16 +12,13 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
     setup: function() {
         this._super("setup", arguments);
         this.selectedDatasets = this.collection.clone().reset();
+
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
     },
 
     selectAll: function() {
-        this.bindings.add(this.selectedDatasets, "reset", this.selectAllFetched);
-        this.selectedDatasets.fetchAll();
-    },
-
-    selectAllFetched: function() {
+        this.selectedDatasets.reset(this.collection.models);
         this.$("> li input[type=checkbox]").prop("checked", true).change();
         chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
     },
