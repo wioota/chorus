@@ -795,10 +795,30 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe "#stream_dataset" do
-      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
+      let(:schema) { GpdbSchema.find_by_name(schema_name) }
       let(:dataset) {
-        GpdbTable.new(:name => 'thing', :schema => GpdbSchema.find_by_name(schema_name))
+        GpdbTable.new(:name => 'thing', :schema => schema)
       }
+      let(:limit) { 42 }
+
+      it "calls stream_sql with dataset sql string and limit" do
+        mock(connection).stream_sql(dataset.all_rows_sql, limit) do |sql, row_limit, block, *args|
+          [1,2,3].each do |i|
+            block.call i
+          end
+          true
+        end
+
+        results = []
+        connection.stream_dataset(dataset, limit) do |row|
+          results << row
+        end
+        results.should == [1,2,3]
+      end
+    end
+
+    describe "#stream_sql" do
+      let(:sql) { "SELECT * from thing" }
 
       before do
         @db = Sequel.connect(db_url)
@@ -814,7 +834,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       let(:subject) {
-        connection.stream_dataset(dataset) do
+        connection.stream_sql(sql) do
           true
         end
       }
@@ -822,9 +842,9 @@ describe GreenplumConnection, :greenplum_integration do
 
       it_behaves_like "a well-behaved database query"
 
-      it "streams all rows of the database" do
+      it "streams all rows of the results" do
         bucket = []
-        connection.stream_dataset(dataset) do |row|
+        connection.stream_sql(sql) do |row|
           bucket << row
         end
 
@@ -833,9 +853,9 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       context "when a limit is provided" do
-        it "only processes part of the table" do
+        it "only processes part of the results" do
           bucket = []
-          connection.stream_dataset(dataset, 1) do |row|
+          connection.stream_sql(sql, 1) do |row|
             bucket << row
           end
 

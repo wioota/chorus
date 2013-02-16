@@ -24,12 +24,12 @@ describe DatasetDownloadsController do
         get :show, :dataset_id => table.to_param, :format => 'csv'
         response.body.should == 'i am the enum'
         assigns(:streamer).user.should == user
-        assigns(:streamer).dataset.should == table
+        assigns(:streamer).sql.should == table.all_rows_sql
       end
 
       it "passes the row_limit to the streamer" do
         get :show, :dataset_id => table.to_param, :format => 'csv', :row_limit => '42'
-        assigns(:streamer).row_limit.should == '42'
+        assigns(:streamer).row_limit.should == 42
       end
 
       it "should set the content-type header" do

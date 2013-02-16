@@ -40,19 +40,22 @@ class DataSourceConnection
   end
 
   def stream_dataset(dataset, limit = nil, &block)
-    sql = dataset.all_rows_sql(limit)
+    stream_sql(dataset.all_rows_sql, limit, &block)
+  end
 
+  def stream_sql(sql, limit = nil)
     with_connection do
       @connection.synchronize do |jdbc_conn|
         jdbc_conn.set_auto_commit(false)
 
         stmnt = jdbc_conn.create_statement
-        stmnt.set_fetch_size(10)
+        stmnt.set_fetch_size(1000)
+        stmnt.set_max_rows(limit) if limit
 
         result_set = stmnt.execute_query(sql)
         column_number = result_set.meta_data.column_count
 
-        while (result_set.next) do
+        while(result_set.next) do
           record = {}
 
           column_number.times do |i|
