@@ -12,13 +12,54 @@ describe("chorus.dialogs.RenameTag", function() {
        });
     });
 
-    describe("renaming a tag", function() {
-        it("saves the tag", function() {
+    describe("submitting a new tag name", function() {
+        beforeEach(function() {
+            spyOnEvent($(document), "close.facebox");
             this.input.val("new-tag-name");
             this.dialog.$('form').submit();
-            this.server.completeUpdateFor(this.tag, this.tag.attributes);
         });
 
+        it("does not close the dialog before the server responds", function() {
+            expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
+        });
+
+        it("should display a loading spinner in the submit button", function() {
+            expect(this.dialog.$("button[type=submit]")).toHaveSpinner();
+        });
+
+        context("when the save is successful", function() {
+            beforeEach(function() {
+                this.server.completeUpdateFor(this.tag, this.tag.attributes);
+            });
+
+            it("closes the dialog", function() {
+                expect("close.facebox").toHaveBeenTriggeredOn($(document));
+            });
+        });
+
+        context("when the server request fails with an unprocessable entity failure", function() {
+            beforeEach(function(){
+                this.input.val("new-tag-name");
+                this.dialog.$('form').submit();
+                spyOnEvent(this.tag, "unprocessableEntity");
+                this.server.lastUpdate().failUnprocessableEntity();
+            });
+
+            it("displays a server error in the dialog", function() {
+                expect(this.dialog.$(".errors")).not.toHaveClass("hidden");
+            });
+
+            it("does not call the model's default error handler", function() {
+                expect("unprocessableEntity").not.toHaveBeenTriggeredOn(this.tag);
+            });
+
+            it("stops the spinner", function() {
+                expect(this.dialog.$("button[type=submit]")).not.toHaveSpinner();
+            });
+        });
+    });
+
+    describe("validating input as user types", function() {
         it("enables the button for a new name", function() {
             this.input.val("different-name").keyup();
             expect(this.dialog.$("button[type=submit]")).not.toBeDisabled();
@@ -52,22 +93,6 @@ describe("chorus.dialogs.RenameTag", function() {
                 this.input.val("a-good-tag").keyup();
                 expect(this.dialog.$("button[type=submit]")).not.toBeDisabled();
                 expect(this.input).not.toHaveClass("has_error");
-            });
-        });
-
-        context("when the server request fails with an unprocessable entity failure", function() {
-            beforeEach(function(){
-                this.input.val("new-tag-name");
-                this.dialog.$('form').submit();
-                this.unprocessableEntitySpy = jasmine.createSpy("unprocessableEntity");
-                this.tag.bind("unprocessableEntity", this.unprocessableEntitySpy);
-                this.server.lastUpdate().failUnprocessableEntity();
-            });
-            it("displays a server error in the dialog", function() {
-               expect(this.dialog.$(".errors")).not.toHaveClass("hidden");
-            });
-            it("does not call the model's default error handler", function() {
-                expect(this.unprocessableEntitySpy).not.toHaveBeenCalled();
             });
         });
     });

@@ -10,10 +10,12 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "saved", this.saved);
     },
 
     postRender: function() {
         this.input = this.$(".rename_tag_input");
+        this.submitButton = this.$("button[type=submit]");
     },
 
     getName: function() {
@@ -22,12 +24,18 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     submit: function(e) {
         e.preventDefault();
+        this.submitButton.startLoading("actions.saving");
         this.model.save({name: this.getName()}, {silent: true, unprocessableEntity: function() {
             // skip the default redirection on unprocessable entity
         }});
     },
 
+    saved:function () {
+        this.closeModal();
+    },
+
     saveFailed: function() {
+        this.submitButton.stopLoading();
         this.showErrors();
     },
 
@@ -41,6 +49,6 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
             this.markInputAsInvalid(this.input, this.model.errors.name, true);
         }
         var disabled = (newAttributes.name === this.model.name()) || !valid;
-        this.$("button[type=submit]").prop("disabled", disabled);
+        this.submitButton.prop("disabled", disabled);
     }
 });
