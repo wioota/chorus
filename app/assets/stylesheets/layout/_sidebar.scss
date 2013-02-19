@@ -223,7 +223,6 @@ body .ui-draggable-dragging {
                 }
 
                 li {
-                    height: 25px;
                     padding-top: 0px;
                     padding-bottom: 0px;
                     color: $color-text2;
@@ -279,7 +278,14 @@ body .ui-draggable-dragging {
                 }
             }
 
-            .data_tab_dataset_column_list {
+            .data_tab_dataset {
+                .toggle_visibility {
+                    top: 8px;
+                    position: relative;
+                }
+            }
+
+           .data_tab_dataset_column_list {
                 .context {
                     line-height: 1.2;
                     .table, .schema {

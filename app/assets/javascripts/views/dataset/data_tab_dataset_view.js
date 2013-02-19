@@ -4,7 +4,8 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
     tagName: "li",
 
     events: {
-        "click .name a": "nameClicked"
+        "click .name a": "nameClicked",
+        "click .toggle_visibility": "toggleVisibility"
     },
 
     postRender: function() {
@@ -77,5 +78,15 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
 
     nameClicked: function(e) {
         e.preventDefault();
+    },
+
+    toggleVisibility: function() {
+        this.columnList = new chorus.views.DataTabDatasetColumnList({
+            el: this.$(".column_list"),
+            dataset: this.model
+        });
+
+        this.registerSubView(this.columnList);
+        this.columnList.render();
     }
 });

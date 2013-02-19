@@ -12,10 +12,10 @@ describe("chorus.views.DataTabDataset", function() {
     });
 
     it("renders the appropriate icon", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/sandbox_table_small.png");
+        expect(this.view.$("img:eq(1)")).toHaveAttr("src", "/images/sandbox_table_small.png");
         this.view.model.set("objectType", "VIEW");
         this.view.render();
-        expect(this.view.$("img")).toHaveAttr("src", "/images/sandbox_view_small.png");
+        expect(this.view.$("img:eq(1)")).toHaveAttr("src", "/images/sandbox_view_small.png");
     });
 
     it("renders the name of the dataset", function() {
@@ -49,6 +49,19 @@ describe("chorus.views.DataTabDataset", function() {
 
             it("prevents the click from causing a navigation", function() {
                 expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
+            });
+        });
+
+        context("when clicking the toggle_visibility arrow", function () {
+            beforeEach(function () {
+                this.view.$('.toggle_visibility').click();
+                this.server.completeFetchAllFor(this.dataset.columns(), [
+                    rspecFixtures.databaseColumn({name: "column_1"})
+                ]);
+            });
+
+            it("shows the columns", function() {
+                expect(this.view.$(".data_tab_dataset_column_list")).toContainText("column_1");
             });
         });
     });
