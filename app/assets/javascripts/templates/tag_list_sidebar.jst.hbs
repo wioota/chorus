@@ -4,10 +4,11 @@
     </div>
 
     <div class="actions">
-        {{#ifAdmin}}
         <ul>
+        {{#ifAdmin}}
             <li><a href="#" class="delete_tag_link">{{t "tag_list.delete.button"}}</a></li>
-        </ul>
         {{/ifAdmin}}
+            <li><a href="#" class="rename_tag_link">{{t "tag_list.rename.button"}}</a></li>
+        </ul>
     </div>
 {{/hasTag}}

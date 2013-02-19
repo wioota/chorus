@@ -3,18 +3,26 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
     templateName: 'tag_list_sidebar',
 
     events: {
-        "click .delete_tag_link" : "deleteSelectedTag"
+        "click .delete_tag_link" : "deleteSelectedTag",
+        "click .rename_tag_link" : "renameSelectedTag"
     },
 
     setup: function() {
         this.subscribePageEvent('tag:selected', function(tag) {
-            this.tag = tag;
-            this.render();
+            this.setTag(tag);
         });
         this.subscribePageEvent('tag:deselected', function() {
-            this.tag = null;
-            this.render();
+            this.setTag(null);
         });
+    },
+
+    setTag: function(tag) {
+      this.tag = tag;
+      if(tag) {
+          this.renameTagDialog = new chorus.dialogs.RenameTag({ model: tag });
+          this.deleteTagAlert  = new chorus.alerts.TagDelete({ model: tag });
+      }
+      this.render();
     },
 
     additionalContext: function() {
@@ -26,8 +34,11 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
 
     deleteSelectedTag: function(e) {
         e.preventDefault();
-        this.deleteTagAlert = new chorus.alerts.TagDelete({ model: this.tag });
         this.deleteTagAlert.launchModal();
-    }
+    },
 
+    renameSelectedTag: function(e) {
+        e.preventDefault();
+        this.renameTagDialog.launchModal();
+    }
 });

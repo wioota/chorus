@@ -5,6 +5,9 @@ class Tag < ActiveRecord::Base
   attr_accessible :name
   attr_accessor :highlighted_attributes, :search_result_notes
 
+  validates_uniqueness_of :name, :case_sensitive => false
+  validates_length_of :name, :maximum => 100, :minimum => 1
+
   searchable do
     string :type_name
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST

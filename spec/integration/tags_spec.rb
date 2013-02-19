@@ -1,5 +1,37 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
+describe 'listing all tags' do
+  let(:user) { users(:owner) }
+  let(:workfile) { workfiles(:public) }
+  before do
+    login(user)
+    workfile.tag_list = "foo,bar,baz"
+    visit "#/tags"
+  end
+
+  it "shows the tags" do
+    %w(foo bar baz).each do |name|
+      page.should have_link(name)
+    end
+  end
+
+  it "renames a specific tag" do
+    find('li', :text => 'foo').click
+    click_on "Rename tag"
+    within_modal do
+      find("input").set("hello")
+      click_on "Rename tag"
+    end
+    find('li', :text => 'hello').should have_link("hello")
+
+    # check that tag is persisted
+    visit "#/"
+
+    visit "#/tags"
+    page.should have_link("hello")
+  end
+end
+
 describe 'add a tag' do
 
   let(:workfile) {workfiles(:public)}

@@ -43,4 +43,29 @@ describe("chorus.views.TagListSidebar", function() {
         });
 
     });
+
+    describe("rename tag link", function() {
+        beforeEach(function() {
+            setLoggedInUser({admin: false}, chorus);
+            chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+            this.renameLink = this.view.$el.find(".actions a.rename_tag_link");
+        });
+
+        it("does not display the rename tag link", function() {
+            expect(this.renameLink).toExist();
+            expect(this.renameLink).toContainTranslation("tag_list.rename.button");
+        });
+
+        context("clicking rename tag", function() {
+           beforeEach(function() {
+               spyOn(this.view.renameTagDialog, "launchModal");
+               this.renameLink.click();
+           });
+
+           it("opens the rename tag dialog", function() {
+               expect(this.view.renameTagDialog.model).toBe(this.selectedTag);
+               expect(this.view.renameTagDialog.launchModal).toHaveBeenCalled();
+           });
+        });
+    });
 });

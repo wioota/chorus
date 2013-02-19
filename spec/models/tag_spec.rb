@@ -1,6 +1,45 @@
 require 'spec_helper'
 
 describe Tag do
+  describe "validation" do
+    describe "length of name" do
+      it "must be between 1 and 100" do
+        Tag.new(:name => "").should_not be_valid
+        Tag.new(:name => "A"*101).should_not be_valid
+
+        Tag.new(:name => "A").should be_valid
+        Tag.new(:name => "A"*100).should be_valid
+      end
+    end
+
+    describe "uniqueness of name" do
+      before do
+        Tag.create!(:name => "unique-name")
+      end
+      it "requires a unique name to be valid" do
+        Tag.new(:name => "unique-name").should_not be_valid
+      end
+
+      it "is case-insensitive" do
+        Tag.new(:name => "UNIQUE-NAME").should_not be_valid
+      end
+
+      describe "database-level constraints" do
+        it "raises an exception when name is in use" do
+          expect {
+            Tag.new(:name => "unique-name").save!(:validate => false)
+          }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+
+        it "has a case-insensitive constraint" do
+          expect {
+            Tag.new(:name => "UNIQUE-NAME").save!(:validate => false)
+          }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+      end
+    end
+  end
+
   describe "polymorphicism" do
     it "can belong to multiple types" do
       table = FactoryGirl.create(:gpdb_table)

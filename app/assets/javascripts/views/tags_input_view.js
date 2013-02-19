@@ -72,7 +72,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     updateTags: function(e, tags) {
         if(tags.length > this.tags.length) {
             for(var i = this.tags.length; i < tags.length; ++i) {
-                this.addTag(tags[i]);
+                this.addTag(tags[i].model);
             }
         } else if(tags.length < this.tags.length) {
             this.removeMissingTag(tags);
@@ -81,7 +81,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     addTag: function(newTag) {
         var duplicate = this.tags.find(function(tag) {
-            return tag.matches(newTag.name);
+            return tag.matches(newTag.name());
         });
         if(duplicate) {
             this.tags.remove(duplicate, {silent: true});
@@ -102,7 +102,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     textExtValidate: function(e, data) {
         this.invalidTagName = "";
         data.tag.name = $.trim(data.tag.name);
-        if(!this.validateTag(data.tag.name)) {
+        data.tag.model = new chorus.models.Tag(data.tag);
+        if(!this.validateTag(data.tag.model)) {
             data.result = false;
 
             if(this.keepInvalidTagName) {
@@ -112,21 +113,14 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         }
     },
 
-    validateTag: function(tagName) {
+    validateTag: function(tag) {
         this.clearErrors();
-
-        tagName = tagName.trim();
-
-        var valid = true;
-        if(tagName.length > 100) {
-            valid = false;
+        if(!tag.performValidation(tag.attributes)) {
+            this.markInputAsInvalid(this.input, tag.errors.name, false);
             this.keepInvalidTagName = true;
-            this.markInputAsInvalid(this.input, t("field_error.TOO_LONG", {field: "Tag", count: 100}), false);
-        } else if(tagName.length === 0) {
-            valid = false;
+            return false;
         }
-
-        return valid;
+        return true;
     },
 
     restoreInvalidTag: function(e, tag) {

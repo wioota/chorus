@@ -4,6 +4,14 @@ class TagsController < ApplicationController
     present paginate(tags.sort_by!{ |tag| tag.name.downcase })
   end
 
+  def update
+    tag = Tag.find(params[:id])
+    tag.name = params[:tag][:name]
+    tag.save!
+
+    head :ok
+  end
+
   def destroy
     tag = Tag.find(params[:id])
     tag.destroy

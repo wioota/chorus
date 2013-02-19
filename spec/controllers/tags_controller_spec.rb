@@ -7,30 +7,18 @@ describe TagsController do
     log_in user
   end
 
-  describe 'index' do
+  describe '#index' do
     it_behaves_like "a paginated list"
 
-    it "should sort the results alphabetically regardless of case" do
-      Tag.create(:name => 'btag')
-      Tag.create(:name => 'Atag')
-      Tag.create(:name => 'atag')
+    it "sorts the results alphabetically regardless of case" do
+      Tag.delete_all
+      FactoryGirl.create :tag, :name => 'btag'
+      FactoryGirl.create :tag, :name => 'Atag'
+      FactoryGirl.create :tag, :name => 'ctag'
 
       get :index
 
-      a_index = decoded_response.index { |tag|
-        tag[:name] == "atag"
-      }
-      capital_a_index = decoded_response.index { |tag|
-        tag[:name] == "Atag"
-      }
-
-      capital_a_index.should < a_index
-
-      last_tag = decoded_response.first
-      decoded_response.each do |tag|
-        tag[:name].downcase.should >= last_tag[:name].downcase
-        last_tag = tag
-      end
+      decoded_response.map(&:name).should == %w{Atag btag ctag}
     end
 
     context "with no query" do
@@ -55,12 +43,12 @@ describe TagsController do
     end
   end
 
-  describe 'delete' do
+  describe '#delete' do
     let(:dataset) { datasets(:tagged) }
     let(:workfile) { workfiles(:tagged) }
-    let(:tag) { Tag.where(:name => 'alpha').first }
+    let(:tag) { Tag.find_by_name('alpha') }
 
-    it 'should delete the tag' do
+    it 'deletes the tag' do
       dataset.tags.map(&:name).should include(tag.name)
       workfile.tags.map(&:name).should include(tag.name)
 
@@ -77,6 +65,28 @@ describe TagsController do
         delete :destroy, :id => "56789"
         response.code.should == "404"
       end
+    end
+  end
+
+  describe '#update' do
+    let(:tag) { Tag.create!(:name => "my name") }
+
+    it "updates the tag's name" do
+      expect do
+        put :update, { :id => tag.id, :name => "my new name"}
+      end.to change { tag.reload.name }.from("my name").to("my new name")
+
+      response.should be_ok
+    end
+
+    it "fails to save when the name is invalid" do
+      other_tag = Tag.create!(:name => "my other name")
+
+      expect do
+        put :update, { :id => tag.id, :name => "my other name" }
+      end.to_not change { tag.reload.name }.to("my other name")
+
+      response.should_not be_ok
     end
   end
 

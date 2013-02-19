@@ -541,7 +541,6 @@
         spyOn($.fn, "cleditor").andReturn([0]);
     };
 
-
     window.enterTag = function(view, tagName) {
         var keyup = $.Event('keyup');
         keyup.keyCode = $.ui.keyCode.ENTER;

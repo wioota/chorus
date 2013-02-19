@@ -34,6 +34,18 @@ resource 'Tags' do
     end
   end
 
+  put '/tags/:id' do
+    parameter :id, 'Id of the tag to rename'
+    parameter :name, 'Tag name (100 characters or less)'
+
+    let(:id) { Tag.first.id }
+    let(:name) { "myTag" }
+
+    example_request 'Rename a tag' do
+      status.should == 200
+    end
+  end
+
   delete '/tags/:id' do
     parameter :id, 'Id of the tag to delete'
 
