@@ -1,11 +1,11 @@
 {{#if models.length}}
     <ul class="list">
         {{#each models}}
-            <li data-name="{{name}}" data-fullname="{{fullName}}" data-cid="{{cid}}" title="{{name}}">
+            <li class='sidebar_list_item' data-name="{{name}}" data-fullname="{{fullName}}" data-cid="{{cid}}" title="{{name}}">
                 <span class="spacer_left"/>
                 <img src="images/small_column.png">
-                <span class="name">{{name}}</span>
-                <span class="details">{{type}}</span>
+                <span class="column_type">[{{type}}]</span>
+                <span class="column_name">{{name}}</span>
                 <span class="spacer_right"/>
             </li>
         {{/each}}

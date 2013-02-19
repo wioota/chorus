@@ -30,10 +30,11 @@ chorus.views.DataTabDatasetColumnList = chorus.views.Base.extend({
         return $(e.currentTarget).clone().addClass("drag_helper");
     },
 
-    collectionModelContext: function(model) {
+    collectionModelContext: function(column) {
         return {
-            cid: model.cid,
-            fullName: model.toText()
+            cid: column.cid,
+            fullName: column.toText(),
+            type: column.get("typeClass")
         };
     }
 });

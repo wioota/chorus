@@ -34,15 +34,15 @@ describe("chorus.views.DataTabDatasetColumnList", function() {
         context("when there are columns", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.dataset.columns(), [
-                    rspecFixtures.databaseColumn({name: "column_1"}),
-                    rspecFixtures.databaseColumn({name: "column_2"})
+                    rspecFixtures.databaseColumn({name: "column_1", typeCategory: "STRING" }),
+                    rspecFixtures.databaseColumn({name: "column_2", typeCategory: "DATETIME"})
                 ]);
             });
 
             it("should show an 'li' for each column", function() {
                 expect(this.view.$("li").length).toBe(2);
-                expect(this.view.$("li").eq(0)).toContainText("column_1");
-                expect(this.view.$("li").eq(1)).toContainText("column_2");
+                expect(this.view.$("li").eq(0)).toContainText("[string] column_1");
+                expect(this.view.$("li").eq(1)).toContainText("[date_time] column_2");
             });
 
             describe("draggable setup", function() {
