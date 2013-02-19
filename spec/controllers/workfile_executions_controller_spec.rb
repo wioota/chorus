@@ -90,32 +90,32 @@ describe WorkfileExecutionsController do
       before do
         log_in user
 
-        mock.proxy(SqlStreamer).new(workspace.sandbox, sql, user, limit) { |streamer|
+        mock.proxy(SqlStreamer).new(workspace.sandbox, "/*#{check_id}*/#{sql}", user, limit) { |streamer|
           mock(streamer).enum { 'response' }
         }
       end
 
       it "sets content disposition: attachment" do
-        post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some"
+        post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
         response.headers['Content-Disposition'].should include("attachment")
         response.headers['Content-Disposition'].should include('filename=some.csv')
         response.headers['Content-Type'].should == 'text/csv'
       end
 
       it "returns the streamer response" do
-        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :download => true, :file_name => "some"
+        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
         response.body.should == 'response'
       end
 
       it "does not limit the results when num_of_rows is not set" do
-        post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some"
+        post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
       end
 
       context "when limit is passed" do
         let(:limit) { "123" }
 
         it "limits the results when to num_of_rows" do
-          post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some", :num_of_rows => limit
+          post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some", :num_of_rows => limit
         end
       end
     end

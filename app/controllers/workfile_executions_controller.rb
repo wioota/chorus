@@ -1,6 +1,6 @@
 class WorkfileExecutionsController < ApplicationController
   before_filter :find_workfile, :find_schema, :verify_workspace, :check_authorization
-  require_params :check_id, :only => :create, :unless => proc { params[:download] }
+  require_params :check_id, :only => :create
   require_params :id, :only => :destroy, :field_name => :check_id
 
   def create
@@ -10,7 +10,7 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Cache-Control"] = 'no-cache'
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
-      self.response_body = SqlStreamer.new(@schema, params[:sql], current_user, params[:num_of_rows]).enum
+      self.response_body = SqlStreamer.new(@schema, "/*#{params[:check_id]}*/#{params[:sql]}", current_user, params[:num_of_rows]).enum
     else
       account = @schema.account_for_user! current_user
       present SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql],
