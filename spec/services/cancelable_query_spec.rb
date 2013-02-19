@@ -13,7 +13,7 @@ describe CancelableQuery do
     let(:results) { SqlResult.new }
 
     before do
-      mock(connection).prepare_and_execute_statement("/*#{check_id}*/" + sql, options) { results }
+      mock(connection).prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, check_id), options) { results }
     end
 
     it "calls to the connection" do
@@ -71,6 +71,12 @@ describe CancelableQuery do
           end
         end
       end
+    end
+  end
+
+  describe "format_sql_and_check_id" do
+    it "comments the check_id before the sql" do
+      CancelableQuery.format_sql_and_check_id("select 1", 123).should == "/*123*/select 1"
     end
   end
 end

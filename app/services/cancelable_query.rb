@@ -1,11 +1,15 @@
 class CancelableQuery
+  def self.format_sql_and_check_id(sql, check_id)
+    "/*#{check_id}*/#{sql}"
+  end
+
   def initialize(connection, check_id)
     @connection = connection
     @check_id = check_id
   end
 
   def execute(sql, options = {})
-    @connection.prepare_and_execute_statement("/*#{@check_id}*/#{sql}", options.merge(:warnings => true))
+    @connection.prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, @check_id), options.merge(:warnings => true))
   end
 
   def cancel
