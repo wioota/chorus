@@ -1,14 +1,13 @@
 chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.extend({
     constructorName: "SqlExecutionAndDownloadTask",
+    nestParams: false,
+    paramsToSave: ['checkId', 'sql', 'schemaId', 'numOfRows', 'fileName'],
 
     save: function() {
-        var paramsToSave = this.underscoreKeys(_.pick(this.attributes, ['checkId', 'schemaId', 'sql', 'numOfRows']));
-        paramsToSave['file_name'] = this.name();
-
         $.fileDownload(this.url(), {
             data: _.extend({
                 download: true
-            }, paramsToSave),
+            }, this.toJSON()),
             httpMethod: "post",
             successCallback: _.bind(this.saved, this),
             failCallback: _.bind(this.saveFailed, this),
@@ -28,5 +27,9 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
     cancel: function() {
         this._super("cancel");
         chorus.PageEvents.broadcast("file:executionCancelled");
+    },
+
+    fileName: function() {
+        return this.name();
     }
 });

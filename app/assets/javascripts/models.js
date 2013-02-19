@@ -253,8 +253,16 @@ chorus.models = {
                         delete attributes[rm_me];
                     });
                 }
+                attributes = _.inject(attributes, function(attrs, value, key) {
+                    if(value !== undefined && value !== null) {
+                        attrs[key] = value;
+                    }
+                    return attrs;
+                }, {});
                 attributes = this.underscoreKeys(attributes);
-                if (this.parameterWrapper) {
+                if (this.nestParams === false) {
+                    result = attributes;
+                } else if (this.parameterWrapper) {
                     result[this.parameterWrapper] = attributes;
                 } else if (this.constructorName && this.constructorName !== "Model") {
                     result[_.underscored(this.constructorName)] = attributes;

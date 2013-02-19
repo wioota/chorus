@@ -26,14 +26,7 @@ class PreviewsController < ApplicationController
 
     sql_without_semicolon = task[:query].gsub(';', '')
     sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view;"
-    result = SqlExecutor.execute_sql(schema, instance_account, task[:check_id], sql, :limit => limit_rows)
+    result = SqlExecutor.execute_sql(schema, instance_account, task[:check_id], sql, :limit => ChorusConfig.instance['default_preview_row_limit'])
     present(result, :status => :ok)
-  end
-
-  private
-
-  # TODO: DRY this out of this controller and the workfile executions controller [#39410527]
-  def limit_rows
-    (ChorusConfig.instance['default_preview_row_limit'] || 500).to_i
   end
 end

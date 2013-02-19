@@ -51,18 +51,6 @@ describe SqlExecutor do
         Time.parse(row[-1]).should == Time.parse("1999-01-08 04:05:06-08")
       end
 
-      context "with row limit" do
-        let(:table) { database.find_dataset_in_schema('heatmap_table', 'test_schema3') }
-        before do
-          stub.proxy(ChorusConfig.instance).[](anything)
-          stub(ChorusConfig.instance).[]('default_preview_row_limit') { 2 }
-        end
-
-        it "returns rows with limit defined" do
-          subject.rows.length.should == 2
-        end
-      end
-
       it "gives each column the right 'name' attribute" do
         subject.columns.map(&:name).should == %w{
         t_composite
@@ -143,10 +131,10 @@ describe SqlExecutor do
     end
 
     context "without live data" do
-      it "uses the default row limit if no row limit mentioned in chorus properties file" do
+      it "uses the default preview row limit" do
         stub.proxy(ChorusConfig.instance).[](anything)
-        stub(ChorusConfig.instance).[]('default_preview_row_limit') { nil }
-        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 500)
+        stub(ChorusConfig.instance).[]('default_preview_row_limit') { 123 }
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 123)
         SqlExecutor.preview_dataset(datasets(:table), Object.new, Object.new)
       end
     end

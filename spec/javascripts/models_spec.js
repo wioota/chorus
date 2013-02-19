@@ -863,6 +863,15 @@ describe("chorus.models.Base", function() {
                 expect(params.foo).toBeDefined();
                 expect(params.foo.first_name).toBe("Lenny");
             });
+
+            context("when nestParams is false", function() {
+                it("does not nest the params", function() {
+                    this.model.nestParams = false;
+                    var params = this.model.toJSON();
+                    expect(params.foo).not.toBeDefined();
+                    expect(params.first_name).toBe("Lenny");
+                });
+            });
         });
 
         context("when paramsToSave are defined", function() {
@@ -924,6 +933,14 @@ describe("chorus.models.Base", function() {
                 expect(params.id).toBeDefined();
                 expect(_.keys(params).length).toBe(2);
             });
+        });
+
+        it("removes undefined or null parameters", function() {
+            this.model.set("firstName", undefined);
+            this.model.set("lastName", null);
+            var params = this.model.toJSON();
+            expect(_.has(params, 'first_name')).toBeFalsy();
+            expect(_.has(params, 'last_name')).toBeFalsy();
         });
     });
 

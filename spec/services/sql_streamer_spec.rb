@@ -64,6 +64,16 @@ describe SqlStreamer, :database_integration do
       end
     end
 
+    context "with a string row_limit" do
+      let(:row_limit) { 2 }
+
+      it "sends the limit as an integer" do
+        enumerator = SqlStreamer.new(schema, sql, user, "2").enum
+        enumerator.next
+        finish_enumerator(enumerator)
+      end
+    end
+
     context "for connection errors" do
       it "returns the error message" do
         any_instance_of(GpdbSchema) do |schema|

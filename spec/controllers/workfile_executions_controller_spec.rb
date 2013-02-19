@@ -30,8 +30,8 @@ describe WorkfileExecutionsController do
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
 
-      it "uses the specified row limit if one is given" do
-        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => 123)) { SqlResult.new }
+      it "always uses default row limit, even if num_of_rows is specified" do
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => default_row_limit)) { SqlResult.new }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
       end
 
@@ -86,24 +86,37 @@ describe WorkfileExecutionsController do
         }
       }
       let(:user) { users(:owner) }
+      let(:limit) { nil }
       before do
         log_in user
 
-        mock.proxy(SqlStreamer).new(workspace.sandbox, sql, user, anything) { |streamer|
+        mock.proxy(SqlStreamer).new(workspace.sandbox, sql, user, limit) { |streamer|
           mock(streamer).enum { 'response' }
         }
       end
 
       it "sets content disposition: attachment" do
-        post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
+        post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some"
         response.headers['Content-Disposition'].should include("attachment")
         response.headers['Content-Disposition'].should include('filename=some.csv')
         response.headers['Content-Type'].should == 'text/csv'
       end
 
       it "returns the streamer response" do
-        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
+        post :create, :workfile_id => workfile.id, :schema_id => workspace.sandbox.id, :sql => sql, :download => true, :file_name => "some"
         response.body.should == 'response'
+      end
+
+      it "does not limit the results when num_of_rows is not set" do
+        post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some"
+      end
+
+      context "when limit is passed" do
+        let(:limit) { "123" }
+
+        it "limits the results when to num_of_rows" do
+          post :create, :workfile_id => workfile.id, :sql => sql, :download => true, :file_name => "some", :num_of_rows => limit
+        end
       end
     end
 

@@ -91,23 +91,5 @@ describe PreviewsController do
       decoded_response.columns.should_not be_nil
       decoded_response.rows.should_not be_nil
     end
-
-    context "no row limit set" do
-      let(:row_limit) { nil }
-
-      it "limits the rows to 500" do
-        mock(SqlExecutor).execute_sql(schema, account, check_id,expected_sql, :limit => 500) { SqlResult.new }
-        post :preview_sql, params
-      end
-    end
-
-    context "row limit set" do
-      let(:row_limit) { 3 }
-
-      it "limits the rows to the row limit" do
-        mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { SqlResult.new }
-        post :preview_sql, params
-      end
-    end
   end
 end
