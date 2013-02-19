@@ -72,11 +72,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     expect(this.view.$(".save button")).toBeDisabled();
                 });
 
-                it("should disable the 'change' button", function(){
-                    var modalSpy = stubModals();
-                    expect(this.view.$(".change_workfile_schema")).toHaveClass("disabled");
-                    this.view.$(".change_workfile_schema").click();
-                    expect(modalSpy).not.toHaveModal(chorus.dialogs.ChangeWorkfileSchema);
+                it("should hide the 'change' button", function(){
+                    expect(this.view.$(".change_workfile_schema")).not.toExist();
                 });
             });
 

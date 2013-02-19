@@ -36,7 +36,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         if (!this.model.workspace().isActive() || !this.model.workspace().canUpdate()) {
             this.$(".run_file").attr("disabled", "disabled");
             this.$(".save button").attr("disabled", "disabled");
-            this.$(".change_workfile_schema").addClass("disabled");
+            this.$(".change_workfile_schema").remove();
         }
 
         if (!this.hasValidExecutionSchema()) {
