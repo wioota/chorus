@@ -16,14 +16,15 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
         this.input = this.$(".rename_tag_input");
     },
 
-    newAttributes: function() {
-        var value = this.input.val().trim();
-        return _.extend(_.clone(this.model.attributes), {name: value});
+    getName: function() {
+        return this.input.val().trim();
     },
 
     submit: function(e) {
         e.preventDefault();
-        this.model.save(this.newAttributes(), {silent: true});
+        this.model.save({name: this.getName()}, {silent: true, unprocessableEntity: function() {
+            // skip the default redirection on unprocessable entity
+        }});
     },
 
     saveFailed: function() {
@@ -32,7 +33,9 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     checkInput : function() {
         this.clearErrors();
-        var newAttributes = this.newAttributes();
+        var newAttributes = _.extend(_.clone(this.model.attributes), {
+            name: this.getName()
+        });
         var valid = this.model.performValidation(newAttributes);
         if (!valid) {
             this.markInputAsInvalid(this.input, this.model.errors.name, true);

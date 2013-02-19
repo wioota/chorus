@@ -55,14 +55,19 @@ describe("chorus.dialogs.RenameTag", function() {
             });
         });
 
-        context("when the server request fails", function() {
+        context("when the server request fails with an unprocessable entity failure", function() {
             beforeEach(function(){
                 this.input.val("new-tag-name");
                 this.dialog.$('form').submit();
+                this.unprocessableEntitySpy = jasmine.createSpy("unprocessableEntity");
+                this.tag.bind("unprocessableEntity", this.unprocessableEntitySpy);
                 this.server.lastUpdate().failUnprocessableEntity();
             });
             it("displays a server error in the dialog", function() {
                expect(this.dialog.$(".errors")).not.toHaveClass("hidden");
+            });
+            it("does not call the model's default error handler", function() {
+                expect(this.unprocessableEntitySpy).not.toHaveBeenCalled();
             });
         });
     });
