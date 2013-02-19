@@ -2,7 +2,7 @@ class DatasetColumnPresenter < Presenter
   def to_hash
     {
       :name => model.name,
-      :data_type => model.data_type,
+      :data_type => model.data_type.downcase,
       :type_category => type_category,
       :description => model.description,
       :statistics => statistics,

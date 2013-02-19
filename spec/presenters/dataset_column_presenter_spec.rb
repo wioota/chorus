@@ -2,13 +2,13 @@ require "spec_helper"
 
 describe DatasetColumnPresenter, :type => :view do
   let(:column) { OpenStruct.new(:name => "column1", :data_type => type_string, :description => 'nothing') }
-  let(:type_string) { "smallint" }
+  let(:type_string) { "SMALLINT" }
 
   subject { DatasetColumnPresenter.new(column, view) }
 
   describe "#to_hash" do
     it "includes the column's basic information" do
-      mock(subject).to_category("smallint") { "bar" }
+      mock(subject).to_category(type_string) { "bar" }
       hash = subject.to_hash
       hash[:name].should == "column1"
       hash[:type_category].should == "bar"
@@ -28,7 +28,7 @@ describe DatasetColumnPresenter, :type => :view do
       let(:fake_presented_statistics) { Object.new }
 
       before do
-        stub(subject).to_category("smallint") { "bar" }
+        stub(subject).to_category(type_string) { "bar" }
         column.statistics = statistics
       end
 
