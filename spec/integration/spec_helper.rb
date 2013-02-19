@@ -48,7 +48,22 @@ RSpec.configure do |config|
     Rails.logger.info "Started test: #{example.full_description}"
   end
 
-  config.after(:each) do
+config.after(:each) do
+    wait_for_page_load
+
+    counter = 0
+
+    begin
+      active = (page.evaluate_script("$.active != 0") rescue false)
+      if active
+        puts "Waiting for AJAX in #{example.full_description}" if counter == 0
+        sleep 1
+        counter += 1
+        retry unless counter > 10
+        puts "Giving up on outstanding AJAX request for #{example.full_description}"
+      end
+    end
+
     DatabaseCleaner.clean
 
     begin

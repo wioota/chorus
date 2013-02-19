@@ -49,7 +49,7 @@ module CapybaraHelpers
   end
 
   def wait_for_page_load
-    page.should have_selector(".main_content")
+    page.find(".main_content") rescue nil
     page.should have_no_selector(".loading_section")
   end
 end

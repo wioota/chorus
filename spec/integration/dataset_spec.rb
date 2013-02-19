@@ -12,6 +12,9 @@ describe "Dataset", :database_integration do
     click_link the_data_source.name
     find("a", :text => /^#{dataset.schema.database.name}$/).click
     find("a", :text => /^#{dataset.schema.name}$/).click
+
+    wait_for_page_load
+
     within ".multiselect" do
       find('.select_all').click
     end
