@@ -51,17 +51,12 @@ RSpec.configure do |config|
 config.after(:each) do
     wait_for_page_load
 
-    counter = 0
+    (0..10).each do |counter|
+      break unless (page.evaluate_script("$.active != 0") rescue nil)
+      sleep 1
 
-    begin
-      active = (page.evaluate_script("$.active != 0") rescue false)
-      if active
-        puts "Waiting for AJAX in #{example.full_description}" if counter == 0
-        sleep 1
-        counter += 1
-        retry unless counter > 10
-        puts "Giving up on outstanding AJAX request for #{example.full_description}"
-      end
+      puts "Waiting for AJAX in #{example.full_description}" if counter == 0
+      puts "Giving up on outstanding AJAX request for #{example.full_description}" if counter == 10
     end
 
     DatabaseCleaner.clean
