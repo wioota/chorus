@@ -52,16 +52,36 @@ describe("chorus.views.DataTabDataset", function() {
             });
         });
 
-        context("when clicking the toggle_visibility arrow", function () {
-            beforeEach(function () {
+        describe("toggling the column list", function () {
+            beforeEach(function() {
                 this.view.$('.toggle_visibility').click();
                 this.server.completeFetchAllFor(this.dataset.columns(), [
                     rspecFixtures.databaseColumn({name: "column_1"})
                 ]);
             });
 
-            it("shows the columns", function() {
-                expect(this.view.$(".data_tab_dataset_column_list")).toContainText("column_1");
+            context("when the list is hidden", function() {
+                it("shows the columns", function() {
+                    expect(this.view.$(".data_tab_dataset_column_list")).toContainText("column_1");
+                });
+
+                it("shows the close arrow", function() {
+                    expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/close.gif");
+                });
+            });
+
+            context("when the list is shown", function() {
+                beforeEach(function () {
+                    this.view.$('.toggle_visibility').click();
+                });
+
+                it("hides the columns", function() {
+                    expect(this.view.$(".data_tab_dataset_column_list")).not.toContainText("column_1");
+                });
+
+                it("shows the expand arrow", function() {
+                    expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/expand.gif");
+                });
             });
         });
     });

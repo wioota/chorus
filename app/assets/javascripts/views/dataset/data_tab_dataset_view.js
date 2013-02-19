@@ -14,6 +14,10 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
         this.setupQTip();
     },
 
+    setup: function() {
+        this.columnsVisible = false;
+    },
+
     setupQTip: function() {
         this.$el.qtip("destroy");
         this.$el.qtip({
@@ -81,12 +85,29 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
     },
 
     toggleVisibility: function() {
-        this.columnList = new chorus.views.DataTabDatasetColumnList({
+        if(!this.columnsVisible) {
+            this.columnList = this.buildColumnList();
+            this.registerSubView(this.columnList);
+            this.columnList.render();
+        }
+
+        else {
+            this.columnList.teardown(true);
+        }
+
+        this.columnsVisible = !this.columnsVisible;
+        this.updateArrowIcon();
+    },
+
+    updateArrowIcon: function() {
+        var imageUrl = this.columnsVisible ? '/images/close.gif' : '/images/expand.gif';
+        this.$('img:eq(0)').attr('src', imageUrl);
+    },
+
+    buildColumnList: function() {
+        return new chorus.views.DataTabDatasetColumnList({
             el: this.$(".column_list"),
             dataset: this.model
         });
-
-        this.registerSubView(this.columnList);
-        this.columnList.render();
     }
 });
