@@ -10,6 +10,7 @@ require 'yaml'
 require 'timeout'
 require 'capybara/poltergeist'
 require 'factory_girl'
+require 'database_cleaner'
 
 headless = Headless.new
 headless.start
@@ -20,6 +21,8 @@ Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
 Capybara.save_and_open_page_path = ENV['WORKSPACE']
 Capybara.default_wait_time = 20
+
+DatabaseCleaner.strategy = :deletion
 
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
 
@@ -40,10 +43,14 @@ require Rails.root.join('spec/external_service_detector.rb').to_s
 
 RSpec.configure do |config|
   config.before(:each) do
+    DatabaseCleaner.start
+
     Rails.logger.info "Started test: #{example.full_description}"
   end
 
   config.after(:each) do
+    DatabaseCleaner.clean
+
     begin
       Capybara.reset_sessions! # this should surface unhandled server errors
     ensure
@@ -54,7 +61,7 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.mock_with :rr
   config.fixture_path = "#{Rails.root}/spec/integration/fixtures"
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
   config.global_fixtures = :all
   config.include Capybara::DSL
   config.include Capybara::RSpecMatchers
