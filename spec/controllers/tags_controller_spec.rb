@@ -88,6 +88,13 @@ describe TagsController do
 
       response.should_not be_ok
     end
+
+    it "presents the updated tag" do
+      mock_present do |presented_tag|
+        presented_tag.name.should == "my other name"
+      end
+      put :update, { :id => tag.id, :name => "my other name" }
+    end
   end
 
   describe "jasmine fixtures" do

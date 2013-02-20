@@ -1,6 +1,8 @@
 describe("chorus.views.TagListSidebar", function() {
     beforeEach(function() {
-        this.tags = new chorus.collections.TagSet([{name: "Hello"}]);
+        this.tags = new chorus.collections.TagSet([
+            {name: "Hello"}
+        ]);
         this.view = new chorus.views.TagListSidebar();
         this.selectedTag = this.tags.first();
     });
@@ -57,15 +59,20 @@ describe("chorus.views.TagListSidebar", function() {
         });
 
         context("clicking rename tag", function() {
-           beforeEach(function() {
-               spyOn(this.view.renameTagDialog, "launchModal");
-               this.renameLink.click();
-           });
+            beforeEach(function() {
+                this.launchModalSpy = jasmine.createSpy("launchModal");
+                this.fakeDialog = { launchModal: this.launchModalSpy };
+                spyOn(chorus.dialogs, "RenameTag").andCallFake(_.bind(function(options) {
+                    expect(options.model).toBe(this.view.tag);
+                    return this.fakeDialog;
+                }, this));
+            });
 
-           it("opens the rename tag dialog", function() {
-               expect(this.view.renameTagDialog.model).toBe(this.selectedTag);
-               expect(this.view.renameTagDialog.launchModal).toHaveBeenCalled();
-           });
+            it("opens the rename tag dialog", function() {
+                this.renameLink.click();
+                expect(chorus.dialogs.RenameTag).toHaveBeenCalled();
+                expect(this.launchModalSpy).toHaveBeenCalled();
+            });
         });
     });
 });

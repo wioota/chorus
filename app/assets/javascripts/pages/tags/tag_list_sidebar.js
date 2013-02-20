@@ -18,10 +18,6 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
 
     setTag: function(tag) {
       this.tag = tag;
-      if(tag) {
-          this.renameTagDialog = new chorus.dialogs.RenameTag({ model: tag });
-          this.deleteTagAlert  = new chorus.alerts.TagDelete({ model: tag });
-      }
       this.render();
     },
 
@@ -34,11 +30,11 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
 
     deleteSelectedTag: function(e) {
         e.preventDefault();
-        this.deleteTagAlert.launchModal();
+        new chorus.alerts.TagDelete({ model: this.tag }).launchModal();
     },
 
     renameSelectedTag: function(e) {
         e.preventDefault();
-        this.renameTagDialog.launchModal();
+        new chorus.dialogs.RenameTag({ model: this.tag }).launchModal();
     }
 });

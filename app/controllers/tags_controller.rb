@@ -9,7 +9,7 @@ class TagsController < ApplicationController
     tag.name = params[:tag][:name]
     tag.save!
 
-    head :ok
+    present tag
   end
 
   def destroy

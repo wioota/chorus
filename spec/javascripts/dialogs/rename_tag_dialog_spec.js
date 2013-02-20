@@ -14,6 +14,7 @@ describe("chorus.dialogs.RenameTag", function() {
 
     describe("submitting a new tag name", function() {
         beforeEach(function() {
+            spyOnEvent(this.tag, "change");
             spyOnEvent($(document), "close.facebox");
             this.input.val("new-tag-name");
             this.dialog.$('form').submit();
@@ -25,6 +26,7 @@ describe("chorus.dialogs.RenameTag", function() {
 
         it("should display a loading spinner in the submit button", function() {
             expect(this.dialog.$("button[type=submit]")).toHaveSpinner();
+            expect(this.dialog.$("button[type=submit]")).toContainTranslation("actions.renaming");
         });
 
         context("when the save is successful", function() {
@@ -34,6 +36,10 @@ describe("chorus.dialogs.RenameTag", function() {
 
             it("closes the dialog", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document));
+            });
+
+            it("triggers change on the tag model", function() {
+                expect("change").toHaveBeenTriggeredOn(this.tag);
             });
         });
 
@@ -56,6 +62,10 @@ describe("chorus.dialogs.RenameTag", function() {
             it("stops the spinner", function() {
                 expect(this.dialog.$("button[type=submit]")).not.toHaveSpinner();
             });
+
+            it("does not trigger change on the tag model", function() {
+                expect("change").not.toHaveBeenTriggeredOn(this.tag);
+            });
         });
     });
 
@@ -66,11 +76,6 @@ describe("chorus.dialogs.RenameTag", function() {
         });
 
         it("disables the button initially because the name hasn't changed", function() {
-            expect(this.dialog.$("button[type=submit]")).toBeDisabled();
-        });
-
-        it("disables the button when the name is the same as the original name", function() {
-            this.input.val(this.tag.name()).keyup();
             expect(this.dialog.$("button[type=submit]")).toBeDisabled();
         });
 

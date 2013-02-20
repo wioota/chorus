@@ -24,13 +24,14 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     submit: function(e) {
         e.preventDefault();
-        this.submitButton.startLoading("actions.saving");
+        this.submitButton.startLoading("actions.renaming");
         this.model.save({name: this.getName()}, {silent: true, unprocessableEntity: function() {
             // skip the default redirection on unprocessable entity
         }});
     },
 
     saved:function () {
+        this.model.trigger("change");
         this.closeModal();
     },
 
@@ -48,7 +49,6 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
         if (!valid) {
             this.markInputAsInvalid(this.input, this.model.errors.name, true);
         }
-        var disabled = (newAttributes.name === this.model.name()) || !valid;
-        this.submitButton.prop("disabled", disabled);
+        this.submitButton.prop("disabled", !valid);
     }
 });
