@@ -4,16 +4,14 @@ chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
     useLoadingSection:true,
 
     postRender: function() {
-        this.setupSchemaMenu();
-        this.setupInsertPopover();
-        this.closeQtipOnScroll();
-        this.setupDragging();
+        this._super('postRender', arguments);
 
         chorus.search({
             list: this.$('ul'),
             input: this.$('input.search')
         });
 
+        this.setupInsertPopover();
         this.setupDescriptionPopover();
     },
 

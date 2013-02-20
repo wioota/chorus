@@ -5,26 +5,19 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         "click .no_credentials .add_credentials": "launchAddCredentialsDialog"
     },
 
-    collectionModelContext: function(model) {
-        return {
-            cid: model.cid
-        };
-    },
-
     setup: function() {
         this.setSchema(this.options.schema);
         this.subscribePageEvent("workfile:changed", this.workfileChanged);
     },
 
     additionalContext: function() {
-        if (!this.schema) {
+        if(!this.schema) {
             return {
                 schemaAssociated: false
             };
         } else {
             return {
                 schemaAssociated: true,
-                schemaName: this.schema && this.schema.get("name"),
                 schemaLink: chorus.helpers.linkTo("#", this.schema.get('name')),
                 schemas: this.schemas.map(function(schema) {
                     return {
@@ -44,6 +37,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     setSchemaToCurrentWorkspace: $.noop,
     fetchResourceAfterSchemaSelected: $.noop,
+    searchTextChanged: $.noop,
 
     teardown: function() {
         this.$("li").qtip("destroy");
@@ -82,7 +76,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         }, this));
     },
 
-     setupDragging: function() {
+    setupDragging: function() {
         this.$("ul.list li").draggable({
             cursor: "move",
             containment: "window",
@@ -91,13 +85,13 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         });
     },
 
-    dragHelper : function(e) {
+    dragHelper: function(e) {
         return $(e.currentTarget).clone().addClass("drag_helper");
     },
 
     schemaSelected: function(e) {
         var schemaId = $(e.target).data("id");
-        if (schemaId === "workspaceSchema") {
+        if(schemaId === "workspaceSchema") {
             this.setSchemaToCurrentWorkspace();
             this.fetchResourceAfterSchemaSelected();
 
@@ -126,7 +120,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     workfileChanged: function(workfile) {
         var executionSchema = workfile.executionSchema();
-        if (!this.schema || (executionSchema.id && executionSchema.id !== this.schema.id)) {
+        if(!this.schema || (executionSchema.id && executionSchema.id !== this.schema.id)) {
             this.setSchema(new chorus.models.Schema(executionSchema));
         }
     },
@@ -134,7 +128,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     setSchema: function(schema) {
         var oldSchema = this.schema;
         this.schema = schema;
-        if (this.schema && (!oldSchema || oldSchema.database().id !== this.schema.database().id)) {
+        if(this.schema && (!oldSchema || oldSchema.database().id !== this.schema.database().id)) {
             this.schemas = this.schema.database().schemas();
             this.requiredResources.add(this.schemas);
             this.schemas.fetchAll();
