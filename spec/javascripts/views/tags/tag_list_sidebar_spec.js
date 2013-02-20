@@ -30,6 +30,23 @@ describe("chorus.views.TagListSidebar", function() {
                 expect(this.deleteLink).toExist();
                 expect(this.deleteLink).toContainTranslation('tag_list.delete.button');
             });
+
+            context("clicking the tag", function() {
+                beforeEach(function() {
+                    this.launchModalSpy = jasmine.createSpy("launchModal");
+                    this.fakeAlert = { launchModal: this.launchModalSpy };
+                    spyOn(chorus.alerts, "TagDelete").andCallFake(_.bind(function(options) {
+                        expect(options.model).toBe(this.view.tag);
+                        return this.fakeAlert;
+                    }, this));
+                });
+
+                it("opens the rename tag dialog", function() {
+                    this.deleteLink.click();
+                    expect(chorus.alerts.TagDelete).toHaveBeenCalled();
+                    expect(this.launchModalSpy).toHaveBeenCalled();
+                });
+            });
         });
 
         context("user is not admin", function() {
@@ -43,7 +60,6 @@ describe("chorus.views.TagListSidebar", function() {
                 expect(this.deleteLink).not.toExist();
             });
         });
-
     });
 
     describe("rename tag link", function() {
