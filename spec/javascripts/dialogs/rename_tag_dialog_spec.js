@@ -31,6 +31,7 @@ describe("chorus.dialogs.RenameTag", function() {
 
         context("when the save is successful", function() {
             beforeEach(function() {
+                spyOn(chorus, "toast");
                 this.server.completeUpdateFor(this.tag, this.tag.attributes);
             });
 
@@ -40,6 +41,10 @@ describe("chorus.dialogs.RenameTag", function() {
 
             it("triggers change on the tag model", function() {
                 expect("change").toHaveBeenTriggeredOn(this.tag);
+            });
+
+            it("displays a toast message", function() {
+                expect(chorus.toast).toHaveBeenCalledWith("tag.rename", {name: "new-tag-name"});
             });
         });
 

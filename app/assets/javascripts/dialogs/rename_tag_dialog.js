@@ -32,6 +32,7 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     saved:function () {
         this.model.trigger("change");
+        chorus.toast("tag.rename", {name: this.model.name()});
         this.closeModal();
     },
 
