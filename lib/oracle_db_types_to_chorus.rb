@@ -26,7 +26,8 @@ module OracleDbTypesToChorus
       "VARCHAR2" => "STRING",
       "XMLTYPE" => "OTHER",
       "TIMESTAMP WITH TIME ZONE" => "DATETIME",
-      "TIMESTAMP WITHOUT TIME ZONE" => "DATETIME"
+      "TIMESTAMP WITHOUT TIME ZONE" => "DATETIME",
+      "TIMESTAMP(6)" => "DATETIME"
   }
 
   def to_category(data_type)

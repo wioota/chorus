@@ -42,5 +42,6 @@ describe "OracleDbTypesToChorus" do
     it_has_type_category("XMLTYPE", "OTHER")
     it_has_type_category("TIMESTAMP WITH TIME ZONE", "DATETIME")
     it_has_type_category("TIMESTAMP WITHOUT TIME ZONE", "DATETIME")
+    it_has_type_category("TIMESTAMP(6)", "DATETIME")
   end
 end
