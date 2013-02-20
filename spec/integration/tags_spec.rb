@@ -9,13 +9,13 @@ describe 'listing all tags' do
     visit "#/tags"
   end
 
-  xit "shows the tags" do
+  it "shows the tags" do
     %w(foo bar baz).each do |name|
       page.should have_link(name)
     end
   end
 
-  xit "renames a specific tag" do
+  it "renames a specific tag" do
     find('li', :text => 'foo').click
     click_on "Rename tag"
     within_modal do
