@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: git://github.com/GreenplumChorus/queue_classic.git
-  revision: 2719301c2813717692169c1eeab42d317df0ac59
+  revision: 1e85a9d9268a04c5da99522e43fcd13437e6bedc
   specs:
     queue_classic (2.0.0)
       scrolls (~> 0.0.8)
