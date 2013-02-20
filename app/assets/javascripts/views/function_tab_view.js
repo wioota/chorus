@@ -1,6 +1,6 @@
-chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.extend({
-    constructorName: "DatabaseFunctionSidebarListView",
-    templateName:"database_function_sidebar_list",
+chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
+    constructorName: "FunctionTabView",
+    templateName:"function_tab",
     useLoadingSection:true,
 
     postRender: function() {
@@ -15,6 +15,56 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
         });
 
         this.setupDescriptionPopover();
+    },
+
+    setupInsertPopover: function() {
+        this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
+        this.setupInsertPopoverWithSelector(this.$("li"));
+    },
+
+    setupInsertPopoverWithSelector: function(element) {
+        element.qtip("destroy");
+        element.qtip({
+            content: "<a>" + t('database.sidebar.insert') + "</a>",
+            events: {
+                render: _.bind(function(e, api) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(api.elements.content).find('a').click(_.bind(this.insertText, this, $(api.elements.target).data('cid')));
+                }, this),
+                show: function(e, api) {
+                    $(api.elements.target).addClass('hover');
+                },
+                hide: function(e, api) {
+                    $(api.elements.target).removeClass('hover');
+                }
+            },
+            show: {
+                delay: 0,
+                solo: true,
+                effect: false
+            },
+            hide: {
+                delay: 0,
+                fixed: true,
+                effect: false
+            },
+            position: {
+                my: "right center",
+                at: "left center",
+                adjust: {
+                    x: -12
+                }
+            },
+            style: {
+                classes: "tooltip-insert",
+                tip: {
+                    corner: "left center",
+                    width: 16,
+                    height: 25
+                }
+            }
+        });
     },
 
     setupDescriptionPopover: function() {
@@ -61,7 +111,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     },
 
     tooltipContent: function(model) {
-        var html = chorus.helpers.renderTemplate("database_function_sidebar_tooltip", {
+        var html = chorus.helpers.renderTemplate("function_tab_tooltip", {
             description:_.prune(model.get("description") || '', 100),
             returnType: model.get("returnType"),
             name: model.get("name"),

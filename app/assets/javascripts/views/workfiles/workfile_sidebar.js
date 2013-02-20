@@ -63,7 +63,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         if (this.options.showSchemaTabs && this.model.isSql() && this.model.workspace().isActive()) {
             this.tabs.tabNames = ["data","database_function_list","activity"];
             var schema = this.model.executionSchema();
-            this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: schema });
+            this.tabs.database_function_list = new chorus.views.FunctionTab({ schema: schema });
             this.tabs.data = this.tabs.data || new chorus.views.DataTab({ schema: schema });
         } else {
             this.tabs.tabNames = ["activity"];

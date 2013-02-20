@@ -20,13 +20,18 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
 
     setupInsertPopover: function() {
         this.$el.qtip("destroy");
-        this.$el.qtip({
+        this.setupInsertPopoverWithSelector(this.$el);
+    },
+
+    setupInsertPopoverWithSelector: function(element) {
+        element.qtip("destroy");
+        element.qtip({
             content: "<a>" + t('database.sidebar.insert') + "</a>",
             events: {
                 render: _.bind(function(e, api) {
                     e.preventDefault();
                     e.stopPropagation();
-                    $(api.elements.content).find('a').click(_.bind(this.insertText, this));
+                    $(api.elements.content).find('a').click(_.bind(this.insertText, this, $(api.elements.target).data('cid')));
                 }, this),
                 show: function(e, api) {
                     $(api.elements.target).addClass('hover');
@@ -107,7 +112,7 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
     buildColumnList: function() {
         return new chorus.views.DataTabDatasetColumnList({
             el: this.$(".column_list"),
-            dataset: this.model
+                dataset: this.model
         });
     }
 });

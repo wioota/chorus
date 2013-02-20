@@ -1,9 +1,9 @@
-describe("chorus.views.DatabaseFunctionSidebarList", function () {
+describe("chorus.views.FunctionTab", function () {
     beforeEach(function () {
         this.schema = rspecFixtures.workspace({ sandboxInfo:{ name:"righteous_tables" } }).sandbox().schema();
         this.modalSpy = stubModals();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.DatabaseFunctionSidebarList({schema:this.schema});
+        this.view = new chorus.views.FunctionTab({schema:this.schema});
     });
 
     it("should fetch the functions for the sandbox", function () {
@@ -17,7 +17,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
     describe("render", function () {
         context("when there's no schema associated", function () {
             beforeEach(function () {
-                this.view = new chorus.views.DatabaseFunctionSidebarList({schema:null});
+                this.view = new chorus.views.FunctionTab({schema:null});
                 this.view.render();
             });
 

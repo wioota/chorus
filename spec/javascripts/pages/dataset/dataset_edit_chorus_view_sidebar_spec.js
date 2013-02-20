@@ -23,8 +23,8 @@ describe("chorus.views.DatasetEditChorusViewSidebar", function() {
         });
 
         it("should have a functions tab", function() {
-            expect(this.view.$('.tab_control .database_function_sidebar_list')).toExist();
-            expect(this.view.tabs.database_function_list).toBeA(chorus.views.DatabaseFunctionSidebarList);
+            expect(this.view.$('.tab_control .function_tab')).toExist();
+            expect(this.view.tabs.database_function_list).toBeA(chorus.views.FunctionTab);
         });
 
         it("should have a dataset tab", function() {

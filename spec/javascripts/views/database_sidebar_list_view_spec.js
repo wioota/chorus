@@ -2,7 +2,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
     context("when there is no schema", function() {
         beforeEach(function() {
             var subclass = chorus.views.DatabaseSidebarList.extend({
-                templateName: "database_function_sidebar_list"
+                templateName: "function_tab"
             });
             this.view = new subclass({schema: undefined});
         });
@@ -14,7 +14,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             });
 
             it("should not crash", function() {
-                expect($(this.view.el)).toHaveClass("database_function_sidebar_list");
+                expect($(this.view.el)).toHaveClass("function_tab");
             });
         });
     });

@@ -217,7 +217,7 @@ body .ui-draggable-dragging {
                 margin: 4px 0px 17px 20px;
             }
 
-            .database_function_sidebar_list, .data_tab {
+            .function_tab, .data_tab {
                 ul {
                     margin-top: 10px;
                 }
@@ -267,7 +267,7 @@ body .ui-draggable-dragging {
                 }
             }
 
-            .database_function_sidebar_list, .data_tab {
+            .function_tab, .data_tab {
                 .schema_menu {
                     display: none;
                 }
@@ -301,7 +301,7 @@ body .ui-draggable-dragging {
     }
 }
 
-.database_function_sidebar_list, .data_tab {
+.function_tab, .data_tab {
     li {
         .list_item_text {
             margin-top: 2px;

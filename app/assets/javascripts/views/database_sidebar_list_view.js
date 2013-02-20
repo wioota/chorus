@@ -52,7 +52,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     postRender: function() {
         this.setupSchemaMenu();
-        this.setupInsertPopover();
         this.closeQtipOnScroll();
         this.setupDragging();
     },
@@ -71,52 +70,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                     mimic: "top center",
                     width: 20,
                     height: 10
-                }
-            }
-        });
-    },
-
-    setupInsertPopover: function() {
-        this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
-        this.$("li").qtip("destroy");
-        this.$("li").qtip({
-            content: "<a>" + t('database.sidebar.insert') + "</a>",
-            events: {
-                render: _.bind(function(e, api) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(api.elements.content).find('a').click(_.bind(this.insertText, this, $(api.elements.target).data('cid')));
-                }, this),
-                show: function(e, api) {
-                    $(api.elements.target).addClass('hover');
-                },
-                hide: function(e, api) {
-                    $(api.elements.target).removeClass('hover');
-                }
-            },
-            show: {
-                delay: 0,
-                solo: true,
-                effect: false
-            },
-            hide: {
-                delay: 0,
-                fixed: true,
-                effect: false
-            },
-            position: {
-                my: "right center",
-                at: "left center",
-                adjust: {
-                    x: -12
-                }
-            },
-            style: {
-                classes: "tooltip-insert",
-                tip: {
-                    corner: "left center",
-                    width: 16,
-                    height: 25
                 }
             }
         });

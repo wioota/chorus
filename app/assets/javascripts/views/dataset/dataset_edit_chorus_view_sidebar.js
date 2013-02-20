@@ -19,7 +19,7 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
         this.tabs = new chorus.views.TabControl(["data", "database_function_list", "activity"]);
         this.schema = this.model.schema();
 
-        this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({ schema: this.schema });
+        this.tabs.database_function_list = new chorus.views.FunctionTab({ schema: this.schema });
         this.tabs.data = new chorus.views.DataTab({ schema: this.schema });
         this.tabs.activity = new chorus.views.ActivityList({
             collection: this.collection,
