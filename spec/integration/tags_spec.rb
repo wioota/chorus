@@ -22,6 +22,9 @@ describe 'listing all tags' do
       find("input").set("hello")
       click_on "Rename tag"
     end
+
+    pending "#39968589 wip"
+
     find('li', :text => 'hello').should have_link("hello")
 
     # check that tag is persisted
