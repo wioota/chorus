@@ -267,36 +267,36 @@ body .ui-draggable-dragging {
                 }
             }
 
-            .data_tab_dataset_column_list {
-                li {
-                    padding-top: 0px;
-                    padding-bottom: 0px;
-                    color: $color-text2;
-                    cursor: pointer;
-                    border-bottom: none;
-
-                    .column_name {
-                        font-weight: $semibold;
-                        max-width: 60%;
-                    }
-                    .column_type {
-                        color: $color-text3;
-                    }
-
-                    &.hover {
-                        margin-top: -1px;
-                        background-color: $selected-row-hover-background-color;
-                        border-top: 1px solid $list-border-color;
-                        border-bottom: 1px solid $list-border-color;
-                    }
-                }
-            }
-
             .database_function_sidebar_list, .data_tab {
                 .schema_menu {
                     display: none;
                 }
             }
+        }
+    }
+}
+
+.data_tab_dataset_column_list {
+    li {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: $color-text2;
+        cursor: pointer;
+        border-bottom: none;
+
+        .column_name {
+            font-weight: $semibold;
+            max-width: 60%;
+        }
+        .column_type {
+            color: $color-text3;
+        }
+
+        &.hover {
+            margin-top: -1px;
+            background-color: $selected-row-hover-background-color;
+            border-top: 1px solid $list-border-color;
+            border-bottom: 1px solid $list-border-color;
         }
     }
 }
