@@ -2,6 +2,7 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
     constructorName: "RenameTagDialog",
     templateName: "rename_tag",
     title: t("rename_tag.title"),
+    additionalClass: "dialog-narrow",
 
     events: {
         "submit form" : "submit",
