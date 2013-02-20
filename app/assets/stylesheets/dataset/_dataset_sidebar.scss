@@ -51,6 +51,7 @@
             font-weight: $semibold;
             overflow: hidden; /*this is neccesary for alignment in firefox due to the overflow:hidden firefox bug*/
             line-height: 22px;
+            color: #5f5f5f;
         }
 
         .column_title {
