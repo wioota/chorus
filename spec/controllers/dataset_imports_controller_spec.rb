@@ -92,29 +92,13 @@ describe DatasetImportsController do
       before do
         import.finished_at = nil
         import.save!
-        stub(ImportTerminator).terminate(import)
+        stub(ImportExecutor).cancel(import, success, anything)
       end
 
-      it "responds with success" do
+      it "cancels a running import" do
+        mock(ImportExecutor).cancel(import, success, nil)
         put :update, params
         response.should be_success
-      end
-
-      it "calls terminate on a running import and sets the success attribute" do
-        mock(ImportTerminator).terminate(import)
-        put :update, params
-        import.reload
-        import.finished_at.should be_within(1.minute).of(Time.current)
-        import.success.should == success
-      end
-
-      it "generates an event and a notification" do
-        expect {
-          expect {
-            put :update, params.merge({:message => "this was canceled because it was bad"})
-          }.to change(Events::DatasetImportFailed, :count).by(1)
-        }.to change(Notification, :count).by(1)
-        Events::DatasetImportFailed.last.error_message.should == "this was canceled because it was bad"
       end
 
       it "redirects html requests back to the import console" do
@@ -133,35 +117,10 @@ describe DatasetImportsController do
     it "authorizes only the admin" do
       log_out
       log_in(users(:owner))
-      mock(ImportTerminator).terminate(import).times(0)
+      dont_allow(ImportExecutor).cancel.with_any_args
       put :update, params
 
       response.should be_forbidden
-    end
-
-    context "for a set of imports that have not finished" do
-      let(:params) { {
-          :id => Import.all.map(&:to_param),
-          :success => success,
-          :format => :json
-      } }
-
-      before do
-        Import.find_each do |import|
-          import.finished_at = nil
-          import.save!
-        end
-      end
-
-      it "cancels all running imports and sets the success attribute" do
-        stub(ImportTerminator).terminate.with_any_args
-        put :update, params
-        response.should be_success
-        Import.find_each do |import|
-          import.finished_at.should be_within(1.minute).of(Time.current)
-          import.success.should == success
-        end
-      end
     end
 
     context "for an import that has already finished" do
@@ -173,9 +132,8 @@ describe DatasetImportsController do
       end
 
       it "does nothing" do
+        dont_allow(ImportExecutor).cancel.with_any_args
         put :update, params
-        import.reload.finished_at.should == finished_at
-        import.success.should == true
         response.should be_success
       end
     end

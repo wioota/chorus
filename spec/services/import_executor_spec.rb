@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fakefs/spec_helpers'
 
 describe ImportExecutor do
   let(:user) { users(:owner) }
@@ -392,8 +393,17 @@ describe ImportExecutor do
   end
 
   describe ".cancel" do
+    let(:source_connection) { Object.new }
+    let(:destination_connection) { Object.new }
+    let(:executor) { ImportExecutor.new(import)}
     before do
-      mock(ImportTerminator).terminate(import)
+      stub(executor).log.with_any_args
+      stub.proxy(executor).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
+      stub.proxy(executor).sandbox { |sandbox| stub(sandbox).connect_as(user) { destination_connection } }
+      stub(source_connection).running?.with_any_args { true }
+      stub(destination_connection).running?.with_any_args { true }
+      mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
+      mock(destination_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_r")
       any_instance_of(Schema) do |schema|
         stub(schema).refresh_datasets.with_any_args do
           FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
@@ -401,9 +411,18 @@ describe ImportExecutor do
       end
     end
 
+    it "should remove the named pipe from disk" do
+      dir = ChorusConfig.instance['gpfdist.data_dir']
+      FileUtils.mkdir_p dir
+      pipe_file = File.join(dir, "pipe_with_some_extra_stuff_#{import.created_at.to_i}_#{import.id}")
+      FileUtils.touch pipe_file
+      executor.cancel(true)
+      File.exists?(pipe_file).should be_false
+    end
+
     describe "when the import is marked as successful" do
       let(:cancel_import) do
-        ImportExecutor.cancel(import, true)
+        executor.cancel(true)
       end
 
       it_behaves_like :it_succeeds, :cancel_import
@@ -411,7 +430,7 @@ describe ImportExecutor do
 
     describe "when the import is marked as failed with a message" do
       let(:cancel_import) do
-        ImportExecutor.cancel(import, false, "some crazy error")
+        executor.cancel(false, "some crazy error")
       end
 
       it_behaves_like :it_fails_with_message, :cancel_import, "some crazy error"

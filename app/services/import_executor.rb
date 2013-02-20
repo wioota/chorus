@@ -24,8 +24,35 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def cancel(success, message = nil)
+    log "Terminating import: #{__getobj__.inspect}"
     update_status(success ? :passed : :failed, message)
-    ImportTerminator.terminate(__getobj__)
+
+    read_pipe_searcher = "pipe%_#{pipe_name}_r"
+    read_connection = sandbox.connect_as(user)
+    if read_connection.running? read_pipe_searcher
+      log "Found running reader on database #{sandbox.database.name} on instance #{sandbox.data_source.name}, killing it"
+      read_connection.kill read_pipe_searcher
+    else
+      log "Could not find running reader on database #{sandbox.database.name} on instance #{sandbox.data_source.name}"
+    end
+
+    write_pipe_searcher = "pipe%_#{pipe_name}_w"
+    write_connection = source_dataset.connect_as(user)
+    if write_connection.running? write_pipe_searcher
+      log "Found running writer on database #{source_dataset.schema.database.name} on instance #{source_dataset.data_source.name}, killing it"
+      write_connection.kill write_pipe_searcher
+    else
+      log "Could not find running writer on database #{source_dataset.schema.database.name} on instance #{source_dataset.data_source.name}"
+    end
+
+    if named_pipe
+      log "Removing named pipe #{named_pipe}"
+      FileUtils.rm_f named_pipe
+    end
+  end
+
+  def log(message)
+    Rails.logger.info("Import Termination: #{message}")
   end
 
   private
@@ -48,8 +75,19 @@ class ImportExecutor < DelegateClass(Import)
         :user => user,
         :sample_count => sample_count,
         :truncate => truncate,
-        :pipe_name => "#{created_at.to_i}_#{id}"
+        :pipe_name => pipe_name
     }
+  end
+
+  def pipe_name
+    "#{created_at.to_i}_#{id}"
+  end
+
+  def named_pipe
+    return @named_pipe if @named_pipe
+    return unless ChorusConfig.instance.gpfdist_configured?
+    dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
+    @named_pipe = Dir.glob(dir.join "pipe*_#{pipe_name}").first
   end
 
   def refresh_schema

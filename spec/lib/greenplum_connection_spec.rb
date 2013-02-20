@@ -314,6 +314,35 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
+  describe "process management" do
+    let(:sql) { "SELECT pg_sleep(300) /* kill_me */" }
+    let(:runner_connection) { GreenplumConnection.new(details) }
+    let(:thread) do
+      Thread.new do
+        begin
+          runner_connection.fetch sql
+        rescue GreenplumConnection::DatabaseError
+        end
+      end
+    end
+
+    after do
+      connection.fetch "SELECT pg_terminate_backend(procpid) FROM (SELECT procpid from pg_stat_activity where current_query like '%kill_me%' and current_query not like '%procpid%') AS PROCPIDS"
+      thread.join
+    end
+
+    it "finds and kills executing queries that match the given sql" do
+      thread
+      timeout(3) do
+        until connection.running?("kill_me") do
+          sleep 0.1
+        end
+      end
+      connection.kill "kill_me"
+      connection.running?("kill_me").should be_false
+    end
+  end
+
   describe "InstanceMethods" do
     let(:database_name) { 'postgres' }
 
@@ -803,7 +832,7 @@ describe GreenplumConnection, :greenplum_integration do
 
       it "calls stream_sql with dataset sql string and limit" do
         mock(connection).stream_sql(dataset.all_rows_sql, limit) do |sql, row_limit, block, *args|
-          [1,2,3].each do |i|
+          [1, 2, 3].each do |i|
             block.call i
           end
           true
@@ -813,7 +842,7 @@ describe GreenplumConnection, :greenplum_integration do
         connection.stream_dataset(dataset, limit) do |row|
           results << row
         end
-        results.should == [1,2,3]
+        results.should == [1, 2, 3]
       end
     end
 
@@ -1245,8 +1274,8 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
         db.disconnect
       end
 
-      let(:table_definition) {'id integer PRIMARY KEY, column1 integer, column2 integer'}
-      let(:distribution_clause) {'DISTRIBUTED BY (id)'}
+      let(:table_definition) { 'id integer PRIMARY KEY, column1 integer, column2 integer' }
+      let(:distribution_clause) { 'DISTRIBUTED BY (id)' }
       let(:subject) { connection.create_table(destination_table_name, table_definition, distribution_clause) }
       let(:expected) { true }
 

@@ -105,6 +105,18 @@ class GreenplumConnection < DataSourceConnection
     raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
+  def running?(search)
+    with_connection do
+      find_pid_query(search).any?
+    end
+  end
+
+  def kill(search)
+    with_connection do
+      @connection.select { pg_terminate_backend(procpid) }.from(find_pid_query(search)).all
+    end
+  end
+
   def with_connection(options = {})
     # do this before creating connection, because it calls with_connection
     include_public_schema = options[:include_public_schema_in_search_path] && schema_exists?("public")
@@ -147,6 +159,10 @@ class GreenplumConnection < DataSourceConnection
 
   def quote_identifier(identifier)
     @connection.send(:quote_identifier, identifier)
+  end
+
+  def find_pid_query(search)
+    @connection.from(:pg_stat_activity).select(:procpid).where { current_query.like("%#{search}%") }.exclude { current_query.like("%procpid%") }
   end
 
   module DatabaseMethods
