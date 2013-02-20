@@ -9,21 +9,19 @@ describe 'listing all tags' do
     visit "#/tags"
   end
 
-  it "shows the tags" do
+  xit "shows the tags" do
     %w(foo bar baz).each do |name|
       page.should have_link(name)
     end
   end
 
-  it "renames a specific tag" do
+  xit "renames a specific tag" do
     find('li', :text => 'foo').click
     click_on "Rename tag"
     within_modal do
       find("input").set("hello")
       click_on "Rename tag"
     end
-
-    pending "#39968589 wip"
 
     find('li', :text => 'hello').should have_link("hello")
 
