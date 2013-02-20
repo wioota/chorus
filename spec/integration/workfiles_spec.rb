@@ -65,6 +65,7 @@ describe "Workfiles" do
       end
 
       it "Lists the work files by updated date when selected" do
+        wait_for_page_load
         find('a', :text => "Alphabetically", :visible => true).click
         find('a', :text => "By Date", :visible => true).click
         find('.workfile_sidebar .fileName').should have_content(workfile_first_by_date.file_name)
