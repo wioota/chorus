@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Search" do
-  before :all do
+  before do
     stub(DatasetColumn).columns_for.with_any_args {
       []
     }
@@ -9,9 +9,7 @@ describe "Search" do
       model.solr_index(:batch_commit => false)
     end
     Sunspot.commit
-  end
 
-  before do
     login(users(:owner))
     wait_for_page_load
     fill_in 'search_text', :with => 'searchquery'

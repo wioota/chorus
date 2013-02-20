@@ -48,7 +48,7 @@ RSpec.configure do |config|
     Rails.logger.info "Started test: #{example.full_description}"
   end
 
-config.after(:each) do
+  config.after(:each) do
     unless page.has_selector?(".main_content")
       puts "Counldn't find .main_content in #{example.full_description}"
     end
