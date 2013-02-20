@@ -8,6 +8,7 @@ describe ImportTerminator, :greenplum_integration do
   let(:schema) { database.schemas.find_by_name(schema_name) }
 
   before do
+    pending
     execute(destination_database_url, "drop table if exists #{destination_table_fullname};")
     dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
   end
@@ -45,7 +46,7 @@ describe ImportTerminator, :greenplum_integration do
       log_text
     end
 
-    context "with a real GpPipe job" do
+    context "with a real CrossDatabaseTableCopier job" do
       def stub_reader_sql
         any_instance_of(CrossDatabaseTableCopier) do |pipe|
           stub.proxy(pipe).reader_sql do |sql|
@@ -90,6 +91,7 @@ describe ImportTerminator, :greenplum_integration do
         end
 
         it "removes the named pipe" do
+          pending
           import_manager.named_pipe.should_not be_nil
           expect(log_for {
             ImportTerminator.terminate(import)
@@ -98,12 +100,14 @@ describe ImportTerminator, :greenplum_integration do
         end
 
         it "kills the reader" do
+          pending
           expect(log_for {
             ImportTerminator.terminate(import)
           }).to match /Found running reader/
         end
 
         it "kills the writer" do
+          pending
           expect(log_for {
             ImportTerminator.terminate(import)
           }).to match /Found running writer/
