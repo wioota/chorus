@@ -52,7 +52,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     postRender: function() {
         this.setupSchemaMenu();
-        this.setupQTip();
+        this.setupInsertPopover();
         this.closeQtipOnScroll();
         this.setupDragging();
     },
@@ -76,7 +76,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         });
     },
 
-    setupQTip: function() {
+    setupInsertPopover: function() {
         this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
         this.$("li").qtip("destroy");
         this.$("li").qtip({

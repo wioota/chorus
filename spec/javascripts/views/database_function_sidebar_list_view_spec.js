@@ -80,12 +80,6 @@ describe("chorus.views.DatabaseFunctionSidebarList", function () {
                     expect(this.view.collection).toBeTruthy();
                 });
 
-                it("should call super if overriding postRender", function() {
-                    spyOn(chorus.views.DatabaseSidebarList.prototype, 'postRender');
-                    this.view.render();
-                    expect(chorus.views.DatabaseSidebarList.prototype.postRender).toHaveBeenCalled();
-                });
-
                 it("should have the fullname on the list elements", function() {
                     expect(this.view.$('ul.list li')).toExist();
                     expect(this.view.$('ul.list li').data('fullname')).toBeTruthy();

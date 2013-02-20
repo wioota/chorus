@@ -11,14 +11,14 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
     postRender: function() {
         this.$el.data("fullname", this.model.toText());
         this.$el.data("name", this.model.name());
-        this.setupQTip();
+        this.setupInsertPopover();
     },
 
     setup: function() {
         this.columnsVisible = false;
     },
 
-    setupQTip: function() {
+    setupInsertPopover: function() {
         this.$el.qtip("destroy");
         this.$el.qtip({
             content: "<a>" + t('database.sidebar.insert') + "</a>",

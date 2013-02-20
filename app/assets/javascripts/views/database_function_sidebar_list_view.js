@@ -4,13 +4,20 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     useLoadingSection:true,
 
     postRender: function() {
-        this._super("postRender", arguments);
+        this.setupSchemaMenu();
+        this.setupInsertPopover();
+        this.closeQtipOnScroll();
+        this.setupDragging();
 
         chorus.search({
             list: this.$('ul'),
             input: this.$('input.search')
         });
 
+        this.setupDescriptionPopover();
+    },
+
+    setupDescriptionPopover: function() {
         this.$("li .name").qtip({
             events: {
                 render: _.bind(function(e, api) {
@@ -51,7 +58,6 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
                 }
             }
         });
-
     },
 
     tooltipContent: function(model) {
