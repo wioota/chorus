@@ -256,10 +256,11 @@ describe ImportExecutor do
   end
 
   describe "#run" do
-    def mock_import
-      mock(GpTableCopier).run_import(database_url, database_url, anything) do | *args |
+    def mock_copier(copier=TableCopier)
+      mock(copier).new(anything) do | *args |
         raise import_failure_message if import_failure_message.present?
         yield *args if block_given?
+        Object.new.tap {|o| stub(o).start }
       end
     end
 
@@ -271,38 +272,38 @@ describe ImportExecutor do
       end
     end
 
-    let(:run_import) do
-      mock_import
+    let(:copier_start) do
+      mock_copier
       ImportExecutor.new(import).run
     end
 
     it "creates a new table copier and runs it" do
-      run_import
+      copier_start
     end
 
     it "sets the started_at time" do
       expect {
-        run_import
+        copier_start
       }.to change(import, :started_at).from(nil)
       import.started_at.should be_within(1.hour).of(Time.current)
     end
 
-    it "passes the import id and created_at time as the pipe_name attribute to GpTableCopier.run_import" do
-      mock_import do | src_url, dst_url, attributes |
+    it "Uses the import id and created_at time in the pipe_name" do
+      mock_copier do | attributes |
         attributes[:pipe_name].should == "#{import.created_at.to_i}_#{import.id}"
       end
       ImportExecutor.run(import.id)
     end
 
     context "when the import succeeds" do
-      it_behaves_like :it_succeeds, :run_import
+      it_behaves_like :it_succeeds, :copier_start
     end
 
     context "when the import fails" do
       let(:import_failure_message) { "some crazy error" }
       let(:run_failing_import) do
         expect {
-          run_import
+          copier_start
         }.to raise_error import_failure_message
       end
 
@@ -316,20 +317,20 @@ describe ImportExecutor do
       end
 
       let(:error_message) { "Original source dataset #{source_dataset.scoped_name} has been deleted" }
-      let(:run_import) {
+      let(:copier_start) {
         ImportExecutor.new(import).run
       }
 
       it "raises an error" do
         expect {
-          run_import
+          copier_start
         }.to raise_error error_message
       end
 
       it "creates a DatasetImportFailed" do
         expect {
           expect {
-            run_import
+            copier_start
           }.to raise_error error_message
         }.to change(Events::DatasetImportFailed, :count).by(1)
 
@@ -346,26 +347,46 @@ describe ImportExecutor do
         import.reload # reload the deleted source dataset
       end
 
-      let(:run_import) {
+      let(:copier_start) {
         ImportExecutor.new(import).run
       }
 
       it "raises an error" do
         expect {
-          run_import
+          copier_start
         }.to raise_error error_message
       end
 
       it "creates a DatasetImportFailed" do
         expect {
           expect {
-            run_import
+            copier_start
           }.to raise_error error_message
         }.to change(Events::DatasetImportFailed, :count).by(1)
 
         event = Events::DatasetImportFailed.last
         event.error_message.should == error_message
         event.workspace.should == workspace
+      end
+    end
+
+    context "when the source and destinations are in different greenplum databases" do
+      let(:source_dataset) { datasets(:searchquery_table) }
+
+      it "should create a CrossDatabaseTableCopier to run the import" do
+        dont_allow(TableCopier).new.with_any_args
+        mock_copier(CrossDatabaseTableCopier)
+        ImportExecutor.new(import).run
+      end
+    end
+
+    context "when the source dataset is in oracle" do
+      let(:source_dataset) { datasets(:oracle_table) }
+
+      it "should create an OracleTableCopier to run the import" do
+        dont_allow(TableCopier).new.with_any_args
+        mock_copier(OracleTableCopier)
+        ImportExecutor.new(import).run
       end
     end
   end

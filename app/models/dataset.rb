@@ -37,7 +37,7 @@ class Dataset < ActiveRecord::Base
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
 
-  delegate :data_source, :accessible_to, :connect_with, :to => :schema
+  delegate :data_source, :accessible_to, :connect_with, :connect_as, :to => :schema
 
   def self.add_search_permissions(current_user, search)
     search.build do

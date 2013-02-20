@@ -16,9 +16,7 @@ class ImportExecutor < DelegateClass(Import)
     touch(:started_at)
     raise "Destination workspace #{workspace_with_deleted.name} has been deleted" if workspace_with_deleted.deleted?
     raise "Original source dataset #{source_dataset_with_deleted.scoped_name} has been deleted" if source_dataset_with_deleted.deleted?
-    source_database_url = get_database_url(source_dataset.schema.database)
-    destination_database_url = get_database_url(sandbox.database)
-    GpTableCopier.run_import(source_database_url, destination_database_url, import_attributes)
+    table_copier.new(import_attributes).start
     update_status :passed
   rescue => e
     update_status :failed, e.message
@@ -32,17 +30,26 @@ class ImportExecutor < DelegateClass(Import)
 
   private
 
-  def import_attributes
-    import_attributes = attributes.symbolize_keys.slice(:to_table, :new_table, :sample_count, :truncate)
-    import_attributes.merge!(
-        :from_table => source_dataset.as_sequel,
-        :to_table => Sequel.qualify(sandbox.name, import_attributes[:to_table]),
-        :pipe_name => created_at.to_i.to_s + "_" + id.to_s)
+  def table_copier
+    if source_dataset.class.name =~ /^Oracle/
+      OracleTableCopier
+    elsif source_dataset.database != sandbox.database
+      CrossDatabaseTableCopier
+    else
+      TableCopier
+    end
   end
 
-  def get_database_url(db)
-    account = db.data_source.account_for_user!(user)
-    db.connect_with(account).db_url
+  def import_attributes
+    {
+        :source_dataset => source_dataset,
+        :destination_schema => sandbox,
+        :destination_table_name => to_table,
+        :user => user,
+        :sample_count => sample_count,
+        :truncate => truncate,
+        :pipe_name => "#{created_at.to_i}_#{id}"
+    }
   end
 
   def refresh_schema

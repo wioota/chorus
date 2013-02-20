@@ -47,7 +47,7 @@ describe ImportTerminator, :greenplum_integration do
 
     context "with a real GpPipe job" do
       def stub_reader_sql
-        any_instance_of(GpPipe) do |pipe|
+        any_instance_of(CrossDatabaseTableCopier) do |pipe|
           stub.proxy(pipe).reader_sql do |sql|
             "SELECT pg_sleep(300) /* #{sql} */"
           end
@@ -55,7 +55,7 @@ describe ImportTerminator, :greenplum_integration do
       end
 
       def stub_writer_sql
-        any_instance_of(GpPipe) do |pipe|
+        any_instance_of(CrossDatabaseTableCopier) do |pipe|
           stub.proxy(pipe).writer_sql do |sql|
             "SELECT pg_sleep(300) /* #{sql} */"
           end
@@ -66,7 +66,7 @@ describe ImportTerminator, :greenplum_integration do
 
       context "when both reader and writer pipes are stuck" do
         before do
-          any_instance_of(GpTableCopier) do |copier|
+          any_instance_of(TableCopier) do |copier|
             stub(copier).use_gp_pipe? { true }
           end
           stub_writer_sql

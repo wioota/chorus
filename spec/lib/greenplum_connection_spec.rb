@@ -1202,6 +1202,131 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
         end
       end
     end
+
+    describe "#primary_key_columns" do
+      context "with a primary key" do
+        let(:expected) { %w(id2 id3 id) }
+        let(:subject) { connection.primary_key_columns('candy') }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+
+      context "without a primary key" do
+        let(:expected) { [] }
+        let(:subject) { connection.primary_key_columns('view1') }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+    end
+
+    describe "#distribution_key_columns" do
+      context "with a distribution key" do
+        let(:expected) { %w(id) }
+        let(:subject) { connection.distribution_key_columns('base_table1') }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+
+      context "without a distribution key" do
+        let(:expected) { [] }
+        let(:subject) { connection.distribution_key_columns('view1') }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+    end
+
+    describe '#create_table' do
+      let(:destination_table_name) { 'a_new_db_table' }
+
+      after do
+        db = Sequel.connect(db_url)
+        db.default_schema = schema_name
+        db.drop_table('a_new_db_table', :if_exists => true)
+        db.disconnect
+      end
+
+      let(:table_definition) {'id integer PRIMARY KEY, column1 integer, column2 integer'}
+      let(:distribution_clause) {'DISTRIBUTED BY (id)'}
+      let(:subject) { connection.create_table(destination_table_name, table_definition, distribution_clause) }
+      let(:expected) { true }
+
+      it_should_behave_like "a well-behaved database query"
+
+      it 'creates a table' do
+        expect {
+          subject
+        }.to change { Sequel.connect(db_url).tables }
+      end
+
+      context 'when a table with that name already exists' do
+        let(:destination_table_name) { 'candy' }
+        it 'raises an error' do
+          expect {
+            subject
+          }.to raise_error(GreenplumConnection::DatabaseError)
+        end
+      end
+    end
+
+    describe "#copy_table_data" do
+      let(:destination_table_name) { 'a_new_db_table' }
+      let(:source_table_name) { 'base_table1' }
+      let(:limit) { nil }
+      let(:conn) { Sequel.connect(db_url) }
+      let(:setup_sql) { '' }
+
+      let(:expected) { true }
+      let(:subject) { connection.copy_table_data(%Q{"#{schema_name}"."#{destination_table_name}"}, source_table_name, setup_sql, limit) }
+
+      before do
+        conn.default_schema = schema_name
+        conn.execute("SET search_path to \"#{schema_name}\"")
+        conn.create_table(destination_table_name, :as => "select * from #{schema_name}.base_table1 limit 0")
+      end
+
+      after do
+        conn.drop_table(destination_table_name, :if_exists => true)
+        conn.disconnect
+      end
+
+      it_should_behave_like "a well-behaved database query"
+
+      it 'copies the source data into the destination table' do
+        expect {
+          subject
+        }.to change { conn.fetch("SELECT * from #{destination_table_name}").all.length }
+      end
+
+      context "with a limit" do
+        let(:limit) { 3 }
+
+        it "should only copy that many rows" do
+          subject
+          conn.fetch("SELECT * from #{destination_table_name}").all.length.should == limit
+        end
+      end
+
+      context "with setup sql for a temp view" do
+        let(:setup_sql) { 'CREATE TEMP VIEW "TMP_VIEW" as select * from base_table1;;' }
+        let(:source_table_name) { "TMP_VIEW" }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+    end
+
+    describe "#count_rows" do
+      let(:expected) { db.from(Sequel.qualify(schema_name, table_name)).count }
+      let(:subject) { connection.count_rows(table_name) }
+      let(:table_name) { 'base_table1' }
+
+      it_should_behave_like "a well-behaved database query"
+
+      context "with a crazy name" do
+        let(:table_name) { "7_`~!@\#$%^&*()+=[]{}|\\;:',<.>/?" }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+    end
   end
 
   describe "GreenplumConnection::DatabaseError" do

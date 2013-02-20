@@ -422,8 +422,8 @@ describe DatasetImportsController do
       log_in user
       create_source_table
 
-      stub(GpPipe).gpfdist_url { Socket.gethostname }
-      stub(GpPipe).grace_period_seconds { 1 }
+      stub(CrossDatabaseTableCopier).gpfdist_url { Socket.gethostname }
+      stub(CrossDatabaseTableCopier).grace_period_seconds { 1 }
       setup_data
       # synchronously run all queued import jobs
       mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|

@@ -374,6 +374,53 @@ class GreenplumConnection < DataSourceConnection
       end
     end
 
+    def primary_key_columns(table_name)
+      with_connection do
+        sql = <<-SQL
+          SELECT attname
+          FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
+          FROM   pg_constraint where conrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass and contype='p'
+          ) y, pg_attribute WHERE attrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
+        SQL
+        @connection.fetch(sql).map { |row| row[:attname] }
+      end
+    end
+
+    def distribution_key_columns(table_name)
+      with_connection do
+        sql = <<-SQL
+          SELECT attname
+          FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
+          FROM   gp_distribution_policy where localoid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass
+          ) y, pg_attribute WHERE attrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
+        SQL
+        @connection.fetch(sql).map { |row| row[:attname] }
+      end
+    end
+
+    def create_table(table_name, table_definition, distribution_clause)
+      with_connection do
+        @connection.execute <<-SQL
+        CREATE TABLE #{quote_identifier(table_name)} (#{table_definition}) #{distribution_clause}
+        SQL
+      end
+      true
+    end
+
+    def copy_table_data(destination_fullname, source_table_name, setup_sql, limit=nil)
+      with_connection do
+        @connection.execute(setup_sql)
+        select_data = @connection.from(source_table_name.to_sym).limit(limit)
+        copy_command = "INSERT INTO #{destination_fullname} (#{select_data.sql})"
+        @connection.execute(copy_command)
+      end
+      true
+    end
+
+    def count_rows(table_name)
+      with_connection { @connection.from(table_name).count }
+    end
+
     private
 
     def datasets_query(options)
