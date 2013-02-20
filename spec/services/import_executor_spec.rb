@@ -257,8 +257,8 @@ describe ImportExecutor do
   end
 
   describe "#run" do
-    def mock_copier(copier=TableCopier)
-      mock(copier).new(anything) do | *args |
+    def mock_copier
+      mock(TableCopier).new(anything) do | *args |
         raise import_failure_message if import_failure_message.present?
         yield *args if block_given?
         Object.new.tap {|o| stub(o).start }
@@ -376,8 +376,12 @@ describe ImportExecutor do
 
       it "should create a CrossDatabaseTableCopier to run the import" do
         dont_allow(TableCopier).new.with_any_args
-        mock_copier(CrossDatabaseTableCopier)
+        ran = false
+        any_instance_of(CrossDatabaseTableCopier) do |copier|
+          stub(copier).start { ran = true }
+        end
         ImportExecutor.new(import).run
+        ran.should be_true
       end
     end
 
@@ -386,8 +390,12 @@ describe ImportExecutor do
 
       it "should create an OracleTableCopier to run the import" do
         dont_allow(TableCopier).new.with_any_args
-        mock_copier(OracleTableCopier)
+        ran = false
+        any_instance_of(OracleTableCopier) do |copier|
+          stub(copier).start { ran = true }
+        end
         ImportExecutor.new(import).run
+        ran.should be_true
       end
     end
   end
