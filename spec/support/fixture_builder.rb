@@ -520,7 +520,7 @@ FixtureBuilder.configure do |fbuilder|
       @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => HadoopIntegration.instance_config['host'], :port => HadoopIntegration.instance_config['port'])
     end
 
-    if ENV['ORACLE_HOST']
+    if ENV['ORACLE_HOST'] && OracleIntegration.has_jar_file?
       real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => OracleIntegration.hostname, :port => OracleIntegration.port, :db_name => OracleIntegration.db_name, :db_username => OracleIntegration.username, :db_password => OracleIntegration.password)
       OracleIntegration.setup_test_schemas
       real_oracle_data_source.refresh_schemas

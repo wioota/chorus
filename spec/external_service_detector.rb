@@ -15,7 +15,7 @@ RSpec.configure do |config|
   end
 
   if ENV['ORACLE_HOST']
-    unless File.exist? Rails.root + 'lib/libraries/ojdbc6.jar'
+    unless OracleIntegration.has_jar_file?
       warn "No Oracle driver found. Skipping Oracle integration tests"
       config.filter_run_excluding :oracle_integration => true
     end

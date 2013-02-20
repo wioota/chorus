@@ -26,11 +26,12 @@ module Shoulda # :nodoc:
   end
 end
 
-require 'external_service_detector'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f unless f.match /fixture_builder/ }
+
+require 'external_service_detector'
 
 # If this offset is not here and you have pre-built fixture_builder, the ids/usernames/etc of new
 # models from Factory Girl will clash with the fixtures

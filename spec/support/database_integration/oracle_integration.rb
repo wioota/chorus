@@ -4,7 +4,13 @@ require 'yaml'
 require 'socket'
 
 module OracleIntegration
-  require Rails.root + 'lib/libraries/ojdbc6.jar'
+  JAR_FILE = Rails.root + 'lib/libraries/ojdbc6.jar'
+
+  def self.has_jar_file?
+    File.exist? JAR_FILE
+  end
+
+  require JAR_FILE if self.has_jar_file?
 
   def self.hostname
     ENV['ORACLE_HOST']
