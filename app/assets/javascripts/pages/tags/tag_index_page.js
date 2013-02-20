@@ -18,5 +18,6 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
 
         this.handleFetchErrorsFor(tags);
         this.bindings.add(tags, "loaded", this.render);
+        this.bindings.add(tags, "remove", this.render);
     }
 });
