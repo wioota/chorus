@@ -31,7 +31,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         models.workspace = new chorus.models.Workspace({ name: "Some Workspace", summary: "One awesome workspace", owner: {firstName: "Bob", lastName: "Lablaw"}, "public": true, archivedAt: null});
         models.workspace.loaded = true;
-        models.workspace._sandbox = new chorus.models.Sandbox();
+        models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Instance'}}});
 
         models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         models.privateWorkspace.loaded = true;
