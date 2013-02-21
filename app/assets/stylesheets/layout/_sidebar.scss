@@ -217,59 +217,78 @@ body .ui-draggable-dragging {
                 margin: 4px 0px 17px 20px;
             }
 
-            .function_tab, .data_tab {
-                ul {
-                    margin-top: 10px;
-                }
-
-                li {
-                    padding-top: 0px;
-                    padding-bottom: 0px;
-                    color: $color-text2;
-                    cursor: pointer;
-
-                    img {
-                        display: inline-block;
-                    }
-
-                    .name {
-                        font-weight: $semibold;
-                    }
-
-                    &.hover {
-                        margin-top: -1px;
-                        background-color: $selected-row-hover-background-color;
-                        border-top: 1px solid $list-border-color;
-                        border-bottom: 1px solid $list-border-color;
-                    }
-                }
-
-                a.more {
-                    display: block;
-                    font-size: 13px;
-                    font-weight: $semibold;
-                    text-align: center;
-                    margin-top: 10px;
-                    padding-bottom: 10px;
-                }
-
-                .empty_selection {
-                    .top {
-                        @include secondary-text-small-semibold;
-                    }
-                }
-            }
-
             .data_tab_dataset {
                 .toggle_visibility {
                     top: 8px;
                     position: relative;
                 }
             }
+        }
+    }
+}
 
-            .function_tab, .data_tab {
-                .schema_menu {
-                    display: none;
+.function_tab {
+    li {
+        &:hover {
+            background-color: $selected-row-hover-background-color;
+        }
+    }
+}
+
+.function_tab, .data_tab {
+    ul {
+        margin-top: 10px;
+    }
+
+    li {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: $color-text2;
+        cursor: pointer;
+
+        img {
+            display: inline-block;
+        }
+
+        .name {
+            font-weight: $semibold;
+        }
+
+        .list_item_text {
+            margin-top: 2px;
+            font-size: 14px;
+            display: inline-block;
+            @include ellipsis;
+            max-width: 75%;
+            vertical-align: middle;
+            line-height: 19px;
+        }
+    }
+
+    a.more {
+        display: block;
+        font-size: 13px;
+        font-weight: $semibold;
+        text-align: center;
+        margin-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .empty_selection {
+        .top {
+            @include secondary-text-small-semibold;
+        }
+    }
+
+    .schema_menu {
+        display: none;
+    }
+
+    .accordion {
+        li {
+            .dataset_title, li {
+                &:hover {
+                    background-color: $selected-row-hover-background-color;
                 }
             }
         }
@@ -277,6 +296,10 @@ body .ui-draggable-dragging {
 }
 
 .data_tab_dataset_column_list {
+    ul {
+        margin: 0 0 5px 0;
+    }
+
     li {
         padding-top: 0px;
         padding-bottom: 0px;
@@ -290,27 +313,6 @@ body .ui-draggable-dragging {
         }
         .column_type {
             color: $color-text3;
-        }
-
-        &.hover {
-            margin-top: -1px;
-            background-color: $selected-row-hover-background-color;
-            border-top: 1px solid $list-border-color;
-            border-bottom: 1px solid $list-border-color;
-        }
-    }
-}
-
-.function_tab, .data_tab {
-    li {
-        .list_item_text {
-            margin-top: 2px;
-            font-size: 14px;
-            display: inline-block;
-            @include ellipsis;
-            max-width: 75%;
-            vertical-align: middle;
-            line-height: 19px;
         }
     }
 }
