@@ -65,7 +65,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.bindings.removeAll();
         this.bindings.add(this.resource, "change", this.render, this);
 
-        if(this.resource.isGreenplum()) {
+        if(this.resource.isGreenplum() || this.resource.isOracle()) {
             var account = this.instance.accountForCurrentUser();
             this.instance.accounts().fetchAllIfNotLoaded();
             account.fetchIfNotLoaded();
