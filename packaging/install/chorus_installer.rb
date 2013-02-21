@@ -333,6 +333,14 @@ class ChorusInstaller
     end
   end
 
+  def enqueue_solr_reindex
+    log "Migrating data from previous version..." do
+      log "Loading legacy data into postgres..." do
+        @executor.rake "enqueue_reindex"
+      end
+    end
+  end
+
   def prompt_for_eula
     @io.log eula
     @io.require_confirmation :accept_terms
@@ -384,6 +392,8 @@ class ChorusInstaller
       setup_database
     end
 
+    enqueue_solr_reindex
+
     if is_supported_mac?
       warn_and_change_osx_properties
     end
@@ -427,7 +437,7 @@ class ChorusInstaller
 
   def secure_sensitive_files
     files = %W{
-      #{destination_path}/shared/secret.token
+    #{destination_path}/shared/secret.token
       #{destination_path}/shared/secret.key
       #{destination_path}/shared/chorus.properties
     }
