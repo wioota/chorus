@@ -42,28 +42,6 @@ class GpdbDataset < Dataset
     schema.database.name
   end
 
-  def table_description
-    DatasetStatistics.for_dataset(self, schema.database.data_source.owner_account).description
-  rescue
-    nil
-  end
-
-  def schema_name
-    schema.name
-  end
-
-  def column_name
-    column_data.map(&:name)
-  end
-
-  def column_description
-    column_data.map(&:description).compact
-  end
-
-  def column_data
-    @column_data ||= DatasetColumn.columns_for(schema.database.data_source.owner_account, self)
-  end
-
   def scoped_name
     %Q{"#{schema_name}"."#{name}"}
   end

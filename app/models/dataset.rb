@@ -125,6 +125,28 @@ class Dataset < ActiveRecord::Base
     'Dataset'
   end
 
+  def schema_name
+    schema.name
+  end
+
+  def column_name
+    column_data.map(&:name)
+  end
+
+  def column_description
+    column_data.map(&:description).compact
+  end
+
+  def column_data
+    @column_data ||= DatasetColumn.columns_for(schema.data_source.owner_account, self)
+  end
+
+  def table_description
+    DatasetStatistics.build_for(self, schema.data_source.owner_account).description
+  rescue
+    nil
+  end
+
   def update_active_tables_and_views_counter_cache_on_schema
     if changed_attributes.include?('stale_at')
       if stale?
