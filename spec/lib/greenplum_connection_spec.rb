@@ -560,7 +560,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#create_external_table" do
+    describe "create_external_table" do
       after do
         if table_name == "a_new_external_table"
           db = Sequel.connect(db_url)
@@ -576,6 +576,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:delimiter) { "," }
       let(:web) { false }
       let(:execute_command) { nil }
+      let(:temporary) { false }
       let(:subject) do
         connection.create_external_table(
             {
@@ -584,7 +585,8 @@ describe GreenplumConnection, :greenplum_integration do
                 :location_url => location_url,
                 :execute => execute_command,
                 :delimiter => delimiter,
-                :web => web
+                :web => web,
+                :temporary => temporary
             }
         )
       end
@@ -610,6 +612,25 @@ describe GreenplumConnection, :greenplum_integration do
           row = Sequel.connect(db_url).fetch("SELECT * from #{schema_name}.#{table_name}").first
           row[:field1].should == "1"
           row[:field2].should == 2
+        end
+      end
+      context 'creating an external temporary table' do
+        let(:temporary) { true }
+        let(:web) { true }
+        let(:location_url) { nil }
+        let(:execute_command) { 'echo "1,2"' }
+
+        it 'creates an external temporary table' do
+          connection.connect!
+          begin
+            subject
+            row = connection.fetch("SELECT * from #{table_name}").first
+            row[:field1].should == "1"
+            row[:field2].should == 2
+          ensure
+            connection.disconnect
+          end
+          expect { connection.fetch("SELECT * from #{table_name}") }.to raise_error(GreenplumConnection::DatabaseError, /not exist/)
         end
       end
 

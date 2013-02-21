@@ -10,6 +10,7 @@ describe OracleTableCopier do
   let(:source_connection) { Object.new }
   let(:sample_count) { nil }
   let(:truncate) { false }
+  let(:destination_exists) { false }
 
   let(:copier) do
     OracleTableCopier.new(
@@ -24,47 +25,45 @@ describe OracleTableCopier do
     )
   end
 
-  describe "initialization" do
+  before do
+    stub(source_dataset).connect_as(user) { source_connection }
+    stub(source_dataset).connect_with(account) { source_connection }
+    stub(source_dataset.data_source).account_for_user! { account }
 
-    before do
-      stub(source_dataset).connect_as(user) { source_connection }
-      stub(source_dataset).connect_with(account) { source_connection }
-      stub(source_dataset.data_source).account_for_user! { account }
+    stub(destination_schema).connect_as(user) { destination_connection }
+    stub(destination_schema).connect_with(account) { destination_connection }
 
-      stub(destination_schema).connect_as(user) { destination_connection }
-      stub(destination_schema).connect_with(account) { destination_connection }
+    stub(destination_connection).table_exists?(destination_table_name) { destination_exists }
+    stub(source_connection).column_info(source_dataset.name, anything) do
+      [
+          {:attname => "BIN_DOUBLE", :format_type => "BINARY_DOUBLE"},
+          {:attname => "BIN_FLOAT", :format_type => "BINARY_FLOAT"},
+          {:attname => "CHARACTER", :format_type => "CHAR"},
+          {:attname => "CHAR_BLOB", :format_type => "CLOB"},
+          {:attname => "DAY", :format_type => "DATE"},
+          {:attname => "DECIMAL_COL", :format_type => "DECIMAL"},
+          {:attname => "INTEGER_COL", :format_type => "INT"},
+          {:attname => "LONG_COL", :format_type => "LONG"},
+          {:attname => "NUMBER_COL", :format_type => "NUMBER"},
+          {:attname => "ROW_ID", :format_type => "ROWID"},
+          {:attname => "TIMESTAMP_COL", :format_type => "TIMESTAMP(6)"},
+          {:attname => "UNICODE_CHAR", :format_type => "NCHAR"},
+          {:attname => "UNICODE_CLOB", :format_type => "NCLOB"},
+          {:attname => "UNICODE_VARCHAR", :format_type => "NVARCHAR2"},
+          {:attname => "UNIVERSAL_ROW_ID", :format_type => "UROWID"},
+          {:attname => "VARIABLE_CHARACTER", :format_type => "VARCHAR"},
+          {:attname => "VARIABLE_CHARACTER_2", :format_type => "VARCHAR2"}
+      ]
     end
+    stub(source_connection).primary_key_columns(source_dataset.name) { primary_keys }
+  end
 
+  describe "initialization" do
     describe "initialize_destination_table" do
       subject { copier.initialize_destination_table }
 
       context "when it doesn't exist yet" do
-        before do
-          stub(destination_connection).table_exists?(destination_table_name) { false }
-          stub(source_connection).column_info(source_dataset.name, anything) do
-            [
-                {:attname => "BIN_DOUBLE", :format_type => "BINARY_DOUBLE"},
-                {:attname => "BIN_FLOAT", :format_type => "BINARY_FLOAT"},
-                {:attname => "CHARACTER", :format_type => "CHAR"},
-                {:attname => "CHAR_BLOB", :format_type => "CLOB"},
-                {:attname => "DAY", :format_type => "DATE"},
-                {:attname => "DECIMAL_COL", :format_type => "DECIMAL"},
-                {:attname => "INTEGER_COL", :format_type => "INT"},
-                {:attname => "LONG_COL", :format_type => "LONG"},
-                {:attname => "NUMBER_COL", :format_type => "NUMBER"},
-                {:attname => "ROW_ID", :format_type => "ROWID"},
-                {:attname => "TIMESTAMP_COL", :format_type => "TIMESTAMP(6)"},
-                {:attname => "UNICODE_CHAR", :format_type => "NCHAR"},
-                {:attname => "UNICODE_CLOB", :format_type => "NCLOB"},
-                {:attname => "UNICODE_VARCHAR", :format_type => "NVARCHAR2"},
-                {:attname => "UNIVERSAL_ROW_ID", :format_type => "UROWID"},
-                {:attname => "VARIABLE_CHARACTER", :format_type => "VARCHAR"},
-                {:attname => "VARIABLE_CHARACTER_2", :format_type => "VARCHAR2"}
-            ]
-          end
-          stub(source_connection).primary_key_columns(source_dataset.name) { primary_keys }
-        end
-
+        let(:destination_exists) { false }
         let(:primary_keys) { [] }
 
         it "creates it with the correct columns" do
@@ -102,9 +101,7 @@ describe OracleTableCopier do
       end
 
       context "when it exists" do
-        before do
-          stub(destination_connection).table_exists?(destination_table_name) { true }
-        end
+        let(:destination_exists) { true }
 
         it "should not create it" do
           dont_allow(destination_connection).create_table.with_any_args
@@ -123,13 +120,36 @@ describe OracleTableCopier do
     end
   end
 
-  describe "run", :oracle_integration do
-    let(:source_dataset) { OracleIntegration.real_schema.datasets.first }
-    let(:user) { users(:owner) }
+  describe "run" do
+    let(:sample_count) { 5 }
+    let(:download_url) do
+      Rails.application.routes.url_helpers.dataset_download_url(
+          {
+              :dataset_id => source_dataset.id,
+              :row_limit => sample_count,
+              :header => false,
+              :host => ChorusConfig.instance.public_url,
+              :port => ChorusConfig.instance.server_port
+          }
+      )
+    end
+    let(:external_table_options) do
+      {
+          :temporary => true,
+          :web => true,
+          :table_name => source_dataset.name,
+          :location_url => download_url
+      }
+    end
 
-    xit "should insert the data into the destination table" do
+    it "should insert the data into the destination table" do
+      mock(destination_connection).connect!
+      mock(destination_connection).create_external_table(hash_including(external_table_options)) do |arg_hash|
+        arg_hash.should have_key(:columns)
+      end
+      mock(destination_connection).copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '')
+      mock(destination_connection).disconnect
       copier.run
-      #get_rows(destination_database_url, "SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
 end
