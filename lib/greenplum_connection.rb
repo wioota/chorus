@@ -286,6 +286,10 @@ class GreenplumConnection < DataSourceConnection
 
       if schema_name
         search_path = "SET search_path TO #{quote_identifier(schema_name)}"
+        if schema_exists?("public")
+          search_path << ", public"
+        end
+
         @connection.default_schema = schema_name
         @connection.execute(search_path)
       end

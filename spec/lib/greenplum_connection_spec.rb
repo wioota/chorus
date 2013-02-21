@@ -906,16 +906,34 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) {
         connection.validate_query('SELECT * FROM base_table1')
       }
+      let(:sequel_connection) { connection.connect! }
 
       let(:expected) { true }
 
       it_behaves_like "a well-behaved database query"
 
-      it "sets the search path on the database connection" do
-        sequel_connection = connection.connect!
-        mock.proxy(sequel_connection).execute('SET search_path TO "test_schema"')
-        connection.validate_query('SELECT 1')
+      context "when the public schema exists" do
+        before do
+          stub(connection).schema_exists?('public') { true }
+        end
+
+        it "sets the search path on the database connection, with the public schema" do
+          mock.proxy(sequel_connection).execute('SET search_path TO "test_schema", public')
+          connection.validate_query('SELECT 1')
+        end
       end
+
+      context "when the public schema does not exist" do
+        before do
+          stub(connection).schema_exists?('public') { false }
+        end
+
+        it "sets the search path on the database connection, without the public schema" do
+          mock.proxy(sequel_connection).execute('SET search_path TO "test_schema"')
+          connection.validate_query('SELECT 1')
+        end
+      end
+
 
       it "catches SQL errors" do
         expect {
