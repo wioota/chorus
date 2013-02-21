@@ -89,27 +89,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
 
-                context("when the instance is a hadoop instance", function() {
-                    beforeEach(function() {
-                        setLoggedInUser({ username: "benjamin", admin: false});
-                        this.instance = rspecFixtures.hadoopInstance({
-                            name: "Harry's House of Glamour",
-                            version: "99.999",
-                            owner: {id: chorus.session.user().get('id')}
-                        });
-                        chorus.PageEvents.broadcast("instance:selected", this.instance);
-                        this.view.render();
-                    });
-
-                    it("does not display edit permissions link", function() {
-                        expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).not.toExist();
-                    });
-
-                    it("does display the edit instance link", function() {
-                        expect(this.view.$(".actions .edit_instance")).toExist();
-                    });
-                });
-
                 context("when the instance is offline", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
@@ -445,10 +424,23 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when a hadoop instance is selected", function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.hadoopInstance({name: "Harry's House of Glamour", username: "hadoop", groupList: "hadoop" });
+            this.instance = rspecFixtures.hadoopInstance({
+                name: "Harry's House of Glamour",
+                username: "hadoop",
+                groupList: "hadoop",
+                owner: {id: chorus.session.user().get('id')}
+            });
             this.view = new chorus.views.InstanceListSidebar();
             chorus.PageEvents.broadcast("instance:selected", this.instance);
             this.server.completeFetchFor(this.instance.activities());
+        });
+
+        it("does not display edit permissions link", function() {
+            expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).not.toExist();
+        });
+
+        it("does display the edit instance link", function() {
+            expect(this.view.$(".actions .edit_instance")).toExist();
         });
 
         it("displays instance type", function() {
