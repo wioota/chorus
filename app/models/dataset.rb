@@ -19,6 +19,8 @@ class Dataset < ActiveRecord::Base
   has_many :comments, :through => :events
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
+  has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
+  has_many :imports, :foreign_key => 'source_dataset_id'
 
   searchable_model :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST

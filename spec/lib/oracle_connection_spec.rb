@@ -308,6 +308,21 @@ describe OracleConnection, :oracle_integration do
 
       it_should_behave_like "a well-behaved database query"
     end
+
+    describe "primary_key_columns" do
+      context "with a primary key" do
+        let(:expected) { %w(COLUMN2 COLUMN1) }
+        let(:subject) { connection.primary_key_columns('WITH_COMPOSITE_KEY') }
+        it_should_behave_like "a well-behaved database query"
+      end
+
+      context "without a primary key" do
+        let(:expected) { [] }
+        let(:subject) { connection.primary_key_columns('NEWTABLE') }
+
+        it_should_behave_like "a well-behaved database query"
+      end
+    end
   end
 
   describe "OracleConnection::DatabaseError" do

@@ -247,6 +247,7 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def create_external_table(options)
+      delimiter = options[:delimiter] || ','
       with_connection do
         location_string = options[:location_url] ? "LOCATION (E'#{options[:location_url]}')" : ""
         execution_string = options[:execute] ? "EXECUTE E'#{options[:execute]}'" : ""
@@ -259,7 +260,7 @@ class GreenplumConnection < DataSourceConnection
         @connection.execute(<<-SQL)
           CREATE EXTERNAL #{options[:web] ? 'WEB ' : ''}#{options[:temporary] ? 'TEMPORARY ' : ''}TABLE #{table_name}
           (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'TEXT'
-          (DELIMITER '#{options[:delimiter]}')
+          (DELIMITER '#{delimiter}')
         SQL
       end
       true

@@ -238,6 +238,7 @@ describe DatasetImportsController do
         end
 
         context "when there's duplicate columns ( only in Chorus View )" do
+          let(:src_table) { datasets(:chorus_view) }
           before do
             stub(Dataset).find(src_table.to_param) { src_table }
             mock(src_table).check_duplicate_column.with_any_args {}

@@ -122,6 +122,22 @@ class OracleConnection < DataSourceConnection
     end
   end
 
+  def primary_key_columns(table_name)
+    with_connection do
+      sql = <<-SQL
+        SELECT cols.table_name, cols.column_name, cols.position, cons.status, cons.owner
+        FROM all_constraints cons, all_cons_columns cols
+        WHERE cols.table_name = '#{table_name}'
+        AND cols.owner = '#{schema_name}'
+        AND cons.constraint_type = 'P'
+        AND cons.constraint_name = cols.constraint_name
+        AND cons.owner = cols.owner
+        ORDER BY cols.table_name, cols.position
+      SQL
+      @connection.fetch(sql).map { |row| row[:column_name] }
+    end
+  end
+
   private
 
   def datasets_query(options)

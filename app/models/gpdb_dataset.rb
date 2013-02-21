@@ -7,8 +7,6 @@ class GpdbDataset < Dataset
 
   belongs_to :schema, :class_name => 'GpdbSchema'
 
-  has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
-  has_many :imports, :foreign_key => 'source_dataset_id'
 
   def instance_account_ids
     schema.database.instance_account_ids
@@ -32,10 +30,6 @@ class GpdbDataset < Dataset
 
   def source_dataset_for(workspace)
     schema_id != workspace.sandbox_id
-  end
-
-  def check_duplicate_column(user)
-    true
   end
 
   def database_name

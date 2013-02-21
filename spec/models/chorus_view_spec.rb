@@ -207,10 +207,10 @@ describe ChorusView do
     let(:chorus_view) { datasets(:executable_chorus_view) }
 
     it 'raises with duplicate column names' do
-      chorus_view.update_attribute :query, 'select 1, 2, 3;'
+      chorus_view.update_attribute :query, 'select 1 as colname, 2 as colname, 3 as colname;'
       expect {
         chorus_view.check_duplicate_column(user)
-      }.to raise_error(GreenplumConnection::DatabaseError)
+      }.to raise_error(GreenplumConnection::DatabaseError, /column \"colname\" duplicated/)
     end
 
     it 'returns true when the column names are unique' do

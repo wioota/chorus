@@ -642,6 +642,15 @@ describe GreenplumConnection, :greenplum_integration do
           }.to raise_error(GreenplumConnection::DatabaseError)
         end
       end
+
+      context 'without a delimiter' do
+        let(:delimiter) { nil }
+        let(:web) { true }
+        let(:location_url) { nil }
+        let(:execute_command) { 'echo "1,2"' }
+
+        it_should_behave_like "a well-behaved database query"
+      end
     end
 
     describe "#table_exists?" do

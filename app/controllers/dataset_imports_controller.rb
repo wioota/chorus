@@ -43,7 +43,7 @@ class DatasetImportsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     src_table = Dataset.find(params[:dataset_id])
-    src_table.check_duplicate_column(current_user)
+    src_table.check_duplicate_column(current_user) if src_table.is_a?(ChorusView)
 
     import = src_table.imports.new(import_params)
 

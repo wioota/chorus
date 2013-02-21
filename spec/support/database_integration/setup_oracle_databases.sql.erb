@@ -1,5 +1,11 @@
 CREATE USER "<%= schema_name %>" IDENTIFIED BY "oracle";
-CREATE TABLE "<%= schema_name %>".NEWTABLE ("id" NUMBER);
+GRANT UNLIMITED TABLESPACE to "<%= schema_name %>";
+GRANT CREATE TABLE, DROP ANY TABLE, ALTER ANY TABLE TO system;
+
+CREATE TABLE "<%= schema_name %>".NEWTABLE (id NUMBER, rowname VARCHAR(20));
+<% (1..10).each do |x| %>
+    <%= %Q{INSERT INTO "#{schema_name}".NEWTABLE (id, rowname) values (#{x}, 'row_#{x}');} %>
+<% end %>
 CREATE TABLE "<%= schema_name %>".NEWERTABLE ("id" NUMBER);
 CREATE VIEW "<%= schema_name %>".NEWVIEW AS SELECT * FROM "<%= schema_name %>".NEWERTABLE;
 CREATE TABLE "<%= schema_name %>".TWO_COLUMN_TABLE ("id" NUMBER, "column2" NUMBER);
