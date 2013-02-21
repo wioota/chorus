@@ -3,13 +3,16 @@ class TypeAheadSearch
   attr_reader :current_user
 
   MODELS_TO_SEARCH = [Attachment, User, GpdbDataSource, HadoopInstance, GnipInstance, Workspace, Workfile, Tag, Dataset, HdfsEntry]
-
   delegate :results, to: :search
 
   def initialize(current_user, params = {})
     @current_user = current_user
     self.query = params[:query]
     self.per_page = params[:per_page] || 3
+  end
+
+  def results
+    query_empty? ? [] : search.results
   end
 
   def search
@@ -20,6 +23,12 @@ class TypeAheadSearch
     @search.execute
     @search.move_highlighted_attributes_to_results
     @search
+  end
+
+  private
+
+  def query_empty?
+    query =~ /^[+-]/
   end
 
   def build_search

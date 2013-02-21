@@ -1,0 +1,34 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000003+AND+-public_b%3Atrue%29&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&q=%2A%3A%2A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''start''=>''0'',''q''=>''*:*'',''group.limit''=>''3'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''group''=>''true'',''wt''=>''ruby'',''fq''=>[''type:(Dataset
+        OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
+        AND -instance_account_ids_im:(1000001))'',''-(security_type_name_sm:ChorusView
+        AND -member_ids_im:1000003 AND -public_b:true)''],''rows''=>''50''}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbTable
+        1000011'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2'']}]}}]}}}'
+    http_version: '1.1'
+  recorded_at: Thu, 21 Feb 2013 00:50:05 GMT
+recorded_with: VCR 2.3.0

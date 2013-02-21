@@ -278,6 +278,18 @@ describe Search do
       it "returns an empty array" do
         create_and_record_search(owner, :query => "") do |search|
           search.models.should be {}
+          search.num_found.values.should == []
+        end
+      end
+    end
+
+    describe "when the search string is a single special character" do
+      %w{+ -}.each do | character |
+        it "returns empty results for strings that are just '#{character}'" do
+          create_and_record_search owner, {:query => character } do |search|
+            search.models.should be {}
+            search.num_found.values.should == []
+          end
         end
       end
     end

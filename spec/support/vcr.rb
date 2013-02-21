@@ -11,6 +11,6 @@ VCR.configure do |c|
 end
 
 def record_with_vcr(tape_name = nil, &block)
-  default_tape_name = example.full_description.downcase.gsub(/[^\w\d]+/, '_')
+  default_tape_name = CGI.escape(example.full_description.downcase)
   VCR.use_cassette(tape_name || default_tape_name, &block)
 end

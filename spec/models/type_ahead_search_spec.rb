@@ -70,6 +70,22 @@ describe TypeAheadSearch do
       end
     end
 
+    describe "when typeahead search begins with a special character" do
+      %w{+ -}.each do | character |
+        it "returns empty results for strings of just #{character}" do
+          create_and_record_search owner, {:query => character } do |search|
+            search.results.should be_empty
+          end
+        end
+
+        it "returns empty results for strings beginning with #{character}" do
+          create_and_record_search owner, {:query => character + "typeahead" } do |search|
+            search.results.should be_empty
+          end
+        end
+      end
+    end
+
     context "when searching workspace as the owner" do
       it "returns public and member workspaces but not others' private workspaces" do
         create_and_record_search do |search|

@@ -23,7 +23,7 @@ class Search
     end
     self.entity_type = params[:entity_type]
   end
-  
+
   def is_tag_search?
     !!tag_param
   end
@@ -57,7 +57,7 @@ class Search
     @models ||= begin
       models = Hash.new() { |hsh, key| hsh[key] = [] }
 
-      return models if tag_missing?
+      return models if tag_missing? || query_empty?
 
       search.associate_grouped_notes_with_primary_records
 
@@ -109,7 +109,7 @@ class Search
     @num_found ||= begin
       found_so_far = Hash.new(0)
 
-      return found_so_far if tag_missing?
+      return found_so_far if tag_missing? || query_empty?
 
       if count_using_facets?
         search.facet(:type_name).rows.each do |facet|
@@ -133,6 +133,10 @@ class Search
   end
 
   private
+
+  def query_empty?
+    query.blank? || query =~ /^[\+\-]$/
+  end
 
   def tag_missing?
     is_tag_search? && tag.nil?
