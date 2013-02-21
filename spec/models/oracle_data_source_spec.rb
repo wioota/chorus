@@ -13,26 +13,6 @@ describe OracleDataSource do
         instance.valid?
       end
     end
-
-    context "when host, port, or db_name change" do
-      before do
-        instance.save!(:validate => false)
-        mock(instance).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
-      end
-
-      it "validates the account when host changes" do
-        instance.host = 'something_new'
-        instance.valid?
-      end
-      it "validates the account when port changes" do
-        instance.port = '5413'
-        instance.valid?
-      end
-      it "validates the account when db_name changes" do
-        instance.db_name = 'something_new'
-        instance.valid?
-      end
-    end
   end
 
   describe "owner_account" do

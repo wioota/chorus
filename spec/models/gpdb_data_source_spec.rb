@@ -2,39 +2,8 @@ require "spec_helper"
 
 describe GpdbDataSource do
   describe "validations" do
-    describe "associated account" do
-      let(:instance) { data_sources(:shared) }
-      context "when host, port, or db_name change" do
-        it "validates the account when host changes" do
-          mock(instance.owner_account).valid?
-          instance.host = 'something_new'
-          instance.valid?
-        end
-        it "validates the account when port changes" do
-          mock(instance.owner_account).valid?
-          instance.port = '5413'
-          instance.valid?
-        end
-        it "validates the account when db_name changes" do
-          mock(instance.owner_account).valid?
-          instance.db_name = 'something_new'
-          instance.valid?
-        end
-        it "pulls associated error messages onto the instance" do
-          stub(instance).valid_db_credentials? { false }
-          instance.db_name = 'something_new'
-          instance.valid?
-          instance.errors.values.should =~ instance.owner_account.errors.values
-        end
-      end
-
-      context "when other attributes change" do
-        it "does not validate the account" do
-          dont_allow(instance.owner_account).valid?
-          instance.name = 'purple_bandana'
-          instance.valid?
-        end
-      end
+    it "is valid when both host and port are empty" do
+      FactoryGirl.build(:gpdb_data_source, :host => "", :port => "").should be_valid
     end
   end
 
