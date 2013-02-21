@@ -8,7 +8,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     setup: function() {
-        this.eventName = this.options.entityType;
+        this.eventName = this.eventName || this.options.entityType;
         this.entityViewType = this.options.entityViewType;
         this.listItemOptions = this.options.listItemOptions || {};
 
@@ -20,7 +20,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
 
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
-        this.subscribePageEvent("checked", this.refreshCheckboxesFromSelectedModels);
+        this.subscribePageEvent("checked", this.checkSelectedModels);
 
         this._super("setup", arguments);
     },
@@ -44,11 +44,11 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     checkSelectedModels: function() {
-        var checkboxes = this.$("input[type=checkbox]");
+        var checkboxes = this.$("li input[type=checkbox]");
         this.collection.each(function(model, i) {
-            if (this.selectedModels.get(model.id)) {
-                checkboxes.eq(i).prop("checked", true);
-            }
+            var selected = !!this.selectedModels.get(model.id);
+            checkboxes.eq(i).prop("checked", selected);
+            checkboxes.eq(i).closest("li").toggleClass("checked", selected);
         }, this);
     },
 
@@ -81,19 +81,6 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
             entityType: model.get('entityType'),
             id: model.get('id')
         });
-    },
-    
-    refreshCheckboxesFromSelectedModels: function(models) {
-        _.each(this.liViews, _.bind(function(li, index) {
-            var model = this.collection.at(index);
-            if (this.findSelectedModel(model)) {
-                li.$el.addClass("checked");
-                li.$('input[type=checkbox]').prop("checked", true);
-            } else {
-                li.$el.removeClass("checked");
-                li.$('input[type=checkbox]').prop("checked", false);
-            }
-        }, this));
     },
 
     selectAll: function() {

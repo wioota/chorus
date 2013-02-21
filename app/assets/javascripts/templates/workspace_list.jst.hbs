@@ -1,6 +1,9 @@
 {{#each models}}
     <li data-id="{{id}}" {{#unless active}}class="archived"{{/unless}}>
         <span class="spacer_left"/>
+
+        <input type="checkbox"/>
+
         <a class="image" href="{{showUrl}}">
             <img src="{{imageUrl}}"/>
         </a>

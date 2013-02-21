@@ -118,5 +118,10 @@ describe("chorus.views.WorkspaceList", function() {
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });
         });
+
+        it("skips rendering of child views from CheckableList", function() {
+            expect(this.view.liViews).toBeUndefined();
+            expect(this.view.$("> li").eq(this.view.selectedIndex)).toHaveClass("selected");
+        });
     });
 });

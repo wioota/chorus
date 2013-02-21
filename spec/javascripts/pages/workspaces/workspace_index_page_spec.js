@@ -32,11 +32,15 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         describe("when the collection is loaded", function() {
             beforeEach(function() {
                 chorus.bindModalLaunchingClicks(this.page);
-                this.server.completeFetchFor(this.page.collection);
+                this.server.completeFetchFor(this.page.collection, this.workspaces);
             });
 
             it("creates a WorkspaceList view", function() {
                 expect(this.page.$(".workspace_list")).toExist();
+            });
+
+            it("passes the multiSelect option to the list content details", function() {
+                expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
             });
 
             it("displays an 'add workspace' button", function() {
@@ -45,12 +49,43 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
             describe("when the workspace:selected event is triggered on the list view", function() {
                 beforeEach(function() {
-                    expect(this.page.model).toBeUndefined();
-                    chorus.PageEvents.broadcast("workspace:selected", this.page.collection.at(0));
+                    chorus.PageEvents.broadcast("workspace:selected", this.page.collection.at(3));
                 });
 
                 it("sets the model of the page", function() {
-                    expect(this.page.model).toBe(this.page.collection.at(0));
+                    expect(this.page.model).toBe(this.page.collection.at(3));
+                });
+            });
+
+            describe("multiple selection", function() {
+                it("does not display the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+                });
+
+                context("when a row has been checked", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("workspace:checked", this.page.collection.clone());
+                    });
+
+                    it("displays the multiple selection section", function() {
+                        expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                    });
+
+                    it("has an action to edit tags", function() {
+                        expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                    });
+
+                    describe("clicking the 'edit_tags' link", function() {
+                        beforeEach(function() {
+                            this.modalSpy = stubModals();
+                            this.page.$(".multiple_selection a.edit_tags").click();
+                        });
+
+                        it("launches the dialog for editing tags", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                            expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                        });
+                    });
                 });
             });
         });

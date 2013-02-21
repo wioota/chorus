@@ -1,4 +1,4 @@
-chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
+chorus.views.WorkspaceList = chorus.views.CheckableList.extend({
     templateName: "workspace_list",
     tagName: "ul",
     eventName: "workspace",
@@ -17,7 +17,7 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
     },
 
     postRender: function() {
-        this._super("postRender");
+        chorus.views.SelectableList.prototype.postRender.apply(this);
         _.each(this.summaryViews, function(summaryView) {
           summaryView.teardown();
         });
@@ -29,5 +29,7 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
             this.summaryViews.push(summaryView);
             this.registerSubView(summaryView);
         }, this);
+
+        this.checkSelectedModels();
     }
 });
