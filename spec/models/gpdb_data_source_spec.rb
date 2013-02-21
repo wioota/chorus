@@ -180,14 +180,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe ".unshared" do
-    it "returns unshared gpdb instances" do
-      gpdb_data_sources = GpdbDataSource.unshared
-      gpdb_data_sources.length.should > 0
-      gpdb_data_sources.each { |i| i.should_not be_shared }
-    end
-  end
-
   describe "#used_by_workspaces" do
     let!(:gpdb_data_source) { FactoryGirl.create :gpdb_data_source }
     let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :data_source => gpdb_data_source, :name => 'db') }
@@ -494,10 +486,12 @@ describe GpdbDataSource do
     end
   end
 
-  describe "DataSource Behaviors", :greenplum_integration do
+  it_should_behave_like :data_source_with_access_control
+
+  describe "DataSource Integration", :greenplum_integration do
     let(:instance) { GreenplumIntegration.real_data_source }
     let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
 
-    it_should_behave_like "DataSource"
+    it_behaves_like :data_source_integration
   end
 end

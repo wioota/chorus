@@ -3,12 +3,12 @@ module DataSources
     wrap_parameters :account, :include => [:db_username, :db_password, :owner_id]
 
     def index
-      accounts = GpdbDataSource.find(params[:data_source_id]).accounts
+      accounts = DataSource.find(params[:data_source_id]).accounts
       present paginate(accounts.includes(:owner).order(:id))
     end
 
     def create
-      gpdb_data_source = GpdbDataSource.unshared.find(params[:data_source_id])
+      gpdb_data_source = DataSource.unshared.find(params[:data_source_id])
       authorize! :edit, gpdb_data_source
 
       account = gpdb_data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
@@ -20,7 +20,7 @@ module DataSources
     end
 
     def update
-      gpdb_data_source = GpdbDataSource.find(params[:data_source_id])
+      gpdb_data_source = DataSource.find(params[:data_source_id])
       authorize! :edit, gpdb_data_source
 
       account = gpdb_data_source.accounts.find(params[:id])
@@ -31,7 +31,7 @@ module DataSources
     end
 
     def destroy
-      gpdb_data_source = GpdbDataSource.find(params[:data_source_id])
+      gpdb_data_source = DataSource.find(params[:data_source_id])
       authorize! :edit, gpdb_data_source
       account = gpdb_data_source.accounts.find(params[:id])
 

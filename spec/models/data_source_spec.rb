@@ -46,56 +46,6 @@ describe DataSource do
     it { should have_many :events }
   end
 
-  describe "access control" do
-    let(:user) { users(:owner) }
-
-    before(:each) do
-      @gpdb_data_source_owned = FactoryGirl.create :gpdb_data_source, :owner => user
-      @gpdb_data_source_shared = FactoryGirl.create :gpdb_data_source, :shared => true
-      @membership_account = FactoryGirl.build(:instance_account, :owner => user)
-      @membership_account.save(:validate => false)
-      @gpdb_data_source_with_membership = @membership_account.instance
-      @gpdb_data_source_forbidden = FactoryGirl.create :gpdb_data_source
-    end
-
-    describe '.accessible_to' do
-      it "returns owned gpdb instances" do
-        GpdbDataSource.accessible_to(user).should include @gpdb_data_source_owned
-      end
-
-      it "returns shared gpdb instances" do
-        GpdbDataSource.accessible_to(user).should include @gpdb_data_source_shared
-      end
-
-      it "returns gpdb instances to which user has membership" do
-        GpdbDataSource.accessible_to(user).should include @gpdb_data_source_with_membership
-      end
-
-      it "does not return instances the user has no access to" do
-        GpdbDataSource.accessible_to(user).should_not include(@gpdb_data_source_forbidden)
-      end
-    end
-
-    describe '#accessible_to' do
-      it 'returns true if the instance is shared' do
-        @gpdb_data_source_shared.accessible_to(user).should be_true
-      end
-
-      it 'returns true if the instance is owned by the user' do
-        @gpdb_data_source_owned.accessible_to(user).should be_true
-      end
-
-      it 'returns true if the user has an instance account' do
-        @gpdb_data_source_with_membership.accessible_to(user).should be_true
-      end
-
-      it 'returns false otherwise' do
-        @gpdb_data_source_forbidden.accessible_to(user).should be_false
-      end
-
-    end
-  end
-
   describe 'activity creation' do
     let(:user) { users(:admin) }
     let :valid_input_attributes do

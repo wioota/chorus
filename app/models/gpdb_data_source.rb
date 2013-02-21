@@ -22,10 +22,6 @@ class GpdbDataSource < DataSource
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
   end
 
-  def self.unshared
-    where("data_sources.shared = false OR data_sources.shared IS NULL")
-  end
-
   def self.reindex_instance instance_id
     instance = GpdbDataSource.find(instance_id)
     instance.solr_index

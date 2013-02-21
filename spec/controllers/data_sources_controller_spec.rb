@@ -184,9 +184,18 @@ describe DataSourcesController do
         post :create, :data_source => valid_attributes
       end
 
-      it "creates a shared OracleDataSource" do
+      it "creates a private OracleDataSource by default" do
+        mock_present do |data_source|
+          data_source.should_not be_shared
+        end
         post :create, valid_attributes
-        OracleDataSource.last.should be_shared
+      end
+
+      it "can create a shared OracleDataSource" do
+        mock_present do |data_source|
+          data_source.should be_shared
+        end
+        post :create, valid_attributes.merge(:shared => true)
       end
 
       context "when oracle is not configured" do

@@ -28,6 +28,10 @@ class DataSource < ActiveRecord::Base
     end
   end
 
+  def self.unshared
+    where("data_sources.shared = false OR data_sources.shared IS NULL")
+  end
+
   def self.accessible_to(user)
     where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           owned: user.id,
@@ -44,13 +48,9 @@ class DataSource < ActiveRecord::Base
   end
 
   def self.create_for_entity_type(entity_type, user, data_source_hash)
-    if entity_type == "gpdb_data_source"
-      GpdbDataSource.create_for_user(user, data_source_hash)
-    elsif entity_type == "oracle_data_source"
-      OracleDataSource.create_for_user(user, data_source_hash)
-    else
-      raise ApiValidationError.new(:entity_type, :invalid)
-    end
+    entity_class = entity_type.classify.constantize rescue NameError
+    raise ApiValidationError.new(:entity_type, :invalid) unless entity_class < DataSource
+    entity_class.create_for_user(user, data_source_hash)
   end
 
   def valid_db_credentials?(account)

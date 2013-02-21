@@ -44,6 +44,15 @@ describe OracleDataSource do
     end
   end
 
+  it_should_behave_like :data_source_with_access_control
+
+  describe "DataSource Integration", :oracle_integration do
+    let(:instance) { OracleIntegration.real_data_source }
+    let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
+
+    it_should_behave_like :data_source_integration
+  end
+
   describe "#schemas" do
     let(:new_oracle) { FactoryGirl.create(:oracle_data_source) }
     let(:schema) { OracleSchema.create!(:name => 'test_schema', :data_source => new_oracle) }

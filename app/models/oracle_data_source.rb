@@ -8,15 +8,14 @@ class OracleDataSource < DataSource
 
   has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
 
-  def self.create_for_user(user, data_source_hash)
+  def self.create_for_user(user, params)
     unless ChorusConfig.instance.oracle_configured?
       raise ApiValidationError.new(:oracle, :not_configured)
     end
 
-    data_source = user.oracle_data_sources.new(data_source_hash)
-    data_source.shared = true
-    data_source.save!
-    data_source
+    user.oracle_data_sources.create!(params) do |data_source|
+      data_source.shared = params[:shared]
+    end
   end
 
   def connect_with(account)
@@ -31,7 +30,6 @@ class OracleDataSource < DataSource
   end
 
   def refresh_databases_later
-
   end
 
   def refresh_schemas
