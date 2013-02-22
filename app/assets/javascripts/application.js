@@ -31,7 +31,11 @@
 //= require router
 //= require models
 //= require collections
-//= require views
+//= require views/core/bare_view
+//= require views/core/base_view
+//= require views/core/main_content_view
+//= require views/core/list_header_view
+//= require views/core/main_content_list_view
 //= require pages
 //= require modals
 //= require presenters
