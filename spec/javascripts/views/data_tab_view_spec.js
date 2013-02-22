@@ -226,30 +226,6 @@ describe("chorus.views.DataTab", function () {
                     expect(helper).toHaveClass("drag_helper");
                     expect(helper).toContainText($li.data("name"));
                 });
-
-                context("when hovering over an li", function () {
-                    beforeEach(function () {
-                        this.view.$('.list li:eq(1)').mouseenter();
-                    });
-
-                    it("has the insert text in the insert arrow", function () {
-                        expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert');
-                    });
-
-                    context("when scrolling", function () {
-                        beforeEach(function () {
-                            chorus.page = new chorus.pages.Base();
-                            chorus.page.sidebar = new chorus.views.Sidebar();
-
-                            this.view.render();
-                            chorus.page.sidebar.trigger("scroll");
-                        });
-
-                        it("closes the open insert arrow", function () {
-                            expect(this.view.closeQtip).toHaveBeenCalled();
-                        });
-                    });
-                });
             });
 
             context("and no data was fetched", function () {
