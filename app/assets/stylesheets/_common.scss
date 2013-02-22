@@ -338,5 +338,13 @@ $summary-line-height: 19px;
 	}
 }
 
+@mixin grab_cursor {
+    cursor: -moz-grab;
+    cursor: -o-grab;
+    cursor: -ms-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //

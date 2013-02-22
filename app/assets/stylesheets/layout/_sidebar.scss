@@ -8,6 +8,8 @@ body .ui-draggable-dragging {
         margin-top: 8px;
         color: $color-text3;
     }
+
+    @include grab_cursor;
 }
 
 #sidebar {
@@ -229,8 +231,13 @@ body .ui-draggable-dragging {
 
 .function_tab {
     li {
+        a {
+            @include grab_cursor;
+        }
+
         &:hover {
             background-color: $selected-row-hover-background-color;
+            @include grab_cursor;
         }
     }
 }
@@ -244,7 +251,6 @@ body .ui-draggable-dragging {
         padding-top: 0px;
         padding-bottom: 0px;
         color: $color-text2;
-        cursor: pointer;
 
         img {
             display: inline-block;
@@ -286,10 +292,20 @@ body .ui-draggable-dragging {
 
     .accordion {
         li {
-            .dataset_title, li {
+            .dataset_title_section, li {
                 &:hover {
                     background-color: $selected-row-hover-background-color;
                 }
+
+                .dataset_title {
+                    &:hover {
+                        @include grab_cursor;
+                    }
+                }
+            }
+
+            a {
+                @include grab_cursor;
             }
         }
     }
@@ -313,6 +329,10 @@ body .ui-draggable-dragging {
         }
         .column_type {
             color: $color-text3;
+        }
+
+        &:hover {
+            @include grab_cursor;
         }
     }
 }

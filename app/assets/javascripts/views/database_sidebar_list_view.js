@@ -78,7 +78,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     setupDragging: function() {
         this.$("ul.list li").draggable({
-            cursor: "move",
             containment: "window",
             appendTo: "body",
             helper: this.dragHelper
