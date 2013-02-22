@@ -288,7 +288,10 @@ class ChorusInstaller
     if upgrade_existing?
       @executor.start_postgres
       log "Running database migrations..." do
-        @executor.rake "db:migrate"
+        db_commands = "db:migrate"
+        db_commands += " enqueue_reindex"
+        log "Running rake #{db_commands}"
+        @executor.rake db_commands
         @executor.stop_postgres
       end
     else
@@ -301,6 +304,7 @@ class ChorusInstaller
         @executor.start_postgres
         db_commands = "db:create db:migrate"
         db_commands += " db:seed"
+        db_commands += " enqueue_reindex"
         log "Running rake #{db_commands}"
         @executor.rake db_commands
         @executor.stop_postgres
@@ -330,14 +334,6 @@ class ChorusInstaller
 
     log "Starting up Chorus..." do
       @executor.start_chorus
-    end
-  end
-
-  def enqueue_solr_reindex
-    log "Migrating data from previous version..." do
-      log "Loading legacy data into postgres..." do
-        @executor.rake "enqueue_reindex"
-      end
     end
   end
 
@@ -389,10 +385,10 @@ class ChorusInstaller
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       generate_paths_file
       generate_chorus_psql_files
-      setup_database
+      setup_database do
+        enqueue_solr_reindex
+      end
     end
-
-    enqueue_solr_reindex
 
     if is_supported_mac?
       warn_and_change_osx_properties

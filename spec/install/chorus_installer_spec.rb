@@ -838,16 +838,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#enqueue_solr_reindex" do
-    before do
-      mock(executor).rake("enqueue_reindex") {true}
-    end
-
-    it "should enqueue the refresh_all task" do
-      expect { installer.enqueue_solr_reindex }.to_not raise_error
-    end
-  end
-
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }
@@ -867,14 +857,14 @@ describe ChorusInstaller do
         installer.setup_database
         executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
         executor.calls[:initdb].should == [installer.data_path, installer.database_user]
-        executor.calls[:rake].should == ["db:create db:migrate db:seed"]
+        executor.calls[:rake].should == ["db:create db:migrate db:seed enqueue_reindex"]
 
         stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
         sprintf("%o", stats).should == "100400"
       end
     end
 
-    context "when upgrading" do
+    context "#when upgrading" do
       before do
         installer.install_mode = :upgrade_existing
       end
@@ -882,7 +872,7 @@ describe ChorusInstaller do
       it "migrates the existing database" do
         installer.setup_database
         executor.call_order.should == [:start_postgres, :rake, :stop_postgres]
-        executor.calls[:rake].should == ["db:migrate"]
+        executor.calls[:rake].should == ["db:migrate enqueue_reindex"]
       end
     end
   end
