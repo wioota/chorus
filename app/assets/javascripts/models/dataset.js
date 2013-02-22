@@ -34,6 +34,14 @@ chorus.models.Dataset = chorus.models.Base.include(
         return entitySubtype && (entitySubtype === "SOURCE_TABLE" || entitySubtype === "CHORUS_VIEW");
     },
 
+    isOracle: function() {
+      return this.instance().isOracle();
+    },
+
+    isGreenplum: function() {
+      return this.instance().isGreenplum();
+    },
+
     columns: function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {

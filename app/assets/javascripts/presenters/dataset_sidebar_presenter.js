@@ -201,6 +201,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource && this.resource.canAnalyze();
     },
 
+    canImport: function() {
+        return this.resource && this.resource.isOracle();
+    },
+
     hasImport: function() {
         return this.resource && this.resource.hasImport();
     },

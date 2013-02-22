@@ -67,6 +67,30 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe('#isOracle', function(){
+        beforeEach(function() {
+            this.oracleDataset = rspecFixtures.oracleDataset();
+            this.gpdbDataset = rspecFixtures.dataset();
+        });
+
+        it('returns whether the parent instance is an oracle data source', function(){
+            expect(this.oracleDataset.isOracle()).toBeTruthy();
+            expect(this.gpdbDataset.isOracle()).toBeFalsy();
+        });
+    });
+
+    describe('#isGreenplum', function(){
+        beforeEach(function() {
+            this.gpdbDataset = rspecFixtures.dataset();
+            this.oracleDataset = rspecFixtures.oracleDataset();
+        });
+
+        it('returns whether the parent instance is a greenplum data source', function(){
+            expect(this.gpdbDataset.isGreenplum()).toBeTruthy();
+            expect(this.oracleDataset.isGreenplum()).toBeFalsy();
+        });
+    });
+
     it("includes the InstanceCredentials mixin", function() {
         expect(this.dataset.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
     });

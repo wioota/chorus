@@ -159,6 +159,28 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
 
+        context("when an oracle dataset is selected", function() {
+            beforeEach(function() {
+                this.oracleDataset = rspecFixtures.oracleDataset();
+                chorus.PageEvents.broadcast("dataset:selected", this.oracleDataset);
+            });
+
+            it("displays an import dataset link", function() {
+                expect(this.view.$("a.import_dataset").text()).toMatchTranslation("dataset.actions.import_dataset");
+            });
+        });
+
+        context("when a greenplum dataset is selected", function() {
+            beforeEach(function() {
+                this.gpdbDataset = rspecFixtures.dataset();
+                chorus.PageEvents.broadcast("dataset:selected", this.gpdbDataset);
+            });
+
+            it("does not display an import dataset link", function() {
+                expect(this.view.$("a.import_dataset")).not.toExist();
+            });
+        });
+
         it("displays a download link", function() {
             expect(this.view.$("a.download")).toHaveData("dialog", "DatasetDownload");
             expect(this.view.$("a.download")).toHaveData("dataset", this.dataset);
