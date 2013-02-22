@@ -55,11 +55,18 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
     context("after everything has been fetched", function() {
         beforeEach(function() {
+            this.originalMainContent = this.page.mainContent;
+            spyOn(this.originalMainContent, "teardown");
+
             this.server.completeFetchFor(this.schema);
             this.server.completeFetchFor(this.page.collection, [
                 rspecFixtures.dataset({ objectName: "bar" }),
                 rspecFixtures.dataset({ objectName: "foo", objectType: "VIEW" })
             ]);
+        });
+
+        it("calls teardown on the old mainContent", function() {
+            expect(this.originalMainContent.teardown).toHaveBeenCalled();
         });
 
         it("passes the multiSelect option to the list content details", function() {
@@ -129,12 +136,34 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             expect(this.page.$(".content_header h1").text()).toBe(this.page.schema.canonicalName());
         });
 
-        it("constructs the main content list correctly", function() {
-            expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
-            expect(this.page.mainContent.collection).toBe(this.page.collection);
-            expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
+        describe("the main content list", function() {
+            beforeEach(function() {
+                // render is bound on the view object before we can spy on it.
+                spyOn(this.page.mainContent, "preRender");
+            });
 
-            expect(this.page.$(this.page.mainContent.el).length).toBe(1);
+            it("is constructed correctly", function() {
+                expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
+                expect(this.page.mainContent.collection).toBe(this.page.collection);
+                expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
+
+                expect(this.page.$(this.page.mainContent.el).length).toBe(1);
+            });
+
+            it("does not re-render when a dataset is updated", function() {
+                this.page.collection.at(0).trigger("change");
+                expect(this.page.mainContent.preRender).not.toHaveBeenCalled();
+            });
+
+            it("does re-render when the collection is reset", function() {
+                this.page.collection.trigger("reset");
+                expect(this.page.mainContent.preRender).toHaveBeenCalled();
+            });
+
+            it("does re-render when the collection is sorted", function() {
+                this.page.collection.trigger("sort");
+                expect(this.page.mainContent.preRender).toHaveBeenCalled();
+            });
         });
 
         describe("search", function() {

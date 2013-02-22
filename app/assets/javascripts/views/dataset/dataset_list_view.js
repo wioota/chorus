@@ -3,6 +3,7 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
     templateName: "dataset_list",
     useLoadingSection: true,
     eventName: "dataset",
+    persistent: true,
 
     events: {
         "click  li input[type=checkbox]": "checkboxClicked",

@@ -53,9 +53,6 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     saveSuccess: function(savedModel) {
         savedModel.saved = true;
         savedModel.trigger("change");
-        var allSaved = this.collection.every(function(model) {
-            return model.saved;
-        });
     },
 
     saveFailed: function(tags) {

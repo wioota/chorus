@@ -11,6 +11,12 @@ describe("chorus.views.DatasetList", function() {
         this.view.render();
     });
 
+    it("does not re-render when a dataset is updated", function() {
+        spyOn(this.view, "preRender");
+        this.collection.at(0).trigger("change");
+        expect(this.view.preRender).not.toHaveBeenCalled();
+    });
+
     context("when the checkable flag is enabled", function() {
         function expectDatasetChecked(expectedModels) {
             expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
@@ -106,7 +112,6 @@ describe("chorus.views.DatasetList", function() {
                     it("un-checks all of the datasets", function() {
                         expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
                         expect(this.view.$("li.checked").length).toBe(0);
-
                     });
 
                     it("broadcasts the 'dataset:checked' page event with an empty collection", function() {
