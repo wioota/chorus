@@ -18,7 +18,7 @@ chorus.views.DataTabDatasetColumnList = chorus.views.Base.extend({
     },
 
     setupDragging: function() {
-        this.$("ul.list li").draggable({
+        this.$("li").draggable({
             cursor: "move",
             containment: "window",
             appendTo: "body",

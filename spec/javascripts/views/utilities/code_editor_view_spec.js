@@ -25,19 +25,27 @@ describe("chorus.views.CodeEditorView", function() {
         expect(CodeMirror.fromTextArea).toHaveBeenCalled();
     });
 
+    describe("#postRender", function() {
+        it("only sets up draggable once", function() {
+            stubDefer();
+            this.view.render();
+            this.view.postRender();
+            expect($.fn.droppable.callCount).toEqual(1);
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             stubDefer();
             this.view.render();
         });
 
-        context("when deferred CodeMirror creation happens twice in one dom render", function() {
+        context("when CodeMirror setup happens twice in one dom render", function() {
             beforeEach(function() {
-                var deferredCodeMirror = _.defer.calls[0].args[0];
-                deferredCodeMirror();
+                this.view.setupCodeMirror();
             });
 
-            it("only calls CodeMirror once", function() {
+            it("only creates CodeMirror once", function() {
                 expect(CodeMirror.fromTextArea.callCount).toBe(1);
             });
         });

@@ -36,20 +36,25 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
         this._super('teardown', [true]);
     },
 
-    postRender: function() {
-        _.defer(_.bind(function() {
-            if(!this.torndown) {
-                var textArea = this.$(".text_editor")[0];
-                if (textArea !== this.textArea) {
-                    this.textArea = textArea;
-                    var editor = this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
-                    _.defer(function() { editor.refresh(); });
-                    if (this.options.beforeEdit) { this.options.beforeEdit.call(this); }
+    setupCodeMirror: function() {
+        if(!this.torndown) {
+            var textArea = this.$(".text_editor")[0];
+            if(textArea !== this.textArea) {
+                this.textArea = textArea;
+                var editor = this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
+                _.defer(function() {
+                    editor.refresh();
+                });
+                if(this.options.beforeEdit) {
+                    this.options.beforeEdit.call(this);
                 }
-
                 this.$(".CodeMirror").droppable().on('drop', _.bind(this.acceptDrop, this));
             }
-        }, this));
+        }
+    },
+
+    postRender: function() {
+        _.defer(_.bind(this.setupCodeMirror, this));
     },
 
     onBlur: function () {
