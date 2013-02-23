@@ -16,7 +16,12 @@ class ImportExecutor < DelegateClass(Import)
     touch(:started_at)
     raise "Destination workspace #{workspace_with_deleted.name} has been deleted" if workspace_with_deleted.deleted?
     raise "Original source dataset #{source_dataset_with_deleted.scoped_name} has been deleted" if source_dataset_with_deleted.deleted?
-    table_copier.new(import_attributes).start
+    copier_class = table_copier
+
+    if copier_class.requires_chorus_authorization?
+      generate_key
+    end
+    copier_class.new(import_attributes).start
     update_status :passed
   rescue => e
     update_status :failed, e.message
@@ -75,12 +80,21 @@ class ImportExecutor < DelegateClass(Import)
         :user => user,
         :sample_count => sample_count,
         :truncate => truncate,
-        :pipe_name => pipe_name
+        :pipe_name => pipe_name,
+        :stream_url => stream_url
     }
   end
 
   def pipe_name
     "#{created_at.to_i}_#{id}"
+  end
+
+  def stream_url
+    Rails.application.routes.url_helpers.dataset_ext_stream_url(:dataset_id => source_dataset.id,
+                                                                :row_limit => sample_count,
+                                                                :host => ChorusConfig.instance.public_url,
+                                                                :port => ChorusConfig.instance.server_port,
+                                                                :stream_key =>  stream_key)
   end
 
   def named_pipe
@@ -102,8 +116,8 @@ class ImportExecutor < DelegateClass(Import)
     passed = (status == :passed)
 
     touch(:finished_at)
-    self.success = passed
-    save(:validate => false)
+    update_attribute(:success, passed)
+    update_attribute(:stream_key, nil)
 
     if passed
       refresh_schema

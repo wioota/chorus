@@ -8,6 +8,16 @@ describe Import, :greenplum_integration do
   let(:account) { GreenplumIntegration.real_account }
   let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
 
+  let(:import) {
+    i = Import.new
+    i.workspace = workspace
+    i.to_table = 'new_table1234'
+    i.new_table = true
+    i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
+    i.user = user
+    i
+  }
+
   before do
     workspace.update_attribute :sandbox_id, schema.id
   end
@@ -20,16 +30,6 @@ describe Import, :greenplum_integration do
   end
 
   describe "validations" do
-    let(:import) {
-      i = Import.new
-      i.workspace = workspace
-      i.to_table = 'new_table1234'
-      i.new_table = true
-      i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
-      i.user = user
-      i
-    }
-
     it "validates the presence of to_table" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :to_table => nil)
       import.should_not be_valid
@@ -98,6 +98,14 @@ describe Import, :greenplum_integration do
       stub(import.source_dataset).dataset_consistent? { false }
 
       import.should be_valid
+    end
+  end
+
+  describe "generate_key" do
+    it "generates a stream_key" do
+      import.save
+      import.generate_key
+      import.reload.stream_key.should_not be_nil
     end
   end
 end

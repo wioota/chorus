@@ -36,4 +36,8 @@ class Import < ActiveRecord::Base
         :reference_type => 'Import'
     )
   end
+
+  def generate_key
+    update_attribute(:stream_key, SecureRandom.hex(20))
+  end
 end

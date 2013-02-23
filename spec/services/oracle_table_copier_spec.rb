@@ -11,6 +11,7 @@ describe OracleTableCopier do
   let(:sample_count) { nil }
   let(:truncate) { false }
   let(:destination_exists) { false }
+  let(:stream_url) { "chorus.oracle_streamer.biz" }
 
   let(:copier) do
     OracleTableCopier.new(
@@ -20,7 +21,8 @@ describe OracleTableCopier do
             :destination_table_name => destination_table_name,
             :user => user,
             :sample_count => sample_count,
-            :truncate => truncate
+            :truncate => truncate,
+            :stream_url => stream_url
         }
     )
   end
@@ -121,24 +123,12 @@ describe OracleTableCopier do
   end
 
   describe "run" do
-    let(:sample_count) { 5 }
-    let(:download_url) do
-      Rails.application.routes.url_helpers.dataset_download_url(
-          {
-              :dataset_id => source_dataset.id,
-              :row_limit => sample_count,
-              :header => false,
-              :host => ChorusConfig.instance.public_url,
-              :port => ChorusConfig.instance.server_port
-          }
-      )
-    end
     let(:external_table_options) do
       {
           :temporary => true,
           :web => true,
           :table_name => source_dataset.name,
-          :location_url => download_url
+          :location_url => stream_url
       }
     end
 

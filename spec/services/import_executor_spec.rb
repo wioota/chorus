@@ -26,7 +26,7 @@ describe ImportExecutor do
                       :user => user,
                       :workspace => workspace,
                       :to_table => destination_table_name,
-                      :source_dataset => source_dataset).tap {|i| i.save(:validate => false)}
+                      :source_dataset => source_dataset).tap { |i| i.save(:validate => false) }
   end
   let(:import_failure_message) { "" }
 
@@ -58,7 +58,7 @@ describe ImportExecutor do
     end
   end
 
-  shared_examples_for :it_succeeds do | trigger |
+  shared_examples_for :it_succeeds do |trigger|
     context "when import is successful" do
       it "creates a DatasetImportSuccess" do
         expect {
@@ -202,11 +202,11 @@ describe ImportExecutor do
     end
   end
 
-  shared_examples_for :it_fails_with_message do | trigger, message |
+  shared_examples_for :it_fails_with_message do |trigger, message|
     let(:expected_failure_message) { message }
 
     context "when the import fails" do
-       it "creates a DatasetImportFailed" do
+      it "creates a DatasetImportFailed" do
         expect {
           send(trigger)
         }.to change(Events::DatasetImportFailed, :count).by(1)
@@ -236,7 +236,7 @@ describe ImportExecutor do
         import.finished_at.should_not be_nil
       end
 
-     it_behaves_like :it_generates_no_events_when_already_marked_as_passed_or_failed, trigger
+      it_behaves_like :it_generates_no_events_when_already_marked_as_passed_or_failed, trigger
     end
   end
 
@@ -258,10 +258,10 @@ describe ImportExecutor do
 
   describe "#run" do
     def mock_copier
-      mock(TableCopier).new(anything) do | *args |
+      mock(TableCopier).new(anything) do |*args|
         raise import_failure_message if import_failure_message.present?
         yield *args if block_given?
-        Object.new.tap {|o| stub(o).start }
+        Object.new.tap { |o| stub(o).start }
       end
     end
 
@@ -290,7 +290,7 @@ describe ImportExecutor do
     end
 
     it "Uses the import id and created_at time in the pipe_name" do
-      mock_copier do | attributes |
+      mock_copier do |attributes|
         attributes[:pipe_name].should == "#{import.created_at.to_i}_#{import.id}"
       end
       ImportExecutor.run(import.id)
@@ -398,12 +398,50 @@ describe ImportExecutor do
         ran.should be_true
       end
     end
+
+    context "when the table copier requires authorization" do
+      let(:source_dataset) { datasets(:oracle_table) }
+      let(:copier) { Object.new }
+      let(:stream_key) { 'f00baa' }
+      let(:stream_url) do
+        Rails.application.routes.url_helpers.dataset_ext_stream_url(:dataset_id => source_dataset.id,
+                                                                    :row_limit => import.sample_count,
+                                                                    :host => ChorusConfig.instance.public_url,
+                                                                    :port => ChorusConfig.instance.server_port,
+                                                                    :stream_key => stream_key
+        )
+      end
+
+      let(:copier_params) do
+        {
+            :source_dataset => source_dataset,
+            :stream_url => stream_url
+        }
+      end
+
+      before do
+        stub(copier).start
+      end
+
+      it "generates a login key in the import and passes in a stream url to the copier" do
+        mock(OracleTableCopier).new(hash_including(copier_params)) { copier }
+        stub(import).stream_key { stream_key }
+        mock(import).generate_key
+        ImportExecutor.new(import).run
+      end
+
+      it "erases the stream_key after running" do
+        stub(OracleTableCopier).new.with_any_args { copier }
+        ImportExecutor.new(import).run
+        import.reload.stream_key.should be_nil
+      end
+    end
   end
 
   describe ".cancel" do
     let(:source_connection) { Object.new }
     let(:destination_connection) { Object.new }
-    let(:executor) { ImportExecutor.new(import)}
+    let(:executor) { ImportExecutor.new(import) }
     before do
       stub(executor).log.with_any_args
       stub.proxy(executor).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }

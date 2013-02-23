@@ -3,6 +3,10 @@ class TableCopier
 
   DISTRIBUTED_RANDOMLY = 'DISTRIBUTED RANDOMLY'
 
+  def self.requires_chorus_authorization?
+    false
+  end
+
   def initialize(attributes)
     @attributes = attributes.with_indifferent_access
   end
