@@ -93,6 +93,8 @@ FixtureBuilder.configure do |fbuilder|
 
     oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: the_collaborator)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
+    fbuilder.name(:oracle, oracle_schema)
+    FactoryGirl.create(:oracle_schema, name: 'oracle_empty', data_source: oracle_data_source)
     FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
@@ -494,7 +496,7 @@ FixtureBuilder.configure do |fbuilder|
 
       GreenplumIntegration.refresh_chorus
       chorus_gpdb42_instance.refresh_databases
-      GpdbSchema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GreenplumIntegration.database_name), :refresh_all => true)
+      Schema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GreenplumIntegration.database_name), :refresh_all => true)
 
       test_database = GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)
       test_schema = test_database.schemas.find_by_name('test_schema')

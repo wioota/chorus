@@ -65,7 +65,7 @@ module BulkData
         params = {:name => instance_name, :host => 'chorus-gpdb42', :port => 5432, :db_username => 'gpadmin',
                   :db_password => 'secret', :db_name => 'postgres', :shared => true}
         gpdb_data_source = current_user.gpdb_data_sources.create!(params, :as => :create)
-        gpdb_data_source.refresh_all
+        gpdb_data_source.refresh
       end
     end
 

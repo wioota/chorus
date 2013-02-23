@@ -26,30 +26,6 @@ class GpdbSchema < Schema
 
   before_save :mark_schemas_as_stale
 
-  def self.refresh(account, database, options = {})
-    found_schemas = []
-
-    database.connect_with(account).schemas.each do |name|
-      schema = database.schemas.find_or_initialize_by_name(name)
-      next if schema.invalid?
-      schema.stale_at = nil
-      schema.save!
-      GpdbDataset.refresh(account, schema, options) if options[:refresh_all]
-      found_schemas << schema
-    end
-
-    found_schemas
-  rescue ActiveRecord::JDBCError, ActiveRecord::StatementInvalid => e
-    Chorus.log_error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
-    return []
-  ensure
-    if options[:mark_stale]
-      (database.schemas.not_stale - found_schemas).each do |schema|
-        schema.mark_stale!
-      end
-    end
-  end
-
   def self.visible_to(*args)
     refresh(*args)
   end

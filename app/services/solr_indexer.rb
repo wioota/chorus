@@ -13,8 +13,8 @@ module SolrIndexer
 
   def self.refresh_external_data(force_index = true)
     Rails.logger.info("Starting Solr Refresh")
-    GpdbDataSource.find_each do |gpdb_data_source|
-      gpdb_data_source.refresh_all(:mark_stale => true, :force_index => force_index)
+    DataSource.find_each do |data_source|
+      data_source.refresh(:mark_stale => true, :force_index => force_index)
     end
     HadoopInstance.find_each do |hadoop_instance|
       hadoop_instance.refresh

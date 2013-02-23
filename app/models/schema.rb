@@ -17,6 +17,30 @@ class Schema < ActiveRecord::Base
     schema
   end
 
+  def self.refresh(account, schema_parent, options = {})
+    found_schemas = []
+
+    schema_parent.connect_with(account).schemas.each do |name|
+      schema = schema_parent.schemas.find_or_initialize_by_name(name)
+      next if schema.invalid?
+      schema.stale_at = nil
+      schema.save!
+      Dataset.refresh(account, schema, options) if options[:refresh_all]
+      found_schemas << schema
+    end
+
+    found_schemas
+  rescue DataSourceConnection::Error => e
+    Chorus.log_error "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
+    return []
+  ensure
+    if options[:mark_stale]
+      (schema_parent.schemas.not_stale - found_schemas).each do |schema|
+        schema.mark_stale!
+      end
+    end
+  end
+
   def verify_in_source(user)
     parent.connect_as(user).schema_exists?(name)
   end
@@ -37,7 +61,7 @@ class Schema < ActiveRecord::Base
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
-        dataset.skip_search_index = true if options[:new]
+        dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
           dataset.save!
         elsif force_index

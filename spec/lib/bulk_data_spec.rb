@@ -69,8 +69,8 @@ describe BulkData do
 
   describe "add default GPDB instance", :greenplum_integration do
     it "should create a GPDB instance with owner" do
-      any_instance_of(GpdbDataSource) do |instance|
-        mock(instance).refresh_all
+      any_instance_of(DataSource) do |instance|
+        mock(instance).refresh
       end
       expect {
         BulkData.create_gpdb_data_source(user_name, 'chores_r_us')

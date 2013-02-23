@@ -88,6 +88,23 @@ class DataSource < ActiveRecord::Base
     self
   end
 
+  def self.refresh(id, options={})
+    symbolized_options = options.symbolize_keys
+    symbolized_options[:new] = symbolized_options[:new].to_s == "true" if symbolized_options[:new]
+    find(id).refresh symbolized_options
+  end
+
+  def refresh(options={})
+    options[:skip_dataset_solr_index] = true if options[:new]
+    refresh_databases options
+    refresh_schemas options
+
+    if options[:skip_dataset_solr_index]
+      #The first refresh_all did not index the datasets in solr due to performance.
+      refresh_schemas options.merge(:force_index => true)
+    end
+  end
+
   private
 
   def account_owned_by(user)

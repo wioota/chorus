@@ -76,4 +76,8 @@ describe OracleSchema do
       schema.active_tables_and_views.should_not include(view)
     end
   end
+
+  it_behaves_like 'a subclass of schema' do
+    let(:schema) { schemas(:oracle) }
+  end
 end

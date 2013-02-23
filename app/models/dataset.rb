@@ -107,6 +107,10 @@ class Dataset < ActiveRecord::Base
     dataset
   end
 
+  def self.refresh(account, schema, options = {})
+    schema.refresh_datasets account, options
+  end
+
   def query_setup_sql
     ""
   end

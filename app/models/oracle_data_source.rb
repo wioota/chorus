@@ -29,24 +29,16 @@ class OracleDataSource < DataSource
     )
   end
 
+  def refresh_databases(options={})
+  end
+
   def refresh_databases_later
   end
 
-  def refresh_schemas
-    actual_schema_names = connect_with(owner_account).schemas
-
-    schemas.each do |schema|
-      unless actual_schema_names.delete schema.name
-        schema.mark_stale!
-      end
-    end
-
-    actual_schema_names.each do |name|
-      schemas.create(:name => name)
-    end
-
-    schemas.not_stale
+  def refresh_schemas(options={})
+    Schema.refresh(owner_account, self, options.reverse_merge(:refresh_all => true))
   end
+
 
   private
 

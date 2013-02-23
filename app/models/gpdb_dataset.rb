@@ -20,10 +20,6 @@ class GpdbDataset < Dataset
     schema.dataset_count account, options
   end
 
-  def self.refresh(account, schema, options = {})
-    schema.refresh_datasets account, options
-  end
-
   def self.visible_to(*args)
     refresh(*args)
   end

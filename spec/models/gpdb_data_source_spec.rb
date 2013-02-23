@@ -354,27 +354,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe ".refresh" do
-    let(:instance) { data_sources(:owners) }
-
-    before do
-      @refreshed_databases = false
-      any_instance_of(GpdbDataSource) do |gpdb_data_source|
-        stub(gpdb_data_source).refresh_databases { @refreshed_databases = true }
-      end
-
-      instance.databases.count.should > 0
-      instance.databases.each do |database|
-        mock(GpdbSchema).refresh(instance.owner_account, database, :refresh_all => true)
-      end
-    end
-
-    it "should refresh all databases for the instance" do
-      described_class.refresh(instance.id)
-      @refreshed_databases.should == true
-    end
-  end
-
   describe "automatic reindexing" do
     let(:instance) { data_sources(:owners) }
 

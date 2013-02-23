@@ -91,7 +91,6 @@ class GpdbDataSource < DataSource
     database_account_groups.each do |database_name, db_usernames|
       database = databases.find_or_initialize_by_name(database_name)
 
-      # TODO: [#40454327] Don't just skip refreshing the database. Actually do something useful.
       if database.invalid?
         databases.delete(database)
         next
@@ -128,26 +127,10 @@ class GpdbDataSource < DataSource
     accounts.pluck(:db_username)
   end
 
-  def self.refresh(id, options={})
-    symbolized_options = options.symbolize_keys
-    symbolized_options[:new] = symbolized_options[:new].to_s == "true" if symbolized_options[:new]
-    find(id).refresh symbolized_options
-  end
-
-  def refresh(options={})
-    refresh_databases options
-    refresh_all options
-
-    # would do this in a separate job, but QC doesn't seem to guarantee the order and development only uses one worker
-    if options[:new]
-      refresh_all options.except(:new).merge(:force_index => true)
-    end
-  end
-
-  def refresh_all(options={})
+  def refresh_schemas(options={})
     databases.each do |database|
       begin
-        GpdbSchema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
+        Schema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
       rescue GreenplumConnection::DatabaseError => e
         Chorus.log_error "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
       end
