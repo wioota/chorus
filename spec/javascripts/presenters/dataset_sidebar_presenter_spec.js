@@ -287,6 +287,45 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     });
                 });
             });
+
+            describe("#canImport", function() {
+                context("when the dataset belongs to a gpdb data source", function() {
+                    beforeEach(function() {
+                        resource = rspecFixtures.dataset();
+                        presenter = new chorus.presenters.DatasetSidebar(resource);
+                    });
+
+                    it("returns false", function() {
+                        expect(presenter.canImport()).toBeFalsy();
+                    });
+                });
+
+                context("when the dataset belongs to an oracle data source", function() {
+                    beforeEach(function() {
+                        resource = rspecFixtures.oracleDataset();
+                        presenter = new chorus.presenters.DatasetSidebar(resource);
+                    });
+
+                    it("returns true", function() {
+                        expect(presenter.canImport()).toBeTruthy();
+                    });
+                });
+            });
+        });
+
+        context("with a dataset that is missing a schema", function() {
+            var presenter, resource;
+            beforeEach(function() {
+                resource = rspecFixtures.dataset();
+                resource.set('schema', null);
+                presenter = new chorus.presenters.DatasetSidebar(resource);
+            });
+
+            describe("#canImport", function() {
+                it("returns false", function() {
+                    expect(presenter.canImport()).toBeFalsy();
+                });
+            });
         });
 
         context("with a workspace table", function() {
