@@ -10,7 +10,7 @@ describe CancelableQuery do
     let(:connection) { Object.new }
     let(:options) { {:warnings => true}.merge(extra_options) }
     let(:extra_options) { {} }
-    let(:results) { SqlResult.new }
+    let(:results) { GreenplumSqlResult.new }
 
     before do
       mock(connection).prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, check_id), options) { results }

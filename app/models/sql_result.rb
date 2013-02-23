@@ -36,14 +36,18 @@ class SqlResult
 
     while result_set.next
       row = (1..meta_data.column_count).map do |i|
-        result_set.get_string(i).to_s
+        column_string_value meta_data, result_set, i
       end
       add_row(row)
     end
   end
 
+  def column_string_value(meta_data, result_set, index)
+    result_set.get_string(index).to_s
+  end
+
   def add_column(name, type)
-    @columns << GpdbDatasetColumn.new(:name => name, :data_type => type)
+    @columns << dataset_column_class.new(:name => name, :data_type => type)
   end
 
   def add_row(row)

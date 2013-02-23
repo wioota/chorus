@@ -1,5 +1,4 @@
 class SqlResultPresenter < Presenter
-
   def to_hash
     {
         :columns => present(model.columns),

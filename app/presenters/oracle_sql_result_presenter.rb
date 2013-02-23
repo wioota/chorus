@@ -1,0 +1,2 @@
+class OracleSqlResultPresenter < SqlResultPresenter
+end

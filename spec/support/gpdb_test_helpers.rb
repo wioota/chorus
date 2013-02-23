@@ -3,7 +3,7 @@ module GpdbTestHelpers
     any_instance_of(GreenplumConnection) do |instance|
       query_values.each do |query, response|
         stub(instance).prepare_and_execute_statement(query).times(any_times) {
-          SqlResult.new.tap do |result|
+          GreenplumSqlResult.new.tap do |result|
             result_set = clone_response(response)
             keys = result_set[0].keys
             keys.each do |key|

@@ -60,6 +60,10 @@ class OracleConnection < DataSourceConnection
     @connection = nil
   end
 
+  def set_timeout(timeout, jdbc_conn)
+    # TODO: implement this
+  end
+
   def db_url
     "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
   end
@@ -136,6 +140,10 @@ class OracleConnection < DataSourceConnection
       SQL
       @connection.fetch(sql).map { |row| row[:column_name] }
     end
+  end
+
+  def create_sql_result(warnings, result_set)
+    OracleSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
   private

@@ -72,4 +72,57 @@ class DataSourceConnection
 
     true
   end
+
+  def prepare_and_execute_statement(query, options = {})
+    with_connection options do
+      @connection.synchronize do |jdbc_conn|
+        if options[:timeout]
+          set_timeout(options[:timeout], jdbc_conn)
+        end
+
+        statement = jdbc_conn.prepare_statement(query)
+        if options[:limit]
+          jdbc_conn.set_auto_commit(false)
+          statement.set_fetch_size(options[:limit])
+          statement.set_max_rows(options[:limit])
+        end
+
+        if options[:describe_only]
+          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
+        else
+          statement.execute
+        end
+
+        if options[:limit]
+          jdbc_conn.commit
+        end
+
+        warnings = []
+        if options[:warnings]
+          warning = statement.get_warnings
+          while (warning)
+            warnings << warning.to_s
+            warning = warning.next_warning
+          end
+        end
+
+        result_set = statement.get_result_set
+        if support_multiple_result_sets?
+          while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
+            result_set.close if result_set
+            result_set = statement.get_result_set
+          end
+        end
+
+        create_sql_result(warnings, result_set)
+      end
+    end
+  rescue Exception => e
+    e.backtrace.each { |line| pa line }
+    raise QueryError, "The query could not be completed. Error: #{e.message}"
+  end
+
+  def support_multiple_result_sets?
+    false
+  end
 end

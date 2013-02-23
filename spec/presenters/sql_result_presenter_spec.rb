@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SqlResultPresenter, :type => :view do
   let(:schema) { schemas(:default) }
   let(:result) do
-    SqlResult.new.tap do |result|
+    GreenplumSqlResult.new.tap do |result|
       result.add_column("size", "real")
       result.add_column("is_cool", "boolean")
       result.add_row(["11", "t"])

@@ -64,20 +64,6 @@ describe GpdbDataset do
     end
   end
 
-  describe "#all_rows_sql" do
-    it "returns the correct sql" do
-      dataset = datasets(:table)
-      dataset.all_rows_sql().strip.should == %Q{SELECT * FROM "#{dataset.name}"}
-    end
-
-    context "with a limit" do
-      it "uses the limit" do
-        dataset = datasets(:table)
-        dataset.all_rows_sql(10).should match "LIMIT 10"
-      end
-    end
-  end
-
   describe "#destroy" do
     let(:dataset) { datasets(:table) }
 

@@ -55,10 +55,6 @@ class GpdbDataset < Dataset
     end
   end
 
-  def preview_sql
-    all_rows_sql
-  end
-
   def column_type
     "GpdbDatasetColumn"
   end

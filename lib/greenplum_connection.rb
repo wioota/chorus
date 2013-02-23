@@ -57,52 +57,10 @@ class GreenplumConnection < DataSourceConnection
     !!@connection
   end
 
-  def prepare_and_execute_statement(query, options = {})
-    with_connection options do
-      @connection.synchronize do |jdbc_conn|
-        if options[:timeout]
-          @connection.send(:statement, jdbc_conn) do |statement|
-            statement.execute "SET statement_timeout TO #{options[:timeout]}"
-          end
-        end
-
-        statement = jdbc_conn.prepare_statement(query)
-        if options[:limit]
-          jdbc_conn.set_auto_commit(false)
-          statement.set_fetch_size(options[:limit])
-          statement.set_max_rows(options[:limit])
-        end
-
-        if options[:describe_only]
-          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
-        else
-          statement.execute
-        end
-
-        if options[:limit]
-          jdbc_conn.commit
-        end
-
-        warnings = []
-        if options[:warnings]
-          warning = statement.get_warnings
-          while (warning)
-            warnings << warning.to_s
-            warning = warning.next_warning
-          end
-        end
-
-        result_set = statement.get_result_set
-        while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
-          result_set.close if result_set
-          result_set = statement.get_result_set
-        end
-
-        SqlResult.new(:warnings => warnings, :result_set => result_set)
-      end
+  def set_timeout(timeout, jdbc_conn)
+    @connection.send(:statement, jdbc_conn) do |statement|
+      statement.execute "SET statement_timeout TO #{timeout}"
     end
-  rescue Exception => e
-    raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
   def running?(search)
@@ -145,6 +103,14 @@ class GreenplumConnection < DataSourceConnection
   def db_url
     query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+  end
+
+  def support_multiple_result_sets?
+    true
+  end
+
+  def create_sql_result(warnings, result_set)
+    GreenplumSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
   private

@@ -25,25 +25,25 @@ describe WorkfileExecutionsController do
 
       it "executes the sql with the check_id and default row limit" do
         mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:limit => default_row_limit)) {
-          SqlResult.new
+          GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
 
       it "always uses default row limit, even if num_of_rows is specified" do
-        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => default_row_limit)) { SqlResult.new }
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => default_row_limit)) { GreenplumSqlResult.new }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
       end
 
       it "uses the presenter for SqlResult" do
-        stub(SqlExecutor).execute_sql { SqlResult.new }
+        stub(SqlExecutor).execute_sql { GreenplumSqlResult.new }
         mock_present { |model| model.should be_a SqlResult }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
 
       it "executes the sql with include_public_schema_in_search_path option" do
         mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:include_public_schema_in_search_path => true)) {
-          SqlResult.new
+          GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
@@ -76,7 +76,7 @@ describe WorkfileExecutionsController do
 
     context "when downloading the results" do
       let(:sql_result) {
-        SqlResult.new.tap{ |result|
+        GreenplumSqlResult.new.tap{ |result|
           result.add_column("a", "string")
           result.add_column("b", "string")
           result.add_column("c", "string")

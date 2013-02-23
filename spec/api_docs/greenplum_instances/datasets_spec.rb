@@ -9,7 +9,7 @@ resource "Greenplum DB: datasets" do
   let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
   let(:result) do
-    SqlResult.new.tap do |r|
+    GreenplumSqlResult.new.tap do |r|
       r.add_column("column_1", "integer")
       r.add_column("column_2", "double")
       r.add_rows([

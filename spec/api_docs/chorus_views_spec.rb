@@ -74,7 +74,7 @@ resource "Chorus Views" do
 
   post "/datasets/preview_sql" do
     let(:sql_result) {
-      SqlResult.new.tap do |r|
+      GreenplumSqlResult.new.tap do |r|
         r.add_column("t_bit", "bit")
         r.add_rows([["10101"]])
         r.schema = schema

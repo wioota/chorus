@@ -115,6 +115,10 @@ class Dataset < ActiveRecord::Base
     Arel::Table.new(name).project('*').take(limit).to_sql
   end
 
+  def preview_sql
+    all_rows_sql
+  end
+
   def as_sequel
     Sequel.qualify(schema.name, name)
   end

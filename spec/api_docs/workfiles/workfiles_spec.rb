@@ -125,7 +125,7 @@ resource "Workfiles" do
     let(:check_id) { "12345" }
 
     let(:result) do
-      SqlResult.new.tap do |r|
+      GreenplumSqlResult.new.tap do |r|
         r.add_column("results_of", "your_sql")
       end
     end

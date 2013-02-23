@@ -13,7 +13,7 @@ describe AnalyzeController do
 
   describe "#create" do
     before do
-      fake_result = SqlResult.new
+      fake_result = GreenplumSqlResult.new
       any_instance_of(GpdbTable) do |gpdb_table|
         stub(gpdb_table).analyze(account) { fake_result }
       end

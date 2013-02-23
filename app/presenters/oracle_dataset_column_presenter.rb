@@ -1,3 +1,3 @@
 class OracleDatasetColumnPresenter < DatasetColumnPresenter
-  include OracleDbTypesToChorus
+  include OracleDbTypeConversions
 end

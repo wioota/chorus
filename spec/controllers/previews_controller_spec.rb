@@ -19,7 +19,7 @@ describe PreviewsController do
 
     context "when create is successful" do
       before do
-        fake_result = SqlResult.new
+        fake_result = GreenplumSqlResult.new
         mock(SqlExecutor).preview_dataset(gpdb_table, account, check_id) { fake_result }
       end
 
@@ -83,7 +83,7 @@ describe PreviewsController do
     end
 
     it "returns the results of the sql" do
-      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { SqlResult.new }
+      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { GreenplumSqlResult.new }
 
       post :preview_sql, params
 

@@ -13,7 +13,7 @@ describe Visualization::Histogram do
       })
 
       mock(SqlExecutor).execute_sql(schema, instance_account, 17, visualization.build_min_max_sql) do
-        SqlResult.new.tap do |result|
+        GreenplumSqlResult.new.tap do |result|
           result.add_column("min", "double")
           result.add_column("max", "double")
           result.add_rows([['1.0', '9.0']])
@@ -23,7 +23,7 @@ describe Visualization::Histogram do
       visualization.instance_variable_set(:@min, "1.0")
       visualization.instance_variable_set(:@max, "9.0")
       mock(SqlExecutor).execute_sql(schema, instance_account, 17, visualization.build_row_sql) do
-        SqlResult.new.tap do |result|
+        GreenplumSqlResult.new.tap do |result|
           result.add_column("bin", "text")
           result.add_column("frequency", "int8")
           result.add_rows([
