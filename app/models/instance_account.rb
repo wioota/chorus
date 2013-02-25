@@ -11,11 +11,11 @@ class InstanceAccount < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :instance, :class_name => 'DataSource'
   has_and_belongs_to_many :gpdb_databases
-  after_save :reindex_gpdb_data_source
-  after_destroy :reindex_gpdb_data_source
+  after_save :reindex_data_source
+  after_destroy :reindex_data_source
   after_destroy { gpdb_databases.clear }
 
-  def reindex_gpdb_data_source
+  def reindex_data_source
     instance.refresh_databases_later
   end
 

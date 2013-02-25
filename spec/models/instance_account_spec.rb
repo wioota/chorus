@@ -67,7 +67,7 @@ describe InstanceAccount do
   end
 
   describe "automatic reindexing" do
-    let(:instance) { data_sources(:owners) }
+    let(:data_source) { data_sources(:owners) }
     let(:user) { users(:not_a_member) }
 
     before do
@@ -77,14 +77,14 @@ describe InstanceAccount do
 
     context "creating a new account" do
       it "should reindex" do
-        mock(instance).refresh_databases_later
-        InstanceAccount.create!({:owner => user, :instance => instance, :db_username => "foo", :db_password => "bar"}, :without_protection => true)
+        mock(data_source).refresh_databases_later
+        FactoryGirl.create(:instance_account, :owner => user, :instance => data_source)
       end
     end
 
     context "deleting an account" do
       let(:user) { users(:the_collaborator) }
-      let(:account) { instance.account_for_user(user) }
+      let(:account) { data_source.account_for_user(user) }
       it "should reindex" do
         mock(account.instance).refresh_databases_later
         account.destroy
@@ -93,7 +93,7 @@ describe InstanceAccount do
 
     context "updating an account" do
       let(:user) { users(:the_collaborator) }
-      let(:account) { instance.account_for_user(user) }
+      let(:account) { data_source.account_for_user(user) }
 
       it "should reindex" do
         mock(account.instance).refresh_databases_later
