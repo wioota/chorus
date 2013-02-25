@@ -29,7 +29,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 noCredentials: this.schemas.statusCode === 403,
                 noCredentialsWarning: chorus.helpers.safeT("dataset.credentials.missing.body", {
                     linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
-                    dataSourceName: this.schema.database().instance().name()
+                    dataSourceName: this.schema.database() && this.schema.database().instance().name()
                 })
             };
         }

@@ -117,6 +117,7 @@ describe("chorus.views.DataTab", function () {
         context("when the 'this workspace' schema is selected", function () {
             context("and there is a focus schema", function () {
                 beforeEach(function () {
+                    spyOn(this.view, 'render');
                     this.view.focusSchema = this.schema;
                     this.view.setSchemaToCurrentWorkspace();
                     this.view.fetchResourceAfterSchemaSelected();
@@ -128,13 +129,17 @@ describe("chorus.views.DataTab", function () {
                         database: this.view.focusSchema.database()
                     });
                     datasetSet.sortAsc("objectName");
-                    datasetSet.fetch();
 
                     expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
                 });
 
                 it("does not sort the datasets on the client side", function () {
                     expect(this.view.collection.attributes.unsorted).toBeTruthy();
+                });
+
+                it("renders the datasets after the fetch completes", function() {
+                    this.server.completeFetchFor(this.view.collection, [rspecFixtures.dataset()]);
+                    expect(this.view.render).toHaveBeenCalled();
                 });
             });
 

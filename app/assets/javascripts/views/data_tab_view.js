@@ -38,6 +38,10 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
     },
 
     fetchResourceAfterSchemaSelected: function() {
+        var fetchOptions = {
+            success: _.bind(this.render, this),
+            error: _.bind(this.render, this)
+        };
         if (this.schema.get("id") === "workspaceSchema") {
             this.collection = new chorus.collections.WorkspaceDatasetSet([], {
                 workspaceId: chorus.page.workspace.id,
@@ -50,10 +54,10 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
                 this.collection.attributes.databaseName = this.focusSchema.database().name();
             }
 
-            this.collection.fetch();
+            this.collection.fetch(fetchOptions);
         } else {
             this.collection = this.schema.datasets();
-            this.collection.fetchIfNotLoaded();
+            this.collection.fetchIfNotLoaded(fetchOptions);
         }
 
         this.bindings.add(this.collection, "searched", this.onSearchComplete);
@@ -61,7 +65,6 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
         this.listview = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.registerSubView(this.listview);
 
-        this.bindings.add(this.collection, 'serverResponded', this.render);
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
     },
 
