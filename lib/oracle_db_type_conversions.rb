@@ -57,7 +57,7 @@ module OracleDbTypeConversions
   end
 
   def convert_column_type(oracle_type)
-    OracleDbTypeConversions.to_category(oracle_type)
+    OracleDbTypeConversions.convert_column_type(oracle_type)
   end
 
   def self.convert_column_type(oracle_type)
