@@ -21,7 +21,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>107}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:18 GMT
@@ -46,7 +46,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>45}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:19 GMT
@@ -71,7 +71,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>33}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:19 GMT
@@ -96,7 +96,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:19 GMT
@@ -121,7 +121,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:19 GMT
@@ -146,7 +146,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>68}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:21 GMT
@@ -171,7 +171,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:21 GMT
@@ -196,7 +196,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>24}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:21 GMT
@@ -221,7 +221,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:21 GMT
@@ -246,7 +246,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:21 GMT
@@ -271,7 +271,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>12}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -296,7 +296,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -321,7 +321,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -346,7 +346,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -371,7 +371,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -396,7 +396,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -421,7 +421,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -446,7 +446,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -471,7 +471,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -496,7 +496,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>28}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -521,7 +521,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>27}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -546,7 +546,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>68}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:22 GMT
@@ -571,7 +571,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -596,7 +596,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -621,7 +621,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -646,7 +646,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -671,7 +671,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -696,7 +696,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -721,7 +721,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -746,7 +746,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>13}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -771,7 +771,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:23 GMT
@@ -796,7 +796,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>875}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -821,7 +821,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -846,7 +846,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -871,7 +871,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -896,7 +896,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -921,7 +921,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -946,7 +946,7 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
@@ -971,8 +971,108 @@ http_interactions:
       server:
       - Jetty(6.1-SNAPSHOT)
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>18}}'
     http_version: '1.1'
   recorded_at: Thu, 21 Feb 2013 01:38:24 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>103}}'
+    http_version: '1.1'
+  recorded_at: Mon, 25 Feb 2013 17:34:08 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+    http_version: '1.1'
+  recorded_at: Mon, 25 Feb 2013 17:34:08 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">GpdbTable 1000010</field><field name="type">GpdbTable</field><field name="type">GpdbDataset</field><field name="type">Dataset</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbTable</field><field name="grouping_id_s">GpdbTable 1000010</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">GpdbTable</field><field name="security_type_name_sm">GpdbDataset</field><field name="security_type_name_sm">Dataset</field><field name="sort_name_s">searchquery_table</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000011</field><field name="found_in_workspace_id_im">1000010</field><field boost="1000000" name="name_texts">searchquery_table</field><field boost="1000" name="database_name_texts">searchquery_database</field><field boost="1000" name="table_description_texts">searchquery table description</field><field boost="1000" name="schema_name_texts">searchquery_schema</field><field boost="1000" name="column_name_texts">searchquery</field><field boost="1000" name="column_name_texts">searchquery 2</field><field boost="1000" name="column_description_texts">searchquery column description</field><field boost="1000" name="column_description_texts">searchquery column description 2</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>110}}'
+    http_version: '1.1'
+  recorded_at: Mon, 25 Feb 2013 17:34:08 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>48}}'
+    http_version: '1.1'
+  recorded_at: Mon, 25 Feb 2013 17:34:08 GMT
 recorded_with: VCR 2.3.0
