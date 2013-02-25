@@ -26,10 +26,11 @@ CREATE TABLE "<%= schema_name %>".ALL_COLUMN_TABLE (
 , "UNIVERSAL_ROW_ID" UROWID
 , "VARIABLE_CHARACTER" VARCHAR(20)
 , "VARIABLE_CHARACTER_2" VARCHAR2(20)
+, "LONG_COLUMN" LONG
 );
 
 INSERT INTO "<%= schema_name %>".ALL_COLUMN_TABLE VALUES
-  (2.3, 5.3, 'c', 'some long text and stuff', to_date('2011-12-23', 'YYYY-MM-DD'), 123.5, 42, 'Ü', 'long Ümlaut', 432, 'stuff', NULL, NULL, NULL, 'some string', 'some other string');
+  (2.3, 5.3, 'c', 'some long text and stuff', to_date('2011-12-23', 'YYYY-MM-DD'), 123.5, 42, 'Ü', 'long Ümlaut', 432, 'stuff', NULL, NULL, NULL, 'some string', 'some other string', 'long content');
 
 CREATE TABLE "<%= schema_name %>".WITH_COMPOSITE_KEY (
   COLUMN1 NUMBER NOT NULL

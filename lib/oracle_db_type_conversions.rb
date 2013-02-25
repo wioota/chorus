@@ -36,6 +36,7 @@ module OracleDbTypeConversions
       "CHAR" => "character",
       "CLOB" => "text",
       "DATE" => "timestamp",
+      "LONG" => "text",
       "DECIMAL" => "float8",
       "INT" => "numeric",
       "NCHAR" => "character",

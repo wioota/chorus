@@ -76,11 +76,12 @@ class DataSourceConnection
   def prepare_and_execute_statement(query, options = {})
     with_connection options do
       @connection.synchronize do |jdbc_conn|
+        statement = jdbc_conn.prepare_statement(query)
+
         if options[:timeout]
           set_timeout(options[:timeout], jdbc_conn)
         end
 
-        statement = jdbc_conn.prepare_statement(query)
         if options[:limit]
           jdbc_conn.set_auto_commit(false)
           statement.set_fetch_size(options[:limit])
@@ -91,10 +92,6 @@ class DataSourceConnection
           statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
         else
           statement.execute
-        end
-
-        if options[:limit]
-          jdbc_conn.commit
         end
 
         warnings = []
@@ -114,11 +111,16 @@ class DataSourceConnection
           end
         end
 
-        create_sql_result(warnings, result_set)
+        result = create_sql_result(warnings, result_set)
+
+        if options[:limit]
+          jdbc_conn.commit
+        end
+
+        result
       end
     end
   rescue Exception => e
-    e.backtrace.each { |line| pa line }
     raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 

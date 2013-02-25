@@ -87,6 +87,16 @@ describe OracleConnection, :oracle_integration do
     end
   end
 
+  describe "#set_timeout" do
+    let (:statement) { Object.new }
+
+    it "calls setQueryTimeout on statement" do
+      mock(statement).set_query_timeout(123)
+      connection.set_timeout(123, statement)
+    end
+
+  end
+
   describe "#version" do
     it "returns the Oracle connection" do
       connection.version.should == '11.2.0.2.0'

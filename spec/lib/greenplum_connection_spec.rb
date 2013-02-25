@@ -159,6 +159,24 @@ describe GreenplumConnection, :greenplum_integration do
     it_should_behave_like "a well-behaved database query"
   end
 
+  describe "#set_timeout" do
+    let(:statement_connection) { Object.new }
+    let(:statement) { Object.new }
+
+    before do
+      stub(statement).connection { statement_connection }
+      sequel_connection = connection.connect!
+      stub(sequel_connection).statement(statement_connection) do |conn, block|
+        block.call statement
+      end
+    end
+
+    it "sets the statement_timeout" do
+      mock(statement).execute("SET statement_timeout TO 123")
+      connection.set_timeout(123, statement)
+    end
+  end
+
   describe "#prepare_and_execute_statement" do
     let(:sql) { "SELECT 1 AS answer" }
     let(:options) { {} }
@@ -258,8 +276,8 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         it "should optimize the query to only actually fetch the limited number of rows, not just fetch all and subselect" do
-          stub.proxy(Sequel).connect(db_url, :test => true) do |connection|
-            connection.synchronize(:default) do |jdbc_conn|
+          stub.proxy(Sequel).connect(db_url, anything) do |connection|
+            connection.synchronize do |jdbc_conn|
               mock.proxy(jdbc_conn).set_auto_commit(false)
               stub.proxy(jdbc_conn).prepare_statement do |statement|
                 mock.proxy(statement).set_fetch_size(1)

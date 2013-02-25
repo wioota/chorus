@@ -57,9 +57,9 @@ class GreenplumConnection < DataSourceConnection
     !!@connection
   end
 
-  def set_timeout(timeout, jdbc_conn)
-    @connection.send(:statement, jdbc_conn) do |statement|
-      statement.execute "SET statement_timeout TO #{timeout}"
+  def set_timeout(timeout, statement)
+    @connection.send(:statement, statement.connection) do |timeout_statement|
+      timeout_statement.execute "SET statement_timeout TO #{timeout}"
     end
   end
 

@@ -60,8 +60,8 @@ class OracleConnection < DataSourceConnection
     @connection = nil
   end
 
-  def set_timeout(timeout, jdbc_conn)
-    # TODO: implement this
+  def set_timeout(timeout, statement)
+    statement.set_query_timeout(timeout)
   end
 
   def db_url
