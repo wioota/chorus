@@ -79,7 +79,7 @@ class DataSourceConnection
         statement = jdbc_conn.prepare_statement(query)
 
         if options[:timeout]
-          set_timeout(options[:timeout], jdbc_conn)
+          set_timeout(options[:timeout], statement)
         end
 
         if options[:limit]
