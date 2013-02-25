@@ -36,7 +36,7 @@ describe SearchController do
     end
 
     generate_and_record_fixture "tagSearchResult.json" do
-        get :show, :query => 'alpha', :tag => true
+      get :show, :query => 'alpha', :tag => true
     end
 
     generate_and_record_fixture "emptySearchResult.json" do
@@ -45,35 +45,35 @@ describe SearchController do
     end
 
     generate_and_record_fixture "searchResultWithEntityTypeUser.json" do
-        get :show, :query => 'searchquery', :entity_type => 'user'
+      get :show, :query => 'searchquery', :entity_type => 'user'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnInstanceNote.json" do
-        get :show, :query => 'searchquery_instance'
+      get :show, :query => 'searchquery_instance'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnWorkspaceNote.json" do
-        get :show, :query => 'searchquery_workspace'
+      get :show, :query => 'searchquery_workspace'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnWorkfileNote.json" do
-        get :show, :query => 'searchquery_workfile'
+      get :show, :query => 'searchquery_workfile'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnDatasetNote.json" do
-        get :show, :query => 'searchquery_dataset'
+      get :show, :query => 'searchquery_dataset'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnHadoopNote.json" do
-        get :show, :query => 'searchquery_hadoop'
+      get :show, :query => 'searchquery_hadoop'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnHdfsNote.json" do
-        get :show, :query => 'searchquery_hdfs_file'
+      get :show, :query => 'searchquery_hdfs_file'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnWorkspaceDatasetNote.json" do
-        get :show, :query => 'searchquery_workspace_dataset'
+      get :show, :query => 'searchquery_workspace_dataset'
     end
   end
 
@@ -117,7 +117,7 @@ describe SearchController do
       end
 
       generate_and_record_fixture "typeAheadSearchResult.json" do
-          get :type_ahead, :query => 'typeahead', :per_page => 15
+        get :type_ahead, :query => 'typeahead', :per_page => 15
       end
     end
   end
