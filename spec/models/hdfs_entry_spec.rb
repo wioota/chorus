@@ -382,10 +382,10 @@ describe HdfsEntry do
           stub(h).show('/file.txt') { raise FileNotFoundError, "File not found on HDFS: file.txt" }
         end
       end
-      it "raises ApiValidationError when not able to read the file" do
+      it "raises HdfsContentsError when not able to read the file" do
         expect {
           entry.contents
-        }.to raise_error(ApiValidationError)
+        }.to raise_error(HdfsEntry::HdfsContentsError)
       end
     end
   end

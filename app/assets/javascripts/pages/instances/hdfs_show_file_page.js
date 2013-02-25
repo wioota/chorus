@@ -10,6 +10,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.hadoopInstance.fetch();
 
         this.handleFetchErrorsFor(this.hadoopInstance);
+        this.handleFetchErrorsFor(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
@@ -20,7 +21,6 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
 
-        this.listenTo(this.hadoopInstance, "loaded", this.render);
         this.listenTo(this.hadoopInstance, "loaded", this.render);
 
         this.breadcrumbs.requiredResources.add([this.model, this.hadoopInstance]);

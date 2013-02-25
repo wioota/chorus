@@ -24,6 +24,8 @@ class HdfsEntry < ActiveRecord::Base
 
   before_save :build_full_path, :on_create => true
 
+  HdfsContentsError = Class.new(StandardError)
+
   def name
     File.basename(path)
   end
@@ -95,8 +97,8 @@ class HdfsEntry < ActiveRecord::Base
     begin
       hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
       hdfs_query.show(path)
-    rescue
-      raise ApiValidationError.new(:contents, :unable_to_read)
+    rescue StandardError => e
+      raise HdfsContentsError.new(e)
     end
   end
 

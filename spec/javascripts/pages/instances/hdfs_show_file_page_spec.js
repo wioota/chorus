@@ -62,6 +62,24 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
     });
 
+    context("when the fetch completes with errors", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, 'loadUrl');
+            this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
+            this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
+            this.server.lastFetchFor(this.page.model).failUnprocessableEntity({
+                record: "HDFS_CONTENTS_UNAVAILABLE"
+            });
+        });
+
+        it("shows a nice error page", function() {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
+            expect(chorus.pageOptions.title).toMatchTranslation('unprocessable_entity.unidentified_error.title');
+            expect(chorus.pageOptions.text).toMatchTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
+        });
+
+    });
+
     describe("when the path is long", function() {
         beforeEach(function() {
             spyOn(chorus, "menu");

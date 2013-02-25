@@ -10,8 +10,12 @@ class Hdfs::FilesController < ApplicationController
   end
 
   def show
-    hdfs_entry = HdfsEntry.find(params[:id])
-    present hdfs_entry, :presenter_options => {:deep => true}
+    begin
+      hdfs_entry = HdfsEntry.find(params[:id])
+      present hdfs_entry, :presenter_options => {:deep => true}
+    rescue HdfsEntry::HdfsContentsError
+      present_errors({:record => :HDFS_CONTENTS_UNAVAILABLE}, :status => :unprocessable_entity)
+    end
   end
 
   private

@@ -70,6 +70,20 @@ describe Hdfs::FilesController do
       generate_fixture "hdfsFile.json" do
         get :show, :hadoop_instance_id => hadoop_instance.id, :id => entry.id
       end
+
+      context "when Hdfs generates an error" do
+        before do
+          any_instance_of(HdfsEntry) do |entry|
+            stub(entry).contents { raise HdfsEntry::HdfsContentsError.new }
+          end
+        end
+
+        it "presents a record error" do
+          get :show, :hadoop_instance_id => hadoop_instance.id, :id => entry.id
+          response.code.should == '422'
+          decoded_errors[:record].should == "HDFS_CONTENTS_UNAVAILABLE"
+        end
+      end
     end
   end
 end
