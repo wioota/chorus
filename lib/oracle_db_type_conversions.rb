@@ -52,12 +52,12 @@ module OracleDbTypeConversions
       "TIMESTAMP WITHOUT TIME ZONE" => "TIMESTAMP without timezone"
   }
 
-  def to_category(data_type)
-    OracleDbTypeConversions.to_category(data_type)
+  def to_category(oracle_type)
+    OracleDbTypeConversions.to_category(oracle_type)
   end
 
   def convert_column_type(oracle_type)
-    OracleDbTypeConversions.to_category(data_type)
+    OracleDbTypeConversions.to_category(oracle_type)
   end
 
   def self.convert_column_type(oracle_type)
@@ -65,7 +65,7 @@ module OracleDbTypeConversions
     GREENPLUM_TYPE_MAP[oracle_type_without_specification]
   end
 
-  def self.to_category(data_type)
-    CATEGORY_MAP[data_type.upcase]
+  def self.to_category(oracle_type)
+    CATEGORY_MAP[oracle_type.upcase]
   end
 end

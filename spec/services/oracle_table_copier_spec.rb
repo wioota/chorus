@@ -77,7 +77,7 @@ describe OracleTableCopier do
               %Q{"DAY" timestamp},
               %Q{"DECIMAL_COL" float8},
               %Q{"INTEGER_COL" numeric},
-              # TODO: %Q{"LONG_COL" text},
+              %Q{"LONG_COL" text},
               %Q{"NUMBER_COL" numeric},
               %Q{"ROW_ID" text},
               %Q{"TIMESTAMP_COL" timestamp},
