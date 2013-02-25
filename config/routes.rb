@@ -53,7 +53,6 @@ Chorus::Application.routes.draw do
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
     resource :download, :only => :show, :controller => 'dataset_downloads'
-    resource :ext_stream, :only => :show, :controller => 'dataset_ext_streams'
     collection do
       post :preview_sql, :controller => 'previews'
     end
@@ -67,6 +66,8 @@ Chorus::Application.routes.draw do
   end
 
   resource :imports, :only => :update, :controller => "dataset_imports"
+
+  resource :external_stream, :only => :show
 
   resources :workspaces, :only => [:index, :create, :show, :update, :destroy] do
     resources :members, :only => [:index, :create]

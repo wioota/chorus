@@ -404,7 +404,7 @@ describe ImportExecutor do
       let(:copier) { Object.new }
       let(:stream_key) { 'f00baa' }
       let(:stream_url) do
-        Rails.application.routes.url_helpers.dataset_ext_stream_url(:dataset_id => source_dataset.id,
+        Rails.application.routes.url_helpers.external_stream_url(:dataset_id => source_dataset.id,
                                                                     :row_limit => import.sample_count,
                                                                     :host => ChorusConfig.instance.public_url,
                                                                     :port => ChorusConfig.instance.server_port,

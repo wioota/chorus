@@ -1,16 +1,8 @@
-class DatasetDownloadsController < ApplicationController
+class DatasetDownloadsController < StreamsController
   include DataSourceAuth
 
   def show
     dataset = Dataset.find(params[:dataset_id])
-    @streamer = DatasetStreamer.new(dataset, current_user, params[:row_limit])
-    response.headers["Content-Disposition"] = "attachment; filename=#{dataset.name}.csv"
-    response.headers["Cache-Control"] = 'no-cache'
-    response.headers["Transfer-Encoding"] = 'chunked'
-    begin
-      self.response_body = @streamer.enum(params[:header] != 'false')
-    rescue ActiveRecord::RecordNotFound => e
-      self.response_body = e.message
-    end
+    stream(dataset, current_user, params[:row_limit], params[:header])
   end
 end
