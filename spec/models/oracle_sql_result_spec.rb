@@ -31,14 +31,14 @@ describe OracleSqlResult do
       let(:column_data_types) { unsupported }
 
       before do
-        stub(fake_meta_data).get_column_name(anything) do
-          "column_name"
+        stub(fake_meta_data).column_type_name(anything) do
+          "COLUMN_TYPE"
         end
       end
 
       it "returns the column name" do
         (0...column_data_types.length).each do |index|
-          result.column_string_value(fake_meta_data, fake_result_set, index).should == "column_name"
+          result.column_string_value(fake_meta_data, fake_result_set, index).should == "column_type"
         end
       end
     end

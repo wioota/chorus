@@ -1,10 +1,11 @@
 class OracleSqlResult < SqlResult
   def column_string_value(meta_data, result_set, index)
     supported = OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys
-    if supported.include? meta_data.column_type_name(index)
+    data_type = meta_data.column_type_name(index)
+    if supported.include? data_type
       super
     else
-      meta_data.get_column_name(index)
+      data_type.downcase
     end
   end
 
