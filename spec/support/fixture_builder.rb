@@ -525,7 +525,7 @@ FixtureBuilder.configure do |fbuilder|
     if ENV['ORACLE_HOST'] && OracleIntegration.has_jar_file?
       real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => OracleIntegration.hostname, :port => OracleIntegration.port, :db_name => OracleIntegration.db_name, :db_username => OracleIntegration.username, :db_password => OracleIntegration.password)
       OracleIntegration.setup_test_schemas
-      real_oracle_data_source.refresh_schemas
+      FactoryGirl.create(:oracle_schema, :name => OracleIntegration.schema_name, :data_source => real_oracle_data_source)
       OracleIntegration.real_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
     end
 
