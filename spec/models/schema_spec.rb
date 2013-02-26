@@ -258,4 +258,14 @@ describe Schema do
       schema.dataset_count(account, options).should == 3
     end
   end
+
+  describe '.visible_to' do
+    let(:parent) { nil }
+    let(:account) { nil }
+
+    it 'gets a list of schemas (alias for refresh)' do
+      mock(Schema).refresh(account, parent) { ["schema1", "schema2"] }
+      Schema.visible_to(account, parent).should == ["schema1", "schema2"]
+    end
+  end
 end

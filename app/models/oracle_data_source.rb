@@ -35,10 +35,10 @@ class OracleDataSource < DataSource
   def refresh_databases_later
   end
 
+  # Used by search
   def refresh_schemas(options={})
     Schema.refresh(owner_account, self, options.reverse_merge(:refresh_all => true))
   end
-
 
   private
 

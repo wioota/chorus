@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DataSources::SchemasController do
-  let(:user) { users(:owner) }
+  let(:user) { data_source.owner }
   let(:data_source) { data_sources(:oracle) }
 
   before do
@@ -13,11 +13,7 @@ describe DataSources::SchemasController do
     let(:schema_2) { FactoryGirl.create(:oracle_schema) }
 
     before do
-      mock(DataSource).find(data_source.id.to_s) {
-        mock(data_source).refresh_schemas {
-          [schema_1, schema_2]
-        }
-      }
+      mock(Schema).visible_to(anything, data_source) { [schema_1, schema_2]}
     end
 
     it 'returns a 200 status code' do

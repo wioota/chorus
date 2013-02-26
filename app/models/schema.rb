@@ -41,6 +41,10 @@ class Schema < ActiveRecord::Base
     end
   end
 
+  def self.visible_to(*args)
+    refresh(*args)
+  end
+
   def verify_in_source(user)
     parent.connect_as(user).schema_exists?(name)
   end

@@ -26,10 +26,6 @@ class GpdbSchema < Schema
 
   before_save :mark_schemas_as_stale
 
-  def self.visible_to(*args)
-    refresh(*args)
-  end
-
   def stored_functions(account)
     results = connect_with(account).functions
 
