@@ -68,10 +68,24 @@ describe TaggingsController do
       end
     end
 
-    context 'when saving the tags fail' do
+    context 'when saving the model fails' do
       before do
         mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
         mock(entity).save!.twice {
+          raise ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang'))
+        }
+      end
+
+      it 're-tries saving' do
+        post :create, params
+        response.code.should == '422'
+      end
+    end
+
+    context 'when saving the tag_list fails' do
+      before do
+        mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
+        mock(entity, :tag_list=).with_any_args.twice {
           raise ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang'))
         }
       end

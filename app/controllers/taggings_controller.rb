@@ -10,11 +10,12 @@ class TaggingsController < ApplicationController
       raise_validation_error if tagname.length > MAXIMUM_TAG_LENGTH
     end
 
-    model.tag_list = tag_names.uniq(&:downcase).sort.join ","
-
+    unique_tag_names = tag_names.uniq(&:downcase).sort.join ","
     begin
+      model.tag_list = unique_tag_names
       model.save!
     rescue ActiveRecord::RecordNotUnique
+      model.tag_list = unique_tag_names
       model.save!
     end
 
