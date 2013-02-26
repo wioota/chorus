@@ -236,7 +236,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             showEdit: this.dataset.isChorusView() && !workspaceArchived,
             showDerive: !this.dataset.isChorusView() && !this.options.isInstanceBrowser && !workspaceArchived,
             showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isInstanceBrowser && !workspaceArchived && canUpdate,
-            showVisualize: !this.dataset.isOracle()
+            showVisualize: this.dataset.schema() && !this.dataset.isOracle()
         };
     },
 
