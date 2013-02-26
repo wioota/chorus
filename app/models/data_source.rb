@@ -15,6 +15,7 @@ class DataSource < ActiveRecord::Base
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
 
+  after_create :enqueue_refresh
   after_create :create_instance_created_event, :if => :current_user
   validates_with DataSourceNameValidator
 
@@ -110,6 +111,10 @@ class DataSource < ActiveRecord::Base
   end
 
   private
+
+  def enqueue_refresh
+    QC.enqueue_if_not_queued("DataSource.refresh", self.id, 'new' => true)
+  end
 
   def account_owned_by(user)
     accounts.find_by_owner_id(user.id)

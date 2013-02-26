@@ -140,16 +140,16 @@ describe DataSourcesController do
         response.code.should == "201"
       end
 
-      it "presents the gpdb data_source" do
+      it "presents the data source" do
         mock_present do |data_source|
           data_source.name == valid_attributes[:name]
         end
         post :create, valid_attributes
       end
 
-      it "schedules a job to refresh the data_source" do
+      it "schedules a job to refresh the data source" do
         stub(QC.default_queue).enqueue_if_not_queued(anything, anything)
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbDataSource.refresh", numeric, {'new' => true})
+        mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', numeric, {'new' => true})
         post :create, :data_source => valid_attributes
       end
 

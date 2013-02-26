@@ -101,14 +101,14 @@ describe GpdbDatabase do
     end
   end
 
-  describe "reindex_dataset_permissions" do
+  describe "reindex_datasets" do
     let(:database) { gpdb_databases(:default) }
 
     it "calls solr_index on all datasets" do
       database.datasets.each do |dataset|
         mock(Sunspot).index(dataset)
       end
-      GpdbDatabase.reindex_dataset_permissions(database.id)
+      GpdbDatabase.reindex_datasets(database.id)
     end
 
     it "does not call solr_index on stale datasets" do
@@ -116,12 +116,12 @@ describe GpdbDatabase do
       dataset.mark_stale!
       stub(Sunspot).index(anything)
       dont_allow(Sunspot).index(dataset)
-      GpdbDatabase.reindex_dataset_permissions(database.id)
+      GpdbDatabase.reindex_datasets(database.id)
     end
 
     it "does a solr commit" do
       mock(Sunspot).commit
-      GpdbDatabase.reindex_dataset_permissions(database.id)
+      GpdbDatabase.reindex_datasets(database.id)
     end
 
     it "continues if exceptions are raised" do
@@ -129,7 +129,7 @@ describe GpdbDatabase do
         mock(Sunspot).index(dataset) { raise "error!" }
       end
       mock(Sunspot).commit
-      GpdbDatabase.reindex_dataset_permissions(database.id)
+      GpdbDatabase.reindex_datasets(database.id)
     end
   end
 

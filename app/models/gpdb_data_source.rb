@@ -29,9 +29,7 @@ class GpdbDataSource < DataSource
   end
 
   def self.create_for_user(user, data_source_hash)
-    data_source = user.gpdb_data_sources.create!(data_source_hash, :as => :create)
-    QC.enqueue_if_not_queued("GpdbDataSource.refresh", data_source.id, 'new' => true)
-    data_source
+    user.gpdb_data_sources.create!(data_source_hash, :as => :create)
   end
 
   def solr_reindex_later
@@ -75,6 +73,19 @@ class GpdbDataSource < DataSource
     end
   end
 
+  def create_database(name, current_user)
+    new_db = databases.build(:name => name)
+    raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
+
+    connect_as(current_user).create_database(name)
+    refresh_databases
+    databases.find_by_name!(name)
+  end
+
+  def account_names
+    accounts.pluck(:db_username)
+  end
+
   def refresh_databases(options ={})
     found_databases = []
     rows = connect_with(owner_account).prepare_and_execute_statement(database_and_role_sql).hashes
@@ -96,7 +107,7 @@ class GpdbDataSource < DataSource
       database_accounts = accounts.where(:db_username => db_usernames)
       if database.instance_accounts.sort != database_accounts.sort
         database.instance_accounts = database_accounts
-        QC.enqueue_if_not_queued("GpdbDatabase.reindex_dataset_permissions", database.id) if database.datasets.count > 0
+        QC.enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id) if database.datasets.count > 0
       end
       found_databases << database
     end
@@ -108,19 +119,6 @@ class GpdbDataSource < DataSource
         database.mark_stale!
       end
     end
-  end
-
-  def create_database(name, current_user)
-    new_db = databases.build(:name => name)
-    raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
-
-    connect_as(current_user).create_database(name)
-    refresh_databases
-    databases.find_by_name!(name)
-  end
-
-  def account_names
-    accounts.pluck(:db_username)
   end
 
   def refresh_schemas(options={})

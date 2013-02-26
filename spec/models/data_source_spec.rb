@@ -1,6 +1,13 @@
 require "spec_helper"
 
 describe DataSource do
+  describe 'creating a DataSource' do
+    it 'enqueues a refresh job' do
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.refresh", anything, hash_including('new' => true))
+      FactoryGirl.create(:data_source)
+    end
+  end
+
   describe ".refresh" do
     let(:data_source) { data_sources(:owners) }
 

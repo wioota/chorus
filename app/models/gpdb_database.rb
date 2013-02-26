@@ -44,12 +44,12 @@ class GpdbDatabase < ActiveRecord::Base
     results
   end
 
-  def self.reindex_dataset_permissions(database_id)
+  def self.reindex_datasets(database_id)
     GpdbDatabase.find(database_id).datasets.not_stale.each do |dataset|
       begin
         dataset.solr_index
       rescue => e
-        Chorus.log_error "Error in GpdbDataset.reindex_dataset_permissions: #{e.message}"
+        Chorus.log_error "Error in GpdbDataset.reindex_datasets: #{e.message}"
       end
     end
     Sunspot.commit
