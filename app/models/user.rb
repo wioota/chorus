@@ -3,6 +3,7 @@ require 'soft_delete'
 
 class User < ActiveRecord::Base
   include SoftDelete
+  include TaggableBehavior
 
   VALID_SORT_ORDERS = HashWithIndifferentAccess.new(
     :first_name => "LOWER(users.first_name)",

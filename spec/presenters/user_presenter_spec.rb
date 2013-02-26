@@ -13,6 +13,7 @@ describe UserPresenter, :type => :view do
       hash.should have_key(:id)
       hash.should have_key(:first_name)
       hash.should have_key(:last_name)
+      hash.should have_key(:tags)
       hash.should_not have_key(:api_key)
     end
 

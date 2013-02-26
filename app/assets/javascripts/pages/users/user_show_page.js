@@ -10,7 +10,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentView({
             model: this.model,
             content: new chorus.views.UserShow({model: this.model}),
-            contentHeader: new chorus.views.DisplayNameHeader({ model: this.model }),
+            contentHeader: new chorus.views.DisplayNameHeader({ model: this.model, showTagBox: true }),
             contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         });
 

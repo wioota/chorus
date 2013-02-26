@@ -11,6 +11,7 @@ shared_examples "taggable models" do |fixture_data|
   it "does not allow duplicates" do
     model.tag_list = "foo,bar"
     model.tag_list = "foo,baz"
+    model.tag_list = "FoO"
     model.tags.map(&:name).should =~ ["foo", "bar", "baz"]
   end
 

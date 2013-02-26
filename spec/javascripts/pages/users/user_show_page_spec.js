@@ -43,6 +43,10 @@ describe("chorus.pages.UserShow", function() {
             expect(this.page.$(".content_details").text().trim()).toBe(t("users.details"));
         });
 
+        it("displays a tag box", function() {
+            expect(this.page.$(".content_header .tag_box")).toExist();
+        });
+
         context("breadcrumbs", function() {
             it("links to home for the first crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");

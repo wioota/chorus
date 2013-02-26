@@ -375,4 +375,6 @@ describe User do
   end
 
   it { should have_attached_file(:image) }
+
+  it_should_behave_like "taggable models", [:users, :default]
 end

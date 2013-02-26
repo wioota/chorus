@@ -15,7 +15,8 @@ class UserPresenter < Presenter
           :title => model.title,
           :dept => model.dept,
           :notes => model.notes,
-          :admin => model.admin?
+          :admin => model.admin?,
+          :tags => present(model.tags)
       })
     end
 
