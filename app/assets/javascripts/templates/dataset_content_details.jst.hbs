@@ -1,6 +1,8 @@
 <div class="definition">
     <span class="sql">{{sqlDefinition definition}}</span>
-    <button class="visualize">{{t "dataset.content_details.visualize"}}</button>
+    {{#if showVisualize}}
+      <button class="visualize">{{t "dataset.content_details.visualize"}}</button>
+    {{/if}}
     {{#if showDerive}}
         <button class="derive">{{t "dataset.content_details.derive"}}</button>
     {{/if}}

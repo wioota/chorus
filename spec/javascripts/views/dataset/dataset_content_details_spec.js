@@ -226,9 +226,22 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".definition")).toExist();
             });
 
-            it("renders the 'Visualize' button", function() {
-                expect(this.view.$("button.visualize")).toExist();
-                expect(this.view.$("button.visualize").text()).toMatchTranslation("dataset.content_details.visualize");
+            context("when dataset is oracle", function() {
+                beforeEach(function() {
+                    spyOn(this.dataset, "isOracle").andReturn(true);
+                    this.view.render();
+                });
+
+                it("does not render the 'Visualize' button", function() {
+                    expect(this.view.$("button.visualize")).not.toExist();
+                });
+            });
+
+            context("when dataset is not oracle", function() {
+                it("renders the 'Visualize' button", function() {
+                    expect(this.view.$("button.visualize")).toExist();
+                    expect(this.view.$("button.visualize").text()).toMatchTranslation("dataset.content_details.visualize");
+                });
             });
 
             it("doesn't render the chorus view info bar", function() {
