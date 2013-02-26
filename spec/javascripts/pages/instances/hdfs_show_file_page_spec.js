@@ -42,7 +42,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("has the file is read-only indicator", function() {
-            expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only");
+            expect(this.page.$(".content_details")).toContainTranslation("hdfs.read_only");
         });
 
         it("has the correct sidebar", function() {
@@ -72,10 +72,9 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             });
         });
 
-        it("shows a nice error page", function() {
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
-            expect(chorus.pageOptions.title).toMatchTranslation('unprocessable_entity.unidentified_error.title');
-            expect(chorus.pageOptions.text).toMatchTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
+        it("shows a nice error message", function() {
+            expect(this.page.$(".errors")).toExist();
+            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
         });
 
     });

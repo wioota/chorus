@@ -16,12 +16,13 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             model:this.model,
             content:new chorus.views.HdfsShowFileView({model:this.model}),
             contentHeader:new chorus.views.HdfsShowFileHeader({ model:this.model }),
-            contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("hdfs.read_only")})
+            contentDetails:new chorus.views.HdfsShowFileDetails({ model:this.model })
         });
 
         this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
 
         this.listenTo(this.hadoopInstance, "loaded", this.render);
+        this.listenTo(this.model, "serverResponded", this.render); // re-render when model is fetched even if it has errors
 
         this.breadcrumbs.requiredResources.add([this.model, this.hadoopInstance]);
     },
@@ -38,6 +39,10 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             { label: this.hadoopInstance.loaded ? instanceCrumb : "..." , url: "#/hadoop_instances"},
             { label: this.model.loaded ? fileNameCrumb : "..."}
         ];
+    },
+
+    unprocessableEntity: function() {
+        // Prevent default re-direct to unprocessable entity page
     },
 
     postRender: function() {

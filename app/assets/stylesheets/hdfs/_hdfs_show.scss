@@ -10,15 +10,15 @@
 
     .content_details {
          background: $content-details-action-background-color;
-         height: 31px;
+         height: auto;
          line-height: 30px;
          vertical-align: middle;
          color: $content-details-action-link-color;
          text-align: right;
 
-         .plain_text {
-             @include font-normal-small;
-             color: $content-details-action-link-color;
-         }
+        .errors {
+            margin-left: -$padding-x;
+            margin-right: -$padding-x;
+        }
      }
 }

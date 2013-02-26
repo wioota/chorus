@@ -32,10 +32,6 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
         });
 
-        it("has a link to create external table", function() {
-            expect(this.view.$("a.external_table")).toExist();
-        });
-
         it("has an activity list", function() {
             expect(this.view.$(".activity_list")).toExist()
 ;        });
@@ -64,6 +60,49 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.file.activities()).toHaveBeenFetched();
         });
 
+        context("when the hdfs file is non-binary and has no server errors", function() {
+            beforeEach(function() {
+                this.file.set("isBinary", false);
+                this.view.render();
+            });
+
+            it("has a link to create external table", function() {
+                expect(this.view.$("a.external_table")).toExist();
+            });
+        });
+
+        context("when the hdfs file is binary", function() {
+            beforeEach(function() {
+                this.file.set("isBinary", true);
+                this.view.render();
+            });
+
+            it("does not have a link to create external table", function() {
+                expect(this.view.$("a.external_table")).not.toExist();
+            });
+        });
+
+        context("when the hdfs file has server errors", function() {
+            beforeEach(function() {
+                this.file.serverErrors= {record: "HDFS_SOMETHING_VERY_BAD"};
+                this.view.render();
+            });
+
+            it("does not have a link to create external table", function() {
+                expect(this.view.$("a.external_table")).not.toExist();
+            });
+        });
+
+        context("when the hdfs file has not loaded", function() {
+            beforeEach(function() {
+                this.file.loaded = false;
+                this.view.render();
+            });
+
+            it("does not have a link to create external table", function() {
+                expect(this.view.$("a.external_table")).not.toExist();
+            });
+        });
     });
 
     describe("when the activity list collection is changed", function() {

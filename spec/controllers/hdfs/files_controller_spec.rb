@@ -78,10 +78,11 @@ describe Hdfs::FilesController do
           end
         end
 
-        it "presents a record error" do
+        it "shows file with an error and without contents" do
           get :show, :hadoop_instance_id => hadoop_instance.id, :id => entry.id
           response.code.should == '422'
           decoded_errors[:record].should == "HDFS_CONTENTS_UNAVAILABLE"
+          response.should have_presented entry
         end
       end
     end
