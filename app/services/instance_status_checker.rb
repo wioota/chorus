@@ -41,7 +41,7 @@ class InstanceStatusChecker
 
   def get_data_source_version
     if @data_source.is_a?(HadoopInstance)
-      Hdfs::QueryService.data_source_version(@data_source)
+      @data_source.version
     else
       @data_source.connect_as_owner.version
     end

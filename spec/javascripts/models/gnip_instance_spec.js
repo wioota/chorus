@@ -60,4 +60,16 @@ describe("chorus.models.GnipInstance", function() {
             expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
         });
     });
+
+    describe("#stateText", function() {
+       it("returns online", function() {
+            expect(this.model.stateText()).toEqual("Online");
+       });
+    });
+
+    describe("#stateIconUrl", function() {
+        it("returns the online icon url", function() {
+            expect(this.model.stateIconUrl()).toEqual("/images/data_sources/green.png");
+        });
+    });
 });

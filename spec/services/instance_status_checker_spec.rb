@@ -81,7 +81,7 @@ describe InstanceStatusChecker do
 
     describe ".check_hdfs_data_sources" do
       before do
-        stub(Hdfs::QueryService).data_source_version(hadoop_instance) { "1.0.0" }
+        stub(hadoop_instance).version { "1.0.0" }
         InstanceStatusChecker.check(hadoop_instance)
       end
 
@@ -99,8 +99,8 @@ describe InstanceStatusChecker do
       let(:offline_data_source) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
 
       before do
-        stub(Hdfs::QueryService).data_source_version(online_data_source) { "0.20.205" }
-        stub(Hdfs::QueryService).data_source_version(offline_data_source) { raise StandardError.new('bang') }
+        stub(online_data_source).version { "0.20.205" }
+        stub(offline_data_source).version { raise StandardError.new('bang') }
       end
     end
   end

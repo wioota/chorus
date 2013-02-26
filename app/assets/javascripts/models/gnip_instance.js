@@ -14,6 +14,14 @@ chorus.models.GnipInstance = chorus.models.Instance.extend({
         return true;
     },
 
+    stateText: function() {
+        return 'Online';
+    },
+
+    stateIconUrl: function() {
+        return this._imagePrefix + 'green.png';
+    },
+
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
