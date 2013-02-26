@@ -105,6 +105,10 @@ class DataSource < ActiveRecord::Base
     end
   end
 
+  def refresh_databases_later
+    QC.enqueue_if_not_queued('DataSource.refresh_databases', id)
+  end
+
   private
 
   def account_owned_by(user)

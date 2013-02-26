@@ -38,10 +38,6 @@ class GpdbDataSource < DataSource
     QC.enqueue_if_not_queued('GpdbDataSource.reindex_instance', id)
   end
 
-  def refresh_databases_later
-    QC.enqueue_if_not_queued('GpdbDataSource.refresh_databases', id)
-  end
-
   def self.owned_by(user)
     if user.admin?
       scoped

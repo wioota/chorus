@@ -40,4 +40,13 @@ describe DataSource do
       end
     end
   end
+
+  describe "#refresh_databases_later" do
+    let(:data_source) { data_sources(:owners) }
+
+    it "should enqueue a job" do
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.refresh_databases", data_source.id)
+      data_source.refresh_databases_later
+    end
+  end
 end

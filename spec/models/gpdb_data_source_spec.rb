@@ -394,14 +394,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe "#refresh_databases_later" do
-    let(:instance) { data_sources(:owners) }
-    it "should enqueue a job" do
-      mock(QC.default_queue).enqueue_if_not_queued("GpdbDataSource.refresh_databases", instance.id)
-      instance.refresh_databases_later
-    end
-  end
-
   describe "#reindex_instance" do
     let(:instance) { data_sources(:owners) }
 
