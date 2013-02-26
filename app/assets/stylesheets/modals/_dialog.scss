@@ -30,6 +30,10 @@
         }
     }
 
+    .errors {
+        word-break: break-all;
+    }
+
     fieldset {
         border: 1px solid $border-color;
         padding: 0 $dialog-padding $dialog-padding;
