@@ -30,7 +30,7 @@ CREATE TABLE "<%= schema_name %>".ALL_COLUMN_TABLE (
 );
 
 INSERT INTO "<%= schema_name %>".ALL_COLUMN_TABLE VALUES
-  (2.3, 5.3, 'c', 'some long text and stuff', to_date('2011-12-23', 'YYYY-MM-DD'), 123.5, 42, 'Ü', 'long Ümlaut', 432, 'stuff', NULL, NULL, NULL, 'some string', 'some other string', 'long content');
+  (2.3, 5.3, 'c', 'some long text and stuff', to_date('2011-12-23', 'YYYY-MM-DD'), 123.5, 42, 'Ü', 'long Ümlaut', 432, 'stuff', NULL, TO_TIMESTAMP('10-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'), NULL, 'some string', 'some other string', 'long content');
 
 CREATE TABLE "<%= schema_name %>".WITH_COMPOSITE_KEY (
   COLUMN1 NUMBER NOT NULL

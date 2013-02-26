@@ -118,10 +118,10 @@ class OracleConnection < DataSourceConnection
   def column_info(table_name, setup_sql)
     with_connection do
       @connection.fetch(<<-SQL, :table => table_name, :schema => schema_name).all
-        SELECT COLUMN_NAME as attname, DATA_TYPE as format_type
+        SELECT COLUMN_NAME as attname, DATA_TYPE as format_type, COLUMN_ID as attnum
         FROM ALL_TAB_COLUMNS
         WHERE TABLE_NAME = :table AND OWNER = :schema
-        ORDER BY attname
+        ORDER BY attnum
       SQL
     end
   end

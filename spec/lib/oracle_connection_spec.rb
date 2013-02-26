@@ -304,10 +304,10 @@ describe OracleConnection, :oracle_integration do
       let(:table_name) { "NEWERTABLE" }
       let(:columns_sql) do
         <<-SQL
-          SELECT COLUMN_NAME as attname, DATA_TYPE as format_type
+          SELECT COLUMN_NAME as attname, DATA_TYPE as format_type, COLUMN_ID as attnum
           FROM ALL_TAB_COLUMNS
           WHERE TABLE_NAME = :table AND OWNER = :schema
-          ORDER BY attname
+          ORDER BY attnum
         SQL
       end
       let(:expected) do

@@ -1,5 +1,7 @@
 # Server Settings
 
+# public_url is the url of the Chorus application as seen from another computer (like a Greenplum Server)
+# do not include the 'http:' or the port
 public_url = mycomputer.example.com
 server_port = 8080
 postgres_port = 8543

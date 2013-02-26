@@ -90,6 +90,7 @@ class ImportExecutor < DelegateClass(Import)
   end
 
   def stream_url
+    raise StandardError.new("Please set public_url in chorus.properties") if ChorusConfig.instance.public_url.nil?
     Rails.application.routes.url_helpers.external_stream_url(:dataset_id => source_dataset.id,
                                                                 :row_limit => sample_count,
                                                                 :host => ChorusConfig.instance.public_url,

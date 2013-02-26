@@ -39,8 +39,7 @@ describe SqlResult, :oracle_integration do
 
       it "does not raise an error caused by a LONG value" do
         expect {
-          sqlresult = connection.prepare_and_execute_statement "SELECT * FROM \"#{schema_name}\".\"#{table_name}\"", options
-          puts sqlresult.rows
+          connection.prepare_and_execute_statement "SELECT * FROM \"#{schema_name}\".\"#{table_name}\"", options
         }.not_to raise_error
       end
     end
