@@ -31,6 +31,10 @@ describe UserAccess do
           user_access.can?(:update, other_user).should be_false
         end
       end
+
+      it "can show any user" do
+        user_access.can?(:show, other_user).should be_true
+      end
     end
   end
 end
