@@ -33,8 +33,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.workspace).toBe(this.workspace);
         });
 
-        it("should have a truncate checkbox for a new table", function() {
-            expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
+        it("should have a truncate checkbox", function() {
+            expect(this.dialog.$(".truncate")).toExist();
         });
 
         it("should set executeAfterSave to be false on the DatasetImport", function() {
@@ -159,8 +159,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             itShouldHaveAllTheFields(".new_table");
 
-            it("doesn't show 'Select a table' menu/link", function() {
-                expect(this.dialog.$("span.dataset_picked")).toHaveClass("hidden");
+            it("disables the 'Select a table' link", function() {
+                expect(this.dialog.$("a.dataset_picked")).toHaveClass("hidden");
+                expect(this.dialog.$("span.dataset_picked")).not.toHaveClass("hidden");
             });
         });
 
@@ -247,6 +248,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.render();
             });
 
+            it("should have a truncate checkbox", function() {
+                expect(this.dialog.$(".truncate")).toExist();
+            });
+
             it("initially has no errors", function() {
                 expect(this.dialog.$(".has_error")).not.toExist();
             });
@@ -259,19 +264,13 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
             });
 
-            it("has the right fieldset selected", function() {
+            it("has the right radio button selected", function() {
                 expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).not.toBeChecked();
                 expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).toBeChecked();
-                expect(this.dialog.$(".existing_table fieldset")).toHaveClass("disabled");
-                expect(this.dialog.$(".new_table fieldset")).not.toHaveClass("disabled");
             });
 
             it("pre-populates the table name", function() {
                 expect(this.dialog.$(".new_table input.name").val()).toBe("my_table");
-            });
-
-            it("should have a truncate checkbox for a new table", function() {
-                expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
             });
         });
 
@@ -282,6 +281,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.render();
             });
 
+            it("should have a truncate checkbox", function() {
+                expect(this.dialog.$(".truncate")).toExist();
+            });
+
             it("has the right title", function () {
                 expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
             });
@@ -290,15 +293,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
             });
 
-            it("has the right fieldset selected", function () {
+            it("has the right radio button selected", function () {
                 expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).toBeChecked();
                 expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).not.toBeChecked();
-                expect(this.dialog.$(".existing_table fieldset")).not.toHaveClass("disabled");
-                expect(this.dialog.$(".new_table fieldset")).toHaveClass("disabled");
-            });
-
-            it("should have a truncate checkbox for a new table", function () {
-                expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
             });
 
             it("pre-populates the schedule fields with the import's settings", function () {

@@ -5,17 +5,18 @@
 .import_scheduler {
     width: 500px;
 
-    fieldset.disabled {
+    fieldset {
         border: none;
-        padding-bottom: 0;
+        padding: 0 15px 0px;
 
-        .inputs {
-            display: none;
+        &.disabled {
+            border: none;
+            padding-bottom: 0;
+
+            .inputs {
+                display: none;
+            }
         }
-    }
-
-    legend {
-        margin-bottom: 5px;
     }
 
     .destination {
