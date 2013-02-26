@@ -12,8 +12,6 @@ class GpdbDataSource < DataSource
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
 
   before_validation :build_instance_account_for_owner, :on => :create
-  after_update :solr_reindex_later, :if => :shared_changed?
-  after_create :create_instance_created_event, :if => :current_user
   after_update :create_instance_name_changed_event, :if => :current_user
 
   attr_accessor :highlighted_attributes, :search_result_notes
@@ -22,18 +20,8 @@ class GpdbDataSource < DataSource
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
   end
 
-  def self.reindex_instance instance_id
-    instance = GpdbDataSource.find(instance_id)
-    instance.solr_index
-    instance.datasets(:reload => true).each(&:solr_index)
-  end
-
   def self.create_for_user(user, data_source_hash)
     user.gpdb_data_sources.create!(data_source_hash, :as => :create)
-  end
-
-  def solr_reindex_later
-    QC.enqueue_if_not_queued('GpdbDataSource.reindex_instance', id)
   end
 
   def self.owned_by(user)

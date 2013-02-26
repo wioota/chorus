@@ -354,63 +354,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe "automatic reindexing" do
-    let(:instance) { data_sources(:owners) }
-
-    before do
-      stub(Sunspot).index.with_any_args
-    end
-
-    context "making the instance shared" do
-      it "should reindex" do
-        mock(instance).solr_reindex_later
-        instance.shared = true
-        instance.save
-      end
-    end
-
-    context "making the instance un-shared" do
-      let(:instance) { data_sources(:shared) }
-      it "should reindex" do
-        mock(instance).solr_reindex_later
-        instance.shared = false
-        instance.save
-      end
-    end
-
-    context "not changing the shared state" do
-      it "should not reindex" do
-        dont_allow(instance).solr_reindex_later
-        instance.update_attributes(:name => 'foo')
-      end
-    end
-  end
-
-  describe "#solr_reindex_later" do
-    let(:instance) { data_sources(:owners) }
-    it "should enqueue a job" do
-      mock(QC.default_queue).enqueue_if_not_queued("GpdbDataSource.reindex_instance", instance.id)
-      instance.solr_reindex_later
-    end
-  end
-
-  describe "#reindex_instance" do
-    let(:instance) { data_sources(:owners) }
-
-    before do
-      stub(Sunspot).index.with_any_args
-    end
-
-    it "reindexes itself" do
-      mock(Sunspot).index(instance)
-      GpdbDataSource.reindex_instance(instance.id)
-    end
-
-    it "should reindex all of it's datasets" do
-      mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
-      GpdbDataSource.reindex_instance(instance.id)
-    end
-  end
 
   describe "#destroy" do
     let(:instance) { data_sources(:owners) }

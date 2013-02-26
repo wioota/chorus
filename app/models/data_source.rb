@@ -14,10 +14,12 @@ class DataSource < ActiveRecord::Base
   validates_presence_of :name, :db_name
   validates_numericality_of :port, :only_integer => true, :if => :host?
   validates_length_of :name, :maximum => 64
+  validates_with DataSourceNameValidator
+
+  after_update :solr_reindex_later, :if => :shared_changed?
 
   after_create :enqueue_refresh
-  after_create :create_instance_created_event, :if => :current_user
-  validates_with DataSourceNameValidator
+  after_create :create_data_source_created_event, :if => :current_user
 
   def self.by_type(entity_type)
     if entity_type == "gpdb_data_source"
@@ -44,8 +46,8 @@ class DataSource < ActiveRecord::Base
     DataSource.accessible_to(user).include?(self)
   end
 
-  def self.refresh_databases instance_id
-    find(instance_id).refresh_databases
+  def self.refresh_databases data_source_id
+    find(data_source_id).refresh_databases
   end
 
   def self.create_for_entity_type(entity_type, user, data_source_hash)
@@ -110,6 +112,16 @@ class DataSource < ActiveRecord::Base
     QC.enqueue_if_not_queued('DataSource.refresh_databases', id)
   end
 
+  def solr_reindex_later
+    QC.enqueue_if_not_queued('DataSource.reindex_data_source', id)
+  end
+
+  def self.reindex_data_source id
+    data_source = find(id)
+    data_source.solr_index
+    data_source.datasets(:reload => true).each(&:solr_index)
+  end
+
   private
 
   def enqueue_refresh
@@ -120,8 +132,7 @@ class DataSource < ActiveRecord::Base
     accounts.find_by_owner_id(user.id)
   end
 
-  def create_instance_created_event
+  def create_data_source_created_event
     Events::DataSourceCreated.by(current_user).add(:data_source => self)
   end
-
 end
