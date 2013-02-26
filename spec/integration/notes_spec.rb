@@ -38,7 +38,6 @@ describe "Notes" do
     end
   end
 
-
   describe "creating a note on a hadoop instance" do
     it "creates the note" do
       hadoop_instance = hadoop_instances(:hadoop)
@@ -75,4 +74,29 @@ describe "Notes" do
       workfile.events.last.body.should == "Note on a workfile"
     end
   end
+
+  describe "creating a note with an attachment" do
+    it "creates the note" do
+      Tempfile.open "test_upload" do |tempfile|
+        workfile = workfiles(:no_collaborators_public)
+        workspace = workfile.workspace
+        visit("#/workspaces/#{workspace.id}/workfiles")
+        within ".selectable.list" do
+          find("li", :text => workfile.file_name).click
+        end
+        click_link "Add a note"
+
+        within_modal do
+          set_cleditor_value("body", "Note on a workfile")
+          click_on "Show options"
+          attach_file "contents", "file://" + tempfile.path
+          click_button "Add Note"
+        end
+
+        workfile.events.last.body.should == "Note on a workfile"
+        page.should have_text(File.basename(tempfile.path))
+      end
+    end
+  end
 end
+

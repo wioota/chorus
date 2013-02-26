@@ -5,11 +5,7 @@ describe AttachmentAccess do
   let(:access) { AttachmentAccess.new(fake_controller) }
   let(:note) { Events::NoteOnGreenplumInstance.last }
 
-
   describe "#create?(params)" do
-    before do
-    end
-
     context "when current user is same as actor of note" do
       it " returns true" do
         stub(fake_controller).current_user { note.actor }
@@ -24,6 +20,4 @@ describe AttachmentAccess do
       end
     end
   end
-
-
 end
