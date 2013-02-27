@@ -379,3 +379,12 @@ data_tab_dataset_list {
         vertical-align: middle;
     }
 }
+
+#sidebar_wrapper .sidebar_schema_picker .ui-tooltip-content {
+    padding: 0;
+    white-space: nowrap;
+    ul {
+        overflow-x: hidden;
+        padding: 4px 8px;
+    }
+}

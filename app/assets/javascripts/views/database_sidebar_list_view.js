@@ -58,6 +58,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 'a.schema': _.bind(this.schemaSelected, this)
             },
 
+            classes: "sidebar_schema_picker",
+
             // Hard code this qtips tip length so it hides the underlying menu
             style: {
                 tip: {
