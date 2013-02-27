@@ -50,11 +50,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         it("should show the schedule controls", function() {
-            expect(this.dialog.$(".options .schedule_widget")).toExist();
+            expect(this.dialog.$(".schedule_widget")).toExist();
         });
 
         it("sets the time fields to the model defaults", function() {
-            expect(this.dialog.$('.options select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+            expect(this.dialog.$('select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
         });
 
         function itShouldHaveAllTheFields(selector) {
@@ -201,7 +201,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 });
 
                 it("sets the time fields to the model defaults", function() {
-                    expect(this.dialog.$('.options select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+                    expect(this.dialog.$('select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
                 });
             });
             context("switching from existing to new", function() {
@@ -248,7 +248,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should show the schedule controls", function() {
-                expect(this.dialog.$(".options .schedule_widget")).toExist();
+                expect(this.dialog.$(".schedule_widget")).toExist();
             });
 
             it("should have a truncate checkbox", function() {
@@ -285,7 +285,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should show the schedule controls", function() {
-                expect(this.dialog.$(".options .schedule_widget")).toExist();
+                expect(this.dialog.$(".schedule_widget")).toExist();
             });
 
             it("should have a truncate checkbox", function() {

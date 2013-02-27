@@ -1,42 +1,49 @@
-<div class="destination">{{t "import.destination" canonicalName=canonicalName}}</div>
+<fieldset>
+    <div class="destination">{{t "import.destination" canonicalName=canonicalName}}</div>
+</fieldset>
 
-<div class="new_table">
-    <fieldset>
-        <legend class="row">
-            <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
-            <label class="main" for="import_scheduler_new_table">{{t "import.new_table"}}</label>
-            <input type="text" class="name" name="newTableName" maxlength="64"/>
+<fieldset class="new_table row">
+    <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
+    <label class="main" for="import_scheduler_new_table">{{t "import.new_table"}}</label>
+    <input type="text" class="name" name="newTableName" maxlength="64"/>
+</fieldset>
+
+<fieldset class="existing_table row">
+    <input type="radio" name="imports" id="import_scheduler_existing_table"/>
+    <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
+    <span class="dataset_picked" name="existingTableName">{{t "dataset.import.select_dataset"}}</span>
+    <a href="#" class="dataset_picked hidden" name="existingTableName">{{t "dataset.import.select_dataset"}}</a>
+</fieldset>
+
+
+{{#if showSchedule}}
+    <fieldset class="titled-input-group">
+        <legend class="subtitle">
+            Schedule
         </legend>
-    </fieldset>
-</div>
 
-<div class="existing_table">
-    <fieldset class="existing_table">
-        <legend class="row">
-            <input type="radio" name="imports" id="import_scheduler_existing_table"/>
-            <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
-            <span class="dataset_picked" name="existingTableName">{{t "dataset.import.select_dataset"}}</span>
-            <a href="#" class="dataset_picked hidden" name="existingTableName">{{t "dataset.import.select_dataset"}}</a>
-        </legend>
-    </fieldset>
-</div>
-
-<div class="options">
-    {{#if showSchedule}}
         <div class="row schedule_widget">
             <div class="schedule"/>
         </div>
-    {{/if}}
+    </fieldset>
+{{/if}}
+
+<fieldset class="titled-input-group">
+    <legend class="subtitle">
+        Options
+    </legend>
+
     <div class="row">
         <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
         <label for="import_scheduler_truncate">{{t "import.truncate"}}</label>
     </div>
+
     <div class="row limit">
         <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
         <label for="import_scheduler_limit_rows_existing">{{t "import.limit_rows"}}</label>
         <input class="row_limit" type="text" name="sampleCount" disabled="disabled" value="500"/>
     </div>
-</div>
+</fieldset>
 
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>

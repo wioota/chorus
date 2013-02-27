@@ -132,12 +132,12 @@ describe("chorus.dialogs.ImportNow", function() {
 
             describe('options',function () {
                 it("should have a 'Limit Rows' checkbox", function() {
-                    expect(this.dialog.$(".options .limit label")).toContainTranslation("import.limit_rows");
-                    expect(this.dialog.$(".options .limit input:checkbox")).not.toBeChecked();
+                    expect(this.dialog.$(".limit label")).toContainTranslation("import.limit_rows");
+                    expect(this.dialog.$(".limit input:checkbox")).not.toBeChecked();
                 });
 
                 it("should have a disabled textfield for the 'Limit Rows' value", function() {
-                    expect(this.dialog.$(".options .limit input:text")).toBeDisabled();
+                    expect(this.dialog.$(".limit input:text")).toBeDisabled();
                 });
             });
 
@@ -226,7 +226,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
             context("and the form is submitted", function() {
                 beforeEach(function() {
-                    this.dialog.$(".options .truncate").prop("checked", true).change();
+                    this.dialog.$(".truncate").prop("checked", true).change();
                     this.dialog.$(".existing_table a.dataset_picked").text("a");
                     this.dialog.onInputFieldChanged();
 
@@ -260,16 +260,16 @@ describe("chorus.dialogs.ImportNow", function() {
 
                 context("when the 'limit rows' checkbox is checked", function() {
                     beforeEach(function() {
-                        this.dialog.$(".options .limit input:checkbox").prop("checked", true).change();
+                        this.dialog.$(".limit input:checkbox").prop("checked", true).change();
                     });
 
                     it("should enable the limit text-input", function() {
-                        expect(this.dialog.$(".options .limit input:text")).toBeEnabled();
+                        expect(this.dialog.$(".limit input:text")).toBeEnabled();
                     });
 
                     context("when a valid row limit is entered", function() {
                         beforeEach(function() {
-                            this.dialog.$(".options .limit input:text").val("345").trigger("keyup");
+                            this.dialog.$(".limit input:text").val("345").trigger("keyup");
                         });
 
                         it("enables the submit button", function() {

@@ -1,5 +1,18 @@
+@import "_common.scss";
+
 .date-picker {
     z-index: 20001;
+}
+
+legend.subtitle {
+    padding: 10px 10px 10px 30px;
+    margin-left: -30px;
+}
+
+.titled-input-group {
+    border-top: 2px solid $subheader-border-color-dark;
+    padding-right: 0;
+    margin-right: 24px;
 }
 
 .import_scheduler {
@@ -79,7 +92,6 @@
         .row_limit {
             float: right;
             width: 120px;
-            margin-right: 6px;
             @include after-clearfix;
         }
     }
@@ -106,6 +118,6 @@
     }
 
     .schedule_widget {
-        margin-left: 40px;
+        margin-left: 20px;
     }
 }
