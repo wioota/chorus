@@ -2,7 +2,10 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
     beforeEach(function() {
         this.oracle = rspecFixtures.oracleDataSource({name: "Davis"});
         this.page = new chorus.pages.OracleSchemaIndexPage(this.oracle.id);
-        this.schemas = rspecFixtures.oracleSchemaSet();
+        this.schemas = rspecFixtures.oracleSchemaSet({
+            0: {name: "schema1"},
+            1: {name: "schema2"}
+        });
     });
 
     it('sets up the right collection', function(){
@@ -24,8 +27,8 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         });
 
         it("lists the schemas", function() {
-            expect(this.page.mainContent.content.$el).toContainText("oracle_schema1");
-            expect(this.page.mainContent.content.$el).toContainText("oracle_schema2");
+            expect(this.page.mainContent.content.$el).toContainText("schema1");
+            expect(this.page.mainContent.content.$el).toContainText("schema2");
         });
 
         it("should have set up search correctly", function() {
@@ -33,7 +36,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("schema.search_placeholder"));
             expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
 
-            this.page.$("input.search").val("oracle_schema1").trigger("keyup");
+            this.page.$("input.search").val("schema1").trigger("keyup");
 
             expect(this.page.$("li.schema:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
@@ -59,9 +62,9 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
             });
 
             it("includes the selected schemas name and type", function() {
-                expect(this.page.sidebar.$el).toContainText("oracle_schema1");
+                expect(this.page.sidebar.$el).toContainText("schema1");
                 this.page.$('.schema:eq(1)').click();
-                expect(this.page.sidebar.$el).toContainText("oracle_schema2");
+                expect(this.page.sidebar.$el).toContainText("schema2");
                 expect(this.page.sidebar.$el).toContainText("Oracle DB Schema");
             });
         });
