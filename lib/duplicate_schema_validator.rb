@@ -11,6 +11,24 @@ module DuplicateSchemaValidator
     end
   end
 
+  def self.run_and_fix
+    get_duplicate_schemas.values.each do |schema_list|
+      schema_list.inject(schema_list.first) do |original, duplicate|
+        if original != duplicate
+          link_workfiles(original, duplicate)
+          link_workspaces(original, duplicate)
+          duplicate.destroy
+        end
+
+        original
+      end
+    end
+
+    true
+  end
+
+  private
+
   def self.get_duplicate_schemas
     schemas = Schema.all
 
@@ -22,5 +40,19 @@ module DuplicateSchemaValidator
     end
 
     indexed_schemas.select {|k, v| v.size > 1}
+  end
+
+  def self.link_workfiles(original, duplicate)
+    Workfile.where(:execution_schema_id => duplicate.id).each do |workfile|
+      workfile.execution_schema = original
+      workfile.save!
+    end
+  end
+
+  def self.link_workspaces(original, duplicate)
+    Workspace.where(:sandbox_id => duplicate.id).each do |workspace|
+      workspace.sandbox = original
+      workspace.save!
+    end
   end
 end
