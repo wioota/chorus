@@ -174,6 +174,8 @@ FixtureBuilder.configure do |fbuilder|
     tagged_table.tag_list = "typeahead"
     tagged_table.save!
 
+
+
     # Search Database Instance Accounts For Solr Permissions
     searchquery_database.instance_accounts << owner_instance_account
     default_database.instance_accounts << owner_instance_account

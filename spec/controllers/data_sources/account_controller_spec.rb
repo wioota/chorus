@@ -105,9 +105,7 @@ describe DataSources::AccountController do
 
   describe "#destroy" do
     context "of an unshared account" do
-      before do
-        log_in owner
-      end
+      before { log_in owner }
 
       it "succeeds" do
         delete :destroy, :data_source_id => data_source.id

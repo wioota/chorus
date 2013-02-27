@@ -14,7 +14,9 @@ class GpdbDatabase < ActiveRecord::Base
   belongs_to :data_source
   has_many :schemas, :class_name => 'GpdbSchema', :as => :parent, :dependent => :destroy
   has_many :datasets, :through => :schemas
-  has_and_belongs_to_many :instance_accounts
+  has_many :instance_account_permissions, :as => :accessed
+  has_many :instance_accounts, :through => :instance_account_permissions
+  #has_and_belongs_to_many :instance_accounts, join_table: :instance_account_permissions, foreign_key: :accessed_id
 
   before_save :mark_schemas_as_stale
   after_destroy { instance_accounts.clear }

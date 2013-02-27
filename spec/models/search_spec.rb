@@ -389,7 +389,7 @@ describe Search do
 
       it "excludes datasets you don't have permissions to" do
         user = users(:no_collaborators)
-        user.instance_accounts.joins(:gpdb_databases).should be_empty
+        user.instance_accounts.joins(:instance_account_permissions).should be_empty
         create_and_record_search(user, :query => 'searchquery', :entity_type => :dataset) do |search|
           search.datasets.should == [shared_dataset]
         end

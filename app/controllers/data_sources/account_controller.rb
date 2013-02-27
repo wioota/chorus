@@ -1,7 +1,7 @@
 module DataSources
   class AccountController < ApplicationController
     def show
-      present GpdbDataSource.find(params[:data_source_id]).account_for_user(current_user)
+      present DataSource.find(params[:data_source_id]).account_for_user(current_user)
     end
 
     def create
@@ -13,8 +13,8 @@ module DataSources
     end
 
     def destroy
-      gpdb_data_source = GpdbDataSource.unshared.find(params[:data_source_id])
-      gpdb_data_source.account_for_user(current_user).destroy
+      data_source = DataSource.unshared.find(params[:data_source_id])
+      data_source.account_for_user(current_user).destroy
       render :json => {}
     end
 

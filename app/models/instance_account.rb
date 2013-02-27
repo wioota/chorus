@@ -8,12 +8,17 @@ class InstanceAccount < ActiveRecord::Base
 
   attr_encrypted :db_password, :encryptor => ChorusEncryptor, :encrypt_method => :encrypt_password, :decrypt_method => :decrypt_password, :encode => false
 
+  has_many :instance_account_permissions, dependent: :destroy
+  has_many :accesseds, :through => :instance_account_permissions
+  has_many :gpdb_databases, :through => :instance_account_permissions, :source => :accessed,
+           :conditions => "instance_account_permissions.accessed_type = 'GpdbDatabase'"
+
   belongs_to :owner, :class_name => 'User'
   belongs_to :data_source
-  has_and_belongs_to_many :gpdb_databases
+
   after_save :reindex_data_source
   after_destroy :reindex_data_source
-  after_destroy { gpdb_databases.clear }
+  after_destroy { instance_account_permissions.clear }
 
   def reindex_data_source
     data_source.refresh_databases_later
