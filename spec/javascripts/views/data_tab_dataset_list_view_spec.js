@@ -53,6 +53,23 @@ describe("chorus.views.DataTabDatasetList", function() {
                         expect("fetch:more").toHaveBeenTriggeredOn(this.view);
                     });
                 });
+
+                context("after additional models are added to the collection", function() {
+                    beforeEach(function() {
+                        this.originalViews = this.view.datasetViews;
+                        this.collection.add(rspecFixtures.dataset({objectName: "Table 3"}));
+                    });
+
+                    it('does not regenerate subviews immediately', function() {
+                        expect(this.view.datasetViews).toEqual(this.originalViews);
+                        expect(this.view.$('li').length).toBe(2);
+                    });
+
+                    it('regenerates the dataset subviews', function() {
+                        this.view.render();
+                        expect(this.view.$('li').length).toBe(3);
+                    });
+                });
             });
 
             context("when there is only one page of results", function() {
@@ -67,7 +84,7 @@ describe("chorus.views.DataTabDatasetList", function() {
             });
         });
 
-        it("does not destroy the subviews on render", function() {
+        it("does not destroy/regenerate subviews on render", function() {
             var originalViews = this.view.datasetViews;
             this.view.render();
             expect(this.view.datasetViews).toEqual(originalViews);

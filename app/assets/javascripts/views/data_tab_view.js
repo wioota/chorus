@@ -60,7 +60,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
             this.collection.fetchIfNotLoaded(fetchOptions);
         }
 
-        this.bindings.add(this.collection, "searched", this.onSearchComplete);
+        this.bindings.add(this.collection, "searched", this.render);
         this.listview && this.listview.teardown();
         this.listview = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.registerSubView(this.listview);
@@ -75,21 +75,11 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         var next = parseInt(this.collection.pagination.page, 10) + 1;
-        this.collection.fetchPage(next, { update: true, remove: false , success: _.bind(this.datasetsAdded, this) });
-    },
-
-    datasetsAdded: function() {
-        this.listview.render();
-        this.postRender();
+        this.collection.fetchPage(next, { update: true, remove: false , success: _.bind(this.render, this) });
     },
 
     searchTextChanged: function(e) {
         this.collection.search($(e.target).val());
-    },
-
-    onSearchComplete: function() {
-        this.listview.render();
-        this.postRender();
     },
 
     setSchema:function(schema) {

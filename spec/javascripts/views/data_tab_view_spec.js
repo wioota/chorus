@@ -34,7 +34,9 @@ describe("chorus.views.DataTab", function () {
                     ]);
 
                     this.server.completeFetchFor(this.view.schemas, schemas.models);
-                    this.schema.datasets().loaded = true;
+                    this.server.completeFetchFor(this.schema.datasets(), [
+                        rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                    ]);
                     this.view.render();
 
                     // Just to get the qtip to exist in the dom
@@ -84,11 +86,11 @@ describe("chorus.views.DataTab", function () {
 
                 describe("fetching more datasets", function () {
                     beforeEach(function () {
-                        spyOn(this.view.listview, "render");
                         this.view.collection.pagination = {page:1, total:2, records:51};
+                        this.view.render();
+                        spyOn(this.view.listview, "render");
                         this.server.reset();
-                        this.view.listview.trigger('fetch:more');
-
+                        this.view.$('a.more').click();
                     });
 
                     it("fetches more of the collection", function () {
@@ -99,7 +101,9 @@ describe("chorus.views.DataTab", function () {
                         beforeEach(function () {
                             spyOn($.fn, "draggable").andCallThrough();
                             this.view.listview.render.reset();
-                            this.server.lastFetch().succeed();
+                            this.server.completeFetchFor(this.schema.datasets(), [
+                                rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                            ], {page:2});
                         });
 
                         it("renders the list view", function () {
@@ -187,7 +191,9 @@ describe("chorus.views.DataTab", function () {
 
         context("after the tables and views are loaded", function () {
             beforeEach(function () {
-                this.schema.datasets().loaded = true;
+                this.server.completeFetchFor(this.schema.datasets(), [
+                    rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                ]);
                 this.qtip = stubQtip("li");
                 this.view.render();
             });
@@ -199,14 +205,6 @@ describe("chorus.views.DataTab", function () {
             context("and some data was fetched", function () {
                 beforeEach(function () {
                     spyOn(this.view, 'closeQtip');
-
-                    this.server.completeFetchFor(this.schema.datasets(), [
-                        rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" }),
-                        rspecFixtures.dataset({ objectName:"zebra", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" }),
-                        rspecFixtures.dataset({ objectName:"Data2", entitySubtype:"SANDBOX_TABLE", objectType:"TABLE" }),
-                        rspecFixtures.dataset({ objectName:"1234", entitySubtype:"SANDBOX_TABLE", objectType:"TABLE" })
-                    ]);
-
                     this.server.completeFetchFor(this.schema.database().schemas());
                 });
 

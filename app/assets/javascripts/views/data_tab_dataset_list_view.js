@@ -3,16 +3,27 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
     templateName: "data_tab_dataset_list",
     useLoadingSection: true,
 
+    datasetViewsAreDirty: true,
+
     events: {
         "click a.more"  : "fetchMoreDatasets"
     },
 
     setup: function() {
-        this.bindings.add(this.collection, "reset", this.rebuildDatasetViews);
+        this.bindings.add(this.collection, "reset", this.markDatasetViewsAsDirty);
+        this.bindings.add(this.collection, "add", this.markDatasetViewsAsDirty);
         this.datasetViews = [];
     },
 
+    markDatasetViewsAsDirty: function() {
+        this.datasetViewsAreDirty = true;
+    },
+
     postRender: function() {
+        if (this.datasetViewsAreDirty) {
+            this.rebuildDatasetViews();
+            this.datasetViewsAreDirty = false;
+        }
         _.each(this.datasetViews, function(view) {
             this.$("ul").append(view.render().$el);
             view.delegateEvents();
@@ -36,7 +47,7 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
 
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
-        this.trigger("fetch:more");
+        this.trigger('fetch:more');
     },
 
     additionalContext:function () {
