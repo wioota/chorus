@@ -104,7 +104,7 @@ describe DuplicateSchemaValidator do
           duplicate_schemas_in_database.count.should eq(1)
         end
 
-        it "links all workfiles to the remaining Schema" do
+        it "links workfiles to the remaining schemas" do
           workfile1 = FactoryGirl.create(:chorus_workfile, :execution_schema => duplicate_schema_objects[0])
           workfile2 = FactoryGirl.create(:chorus_workfile, :execution_schema => duplicate_schema_objects[1])
 
@@ -114,7 +114,7 @@ describe DuplicateSchemaValidator do
           workfile2.reload.execution_schema.should eq(duplicate_schemas_in_database.first)
         end
 
-        it "links all the workspaces to the remaining Schema" do
+        it "links workspaces to the remaining schemas" do
           workspace1 = FactoryGirl.create(:workspace, :sandbox => duplicate_schema_objects[0])
           workspace2 = FactoryGirl.create(:workspace, :sandbox => duplicate_schema_objects[1])
 
@@ -122,6 +122,16 @@ describe DuplicateSchemaValidator do
 
           workspace1.reload.sandbox.should eq(duplicate_schemas_in_database.first)
           workspace2.reload.sandbox.should eq(duplicate_schemas_in_database.first)
+        end
+
+        it "links chorus views to the remaining schema" do
+          chorusview1 = FactoryGirl.create(:chorus_view, :schema => duplicate_schema_objects[0])
+          chorusview2 = FactoryGirl.create(:chorus_view, :schema => duplicate_schema_objects[1])
+
+          DuplicateSchemaValidator.run_and_fix
+
+          chorusview1.reload.schema.should eq(duplicate_schemas_in_database.first)
+          chorusview2.reload.schema.should eq(duplicate_schemas_in_database.first)
         end
       end
     end

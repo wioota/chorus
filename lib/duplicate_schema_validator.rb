@@ -17,6 +17,7 @@ module DuplicateSchemaValidator
         if original != duplicate
           link_workfiles(original, duplicate)
           link_workspaces(original, duplicate)
+          link_chorus_views(original, duplicate)
           duplicate.destroy
         end
 
@@ -53,6 +54,16 @@ module DuplicateSchemaValidator
     Workspace.where(:sandbox_id => duplicate.id).each do |workspace|
       workspace.sandbox = original
       workspace.save!
+    end
+  end
+  
+  def self.link_chorus_views(original, duplicate)
+    ChorusView.where(:schema_id => duplicate.id).each do |view|
+      ActiveRecord::Base.connection.execute(<<-SQL)
+        UPDATE datasets
+        SET schema_id=#{original.id}
+        WHERE id=#{view.id}
+      SQL
     end
   end
 end
