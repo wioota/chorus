@@ -368,7 +368,7 @@ describe User do
   describe "#accessible_account_ids" do
     it "includes the users individual instance accounts plus all shared instance accounts" do
       user = users(:owner)
-      shared_ids = InstanceAccount.joins(:instance).where('data_sources.shared = true').collect(&:id)
+      shared_ids = InstanceAccount.joins(:data_source).where('data_sources.shared = true').collect(&:id)
       user_ids = user.instance_account_ids
       user.accessible_account_ids.should =~ (shared_ids + user_ids).uniq
     end
