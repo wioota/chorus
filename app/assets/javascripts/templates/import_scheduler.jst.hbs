@@ -7,14 +7,6 @@
             <label class="main" for="import_scheduler_new_table">{{t "import.new_table"}}</label>
             <input type="text" class="name" name="newTableName" maxlength="64"/>
         </legend>
-
-        <div class="inputs">
-            {{#if showSchedule}}
-                <div class="schedule_widget">
-                    <div class="schedule"/>
-                </div>
-            {{/if}}
-        </div>
     </fieldset>
 </div>
 
@@ -26,18 +18,15 @@
             <span class="dataset_picked" name="existingTableName">{{t "dataset.import.select_dataset"}}</span>
             <a href="#" class="dataset_picked hidden" name="existingTableName">{{t "dataset.import.select_dataset"}}</a>
         </legend>
-
-        <div class="inputs">
-            {{#if showSchedule}}
-                <div class="schedule_widget">
-                    <div class="schedule"/>
-                </div>
-            {{/if}}
-        </div>
     </fieldset>
 </div>
 
 <div class="options">
+    {{#if showSchedule}}
+        <div class="row schedule_widget">
+            <div class="schedule"/>
+        </div>
+    {{/if}}
     <div class="row">
         <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
         <label for="import_scheduler_truncate">{{t "import.truncate"}}</label>

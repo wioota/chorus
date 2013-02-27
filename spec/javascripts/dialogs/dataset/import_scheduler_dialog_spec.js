@@ -50,11 +50,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         it("should show the schedule controls", function() {
-            expect(this.dialog.$(".schedule_widget")).toExist();
+            expect(this.dialog.$(".options .schedule_widget")).toExist();
         });
 
         it("sets the time fields to the model defaults", function() {
-            expect(this.dialog.$('.new_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+            expect(this.dialog.$('.options select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
         });
 
         function itShouldHaveAllTheFields(selector) {
@@ -72,17 +72,17 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.$("input[name='limit_num_rows']").prop("checked", true).change();
                     this.dialog.$("input[name='sampleCount']").val(123);
 
-                    this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
-                    this.dialog.activeScheduleView.$(".start input[name='month']").val("02");
-                    this.dialog.activeScheduleView.$(".start input[name='day']").val("29");
+                    this.dialog.$(".start input[name='year']").val("2012");
+                    this.dialog.$(".start input[name='month']").val("02");
+                    this.dialog.$(".start input[name='day']").val("29");
 
-                    this.dialog.activeScheduleView.$(".end input[name='year']").val("2012");
-                    this.dialog.activeScheduleView.$(".end input[name='month']").val("03");
-                    this.dialog.activeScheduleView.$(".end input[name='day']").val("21");
+                    this.dialog.$(".end input[name='year']").val("2012");
+                    this.dialog.$(".end input[name='month']").val("03");
+                    this.dialog.$(".end input[name='day']").val("21");
 
-                    this.dialog.activeScheduleView.$("select.ampm").val("PM");
-                    this.dialog.activeScheduleView.$("select.hours").val("12");
-                    this.dialog.activeScheduleView.$("select.minutes").val("09");
+                    this.dialog.$("select.ampm").val("PM");
+                    this.dialog.$("select.hours").val("12");
+                    this.dialog.$("select.minutes").val("09");
                     this.startDatetime = new Date(2012, 1, 29, 12, 9, 0, 0);
                     expect(this.dialog.$("button.submit")).toBeEnabled();
 
@@ -100,7 +100,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                 context("when the date is invalid", function() {
                     beforeEach(function() {
-                        this.dialog.activeScheduleView.$(".start input[name='day']").val("32");
+                        this.dialog.$(".start input[name='day']").val("32");
                     });
 
                     it("displays an 'invalid date' message", function() {
@@ -121,17 +121,17 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     this.dialog.$("input[name='limit_num_rows']").prop("checked", false);
 
-                    this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
-                    this.dialog.activeScheduleView.$(".start input[name='month']").val("02");
-                    this.dialog.activeScheduleView.$(".start input[name='day']").val("29");
+                    this.dialog.$(".start input[name='year']").val("2012");
+                    this.dialog.$(".start input[name='month']").val("02");
+                    this.dialog.$(".start input[name='day']").val("29");
 
-                    this.dialog.activeScheduleView.$(".end input[name='year']").val("2012");
-                    this.dialog.activeScheduleView.$(".end input[name='month']").val("03");
-                    this.dialog.activeScheduleView.$(".end input[name='day']").val("21");
+                    this.dialog.$(".end input[name='year']").val("2012");
+                    this.dialog.$(".end input[name='month']").val("03");
+                    this.dialog.$(".end input[name='day']").val("21");
 
-                    this.dialog.activeScheduleView.$("select.ampm").val("PM");
-                    this.dialog.activeScheduleView.$("select.hours").val("12");
-                    this.dialog.activeScheduleView.$("select.minutes").val("09");
+                    this.dialog.$("select.ampm").val("PM");
+                    this.dialog.$("select.hours").val("12");
+                    this.dialog.$("select.minutes").val("09");
 
                     this.dialog.onInputFieldChanged();
                     expect(this.dialog.$("button.submit")).toBeEnabled();
@@ -167,7 +167,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("when 'Import into Existing Table' is checked", function() {
             beforeEach(function() {
-                this.dialog.activeScheduleView.enable.reset();
                 this.dialog.$(".new_table input:radio").prop("checked", false);
                 this.dialog.$(".existing_table input:radio").prop("checked", true).change();
             });
@@ -202,7 +201,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 });
 
                 it("sets the time fields to the model defaults", function() {
-                    expect(this.dialog.$('.existing_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+                    expect(this.dialog.$('.options select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
                 });
             });
             context("switching from existing to new", function() {
@@ -241,11 +240,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         });
 
-        context("and the toTable is not an existing Table", function() {
+        context("and the destination is a new table", function() {
             beforeEach(function() {
                 this.importSchedule.set({newTable: true});
                 this.server.completeFetchFor(this.dataset.getImportSchedules(), [this.importSchedule]);
                 this.dialog.render();
+            });
+
+            it("should show the schedule controls", function() {
+                expect(this.dialog.$(".options .schedule_widget")).toExist();
             });
 
             it("should have a truncate checkbox", function() {
@@ -274,11 +277,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
         });
 
-        context("and the toTable is an existing Table", function() {
+        context("and the destination is an existing Table", function() {
             beforeEach(function () {
                 this.importSchedule.set({newTable: false});
                 this.server.completeFetchFor(this.dataset.getImportSchedules(), [this.importSchedule]);
                 this.dialog.render();
+            });
+
+            it("should show the schedule controls", function() {
+                expect(this.dialog.$(".options .schedule_widget")).toExist();
             });
 
             it("should have a truncate checkbox", function() {
@@ -299,17 +306,17 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("pre-populates the schedule fields with the import's settings", function () {
-                expect(this.dialog.activeScheduleView.$(".start input[name='year']").val()).toBe("2013");
-                expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
-                expect(this.dialog.activeScheduleView.$(".start input[name='day']").val()).toBe("21");
+                expect(this.dialog.$(".start input[name='year']").val()).toBe("2013");
+                expect(this.dialog.$(".start input[name='month']").val()).toBe("2");
+                expect(this.dialog.$(".start input[name='day']").val()).toBe("21");
 
-                expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("5");
-                expect(this.dialog.activeScheduleView.$(".minutes").val()).toBe("30");
-                expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("AM");
+                expect(this.dialog.$(".hours").val()).toBe("5");
+                expect(this.dialog.$(".minutes").val()).toBe("30");
+                expect(this.dialog.$(".ampm").val()).toBe("AM");
 
-                expect(this.dialog.activeScheduleView.$(".end input[name='year']").val()).toBe("2013");
-                expect(this.dialog.activeScheduleView.$(".end input[name='month']").val()).toBe("5");
-                expect(this.dialog.activeScheduleView.$(".end input[name='day']").val()).toBe("27");
+                expect(this.dialog.$(".end input[name='year']").val()).toBe("2013");
+                expect(this.dialog.$(".end input[name='month']").val()).toBe("5");
+                expect(this.dialog.$(".end input[name='day']").val()).toBe("27");
             });
 
             it("pre-populates the destination table and truncation fields with the import's settings", function () {
@@ -385,5 +392,4 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
         });
     });
-
 });

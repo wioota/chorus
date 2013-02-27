@@ -4,8 +4,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     allowTruncate: true,
 
     subviews: {
-        ".new_table .schedule": "scheduleViewNew",
-        ".existing_table .schedule": "scheduleViewExisting"
+        ".schedule": "scheduleView"
     },
 
     resourcesLoaded: function () {
@@ -23,10 +22,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     },
 
     customSetup: function () {
-        this.scheduleViewNew = new chorus.views.ImportSchedule();
-        this.registerSubView(this.scheduleViewNew);
-        this.scheduleViewExisting = new chorus.views.ImportSchedule();
-        this.registerSubView(this.scheduleViewExisting);
+        this.scheduleView = new chorus.views.ImportSchedule();
+        this.registerSubView(this.scheduleView);
 
         var action = this.options.action;
 
@@ -37,40 +34,24 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
             this.title = t("import.title_edit_schedule");
             this.submitText = t("actions.save_changes");
         }
-
-        this.activeScheduleView = this.scheduleViewNew;
     },
 
     postRender: function () {
         this.schedule && this.setFieldValues(this.schedule);
         if(this.options.action === "create_schedule") {
-            this.activeScheduleView.enable();
+            this.scheduleView.enable();
         }
         this.updateExistingTableLink();
     },
 
-    updateExistingTableLink: function () {
-        this._super("updateExistingTableLink");
-        var disableExisting = this.$(".new_table input:radio").prop("checked");
-
-        this.activeScheduleView = disableExisting ? this.scheduleViewNew : this.scheduleViewExisting;
-        if(this.options.action === "create_schedule") {
-            this.activeScheduleView.enable();
-        }
-    },
-
     setFieldValues: function (model) {
         this._super("setFieldValues", arguments);
-        var newTable = model.get("newTable") === true;
-        this.activeScheduleView = newTable ? this.scheduleViewNew : this.scheduleViewExisting;
-
-        this.scheduleViewExisting.setFieldValues(model);
-        this.scheduleViewNew.setFieldValues(model);
+        this.scheduleView.setFieldValues(model);
     },
 
     getNewModelAttrs: function () {
         var updates = this._super("getNewModelAttrs");
-        _.extend(updates, this.activeScheduleView.fieldValues());
+        _.extend(updates, this.scheduleView.fieldValues());
         return updates;
     },
 
