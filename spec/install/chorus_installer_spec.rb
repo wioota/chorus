@@ -838,6 +838,28 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#validate_schema_names" do
+    context "when there are duplicate Schema names" do
+      before do
+        mock(executor).rake("validations:schema_names") {false}
+      end
+
+      it "raises an installer error" do
+        expect { installer.validate_schema_names }.to raise_error(InstallerErrors::InstallAborted)
+      end
+    end
+
+    context "when there are no duplicate Schema names" do
+      before do
+        mock(executor).rake("validations:schema_names") {true}
+      end
+
+      it "does not raise an error" do
+        expect { installer.validate_schema_names }.to_not raise_error
+      end
+    end
+  end
+
   describe "#setup_database" do
     before do
       stub(installer).version { "2.2.0.0" }

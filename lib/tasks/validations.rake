@@ -16,4 +16,9 @@ namespace :validations do
 
     exit(1) unless data_valid
   end
+
+  desc 'Check Schema Names'
+  task :schema_names => :environment do
+    exit(1) unless DuplicateSchemaValidator.run
+  end
 end
