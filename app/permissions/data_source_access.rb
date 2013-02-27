@@ -12,7 +12,7 @@ class DataSourceAccess < DefaultAccess
   end
 
   def show_contents?(data_source)
-    data_source.shared? || current_user.instance_accounts.exists?(:instance_id => data_source.id)
+    data_source.shared? || current_user.instance_accounts.exists?(:data_source_id => data_source.id)
   end
 end
 

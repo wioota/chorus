@@ -67,7 +67,7 @@ FactoryGirl.define do
     sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"
     owner
-    association :instance, :factory => :gpdb_data_source
+    association :data_source, :factory => :gpdb_data_source
   end
 
   factory :gpdb_database do

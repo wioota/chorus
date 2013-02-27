@@ -31,7 +31,7 @@ class GpdbDatabase < ActiveRecord::Base
   SQL
 
   def self.refresh(account)
-    data_source = account.instance
+    data_source = account.data_source
     results = []
     data_source.connect_with(account).databases.map do |name|
       next if new(:name => name).invalid?

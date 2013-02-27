@@ -25,7 +25,7 @@ describe DataSource do
 
     context 'making the data source un-shared' do
       let(:data_source) { data_sources(:shared) }
-      
+
       it 'enqueues a reindex job' do
         mock(data_source).solr_reindex_later
         data_source.shared = false
@@ -114,6 +114,49 @@ describe DataSource do
     it 'should enqueue a job' do
       mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh_databases', data_source.id)
       data_source.refresh_databases_later
+    end
+  end
+
+  describe '#account_for_user!' do
+    let(:user) { users(:owner) }
+
+    context 'shared gpdb instance' do
+      let(:data_source) { data_sources(:shared) }
+      let(:owner_account) { data_source.owner_account }
+
+      it 'should return the same account for everyone' do
+        data_source.account_for_user!(user).should == owner_account
+        data_source.account_for_user!(data_source.owner).should == owner_account
+      end
+    end
+
+    context 'individual gpdb instance' do
+      let(:data_source) { data_sources(:owners) }
+      let!(:owner_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, data_source.owner.id) }
+      let!(:user_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, users(:the_collaborator).id) }
+
+      it 'should return the account for the user' do
+        data_source.account_for_user!(data_source.owner).should == owner_account
+        data_source.account_for_user!(user_account.owner).should == user_account
+      end
+    end
+
+    context 'missing account' do
+      let(:data_source) { data_sources(:owners) }
+
+      it 'raises an exception' do
+        expect { data_source.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe '#account_for_user' do
+    let(:data_source) { data_sources(:owners) }
+
+    context 'missing account' do
+      it 'returns nil' do
+        data_source.account_for_user(users(:no_collaborators)).should be_nil
+      end
     end
   end
 end

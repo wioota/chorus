@@ -177,49 +177,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe "#account_for_user!" do
-    let(:user) { users(:owner) }
-
-    context "shared gpdb instance" do
-      let(:gpdb_data_source) { FactoryGirl.create(:gpdb_data_source, :shared => true) }
-      let(:owner_account) { gpdb_data_source.owner_account }
-
-      it "should return the same account for everyone" do
-        gpdb_data_source.account_for_user!(user).should == owner_account
-        gpdb_data_source.account_for_user!(gpdb_data_source.owner).should == owner_account
-      end
-    end
-
-    context "individual gpdb instance" do
-      let(:gpdb_data_source) { data_sources(:owners) }
-      let!(:owner_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_data_source.id, gpdb_data_source.owner.id) }
-      let!(:user_account) { InstanceAccount.find_by_instance_id_and_owner_id(gpdb_data_source.id, users(:the_collaborator).id) }
-
-      it "should return the account for the user" do
-        gpdb_data_source.account_for_user!(gpdb_data_source.owner).should == owner_account
-        gpdb_data_source.account_for_user!(user_account.owner).should == user_account
-      end
-    end
-
-    context "missing account" do
-      let(:gpdb_data_source) { data_sources(:owners) }
-
-      it "raises an exception" do
-        expect { gpdb_data_source.account_for_user!(users(:no_collaborators)) }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
-
-  describe "#account_for_user" do
-    let(:gpdb_data_source) { data_sources(:owners) }
-
-    context "missing account" do
-      it "returns nil" do
-        gpdb_data_source.account_for_user(users(:no_collaborators)).should be_nil
-      end
-    end
-  end
-
   describe "search fields" do
     it "indexes text fields" do
       GpdbDataSource.should have_searchable_field :name
@@ -230,7 +187,7 @@ describe GpdbDataSource do
   describe "refresh_databases", :greenplum_integration do
     context "with database integration" do
       let(:account_with_access) { GreenplumIntegration.real_account }
-      let(:gpdb_data_source) { account_with_access.instance }
+      let(:gpdb_data_source) { account_with_access.data_source }
       let(:database) { GreenplumIntegration.real_database }
 
       it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_datasets" do
@@ -350,10 +307,9 @@ describe GpdbDataSource do
     let(:account) { GreenplumIntegration.real_account }
 
     it "should not include the 'template0' database" do
-      account.instance.databases.map(&:name).should_not include "template0"
+      account.data_source.databases.map(&:name).should_not include "template0"
     end
   end
-
 
   describe "#destroy" do
     let(:instance) { data_sources(:owners) }

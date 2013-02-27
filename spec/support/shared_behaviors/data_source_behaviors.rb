@@ -29,7 +29,7 @@ shared_examples_for :data_source_with_access_control do
       @data_source_with_membership = FactoryGirl.create factory_name
       @data_source_forbidden = FactoryGirl.create factory_name
 
-      @membership_account = FactoryGirl.build :instance_account, :owner => user, :instance => @data_source_with_membership
+      @membership_account = FactoryGirl.build :instance_account, :owner => user, :data_source => @data_source_with_membership
       @membership_account.save(:validate => false)
     end
 

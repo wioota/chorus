@@ -116,7 +116,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # Instance Accounts
     @shared_instance_account = shared_instance.account_for_user(admin)
-    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :instance => owners_instance)
+    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => owners_instance)
     owner_instance_account = owners_instance.account_for_user(owner)
 
 
@@ -497,7 +497,7 @@ FixtureBuilder.configure do |fbuilder|
 
       @chorus_gpdb42_test_superuser = chorus_gpdb42_instance.account_for_user(admin)
 
-      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :instance => chorus_gpdb42_instance))
+      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42_instance))
 
       GreenplumIntegration.refresh_chorus
       chorus_gpdb42_instance.refresh_databases

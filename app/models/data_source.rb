@@ -5,8 +5,8 @@ class DataSource < ActiveRecord::Base
   attr_accessible :shared, :as => :create
 
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :instance, :foreign_key => "instance_id", :dependent => :destroy
-  has_one :owner_account, :class_name => 'InstanceAccount', :foreign_key => "instance_id", :inverse_of => :instance, :conditions => proc { {:owner_id => owner_id} }
+  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :data_source, :foreign_key => "data_source_id", :dependent => :destroy
+  has_one :owner_account, :class_name => 'InstanceAccount', :foreign_key => "data_source_id", :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -38,7 +38,7 @@ class DataSource < ActiveRecord::Base
   def self.accessible_to(user)
     where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           owned: user.id,
-          with_membership: user.instance_accounts.pluck(:instance_id)
+          with_membership: user.instance_accounts.pluck(:data_source_id)
     )
   end
 

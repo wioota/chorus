@@ -5,7 +5,7 @@ class InstanceAccountPresenter < Presenter
       :id => model.id,
       :db_username => model.db_username,
       :owner_id => model.owner_id,
-      :instance_id => model.instance_id,
+      :instance_id => model.data_source_id,
       :owner => present(model.owner),
       :entity_type => model.entity_type_name
     }

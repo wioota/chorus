@@ -14,16 +14,16 @@ describe InstanceAccount do
 
     it "validates the uniqueness of owner_id and instance_id" do
       account = InstanceAccount.first
-      instance = account.instance
-      stub(instance).valid_db_credentials?(anything) { true }
-      new_account = instance.accounts.build(:owner => account.owner)
+      data_source = account.data_source
+      stub(data_source).valid_db_credentials?(anything) { true }
+      new_account = data_source.accounts.build(:owner => account.owner)
       new_account.should_not be_valid
       new_account.should have_error_on(:owner_id).with_message(:taken)
     end
 
     it "validates the credentials are valid" do
       account = InstanceAccount.first
-      stub(account.instance).valid_db_credentials?(account) { false }
+      stub(account.data_source).valid_db_credentials?(account) { false }
       account.should_not be_valid
       account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
     end
@@ -31,7 +31,7 @@ describe InstanceAccount do
     context "during legacy migration" do
       it "does not validate credentials" do
         account = InstanceAccount.first
-        stub(account.instance).valid_db_credentials?(account) { false }
+        stub(account.data_source).valid_db_credentials?(account) { false }
         account.legacy_migrate = true
         account.should be_valid
       end
@@ -42,17 +42,17 @@ describe InstanceAccount do
     it { should belong_to :owner }
     it { should validate_presence_of :owner }
 
-    it { should belong_to :instance }
-    it { should validate_presence_of :instance }
+    it { should belong_to :data_source }
+    it { should validate_presence_of :data_source }
   end
 
   describe "password encryption in the rails database" do
     let(:owner) { users(:admin) }
-    let(:instance) { data_sources(:default) }
+    let(:data_source) { data_sources(:default) }
     let(:password) { "apass" }
     let(:instance_account) do
-      account = instance.account_for_user(owner)
-      stub(account.instance).valid_db_credentials?(anything) { true }
+      account = data_source.account_for_user(owner)
+      stub(account.data_source).valid_db_credentials?(anything) { true }
       account.update_attributes!(:db_password => password, :db_username => 'aname')
       account
     end
@@ -78,7 +78,7 @@ describe InstanceAccount do
     context "creating a new account" do
       it "should reindex" do
         mock(data_source).refresh_databases_later
-        FactoryGirl.create(:instance_account, :owner => user, :instance => data_source)
+        FactoryGirl.create(:instance_account, :owner => user, :data_source => data_source)
       end
     end
 
@@ -86,7 +86,7 @@ describe InstanceAccount do
       let(:user) { users(:the_collaborator) }
       let(:account) { data_source.account_for_user(user) }
       it "should reindex" do
-        mock(account.instance).refresh_databases_later
+        mock(account.data_source).refresh_databases_later
         account.destroy
       end
     end
@@ -96,7 +96,7 @@ describe InstanceAccount do
       let(:account) { data_source.account_for_user(user) }
 
       it "should reindex" do
-        mock(account.instance).refresh_databases_later
+        mock(account.data_source).refresh_databases_later
         account.update_attributes(:db_username => "baz")
       end
     end

@@ -31,7 +31,7 @@ describe Gpdb::InstanceOwnership do
 
       context "when switching to a user with an existing account" do
         before do
-          FactoryGirl.build(:instance_account, :instance => gpdb_data_source, :owner => new_owner).tap { |a| a.save(:validate => false)}
+          FactoryGirl.build(:instance_account, :data_source => gpdb_data_source, :owner => new_owner).tap { |a| a.save(:validate => false)}
         end
 
         it "switches ownership of instance" do

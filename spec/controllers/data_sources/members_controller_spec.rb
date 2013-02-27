@@ -55,7 +55,7 @@ describe DataSources::MembersController do
             rehydrated_account.db_username.should == "lenny"
             rehydrated_account.db_password.should == "secret"
             rehydrated_account.owner.should == admin
-            rehydrated_account.instance.should == data_source
+            rehydrated_account.data_source.should == data_source
           end
         end
       end
@@ -79,7 +79,7 @@ describe DataSources::MembersController do
             rehydrated_account.db_username.should == "lenny"
             rehydrated_account.db_password.should == "secret"
             rehydrated_account.owner.should == instance_owner
-            rehydrated_account.instance.should == data_source
+            rehydrated_account.data_source.should == data_source
           end
         end
       end
@@ -210,7 +210,7 @@ describe DataSources::MembersController do
 
     describe "#destroy" do
       before do
-        @other_user_account = FactoryGirl.build(:instance_account, :instance => data_source, :owner => other_user).tap { |a| a.save(:validate => false) }
+        @other_user_account = FactoryGirl.build(:instance_account, :data_source => data_source, :owner => other_user).tap { |a| a.save(:validate => false) }
       end
 
       context "when the current user is the instance's owner" do
