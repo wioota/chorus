@@ -286,7 +286,7 @@ class ChorusInstaller
 
   def validate_schema_names
     unless @executor.rake "validations:schema_names"
-      raise InstallerErrors::InstallAborted, "Duplicate schema names found! Please run 'rake merge_duplicate_schemas' to fix this and try again."
+      raise InstallerErrors::InstallAborted, "Duplicate schema names found! Please run 'rake data:merge_duplicate_schemas' to fix this and try again."
     end
   end
 

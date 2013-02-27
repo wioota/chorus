@@ -31,7 +31,7 @@ module DuplicateSchemaValidator
   private
 
   def self.get_duplicate_schemas
-    schemas = Schema.all
+    schemas = Schema.where(:deleted_at => nil).all
 
     indexed_schemas = schemas.inject({}) do |indexed, schema|
       key = [schema.name, schema.parent_id, schema.parent_type].to_param
