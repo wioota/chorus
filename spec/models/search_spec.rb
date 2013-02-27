@@ -260,7 +260,7 @@ describe Search do
     let(:chorus_view) { datasets(:searchquery_chorus_view) }
 
     before do
-      reindex_solr_fixtures
+      index_solr_fixtures_once
     end
 
     def create_and_record_search(*args)

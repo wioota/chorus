@@ -5,7 +5,7 @@ describe TypeAheadSearchPresenter, :type => :view do
   let(:user) { users(:owner) }
 
   before do
-    reindex_solr_fixtures
+    index_solr_fixtures_once
     set_current_user(user)
   end
 

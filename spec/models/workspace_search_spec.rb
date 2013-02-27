@@ -77,7 +77,7 @@ describe WorkspaceSearch do
     let(:matching_view) { datasets(:searchquery_chorus_view) }
     let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
     before do
-      reindex_solr_fixtures
+      index_solr_fixtures_once
     end
 
     describe "num_found" do
