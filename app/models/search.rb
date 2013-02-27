@@ -29,7 +29,7 @@ class Search
   end
 
   def models_to_search
-    [User, GpdbDataSource, HadoopInstance, GnipInstance, Workspace, Workfile, Dataset, HdfsEntry, Attachment].select do |model|
+    [User, GpdbDataSource, HadoopInstance, GnipInstance, Workspace, Workfile, Dataset, HdfsEntry, Attachment, OracleDataSource].select do |model|
       entity_type.nil? || class_name_to_key(model.type_name) == class_name_to_key(entity_type)
     end
   end

@@ -177,13 +177,6 @@ describe GpdbDataSource do
     end
   end
 
-  describe "search fields" do
-    it "indexes text fields" do
-      GpdbDataSource.should have_searchable_field :name
-      GpdbDataSource.should have_searchable_field :description
-    end
-  end
-
   describe "refresh_databases", :greenplum_integration do
     context "with database integration" do
       let(:account_with_access) { GreenplumIntegration.real_account }

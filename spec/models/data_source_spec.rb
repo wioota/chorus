@@ -159,4 +159,37 @@ describe DataSource do
       end
     end
   end
+
+  describe "search fields" do
+    it "indexes text fields" do
+      DataSource.should have_searchable_field :name
+      DataSource.should have_searchable_field :description
+    end
+  end
+
+  describe ".reindex_data_source" do
+    let(:instance) { data_sources(:owners) }
+
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
+    it "reindexes itself" do
+      mock(Sunspot).index(instance)
+      DataSource.reindex_data_source(instance.id)
+    end
+
+    it "should reindex all of it's datasets" do
+      mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
+      DataSource.reindex_data_source(instance.id)
+    end
+  end
+
+  describe ".solr_reindex_later" do
+    let(:instance) { data_sources(:owners) }
+    it "should enqueue a job" do
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.reindex_data_source", instance.id)
+      instance.solr_reindex_later
+    end
+  end
 end

@@ -14,12 +14,6 @@ class GpdbDataSource < DataSource
   before_validation :build_instance_account_for_owner, :on => :create
   after_update :create_instance_name_changed_event, :if => :current_user
 
-  attr_accessor :highlighted_attributes, :search_result_notes
-  searchable_model do
-    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-  end
-
   def self.create_for_user(user, data_source_hash)
     user.gpdb_data_sources.create!(data_source_hash, :as => :create)
   end

@@ -21,6 +21,12 @@ class DataSource < ActiveRecord::Base
   after_create :enqueue_refresh
   after_create :create_data_source_created_event, :if => :current_user
 
+  attr_accessor :highlighted_attributes, :search_result_notes
+  searchable_model do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+  end
+
   def self.by_type(entity_type)
     if entity_type == "gpdb_data_source"
       where(type: "GpdbDataSource")
@@ -29,6 +35,16 @@ class DataSource < ActiveRecord::Base
     else
       self
     end
+  end
+
+  def self.reindex_data_source(id)
+    data_source = find(id)
+    data_source.solr_index
+    data_source.datasets(:reload => true).each(&:solr_index)
+  end
+
+  def solr_reindex_later
+    QC.enqueue_if_not_queued('DataSource.reindex_instance', id)
   end
 
   def self.unshared
@@ -114,12 +130,6 @@ class DataSource < ActiveRecord::Base
 
   def solr_reindex_later
     QC.enqueue_if_not_queued('DataSource.reindex_data_source', id)
-  end
-
-  def self.reindex_data_source id
-    data_source = find(id)
-    data_source.solr_index
-    data_source.datasets(:reload => true).each(&:solr_index)
   end
 
   private

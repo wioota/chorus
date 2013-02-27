@@ -33,6 +33,7 @@ describe Search do
       search.search
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(GpdbDataSource)
+      Sunspot.session.should be_a_search_for(OracleDataSource)
       Sunspot.session.should be_a_search_for(HadoopInstance)
       Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
@@ -112,6 +113,7 @@ describe Search do
         search.search
         Sunspot.session.should_not be_a_search_for(User)
         Sunspot.session.should be_a_search_for(GpdbDataSource)
+        Sunspot.session.should be_a_search_for(OracleDataSource)
         Sunspot.session.should be_a_search_for(HadoopInstance)
         Sunspot.session.should be_a_search_for(GnipInstance)
       end

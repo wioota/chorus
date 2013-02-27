@@ -18,6 +18,10 @@ class OracleDataSource < DataSource
     end
   end
 
+  def self.type_name
+    'Instance'
+  end
+
   def connect_with(account)
     OracleConnection.new(
         :username => account.db_username,

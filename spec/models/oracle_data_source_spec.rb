@@ -33,6 +33,12 @@ describe OracleDataSource do
     it_should_behave_like :data_source_integration
   end
 
+  describe ".type_name" do
+    it "is Instance" do
+      subject.type_name.should == 'Instance'
+    end
+  end
+
   describe "#schemas" do
     let(:new_oracle) { FactoryGirl.create(:oracle_data_source) }
     let(:schema) { OracleSchema.create!(:name => 'test_schema', :data_source => new_oracle) }
