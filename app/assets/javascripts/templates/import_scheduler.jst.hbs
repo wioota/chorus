@@ -1,5 +1,11 @@
 <fieldset>
-    <div class="destination">{{t "import.destination" canonicalName=canonicalName}}</div>
+    <div class="destination">
+        {{#if allowSchemaSelection}}
+            <a class="select_schema">{{t "import.select_schema"}}</a>
+        {{else}}
+            {{t "import.destination" canonicalName=canonicalName}}
+        {{/if}}
+    </div>
 </fieldset>
 
 <fieldset class="new_table row">

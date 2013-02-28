@@ -976,6 +976,7 @@ describe("chorus.models.Dataset", function() {
             dataset = new inheritedModelClass();
             dataset.set({
                 workspace: rspecFixtures.workspace(),
+                schema: rspecFixtures.schema(),
                 hasCredentials: true
             });
             dataset.importConfiguration = false;
@@ -1003,6 +1004,11 @@ describe("chorus.models.Dataset", function() {
 
         it("shouldn't export when import config is not loaded", function() {
             expect(dataset.canExport()).toBeFalsy();
+        });
+
+        it("should export when data source is Oracle", function () {
+            dataset = rspecFixtures.oracleDataset();
+            expect(dataset.canExport()).toBeTruthy();
         });
     });
 

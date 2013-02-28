@@ -325,4 +325,32 @@ describe("chorus.dialogs.ImportNow", function() {
             });
         });
     });
+
+    context("without a workspace", function() {
+        beforeEach(function() {
+            this.dataset = rspecFixtures.oracleDataset();
+            this.dialog = new chorus.dialogs.ImportNow({
+                dataset: this.dataset
+            });
+            this.dialog.render();
+        });
+
+        context("clicking the schema link", function() {
+            beforeEach(function() {
+                this.modalSpy = stubModals();
+                this.dialog.$("a.select_schema").click();
+            });
+
+            it("displays a schema picker dialog", function() {
+                expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
+            });
+
+            it("sets the schema when one chosen", function() {
+                this.schema = rspecFixtures.schema();
+                this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+                expect(this.dialog.schema).toBe(this.schema);
+                expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
+            });
+        });
+    });
 });

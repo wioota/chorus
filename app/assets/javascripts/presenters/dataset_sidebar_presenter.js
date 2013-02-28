@@ -56,16 +56,13 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.hasWorkspace() && this.resource.workspace().id;
     },
 
-    hasSandbox: function() {
-        return this.hasWorkspace() && this.resource.workspace().sandbox();
+    importsEnabled: function() {
+        return (this.hasWorkspace() && this.resource.workspace().sandbox()) ||
+            (this.resource && this.resource.isOracle());
     },
 
     hasWorkspace: function() {
         return this.resource && this.realWorkspace();
-    },
-
-    activeWorkspace: function() {
-        return this.hasWorkspace() && this.resource.workspace().isActive();
     },
 
     isImportConfigLoaded: function() {
@@ -209,7 +206,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource && this.resource.hasImport();
     },
 
-    canExport: function canExport() {
+    canExport: function() {
         return !this.options.searchPage && this.resource && this.resource.canExport();
     },
 

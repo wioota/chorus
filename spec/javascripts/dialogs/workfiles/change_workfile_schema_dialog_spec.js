@@ -7,15 +7,15 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     describe("#render", function () {
         it("has the right title", function () {
-            expect(this.dialog.$(".dialog_header h1")).toContainTranslation("workfile.change_workfile_schema.title");
+            expect(this.dialog.$(".dialog_header h1")).toContainTranslation("schema_picker.change_workfile_schema.title");
         });
 
         it("has the right label text", function(){
-            expect(this.dialog.$el).toContainTranslation("workfile.change_workfile_schema.select_schema");
+            expect(this.dialog.$el).toContainTranslation("schema_picker.change_workfile_schema.select_schema");
         });
 
         it("has a Save Search Path button", function () {
-            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("workfile.change_workfile_schema.save_search_path");
+            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("schema_picker.change_workfile_schema.save");
         });
 
         it("has a Cancel button", function () {
@@ -71,7 +71,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             });
 
             it("displays toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("workfile.change_workfile_schema.saved_message");
+                expect(chorus.toast).toHaveBeenCalledWith("schema_picker.change_workfile_schema.saved_message");
             });
 
             it("presents the new execution schema", function(){

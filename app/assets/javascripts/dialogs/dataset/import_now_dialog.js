@@ -15,7 +15,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         "cut input:text": "onInputFieldChanged",
         "click button.submit": "saveModel",
         "click button.cancel": "onClickCancel",
-        "click .existing_table a.dataset_picked": "launchDatasetPickerDialog"
+        "click .existing_table a.dataset_picked": "launchDatasetPickerDialog",
+        "click a.select_schema": "launchSchemaPickerDialog"
     },
 
     resourcesLoaded: function() {
@@ -29,17 +30,27 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.dataset = this.options.dataset;
-        this.workspace = this.options.workspace;
+        this.workspace = this.dataset.workspace();
+
+        this.schema = this.workspace && this.workspace.sandbox().schema();
+
+        var workspaceId = this.workspace &&
+            this.workspace.id;
+
         this.model = new chorus.models.DatasetImport({
             datasetId: this.dataset.get("id"),
-            workspaceId: this.dataset.get("workspace").id
+            workspaceId: workspaceId
         });
+        this.model.loaded = true;
     },
 
     setup: function() {
         this.importSchedules = this.dataset.getImportSchedules();
-        this.importSchedules.fetchIfNotLoaded();
-        this.requiredResources.push(this.importSchedules);
+
+        if(this.importSchedules) {
+            this.importSchedules.fetchIfNotLoaded();
+            this.requiredResources.push(this.importSchedules);
+        }
 
         this.customSetup();
     },
@@ -51,8 +62,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     saveModel: function() {
         this.$("button.submit").startLoading("import.importing");
-
-        this.model.set({ workspaceId: this.workspace.get("id") });
 
         this.model.unset("sampleCount", {silent: true});
         this.model.save(this.getNewModelAttrs());
@@ -97,15 +106,29 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         }
     },
 
+    launchSchemaPickerDialog: function(e) {
+        e.preventDefault();
+        var schemaPickerDialog = new chorus.dialogs.SchemaPicker({
+            action: "select_import_schema"
+        });
+        this.bindings.add(schemaPickerDialog, "schema:selected", this.schemaChosen, this);
+        this.launchSubModal(schemaPickerDialog);
+    },
+
+    schemaChosen: function(schema) {
+        this.schema = schema;
+        this.$("a.select_schema").text(schema.canonicalName());
+    },
+
     setFieldValues: function(schedule) {
         this.$("input[type='radio']").prop("checked", false);
         var newTable = schedule.get("newTable") === true;
-        if (!newTable) {
-            this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
-            this.changeSelectedDataset(schedule.get("toTable"));
-        } else {
+        if (newTable) {
             this.$(".new_table input.name").val(schedule.get("toTable"));
             this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
+        } else {
+            this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
+            this.changeSelectedDataset(schedule.get("toTable"));
         }
 
         this.$(".truncate").prop("checked", !!schedule.get("truncate"));
@@ -153,7 +176,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            canonicalName: this.workspace.sandbox().schema().canonicalName(),
+            allowSchemaSelection: !this.workspace,
+            canonicalName: this.schema && this.schema.canonicalName(),
             showSchedule: this.showSchedule,
             submitText: this.submitText
         };

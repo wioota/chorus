@@ -36,7 +36,7 @@
     <div class="actions">
         <ul>
             {{#if realWorkspace}}
-                {{#if activeWorkspace}}
+                {{#unless workspaceArchived}}
                     <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="dataset" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                     {{#if isChorusView}}
                         {{#if hasInstanceAccount}}
@@ -46,15 +46,15 @@
                     {{else}}
                         <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
                     {{/if}}
-                {{/if}}
+                {{/unless}}
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="dataset" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
                 <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
             {{/if}}
 
-            {{#if activeWorkspace}}
+            {{#unless workspaceArchived}}
                 {{#if canExport}}
-                    {{#if hasSandbox}}
+                    {{#if importsEnabled}}
                         <li><a class="import_now dialog" data-dialog="ImportNow" href="#">{{t "actions.import_now"}}</a></li>
                         {{#if hasSchedule}}
                             <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" data-action="edit_schedule" href="#">{{t "actions.edit_schedule"}}</a></li>
@@ -72,7 +72,7 @@
                         {{/if}}
                     {{/if}}
                 {{/if}}
-            {{/if}}
+            {{/unless}}
 
             {{#unless noCredentials}}
                 {{#if listMode}}
@@ -90,9 +90,9 @@
                 <li><a class="import_dataset" href="#">{{t "dataset.actions.import_dataset"}}</a></li>
             {{/if}}
 
-            {{#if activeWorkspace}}
+            {{#unless workspaceArchived}}
                 {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
-            {{/if}}
+            {{/unless}}
         </ul>
     </div>
 

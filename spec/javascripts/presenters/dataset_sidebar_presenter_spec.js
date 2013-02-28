@@ -8,8 +8,7 @@ function itBehavesLikeARegularDataset(presenter) {
     expect(presenter.typeString()).toBeTruthy();
     expect(presenter.workspaceId()).toBeFalsy();
     expect(presenter.realWorkspace()).toBeFalsy();
-    expect(presenter.hasSandbox()).toBeFalsy();
-    expect(presenter.activeWorkspace()).toBeFalsy();
+    expect(presenter.importsEnabled()).toBeFalsy();
     expect(presenter.isDeleteable()).toBeFalsy();
     expect(presenter.isImportConfigLoaded()).toBeFalsy();
     expect(presenter.hasSchedule()).toBeFalsy();
@@ -329,29 +328,38 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
         context("with a workspace table", function() {
-            var presenter, sidebar, resource;
             beforeEach(function() {
-                resource = rspecFixtures.workspaceDataset.datasetTable();
-                resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 });
-                presenter = new chorus.presenters.DatasetSidebar(resource);
+                this.resource = rspecFixtures.workspaceDataset.datasetTable();
+                this.resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 });
+                this.presenter = new chorus.presenters.DatasetSidebar(this.resource);
             });
 
             it("returns everything", function() {
-                expect(presenter.workspaceArchived()).toBeFalsy();
-                expect(presenter.hasSandbox()).toBeTruthy();
-                expect(presenter.workspaceId()).not.toBeEmpty();
-                expect(presenter.activeWorkspace()).toBeTruthy();
+                expect(this.presenter.workspaceArchived()).toBeFalsy();
+                expect(this.presenter.importsEnabled()).toBeTruthy();
+                expect(this.presenter.workspaceId()).not.toBeEmpty();
             });
 
             context("when the searchPage option is true", function() {
-                var presenter;
                 beforeEach(function() {
-                    presenter = new chorus.presenters.DatasetSidebar(resource, {searchPage: true});
+                    this.presenter = new chorus.presenters.DatasetSidebar(this.resource, {searchPage: true});
                 });
 
                 it("returns everything", function() {
-                    itBehavesLikeARegularDataset(presenter);
+                    itBehavesLikeARegularDataset(this.presenter);
                 });
+            });
+        });
+
+        context("with an Oracle dataset", function() {
+            beforeEach(function() {
+                var resource = rspecFixtures.oracleDataset();
+                this.presenter = new chorus.presenters.DatasetSidebar(resource);
+            });
+
+            it("enables imports", function() {
+                expect(this.presenter.workspaceArchived()).toBeFalsy();
+                expect(this.presenter.importsEnabled()).toBeTruthy();
             });
         });
     });

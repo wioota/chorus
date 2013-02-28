@@ -6,20 +6,20 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
         "click button.submit": "save"
     },
 
-    subviews:{
-        ".schema_picker":"schemaPicker"
+    subviews: {
+        ".schema_picker": "schemaPicker"
     },
 
-    title:t("workfile.change_workfile_schema.title"),
+    title: t("schema_picker.change_workfile_schema.title"),
 
-    setup:function () {
+    setup: function() {
         this.bindings.add(this.model, "saved", this.saved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
 
         var options = {};
 
         var schema = this.model.executionSchema();
-        if (schema) {
+        if(schema) {
             options.defaultSchema = schema;
         }
 
@@ -43,7 +43,7 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("workfile.change_workfile_schema.saved_message");
+        chorus.toast("schema_picker.change_workfile_schema.saved_message");
         chorus.PageEvents.broadcast("workfile:changed", this.model);
     },
 
@@ -51,7 +51,7 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
         this.showErrors(this.model);
     },
 
-    enableOrDisableSubmitButton:function () {
+    enableOrDisableSubmitButton: function() {
         this.$("button.submit").prop("disabled", !this.schemaPicker.ready());
     }
 });
