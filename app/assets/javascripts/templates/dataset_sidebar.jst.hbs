@@ -49,7 +49,9 @@
                 {{/unless}}
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="dataset" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
-                <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
+                {{#if canAssociate}}
+                    <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
+                {{/if}}
             {{/if}}
 
             {{#unless workspaceArchived}}

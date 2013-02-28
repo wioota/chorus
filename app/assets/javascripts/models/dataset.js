@@ -268,12 +268,12 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.get('hasCredentials') !== false;
     },
 
-    analyzableObjectType: function() {
-        return this.get("objectType") === "TABLE";
+    isGpdbTable: function() {
+        return this.get("objectType") === "TABLE" && this.isGreenplum();
     },
 
     canAnalyze: function() {
-        return this.hasCredentials() && this.analyzableObjectType() && !this.workspaceArchived();
+        return this.hasCredentials() && this.isGpdbTable() && !this.workspaceArchived();
     },
 
     analyze: function() {

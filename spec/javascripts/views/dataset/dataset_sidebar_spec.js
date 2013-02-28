@@ -79,7 +79,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("does not display for a view", function() {
-                this.dataset = rspecFixtures.dataset({objectType: "VIEW"});
+                this.dataset = rspecFixtures.workspaceDataset.datasetView();
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
@@ -698,6 +698,17 @@ describe("chorus.views.DatasetSidebar", function() {
 
             it("has a link to associate the dataset with a workspace", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
+            });
+
+            context('when the dataset is an oracle dataset', function(){
+                beforeEach(function(){
+                    this.dataset = rspecFixtures.oracleDataset();
+                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                });
+
+                it('doesnt show the associate link', function(){
+                    expect(this.view.$('.actions .associate')).not.toExist();
+                });
             });
 
             describe("when the 'associate with workspace' link is clicked", function() {

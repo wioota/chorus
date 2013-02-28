@@ -43,6 +43,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return deleteMsgKey || "";
     },
 
+    canAssociate: function() {
+        return this.resource.isGreenplum();
+    },
+
     isDeleteable: function() {
         return !this.options.searchPage && this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
     },
@@ -199,7 +203,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canImport: function() {
-        return this.resource && this.resource.schema() && this.resource.isOracle();
+        return this.resource && this.resource.isOracle();
     },
 
     hasImport: function() {

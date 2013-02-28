@@ -181,8 +181,9 @@ describe("chorus.pages.DatasetShowPage", function () {
     context('when the dataset fetch fails with errors', function () {
         beforeEach(function () {
             spyOn(Backbone.history, "loadUrl");
+
             this.server.lastFetchFor(this.dataset).failUnprocessableEntity(
-                { record: 'MISSING_DB_OBJECT' }, { object_name: 'Table Name'});
+                { record: 'MISSING_DB_OBJECT' }, rspecFixtures.dataset().toJSON());
         });
 
         it('stays on the page', function () {
@@ -190,7 +191,7 @@ describe("chorus.pages.DatasetShowPage", function () {
         });
 
         it("renders the header", function () {
-            expect(this.page.$('h1')).toContainText('Table Name');
+            expect(this.page.$('h1')).toExist();
         });
 
         it('shows the error bar', function () {

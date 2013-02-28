@@ -929,25 +929,32 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#analyzableObjectType", function() {
+    describe("#isGpdbTable", function() {
+        var dataset;
+        
         it("returns true for a sandbox table", function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            expect(this.dataset.analyzableObjectType()).toBeTruthy();
+            dataset = rspecFixtures.workspaceDataset.datasetTable();
+            expect(dataset.isGpdbTable()).toBeTruthy();
         });
 
         it("returns true for a source table", function() {
-            this.dataset = rspecFixtures.dataset();
-            expect(this.dataset.analyzableObjectType()).toBeTruthy();
+            dataset = rspecFixtures.dataset();
+            expect(dataset.isGpdbTable()).toBeTruthy();
         });
 
         it("returns false for views", function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetView();
-            expect(this.dataset.analyzableObjectType()).toBeFalsy();
+            dataset = rspecFixtures.workspaceDataset.datasetView();
+            expect(dataset.isGpdbTable()).toBeFalsy();
         });
 
-        it("returns false for Chorus views", function() {
-            this.dataset = rspecFixtures.workspaceDataset.chorusView();
-            expect(this.dataset.analyzableObjectType()).toBeFalsy();
+        it("returns false for chorus views", function() {
+            dataset = rspecFixtures.workspaceDataset.chorusView();
+            expect(dataset.isGpdbTable()).toBeFalsy();
+        });
+
+        it('returns false when the dataset is not greenplum', function(){
+            dataset = rspecFixtures.oracleDataset();
+            expect(dataset.isGpdbTable()).toBeFalsy();
         });
     });
 
@@ -1050,27 +1057,28 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#analyzableObjectType", function() {
+    describe("#canAnalyze", function() {
         it("returns true when user has credentials, object type is table and workspace is not archived", function() {
             this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
             expect(this.dataset.canAnalyze()).toBeTruthy();
         });
 
-        it("returns false when hasCredentials is falsy", function() {
+        it("returns false when the user has no credentials", function() {
             this.dataset.set({ hasCredentials: false, objectType: "TABLE" });
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
-        it("returns false when analyzableObjectType is falsy", function() {
+        it("returns false for dataset that is not a gpdb table", function() {
             this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" });
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
-        it("returns false when workspaceArchived is not falsy", function() {
+        it("returns false when the workspace is archived", function() {
             this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
             this.dataset._workspace = rspecFixtures.workspace({ archivedAt: "2012-12-12"});
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
+
     });
 
     describe("Analyze", function() {
