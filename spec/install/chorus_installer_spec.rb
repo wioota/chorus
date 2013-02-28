@@ -838,24 +838,47 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#validate_schema_names" do
+  describe "#merge_duplicate_schemas" do
     context "when there are duplicate Schema names" do
       before do
-        mock(executor).rake("validations:schema_names") {false}
+        stub(executor).rake("data:merge_duplicate_schemas")
+        stub(executor).rake("validations:schema_names") {false}
       end
 
-      xit "raises an installer error" do
-        expect { installer.validate_schema_names }.to raise_error(InstallerErrors::InstallAborted)
+      it "requires confirmation from the user to merge duplicate schemas" do
+        mock(io).require_confirmation(anything)
+        installer.merge_duplicate_schemas
+      end
+
+      context "when the user accepts the merge" do
+        before do
+          stub(io).require_confirmation(anything) { }
+        end
+
+        it "merges the duplicate schemas" do
+          mock(executor).rake("data:merge_duplicate_schemas")
+          installer.merge_duplicate_schemas
+        end
+      end
+
+      context "when the user does not accept the merge" do
+        before do
+          stub(io).require_confirmation(anything) { raise StandardError.new }
+        end
+
+        it "does not merge the duplicate schemas" do
+          dont_allow(executor).rake("data:merge_duplicate_schemas")
+
+          expect {
+            installer.merge_duplicate_schemas
+          }.to raise_error
+        end
       end
     end
 
     context "when there are no duplicate Schema names" do
       before do
         mock(executor).rake("validations:schema_names") {true}
-      end
-
-      xit "does not raise an error" do
-        expect { installer.validate_schema_names }.to_not raise_error
       end
     end
   end
