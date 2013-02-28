@@ -15,7 +15,7 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
         context("with filter type", function() {
             it("appends the filter type", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
-                expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({type: "SOURCE_TABLE", per_page: "10", page: "1"});
+                expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({entity_subtype: "SOURCE_TABLE", per_page: "10", page: "1"});
             });
         });
 
@@ -40,7 +40,7 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
                 this.collection.attributes.namePattern = "Foo";
                 this.collection.attributes.database = rspecFixtures.database({id: "123"});
                 expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
-                    type: "SOURCE_TABLE",
+                    entity_subtype: "SOURCE_TABLE",
                     namePattern: "Foo",
                     databaseId: "123",
                     per_page: "10",

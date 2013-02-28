@@ -21,7 +21,7 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
         return {
             namePattern: this.attributes.namePattern,
             databaseId: this.attributes.database && this.attributes.database.id,
-            type: this.attributes.type
+            entitySubtype: this.attributes.type
         };
     },
 
