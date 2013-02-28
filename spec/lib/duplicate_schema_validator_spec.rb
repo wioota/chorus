@@ -1,14 +1,24 @@
 require 'spec_helper'
 
+def add_index
+  unless conn.index_exists? :schemas, [:name, :parent_id, :parent_type], :unique => true
+    conn.add_index :schemas, [:name, :parent_id, :parent_type], :unique => true
+  end
+end
+
+def remove_index
+  if conn.index_exists? :schemas, [:name, :parent_id, :parent_type], :unique => true
+    conn.remove_index :schemas, :column => [:name, :parent_id, :parent_type]
+  end
+end
+
 describe DuplicateSchemaValidator do
   let(:conn) { ActiveRecord::Base.connection }
 
   describe ".run" do
     context "when the unique index exists" do
       before do
-        unless conn.index_exists? :schemas, [:parent_id, :parent_type, :name], :unique => true
-          conn.add_index :schemas, [:parent_id, :parent_type, :name], :unique => true
-        end
+        add_index
       end
 
       it "returns true" do
@@ -18,9 +28,7 @@ describe DuplicateSchemaValidator do
 
     context "when the unique index does not exist" do
       before do
-        if conn.index_exists? :schemas, [:parent_id, :parent_type, :name], :unique => true
-          conn.remove_index :schemas, [:parent_id, :parent_type, :name]
-        end
+        remove_index
       end
 
       context "when there are duplicate schema names" do
@@ -51,9 +59,7 @@ describe DuplicateSchemaValidator do
   describe ".run_and_fix" do
     context "when the unique index exists" do
       before do
-        unless conn.index_exists? :schemas, [:parent_id, :parent_type, :name], :unique => true
-          conn.add_index :schemas, [:parent_id, :parent_type, :name], :unique => true
-        end
+        add_index
       end
 
       it "returns true" do
@@ -63,9 +69,7 @@ describe DuplicateSchemaValidator do
 
     context "when the unique index does not exist" do
       before do
-        if conn.index_exists? :schemas, [:parent_id, :parent_type, :name], :unique => true
-          conn.remove_index :schemas, [:parent_id, :parent_type, :name]
-        end
+        remove_index
       end
 
       context "when there are no duplicate schemas" do

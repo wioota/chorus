@@ -38,6 +38,10 @@ module DuplicateSchemaValidator
   private
 
   def self.get_duplicate_schemas
+    if ActiveRecord::Base.connection.index_exists? :schemas, [:name, :parent_id, :parent_type], :unique => true
+      return {}
+    end
+
     schemas = Schema.all
 
     indexed_schemas = schemas.inject({}) do |indexed, schema|
