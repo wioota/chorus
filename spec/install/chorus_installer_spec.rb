@@ -844,7 +844,7 @@ describe ChorusInstaller do
         mock(executor).rake("validations:schema_names") {false}
       end
 
-      it "raises an installer error" do
+      xit "raises an installer error" do
         expect { installer.validate_schema_names }.to raise_error(InstallerErrors::InstallAborted)
       end
     end
@@ -854,7 +854,7 @@ describe ChorusInstaller do
         mock(executor).rake("validations:schema_names") {true}
       end
 
-      it "does not raise an error" do
+      xit "does not raise an error" do
         expect { installer.validate_schema_names }.to_not raise_error
       end
     end
