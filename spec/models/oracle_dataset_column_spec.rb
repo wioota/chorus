@@ -51,4 +51,31 @@ describe OracleDatasetColumn do
       column1.statistics.should be_nil
     end
   end
+
+  describe "#is_supported?" do
+    let(:column) {OracleDatasetColumn.new(:name => "column_name",
+                                          :data_type => column_data_type,
+                                          :ordinal_position => 1,
+                                          :description => "description")}
+
+    context "when the column data type is supported" do
+      OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys.each do |type|
+        let(:column_data_type) { type }
+
+        it "returns true for #{type}" do
+          column.is_supported?.should be_true
+        end
+      end
+    end
+
+    context "when the column data type is unsupported" do
+      (OracleDbTypeConversions::CATEGORY_MAP.keys - OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys).each do |type|
+        let(:column_data_type) { type }
+
+        it "returns false for #{type}" do
+          column.is_supported?.should be_false
+        end
+      end
+    end
+  end
 end

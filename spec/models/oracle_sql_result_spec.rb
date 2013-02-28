@@ -36,7 +36,7 @@ describe OracleSqlResult do
         end
       end
 
-      it "returns the column name" do
+      it "returns the column type" do
         (0...column_data_types.length).each do |index|
           result.column_string_value(fake_meta_data, fake_result_set, index).should == "column_type"
         end
