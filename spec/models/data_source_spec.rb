@@ -88,12 +88,6 @@ describe DataSource do
 
     it 'refreshes databases for the data source' do
       mock(data_source).refresh_databases({})
-      stub(data_source).refresh_all
-      data_source.refresh
-    end
-
-    it 'calls refresh all' do
-      stub(data_source).refresh_databases
       mock(data_source).refresh_schemas({})
       data_source.refresh
     end
