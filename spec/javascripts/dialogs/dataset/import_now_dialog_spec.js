@@ -351,6 +351,20 @@ describe("chorus.dialogs.ImportNow", function() {
                 expect(this.dialog.schema).toBe(this.schema);
                 expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
             });
+
+            context("when the form is submitted", function() {
+                beforeEach(function() {
+                    this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                    this.schema = rspecFixtures.schema();
+                    this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("saves the model", function() {
+                    expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
+                    expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[schema_id]"]).toBe(this.schema.id);
+                });
+            });
         });
     });
 });
