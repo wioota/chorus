@@ -256,5 +256,16 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.liToClick).toHaveClass("selected");
             });
         });
+
+        describe("checking a data source checkbox", function() {
+            it("broadcasts the selected event with the right models", function() {
+                spyOn(chorus.PageEvents, 'broadcast');
+                this.view.$("li input:checkbox").eq(0).click().change();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+                var lastTwoCalls = chorus.PageEvents.broadcast.calls.slice(-2);
+                var selectedModelsCollection = lastTwoCalls[0].args[1];
+                expect(selectedModelsCollection.length).toEqual(1);
+            });
+        });
     });
 });

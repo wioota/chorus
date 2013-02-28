@@ -59,7 +59,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     checkboxChanged: function(e) {
         var clickedBox = $(e.currentTarget);
         var clickedLi = $(e.currentTarget.parentElement);
-        var index = this.$("> li input[type=checkbox]").index(clickedBox);
+        var index = this.$("li input[type=checkbox]").index(clickedBox);
         var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
 

@@ -1,9 +1,9 @@
-chorus.views.InstanceList = chorus.views.Base.extend({
+chorus.views.InstanceList = chorus.views.CheckableList.extend({
     constructorName: "InstanceListView",
     templateName: "instance_list",
 
     events: {
-        "click li": "selectItem"
+        "click li": "listItemClicked"
     },
 
     makeModel: function() {
@@ -15,12 +15,32 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         this.bindings.add(this.hadoopInstances, "change", this.render);
         this.bindings.add(this.gnipInstances, "change", this.render);
 
-        this.bindings.add(this.dataSources, "reset", this.render);
-        this.bindings.add(this.hadoopInstances, "reset", this.render);
-        this.bindings.add(this.gnipInstances, "reset", this.render);
+        this.bindings.add(this.dataSources, "reset", this.renderAndSetupCheckable);
+        this.bindings.add(this.hadoopInstances, "reset", this.renderAndSetupCheckable);
+        this.bindings.add(this.gnipInstances, "reset", this.renderAndSetupCheckable);
+    },
+
+    renderAndSetupCheckable: function() {
+        this.render();
+        this.setupCheckableCollection();
+    },
+
+    setupCheckableCollection: function() {
+        this.collection.reset();
+        this.dataSources.each(function(dataSource) {
+            this.collection.add(dataSource);
+        }, this);
+        this.hadoopInstances.each(function(hadoop) {
+            this.collection.add(hadoop);
+        }, this);
+        this.gnipInstances.each(function(gnip) {
+            this.collection.add(gnip);
+        }, this);
     },
 
     setup: function() {
+        this.collection = new chorus.collections.Base();
+        this._super('setup', arguments);
         this.subscribePageEvent("instance:added", function(instance) {
             this.dataSources.fetchAll();
             this.hadoopInstances.fetchAll();
@@ -56,8 +76,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         return presenter.present();
     },
 
-    selectItem: function(e) {
-        var target = $(e.currentTarget);
+    selectItem: function(target) {
         if(target.hasClass("selected")) {
             return;
         }
