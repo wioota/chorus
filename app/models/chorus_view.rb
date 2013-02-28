@@ -8,6 +8,10 @@ class ChorusView < GpdbDataset
 
   belongs_to :workspace
 
+  # Don't count ChorusViews in Schema's Dataset counter cache
+  after_create :decrement_counter_cache
+  after_destroy :increment_counter_cache
+
   include_shared_search_fields :workspace, :workspace
 
   validates_presence_of :workspace, :query
@@ -100,5 +104,15 @@ class ChorusView < GpdbDataset
 
   def verify_in_source(user)
     true
+  end
+
+  private
+
+  def increment_counter_cache
+    Schema.increment_counter(:active_tables_and_views_count, schema_id)
+  end
+
+  def decrement_counter_cache
+    Schema.decrement_counter(:active_tables_and_views_count, schema_id)
   end
 end
