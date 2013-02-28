@@ -18,6 +18,8 @@ module DuplicateSchemaValidator
           link_workfiles(original, duplicate)
           link_workspaces(original, duplicate)
           link_chorus_views(original, duplicate)
+          link_datasets(original, duplicate)
+
           duplicate.destroy
         end
 
@@ -66,4 +68,77 @@ module DuplicateSchemaValidator
       SQL
     end
   end
+
+  def self.link_datasets(original, duplicate)
+    #original.refresh_datasets
+    duplicate.datasets.each do |dup_dataset|
+      original_dataset = original.datasets.find_by_name(dup_dataset.name)
+      link_dataset_activities(original_dataset, dup_dataset)
+      link_dataset_events(original_dataset, dup_dataset)
+      link_dataset_associated_datasets(original_dataset, dup_dataset)
+      link_dataset_import_schedules(original_dataset, dup_dataset)
+      link_dataset_imports(original_dataset, dup_dataset)
+    end
+  end
+
+  def self.link_dataset_activities(original, duplicate)
+    Activity.where(:entity_id => duplicate.id,
+                   :entity_type => POLYMORPHIC_DATASET_TYPES).each do |activity|
+      activity.entity = original
+      activity.save!
+    end
+  end
+
+  def self.link_dataset_events(original, duplicate)
+    query = Events::Base.where(
+        :target1_id => duplicate.id,
+        :target1_type => POLYMORPHIC_DATASET_TYPES
+    )
+
+    query.all.each do |event|
+      event.target1 = original
+      event.save!
+    end
+
+    query = Events::Base.where(
+        :target2_id => duplicate.id,
+        :target2_type => POLYMORPHIC_DATASET_TYPES
+    )
+
+    query.all.each do |event|
+      event.target2 = original
+      event.save!
+    end
+  end
+
+  def self.link_dataset_associated_datasets(original, duplicate)
+    AssociatedDataset.where(:dataset_id => duplicate.id).each do |association|
+      association.dataset = original
+      association.save!
+    end
+  end
+
+  def self.link_dataset_import_schedules(original, duplicate)
+    ImportSchedule.where(:source_dataset_id => duplicate.id).each do |schedule|
+      schedule.source_dataset = original
+      schedule.save!(:validate => false)
+    end
+  end
+
+  def self.link_dataset_imports(original, duplicate)
+    Import.where(:source_dataset_id => duplicate.id).each do |import|
+      import.source_dataset = original
+      import.save!(:validate => false)
+    end
+  end
+
+
+  POLYMORPHIC_DATASET_TYPES = [
+      'Dataset',
+      'ChorusView',
+      'GpdbTable',
+      'OracleTable',
+      'GpdbView',
+      'OracleView'
+  ]
 end

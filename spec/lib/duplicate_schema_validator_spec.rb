@@ -133,6 +133,123 @@ describe DuplicateSchemaValidator do
           chorusview1.reload.schema.should eq(duplicate_schemas_in_database.first)
           chorusview2.reload.schema.should eq(duplicate_schemas_in_database.first)
         end
+
+        it "deletes duplicate datasets" do
+          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[0])
+          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[1])
+
+          DuplicateSchemaValidator.run_and_fix
+
+          duplicate_schemas_in_database.first.datasets.where(:name => 'duplicate_table').count.should eq(1)
+        end
+
+        it "links activities for duplicate datasets to datasets in the remaining schema" do
+          activity_lists = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            activities = Events::DatasetImportCreated.by(users(:owner)).add(
+                :workspace => workspaces(:public),
+                :dataset => nil, :source_dataset => dataset,
+                :destination_table => 'other_table'
+            ).activities
+
+            activities.select { |activity| activity.entity_id == dataset.id }
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          activity_lists.each do |activities|
+            activities.each do |activity|
+              activity.reload.entity.should eq(duplicate_schemas_in_database.first.datasets.first)
+            end
+          end
+        end
+
+        it "links event target1 for duplicate datasets to datasets in the remaining schema" do
+          events = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            Events::DatasetImportCreated.by(users(:owner)).add(
+                :workspace => workspaces(:public),
+                :dataset => nil, :source_dataset => dataset,
+                :destination_table => 'other_table'
+            )
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          events.each do |event|
+            event.reload.target1.should eq(duplicate_schemas_in_database.first.datasets.first)
+          end
+        end
+
+        it "links event target2 for duplicate datasets to datasets in the remaining schema" do
+          events = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            Events::DatasetImportCreated.by(users(:owner)).add(
+                :workspace => workspaces(:public),
+                :dataset => dataset, :source_dataset => datasets(:table),
+                :destination_table => 'other_table'
+            )
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          events.each do |event|
+            event.reload.target2.should eq(duplicate_schemas_in_database.first.datasets.first)
+          end
+        end
+
+        it "links associated datasets for duplicate datasets to datasets in the remaining schema" do
+          workspaces = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            workspace = FactoryGirl.create(:workspace)
+            workspace.bound_datasets << dataset
+            workspace
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          workspaces.each do |workspace|
+            workspace.bound_datasets.where(
+                :id => duplicate_schemas_in_database.first.datasets.first
+            ).count.should eq(1)
+          end
+        end
+
+        it "links import schedules for duplicate datasets to datasets in the remaining schema" do
+          schedules = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            schedule = ImportSchedule.new()
+            schedule.source_dataset = dataset
+            any_instance_of(ImportSchedule) do |sched|
+              stub(sched).set_next_import { }
+            end
+            schedule.save!(:validate => false)
+            schedule
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          schedules.each do |schedule|
+            schedule.reload.source_dataset.should eq(duplicate_schemas_in_database.first.datasets.first)
+          end
+        end
+
+        it "links imports for duplicate datasets to datasets in the remaining schema" do
+          imports = duplicate_schema_objects.map do |schema|
+            dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
+            import = Import.new
+            import.source_dataset = dataset
+            import.save!(:validate => false)
+            import
+          end
+
+          DuplicateSchemaValidator.run_and_fix
+
+          imports.each do |import|
+            import.reload.source_dataset.should eq(duplicate_schemas_in_database.first.datasets.first)
+          end
+        end
+
       end
     end
   end
