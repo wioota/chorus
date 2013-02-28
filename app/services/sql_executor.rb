@@ -20,7 +20,7 @@ module SqlExecutor
     end
 
     def sql_execution_timeout
-      (60 * 1000 * (ChorusConfig.instance["execution_timeout_in_minutes"] || 0))
+      (60 * (ChorusConfig.instance["execution_timeout_in_minutes"] || 0))
     end
   end
 end

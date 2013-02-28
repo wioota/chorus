@@ -59,7 +59,7 @@ class GreenplumConnection < DataSourceConnection
 
   def set_timeout(timeout, statement)
     @connection.send(:statement, statement.connection) do |timeout_statement|
-      timeout_statement.execute "SET statement_timeout TO #{timeout}"
+      timeout_statement.execute "SET statement_timeout TO #{(timeout * 1000).to_i}"
     end
   end
 

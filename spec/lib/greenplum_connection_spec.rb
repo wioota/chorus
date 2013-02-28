@@ -172,7 +172,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     it "sets the statement_timeout" do
-      mock(statement).execute("SET statement_timeout TO 123")
+      mock(statement).execute("SET statement_timeout TO 123000")
       connection.set_timeout(123, statement)
     end
   end
@@ -323,7 +323,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     context "when a timeout is specified" do
-      let(:options) { {:timeout => 100} }
+      let(:options) { {:timeout => 0.1} }
       let(:sql) { "SELECT pg_sleep(.2);" }
 
       it "should raise a timeout error" do

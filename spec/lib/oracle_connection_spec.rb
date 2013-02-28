@@ -103,6 +103,46 @@ describe OracleConnection, :oracle_integration do
     end
   end
 
+  describe "#prepare_and_execute_statement" do
+    context "when a timeout is specified" do
+      let(:options) { {:timeout => 1} }
+      let(:too_many_rows) { 2500 }
+      let(:sql) do
+        sql = <<-SQL
+            INSERT INTO "#{OracleIntegration.schema_name}".BIG_TABLE
+        SQL
+        sql + (1..too_many_rows).map do |count|
+          <<-SQL
+            (SELECT #{count} FROM "#{OracleIntegration.schema_name}".BIG_TABLE)
+          SQL
+        end.join(" UNION ")
+      end
+
+      around do |example|
+        connection.execute(<<-SQL) rescue nil
+          CREATE TABLE "#{OracleIntegration.schema_name}".BIG_TABLE
+            (COLUMN1 NUMBER)
+        SQL
+
+        connection.execute <<-SQL
+            INSERT INTO "#{OracleIntegration.schema_name}".BIG_TABLE VALUES (0)
+        SQL
+
+        example.run
+
+        connection.execute <<-SQL
+          DROP TABLE "#{OracleIntegration.schema_name}".BIG_TABLE
+        SQL
+      end
+
+      it "should raise a timeout error (which is 'requested cancel' on oracle)" do
+        expect do
+          connection.prepare_and_execute_statement sql, options
+        end.to raise_error(DataSourceConnection::QueryError, /requested cancel/)
+      end
+    end
+  end
+
   describe "methods within a schema" do
     let(:schema_name) { OracleIntegration.schema_name }
     let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
@@ -244,7 +284,7 @@ describe OracleConnection, :oracle_integration do
 
     describe "#metadata_for_dataset" do
       let(:schema_name) { OracleIntegration.schema_name }
-      let(:expected) { { :column_count => 2 } }
+      let(:expected) { {:column_count => 2} }
       let(:subject) { connection.metadata_for_dataset('TWO_COLUMN_TABLE') }
 
       it_should_behave_like "a well-behaved database query"

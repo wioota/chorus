@@ -191,7 +191,7 @@ describe SqlExecutor do
 
         mock(connection_provider).connect_with(account) { fake_connection }
         mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
-        mock(fake_query).execute(sql, {:timeout => 60 * 1000 * timeout}) { raise GreenplumConnection::QueryError }
+        mock(fake_query).execute(sql, {:timeout => 60 * timeout}) { raise GreenplumConnection::QueryError }
 
         expect {
           SqlExecutor.execute_sql(connection_provider, account, check_id, sql)
