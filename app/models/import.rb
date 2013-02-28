@@ -1,8 +1,6 @@
 # An immutable record of an Import action
 # Can be a user-initiated import or from an ImportSchedule
-# Belongs to a dataset, so it must have a sandbox (???)
 
-# Todo: perhaps get rid of workspace_id for schema_id instead.
 class Import < ActiveRecord::Base
   include ImportMixins
 

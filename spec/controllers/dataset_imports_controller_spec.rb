@@ -188,7 +188,7 @@ describe DatasetImportsController do
               import.to_table.should == "the_new_table"
               import.source_dataset.should == src_table
               import.truncate.should == false
-              import.user_id == user.id
+              import.user_id.should == user.id
               import.sample_count.should == 12
               import.new_table.should == true
             end
@@ -211,7 +211,7 @@ describe DatasetImportsController do
           event.destination_table.should == 'the_new_table'
         end
 
-        it "should return error for archived workspaces" do
+        it 'returns an error for archived workspaces' do
           attributes[:workspace_id] = archived_workspace.id
           expect {
             post :create, attributes
@@ -219,20 +219,20 @@ describe DatasetImportsController do
           response.code.should == "422"
         end
 
-        it "should return successfully for active workspaces" do
+        it 'succeeds for an active workspaces' do
           post :create, attributes
           response.code.should == "201"
           response.body.should == "{}"
         end
 
-        it "throws an error if table already exists" do
+        it 'returns an error if table already exists' do
           post :create, attributes.merge(:to_table => "master_table1")
           response.code.should == "422"
 
           decoded_errors.fields.base.TABLE_EXISTS.should be_present
         end
 
-        it "throws an error if source table can't be found" do
+        it "returns an error if source table can't be found" do
           post :create, attributes.merge(:dataset_id => 'missing_source_table')
           response.code.should == "404"
         end

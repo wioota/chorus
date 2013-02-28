@@ -18,7 +18,7 @@ class ImportScheduler
             :workspace => schedule.workspace,
             :destination_table => schedule.to_table,
             :source_dataset => schedule.source_dataset,
-            :dataset => schedule.sandbox.datasets.find_by_name(schedule.to_table)
+            :dataset => schedule.schema.datasets.find_by_name(schedule.to_table)
         }
         if schedule.errors.blank?
           event_args.merge! :error_message => e.message

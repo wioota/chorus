@@ -28,7 +28,6 @@ describe("chorus.models.DatasetImport", function() {
         });
     });
 
-
     describe("#beforeSave", function() {
         context("when the model has a 'sampleCount'", function() {
             beforeEach(function() {

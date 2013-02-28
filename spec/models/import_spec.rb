@@ -8,15 +8,15 @@ describe Import, :greenplum_integration do
   let(:account) { GreenplumIntegration.real_account }
   let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
 
-  let(:import) {
-    i = Import.new
-    i.workspace = workspace
-    i.to_table = 'new_table1234'
-    i.new_table = true
-    i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
-    i.user = user
-    i
-  }
+  let(:import) do
+    Import.new.tap do |i|
+      i.workspace = workspace
+      i.to_table = 'new_table1234'
+      i.new_table = true
+      i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
+      i.user = user
+    end
+  end
 
   before do
     workspace.update_attribute :sandbox_id, schema.id

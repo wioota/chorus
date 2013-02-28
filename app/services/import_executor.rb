@@ -1,8 +1,6 @@
 require 'sequel/no_core_ext'
 
 class ImportExecutor < DelegateClass(Import)
-  delegate :sandbox, :to => :workspace
-
   def self.run(import_id)
     import = Import.find(import_id)
     ImportExecutor.new(import).run if import.success.nil?
@@ -33,12 +31,12 @@ class ImportExecutor < DelegateClass(Import)
     update_status(success ? :passed : :failed, message)
 
     read_pipe_searcher = "pipe%_#{pipe_name}_r"
-    read_connection = sandbox.connect_as(user)
+    read_connection = schema.connect_as(user)
     if read_connection.running? read_pipe_searcher
-      log "Found running reader on database #{sandbox.database.name} on instance #{sandbox.data_source.name}, killing it"
+      log "Found running reader on database #{schema.database.name} on instance #{schema.data_source.name}, killing it"
       read_connection.kill read_pipe_searcher
     else
-      log "Could not find running reader on database #{sandbox.database.name} on instance #{sandbox.data_source.name}"
+      log "Could not find running reader on database #{schema.database.name} on instance #{schema.data_source.name}"
     end
 
     write_pipe_searcher = "pipe%_#{pipe_name}_w"
@@ -65,7 +63,7 @@ class ImportExecutor < DelegateClass(Import)
   def table_copier
     if source_dataset.class.name =~ /^Oracle/
       OracleTableCopier
-    elsif source_dataset.database != sandbox.database
+    elsif source_dataset.database != schema.database
       CrossDatabaseTableCopier
     else
       TableCopier
@@ -75,7 +73,7 @@ class ImportExecutor < DelegateClass(Import)
   def import_attributes
     {
         :source_dataset => source_dataset,
-        :destination_schema => sandbox,
+        :destination_schema => schema,
         :destination_table_name => to_table,
         :user => user,
         :sample_count => sample_count,
@@ -107,8 +105,8 @@ class ImportExecutor < DelegateClass(Import)
 
   def refresh_schema
     # update rails db for new dataset
-    destination_account = sandbox.database.data_source.account_for_user!(user)
-    sandbox.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
+    destination_account = schema.database.data_source.account_for_user!(user)
+    schema.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
   end
 
   def update_status(status, message = nil)

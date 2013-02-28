@@ -50,12 +50,9 @@ class DatasetImportsController < ApplicationController
     import.workspace = workspace
     import.user = current_user
 
-    if import.save
-      import.create_import_event
-      QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
-      render :json => {}, :status => :created
-    else
-      raise ApiValidationError.new(import.errors)
-    end
+    import.save!
+    import.create_import_event
+    QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
+    render :json => {}, :status => :created
   end
 end

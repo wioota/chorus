@@ -459,7 +459,7 @@ describe ImportExecutor do
     before do
       stub(executor).log.with_any_args
       stub.proxy(executor).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
-      stub.proxy(executor).sandbox { |sandbox| stub(sandbox).connect_as(user) { destination_connection } }
+      stub.proxy(executor).schema { |sandbox| stub(sandbox).connect_as(user) { destination_connection } }
       stub(source_connection).running?.with_any_args { true }
       stub(destination_connection).running?.with_any_args { true }
       mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
