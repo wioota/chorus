@@ -15,6 +15,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     makeModel: function () {
         this.dataset = this.options.dataset;
         this.workspace = this.options.workspace;
+        this.schema = this.workspace && this.workspace.sandbox().schema();
         this.model = new chorus.models.DatasetImportSchedule({
             datasetId: this.dataset.get("id"),
             workspaceId: this.dataset.get("workspace").id
