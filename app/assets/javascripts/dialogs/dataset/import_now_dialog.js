@@ -118,6 +118,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     schemaChosen: function(schema) {
         this.schema = schema;
         this.$("a.select_schema").text(schema.canonicalName());
+        this.updateSubmitButton();
     },
 
     setFieldValues: function(schedule) {
@@ -200,6 +201,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
         var formIsValid = (importIntoExisting  && this.destinationTableHasBeenPicked() ||
                           (!importIntoExisting && newTableNameGiven));
+
+        formIsValid = formIsValid && !!this.schema;
 
         this.$('button.submit').prop('disabled', !formIsValid);
     },
