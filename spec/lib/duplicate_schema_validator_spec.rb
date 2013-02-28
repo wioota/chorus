@@ -80,8 +80,7 @@ describe DuplicateSchemaValidator do
           Schema.where(
               :name => "duplicate_schema",
               :parent_id => database.id,
-              :parent_type => "GpdbDatabase",
-              :deleted_at => nil
+              :parent_type => "GpdbDatabase"
           )
         }
 
@@ -100,6 +99,13 @@ describe DuplicateSchemaValidator do
         end
 
         it "removes the duplicate schemas" do
+          DuplicateSchemaValidator.run_and_fix
+          duplicate_schemas_in_database.count.should eq(1)
+        end
+
+        it "even removes soft deleted duplicates! WOW!" do
+          duplicate_schemas_in_database.destroy_all
+
           DuplicateSchemaValidator.run_and_fix
           duplicate_schemas_in_database.count.should eq(1)
         end
@@ -135,12 +141,21 @@ describe DuplicateSchemaValidator do
         end
 
         it "deletes duplicate datasets" do
-          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[0])
-          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[1])
+          dataset1 = FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[0])
+          dataset2 = FactoryGirl.create(:gpdb_table, :name => 'duplicate_table', :schema => duplicate_schema_objects[1])
 
           DuplicateSchemaValidator.run_and_fix
 
-          duplicate_schemas_in_database.first.datasets.where(:name => 'duplicate_table').count.should eq(1)
+          ((Dataset.find_by_id(dataset1.id) ? 1 : 0) + (Dataset.find_by_id(dataset2.id) ? 1 : 0)).should == 1
+        end
+
+        it "handles the duplicate schemas having mismatched dataset sets" do
+          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table1', :schema => duplicate_schema_objects[0])
+          FactoryGirl.create(:gpdb_table, :name => 'duplicate_table2', :schema => duplicate_schema_objects[1])
+
+          DuplicateSchemaValidator.run_and_fix
+
+          Dataset.where(:schema_id => duplicate_schemas_in_database.first.id).count.should eq(2)
         end
 
         it "links activities for duplicate datasets to datasets in the remaining schema" do

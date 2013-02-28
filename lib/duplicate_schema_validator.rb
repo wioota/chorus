@@ -20,7 +20,12 @@ module DuplicateSchemaValidator
           link_chorus_views(original, duplicate)
           link_datasets(original, duplicate)
 
-          duplicate.destroy
+          puts "Destroying Schema ##{duplicate.id}"
+          ActiveRecord::Base.connection.execute(<<-SQL)
+            DELETE
+            FROM schemas
+            WHERE id = #{duplicate.id}
+          SQL
         end
 
         original
@@ -33,7 +38,7 @@ module DuplicateSchemaValidator
   private
 
   def self.get_duplicate_schemas
-    schemas = Schema.where(:deleted_at => nil).all
+    schemas = Schema.all
 
     indexed_schemas = schemas.inject({}) do |indexed, schema|
       key = [schema.name, schema.parent_id, schema.parent_type].to_param
@@ -70,14 +75,19 @@ module DuplicateSchemaValidator
   end
 
   def self.link_datasets(original, duplicate)
-    #original.refresh_datasets
     duplicate.datasets.each do |dup_dataset|
-      original_dataset = original.datasets.find_by_name(dup_dataset.name)
+      original_dataset = original.datasets.find_or_create_by_name(dup_dataset.name)
       link_dataset_activities(original_dataset, dup_dataset)
       link_dataset_events(original_dataset, dup_dataset)
       link_dataset_associated_datasets(original_dataset, dup_dataset)
       link_dataset_import_schedules(original_dataset, dup_dataset)
       link_dataset_imports(original_dataset, dup_dataset)
+
+      ActiveRecord::Base.connection.execute(<<-SQL)
+        DELETE
+        FROM datasets
+        WHERE id = #{dup_dataset.id}
+      SQL
     end
   end
 
