@@ -1,5 +1,5 @@
 chorus.collections.DataSourceSet = chorus.collections.Base.extend({
-    urlTemplate: 'data_sources',
+    urlTemplate: 'data_sources?accessible={{accessible}}',
     constructorName: 'DataSourceSet',
     model: chorus.models.DynamicDataSource,
 

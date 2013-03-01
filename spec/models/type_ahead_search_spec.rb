@@ -52,6 +52,7 @@ describe TypeAheadSearch do
         tape_name = "type_ahead_search_spec"
         args = [owner, {:query => 'typeahead', :per_page => 15}]
       end
+
       record_with_vcr(tape_name) do
         search = described_class.new(*args)
         yield search
@@ -64,7 +65,6 @@ describe TypeAheadSearch do
         search.results.should include(workfiles(:typeahead))
         search.results.should include(hdfs_entries(:typeahead))
         search.results.should include(users(:typeahead))
-        search.results.should include(data_sources(:typeahead_gpdb_data_source))
         search.results.should include(hadoop_instances(:typeahead))
         search.results.should include(datasets(:typeahead_gpdb_table))
       end

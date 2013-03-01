@@ -53,7 +53,8 @@ class DataSource < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
+    where('data_sources.state = :state AND (data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership))',
+          state: "online",
           owned: user.id,
           with_membership: user.instance_accounts.pluck(:data_source_id)
     )

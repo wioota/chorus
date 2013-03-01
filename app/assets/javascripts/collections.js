@@ -33,9 +33,10 @@ chorus.collections = {
                     per_page: this.per_page !== undefined ? this.per_page : 50,
                     page: 1
                 }, options);
-
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-                var uri = new URI("/" + Handlebars.compile(template, {noEscape: true})(this.attributes));
+                var compiledTemplateWith = Handlebars.compile(template, {noEscape: true});
+
+                var uri = new URI("/" + compiledTemplateWith(this.attributes));
 
                 if (this.urlParams) {
                     var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
@@ -90,7 +91,7 @@ chorus.collections = {
                 this.trigger("paginate");
             },
 
-            fetchAll: (function() {
+            fetchAll: (function(params) {
                 var fetchPage = function(page) {
                     var self = this;
                     this.fetch({

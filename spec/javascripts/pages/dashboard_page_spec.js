@@ -162,4 +162,21 @@ describe("chorus.pages.DashboardPage", function() {
             });
         });
     });
+
+    describe('#fetchInstances', function(){
+        beforeEach(function() {
+            spyOn(this.page.gnipInstanceSet, "fetchAll");
+            spyOn(this.page.hadoopInstanceSet, "fetchAll");
+            this.page.fetchInstances();
+        });
+
+        it("fetches only accessible data sources", function() {
+            expect(this.server.lastFetch().params().accessible).toBe('true');
+        });
+
+        it("fetches all gnip and hadoop instances", function() {
+            expect(this.page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
+            expect(this.page.hadoopInstanceSet.fetchAll).toHaveBeenCalled();
+        });
+    });
 });

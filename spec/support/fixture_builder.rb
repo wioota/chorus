@@ -1,8 +1,3 @@
-
-
-
-
-
 require_relative "./database_integration/greenplum_integration"
 require_relative "./database_integration/oracle_integration"
 require_relative "./database_integration/hadoop_integration"
@@ -91,8 +86,10 @@ FixtureBuilder.configure do |fbuilder|
 
     shared_instance = FactoryGirl.create(:gpdb_data_source, :name => "Shared", :owner => admin, :shared => true)
     owners_instance = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
+    admin_only_instance = FactoryGirl.create(:gpdb_data_source, :name => "Admins", :owner => admin, :shared => false)
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
+    FactoryGirl.create(:gpdb_data_source, :name => "Online", :owner => owner, :state => "online")
 
     @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:data_source => owners_instance)
 

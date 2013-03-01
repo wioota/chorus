@@ -1,6 +1,24 @@
 require 'spec_helper'
 
 describe DataSource do
+  describe 'scopes' do
+    describe '#accessible_to' do
+      let(:permitted_data_source) { data_sources(:owners) }
+      let(:prohibited_data_source) { data_sources(:admins) }
+      let(:online_data_source) { data_sources(:online) }
+      let(:offline_data_source) { data_sources(:offline) }
+
+      let(:user) { users(:owner) }
+
+      it "returns only online data sources that the user can access" do
+        DataSource.accessible_to(user).should include(online_data_source)
+        DataSource.accessible_to(user).should_not include(offline_data_source)
+        DataSource.accessible_to(user).should include(permitted_data_source)
+        DataSource.accessible_to(user).should_not include(prohibited_data_source)
+      end
+    end
+  end
+
   describe 'creating a DataSource' do
     it 'enqueues a refresh job' do
       mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', anything, hash_including('new' => true))

@@ -5,23 +5,35 @@ describe DataSourcesController do
 
   let(:user) { users(:owner) }
 
-  before do
-    log_in user
-  end
+  before { log_in user }
 
   describe "#index" do
-    it "returns all data source" do
-      get :index
-      response.code.should == "200"
-      decoded_response.size.should == DataSource.count
-    end
+    let(:permitted_data_source) { data_sources(:owners) }
+    let(:prohibited_data_source) { data_sources(:admins) }
+    let(:online_data_source) { data_sources(:online) }
+    let(:offline_data_source) { data_sources(:offline) }
 
     it_behaves_like "a paginated list"
 
-    it "returns all data sources (online and offline) that the user can access when accessible is passed" do
-      get :index, :accessible => "true"
+    it "returns all data sources" do
+      get :index
       response.code.should == "200"
-      decoded_response.map(&:id).should include(data_sources(:offline).id)
+      decoded_response.size.should == DataSource.count
+      decoded_response.map(&:id).should include(online_data_source.id)
+      decoded_response.map(&:id).should include(offline_data_source.id)
+      decoded_response.map(&:id).should include(permitted_data_source.id)
+      decoded_response.map(&:id).should include(prohibited_data_source.id)
+    end
+
+    context 'when accessible => "true" is passed' do
+      it "returns only online data sources that the user can access" do
+        get :index, :accessible => "true"
+        response.code.should == "200"
+        decoded_response.map(&:id).should include(online_data_source.id)
+        decoded_response.map(&:id).should_not include(offline_data_source.id)
+        decoded_response.map(&:id).should include(permitted_data_source.id)
+        decoded_response.map(&:id).should_not include(prohibited_data_source.id)
+      end
     end
 
     describe "filtering by type" do
@@ -114,13 +126,13 @@ describe DataSourcesController do
 
     let(:valid_attributes) do
       {
-          :name => "create_spec_name",
+          :name => 'create_spec_name',
           :port => 12345,
-          :host => "server.emc.com",
-          :db_name => "postgres",
-          :description => "old description",
-          :db_username => "bob",
-          :db_password => "secret",
+          :host => 'server.emc.com',
+          :db_name => 'postgres',
+          :description => 'old description',
+          :db_username => 'bob',
+          :db_password => 'secret',
           :entity_type => entity_type,
           :shared => false
       }
@@ -130,24 +142,24 @@ describe DataSourcesController do
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
     end
 
-    context "for a GpdbDataSource" do
+    context 'for a GpdbDataSource' do
       let(:entity_type) { "gpdb_data_source" }
 
-      it "creates the data source" do
+      it 'creates the data source' do
         expect {
           post :create, valid_attributes
         }.to change(GpdbDataSource, :count).by(1)
         response.code.should == "201"
       end
 
-      it "presents the data source" do
+      it 'presents the data source' do
         mock_present do |data_source|
           data_source.name == valid_attributes[:name]
         end
         post :create, valid_attributes
       end
 
-      it "schedules a job to refresh the data source" do
+      it 'schedules a job to refresh the data source' do
         stub(QC.default_queue).enqueue_if_not_queued(anything, anything)
         mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', numeric, {'new' => true})
         post :create, :data_source => valid_attributes
