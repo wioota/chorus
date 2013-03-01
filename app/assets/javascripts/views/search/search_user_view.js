@@ -14,7 +14,7 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
                 }
             }, this), this);
 
-        return {
+        return _.extend(this._super("additionalContext"), {
             iconSrc: this.model.fetchImageUrl({size: "icon"}),
             link: this.model.showUrl(),
             displayName: new Handlebars.SafeString(modelWithSearchResults.displayName()),
@@ -22,6 +22,6 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
             supportingMessage: supportingMessage.slice(0, 3),
             moreSupportingMessage: supportingMessage.slice(3),
             hasMoreSupportingMessage: Math.max(0, supportingMessage.length - 3)
-        };
+        });
     }
 });

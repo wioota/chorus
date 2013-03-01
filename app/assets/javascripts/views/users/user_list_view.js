@@ -7,7 +7,8 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
             imageUrl: model.fetchImageUrl({size: "icon"}),
             showUrl: model.showUrl(),
             fullName: model.displayName(),
-            title: model.get("title")
+            title: model.get("title"),
+            tags: model.tags().models
         };
     }
 });

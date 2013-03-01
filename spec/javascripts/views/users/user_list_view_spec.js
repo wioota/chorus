@@ -34,6 +34,14 @@ describe("chorus.views.UserList", function() {
                 expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
             });
 
+            it("displays the users' tags", function(){
+                this.collection.at(0).tags().reset([{name: "tag1"}, {name: "tag2"}]);
+                this.view.render();
+
+                expect(this.view.$(".item_tag_list:first")).toContainTranslation("tag_list.title");
+                expect(this.view.$(".item_tag_list:first")).toContainText("tag1 tag2");
+            });
+
             it("sets title attributes", function() {
                 var self = this;
 
