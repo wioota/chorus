@@ -1,13 +1,4 @@
 module SolrHelpers
-  class SearchSpecHelper
-    def self.indexed=(value)
-      @@indexed = value
-    end
-
-    def self.indexed?
-      @@indexed ||= false
-    end
-  end
 
   def reindex_solr_fixtures
     stub(DatasetColumn).columns_for.with_any_args {
@@ -42,16 +33,4 @@ module SolrHelpers
       searchquery_dataset.solr_index!
     end
   end
-
-  def index_solr_fixtures_once
-    #This is almost all a workaround for running reindex_solr_fixtures in a before(:all)
-    #Even if the reindex were to work in the before(:all), you need to reassign Sunspot.session
-    if SearchSpecHelper.indexed?
-      Sunspot.session = Sunspot.session.original_session
-    else
-      reindex_solr_fixtures
-      SearchSpecHelper.indexed=true
-    end
-  end
-
 end

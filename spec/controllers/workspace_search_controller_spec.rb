@@ -31,7 +31,7 @@ describe WorkspaceSearchController do
     end
 
     generate_fixture "searchResultInWorkspace.json" do
-      index_solr_fixtures_once
+      reindex_solr_fixtures
 
       VCR.use_cassette "workspace_search_solr_query_as_owner" do
         get :show, :query => 'searchquery', :workspace_id => workspace.id
@@ -39,7 +39,7 @@ describe WorkspaceSearchController do
     end
 
     generate_fixture "searchResultInWorkspaceWithEntityTypeWorkfile.json" do
-      index_solr_fixtures_once
+      reindex_solr_fixtures
 
       VCR.use_cassette "workspace_search_solr_workfiles_query_as_owner" do
         get :show, :query => 'searchquery', :entity_type => 'workfile', :workspace_id => workspace.id

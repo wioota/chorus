@@ -6,7 +6,7 @@ describe WorkspaceSearchPresenter, :type => :view do
   let(:workspace) { workspaces(:search_public) }
 
   before(:each) do
-    index_solr_fixtures_once
+    reindex_solr_fixtures
     set_current_user(user)
   end
 

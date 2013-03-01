@@ -5,7 +5,7 @@ describe SearchPresenter, :type => :view do
   let(:user) { users(:owner) }
 
   before do
-    index_solr_fixtures_once
+    reindex_solr_fixtures
     set_current_user(user)
   end
 

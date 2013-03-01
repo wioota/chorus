@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SearchController do
   def self.generate_and_record_fixture(fixture_name, &block)
     self.generate_fixture fixture_name do
-      index_solr_fixtures_once
+      reindex_solr_fixtures
 
       tape_name = "search_solr_query_" + fixture_name.underscore.gsub(".json", "")
       VCR.use_cassette tape_name do
