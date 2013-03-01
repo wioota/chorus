@@ -16,33 +16,48 @@ describe("textext extensions", function() {
 
         it("pulls the response object out of the JSON data", function() {
             this.textext.ajax().onComplete({response: [{name: 'foo'}]}, 'bar');
-            expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {result: [{suggestionText: 'bar (' + t("tags.create_new") + ')', name: 'bar'}, {name: 'foo'}]});
+            expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {
+                result: [
+                    {text: 'bar <span class=\'create_new\'>(' + t("tags.create_new") + ')</span>', name: 'bar'},
+                    {text: 'foo', name: 'foo'}
+                ]});
+        });
+
+        it("puts the escaped value in the text field", function() {
+            this.textext.ajax().onComplete({response: [{name: '<script>alert();</script>'}]}, '');
+            expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {
+                result: [{text: "&lt;script&gt;alert();&lt;/script&gt;", name: '<script>alert();</script>'}]
+            });
         });
 
         it("removes tags already in the tag set", function() {
             this.tagSet.add({name: 'foo'});
             this.textext.ajax().onComplete({response: [{name: 'foo'}, {name: 'bar'}]}, 'bar');
-            expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {result: [{name: 'bar'}]});
+            expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
+                {result: [{text: 'bar', name: 'bar'}]});
         });
 
         context("when the query tag is already in the autocomplete response", function() {
             it("does not display the query tag twice in the list", function() {
                 this.textext.ajax().onComplete({response: [{name: 'bar'}]}, 'bar');
-                expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {result: [{name: 'bar'}]});
+                expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
+                    {result: [{text: 'bar', name: 'bar'}]});
             });
         });
 
         context("when the query tag is empty", function(){
            it("does not suggest (Create new)", function(){
                this.textext.ajax().onComplete({response: [{name: 'bar'}]}, '');
-               expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {result: [{name: 'bar'}]});
+               expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
+                   {result: [{text: 'bar', name: 'bar'}]});
            });
         });
 
         context("when the query tag is not in the autocomplete response", function() {
             it("adds the current value with (Create New) to the beginning of the list", function() {
                 this.textext.ajax().onComplete({response: []}, 'bar');
-                expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object), {result: [{suggestionText: 'bar (' + t("tags.create_new") + ')', name: 'bar'}]});
+                expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
+                    {result: [{text: 'bar <span class=\'create_new\'>(' + t("tags.create_new") + ')</span>', name: 'bar'}]});
             });
         });
     });

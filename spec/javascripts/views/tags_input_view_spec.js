@@ -237,7 +237,7 @@ describe("chorus.views.TagsInput", function() {
             });
 
             it("show '(Create new)' next to it in the suggestion list", function() {
-                expect($(view.el).html()).toContain("s (" + t("tags.create_new") + ")");
+                expect($(view.el).html()).toContainTranslation("tags.create_new");
             });
 
            context("when the user selects the suggestion", function(){

@@ -13,8 +13,13 @@
             return self.opts('ajax.existingTagCollection').containsTag(tag.name);
         });
 
+        _.each(result, function(tag) {
+            tag.text = Handlebars.Utils.escapeExpression(tag.name);
+        });
+
         if(query.trim().length > 0 && !_.any(result, function(tag) { return tag.name === query; })) {
-            result.unshift({suggestionText: query + " (" + t("tags.create_new") + ")", name: query});
+            var escapedQuery = Handlebars.Utils.escapeExpression(query);
+            result.unshift({text: escapedQuery + " <span class='create_new'>(" + t("tags.create_new") + ")</span>", name: query});
         }
 
         self.trigger('setSuggestions', { result : result });

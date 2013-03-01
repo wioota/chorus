@@ -90,6 +90,9 @@
                         &.text-selected {
                             background: $picklist-selected-background-color;
                         }
+                        .create_new {
+                            font-style: italic;
+                        }
                     }
                 }
             }
