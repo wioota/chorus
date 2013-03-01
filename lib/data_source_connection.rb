@@ -1,6 +1,8 @@
 require 'sequel'
 
 class DataSourceConnection
+  LIKE_ESCAPE_CHARACTER = "@"
+
   class Error < StandardError
     def initialize(exception = nil)
       if exception
@@ -25,6 +27,10 @@ class DataSourceConnection
   end
 
   class QueryError < StandardError; end
+
+  def self.escape_like_string(input_string)
+    input_string.gsub(/[\_\%#{LIKE_ESCAPE_CHARACTER}]/) { |c| LIKE_ESCAPE_CHARACTER + c }
+  end
 
   def fetch(sql, parameters = {})
     with_connection { @connection.fetch(sql, parameters).all }

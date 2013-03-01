@@ -429,7 +429,7 @@ class GreenplumConnection < DataSourceConnection
         query = query.where("\"relations\".\"relhassubclass\" = 't' OR \"pg_partition_rule\".\"parchildrelid\" is null")
 
         if options[:name_filter]
-          query = query.where { relname.ilike("%#{options[:name_filter]}%") }
+          query = query.where("\"relname\" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'")
         end
 
         yield query.qualify_to_first_source

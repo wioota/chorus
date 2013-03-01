@@ -1068,22 +1068,35 @@ LIMIT 2
       end
 
       context "when a name filter is passed" do
-        let(:datasets_sql) do
-          <<-SQL
-SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-AND (pg_catalog.pg_class.relname ILIKE '%candy%')
-ORDER BY lower(replace(relname,'_', '')) ASC
-          SQL
-        end
-        let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
-        let(:subject) { connection.datasets(:name_filter => 'cANdy') }
+        let(:subject) { connection.datasets(:name_filter => name_filter) }
 
-        it_should_behave_like "a well-behaved database query"
+        context "and the filter does not contain LIKE wildcards" do
+          let(:name_filter) {'cANdy'}
+          let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
+          let(:datasets_sql) do
+            <<-SQL
+  SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+  FROM pg_catalog.pg_class
+  LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+  WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+  AND pg_catalog.pg_class.relkind in ('r', 'v')
+  AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+  AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+  ORDER BY lower(replace(relname,'_', '')) ASC
+            SQL
+          end
+
+          it_should_behave_like "a well-behaved database query"
+        end
+
+        context "and the filter contains LIKE wildcards" do
+          let(:name_filter) {'_c'}
+
+          it "only returns which contain '_c' in their names (and it does not return 2candy)" do
+            subject.length.should > 0
+            subject.each { |dataset| dataset[:name].should include "_c" }
+          end
+        end
       end
 
       context "when only showing tables" do
@@ -1543,4 +1556,6 @@ AND (pg_catalog.pg_class.relname ILIKE '%candy%')
       end
     end
   end
+
+
 end
