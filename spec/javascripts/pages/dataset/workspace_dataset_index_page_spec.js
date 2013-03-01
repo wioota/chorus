@@ -350,21 +350,21 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                             this.page.$("li[data-type=SOURCE_TABLE] a").click();
                             expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SOURCE_TABLE");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SOURCE_TABLE");
                         });
 
                         it("has can filter the list by 'SANBOX_TABLE'", function() {
                             this.page.$("li[data-type=SANDBOX_DATASET] a").click();
                             expect(this.page.collection.attributes.type).toBe("SANDBOX_DATASET");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SANDBOX_DATASET");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SANDBOX_DATASET");
                         });
 
                         it("has can filter the list by 'CHORUS_VIEW'", function() {
                             this.page.$("li[data-type=CHORUS_VIEW] a").click();
                             expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=CHORUS_VIEW");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=CHORUS_VIEW");
                         });
                     });
 
