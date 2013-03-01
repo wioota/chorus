@@ -7,9 +7,8 @@ class GpdbDataset < Dataset
 
   belongs_to :schema, :class_name => 'GpdbSchema'
 
-
   def instance_account_ids
-    schema.database.instance_account_ids
+    database.instance_account_ids
   end
 
   def found_in_workspace_id

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe OracleDataSource do
-  describe "validations" do
-    let(:instance) { FactoryGirl.build(:oracle_data_source) }
+  let(:instance) { FactoryGirl.build(:oracle_data_source) }
 
+  describe "validations" do
     it { should validate_presence_of(:host) }
     it { should validate_presence_of(:port) }
 
@@ -48,16 +48,41 @@ describe OracleDataSource do
     end
   end
 
+  describe "#refresh_databases" do
+    it "calls refresh_schemas" do
+      options = {:foo => 'bar'}
+      mock(instance).refresh_schemas(options)
+      instance.refresh_databases(options)
+    end
+  end
+
   describe "#refresh_schemas" do
     let(:data_source) { data_sources(:oracle) }
 
-    before do
+    it 'returns the OracleSchemas in the data source' do
       mock(Schema).refresh(data_source.owner_account, data_source, {:refresh_all => true}) { ["schemas"] }
-    end
-
-    it "returns the OracleSchemas in the data source" do
+      stub(data_source).update_permissions
       schemas = data_source.refresh_schemas
       schemas.should =~ ["schemas"]
+    end
+
+    it 'updates permissions' do
+      stub(Schema).refresh.with_any_args
+      mock(data_source).update_permissions
+      data_source.refresh_schemas
+    end
+  end
+
+  describe "#update_permissions", :oracle_integraion do
+    let(:data_source) { OracleIntegration.real_data_source }
+    let(:schema) { OracleIntegration.real_schema }
+    let(:account_with_access) { data_source.owner_account }
+
+    it "adds new instance accounts to each Schema" do
+      schema.instance_accounts = []
+      schema.instance_accounts.find_by_id(account_with_access.id).should be_nil
+      data_source.update_permissions
+      schema.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
     end
   end
 end

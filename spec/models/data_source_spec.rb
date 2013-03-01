@@ -88,14 +88,12 @@ describe DataSource do
 
     it 'refreshes databases for the data source' do
       mock(data_source).refresh_databases({})
-      mock(data_source).refresh_schemas({})
       data_source.refresh
     end
 
     context 'when new is set' do
-      it 'calls refresh all twice, the first time skipping the dataset solr indexing, the second time forcing it' do
-        stub(data_source).refresh_databases
-        mock(data_source).refresh_schemas(hash_including(:skip_dataset_solr_index => true))
+      it 'refreshes the databases, skipping dataset solr indexing and then refreshes the schemas forcing the dataset solr indexing' do
+        mock(data_source).refresh_databases(hash_including(:skip_dataset_solr_index => true))
         mock(data_source).refresh_schemas(hash_including(:force_index => true))
         data_source.refresh(:new => true)
       end

@@ -34,11 +34,30 @@ class OracleDataSource < DataSource
   end
 
   def refresh_databases(options={})
+    refresh_schemas options
   end
 
   # Used by search
   def refresh_schemas(options={})
-    Schema.refresh(owner_account, self, options.reverse_merge(:refresh_all => true))
+    schemas = Schema.refresh(owner_account, self, options.reverse_merge(:refresh_all => true))
+    update_permissions
+    schemas
+  end
+
+  def update_permissions
+    schema_permissions = {}
+    accounts.each do |account|
+      connect_with(account).schemas.each do |schema|
+        schema_permissions[schema] ||= []
+        schema_permissions[schema] << account.id
+      end
+    end
+
+    schema_permissions.each do |schema_name, account_ids|
+      schema = schemas.find_by_name(schema_name)
+      schema.instance_account_ids = account_ids
+      schema.save!
+    end
   end
 
   private

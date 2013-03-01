@@ -177,7 +177,7 @@ describe GpdbDataSource do
     end
   end
 
-  describe "refresh_databases", :greenplum_integration do
+  describe "#refresh_databases", :greenplum_integration do
     context "with database integration" do
       let(:account_with_access) { GreenplumIntegration.real_account }
       let(:gpdb_data_source) { account_with_access.data_source }
@@ -258,6 +258,12 @@ describe GpdbDataSource do
           end
           gpdb_data_source.refresh_databases(:mark_stale => true)
           missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+        end
+
+        it "calls refresh_schemas" do
+          options = {:foo => 'bar'}
+          mock(gpdb_data_source).refresh_schemas(options)
+          gpdb_data_source.refresh_databases options
         end
       end
 

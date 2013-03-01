@@ -9,6 +9,12 @@ describe GpdbDataset do
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
 
+  describe "#instance_account_ids" do
+    it "returns instance account ids with access to the database" do
+      dataset.instance_account_ids.should == dataset.database.instance_account_ids
+    end
+  end
+
   describe "associations" do
     it { should have_many :associated_datasets }
     it { should have_many :bound_workspaces }

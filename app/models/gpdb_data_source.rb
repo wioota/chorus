@@ -93,6 +93,7 @@ class GpdbDataSource < DataSource
       end
       found_databases << database
     end
+    refresh_schemas options
   rescue ActiveRecord::JDBCError => e
     Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   ensure

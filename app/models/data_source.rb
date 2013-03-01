@@ -116,7 +116,6 @@ class DataSource < ActiveRecord::Base
   def refresh(options={})
     options[:skip_dataset_solr_index] = true if options[:new]
     refresh_databases options
-    refresh_schemas options
 
     if options[:skip_dataset_solr_index]
       #The first refresh_all did not index the datasets in solr due to performance.

@@ -40,6 +40,10 @@ module OracleIntegration
     OracleDataSource.find_by_host(hostname)
   end
 
+  def self.real_account
+    real_data_source.owner_account
+  end
+
   def self.real_schema
     real_data_source.schemas.find_by_name(schema_name)
   end
