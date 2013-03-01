@@ -135,7 +135,6 @@ describe("chorus.views.CheckableList", function() {
                 });
             });
         });
-
     });
 
     describe("when another list view broadcasts that it has updated the set of checked items", function() {

@@ -21,10 +21,12 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
         this.bindings.add(this.gnipInstances, "reset", this.renderAndSetupCheckable);
     },
 
+    catEntityTypeToModelID: function(model) {
+        model.id = model.get('id') + '-' + model.get('entityType');
+    },
+
     renderAndSetupCheckable: function(collection) {
-        collection.each(function(model) {
-            model.id = model.get('id') + '-' + model.get('entityType');
-        }, this);
+        collection.each(this.catEntityTypeToModelID, this);
         this.render();
         this.setupCheckableCollection();
     },
@@ -62,6 +64,7 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
     },
 
     postRender: function() {
+        this.checkSelectedModels();
         if(this.selectedInstance) {
             this.$('li[data-instance-id=' + this.selectedInstance.get("id") + ']' + '[data-type=' + this.selectedInstance.get("entityType") + ']').click();
         } else {

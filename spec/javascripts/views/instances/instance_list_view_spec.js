@@ -30,15 +30,15 @@ describe("chorus.views.InstanceList", function() {
 
     context('when the data sources are fetched', function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.hadoopInstances, [
-                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "1"}),
-                rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
-                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
-            ]);
             this.server.completeFetchFor(this.dataSources, [
                 rspecFixtures.gpdbDataSource({name : "GP9", id: "1"}),
                 rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
                 rspecFixtures.oracleDataSource({name : "oracle", id: "3"})
+            ]);
+            this.server.completeFetchFor(this.hadoopInstances, [
+                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "1"}),
+                rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
+                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
                 rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
@@ -89,7 +89,7 @@ describe("chorus.views.InstanceList", function() {
             expect(this.view.$("li.selected")).toContainText('gP1');
         });
 
-        describe('when andata source is destroyed', function() {
+        describe('when a data source is destroyed', function() {
             beforeEach(function() {
                 this.oldLength = this.dataSources.length;
                 var liToSelect = this.view.$("li").eq(2);
@@ -128,7 +128,7 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe('when andata source is offline', function() {
+        describe('when a data source is offline', function() {
             beforeEach(function() {
                 this.dataSources.at(0).set({ name: "Greenplum", online: false });
                 this.view.render();
@@ -273,6 +273,25 @@ describe("chorus.views.InstanceList", function() {
         describe("the collection that is used for multiple selections", function() {
             it("contains all of the data sources", function() {
                 expect(this.view.collection.length).toEqual(9);
+            });
+        });
+
+        describe("rendering the checkboxes", function() {
+            it("ensures that selected models are checked", function() {
+                this.view.selectedModels.reset([
+                    this.dataSources.at(0),
+                    this.hadoopInstances.at(0)
+                ]);
+                this.view.render();
+
+                var selectedDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(0);
+                expect(selectedDataSourceCheckbox).toBeChecked();
+
+                var selectedHadoopInstanceCheckbox = this.view.$("input[type=checkbox]").eq(3);
+                expect(selectedHadoopInstanceCheckbox).toBeChecked();
+
+                var unselectedModelCheckbox = this.view.$("input[type=checkbox]").eq(1);
+                expect(unselectedModelCheckbox).not.toBeChecked();
             });
         });
     });
