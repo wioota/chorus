@@ -62,7 +62,7 @@ describe DatasetImportsController do
       response.should be_forbidden
     end
 
-    generate_fixture 'datasetImportSet.json' do
+    generate_fixture 'workspaceImportSet.json' do
       get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
       response.should be_success
     end

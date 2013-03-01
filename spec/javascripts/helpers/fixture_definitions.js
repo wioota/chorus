@@ -66,7 +66,7 @@ window.rspecFixtureDefinitions = {
     csvImport: {  model: "CSVImport" },
 
     csvImportSet: {
-        collection: "DatasetImportSet"
+        collection: "WorkspaceImportSet"
     },
 
     database: { unique: ["id"] },
@@ -83,7 +83,7 @@ window.rspecFixtureDefinitions = {
 
     datasetImportScheduleSet: {},
 
-    datasetImportSet: {},
+    workspaceImportSet: {},
 
     datasetStatisticsTable: {
         model: "DatasetStatistics"

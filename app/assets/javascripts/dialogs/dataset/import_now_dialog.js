@@ -37,7 +37,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var workspaceId = this.workspace &&
             this.workspace.id;
 
-        this.model = new chorus.models.DatasetImport({
+        this.model = new chorus.models.WorkspaceImport({
             datasetId: this.dataset.get("id"),
             workspaceId: workspaceId
         });

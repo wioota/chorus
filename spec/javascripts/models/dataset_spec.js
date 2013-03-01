@@ -965,7 +965,7 @@ describe("chorus.models.Dataset", function() {
 
         it("is true if there are imports", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            importDataset.getImports().add(rspecFixtures.datasetImportSet().models);
+            importDataset.getImports().add(rspecFixtures.workspaceImportSet().models);
             expect(importDataset.hasImport()).toBeTruthy();
         });
     });

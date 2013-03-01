@@ -208,12 +208,12 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#hasImport", function() {
         it("is false if there are no loaded imports", function() {
-            spyOn(this.dataset, 'getImports').andReturn(new chorus.collections.DatasetImportSet());
+            spyOn(this.dataset, 'getImports').andReturn(new chorus.collections.WorkspaceImportSet());
             expect(this.dataset.hasImport()).toBeFalsy();
         });
 
         it("is true if there are imports", function() {
-            this.dataset.getImports().add(rspecFixtures.datasetImportSet().models);
+            this.dataset.getImports().add(rspecFixtures.workspaceImportSet().models);
             expect(this.dataset.hasImport()).toBeTruthy();
         });
     });
@@ -224,7 +224,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it("returns the first import if there are more than one", function() {
-            var imports = rspecFixtures.datasetImportSet().models;
+            var imports = rspecFixtures.workspaceImportSet().models;
             this.dataset.getImports().add(imports);
             expect(imports.length).toBeGreaterThan(1);
             expect(this.dataset.lastImport()).toBe(_.first(imports));

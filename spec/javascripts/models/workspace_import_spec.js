@@ -1,6 +1,6 @@
-describe("chorus.models.DatasetImport", function() {
+describe("chorus.models.WorkspaceImport", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.datasetImportSet().at(0);
+        this.model = rspecFixtures.workspaceImportSet().at(0);
         this.model.set({
             datasetId: '102',
             workspaceId: '1'

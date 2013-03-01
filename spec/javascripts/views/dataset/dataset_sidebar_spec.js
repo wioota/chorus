@@ -332,7 +332,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the dataset has a last import (as a destination dataset)", function() {
                     beforeEach(function() {
-                        this.imports = rspecFixtures.datasetImportSet();
+                        this.imports = rspecFixtures.workspaceImportSet();
                         this.lastImport = this.imports.last();
                         this.lastImport.set({
                             startedStamp: "2012-02-29T14:23:58Z",
@@ -547,7 +547,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the dataset has a last import", function() {
                     beforeEach(function() {
-                        this.imports = rspecFixtures.datasetImportSet();
+                        this.imports = rspecFixtures.workspaceImportSet();
                         this.lastImport = this.imports.last();
                         this.lastImport.set({
                             startedStamp: "2012-02-29T14:23:58Z",

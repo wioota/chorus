@@ -128,7 +128,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         describe("#lastImport", function() {
             context("for a source table", function() {
                 beforeEach(function() {
-                    this.datasetImport = rspecFixtures.datasetImportSet().last();
+                    this.datasetImport = rspecFixtures.workspaceImportSet().last();
                     this.datasetImport.set({
                         sourceDatasetId: resource.get('id'),
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),
@@ -223,7 +223,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
             context("for a sandbox table", function() {
                 beforeEach(function() {
-                    this.datasetImport = rspecFixtures.datasetImportSet().first();
+                    this.datasetImport = rspecFixtures.workspaceImportSet().first();
                     this.datasetImport.set({
                         sourceDatasetId: resource.get('id') + 1,
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),

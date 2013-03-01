@@ -75,7 +75,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
 
     getImports: function() {
         if (!this._datasetImports) {
-            this._datasetImports = new chorus.collections.DatasetImportSet([], {
+            this._datasetImports = new chorus.collections.WorkspaceImportSet([], {
                 datasetId: this.get("id"),
                 workspaceId: this.get("workspace").id
             });
