@@ -44,10 +44,6 @@ class DataSource < ActiveRecord::Base
     data_source.datasets(:reload => true).each(&:solr_index)
   end
 
-  def solr_reindex_later
-    QC.enqueue_if_not_queued('DataSource.reindex_instance', id)
-  end
-
   def self.unshared
     where("data_sources.shared = false OR data_sources.shared IS NULL")
   end

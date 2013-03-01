@@ -73,7 +73,7 @@ describe OracleDataSource do
     end
   end
 
-  describe "#update_permissions", :oracle_integraion do
+  describe "#update_permissions", :oracle_integration do
     let(:data_source) { OracleIntegration.real_data_source }
     let(:schema) { OracleIntegration.real_schema }
     let(:account_with_access) { data_source.owner_account }

@@ -45,22 +45,22 @@ class OracleDataSource < DataSource
   end
 
   def update_permissions
-    schema_permissions = {}
-    accounts.each do |account|
-      begin
-        connect_with(account).schemas.each do |schema|
-          schema_permissions[schema] ||= []
-          schema_permissions[schema] << account.id
-        end
-      rescue => e
-        pa e.message
+    begin
+      schema_permissions = {}
+      accounts.each do |account|
+          connect_with(account).schemas.each do |schema|
+            schema_permissions[schema] ||= []
+            schema_permissions[schema] << account.id
+          end
       end
-    end
 
-    schema_permissions.each do |schema_name, account_ids|
-      schema = schemas.find_by_name(schema_name)
-      schema.instance_account_ids = account_ids
-      schema.save!
+      schema_permissions.each do |schema_name, account_ids|
+        schema = schemas.find_by_name(schema_name)
+        schema.instance_account_ids = account_ids
+        schema.save!
+      end
+    rescue => e
+        pa e.message
     end
   end
 

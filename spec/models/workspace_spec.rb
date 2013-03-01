@@ -528,7 +528,7 @@ describe Workspace do
 
     describe "before_update" do
       describe "clear_assigned_datasets_on_sandbox_assignment" do
-        let(:sandbox_dataset) { sandbox.datasets.first }
+        let(:sandbox_dataset) { datasets(:tagged) }
         let(:other_dataset) { datasets(:other_table) }
 
         before do
