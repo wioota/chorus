@@ -1,5 +1,5 @@
 chorus.models.WorkspaceImport = chorus.models.Base.extend({
-    constructorName: "DatasetImport",
+    constructorName: "WorkspaceImport",
     urlTemplate: "workspaces/{{workspaceId}}/imports",
     parameterWrapper: 'dataset_import',
 

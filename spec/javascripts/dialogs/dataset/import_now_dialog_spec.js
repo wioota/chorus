@@ -34,6 +34,10 @@ describe("chorus.dialogs.ImportNow", function() {
 
     context('importing into a workspace', function() {
 
+        it('creates a WorkspaceImport model', function(){
+            expect(this.dialog.model).toBeA(chorus.models.WorkspaceImport);
+        });
+
         context("with an existing import", function() {
             beforeEach(function() {
                 this.importSchedule.set({
@@ -338,7 +342,11 @@ describe("chorus.dialogs.ImportNow", function() {
             this.dialog.render();
         });
 
-        context("clicking the schema link", function() {
+        it('creates a SchemaImport model', function(){
+            expect(this.dialog.model).toBeA(chorus.models.SchemaImport);
+        });
+
+        describe("choosing a destination schema", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
                 this.dialog.$("a.select_schema").click();
@@ -374,7 +382,6 @@ describe("chorus.dialogs.ImportNow", function() {
 
                 it("saves the model", function() {
                     expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
-                    expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[schema_id]"]).toBe(this.schema.id);
                 });
             });
         });

@@ -32,15 +32,18 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.dataset = this.options.dataset;
         this.workspace = this.dataset.workspace();
 
-        this.schema = this.workspace && this.workspace.sandbox().schema();
+        if(this.workspace) {
+            this.schema = this.workspace.sandbox().schema();
+            this.model = new chorus.models.WorkspaceImport({
+                datasetId: this.dataset.get("id"),
+                workspaceId: this.workspace.id
+            });
+        } else {
+            this.model = new chorus.models.SchemaImport({
+                datasetId: this.dataset.get("id")
+            });
+        }
 
-        var workspaceId = this.workspace &&
-            this.workspace.id;
-
-        this.model = new chorus.models.WorkspaceImport({
-            datasetId: this.dataset.get("id"),
-            workspaceId: workspaceId
-        });
         this.model.loaded = true;
     },
 
@@ -81,7 +84,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
-        if (!this.saving) {
+        if(!this.saving) {
             var destination = this.schedule && this.schedule.destination();
 
             var datasetDialog = new chorus.dialogs.DatasetsPicker({
@@ -93,7 +96,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         }
     },
 
-    datasetsChosen: function(datasets){
+    datasetsChosen: function(datasets) {
         this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name());
     },
 
@@ -124,7 +127,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     setFieldValues: function(schedule) {
         this.$("input[type='radio']").prop("checked", false);
         var newTable = schedule.get("newTable") === true;
-        if (newTable) {
+        if(newTable) {
             this.$(".new_table input.name").val(schedule.get("toTable"));
             this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
         } else {
@@ -134,7 +137,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
         this.$(".truncate").prop("checked", !!schedule.get("truncate"));
 
-        if (schedule.get("sampleCount") && schedule.get("sampleCount") !== '0') {
+        if(schedule.get("sampleCount") && schedule.get("sampleCount") !== '0') {
             this.$("input[name='limit_num_rows']").prop("checked", true);
             this.$("input[name='sampleCount']").prop("disabled", false);
             this.$("input[name='sampleCount']").val(schedule.get("sampleCount"));
@@ -166,7 +169,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var $a = this.$(".existing_table a.dataset_picked");
         var $span = this.$(".existing_table span.dataset_picked");
 
-        if (enable) {
+        if(enable) {
             $a.removeClass("hidden");
             $span.addClass("hidden");
         } else {
@@ -199,8 +202,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var importIntoExisting = this.$('.existing_table input:radio').prop("checked");
         var newTableNameGiven = this.$('input.name').val().trim().length > 0;
 
-        var formIsValid = (importIntoExisting  && this.destinationTableHasBeenPicked() ||
-                          (!importIntoExisting && newTableNameGiven));
+        var formIsValid = (importIntoExisting && this.destinationTableHasBeenPicked() ||
+            (!importIntoExisting && newTableNameGiven));
 
         formIsValid = formIsValid && !!this.schema;
 

@@ -8,7 +8,7 @@ describe("chorus.models.WorkspaceImport", function() {
     });
 
     describe('url', function() {
-        it('saves to the workspace/:id/dataset/:dataset_id/imports', function() {
+        it('saves to the workspace/:id/imports', function() {
             expect(this.model.url()).toHaveUrlPath('/workspaces/1/imports');
         });
     });
@@ -27,25 +27,6 @@ describe("chorus.models.WorkspaceImport", function() {
         it("returns false if the import has no time info", function() {
             this.model.set({ success: null, startedStamp: null, completedStamp: null });
             expect(this.model.isInProgress()).toBeFalsy();
-        });
-    });
-
-    describe("#beforeSave", function() {
-        context("when the model has a 'sampleCount'", function() {
-            beforeEach(function() {
-                this.model.set({
-                    newTable: 'true',
-                    truncate: 'true',
-                    useLimitRows: true,
-                    sampleCount: 477
-                });
-            });
-
-            it("sets the 'sampleMethod' parameter, as required by the API", function() {
-                this.model.save();
-                var params = this.server.lastUpdate().params();
-                expect(params["dataset_import[sample_count]"]).toBe('477');
-            });
         });
     });
 
