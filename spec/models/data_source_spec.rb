@@ -184,4 +184,6 @@ describe DataSource do
       instance.solr_reindex_later
     end
   end
+
+  it_should_behave_like "taggable models", [:data_sources, :default]
 end

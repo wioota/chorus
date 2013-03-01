@@ -1,4 +1,6 @@
 class GnipInstance < ActiveRecord::Base
+  include TaggableBehavior
+
   attr_accessible :name, :stream_url, :description, :username, :password, :owner
   attr_accessor :highlighted_attributes, :search_result_notes
 

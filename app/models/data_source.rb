@@ -1,5 +1,6 @@
 class DataSource < ActiveRecord::Base
   include SoftDelete
+  include TaggableBehavior
 
   attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create

@@ -96,4 +96,7 @@ describe HadoopInstance do
       }.not_to change(HdfsEntry, :count)
     end
   end
+
+  it_should_behave_like "taggable models", [:hadoop_instances, :hadoop]
+
 end

@@ -20,4 +20,7 @@ describe GnipInstance do
     it { should have_many :events }
     it { should have_many :activities }
   end
+
+  it_should_behave_like "taggable models", [:gnip_instances, :default]
+
 end
