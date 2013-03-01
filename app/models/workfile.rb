@@ -1,6 +1,7 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
   include TaggableBehavior
+  include Notable
 
   @@entity_subtypes = Hash.new('ChorusWorkfile').merge!({
      'alpine' => 'AlpineWorkfile'
@@ -16,7 +17,6 @@ class Workfile < ActiveRecord::Base
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
-  has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
   has_many :comments, :through => :events
   has_many :versions, :class_name => 'WorkfileVersion'
 

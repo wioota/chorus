@@ -1,5 +1,6 @@
 class HadoopInstance < ActiveRecord::Base
   include TaggableBehavior
+  include Notable
 
   attr_accessible :name, :host, :port, :description, :username, :group_list
   belongs_to :owner, :class_name => 'User'

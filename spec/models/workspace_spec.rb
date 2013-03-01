@@ -2,6 +2,18 @@ require "spec_helper"
 require 'timecop'
 
 describe Workspace do
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnWorkspace.create!({
+          :actor => users(:owner),
+          :workspace => model,
+          :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { workspaces(:public_with_no_collaborators) }
+  end
+
   describe "associations" do
     it { should have_many(:members) }
     it { should have_many(:activities) }

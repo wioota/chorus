@@ -1,6 +1,7 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
   include TaggableBehavior
+  include Notable
 
   attr_accessor :archived
   attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings

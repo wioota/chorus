@@ -2,6 +2,7 @@ class Dataset < ActiveRecord::Base
   include Stale
   include SoftDelete
   include TaggableBehavior
+  include Notable
 
   belongs_to :schema, :counter_cache => :active_tables_and_views_count
 
@@ -13,7 +14,6 @@ class Dataset < ActiveRecord::Base
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
-  has_many :notes, :through => :activities, :source => :event, :class_name => "Events::Note"
   has_many :comments, :through => :events
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace

@@ -19,6 +19,18 @@ describe DataSource do
     end
   end
 
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnGreenplumInstance.create!({
+          :actor => users(:owner),
+          :gpdb_data_source => model,
+          :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { FactoryGirl.create(:gpdb_data_source) }
+  end
+
   describe 'creating a DataSource' do
     it 'enqueues a refresh job' do
       mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', anything, hash_including('new' => true))

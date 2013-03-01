@@ -6,6 +6,18 @@ describe Dataset do
   let(:dataset) { datasets(:table) }
   let(:source_table) { datasets(:source_table) }
 
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnDataset.create!({
+          :actor => users(:owner),
+          :dataset => model,
+          :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { dataset }
+  end
+
   describe "associations" do
     it { should belong_to :schema }
     it { should have_many :activities }

@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe GnipInstance do
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnGnipInstance.create!({
+        :actor => users(:owner),
+        :gnip_instance => model,
+        :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { FactoryGirl.create(:gnip_instance) }
+  end
+
   describe "validations" do
     it { should validate_presence_of :stream_url }
     it { should validate_presence_of :name }

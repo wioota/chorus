@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe Workfile do
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnWorkfile.create!({
+          :actor => users(:owner),
+          :workfile => model,
+          :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { FactoryGirl.create(:workfile) }
+  end
+
   describe "validations" do
     it { should validate_presence_of :file_name }
 

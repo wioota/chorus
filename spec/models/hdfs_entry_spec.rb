@@ -1,6 +1,18 @@
 require "spec_helper"
 
 describe HdfsEntry do
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnHdfsFile.create!({
+        :actor => users(:owner),
+        :hdfs_file => model,
+        :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { FactoryGirl.create(:hdfs_entry) }
+  end
+
   describe "associations" do
     it { should belong_to(:hadoop_instance) }
     it { should belong_to(:parent) }

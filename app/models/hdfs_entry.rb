@@ -1,5 +1,6 @@
 class HdfsEntry < ActiveRecord::Base
   include Stale
+  include Notable
 
   attr_accessible :path
 

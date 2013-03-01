@@ -3,6 +3,18 @@ require 'spec_helper'
 describe HadoopInstance do
   subject { FactoryGirl.build :hadoop_instance }
 
+  it_behaves_like "a notable model" do
+    let!(:note) do
+      Events::NoteOnHadoopInstance.create!({
+        :actor => users(:owner),
+        :hadoop_instance => model,
+        :body => "This is the body"
+      }, :as => :create)
+    end
+
+    let!(:model) { FactoryGirl.create(:hadoop_instance) }
+  end
+
   describe "associations" do
     it { should belong_to :owner }
     its(:owner) { should be_a User }
