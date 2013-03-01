@@ -15,7 +15,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         expect(this.page.helpId).toBe("hadoop_instances");
     });
 
-    it("constructs an HDFS file model with the right instance id", function() {
+    it('constructs an HDFS file model with the right data source id', function() {
         expect(this.page.model).toBeA(chorus.models.HdfsEntry);
         expect(this.page.model.get("hadoopInstance").id).toBe("1234");
     });

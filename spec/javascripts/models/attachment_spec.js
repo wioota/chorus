@@ -80,7 +80,7 @@ describe("chorus.models.Attachment", function() {
                 "/workfiles/" + workfile.id);
         });
 
-        it("shows the URL for an instance", function() {
+        it('shows the URL for a data source', function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             var model = search.attachments().at(0);
             var instance = model.instance();
@@ -169,26 +169,26 @@ describe("chorus.models.Attachment", function() {
         });
     });
 
-    describe("instance", function() {
+    describe('data source', function() {
         beforeEach(function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             this.model = search.attachments().at(0);
         });
 
-        it("returns the instance", function() {
+        it("returns the data source", function() {
             this.instance = this.model.instance();
             expect(this.instance.get('name')).toBe(this.model.get('instance').name);
             expect(this.instance.get('id')).toBe(this.model.get('instance').id);
         });
 
-        it("dynamically assigns the instance type", function() {
+        it("dynamically assigns the data source type", function() {
             expect(this.model.instance()).toBeA(chorus.models.GpdbDataSource);
             var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
             var model = search.attachments().at(0);
             expect(model.instance()).toBeA(chorus.models.HadoopInstance);
         });
 
-        it("returns falsy when there is no instance", function() {
+        it("returns falsy when there is no data source", function() {
             this.model.unset('instance');
             expect(this.model.instance()).toBeFalsy();
         });

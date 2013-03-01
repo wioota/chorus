@@ -64,7 +64,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect(this.view.$("a.name")).toContainText(this.model.get("name"));
         });
 
-        it("should render the instance location", function() {
+        it('should render the data source location', function() {
             var $inst = this.view.$(".instance a");
 
             expect($inst.text()).toBe(this.model.getHadoopInstance().name());
@@ -95,7 +95,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             this.view.render();
         });
 
-         it("should render the instance location", function() {
+         it('should render the data source location', function() {
             var $inst = this.view.$(".instance a");
 
             expect($inst.text()).toBe(this.model.getHadoopInstance().name());

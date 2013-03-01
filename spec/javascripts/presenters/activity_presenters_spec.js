@@ -288,7 +288,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("hadoop instance created", function() {
+    context('hadoop data source created', function() {
         var hadoopInstance;
 
         beforeEach(function() {
@@ -310,7 +310,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("gnip instance created", function() {
+    context('gnip data source created', function() {
         beforeEach(function() {
             model = rspecFixtures.activity.gnipInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
@@ -330,7 +330,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("gpdb instance changed owner", function() {
+    context('gpdb data source changed owner', function() {
         var gpdbDataSource, newOwner;
 
         beforeEach(function() {
@@ -354,7 +354,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("gpdb instance changed name", function() {
+    context('gpdb data source changed name', function() {
         var gpdbDataSource;
 
         beforeEach(function() {
@@ -381,7 +381,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("hadoop instance changed name", function() {
+    context('hadoop data source changed name', function() {
         var instance;
 
         beforeEach(function() {
@@ -898,7 +898,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("note on a gpdb instance", function() {
+    context('note on a gpdb data source', function() {
         var instance;
 
         beforeEach(function() {
@@ -926,7 +926,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("note on a gnip instance", function() {
+    context('note on a gnip data source', function() {
         var instance;
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnGnipInstanceCreated({
@@ -979,7 +979,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("note on a hadoop instance", function() {
+    context('note on a hadoop data source', function() {
         var instance;
 
         beforeEach(function() {

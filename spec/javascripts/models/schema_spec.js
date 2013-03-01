@@ -117,7 +117,7 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.get('database')).toBeUndefined();
             });
 
-            it("returns the instance directly", function() {
+            it('returns the data source directly', function() {
                 expect(this.model.instance().name()).toEqual('instance');
                 expect(this.model.instance().id).toEqual(45);
             });
@@ -133,7 +133,7 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.get('instance')).toBeUndefined();
             });
 
-            it("returns the instance directly", function() {
+            it('returns the data source directly', function() {
                 expect(this.model.instance().name()).toEqual('instance');
                 expect(this.model.instance().id).toEqual(42);
             });

@@ -304,7 +304,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
                 });
 
-                context("when the account loads and is empty and the instance is shared", function() {
+                context('when the account loads and is empty and the data source is shared', function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.page.instance.set({"shared": true});

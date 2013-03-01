@@ -34,7 +34,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
         expect(this.dialog.model).toBe(this.chorusView);
     });
 
-    it("fetches the list of schemas in the same instance as the original schema", function () {
+    it("fetches the list of schemas in the same data source as the original schema", function () {
         expect(this.schema.database().schemas()).toHaveBeenFetched();
     });
 
@@ -217,7 +217,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                             expect(this.schemaBob.datasets()).toHaveBeenFetched();
                         });
 
-                        it("updates the instance, database and schema names in the sub header", function () {
+                        it("updates the data source, database and schema names in the sub header", function () {
                             expect(this.dialog.$(".canonical_name")).toContainText(this.schemaBob.canonicalName());
                         });
 

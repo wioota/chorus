@@ -53,7 +53,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        context("with a instance id, database id, and schema id", function() {
+        context('with a data source id, database id, and schema id', function() {
             beforeEach(function() {
                 spyOn(this.dialog, 'closeModal');
                 spyOn(this.dialog.schemaPicker, 'schemaId').andReturn("6");
@@ -134,7 +134,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         });
 
-        context("with a instance id, database id, and schema name", function() {
+        context('with a data source id, database id, and schema name', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",
@@ -159,7 +159,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        context("with an instance id, database name and schema name", function() {
+        context('with a data source id, database name and schema name', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     instance: "4",

@@ -64,8 +64,8 @@ describe("chorus.views.Dashboard", function(){
             });
         });
 
-        describe("the instance list", function() {
-            it("renders the instance list with the right title", function() {
+        describe('the data source list', function() {
+            it('renders the data source list with the right title', function() {
                 expect(this.view.$(".main_content.instance_list .content_header h1").text()).toMatchTranslation("header.browse_data");
             });
 
@@ -75,7 +75,7 @@ describe("chorus.views.Dashboard", function(){
                 expect(browseLink.attr("href")).toBe("#/data_sources");
             });
 
-            it("has an 'add an instance' link", function() {
+            it('has the Add a Data Source link', function() {
                 var link = this.view.$(".dashboard_instance_list_content_details a.add");
                 expect(link.text().trim()).toMatchTranslation("dashboard.instances.add");
                 expect(link.data("dialog")).toBe("InstancesNew");

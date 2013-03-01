@@ -36,13 +36,13 @@ describe("chorus.views.Dataset", function() {
         });
     });
 
-    it("renders breadcrumbs for the table's instance, database and schema", function() {
+    it('renders breadcrumbs for the data source, database and schema', function() {
         expect(this.view.$(".instance")).toContainText(this.dataset.instance().get("name"));
         expect(this.view.$(".database")).toContainText(this.dataset.database().get("name"));
         expect(this.view.$(".schema")).toContainText(this.dataset.schema().get("name"));
     });
 
-    it("attaches the instance model to the instance and database breadcrumbs", function() {
+    it('attaches the data source model to the data source and database breadcrumbs', function() {
         expect(this.view.$(".instance").data("instance")).toEqual(this.dataset.instance().attributes);
         expect(this.view.$(".database").data("instance")).toEqual(this.dataset.instance().attributes);
     });
@@ -85,7 +85,7 @@ describe("chorus.views.Dataset", function() {
             this.view.render();
         });
 
-        it("does not have dataset links (still has instance links)", function() {
+        it('does not have dataset links (still has data source links)', function() {
             expect(this.view.$("a.image")).not.toExist();
             expect(this.view.$("a.name")).not.toExist();
         });

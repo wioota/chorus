@@ -9,13 +9,13 @@ describe("chorus.models.Instance", function() {
     });
 
     describe("#stateIconUrl and #stateText", function() {
-        it("works for 'offline' instances", function() {
+        it('works for offline data sources', function() {
             this.instance.set({ online: false });
             expect(this.instance.stateIconUrl()).toBe("/images/data_sources/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 
-        it("works for online instances", function() {
+        it('works for online data sources', function() {
             this.instance.set({ online: true });
             expect(this.instance.stateIconUrl()).toBe("/images/data_sources/green.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.online");

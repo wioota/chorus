@@ -472,7 +472,7 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toMatchTranslation("header.users_list");
                 });
 
-                it("has a link to instances", function() {
+                it('has a link to data sources', function() {
                     expect(this.view.$(".menu.popup_gear a[href='#/data_sources']").text()).toMatchTranslation("header.instances");
                 });
 

@@ -73,7 +73,7 @@ describe("chorus.models.Dataset", function() {
             this.gpdbDataset = rspecFixtures.dataset();
         });
 
-        it('returns whether the parent instance is an oracle data source', function(){
+        it('returns whether the parent data source is an oracle data source', function(){
             expect(this.oracleDataset.isOracle()).toBeTruthy();
             expect(this.gpdbDataset.isOracle()).toBeFalsy();
         });
@@ -85,7 +85,7 @@ describe("chorus.models.Dataset", function() {
             this.oracleDataset = rspecFixtures.oracleDataset();
         });
 
-        it('returns whether the parent instance is a greenplum data source', function(){
+        it('returns whether the parent data source is greenplum', function(){
             expect(this.gpdbDataset.isGreenplum()).toBeTruthy();
             expect(this.oracleDataset.isGreenplum()).toBeFalsy();
         });
@@ -253,14 +253,13 @@ describe("chorus.models.Dataset", function() {
 
     describe("#instance", function() {
         beforeEach(function() {
-            this.instance = this.dataset.instance();
+            this.dataSource = this.dataset.instance();
         });
 
-        it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.GpdbDataSource);
-
-            expect(this.instance.id).toBe(this.dataset.get("schema").database.instance.id);
-            expect(this.instance.name()).toBe(this.dataset.get("schema").database.instance.name);
+        it("returns a data source with the right id and name", function() {
+            expect(this.dataSource).toBeA(chorus.models.GpdbDataSource);
+            expect(this.dataSource.id).toBe(this.dataset.get("schema").database.instance.id);
+            expect(this.dataSource.name()).toBe(this.dataset.get("schema").database.instance.name);
         });
     });
 

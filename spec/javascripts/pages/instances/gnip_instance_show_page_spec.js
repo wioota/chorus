@@ -4,7 +4,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
         this.page = new chorus.pages.GnipInstanceShowPage(this.model.id);
     });
 
-    context("after the instance has loaded successfully", function() {
+    context('after the data source has loaded successfully', function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
             this.page.render();

@@ -19,11 +19,11 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         expect(this.page.$(".content_header h1").text()).toBe("");
     });
 
-    it("fetches the instance", function() {
+    it('fetches the data source', function() {
         expect(this.page.instance).toHaveBeenFetched();
     });
 
-    it("fetches the databases for that instance", function() {
+    it('fetches the databases for that data source', function() {
         expect(this.page.collection).toHaveBeenFetched();
     });
 
@@ -43,7 +43,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
             expect(this.page.mainContent.contentHeader.$("h1")).toContainText(this.instance.get("name"));
         });
 
-        it("should have the correct instance icon in the header ", function() {
+        it('should have the correct data source icon in the header ', function() {
             expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", this.instance.providerIconUrl());
         });
 

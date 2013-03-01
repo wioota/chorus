@@ -33,7 +33,7 @@ describe("chorus.views.DashboardInstanceList", function() {
             this.view.render();
         });
 
-        it("displays the names of the instances", function() {
+        it('displays the names of the data sources', function() {
             expect(this.view.$(".name").eq(0)).toContainText("broccoli");
             expect(this.view.$(".name").eq(0)).toHaveHref(this.instance1.showUrl());
 
@@ -41,7 +41,7 @@ describe("chorus.views.DashboardInstanceList", function() {
             expect(this.view.$(".name").eq(1)).toHaveHref(this.instance2.showUrl());
         });
 
-        it("sorts the instances case-insensitively", function() {
+        it('sorts the data sources case-insensitively', function() {
             expect(this.view.$(".name").eq(0)).toContainText("broccoli");
             expect(this.view.$(".name").eq(1)).toContainText("Camels");
             expect(this.view.$(".name").eq(2)).toContainText("chicken");
@@ -51,7 +51,7 @@ describe("chorus.views.DashboardInstanceList", function() {
             expect(this.view.$(".name").eq(6)).toContainText("kangaroo");
         });
 
-        it("displays the icon for each instance", function() {
+        it('displays the icon for each data source', function() {
             expect(this.view.$(".image img").eq(0).attr("src")).toBe(this.instance1.providerIconUrl());
             expect(this.view.$(".image img").eq(1).attr("src")).toBe(this.instance2.providerIconUrl());
         });

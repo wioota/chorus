@@ -175,7 +175,7 @@ describe("chorus.views.DatasetList", function() {
                 this.view.render();
             });
 
-            it("renders the no datasets in the this instance message", function() {
+            it('renders the no datasets in the this data source message', function() {
                 expect($(this.view.el)).toContainTranslation("dataset.browse_more_instance");
             });
         });

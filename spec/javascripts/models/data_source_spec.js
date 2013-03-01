@@ -24,7 +24,7 @@ describe('chorus.models.DataSource', function() {
     });
 
     describe('#isShared', function(){
-        it('returns true if the instance is marked as shared', function(){
+        it('returns true if the data source is marked as shared', function(){
             var shared = new chorus.models.DataSource({shared: true});
             expect(shared.isShared()).toBeTruthy();
             var unshared = new chorus.models.DataSource();
@@ -33,7 +33,7 @@ describe('chorus.models.DataSource', function() {
     });
 
     describe('#isGreenplum', function(){
-        it('returns true if the instance is a greenplum db', function(){
+        it('returns true if the data source is greenplum', function(){
             var gpdb = new chorus.models.DataSource({entityType: 'gpdb_data_source'});
             expect(gpdb.isGreenplum()).toBeTruthy();
             var oracle = new chorus.models.DataSource({entityType: 'oracle_data_source'});
@@ -52,7 +52,7 @@ describe('chorus.models.DataSource', function() {
             expect(this.account).toBeA(chorus.models.InstanceAccount);
         });
 
-        it("sets the instance id", function() {
+        it("sets the data source id", function() {
             expect(this.account.get("instanceId")).toBe(this.model.get("id"));
         });
 
@@ -83,7 +83,7 @@ describe('chorus.models.DataSource', function() {
                 expect(account).not.toBe(previousAccount);
             });
 
-            it("triggers 'change' on the instance", function() {
+            it("triggers 'change' on the data source", function() {
                 spyOnEvent(this.model, 'change');
                 this.model.accountForCurrentUser().trigger("destroy");
                 expect("change").toHaveBeenTriggeredOn(this.model);
@@ -126,7 +126,7 @@ describe('chorus.models.DataSource', function() {
             expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet);
         });
 
-        it("sets the instance id", function() {
+        it("sets the data source id", function() {
             expect(this.instanceAccounts.attributes.instanceId).toBe(this.model.get('id'));
         });
 
@@ -146,7 +146,7 @@ describe('chorus.models.DataSource', function() {
             expect(this.instanceUsage).toBeA(chorus.models.InstanceUsage);
         });
 
-        it("sets the instance id", function() {
+        it("sets the data source id", function() {
             expect(this.instanceUsage.attributes.instanceId).toBe(this.model.get('id'));
         });
 
@@ -156,19 +156,19 @@ describe('chorus.models.DataSource', function() {
     });
 
     describe("#hasWorkspaceUsageInfo", function() {
-        it("returns true when the instance's usage is loaded", function() {
+        it("returns true when the data source usage is loaded", function() {
             this.model.usage().set({workspaces: []});
             expect(this.model.hasWorkspaceUsageInfo()).toBeTruthy();
         });
 
-        it("returns false when the instances's usage is not loaded", function() {
+        it('returns false when the data source usage is not loaded', function() {
             this.model.usage().unset("workspaces");
             expect(this.model.hasWorkspaceUsageInfo()).toBeFalsy();
         });
     });
 
     describe("#sharing", function() {
-        it("returns an instance sharing model", function() {
+        it("returns a data source sharing model", function() {
             expect(this.model.sharing().get("instanceId")).toBe(this.model.get("id"));
         });
 
@@ -186,7 +186,7 @@ describe('chorus.models.DataSource', function() {
             spyOn(this.model, "accounts").andReturn(this.accounts);
         });
 
-        it("returns the account name of the user who owns the instance and shared it", function() {
+        it("returns the account name of the user who owns the data source and shared it", function() {
             this.user = rspecFixtures.user();
             this.account = this.model.accountForUser(this.user);
             expect(this.model.sharedAccountDetails()).toBe(this.model.accountForOwner().get("dbUsername"));

@@ -6,7 +6,7 @@ describe("chorus.views.SearchInstance", function() {
     });
 
 
-    it("includes the instance icon", function() {
+    it('includes the data source icon', function() {
         expect(this.view.$("img.provider").attr("src")).toBe(this.model.providerIconUrl());
     });
 
@@ -18,7 +18,7 @@ describe("chorus.views.SearchInstance", function() {
         expect(this.view.$("img.state").attr("title")).toBe(this.model.stateText());
     });
 
-    it("has a link to the instance for each instance in the collection", function() {
+    it('has a link to the instance for each data source in the collection', function() {
         expect(this.view.$('.name').attr('href')).toBe(this.model.showUrl());
     });
 

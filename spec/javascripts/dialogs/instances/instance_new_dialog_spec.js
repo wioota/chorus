@@ -55,7 +55,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$(".data_sources").val("register_existing_greenplum").change();
             });
 
-            it("un-collapses the 'register an existing instance'", function() {
+            it("un-collapses the 'register an existing data source'", function() {
                 expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
                 expect(this.dialog.$(".register_existing_greenplum")).not.toHaveClass("collapsed");
             });
@@ -164,7 +164,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$(".data_sources").val("register_existing_oracle").change();
             });
 
-            it("un-collapses the 'register an existing instance'", function() {
+            it("un-collapses the 'register an existing data source'", function() {
                 expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
                 expect(this.dialog.$(".register_existing_oracle")).not.toHaveClass("collapsed");
             });
@@ -209,7 +209,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true }));
         });
 
-        it("shows the 'Register an existing GNIP instance' option", function() {
+        it("shows the 'Register an existing GNIP data source' option", function() {
             expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).toExist();
         });
 
@@ -222,7 +222,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             expect(this.selectMenuStub.find(".register_existing_gnip")).toExist();
         });
 
-        describe("selecting gnip instance", function() {
+        describe("selecting gnip data source", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_gnip").change();
             });
@@ -238,7 +238,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: false }));
         });
 
-        it("does not show the 'Register an existing GNIP instance' option", function() {
+        it("does not show the 'Register an existing GNIP data source' option", function() {
             expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).not.toExist();
         });
     });
@@ -324,7 +324,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             });
         }
 
-        context("registering a hadoop instance", function() {
+        context("registering a hadoop data source", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
 
@@ -340,7 +340,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("creates a hadoop instance model with the right data and saves it", function() {
+            it("creates a hadoop data source model with the right data and saves it", function() {
                 var params = this.server.lastCreate().params();
 
                 expect(params['hadoop_instance[name]']).toBe("Instance_Name");
@@ -411,7 +411,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             testUpload();
         });
 
-        context("registering a gnip instance", function() {
+        context('registering a gnip data source', function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_gnip").change();
 

@@ -66,7 +66,7 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#hadoopInstance", function() {
-            it("returns a hadoop instance with the right data", function() {
+            it("returns a hadoop data source with the right data", function() {
                 activity = rspecFixtures.activity.hadoopInstanceCreated({
                     hadoopInstance: { id: 8 }
                 });
@@ -78,7 +78,7 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#gnipInstance", function() {
-            it("returns a gnip instance with the right data", function() {
+            it("returns a gnip data source with the right data", function() {
                 activity = rspecFixtures.activity.gnipInstanceCreated({
                     gnipInstance: { id: 8 }
                 });
@@ -90,7 +90,7 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#gpdbDataSource", function() {
-            it("returns a gpdb instance with the right data", function() {
+            it("returns a gpdb data source with the right data", function() {
                 activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
                     actor: { id: 5 },
                     gpdbDataSource: { id: 6 },

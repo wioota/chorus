@@ -106,7 +106,7 @@ describe("chorus.views.SearchAttachment", function() {
         });
     });
 
-    context("with instance", function() {
+    context('with data source', function() {
         beforeEach(function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             this.result = search.attachments().at(0);

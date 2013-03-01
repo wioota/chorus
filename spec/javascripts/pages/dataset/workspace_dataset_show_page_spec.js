@@ -150,7 +150,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         describe("#contentHeader", function() {
             describe("the links at the top", function() {
-                it("includes the link to the instance", function() {
+                it('includes the link to the data source', function() {
                     expect(this.page.$(".content_header a.instance")).toHaveHref(this.page.model.instance().showUrl());
                     expect(this.page.$(".content_header a.instance")).toHaveText(this.page.model.instance().name());
                 });

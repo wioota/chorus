@@ -44,7 +44,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             expect(this.view.$(".loading")).not.toExist();
         });
 
-        it("shows the instances count", function() {
+        it('shows the data sources count', function() {
             expect(this.view.$(".number")).toContainText(6);
         });
     });

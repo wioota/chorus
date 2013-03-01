@@ -18,11 +18,11 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         expect(this.hdfsEntry).toHaveBeenFetched();
     });
 
-    it("fetches the instance", function() {
+    it('fetches the data source', function() {
         expect(this.instance).toHaveBeenFetched();
     });
 
-    describe("before the instance fetch completes", function() {
+    describe('before the data source fetch completes', function() {
         beforeEach(function() {
             this.page.render();
         });

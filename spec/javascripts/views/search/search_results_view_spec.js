@@ -210,7 +210,7 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
 
-            context("when the li is for an instance", function() {
+            context('when the li is for a data source', function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                     var modelToClick = this.model.instances().find(function (instance) { return instance.isGreenplum(); });
                     this.view.$(".instance_list li.gpdb_data_source").eq(0).click();
@@ -218,7 +218,7 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
 
-            context("when the li is for a hadoop instance", function() {
+            context('when the li is for a hadoop data source', function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                     var modelToClick = this.model.instances().find(function (instance) { return instance.isHadoop(); });
                     this.view.$(".instance_list li.hadoop_instance").eq(0).click();
@@ -226,7 +226,7 @@ describe("chorus.views.SearchResults", function() {
                 });
             });
 
-            context("when the li is for a gnip instance", function() {
+            context('when the li is for a gnip data source', function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                     var modelToClick = this.model.instances().find(function (instance) { return instance.isGnip(); });
                     this.view.$(".instance_list li.gnip_instance").eq(0).click();

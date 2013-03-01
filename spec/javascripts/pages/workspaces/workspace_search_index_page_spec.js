@@ -34,7 +34,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 expect(crumbs.eq(2)).toContainTranslation("breadcrumbs.search_results");
             });
 
-            it("disables the 'instances', 'people', 'hdfs entries' and 'workspaces' options in the filter menu", function() {
+            it("disables the 'data sources', 'people', 'hdfs entries' and 'workspaces' options in the filter menu", function() {
                 var menuOptions = this.page.$(".default_content_header .link_menu.type li");
                 expect(menuOptions.find("a").length).toBe(4);
 

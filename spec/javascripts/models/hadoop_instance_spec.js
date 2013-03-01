@@ -16,7 +16,7 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.entityType).toBe("hadoop_instance");
     });
 
-    it("links to the root directory of the hadoop instance", function() {
+    it('links to the root directory of the hadoop data source', function() {
         expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
 
@@ -39,7 +39,7 @@ describe("chorus.models.HadoopInstance", function() {
     });
 
     describe("#sharedAccountDetails", function() {
-        it("returns the account name of the user who owns the instance and shared it", function() {
+        it('returns the account name of the user who owns the data source and shared it', function() {
             var sharedAccountDetails = this.model.get("username") + ", " + this.model.get("groupList");
             expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
         });

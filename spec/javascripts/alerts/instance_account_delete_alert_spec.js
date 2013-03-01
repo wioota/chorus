@@ -10,7 +10,7 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
     });
 
     describe("#makeModel", function() {
-        it("gets the current user's account for the instance that is the current page model", function(){
+        it("gets the user account for the data source that is the current page model", function(){
             expect(this.alert.model.get("userId")).toBe("1011");
             expect(this.alert.model.get("instanceId")).toBe("456");
         });

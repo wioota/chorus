@@ -125,7 +125,7 @@ describe("chorus.views.SchemaPicker", function() {
             spyOn(chorus, 'styleSelect');
         });
 
-        context("when instance is provided", function() {
+        context('when data source is provided', function() {
             beforeEach(function() {
                 this.instance = rspecFixtures.gpdbDataSource();
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance });
@@ -133,11 +133,11 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view.render();
             });
 
-            it('does not try to fetch the instances', function() {
+            it('does not try to fetch the data sources', function() {
                 expect(this.server.lastFetchAllFor(new chorus.collections.GpdbDataSourceSet())).toBeUndefined();
             });
 
-            it("displays the instance's name as a label instead of a select instances", function() {
+            it('displays the data source name as a label instead of Select Data Source', function() {
                 expect(this.view.$(".instance .title")).toContainText(this.instance.name());
                 expect(this.view.$('.instance select')).not.toExist();
             });
@@ -156,7 +156,7 @@ describe("chorus.views.SchemaPicker", function() {
             });
         });
 
-        context("when an instance and a database are provided", function() {
+        context('when a data source and a database are provided', function() {
             beforeEach(function() {
                 this.instance = rspecFixtures.gpdbDataSource();
                 this.database = rspecFixtures.database({instance: { id: this.instance.get("id") } });
@@ -167,12 +167,12 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view.render();
             });
 
-            it('does not try to fetch the instances or the databases', function() {
+            it('does not try to fetch the data sources or the databases', function() {
                 expect(this.server.lastFetchAllFor(new chorus.collections.GpdbDataSourceSet())).toBeUndefined();
                 expect(this.server.lastFetchAllFor(new chorus.collections.DatabaseSet({instanceId: this.instance.get("id")}))).toBeUndefined();
             });
 
-            it("displays the instance and database names instead of selects for instances and databases", function() {
+            it('displays the data source and database names instead of selects for data sources and databases', function() {
                 expect(this.view.$(".instance .title")).toContainText(this.instance.name());
                 expect(this.view.$(".database .title")).toContainText(this.database.name());
 
@@ -218,12 +218,12 @@ describe("chorus.views.SchemaPicker", function() {
                     expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
                 });
 
-                it("renders a select for the instance", function() {
+                it('renders a select for the data source', function() {
                     expect(this.view.$('.instance select')).toExist();
                     expect(this.view.$('.instance .title')).not.toExist();
                 });
 
-                it("fetches the list of instances", function() {
+                it("fetches the list of data sources", function() {
                     expect(this.server.requests[0].url).toMatch("/data_sources/");
                 });
 
@@ -233,7 +233,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                 itSortsTheSelectOptionsAlphabetically('instance');
 
-                context("when the instance list fetch completes", function() {
+                context('when the data source list fetch completes', function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.instances, [
                             rspecFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
@@ -262,12 +262,12 @@ describe("chorus.views.SchemaPicker", function() {
                             expect(this.view.$(".instance .loading_text")).toHaveClass("hidden");
                         });
 
-                        it("keeps the same options in the instance select", function() {
+                        it('keeps the same options in the data source select', function() {
                             expect(this.view.$("select[name=instance] option").length).toBe(4);
                         });
                     });
 
-                    context("choosing an instance", function() {
+                    context('choosing a data source', function() {
                         beforeEach(function() {
                             this.view.$(".instance select").prop("selectedIndex", 1).change();
                             this.selectedInstance = this.view.instances.get(this.view.$('.instance select option:selected').val());
@@ -284,7 +284,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                             itShowsUnavailable("database");
 
-                            describe("choosing another instance", function() {
+                            describe('choosing another data source', function() {
                                 beforeEach(function() {
                                     this.view.$(".instance select").prop("selectedIndex", 2).change();
                                 });
@@ -556,7 +556,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                             itShouldResetSelect('schema', false);
 
-                                            context("changing the instance", function() {
+                                            context('changing the data source', function() {
                                                 beforeEach(function() {
                                                     var select = this.view.$(".instance select");
                                                     select.prop("selectedIndex", 2);
@@ -568,7 +568,7 @@ describe("chorus.views.SchemaPicker", function() {
                                             });
                                         });
 
-                                        context("changing the instance", function() {
+                                        context('changing the data source', function() {
                                             beforeEach(function() {
                                                 this.view.$(".instance select")
                                                     .prop("selectedIndex", 2)
@@ -589,7 +589,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                             itHidesSection('schema');
 
-                                            context("unselecting the instance", function() {
+                                            context('unselecting the data source', function() {
                                                 beforeEach(function() {
                                                     var select = this.view.$(".instance select");
                                                     select.prop("selectedIndex", 0);
@@ -636,7 +636,7 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
 
-                context("when the instance list fetch completes without any instances", function() {
+                context('when the data source list fetch completes without any data sources', function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.instances, []);
                     });
@@ -646,7 +646,7 @@ describe("chorus.views.SchemaPicker", function() {
                     itHidesSection('schema');
                 });
 
-                context("when the instance list fetch fails", function() {
+                context('when the data source list fetch fails', function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, 'error');
                         this.server.lastFetchAllFor(this.view.instances).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
@@ -686,7 +686,7 @@ describe("chorus.views.SchemaPicker", function() {
                 $("#jasmine_content").append(this.view.el);
             });
 
-            context("when the instances list does not include the selected instance", function() {
+            context('when the data sources list does not include the selected data source', function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.instances, [
                         rspecFixtures.gpdbDataSource({id: 1, name: "A"}),
@@ -701,7 +701,7 @@ describe("chorus.views.SchemaPicker", function() {
                 itHidesSection("schema");
             });
 
-            context("when the instances list is empty", function() {
+            context('when the data sources list is empty', function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.instances, []);
                     this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
@@ -713,7 +713,7 @@ describe("chorus.views.SchemaPicker", function() {
                 itHidesSection("schema");
             });
 
-            context("when the instance list fetch completes", function() {
+            context('when the data source list fetch completes', function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.instances, [
                         rspecFixtures.gpdbDataSource(),
@@ -759,7 +759,7 @@ describe("chorus.views.SchemaPicker", function() {
                             ]);
                         });
 
-                        it("selects the instance", function() {
+                        it('selects the data source', function() {
                             expect(this.view.$('.instance select option:selected').val()).toEqual('789');
                         });
 
@@ -844,7 +844,7 @@ describe("chorus.views.SchemaPicker", function() {
         });
 
         describe("#fieldValues", function() {
-            context("with an instance provided", function() {
+            context('with a data source provided', function() {
                 beforeEach(function() {
                     this.instance = rspecFixtures.gpdbDataSource();
                     this.view = new chorus.views.SchemaPicker({ instance: this.instance });
@@ -855,7 +855,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view.$(".schema select").val("6").change();
                 });
 
-                it("uses the provided instance", function() {
+                it('uses the provided data source', function() {
                     expect(this.view.fieldValues()).toEqual({
                         instance: this.instance.get('id'),
                         database: '5',
@@ -864,7 +864,7 @@ describe("chorus.views.SchemaPicker", function() {
                 });
             });
 
-            context("with no instance provided", function() {
+            context('with no data source provided', function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
@@ -873,7 +873,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view.$(".instance select").val("4").change();
                 });
 
-                context("when an instance, database, and schema are selected from the dropdowns", function() {
+                context('when a data source, database, and schema are selected from the dropdowns', function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
@@ -881,7 +881,7 @@ describe("chorus.views.SchemaPicker", function() {
                         this.view.$(".schema select").val("6").change();
                     });
 
-                    it("returns instance, database, and schema ids", function() {
+                    it('returns data source, database, and schema ids', function() {
                         expect(this.view.fieldValues()).toEqual({
                             instance: '4',
                             database: '5',
@@ -897,7 +897,7 @@ describe("chorus.views.SchemaPicker", function() {
                         this.view.$(".schema input.name").val("New_Schema").keyup();
                     });
 
-                    it("returns the instance id and the database and schema names", function() {
+                    it('returns the data source id and the database and schema names', function() {
                         expect(this.view.fieldValues()).toEqual({
                             instance: '4',
                             databaseName: 'New_Database',
@@ -913,7 +913,7 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
             });
 
-            context("when an instance, database, and schema are selected", function() {
+            context('when a data source, database, and schema are selected', function() {
                 beforeEach(function() {
                     spyOn(this.view, "fieldValues").andReturn({
                         instance: 5,
@@ -928,7 +928,7 @@ describe("chorus.views.SchemaPicker", function() {
             });
 
             context("when not completely specified", function() {
-                context("with only an instance", function() {
+                context('with only a data source', function() {
                     beforeEach(function() {
                         spyOn(this.view, "fieldValues").andReturn({
                             instance: 5
@@ -940,7 +940,7 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
 
-                context("with an instance and a blank databaseName", function() {
+                context('with a data source and a blank databaseName', function() {
                     beforeEach(function() {
                         spyOn(this.view, "fieldValues").andReturn({
                             instance: 5,
@@ -953,7 +953,7 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
 
-                context("with an instance, a database, and a blank schemaName", function() {
+                context('with a data source, a database, and a blank schemaName', function() {
                     beforeEach(function() {
                         spyOn(this.view, "fieldValues").andReturn({
                             instance: 5,

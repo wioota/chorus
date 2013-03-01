@@ -14,13 +14,13 @@ describe("chorus.views.InstanceList", function() {
         });
     });
 
-    context("without instances", function() {
+    context('without data sources', function() {
         describe("#render", function() {
             beforeEach(function() {
                 this.view.render();
             });
 
-            it("renders empty text for each instance type", function() {
+            it('renders empty text for each data source type', function() {
                 expect(this.view.$(".data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
@@ -28,7 +28,7 @@ describe("chorus.views.InstanceList", function() {
         });
     });
 
-    context("when the instances are fetched", function() {
+    context('when the data sources are fetched', function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.hadoopInstances, [
                 rspecFixtures.hadoopInstance({name : "Hadoop9", id: "1"}),
@@ -51,15 +51,15 @@ describe("chorus.views.InstanceList", function() {
             expect(this.view.$("ul.list")).toHaveClass("selectable");
         });
 
-        it("renders the three instance provider sections", function() {
+        it('renders the three data source provider sections', function() {
             expect(this.view.$("div.instance_provider").length).toBe(3);
         });
 
-        it("renders the details section in each instance provider section", function() {
+        it('renders the details section in each data source provider section', function() {
             expect(this.view.$("div.instance_provider .details").length).toBe(3);
         });
 
-        it("renders the data sources in the correct instance div", function() {
+        it('renders the data sources in the correct data source div', function() {
             var dataSources = this.view.$(".data_source li.instance");
             expect(dataSources.length).toBe(3);
             expect(dataSources).toContainText("gP1");
@@ -67,7 +67,7 @@ describe("chorus.views.InstanceList", function() {
             expect(dataSources).toContainText("oracle");
         });
 
-        it("renders the hadoop instances in the correct instance div", function() {
+        it('renders the hadoop data sources in the correct data source div', function() {
             var hadoopItems = this.view.$(".hadoop_instance li.instance");
             expect(hadoopItems.length).toBe(3);
             expect(hadoopItems).toContainText("hadoop1");
@@ -75,7 +75,7 @@ describe("chorus.views.InstanceList", function() {
             expect(hadoopItems).toContainText("Hadoop10");
         });
 
-        it("renders the gnip instances in the correct instance div", function() {
+        it('renders the gnip data sources in the correct data source div', function() {
             var gnipItems = this.view.$(".gnip_instance li.instance");
             expect(gnipItems.length).toBe(3);
             expect(gnipItems).toContainText("Gnip1");
@@ -83,13 +83,13 @@ describe("chorus.views.InstanceList", function() {
             expect(gnipItems).toContainText("Gnip3");
         });
 
-        it("pre-selects the first instance", function() {
+        it('pre-selects the first data source', function() {
             expect(this.view.$("li:first-child")).toHaveClass("selected");
             expect(this.view.$("li.selected").length).toBe(1);
             expect(this.view.$("li.selected")).toContainText('gP1');
         });
 
-        describe("when an instance is destroyed", function() {
+        describe('when andata source is destroyed', function() {
             beforeEach(function() {
                 this.oldLength = this.dataSources.length;
                 var liToSelect = this.view.$("li").eq(2);
@@ -103,7 +103,7 @@ describe("chorus.views.InstanceList", function() {
                     this.server.lastDestroy().succeed();
                 });
 
-                it("selects the next available instance", function() {
+                it('selects the next available data source', function() {
                     expect(this.view.$("li:first-child")).toHaveClass("selected");
                     expect(this.view.$("li.selected").length).toBe(1);
                 });
@@ -114,7 +114,7 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
-            context("when a non-selected instance is destroyed", function() {
+            context('when a non-selected data source is destroyed', function() {
                 beforeEach(function() {
                     var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
                     var id = nonSelectedLi.data("instanceId");
@@ -122,13 +122,13 @@ describe("chorus.views.InstanceList", function() {
                     this.server.lastDestroy().succeed();
                 });
 
-                it("leaves the same instance selected", function() {
+                it('leaves the same data source selected', function() {
                     expect(this.view.$("li.selected").data("instanceId")).toBe(this.selectedId);
                 });
             });
         });
 
-        describe("when an instance is offline", function() {
+        describe('when andata source is offline', function() {
             beforeEach(function() {
                 this.dataSources.at(0).set({ name: "Greenplum", online: false });
                 this.view.render();
@@ -153,7 +153,7 @@ describe("chorus.views.InstanceList", function() {
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
-            it("re-fetches the data sources, hadoop and gnip instances", function() {
+            it('re-fetches the data sources, hadoop and gnip data sources', function() {
                 expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
@@ -168,7 +168,7 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe("clicking on a gpdb instance", function() {
+        describe('clicking on a gpdbdata source', function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy("instance:selected");
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
@@ -177,7 +177,7 @@ describe("chorus.views.InstanceList", function() {
                 this.li2.click();
             });
 
-            it("triggers the instance:selected event", function() {
+            it('triggers the instance:selected event', function() {
                 expect(this.eventSpy).toHaveBeenCalled();
                 var instancePassed = this.eventSpy.mostRecentCall.args[0];
                 expect(instancePassed.get("name")).toBe("GP9");
@@ -198,7 +198,7 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
-            context("clicking on the same instance again", function() {
+            context('clicking on the same data source again', function() {
                 beforeEach(function() {
                     this.li2.click();
                 });
@@ -208,7 +208,7 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
-            context("and then clicking on another instance", function() {
+            context('and then clicking on another data source', function() {
                 beforeEach(function() {
                     this.li3.click();
                 });
@@ -219,7 +219,7 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe("clicking on a hadoop instance", function() {
+        describe('clicking on a hadoopdata source', function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy();
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
@@ -238,7 +238,7 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        describe("clicking on a gnip instance", function() {
+        describe('clicking on a gnipdata source', function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy();
                 chorus.PageEvents.subscribe("instance:selected", this.eventSpy);

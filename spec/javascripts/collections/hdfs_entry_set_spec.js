@@ -1,5 +1,5 @@
 describe("chorus.collections.HdfsEntrySet", function() {
-    context("when the collection has path and instance set", function() {
+    context('when the collection has path and data source set', function() {
         beforeEach(function() {
             this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([rspecFixtures.hdfsFile()], {
                 path: '/data/somewhere',
@@ -9,7 +9,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
 
         describe("add", function() {
-            it("sets the path and instance on the added entries", function() {
+            it("sets the path and data source on the added entries", function() {
                 expect(this.hdfsEntrySet.at(0).get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
             });
         });
@@ -34,7 +34,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
 
         describe("add", function() {
-            it("keeps the path and instance already set on the entry", function() {
+            it("keeps the path and data source already set on the entry", function() {
                 var entry = rspecFixtures.hdfsFile({path: '/data/foo', hadoopInstance: {id: '10000'}});
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');

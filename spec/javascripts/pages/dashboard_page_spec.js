@@ -123,17 +123,17 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.dataSourceSet).toHaveBeenFetched();
         });
 
-        it("fetches the hadoop instances", function() {
+        it('fetches the hadoop data sources', function() {
             expect(this.page.hadoopInstanceSet).toBeA(chorus.collections.HadoopInstanceSet);
             expect(this.page.hadoopInstanceSet).toHaveBeenFetched();
         });
 
-        it("fetches the gnip instances", function() {
+        it('fetches the gnip data sources', function() {
             expect(this.page.gnipInstanceSet).toBeA(chorus.collections.GnipInstanceSet);
             expect(this.page.gnipInstanceSet).toHaveBeenFetched();
         });
 
-        it("passes the instance set through to the instance list view", function() {
+        it('passes the data source set through to the data source list view', function() {
             var packedUpDataSourceSet = this.page.dataSourceSet.map(function(instance) {
                 return new chorus.models.Base(instance);
             });
@@ -151,13 +151,13 @@ describe("chorus.pages.DashboardPage", function() {
             expect(packedUpInstanceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
         });
 
-        describe("when an instance is added", function() {
+        describe('when a data source is added', function() {
             beforeEach(function() {
                 spyOn(this.page, "fetchInstances");
                 chorus.PageEvents.broadcast("instance:added");
             });
 
-            it("re-fetches all instances", function() {
+            it('re-fetches all data sources', function() {
                 expect(this.page.fetchInstances).toHaveBeenCalled();
             });
         });

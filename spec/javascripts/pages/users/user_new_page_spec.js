@@ -66,7 +66,7 @@ describe("chorus.pages.UserNewPage", function() {
             expect(this.page.$(".content_details")).toContainTranslation("users.details");
         });
 
-        it("goes to 404 when the instance fetch fails", function() {
+        it("goes to 404 when the config fetch fails", function() {
             spyOn(Backbone.history, "loadUrl");
             this.server.lastFetchFor(this.config).failNotFound();
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");

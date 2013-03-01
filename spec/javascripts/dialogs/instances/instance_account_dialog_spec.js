@@ -16,7 +16,7 @@ describe("chorus.dialogs.InstanceAccount", function() {
     });
 
     describe("#makeModel", function() {
-        it("gets the current user's account on the instance that is the current page model", function() {
+        it("gets the current user's account on the data source that is the current page model", function() {
             expect(this.dialog.model).toBe(this.instance.accountForCurrentUser());
         });
     });

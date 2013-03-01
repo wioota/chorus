@@ -16,7 +16,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
     });
 
     describe("#render", function() {
-        describe("when editing a greenplum instance", function() {
+        describe('when editing a greenplum data source', function() {
             beforeEach(function() {
                 this.dialog.model.set({ entityType: "gpdb_data_source"});
                 this.dialog.render();
@@ -49,7 +49,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
-        describe("when editing a hadoop instance", function() {
+        describe('when editing a hadoop data source', function() {
             beforeEach(function() {
                 this.dialog.model.set({ username: "user", groupList: "hadoop"});
                 this.dialog.model = new chorus.models.HadoopInstance(this.dialog.model.attributes);
@@ -87,7 +87,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
-        describe("when editing a gnip instance", function() {
+        describe('when editing a gnip data source', function() {
             beforeEach(function() {
                 this.instance = rspecFixtures.gnipInstance({
                     name: "myGnip",
@@ -178,7 +178,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.$("button.cancel")).toBeDisabled();
         });
 
-        context("with a hadoop instance", function() {
+        context('with a hadoop data source', function() {
             beforeEach(function() {
                 this.dialog.model = new chorus.models.HadoopInstance();
                 this.dialog.render();
@@ -200,7 +200,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
-        context("with a gnip instance", function() {
+        context('with a gnip data source', function() {
             beforeEach(function() {
                 this.dialog.model = new chorus.models.GnipInstance();
                 this.dialog.render();

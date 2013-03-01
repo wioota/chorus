@@ -33,22 +33,22 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         expect(this.dataSourceSet).toHaveBeenFetched();
     });
 
-    it("fetches all hadoop instances", function() {
+    it('fetches all hadoop data sources', function() {
         expect(this.hadoopInstanceSet).toHaveBeenFetched();
     });
 
-    it("fetches all gnip instances", function() {
+    it('fetches all gnip data sources', function() {
         expect(this.gnipInstanceSet).toHaveBeenFetched();
     });
 
-    it("passes the data sources and hadoop instances to the content details view", function() {
+    it('passes the data sources and hadoop data sources to the content details view', function() {
         var contentDetails = this.page.mainContent.contentDetails;
         expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
         expect(contentDetails.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(contentDetails.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
 
-    it("passes the data sources, hadoop and gnip instances to the list view", function() {
+    it('passes the data sources, hadoop and gnip data sources to the list view', function() {
         var list = this.page.mainContent.content;
         expect(list.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
         expect(list.options.dataSources).toBeA(chorus.collections.DataSourceSet);
@@ -61,7 +61,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             this.page.render();
         });
 
-        it("launches a new instance dialog", function() {
+        it('launches a new data source dialog', function() {
             var modal = stubModals();
             this.page.mainContent.contentDetails.$("button").click();
             expect(modal.lastModal()).toBeA(chorus.dialogs.InstancesNew);
@@ -106,7 +106,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             expect(this.page.mainContent.contentDetails.$(".loading")).not.toExist();
         });
 
-        it('displays the instance count', function(){
+        it('displays the data source count', function(){
             expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("6");
         });
     });

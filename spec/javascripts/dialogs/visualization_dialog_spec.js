@@ -249,7 +249,7 @@ describe("chorus.dialogs.Visualization", function() {
                     });
                 });
 
-                context("when dataset doesn't have workspace ( from instance browser page)", function() {
+                context('when the dataset doesnt belong to a workspace (from schema browser)', function() {
                     beforeEach(function() {
                         this.server.reset();
                         var dataset = rspecFixtures.dataset();

@@ -204,7 +204,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
             });
 
-            describe("the instance section", function() {
+            describe('the data source section', function() {
                 beforeEach(function() {
                     this.instanceLIs = this.page.$(".instance_list li");
                 });
@@ -213,17 +213,17 @@ describe("chorus.pages.SearchIndexPage", function() {
                     expect(this.instanceLIs.length).toBe(3);
                 });
 
-                describe("clicking on an instance search result", function() {
+                describe('clicking on andata source search result', function() {
                     beforeEach(function() {
                         spyOn(this.page.sidebars.instance, "setInstance");
                         this.instanceLIs.eq(0).trigger("click");
                     });
 
-                    it("selects that instance", function() {
+                    it('selects that data source', function() {
                         expect(this.instanceLIs.eq(0)).toHaveClass("selected");
                     });
 
-                    it("shows the instance in the sidebar", function() {
+                    it('shows the data source in the sidebar', function() {
                         expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
                         expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0));
                     });

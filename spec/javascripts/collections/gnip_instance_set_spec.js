@@ -13,7 +13,7 @@ describe("chorus.collections.GnipInstanceSet", function() {
         expect(this.collection.url()).toHaveUrlPath("/gnip_instances");
     });
 
-    it("sorts the instances by name, case insensitively", function() {
+    it('sorts the data sources by name, case insensitively', function() {
         expect(this.collection.at(0).get("name")).toBe("cat_instance");
         expect(this.collection.at(1).get("name")).toBe("Dog_instance");
         expect(this.collection.at(2).get("name")).toBe("egg_instance");

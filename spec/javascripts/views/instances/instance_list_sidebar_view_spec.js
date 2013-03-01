@@ -1,18 +1,18 @@
 describe("chorus.views.InstanceListSidebar", function() {
-    context("when no instance is selected", function() {
+    context('when no data source is selected', function() {
         beforeEach(function() {
             this.view = new chorus.views.InstanceListSidebar();
             this.view.render();
         });
 
         describe("render", function() {
-            it("should not display instance information", function() {
+            it('should not display data source information', function() {
                 expect(this.view.$(".info")).not.toExist();
             });
         });
     });
 
-    context("when a gpdb instance is selected", function() {
+    context('when a gpdb data source is selected', function() {
         beforeEach(function() {
             this.instance = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
@@ -24,7 +24,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             $('#jasmine_content').append(this.view.el);
         });
 
-        it("fetches the activities, instance usage and accounts", function() {
+        it('fetches the activities, data source usage and accounts', function() {
             expect(this.instance.activities()).toHaveBeenFetched();
             expect(this.instance.usage()).toHaveBeenFetched();
             expect(this.instance.accounts()).toHaveAllBeenFetched();
@@ -40,11 +40,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
-            it("displays instance name", function() {
+            it('displays data source name', function() {
                 expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
             });
 
-            it("displays instance type", function() {
+            it('displays data source type', function() {
                 expect(this.view.$(".instance_type")).toContainText("Greenplum Database");
             });
 
@@ -71,25 +71,25 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_data_source');
             });
 
-            context("when user is an admin or owner of the instance", function() {
-                it("displays edit instance link when user is admin", function() {
+            context('when user is an admin or owner of the data source', function() {
+                it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("displays edit instance link when user is owner", function() {
+                it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.set({owner: {id: chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("does not display the delete instance link", function() {
+                it('does not display the delete data source link', function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
 
-                context("when the instance is offline", function() {
+                context('when the data source is offline', function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
@@ -98,7 +98,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         this.view.render();
                     });
 
-                    it("does display the edit instance link", function() {
+                    it('does display the edit data source link', function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     });
 
@@ -108,18 +108,18 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when user is not an admin or owner of the instance", function() {
+            context('when user is not an admin or owner of the data source', function() {
                 beforeEach(function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.set({owner: {id: "harry"}});
                     this.view.render();
                 });
 
-                it("does not display edit instance link when user is neither admin nor owner", function() {
+                it('does not display edit data source link when user is neither admin nor owner', function() {
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
 
-                it("does not display the delete instance link", function() {
+                it('does not display the delete data source link', function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
             });
@@ -140,8 +140,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".instance_configuration_details")).toContainText("99.999");
                 });
 
-                describe("for existing gpdb instance", function() {
-                    context("and the instance has a shared account", function() {
+                describe('for existing greenplum data source', function() {
+                    context('and the data source has a shared account', function() {
                         beforeEach(function() {
                             var instance = rspecFixtures.gpdbDataSource({"shared":true});
                             instance.loaded = true;
@@ -158,7 +158,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
                     });
 
-                    context("and the instance does not have a shared account", function() {
+                    context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
                             expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
@@ -166,7 +166,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 });
 
-                describe("for a new gpdb instance", function() {
+                describe('for a new gpdbdata source', function() {
                     beforeEach(function() {
                         this.view.model = this.view.model.set({ size: "1", port: null, host: null });
                         this.view.render();
@@ -184,7 +184,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when the instance has a shared account", function() {
+            context('when the data source has a shared account', function() {
                 beforeEach(function() {
                     this.instance.set({
                         shared: true
@@ -201,17 +201,17 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .add_credentials")).not.toExist();
                 });
 
-                it("displays the instance shared account info", function () {
+                it('displays the data source shared account info', function () {
                     expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"));
                 });
 
-                it("displays edit instance link when user is admin", function() {
+                it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("displays edit instance link when user is owner", function() {
+                it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
                     this.instance.set({owner: {id: chorus.session.user().get('id')}});
@@ -219,7 +219,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("does NOT display the edit instance link when user is not an admin or owner", function() {
+                it('does NOT display the edit data source link when user is not an admin or owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
@@ -230,9 +230,9 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when the instance does not have a shared account", function() {
-                context("when the current user is NOT an admin or owner of the instance", function() {
-                    context("when the user does not have an account for the instance", function() {
+            context('when the data source does not have a shared account', function() {
+                context('when the current user is NOT an admin or owner of the data source', function() {
+                    context('when the user does not have an account for the data source', function() {
                         it("shows the 'no access' text and image", function() {
                             expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
                             expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
@@ -256,7 +256,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
                     });
 
-                    context("when the user has set up an account for the instance", function() {
+                    context('when the user has set up an account for the data source', function() {
                         beforeEach(function() {
                             var account = rspecFixtures.instanceAccount();
                             spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
@@ -378,7 +378,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
         });
 
-        context("when the user doesn't have permission to fetch the instances workspace usage", function() {
+        context("when the user doesn't have permission to fetch the data source workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchAllFor(this.instance.accounts());
@@ -393,7 +393,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-    context('when a oracle instance is selected', function() {
+    context('when a oracle data source is selected', function() {
         beforeEach(function(){
             this.instance = rspecFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
@@ -405,7 +405,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             $('#jasmine_content').append(this.view.el);
         });
 
-        it("fetches the activities, instance usage and accounts", function() {
+        it('fetches the activities, data source usage and accounts', function() {
             expect(this.instance.activities()).toHaveBeenFetched();
             expect(this.instance.usage()).toHaveBeenFetched();
             expect(this.instance.accounts()).toHaveAllBeenFetched();
@@ -433,11 +433,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
-            it("displays instance name", function() {
+            it('displays data source name', function() {
                 expect(this.view.$(".instance_name")).toContainText("Harry's House of Glamour");
             });
 
-            it("displays instance type", function() {
+            it('displays data source type', function() {
                 expect(this.view.$(".instance_type")).toContainText("Oracle Database");
             });
 
@@ -457,25 +457,25 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
             });
 
-            context("when user is an admin or owner of the instance", function() {
-                it("displays edit instance link when user is admin", function() {
+            context('when user is an admin or owner of the data source', function() {
+                it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("displays edit instance link when user is owner", function() {
+                it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.set({owner: {id: chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("does not display the delete instance link", function() {
+                it('does not display the delete data source link', function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
 
-                context("when the instance is offline", function() {
+                context('when the data source is offline', function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
@@ -484,7 +484,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         this.view.render();
                     });
 
-                    it("does display the edit instance link", function() {
+                    it('does display the edit data source link', function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     });
 
@@ -494,18 +494,18 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when user is not an admin or owner of the instance", function() {
+            context('when user is not an admin or owner of the data source', function() {
                 beforeEach(function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.set({owner: {id: "harry"}});
                     this.view.render();
                 });
 
-                it("does not display edit instance link when user is neither admin nor owner", function() {
+                it('does not display edit data source link when user is neither admin nor owner', function() {
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
 
-                it("does not display the delete instance link", function() {
+                it('does not display the delete data source link', function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
             });
@@ -521,8 +521,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".activity_list")).toHaveClass("hidden");
                 });
 
-                describe("for existing instance", function() {
-                    context("and the instance has a shared account", function() {
+                describe('for existing data source', function() {
+                    context('and the data source has a shared account', function() {
                         beforeEach(function() {
                             var instance = rspecFixtures.oracleDataSource({shared: true});
                             instance.loaded = true;
@@ -538,7 +538,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
                     });
 
-                    context("and the instance does not have a shared account", function() {
+                    context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
                             expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
@@ -546,7 +546,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 });
 
-                describe("for a new instance", function() {
+                describe('for a new data source', function() {
                     beforeEach(function() {
                         this.view.model = this.view.model.set({ size: "1", port: null, host: null });
                         this.view.render();
@@ -564,7 +564,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when the instance has a shared account", function() {
+            context('when the data source has a shared account', function() {
                 beforeEach(function() {
                     this.instance.set({
                         shared: true
@@ -581,17 +581,17 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .add_credentials")).not.toExist();
                 });
 
-                it("displays the instance shared account info", function () {
+                it('displays the data source shared account info', function () {
                     expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"));
                 });
 
-                it("displays edit instance link when user is admin", function() {
+                it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("displays edit instance link when user is owner", function() {
+                it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
                     this.instance.set({owner: {id: chorus.session.user().get('id')}});
@@ -599,7 +599,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
-                it("does NOT display the edit instance link when user is not an admin or owner", function() {
+                it('does NOT display the edit data source link when user is not an admin or owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
@@ -610,9 +610,9 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            context("when the instance does not have a shared account", function() {
-                context("when the current user is NOT an admin or owner of the instance", function() {
-                    context("when the user does not have an account for the instance", function() {
+            context('when the data source does not have a shared account', function() {
+                context('when the current user is NOT an admin or owner of the data source', function() {
+                    context('when the user does not have an account for the data source', function() {
                         it("shows the 'no access' text and image", function() {
                             expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
                             expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
@@ -636,7 +636,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
                     });
 
-                    context("when the user has set up an account for the instance", function() {
+                    context('when the user has set up an account for the data source', function() {
                         beforeEach(function() {
                             var account = rspecFixtures.instanceAccount();
                             spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
@@ -718,7 +718,7 @@ describe("chorus.views.InstanceListSidebar", function() {
     });
 
 
-    context("when a hadoop instance is selected", function() {
+    context('when a hadoop data source is selected', function() {
         beforeEach(function() {
             this.instance = rspecFixtures.hadoopInstance({
                 name: "Harry's House of Glamour",
@@ -735,11 +735,11 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).not.toExist();
         });
 
-        it("does display the edit instance link", function() {
+        it('does display the edit data source link', function() {
             expect(this.view.$(".actions .edit_instance")).toExist();
         });
 
-        it("displays instance type", function() {
+        it('displays data source type', function() {
             expect(this.view.$(".instance_type")).toContainText("Hadoop");
         });
 
@@ -756,7 +756,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-    context("when a gnip instance is selected", function() {
+    context('when a gnip data source is selected', function() {
         beforeEach(function() {
             this.instance = rspecFixtures.gnipInstance({name: "Harry's House of Glamour", username: "gnip" });
             this.view = new chorus.views.InstanceListSidebar();
@@ -764,7 +764,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             this.server.completeFetchFor(this.instance.activities());
         });
 
-        it("displays instance type", function() {
+        it('displays data source type', function() {
             expect(this.view.$(".instance_type")).toContainText("Gnip Account");
         });
 

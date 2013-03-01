@@ -48,14 +48,14 @@ describe("chorus.models.GnipInstance", function() {
         expect(this.model.performValidation(this.attrs)).toBeTruthy();
     });
 
-    it("requires a password if a new instance", function () {
+    it('requires a password if a new data source', function () {
         this.model.unset("id");
         this.attrs.password = "";
         expect(this.model.performValidation(this.attrs)).toBeFalsy();
     });
 
     describe("#sharedAccountDetails", function() {
-        it("returns the account name of the user who owns the instance and shared it", function() {
+        it('returns the account name of the user who owns the data source and shared it', function() {
             var sharedAccountDetails = this.model.get("username");
             expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
         });

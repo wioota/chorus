@@ -12,7 +12,7 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
     });
 
     describe("#makeModel", function() {
-        it("gets the current user's account for the instance that is the current page model", function(){
+        it("gets the user account for that data source", function(){
             expect(this.alert.model.get("datasetId")).toBe(this.schedules.last().get("datasetId"));
         });
     });

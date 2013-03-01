@@ -6,7 +6,7 @@ describe("chorus.models.InstanceUsage", function() {
     });
 
     describe("workspaceCount", function() {
-        it("returns the number of workspaces in which the instance is used", function() {
+        it('returns the number of workspaces in which the data source is used', function() {
             this.usage.set({ workspaces: [{}, {}, {}] });
             expect(this.usage.workspaceCount()).toBe(3);
         });

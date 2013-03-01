@@ -28,7 +28,7 @@ describe("chorus.models.Sandbox", function() {
             this.schema = this.model.schema();
         });
 
-        it("should be created with instance, database, and schema names and ids", function() {
+        it('should be created with data source, database, and schema names and ids', function() {
             expect(this.schema.get('id')).toBe(this.model.get('id'));
             expect(this.schema.get('name')).toBe(this.model.get('name'));
         });
@@ -59,7 +59,7 @@ describe("chorus.models.Sandbox", function() {
             this.instance = this.model.instance();
         });
 
-        it("returns an instance with the right id and name", function() {
+        it('returns a data source with the right id and name', function() {
             expect(this.instance).toBeA(chorus.models.GpdbDataSource);
             expect(this.instance.get("id")).toBe(this.model.get("database").instance.id);
             expect(this.instance.get("name")).toBe(this.model.get("database").instance.name);

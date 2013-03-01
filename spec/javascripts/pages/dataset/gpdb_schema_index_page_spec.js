@@ -34,7 +34,7 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
             expect(this.page.mainContent.contentHeader.$("h1")).toContainText("Foo");
         });
 
-        it("should have the correct instance icon in the header ", function() {
+        it('should have the correct data source icon in the header ', function() {
             expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", "/images/data_sources/greenplum_database.png");
         });
 

@@ -7,8 +7,8 @@ describe("chorus.Mixins.InstanceCredentials", function() {
         });
 
         describe("#instanceRequiringCredentials", function() {
-            context("when a fetch failed because of missing instance credentials", function() {
-                it("returns an instance model with the right id", function() {
+            context('when a fetch failed because of missing data source credentials', function() {
+                it("returns a data source model with the right id", function() {
                     var json = rspecFixtures.forbiddenInstanceJson({ errors: { model_data: { id: 101 } } });
 
                     this.collection.fetch();

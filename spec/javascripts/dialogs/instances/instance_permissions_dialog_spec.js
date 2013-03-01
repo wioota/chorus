@@ -25,7 +25,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 submodal.trigger("confirmChangeOwner", this.newOwner);
             });
 
-            it("saves the instance", function() {
+            it("saves the data source", function() {
                 expect(this.dialog.ownership.save).toHaveBeenCalled();
             });
 
@@ -51,15 +51,15 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
 
-                    it("triggers the 'invalidated' event on the instance", function() {
+                    it("triggers the 'invalidated' event on the data source", function() {
                         expect('invalidated').toHaveBeenTriggeredOn(this.instance);
                     });
 
-                    it("sets the owner id on the instance", function() {
+                    it("sets the owner id on the data source", function() {
                         expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
                     });
 
-                    it("can render the instance's shared db username", function() {
+                    it("can render the data source's shared db username", function() {
                         expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"));
                     });
                 });
@@ -100,7 +100,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
     });
 
-    context("when the instance is a shared account", function() {
+    context('when the data source is a shared account', function() {
         beforeEach(function() {
             this.instance = rspecFixtures.gpdbDataSource({"shared":true});
             var account = rspecFixtures.instanceAccount({
@@ -259,7 +259,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_removed");
                         });
 
-                        it("clears shared account information from the instance model in the dialog", function() {
+                        it("clears shared account information from the data source model in the dialog", function() {
                             expect(this.dialog.instance.isShared()).toBeFalsy();
                         });
 
@@ -294,7 +294,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
     });
 
-    context("when the instance has individual accounts", function() {
+    context('when the data source has individual accounts', function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
             this.owner = rspecFixtures.user({firstName: 'EDC', lastName: 'Admin'});
@@ -413,7 +413,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
                     });
 
-                    it("re-fetches the instance", function() {
+                    it("re-fetches the data source", function() {
                         expect(this.dialog.instance.fetch).toHaveBeenCalled();
                     });
                 });
@@ -799,7 +799,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         expect(this.otherSavedSpy).toHaveBeenCalled();
                     });
 
-                    it("clears shared account information from the instance model in the dialog", function() {
+                    it("clears shared account information from the data source", function() {
                         expect(this.dialog.instance.isShared()).toBeTruthy();
                     });
 

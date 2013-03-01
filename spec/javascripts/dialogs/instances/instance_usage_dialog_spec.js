@@ -74,7 +74,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
                     toBe(this.workspaces[0].ownerFullName);
             });
 
-            context("when the instance is offline", function() {
+            context('when the data source is offline', function() {
                 beforeEach(function() {
                     this.instance.set("state", "offline");
                     this.dialog.render();

@@ -860,7 +860,7 @@ describe("handlebars", function () {
                 expect($(this.result)).toContainTranslation('dataset.from', {location:''});
             });
 
-            it("includes the instance name, database name, and schema name", function () {
+            it('includes the data source name, database name, and schema name', function () {
                 var instance = this.model.instance();
                 expect($(this.result).find("a.instance")).toContainText(instance.name());
                 expect($(this.result).find("a.instance")).toHaveHref(instance.showUrl());
@@ -889,7 +889,7 @@ describe("handlebars", function () {
                 expect($(this.result).find('em').length).toBe(2);
             });
 
-            context("when the dataset's schema directly belongs to an instance", function() {
+            context('when the dataset schemas parent is a data source', function() {
                 beforeEach(function() {
                     this.model = rspecFixtures.oracleDataset();
                     this.result = $(Handlebars.helpers.datasetLocation(this.model).toString());
@@ -923,7 +923,7 @@ describe("handlebars", function () {
                     this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 });
 
-                it("includes the instance name, database name, and schema name", function () {
+                it('includes the data source name, database name, and schema name', function () {
                     expect($(this.result)).toContainText(this.model.instance().name());
                     expect($(this.result)).toContainText(this.model.database().name());
                     expect($(this.result)).toContainText(this.model.schema().name());

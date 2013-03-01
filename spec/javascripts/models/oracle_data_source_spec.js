@@ -28,7 +28,7 @@ describe("chorus.models.OracleDataSource", function() {
     });
 
     describe("#isGreenplum", function() {
-        it("returns false for oracle instances", function() {
+        it('returns false for oracle data sources', function() {
             expect(this.instance.isGreenplum()).toBeFalsy();
         });
     });
@@ -45,7 +45,7 @@ describe("chorus.models.OracleDataSource", function() {
             };
         });
 
-        context("when the instance is new", function() {
+        context('when the data source is new', function() {
             beforeEach(function() {
                 this.instance.unset("id", { silent: true });
             });
@@ -80,7 +80,7 @@ describe("chorus.models.OracleDataSource", function() {
             });
         });
 
-        context("when the instance has already been created", function() {
+        context('when the data source has already been created', function() {
             it("does not require a dbUsername or dbPassword", function() {
                 delete this.attrs.dbPassword;
                 delete this.attrs.dbUsername;

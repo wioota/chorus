@@ -31,7 +31,7 @@ describe("chorus.models.GpdbDataSource", function() {
             expect(this.databases).toBeA(chorus.collections.DatabaseSet);
         });
 
-        it("sets the instance id", function() {
+        it('sets the data source id', function() {
             expect(this.databases.attributes.instanceId).toBe(this.instance.get('id'));
         });
 
@@ -52,7 +52,7 @@ describe("chorus.models.GpdbDataSource", function() {
             };
         });
 
-        context("when the instance is new", function() {
+        context('when the data source is new', function() {
             beforeEach(function() {
                 this.instance.unset("id", { silent: true });
             });
@@ -87,7 +87,7 @@ describe("chorus.models.GpdbDataSource", function() {
             });
         });
 
-        context("when the instance has already been created", function() {
+        context('when the data source has already been created', function() {
             it("does not require a dbUsername or dbPassword", function() {
                 delete this.attrs.dbPassword;
                 delete this.attrs.dbUsername;

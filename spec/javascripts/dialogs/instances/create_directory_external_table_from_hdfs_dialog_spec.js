@@ -53,7 +53,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 expect(this.dialog.model.get("path")).toBe("/bar.csv");
             });
 
-            it("sets the hadoop instance id", function() {
+            it("sets the hadoop data source id", function() {
                 expect(this.dialog.model.get("hadoopInstanceId")).toBe("234");
             });
         });

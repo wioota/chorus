@@ -10,7 +10,7 @@ describe("chorus.models.Database", function() {
     });
 
     describe("#instance", function() {
-        it("returns an instance with the right id and name", function() {
+        it("returns a data source with the right id and name", function() {
             expect(this.model.instance().id).toEqual('1');
             expect(this.model.instance().name()).toEqual('insta_whip');
         });
