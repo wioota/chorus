@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -42,7 +42,7 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>30,''ngroups''=>29,''groups''=>[{''groupValue''=>''User
         1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4671400.5,''docs''=>[{''id''=>''User
-        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@oconnell.net''],''last_name_texts''=>[''Bauch''],''score''=>4671400.5}]}},{''groupValue''=>''LinkedTableauWorkfile
+        1000006'',''first_name_texts''=>[''searchquery''],''username_texts''=>[''owner''],''email_texts''=>[''searchquery@boehm.biz''],''last_name_texts''=>[''Wolf''],''score''=>4671400.5}]}},{''groupValue''=>''LinkedTableauWorkfile
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4671400.5,''docs''=>[{''id''=>''LinkedTableauWorkfile
         1000002'',''file_name_texts''=>[''searchquery''],''score''=>4671400.5}]}},{''groupValue''=>''GpdbTable
         1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3257924.5,''docs''=>[{''id''=>''GpdbTable
@@ -147,7 +147,7 @@ http_interactions:
         guess'']},''GnipInstance 1000000''=>{''description_texts''=>[''a @@@hl@@@searchquery@@@endhl@@@
         example gnip account'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:56 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -170,7 +170,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         summary_texts file_name_texts description_texts version_comments_texts database_name_texts
         table_description_texts schema_name_texts column_name_texts column_description_texts
         query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
@@ -213,5 +213,5 @@ http_interactions:
         1000014''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
         1000013''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:56 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:07 GMT
 recorded_with: VCR 2.3.0

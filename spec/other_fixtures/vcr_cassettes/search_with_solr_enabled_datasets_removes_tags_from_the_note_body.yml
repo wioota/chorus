@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:25:54 GMT
+  recorded_at: Fri, 01 Mar 2013 19:54:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>33}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>46}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:25:54 GMT
+  recorded_at: Fri, 01 Mar 2013 19:54:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -72,7 +72,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -96,5 +96,5 @@ http_interactions:
         1000045''=>{''body_texts''=>[''sometext @@@hl@@@searchwithhtml@@@endhl@@@
         ftw'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:25:54 GMT
+  recorded_at: Fri, 01 Mar 2013 19:54:19 GMT
 recorded_with: VCR 2.3.0

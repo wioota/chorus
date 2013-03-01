@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:40 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:40 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -72,9 +72,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:40 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -97,9 +97,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:39:40 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -124,7 +124,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:40 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -149,7 +149,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:41 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -172,9 +172,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>15}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:41 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -199,7 +199,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:41 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -222,9 +222,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:41 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -247,9 +247,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:43 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:31 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -272,9 +272,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -297,9 +297,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -322,59 +322,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Comment 1000000</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="body_texts">Comment on Note on Greenplum</field></doc><doc><field name="id">Comment 1000001</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="body_texts">2nd Comment on Note on Greenplum</field></doc><doc><field name="id">Comment 1000002</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="security_type_name_sm">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="body_texts">Comment on no collaborators private</field></doc><doc><field name="id">Comment 1000003</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbTable 1000010</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">GpdbTable</field><field name="security_type_name_sm">GpdbDataset</field><field name="security_type_name_sm">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000011</field><field name="found_in_workspace_id_im">1000010</field><field name="body_texts">commentsearch ftw</field></doc><doc><field name="id">Comment 1000004</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">ChorusView 1000018</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">ChorusView</field><field name="security_type_name_sm">GpdbDataset</field><field name="security_type_name_sm">Dataset</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000011</field><field name="found_in_workspace_id_im">1000010</field><field name="body_texts">commentsearch</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -399,7 +349,57 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Comment 1000000</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="body_texts">Comment on Note on Greenplum</field></doc><doc><field name="id">Comment 1000001</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="body_texts">2nd Comment on Note on Greenplum</field></doc><doc><field name="id">Comment 1000002</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">Workspace 1000006</field><field name="type_name_s">Workspace</field><field name="security_type_name_sm">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000006</field><field name="body_texts">Comment on no collaborators private</field></doc><doc><field name="id">Comment 1000003</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">GpdbTable 1000010</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">GpdbTable</field><field name="security_type_name_sm">GpdbDataset</field><field name="security_type_name_sm">Dataset</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000011</field><field name="found_in_workspace_id_im">1000010</field><field name="body_texts">commentsearch ftw</field></doc><doc><field name="id">Comment 1000004</field><field name="type">Comment</field><field name="type">ActiveRecord::Base</field><field name="class_name">Comment</field><field name="grouping_id_s">ChorusView 1000018</field><field name="type_name_s">Dataset</field><field name="security_type_name_sm">ChorusView</field><field name="security_type_name_sm">GpdbDataset</field><field name="security_type_name_sm">Dataset</field><field name="member_ids_im">1000006</field><field name="member_ids_im">1000007</field><field name="public_b">false</field><field name="workspace_id_im">1000011</field><field name="instance_account_ids_im">1000002</field><field name="found_in_workspace_id_im">1000001</field><field name="found_in_workspace_id_im">1000011</field><field name="found_in_workspace_id_im">1000010</field><field name="body_texts">commentsearch</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -424,7 +424,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -447,9 +447,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -474,107 +474,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">GpdbDataSource 1000000</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">searchquery</field><field boost="1000000" name="name_texts">searchquery</field><field boost="1000" name="description_texts">Just for searchquery and greenplumsearch</field></doc><doc><field name="id">GpdbDataSource 1000001</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000001</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">shared</field><field boost="1000000" name="name_texts">Shared</field></doc><doc><field name="id">GpdbDataSource 1000002</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000002</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">owners</field><field boost="1000000" name="name_texts">Owners</field></doc><doc><field name="id">GpdbDataSource 1000003</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000003</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">admins</field><field boost="1000000" name="name_texts">Admins</field></doc><doc><field name="id">GpdbDataSource 1000004</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000004</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">offline</field><field boost="1000000" name="name_texts">Offline</field></doc><doc><field name="id">GpdbDataSource 1000005</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000005</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">online</field><field boost="1000000" name="name_texts">Online</field></doc><doc><field name="id">OracleDataSource 1000006</field><field name="type">OracleDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">OracleDataSource</field><field name="grouping_id_s">OracleDataSource 1000006</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">oracle</field><field boost="1000000" name="name_texts">oracle</field></doc><doc><field name="id">GpdbDataSource 1000007</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000007</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">typeahead_gpdb_data_source</field><field boost="1000000" name="name_texts">typeahead_gpdb_data_source</field></doc><doc><field name="id">GpdbDataSource 1000008</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000008</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">gpdb_data_source44445</field><field boost="1000000" name="name_texts">gpdb_data_source44445</field></doc><doc><field name="id">GpdbDataSource 1000009</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000009</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">chorus_gpdb40</field><field boost="1000000" name="name_texts">chorus_gpdb40</field></doc><doc><field name="id">GpdbDataSource 1000010</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000010</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">chorus_gpdb41</field><field boost="1000000" name="name_texts">chorus_gpdb41</field></doc><doc><field name="id">GpdbDataSource 1000011</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000011</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">local-greenplum</field><field boost="1000000" name="name_texts">local-greenplum</field></doc><doc><field name="id">OracleDataSource 1000012</field><field name="type">OracleDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">OracleDataSource</field><field name="grouping_id_s">OracleDataSource 1000012</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">oracle_data_source44445</field><field boost="1000000" name="name_texts">oracle_data_source44445</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Tag 1000000</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">alpha</field></doc><doc><field name="id">Tag 1000001</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">typeahead</field></doc><doc><field name="id">Tag 1000002</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">beta</field></doc></add>
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
-    http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -599,13 +499,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:47 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@keeblerlubowitz.net</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@walter.info</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Earline</field><field boost="1000000" name="last_name_texts">Rowe</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">earline@rohan.info</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Sydney</field><field boost="1000000" name="last_name_texts">Murazik</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">sydney@beer.com</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">McDermott</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@marvin.biz</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Wunsch</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@donnelly.info</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">Bauch</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@oconnell.net</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Augusta</field><field boost="1000000" name="last_name_texts">Tremblay</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">augusta@koepp.com</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Golden</field><field boost="1000000" name="last_name_texts">Abshire</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">golden@stoltenberg.name</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Jamar</field><field boost="1000000" name="last_name_texts">Weimann</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">jamar@dietrichmosciski.org</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Prosacco</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@goyette.com</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Bennett</field><field boost="1000000" name="last_name_texts">Brown</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">bennett@blick.info</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Antwan</field><field boost="1000000" name="last_name_texts">Roberts</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">antwan@runolfon.info</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Julianne</field><field boost="1000000" name="last_name_texts">Mayert</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">julianne@schowalter.com</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Devan</field><field boost="1000000" name="last_name_texts">Ondricka</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">devan@smith.biz</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Andres</field><field boost="1000000" name="last_name_texts">Hermiston</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">andres@beier.biz</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Jacinthe</field><field boost="1000000" name="last_name_texts">Muller</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">jacinthe@littleko.net</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Gino</field><field boost="1000000" name="last_name_texts">Walter</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">gino@osinskibergstrom.net</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Jailyn</field><field boost="1000000" name="last_name_texts">Feest</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">jailyn@goodwindietrich.net</field></doc><doc><field name="id">User 1000019</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000019</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Shaina</field><field boost="1000000" name="last_name_texts">Kessler</field><field boost="1000" name="username_texts">user44453</field><field boost="1000" name="email_texts">shaina@keebler.info</field></doc><doc><field name="id">User 1000020</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000020</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Nia</field><field boost="1000000" name="last_name_texts">Ankunding</field><field boost="1000" name="username_texts">user44454</field><field boost="1000" name="email_texts">nia@buckridge.name</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">GpdbDataSource 1000000</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000000</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">searchquery</field><field boost="1000000" name="name_texts">searchquery</field><field boost="1000" name="description_texts">Just for searchquery and greenplumsearch</field></doc><doc><field name="id">GpdbDataSource 1000001</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000001</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">shared</field><field boost="1000000" name="name_texts">Shared</field></doc><doc><field name="id">GpdbDataSource 1000002</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000002</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">owners</field><field boost="1000000" name="name_texts">Owners</field></doc><doc><field name="id">GpdbDataSource 1000003</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000003</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">admins</field><field boost="1000000" name="name_texts">Admins</field></doc><doc><field name="id">GpdbDataSource 1000004</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000004</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">offline</field><field boost="1000000" name="name_texts">Offline</field></doc><doc><field name="id">GpdbDataSource 1000005</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000005</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">online</field><field boost="1000000" name="name_texts">Online</field></doc><doc><field name="id">OracleDataSource 1000006</field><field name="type">OracleDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">OracleDataSource</field><field name="grouping_id_s">OracleDataSource 1000006</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">oracle</field><field boost="1000000" name="name_texts">oracle</field></doc><doc><field name="id">GpdbDataSource 1000007</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000007</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">typeahead_gpdb_data_source</field><field boost="1000000" name="name_texts">typeahead_gpdb_data_source</field></doc><doc><field name="id">GpdbDataSource 1000008</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000008</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">gpdb_data_source44445</field><field boost="1000000" name="name_texts">gpdb_data_source44445</field></doc><doc><field name="id">GpdbDataSource 1000009</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000009</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">chorus_gpdb40</field><field boost="1000000" name="name_texts">chorus_gpdb40</field></doc><doc><field name="id">GpdbDataSource 1000010</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000010</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">chorus_gpdb41</field><field boost="1000000" name="name_texts">chorus_gpdb41</field></doc><doc><field name="id">GpdbDataSource 1000011</field><field name="type">GpdbDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">GpdbDataSource</field><field name="grouping_id_s">GpdbDataSource 1000011</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">local-greenplum</field><field boost="1000000" name="name_texts">local-greenplum</field></doc><doc><field name="id">OracleDataSource 1000012</field><field name="type">OracleDataSource</field><field name="type">DataSource</field><field name="type">ActiveRecord::Base</field><field name="class_name">OracleDataSource</field><field name="grouping_id_s">OracleDataSource 1000012</field><field name="type_name_s">Instance</field><field name="security_type_name_sm">Instance</field><field name="security_type_name_sm">DataSource</field><field name="sort_name_s">oracle_data_source44445</field><field boost="1000000" name="name_texts">oracle_data_source44445</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -624,7 +524,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -647,9 +547,109 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>23}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Tag 1000000</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">alpha</field></doc><doc><field name="id">Tag 1000001</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">typeahead</field></doc><doc><field name="id">Tag 1000002</field><field name="type">Tag</field><field name="type">ActiveRecord::Base</field><field name="class_name">Tag</field><field name="type_name_s">Tag</field><field boost="1000000" name="name_texts">beta</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:34 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Admin_44445</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin_44445@boylehettinger.net</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Admin_44446</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">admin_44446@kiehn.com</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Frederic</field><field boost="1000000" name="last_name_texts">Streich</field><field boost="1000" name="username_texts">default</field><field boost="1000" name="email_texts">frederic@hamillohara.org</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Andres</field><field boost="1000000" name="last_name_texts">Wuckert</field><field boost="1000" name="username_texts">no_collaborators</field><field boost="1000" name="email_texts">andres@ruel.name</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">no_picture</field><field boost="1000000" name="last_name_texts">Kuhn</field><field boost="1000" name="username_texts">no_picture</field><field boost="1000" name="email_texts">no_picture@schowalter.info</field></doc><doc><field name="id">User 1000005</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000005</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">with_picture</field><field boost="1000000" name="last_name_texts">Boyer</field><field boost="1000" name="username_texts">with_picture</field><field boost="1000" name="email_texts">with_picture@lesch.info</field></doc><doc><field name="id">User 1000006</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000006</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">searchquery</field><field boost="1000000" name="last_name_texts">Wolf</field><field boost="1000" name="username_texts">owner</field><field boost="1000" name="email_texts">searchquery@boehm.biz</field></doc><doc><field name="id">User 1000007</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000007</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Bertha</field><field boost="1000000" name="last_name_texts">Huel</field><field boost="1000" name="username_texts">the_collaborator</field><field boost="1000" name="email_texts">bertha@predovic.info</field></doc><doc><field name="id">User 1000008</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000008</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Terrance</field><field boost="1000000" name="last_name_texts">Gerlach</field><field boost="1000" name="username_texts">not_a_member</field><field boost="1000" name="email_texts">terrance@shieldswillms.com</field></doc><doc><field name="id">User 1000009</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000009</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Elmira</field><field boost="1000000" name="last_name_texts">Collins</field><field boost="1000" name="username_texts">restricted_user</field><field boost="1000" name="email_texts">elmira@jewe.info</field></doc><doc><field name="id">User 1000010</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000010</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">typeahead</field><field boost="1000000" name="last_name_texts">Crooks</field><field boost="1000" name="username_texts">typeahead</field><field boost="1000" name="email_texts">typeahead@kuhicoberbrunner.org</field></doc><doc><field name="id">User 1000011</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000011</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Albin</field><field boost="1000000" name="last_name_texts">Parker</field><field boost="1000" name="username_texts">user44445</field><field boost="1000" name="email_texts">albin@brownoconnell.info</field></doc><doc><field name="id">User 1000012</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000012</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Bryana</field><field boost="1000000" name="last_name_texts">Windler</field><field boost="1000" name="username_texts">user44446</field><field boost="1000" name="email_texts">bryana@ritchieoreilly.biz</field></doc><doc><field name="id">User 1000013</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000013</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Charley</field><field boost="1000000" name="last_name_texts">Beier</field><field boost="1000" name="username_texts">user44447</field><field boost="1000" name="email_texts">charley@veum.name</field></doc><doc><field name="id">User 1000014</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000014</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Elody</field><field boost="1000000" name="last_name_texts">Eichmann</field><field boost="1000" name="username_texts">user44448</field><field boost="1000" name="email_texts">elody@windler.com</field></doc><doc><field name="id">User 1000015</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000015</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Myra</field><field boost="1000000" name="last_name_texts">Keeling</field><field boost="1000" name="username_texts">user44449</field><field boost="1000" name="email_texts">myra@purdymitchell.biz</field></doc><doc><field name="id">User 1000016</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000016</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Maynard</field><field boost="1000000" name="last_name_texts">Casper</field><field boost="1000" name="username_texts">user44450</field><field boost="1000" name="email_texts">maynard@bode.name</field></doc><doc><field name="id">User 1000017</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000017</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Rahul</field><field boost="1000000" name="last_name_texts">O'Reilly</field><field boost="1000" name="username_texts">user44451</field><field boost="1000" name="email_texts">rahul@kohler.info</field></doc><doc><field name="id">User 1000018</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000018</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Marco</field><field boost="1000000" name="last_name_texts">Kunde</field><field boost="1000" name="username_texts">user44452</field><field boost="1000" name="email_texts">marco@maggio.org</field></doc><doc><field name="id">User 1000019</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000019</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Reginald</field><field boost="1000000" name="last_name_texts">Haag</field><field boost="1000" name="username_texts">user44453</field><field boost="1000" name="email_texts">reginald@farrell.name</field></doc><doc><field name="id">User 1000020</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000020</field><field name="type_name_s">User</field><field name="security_type_name_sm">User</field><field boost="1000000" name="first_name_texts">Amya</field><field boost="1000000" name="last_name_texts">McGlynn</field><field boost="1000" name="username_texts">user44454</field><field boost="1000" name="email_texts">amya@kozey.biz</field></doc></add>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>24}}'
+    http_version: '1.1'
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -672,9 +672,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -697,9 +697,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -722,9 +722,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -747,9 +747,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -774,7 +774,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -797,9 +797,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:35 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -824,7 +824,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:48 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -847,9 +847,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -872,9 +872,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -897,9 +897,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -922,9 +922,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -947,9 +947,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -972,9 +972,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -997,9 +997,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1022,9 +1022,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1047,9 +1047,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1072,7 +1072,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:36 GMT
 recorded_with: VCR 2.3.0

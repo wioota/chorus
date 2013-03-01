@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -41,12 +41,12 @@ http_interactions:
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''User
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3969199.0,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@keeblerlubowitz.net''],''last_name_texts''=>[''AlphaSearch''],''score''=>3969199.0}]}},{''groupValue''=>''User
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3969199.0,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@walter.info''],''last_name_texts''=>[''AlphaSearch''],''score''=>3969199.0}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4031476.0,''docs''=>[{''id''=>''User
+        1000000'',''first_name_texts''=>[''Admin_44445''],''username_texts''=>[''admin''],''email_texts''=>[''admin_44445@boylehettinger.net''],''last_name_texts''=>[''AlphaSearch''],''score''=>4031476.0}]}},{''groupValue''=>''User
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>4031476.0,''docs''=>[{''id''=>''User
+        1000001'',''first_name_texts''=>[''Admin_44446''],''username_texts''=>[''evil_admin''],''email_texts''=>[''admin_44446@kiehn.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>4031476.0}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000000''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']},''User
         1000001''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:25:57 GMT
+  recorded_at: Fri, 01 Mar 2013 19:56:50 GMT
 recorded_with: VCR 2.3.0

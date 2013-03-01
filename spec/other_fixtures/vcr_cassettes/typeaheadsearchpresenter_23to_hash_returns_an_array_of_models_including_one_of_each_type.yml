@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>9,''params''=>{''fl''=>''*
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''fl''=>''*
         score'',''start''=>''0'',''q''=>''typeahead'',''qf''=>''name_texts first_name_texts
         last_name_texts file_name_texts'',''hl.simple.pre''=>''@@@hl@@@'',''hl.simple.post''=>''@@@endhl@@@'',''wt''=>''ruby'',''fq''=>[''type:(Attachment
         OR User OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR
@@ -37,7 +37,7 @@ http_interactions:
         AND -public_b:true)'',''-(security_type_name_sm:(Dataset) AND -instance_account_ids_im:(1000001
         OR 1000002 OR 1000004 OR 1000005 OR 1000014))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000006 AND -public_b:true)''],''hl''=>''on'',''defType''=>''edismax'',''rows''=>''20''}},''response''=>{''numFound''=>13,''start''=>0,''maxScore''=>4671400.5,''docs''=>[{''id''=>''User
-        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@goyette.com''],''last_name_texts''=>[''Prosacco''],''score''=>4671400.5},{''id''=>''ChorusWorkfile
+        1000010'',''first_name_texts''=>[''typeahead''],''username_texts''=>[''typeahead''],''email_texts''=>[''typeahead@kuhicoberbrunner.org''],''last_name_texts''=>[''Crooks''],''score''=>4671400.5},{''id''=>''ChorusWorkfile
         1000000'',''file_name_texts''=>[''typeahead''],''description_texts''=>[''A
         nice description''],''version_comments_texts''=>['''',''Factory commit message''],''score''=>4671400.5},{''id''=>''Tag
         1000001'',''name_texts''=>[''typeahead''],''score''=>2110545.5},{''id''=>''HdfsEntry
@@ -65,5 +65,5 @@ http_interactions:
         1000002''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_hadoop_instance'']},''GpdbDataSource
         1000007''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_gpdb_data_source'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 01 Mar 2013 18:40:49 GMT
+  recorded_at: Fri, 01 Mar 2013 20:00:13 GMT
 recorded_with: VCR 2.3.0
