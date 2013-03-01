@@ -109,5 +109,43 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         it('displays the data source count', function(){
             expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("6");
         });
+
+        describe("multiple selection", function() {
+            beforeEach(function() {
+                this.page.render();
+            });
+
+            context("when nothing is checked", function() {
+                it("does not display the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+                });
+            });
+
+            context("when a row has been checked", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("instance:checked", this.page.mainContent.content.collection);
+                });
+
+                it("displays the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                });
+
+                it("has an action to edit tags", function() {
+                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                });
+
+                describe("clicking the 'edit_tags' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.edit_tags").click();
+                    });
+
+                    it("launches the dialog for editing tags", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+        });
     });
 });

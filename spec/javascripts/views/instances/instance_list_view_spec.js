@@ -263,8 +263,16 @@ describe("chorus.views.InstanceList", function() {
                 this.view.$("li input:checkbox").eq(0).click().change();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
                 var lastTwoCalls = chorus.PageEvents.broadcast.calls.slice(-2);
+                var eventName = lastTwoCalls[1].args[0];
+                expect(eventName).toEqual("instance:checked");
                 var selectedModelsCollection = lastTwoCalls[0].args[1];
                 expect(selectedModelsCollection.length).toEqual(1);
+            });
+        });
+
+        describe("the collection that is used for multiple selections", function() {
+            it("contains all of the data sources", function() {
+                expect(this.view.collection.length).toEqual(9);
             });
         });
     });

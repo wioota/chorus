@@ -1,6 +1,7 @@
 chorus.views.InstanceList = chorus.views.CheckableList.extend({
     constructorName: "InstanceListView",
     templateName: "instance_list",
+    eventName: "instance",
 
     events: {
         "click li": "listItemClicked"
@@ -20,7 +21,10 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
         this.bindings.add(this.gnipInstances, "reset", this.renderAndSetupCheckable);
     },
 
-    renderAndSetupCheckable: function() {
+    renderAndSetupCheckable: function(collection) {
+        collection.each(function(model) {
+            model.id = model.get('id') + '-' + model.get('entityType');
+        }, this);
         this.render();
         this.setupCheckableCollection();
     },

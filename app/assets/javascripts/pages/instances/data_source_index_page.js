@@ -31,6 +31,18 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.InstanceListSidebar();
 
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "instance:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
+        });
+
         this.subscribePageEvent("instance:selected", this.setModel);
     },
 
