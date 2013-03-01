@@ -84,5 +84,10 @@ describe OracleDataSource do
       data_source.update_permissions
       schema.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
     end
+
+    it "continues when unable to connect with an account" do
+      stub(data_source).connect_with { raise StandardError.new("logon denied") }
+      expect{data_source.update_permissions}.not_to raise_error
+    end
   end
 end
