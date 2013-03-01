@@ -16,11 +16,11 @@ describe DatasetImportsController do
     it "uses authorization based on the visible datasets"
 
     it_behaves_like "a paginated list" do
-      let(:params) { {:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id} }
+      let(:params) { {:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.to_param} }
     end
 
     it "shows the latest imports for a dataset as the source dataset" do
-      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+      get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.to_param
       response.should be_success
       decoded_response.should_not be_nil
       decoded_response.length.should == 3
@@ -31,7 +31,7 @@ describe DatasetImportsController do
       let(:destination_dataset) { workspace.sandbox.datasets.create!({:name => 'new_table_for_import'}, :without_protection => true) }
 
       it "shows the latest imports for a destination dataset" do
-        get :index, :workspace_id => workspace.id, :dataset_id => destination_dataset.id
+        get :index, :workspace_id => workspace.to_param, :dataset_id => destination_dataset.to_param
         response.should be_success
         decoded_response.length.should == 3
       end
@@ -42,7 +42,7 @@ describe DatasetImportsController do
       let(:destination_dataset) { FactoryGirl.create :chorus_view, :name => 'new_table_for_import', :workspace => workspace }
 
       it "doesn't find imports where the chorus view has the same name as a destination table" do
-        get :index, :workspace_id => workspace.id, :dataset_id => destination_dataset.id
+        get :index, :workspace_id => workspace.to_param, :dataset_id => destination_dataset.to_param
         response.should be_success
         decoded_response.length.should == 0
       end
@@ -50,14 +50,14 @@ describe DatasetImportsController do
       it "does return imports where the chorus view is the source" do
         source_dataset.type = "ChorusView"
         source_dataset.save!
-        get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.id
+        get :index, :workspace_id => import_three.workspace_id, :dataset_id => source_dataset.to_param
         decoded_response.length.should == 3
       end
     end
 
     it "authorizes" do
       log_in users(:default)
-      get :index, :workspace_id => workspaces(:private).id, :dataset_id => source_dataset.id
+      get :index, :workspace_id => workspaces(:private).to_param, :dataset_id => source_dataset.to_param
 
       response.should be_forbidden
     end
@@ -152,8 +152,9 @@ describe DatasetImportsController do
       HashWithIndifferentAccess.new(
           :to_table => "the_new_table",
           :sample_count => "12",
-          :workspace_id => active_workspace.id.to_s,
-          :truncate => "false"
+          :workspace_id => active_workspace.to_param,
+          :truncate => "false",
+          :dataset_id => src_table.to_param
       )
     }
 
@@ -171,7 +172,7 @@ describe DatasetImportsController do
       context "into a new destination dataset" do
         before do
           attributes[:new_table] = "true"
-          attributes.merge! :dataset_id => src_table.to_param, :workspace_id => active_workspace.id
+          attributes.merge! :workspace_id => active_workspace.to_param
         end
 
         let(:active_workspace) { FactoryGirl.create :workspace, :name => "TestImportWorkspace", :sandbox => schema, :owner => user }
@@ -212,7 +213,7 @@ describe DatasetImportsController do
         end
 
         it 'returns an error for archived workspaces' do
-          attributes[:workspace_id] = archived_workspace.id
+          attributes[:workspace_id] = archived_workspace.to_param
           expect {
             post :create, attributes
           }.to change(Events::DatasetImportCreated, :count).by(0)
@@ -232,12 +233,7 @@ describe DatasetImportsController do
           decoded_errors.fields.base.TABLE_EXISTS.should be_present
         end
 
-        it "returns an error if source table can't be found" do
-          post :create, attributes.merge(:dataset_id => 'missing_source_table')
-          response.code.should == "404"
-        end
-
-        context "when there's duplicate columns ( only in Chorus View )" do
+        context "when there's duplicate columns (only in Chorus View)" do
           let(:src_table) { datasets(:chorus_view) }
           before do
             stub(Dataset).find(src_table.to_param) { src_table }
@@ -255,7 +251,7 @@ describe DatasetImportsController do
         before do
           attributes[:new_table] = "false"
           attributes[:to_table] = dst_table_name
-          attributes.merge! :dataset_id => src_table.to_param, :workspace_id => active_workspace.id
+          attributes.merge! :workspace_id => active_workspace.to_param
         end
 
         context "when destination dataset is consistent with source" do
@@ -360,8 +356,8 @@ describe DatasetImportsController do
           :dataset => nil,
           :truncate => false,
           :destination_table => destination_table_name,
-          :dataset_id => source_dataset.id,
-          :workspace_id => workspace.id
+          :dataset_id => source_dataset.to_param,
+          :workspace_id => workspace.to_param
       }
     end
 

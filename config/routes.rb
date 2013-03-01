@@ -75,9 +75,11 @@ Chorus::Application.routes.draw do
     resource :sandbox, :only => [:create]
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
+    resources :imports, :only => [:create], :controller => 'dataset_imports'
+
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
       resources :import_schedules, :only => [:index, :create, :update, :destroy], :controller => 'dataset_import_schedules'
-      resources :imports, :only => [:index, :create], :controller => 'dataset_imports'
+      resources :imports, :only => [:index], :controller => 'dataset_imports'
       resources :tableau_workbooks, :only => :create
     end
     resource :search, :only => [:show], :controller => 'workspace_search'

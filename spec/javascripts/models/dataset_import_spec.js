@@ -7,8 +7,10 @@ describe("chorus.models.DatasetImport", function() {
         });
     });
 
-    it("has the right url", function() {
-        expect(this.model.url()).toContain("/datasets/102/import");
+    describe('url', function() {
+        it('saves to the workspace/:id/dataset/:dataset_id/imports', function() {
+            expect(this.model.url()).toHaveUrlPath('/workspaces/1/imports');
+        });
     });
 
     describe("#isInProgress", function() {

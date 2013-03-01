@@ -1,6 +1,6 @@
 chorus.models.DatasetImport = chorus.models.Base.extend({
     constructorName: "DatasetImport",
-    urlTemplate: "workspaces/{{workspaceId}}/datasets/{{datasetId}}/imports",
+    urlTemplate: "workspaces/{{workspaceId}}/imports",
 
     declareValidations: function(newAttrs) {
         if (newAttrs.newTable === "true") {
