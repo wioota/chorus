@@ -82,7 +82,7 @@ describe Presenter, :type => :view do
       end
     end
 
-    context "with an acts as taggble on tag" do
+    context "with an acts as taggable on tag" do
       it "should create a TagPresenter" do
         event = Tag.new(:name => 'bar')
         mock.proxy(TagPresenter).new(event, view, {})

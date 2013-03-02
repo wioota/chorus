@@ -23,17 +23,18 @@ _.extend(chorus.presenters.InstanceList.prototype, {
         return this;
     },
 
-    presentModel: function(model) {
+    presentModel: function(instance) {
         return {
-            id: model.get("id"),
-            name: model.get("name"),
-            description: model.get("description"),
-            stateUrl: model.stateIconUrl(),
-            showUrl: model.showUrl(),
-            providerUrl: model.providerIconUrl(),
-            isOffline: model.isOffline(),
-            stateText: model.stateText(),
-            entityType: model.get('entityType')
+            id: instance.get("id"),
+            name: instance.get("name"),
+            description: instance.get("description"),
+            stateUrl: instance.stateIconUrl(),
+            showUrl: instance.showUrl(),
+            providerUrl: instance.providerIconUrl(),
+            isOffline: instance.isOffline(),
+            stateText: instance.stateText(),
+            entityType: instance.get('entityType'),
+            tags: instance.tags().models
         };
     }
 });

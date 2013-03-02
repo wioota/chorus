@@ -98,4 +98,19 @@ describe("chorus.presenters.InstanceList", function() {
     itPresentsModelAttribute("id");
     itPresentsModelAttribute("name");
     itPresentsModelAttribute("description");
+
+    it("presents the tags for all data sources", function() {
+        var presenterPropertyMap = {
+            dataSources: dataSources,
+            hadoop: hadoopInstances,
+            gnip: gnipInstances
+        };
+
+        _.each(presenterPropertyMap, function(presentedCollection, presenterProperty) {
+           presentedCollection.each(function(model, i) {
+               expect(presenter[presenterProperty][i]["tags"]).toBe(model.tags().models);
+           });
+        });
+    });
+
 });
