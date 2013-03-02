@@ -100,6 +100,13 @@ describe Dataset do
     it "returns all objects if name is not provided" do
       Dataset.with_name_like(nil).count.should == Dataset.count
     end
+
+    it "does not treat special characters as wildcards" do
+      dataset.update_attributes!({:name => "amat_%ingtable"}, :without_protection => true)
+
+      Dataset.with_name_like("t_%i").count.should == 1
+      #Dataset.with_name_like("_m").count.should == 0
+    end
   end
 
   describe ".filter_by_name" do
