@@ -56,7 +56,7 @@ class GpdbDataSource < DataSource
   end
 
   def create_database(name, current_user)
-    new_db = databases.build(:name => name)
+    new_db = GpdbDatabase.new(:name => name, :data_source => self)
     raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
 
     connect_as(current_user).create_database(name)

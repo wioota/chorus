@@ -62,7 +62,7 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def create_schema(name, current_user)
-    new_schema = schemas.build(:name => name)
+    new_schema = GpdbSchema.new(:name => name, :database => self)
     raise ActiveRecord::RecordInvalid.new(new_schema) if new_schema.invalid?
 
     connect_as(current_user).create_schema(name)

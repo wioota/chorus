@@ -44,7 +44,7 @@ describe TypeAheadSearch do
     let(:private_workspace_not_a_member) { workspaces(:typeahead_private_no_members) }
 
     before do
-      reindex_solr_fixtures
+      index_solr_fixtures_once
     end
 
     def create_and_record_search(*args)
