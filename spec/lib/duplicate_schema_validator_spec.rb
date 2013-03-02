@@ -45,6 +45,16 @@ describe DuplicateSchemaValidator do
         it "returns false" do
           DuplicateSchemaValidator.run.should be_false
         end
+
+        it "logs duplicate schemas if a logger is set" do
+          logger = Object.new
+          mock(logger).info(anything)
+
+          DuplicateSchemaValidator.logger = logger
+          DuplicateSchemaValidator.run
+
+          DuplicateSchemaValidator.logger = nil
+        end
       end
 
       context "when there are no duplicate schema names" do
@@ -100,6 +110,16 @@ describe DuplicateSchemaValidator do
 
         it "returns true" do
           DuplicateSchemaValidator.run_and_fix.should be_true
+        end
+
+        it "logs duplicate destroying schemas" do
+          logger = Object.new
+          mock(logger).info(anything)
+
+          DuplicateSchemaValidator.logger = logger
+          DuplicateSchemaValidator.run_and_fix
+
+          DuplicateSchemaValidator.logger = nil
         end
 
         it "removes the duplicate schemas" do

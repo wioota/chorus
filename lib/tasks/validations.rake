@@ -20,6 +20,7 @@ namespace :validations do
   desc 'Check Schema Names'
   task :schema_names => :environment do
     puts "Checking for duplicate Schemas..."
+    DuplicateSchemaValidator.logger = Logger.new(STDOUT)
     exit(1) unless DuplicateSchemaValidator.run
   end
 end

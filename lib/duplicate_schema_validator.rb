@@ -1,4 +1,6 @@
 module DuplicateSchemaValidator
+  mattr_accessor :logger
+
   def self.run
     duplicate_schemas = get_duplicate_schemas
 
@@ -6,7 +8,7 @@ module DuplicateSchemaValidator
       true
     else
       dup_names = duplicate_schemas.map {|k, schemas| schemas.first.name }
-      puts "Duplicate schemas found: #{dup_names}"
+      @@logger.info "Duplicate schemas found: #{dup_names}" if @@logger
       false
     end
   end
@@ -20,7 +22,7 @@ module DuplicateSchemaValidator
           link_chorus_views(original, duplicate)
           link_datasets(original, duplicate)
 
-          puts "Destroying Schema ##{duplicate.id}"
+          @@logger.info "Destroying Schema ##{duplicate.id}" if @@logger
           ActiveRecord::Base.connection.execute(<<-SQL)
             DELETE
             FROM schemas
