@@ -18,6 +18,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             hadoopInstances: hadoopInstances,
             gnipInstances: gnipInstances
         });
+        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
     });
 
     describe('#render', function() {
@@ -46,6 +47,28 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
 
         it('shows the data sources count', function() {
             expect(this.view.$(".number")).toContainText(6);
+        });
+
+        describe("multiple selection", function() {
+            it("should have a 'select all' and 'deselect all'", function() {
+                expect(this.view.$(".multiselect span")).toContainTranslation("actions.select");
+                expect(this.view.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
+                expect(this.view.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
+            });
+
+            describe("when the 'select all' link is clicked", function() {
+                it("broadcasts the 'selectAll' page event", function() {
+                    this.view.$(".multiselect a.select_all").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                });
+            });
+
+            describe("when the 'select none' link is clicked", function() {
+                it("broadcasts the 'selectNone' page event", function() {
+                    this.view.$(".multiselect a.select_none").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                });
+            });
         });
     });
 });

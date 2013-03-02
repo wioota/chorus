@@ -35,21 +35,6 @@ $link-padding: 15px;
         }
     }
 
-    .multiselect {
-        a {
-            @include link-with-dotted-underline;
-        }
-
-        .select {
-            padding-right: 3px;
-        }
-
-        .separator {
-            padding: 0 3px;
-            color: $link-color;
-        }
-    }
-
     button, .button {
         @include font-content-details;
         @include content-details-button($border-color);
