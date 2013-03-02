@@ -24,6 +24,13 @@ describe("MainContentList", function() {
             });
         });
 
+        it("doesn't re-render on collection change events", function() {
+            var view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User" });
+            spyOn(view, "preRender");
+            this.collection.trigger('change');
+            expect(view.preRender).not.toHaveBeenCalled();
+        });
+
         context("when a title override is provided", function() {
             beforeEach(function() {
                 this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", title: "YES!" });

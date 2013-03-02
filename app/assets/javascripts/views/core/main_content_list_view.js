@@ -2,6 +2,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
     setup: function(options) {
         var modelClass = options.modelClass;
         var collection = this.collection;
+
         if(options.checkable) {
             this.content = new chorus.views.CheckableList(_.extend({
                     collection: collection,
@@ -18,6 +19,8 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         if (options.hasOwnProperty('persistent')) {
             this.persistent = options.persistent;
         }
+
+        this.suppressRenderOnChange = true;
 
         if (options.contentDetails) {
             this.contentDetails = options.contentDetails;
@@ -38,5 +41,6 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
             });
         }
     },
+
     additionalClass: "main_content_list"
 });

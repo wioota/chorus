@@ -10,7 +10,11 @@ chorus.views.Base = chorus.views.Bare.extend({
             this.listenTo(this.resource, "saveFailed validationFailed", this.showErrors);
             this.listenTo(this.resource, "validated", this.clearErrors);
             if (!this.persistent) {
-                this.listenTo(this.resource, "change reset sort", this.render);
+                this.listenTo(this.resource, "reset sort", this.render);
+
+                if (!this.suppressRenderOnChange) {
+                    this.listenTo(this.resource, "change", this.render);
+                }
             }
         }
     },

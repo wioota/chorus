@@ -67,7 +67,7 @@ describe("chorus.views.Base", function() {
             });
         });
 
-        describe("with persistent:true", function() {
+        describe("with persistent true", function() {
             beforeEach(function() {
                 chorus.views.Base.prototype.persistent = true;
                 this.view = new chorus.views.Base({model: this.model});

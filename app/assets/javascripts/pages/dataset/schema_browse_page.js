@@ -74,7 +74,6 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             modelClass: "Dataset",
             collection: this.collection,
             title: this.schema.canonicalName(),
-            persistent: true,
             search: {
                 placeholder: t("schema.search"),
                 onTextChange: onTextChangeFunction
@@ -82,7 +81,6 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             contentOptions: { checkable: true },
             contentDetailsOptions: { multiSelect: true }
         });
-        this.mainContent.listenTo(this.collection, "reset sort", this.mainContent.render);
         this.render();
     }
 });
