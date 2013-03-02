@@ -1,6 +1,7 @@
 describe("chorus.views.SearchInstance", function() {
     beforeEach(function() {
         this.model = rspecFixtures.hadoopInstance();
+        this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
         this.view = new chorus.views.SearchInstance({ model: this.model });
         this.view.render();
     });
@@ -20,6 +21,17 @@ describe("chorus.views.SearchInstance", function() {
 
     it('has a link to the instance for each data source in the collection', function() {
         expect(this.view.$('.name').attr('href')).toBe(this.model.showUrl());
+    });
+
+    describe("tags", function () {
+        it("should show a list of tags", function () {
+            expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
+            expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
+        });
+
+        it("tags should link to the tag show page", function () {
+            expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/tags/tag1");
+        });
     });
 
     describe("comments", function() {
