@@ -18,6 +18,15 @@ describe TaggingsController do
       entity.reload.tags.map(&:name).should =~ tag_names
     end
 
+    it "removes tags" do
+      entity.tag_list = ["alpha", "beta", "gamma"]
+      entity.save!
+
+      post :create, params
+      response.code.should == '201'
+      entity.reload.tags.map(&:name).should =~ tag_names
+    end
+
     context 'with a dataset' do
       let(:entity) { datasets(:table) }
 

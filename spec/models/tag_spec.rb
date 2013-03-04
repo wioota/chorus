@@ -58,6 +58,29 @@ describe Tag do
     end
   end
 
+  describe ".find_or_create_by_tag_name" do
+    context "when the tag exists" do
+      let!(:tag) { Tag.create!(:name => "ABC") }
+
+      it "returns the tag" do
+        Tag.find_or_create_by_tag_name("abc").should == tag
+      end
+    end
+
+    context "when the tag does not exist" do
+      it "creates a new tag" do
+        -> {
+          Tag.find_or_create_by_tag_name("abc")
+        }.should change(Tag, :count).by(1)
+      end
+
+      it "returns the new tag" do
+        tag = Tag.find_or_create_by_tag_name("abc")
+        tag.name.should == "abc"
+      end
+    end
+  end
+
   describe "#named_like" do
     it "returns tags based on substring match" do
       Tag.create!(:name => "abc")

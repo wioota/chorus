@@ -132,7 +132,7 @@ FixtureBuilder.configure do |fbuilder|
     source_view = FactoryGirl.create(:gpdb_view, :name => "source_view", :schema => other_schema)
 
     tagged = FactoryGirl.create(:gpdb_table, :name => 'tagged', :schema => default_schema)
-    tagged.tag_list = 'alpha'
+    tagged.tag_list = ['alpha']
     tagged.save!
 
     # Search setup
@@ -168,10 +168,8 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     tagged_table = FactoryGirl.create(:gpdb_table, :name => "searchable_tag", :schema => searchquery_schema)
-    tagged_table.tag_list = "typeahead"
+    tagged_table.tag_list = ["typeahead"]
     tagged_table.save!
-
-
 
     # Search Database Instance Accounts For Solr Permissions
     searchquery_database.instance_accounts << owner_instance_account
@@ -190,7 +188,7 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << search_private_workspace = owner.owned_workspaces.create!({:name => "Search Private", :summary => "searchquery", :sandbox => searchquery_schema, :public => false}, :without_protection => true)
     workspaces << owner.owned_workspaces.create!({:name => "no_sandbox", :summary => "No Sandbox", :public => false}, :without_protection => true)
     workspaces << @empty_workspace = owner.owned_workspaces.create!({:name => "empty", :public => true}, :without_protection => true)
-    workspaces << owner.owned_workspaces.create!({:name => "tagged", :public => true, :sandbox => default_schema, :tag_list => "alpha,beta"}, :without_protection => true)
+    workspaces << owner.owned_workspaces.create!({:name => "tagged", :public => true, :sandbox => default_schema, :tag_list => ["alpha", "beta"]}, :without_protection => true)
 
     fbuilder.name :public, public_workspace
     fbuilder.name :private, private_workspace
@@ -286,7 +284,7 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:workfile_version, :workfile => public_search_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file, :commit_message => "Committed to searchquery")
 
       tagged_workfile = FactoryGirl.create(:chorus_workfile, :file_name => 'tagged', :owner => owner, :workspace => public_workspace, :versions_attributes => [{:contents => file}])
-      tagged_workfile.tag_list = "alpha,beta"
+      tagged_workfile.tag_list = ["alpha", "beta"]
       tagged_workfile.save!
 
       @draft_default = FactoryGirl.create(:workfile_draft, :owner => owner)

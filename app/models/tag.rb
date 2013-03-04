@@ -20,4 +20,8 @@ class Tag < ActiveRecord::Base
   def self.reset_counters
     find_each { |tag| tag.update_attribute(:taggings_count, tag.taggings.count) }
   end
+
+  def self.find_or_create_by_tag_name(name)
+    self.where("UPPER(name) = UPPER(?)", name).first_or_create!(:name => name)
+  end
 end

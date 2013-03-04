@@ -668,7 +668,7 @@ describe Search do
           tagged_workfile = workfiles(:tagged)
 
           [public_workfile, tagged_workfile].each do |w|
-            w.tag_list = "tagSort"
+            w.tag_list = ["tagSort"]
             w.save!
           end
           Sunspot.commit
