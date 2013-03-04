@@ -12,7 +12,6 @@ class OracleTableCopier < TableCopier
     destination_connection.disconnect
   end
 
-
   private
 
   def distribution_key_columns
