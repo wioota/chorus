@@ -41,6 +41,7 @@ Chorus::Application.routes.draw do
   resources :schemas, :only => [:show] do
     resources :datasets, :only => [:index]
     resources :functions, :only => [:index]
+    resources :imports, :only => :create, :controller => 'schemas/imports'
   end
 
   resources :tables, :only => [] do
@@ -75,7 +76,7 @@ Chorus::Application.routes.draw do
     resource :sandbox, :only => [:create]
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
-    resources :imports, :only => [:create], :controller => 'dataset_imports'
+    resources :imports, :only => [:create], :controller => 'workspaces/imports'
 
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
       resources :import_schedules, :only => [:index, :create, :update, :destroy], :controller => 'dataset_import_schedules'

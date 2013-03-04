@@ -1,4 +1,5 @@
 class DatasetImportsController < ApplicationController
+  before_filter :require_admin, :only => :update
   wrap_parameters :dataset_import, :exclude => [:id]
 
   def index
@@ -16,8 +17,6 @@ class DatasetImportsController < ApplicationController
     present paginate imports
   end
 
-  # TODO #41244423: allow users to terminate their own imports
-  before_filter :require_admin, :only => :update
   def update
     ids = [*params[:id]]
 
@@ -37,22 +36,5 @@ class DatasetImportsController < ApplicationController
     end
   end
 
-  def create
-    import_params = params[:dataset_import]
-    workspace = Workspace.find(params[:workspace_id])
-    authorize! :can_edit_sub_objects, workspace
 
-    src_table = Dataset.find(import_params[:dataset_id])
-    src_table.check_duplicate_column(current_user) if src_table.is_a?(ChorusView)
-
-    import = src_table.imports.new(import_params)
-
-    import.workspace = workspace
-    import.user = current_user
-
-    import.save!
-    import.create_import_event
-    QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
-    render :json => {}, :status => :created
-  end
 end

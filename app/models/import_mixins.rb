@@ -49,17 +49,10 @@ module ImportMixins
   end
 
   included do
-    belongs_to :workspace
-
-    validates :workspace, :presence => true
     validate :destination_dataset, :unless => :new_table
 
     belongs_to :destination_dataset, :class_name => 'Dataset'
     before_validation :set_destination_dataset_id
-  end
-
-  def schema
-    workspace.sandbox
   end
 
   def source_dataset_with_deleted

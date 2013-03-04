@@ -9,7 +9,7 @@ describe Import, :greenplum_integration do
   let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
 
   let(:import) do
-    Import.new.tap do |i|
+    WorkspaceImport.new.tap do |i|
       i.workspace = workspace
       i.to_table = 'new_table1234'
       i.new_table = true
@@ -18,15 +18,11 @@ describe Import, :greenplum_integration do
     end
   end
 
-  before do
-    workspace.update_attribute :sandbox_id, schema.id
-  end
+  before { workspace.update_attribute :sandbox_id, schema.id }
 
   describe "associations" do
-    it { should belong_to :workspace }
     it { should belong_to(:source_dataset).class_name('Dataset') }
     it { should belong_to :user }
-    it { should belong_to :import_schedule }
   end
 
   describe "validations" do

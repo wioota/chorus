@@ -2,9 +2,13 @@ class ImportSchedule < ActiveRecord::Base
   include SoftDelete
   include ImportMixins
 
+  belongs_to :workspace
+  validates :workspace, :presence => true
+  validate :workspace_is_not_archived, :unless => :deleted?
+
   belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
-  has_many :imports, :validate => false
+  has_many :imports, :validate => false, :class_name => 'WorkspaceImport'
 
   attr_accessible :to_table, :new_table, :sample_count,
                   :truncate, :start_datetime, :end_date, :frequency
@@ -18,7 +22,6 @@ class ImportSchedule < ActiveRecord::Base
   validates :user, :presence => true
   validates :start_datetime, :presence => true
   validates :end_date, :presence => true
-  validate :workspace_is_not_archived, :unless => :deleted?
 
   validates :frequency, :inclusion => {:in => %w( daily weekly monthly )}
 
@@ -59,7 +62,11 @@ class ImportSchedule < ActiveRecord::Base
     self.next_import_at = val
   end
 
-  def create_duplicate_import_schedule (source_dataset_id)
+  def schema
+    workspace.sandbox
+  end
+
+  def create_duplicate_import_schedule(source_dataset_id)
     new_import_schedule = ImportSchedule.new
     new_import_schedule.frequency = frequency
     new_import_schedule.destination_dataset_id = destination_dataset_id

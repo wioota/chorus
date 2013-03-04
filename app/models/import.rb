@@ -12,13 +12,9 @@ class Import < ActiveRecord::Base
   belongs_to :import_schedule
 
   validates :to_table, :presence => true
-
   validates :user, :presence => true
 
-  validate :workspace_is_not_archived
-
   validate :table_does_not_exist, :if => :new_table, :on => :create
-
   validates :source_dataset, :presence => true, :unless => :file_name
   validates :file_name, :presence => true, :unless => :source_dataset
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create

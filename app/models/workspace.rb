@@ -28,6 +28,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :associated_datasets
   has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
+  has_many :imports, :class_name => 'WorkspaceImport'
 
   validates_presence_of :name
   validate :uniqueness_of_workspace_name

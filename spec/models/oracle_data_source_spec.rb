@@ -7,8 +7,8 @@ describe OracleDataSource do
     it { should validate_presence_of(:host) }
     it { should validate_presence_of(:port) }
 
-    context "when creating" do
-      it "should validate owner account" do
+    context 'when creating' do
+      it 'validates the owner account' do
         mock(instance).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
         instance.valid?
       end

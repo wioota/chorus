@@ -456,6 +456,7 @@ describe ImportExecutor do
     let(:source_connection) { Object.new }
     let(:destination_connection) { Object.new }
     let(:executor) { ImportExecutor.new(import) }
+
     before do
       stub(executor).log.with_any_args
       stub.proxy(executor).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
@@ -471,7 +472,7 @@ describe ImportExecutor do
       end
     end
 
-    it "should remove the named pipe from disk" do
+    it 'removes the named pipe from disk' do
       dir = ChorusConfig.instance['gpfdist.data_dir']
       FileUtils.mkdir_p dir
       pipe_file = File.join(dir, "pipe_with_some_extra_stuff_#{import.created_at.to_i}_#{import.id}")

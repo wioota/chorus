@@ -12,7 +12,7 @@ FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir[*%w{
     spec/support/fixture_builder.rb
-    spec/factories.rb
+    spec/factories/*
     db/structure.sql
     spec/support/database_integration/*
     tmp/*_HOST_STALE
@@ -97,7 +97,7 @@ FixtureBuilder.configure do |fbuilder|
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
     fbuilder.name(:oracle, oracle_schema)
     FactoryGirl.create(:oracle_schema, name: 'oracle_empty', data_source: oracle_data_source)
-    FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
+    oracle_table = FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
 
@@ -341,15 +341,14 @@ FixtureBuilder.configure do |fbuilder|
     )
     fbuilder.name :dataset_import_created, dataset_import_created
 
+    schema_import = FactoryGirl.create(:schema_import, :user => owner, :to_table => "schema_import_table", :source_dataset_id => oracle_table.id, :schema => default_schema)
+    fbuilder.name :to_schema, schema_import
+
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
                                          :frequency => 'weekly', :workspace => public_workspace,
                                          :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
                                          :new_table => 't', :user_id => owner.id)
     fbuilder.name :default, import_schedule
-
-
-
-
 
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                   :import_schedule => import_schedule,

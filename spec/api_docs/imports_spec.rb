@@ -21,6 +21,26 @@ resource 'Imports' do
     end
   end
 
+  post '/schemas/:schema_id/imports' do
+    parameter :dataset_id, 'Id of the source dataset'
+    parameter :to_table, 'Table name of the destination table'
+    parameter :truncate, 'True/false: truncate into existing table (only if new_table is false)'
+    parameter :new_table, 'True/false: if true, import into new table. Otherwise, import into existing table.'
+    parameter :sample_count, 'Maximum number of rows to import'
+
+    required_parameters :dataset_id, :to_table, :new_table
+
+    let(:schema_id) { schemas(:default).to_param }
+    let(:to_table) { 'fancyTable' }
+    let(:truncate) { 'false' }
+    let(:new_table) { 'true' }
+    let(:sample_count) { '500' }
+
+    example_request 'Import an Oracle dataset into a Greenplum schema' do
+      status.should == 201
+    end
+  end
+
   post '/workspaces/:workspace_id/imports' do
     parameter :dataset_id, 'Id of the source dataset'
     parameter :to_table, 'Table name of the destination table'
@@ -35,7 +55,7 @@ resource 'Imports' do
     let(:new_table) { 'true' }
     let(:sample_count) { '500' }
 
-    example_request 'Import an existing dataset into a workspace, or create an import for a dataset' do
+    example_request 'Import a dataset into a workspace' do
       status.should == 201
     end
   end

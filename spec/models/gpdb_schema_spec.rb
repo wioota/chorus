@@ -5,6 +5,7 @@ describe GpdbSchema do
     it { should belong_to(:database) }
     it { should have_many(:datasets) }
     it { should have_many(:workspaces) }
+    it { should have_many(:imports) }
 
     describe "#database" do
       let(:schema) {
@@ -92,7 +93,7 @@ describe GpdbSchema do
   end
 
   it_behaves_like 'a subclass of schema' do
-    let(:schema) { GpdbSchema.first }
+    let(:schema) { schemas(:default) }
   end
 
   context "refresh returns the list of schemas", :greenplum_integration do

@@ -68,14 +68,14 @@ class CsvImporter
   end
 
   def create_csv_import
-    i = Import.new(
+    i = WorkspaceImport.new(
         :file_name => csv_file.contents_file_name,
         :to_table => csv_file.to_table,
         :new_table => csv_file.new_table,
         :truncate => csv_file.truncate,
     )
-    i.workspace_id = csv_file.workspace_id
-    i.user_id = csv_file.user_id
+    i.workspace = csv_file.workspace
+    i.user = csv_file.user
     i.save
     i
   end

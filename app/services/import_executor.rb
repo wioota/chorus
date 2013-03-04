@@ -1,6 +1,6 @@
 require 'sequel/no_core_ext'
 
-class ImportExecutor < DelegateClass(Import)
+class ImportExecutor < DelegateClass(WorkspaceImport)
   def self.run(import_id)
     import = Import.find(import_id)
     ImportExecutor.new(import).run if import.success.nil?

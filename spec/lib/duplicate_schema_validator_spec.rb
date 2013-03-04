@@ -276,7 +276,7 @@ describe DuplicateSchemaValidator do
         it "links imports for duplicate datasets to datasets in the remaining schema" do
           imports = duplicate_schema_objects.map do |schema|
             dataset = FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'duplicate_dataset')
-            import = Import.new
+            import = WorkspaceImport.new
             import.source_dataset = dataset
             import.save!(:validate => false)
             import

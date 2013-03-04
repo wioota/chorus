@@ -1,0 +1,4 @@
+class WorkspaceImportPresenter < ImportPresenter
+
+end
+

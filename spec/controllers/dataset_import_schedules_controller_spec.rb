@@ -447,5 +447,4 @@ describe DatasetImportSchedulesController do
       gpdb2.exec_query("SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
-
 end

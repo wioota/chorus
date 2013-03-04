@@ -1176,7 +1176,7 @@ AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid
           db.disconnect
         end
 
-        it "should raise a SqlPermissionDenied" do
+        it 'raises SqlPermissionDenied' do
           expect { subject }.to raise_error(GreenplumConnection::SqlPermissionDenied)
         end
       end
