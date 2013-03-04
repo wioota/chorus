@@ -8,8 +8,9 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     },
 
     resourcesLoaded: function () {
-        this.model = this.schedule = this.dataset.importSchedule() || this.model;
-        this._super('resourcesLoaded');
+        if (this.dataset.importSchedule()) {
+            this.model.set(this.dataset.importSchedule());
+        }
     },
 
     makeModel: function () {
@@ -38,7 +39,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     },
 
     postRender: function () {
-        this.schedule && this.setFieldValues(this.schedule);
+        this.model && this.setFieldValues(this.model);
         if(this.options.action === "create_schedule") {
             this.scheduleView.enable();
         }

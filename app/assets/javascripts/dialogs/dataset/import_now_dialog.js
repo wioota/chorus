@@ -21,11 +21,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     resourcesLoaded: function() {
         this.schedule = this.schedule || this.dataset.importSchedule();
-        this.bindings.add(this.model, "saved", this.modelSaved);
-        this.bindings.add(this.model, "saveFailed validationFailed", function() {
-            this.showErrors(this.model);
-            this.$("button.submit").stopLoading();
-        });
     },
 
     makeModel: function() {
@@ -56,6 +51,12 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         }
 
         this.customSetup();
+
+        this.bindings.add(this.model, "saved", this.modelSaved);
+        this.bindings.add(this.model, "saveFailed validationFailed", function() {
+            this.showErrors(this.model);
+            this.$("button.submit").stopLoading();
+        });
     },
 
     customSetup: function() {

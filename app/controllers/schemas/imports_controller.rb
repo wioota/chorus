@@ -11,7 +11,7 @@ module Schemas
       import.save!
 
       QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
-      head :created
+      render :json => {}, :status => :created
     end
   end
 end
