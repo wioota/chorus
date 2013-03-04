@@ -405,7 +405,7 @@ describe DatasetImportSchedulesController do
       end
     end
 
-    context "does a scheduled import" do
+    context 'running a scheduled import' do
       before do
         import_attributes.merge!(
             :import_type => 'schedule',

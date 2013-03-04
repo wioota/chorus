@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SchemaImport do
   let(:schema) { schemas(:default) }
-  let(:import) { imports(:to_schema) }
+  let(:import) { imports(:oracle) }
 
   describe 'associations' do
     it { should belong_to :schema }

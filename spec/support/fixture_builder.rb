@@ -342,7 +342,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :dataset_import_created, dataset_import_created
 
     schema_import = FactoryGirl.create(:schema_import, :user => owner, :to_table => "schema_import_table", :source_dataset_id => oracle_table.id, :schema => default_schema)
-    fbuilder.name :to_schema, schema_import
+    fbuilder.name :oracle, schema_import
 
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
                                          :frequency => 'weekly', :workspace => public_workspace,

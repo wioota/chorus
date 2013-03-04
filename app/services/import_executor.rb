@@ -12,7 +12,7 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
 
   def run
     touch(:started_at)
-    raise "Destination workspace #{workspace_with_deleted.name} has been deleted" if workspace_with_deleted.deleted?
+    raise "Destination workspace #{workspace_with_deleted.name} has been deleted" if __getobj__.is_a?(WorkspaceImport) && workspace_with_deleted.deleted?
     raise "Original source dataset #{source_dataset_with_deleted.scoped_name} has been deleted" if source_dataset_with_deleted.deleted?
     copier_class = table_copier
 
@@ -123,14 +123,17 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
       set_destination_dataset_id
       save(:validate => false)
 
-      event = create_passed_event_and_notification
-      update_import_created_event
+
+      if __getobj__.is_a?(WorkspaceImport)
+        event = create_passed_event_and_notification
+        update_import_created_event
+      end
       import_schedule.update_attributes({:new_table => false}) if import_schedule
     else
-      event = create_failed_event message
+      event = create_failed_event message if __getobj__.is_a?(WorkspaceImport)
     end
 
-    Notification.create!(:recipient_id => user.id, :event_id => event.id)
+    Notification.create!(:recipient_id => user.id, :event_id => event.id) if __getobj__.is_a?(WorkspaceImport)
   end
 
   def create_passed_event_and_notification

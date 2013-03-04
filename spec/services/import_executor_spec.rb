@@ -386,9 +386,9 @@ describe ImportExecutor do
     end
 
     context "when the source dataset is in oracle" do
-      let(:source_dataset) { datasets(:oracle_table) }
+      let(:import) { imports(:oracle) }
 
-      it "should create an OracleTableCopier to run the import" do
+      it "creates an OracleTableCopier to run the import" do
         dont_allow(TableCopier).new.with_any_args
         ran = false
         any_instance_of(OracleTableCopier) do |copier|
