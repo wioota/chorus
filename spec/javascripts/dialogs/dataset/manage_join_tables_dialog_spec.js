@@ -46,9 +46,9 @@ describe("chorus.dialogs.ManageJoinTables", function () {
 
     describe("when the fetches complete", function () {
         beforeEach(function () {
-            this.schemaBob = rspecFixtures.schema({name:"Bob", database:this.schema.database().attributes });
-            this.schemaTed = rspecFixtures.schema({name:"Ted", database:this.schema.database().attributes });
-            this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
+            this.firstSchema = rspecFixtures.schema({name:"Bob", database:this.schema.database().attributes });
+            this.secondSchema = rspecFixtures.schema({name:"Ted", database:this.schema.database().attributes });
+            this.server.completeFetchFor(this.dialog.schemas, [this.firstSchema, this.schema, this.secondSchema]);
 
             this.dataset1 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName:"cats",
@@ -92,13 +92,6 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             expect(this.dialog.$(".name").eq(1)).toHaveText("dogs");
             expect(this.dialog.$(".name").eq(2)).toHaveText("original");
             expect(this.dialog.$(".name").eq(3)).toHaveText("lions");
-        });
-
-        // TODO #42338303 : make this work again
-        xit("shows the column count for each table/view", function () {
-            var columnCounts = this.dialog.$(".column_count");
-            expect(columnCounts.eq(0).text().trim()).toBe("");
-            expect(columnCounts.eq(1).text().trim()).toMatchTranslation("dataset.manage_join_tables.column_count_plural", { count:22 });
         });
 
         it("shows the medium dataset icon for each table/view", function () {
@@ -214,16 +207,16 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                         });
 
                         it("loads the schema's datasets", function () {
-                            expect(this.schemaBob.datasets()).toHaveBeenFetched();
+                            expect(this.firstSchema.datasets()).toHaveBeenFetched();
                         });
 
                         it("updates the data source, database and schema names in the sub header", function () {
-                            expect(this.dialog.$(".canonical_name")).toContainText(this.schemaBob.canonicalName());
+                            expect(this.dialog.$(".canonical_name")).toContainText(this.firstSchema.canonicalName());
                         });
 
                         describe("when the datasets are fetched", function () {
                             beforeEach(function () {
-                                this.server.completeFetchFor(this.schemaBob.datasets(), [
+                                this.server.completeFetchFor(this.firstSchema.datasets(), [
                                     rspecFixtures.workspaceDataset.datasetTable({ objectName:"fred" }),
                                     rspecFixtures.workspaceDataset.datasetTable({ objectName:"lou" }),
                                     rspecFixtures.workspaceDataset.datasetTable({ objectName:"bryan" })
