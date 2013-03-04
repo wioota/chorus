@@ -59,17 +59,20 @@ describe OracleDataSource do
   describe "#refresh_schemas" do
     let(:data_source) { data_sources(:oracle) }
 
-    it 'returns the OracleSchemas in the data source' do
-      mock(Schema).refresh(data_source.owner_account, data_source, {:refresh_all => true}) { ["schemas"] }
-      stub(data_source).update_permissions
-      schemas = data_source.refresh_schemas
-      schemas.should =~ ["schemas"]
+    before do
+      stub(data_source).update_permission
+    end
+
+    it 'returns the schema names' do
+      # schema names from fixture builder
+      data_source.refresh_schemas.should =~ ["oracle", "oracle_empty"]
     end
 
     it 'updates permissions' do
+      options = {:foo => 'bar'}
       stub(Schema).refresh.with_any_args
-      mock(data_source).update_permissions
-      data_source.refresh_schemas
+      mock(data_source).update_permissions(options)
+      data_source.refresh_schemas(options)
     end
   end
 
@@ -77,6 +80,12 @@ describe OracleDataSource do
     let(:data_source) { OracleIntegration.real_data_source }
     let(:schema) { OracleIntegration.real_schema }
     let(:account_with_access) { data_source.owner_account }
+
+    it 'calls Schema.refresh for each account' do
+      schema.instance_accounts = [account_with_access]
+      mock.proxy(Schema).refresh(account_with_access, data_source, {:refresh_all => true})
+      data_source.update_permissions
+    end
 
     it "adds new instance accounts to each Schema" do
       schema.instance_accounts = []

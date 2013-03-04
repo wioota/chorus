@@ -39,28 +39,28 @@ class OracleDataSource < DataSource
 
   # Used by search
   def refresh_schemas(options={})
-    schemas = Schema.refresh(owner_account, self, options.reverse_merge(:refresh_all => true))
-    update_permissions
-    schemas
+    update_permissions options
+    schemas.map(&:name)
   end
 
-  def update_permissions
+  def update_permissions(options={})
     begin
       schema_permissions = {}
       accounts.each do |account|
+        Schema.refresh(account, self, options.reverse_merge(:refresh_all => true))
           connect_with(account).schemas.each do |schema|
             schema_permissions[schema] ||= []
             schema_permissions[schema] << account.id
           end
       end
-
-      schema_permissions.each do |schema_name, account_ids|
-        schema = schemas.find_by_name(schema_name)
-        schema.instance_account_ids = account_ids
-        schema.save!
-      end
     rescue => e
-        pa e.message
+      Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
+    end
+
+    schema_permissions.each do |schema_name, account_ids|
+      schema = schemas.find_by_name(schema_name)
+      schema.instance_account_ids = account_ids
+      schema.save!
     end
   end
 
