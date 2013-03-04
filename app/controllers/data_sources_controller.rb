@@ -5,7 +5,7 @@ class DataSourcesController < ApplicationController
 
   def index
     data_sources = DataSource.by_type(params[:entity_type])
-    data_sources = data_sources.accessible_to(current_user) if params[:accessible]
+    data_sources = data_sources.accessible_to(current_user) if params[:accessible] == "true"
 
     present paginate data_sources
   end
