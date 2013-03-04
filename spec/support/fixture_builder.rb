@@ -496,7 +496,7 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42_instance))
 
       GreenplumIntegration.refresh_chorus
-      chorus_gpdb42_instance.refresh_databases
+      chorus_gpdb42_instance.refresh_databases(:skip_schema_refresh => true)
       Schema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42_instance.databases.find_by_name(GreenplumIntegration.database_name), :refresh_all => true)
 
       test_database = GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)
