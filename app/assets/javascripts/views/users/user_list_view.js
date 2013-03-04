@@ -1,4 +1,4 @@
-chorus.views.UserList = chorus.views.SelectableList.extend({
+chorus.views.UserList = chorus.views.CheckableList.extend({
     templateName: "user/list",
     eventName: "user",
 
@@ -10,5 +10,11 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
             title: model.get("title"),
             tags: model.tags().models
         };
+    },
+
+    postRender: function() {
+        chorus.views.SelectableList.prototype.postRender.apply(this);
+
+        this.checkSelectedModels();
     }
 });

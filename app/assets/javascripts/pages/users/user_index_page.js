@@ -33,8 +33,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
                     chosen: "firstName"
                 }
 
-            },
-            buttons:buttons
+            }
         });
 
         this.mainContent.contentHeader.bind("choice:sort", function (choice) {
@@ -42,7 +41,21 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         }, this);
 
+        this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User", multiSelect: true, buttons: buttons});
+
         this.sidebar = new chorus.views.UserSidebar({listMode: true});
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "user:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
+        });
 
         this.subscribePageEvent("user:selected", this.setModel);
     },
