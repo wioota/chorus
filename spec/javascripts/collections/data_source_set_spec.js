@@ -12,4 +12,12 @@ describe("chorus.collections.DataSourceSet", function() {
             expect(this.collection.comparator(model)).toBe('data source');
         });
     });
+
+    describe("#urlParams", function() {
+       it("contains the accessible attribute", function() {
+           expect(this.collection.urlParams().accessible).toBeUndefined();
+           this.collection.attributes.accessible = true;
+           expect(this.collection.urlParams().accessible).toBe(true);
+       });
+    });
 });
