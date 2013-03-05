@@ -166,7 +166,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("displays an import dataset link", function() {
-                expect(this.view.$("a.import_dataset").text()).toMatchTranslation("dataset.actions.import_dataset");
+                expect(this.view.$("a.import_dataset").text()).toMatchTranslation("actions.import_now");
             });
         });
 
