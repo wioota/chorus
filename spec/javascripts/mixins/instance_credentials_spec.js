@@ -15,7 +15,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     this.server.lastFetchFor(this.collection).respondJson(403, json);
 
                     var instance = this.collection.instanceRequiringCredentials();
-                    expect(instance).toBeA(chorus.models.GpdbDataSource);
+                    expect(instance).toBeA(chorus.models.DataSource);
                     expect(instance.get("id")).toBe(101);
                 });
             });

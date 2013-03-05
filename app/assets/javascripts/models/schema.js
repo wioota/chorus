@@ -1,4 +1,6 @@
-chorus.models.Schema = chorus.models.Base.extend({
+chorus.models.Schema = chorus.models.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     constructorName: "Schema",
     showUrlTemplate: "schemas/{{id}}",
     urlTemplate: "schemas/{{id}}",

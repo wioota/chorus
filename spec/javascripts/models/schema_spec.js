@@ -143,4 +143,14 @@ describe("chorus.models.Schema", function() {
             });
         });
     });
+
+    describe("instance credentials", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.schema();
+        });
+
+        it("includes InstanceCredentials mixin", function() {
+            expect(this.model.instanceRequiringCredentials).toBeTruthy();
+        });
+    });
 });

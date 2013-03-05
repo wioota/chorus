@@ -3,9 +3,13 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         this.oracle = rspecFixtures.oracleDataSource({name: "Davis"});
         this.page = new chorus.pages.OracleSchemaIndexPage(this.oracle.id);
         this.schemas = rspecFixtures.oracleSchemaSet({
-            0: {name: "schema1"},
-            1: {name: "schema2"}
+            0: rspecFixtures.oracleSchema({name: "schema1"}),
+            1: rspecFixtures.oracleSchema({name: "schema2"})
         });
+    });
+
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
     });
 
     it('sets up the right collection', function(){
@@ -67,6 +71,20 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
                 expect(this.page.sidebar.$el).toContainText("schema2");
                 expect(this.page.sidebar.$el).toContainText("Oracle DB Schema");
             });
+        });
+    });
+
+    context('when fetching the collection returns a 403', function(){
+        var launchModalSpy;
+
+        beforeEach(function() {
+            launchModalSpy = spyOn(chorus.dialogs.InstanceAccount.prototype, 'launchModal');
+            this.server.completeFetchFor(this.page.dataSource);
+            this.server.lastFetchFor(this.page.collection).failForbidden({message: "Forbidden", model_data: {id: 'foo'}});
+        });
+
+        it("launches the InstanceAccount dialog", function() {
+            expect(launchModalSpy).toHaveBeenCalled();
         });
     });
 });

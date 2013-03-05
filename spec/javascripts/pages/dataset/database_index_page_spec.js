@@ -75,4 +75,18 @@ describe("chorus.pages.DatabaseIndexPage", function() {
             expect(this.page.$(this.page.sidebar.el)).toExist();
         });
     });
+
+    context('when fetching the collection returns a 403', function(){
+        var launchModalSpy;
+
+        beforeEach(function() {
+            launchModalSpy = spyOn(chorus.dialogs.InstanceAccount.prototype, 'launchModal');
+            this.server.completeFetchFor(this.instance);
+            this.server.lastFetchAllFor(this.page.collection).failForbidden({message: "Forbidden", model_data: {id: 'foo'}});
+        });
+
+        it("launches the InstanceAccount dialog", function() {
+            expect(launchModalSpy).toHaveBeenCalled();
+        });
+    });
 });

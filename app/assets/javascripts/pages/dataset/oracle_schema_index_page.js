@@ -1,10 +1,14 @@
-chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.extend({
+chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.include(
+        chorus.Mixins.InstanceCredentials.page
+).extend({
     setup: function(oracleDataSourceId){
         this.dataSource = new chorus.models.OracleDataSource({id: oracleDataSourceId});
         this.collection = this.dataSource.schemas();
         this.dataSource.fetch();
         this.collection.fetch();
         this.requiredResources.add(this.dataSource);
+
+        this.handleFetchErrorsFor(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             title: _.bind(this.dataSource.name, this.dataSource),
