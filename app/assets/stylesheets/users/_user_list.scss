@@ -15,8 +15,12 @@
             left: 57px;
         }
 
-        .details span {
-            @include font-normal-alpha;
+        div.details {
+            position: relative;
+
+            span {
+                @include font-normal-alpha;
+            }
         }
     }
 }
