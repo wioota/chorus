@@ -7,7 +7,7 @@ chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentView({
             model: this.model,
-            contentHeader: new chorus.views.DisplayNameHeader({model: this.model, imageUrl: '/images/data_sources/icon_gnip_instance.png'})
+            contentHeader: new chorus.views.TaggableHeader({model: this.model})
         });
 
         this.sidebar = new chorus.views.InstanceListSidebar();

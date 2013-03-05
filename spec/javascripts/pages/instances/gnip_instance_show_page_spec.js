@@ -25,6 +25,10 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
             expect(this.page.$(".content_header img").attr("src")).toContain("/images/data_sources/icon_gnip_instance.png");
         });
 
+        it("has a tag box", function() {
+            expect(this.page.$('.tag_box')).toExist();
+        });
+
         it("displays the sidebar", function() {
             var sidebar = this.page.sidebar;
             expect(sidebar).toBeDefined();
