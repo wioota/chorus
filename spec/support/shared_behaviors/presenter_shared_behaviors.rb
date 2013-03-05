@@ -73,11 +73,23 @@ shared_examples "dataset presenter with workspace" do |dataset_factory_name|
 end
 
 shared_examples "activity stream instance presenter" do
+  context "outside of activity Stream" do
+    let(:options) { {:activity_stream => false} }
+
+    it "sets complete_json" do
+      presenter.presentation_hash[:complete_json].should be_true
+    end
+  end
+
   context "For activity Stream" do
     let(:options) { {:activity_stream => true} }
 
-    it "should not present the owner" do
-      hash[:owner].should be_nil
+    it "does not present the owner" do
+      presenter.presentation_hash[:owner].should be_nil
+    end
+
+    it "sets complete_json to false" do
+      presenter.presentation_hash[:complete_json].should be_false
     end
   end
 end

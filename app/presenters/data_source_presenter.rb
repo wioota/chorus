@@ -15,6 +15,9 @@ class DataSourcePresenter < Presenter
     }.merge(owner_hash)
   end
 
+  def complete_json?
+    !rendering_activities?
+  end
 
   private
 

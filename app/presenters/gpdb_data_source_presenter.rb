@@ -7,7 +7,5 @@ class GpdbDataSourcePresenter < DataSourcePresenter
     })
   end
 
-  def complete_json?
-    !rendering_activities?
-  end
+
 end
