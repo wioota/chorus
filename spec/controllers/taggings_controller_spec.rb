@@ -77,11 +77,11 @@ describe TaggingsController do
       end
     end
 
-    context 'when saving the model fails' do
+    context 'when saving the tag_list fails from active record uniqueness validation' do
       before do
         mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
-        mock(entity).save!.twice {
-          raise ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang'))
+        mock(entity, :tag_list=).with_any_args.twice {
+          raise ActiveRecord::RecordInvalid.new(Tag.new)
         }
       end
 
@@ -91,7 +91,7 @@ describe TaggingsController do
       end
     end
 
-    context 'when saving the tag_list fails' do
+    context 'when saving the tag_list fails due to uniqueness at the database level' do
       before do
         mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
         mock(entity, :tag_list=).with_any_args.twice {

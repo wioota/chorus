@@ -13,11 +13,10 @@ class TaggingsController < ApplicationController
     unique_tag_names = tag_names.uniq(&:downcase).sort
     begin
       model.tag_list = unique_tag_names
-      model.save!
-    rescue ActiveRecord::RecordNotUnique
+    rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
       model.tag_list = unique_tag_names
-      model.save!
     end
+    model.save!
 
     render :json => {}, :status => :created
   end
