@@ -24,6 +24,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         });
 
         this.mainContent = new chorus.views.MainContentList({
+            contentHeader: new chorus.views.HdfsEntryHeader({dataSource: this.instance, hdfsEntry: this.hdfsEntry}),
             modelClass: "HdfsEntry",
             collection: this.collection
         });
@@ -48,14 +49,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         ];
     },
 
-    everythingLoaded: function() {
-        this.mainContent.contentHeader.options.title = this.instance.get("name") + ": " + this.ellipsizePath();
-        this.render();
-    },
-
     instanceFetched: function() {
         if(this.hdfsEntry.loaded) {
-            this.everythingLoaded();
+            this.render();
         }
     },
 
@@ -67,7 +63,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.collection.loaded = true;
 
         if(this.instance.loaded) {
-            this.everythingLoaded();
+            this.render();
         }
     },
 

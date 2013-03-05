@@ -53,10 +53,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             );
         });
 
-        it("should have title in the mainContentList", function() {
-            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /foo/myDir");
-        });
-
         it("should have the right breadcrumbs", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
@@ -87,24 +83,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
     });
 
-    describe("when the entry is the root directory", function () {
-        beforeEach(function() {
-            this.server.completeFetchFor(this.instance);
-            this.server.completeFetchFor(this.hdfsEntry,
-                {
-                    ancestors: [],
-                    path: "/",
-                    name: "/",
-                    entries: []
-                }
-            );
-        });
-
-        it("shows just '/' for root", function () {
-            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.name() + ": /");
-        });
-    });
-
     describe("when the path is long", function () {
         beforeEach(function () {
             spyOn(chorus, "menu");
@@ -122,10 +100,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                     entries: []
                 }
             );
-        });
-
-        it("ellipsizes the inner directories", function () {
-            expect(this.page.mainContent.contentHeader.options.title).toBe(this.instance.get("name") + ": /start/.../foo");
         });
 
         it("constructs the breadcrumb links correctly", function () {
