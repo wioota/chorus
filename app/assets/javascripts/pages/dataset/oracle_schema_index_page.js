@@ -11,9 +11,8 @@ chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.include(
         this.handleFetchErrorsFor(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
-            title: _.bind(this.dataSource.name, this.dataSource),
             modelClass: "Schema",
-            imageUrl: "/images/data_sources/icon_oracle_data_source.png",
+            contentHeader: new chorus.views.TaggableHeader({model: this.dataSource}),
             collection: this.collection,
             search: {
                 selector: ".name",

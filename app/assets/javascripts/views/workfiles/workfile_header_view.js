@@ -1,7 +1,7 @@
 chorus.views.WorkfileHeader = chorus.views.Base.extend({
     templateName: "workfile_header",
     constructorName: "WorkfileHeaderView",
-    additionalClass: 'show_page_header',
+    additionalClass: 'taggable_header',
 
     subviews: {
         '.tag_box': 'tagBox'

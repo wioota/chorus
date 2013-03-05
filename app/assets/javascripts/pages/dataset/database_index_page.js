@@ -18,29 +18,17 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.mainContent = new chorus.views.MainContentList({
             emptyTitleBeforeFetch: true,
             modelClass: "Database",
-            collection: this.collection
-        });
-
-        this.sidebar = new chorus.views.DatabaseListSidebar();
-
-        this.bindings.add(this.instance, "loaded", this.instanceLoaded);
-
-        this.breadcrumbs.requiredResources.add(this.instance);
-    },
-
-    instanceLoaded: function() {
-        this.mainContent = new chorus.views.MainContentList({
-            modelClass: "Database",
             collection: this.collection,
-            title: this.instance.get("name"),
-            imageUrl: this.instance.providerIconUrl(),
+            contentHeader: new chorus.views.TaggableHeader({model: this.instance}),
             search: {
                 eventName: "database:search",
                 placeholder: t("database.search_placeholder")
             }
         });
 
-        this.render();
+        this.sidebar = new chorus.views.DatabaseListSidebar();
+
+        this.breadcrumbs.requiredResources.add(this.instance);
     },
 
     crumbs: function() {
