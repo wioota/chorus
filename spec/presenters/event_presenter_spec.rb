@@ -28,11 +28,12 @@ describe EventPresenter, :type => :view do
       let(:options) { {:activity_stream => true} }
 
       context "SourceTableCreated" do
-        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => datasets(:table)) }
+        let(:dataset) { datasets(:table) }
+        let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }
+
         it "does not render datasets with their schemas or associated workspaces" do
           hash = subject.to_hash
-          hash[:dataset][:schema][:id].should == datasets(:table).schema_id
-          hash[:dataset][:schema].keys.size.should == 1
+          hash[:dataset].should == DatasetPresenter.present(dataset, view, {:activity_stream => true})
           hash[:dataset][:associated_workspaces].should be_empty
         end
       end
