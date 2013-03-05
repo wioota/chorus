@@ -32,7 +32,7 @@ class DatasetPresenter < Presenter
   private
 
   def schema_hash
-    rendering_activities? ? {:id => model.schema_id } : present(model.schema)
+    rendering_activities? ? {:id => model.schema_id, :name => model.schema.name } : present(model.schema)
   end
 
   def thetype

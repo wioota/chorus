@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require_relative 'helpers'
 
-describe "DataSourceCreated" do
+describe Events::DataSourceCreated do
   extend EventHelpers
 
   let(:actor) { users(:owner) }

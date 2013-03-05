@@ -129,7 +129,6 @@
     }
 
     hidden = {
-
         headerParamOptions: {
             GreenplumInstanceChangedName: {
                 links: [ "actor", "gpdbDataSource" ],
@@ -271,6 +270,10 @@
                 links: ["workspace"],
                 attrs: ["sourceDataset"],
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+            },
+
+            SchemaImportSuccess: {
+                computed: ["destinationDatasetInSchemaLink", "sourceDatasetInSchemaLink", 'destinationSchemaLink']
             },
 
             GnipStreamImportCreated: {
@@ -482,6 +485,19 @@
                 workspace: workfile.workspace
             });
             return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
+        },
+
+        destinationSchemaLink: function(self) {
+            var schema = self.model.dataset().schema();
+            return schema.showLink();
+        },
+
+        destinationDatasetInSchemaLink: function(self){
+            return (new chorus.models.Dataset(self.model.dataset().attributes)).showLink();
+        },
+
+        sourceDatasetInSchemaLink: function(self){
+            return (new chorus.models.Dataset(self.model.importSource().attributes)).showLink();
         },
 
         datasetLink: function(self) {

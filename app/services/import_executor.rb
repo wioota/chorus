@@ -42,10 +42,10 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
     write_pipe_searcher = "pipe%_#{pipe_name}_w"
     write_connection = source_dataset.connect_as(user)
     if write_connection.running? write_pipe_searcher
-      log "Found running writer on database #{source_dataset.schema.database.name} on instance #{source_dataset.data_source.name}, killing it"
+      log "Found running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}, killing it"
       write_connection.kill write_pipe_searcher
     else
-      log "Could not find running writer on database #{source_dataset.schema.database.name} on instance #{source_dataset.data_source.name}"
+      log "Could not find running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}"
     end
 
     if named_pipe
@@ -120,37 +120,28 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
 
     if passed
       refresh_schema
-      set_destination_dataset_id
-      save(:validate => false)
-
-
-      if __getobj__.is_a?(WorkspaceImport)
-        event = create_passed_event_and_notification
-        update_import_created_event
-      end
-      import_schedule.update_attributes({:new_table => false}) if import_schedule
+      mark_as_success
     else
       event = create_failed_event message if __getobj__.is_a?(WorkspaceImport)
+      Notification.create!(:recipient_id => user.id, :event_id => event.id) if __getobj__.is_a?(WorkspaceImport)
     end
-
-    Notification.create!(:recipient_id => user.id, :event_id => event.id) if __getobj__.is_a?(WorkspaceImport)
   end
 
-  def create_passed_event_and_notification
-    Events::WorkspaceImportSuccess.by(user).add(
-        :workspace => workspace,
-        :dataset => destination_dataset,
-        :source_dataset => source_dataset
-    )
+  def mark_as_success
+    set_destination_dataset_id
+    save(:validate => false)
+    create_passed_event_and_notification
+    update_import_created_event
+    import_schedule.update_attributes({:new_table => false}) if import_schedule
   end
 
   def update_import_created_event
     if import_schedule_id
       reference_id = import_schedule_id
-      reference_type = "ImportSchedule"
+      reference_type = ImportSchedule.name
     else
       reference_id = id
-      reference_type = "Import"
+      reference_type = Import.name
     end
 
     import_created_event = find_dataset_import_created_event(source_dataset_id, workspace_id, reference_id, reference_type)

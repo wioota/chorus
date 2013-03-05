@@ -10,6 +10,7 @@ window.rspecFixtureDefinitions = {
             datasetImportFailed: {},
             datasetImportFailedWithModelErrors: {},
             datasetImportSuccess: {},
+            schemaImportSuccess: {},
             dataSourceCreated: {},
             fileImportCreated: {},
             fileImportFailed: {},

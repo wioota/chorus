@@ -234,7 +234,7 @@
         },
 
         isSuccessfulImport: function() {
-            return this.get('action') === "GnipStreamImportSuccess" || this.get("action") === "FileImportSuccess" ||  this.get("action") === "WorkspaceImportSuccess" ;
+            return this.get('action') === "GnipStreamImportSuccess" || this.get("action") === "FileImportSuccess" ||  this.get("action") === "WorkspaceImportSuccess" || this.get('action') === 'SchemaImportSuccess';
         },
 
         promoterLink: function() {

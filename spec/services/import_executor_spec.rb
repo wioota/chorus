@@ -6,7 +6,7 @@ describe ImportExecutor do
   let(:source_dataset) { datasets(:table) }
   let(:workspace) { workspaces(:public) }
   let(:sandbox) { workspace.sandbox }
-  let(:destination_table_name) { "dst_table" }
+  let(:destination_table_name) { import.to_table }
   let(:database_url) { sandbox.database.connect_with(account).db_url }
   let(:account) { sandbox.data_source.account_for_user!(user) }
 
@@ -16,7 +16,7 @@ describe ImportExecutor do
         :dataset => nil,
         :destination_table => destination_table_name,
         :reference_id => import.id,
-        :reference_type => "Import",
+        :reference_type => Import.name,
         :source_dataset => source_dataset
     )
   end
@@ -25,7 +25,6 @@ describe ImportExecutor do
     FactoryGirl.build(:import,
                       :user => user,
                       :workspace => workspace,
-                      :to_table => destination_table_name,
                       :source_dataset => source_dataset).tap { |i| i.save(:validate => false) }
   end
   let(:import_failure_message) { "" }
@@ -60,45 +59,9 @@ describe ImportExecutor do
 
   shared_examples_for :it_succeeds do |trigger|
     context "when import is successful" do
-      it "creates a WorkspaceImportSuccess" do
-        expect {
-          send(trigger)
-        }.to change(Events::WorkspaceImportSuccess, :count).by(1)
-
-        event = Events::WorkspaceImportSuccess.last
-
-        event.actor.should == user
-        event.workspace.should == workspace
-        event.source_dataset.should == source_dataset
-      end
-
-      it "creates a WorkspaceImportSuccess with the correct dataset" do
-        # Make sure event doesn't reference rogue ChorusView with the same name
-        FactoryGirl.create(:chorus_view,
-                           :name => destination_table_name,
-                           :schema => sandbox,
-                           :workspace => workspace)
-
-        expect {
-          send(trigger)
-        }.to change(Dataset, :count).by(1)
-
-        dataset = Dataset.last
-
-        event = Events::WorkspaceImportSuccess.last
-        event.dataset.name.should == destination_table_name
-        event.dataset.schema.should == sandbox
-        event.dataset.id.should == dataset.id
-      end
-
-      it "creates a notification" do
-        expect {
-          send(trigger)
-        }.to change(Notification, :count).by(1)
-
-        notification = Notification.last
-        notification.recipient_id.should == user.id
-        notification.event_id.should == Events::WorkspaceImportSuccess.last.id
+      it "creates a success event and notification" do
+        mock(import).create_passed_event_and_notification
+        send(trigger)
       end
 
       it "marks the import as success" do
@@ -138,7 +101,7 @@ describe ImportExecutor do
 
         before do
           dataset_import_created_event.reference_id = import_schedule_id
-          dataset_import_created_event.reference_type = 'ImportSchedule'
+          dataset_import_created_event.reference_type = ImportSchedule.name
           dataset_import_created_event.save!
           import.import_schedule_id = import_schedule_id
           import.save!
@@ -289,7 +252,7 @@ describe ImportExecutor do
       import.started_at.should be_within(1.hour).of(Time.current)
     end
 
-    it "Uses the import id and created_at time in the pipe_name" do
+    it "uses the import id and created_at time in the pipe_name" do
       mock_copier do |attributes|
         attributes[:pipe_name].should == "#{import.created_at.to_i}_#{import.id}"
       end
@@ -385,10 +348,10 @@ describe ImportExecutor do
       end
     end
 
-    context "when the source dataset is in oracle" do
+    context 'when the import is into a schema' do
       let(:import) { imports(:oracle) }
 
-      it "creates an OracleTableCopier to run the import" do
+      it 'creates an OracleTableCopier to run the import' do
         dont_allow(TableCopier).new.with_any_args
         ran = false
         any_instance_of(OracleTableCopier) do |copier|

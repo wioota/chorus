@@ -1,5 +1,5 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset, gnipInstance, datasetModel;
+    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset, gnipInstance, datasetModel, schema;
 
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
@@ -450,7 +450,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("workspace make public", function() {
+    context("workspace made public", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workspaceMakePublic();
             presenter = new chorus.presenters.Activity(model);
@@ -471,7 +471,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("workspace make private", function() {
+    context("workspace made private", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workspaceMakePrivate();
             presenter = new chorus.presenters.Activity(model);
@@ -813,6 +813,29 @@ describe("chorus.presenters.Activity", function() {
                     datasetType: t("dataset.entitySubtypes.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
+    context('dataset import into schema success', function(){
+        beforeEach(function() {
+            model = rspecFixtures.activity.schemaImportSuccess();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            schema = model.dataset().schema();
+            dataset = model.dataset();
+            sourceDataset = model.importSource();
+        });
+
+        itHasTheImportIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.SchemaImportSuccess.default", {
+                    sourceDatasetInSchemaLink: (new chorus.models.Dataset(sourceDataset.attributes)).showLink(),
+                    destinationDatasetInSchemaLink: (new chorus.models.Dataset(dataset.attributes)).showLink(),
+                    destinationSchemaLink: dataset.schema().showLink()
                 }
             );
         });
@@ -1691,6 +1714,7 @@ describe("chorus.presenters.Activity", function() {
 
         itHasTheActorIcon();
     });
+
     context("database view created from chorus view", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.viewCreated();

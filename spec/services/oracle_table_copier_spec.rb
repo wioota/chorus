@@ -132,7 +132,7 @@ describe OracleTableCopier do
       }
     end
 
-    it "should insert the data into the destination table" do
+    it 'inserts the data into the destination table' do
       mock(destination_connection).connect!
       mock(destination_connection).create_external_table(hash_including(external_table_options)) do |arg_hash|
         arg_hash.should have_key(:columns)

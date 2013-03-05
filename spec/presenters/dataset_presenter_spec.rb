@@ -64,9 +64,8 @@ describe DatasetPresenter, :type => :view do
       let(:schema) { FactoryGirl.create :gpdb_schema }
       let(:activity_stream) { true }
 
-      it "renders only the schema id" do
-        hash[:schema][:id].should == schema.id
-        hash[:schema].keys.size.should == 1
+      it 'renders the id and name' do
+        hash[:schema].should == { id: schema.id, name: schema.name }
       end
 
       it "renders empty/false value for mutiple keys" do
