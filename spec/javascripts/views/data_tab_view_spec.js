@@ -229,6 +229,14 @@ describe("chorus.views.DataTab", function () {
                     expect(helper).toHaveClass("drag_helper");
                     expect(helper).toContainText($li.data("name"));
                 });
+
+                it("the draggable helper for the table does not have column info", function() {
+                    var $li = this.view.$("ul.list li:eq(0)");
+                    $li.find(".column_list").append("<ul><li>Column1</li></ul>");
+                    var helper = this.view.dragHelper({currentTarget: $li});
+                    expect(helper).toHaveClass("drag_helper");
+                    expect(helper).not.toContainText("Column1");
+                });
             });
 
             context("and no data was fetched", function () {

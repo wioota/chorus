@@ -22,6 +22,12 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
         });
     },
 
+    dragHelper: function(e) {
+        var $dragEl = $(e.currentTarget).clone().addClass("drag_helper");
+        $dragEl.find(".column_list").remove();
+        return $dragEl;
+    },
+
     additionalContext: function() {
         var ctx = this._super("additionalContext", arguments);
         ctx.isWorkspaceSchema = (this.schema && this.schema.get("id") === "workspaceSchema");
