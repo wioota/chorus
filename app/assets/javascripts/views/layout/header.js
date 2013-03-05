@@ -91,7 +91,6 @@ chorus.views.Header = chorus.views.Base.extend({
                 $select.append("<option value=" + Handlebars.Utils.escapeExpression(user.get("username")) + ">" + Handlebars.Utils.escapeExpression(user.displayName()) + "</option>");
             });
 
-            $select.css({position: 'fixed', bottom: 0, right: 0});
             $("body").append($select);
             $select.unbind("change").bind("change", function() {
                 switchUser($(this).val());
