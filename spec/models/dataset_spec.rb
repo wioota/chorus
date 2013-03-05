@@ -107,6 +107,18 @@ describe Dataset do
       Dataset.with_name_like("t_%i").count.should == 1
       #Dataset.with_name_like("_m").count.should == 0
     end
+
+    it "is a joinable query" do
+      # Regression test in case query provides ambiguous column references
+      workspace = workspaces(:public)
+
+      expect {
+        workspace.datasets(users(:owner), {
+            :name_filter => 'match',
+            :database_id => workspace.sandbox.database
+        })
+      }.not_to raise_error
+    end
   end
 
   describe ".filter_by_name" do

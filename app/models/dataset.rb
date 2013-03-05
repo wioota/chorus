@@ -58,7 +58,7 @@ class Dataset < ActiveRecord::Base
   def self.with_name_like(name)
     if name.present?
       like_string = "%#{DataSourceConnection.escape_like_string(name)}%"
-      where("name ILIKE ? ESCAPE '#{DataSourceConnection::LIKE_ESCAPE_CHARACTER}'", like_string)
+      where("datasets.name ILIKE ? ESCAPE '#{DataSourceConnection::LIKE_ESCAPE_CHARACTER}'", like_string)
     else
       scoped
     end
