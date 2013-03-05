@@ -4,7 +4,17 @@ describe DatasetStreamer do
   let(:dataset) { datasets(:table) }
   let(:user) { users(:owner) }
   let(:limit) { nil }
-  let(:streamer) { DatasetStreamer.new(dataset, user, row_limit: limit) }
+  let(:options) { { row_limit: limit, target_is_greenplum: true } }
+  let(:streamer) { DatasetStreamer.new(dataset, user, options) }
+
+  describe "initialize" do
+    let(:limit) { 8 }
+
+    it "sets the options" do
+      streamer.row_limit.should == 8
+      streamer.target_is_greenplum.should be_true
+    end
+  end
 
   describe "sql" do
     it "returns the all_rows_sql for the dataset" do

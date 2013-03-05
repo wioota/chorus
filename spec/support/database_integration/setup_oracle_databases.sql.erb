@@ -48,3 +48,14 @@ CREATE TABLE "<%= schema_name %>".UNSUPPORTED_COLUMNS (
 );
 
 INSERT INTO "<%= schema_name %>".UNSUPPORTED_COLUMNS VALUES (NULL, NULL, NULL, NULL, NULL, '<xml/>');
+
+CREATE TABLE "<%= schema_name %>".SPECIAL_CHARACTERS (
+  "COLUMN" VARCHAR(20)
+);
+
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\0');
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\');
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('|');
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\r');
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\n');
+INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('foo,bar');

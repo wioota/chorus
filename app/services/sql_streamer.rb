@@ -11,12 +11,6 @@ class SqlStreamer
     self.target_is_greenplum = options[:target_is_greenplum]
   end
 
-  def format_row(row)
-    result = row.to_csv
-    result.gsub!('|', '\\|') if self.target_is_greenplum
-    result
-  end
-
   def format(hash, first_row_flag)
     results = ''
     results << format_row(hash.keys) if first_row_flag
@@ -49,5 +43,24 @@ class SqlStreamer
 
       ActiveRecord::Base.connection.close
     end
+  end
+
+  private
+
+  def format_for_greenplum(value)
+    if value.is_a?(String)
+      return '' if value == '\0'
+      value.gsub(/(\\n|\\r)/, ' ')
+    else
+      value
+    end
+  end
+
+  def format_row(row)
+    if self.target_is_greenplum
+      row.map { |value| format_for_greenplum(value) }
+    else
+      row
+    end.to_csv
   end
 end

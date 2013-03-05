@@ -59,15 +59,19 @@ describe SqlStreamer, :database_integration do
 
       describe "when the sql streamer has greenplum as target" do
         let(:streamer) { SqlStreamer.new(schema, sql, user, {target_is_greenplum: true}) }
-        let(:streamed_data) {
+
+        let(:streamed_data) do
           [{
              :id => 1,
-             :pipe => '|'
+             :newline => '\n',
+             :carriage_return => '\r',
+             :null => '\0'
            }]
-        }
-        it "escapes the pipe character" do
+        end
+
+        it "converts special characters to whitespace or empty string" do
           enumerator = streamer.enum
-          enumerator.next.split("\n").last.should == '1,\\|'
+          enumerator.next.split("\n").last.should == '1, , ,""'
           finish_enumerator(enumerator)
         end
       end
