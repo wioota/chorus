@@ -23,7 +23,7 @@ describe BulkData do
     let(:file_name) { "input_users.csv" }
 
     before do
-      BulkData.create_fake_users(file_name, 10)
+      BulkData.create_fake_users(file_name, 2)
       CSV.open(file_name, 'a') do |file|
         file << %w(Charlie Chambers chch t chch@somewhere.com ThisGuy Nowhere hahaha)
       end
@@ -32,7 +32,7 @@ describe BulkData do
     it "load all the users into the database" do
       expect {
         BulkData.load_users_from_csv(file_name, user_name)
-      }.to change { User.count }.by(11)
+      }.to change { User.count }.by(3)
       charlie = User.last
       charlie.first_name.should == 'Charlie'
       charlie.last_name.should == 'Chambers'
@@ -47,7 +47,7 @@ describe BulkData do
     it "creates the events" do
       expect {
         BulkData.load_users_from_csv(file_name, user_name)
-      }.to change { Events::UserAdded.count }.by(11)
+      }.to change { Events::UserAdded.count }.by(3)
     end
   end
 
@@ -61,9 +61,9 @@ describe BulkData do
     it "creates the events for creating workspaces" do
       expect {
         expect {
-          BulkData.create_workspaces(5)
-        }.to change { Events::Base.count }.by(10)
-      }.to change { Events::MembersAdded.count }.by(5)
+          BulkData.create_workspaces(2)
+        }.to change { Events::Base.count }.by(4)
+      }.to change { Events::MembersAdded.count }.by(2)
     end
   end
 

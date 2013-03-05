@@ -98,7 +98,7 @@ module BulkData
             file.content_type = "text/sql"
             file.original_filename = "#{WORDS.sample}.sql"
             workfile_params = {
-                :file_name => "#{Faker::Name.first_name}.sql",
+                :file_name => "#{Faker::Name.first_name.gsub("'","_tick_")}.sql",
                 :versions_attributes => [
                     {
                         :contents => file,
