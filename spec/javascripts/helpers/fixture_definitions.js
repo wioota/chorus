@@ -6,11 +6,7 @@ window.rspecFixtureDefinitions = {
             chorusViewChanged: {},
             chorusViewCreatedFromDataset: {},
             chorusViewCreatedFromWorkfile: {},
-            datasetImportCreated: {},
-            datasetImportFailed: {},
             datasetImportFailedWithModelErrors: {},
-            datasetImportSuccess: {},
-            schemaImportSuccess: {},
             dataSourceCreated: {},
             fileImportCreated: {},
             fileImportFailed: {},
@@ -42,6 +38,7 @@ window.rspecFixtureDefinitions = {
             publicWorkspaceCreated: {},
             sandboxAdded: {},
             sourceTableCreated: {},
+            schemaImportSuccess: {},
             tableauWorkbookPublished: {},
             tableauWorkfileCreated: {},
             userCreated: {},
@@ -54,7 +51,10 @@ window.rspecFixtureDefinitions = {
             workspaceMakePublic: {},
             workspaceMakePrivate: {},
             workspaceArchived: {},
-            workspaceUnarchived: {}
+            workspaceUnarchived: {},
+            workspaceImportCreated: {},
+            workspaceImportFailed: {},
+            workspaceImportSuccess: {}
         }
     },
 

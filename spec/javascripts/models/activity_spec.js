@@ -152,7 +152,7 @@ describe("chorus.models.Activity", function() {
             var dataset;
 
             beforeEach(function() {
-                activity = rspecFixtures.activity.datasetImportSuccess({
+                activity = rspecFixtures.activity.workspaceImportSuccess({
                     sourceDataset: { id: 9, associatedWorkspaces: [{id: 10}]}
                 });
 
@@ -323,7 +323,7 @@ describe("chorus.models.Activity", function() {
     describe("#isFailure", function() {
         it("returns true for IMPORT_FAILED", function() {
             expect(rspecFixtures.activity.fileImportFailed().isFailure()).toBeTruthy();
-            expect(rspecFixtures.activity.datasetImportFailed().isFailure()).toBeTruthy();
+            expect(rspecFixtures.activity.workspaceImportFailed().isFailure()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
@@ -334,12 +334,12 @@ describe("chorus.models.Activity", function() {
     describe("#isSuccessfulImport", function() {
         it("returns true for IMPORT SUCCESS", function() {
             expect(rspecFixtures.activity.fileImportSuccess().isSuccessfulImport()).toBeTruthy();
-            expect(rspecFixtures.activity.datasetImportSuccess().isSuccessfulImport()).toBeTruthy();
+            expect(rspecFixtures.activity.workspaceImportSuccess().isSuccessfulImport()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
             expect(rspecFixtures.activity.fileImportFailed().isSuccessfulImport()).toBeFalsy();
-            expect(rspecFixtures.activity.datasetImportFailed().isSuccessfulImport()).toBeFalsy();
+            expect(rspecFixtures.activity.workspaceImportFailed().isSuccessfulImport()).toBeFalsy();
         });
 
     });

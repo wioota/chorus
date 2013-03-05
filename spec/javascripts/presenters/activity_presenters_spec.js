@@ -795,7 +795,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("dataset import success", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.datasetImportSuccess();
+            model = rspecFixtures.activity.workspaceImportSuccess();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -870,7 +870,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("dataset import failed", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.datasetImportFailed();
+            model = rspecFixtures.activity.workspaceImportFailed();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -1369,7 +1369,7 @@ describe("chorus.presenters.Activity", function() {
         var activity_data;
         beforeEach(function () {
             datasetModel = rspecFixtures.dataset();
-            model = rspecFixtures.activity.datasetImportCreated({dataset: datasetModel});
+            model = rspecFixtures.activity.workspaceImportCreated({dataset: datasetModel});
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -1395,13 +1395,13 @@ describe("chorus.presenters.Activity", function() {
             context("when importing to a new table", function () {
                 beforeEach(function() {
                     datasetModel = rspecFixtures.dataset();
-                    model = rspecFixtures.activity.datasetImportCreated();
+                    model = rspecFixtures.activity.workspaceImportCreated();
                     dataset = model.dataset();
                     presenter = new chorus.presenters.Activity(model);
                     activity_data["destObjectOrName"] =  "other_table";
                 });
                 it("displays the destination table name without link", function () {
-                    rspecFixtures.activity.datasetImportCreated();
+                    rspecFixtures.activity.workspaceImportCreated();
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
                         "activity.header.WorkspaceImportCreated.default",
                         activity_data
@@ -1411,7 +1411,7 @@ describe("chorus.presenters.Activity", function() {
             context("when importing to an existing table", function () {
                 beforeEach(function () {
                     datasetModel = rspecFixtures.dataset();
-                    model = rspecFixtures.activity.datasetImportCreated({dataset: datasetModel});
+                    model = rspecFixtures.activity.workspaceImportCreated({dataset: datasetModel});
                     dataset = model.dataset();
                     presenter = new chorus.presenters.Activity(model);
                 });
