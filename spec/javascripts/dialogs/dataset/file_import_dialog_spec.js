@@ -1,4 +1,4 @@
-describe("chorus.dialogs.DatasetImport", function() {
+describe("chorus.dialogs.FileImport", function() {
     beforeEach(function() {
         chorus.page = {};
         chorus.page.workspace = rspecFixtures.workspace({id: 242});
@@ -13,7 +13,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             rspecFixtures.workspaceDataset.datasetView()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
-        this.dialog = new chorus.dialogs.DatasetImport({
+        this.dialog = new chorus.dialogs.FileImport({
             workspaceId: 242,
             canonicalName: "FooBar"
         });

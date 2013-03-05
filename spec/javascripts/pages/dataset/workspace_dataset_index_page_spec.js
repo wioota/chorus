@@ -237,21 +237,21 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     it("has the right text", function() {
-                        expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import.title");
+                        expect(this.page.$("button[data-dialog='FileImport']").text()).toMatchTranslation("dataset.import.title");
                     });
 
                     it("has the right data attributes", function() {
-                        expect(this.page.$("button[data-dialog='DatasetImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
-                        expect(this.page.$("button[data-dialog='DatasetImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
+                        expect(this.page.$("button[data-dialog='FileImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
+                        expect(this.page.$("button[data-dialog='FileImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
                     });
 
                     describe("when the button is clicked", function() {
                         beforeEach(function() {
-                            this.page.$("button[data-dialog='DatasetImport']").click();
+                            this.page.$("button[data-dialog='FileImport']").click();
                         });
 
                         it("launches an Import File dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetImport);
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
                         });
                     });
 

@@ -65,7 +65,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             },
             buttons: [
                 {
-                    view: "DatasetImport",
+                    view: "FileImport",
                     text: t("dataset.import.title"),
                     dataAttributes : [{name: 'workspace-id', value: this.workspace.get("id") }],
                     helpText: t("dataset.import.need_sandbox", {hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="'+this.workspace.get("id")+'">'+t("actions.click_here")+'</a>'}),
