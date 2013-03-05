@@ -5,7 +5,7 @@ describe 'listing all tags' do
   let(:workfile) { workfiles(:public) }
   before do
     login(user)
-    workfile.tag_list = "foo,bar,baz"
+    workfile.tag_list = %w{foo bar baz}
     visit "#/tags"
   end
 
@@ -124,7 +124,7 @@ describe 'viewing all the entities sharing a specific tag' do
 
     before do
       login(users(:admin))
-      workfile.tag_list = 'crazy_tag'
+      workfile.tag_list = ['crazy_tag']
       workfile.save!
       Sunspot.commit
     end
@@ -146,7 +146,7 @@ describe 'viewing all the entities sharing a specific tag' do
 
     before do
       login(users(:admin))
-      dataset.tag_list = 'crazy_tag'
+      dataset.tag_list = ['crazy_tag']
       dataset.save!
       Sunspot.commit
     end
