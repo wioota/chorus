@@ -21,7 +21,7 @@ class Import < ActiveRecord::Base
 
   def create_import_event
     dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
-    Events::DatasetImportCreated.by(user).add(
+    Events::WorkspaceImportCreated.by(user).add(
         :workspace => workspace,
         :source_dataset => source_dataset,
         :dataset => dst_table,

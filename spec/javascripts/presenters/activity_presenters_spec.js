@@ -808,7 +808,7 @@ describe("chorus.presenters.Activity", function() {
         it("has the right header html", function() {
             presenter.options.displayStyle = ["without_workspace"];
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DatasetImportSuccess.default", {
+                "activity.header.WorkspaceImportSuccess.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.entitySubtypes.table"),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
@@ -858,7 +858,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.DatasetImportFailed.default", {
+                "activity.header.WorkspaceImportFailed.default", {
                     importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.entitySubtypes.table"),
                     destObjectOrName: model.get('destinationTable'),
@@ -1365,7 +1365,7 @@ describe("chorus.presenters.Activity", function() {
             it("blank out the without_workspace style and use default instead", function () {
                 presenter.options.displayStyle = ["without_workspace"];
                 expect(presenter.headerHtml().toString()).toMatchTranslation(
-                    "activity.header.DatasetImportCreated.default",
+                    "activity.header.WorkspaceImportCreated.default",
                     activity_data
                 );
             });
@@ -1380,7 +1380,7 @@ describe("chorus.presenters.Activity", function() {
                 it("displays the destination table name without link", function () {
                     rspecFixtures.activity.datasetImportCreated();
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.DatasetImportCreated.default",
+                        "activity.header.WorkspaceImportCreated.default",
                         activity_data
                     );
                 });
@@ -1394,7 +1394,7 @@ describe("chorus.presenters.Activity", function() {
                 });
                 it("displays the destination table name with dataset link", function () {
                     expect(presenter.headerHtml().toString()).toMatchTranslation(
-                        "activity.header.DatasetImportCreated.default", {
+                        "activity.header.WorkspaceImportCreated.default", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
                             importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                             datasetType: t("dataset.entitySubtypes.table"),

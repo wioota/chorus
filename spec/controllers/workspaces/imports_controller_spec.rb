@@ -68,9 +68,9 @@ describe Workspaces::ImportsController do
         it "makes a DATASET_IMPORT_CREATED event" do
           expect {
             post :create, attributes
-          }.to change(Events::DatasetImportCreated, :count).by(1)
+          }.to change(Events::WorkspaceImportCreated, :count).by(1)
 
-          event = Events::DatasetImportCreated.last
+          event = Events::WorkspaceImportCreated.last
           event.actor.should == user
           event.dataset.should == nil
           event.source_dataset.should == src_table
@@ -83,7 +83,7 @@ describe Workspaces::ImportsController do
             attributes[:workspace_id] = archived_workspace.to_param
             expect {
               post :create, attributes
-            }.to change(Events::DatasetImportCreated, :count).by(0)
+            }.to change(Events::WorkspaceImportCreated, :count).by(0)
             response.code.should == "422"
 
           end
@@ -145,8 +145,8 @@ describe Workspaces::ImportsController do
           it "makes a DATASET_IMPORT_CREATED event" do
             expect {
               post :create, attributes
-            }.to change(Events::DatasetImportCreated, :count).by(1)
-            event = Events::DatasetImportCreated.last
+            }.to change(Events::WorkspaceImportCreated, :count).by(1)
+            event = Events::WorkspaceImportCreated.last
 
             event.actor.should == user
             event.dataset.name.should == dst_table_name
@@ -255,8 +255,8 @@ describe Workspaces::ImportsController do
       expect {
         expect {
           post :create, import_attributes
-        }.to change(Events::DatasetImportCreated, :count).by(1)
-      }.to change(Events::DatasetImportSuccess, :count).by(1)
+        }.to change(Events::WorkspaceImportCreated, :count).by(1)
+      }.to change(Events::WorkspaceImportSuccess, :count).by(1)
       check_destination_table
     end
 

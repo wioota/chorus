@@ -243,7 +243,7 @@
                 computed: ["count"]
             },
 
-            DatasetImportCreated: {
+            WorkspaceImportCreated: {
                 links: ["actor", "workspace", "dataset"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
@@ -261,13 +261,13 @@
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
             },
 
-            DatasetImportSuccess: {
+            WorkspaceImportSuccess: {
                 links: ["workspace", "dataset"],
                 attrs: ["sourceTable"],
                 computed: ["importSourceDatasetLink", "datasetType"]
             },
 
-            DatasetImportFailed: {
+            WorkspaceImportFailed: {
                 links: ["workspace"],
                 attrs: ["sourceDataset"],
                 computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
@@ -387,7 +387,7 @@
                         return ('many.' + style);
                 }
             } else if (self.get("action").lastIndexOf("FileImport", 0) === 0 ||
-                       self.get("action").lastIndexOf("DatasetImport", 0) === 0) {
+                       self.get("action").lastIndexOf("WorkspaceImport", 0) === 0) {
                 return "";
             } else {
                 return style;

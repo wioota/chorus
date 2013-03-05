@@ -442,7 +442,7 @@ FixtureBuilder.configure do |fbuilder|
     Timecop.travel(-1.day)
 
     import_schedule.errors.add(:base, :table_not_consistent, {:src_table_name => default_table.name, :dest_table_name => other_table.name})
-    @import_failed_with_model_errors = Events::DatasetImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => other_table.name, :error_objects => import_schedule.errors, :dataset => other_table)
+    @import_failed_with_model_errors = Events::WorkspaceImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => other_table.name, :error_objects => import_schedule.errors, :dataset => other_table)
 
     Events::GreenplumInstanceChangedOwner.by(admin).add(:gpdb_data_source => gpdb_data_source, :new_owner => no_collaborators)
     Events::GreenplumInstanceChangedName.by(admin).add(:gpdb_data_source => gpdb_data_source, :old_name => 'mahna_mahna', :new_name => gpdb_data_source.name)
@@ -459,9 +459,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::FileImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => default_table, :file_name => 'import.csv', :import_type => 'file')
     Events::FileImportFailed.by(owner).add(:workspace => public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
     Events::MembersAdded.by(owner).add(:workspace => public_workspace, :member => the_collaborator, :num_added => '5')
-    Events::DatasetImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
-    Events::DatasetImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :source_dataset => default_table)
-    Events::DatasetImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
+    Events::WorkspaceImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
+    Events::WorkspaceImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :source_dataset => default_table)
+    Events::WorkspaceImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
     fbuilder.name :gnip_stream_import_created, Events::GnipStreamImportCreated.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :gnip_instance => gnip_instance)
     Events::GnipStreamImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_instance)
     Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :error_message => "an error", :gnip_instance => gnip_instance)

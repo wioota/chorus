@@ -137,7 +137,7 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
   end
 
   def create_passed_event_and_notification
-    Events::DatasetImportSuccess.by(user).add(
+    Events::WorkspaceImportSuccess.by(user).add(
         :workspace => workspace,
         :dataset => destination_dataset,
         :source_dataset => source_dataset
@@ -162,7 +162,7 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
   end
 
   def find_dataset_import_created_event(source_dataset_id, workspace_id, reference_id, reference_type)
-    possible_events = Events::DatasetImportCreated.where(:target1_id => source_dataset_id,
+    possible_events = Events::WorkspaceImportCreated.where(:target1_id => source_dataset_id,
                                                          :workspace_id => workspace_id)
 
     # optimized to avoid fetching all events since the intended event is almost certainly the last event
@@ -173,7 +173,7 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
   end
 
   def create_failed_event(error_message)
-    Events::DatasetImportFailed.by(user).add(
+    Events::WorkspaceImportFailed.by(user).add(
         :workspace => workspace_with_deleted,
         :destination_table => to_table,
         :error_message => error_message,

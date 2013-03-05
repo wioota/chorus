@@ -25,7 +25,7 @@ class ImportScheduler
         else
           event_args.merge! :error_objects => schedule.errors
         end
-        Events::DatasetImportFailed.by(schedule.user).add(event_args)
+        Events::WorkspaceImportFailed.by(schedule.user).add(event_args)
         Chorus.log_error "Import schedule with ID #{schedule.id} failed with error '#{e}'."
       end
     end

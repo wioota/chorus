@@ -419,11 +419,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DatasetImportCreated" do
+  describe "WorkspaceImportCreated" do
     let(:source_dataset) { datasets(:other_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DatasetImportCreated.add(
+      Events::WorkspaceImportCreated.add(
           :actor => actor,
           :dataset => dataset,
           :source_dataset => source_dataset,
@@ -482,11 +482,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DatasetImportSuccess" do
+  describe "WorkspaceImportSuccess" do
     let(:source_dataset) { datasets(:other_table) }
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DatasetImportSuccess.add(
+      Events::WorkspaceImportSuccess.add(
           :actor => actor,
           :dataset => dataset,
           :source_dataset => source_dataset,
@@ -526,11 +526,11 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "DatasetImportFailed" do
+  describe "WorkspaceImportFailed" do
     let(:source_dataset) {datasets(:other_table)}
     let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
-      Events::DatasetImportFailed.add(
+      Events::WorkspaceImportFailed.add(
           :actor => actor,
           :source_dataset => source_dataset,
           :destination_table => 'test',

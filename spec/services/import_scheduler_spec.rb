@@ -132,24 +132,24 @@ describe ImportScheduler do
 
         expect {
           ImportScheduler.run
-        }.to change(Events::DatasetImportFailed, :count).by(1)
+        }.to change(Events::WorkspaceImportFailed, :count).by(1)
 
-        event = Events::DatasetImportFailed.last
+        event = Events::WorkspaceImportFailed.last
         event.source_dataset.should == import_schedule.source_dataset
         event.error_objects["base"].should == import_schedule.errors.full_messages
       end
 
-      context "when creating the import raises an exception" do
+      context 'when creating the import raises an exception' do
         before do
           stub(import_schedule).create_import { raise StandardError, "oops!" }
         end
 
-        it "should set the error_message, but not the error_objects" do
+        it 'sets the error_message, but not the error_objects' do
           expect {
             ImportScheduler.run
-          }.to change(Events::DatasetImportFailed, :count).by(1)
+          }.to change(Events::WorkspaceImportFailed, :count).by(1)
 
-          event = Events::DatasetImportFailed.last
+          event = Events::WorkspaceImportFailed.last
           event.source_dataset.should == import_schedule.source_dataset
           event.error_objects.should be_nil
           event.error_message.should == "oops!"

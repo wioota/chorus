@@ -17,7 +17,7 @@ describe DatasetImportSchedulesController do
 
     shared_examples_for "import data" do
       context "with an import schedule" do
-        it "should return the import schedule" do
+        it 'returns the import schedule' do
           get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
 
           response.should be_success
@@ -29,8 +29,8 @@ describe DatasetImportSchedulesController do
         end
       end
 
-      context "without a schedule" do
-        it "should return an empty list" do
+      context 'without a schedule' do
+        it 'returns an empty list' do
           import_schedule.delete
           get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
           response.should be_success
@@ -39,22 +39,22 @@ describe DatasetImportSchedulesController do
       end
     end
 
-    context "for a source dataset" do
+    context 'for a source dataset' do
       let!(:dataset) { import_schedule.source_dataset }
-      it_should_behave_like "import data"
+      it_should_behave_like 'import data'
     end
 
-    context "when requesting for the destination dataset" do
+    context 'when requesting for the destination dataset' do
       let!(:dataset) { FactoryGirl.create(:gpdb_table, :schema => import_schedule.workspace.sandbox, :name => import_schedule.to_table) }
 
-      it "should return an empty list of schedules" do
+      it 'returns an empty list of schedules' do
         get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
         response.should be_success
         decoded_response.length.should == 0
       end
     end
 
-    it "authorizes" do
+    it 'authorizes' do
       log_in users(:default)
       get :index, :workspace_id => workspaces(:private).id, :dataset_id => dataset.id
 
@@ -62,7 +62,7 @@ describe DatasetImportSchedulesController do
     end
   end
 
-  describe "#create" do
+  describe '#create' do
     let(:source_table) { datasets(:source_table) }
     let(:archived_workspace) { workspaces(:archived) }
     let(:active_workspace) { workspaces(:public) }
@@ -117,9 +117,9 @@ describe DatasetImportSchedulesController do
 
       expect {
         post :create, attributes
-      }.to change(Events::DatasetImportCreated, :count).by(1)
+      }.to change(Events::WorkspaceImportCreated, :count).by(1)
 
-      event = Events::DatasetImportCreated.last
+      event = Events::WorkspaceImportCreated.last
 
       event.actor.should == user
       event.dataset.should == nil
@@ -164,7 +164,7 @@ describe DatasetImportSchedulesController do
 
       expect {
         post :create, attributes
-      }.to change(Events::DatasetImportCreated, :count).by(0)
+      }.to change(Events::WorkspaceImportCreated, :count).by(0)
     end
 
     it "should return 422 if frequency is invalid" do
@@ -189,9 +189,9 @@ describe DatasetImportSchedulesController do
 
         expect {
           post :create, attributes
-        }.to change(Events::DatasetImportCreated, :count).by(1)
+        }.to change(Events::WorkspaceImportCreated, :count).by(1)
 
-        event = Events::DatasetImportCreated.last
+        event = Events::WorkspaceImportCreated.last
         event.dataset.name.should == to_table
         event.destination_table.should == to_table
       end
@@ -418,7 +418,7 @@ describe DatasetImportSchedulesController do
         Timecop.freeze(DateTime.parse(start_time) - 1.hour) do
           expect {
             post :create, import_attributes
-          }.to change(Events::DatasetImportCreated, :count).by(1)
+          }.to change(Events::WorkspaceImportCreated, :count).by(1)
         end
 
         any_instance_of(Import) do |import|
@@ -428,7 +428,7 @@ describe DatasetImportSchedulesController do
         Timecop.freeze(DateTime.parse(start_time) + 1.day) do
           expect {
             ImportScheduler.run
-          }.to change(Events::DatasetImportSuccess, :count).by(1)
+          }.to change(Events::WorkspaceImportSuccess, :count).by(1)
         end
         check_destination_table
       end

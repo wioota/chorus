@@ -11,7 +11,7 @@ describe ImportExecutor do
   let(:account) { sandbox.data_source.account_for_user!(user) }
 
   let!(:dataset_import_created_event) do
-    Events::DatasetImportCreated.by(user).add(
+    Events::WorkspaceImportCreated.by(user).add(
         :workspace => workspace,
         :dataset => nil,
         :destination_table => destination_table_name,
@@ -60,19 +60,19 @@ describe ImportExecutor do
 
   shared_examples_for :it_succeeds do |trigger|
     context "when import is successful" do
-      it "creates a DatasetImportSuccess" do
+      it "creates a WorkspaceImportSuccess" do
         expect {
           send(trigger)
-        }.to change(Events::DatasetImportSuccess, :count).by(1)
+        }.to change(Events::WorkspaceImportSuccess, :count).by(1)
 
-        event = Events::DatasetImportSuccess.last
+        event = Events::WorkspaceImportSuccess.last
 
         event.actor.should == user
         event.workspace.should == workspace
         event.source_dataset.should == source_dataset
       end
 
-      it "creates a DatasetImportSucess with the correct dataset" do
+      it "creates a WorkspaceImportSuccess with the correct dataset" do
         # Make sure event doesn't reference rogue ChorusView with the same name
         FactoryGirl.create(:chorus_view,
                            :name => destination_table_name,
@@ -85,7 +85,7 @@ describe ImportExecutor do
 
         dataset = Dataset.last
 
-        event = Events::DatasetImportSuccess.last
+        event = Events::WorkspaceImportSuccess.last
         event.dataset.name.should == destination_table_name
         event.dataset.schema.should == sandbox
         event.dataset.id.should == dataset.id
@@ -98,7 +98,7 @@ describe ImportExecutor do
 
         notification = Notification.last
         notification.recipient_id.should == user.id
-        notification.event_id.should == Events::DatasetImportSuccess.last.id
+        notification.event_id.should == Events::WorkspaceImportSuccess.last.id
       end
 
       it "marks the import as success" do
@@ -161,13 +161,13 @@ describe ImportExecutor do
           end
         end
 
-        it "still creates a DatasetImportSuccess event with an empty dataset link" do
+        it "still creates a WorkspaceImportSuccess event with an empty dataset link" do
           expect {
             expect {
               send(trigger)
             }.not_to raise_error
-          }.to change(Events::DatasetImportSuccess, :count).by(1)
-          event = Events::DatasetImportSuccess.last
+          }.to change(Events::WorkspaceImportSuccess, :count).by(1)
+          event = Events::WorkspaceImportSuccess.last
           event.dataset.should be_nil
         end
       end
@@ -179,11 +179,11 @@ describe ImportExecutor do
           end
         end
 
-        it "still creates a DatasetImportSuccess event with an empty dataset link" do
+        it "still creates a WorkspaceImportSuccess event with an empty dataset link" do
           expect {
             send(trigger)
-          }.to change(Events::DatasetImportSuccess, :count).by(1)
-          event = Events::DatasetImportSuccess.last
+          }.to change(Events::WorkspaceImportSuccess, :count).by(1)
+          event = Events::WorkspaceImportSuccess.last
           event.dataset.should be_nil
         end
       end
@@ -206,12 +206,12 @@ describe ImportExecutor do
     let(:expected_failure_message) { message }
 
     context "when the import fails" do
-      it "creates a DatasetImportFailed" do
+      it "creates a WorkspaceImportFailed" do
         expect {
           send(trigger)
-        }.to change(Events::DatasetImportFailed, :count).by(1)
+        }.to change(Events::WorkspaceImportFailed, :count).by(1)
 
-        event = Events::DatasetImportFailed.last
+        event = Events::WorkspaceImportFailed.last
         event.actor.should == user
         event.error_message.should == expected_failure_message
         event.workspace.should == workspace
@@ -226,7 +226,7 @@ describe ImportExecutor do
 
         notification = Notification.last
         notification.recipient_id.should == user.id
-        notification.event_id.should == Events::DatasetImportFailed.last.id
+        notification.event_id.should == Events::WorkspaceImportFailed.last.id
       end
 
       it "marks the import as failed" do
@@ -328,14 +328,14 @@ describe ImportExecutor do
         }.to raise_error error_message
       end
 
-      it "creates a DatasetImportFailed" do
+      it "creates a WorkspaceImportFailed" do
         expect {
           expect {
             copier_start
           }.to raise_error error_message
-        }.to change(Events::DatasetImportFailed, :count).by(1)
+        }.to change(Events::WorkspaceImportFailed, :count).by(1)
 
-        event = Events::DatasetImportFailed.last
+        event = Events::WorkspaceImportFailed.last
         event.error_message.should == error_message
       end
     end
@@ -358,14 +358,14 @@ describe ImportExecutor do
         }.to raise_error error_message
       end
 
-      it "creates a DatasetImportFailed" do
+      it "creates a WorkspaceImportFailed" do
         expect {
           expect {
             copier_start
           }.to raise_error error_message
-        }.to change(Events::DatasetImportFailed, :count).by(1)
+        }.to change(Events::WorkspaceImportFailed, :count).by(1)
 
-        event = Events::DatasetImportFailed.last
+        event = Events::WorkspaceImportFailed.last
         event.error_message.should == error_message
         event.workspace.should == workspace
       end

@@ -59,7 +59,7 @@ class GpdbDataset < Dataset
   def create_import_event(params, user)
     workspace = Workspace.find(params[:workspace_id])
     dst_table = workspace.sandbox.datasets.find_by_name(params[:to_table]) unless params[:new_table].to_s == "true"
-    Events::DatasetImportCreated.by(user).add(
+    Events::WorkspaceImportCreated.by(user).add(
         :workspace => workspace,
         :source_dataset => self,
         :dataset => dst_table,

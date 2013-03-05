@@ -166,18 +166,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("displays an import dataset link", function() {
-                expect(this.view.$("a.import_dataset").text()).toMatchTranslation("actions.import_now");
-            });
-        });
-
-        context("when a greenplum dataset is selected", function() {
-            beforeEach(function() {
-                this.gpdbDataset = rspecFixtures.dataset();
-                chorus.PageEvents.broadcast("dataset:selected", this.gpdbDataset);
-            });
-
-            it("does not display an import dataset link", function() {
-                expect(this.view.$("a.import_dataset")).not.toExist();
+                expect(this.view.$("a.import_now").text()).toMatchTranslation("actions.import_now");
             });
         });
 
