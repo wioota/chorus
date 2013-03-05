@@ -5,7 +5,8 @@ describe SqlStreamer, :database_integration do
   let(:sql) { "select 1;" }
   let(:user) { users(:owner) }
   let(:row_limit) { nil }
-  let(:streamer) { SqlStreamer.new(schema, sql, user, row_limit) }
+  let(:options) { row_limit ? {row_limit: row_limit} : {} }
+  let(:streamer) { SqlStreamer.new(schema, sql, user, options) }
 
   let(:streamed_data) { [
       {:id => 1, :something => 'hello'},
@@ -40,17 +41,35 @@ describe SqlStreamer, :database_integration do
       check_enumerator(streamer.enum(false), false)
     end
 
-    context "with quotes in the data" do
+    context "with special characters in the data" do
       let(:streamed_data) {
         [{
-             :id => 1, :double_quotes => %Q{with"double"quotes}, :single_quotes => %Q{with'single'quotes}, :comma => %Q{with,comma}
+             :id => 1,
+             :double_quotes => %Q{with"double"quotes},
+             :single_quotes => %Q{with'single'quotes},
+             :comma => 'with,comma'
          }]
       }
 
-      it "escapes quotes in the csv" do
+      it "escapes the characters in the csv" do
         enumerator = streamer.enum
         enumerator.next.split("\n").last.should == %Q{1,"with""double""quotes",with'single'quotes,"with,comma"}
         finish_enumerator(enumerator)
+      end
+
+      describe "when the sql streamer has greenplum as target" do
+        let(:streamer) { SqlStreamer.new(schema, sql, user, {target_is_greenplum: true}) }
+        let(:streamed_data) {
+          [{
+             :id => 1,
+             :pipe => '|'
+           }]
+        }
+        it "escapes the pipe character" do
+          enumerator = streamer.enum
+          enumerator.next.split("\n").last.should == '1,\\|'
+          finish_enumerator(enumerator)
+        end
       end
     end
 
@@ -68,7 +87,7 @@ describe SqlStreamer, :database_integration do
       let(:row_limit) { 2 }
 
       it "sends the limit as an integer" do
-        enumerator = SqlStreamer.new(schema, sql, user, "2").enum
+        enumerator = SqlStreamer.new(schema, sql, user, row_limit: "2").enum
         enumerator.next
         finish_enumerator(enumerator)
       end

@@ -10,7 +10,9 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Cache-Control"] = 'no-cache'
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
-      self.response_body = SqlStreamer.new(@schema, CancelableQuery.format_sql_and_check_id(params[:sql], params[:check_id]), current_user, params[:num_of_rows]).enum
+      sql = CancelableQuery.format_sql_and_check_id(params[:sql], params[:check_id])
+      streamer = SqlStreamer.new(@schema, sql, current_user, row_limit: params[:num_of_rows])
+      self.response_body = streamer.enum
     else
       account = @schema.account_for_user! current_user
       present SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql],

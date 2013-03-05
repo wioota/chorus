@@ -1,17 +1,26 @@
 require 'csv'
+
 class SqlStreamer
-  attr_accessor :schema, :sql, :user, :row_limit
-  def initialize(schema, sql, user, row_limit = nil)
+  attr_accessor :schema, :sql, :user, :row_limit, :target_is_greenplum
+
+  def initialize(schema, sql, user, options = {})
     self.schema = schema
     self.sql = sql
     self.user = user
-    self.row_limit = row_limit
+    self.row_limit = options[:row_limit]
+    self.target_is_greenplum = options[:target_is_greenplum]
   end
+
+  def format_row(row)
+    result = row.to_csv
+    result.gsub!('|', '\\|') if self.target_is_greenplum
+    result
+  end
+
   def format(hash, first_row_flag)
     results = ''
-    results << hash.keys.to_csv if first_row_flag
-    results << hash.values.to_csv
-    results
+    results << format_row(hash.keys) if first_row_flag
+    results << format_row(hash.values)
   end
 
   def empty_results_error

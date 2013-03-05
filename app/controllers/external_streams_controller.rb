@@ -7,6 +7,7 @@ class ExternalStreamsController < StreamsController
     import = Import.find_by_stream_key(params[:stream_key])
     return head :unauthorized unless import
 
-    stream(import.source_dataset, import.user, params[:row_limit], false)
+    stream_options = params.slice(:row_limit).merge(target_is_greenplum: true)
+    stream(import.source_dataset, import.user, stream_options)
   end
 end

@@ -90,9 +90,9 @@ describe WorkfileExecutionsController do
       before do
         log_in user
 
-        mock.proxy(SqlStreamer).new(workspace.sandbox, "/*#{check_id}*/#{sql}", user, limit) { |streamer|
+        mock.proxy(SqlStreamer).new(workspace.sandbox, "/*#{check_id}*/#{sql}", user, row_limit: limit) do |streamer|
           mock(streamer).enum { 'response' }
-        }
+        end
       end
 
       it "sets content disposition: attachment" do

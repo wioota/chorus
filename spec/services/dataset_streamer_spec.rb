@@ -4,7 +4,7 @@ describe DatasetStreamer do
   let(:dataset) { datasets(:table) }
   let(:user) { users(:owner) }
   let(:limit) { nil }
-  let(:streamer) { DatasetStreamer.new(dataset, user, limit) }
+  let(:streamer) { DatasetStreamer.new(dataset, user, row_limit: limit) }
 
   describe "sql" do
     it "returns the all_rows_sql for the dataset" do
