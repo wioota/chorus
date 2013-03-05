@@ -11,8 +11,22 @@ chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
             input: this.$('input.search')
         });
 
+        this.setupDragging();
         this.setupDescriptionPopover();
     },
+
+    setupDragging: function() {
+        this.$("ul.list li").draggable({
+            containment: "window",
+            appendTo: "body",
+            helper: this.dragHelper
+        });
+    },
+
+    dragHelper: function(e) {
+        return $(e.currentTarget).clone().addClass("drag_helper");
+    },
+
 
     setupDescriptionPopover: function() {
         this.$("li .name").qtip({

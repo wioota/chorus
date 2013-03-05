@@ -4,6 +4,7 @@ describe("chorus.views.DataTab", function () {
 
         chorus.page = { workspace:rspecFixtures.workspace({name:"new_workspace"}) };
         this.schema = chorus.page.workspace.sandbox().schema();
+        spyOn(chorus.views.DataTabDatasetList.prototype, "rebuildDatasetViews").andCallThrough();
         this.view = new chorus.views.DataTab({schema:this.schema});
 
         stubDefer();
@@ -33,6 +34,7 @@ describe("chorus.views.DataTab", function () {
                         rspecFixtures.schema({name:"Schema 2"})
                     ]);
 
+                    spyOn(this.view, "render").andCallThrough();
                     this.server.completeFetchFor(this.view.schemas, schemas.models);
                     this.server.completeFetchFor(this.schema.datasets(), [
                         rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
@@ -64,6 +66,7 @@ describe("chorus.views.DataTab", function () {
                 describe("searching for a dataset", function () {
                     beforeEach(function () {
                         this.server.reset();
+                        this.view.listview.rebuildDatasetViews.andCallFake(function(){});
                         this.view.$("input.search").val("foo").trigger("keyup");
                     });
 
@@ -73,13 +76,13 @@ describe("chorus.views.DataTab", function () {
 
                     context("when the fetch completes", function () {
                         beforeEach(function () {
-                            spyOn($.fn, "draggable").andCallThrough();
-                            spyOn(this.view.listview, "render");
+                            this.view.render.reset();
                             this.server.lastFetch().succeed();
                         });
 
-                        it("makes items draggable", function () {
-                            expect($.fn.draggable).toHaveBeenCalled();
+                        it("renders the list view", function () {
+                            expect(this.view.render).not.toHaveBeenCalled();
+                            expect(this.view.listview.rebuildDatasetViews).toHaveBeenCalled();
                         });
                     });
                 });
@@ -99,7 +102,6 @@ describe("chorus.views.DataTab", function () {
 
                     context("when the fetch succeeds", function () {
                         beforeEach(function () {
-                            spyOn($.fn, "draggable").andCallThrough();
                             this.view.listview.render.reset();
                             this.server.completeFetchFor(this.schema.datasets(), [
                                 rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
@@ -108,10 +110,6 @@ describe("chorus.views.DataTab", function () {
 
                         it("renders the list view", function () {
                             expect(this.view.listview.render).toHaveBeenCalled();
-                        });
-
-                        it("makes items draggable", function () {
-                            expect($.fn.draggable).toHaveBeenCalled();
                         });
                     });
                 });
@@ -215,27 +213,6 @@ describe("chorus.views.DataTab", function () {
                 it("should have the fullname on the list elements", function() {
                     expect(this.view.$('ul.list li')).toExist();
                     expect(this.view.$('ul.list li').data('fullname')).toBeTruthy();
-                });
-
-                it("should make the list elements draggable", function() {
-                    spyOn($.fn, "draggable");
-                    this.view.render();
-                    expect($.fn.draggable).toHaveBeenCalledOnSelector("ul.list li");
-                });
-
-                it("the draggable helper has the name of the table", function() {
-                    var $li = this.view.$("ul.list li:eq(0)");
-                    var helper = this.view.dragHelper({currentTarget: $li});
-                    expect(helper).toHaveClass("drag_helper");
-                    expect(helper).toContainText($li.data("name"));
-                });
-
-                it("the draggable helper for the table does not have column info", function() {
-                    var $li = this.view.$("ul.list li:eq(0)");
-                    $li.find(".column_list").append("<ul><li>Column1</li></ul>");
-                    var helper = this.view.dragHelper({currentTarget: $li});
-                    expect(helper).toHaveClass("drag_helper");
-                    expect(helper).not.toContainText("Column1");
                 });
             });
 

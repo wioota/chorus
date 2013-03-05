@@ -12,6 +12,7 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
     setup: function() {
         this.bindings.add(this.collection, "reset", this.markDatasetViewsAsDirty);
         this.bindings.add(this.collection, "add", this.markDatasetViewsAsDirty);
+        this.bindings.add(this.collection, "searched", this.rebuildDatasetViews);
         this.datasetViews = [];
     },
 
@@ -28,6 +29,8 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
             this.$("ul").append(view.render().$el);
             view.delegateEvents();
         }, this);
+
+        this.setupDragging();
     },
 
     rebuildDatasetViews: function() {
@@ -48,6 +51,20 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         this.trigger('fetch:more');
+    },
+
+    setupDragging: function() {
+        this.$("ul.list li").draggable({
+            containment: "window",
+            appendTo: "body",
+            helper: this.dragHelper
+        });
+    },
+
+    dragHelper: function(e) {
+        var $dragEl = $(e.currentTarget).clone().addClass("drag_helper");
+        $dragEl.find(".column_list").remove();
+        return $dragEl;
     },
 
     additionalContext:function () {

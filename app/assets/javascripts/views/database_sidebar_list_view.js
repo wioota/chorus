@@ -47,7 +47,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     postRender: function() {
         this.setupSchemaMenu();
         this.closeQtipOnScroll();
-        this.setupDragging();
     },
 
     setupSchemaMenu: function() {
@@ -76,18 +75,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             $(".hover").removeClass("hover");
             this.closeQtip();
         }, this));
-    },
-
-    setupDragging: function() {
-        this.$("ul.list li").draggable({
-            containment: "window",
-            appendTo: "body",
-            helper: this.dragHelper
-        });
-    },
-
-    dragHelper: function(e) {
-        return $(e.currentTarget).clone().addClass("drag_helper");
     },
 
     schemaSelected: function(e) {

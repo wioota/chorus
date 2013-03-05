@@ -22,12 +22,6 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
         });
     },
 
-    dragHelper: function(e) {
-        var $dragEl = $(e.currentTarget).clone().addClass("drag_helper");
-        $dragEl.find(".column_list").remove();
-        return $dragEl;
-    },
-
     additionalContext: function() {
         var ctx = this._super("additionalContext", arguments);
         ctx.isWorkspaceSchema = (this.schema && this.schema.get("id") === "workspaceSchema");
@@ -66,7 +60,6 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
             this.collection.fetchIfNotLoaded(fetchOptions);
         }
 
-        this.bindings.add(this.collection, "searched", this.render);
         this.listview && this.listview.teardown();
         this.listview = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.registerSubView(this.listview);

@@ -84,6 +84,27 @@ describe("chorus.views.DataTabDatasetList", function() {
             });
         });
 
+        it("should make the list elements draggable", function() {
+            spyOn($.fn, "draggable");
+            this.view.render();
+            expect($.fn.draggable).toHaveBeenCalledOnSelector("ul.list li");
+        });
+
+        it("the draggable helper has the name of the table", function() {
+            var $li = this.view.$("ul.list li:eq(0)");
+            var helper = this.view.dragHelper({currentTarget: $li});
+            expect(helper).toHaveClass("drag_helper");
+            expect(helper).toContainText($li.data("name"));
+        });
+
+        it("the draggable helper for the table does not have column info", function() {
+            var $li = this.view.$("ul.list li:eq(0)");
+            $li.find(".column_list").append("<ul><li>Column1</li></ul>");
+            var helper = this.view.dragHelper({currentTarget: $li});
+            expect(helper).toHaveClass("drag_helper");
+            expect(helper).not.toContainText("Column1");
+        });
+
         it("does not destroy/regenerate subviews on render", function() {
             var originalViews = this.view.datasetViews;
             this.view.render();
