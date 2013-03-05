@@ -1,8 +1,8 @@
 module DataSources
-  class SchemasController < ApplicationController
+  class SchemasController < DataSourcesController
     def index
       data_source = DataSource.find(params[:data_source_id])
-      present Schema.visible_to data_source.account_for_user!(current_user), data_source
+      present Schema.visible_to(authorized_account(data_source), data_source)
     end
   end
 end

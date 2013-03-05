@@ -21,9 +21,9 @@ module DataSources
     private
 
     def updated_account
-      gpdb_data_source = GpdbDataSource.unshared.find(params[:data_source_id])
+      data_source = DataSource.unshared.find(params[:data_source_id])
 
-      account = gpdb_data_source.accounts.find_or_initialize_by_owner_id(current_user.id)
+      account = data_source.accounts.find_or_initialize_by_owner_id(current_user.id)
       account.attributes = params[:account]
       account.save!
       account

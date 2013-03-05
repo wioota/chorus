@@ -29,6 +29,21 @@ describe DataSources::AccountController do
       log_in user
     end
 
+    context "with an oracle data source" do
+      let(:data_source) { data_sources(:oracle) }
+
+      it "succeeds" do
+        post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
+        response.code.should == "201"
+
+        decoded_response.db_username.should == "lenny"
+        decoded_response.owner.id.should == user.id
+
+        rehydrated_account = InstanceAccount.find(decoded_response.id)
+        rehydrated_account.db_password.should == "secret"
+      end
+    end
+
     it "succeeds" do
       post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
       response.code.should == "201"
