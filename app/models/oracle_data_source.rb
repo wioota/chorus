@@ -39,32 +39,37 @@ class OracleDataSource < DataSource
 
   # Used by search
   def refresh_schemas(options={})
-    update_permissions options
+    schema_permissions = update_schemas(options)
+    update_permissions(schema_permissions)
     schemas.map(&:name)
   end
 
-  def update_permissions(options={})
+  private
+
+  def update_permissions(schema_permissions)
+    schema_permissions.each do |schema_id, account_ids|
+      schema = schemas.find(schema_id)
+      schema.instance_account_ids = account_ids
+      schema.save!
+      QC.enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id)
+    end
+  end
+
+  def update_schemas(options)
     begin
       schema_permissions = {}
       accounts.each do |account|
-        Schema.refresh(account, self, options.reverse_merge(:refresh_all => true))
-          connect_with(account).schemas.each do |schema|
-            schema_permissions[schema] ||= []
-            schema_permissions[schema] << account.id
-          end
+        schemas = Schema.refresh(account, self, options.reverse_merge(:refresh_all => true))
+        schemas.each do |schema|
+          schema_permissions[schema.id] ||= []
+          schema_permissions[schema.id] << account.id
+        end
       end
     rescue => e
       Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
     end
-
-    schema_permissions.each do |schema_name, account_ids|
-      schema = schemas.find_by_name(schema_name)
-      schema.instance_account_ids = account_ids
-      schema.save!
-    end
+    schema_permissions
   end
-
-  private
 
   def validate_owner?
     self.changed.include?('host') || self.changed.include?('port') || self.changed.include?('db_name')

@@ -77,6 +77,43 @@ describe OracleSchema do
     end
   end
 
+  describe ".reindex_datasets" do
+    let(:schema) { schemas(:oracle) }
+
+    before do
+      schema.datasets.each do |dataset|
+        stub(Sunspot).index(dataset)
+      end
+    end
+
+    it "calls solr_index on 'all' datasets" do
+      schema.datasets.each do |dataset|
+        mock(Sunspot).index(dataset)
+      end
+      OracleSchema.reindex_datasets(schema.id)
+    end
+
+    it "does not call solr_index on stale datasets" do
+      stale_dataset = schema.datasets.first
+      stale_dataset.mark_stale!
+      dont_allow(Sunspot).index(stale_dataset)
+      OracleSchema.reindex_datasets(schema.id)
+    end
+
+    it "calls Sunspot.commit" do
+      mock(Sunspot).commit
+      OracleSchema.reindex_datasets(schema.id)
+    end
+
+    it "continues if exceptions are raised" do
+      schema.datasets.each do |dataset|
+        mock(Sunspot).index(dataset) { raise "error!" }
+      end
+      mock(Sunspot).commit
+      OracleSchema.reindex_datasets(schema.id)
+    end
+  end
+
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:oracle) }
   end
