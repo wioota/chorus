@@ -67,11 +67,11 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("posts to the sandbox endpoint with the correct params", function() {
+            it("creates the sandbox", function() {
                 expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
                 expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBe('6');
                 expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
-                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
+                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
             });
 
             it("doesn't yet display a toast", function() {
@@ -155,7 +155,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
                 expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
                 expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
-                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
+                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
             });
         });
 
@@ -174,7 +174,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             it("sets the database name and schema name on the schema", function() {
                 expect(this.dialog.model.get("databaseName")).toBe("new_database");
                 expect(this.dialog.model.get("schemaName")).toBe("new_schema");
-                expect(this.dialog.model.get("instanceId")).toBe("4");
+                expect(this.dialog.model.get("dataSourceId")).toBe("4");
             });
 
             it("saves the workspace with the new database and sandbox names", function() {
@@ -182,7 +182,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
                 expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
                 expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
-                expect(this.server.lastCreate().params()['sandbox[instance_id]']).toBe('4');
+                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
             });
         });
     });

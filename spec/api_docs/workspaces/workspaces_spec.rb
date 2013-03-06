@@ -7,7 +7,7 @@ resource "Workspaces" do
   let(:user) { workspace.owner }
 
   let(:gpdb_data_source) { database.data_source}
-  let(:instance_id) { gpdb_data_source.id }
+  let(:data_source_id) { gpdb_data_source.id }
   let(:database) { workspace.sandbox.database }
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
@@ -59,11 +59,11 @@ resource "Workspaces" do
 
   post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
     parameter :workspace_id, "Id of a workspace"
-    parameter :instance_id, "Id of an instance to create new database in"
+    parameter :data_source_id, "Id of a Greenplum data source to create new database in"
     parameter :database_name, "Name of a new database"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id, :database_name, :schema_name, :workspace_id
+    required_parameters :data_source_id, :database_name, :schema_name, :workspace_id
 
     let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
     let(:database_name) { "a_new_database_name" }
@@ -81,11 +81,11 @@ resource "Workspaces" do
 
   post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
     parameter :workspace_id, "Id of a workspace"
-    parameter :instance_id, "Id of the instance to create a schema in"
+    parameter :data_source_id, "Id of the Greenplum data source to create a schema in"
     parameter :database_id, "Id of the database to create a schema in"
     parameter :schema_name, "Name of new schema"
 
-    required_parameters :instance_id, :database_id, :schema_name, :workspace_id
+    required_parameters :data_source_id, :database_id, :schema_name, :workspace_id
 
     let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
     let(:database) { GreenplumIntegration.real_database }

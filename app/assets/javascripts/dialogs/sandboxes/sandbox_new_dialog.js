@@ -47,14 +47,14 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         var schemaName = sandboxId ? undefined : this.schemaPicker.fieldValues().schemaName;
         var databaseId = this.schemaPicker.fieldValues().database;
         var databaseName = databaseId ? undefined : this.schemaPicker.fieldValues().databaseName;
-        var instanceId = this.schemaPicker.fieldValues().instance;
+        var dataSourceId = this.schemaPicker.fieldValues().instance;
 
         this.model.set({
             schemaId: sandboxId,
             schemaName: schemaName,
             databaseId: databaseId,
             databaseName: databaseName,
-            instanceId: instanceId
+            dataSourceId: dataSourceId
         });
 
         this.model.save();

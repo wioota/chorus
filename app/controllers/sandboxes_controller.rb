@@ -11,7 +11,7 @@ class SandboxesController < ApplicationController
         workspace.sandbox = GpdbSchema.find(attributes[:schema_id]) if attributes[:schema_id]
         if attributes[:schema_name]
           if attributes[:database_name]
-            gpdb_data_source = GpdbDataSource.find(attributes[:instance_id])
+            gpdb_data_source = GpdbDataSource.find(attributes[:data_source_id])
             database = gpdb_data_source.create_database(attributes[:database_name], current_user)
           else
             database = GpdbDatabase.find(attributes[:database_id])

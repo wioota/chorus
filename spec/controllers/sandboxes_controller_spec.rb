@@ -87,7 +87,7 @@ describe SandboxesController do
           end
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :data_source_id => gpdb_data_source.to_param
         response.code.should == '201'
 
         workspace.reload.sandbox.name.should == 'create_new_schema'
@@ -106,7 +106,7 @@ describe SandboxesController do
           mock(database_double).create_schema.with_any_args.times(0)
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'public', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'public', :database_name => 'new_database', :data_source_id => gpdb_data_source.to_param
         response.should be_success
         workspace.reload.sandbox.name.should == 'public'
         workspace.reload.sandbox.database.name.should == 'new_database'
@@ -119,7 +119,7 @@ describe SandboxesController do
           }
         end
 
-        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :instance_id => gpdb_data_source.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => 'create_new_schema', :database_name => 'new_database', :data_source_id => gpdb_data_source.to_param
 
         response.code.should == '422'
         decoded_errors.fields.database.GENERIC.message.should == 'Database creation failed'
@@ -136,7 +136,7 @@ describe SandboxesController do
       end
 
       it "should work" do
-        post :create, :workspace_id => workspace.id, :schema_name => schema_name, :database_name => database_name, :instance_id => gpdb_data_source.to_param
+        post :create, :workspace_id => workspace.id, :schema_name => schema_name, :database_name => database_name, :data_source_id => gpdb_data_source.to_param
         response.code.should == '201'
 
         workspace.reload.sandbox.name.should == schema_name
