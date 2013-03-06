@@ -8,7 +8,8 @@ class SqlResult
     @columns = []
     @rows = []
     @warnings = options[:warnings] || []
-    load_from_result_set(options[:result_set]) if options[:result_set]
+    @result_set = options[:result_set]
+    load_from_result_set if @result_set
   end
 
   def canceled?
@@ -25,27 +26,6 @@ class SqlResult
     end
   end
 
-  def load_from_result_set(result_set)
-    return unless result_set
-
-    meta_data = result_set.meta_data
-
-    (1..meta_data.column_count).each do |i|
-      add_column(meta_data.get_column_name(i), meta_data.column_type_name(i))
-    end
-
-    while result_set.next
-      row = (1..meta_data.column_count).map do |i|
-        column_string_value meta_data, result_set, i
-      end
-      add_row(row)
-    end
-  end
-
-  def column_string_value(meta_data, result_set, index)
-    result_set.get_string(index).to_s
-  end
-
   def add_column(name, type)
     @columns << dataset_column_class.new(:name => name, :data_type => type)
   end
@@ -56,5 +36,31 @@ class SqlResult
 
   def add_rows(rows)
     @rows.concat(rows)
+  end
+
+  private
+
+  def column_string_value(index)
+    @result_set.get_string(index+1).to_s
+  end
+
+  def load_from_result_set
+    meta_data = @result_set.meta_data
+    column_count = meta_data.column_count
+
+    column_count.times do |i|
+      add_column(
+        meta_data.get_column_name(i+1),
+        meta_data.column_type_name(i+1)
+      )
+    end
+
+    while @result_set.next
+      row = (0...column_count).map do |i|
+         column_string_value(i)
+      end
+
+      add_row(row)
+    end
   end
 end

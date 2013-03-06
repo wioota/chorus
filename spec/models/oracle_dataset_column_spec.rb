@@ -52,28 +52,27 @@ describe OracleDatasetColumn do
     end
   end
 
-  describe "#is_supported?" do
-    let(:column) {OracleDatasetColumn.new(:name => "column_name",
-                                          :data_type => column_data_type,
-                                          :ordinal_position => 1,
-                                          :description => "description")}
+  describe "#supported?" do
+    subject do
+      OracleDatasetColumn.new(:name => "column_name",
+                              :ordinal_position => 1,
+                              :description => "description")
+    end
 
     context "when the column data type is supported" do
-      OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys.each do |type|
-        let(:column_data_type) { type }
-
+      %w{CHAR DATE TIMESTAMP(6) ROWID NVARCHAR2 VARCHAR INT CHAR LONG}.each do |type|
         it "returns true for #{type}" do
-          column.is_supported?.should be_true
+          subject.data_type = type
+          subject.should be_supported
         end
       end
     end
 
     context "when the column data type is unsupported" do
-      (OracleDbTypeConversions::CATEGORY_MAP.keys - OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys).each do |type|
-        let(:column_data_type) { type }
-
+      %w{MLSLABEL BFILE RAW BLOB}.each do |type|
         it "returns false for #{type}" do
-          column.is_supported?.should be_false
+          subject.data_type = type
+          subject.should_not be_supported
         end
       end
     end

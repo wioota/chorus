@@ -180,8 +180,11 @@ describe GreenplumConnection, :greenplum_integration do
   describe "#prepare_and_execute_statement" do
     let(:sql) { "SELECT 1 AS answer" }
     let(:options) { {} }
-    let(:subject) { connection.prepare_and_execute_statement(sql, options) }
     let(:expected) { [{'answer' => '1'}] }
+
+    subject do
+      connection.prepare_and_execute_statement(sql, options)
+    end
 
     it "should return a SqlResult" do
       subject.should be_a(SqlResult)

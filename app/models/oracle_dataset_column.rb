@@ -1,5 +1,5 @@
 class OracleDatasetColumn < DatasetColumn
-  def is_supported?
-    OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys.include? data_type.upcase
+  def supported?
+    !!OracleDbTypeConversions.convert_column_type(data_type.upcase)
   end
 end
