@@ -23,7 +23,7 @@ describe OracleSqlResult do
       end
     end
 
-    context "when getting an supported data type" do
+    context "when getting a supported data type" do
       let(:column_data_types) { supported }
 
       it "returns the value as a string" do

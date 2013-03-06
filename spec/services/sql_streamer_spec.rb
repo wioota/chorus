@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SqlStreamer, :database_integration do
+describe SqlStreamer do
   let(:schema) { schemas(:public) }
   let(:sql) { "select 1;" }
   let(:user) { users(:owner) }
