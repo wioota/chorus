@@ -41,9 +41,21 @@ module GreenplumIntegration
     conn.exec_query(sql)
   end
 
+  def self.drop_test_db
+    conn = ActiveRecord::Base.postgresql_connection(
+        :host => hostname,
+        :port => port,
+        :database => "postgres",
+        :username => username,
+        :password => password,
+        :adapter => "jdbcpostgresql")
+    conn.exec_query("DROP DATABASE IF EXISTS #{GreenplumIntegration.database_name}")
+  end
+
   def self.setup_gpdb
     if gpdb_changed?
       puts "  Importing into #{GreenplumIntegration.database_name}"
+      drop_test_db
       execute_sql("create_gpadmin.sql")
       execute_sql("drop_and_create_gpdb_databases.sql")
       execute_sql("create_test_schemas.sql", database_name)

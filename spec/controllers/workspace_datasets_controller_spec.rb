@@ -254,6 +254,7 @@ describe WorkspaceDatasetsController do
   context "with real greenplum", :greenplum_integration do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:gpdb_workspace) }
+    let(:account) { workspace.sandbox.parent.data_source.account_for_user!(user) }
 
     before do
       log_in user
@@ -333,8 +334,8 @@ describe WorkspaceDatasetsController do
         let(:entity_subtype) { "SANDBOX_DATASET" }
 
         it "presents the correct count / pagination information" do
-          decoded_pagination.records.should == workspace.sandbox.active_tables_and_views.size
-          decoded_pagination.total.should == (workspace.sandbox.active_tables_and_views.size/5.0).ceil
+          decoded_pagination.records.should == workspace.datasets(user, :entity_subtype => entity_subtype).count
+          decoded_pagination.total.should == (workspace.datasets(user, :entity_subtype => entity_subtype).count/5.0).ceil
         end
       end
 

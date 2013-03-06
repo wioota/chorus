@@ -1009,16 +1009,18 @@ describe GreenplumConnection, :greenplum_integration do
 
     describe "#datasets" do
       let(:datasets_sql) do
-        <<-SQL
-SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-ORDER BY lower(replace(relname,'_', '')) ASC
+        (<<-SQL).strip_heredoc
+          SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+          FROM pg_catalog.pg_class
+          LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+          WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+          AND pg_catalog.pg_class.relkind in ('r', 'v')
+          AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+          AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
+          ORDER BY lower(replace(relname,'_', '')) ASC
         SQL
       end
+
       let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
       let(:subject) { connection.datasets }
 
@@ -1054,14 +1056,15 @@ ORDER BY lower(replace(relname,'_', '')) ASC
       context "when a limit is passed" do
         let(:datasets_sql) do
           <<-SQL
-SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-ORDER BY lower(replace(relname,'_', '')) ASC
-LIMIT 2
+            SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+            FROM pg_catalog.pg_class
+            LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+            WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+            AND pg_catalog.pg_class.relkind in ('r', 'v')
+            AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+            AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
+            ORDER BY lower(replace(relname,'_', '')) ASC
+            LIMIT 2
           SQL
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
@@ -1078,14 +1081,15 @@ LIMIT 2
           let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
           let(:datasets_sql) do
             <<-SQL
-  SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-  FROM pg_catalog.pg_class
-  LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-  WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-  AND pg_catalog.pg_class.relkind in ('r', 'v')
-  AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-  AND (pg_catalog.pg_class.relname ILIKE '%candy%')
-  ORDER BY lower(replace(relname,'_', '')) ASC
+              SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+              FROM pg_catalog.pg_class
+              LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+              WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+              AND pg_catalog.pg_class.relkind in ('r', 'v')
+              AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+              AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+              AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
+              ORDER BY lower(replace(relname,'_', '')) ASC
             SQL
           end
 
@@ -1105,13 +1109,14 @@ LIMIT 2
       context "when only showing tables" do
         let(:datasets_sql) do
           <<-SQL
-SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind = 'r'
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-ORDER BY lower(replace(relname,'_', '')) ASC
+            SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+            FROM pg_catalog.pg_class
+            LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+            WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+            AND pg_catalog.pg_class.relkind = 'r'
+            AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+            AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
+            ORDER BY lower(replace(relname,'_', '')) ASC
           SQL
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
@@ -1123,15 +1128,16 @@ ORDER BY lower(replace(relname,'_', '')) ASC
       context "when multiple options are passed" do
         let(:datasets_sql) do
           <<-SQL
-SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-AND (pg_catalog.pg_class.relname ILIKE '%candy%')
-ORDER BY lower(replace(relname,'_', '')) ASC
-LIMIT 2
+            SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
+            FROM pg_catalog.pg_class
+            LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+            WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+            AND pg_catalog.pg_class.relkind in ('r', 'v')
+            AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+            AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+            AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
+            ORDER BY lower(replace(relname,'_', '')) ASC
+            LIMIT 2
           SQL
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
@@ -1144,12 +1150,13 @@ LIMIT 2
     describe "#datasets_count" do
       let(:datasets_sql) do
         <<-SQL
-SELECT count(pg_catalog.pg_class.relname)
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+          SELECT count(pg_catalog.pg_class.relname)
+          FROM pg_catalog.pg_class
+          LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+          WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+          AND pg_catalog.pg_class.relkind in ('r', 'v')
+          AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+          AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
         SQL
       end
       let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }
@@ -1187,13 +1194,14 @@ AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid
       context "when a name filter is passed" do
         let(:datasets_sql) do
           <<-SQL
-SELECT count(pg_catalog.pg_class.relname)
-FROM pg_catalog.pg_class
-LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
-WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-AND pg_catalog.pg_class.relkind in ('r', 'v')
-AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
-AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+            SELECT count(pg_catalog.pg_class.relname)
+            FROM pg_catalog.pg_class
+            LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
+            WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
+            AND pg_catalog.pg_class.relkind in ('r', 'v')
+            AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
+            AND (pg_catalog.pg_class.relname ILIKE '%candy%')
+            AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
           SQL
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).single_value }

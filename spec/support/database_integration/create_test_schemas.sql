@@ -32,6 +32,19 @@
   CREATE TABLE "7_`~!@#$%^&*()+=[]{}|\;:',<.>/?"
     (id integer PRIMARY KEY, column3 integer, column2 integer, category text, time_value timestamp );
 
+  CREATE TABLE parition_sales (trans_id int, date date, amount decimal(9,2), region text)
+              DISTRIBUTED BY (trans_id)
+              PARTITION BY RANGE (date)
+              SUBPARTITION BY LIST (region)
+              SUBPARTITION TEMPLATE (
+                SUBPARTITION usa VALUES ('usa'),
+                SUBPARTITION asia VALUES ('asia'),
+                SUBPARTITION europe VALUES ('europe'),
+                DEFAULT SUBPARTITION other_regions)
+              (START (date '2008-01-01') INCLUSIVE
+              END (date '2009-01-01') EXCLUSIVE EVERY (INTERVAL '1 month'),
+              DEFAULT PARTITION outlying_dates );
+
   CREATE EXTERNAL WEB TABLE external_web_table1
     (name text, date date, amount float4, category text, description text)
     LOCATION ('http://intranet.company.com/expenses/sales/file.csv')

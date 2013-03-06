@@ -426,7 +426,8 @@ class GreenplumConnection < DataSourceConnection
         query = query.left_outer_join(:pg_partition_rule, :parchildrelid => :relations__oid, :relations__relhassubclass => 'f')
         query = query.where(:pg_namespace__nspname => schema_name)
         query = query.where(:relations__relkind => options[:tables_only] ? 'r' : %w(r v))
-        query = query.where("\"relations\".\"relhassubclass\" = 't' OR \"pg_partition_rule\".\"parchildrelid\" is null")
+        query = query.where(%Q|"relations"."relhassubclass" = 't' OR "pg_partition_rule"."parchildrelid" is null|)
+        query = query.where(%Q|"relations"."oid" NOT IN (SELECT "parchildrelid" FROM "pg_partition_rule")|)
 
         if options[:name_filter]
           query = query.where("\"relname\" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'")
