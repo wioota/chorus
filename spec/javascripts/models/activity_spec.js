@@ -324,6 +324,8 @@ describe("chorus.models.Activity", function() {
         it("returns true for IMPORT_FAILED", function() {
             expect(rspecFixtures.activity.fileImportFailed().isFailure()).toBeTruthy();
             expect(rspecFixtures.activity.workspaceImportFailed().isFailure()).toBeTruthy();
+            expect(rspecFixtures.activity.schemaImportFailed().isFailure()).toBeTruthy();
+            expect(rspecFixtures.activity.gnipStreamImportFailed().isFailure()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
@@ -335,13 +337,14 @@ describe("chorus.models.Activity", function() {
         it("returns true for IMPORT SUCCESS", function() {
             expect(rspecFixtures.activity.fileImportSuccess().isSuccessfulImport()).toBeTruthy();
             expect(rspecFixtures.activity.workspaceImportSuccess().isSuccessfulImport()).toBeTruthy();
+            expect(rspecFixtures.activity.schemaImportSuccess().isSuccessfulImport()).toBeTruthy();
+            expect(rspecFixtures.activity.gnipStreamImportSuccess().isSuccessfulImport()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
             expect(rspecFixtures.activity.fileImportFailed().isSuccessfulImport()).toBeFalsy();
             expect(rspecFixtures.activity.workspaceImportFailed().isSuccessfulImport()).toBeFalsy();
         });
-
     });
 
     describe("#isOwner", function() {

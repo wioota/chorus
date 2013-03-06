@@ -122,8 +122,7 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
       refresh_schema
       mark_as_success
     else
-      event = create_failed_event message if __getobj__.is_a?(WorkspaceImport)
-      Notification.create!(:recipient_id => user.id, :event_id => event.id) if __getobj__.is_a?(WorkspaceImport)
+      create_failed_event_and_notification(message)
     end
   end
 
@@ -161,15 +160,5 @@ class ImportExecutor < DelegateClass(WorkspaceImport)
       return event if event.reference_id == reference_id && event.reference_type == reference_type
       possible_events.pop
     end
-  end
-
-  def create_failed_event(error_message)
-    Events::WorkspaceImportFailed.by(user).add(
-        :workspace => workspace_with_deleted,
-        :destination_table => to_table,
-        :error_message => error_message,
-        :source_dataset => source_dataset,
-        :dataset => workspace_with_deleted.sandbox.datasets.find_by_name(to_table)
-    )
   end
 end

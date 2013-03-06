@@ -276,6 +276,10 @@
                 computed: ["destinationDatasetInSchemaLink", "sourceDatasetInSchemaLink", 'destinationSchemaLink']
             },
 
+            SchemaImportFailed: {
+                computed: ["sourceDatasetInSchemaLink", 'destinationSchemaLink', 'destObjectOrNameInSchema']
+            },
+
             GnipStreamImportCreated: {
                 links: ["actor", "gnipInstance", "dataset"],
                 attrs: ["destinationTable"],
@@ -489,6 +493,9 @@
 
         destinationSchemaLink: function(self) {
             var schema = self.model.dataset().schema();
+            if (!schema) {
+                schema = new chorus.models.Schema(self.model.get('schema'));
+            }
             return schema.showLink();
         },
 
@@ -508,6 +515,14 @@
             var dataset = self.model["dataset"]();
             if (dataset.get("id")){
                 return hidden.modelLink(dataset);
+            }
+            return self.model.get("destinationTable");
+        },
+
+        destObjectOrNameInSchema: function(self) {
+            var dataset = self.model["dataset"]();
+            if (dataset.get("id")){
+                return (new chorus.models.Dataset(dataset.attributes)).showLink();
             }
             return self.model.get("destinationTable");
         },

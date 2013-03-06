@@ -230,11 +230,25 @@
         },
 
         isFailure: function() {
-            return this.get('action') === "GnipStreamImportFailed" || this.get("action") === "FileImportFailed" ||  this.get("action") === "WorkspaceImportFailed";
+            var failureActions = [
+                "GnipStreamImportFailed",
+                "FileImportFailed",
+                "WorkspaceImportFailed",
+                "SchemaImportFailed"
+            ];
+
+            return _.contains(failureActions, this.get("action"));
         },
 
         isSuccessfulImport: function() {
-            return this.get('action') === "GnipStreamImportSuccess" || this.get("action") === "FileImportSuccess" ||  this.get("action") === "WorkspaceImportSuccess" || this.get('action') === 'SchemaImportSuccess';
+            var successActions = [
+                "GnipStreamImportSuccess",
+                "FileImportSuccess",
+                "WorkspaceImportSuccess",
+                "SchemaImportSuccess"
+            ];
+
+            return _.contains(successActions, this.get("action"));
         },
 
         promoterLink: function() {

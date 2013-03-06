@@ -272,7 +272,8 @@ describe EventsController do
         'hdfsFileExtTableCreated' => Events::HdfsFileExtTableCreated,
         'hdfsDirectoryExtTableCreated' => Events::HdfsDirectoryExtTableCreated,
         'hdfsPatternExtTableCreated' => Events::HdfsPatternExtTableCreated,
-        'schemaImportSuccess' => Events::SchemaImportSuccess
+        'schemaImportSuccess' => Events::SchemaImportSuccess,
+        'schemaImportFailed' => Events::SchemaImportFailed
     }
 
     FIXTURE_FILES.each do |file_name, event_relation|

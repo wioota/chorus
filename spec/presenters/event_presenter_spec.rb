@@ -235,5 +235,28 @@ describe EventPresenter, :type => :view do
         hash['error_objects'].should == ErrorPresenter.new(event.error_objects).as_json
       end
     end
+
+    context "with a schema import failed event" do
+      let(:event) { events(:schema_import_failed) }
+      let(:schema) { schemas(:default) }
+
+      context "when it has a schema_id in additional data" do
+        it "has a schema hash" do
+          hash = subject.to_hash
+          hash[:schema].should == {
+            :id => schema.id,
+            :name => schema.name
+          }
+        end
+      end
+
+      context "when it doesn't have a schema_id in additional data" do
+        before { event.additional_data.delete('schema_id') }
+
+        it "doesn't have a schema hash" do
+          subject.to_hash.should_not include :schema
+        end
+      end
+    end
   end
 end

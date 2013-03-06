@@ -169,27 +169,9 @@ describe ImportExecutor do
     let(:expected_failure_message) { message }
 
     context "when the import fails" do
-      it "creates a WorkspaceImportFailed" do
-        expect {
-          send(trigger)
-        }.to change(Events::WorkspaceImportFailed, :count).by(1)
-
-        event = Events::WorkspaceImportFailed.last
-        event.actor.should == user
-        event.error_message.should == expected_failure_message
-        event.workspace.should == workspace
-        event.source_dataset.should == source_dataset
-        event.destination_table.should == destination_table_name
-      end
-
-      it "creates a notification" do
-        expect {
-          send(trigger)
-        }.to change(Notification, :count).by(1)
-
-        notification = Notification.last
-        notification.recipient_id.should == user.id
-        notification.event_id.should == Events::WorkspaceImportFailed.last.id
+      it "creates " do
+        mock(import).create_failed_event_and_notification(message)
+        send(trigger)
       end
 
       it "marks the import as failed" do

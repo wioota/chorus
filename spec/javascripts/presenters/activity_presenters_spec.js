@@ -841,6 +841,51 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context('dataset import into schema failed', function(){
+        beforeEach(function() {
+            model = rspecFixtures.activity.schemaImportFailed();
+            actor = model.actor();
+            sourceDataset = model.importSource();
+
+        });
+
+        itHasTheImportIcon();
+
+        context("when the events has a dataset", function() {
+            beforeEach(function() {
+                dataset = model.dataset();
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SchemaImportFailed.default", {
+                        sourceDatasetInSchemaLink: (new chorus.models.Dataset(sourceDataset.attributes)).showLink(),
+                        destinationSchemaLink: dataset.schema().showLink(),
+                        destObjectOrNameInSchema: (new chorus.models.Dataset(dataset.attributes)).showLink()
+                    }
+                );
+            });
+        });
+
+        context("when the events does not have a dataset", function() {
+            beforeEach(function() {
+                delete model.attributes.dataset;
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SchemaImportFailed.default", {
+                        sourceDatasetInSchemaLink: (new chorus.models.Dataset(sourceDataset.attributes)).showLink(),
+                        destinationSchemaLink: (new chorus.models.Schema(model.get('schema'))).showLink(),
+                        destObjectOrNameInSchema: model.get('destinationTable')
+                    }
+                );
+            });
+        });
+    });
+
     context("file import failed", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.fileImportFailed();
