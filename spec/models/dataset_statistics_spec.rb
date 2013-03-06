@@ -50,14 +50,14 @@ describe DatasetStatistics do
 
     it "fills in the 'description' attribute of each db object in the relation" do
       mock(connection).metadata_for_dataset(dataset.name) { fake_statistics }
-      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      mock(connection).partitions_disk_size(dataset.name) { 43 }
       mock.proxy(DatasetStatistics).new(fake_statistics)
       DatasetStatistics.build_for(dataset, account).should be_a(DatasetStatistics)
     end
 
     it "adds the partition size to the disk size" do
       mock(connection).metadata_for_dataset(dataset.name) { fake_statistics }
-      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      mock(connection).partitions_disk_size(dataset.name) { 43 }
       stats = DatasetStatistics.build_for(dataset, account)
       stats.disk_size.should == 543
     end
@@ -69,7 +69,7 @@ describe DatasetStatistics do
 
     it "handles nil last analyzed values (for views)" do
       mock(connection).metadata_for_dataset(dataset.name) { fake_statistics.merge('last_analyzed' => nil) }
-      mock(connection).partition_data_for_dataset(dataset.name) { {'disk_size' => 43} }
+      mock(connection).partitions_disk_size(dataset.name) { 43 }
       DatasetStatistics.build_for(dataset, account).last_analyzed.should be_nil
     end
 

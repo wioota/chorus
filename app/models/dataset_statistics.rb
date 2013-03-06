@@ -27,7 +27,10 @@ class DatasetStatistics
       metadata = connection.metadata_for_dataset(dataset.name)
 
       if metadata
-        add_partition_disk_size(connection, dataset.name, metadata) if metadata['partition_count'].to_i > 0
+        if metadata['partition_count'].to_i > 0
+          metadata['disk_size'] = partition_disk_size(connection, dataset.name, metadata)
+        end
+
         self.new(metadata)
       end
     end
@@ -40,8 +43,7 @@ class DatasetStatistics
     self.new('column_count' => result.columns.count)
   end
 
-  def self.add_partition_disk_size(connection, name, metadata)
-    partition_result = connection.partition_data_for_dataset(name)
-    metadata['disk_size'] = metadata['disk_size'].to_i + partition_result['disk_size'].to_i
+  def self.partition_disk_size(connection, name, metadata)
+    connection.partitions_disk_size(name) + metadata['disk_size'].to_i
   end
 end
