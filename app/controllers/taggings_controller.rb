@@ -11,10 +11,16 @@ class TaggingsController < ApplicationController
     end
 
     unique_tag_names = tag_names.uniq(&:downcase).sort
-    begin
-      model.tag_list = unique_tag_names
-    rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
-      model.tag_list = unique_tag_names
+
+    # worst-case for number of failed attempts to create a new tag is the number of tags in the list
+    max_failures = unique_tag_names.length
+    (0 .. max_failures).to_a.reverse.each do |attempts_left|
+      begin
+        model.tag_list = unique_tag_names
+        break
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+        raise unless attempts_left > 0
+      end
     end
     model.save!
 

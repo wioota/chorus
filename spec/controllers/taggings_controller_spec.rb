@@ -77,31 +77,49 @@ describe TaggingsController do
       end
     end
 
-    context 'when saving the tag_list fails from active record uniqueness validation' do
+    context 'when saving the tag_list fails due uniqueness errors' do
+      let(:tag_names) { %w{a b c} }
+      let(:num_failures) { 3 }
+      let(:exception) { ActiveRecord::RecordInvalid.new(Tag.new) }
+
       before do
+        @failures_left = num_failures
         mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
-        mock(entity, :tag_list=).with_any_args.twice {
-          raise ActiveRecord::RecordInvalid.new(Tag.new)
+        mock(entity, :tag_list=).with_any_args.times(4) {
+          will_raise = @failures_left > 0
+          @failures_left -= 1
+          raise exception if will_raise
         }
       end
 
-      it 're-tries saving' do
+      it "succeeds after making as many repeat attempts as there are tags" do
         post :create, params
-        response.code.should == '422'
-      end
-    end
-
-    context 'when saving the tag_list fails due to uniqueness at the database level' do
-      before do
-        mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
-        mock(entity, :tag_list=).with_any_args.twice {
-          raise ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang'))
-        }
+        response.code.should == '201'
       end
 
-      it 're-tries saving' do
-        post :create, params
-        response.code.should == '422'
+      context "when it fails on the last attempt" do
+        let(:num_failures) { 4 }
+        it 'returns 422' do
+          post :create, params
+          response.code.should == '422'
+        end
+      end
+
+      context "when the uniqueness error is at the database level" do
+        let(:exception) { ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang')) }
+
+        it "makes as many repeat attempts as there are tags" do
+          post :create, params
+          response.code.should == '201'
+        end
+
+        context "when it fails on the last attempt" do
+          let(:num_failures) { 4 }
+          it 'returns 422' do
+            post :create, params
+            response.code.should == '422'
+          end
+        end
       end
     end
 
