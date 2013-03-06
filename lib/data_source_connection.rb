@@ -61,7 +61,7 @@ class DataSourceConnection
         result_set = stmnt.execute_query(sql)
         column_number = result_set.meta_data.column_count
 
-        while(result_set.next) do
+        while result_set.next
           record = {}
 
           column_number.times do |i|

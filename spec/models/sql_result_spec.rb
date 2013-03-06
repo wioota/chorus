@@ -31,7 +31,7 @@ describe SqlResult, :oracle_integration do
     let(:table_name) { "ALL_COLUMN_TABLE" }
 
     context "when a limit is set" do
-      let((:options)) do
+      let(:options) do
         {
             :limit => 1
         }

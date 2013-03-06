@@ -28,4 +28,17 @@ describe DatasetStreamer do
       end
     end
   end
+
+  describe "oracle integration", :oracle_integration do
+    let(:schema) { OracleIntegration.real_schema }
+    let(:table) { schema.datasets.find_by_name('ALL_COLUMN_TABLE') }
+    let(:view) { schema.datasets.find_by_name('ALL_COLUMN_VIEW') }
+    let(:user) { OracleIntegration.real_data_source.owner }
+    let(:table_streamer) { DatasetStreamer.new(table, user, options) }
+    let(:view_streamer) { DatasetStreamer.new(view, user, options) }
+
+    it "generates the same result for a table and an identical view" do
+      table_streamer.enum.to_a.should == view_streamer.enum.to_a
+    end
+  end
 end

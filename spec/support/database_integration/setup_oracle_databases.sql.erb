@@ -59,3 +59,5 @@ INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('|');
 INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\r');
 INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('\n');
 INSERT INTO "<%= schema_name %>".SPECIAL_CHARACTERS VALUES ('foo,bar');
+
+CREATE VIEW "<%= schema_name %>".ALL_COLUMN_VIEW as SELECT * from "<%= schema_name %>".ALL_COLUMN_TABLE;
