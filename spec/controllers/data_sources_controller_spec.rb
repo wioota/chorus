@@ -15,35 +15,35 @@ describe DataSourcesController do
 
     it_behaves_like "a paginated list"
 
-    it "returns all data sources" do
+    it "returns only online data sources that the user can access" do
       get :index
       response.code.should == "200"
-      decoded_response.size.should == DataSource.count
       decoded_response.map(&:id).should include(online_data_source.id)
-      decoded_response.map(&:id).should include(offline_data_source.id)
+      decoded_response.map(&:id).should_not include(offline_data_source.id)
       decoded_response.map(&:id).should include(permitted_data_source.id)
-      decoded_response.map(&:id).should include(prohibited_data_source.id)
+      decoded_response.map(&:id).should_not include(prohibited_data_source.id)
     end
 
-    context 'when accessible => "true" is passed' do
-      it "returns only online data sources that the user can access" do
-        get :index, :accessible => "true"
+    context 'when all => "true" is passed' do
+      it "returns all data sources" do
+        get :index, :all => true
         response.code.should == "200"
+        decoded_response.size.should == DataSource.count
         decoded_response.map(&:id).should include(online_data_source.id)
-        decoded_response.map(&:id).should_not include(offline_data_source.id)
+        decoded_response.map(&:id).should include(offline_data_source.id)
         decoded_response.map(&:id).should include(permitted_data_source.id)
-        decoded_response.map(&:id).should_not include(prohibited_data_source.id)
+        decoded_response.map(&:id).should include(prohibited_data_source.id)
       end
     end
 
     describe "filtering by type" do
       it "filters by gpdb data sources" do
-        get :index, :entity_type => "gpdb_data_source"
+        get :index, :entity_type => "gpdb_data_source", :all => true
         decoded_response.map(&:id).should =~ GpdbDataSource.all.map(&:id)
       end
 
       it "filters by oracle data sources" do
-        get :index, :entity_type => "oracle_data_source"
+        get :index, :entity_type => "oracle_data_source", :all => true
         decoded_response.map(&:id).should =~ OracleDataSource.all.map(&:id)
       end
     end

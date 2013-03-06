@@ -119,7 +119,6 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("fetches only the data sources where the user has permissions", function() {
             expect(this.page.dataSourceSet).toBeA(chorus.collections.DataSourceSet);
-            expect(this.page.dataSourceSet.attributes.accessible).toBe(true);
             expect(this.page.dataSourceSet).toHaveBeenFetched();
         });
 
@@ -168,10 +167,6 @@ describe("chorus.pages.DashboardPage", function() {
             spyOn(this.page.gnipInstanceSet, "fetchAll");
             spyOn(this.page.hadoopInstanceSet, "fetchAll");
             this.page.fetchInstances();
-        });
-
-        it("fetches only accessible data sources", function() {
-            expect(this.server.lastFetch().params().accessible).toBe('true');
         });
 
         it("fetches all gnip and hadoop instances", function() {

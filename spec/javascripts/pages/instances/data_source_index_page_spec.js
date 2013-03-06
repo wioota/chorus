@@ -1,7 +1,7 @@
 describe("chorus.pages.DataSourceIndexPage", function() {
     beforeEach(function() {
         this.page = new chorus.pages.DataSourceIndexPage();
-        this.dataSourceSet = new chorus.collections.DataSourceSet();
+        this.dataSourceSet = new chorus.collections.DataSourceSet([], {all: true});
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();
     });
@@ -108,6 +108,10 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
         it('displays the data source count', function(){
             expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("6");
+        });
+
+        it("fetches all datasets", function() {
+            expect(this.server.lastFetchFor(this.dataSourceSet).params().all).toBe("true");
         });
 
         describe("multiple selection", function() {

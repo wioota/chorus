@@ -5,7 +5,7 @@ class DataSourcesController < ApplicationController
 
   def index
     data_sources = DataSource.by_type(params[:entity_type])
-    data_sources = data_sources.accessible_to(current_user) if params[:accessible]
+    data_sources = data_sources.accessible_to(current_user) unless params[:all]
 
     present paginate data_sources
   end
@@ -20,7 +20,6 @@ class DataSourcesController < ApplicationController
     data_source = DataSource.create_for_entity_type(entity_type, current_user, params[:data_source])
     present data_source, :status => :created
   end
-
 
   def update
     data_source = DataSource.find(params[:id])

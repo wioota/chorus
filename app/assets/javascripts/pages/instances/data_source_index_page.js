@@ -6,7 +6,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
     helpId: "instances",
 
     setup:function () {
-        var dataSources = new chorus.collections.DataSourceSet();
+        var dataSources = new chorus.collections.DataSourceSet([], {all: true});
         var hadoopInstances = new chorus.collections.HadoopInstanceSet();
         var gnipInstances = new chorus.collections.GnipInstanceSet();
         dataSources.fetchAll();
