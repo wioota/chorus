@@ -11,7 +11,8 @@ class HadoopInstancePresenter < Presenter
         :version => model.version,
         :username => model.username,
         :group_list => model.group_list,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :tags => present(model.tags)
     }.merge(owner_hash)
   end
 

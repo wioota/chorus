@@ -11,7 +11,7 @@ class DataSourcePresenter < Presenter
         :description => model.description,
         :version => model.version,
         :entity_type => model.entity_type_name,
-        :tags => present(model.tags),
+        :tags => present(model.tags)
     }.merge(owner_hash)
   end
 

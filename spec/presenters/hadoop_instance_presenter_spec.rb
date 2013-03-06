@@ -24,6 +24,7 @@ describe HadoopInstancePresenter, :type => :view do
       hash.should have_key(:username)
       hash.should have_key(:group_list)
       hash.should have_key(:online)
+      hash.should have_key(:tags)
       hash[:entity_type].should == 'hadoop_instance'
     end
 

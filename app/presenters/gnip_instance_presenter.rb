@@ -1,5 +1,4 @@
 class GnipInstancePresenter < Presenter
-
   def to_hash
     {
         :name => model.name,
@@ -8,7 +7,8 @@ class GnipInstancePresenter < Presenter
         :description => model.description,
         :username => model.username,
         :state => "online",
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :tags => present(model.tags)
     }.merge(owner_hash)
   end
 

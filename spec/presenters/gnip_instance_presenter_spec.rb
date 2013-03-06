@@ -16,7 +16,9 @@ describe GnipInstancePresenter, :type => :view do
       hash.should have_key(:owner)
       hash.should have_key(:description)
       hash.should have_key(:username)
+      hash.should have_key(:tags)
       hash.should have_key(:state)
+
       hash[:entity_type].should == "gnip_instance"
     end
 
