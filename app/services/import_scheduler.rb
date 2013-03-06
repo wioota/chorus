@@ -1,5 +1,3 @@
-require 'error_logger'
-
 class ImportScheduler
   def self.run
     ImportSchedule.ready_to_run.each do |schedule|

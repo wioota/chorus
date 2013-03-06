@@ -1,5 +1,4 @@
 require 'timeout'
-require 'error_logger'
 
 require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.2.jar')
 

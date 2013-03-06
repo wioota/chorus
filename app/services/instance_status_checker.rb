@@ -1,5 +1,3 @@
-require 'error_logger'
-
 class InstanceStatusChecker
   def self.check_all
     DataSource.find_each { |ds| self.check(ds) }

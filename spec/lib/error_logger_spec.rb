@@ -1,15 +1,4 @@
-require 'error_logger'
-require 'timecop'
-require 'spec/support/rr'
-
-unless defined? Rails
-  class Rails
-    unless defined?(self.logger)
-      def self.logger
-      end
-    end
-  end
-end
+require 'spec_helper'
 
 describe Chorus do
   describe "#log_error" do
