@@ -13,7 +13,7 @@ module Stale
   def mark_stale!
     unless stale?
       self.stale_at = Time.now.utc
-      save!
+      save!(:validate => false)
     end
   end
 end

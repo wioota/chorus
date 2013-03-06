@@ -76,4 +76,8 @@ shared_examples_for 'a subclass of schema' do
       end
     end
   end
+
+  it_should_behave_like 'something that can go stale' do
+    let(:model) { schema }
+  end
 end

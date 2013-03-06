@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe GpdbDatabase do
+  it_should_behave_like 'something that can go stale' do
+    let(:model) { gpdb_databases(:default) }
+  end
+
   describe "validations" do
     it 'has a valid factory' do
       FactoryGirl.build(:gpdb_database).should be_valid
