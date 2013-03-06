@@ -11,14 +11,35 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
     set_current_user(user)
   end
 
+  context 'with unauthorized LDAP' do
+    let(:hash) { presenter.to_hash }
+
+    before do
+      @schema_connections = 0
+      mock(Gpdb::ConnectionBuilder).connect!.with_any_args do
+        @schema_connections += 1
+        raise StandardError.new 'FATAL: LDAP authentication failed for user "gpadmin"'
+      end
+    end
+
+    it 'should use nil for values' do
+      hash[:sandboxes_size].should == '0 Bytes'
+      hash[:sandboxes_size_in_bytes].should == 0
+    end
+
+    it 'should not connect to the instance more than once' do
+      expect { hash }.to change { @schema_connections }.by(1)
+    end
+  end
   describe "#to_hash" do
     let(:size) { 10 }
+    let(:hash) { presenter.to_hash }
+
     before do
       any_instance_of(GpdbSchema) do |schema|
         stub(schema).disk_space_used { size }
       end
     end
-    let(:hash) { presenter.to_hash }
 
     it "includes the right keys" do
       hash.should have_key(:workspaces)
@@ -78,7 +99,7 @@ describe GpdbInstanceWorkspaceDetailPresenter, :type => :view do
     context "when the current_user doesn't have access to the instance" do
       let(:user) { users(:not_a_member) }
 
-      it "should have nil for values" do
+      it "should use nil for values" do
         hash[:workspaces].should be_nil
         hash[:sandboxes_size].should be_nil
         hash[:sandboxes_size_in_bytes].should be_nil

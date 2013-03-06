@@ -147,8 +147,9 @@ class GpdbSchema < ActiveRecord::Base
       @disk_space_used = results.first['size']
     end
     @disk_space_used == :error ? nil : @disk_space_used
-  rescue Exception
+  rescue => e
     @disk_space_used = :error
+    raise e if (e.message.match(/authentication/i))
     nil
   end
 
