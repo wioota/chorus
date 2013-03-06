@@ -81,7 +81,7 @@ describe Events::Base do
       end
     end
 
-    context "event on public workspace" do
+    context "event in public workspace" do
       context "user is not a member" do
         let(:workspace) { workspaces(:public) }
         let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => public_event) }
@@ -101,7 +101,7 @@ describe Events::Base do
       end
     end
 
-    context "when the event is in a private workspace" do
+    context "event in private workspace" do
       let(:workspace) { workspaces(:private) }
       let!(:workspace_activity) { Activity.create!(:entity => workspace, :event => private_event) }
 
@@ -117,6 +117,15 @@ describe Events::Base do
           workspace.members << user
           subject.should include(workspace_activity.event)
         end
+      end
+    end
+
+    context 'other events that the user has done' do
+      let(:event) { Events::SchemaImportSuccess.first! }
+      let(:user) { event.actor }
+
+      it 'is included' do
+        subject.should include event
       end
     end
   end

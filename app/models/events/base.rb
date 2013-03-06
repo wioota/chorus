@@ -85,7 +85,7 @@ module Events
         FROM memberships
         WHERE user_id = #{user.id})
       SQL
-      self.activity_query(workspace_activities)
+      self.activity_query(user, workspace_activities)
     end
 
     def self.visible_to(user)
@@ -97,7 +97,7 @@ module Events
       OR workspaces.public = true
       OR (SELECT admin FROM users WHERE id = #{user.id}) = true
       SQL
-      self.activity_query(workspace_activities).joins('LEFT OUTER JOIN "workspaces" ON "workspaces"."id" = "events"."workspace_id"')
+      self.activity_query(user, workspace_activities).joins('LEFT OUTER JOIN "workspaces" ON "workspaces"."id" = "events"."workspace_id"')
     end
 
     def create_activities
@@ -108,10 +108,10 @@ module Events
 
     private
 
-    def self.activity_query(workspace_activities)
+    def self.activity_query(user, workspace_activities)
       group("events.id").readonly(false).
           joins(:activities).
-          where(%Q{(events.published = true) OR (activities.entity_type = 'GLOBAL') OR (activities.entity_type = 'Workspace'
+          where(%Q{(events.published = true) OR (events.actor_id=#{user.id}) OR (activities.entity_type = 'GLOBAL') OR (activities.entity_type = 'Workspace'
           AND (#{workspace_activities}))})
     end
 
