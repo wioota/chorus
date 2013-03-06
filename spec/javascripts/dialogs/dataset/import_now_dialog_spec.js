@@ -346,7 +346,11 @@ describe("chorus.dialogs.ImportNow", function() {
             expect(this.dialog.model).toBeA(chorus.models.SchemaImport);
         });
 
-        describe("choosing a destination schema", function() {
+        it("both import targets start disabled", function() {
+            expect(this.dialog.$("input:radio")).toBeDisabled();
+        });
+
+       describe("choosing a destination schema", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
                 this.dialog.$("a.select_schema").click();
@@ -356,14 +360,23 @@ describe("chorus.dialogs.ImportNow", function() {
                 expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
             });
 
-            it("sets the schema when one chosen", function() {
-                this.schema = rspecFixtures.schema();
-                this.modalSpy.lastModal().trigger("schema:selected", this.schema);
-                expect(this.dialog.schema).toBe(this.schema);
-                expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
-            });
+           context("when a schema is chosen", function() {
+               beforeEach(function() {
+                    this.schema = rspecFixtures.schema();
+                    this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+               });
 
-            it("enables the submit button when a schema is chosen", function() {
+               it("displays the schema", function() {
+                   expect(this.dialog.schema).toBe(this.schema);
+                   expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
+                });
+
+               it("enables the import target options", function() {
+                   expect(this.dialog.$("input:radio")).not.toBeDisabled();
+               });
+           });
+
+           it("enables the submit button when a schema is chosen", function() {
                 this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
                 expect(this.dialog.$("button.submit")).toBeDisabled();
 

@@ -122,7 +122,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     schemaChosen: function(schema) {
         this.schema = schema;
         this.$("a.select_schema").text(schema.canonicalName());
-        this.updateSubmitButton();
+        this.updateButtons();
     },
 
     setFieldValues: function(schedule) {
@@ -193,13 +193,13 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var changeType = e && e.type;
         if(changeType === "paste" || changeType === "cut") {
             //paste and cut events fire before they actually update the input field
-            _.defer(_.bind(this.updateSubmitButton, this));
+            _.defer(_.bind(this.updateButtons, this));
         } else {
-            this.updateSubmitButton();
+            this.updateButtons();
         }
     },
 
-    updateSubmitButton: function() {
+    updateButtons: function() {
         var importIntoExisting = this.$('.existing_table input:radio').prop("checked");
         var newTableNameGiven = this.$('input.name').val().trim().length > 0;
 
@@ -209,6 +209,10 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         formIsValid = formIsValid && !!this.schema;
 
         this.$('button.submit').prop('disabled', !formIsValid);
+
+        if (!this.workspace) {
+            this.$("input[type='radio']").prop("disabled", !this.schema);
+        }
     },
 
     onCheckboxClicked: function(e) {
@@ -216,7 +220,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var $limitInput = this.$(".limit input:text");
 
         $limitInput.prop("disabled", !limitRows);
-        this.updateSubmitButton();
+        this.updateButtons();
     },
 
     getNewModelAttrs: function() {
