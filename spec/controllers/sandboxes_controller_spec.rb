@@ -125,6 +125,24 @@ describe SandboxesController do
         decoded_errors.fields.database.GENERIC.message.should == 'Database creation failed'
       end
     end
+
+    context "with a real greenplum database", :greenplum_integration do
+      let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
+      let(:database_name) { "new_database" }
+      let(:schema_name) { "new_schema" }
+
+      after do
+        gpdb_data_source.connect_as(owner).execute("drop database if exists #{database_name}")
+      end
+
+      it "should work" do
+        post :create, :workspace_id => workspace.id, :schema_name => schema_name, :database_name => database_name, :instance_id => gpdb_data_source.to_param
+        response.code.should == '201'
+
+        workspace.reload.sandbox.name.should == schema_name
+        workspace.reload.sandbox.database.name.should == database_name
+      end
+    end
   end
 end
 
