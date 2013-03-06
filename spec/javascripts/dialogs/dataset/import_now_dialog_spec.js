@@ -333,24 +333,33 @@ describe("chorus.dialogs.ImportNow", function() {
         });
     });
 
-    context("importing into a schema", function() {
+    describe("importing into a schema", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.oracleDataset();
             this.dialog = new chorus.dialogs.ImportNow({
                 dataset: this.dataset
             });
             this.dialog.render();
+            this.schema = rspecFixtures.schema();
+            $("#jasmine_content").append(this.dialog.el);
         });
 
         it('creates a SchemaImport model', function(){
             expect(this.dialog.model).toBeA(chorus.models.SchemaImport);
         });
 
-        it("both import targets start disabled", function() {
-            expect(this.dialog.$("input:radio")).toBeDisabled();
+        it("all options are hidden until a schema is selected", function() {
+            expect(this.dialog.$("input:radio")).toBeHidden();
+            expect(this.dialog.$("input:checkbox")).toBeHidden();
         });
 
-       describe("choosing a destination schema", function() {
+        it("the submit button remains disabled when a table name is provided", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+            this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+        });
+
+        describe("when the select schema link is clicked", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
                 this.dialog.$("a.select_schema").click();
@@ -359,36 +368,33 @@ describe("chorus.dialogs.ImportNow", function() {
             it("displays a schema picker dialog", function() {
                 expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
             });
+        });
 
-           context("when a schema is chosen", function() {
-               beforeEach(function() {
-                    this.schema = rspecFixtures.schema();
-                    this.modalSpy.lastModal().trigger("schema:selected", this.schema);
-               });
-
-               it("displays the schema", function() {
-                   expect(this.dialog.schema).toBe(this.schema);
-                   expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
-                });
-
-               it("enables the import target options", function() {
-                   expect(this.dialog.$("input:radio")).not.toBeDisabled();
-               });
-           });
-
-           it("enables the submit button when a schema is chosen", function() {
-                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-                expect(this.dialog.$("button.submit")).toBeDisabled();
-
-                this.schema = rspecFixtures.schema();
+        context("when a schema has been selected", function() {
+            beforeEach(function() {
+                this.modalSpy = stubModals();
+                this.dialog.$("a.select_schema").click();
                 this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+            });
+
+            it("displays the schema", function() {
+                expect(this.dialog.schema).toBe(this.schema);
+                expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
+             });
+
+            it("enables the import target options", function() {
+                expect(this.dialog.$("input")).toBeVisible();
+            });
+
+            it("shows the submit button when a table name is entered", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
+                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
                 expect(this.dialog.$("button.submit")).toBeEnabled();
             });
 
             context("when the form is submitted", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-                    this.schema = rspecFixtures.schema();
                     this.modalSpy.lastModal().trigger("schema:selected", this.schema);
                     this.dialog.$("button.submit").click();
                 });

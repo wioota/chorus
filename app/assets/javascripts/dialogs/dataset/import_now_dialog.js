@@ -79,7 +79,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.$(".truncate").prop("disabled", true);
-        this.schedule && this.setFieldValues(this.schedule);
+        this.setFieldValuesFromSchedule();
         this.updateExistingTableLink();
     },
 
@@ -88,10 +88,14 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         if(!this.saving) {
             var destination = this.schedule && this.schedule.destination();
 
-            var datasetDialog = new chorus.dialogs.DatasetsPicker({
-                workspaceId: this.workspace.get('id'),
+            var pickerOptions = {
                 defaultSelection: destination && destination.id && destination
-            });
+            };
+
+            if(this.workspace) {
+                pickerOptions.workspaceId = this.workspace.get('id');
+            }
+            var datasetDialog = new chorus.dialogs.DatasetsPicker(pickerOptions);
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }
@@ -122,10 +126,12 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     schemaChosen: function(schema) {
         this.schema = schema;
         this.$("a.select_schema").text(schema.canonicalName());
-        this.updateButtons();
+        this.updateInputState();
     },
 
-    setFieldValues: function(schedule) {
+    setFieldValuesFromSchedule: function() {
+        var schedule = this.schedule;
+        if(!this.schedule) return;
         this.$("input[type='radio']").prop("checked", false);
         var newTable = schedule.get("newTable") === true;
         if(newTable) {
@@ -193,13 +199,13 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var changeType = e && e.type;
         if(changeType === "paste" || changeType === "cut") {
             //paste and cut events fire before they actually update the input field
-            _.defer(_.bind(this.updateButtons, this));
+            _.defer(_.bind(this.updateInputState, this));
         } else {
-            this.updateButtons();
+            this.updateInputState();
         }
     },
 
-    updateButtons: function() {
+    updateInputState: function() {
         var importIntoExisting = this.$('.existing_table input:radio').prop("checked");
         var newTableNameGiven = this.$('input.name').val().trim().length > 0;
 
@@ -210,8 +216,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
         this.$('button.submit').prop('disabled', !formIsValid);
 
-        if (!this.workspace) {
-            this.$("input[type='radio']").prop("disabled", !this.schema);
+        if(!this.workspace) {
+            this.$(".options").toggleClass("hidden", !this.schema);
         }
     },
 
@@ -220,7 +226,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var $limitInput = this.$(".limit input:text");
 
         $limitInput.prop("disabled", !limitRows);
-        this.updateButtons();
+        this.updateInputState();
     },
 
     getNewModelAttrs: function() {
