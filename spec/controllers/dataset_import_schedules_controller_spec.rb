@@ -179,7 +179,7 @@ describe DatasetImportSchedulesController do
       let(:new_table) { false }
 
       it "should create a Import scheduled event with the correct destination dataset" do
-        any_instance_of(Dataset) do |d|
+        any_instance_of(GpdbDataset) do |d|
           stub(d).can_import_from(anything) { true }
         end
 
