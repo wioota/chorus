@@ -37,6 +37,7 @@ window.rspecFixtureDefinitions = {
             privateWorkspaceCreated: {},
             publicWorkspaceCreated: {},
             sandboxAdded: {},
+            schemaImportCreated: {},
             schemaImportFailed: {},
             schemaImportSuccess: {},
             sourceTableCreated: {},

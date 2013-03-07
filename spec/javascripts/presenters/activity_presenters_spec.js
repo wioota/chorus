@@ -793,7 +793,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("dataset import success", function() {
+    context("workspace import success", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workspaceImportSuccess();
             presenter = new chorus.presenters.Activity(model);
@@ -818,7 +818,32 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context('dataset import into schema success', function(){
+    context('schema import created', function(){
+        beforeEach(function() {
+            model = rspecFixtures.activity.schemaImportCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            schema = model.schema();
+            dataset = model.dataset();
+            sourceDataset = new chorus.models.Dataset(model.get('sourceDataset'));
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.SchemaImportCreated.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    sourceDatasetInSchemaLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                    datasetType: t("dataset.entitySubtypes.table"),
+                    destObjectOrName: model.get('destinationTable'),
+                    schemaLink: linkTo(schema.showUrl(), schema.name())
+                }
+            );
+        });
+    });
+
+    context('schema import success', function(){
         beforeEach(function() {
             model = rspecFixtures.activity.schemaImportSuccess();
             presenter = new chorus.presenters.Activity(model);
@@ -841,7 +866,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context('dataset import into schema failed', function(){
+    context('schema import failed', function(){
         beforeEach(function() {
             model = rspecFixtures.activity.schemaImportFailed();
             actor = model.actor();

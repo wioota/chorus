@@ -13,7 +13,8 @@
         "noteObject" : "NoteObject",
         "hdfsEntry" : "HdfsEntry",
         "member": "User",
-        "sourceDataset": "WorkspaceDataset"
+        "sourceDataset": "WorkspaceDataset",
+        "schema": "Schema"
     };
 
     function makeAssociationMethod(name, setupFunction) {
@@ -44,6 +45,7 @@
 
         newOwner: makeAssociationMethod("newOwner"),
         workspace: makeAssociationMethod("workspace"),
+        schema: makeAssociationMethod("schema"),
         actor: makeAssociationMethod("actor"),
         dataSource: makeAssociationMethod('dataSource'),
         gpdbDataSource: makeAssociationMethod("gpdbDataSource"),

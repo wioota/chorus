@@ -280,6 +280,11 @@
                 computed: ["sourceDatasetInSchemaLink", 'destinationSchemaLink', 'destObjectOrNameInSchema']
             },
 
+            SchemaImportCreated: {
+                links: ["actor", "schema"],
+                computed: ["sourceDatasetInSchemaLink", "datasetType", "destObjectOrName"]
+            },
+
             GnipStreamImportCreated: {
                 links: ["actor", "gnipInstance", "dataset"],
                 attrs: ["destinationTable"],

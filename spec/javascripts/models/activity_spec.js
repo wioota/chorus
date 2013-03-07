@@ -103,7 +103,7 @@ describe("chorus.models.Activity", function() {
             });
         });
 
-         describe("#workspace", function() {
+        describe("#workspace", function() {
             it("returns a Workspace with the right data", function() {
                 activity = rspecFixtures.activity.sourceTableCreated({
                     dataset: { id: 9 }, workspace: {id: 10}
@@ -112,6 +112,17 @@ describe("chorus.models.Activity", function() {
                 var workspace = activity.workspace();
                 expect(workspace).toBeA(chorus.models.Workspace);
                 expect(workspace.id).toBe(10);
+            });
+        });
+
+        describe("#schema", function() {
+            it("returns a Schema with the right data", function() {
+                activity = rspecFixtures.activity.schemaImportCreated({
+                });
+
+                var schema = activity.schema();
+                expect(schema).toBeA(chorus.models.Schema);
+                expect(schema.id).toBe(activity.get('schema').id);
             });
         });
 
