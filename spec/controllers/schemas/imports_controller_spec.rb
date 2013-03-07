@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Schemas::ImportsController do
   describe '#create' do
     let(:source_dataset) { datasets(:oracle_table) }
-    let(:schema) { GreenplumIntegration.real_database.schemas.first! }
+    let(:schema) { source_dataset.schema }
     let(:user) { schema.data_source.owner }
 
     before do
