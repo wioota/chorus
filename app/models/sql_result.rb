@@ -52,6 +52,11 @@ class SqlResult
       date = @result_set.get_object(index+1)
       java.text.SimpleDateFormat.new("M/dd/yyyy").format(date)
 
+    # oracle TIMESTAMP#to_s gives us dd-mm-yyyy hh:mm:ss...
+    elsif type == "TIMESTAMP"
+      date = @result_set.get_object(index+1).timestamp_value
+      java.text.SimpleDateFormat.new("M/dd/yyyy h:mm:ss.SSS a").format(date)
+
     else
       @result_set.get_string(index+1)
     end
