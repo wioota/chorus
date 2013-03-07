@@ -35,18 +35,14 @@ class GpdbDataset < Dataset
     %Q{"#{schema_name}"."#{name}"}
   end
 
-  def dataset_consistent?(another_dataset)
-    another_column_data = another_dataset.column_data
-    my_column_data = column_data
+  def can_import_from(source)
+    source_columns = source.column_data
+    destination_columns = column_data
 
-    consistent_size = my_column_data.size == another_column_data.size
+    consistent_size = destination_columns.size == source_columns.size
 
-    consistent_size && my_column_data.all? do |column|
-      another_column = another_column_data.find do |another_column|
-        another_column.name == column.name
-      end
-
-      another_column && another_column.data_type == column.data_type
+    consistent_size && destination_columns.all? do |destination_column|
+      source_columns.find { |source_column| destination_column.match?(source_column) }
     end
   end
 

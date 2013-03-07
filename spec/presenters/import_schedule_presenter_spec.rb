@@ -9,7 +9,7 @@ describe ImportSchedulePresenter, :type => :view do
     @presenter = ImportSchedulePresenter.new(import_schedule, view, {:dataset_id => dataset_id})
 
     any_instance_of(Dataset) do |d|
-      stub(d).dataset_consistent?(anything) { true }
+      stub(d).can_import_from(anything) { true }
     end
   end
 

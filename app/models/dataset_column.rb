@@ -30,4 +30,8 @@ class DatasetColumn
   def entity_type_name
     'database_column'
   end
+
+  def match?(source_column)
+    name == source_column.name && gpdb_data_type == source_column.gpdb_data_type
+  end
 end

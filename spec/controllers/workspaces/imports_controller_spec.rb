@@ -109,7 +109,7 @@ describe Workspaces::ImportsController do
         context "when destination dataset is consistent with source" do
           before do
             any_instance_of(GpdbTable) do |d|
-              stub(d).dataset_consistent? { true }
+              stub(d).can_import_from { true }
             end
             any_instance_of(Import) do |d|
               stub(d).table_exists? { true }
@@ -145,7 +145,7 @@ describe Workspaces::ImportsController do
 
         it "throws an error if table structure is not consistent" do
           any_instance_of(GpdbTable) do |d|
-            stub(d).dataset_consistent? { false }
+            stub(d).can_import_from { false }
           end
           any_instance_of(Import) do |d|
             stub(d).table_exists? { true }

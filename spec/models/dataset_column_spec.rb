@@ -47,4 +47,21 @@ describe DatasetColumn do
       column1.ordinal_position.should eq(2)
     end
   end
+
+  describe '#match?' do
+    let(:oracle_column) { OracleDatasetColumn.new(name: 'name', data_type: 'CHAR') }
+    let(:greenplum_column) { GpdbDatasetColumn.new(name: 'name', data_type: 'character') }
+
+    context 'with an oracle and a greenplum' do
+      it 'is true if their types are convertible' do
+        oracle_column.match?(greenplum_column).should be_true
+      end
+    end
+
+    context 'with two greenplums' do
+      it 'is true if their types are the same' do
+        greenplum_column.match?(greenplum_column).should be_true
+      end
+    end
+  end
 end
