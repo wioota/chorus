@@ -1,2 +1,1 @@
-class OracleSqlResultPresenter < SqlResultPresenter
-end
+class OracleSqlResultPresenter < SqlResultPresenter; end

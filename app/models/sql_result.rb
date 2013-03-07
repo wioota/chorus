@@ -41,8 +41,17 @@ class SqlResult
   private
 
   def column_string_value(index)
-    if @result_set.meta_data.column_type_name(index+1) == "float8"
+    type = @result_set.meta_data.column_type_name(index+1)
+
+    # greenplum float8#to_s gives us weird rounded numbers
+    if type == "float8"
       @result_set.get_object(index+1).to_s
+
+    # oracle DATE#to_s gives us dd-mm-yyyy hh:mm:ss...
+    elsif type == "DATE"
+      date = @result_set.get_object(index+1)
+      java.text.SimpleDateFormat.new("M/dd/yyyy").format(date)
+
     else
       @result_set.get_string(index+1)
     end
