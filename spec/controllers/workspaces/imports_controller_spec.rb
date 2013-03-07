@@ -49,20 +49,18 @@ describe Workspaces::ImportsController do
           response.code.should == "201"
         end
 
-        it 'enqueues a new ImportExecutor.run job' do
-          mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
-            Import.find(import_id).tap do |import|
-              import.workspace.should == active_workspace
-              import.to_table.should == "the_new_table"
-              import.source_dataset.should == src_table
-              import.truncate.should == false
-              import.user_id.should == user.id
-              import.sample_count.should == 12
-              import.new_table.should == true
-            end
-          end
-
-          post :create, attributes
+        it 'creates a new import' do
+          expect {
+            post :create, attributes
+          }.to change(WorkspaceImport, :count).by(1)
+          import = WorkspaceImport.last
+          import.workspace.should == active_workspace
+          import.to_table.should == "the_new_table"
+          import.source_dataset.should == src_table
+          import.truncate.should == false
+          import.user_id.should == user.id
+          import.sample_count.should == 12
+          import.new_table.should == true
         end
 
         context 'when the workspace is archived' do
@@ -70,7 +68,7 @@ describe Workspaces::ImportsController do
             attributes[:workspace_id] = archived_workspace.to_param
             expect {
               post :create, attributes
-            }.to change(Events::WorkspaceImportCreated, :count).by(0)
+            }.not_to change(WorkspaceImport, :count)
             response.code.should == "422"
 
           end
@@ -127,19 +125,6 @@ describe Workspaces::ImportsController do
             last_import.to_table.should_not be_nil
             last_import.sample_count.should == 12
             last_import.truncate.should be_false
-          end
-
-          it "makes a DATASET_IMPORT_CREATED event" do
-            expect {
-              post :create, attributes
-            }.to change(Events::WorkspaceImportCreated, :count).by(1)
-            event = Events::WorkspaceImportCreated.last
-
-            event.actor.should == user
-            event.dataset.name.should == dst_table_name
-            event.source_dataset.should == src_table
-            event.workspace.should == active_workspace
-            event.destination_table.should == dst_table_name
           end
         end
 
@@ -239,11 +224,7 @@ describe Workspaces::ImportsController do
     end
 
     it "copies data" do
-      expect {
-        expect {
-          post :create, import_attributes
-        }.to change(Events::WorkspaceImportCreated, :count).by(1)
-      }.to change(Events::WorkspaceImportSuccess, :count).by(1)
+      post :create, import_attributes
       check_destination_table
     end
 

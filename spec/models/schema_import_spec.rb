@@ -29,6 +29,18 @@ describe SchemaImport do
       event.schema.should == schema
       event.destination_table.should == 'the_new_table'
     end
+
+    it 'enqueues a job to run itself' do
+      mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything)
+        expect {
+        import = SchemaImport.new
+        import.to_table = 'the_new_table'
+        import.source_dataset = source_dataset
+        import.schema = schema
+        import.user = user
+        import.save!(:validate => false)
+      }.to change(Events::SchemaImportCreated, :count).by(1)
+    end
   end
 
   describe '#create_passed_event_and_notification' do

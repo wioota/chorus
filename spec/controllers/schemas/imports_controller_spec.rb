@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Schemas::ImportsController do
-  describe '#create' do
+  describe '#create', :greenplum_integration do
     let(:source_dataset) { datasets(:oracle_table) }
-    let(:schema) { source_dataset.schema }
+    let(:schema) { GreenplumIntegration.real_database.schemas.first! }
     let(:user) { schema.data_source.owner }
 
     before do
@@ -28,20 +28,18 @@ describe Schemas::ImportsController do
           response.code.should == "201"
         end
 
-        it 'enqueues a new ImportExecutor.run job' do
-          mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
-            Import.find(import_id).tap do |import|
-              import.schema.should == schema
-              import.to_table.should == "the_new_table"
-              import.source_dataset.should == source_dataset
-              import.truncate.should == false
-              import.user_id.should == user.id
-              import.sample_count.should == 12
-              import.new_table.should == true
-            end
-          end
-
-          post :create, attributes
+        it 'creates a new import' do
+          expect {
+            post :create, attributes
+          }.to change(SchemaImport, :count).by(1)
+          import = SchemaImport.last
+          import.schema.should == schema
+          import.to_table.should == "the_new_table"
+          import.source_dataset.should == source_dataset
+          import.truncate.should == false
+          import.user_id.should == user.id
+          import.sample_count.should == 12
+          import.new_table.should == true
         end
       end
     end

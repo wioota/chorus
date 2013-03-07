@@ -10,7 +10,6 @@ module Schemas
       import.source_dataset = Dataset.find(import_params[:dataset_id])
       import.save!
 
-      QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
       render :json => {}, :status => :created
     end
   end

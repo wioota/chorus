@@ -20,6 +20,7 @@ class Import < ActiveRecord::Base
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
   after_create :create_import_event
+  after_create { QC.enqueue_if_not_queued("ImportExecutor.run", id) }
 
   def generate_key
     update_attribute(:stream_key, SecureRandom.hex(20))
