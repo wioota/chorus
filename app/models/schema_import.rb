@@ -2,6 +2,18 @@ class SchemaImport < Import
   belongs_to :schema
   validates :schema, :presence => true
 
+  def create_import_event
+    destination_table = schema.datasets.tables.find_by_name(to_table)
+    Events::SchemaImportCreated.by(user).add(
+      {
+        :source_dataset => source_dataset,
+        :schema_id => schema.id,
+        :destination_table => to_table,
+        :dataset => destination_table
+      }
+    )
+  end
+
   def create_passed_event_and_notification
     event = Events::SchemaImportSuccess.by(user).add(
       :dataset => destination_dataset,

@@ -16,7 +16,6 @@ module Workspaces
       import.user = current_user
 
       import.save!
-      import.create_import_event
       QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
       render :json => {}, :status => :created
     end

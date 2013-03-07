@@ -23,7 +23,7 @@ describe Events::SchemaImportFailed do
 
   its(:dataset) { should == destination_dataset }
   its(:targets) { should == {:source_dataset => source_dataset, :dataset => destination_dataset } }
-  its(:additional_data) { should == {"schema_id" => schema.id,
+  its(:additional_data) { should == {'schema_id' => schema.id,
                                      'destination_table' => 'non_existent_table',
                                      'error_message' => 'Flying Monkey Attack again'} }
   its(:schema) { should == schema }

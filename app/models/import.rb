@@ -19,17 +19,7 @@ class Import < ActiveRecord::Base
   validates :file_name, :presence => true, :unless => :source_dataset
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
-  def create_import_event
-    dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table
-    Events::WorkspaceImportCreated.by(user).add(
-        :workspace => workspace,
-        :source_dataset => source_dataset,
-        :dataset => dst_table,
-        :destination_table => to_table,
-        :reference_id => id,
-        :reference_type => 'Import'
-    )
-  end
+  after_create :create_import_event
 
   def generate_key
     update_attribute(:stream_key, SecureRandom.hex(20))

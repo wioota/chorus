@@ -7,6 +7,18 @@ class WorkspaceImport < Import
     workspace.sandbox
   end
 
+  def create_import_event
+    destination_table = schema.datasets.tables.find_by_name(to_table)
+    Events::WorkspaceImportCreated.by(user).add(
+      :workspace => workspace,
+      :source_dataset => source_dataset,
+      :dataset => destination_table,
+      :destination_table => to_table,
+      :reference_id => id,
+      :reference_type => 'Import'
+    )
+  end
+
   def create_passed_event_and_notification
     event = Events::WorkspaceImportSuccess.by(user).add(
       :workspace => workspace,

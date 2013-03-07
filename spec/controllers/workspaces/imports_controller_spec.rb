@@ -65,19 +65,6 @@ describe Workspaces::ImportsController do
           post :create, attributes
         end
 
-        it "makes a DATASET_IMPORT_CREATED event" do
-          expect {
-            post :create, attributes
-          }.to change(Events::WorkspaceImportCreated, :count).by(1)
-
-          event = Events::WorkspaceImportCreated.last
-          event.actor.should == user
-          event.dataset.should == nil
-          event.source_dataset.should == src_table
-          event.workspace.should == active_workspace
-          event.destination_table.should == 'the_new_table'
-        end
-
         context 'when the workspace is archived' do
           it 'returns an error for archived workspaces' do
             attributes[:workspace_id] = archived_workspace.to_param

@@ -7,6 +7,30 @@ describe SchemaImport do
     it { should belong_to :schema }
   end
 
+  describe 'creating' do
+    let(:source_dataset) { datasets(:oracle_table) }
+    let(:schema) { schemas(:default) }
+    let(:user) { users(:owner) }
+
+    it 'creates a SchemaImportCreated event' do
+      expect {
+        import = SchemaImport.new
+        import.to_table = 'the_new_table'
+        import.source_dataset = source_dataset
+        import.schema = schema
+        import.user = user
+        import.save!(:validate => false)
+      }.to change(Events::SchemaImportCreated, :count).by(1)
+
+      event = Events::SchemaImportCreated.last
+      event.actor.should == user
+      event.dataset.should be_nil
+      event.source_dataset.should == source_dataset
+      event.schema.should == schema
+      event.destination_table.should == 'the_new_table'
+    end
+  end
+
   describe '#create_passed_event_and_notification' do
     it 'creates a SchemaImportSuccess event' do
       expect {

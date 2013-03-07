@@ -8,6 +8,30 @@ describe WorkspaceImport do
     it { should belong_to :import_schedule }
   end
 
+  describe 'creating' do
+    let(:source_dataset) { datasets(:oracle_table) }
+    let(:workspace) { workspaces(:public) }
+    let(:user) { users(:owner) }
+
+    it 'creates a WorkspaceImportCreated event' do
+      expect {
+        import = WorkspaceImport.new
+        import.to_table = 'the_new_table'
+        import.source_dataset = source_dataset
+        import.workspace = workspace
+        import.user = user
+        import.save!(:validate => false)
+      }.to change(Events::WorkspaceImportCreated, :count).by(1)
+
+      event = Events::WorkspaceImportCreated.last
+      event.actor.should == user
+      event.dataset.should be_nil
+      event.source_dataset.should == source_dataset
+      event.workspace.should == workspace
+      event.destination_table.should == 'the_new_table'
+    end
+  end
+
   describe '#schema' do
     it 'is the sandbox of the workspace' do
       import.schema.should == import.workspace.sandbox
