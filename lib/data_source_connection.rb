@@ -65,7 +65,7 @@ class DataSourceConnection
           record = {}
 
           column_number.times do |i|
-            record[result_set.meta_data.column_name(i+1).to_sym] = result_set.get_string(i+1)
+            record[result_set.meta_data.column_name(i+1).to_sym] = result_set.get_string(i+1) || "null"
           end
 
           yield record

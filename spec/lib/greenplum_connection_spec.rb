@@ -906,6 +906,7 @@ describe GreenplumConnection, :greenplum_integration do
         @db.execute("CREATE TABLE thing (one integer, two integer, three timestamp with time zone, fourth timestamp)")
         @db.execute("INSERT INTO thing VALUES (1, 2, '1999-01-08 04:05:06 -8:00', '1999-01-08 04:05:06')")
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', '1999-07-08 04:05:06')")
+        @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', null)")
       end
 
       after do
@@ -929,7 +930,8 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"},
-                          {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "1999-07-08 04:05:06"}]
+                          {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "1999-07-08 04:05:06"},
+                          {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "null"}]
       end
 
       context "when a limit is provided" do
