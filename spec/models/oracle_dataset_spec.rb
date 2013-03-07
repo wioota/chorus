@@ -6,15 +6,25 @@ describe OracleDataset do
   describe "#all_rows_sql" do
     let(:schema) { OracleSchema.new(:name => "foobar")}
     let(:dataset) { OracleTable.new(:name => "table_name") }
+    let(:dataset_columns) { [
+        OracleDatasetColumn.new(:name => "unsupported",
+                                :data_type => "MLSLABEL",
+                                :ordinal_position => 1,
+                                :description => "unsupported"
+        ),
+        OracleDatasetColumn.new(:name => "supported",
+                                :data_type => "varchar",
+                                :ordinal_position => 2,
+                                :description => "supported")
+    ] }
 
-    before { dataset.schema = schema }
-
-    it "specifies the schema" do
-      dataset.all_rows_sql.should == "SELECT * FROM \"foobar\".\"table_name\""
+    before do
+      dataset.schema = schema
+      stub(dataset).column_data.returns(dataset_columns)
     end
 
-    it "specifies the limit" do
-      dataset.all_rows_sql(5).should =~ /WHERE rownum <= 5/i
+    it "selects only the columns that are supported" do
+      dataset.all_rows_sql.should == "SELECT 'mlslabel' AS \"unsupported\", \"supported\" FROM \"foobar\".\"table_name\""
     end
   end
 
