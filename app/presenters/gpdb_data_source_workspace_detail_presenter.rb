@@ -10,8 +10,15 @@ class GpdbDataSourceWorkspaceDetailPresenter < Presenter
     workspaces = []
     sandbox_sizes = {}
 
+    credentials_invalid = false
+
     model.used_by_workspaces(current_user).each do |workspace|
-      sandbox_size = workspace.sandbox.disk_space_used(account)
+      begin
+        sandbox_size = workspace.sandbox.disk_space_used(account) unless credentials_invalid
+      rescue => e
+        credentials_invalid = true if (e.respond_to?(:error_type) && e.error_type == :INVALID_PASSWORD)
+      end
+
       sandbox_sizes[workspace.sandbox.id] = sandbox_size || 0
 
       workspaces << {

@@ -80,4 +80,28 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
       end
     end
   end
+
+  context 'with unauthorized LDAP' do
+    let(:hash) { presenter.to_hash }
+    let(:authentication_error) { GreenplumConnection::DatabaseError.new }
+
+    before do
+      stub(authentication_error).error_type { :INVALID_PASSWORD }
+      @schema_connections = 0
+      any_instance_of(GpdbSchema) do |schema|
+        stub(schema).connect_with.with_any_args do
+          @schema_connections += 1
+          raise authentication_error
+        end
+      end
+    end
+
+    it 'should use nil for values' do
+      hash[:sandboxes_size_in_bytes].should == 0
+    end
+
+    it 'should not connect to the instance more than once' do
+      expect { hash }.to change { @schema_connections }.by(1)
+    end
+  end
 end
