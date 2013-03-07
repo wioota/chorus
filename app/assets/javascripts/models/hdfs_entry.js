@@ -47,5 +47,4 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
         var name = this.get("name") || "";
         return chorus.urlHelpers.fileIconUrl(_.last(name.split(".")));
     }
-
 });

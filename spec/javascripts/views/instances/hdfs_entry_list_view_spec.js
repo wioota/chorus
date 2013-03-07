@@ -7,8 +7,6 @@ describe("chorus.views.HdfsEntryList", function() {
             rspecFixtures.hdfsDir({count: -1})
         ], {hadoopInstance: {id: "1234"}, path: "/abc" });
 
-//        this.collection = new chorus.collections.HdfsEntrySet([rspecFixtures.hdfsFile(), rspecFixtures.hdfsDir({count: -1})], {hadoopInstance: {id: "1234"}, path: "/abc"});
-//        this.collection.add();
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
 

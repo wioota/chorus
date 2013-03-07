@@ -19,7 +19,8 @@ chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
                 chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
             showUrl: model.showUrl(),
             dirInfo: message,
-            displayableFiletype: model.get('isBinary') === false
+            displayableFiletype: model.get('isBinary') === false,
+            tags: model.tags().models
         };
     }
 });

@@ -1,5 +1,4 @@
 class HdfsEntryPresenter < Presenter
-
   def to_hash
     hash = {
         :id => model.id,
@@ -26,6 +25,6 @@ class HdfsEntryPresenter < Presenter
   end
 
   def complete_json?
-    options[:deep]
+    !model.is_directory || options[:deep]
   end
 end
