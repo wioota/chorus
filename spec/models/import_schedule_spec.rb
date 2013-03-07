@@ -44,7 +44,9 @@ describe ImportSchedule, :greenplum_integration do
       it "sets the destination_dataset before validation" do
         import_schedule.new_table = false
         import_schedule.to_table = 'base_table1'
-        stub(import_schedule.source_dataset).can_import_from { true }
+        any_instance_of(GpdbDataset) do |dataset|
+          stub(dataset).can_import_from { true }
+        end
         import_schedule.should be_valid
         import_schedule.destination_dataset.name.should == 'base_table1'
       end

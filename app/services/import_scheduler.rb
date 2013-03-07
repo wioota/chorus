@@ -4,7 +4,6 @@ class ImportScheduler
       begin
         import = schedule.create_import
         schedule.save! #update next_import_at
-        QC.enqueue_if_not_queued("ImportExecutor.run", import.id)
       rescue => e
         begin
           schedule.save(:validate => false) #update next_import_at, and then fill errors

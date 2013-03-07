@@ -64,7 +64,9 @@ describe Import, :greenplum_integration do
     end
 
     it "validates that the source and destination have consistent schemas" do
-      stub(import.source_dataset).can_import_from { false }
+      any_instance_of GpdbDataset do |dataset|
+        stub(dataset).can_import_from { false }
+      end
       import.to_table = 'pg_all_types'
       import.new_table = false
       import.should_not be_valid
@@ -73,7 +75,9 @@ describe Import, :greenplum_integration do
     end
 
     it "sets the destination_dataset before validation" do
-      stub(import.source_dataset).can_import_from { true }
+      any_instance_of GpdbDataset do |dataset|
+        stub(dataset).can_import_from { true }
+      end
       import.to_table = 'master_table1'
       import.new_table = false
       import.should be_valid
@@ -81,7 +85,9 @@ describe Import, :greenplum_integration do
     end
 
     it "should change a previously set destination dataset" do
-      stub(import.source_dataset).can_import_from { true }
+      any_instance_of GpdbDataset do |dataset|
+        stub(dataset).can_import_from { true }
+      end
       import.destination_dataset = import.source_dataset
       import.to_table = 'master_table1'
       import.new_table = false
@@ -91,7 +97,9 @@ describe Import, :greenplum_integration do
 
     it "is valid if an imports table become inconsistent after saving" do
       import.save
-      stub(import.source_dataset).can_import_from { false }
+      any_instance_of GpdbDataset do |dataset|
+        stub(dataset).can_import_from { false }
+      end
 
       import.should be_valid
     end

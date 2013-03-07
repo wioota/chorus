@@ -22,16 +22,13 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         database_name_texts table_description_texts schema_name_texts column_name_texts
         column_description_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
         AND -instance_account_ids_im:(1000001))'',''-(security_type_name_sm:ChorusView
-        AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''GpdbTable
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1449675.1,''docs''=>[{''id''=>''GpdbTable
-        1000011'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bogus'',''bogus
-        2''],''score''=>1449675.1}]}}]}},''highlighting''=>{''GpdbTable 1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table'']}}}'
+        AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Mon, 04 Mar 2013 21:39:15 GMT
+  recorded_at: Thu, 07 Mar 2013 19:51:12 GMT
 recorded_with: VCR 2.3.0
