@@ -16,6 +16,7 @@
 
 #page {
     min-width: $page-min-width;
+    position: relative;
 }
 
 #guts {
@@ -34,6 +35,7 @@
         position: fixed;
         width: 100%;
         z-index: $header-z-index;
+        min-width: $page-min-width;
     }
 
     > .breadcrumbs {
