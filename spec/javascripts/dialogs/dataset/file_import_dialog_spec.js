@@ -242,6 +242,14 @@ describe("chorus.dialogs.FileImport", function() {
                         expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.DatasetsPicker);
                     });
 
+                    it("passes a collection of workspace datasets", function() {
+                        var collection = this.modalSpy.lastModal().options.collection;
+                        expect(collection).toBeA(chorus.collections.WorkspaceDatasetSet);
+                        expect(collection.attributes.workspaceId).toEqual(242);
+                        expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
+                        expect(collection.attributes.objectType).toEqual("TABLE");
+                    });
+
                     context("when no dataset is selected", function() {
                         context("when 'import into new table' is checked", function() {
                             beforeEach(function() {

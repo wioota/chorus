@@ -2,6 +2,7 @@ describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
         this.model = rspecFixtures.workspace({
+            id: 123,
             archivedAt: null,
             image: {
                 icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
@@ -51,6 +52,16 @@ describe("chorus.models.Workspace", function() {
             expect(this.datasets).toBeA(chorus.collections.WorkspaceDatasetSet);
             expect(this.datasets.attributes.workspaceId).toBe(this.model.id);
             expect(this.datasets.attributes.database.id).toBe("123");
+        });
+    });
+
+    describe("#sandboxTables()", function() {
+        it("returns a dataset set of only sandbox tables", function() {
+            var collection = this.model.sandboxTables();
+            expect(collection).toBeA(chorus.collections.WorkspaceDatasetSet);
+            expect(collection.attributes.workspaceId).toEqual(123);
+            expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
+            expect(collection.attributes.objectType).toEqual("TABLE");
         });
     });
 

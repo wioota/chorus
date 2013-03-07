@@ -19,7 +19,8 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var datasetDialog = new chorus.dialogs.DatasetsPicker({ workspaceId: this.options.workspaceId });
+            var workspace = new chorus.models.Workspace({id: this.options.workspaceId});
+            var datasetDialog = new chorus.dialogs.DatasetsPicker({ collection: workspace.sandboxTables() });
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }

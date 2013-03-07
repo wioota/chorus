@@ -18,15 +18,6 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
         this._super("setup");
         this.pickItemsList.templateName = "datasets_picker_list";
         this.pickItemsList.className = "datasets_picker_list";
-    },
-
-    makeModel: function() {
-        this._super("makeModel", arguments);
-        this.collection = new chorus.collections.WorkspaceDatasetSet([], {
-            workspaceId: this.options.workspaceId,
-            type: "SANDBOX_TABLE",
-            objectType: "TABLE"
-        });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
     },

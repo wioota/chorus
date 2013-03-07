@@ -79,7 +79,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.$(".truncate").prop("disabled", true);
-        this.setFieldValuesFromSchedule();
+        this.schedule && this.setFieldValuesFromSchedule(this.schedule);
         this.updateExistingTableLink();
     },
 
@@ -93,7 +93,9 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
             };
 
             if(this.workspace) {
-                pickerOptions.workspaceId = this.workspace.get('id');
+                pickerOptions.collection = this.workspace.sandboxTables();
+            } else {
+                pickerOptions.collection = this.schema.datasets();
             }
             var datasetDialog = new chorus.dialogs.DatasetsPicker(pickerOptions);
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
@@ -129,9 +131,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.updateInputState();
     },
 
-    setFieldValuesFromSchedule: function() {
-        var schedule = this.schedule;
-        if(!this.schedule) return;
+    setFieldValuesFromSchedule: function(schedule) {
         this.$("input[type='radio']").prop("checked", false);
         var newTable = schedule.get("newTable") === true;
         if(newTable) {

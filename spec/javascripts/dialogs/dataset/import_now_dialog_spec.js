@@ -11,7 +11,8 @@ jasmine.sharedExamples.importIntoNewTableIsSelected = function() {
 
 describe("chorus.dialogs.ImportNow", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+        this.workspace = rspecFixtures.workspace({id: 123});
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
         this.importSchedules = rspecFixtures.datasetImportScheduleSet();
         _.extend(this.importSchedules.attributes, {
             datasetId: this.dataset.get('id'),
@@ -23,7 +24,6 @@ describe("chorus.dialogs.ImportNow", function() {
             workspaceId: this.dataset.get('workspace').id,
             destinationDatasetId: 789
         });
-        this.workspace = rspecFixtures.workspace(this.dataset.get('workspace'));
         this.importSchedule.unset('sampleCount');
 
         this.dialog = new chorus.dialogs.ImportNow({
@@ -188,6 +188,14 @@ describe("chorus.dialogs.ImportNow", function() {
                         expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
                     });
 
+                    it("passes a collection of workspace datasets", function() {
+                        var collection = chorus.modal.options.collection;
+                        expect(collection).toBeA(chorus.collections.WorkspaceDatasetSet);
+                        expect(collection.attributes.workspaceId).toEqual(123);
+                        expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
+                        expect(collection.attributes.objectType).toEqual("TABLE");
+                    });
+
                     context("after selecting a dataset", function() {
                         beforeEach(function() {
                             var datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" })];
@@ -340,7 +348,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 dataset: this.dataset
             });
             this.dialog.render();
-            this.schema = rspecFixtures.schema();
+            this.schema = rspecFixtures.schema({id: 456});
             $("#jasmine_content").append(this.dialog.el);
         });
 
@@ -390,6 +398,34 @@ describe("chorus.dialogs.ImportNow", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
                 this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
                 expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            context("when 'Import into Existing Table' is checked", function() {
+                beforeEach(function() {
+                    this.dialog.$(".new_table input:radio").prop("checked", false);
+                    this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                });
+
+                it("should enable the 'select destination table' link", function() {
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
+                });
+
+                context("when the dataset picker link is clicked", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".existing_table a.dataset_picked").click();
+                    });
+
+                    it("should have a link to the dataset picker dialog", function() {
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                    });
+
+                    it("passes a collection of datasets in the selected schema", function() {
+                        var collection = chorus.modal.options.collection;
+                        expect(collection).toBeA(chorus.collections.DatasetSet);
+                        expect(collection.attributes.schemaId).toEqual(456);
+                    });
+                });
             });
 
             context("when the form is submitted", function() {

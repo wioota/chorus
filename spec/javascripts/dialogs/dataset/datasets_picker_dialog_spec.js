@@ -2,8 +2,8 @@ describe("chorus.dialogs.DatasetsPicker", function() {
     var dialog, datasets, datasetModels;
     beforeEach(function() {
         stubModals();
-        dialog = new chorus.dialogs.DatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+        dialog = new chorus.dialogs.DatasetsPicker({ collection: datasets });
         datasetModels = [
                             rspecFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
                             rspecFixtures.workspaceDataset.datasetTable({ objectName: "B", id: "AGENT_SMITH" })

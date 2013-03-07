@@ -39,16 +39,16 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
     },
 
     postRender: function () {
-        this.model && this.setFieldValues(this.model);
+        this.model && this.setFieldValuesFromSchedule(this.model);
         if(this.options.action === "create_schedule") {
             this.scheduleView.enable();
         }
         this.updateExistingTableLink();
     },
 
-    setFieldValues: function (model) {
-        this._super("setFieldValues", arguments);
-        this.scheduleView.setFieldValues(model);
+    setFieldValuesFromSchedule: function (schedule) {
+        this._super("setFieldValuesFromSchedule", arguments);
+        this.scheduleView.setFieldValues(schedule);
     },
 
     getNewModelAttrs: function () {
