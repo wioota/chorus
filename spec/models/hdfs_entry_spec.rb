@@ -13,6 +13,8 @@ describe HdfsEntry do
     let!(:model) { FactoryGirl.create(:hdfs_entry) }
   end
 
+  it_should_behave_like "taggable models", [:hdfs_entries, :hdfs_file]
+
   describe "associations" do
     it { should belong_to(:hadoop_instance) }
     it { should belong_to(:parent) }

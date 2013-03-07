@@ -11,7 +11,8 @@ class HdfsEntryPresenter < Presenter
         :hadoop_instance => present(model.hadoop_instance),
         :ancestors => model.ancestors,
         :path => model.parent_path,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :tags => present(model.tags)
     }
 
     if model.is_directory

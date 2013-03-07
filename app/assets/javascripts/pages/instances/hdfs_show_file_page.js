@@ -46,10 +46,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        var hadoopInstanceId = this.hadoopInstance.get("id");
         var $content = $("<ul class='hdfs_link_menu'/>");
-
-        var $li = $("<li/>");
 
         var pathSegments = this.model.pathSegments();
         var maxLength = 20;

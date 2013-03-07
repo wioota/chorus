@@ -33,6 +33,7 @@ describe HdfsEntryPresenter, :type => :view do
         hash[:size].should == 10
         hash[:is_dir].should be_true
         hash[:count].should be(1)
+        hash[:tags].should be_an Array
         hash[:hadoop_instance][:id].should == hadoop_instance.id
         hash[:hadoop_instance][:name].should == hadoop_instance.name
         hash[:ancestors].should == [{:name => "foo", :id => 1}]

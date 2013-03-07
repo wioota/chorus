@@ -1,6 +1,7 @@
 class HdfsEntry < ActiveRecord::Base
   include Stale
   include Notable
+  include TaggableBehavior
 
   attr_accessible :path
 
