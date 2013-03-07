@@ -282,7 +282,7 @@
 
             SchemaImportCreated: {
                 links: ["actor", "schema"],
-                computed: ["sourceDatasetInSchemaLink", "datasetType", "destObjectOrName"]
+                computed: ["sourceDatasetInSchemaLink", "datasetType", "destObjectOrNameInSchema"]
             },
 
             GnipStreamImportCreated: {
@@ -516,14 +516,16 @@
             return self.model.get("destinationTable");
         },
 
+        // this is the one that returns a WorkspaceDataset
         destObjectOrName: function(self) {
             var dataset = self.model["dataset"]();
-            if (dataset.get("id")){
+            if (dataset.get("id")) {
                 return hidden.modelLink(dataset);
             }
             return self.model.get("destinationTable");
         },
 
+        // this is the one that returns a Dataset
         destObjectOrNameInSchema: function(self) {
             var dataset = self.model["dataset"]();
             if (dataset.get("id")){

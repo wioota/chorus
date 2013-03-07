@@ -1,5 +1,6 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset, gnipInstance, datasetModel, schema;
+    var model, actor, presenter, workfile, workspace, dataset, member,
+        sourceDataset, gnipInstance, datasetModel, schema, destination;
 
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
@@ -819,28 +820,52 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context('schema import created', function(){
+
         beforeEach(function() {
             model = rspecFixtures.activity.schemaImportCreated();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             schema = model.schema();
-            dataset = model.dataset();
+            destination = model.dataset();
             sourceDataset = new chorus.models.Dataset(model.get('sourceDataset'));
         });
 
         itHasTheActorIcon();
 
-        it("has the right header html", function() {
-            expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.SchemaImportCreated.default", {
-                    actorLink: linkTo(actor.showUrl(), actor.name()),
-                    sourceDatasetInSchemaLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
-                    datasetType: t("dataset.entitySubtypes.table"),
-                    destObjectOrName: model.get('destinationTable'),
-                    schemaLink: linkTo(schema.showUrl(), schema.name())
-                }
-            );
+        context("after the destination dataset exists", function(){
+            beforeEach(function(){
+                destination = rspecFixtures.dataset();
+                model = rspecFixtures.activity.schemaImportCreated({dataset: destination});
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SchemaImportCreated.default", {
+                        actorLink: linkTo(actor.showUrl(), actor.name()),
+                        sourceDatasetInSchemaLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                        destObjectOrNameInSchema: linkTo(destination.showUrl(), destination.name()),
+                        datasetType: t("dataset.entitySubtypes.table"),
+                        schemaLink: linkTo(schema.showUrl(), schema.name())
+                    }
+                );
+            });
         });
+
+        context("before the destination dataset exists", function(){
+            it("has the right header html", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SchemaImportCreated.default", {
+                        actorLink: linkTo(actor.showUrl(), actor.name()),
+                        sourceDatasetInSchemaLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                        datasetType: t("dataset.entitySubtypes.table"),
+                        destObjectOrNameInSchema: model.get('destinationTable'),
+                        schemaLink: linkTo(schema.showUrl(), schema.name())
+                    }
+                );
+            });
+        });
+
     });
 
     context('schema import success', function(){
@@ -1435,7 +1460,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("dataset import created event", function() {
+    context("workspace import created event", function() {
         var activity_data;
         beforeEach(function () {
             datasetModel = rspecFixtures.dataset();
