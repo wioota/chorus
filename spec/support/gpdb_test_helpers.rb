@@ -21,7 +21,7 @@ module GpdbTestHelpers
 
   def stub_gpdb_fail
     any_instance_of(GreenplumConnection) do |instance|
-      stub(instance).prepare_and_execute_statement.with_any_args { raise ActiveRecord::JDBCError }
+      stub(instance).prepare_and_execute_statement.with_any_args { raise GreenplumConnection::QueryError }
     end
   end
 

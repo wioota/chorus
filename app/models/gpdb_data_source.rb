@@ -94,7 +94,7 @@ class GpdbDataSource < DataSource
       found_databases << database
     end
     refresh_schemas options unless options[:skip_schema_refresh]
-  rescue ActiveRecord::JDBCError => e
+  rescue GreenplumConnection::QueryError => e
     Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   ensure
     if options[:mark_stale]
