@@ -111,7 +111,7 @@ GIT
     sunspot_solr (2.0.0.pre.120720)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     POpen4 (0.1.4)
       Platform (>= 0.4.0)
