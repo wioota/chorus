@@ -13,6 +13,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'gpdb_data_source',
                 'hadoop_instance',
                 'gnip_instance',
+                'oracle_data_source',
                 'user',
                 'workfile',
                 'dataset',
@@ -48,6 +49,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.GpdbDataSource);
             expectToContainClass(this.searchResults, chorus.models.HadoopInstance);
             expectToContainClass(this.searchResults, chorus.models.GnipInstance);
+            expectToContainClass(this.searchResults, chorus.models.OracleDataSource);
             expectToContainClass(this.searchResults, chorus.models.User);
             expectToContainClass(this.searchResults, chorus.models.Workfile);
             expectToContainClass(this.searchResults, chorus.models.Dataset);

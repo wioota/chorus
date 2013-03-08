@@ -158,7 +158,7 @@ FixtureBuilder.configure do |fbuilder|
     end
     @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
     typeahead_instance = FactoryGirl.create :gpdb_data_source, :name => 'typeahead_gpdb_data_source'
-    [:workspace, :hadoop_instance].each do |model|
+    [:workspace, :hadoop_instance, :oracle_data_source].each do |model|
       fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead_' + model.to_s)
     end
 
