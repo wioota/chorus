@@ -331,7 +331,16 @@ describe ImportExecutor do
     end
 
     context 'when the import is into a schema' do
-      let(:import) { imports(:oracle) }
+      let!(:import) do
+        import = FactoryGirl.build(:schema_import, :user => users(:owner),
+                                   :schema => schemas(:default),
+                                   :to_table => "new_table_for_import",
+                                   :created_at => '2012-09-03 23:00:00-07',
+                                   :source_dataset_id => datasets(:oracle_table).id, )
+        import.save!(:validate => false)
+        import
+      end
+      let(:event) {  }
 
       it 'creates an OracleTableCopier to run the import' do
         dont_allow(TableCopier).new.with_any_args
@@ -341,6 +350,18 @@ describe ImportExecutor do
         end
         ImportExecutor.new(import).run
         ran.should be_true
+      end
+
+      it 'updates the SchemaImportCreated event' do
+        event = Events::SchemaImportCreated.find_for_import(import)
+
+        any_instance_of(OracleTableCopier) do |copier|
+          mock(copier).start
+        end
+
+        expect do
+          ImportExecutor.new(import).run
+        end.to change { event.reload.dataset.try(:name) }.from(nil).to(import.to_table)
       end
     end
 

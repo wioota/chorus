@@ -9,9 +9,15 @@ class SchemaImport < Import
         :source_dataset => source_dataset,
         :schema_id => schema.id,
         :destination_table => to_table,
-        :dataset => destination_table
+        :dataset => destination_table,
+        :reference_id => id,
+        :reference_type => 'Import'
       }
     )
+  end
+
+  def created_event_class
+    Events::SchemaImportCreated
   end
 
   def create_passed_event_and_notification

@@ -19,6 +19,10 @@ class WorkspaceImport < Import
     )
   end
 
+  def created_event_class
+    Events::WorkspaceImportCreated
+  end
+
   def create_passed_event_and_notification
     event = Events::WorkspaceImportSuccess.by(user).add(
       :workspace => workspace,

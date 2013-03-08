@@ -28,4 +28,22 @@ describe Events::SchemaImportCreated do
 
   it_creates_activities_for { [actor, destination_dataset, source_dataset] }
   it_does_not_create_a_global_activity
+
+
+  describe ".find_for_import" do
+    let!(:import) do
+      import = FactoryGirl.build(:schema_import, :user => users(:owner),
+                                 :schema => schemas(:default),
+                                 :to_table => "new_table_for_import",
+                                 :created_at => '2012-09-03 23:00:00-07',
+                                 :source_dataset_id => datasets(:oracle_table).id, )
+      import.save!(:validate => false)
+      import
+    end
+
+    it "returns the event for the given import" do
+      expected_event = described_class.last
+      described_class.find_for_import(import).should == expected_event
+    end
+  end
 end

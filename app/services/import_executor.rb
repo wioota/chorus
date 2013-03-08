@@ -17,13 +17,11 @@ class ImportExecutor
   def run
     import.touch(:started_at)
     # raises go into import#throw_if_not_runnable ?
-    raise "Destination workspace #{import.workspace_with_deleted.name} has been deleted" if workspace_import? && import.workspace_with_deleted.deleted?
+    raise "Destination workspace #{import.workspace_with_deleted.name} has been deleted" if import.workspace_import? && import.workspace_with_deleted.deleted?
     raise "Original source dataset #{import.source_dataset_with_deleted.scoped_name} has been deleted" if import.source_dataset_with_deleted.deleted?
-    copier_class = table_copier
 
-    if copier_class.requires_chorus_authorization?
-      import.generate_key
-    end
+    import.generate_key if copier_class.requires_chorus_authorization?
+
     copier_class.new(import_attributes).start
     ################## Move to import?
     update_status :passed
@@ -69,7 +67,7 @@ class ImportExecutor
 
   private
 
-  def table_copier
+  def copier_class
     if import.source_dataset.class.name =~ /^Oracle/
       OracleTableCopier
     elsif import.source_dataset.database != import.schema.database
@@ -130,62 +128,13 @@ class ImportExecutor
 
     if passed
       refresh_schema
-      mark_as_success
+      import.mark_as_success
     else
       import.create_failed_event_and_notification(message)
     end
   end
 
-  def mark_as_success
-    import.set_destination_dataset_id
-    import.save(:validate => false)
-    import.create_passed_event_and_notification
-    update_import_created_event
-    import.import_schedule.update_attributes({:new_table => false}) if import.import_schedule
-  end
-
-  def update_import_created_event
-    if import.import_schedule_id
-      reference_id = import.import_schedule_id
-      reference_type = ImportSchedule.name
-    else
-      reference_id = import.id
-      reference_type = Import.name
-    end
-
-    event = import_created_event(import.source_dataset_id, import.workspace_id, reference_id, reference_type)
-
-    if event
-      event.dataset = import.find_destination_dataset
-      event.save!
-    end
-  end
-
   def import
     @import
-  end
-
-  def created_event_class
-    workspace_import? ? Events::WorkspaceImportCreated : Events::SchemaImportCreated
-  end
-
-  def workspace_import?
-    import.is_a?(WorkspaceImport)
-  end
-
-  def import_created_event(source_dataset_id, destination_id, reference_id, reference_type)
-    possible_events = created_event_class.where(:target1_id => source_dataset_id,
-                                                :workspace_id => destination_id)
-
-    # optimized to avoid fetching all events since the intended event is almost certainly the last event
-
-    while event = possible_events.last
-      return event if the_slipper_fits(event, reference_id, reference_type)
-      possible_events.pop
-    end
-  end
-
-  def the_slipper_fits(event, reference_id, reference_type)
-    event.reference_id == reference_id && event.reference_type == reference_type
   end
 end

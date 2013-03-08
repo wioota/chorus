@@ -25,4 +25,27 @@ class Import < ActiveRecord::Base
   def generate_key
     update_attribute(:stream_key, SecureRandom.hex(20))
   end
+
+  def mark_as_success
+    set_destination_dataset_id
+    save(:validate => false)
+    create_passed_event_and_notification
+    update_import_created_event
+    import_schedule.update_attributes({:new_table => false}) if import_schedule
+  end
+
+  def workspace_import?
+    self.is_a?(WorkspaceImport)
+  end
+
+  private
+
+  def update_import_created_event
+    event = created_event_class.find_for_import(self)
+
+    if event
+      event.dataset = find_destination_dataset
+      event.save!
+    end
+  end
 end

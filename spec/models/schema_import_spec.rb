@@ -13,12 +13,12 @@ describe SchemaImport do
     let(:user) { users(:owner) }
 
     it 'creates a SchemaImportCreated event' do
+      import = SchemaImport.new
+      import.to_table = 'the_new_table'
+      import.source_dataset = source_dataset
+      import.schema = schema
+      import.user = user
       expect {
-        import = SchemaImport.new
-        import.to_table = 'the_new_table'
-        import.source_dataset = source_dataset
-        import.schema = schema
-        import.user = user
         import.save!(:validate => false)
       }.to change(Events::SchemaImportCreated, :count).by(1)
 
@@ -27,6 +27,8 @@ describe SchemaImport do
       event.dataset.should be_nil
       event.source_dataset.should == source_dataset
       event.schema.should == schema
+      event.reference_id.should == import.id
+      event.reference_type.should == 'Import'
       event.destination_table.should == 'the_new_table'
     end
 
