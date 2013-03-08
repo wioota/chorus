@@ -1,6 +1,6 @@
-describe("chorus.collections.DatasetSet", function() {
+describe("chorus.collections.SchemaDatasetSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([], {
+        this.collection = new chorus.collections.SchemaDatasetSet([], {
             schemaId: 987
         });
     });
@@ -16,20 +16,20 @@ describe("chorus.collections.DatasetSet", function() {
     describe("#url", function() {
         it("is correct", function() {
             var url = this.collection.url({ per_page: 10, page: 1});
-            expect(url).toContainQueryParams({ per_page: 10, page: 1, entitySubtype: "meta" });
+            expect(url).toContainQueryParams({ per_page: 10, page: 1 });
             expect(url).toHaveUrlPath("/schemas/987/datasets");
         });
 
-        context("filtering", function() {
-            beforeEach(function() {
-                this.collection.attributes.filter = "foo";
-            });
+        it('filters by type', function() {
+            this.collection.attributes.tablesOnly = 'true';
+            expect(this.collection.url()).toContainQueryParams({tablesOnly: 'true'});
+        });
 
-            it("should include the filter in the url", function() {
-                var url = this.collection.url({per_page: 10, page: 1});
-                expect(url).toHaveUrlPath("/schemas/987/datasets");
-                expect(url).toContainQueryParams({ per_page: 10, page: 1, filter: "foo" });
-            });
+        it("filters by name", function() {
+            this.collection.attributes.filter = "foo";
+            var url = this.collection.url({per_page: 10, page: 1});
+            expect(url).toHaveUrlPath("/schemas/987/datasets");
+            expect(url).toContainQueryParams({ per_page: 10, page: 1, filter: "foo" });
         });
     });
 
@@ -38,7 +38,7 @@ describe("chorus.collections.DatasetSet", function() {
             this.collection.search("search term");
             expect(this.server.lastFetch().url).toMatchUrl(
                 "/schemas/987/datasets?filter=search+term",
-                {paramsToIgnore: ["entity_subtype", "page", "per_page"]}
+                {paramsToIgnore: ["entity_type", "page", "per_page"]}
             );
         });
 
@@ -50,4 +50,5 @@ describe("chorus.collections.DatasetSet", function() {
             expect(eventListener).toHaveBeenCalled();
         });
     });
+
 });

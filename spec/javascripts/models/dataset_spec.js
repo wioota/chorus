@@ -43,7 +43,7 @@ describe("chorus.models.Dataset", function() {
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet();
+                this.collection = new chorus.collections.SchemaDatasetSet();
                 this.collection.add(this.dataset);
             });
 

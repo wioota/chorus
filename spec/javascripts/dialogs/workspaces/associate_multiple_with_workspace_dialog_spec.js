@@ -1,6 +1,6 @@
 describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     beforeEach(function() {
-        this.datasets = new chorus.collections.DatasetSet([
+        this.datasets = new chorus.collections.SchemaDatasetSet([
             rspecFixtures.dataset({ id: '123' }),
             rspecFixtures.dataset({ id: '456' }),
             rspecFixtures.dataset({ id: '789' })

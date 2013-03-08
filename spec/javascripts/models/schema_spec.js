@@ -16,7 +16,7 @@ describe("chorus.models.Schema", function() {
 
         describe("#datasets", function() {
             it("should return a DatabaseObjectSet", function() {
-                expect(this.model.datasets()).toBeA(chorus.collections.DatasetSet);
+                expect(this.model.datasets()).toBeA(chorus.collections.SchemaDatasetSet);
             });
 
             it("should memoize the result", function() {

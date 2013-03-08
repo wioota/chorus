@@ -15,9 +15,16 @@ chorus.models.Schema = chorus.models.Base.include(
 
     datasets: function() {
         if(!this._datasets) {
-            this._datasets = new chorus.collections.DatasetSet([], { schemaId: this.id });
+            this._datasets = new chorus.collections.SchemaDatasetSet([], { schemaId: this.id });
         }
         return this._datasets;
+    },
+
+    tables: function() {
+        if(!this._tables) {
+            this._tables = new chorus.collections.SchemaDatasetSet([], {schemaId: this.id, tablesOnly: "true"});
+        }
+        return this._tables;
     },
 
     database: function() {

@@ -188,12 +188,11 @@ describe("chorus.dialogs.ImportNow", function() {
                         expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
                     });
 
-                    it("passes a collection of workspace datasets", function() {
+                    it("uses the tables in the workspace sandbox", function() {
                         var collection = chorus.modal.options.collection;
-                        expect(collection).toBeA(chorus.collections.WorkspaceDatasetSet);
-                        expect(collection.attributes.workspaceId).toEqual(123);
-                        expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
-                        expect(collection.attributes.objectType).toEqual("TABLE");
+                        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
+                        expect(collection.attributes.schemaId).toEqual(this.workspace.sandbox().schema().id);
+                        expect(collection.attributes.tablesOnly).toEqual('true');
                     });
 
                     context("after selecting a dataset", function() {
@@ -422,7 +421,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
                     it("passes a collection of datasets in the selected schema", function() {
                         var collection = chorus.modal.options.collection;
-                        expect(collection).toBeA(chorus.collections.DatasetSet);
+                        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
                         expect(collection.attributes.schemaId).toEqual(456);
                     });
                 });

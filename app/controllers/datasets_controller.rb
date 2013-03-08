@@ -7,6 +7,7 @@ class DatasetsController < ApplicationController
 
     options = {}
     options[:name_filter] = params[:filter] if params[:filter]
+    options[:tables_only] = params[:tables_only] if params[:tables_only]
 
     datasets = schema.refresh_datasets(account, options.merge(:limit => params[:page].to_i * params[:per_page].to_i))
     params.merge!(:total_entries => schema.dataset_count(account, options))

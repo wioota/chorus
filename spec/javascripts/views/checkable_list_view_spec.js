@@ -1,6 +1,6 @@
 describe("chorus.views.CheckableList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([
+        this.collection = new chorus.collections.SchemaDatasetSet([
             rspecFixtures.dataset({id: 123}),
             rspecFixtures.dataset({id: 456})
         ], {schemaId: "3"});
@@ -58,13 +58,13 @@ describe("chorus.views.CheckableList", function() {
 
         expect(eventName).toBe("checked");
         var collection = lastTwoCalls[0].args[1];
-        expect(collection).toBeA(chorus.collections.DatasetSet);
+        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
 
         eventName = lastTwoCalls[1].args[0];
         expect(eventName).toBe("dataset:checked");
 
         collection = lastTwoCalls[1].args[1];
-        expect(collection).toBeA(chorus.collections.DatasetSet);
+        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
         expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
     }
 

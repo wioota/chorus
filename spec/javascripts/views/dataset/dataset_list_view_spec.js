@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([
+        this.collection = new chorus.collections.SchemaDatasetSet([
             rspecFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
             rspecFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "bar" }),
             rspecFixtures.workspaceDataset.datasetTable({ objectName: "baz" })
@@ -24,7 +24,7 @@ describe("chorus.views.DatasetList", function() {
             expect(eventName).toBe("dataset:checked");
 
             var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
-            expect(collection).toBeA(chorus.collections.DatasetSet);
+            expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
             expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
         }
 
@@ -134,7 +134,7 @@ describe("chorus.views.DatasetList", function() {
 
     describe("when there are no datasets", function() {
         beforeEach(function() {
-            this.view.collection = new chorus.collections.DatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+            this.view.collection = new chorus.collections.SchemaDatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
             this.view.render();
         });
 
@@ -170,7 +170,7 @@ describe("chorus.views.DatasetList", function() {
 
         context("when there is no workspace", function() {
             beforeEach(function() {
-                this.view.collection = new chorus.collections.DatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+                this.view.collection = new chorus.collections.SchemaDatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
                 this.view.collection.loaded = true;
                 this.view.render();
             });

@@ -66,7 +66,7 @@
         }
     });
 
-    chorus.collections.Search.DatasetSet = chorus.collections.DatasetSet.include(
+    chorus.collections.Search.DatasetSet = chorus.collections.SchemaDatasetSet.include(
         searchCollectionMixins
     ).extend({
         searchKey: "datasets"

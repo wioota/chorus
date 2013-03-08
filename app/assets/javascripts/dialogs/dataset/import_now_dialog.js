@@ -87,16 +87,12 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         e.preventDefault();
         if(!this.saving) {
             var destination = this.schedule && this.schedule.destination();
-
+            var tables = this.schema.tables();
             var pickerOptions = {
-                defaultSelection: destination && destination.id && destination
+                defaultSelection: destination && destination.id && destination,
+                collection: tables
             };
 
-            if(this.workspace) {
-                pickerOptions.collection = this.workspace.sandboxTables();
-            } else {
-                pickerOptions.collection = this.schema.datasets();
-            }
             var datasetDialog = new chorus.dialogs.DatasetsPicker(pickerOptions);
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);

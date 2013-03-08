@@ -145,7 +145,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             it("is constructed correctly", function() {
                 expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
                 expect(this.page.mainContent.collection).toBe(this.page.collection);
-                expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
+                expect(this.page.mainContent.collection).toBeA(chorus.collections.SchemaDatasetSet);
 
                 expect(this.page.$(this.page.mainContent.el).length).toBe(1);
             });

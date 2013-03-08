@@ -36,23 +36,31 @@ describe DatasetsController do
           context "pagination" do
             let(:per_page) { 1 }
 
-            it "should paginate results" do
+            it "paginates results" do
               get :index, :schema_id => schema.to_param, :per_page => per_page
               decoded_response.length.should == 1
             end
           end
 
-          it "should sort db objects by name" do
+          it "sorts the datasets by name" do
             get :index, :schema_id => schema.to_param
             # stub checks for valid SQL with sorting
           end
         end
 
-        context "with filter" do
+        context "with a name filter" do
           let(:options) { {:name_filter => 'view', :limit => 50} }
-          it "should filter db objects by name" do
+          it "filters datasets by name" do
             get :index, :schema_id => schema.to_param, :filter => 'view'
             # stub checks for valid SQL with sorting and filtering
+          end
+        end
+
+        context 'with a type filter' do
+          let(:options) { {:tables_only => true, :limit => 50 } }
+
+          it 'returns datasets of that type' do
+            get :index, :schema_id => schema.to_param, :tables_only => true
           end
         end
       end

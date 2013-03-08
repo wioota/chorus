@@ -194,7 +194,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.workspaceSet = new chorus.collections.WorkspaceSet([models.workspace, models.privateWorkspace, models.archivedWorkspace]);
         collections.workspaceSet.loaded = true;
 
-        collections.datasetSet = new chorus.collections.DatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
+        collections.datasetSet = new chorus.collections.SchemaDatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
         collections.datasetSet.loaded = true;
 
         collections.databaseSet = new chorus.collections.DatabaseSet([models.database, models.otherDatabase]);
