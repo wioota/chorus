@@ -46,17 +46,6 @@ class SqlResult
     # greenplum float8#to_s gives us weird rounded numbers
     if type == "float8"
       @result_set.get_object(index+1).to_s
-
-    # oracle DATE#to_s gives us dd-mm-yyyy hh:mm:ss...
-    elsif type == "DATE"
-      date = @result_set.get_object(index+1)
-      date ? java.text.SimpleDateFormat.new("M/dd/yyyy").format(date) : ""
-
-    # oracle TIMESTAMP#to_s gives us dd-mm-yyyy hh:mm:ss...
-    elsif type == "TIMESTAMP"
-      date = @result_set.get_object(index+1)
-      date ? java.text.SimpleDateFormat.new("M/dd/yyyy h:mm:ss.SSS a").format(date.timestamp_value) : ""
-
     else
       @result_set.get_string(index+1)
     end

@@ -64,22 +64,6 @@ describe SqlResult, :oracle_integration do
           rs.rows[0][1].should == "5.3"
         end
       end
-
-      describe "connecting to oracle" do
-        let(:schema) { OracleIntegration.real_schema }
-        let(:account) { OracleIntegration.real_account }
-        let(:table_name) { "ALL_COLUMN_TABLE" }
-
-        it "properly formats DATE columns" do
-          rs = schema.connect_with(account).prepare_and_execute_statement "SELECT DAY FROM \"#{schema_name}\".\"#{table_name}\""
-          rs.rows[0][0].should == "12/23/2011"
-        end
-
-        it "properly formats TIMESTAMP columns" do
-          rs = schema.connect_with(account).prepare_and_execute_statement "SELECT TIMESTAMP_COL FROM \"#{schema_name}\".\"#{table_name}\""
-          rs.rows[0][0].should == "9/10/2002 2:10:10.123 PM"
-        end
-      end
     end
   end
 end
