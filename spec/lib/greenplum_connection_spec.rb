@@ -598,6 +598,8 @@ describe GreenplumConnection, :greenplum_integration do
       let(:web) { false }
       let(:execute_command) { nil }
       let(:temporary) { false }
+      let(:null_string) { 'null' }
+
       let(:subject) do
         connection.create_external_table(
             {
@@ -607,7 +609,8 @@ describe GreenplumConnection, :greenplum_integration do
                 :execute => execute_command,
                 :delimiter => delimiter,
                 :web => web,
-                :temporary => temporary
+                :temporary => temporary,
+                :null => null_string
             }
         )
       end
@@ -670,6 +673,11 @@ describe GreenplumConnection, :greenplum_integration do
         let(:location_url) { nil }
         let(:execute_command) { 'echo "1,2"' }
 
+        it_should_behave_like "a well-behaved database query"
+      end
+
+      context "without a null" do
+        let(:null_string) { nil }
         it_should_behave_like "a well-behaved database query"
       end
     end

@@ -226,7 +226,7 @@ class GreenplumConnection < DataSourceConnection
         @connection.execute(<<-SQL)
           CREATE EXTERNAL #{options[:web] ? 'WEB ' : ''}#{options[:temporary] ? 'TEMPORARY ' : ''}TABLE #{table_name}
           (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'CSV'
-          (DELIMITER '#{delimiter}')
+          (DELIMITER '#{delimiter}' #{"NULL 'null'" if options[:null]})
         SQL
       end
       true
