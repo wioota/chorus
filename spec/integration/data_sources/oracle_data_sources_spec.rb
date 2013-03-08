@@ -61,6 +61,7 @@ describe "Data Source", :oracle_integration do
     end
 
     it "should show a list of the datasets in the schema" do
+      wait_for_page_load
       schema.datasets.each do |dataset|
         page.should have_content dataset.name
       end
