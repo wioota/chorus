@@ -1,6 +1,6 @@
 module SolrIndexer
   def self.refresh_and_reindex(types)
-    self.refresh_external_data false
+    self.refresh_external_data
     self.reindex(types)
   end
 
@@ -11,15 +11,15 @@ module SolrIndexer
     Rails.logger.info("Solr Re-Index Completed")
   end
 
-  def self.refresh_external_data(force_index = true)
+  def self.refresh_external_data
     Rails.logger.info("Starting Solr Refresh")
-    DataSource.find_each do |data_source|
-      data_source.refresh(:mark_stale => true, :force_index => force_index)
+    DataSource.find_each do |ds|
+      QC.enqueue_if_not_queued("DataSource.refresh", ds.id, 'mark_stale' => true, 'force_index' => false)
     end
-    HdfsDataSource.find_each do |hdfs_data_source|
-      hdfs_data_source.refresh
+    HdfsDataSource.find_each do |ds|
+      QC.enqueue_if_not_queued("HdfsDataSource.refresh", ds.id)
     end
-    Rails.logger.info("Solr Refresh Completed")
+    Rails.logger.info("Solr Refreshes Queued")
   end
 
   private

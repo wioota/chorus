@@ -2,21 +2,16 @@ require 'spec_helper'
 
 describe SolrIndexer do
   describe ".refresh_external_data" do
-    it "refreshes all gpdb instances, all their databases, and all hadoop data sources" do
-      data_source_count = 0
-      any_instance_of(DataSource) do |data_source|
-        stub(data_source).refresh(:mark_stale => true, :force_index => true) { data_source_count += 1 }
+    it "refreshes Oracle, Gpdb, and Hadoop Data Sources" do
+      DataSource.pluck(:id).each do |id|
+        mock(QC.default_queue).enqueue_if_not_queued("DataSource.refresh", id, 'mark_stale' => true, 'force_index' => false)
       end
 
-      hdfs_data_source_count = 0
-      any_instance_of(HdfsDataSource) do |hdfs_data_source|
-        stub(hdfs_data_source).refresh { hdfs_data_source_count += 1 }
+      HdfsDataSource.pluck(:id).each do |id|
+        mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.refresh", id)
       end
 
       SolrIndexer.refresh_external_data
-
-      data_source_count.should == GpdbDataSource.count + OracleDataSource.count
-      hdfs_data_source_count.should == HdfsDataSource.count
     end
   end
 
@@ -62,7 +57,7 @@ describe SolrIndexer do
 
   describe ".refresh_and_reindex" do
     it "calls refresh, and passes the given models to reindex" do
-      mock(SolrIndexer).refresh_external_data(false)
+      mock(SolrIndexer).refresh_external_data
       mock(SolrIndexer).reindex("Model")
       SolrIndexer.refresh_and_reindex("Model")
     end

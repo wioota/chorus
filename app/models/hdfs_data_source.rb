@@ -24,7 +24,7 @@ class HdfsDataSource < ActiveRecord::Base
     "gphdfs://#{host}:#{port}/"
   end
 
-  def self.full_refresh(id)
+  def self.refresh(id)
     find(id).refresh
   end
 

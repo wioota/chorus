@@ -30,10 +30,8 @@ class DataSource < ActiveRecord::Base
   end
 
   def self.by_type(entity_type)
-    if entity_type == "gpdb_data_source"
-      where(type: "GpdbDataSource")
-    elsif entity_type == "oracle_data_source"
-      where(type: "OracleDataSource")
+    if entity_type
+      where(type: entity_type.classify)
     else
       self
     end

@@ -39,12 +39,12 @@ describe DataSourcesController do
     describe "filtering by type" do
       it "filters by gpdb data sources" do
         get :index, :entity_type => "gpdb_data_source", :all => true
-        decoded_response.map(&:id).should =~ GpdbDataSource.all.map(&:id)
+        decoded_response.map(&:id).should =~ GpdbDataSource.pluck(:id)
       end
 
       it "filters by oracle data sources" do
         get :index, :entity_type => "oracle_data_source", :all => true
-        decoded_response.map(&:id).should =~ OracleDataSource.all.map(&:id)
+        decoded_response.map(&:id).should =~ OracleDataSource.pluck(:id)
       end
     end
   end
