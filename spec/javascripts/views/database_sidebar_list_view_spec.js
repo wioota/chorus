@@ -157,5 +157,14 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 dataSourceName: this.schema.database().instance().name()
             });
         });
+
+        it("should display the add credentials dialog when the add credential link is clicked", function() {
+            var modalSpy = stubModals();
+            this.view.$(".add_credentials").click();
+            expect(modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
+
+            var dialog = modalSpy.lastModal();
+            expect(dialog.model.get("instanceId")).toBeDefined();
+        });
     });
 });

@@ -6,11 +6,11 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
         body: 'instances.account.enter_credentials'
     },
 
-    setup:function () {
+    setup: function() {
         this.title = this.options.title;
     },
 
-    makeModel:function (options) {
+    makeModel: function(options) {
         var instance = this.options.instance;
         this.model = instance.accountForCurrentUser();
         this._super("makeModel", arguments);
@@ -18,10 +18,10 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
 
     modalClosed: function() {
         this._super("modalClosed", arguments);
-        if (this.options.reload && this.savedSuccessfully) {
+        if(this.options.reload && this.savedSuccessfully) {
             chorus.router.reload();
         }
-        if (this.options.goBack && !this.savedSuccessfully) {
+        if(this.options.goBack && !this.savedSuccessfully) {
             window.history.back();
         }
     },

@@ -126,7 +126,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        var instance = new chorus.models.GpdbDataSource({id: this.schema.get("instanceId")});
-        new chorus.dialogs.InstanceAccount({ instance: instance, title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
+        new chorus.dialogs.InstanceAccount({ instance: this.schema.instance(), title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
     }
 });
