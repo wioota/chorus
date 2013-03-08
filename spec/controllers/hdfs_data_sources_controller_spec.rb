@@ -27,7 +27,7 @@ describe HdfsDataSourcesController do
       end
 
       it "schedules a job to refresh the instance" do
-        mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.full_refresh", numeric)
+        mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.refresh", numeric)
         post :create
       end
     end
@@ -38,7 +38,7 @@ describe HdfsDataSourcesController do
     let(:params) { attributes.merge :id => hdfs_data_source }
     let(:fake_instance) { Object.new }
 
-    it "presents a hadoop data source returned by update" do
+    it "presents the updated hadoop data source" do
       mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) { fake_instance }
       it_uses_authorization(:edit, hdfs_data_source)
       mock_present { |instance| instance.should == fake_instance }

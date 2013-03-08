@@ -4,7 +4,7 @@ require 'hdfs_data_source_access'
 class HdfsDataSourcesController < ApplicationController
   def create
     instance = Hdfs::DataSourceRegistrar.create!(params[:hdfs_data_source], current_user)
-    QC.enqueue_if_not_queued("HdfsDataSource.full_refresh", instance.id)
+    QC.enqueue_if_not_queued("HdfsDataSource.refresh", instance.id)
     present instance, :status => :created
   end
 
