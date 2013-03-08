@@ -239,7 +239,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         updates.schemaId = this.schema.id;
 
         if(this.isNewTable()) {
-            updates.toTable = this.$("input[name=newTableName]").val();
+            updates.toTable = this.$("input[name=toTable]").val();
         } else {
             updates.toTable = this.selectedDatasetName;
         }
