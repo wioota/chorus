@@ -19,6 +19,8 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                     return new chorus.models.HdfsEntry(result);
                 case "dataset":
                     return new chorus.models.Dataset(result);
+                case "oracle_dataset":
+                    return new chorus.models.Dataset(result);
                 case "chorus_view":
                     return new chorus.models.ChorusView(result);
                 case "gpdb_data_source":

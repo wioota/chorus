@@ -35,6 +35,10 @@ class GpdbDataset < Dataset
     %Q{"#{schema_name}"."#{name}"}
   end
 
+  def entity_type_name
+    'dataset'
+  end
+
   def can_import_from(source)
     source_columns = source.column_data
     destination_columns = column_data

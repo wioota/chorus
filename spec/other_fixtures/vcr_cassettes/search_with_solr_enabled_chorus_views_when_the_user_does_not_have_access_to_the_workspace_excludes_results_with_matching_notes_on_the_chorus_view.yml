@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:45:13 GMT
+  recorded_at: Sat, 09 Mar 2013 01:08:06 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -49,13 +49,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:45:13 GMT
+  recorded_at: Sat, 09 Mar 2013 01:08:06 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000008+AND+-public_b%3Atrue%29&q=workspacedatasetnotesearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000003+OR+1000018%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000008+AND+-public_b%3Atrue%29&q=workspacedatasetnotesearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -72,13 +72,13 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         database_name_texts table_description_texts schema_name_texts column_name_texts
         column_description_texts query_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''workspacedatasetnotesearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
         OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000017))'',''-(security_type_name_sm:ChorusView
+        AND -instance_account_ids_im:(1000001 OR 1000003 OR 1000018))'',''-(security_type_name_sm:ChorusView
         AND -member_ids_im:1000008 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:45:13 GMT
+  recorded_at: Sat, 09 Mar 2013 01:08:06 GMT
 recorded_with: VCR 2.3.0

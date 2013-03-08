@@ -101,10 +101,7 @@ describe SearchController do
 
     context "with a user" do
       let(:user) { users(:owner) }
-
-      before do
-        log_in user
-      end
+      before { log_in user }
 
       it "uses the search object" do
         fake_search = Object.new
