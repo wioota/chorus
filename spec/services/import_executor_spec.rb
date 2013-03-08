@@ -4,15 +4,15 @@ require 'fakefs/spec_helpers'
 describe ImportExecutor do
   let(:user) { users(:owner) }
   let(:source_dataset) { datasets(:table) }
-  let(:workspace) { workspaces(:public) }
-  let(:sandbox) { workspace.sandbox }
+  let(:destination) { workspaces(:public) }
+  let(:sandbox) { destination.sandbox }
   let(:destination_table_name) { import.to_table }
   let(:database_url) { sandbox.database.connect_with(account).db_url }
   let(:account) { sandbox.data_source.account_for_user!(user) }
 
-  let!(:dataset_import_created_event) do
+  let!(:import_created_event) do
     Events::WorkspaceImportCreated.by(user).add(
-        :workspace => workspace,
+        :workspace => destination,
         :dataset => nil,
         :destination_table => destination_table_name,
         :reference_id => import.id,
@@ -24,7 +24,7 @@ describe ImportExecutor do
   let(:import) do
     FactoryGirl.build(:import,
                       :user => user,
-                      :workspace => workspace,
+                      :workspace => destination,
                       :source_dataset => source_dataset).tap { |i| i.save(:validate => false) }
   end
   let(:import_failure_message) { "" }
@@ -89,7 +89,7 @@ describe ImportExecutor do
 
       it "sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
         send(trigger)
-        event = dataset_import_created_event.reload
+        event = import_created_event.reload
         event.dataset.name.should == destination_table_name
         event.dataset.schema.should == sandbox
       end
@@ -100,16 +100,16 @@ describe ImportExecutor do
         let(:import_schedule_id) { 1234 }
 
         before do
-          dataset_import_created_event.reference_id = import_schedule_id
-          dataset_import_created_event.reference_type = ImportSchedule.name
-          dataset_import_created_event.save!
+          import_created_event.reference_id = import_schedule_id
+          import_created_event.reference_type = ImportSchedule.name
+          import_created_event.save!
           import.import_schedule_id = import_schedule_id
           import.save!
         end
 
         it "still sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
           send(trigger)
-          event = dataset_import_created_event.reload
+          event = import_created_event.reload
           event.dataset.name.should == destination_table_name
           event.dataset.schema.should == sandbox
         end
@@ -124,7 +124,7 @@ describe ImportExecutor do
           end
         end
 
-        it "still creates a WorkspaceImportSuccess event with an empty dataset link" do
+        it "still creates a destinationImportSuccess event with an empty dataset link" do
           expect {
             expect {
               send(trigger)
@@ -154,7 +154,7 @@ describe ImportExecutor do
 
     context "when the import created event cannot be found" do
       before do
-        dataset_import_created_event.delete
+        import_created_event.delete
       end
 
       it "doesn't blow up" do
@@ -286,10 +286,10 @@ describe ImportExecutor do
     end
 
     context "where the workspace has been deleted" do
-      let(:error_message) { "Destination workspace #{workspace.name} has been deleted" }
+      let(:error_message) { "Destination workspace #{destination.name} has been deleted" }
 
       before do
-        workspace.destroy
+        destination.destroy
         import.reload # reload the deleted source dataset
       end
 
@@ -312,7 +312,7 @@ describe ImportExecutor do
 
         event = Events::WorkspaceImportFailed.last
         event.error_message.should == error_message
-        event.workspace.should == workspace
+        event.workspace.should == destination
       end
     end
 
@@ -403,9 +403,10 @@ describe ImportExecutor do
     let(:executor) { ImportExecutor.new(import) }
 
     before do
-      stub(executor).log.with_any_args
-      stub.proxy(executor).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
-      stub.proxy(executor).schema { |sandbox| stub(sandbox).connect_as(user) { destination_connection } }
+      stub(import).log.with_any_args
+      stub.proxy(import).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
+      stub.proxy(import).schema { |sandbox| stub(sandbox).connect_as(user) { destination_connection } }
+
       stub(source_connection).running?.with_any_args { true }
       stub(destination_connection).running?.with_any_args { true }
       mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
