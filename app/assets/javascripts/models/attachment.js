@@ -8,14 +8,14 @@ chorus.models.Attachment = chorus.models.Base.extend({
         var workfileUrl = this.workfile() && this.workfile().showUrl();
         var hdfsFileUrl = this.hdfsFile() && this.hdfsFile().showUrl();
         var instanceUrl = this.instance() && this.instance().showUrl();
-        var hadoopInstanceUrl = this.hadoopInstance() && this.hadoopInstance().showUrl();
+        var hdfsDataSourceUrl = this.hdfsDataSource() && this.hdfsDataSource().showUrl();
 
         return datasetUrl ||
             (workspaceUrl && workfileUrl) ||
             hdfsFileUrl ||
             workspaceUrl ||
             instanceUrl ||
-            hadoopInstanceUrl;
+            hdfsDataSourceUrl;
     },
 
     iconUrl: function(options) {
@@ -69,15 +69,15 @@ chorus.models.Attachment = chorus.models.Base.extend({
         return this._instance;
     },
 
-    hadoopInstance: function() {
-        if (!this._hadoopInstance) {
+    hdfsDataSource: function() {
+        if (!this._hdfsDataSource) {
             if (this.hdfsFile()) {
-                this._hadoopInstance = this.hdfsFile().getHadoopInstance();
+                this._hdfsDataSource = this.hdfsFile().getHdfsDataSource();
             } else {
-                this._hadoopInstance = this.get('hadoopInstance') && new chorus.models.HadoopInstance(this.get('hadoopInstance'));
+                this._hdfsDataSource = this.get('hdfsDataSource') && new chorus.models.HdfsDataSource(this.get('hdfsDataSource'));
             }
         }
-        return this._hadoopInstance;
+        return this._hdfsDataSource;
     },
 
     dataset: function() {

@@ -1,15 +1,15 @@
 chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     constructorName: "HdfsShowFilePage",
-    helpId: "hadoop_instances",
+    helpId: "hdfs_data_sources",
 
-    setup:function (hadoopInstanceId, id) {
-        this.model = new chorus.models.HdfsEntry({ hadoopInstance: {id: hadoopInstanceId}, id: id });
+    setup:function (hdfsDataSourceId, id) {
+        this.model = new chorus.models.HdfsEntry({ hdfsDataSource: {id: hdfsDataSourceId}, id: id });
         this.model.fetch();
 
-        this.hadoopInstance = new chorus.models.HadoopInstance({id: hadoopInstanceId});
-        this.hadoopInstance.fetch();
+        this.hdfsDataSource = new chorus.models.HdfsDataSource({id: hdfsDataSourceId});
+        this.hdfsDataSource.fetch();
 
-        this.handleFetchErrorsFor(this.hadoopInstance);
+        this.handleFetchErrorsFor(this.hdfsDataSource);
         this.handleFetchErrorsFor(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
@@ -21,22 +21,22 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
 
-        this.listenTo(this.hadoopInstance, "loaded", this.render);
+        this.listenTo(this.hdfsDataSource, "loaded", this.render);
         this.listenTo(this.model, "serverResponded", this.render); // re-render when model is fetched even if it has errors
 
-        this.breadcrumbs.requiredResources.add([this.model, this.hadoopInstance]);
+        this.breadcrumbs.requiredResources.add([this.model, this.hdfsDataSource]);
     },
 
     crumbs: function() {
         var pathLength = _.compact(this.model.getPath().split("/")).length - 1;
 
-        var instanceCrumb = this.hadoopInstance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
+        var instanceCrumb = this.hdfsDataSource.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
         var fileNameCrumb = this.model.get("name");
 
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.instances"), url: "#/data_sources" },
-            { label: this.hadoopInstance.loaded ? instanceCrumb : "..." , url: "#/hadoop_instances"},
+            { label: this.hdfsDataSource.loaded ? instanceCrumb : "..." , url: "#/hdfs_data_sources"},
             { label: this.model.loaded ? fileNameCrumb : "..."}
         ];
     },

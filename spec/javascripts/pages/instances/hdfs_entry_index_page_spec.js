@@ -1,8 +1,8 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.hadoopInstance({id: "1234", name: "instance Name"});
+        this.instance = rspecFixtures.hdfsDataSource({id: "1234", name: "instance Name"});
         this.hdfsEntry = rspecFixtures.hdfsDir({
-            hadoopInstance: this.instance.attributes,
+            hdfsDataSource: this.instance.attributes,
             id: "4",
             name: "myDir",
             path: "/foo"
@@ -109,11 +109,11 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
             expect($content.find("a").length).toBe(5);
 
-            expect($content.find("a").eq(0).attr("href")).toBe("#/hadoop_instances/1234/browse/55");
-            expect($content.find("a").eq(1).attr("href")).toBe("#/hadoop_instances/1234/browse/44");
-            expect($content.find("a").eq(2).attr("href")).toBe("#/hadoop_instances/1234/browse/33");
-            expect($content.find("a").eq(3).attr("href")).toBe("#/hadoop_instances/1234/browse/22");
-            expect($content.find("a").eq(4).attr("href")).toBe("#/hadoop_instances/1234/browse/11");
+            expect($content.find("a").eq(0).attr("href")).toBe("#/hdfs_data_sources/1234/browse/55");
+            expect($content.find("a").eq(1).attr("href")).toBe("#/hdfs_data_sources/1234/browse/44");
+            expect($content.find("a").eq(2).attr("href")).toBe("#/hdfs_data_sources/1234/browse/33");
+            expect($content.find("a").eq(3).attr("href")).toBe("#/hdfs_data_sources/1234/browse/22");
+            expect($content.find("a").eq(4).attr("href")).toBe("#/hdfs_data_sources/1234/browse/11");
 
             expect($content.find("a").eq(0).text()).toBe("start");
             expect($content.find("a").eq(1).text()).toBe("m1");

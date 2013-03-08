@@ -31,7 +31,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     },
 
     setupModel: function() {
-        this.model.set({hadoopInstanceId : this.collection.attributes.hadoopInstance.id}, {silent: true});
+        this.model.set({hdfsDataSourceId : this.collection.attributes.hdfsDataSource.id}, {silent: true});
         this.model.set({path: this.pathWithSlash() + this.model.get("name")}, {silent: true});
     },
 
@@ -68,7 +68,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
             var result = regexp.test(this.model.get("name"));
 
             if (!result) {
-                this.markInputAsInvalid(this.$("input[name='pattern']"), t("hdfs_instance.create_external.validation.pattern"), true);
+                this.markInputAsInvalid(this.$("input[name='pattern']"), t("hdfs_data_source.create_external.validation.pattern"), true);
             }
             return result && parent_dialog_valid;
         }

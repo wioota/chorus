@@ -76,27 +76,27 @@ describe InstanceStatusChecker do
     end
   end
 
-  describe "checking a hadoop instance:" do
-    let(:hadoop_instance) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
+  describe "checking a hadoop data source:" do
+    let(:hdfs_data_source) { FactoryGirl.create :hdfs_data_source, :state => 'offline', :version => "0.20.1" }
 
     describe ".check_hdfs_data_sources" do
       before do
-        stub(hadoop_instance).version { "1.0.0" }
-        InstanceStatusChecker.check(hadoop_instance)
+        stub(hdfs_data_source).version { "1.0.0" }
+        InstanceStatusChecker.check(hdfs_data_source)
       end
 
       it "updates the connection status for each data_source" do
-        hadoop_instance.reload.should be_online
+        hdfs_data_source.reload.should be_online
       end
 
       it "updates the version for each data_source" do
-        hadoop_instance.reload.version.should == "1.0.0"
+        hdfs_data_source.reload.version.should == "1.0.0"
       end
     end
 
     it_behaves_like :it_checks_a_data_source_if_due do
-      let(:online_data_source) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
-      let(:offline_data_source) { FactoryGirl.create :hadoop_instance, :state => 'offline', :version => "0.20.1" }
+      let(:online_data_source) { FactoryGirl.create :hdfs_data_source, :state => 'offline', :version => "0.20.1" }
+      let(:offline_data_source) { FactoryGirl.create :hdfs_data_source, :state => 'offline', :version => "0.20.1" }
 
       before do
         stub(online_data_source).version { "0.20.205" }

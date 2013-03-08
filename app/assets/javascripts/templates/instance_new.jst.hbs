@@ -3,7 +3,7 @@
     <option selected name="select_one" value="">{{t "selectbox.select_one"}}</option>
     <option name="register_existing_greenplum" value="register_existing_greenplum">{{t "datasource.greenplum"}}</option>
     {{#if oracleConfigured}} <option name="register_existing_oracle" value="register_existing_oracle">{{t "datasource.oracle"}}</option>{{/if}}
-    <option name="register_existing_hadoop"  value="register_existing_hadoop">{{t "datasource.hdfs"}}</option>
+    <option name="register_existing_hdfs"  value="register_existing_hdfs">{{t "datasource.hdfs"}}</option>
     {{#if gnipConfigured}} <option name="register_existing_gnip" value="register_existing_gnip">{{t "datasource.gnip"}}</option>{{/if}}
 </select>
 
@@ -65,8 +65,8 @@
   </form>
 </div>
 
-<div class="data_sources_form collapsed register_existing_hadoop">
-    <div class="description">{{t "instances.new_dialog.register_existing_hadoop_help_text"}}</div>
+<div class="data_sources_form collapsed register_existing_hdfs">
+    <div class="description">{{t "instances.new_dialog.register_existing_hdfs_help_text"}}</div>
     <form>
         <input class="hidden" type="checkbox" name="shared" checked="checked"/>
 

@@ -4,7 +4,7 @@ class Hdfs::FilesController < ApplicationController
       hdfs_entries = HdfsEntry.where(:parent_id => params[:id])
       present hdfs_entries, :presenter_options => {:deep => true}
     else
-      hdfs_entry = HdfsEntry.find_by_path_and_hadoop_instance_id('/', hadoop_instance.id)
+      hdfs_entry = HdfsEntry.find_by_path_and_hdfs_data_source_id('/', hdfs_data_source.id)
       present hdfs_entry, :presenter_options => {:deep => true}
     end
   end
@@ -24,7 +24,7 @@ class Hdfs::FilesController < ApplicationController
 
   private
 
-  def hadoop_instance
-    @hadoop_instance ||= HadoopInstance.find(params[:hadoop_instance_id])
+  def hdfs_data_source
+    @hdfs_data_source ||= HdfsDataSource.find(params[:hdfs_data_source_id])
   end
 end

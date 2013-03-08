@@ -9,15 +9,15 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
 
     makeModel: function() {
         this.dataSources = this.options.dataSources;
-        this.hadoopInstances = this.options.hadoopInstances;
+        this.hdfsDataSources = this.options.hdfsDataSources;
         this.gnipInstances = this.options.gnipInstances;
 
         this.bindings.add(this.dataSources, "change", this.render);
-        this.bindings.add(this.hadoopInstances, "change", this.render);
+        this.bindings.add(this.hdfsDataSources, "change", this.render);
         this.bindings.add(this.gnipInstances, "change", this.render);
 
         this.bindings.add(this.dataSources, "reset", this.renderAndSetupCheckable);
-        this.bindings.add(this.hadoopInstances, "reset", this.renderAndSetupCheckable);
+        this.bindings.add(this.hdfsDataSources, "reset", this.renderAndSetupCheckable);
         this.bindings.add(this.gnipInstances, "reset", this.renderAndSetupCheckable);
     },
 
@@ -36,7 +36,7 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
         this.dataSources.each(function(dataSource) {
             this.collection.add(dataSource);
         }, this);
-        this.hadoopInstances.each(function(hadoop) {
+        this.hdfsDataSources.each(function(hadoop) {
             this.collection.add(hadoop);
         }, this);
         this.gnipInstances.each(function(gnip) {
@@ -49,12 +49,12 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
         this._super('setup', arguments);
         this.subscribePageEvent("instance:added", function(instance) {
             this.dataSources.fetchAll();
-            this.hadoopInstances.fetchAll();
+            this.hdfsDataSources.fetchAll();
             this.gnipInstances.fetchAll();
             this.selectedInstance = instance;
         });
         this.bindings.add(this.dataSources, "remove", this.instanceDestroyed);
-        this.bindings.add(this.hadoopInstances, "remove", this.instanceDestroyed);
+        this.bindings.add(this.hdfsDataSources, "remove", this.instanceDestroyed);
         this.bindings.add(this.gnipInstances, "remove", this.instanceDestroyed);
     },
 
@@ -76,7 +76,7 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
 
     context: function() {
         var presenter = new chorus.presenters.InstanceList({
-            hadoop: this.hadoopInstances,
+            hadoop: this.hdfsDataSources,
             dataSources: this.dataSources,
             gnip: this.gnipInstances
         });
@@ -94,7 +94,7 @@ chorus.views.InstanceList = chorus.views.CheckableList.extend({
         var map = {
             oracle_data_source: this.dataSources,
             gpdb_data_source: this.dataSources,
-            hadoop_instance: this.hadoopInstances,
+            hdfs_data_source: this.hdfsDataSources,
             gnip_instance: this.gnipInstances
         };
         var collection = map[target.data("type")];

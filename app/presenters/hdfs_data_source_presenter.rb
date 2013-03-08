@@ -1,4 +1,4 @@
-class HadoopInstancePresenter < Presenter
+class HdfsDataSourcePresenter < Presenter
 
   def to_hash
     {

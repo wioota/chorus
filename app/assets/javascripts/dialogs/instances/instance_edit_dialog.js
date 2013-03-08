@@ -21,7 +21,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             gpdbDataSource: this.model.get("entityType") === "gpdb_data_source",
-            hadoopInstance: this.model.constructorName === "HadoopInstance",
+            hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipInstance: this.model.constructorName === "GnipInstance"
         };
     },

@@ -13,7 +13,7 @@ module Hdfs
   JavaHdfs.timeout = 5
 
   class QueryService
-    def self.instance_version(instance)
+    def self.version_of(instance)
       new(instance.host, instance.port, instance.username, instance.version).version
     end
 

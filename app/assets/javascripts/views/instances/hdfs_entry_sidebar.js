@@ -70,10 +70,10 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     createExternalTable: function(e) {
         e && e.preventDefault();
-        var hadoopInstance = new chorus.models.HadoopInstance({id: this.options.hadoopInstanceId});
+        var hdfsDataSource = new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId});
 
         var hdfsFile = new chorus.models.HdfsEntry({
-            hadoopInstance: hadoopInstance,
+            hdfsDataSource: hdfsDataSource,
             id: this.resource.id
         });
 
@@ -82,7 +82,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         this.bindings.add(hdfsFile, "loaded", function() {
             var externalTable = new chorus.models.HdfsExternalTable({
                 path: hdfsFile.get('path'),
-                hadoopInstanceId: hadoopInstance.get('id'),
+                hdfsDataSourceId: hdfsDataSource.get('id'),
                 hdfs_entry_id: hdfsFile.get('id')
             });
 

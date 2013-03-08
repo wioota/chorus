@@ -34,7 +34,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(GpdbDataSource)
       Sunspot.session.should be_a_search_for(OracleDataSource)
-      Sunspot.session.should be_a_search_for(HadoopInstance)
+      Sunspot.session.should be_a_search_for(HdfsDataSource)
       Sunspot.session.should be_a_search_for(GnipInstance)
       Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should be_a_search_for(Workfile)
@@ -114,7 +114,7 @@ describe Search do
         Sunspot.session.should_not be_a_search_for(User)
         Sunspot.session.should be_a_search_for(GpdbDataSource)
         Sunspot.session.should be_a_search_for(OracleDataSource)
-        Sunspot.session.should be_a_search_for(HadoopInstance)
+        Sunspot.session.should be_a_search_for(HdfsDataSource)
         Sunspot.session.should be_a_search_for(GnipInstance)
       end
 
@@ -246,7 +246,7 @@ describe Search do
     let(:owner) { users(:owner) }
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_data_source) { data_sources(:default) }
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
     let(:gnip_instance) { gnip_instances(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:attachment) { attachments(:attachment) }
@@ -340,13 +340,13 @@ describe Search do
       it "should include Gpdb, Hadoop, and Gnip" do
         create_and_record_search do |search|
           search.instances.should include(gpdb_data_source)
-          search.instances.should include(hadoop_instance)
+          search.instances.should include(hdfs_data_source)
           search.instances.should include(gnip_instance)
         end
       end
 
       context "including highlighted attributes" do
-        [GpdbDataSource, HadoopInstance, GnipInstance].each do |instance_type|
+        [GpdbDataSource, HdfsDataSource, GnipInstance].each do |instance_type|
           it "should include highlighted attributes for #{instance_type.name}" do
             create_and_record_search do |search|
               instance = search.instances.select { |instance| instance.is_a?(instance_type) }.first
@@ -538,7 +538,7 @@ describe Search do
         end
       end
 
-      it "returns the HadoopInstance objects found" do
+      it "returns the HdfsDataSource objects found" do
         create_and_record_search do |search|
           search.hdfs_entries.length.should == 1
           search.hdfs_entries.first.should == hdfs_entry

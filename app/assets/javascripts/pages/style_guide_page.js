@@ -58,7 +58,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "online": false
         });
 
-        models.hadoopInstance = new chorus.models.HadoopInstance({
+        models.hdfsDataSource = new chorus.models.HdfsDataSource({
             name: "Angry Elephant",
             online: true
         });
@@ -144,7 +144,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
         models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
-        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hadoopInstance: models.hadoopInstance, contents: ["a,b,1", "b,c,2", "d,e,3"]});
+        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"]});
 
         models.activity = new chorus.models.Activity({
             "action": "GreenplumInstanceChangedOwner",
@@ -204,9 +204,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.schemaSet.loaded = true;
 
         collections.dataSourceSet = new chorus.collections.DataSourceSet([models.oracleDataSource, models.greenplumDataSource]);
-        collections.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([models.hadoopInstance]);
+        collections.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([models.hdfsDataSource]);
         collections.gnipInstanceSet = new chorus.collections.GnipInstanceSet([models.gnipInstance]);
-        collections.dataSourceSet.loaded = collections.hadoopInstanceSet.loaded = collections.gnipInstanceSet.loaded = true;
+        collections.dataSourceSet.loaded = collections.hdfsDataSourceSet.loaded = collections.gnipInstanceSet.loaded = true;
 
         collections.workfileSet = new chorus.collections.WorkfileSet([models.workfile, models.otherWorkfile]);
         collections.workfileSet.loaded = true;
@@ -215,7 +215,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.userCollection = new chorus.collections.UserSet([models.user, models.otherUser, models.thirdUser]);
         collections.userCollection.loaded = true;
 
-        collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([models.hdfsFile], {hadoopInstance: models.hadoopInstance});
+        collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([models.hdfsFile], {hdfsDataSource: models.hdfsDataSource});
 
         collections.activitySet = new chorus.collections.ActivitySet([models.activity, models.otherActivity]);
         collections.activitySet.loaded = true;
@@ -477,7 +477,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Data source list": (function() {
                 var options = {
                     dataSources: collections.dataSourceSet,
-                    hadoopInstances: collections.hadoopInstanceSet,
+                    hdfsDataSources: collections.hdfsDataSourceSet,
                     gnipInstances: collections.gnipInstanceSet
                 };
 

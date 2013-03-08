@@ -17,8 +17,8 @@ window.rspecFixtureDefinitions = {
             gnipStreamImportSuccess: {},
             greenplumInstanceChangedName: {},
             greenplumInstanceChangedOwner: {},
-            hadoopInstanceCreated: {},
-            hadoopInstanceChangedName: {},
+            hdfsDataSourceCreated: {},
+            hdfsDataSourceChangedName: {},
             hdfsFileExtTableCreated: {},
             hdfsDirectoryExtTableCreated: {},
             hdfsPatternExtTableCreated: {},
@@ -29,7 +29,7 @@ window.rspecFixtureDefinitions = {
             noteOnDatasetCreated: {},
             noteOnGnipInstanceCreated: {},
             noteOnGreenplumInstanceCreated: {},
-            noteOnHadoopInstanceCreated: {},
+            noteOnHdfsDataSourceCreated: {},
             noteOnHdfsFileCreated: {},
             noteOnWorkfileCreated: {},
             noteOnWorkspaceCreated: {},
@@ -112,7 +112,7 @@ window.rspecFixtureDefinitions = {
 
     oracleDataSource: { unique: [ "id" ] },
 
-    hadoopInstance: { unique: ["id"] },
+    hdfsDataSource: { unique: ["id"] },
 
     heatmapTask: {},
 

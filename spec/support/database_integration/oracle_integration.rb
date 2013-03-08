@@ -72,7 +72,7 @@ module OracleIntegration
   private
 
   def self.config
-    config_file = "test_instance_connection_config.yml"
+    config_file = "test_data_sources_config.yml"
     @@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
   end
 
@@ -81,7 +81,7 @@ module OracleIntegration
   end
 
   def self.find_oracle_data_source(name)
-    config['instances']['oracle'].find { |hash| hash["host"] == name }
+    config['data_sources']['oracle'].find { |hash| hash["host"] == name }
   end
 
   def self.account

@@ -720,7 +720,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context('when a hadoop data source is selected', function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.hadoopInstance({
+            this.instance = rspecFixtures.hdfsDataSource({
                 name: "Harry's House of Glamour",
                 username: "hadoop",
                 groupList: "hadoop",
@@ -747,7 +747,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hadoop_instance');
+            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hdfs_data_source');
         });
 
         it("shows the shared account", function() {

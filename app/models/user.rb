@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   has_many :comments
 
   has_many :instance_accounts, :foreign_key => :owner_id, :dependent => :destroy
-  has_many :hadoop_instances, :foreign_key => :owner_id
+  has_many :hdfs_data_sources, :foreign_key => :owner_id
   has_many :gnip_instances, :foreign_key => :owner_id
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",

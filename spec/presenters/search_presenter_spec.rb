@@ -37,7 +37,7 @@ describe SearchPresenter, :type => :view do
         instance_hash.should have_key(:numFound)
         instance_hash.should have_key(:results)
         instance_types = instance_hash[:results].map {|result| result[:entity_type]}.uniq
-        instance_types.should =~ ['gpdb_data_source', 'hadoop_instance', 'gnip_instance']
+        instance_types.should =~ ['gpdb_data_source', 'hdfs_data_source', 'gnip_instance']
         instance_hash[:results].each do |result|
           result.should have_key(:highlighted_attributes)
         end

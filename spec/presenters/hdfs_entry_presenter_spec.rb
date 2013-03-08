@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe HdfsEntryPresenter, :type => :view do
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
 
   let(:options) {{}}
   let(:presenter) { HdfsEntryPresenter.new(entry, view, options) }
@@ -10,13 +10,13 @@ describe HdfsEntryPresenter, :type => :view do
     let(:hash) { presenter.to_hash }
     context "for a directory" do
       let(:entry) do
-        hadoop_instance.hdfs_entries.create!({
+        hdfs_data_source.hdfs_entries.create!({
            :path => "/data",
            :modified_at => "2010-10-20 10:11:12",
            :size => '10',
            :is_directory => 'true',
            :content_count => 1,
-           :hadoop_instance => hadoop_instance
+           :hdfs_data_source => hdfs_data_source
        }, :without_protection => true)
       end
 
@@ -34,8 +34,8 @@ describe HdfsEntryPresenter, :type => :view do
         hash[:is_dir].should be_true
         hash[:count].should be(1)
         hash[:tags].should be_an Array
-        hash[:hadoop_instance][:id].should == hadoop_instance.id
-        hash[:hadoop_instance][:name].should == hadoop_instance.name
+        hash[:hdfs_data_source][:id].should == hdfs_data_source.id
+        hash[:hdfs_data_source][:name].should == hdfs_data_source.name
         hash[:ancestors].should == [{:name => "foo", :id => 1}]
         hash.should_not have_key(:contents)
         hash.should_not have_key(:entries)
@@ -53,13 +53,13 @@ describe HdfsEntryPresenter, :type => :view do
 
     context "for a file" do
       let(:entry) do
-        hadoop_instance.hdfs_entries.create!({
+        hdfs_data_source.hdfs_entries.create!({
              :path => "/data.file",
              :modified_at => "2010-10-20 10:11:12",
              :size => '10',
              :is_directory => 'false',
              :content_count => 1,
-             :hadoop_instance => hadoop_instance
+             :hdfs_data_source => hdfs_data_source
          }, :without_protection => true)
       end
 
@@ -75,8 +75,8 @@ describe HdfsEntryPresenter, :type => :view do
         hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
         hash[:size].should == 10
         hash[:is_dir].should be_false
-        hash[:hadoop_instance][:id].should == hadoop_instance.id
-        hash[:hadoop_instance][:name].should == hadoop_instance.name
+        hash[:hdfs_data_source][:id].should == hdfs_data_source.id
+        hash[:hdfs_data_source][:name].should == hdfs_data_source.name
         hash[:ancestors].should == [{:name => "foo", :id => 1}]
         hash.should_not have_key(:contents)
         hash.should_not have_key(:entries)

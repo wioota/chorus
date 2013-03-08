@@ -30,12 +30,12 @@ describe EventsController do
         end
       end
 
-      context "for a hadoop instance" do
-        let(:object) { hadoop_instances(:hadoop) }
+      context "for an hdfs data source" do
+        let(:object) { hdfs_data_sources(:hadoop) }
 
-        it "presents the hadoop instance's activities" do
+        it "presents the hdfs data source's activities" do
           mock_present { |models| models.should include(event) }
-          get :index, :entity_type => "hadoop_instance", :entity_id => object.id
+          get :index, :entity_type => "hdfs_data_source", :entity_id => object.id
           response.code.should == "200"
         end
       end
@@ -223,10 +223,10 @@ describe EventsController do
     FIXTURE_FILES = {
         'dataSourceCreated' => Events::DataSourceCreated,
         'gnipInstanceCreated' => Events::GnipInstanceCreated,
-        'hadoopInstanceCreated' => Events::HadoopInstanceCreated,
+        'hdfsDataSourceCreated' => Events::HdfsDataSourceCreated,
         'greenplumInstanceChangedOwner' => Events::GreenplumInstanceChangedOwner,
         'greenplumInstanceChangedName' => Events::GreenplumInstanceChangedName,
-        'hadoopInstanceChangedName' => Events::HadoopInstanceChangedName,
+        'hdfsDataSourceChangedName' => Events::HdfsDataSourceChangedName,
         'publicWorkspaceCreated' => Events::PublicWorkspaceCreated,
         'privateWorkspaceCreated' => Events::PrivateWorkspaceCreated,
         'workspaceMakePublic' => Events::WorkspaceMakePublic,
@@ -241,7 +241,7 @@ describe EventsController do
         'insightOnGreenplumInstance' => Events::NoteOnGreenplumInstance.where(:insight => true),
         'noteOnGnipInstanceCreated' => Events::NoteOnGnipInstance.where(:insight => false),
         'insightOnGnipInstanceCreated' => Events::NoteOnGnipInstance.where(:insight => true),
-        'noteOnHadoopInstanceCreated' => Events::NoteOnHadoopInstance,
+        'noteOnHdfsDataSourceCreated' => Events::NoteOnHdfsDataSource,
         'noteOnHdfsFileCreated' => Events::NoteOnHdfsFile,
         'noteOnWorkspaceCreated' => Events::NoteOnWorkspace,
         'noteOnWorkfileCreated' => Events::NoteOnWorkfile,

@@ -74,12 +74,12 @@ describe("chorus.views.SearchAttachment", function() {
 
         it("shows the file", function() {
             var hdfs = this.result.hdfsFile();
-            var hadoop_instance = this.result.hadoopInstance();
+            var hdfs_data_source = this.result.hdfsDataSource();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.file_in_hdfs",
                 {
-                    hdfsFileLink: '<a href="#/hadoop_instances/' + hadoop_instance.id +  '/browseFile/' + hdfs.id  +'">'+hdfs.name()+'</a>'
+                    hdfsFileLink: '<a href="#/hdfs_data_sources/' + hdfs_data_source.id +  '/browseFile/' + hdfs.id  +'">'+hdfs.name()+'</a>'
                 }
             );
         });

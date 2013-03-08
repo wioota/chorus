@@ -65,15 +65,15 @@ describe("chorus.models.Activity", function() {
             });
         });
 
-        describe("#hadoopInstance", function() {
+        describe("#hdfsDataSource", function() {
             it("returns a hadoop data source with the right data", function() {
-                activity = rspecFixtures.activity.hadoopInstanceCreated({
-                    hadoopInstance: { id: 8 }
+                activity = rspecFixtures.activity.hdfsDataSourceCreated({
+                    hdfsDataSource: { id: 8 }
                 });
 
-                var hadoopInstance = activity.hadoopInstance();
-                expect(hadoopInstance).toBeA(chorus.models.HadoopInstance);
-                expect(hadoopInstance.id).toBe(8);
+                var hdfsDataSource = activity.hdfsDataSource();
+                expect(hdfsDataSource).toBeA(chorus.models.HdfsDataSource);
+                expect(hdfsDataSource.id).toBe(8);
             });
         });
 
@@ -220,12 +220,12 @@ describe("chorus.models.Activity", function() {
             context("for a NoteOnHdfsFile", function() {
                 it("returns a hdfsFile with the right data", function() {
                     activity = rspecFixtures.activity.noteOnHdfsFileCreated({
-                        hdfsFile: { id: 2345, name: "path.txt", hadoopInstance: {id: 331} }
+                        hdfsFile: { id: 2345, name: "path.txt", hdfsDataSource: {id: 331} }
                     });
                     var hdfsFile = activity.noteObject();
                     expect(hdfsFile).toBeA(chorus.models.HdfsEntry);
                     expect(hdfsFile.get("name")).toBe("path.txt");
-                    expect(hdfsFile.get("hadoopInstance").id).toBe(331);
+                    expect(hdfsFile.get("hdfsDataSource").id).toBe(331);
                 });
             });
 
@@ -279,7 +279,7 @@ describe("chorus.models.Activity", function() {
                 activity = rspecFixtures.activity.hdfsFileExtTableCreated({
                     hdfsEntry: {
                         id: 1234,
-                        hadoopInstance: {id: 1},
+                        hdfsDataSource: {id: 1},
                         path: "/data/test",
                         name: "file.csv"
                     }
@@ -289,7 +289,7 @@ describe("chorus.models.Activity", function() {
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
                 expect(hdfsEntry.getPath()).toBe("/data/test");
                 expect(hdfsEntry.name()).toBe("file.csv");
-                expect(hdfsEntry.get("hadoopInstance").id).toBe(1);
+                expect(hdfsEntry.get("hdfsDataSource").id).toBe(1);
                 expect(hdfsEntry.get("id")).toBe(1234);
             });
         });

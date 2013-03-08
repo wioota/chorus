@@ -135,8 +135,8 @@
                 attrs: [ "newName", "oldName" ]
             },
 
-            HadoopInstanceChangedName: {
-                links: [ "actor", "hadoopInstance" ],
+            HdfsDataSourceChangedName: {
+                links: [ "actor", "hdfsDataSource" ],
                 attrs: [ "newName", "oldName" ]
             },
 
@@ -148,8 +148,8 @@
                 links: [ "actor", "gnipInstance" ]
             },
 
-            HadoopInstanceCreated: {
-                links: [ "actor", "hadoopInstance" ]
+            HdfsDataSourceCreated: {
+                links: [ "actor", "hdfsDataSource" ]
             },
 
             GreenplumInstanceChangedOwner: {
@@ -444,7 +444,7 @@
             var actionType = self.model.get("actionType");
             switch (actionType) {
                 case "NoteOnGreenplumInstance":
-                case "NoteOnHadoopInstance":
+                case "NoteOnHdfsDataSource":
                 case "NoteOnGnipInstance":
                     return "data source";
                 case "NoteOnHdfsFile":

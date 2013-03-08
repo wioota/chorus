@@ -115,7 +115,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 });
 
                 it("shows an error about an unsupported version", function() {
-                    expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old_41");
+                    expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_data_source.gpdb_version.too_old_41");
                 });
             });
 

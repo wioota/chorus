@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntryHeader", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.hadoopInstance();
+        this.dataSource = rspecFixtures.hdfsDataSource();
         this.hdfsEntry = rspecFixtures.hdfsDir();
 
         this.view = new chorus.views.HdfsEntryHeader({dataSource: this.dataSource, hdfsEntry: this.hdfsEntry});

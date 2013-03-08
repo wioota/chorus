@@ -290,12 +290,12 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context('hadoop data source created', function() {
-        var hadoopInstance;
+        var hdfsDataSource;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.hadoopInstanceCreated();
+            model = rspecFixtures.activity.hdfsDataSourceCreated();
             presenter = new chorus.presenters.Activity(model);
-            hadoopInstance = model.hadoopInstance();
+            hdfsDataSource = model.hdfsDataSource();
             actor = model.actor();
         });
 
@@ -303,9 +303,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HadoopInstanceCreated.default", {
+                "activity.header.HdfsDataSourceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    hadoopInstanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
+                    hdfsDataSourceLink: linkTo(hdfsDataSource.showUrl(), hdfsDataSource.name())
                 }
             );
         });
@@ -386,12 +386,12 @@ describe("chorus.presenters.Activity", function() {
         var instance;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.hadoopInstanceChangedName({
+            model = rspecFixtures.activity.hdfsDataSourceChangedName({
                 newName: "jane",
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            instance = model.hadoopInstance();
+            instance = model.hdfsDataSource();
             actor = model.actor();
         });
 
@@ -399,9 +399,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HadoopInstanceChangedName.default", {
+                "activity.header.HdfsDataSourceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    hadoopInstanceLink: linkTo(instance.showUrl(), instance.name()),
+                    hdfsDataSourceLink: linkTo(instance.showUrl(), instance.name()),
                     newName: "jane",
                     oldName: "john"
                 }
@@ -991,13 +991,13 @@ describe("chorus.presenters.Activity", function() {
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
-                hdfsFile: { isDir: false, id: 4567, name: "path.csv", hadoopInstance: {id: 1234}}
+                hdfsFile: { isDir: false, id: 4567, name: "path.csv", hdfsDataSource: {id: 1234}}
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             hdfsFile = rspecFixtures.hdfsDir({
                 id: 4567,
-                hadoopInstance: { id: 1234 },
+                hdfsDataSource: { id: 1234 },
                 name: "path.csv",
                 isDir: false
             });
@@ -1101,15 +1101,15 @@ describe("chorus.presenters.Activity", function() {
         var instance;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.noteOnHadoopInstanceCreated({
-                hadoopInstance: {
+            model = rspecFixtures.activity.noteOnHdfsDataSourceCreated({
+                hdfsDataSource: {
                     id: 42,
                     name: 'my_instance'
                 }
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            instance = rspecFixtures.hadoopInstance({id: 42, name: 'my_instance'});
+            instance = rspecFixtures.hdfsDataSource({id: 42, name: 'my_instance'});
         });
 
         itHasTheActorIcon();

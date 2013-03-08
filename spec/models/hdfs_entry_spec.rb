@@ -16,16 +16,16 @@ describe HdfsEntry do
   it_should_behave_like "taggable models", [:hdfs_entries, :hdfs_file]
 
   describe "associations" do
-    it { should belong_to(:hadoop_instance) }
+    it { should belong_to(:hdfs_data_source) }
     it { should belong_to(:parent) }
     it { should have_many(:children) }
   end
 
   describe "validations" do
-    it "should validate uniqueness of path, scoped to hadoop_instance_id" do
+    it "should validate uniqueness of path, scoped to hdfs_data_source_id" do
       existing_entry = HdfsEntry.last
       duplicate_entry = HdfsEntry.new
-      duplicate_entry.hadoop_instance = existing_entry.hadoop_instance
+      duplicate_entry.hdfs_data_source = existing_entry.hdfs_data_source
       duplicate_entry.path = existing_entry.path
       duplicate_entry.should_not be_valid
       duplicate_entry.should have_error_on(:path)
@@ -36,12 +36,12 @@ describe HdfsEntry do
       FactoryGirl.build(:hdfs_entry, :path => '/foo/bar.csv').should be_valid
     end
 
-    it { should validate_presence_of(:hadoop_instance) }
+    it { should validate_presence_of(:hdfs_data_source) }
   end
 
   describe ".list" do
     context "queries the hdfs query system and retrieve entries objects" do
-      let(:hadoop_instance) { hadoop_instances(:hadoop) }
+      let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
 
       before do
         @hdfs_results =
@@ -66,7 +66,7 @@ describe HdfsEntry do
       end
 
       it "converts hdfs query results into entries" do
-        list = HdfsEntry.list('/', hadoop_instance).sort_by(&:path)
+        list = HdfsEntry.list('/', hdfs_data_source).sort_by(&:path)
         first_result = list.first
 
         first_result.is_directory.should be_true
@@ -75,7 +75,7 @@ describe HdfsEntry do
         first_result.size.should == 10
         first_result.content_count.should == 0
         first_result.modified_at.should == "2010-10-20 22:00:00"
-        first_result.hadoop_instance.should == hadoop_instance
+        first_result.hdfs_data_source.should == hdfs_data_source
 
         last_result = list.last
         last_result.path.should == '/photo.png'
@@ -83,12 +83,12 @@ describe HdfsEntry do
       end
 
       it "saves the hdfs entries to the database" do
-        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
+        expect { HdfsEntry.list('/', hdfs_data_source) }.to change(HdfsEntry, :count).by(3)
 
         last_entry = HdfsEntry.last
         last_entry.path.should == '/photo.png'
         last_entry.parent.path.should == '/'
-        last_entry.hadoop_instance.should == hadoop_instance
+        last_entry.hdfs_data_source.should == hdfs_data_source
         last_entry.modified_at.should == "2010-10-20 22:00:00"
         last_entry.size.should == 10
         last_entry.is_directory.should == false
@@ -96,9 +96,9 @@ describe HdfsEntry do
       end
 
       it "stores a unique hdfs entry in the database" do
-        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(3)
+        expect { HdfsEntry.list('/', hdfs_data_source) }.to change(HdfsEntry, :count).by(3)
         list_again = nil
-        expect { list_again = HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry, :count).by(0)
+        expect { list_again = HdfsEntry.list('/', hdfs_data_source) }.to change(HdfsEntry, :count).by(0)
 
         first_result = list_again.first
         first_result.is_directory.should be_true
@@ -106,21 +106,21 @@ describe HdfsEntry do
         first_result.size.should == 10
         first_result.content_count.should == 0
         first_result.modified_at.should == "2010-10-20 22:00:00"
-        first_result.hadoop_instance.should == hadoop_instance
+        first_result.hdfs_data_source.should == hdfs_data_source
       end
 
       it "marks hdfs entries that no longer exist as stale" do
-        HdfsEntry.list('/', hadoop_instance)
-        hadoop_instance.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"}, :without_protection => true)
-        expect { HdfsEntry.list('/', hadoop_instance) }.to change(HdfsEntry.not_stale, :count).by(-2)
-        hadoop_instance.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_stale
+        HdfsEntry.list('/', hdfs_data_source)
+        hdfs_data_source.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"}, :without_protection => true)
+        expect { HdfsEntry.list('/', hdfs_data_source) }.to change(HdfsEntry.not_stale, :count).by(-2)
+        hdfs_data_source.hdfs_entries.find_by_path("/nonexistent_dir/goingaway.txt").should be_stale
       end
 
       context "when no results come back from query service for the given path" do
         it "marks hdfs entries that no longer exist as stale" do
-          HdfsEntry.list('/', hadoop_instance)
+          HdfsEntry.list('/', hdfs_data_source)
           @hdfs_results = []
-          HdfsEntry.list('/', hadoop_instance)
+          HdfsEntry.list('/', hdfs_data_source)
           HdfsEntry.not_stale.count.should == 1
         end
       end
@@ -142,7 +142,7 @@ describe HdfsEntry do
                    "modified_at" => "2010-10-20 22:00:00",
                    'content_count' => 0
                }]
-          HdfsEntry.list('/', hadoop_instance)
+          HdfsEntry.list('/', hdfs_data_source)
           directory_entry = HdfsEntry.find_by_path('/directory')
           file_entry = HdfsEntry.find_by_path('/directory.png')
           file_entry.should_not be_stale
@@ -155,7 +155,7 @@ describe HdfsEntry do
                    "modified_at" => "2010-10-20 22:00:00",
                    'content_count' => 0
                }]
-          HdfsEntry.list('/', hadoop_instance)
+          HdfsEntry.list('/', hdfs_data_source)
 
           file_entry.reload.should_not be_stale
           directory_entry.reload.should be_stale
@@ -163,19 +163,19 @@ describe HdfsEntry do
       end
 
       it "marks stale entries as not stale if they reappear" do
-        HdfsEntry.list('/', hadoop_instance)
-        hadoop_instance.hdfs_entries.where("parent_id IS NOT NULL").each(&:mark_stale!)
-        HdfsEntry.list('/', hadoop_instance)
-        hadoop_instance.hdfs_entries.where("stale_at IS NOT NULL").length.should == 0
+        HdfsEntry.list('/', hdfs_data_source)
+        hdfs_data_source.hdfs_entries.where("parent_id IS NOT NULL").each(&:mark_stale!)
+        HdfsEntry.list('/', hdfs_data_source)
+        hdfs_data_source.hdfs_entries.where("stale_at IS NOT NULL").length.should == 0
       end
 
       it "does not update records if no changes have occurred" do
-        HdfsEntry.list('/', hadoop_instance)
+        HdfsEntry.list('/', hdfs_data_source)
         update_time = 1.year.ago
-        hadoop_instance.hdfs_entries.update_all(:updated_at => update_time)
+        hdfs_data_source.hdfs_entries.update_all(:updated_at => update_time)
         dont_allow(Sunspot.session).index
-        HdfsEntry.list('/', hadoop_instance)
-        hadoop_instance.hdfs_entries.where(:updated_at => update_time).count.should == hadoop_instance.hdfs_entries.count
+        HdfsEntry.list('/', hdfs_data_source)
+        hdfs_data_source.hdfs_entries.where(:updated_at => update_time).count.should == hdfs_data_source.hdfs_entries.count
       end
 
       context "the parent-child relationship" do
@@ -203,8 +203,8 @@ describe HdfsEntry do
           end
         end
 
-        let(:child) { HdfsEntry.list('/parent/', hadoop_instance).first }
-        let(:parent) { HdfsEntry.list('/', hadoop_instance).first }
+        let(:child) { HdfsEntry.list('/parent/', hdfs_data_source).first }
+        let(:parent) { HdfsEntry.list('/', hdfs_data_source).first }
 
         context "when parent is created after the child" do
           it "updates the parent-child relationship" do
@@ -228,8 +228,8 @@ describe HdfsEntry do
   end
 
   describe ".create" do
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:child) { hadoop_instance.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"},
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    let(:child) { hdfs_data_source.hdfs_entries.create!({:path => "/nonexistent_dir/goingaway.txt"},
                                                        :without_protection => true) }
     it "creates the parent" do
       child.parent.should be_a(HdfsEntry)
@@ -252,7 +252,7 @@ describe HdfsEntry do
   end
 
   describe "#file" do
-    let(:hadoop_instance) { FactoryGirl.build_stubbed(:hadoop_instance) }
+    let(:hdfs_data_source) { FactoryGirl.build_stubbed(:hdfs_data_source) }
 
     let(:directory_entry) do
       HdfsEntry.new({
@@ -261,7 +261,7 @@ describe HdfsEntry do
           :is_directory => true,
           :modified_at => Time.parse("2010-10-20 22:00:00"),
           :content_count => 4,
-          :hadoop_instance => hadoop_instance
+          :hdfs_data_source => hdfs_data_source
       }, :without_protection => true)
     end
 
@@ -271,7 +271,7 @@ describe HdfsEntry do
           :is_directory => false,
           :modified_at => Time.parse("2010-10-20 22:00:00"),
           :size => 4096,
-          :hadoop_instance => hadoop_instance
+          :hdfs_data_source => hdfs_data_source
       }, :without_protection => true)
     end
 
@@ -286,15 +286,15 @@ describe HdfsEntry do
         file = file_entry.file
 
         file.path.should == "/hello.sql"
-        file.hadoop_instance.should == hadoop_instance
+        file.hdfs_data_source.should == hdfs_data_source
         file.modified_at.should == file_entry.modified_at
       end
     end
   end
 
   describe "search fields" do
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!({:path => "/foo/bar/baz.txt"}, :without_protection => true) }
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    let(:hdfs_entry) { hdfs_data_source.hdfs_entries.create!({:path => "/foo/bar/baz.txt"}, :without_protection => true) }
 
     it "returns the file name for name" do
       hdfs_entry.name.should == 'baz.txt'
@@ -315,13 +315,13 @@ describe HdfsEntry do
     end
 
     it "does not index directories" do
-      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :is_directory => true}, :without_protection => true)
+      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hdfs_data_source_id => hdfs_data_source.id, :is_directory => true}, :without_protection => true)
       dont_allow(hdfs_entry).solr_index
       hdfs_entry.save!
     end
 
     it "does not index stale records" do
-      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hadoop_instance_id => hadoop_instance.id, :is_directory => false}, :without_protection => true)
+      hdfs_entry = HdfsEntry.new({:path => "/foo/bar/baz", :hdfs_data_source_id => hdfs_data_source.id, :is_directory => false}, :without_protection => true)
       hdfs_entry.mark_stale!
       dont_allow(hdfs_entry).solr_index
       hdfs_entry.save!
@@ -329,11 +329,11 @@ describe HdfsEntry do
   end
 
   describe "#ancestors" do
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
     let(:root) {
       FactoryGirl.build(
           :hdfs_entry,
-          :hadoop_instance_id => hadoop_instance.id,
+          :hdfs_data_source_id => hdfs_data_source.id,
           :path => '/',
           :is_directory => true,
           :modified_at => "2010-10-20 22:00:00",
@@ -349,7 +349,7 @@ describe HdfsEntry do
     context "when the hsfd_entry is not root" do
       let(:dir) { FactoryGirl.build(
           :hdfs_entry,
-          :hadoop_instance_id => hadoop_instance.id,
+          :hdfs_data_source_id => hdfs_data_source.id,
           :path => '/foo',
           :is_directory => true,
           :modified_at => "2010-10-20 22:00:00",
@@ -360,7 +360,7 @@ describe HdfsEntry do
 
       let(:entry) {FactoryGirl.build(
           :hdfs_entry,
-          :hadoop_instance_id => hadoop_instance.id,
+          :hdfs_data_source_id => hdfs_data_source.id,
           :path => '/foo/bar.csv',
           :is_directory => false,
           :modified_at => "2010-10-20 22:00:00",
@@ -371,15 +371,15 @@ describe HdfsEntry do
       it "returns the ids and names of all ancestors in order, root last" do
         entry.ancestors.should == [
             {:name => dir.name, :id => dir.id},
-            {:name => hadoop_instance.name, :id => root.id}
+            {:name => hdfs_data_source.name, :id => root.id}
         ]
       end
     end
   end
 
   describe "#contents" do
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:entry) { hadoop_instance.hdfs_entries.build(:path => "/file.txt") }
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    let(:entry) { hdfs_data_source.hdfs_entries.build(:path => "/file.txt") }
     before do
       any_instance_of(Hdfs::QueryService) do |h|
         stub(h).show('/file.txt') { ["content"] }
@@ -427,19 +427,19 @@ describe HdfsEntry do
   end
 
   describe "#url" do
-    let(:hadoop_instance) { hadoop_instances(:hadoop) }
-    let(:entry) { hadoop_instance.hdfs_entries.build(:path => "/file.txt") }
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    let(:entry) { hdfs_data_source.hdfs_entries.build(:path => "/file.txt") }
     it "returns a url" do
       entry.url.should == "gphdfs://hadoop.example.com:1111/file.txt"
     end
   end
 
   describe ".from_param(param)" do
-    it "uses the hadoop instance id and file-system path specified in the string" do
+    it "uses the hadoop data source id and file-system path specified in the string" do
       entry = hdfs_entries(:hdfs_file)
       hdfs_entry = HdfsEntry.from_param(entry.id)
 
-      hdfs_entry.hadoop_instance_id.should == entry.hadoop_instance.id
+      hdfs_entry.hdfs_data_source_id.should == entry.hdfs_data_source.id
       hdfs_entry.path.should == entry.path
     end
   end

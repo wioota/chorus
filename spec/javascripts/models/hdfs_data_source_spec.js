@@ -1,11 +1,11 @@
-describe("chorus.models.HadoopInstance", function() {
+describe("chorus.models.HdfsDataSource", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.hadoopInstance({id : 123, username: "hadoop", groupList: "hadoop"});
+        this.model = rspecFixtures.hdfsDataSource({id : 123, username: "hadoop", groupList: "hadoop"});
         this.attrs = {};
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toBe("/hadoop_instances/123");
+        expect(this.model.url()).toBe("/hdfs_data_sources/123");
     });
 
     it("is shared", function() {
@@ -13,11 +13,11 @@ describe("chorus.models.HadoopInstance", function() {
     });
 
     it("has the correct entityType", function() {
-        expect(this.model.entityType).toBe("hadoop_instance");
+        expect(this.model.entityType).toBe("hdfs_data_source");
     });
 
     it('links to the root directory of the hadoop data source', function() {
-        expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
+        expect(this.model.showUrl()).toBe("#/hdfs_data_sources/" + this.model.get('id') + "/browse/");
     });
 
     it("returns true for isHadoop", function() {

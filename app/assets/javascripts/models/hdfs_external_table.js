@@ -1,7 +1,7 @@
 chorus.models.HdfsExternalTable = chorus.models.Base.extend({
     constructorName: 'HdfsExternalTable',
     urlTemplate: function (options) {
-        var defaultUrl = "hadoop_instances/{{hadoopInstanceId}}/files/?id={{id}}";
+        var defaultUrl = "hdfs_data_sources/{{hdfsDataSourceId}}/files/?id={{id}}";
         var postUrl = "workspaces/{{workspaceId}}/external_tables";
 
         var method = options && options.method;

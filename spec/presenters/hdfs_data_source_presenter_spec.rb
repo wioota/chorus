@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe HadoopInstancePresenter, :type => :view do
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
-  let(:user) { hadoop_instance.owner }
-  let(:presenter) { HadoopInstancePresenter.new(hadoop_instance, view, options) }
+describe HdfsDataSourcePresenter, :type => :view do
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+  let(:user) { hdfs_data_source.owner }
+  let(:presenter) { HdfsDataSourcePresenter.new(hdfs_data_source, view, options) }
   let(:options) { {} }
 
   before do
@@ -25,7 +25,7 @@ describe HadoopInstancePresenter, :type => :view do
       hash.should have_key(:group_list)
       hash.should have_key(:online)
       hash.should have_key(:tags)
-      hash[:entity_type].should == 'hadoop_instance'
+      hash[:entity_type].should == 'hdfs_data_source'
     end
 
     it "should use ownerPresenter Hash method for owner" do

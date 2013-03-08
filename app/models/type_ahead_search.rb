@@ -7,7 +7,7 @@ class TypeAheadSearch
     User,
     GpdbDataSource,
     OracleDataSource,
-    HadoopInstance,
+    HdfsDataSource,
     GnipInstance,
     Workspace,
     Workfile,

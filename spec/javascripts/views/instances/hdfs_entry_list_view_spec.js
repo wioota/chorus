@@ -5,7 +5,7 @@ describe("chorus.views.HdfsEntryList", function() {
             rspecFixtures.hdfsFile(),
             rspecFixtures.hdfsFile(),
             rspecFixtures.hdfsDir({count: -1})
-        ], {hadoopInstance: {id: "1234"}, path: "/abc" });
+        ], {hdfsDataSource: {id: "1234"}, path: "/abc" });
 
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
@@ -46,7 +46,7 @@ describe("chorus.views.HdfsEntryList", function() {
         });
 
         it("links the directory name to that browse page", function() {
-            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/"+this.collection.at(0).id);
+            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hdfs_data_sources/1234/browse/"+this.collection.at(0).id);
         });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
@@ -65,13 +65,13 @@ describe("chorus.views.HdfsEntryList", function() {
             });
 
             it("links the directory name to that browse page", function() {
-                expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/" + this.collection.at(0).id);
+                expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hdfs_data_sources/1234/browse/" + this.collection.at(0).id);
             });
         });
 
         it("broadcasts hdfs_entry:selected on itemSelected", function() {
             var model = new chorus.models.HdfsEntry({
-                hadoopInstance: {
+                hdfsDataSource: {
                     id: 111
                 },
                 path: "/",

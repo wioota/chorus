@@ -4,9 +4,9 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             rspecFixtures.gpdbDataSource(),
             rspecFixtures.gpdbDataSource()
         ]);
-        var hadoopInstances = new chorus.collections.HadoopInstanceSet([
-            rspecFixtures.hadoopInstance(),
-            rspecFixtures.hadoopInstance()
+        var hdfsDataSources = new chorus.collections.HdfsDataSourceSet([
+            rspecFixtures.hdfsDataSource(),
+            rspecFixtures.hdfsDataSource()
         ]);
         var gnipInstances = new chorus.collections.GnipInstanceSet([
             rspecFixtures.gnipInstance(),
@@ -15,7 +15,7 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
 
         this.view = new chorus.views.InstanceIndexContentDetails({
             dataSources: dataSources,
-            hadoopInstances: hadoopInstances,
+            hdfsDataSources: hdfsDataSources,
             gnipInstances: gnipInstances
         });
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
@@ -35,8 +35,8 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
         beforeEach(function() {
             this.view.dataSources.loaded = true;
             this.view.dataSources.trigger('loaded');
-            this.view.hadoopInstances.loaded = true;
-            this.view.hadoopInstances.trigger('loaded');
+            this.view.hdfsDataSources.loaded = true;
+            this.view.hdfsDataSources.trigger('loaded');
             this.view.gnipInstances.loaded = true;
             this.view.gnipInstances.trigger('loaded');
         });

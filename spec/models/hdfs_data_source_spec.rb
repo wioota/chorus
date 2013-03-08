@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe HadoopInstance do
-  subject { FactoryGirl.build :hadoop_instance }
+describe HdfsDataSource do
+  subject { FactoryGirl.build :hdfs_data_source }
 
   it_behaves_like "a notable model" do
     let!(:note) do
-      Events::NoteOnHadoopInstance.create!({
+      Events::NoteOnHdfsDataSource.create!({
         :actor => users(:owner),
-        :hadoop_instance => model,
+        :hdfs_data_source => model,
         :body => "This is the body"
       }, :as => :create)
     end
 
-    let!(:model) { FactoryGirl.create(:hadoop_instance) }
+    let!(:model) { FactoryGirl.create(:hdfs_data_source) }
   end
 
   describe "associations" do
@@ -31,7 +31,7 @@ describe HadoopInstance do
     it_should_behave_like "it validates with DataSourceNameValidator"
 
     it_should_behave_like 'a model with name validations' do
-      let(:factory_name) { :hadoop_instance }
+      let(:factory_name) { :hdfs_data_source }
     end
   end
 
@@ -54,7 +54,7 @@ describe HadoopInstance do
     end
 
     context "when the server is not reachable" do
-      let(:instance) { hadoop_instances(:hadoop) }
+      let(:instance) { hdfs_data_sources(:hadoop) }
       before do
         any_instance_of(Hdfs::QueryService) do |qs|
           stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
@@ -71,7 +71,7 @@ describe HadoopInstance do
     end
 
     context "when a DirectoryNotFoundError happens on a subdirectory" do
-      let(:instance) { hadoop_instances(:hadoop) }
+      let(:instance) { hdfs_data_sources(:hadoop) }
       before do
         any_instance_of(Hdfs::QueryService) do |qs|
           stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
@@ -88,7 +88,7 @@ describe HadoopInstance do
 
   describe "after being created" do
     before do
-      @new_instance = HadoopInstance.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
+      @new_instance = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
     end
 
     it "creates an HDFS root entry" do
@@ -99,7 +99,7 @@ describe HadoopInstance do
   end
 
   describe "after being updated" do
-    let(:instance) { HadoopInstance.first }
+    let(:instance) { HdfsDataSource.first }
 
     it "it doesn't create any entries" do
       expect {
@@ -109,6 +109,6 @@ describe HadoopInstance do
     end
   end
 
-  it_should_behave_like "taggable models", [:hadoop_instances, :hadoop]
+  it_should_behave_like "taggable models", [:hdfs_data_sources, :hadoop]
 
 end

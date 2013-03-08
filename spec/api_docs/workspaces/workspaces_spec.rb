@@ -58,6 +58,8 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
+
+    pending "this test is flakey"
     parameter :workspace_id, "Id of a workspace"
     parameter :data_source_id, "Id of a Greenplum data source to create new database in"
     parameter :database_name, "Name of a new database"

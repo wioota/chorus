@@ -8,14 +8,14 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     urlTemplate: function() {
-        return "hadoop_instances/{{hadoopInstance.id}}/files/{{id}}";
+        return "hdfs_data_sources/{{hdfsDataSource.id}}/files/{{id}}";
     },
 
     showUrlTemplate: function() {
         if(this.get("isDir")) {
-            return "hadoop_instances/{{hadoopInstance.id}}/browse/{{id}}";
+            return "hdfs_data_sources/{{hdfsDataSource.id}}/browse/{{id}}";
         } else {
-            return "hadoop_instances/{{hadoopInstance.id}}/browseFile/{{id}}";
+            return "hdfs_data_sources/{{hdfsDataSource.id}}/browseFile/{{id}}";
         }
     },
 
@@ -30,7 +30,7 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     pathSegments: function() {
         return _.map(this.get("ancestors"), function(ancestor) {
-            return new chorus.models.HdfsEntry(_.extend({isDir: true, hadoopInstance: this.get("hadoopInstance")}, ancestor));
+            return new chorus.models.HdfsEntry(_.extend({isDir: true, hdfsDataSource: this.get("hdfsDataSource")}, ancestor));
         }, this).reverse();
 
     },
@@ -39,8 +39,8 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
         return _.last(this.pathSegments());
     },
 
-    getHadoopInstance: function() {
-        return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" });
+    getHdfsDataSource: function() {
+        return new chorus.models.HdfsDataSource(this.get('hdfsDataSource')).set({ instanceProvider: "Hadoop" });
     },
 
     iconUrl: function() {

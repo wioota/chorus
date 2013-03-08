@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'java'
 
 describe Hdfs::QueryService, :hdfs_integration do
-  let(:hdfs_params) { HadoopIntegration.instance_config }
+  let(:hdfs_params) { HdfsIntegration.instance_config }
   before do
     devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
     com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull
@@ -11,11 +11,11 @@ describe Hdfs::QueryService, :hdfs_integration do
   describe ".instance_version" do
     context "existing hadoop server" do
       let(:instance) do
-        HadoopInstance.new hdfs_params
+        HdfsDataSource.new hdfs_params
       end
 
       it "returns the hadoop version" do
-        version = described_class.instance_version(instance)
+        version = described_class.version_of(instance)
         version.should == "0.20.1gp"
       end
     end
@@ -25,13 +25,13 @@ describe Hdfs::QueryService, :hdfs_integration do
       let(:port) { 8888 }
       let(:username) { "pivotal" }
       let(:nonexistent_instance) do
-        HadoopInstance.new :host => instance, :port => port, :username => username
+        HdfsDataSource.new :host => instance, :port => port, :username => username
       end
 
       it "raises ApiValidationError and prints to log file" do
         Timecop.freeze(Time.current)
         mock(Rails.logger).error("#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{instance}:#{port}")
-        expect { described_class.instance_version(nonexistent_instance) }.to raise_error(ApiValidationError) { |error|
+        expect { described_class.version_of(nonexistent_instance) }.to raise_error(ApiValidationError) { |error|
           error.record.errors.get(:connection).should == [[:generic, { :message => "Unable to determine HDFS server version or unable to reach server at #{instance}:#{port}. Check connection parameters." }]]
         }
         Timecop.return

@@ -15,14 +15,14 @@ describe ExistingDataSourcesValidator do
   end
 
   describe '.run' do
-    let(:data_sources) { [GpdbDataSource, HadoopInstance, GnipInstance] }
+    let(:data_sources) { [GpdbDataSource, HdfsDataSource, GnipInstance] }
 
     it "returns true if the data sources are all valid" do
       ExistingDataSourcesValidator.run(data_sources).should be_true
     end
 
     it_validates_duplicate(:gpdb_data_source, :gnip_instance)
-    it_validates_duplicate(:hadoop_instance, :gpdb_data_source)
+    it_validates_duplicate(:hdfs_data_source, :gpdb_data_source)
     it_validates_duplicate(:gnip_instance, :gnip_instance)
 
     it "doesn't validate tables that don't exist" do

@@ -1,6 +1,6 @@
 require_relative "./database_integration/greenplum_integration"
 require_relative "./database_integration/oracle_integration"
-require_relative "./database_integration/hadoop_integration"
+require_relative "./database_integration/hdfs_integration"
 require_relative "./current_user"
 require 'rr'
 
@@ -16,7 +16,7 @@ FixtureBuilder.configure do |fbuilder|
     db/structure.sql
     spec/support/database_integration/*
     tmp/*_HOST_STALE
-    spec/support/test_instance_connection_config.yml
+    spec/support/test_data_sources_config.yml
   }]
 
   fbuilder.name_model_with(ChorusWorkfile) do |record|
@@ -101,11 +101,11 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
 
-    hadoop_instance = HadoopInstance.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop instance", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
-    fbuilder.name :hadoop, hadoop_instance
-    Events::HadoopInstanceCreated.by(admin).add(:hadoop_instance => hadoop_instance)
+    hdfs_data_source = HdfsDataSource.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop data source", :host => "hadoop.example.com", :port => "1111", :owner => admin}, :without_protection => true)
+    fbuilder.name :hadoop, hdfs_data_source
+    Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)
 
-    fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hadoop_instance => hadoop_instance}, :without_protection => true)
+    fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
 
     gnip_instance = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
     FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead_gnip')
@@ -158,7 +158,7 @@ FixtureBuilder.configure do |fbuilder|
     end
     @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
     typeahead_instance = FactoryGirl.create :gpdb_data_source, :name => 'typeahead_gpdb_data_source'
-    [:workspace, :hadoop_instance, :oracle_data_source].each do |model|
+    [:workspace, :hdfs_data_source, :oracle_data_source].each do |model|
       fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead_' + model.to_s)
     end
 
@@ -266,8 +266,8 @@ FixtureBuilder.configure do |fbuilder|
                                     }, :without_protection => true)
 
     #HDFS Entry
-    @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hadoop_instance => hadoop_instance)
-    @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hadoop_instance => hadoop_instance, :is_directory => true)
+    @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hdfs_data_source => hdfs_data_source)
+    @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hdfs_data_source => hdfs_data_source, :is_directory => true)
 
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
@@ -396,7 +396,7 @@ FixtureBuilder.configure do |fbuilder|
       Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'is this a greenplumsearch instance?'}, :as => :create)
       Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'no, not greenplumsearch'}, :as => :create)
       Events::NoteOnGreenplumInstance.create!({:note_target => shared_instance, :body => 'really really?'}, :as => :create)
-      @note_on_hadoop_instance = Events::NoteOnHadoopInstance.create!({:note_target => hadoop_instance, :body => 'hadoop-idy-doop'}, :as => :create)
+      @note_on_hdfs_data_source = Events::NoteOnHdfsDataSource.create!({:note_target => hdfs_data_source, :body => 'hadoop-idy-doop'}, :as => :create)
       @note_on_hdfs_file = Events::NoteOnHdfsFile.create!({:note_target => @hdfs_file, :body => 'hhhhhhaaaadooooopppp'}, :as => :create)
       @note_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'Come see my awesome workspace!'}, :as => :create)
       @note_on_workfile = Events::NoteOnWorkfile.create!({:note_target => text_workfile, :body => "My awesome workfile"}, :as => :create)
@@ -448,7 +448,7 @@ FixtureBuilder.configure do |fbuilder|
     @schema_import_failed = Events::SchemaImportFailed.by(owner).add(:dataset => default_table, :source_dataset => oracle_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!", :schema_id => default_table.schema.id)
     Events::GreenplumInstanceChangedOwner.by(admin).add(:gpdb_data_source => gpdb_data_source, :new_owner => no_collaborators)
     Events::GreenplumInstanceChangedName.by(admin).add(:gpdb_data_source => gpdb_data_source, :old_name => 'mahna_mahna', :new_name => gpdb_data_source.name)
-    Events::HadoopInstanceChangedName.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
+    Events::HdfsDataSourceChangedName.by(admin).add(:hdfs_data_source => hdfs_data_source, :old_name => 'Slartibartfast', :new_name => hdfs_data_source.name)
     Events::SourceTableCreated.by(admin).add(:dataset => default_table, :workspace => public_workspace)
     Events::WorkspaceAddSandbox.by(owner).add(:sandbox_schema => default_schema, :workspace => public_workspace)
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
@@ -481,7 +481,7 @@ FixtureBuilder.configure do |fbuilder|
     @attachment_workfile = @note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile')))
     @attachment_private_workfile = @note_on_no_collaborators_private_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
     @attachment_dataset = @note_on_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_dataset')))
-    @attachment_hadoop = @note_on_hadoop_instance.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
+    @attachment_hadoop = @note_on_hdfs_data_source.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hadoop')))
     @attachment_hdfs = @note_on_hdfs_file.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_hdfs_file')))
     @attachment_workspace_dataset = @note_on_search_workspace_dataset.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace_dataset')))
     @attachment_on_chorus_view = @note_on_chorus_view_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'attachmentsearch')))
@@ -522,7 +522,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['HADOOP_HOST']
-      @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => HadoopIntegration.instance_config['host'], :port => HadoopIntegration.instance_config['port'])
+      @real = FactoryGirl.create(:hdfs_data_source, :owner => owner, :host => HdfsIntegration.instance_config['host'], :port => HdfsIntegration.instance_config['port'])
     end
 
     if ENV['ORACLE_HOST'] && OracleIntegration.has_jar_file?

@@ -7,14 +7,14 @@ describe Events::Note do
 
   let(:actor) { users(:not_a_member) }
   let(:gpdb_data_source) { data_sources(:default) }
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:workspace) { workspaces(:public) }
   let(:workfile) { workfiles(:public) }
   let(:tableau_workfile) { workfiles(:tableau) }
   let(:dataset) { datasets(:table) }
   let(:hdfs_entry) do
-    hadoop_instance.hdfs_entries.create!(:path => '/data/test.csv',
+    hdfs_data_source.hdfs_entries.create!(:path => '/data/test.csv',
                                          :modified_at => "2010-10-24 22:00:00")
   end
 
@@ -56,28 +56,28 @@ describe Events::Note do
     it_creates_a_global_activity
   end
 
-  describe "NoteOnHadoopInstance" do
+  describe "NoteOnHdfsDataSource" do
     subject do
-      Events::NoteOnHadoopInstance.create!({
+      Events::NoteOnHdfsDataSource.create!({
           :actor => actor,
-          :hadoop_instance => hadoop_instance,
+          :hdfs_data_source => hdfs_data_source,
           :body => "This is the body"
       }, :as => :create)
     end
 
     it "sets the instance set correctly" do
-      subject.hadoop_instance.should == hadoop_instance
+      subject.hdfs_data_source.should == hdfs_data_source
     end
 
     it "sets the instance as the target" do
-      subject.targets.should == {:hadoop_instance => hadoop_instance}
+      subject.targets.should == {:hdfs_data_source => hdfs_data_source}
     end
 
     it "sets the body" do
       subject.body.should == "This is the body"
     end
 
-    it_creates_activities_for { [actor, hadoop_instance] }
+    it_creates_activities_for { [actor, hdfs_data_source] }
     it_creates_a_global_activity
   end
 
@@ -329,16 +329,16 @@ describe Events::Note do
       note.actor.should == user
     end
 
-    it "builds a note on a hadoop instance" do
-      hadoop_instance = hadoop_instances(:hadoop)
-      note = Events::Note.build_for(hadoop_instance, {
+    it "builds a note on a hadoop data source" do
+      hdfs_data_source = hdfs_data_sources(:hadoop)
+      note = Events::Note.build_for(hdfs_data_source, {
           :body => "Some crazy content",
-          :entity_type => "hadoop_instance"
+          :entity_type => "hdfs_data_source"
       })
 
       note.save!
-      note.hadoop_instance.should == hadoop_instance
-      note.should be_a(Events::NoteOnHadoopInstance)
+      note.hdfs_data_source.should == hdfs_data_source
+      note.should be_a(Events::NoteOnHdfsDataSource)
       note.body.should == "Some crazy content"
       note.actor.should == user
     end
@@ -352,7 +352,7 @@ describe Events::Note do
       note.save!
       note.should be_a(Events::NoteOnHdfsFile)
       note.actor.should == user
-      note.hdfs_file.hadoop_instance.should == hadoop_instance
+      note.hdfs_file.hdfs_data_source.should == hdfs_data_source
       note.hdfs_file.path.should == "/data/test.csv"
       note.body.should == "Some crazy content"
     end

@@ -7,14 +7,14 @@ describe "Event types" do
 
   let(:actor) { users(:owner) }
   let(:gpdb_data_source) { data_sources(:default) }
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
   let(:gnip_instance) { gnip_instances(:default) }
   let(:user) { users(:the_collaborator) }
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { datasets(:view) }
   let(:destination_dataset) { datasets(:table) }
-  let(:hdfs_entry) { hadoop_instance.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
+  let(:hdfs_entry) { hdfs_data_source.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
   let(:chorus_view) { datasets(:chorus_view) }
 
@@ -68,19 +68,19 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "HadoopInstanceCreated" do
+  describe "HdfsDataSourceCreated" do
     subject do
-      Events::HadoopInstanceCreated.add(
+      Events::HdfsDataSourceCreated.add(
           :actor => actor,
-          :hadoop_instance => hadoop_instance
+          :hdfs_data_source => hdfs_data_source
       )
     end
 
-    its(:action) { should == "HadoopInstanceCreated" }
-    its(:hadoop_instance) { should == hadoop_instance }
-    its(:targets) { should == {:hadoop_instance => hadoop_instance} }
+    its(:action) { should == "HdfsDataSourceCreated" }
+    its(:hdfs_data_source) { should == hdfs_data_source }
+    its(:targets) { should == {:hdfs_data_source => hdfs_data_source} }
 
-    it_creates_activities_for { [actor, hadoop_instance] }
+    it_creates_activities_for { [actor, hdfs_data_source] }
     it_creates_a_global_activity
   end
 
@@ -138,24 +138,24 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "HadoopInstanceChangedName" do
+  describe "HdfsDataSourceChangedName" do
     subject do
-      Events::HadoopInstanceChangedName.add(
+      Events::HdfsDataSourceChangedName.add(
           :actor => actor,
-          :hadoop_instance => hadoop_instance,
+          :hdfs_data_source => hdfs_data_source,
           :old_name => "brent",
           :new_name => "brenda"
       )
     end
 
-    its(:hadoop_instance) { should == hadoop_instance }
+    its(:hdfs_data_source) { should == hdfs_data_source }
     its(:old_name) { should == "brent" }
     its(:new_name) { should == "brenda" }
 
-    its(:targets) { should == {:hadoop_instance => hadoop_instance} }
+    its(:targets) { should == {:hdfs_data_source => hdfs_data_source} }
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
-    it_creates_activities_for { [actor, hadoop_instance] }
+    it_creates_activities_for { [actor, hdfs_data_source] }
     it_creates_a_global_activity
   end
 

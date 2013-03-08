@@ -16,8 +16,8 @@ module SolrIndexer
     DataSource.find_each do |data_source|
       data_source.refresh(:mark_stale => true, :force_index => force_index)
     end
-    HadoopInstance.find_each do |hadoop_instance|
-      hadoop_instance.refresh
+    HdfsDataSource.find_each do |hdfs_data_source|
+      hdfs_data_source.refresh
     end
     Rails.logger.info("Solr Refresh Completed")
   end

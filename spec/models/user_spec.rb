@@ -241,7 +241,7 @@ describe User do
   describe "associations" do
     it { should have_many(:gpdb_data_sources) }
     it { should have_many(:instance_accounts) }
-    it { should have_many(:hadoop_instances) }
+    it { should have_many(:hdfs_data_sources) }
     it { should have_many(:workspaces) }
     it { should have_many(:owned_workspaces) }
     it { should have_many(:activities) }

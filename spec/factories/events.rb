@@ -8,8 +8,8 @@ FactoryGirl.define do
       association :data_source, :factory => :gpdb_data_source
     end
 
-    factory :hadoop_instance_created_event, :class => Events::HadoopInstanceCreated do
-      hadoop_instance
+    factory :hadoop_instance_created_event, :class => Events::HdfsDataSourceCreated do
+      hdfs_data_source
     end
 
     factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
@@ -23,8 +23,8 @@ FactoryGirl.define do
       old_name 'old_instance_name'
     end
 
-    factory :hadoop_instance_changed_name_event, :class => Events::HadoopInstanceChangedName do
-      hadoop_instance
+    factory :hdfs_data_source_changed_name_event, :class => Events::HdfsDataSourceChangedName do
+      hdfs_data_source
       new_name 'new_instance_name'
       old_name 'old_instance_name'
     end
@@ -58,8 +58,8 @@ FactoryGirl.define do
       body 'Note to self, add a body'
     end
 
-    factory :note_on_hadoop_instance_event, :class => Events::NoteOnHadoopInstance do
-      hadoop_instance
+    factory :note_on_hdfs_data_source_event, :class => Events::NoteOnHdfsDataSource do
+      hdfs_data_source
       body 'Note to self, add a body'
     end
 

@@ -7,7 +7,7 @@ describe ExternalTablesController do
   let!(:instance_account) { sandbox.data_source.account_for_user!(user) }
   let(:sandbox) { schemas(:default) }
 
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
   let(:hdfs_entry) { hdfs_entries(:hdfs_file) }
   let(:hdfs_directory) { hdfs_entries(:directory) }
 
@@ -32,7 +32,7 @@ describe ExternalTablesController do
       {
           :column_names => %w{field1 field2},
           :delimiter => ',',
-          :id => hadoop_instance.id,
+          :id => hdfs_data_source.id,
           :hdfs_entry_id => hdfs_entry,
           :pathname => "foo_fighter/twisted_sisters/",
           :table_name => "tablefromhdfs",

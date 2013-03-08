@@ -2,7 +2,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
     beforeEach(function() {
         this.page = new chorus.pages.DataSourceIndexPage();
         this.dataSourceSet = new chorus.collections.DataSourceSet([], {all: true});
-        this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
+        this.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet();
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet();
     });
 
@@ -16,7 +16,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             var page = new chorus.pages.DataSourceIndexPage();
             expect(page.handleFetchErrorsFor.calls.length).toEqual(3);
             expect(page.handleFetchErrorsFor.calls[0].args[0].constructor).toBe(chorus.collections.DataSourceSet);
-            expect(page.handleFetchErrorsFor.calls[1].args[0].constructor).toBe(chorus.collections.HadoopInstanceSet);
+            expect(page.handleFetchErrorsFor.calls[1].args[0].constructor).toBe(chorus.collections.HdfsDataSourceSet);
             expect(page.handleFetchErrorsFor.calls[2].args[0].constructor).toBe(chorus.collections.GnipInstanceSet);
         });
 
@@ -34,7 +34,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
     });
 
     it('fetches all hadoop data sources', function() {
-        expect(this.hadoopInstanceSet).toHaveBeenFetched();
+        expect(this.hdfsDataSourceSet).toHaveBeenFetched();
     });
 
     it('fetches all gnip data sources', function() {
@@ -43,14 +43,14 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
     it('passes the data sources and hadoop data sources to the content details view', function() {
         var contentDetails = this.page.mainContent.contentDetails;
-        expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
+        expect(contentDetails.options.hdfsDataSources).toBeA(chorus.collections.HdfsDataSourceSet);
         expect(contentDetails.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(contentDetails.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
 
     it('passes the data sources, hadoop and gnip data sources to the list view', function() {
         var list = this.page.mainContent.content;
-        expect(list.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
+        expect(list.options.hdfsDataSources).toBeA(chorus.collections.HdfsDataSourceSet);
         expect(list.options.dataSources).toBeA(chorus.collections.DataSourceSet);
         expect(list.options.gnipInstances).toBeA(chorus.collections.GnipInstanceSet);
     });
@@ -86,9 +86,9 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                 rspecFixtures.gpdbDataSource()
             ]);
 
-            this.server.completeFetchAllFor(this.hadoopInstanceSet, [
-                rspecFixtures.hadoopInstance(),
-                rspecFixtures.hadoopInstance()
+            this.server.completeFetchAllFor(this.hdfsDataSourceSet, [
+                rspecFixtures.hdfsDataSource(),
+                rspecFixtures.hdfsDataSource()
             ]);
             this.server.completeFetchAllFor(this.gnipInstanceSet, [
                 rspecFixtures.gnipInstance(),

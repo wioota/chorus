@@ -49,30 +49,30 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
-        describe('when editing a hadoop data source', function() {
+        describe('when editing a hdfs data source', function() {
             beforeEach(function() {
-                this.dialog.model.set({ username: "user", groupList: "hadoop"});
-                this.dialog.model = new chorus.models.HadoopInstance(this.dialog.model.attributes);
+                this.instance = rspecFixtures.hdfsDataSource({username: 'user', groupList: 'hadoop'});
+                this.dialog = new chorus.dialogs.InstanceEdit({ instance: this.instance });
                 this.dialog.render();
             });
 
             it("has a pre-populated and enabled 'name' field", function() {
-                expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
+                expect(this.dialog.$("input[name=name]").val()).toBe(this.instance.get('name'));
                 expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'description' field", function() {
-                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
+                expect(this.dialog.$("textarea[name=description]").val()).toBe(this.instance.get('description'));
                 expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'host' field", function() {
-                expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
+                expect(this.dialog.$("input[name=host]").val()).toBe(this.instance.get('host'));
                 expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'port' field", function() {
-                expect(this.dialog.$("input[name=port]").val()).toBe("8555");
+                expect(this.dialog.$("input[name=port]").val()).toBe(this.instance.get('port').toString());
                 expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
             });
 
@@ -180,7 +180,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context('with a hadoop data source', function() {
             beforeEach(function() {
-                this.dialog.model = new chorus.models.HadoopInstance();
+                this.dialog.model = new chorus.models.HdfsDataSource();
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=port]").val("8557");

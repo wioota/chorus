@@ -1,7 +1,7 @@
 class InstanceStatusChecker
   def self.check_all
     DataSource.find_each { |ds| self.check(ds) }
-    HadoopInstance.find_each { |instance| self.check(instance) }
+    HdfsDataSource.find_each { |instance| self.check(instance) }
   end
 
   def self.check(data_source)
@@ -38,7 +38,7 @@ class InstanceStatusChecker
   end
 
   def get_data_source_version
-    if @data_source.is_a?(HadoopInstance)
+    if @data_source.is_a?(HdfsDataSource)
       @data_source.version
     else
       @data_source.connect_as_owner.version

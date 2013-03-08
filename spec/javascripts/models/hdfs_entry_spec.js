@@ -8,7 +8,7 @@ describe("chorus.models.HdfsEntry", function() {
             beforeEach(function() {
                 this.model = new chorus.models.HdfsEntry({
                    id: 10012,
-                   hadoopInstance: {
+                   hdfsDataSource: {
                        id: 42
                    },
                     path: "/data/a%pct",
@@ -18,7 +18,7 @@ describe("chorus.models.HdfsEntry", function() {
             });
 
             it("is correct", function() {
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browse/" + this.model.id);
+                expect(this.model.showUrl()).toBe("#/hdfs_data_sources/42/browse/" + this.model.id);
             });
         });
 
@@ -26,7 +26,7 @@ describe("chorus.models.HdfsEntry", function() {
             beforeEach(function() {
                 this.model = new chorus.models.HdfsEntry({
                     id: 10012,
-                    hadoopInstance: {
+                    hdfsDataSource: {
                         id: '42'
                     },
                     path: '/data/a space',
@@ -35,12 +35,12 @@ describe("chorus.models.HdfsEntry", function() {
             });
 
             it("is correct", function() {
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/" + this.model.id);
+                expect(this.model.showUrl()).toBe("#/hdfs_data_sources/42/browseFile/" + this.model.id);
             });
 
             it("is correct when path is /", function() {
                 this.model.set({path: "/"});
-                expect(this.model.showUrl()).toBe("#/hadoop_instances/42/browseFile/" + this.model.id);
+                expect(this.model.showUrl()).toBe("#/hdfs_data_sources/42/browseFile/" + this.model.id);
             });
         });
     });
@@ -49,7 +49,7 @@ describe("chorus.models.HdfsEntry", function() {
         it("returns the entry's parent directory", function() {
             this.model = new chorus.models.HdfsEntry({
                id: 10012,
-               hadoopInstance: {
+               hdfsDataSource: {
                    id: 10000
                },
                path: "/imports/july/21",
@@ -67,7 +67,7 @@ describe("chorus.models.HdfsEntry", function() {
         beforeEach(function() {
             this.model = new chorus.models.HdfsEntry({
                 id: 10012,
-                hadoopInstance: {
+                hdfsDataSource: {
                     id: 10000
                 },
                 path: "/foo/bar/%baz",
@@ -98,30 +98,30 @@ describe("chorus.models.HdfsEntry", function() {
         });
     });
 
-    describe('getHadoopInstance', function() {
+    describe('getHdfsDataSource', function() {
         beforeEach(function() {
             this.model = new chorus.models.HdfsEntry({
-               hadoopInstance: {
+               hdfsDataSource: {
                    id: 3,
                    name: "obscene"
                },
                path: "/"
            });
 
-            this.hadoopInstance = this.model.getHadoopInstance();
+            this.hdfsDataSource = this.model.getHdfsDataSource();
         });
 
         it('returns a hadoop data source', function() {
-            expect(this.hadoopInstance).toBeA(chorus.models.HadoopInstance);
+            expect(this.hdfsDataSource).toBeA(chorus.models.HdfsDataSource);
         });
 
         it('has the correct attributes', function() {
-            expect(this.hadoopInstance.get('id')).toBe(3);
-            expect(this.hadoopInstance.get('name')).toBe('obscene');
+            expect(this.hdfsDataSource.get('id')).toBe(3);
+            expect(this.hdfsDataSource.get('name')).toBe('obscene');
         });
 
         it("should have an instanceProvider of Hadoop", function() {
-            expect(this.hadoopInstance.get('instanceProvider')).toBe('Hadoop');
+            expect(this.hdfsDataSource.get('instanceProvider')).toBe('Hadoop');
         });
     });
 
@@ -129,7 +129,7 @@ describe("chorus.models.HdfsEntry", function() {
         context("path is not root", function() {
             it("returns the path including the filename", function() {
                 var model = new chorus.models.HdfsEntry({
-                   hadoopInstance: {
+                   hdfsDataSource: {
                        id: 3
                    },
                     path: "/",
@@ -143,7 +143,7 @@ describe("chorus.models.HdfsEntry", function() {
         context("path is not root", function() {
             it("returns the path including the filename", function() {
                 var model = new chorus.models.HdfsEntry({
-                    hadoopInstance: {
+                    hdfsDataSource: {
                         id: 3
                     },
                     path: "/workfiles",
@@ -157,7 +157,7 @@ describe("chorus.models.HdfsEntry", function() {
 
     it("has the correct iconUrl", function() {
         var model = new chorus.models.HdfsEntry({
-            hadoopInstance: {
+            hdfsDataSource: {
                 id: 3
             },
             is_dir: false,

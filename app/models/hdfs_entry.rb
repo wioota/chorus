@@ -8,12 +8,12 @@ class HdfsEntry < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
 
-  belongs_to :hadoop_instance
+  belongs_to :hdfs_data_source
   belongs_to :parent, :class_name => HdfsEntry, :foreign_key => 'parent_id'
   has_many :children, :class_name => HdfsEntry, :foreign_key => 'parent_id', :dependent => :destroy
 
-  validates_uniqueness_of :path, :scope => :hadoop_instance_id
-  validates_presence_of :hadoop_instance
+  validates_uniqueness_of :path, :scope => :hdfs_data_source_id
+  validates_presence_of :hdfs_data_source
   validates_format_of :path, :with => %r{\A/.*}
 
   scope :files, where(:is_directory => false)
@@ -40,7 +40,7 @@ class HdfsEntry < ActiveRecord::Base
     #return @ancestors if @ancestors
     @ancestors = []
     if parent
-      parent_name = parent.path == '/' ? hadoop_instance.name : parent.name
+      parent_name = parent.path == '/' ? hdfs_data_source.name : parent.name
       @ancestors << {:name => parent_name, :id => parent_id}
       @ancestors += parent.ancestors
     end
@@ -65,25 +65,25 @@ class HdfsEntry < ActiveRecord::Base
     end
   end
 
-  def self.list(path, hadoop_instance)
-    hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
+  def self.list(path, hdfs_data_source)
+    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
     current_entries = hdfs_query.list(path).map do |result|
-      hdfs_entry = hadoop_instance.hdfs_entries.find_or_initialize_by_path(result["path"])
+      hdfs_entry = hdfs_data_source.hdfs_entries.find_or_initialize_by_path(result["path"])
       hdfs_entry.stale_at = nil if hdfs_entry.stale?
-      hdfs_entry.hadoop_instance = hadoop_instance
+      hdfs_entry.hdfs_data_source = hdfs_data_source
       hdfs_entry.assign_attributes(result, :without_protection => true)
       hdfs_entry.save! if hdfs_entry.changed?
       hdfs_entry
     end
 
-    parent = hadoop_instance.hdfs_entries.find_by_path(normalize_path(path))
+    parent = hdfs_data_source.hdfs_entries.find_by_path(normalize_path(path))
     current_entry_ids = current_entries.map(&:id)
     finder = parent.children
     finder = finder.where(['id not in (?)', current_entry_ids]) unless current_entry_ids.empty?
     finder.each do |hdfs_entry|
       hdfs_entry.mark_stale!
       next unless hdfs_entry.is_directory?
-      hadoop_instance.hdfs_entries.where("stale_at IS NULL AND path LIKE ?", "#{hdfs_entry.path}/%").find_each do |entry_to_mark_stale|
+      hdfs_data_source.hdfs_entries.where("stale_at IS NULL AND path LIKE ?", "#{hdfs_entry.path}/%").find_each do |entry_to_mark_stale|
         entry_to_mark_stale.mark_stale!
       end
     end
@@ -92,12 +92,12 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def entries
-    HdfsEntry.list(path.chomp('/') + '/', hadoop_instance)
+    HdfsEntry.list(path.chomp('/') + '/', hdfs_data_source)
   end
 
   def contents
     begin
-      hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
+      hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
       hdfs_query.show(path)
     rescue StandardError => e
       raise HdfsContentsError.new(e)
@@ -106,7 +106,7 @@ class HdfsEntry < ActiveRecord::Base
 
   def file
     unless is_directory?
-      HdfsFile.new(path, hadoop_instance, {
+      HdfsFile.new(path, hdfs_data_source, {
           :modified_at => modified_at
       })
     end
@@ -117,7 +117,7 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def url
-    hadoop_instance.url.chomp('/') + path
+    hdfs_data_source.url.chomp('/') + path
   end
 
   def entity_type_name
@@ -132,7 +132,7 @@ class HdfsEntry < ActiveRecord::Base
 
   def build_full_path
     return true if path == "/"
-    self.parent = hadoop_instance.hdfs_entries.find_or_create_by_path(parent_path)
+    self.parent = hdfs_data_source.hdfs_entries.find_or_create_by_path(parent_path)
     self.parent.is_directory = true
     self.parent.save!
   end

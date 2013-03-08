@@ -10,7 +10,7 @@ namespace :validations do
     data_valid = ExistingDataSourcesValidator.run([
       legacy_gpdb_instance,
       DataSource,
-      HadoopInstance,
+      HdfsDataSource,
       GnipInstance
     ])
 

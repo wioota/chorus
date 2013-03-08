@@ -29,7 +29,7 @@ describe("chorus.collections.ActivitySet", function() {
             it("includes the entity_type, the ", function() {
                 var model = rspecFixtures.hdfsFile({
                     id: 8789,
-                    hadoopInstance : { id : 1 },
+                    hdfsDataSource : { id : 1 },
                     path : "/data",
                     name : "test.csv"
                 });

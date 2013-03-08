@@ -115,7 +115,7 @@ describe Events::NoteAccess do
     it "has a class for each type of note" do
       Events::NoteOnWorkspaceAccess.new(fake_controller).should be_a Events::NoteAccess
       Events::NoteOnGreenplumInstanceAccess.new(fake_controller).should be_a Events::NoteAccess
-      Events::NoteOnHadoopInstanceAccess.new(fake_controller).should be_a Events::NoteAccess
+      Events::NoteOnHdfsDataSourceAccess.new(fake_controller).should be_a Events::NoteAccess
     end
   end
 end

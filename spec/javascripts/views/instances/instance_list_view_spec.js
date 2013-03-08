@@ -1,15 +1,15 @@
 describe("chorus.views.InstanceList", function() {
     beforeEach(function() {
         this.dataSources = new chorus.collections.DataSourceSet();
-        this.hadoopInstances = new chorus.collections.HadoopInstanceSet();
+        this.hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
         this.gnipInstances = new chorus.collections.GnipInstanceSet();
         this.dataSources.fetch();
-        this.hadoopInstances.fetch();
+        this.hdfsDataSources.fetch();
         this.gnipInstances.fetch();
 
         this.view = new chorus.views.InstanceList({
             dataSources: this.dataSources,
-            hadoopInstances: this.hadoopInstances,
+            hdfsDataSources: this.hdfsDataSources,
             gnipInstances: this.gnipInstances
         });
     });
@@ -22,7 +22,7 @@ describe("chorus.views.InstanceList", function() {
 
             it('renders empty text for each data source type', function() {
                 expect(this.view.$(".data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
-                expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".hdfs_data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
         });
@@ -35,10 +35,10 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
                 rspecFixtures.oracleDataSource({name : "oracle", id: "3"})
             ]);
-            this.server.completeFetchFor(this.hadoopInstances, [
-                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "1"}),
-                rspecFixtures.hadoopInstance({name : "hadoop1", id: "2"}),
-                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "3"})
+            this.server.completeFetchFor(this.hdfsDataSources, [
+                rspecFixtures.hdfsDataSource({name : "Hadoop9", id: "1"}),
+                rspecFixtures.hdfsDataSource({name : "hadoop1", id: "2"}),
+                rspecFixtures.hdfsDataSource({name : "Hadoop10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipInstances, [
                 rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
@@ -68,7 +68,7 @@ describe("chorus.views.InstanceList", function() {
         });
 
         it('renders the hadoop data sources in the correct data source div', function() {
-            var hadoopItems = this.view.$(".hadoop_instance li.instance");
+            var hadoopItems = this.view.$(".hdfs_data_source li.instance");
             expect(hadoopItems.length).toBe(3);
             expect(hadoopItems).toContainText("hadoop1");
             expect(hadoopItems).toContainText("Hadoop9");
@@ -148,14 +148,14 @@ describe("chorus.views.InstanceList", function() {
             beforeEach(function() {
                 this.newInstance = rspecFixtures.oracleDataSource({id: 31415});
                 spyOn(this.view.dataSources, "fetchAll");
-                spyOn(this.view.hadoopInstances, "fetchAll");
+                spyOn(this.view.hdfsDataSources, "fetchAll");
                 spyOn(this.view.gnipInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
             it('re-fetches the data sources, hadoop and gnip data sources', function() {
                 expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
-                expect(this.view.hadoopInstances.fetchAll).toHaveBeenCalled();
+                expect(this.view.hdfsDataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
             });
 
@@ -280,15 +280,15 @@ describe("chorus.views.InstanceList", function() {
             it("ensures that selected models are checked", function() {
                 this.view.selectedModels.reset([
                     this.dataSources.at(0),
-                    this.hadoopInstances.at(0)
+                    this.hdfsDataSources.at(0)
                 ]);
                 this.view.render();
 
                 var selectedDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(0);
                 expect(selectedDataSourceCheckbox).toBeChecked();
 
-                var selectedHadoopInstanceCheckbox = this.view.$("input[type=checkbox]").eq(3);
-                expect(selectedHadoopInstanceCheckbox).toBeChecked();
+                var selectedHdfsDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(3);
+                expect(selectedHdfsDataSourceCheckbox).toBeChecked();
 
                 var unselectedModelCheckbox = this.view.$("input[type=checkbox]").eq(1);
                 expect(unselectedModelCheckbox).not.toBeChecked();

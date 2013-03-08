@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe HadoopInstanceAccess do
+describe HdfsDataSourceAccess do
   let(:owner) { FactoryGirl.create(:user) }
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => owner) }
+  let(:hdfs_data_source) { FactoryGirl.create(:hdfs_data_source, :owner => owner) }
 
   subject do
     stub(controller = Object.new).current_user { current_user }
@@ -15,7 +15,7 @@ describe HadoopInstanceAccess do
       let(:current_user) { owner }
 
       it "allows access" do
-        subject.can?(:edit, hadoop_instance).should be_true
+        subject.can?(:edit, hdfs_data_source).should be_true
       end
     end
 
@@ -24,17 +24,17 @@ describe HadoopInstanceAccess do
 
       it "does not allow access" do
         user = FactoryGirl.create(:user)
-        subject.can?(:edit, hadoop_instance).should be_false
+        subject.can?(:edit, hdfs_data_source).should be_false
       end
     end
   end
 
   describe "#show?" do
-    context "if the user has access to the hadoop instance" do
+    context "if the user has access to the hadoop data source" do
       let(:current_user) { users(:default) }
 
       it "allows access" do
-        subject.can?(:show, hadoop_instance).should be_true
+        subject.can?(:show, hdfs_data_source).should be_true
       end
     end
   end

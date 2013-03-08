@@ -60,12 +60,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     instanceClass: function() {
-        var instanceType = this.$("select.data_sources").val();
-        if (instanceType === "register_existing_hadoop") {
-            return chorus.models.HadoopInstance;
-        } else if (instanceType === "register_existing_gnip") {
+        var dataSourceType = this.$("select.data_sources").val();
+        if (dataSourceType === "register_existing_hdfs") {
+            return chorus.models.HdfsDataSource;
+        } else if (dataSourceType === "register_existing_gnip") {
             return chorus.models.GnipInstance;
-        } else if (instanceType === "register_existing_oracle") {
+        } else if (dataSourceType === "register_existing_oracle") {
             return chorus.models.OracleDataSource;
         } else {
             return chorus.models.GpdbDataSource;

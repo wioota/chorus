@@ -20,8 +20,8 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
     });
 
     it("has the correct title and button", function() {
-        expect(this.dialog.title).toMatchTranslation("hdfs_instance.workspace_picker.title");
-        expect(this.dialog.submitButtonTranslationKey).toBe("hdfs_instance.workspace_picker.button");
+        expect(this.dialog.title).toMatchTranslation("hdfs_data_source.workspace_picker.title");
+        expect(this.dialog.submitButtonTranslationKey).toBe("hdfs_data_source.workspace_picker.button");
     });
 
     context("when the fetch completes", function() {
@@ -59,15 +59,15 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                         spyOnEvent(this.dialog, "workspace:selected");
                         this.dialog.selectedItem().sandbox().instance().set('version', '4.1');
                         this.dialog.$("button.submit").click();
-                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old_42");
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_data_source.gpdb_version.too_old_42");
                         expect("workspace:selected").not.toHaveBeenTriggeredOn(this.dialog, [this.dialog.selectedItem()]);
                     });
                 });
 
                 it("fetches the list of hdfs files", function() {
-                    var hadoopInstanceId = this.dialog.model.get('hadoopInstance').id;
+                    var hdfsDataSourceId = this.dialog.model.get('hdfsDataSource').id;
                     var fileId = this.dialog.model.id;
-                    expect(this.server.lastFetch().url).toMatchUrl("/hadoop_instances/" + hadoopInstanceId + "/files/?id=" + fileId, {paramsToIgnore: ["page", "per_page"]});
+                    expect(this.server.lastFetch().url).toMatchUrl("/hdfs_data_sources/" + hdfsDataSourceId + "/files/?id=" + fileId, {paramsToIgnore: ["page", "per_page"]});
                 });
 
                 context("when the hdfs entries fetch completes", function() {
@@ -102,7 +102,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
                     });
                     it("displays error when the directory doesn't have any text files", function() {
-                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files");
+                        expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_data_source.no_text_files");
                     });
 
                     it("does not open the Create External Table dialog", function() {

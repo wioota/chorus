@@ -96,7 +96,7 @@ end
 require 'events/note_on_dataset'
 require 'events/note_on_greenplum_instance'
 require 'events/note_on_gnip_instance'
-require 'events/note_on_hadoop_instance'
+require 'events/note_on_hdfs_data_source'
 require 'events/note_on_hdfs_file'
 require 'events/note_on_workfile'
 require 'events/note_on_workspace'

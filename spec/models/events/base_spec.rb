@@ -9,7 +9,7 @@ describe Events::Base do
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
       dataset = datasets(:table)
-      hdfs_entry = HdfsEntry.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
+      hdfs_entry = HdfsEntry.create({:hdfs_data_source_id => 1234, :path => "/path/file.txt"})
       workspace = workspaces(:public)
 
       Events::DataSourceCreated.by(user1).add(:data_source => gpdb_data_source1)

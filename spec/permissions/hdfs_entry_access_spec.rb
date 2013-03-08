@@ -22,8 +22,8 @@ describe HdfsEntryAccess do
       let(:user) { users(:the_collaborator) }
 
       before do
-        any_instance_of(HadoopInstanceAccess) do |instance|
-          stub(instance).can? :show, hdfs_entry.hadoop_instance { false }
+        any_instance_of(HdfsDataSourceAccess) do |instance|
+          stub(instance).can? :show, hdfs_entry.hdfs_data_source { false }
         end
       end
 

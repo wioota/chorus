@@ -1,5 +1,5 @@
 describe("chorus.presenters.InstanceList", function() {
-    var dataSources, hadoopInstances, gnipInstances, presenter;
+    var dataSources, hdfsDataSources, gnipInstances, presenter;
 
     beforeEach(function() {
         dataSources = new chorus.collections.DataSourceSet([
@@ -7,10 +7,10 @@ describe("chorus.presenters.InstanceList", function() {
             rspecFixtures.gpdbDataSource({ online: false })
         ]);
 
-        hadoopInstances = new chorus.collections.HadoopInstanceSet([
-            rspecFixtures.hadoopInstance({ online: false }),
-            rspecFixtures.hadoopInstance({ description: "special instance", online: true }),
-            rspecFixtures.hadoopInstance()
+        hdfsDataSources = new chorus.collections.HdfsDataSourceSet([
+            rspecFixtures.hdfsDataSource({ online: false }),
+            rspecFixtures.hdfsDataSource({ description: "special instance", online: true }),
+            rspecFixtures.hdfsDataSource()
         ]);
 
         gnipInstances = new chorus.collections.GnipInstanceSet([
@@ -21,7 +21,7 @@ describe("chorus.presenters.InstanceList", function() {
         
         presenter = new chorus.presenters.InstanceList({
             dataSources: dataSources,
-            hadoop: hadoopInstances,
+            hadoop: hdfsDataSources,
             gnip: gnipInstances
         });
         presenter.present();
@@ -40,7 +40,7 @@ describe("chorus.presenters.InstanceList", function() {
 
         presenter = new chorus.presenters.InstanceList({
             dataSources: new chorus.collections.DataSourceSet(),
-            hadoop: new chorus.collections.HadoopInstanceSet(),
+            hadoop: new chorus.collections.HdfsDataSourceSet(),
             gnip: new chorus.collections.GnipInstanceSet()
 
         });
@@ -62,7 +62,7 @@ describe("chorus.presenters.InstanceList", function() {
                 expect(presenter.dataSources[i][name]).toBe(model.get(name));
             });
 
-            hadoopInstances.each(function(model, i) {
+            hdfsDataSources.each(function(model, i) {
                 expect(presenter.hadoop[i][name]).toBe(model.get(name));
             });
 
@@ -80,7 +80,7 @@ describe("chorus.presenters.InstanceList", function() {
                 expect(presenter.dataSources[i][presentedName]).toBe(model[methodName]());
             });
 
-            hadoopInstances.each(function(model, i) {
+            hdfsDataSources.each(function(model, i) {
                 expect(presenter.hadoop[i][presentedName]).toBe(model[methodName]());
             });
 
@@ -102,7 +102,7 @@ describe("chorus.presenters.InstanceList", function() {
     it("presents the tags for all data sources", function() {
         var presenterPropertyMap = {
             dataSources: dataSources,
-            hadoop: hadoopInstances,
+            hadoop: hdfsDataSources,
             gnip: gnipInstances
         };
 

@@ -1,4 +1,4 @@
-instances:
+data_sources:
   gpdb:
     - host: "chorus-gpdb42"
       port: 5432

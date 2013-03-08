@@ -168,7 +168,7 @@ module GreenplumIntegration
   private
 
   def self.config
-    config_file = "test_instance_connection_config.yml"
+    config_file = "test_data_sources_config.yml"
     @@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
   end
 
@@ -177,7 +177,7 @@ module GreenplumIntegration
   end
 
   def self.find_greenplum_instance(name)
-    config['instances']['gpdb'].find { |hash| hash["host"] == name }
+    config['data_sources']['gpdb'].find { |hash| hash["host"] == name }
   end
 
   def self.greenplum_account

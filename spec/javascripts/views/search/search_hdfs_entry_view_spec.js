@@ -67,8 +67,8 @@ describe("chorus.views.SearchHdfsEntry", function() {
         it('should render the data source location', function() {
             var $inst = this.view.$(".instance a");
 
-            expect($inst.text()).toBe(this.model.getHadoopInstance().name());
-            expect($inst.attr("href")).toBe(this.model.getHadoopInstance().showUrl());
+            expect($inst.text()).toBe(this.model.getHdfsDataSource().name());
+            expect($inst.attr("href")).toBe(this.model.getHdfsDataSource().showUrl());
         });
 
         it("should render a link to each file", function() {
@@ -80,7 +80,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).html()).toEqual("<em>aaa</em>");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/" + this.model.getHadoopInstance().id + "/browse/" + this.model.get('ancestors')[0].id);
+            expect($links.eq(0).attr("href")).toBe("#/hdfs_data_sources/" + this.model.getHdfsDataSource().id + "/browse/" + this.model.get('ancestors')[0].id);
 
             expect($links.eq(1).html()).toEqual("bbb");
             expect($links.eq(1).attr("href")).toBe(this.model.showUrl());
@@ -98,8 +98,8 @@ describe("chorus.views.SearchHdfsEntry", function() {
          it('should render the data source location', function() {
             var $inst = this.view.$(".instance a");
 
-            expect($inst.text()).toBe(this.model.getHadoopInstance().name());
-            expect($inst.attr("href")).toBe(this.model.getHadoopInstance().showUrl());
+            expect($inst.text()).toBe(this.model.getHdfsDataSource().name());
+            expect($inst.attr("href")).toBe(this.model.getHdfsDataSource().showUrl());
         });
 
         it("should not render a link to each file", function() {
@@ -112,7 +112,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).text()).toBe("aaa");
-            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/" + this.model.getHadoopInstance().id + "/browse/" + this.model.get('ancestors')[0].id);
+            expect($links.eq(0).attr("href")).toBe("#/hdfs_data_sources/" + this.model.getHdfsDataSource().id + "/browse/" + this.model.get('ancestors')[0].id);
 
             expect($links.eq(1).text()).toBe("bbb");
             expect($links.eq(1).attr("href")).toMatchUrl(this.model.showUrl());

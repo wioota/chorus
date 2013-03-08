@@ -1,6 +1,6 @@
 class DataSourceNameValidator < ActiveModel::Validator
 
-  DATA_SOURCE_TYPES = [DataSource, HadoopInstance, GnipInstance]
+  DATA_SOURCE_TYPES = [DataSource, HdfsDataSource, GnipInstance]
 
   def validate(record)
     if record.name && unique_name?(record)

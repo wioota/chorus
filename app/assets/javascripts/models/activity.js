@@ -6,7 +6,7 @@
         "gpdbDataSource": "GpdbDataSource",
         "gnipInstance": "GnipInstance",
         "newOwner": "User",
-        "hadoopInstance": "HadoopInstance",
+        "hdfsDataSource": "HdfsDataSource",
         "workfile": "Workfile",
         "workspace": "Workspace",
         "newUser" : "User",
@@ -50,7 +50,7 @@
         dataSource: makeAssociationMethod('dataSource'),
         gpdbDataSource: makeAssociationMethod("gpdbDataSource"),
         gnipInstance: makeAssociationMethod("gnipInstance"),
-        hadoopInstance: makeAssociationMethod("hadoopInstance"),
+        hdfsDataSource: makeAssociationMethod("hdfsDataSource"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
         member: makeAssociationMethod("member"),
@@ -67,7 +67,7 @@
             var hdfsEntry = this.get("hdfsEntry");
             model.set({
                 id : hdfsEntry.id,
-                hadoopInstance: hdfsEntry.hadoopInstance
+                hdfsDataSource: hdfsEntry.hdfsDataSource
             });
         }),
 
@@ -75,9 +75,9 @@
             var model;
 
             switch (this.get("actionType")) {
-                case "NoteOnHadoopInstance":
-                    model = new chorus.models.HadoopInstance();
-                    model.set(this.get("hadoopInstance"));
+                case "NoteOnHdfsDataSource":
+                    model = new chorus.models.HdfsDataSource();
+                    model.set(this.get("hdfsDataSource"));
                     break;
                 case "NoteOnGreenplumInstance":
                     model = new chorus.models.GpdbDataSource();
@@ -90,7 +90,7 @@
                 case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsEntry();
                     model.set({
-                        hadoopInstance: new chorus.models.HadoopInstance(this.get("hdfsFile").hadoopInstance),
+                        hdfsDataSource: new chorus.models.HdfsDataSource(this.get("hdfsFile").hdfsDataSource),
                         id: this.get("hdfsFile").id,
                         name: this.get("hdfsFile").name
                     });

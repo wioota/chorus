@@ -1,4 +1,4 @@
-class HadoopInstance < ActiveRecord::Base
+class HdfsDataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
@@ -39,7 +39,7 @@ class HadoopInstance < ActiveRecord::Base
   end
 
   def create_root_entry
-    hdfs_entries.create({:hadoop_instance => self, :path => "/", :is_directory => true}, { :without_protection => true })
+    hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, { :without_protection => true })
   end
 
   def self.type_name

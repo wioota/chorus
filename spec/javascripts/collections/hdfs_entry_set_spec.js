@@ -3,14 +3,14 @@ describe("chorus.collections.HdfsEntrySet", function() {
         beforeEach(function() {
             this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([rspecFixtures.hdfsFile()], {
                 path: '/data/somewhere',
-                hadoopInstance: {id: 222},
+                hdfsDataSource: {id: 222},
                 id: 11
             });
         });
 
         describe("add", function() {
             it("sets the path and data source on the added entries", function() {
-                expect(this.hdfsEntrySet.at(0).get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
+                expect(this.hdfsEntrySet.at(0).get('hdfsDataSource')).toBe(this.hdfsEntrySet.attributes.hdfsDataSource);
             });
         });
 
@@ -19,7 +19,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
                 var model = this.hdfsEntrySet.hdfsEntry();
                 expect(model).toBeA(chorus.models.HdfsEntry);
                 expect(model.id).toBe(11);
-                expect(model.get('hadoopInstance')).toEqual({id: 222});
+                expect(model.get('hdfsDataSource')).toEqual({id: 222});
                 expect(model.get('isDir')).toBeTruthy();
             });
         });
@@ -29,16 +29,16 @@ describe("chorus.collections.HdfsEntrySet", function() {
         beforeEach(function() {
             this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([], {
                 path: null,
-                hadoopInstance: null
+                hdfsDataSource: null
             });
         });
 
         describe("add", function() {
             it("keeps the path and data source already set on the entry", function() {
-                var entry = rspecFixtures.hdfsFile({path: '/data/foo', hadoopInstance: {id: '10000'}});
+                var entry = rspecFixtures.hdfsFile({path: '/data/foo', hdfsDataSource: {id: '10000'}});
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');
-                expect(this.hdfsEntrySet.at(0).get('hadoopInstance').id).toBe('10000');
+                expect(this.hdfsEntrySet.at(0).get('hdfsDataSource').id).toBe('10000');
             });
         });
     });

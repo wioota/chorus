@@ -48,8 +48,8 @@ FactoryGirl.define do
     end
   end
 
-  factory :hadoop_instance do
-    sequence(:name) { |n| "hadoop_instance#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+  factory :hdfs_data_source do
+    sequence(:name) { |n| "hdfs_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     owner
@@ -206,7 +206,7 @@ FactoryGirl.define do
   end
 
   factory :hdfs_entry do
-    hadoop_instance
+    hdfs_data_source
     is_directory false
     path "/folder/subfolder/file.csv"
     modified_at 1.year.ago

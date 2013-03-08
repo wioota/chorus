@@ -1,8 +1,8 @@
 chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend({
     constructorName: "HdfsInstanceWorkspacePicker",
 
-    title: t("hdfs_instance.workspace_picker.title"),
-    submitButtonTranslationKey: "hdfs_instance.workspace_picker.button",
+    title: t("hdfs_data_source.workspace_picker.title"),
+    submitButtonTranslationKey: "hdfs_data_source.workspace_picker.button",
 
     setup: function() {
         this.requiredResources.add(this.collection);
@@ -22,7 +22,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         this.model.serverErrors = [];
 
         if(this.selectedItem().sandbox().instance().version() < "4.2") {
-            this.showDialogError(t("hdfs_instance.gpdb_version.too_old_42"));
+            this.showDialogError(t("hdfs_data_source.gpdb_version.too_old_42"));
             return;
         }
 
@@ -30,7 +30,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         var separator = (path === "/") ? "" : "/";
 
         this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
-            hadoopInstance : this.model.get("hadoopInstance"),
+            hdfsDataSource : this.model.get("hdfsDataSource"),
             id: this.model.get("id")
         });
         this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this);
@@ -47,7 +47,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         var hdfsTextFiles = this.hdfsFiles.removeDirectories();
 
         if (hdfsTextFiles.length === 0) {
-            this.showDialogError(t("hdfs_instance.no_text_files"));
+            this.showDialogError(t("hdfs_data_source.no_text_files"));
         } else {
             this.externalTableDialog = new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
                 collection: hdfsTextFiles || [],

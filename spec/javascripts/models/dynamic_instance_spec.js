@@ -4,9 +4,9 @@ describe("chorus.models.DynamicInstance", function() {
         expect(model).toBeA(chorus.models.GpdbDataSource);
     });
 
-    it("should return a hadoop data source when the entity_type is hadoop_instance", function() {
-        var model = new chorus.models.DynamicInstance({entityType: "hadoop_instance"});
-        expect(model).toBeA(chorus.models.HadoopInstance);
+    it("should return a hadoop data source when the entity_type is hdfs_data_source", function() {
+        var model = new chorus.models.DynamicInstance({entityType: "hdfs_data_source"});
+        expect(model).toBeA(chorus.models.HdfsDataSource);
     });
 
     it("should return a gnip data source when the entity_type is gnip_instance", function() {

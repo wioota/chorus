@@ -19,12 +19,12 @@ describe("chorus.dialogs.InstancesNew", function() {
     it("shows the icon", function() {
         this.dialog.$(".ui-selectmenu-button .ui-button").click();
         expect(this.selectMenuStub.find(".register_existing_greenplum")).toExist();
-        expect(this.selectMenuStub.find(".register_existing_hadoop")).toExist();
+        expect(this.selectMenuStub.find(".register_existing_hdfs")).toExist();
     });
 
     it("shows data source description", function() {
         expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
-        expect(this.dialog.$(".register_existing_hadoop .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop_help_text");
+        expect(this.dialog.$(".register_existing_hdfs .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hdfs_help_text");
     });
 
     describe("when the configuration is loaded", function() {
@@ -111,12 +111,12 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         describe("selecting the 'register a hadoop file system' radio button", function() {
             beforeEach(function() {
-                this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
+                this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
             });
 
             it("un-collapses the 'register a hadoop file system' form", function() {
                 expect(this.dialog.$("div.data_sources_form").not(".collapsed").length).toBe(1);
-                expect(this.dialog.$("div.register_existing_hadoop")).not.toHaveClass("collapsed");
+                expect(this.dialog.$("div.register_existing_hdfs")).not.toHaveClass("collapsed");
             });
 
             it("enables the submit button", function() {
@@ -125,7 +125,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
             describe("filling out the form", function() {
                 beforeEach(function() {
-                    var form = this.dialog.$(".register_existing_hadoop");
+                    var form = this.dialog.$(".register_existing_hdfs");
                     form.find("input[name=name]").val("Instance_Name");
                     form.find("textarea[name=description]").val("Instance Description");
                     form.find("input[name=host]").val("foo.bar");
@@ -326,29 +326,29 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("registering a hadoop data source", function() {
             beforeEach(function() {
-                this.dialog.$("select.data_sources").val("register_existing_hadoop").change();
+                this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
 
-                var hadoopSection = this.dialog.$("div.register_existing_hadoop");
+                var hadoopSection = this.dialog.$("div.register_existing_hdfs");
                 hadoopSection.find("input[name=name]").val(" Instance_Name ");
                 hadoopSection.find("textarea[name=description]").val(" Instance Description ");
                 hadoopSection.find("input[name=host]").val(" foo.bar ");
                 hadoopSection.find("input[name=port]").val("1234");
-                hadoopSection.find("input.username").val(" user ");
-                hadoopSection.find("input.group_list").val(" hadoop ").change();
+                hadoopSection.find("input[name=username]").val(" user ");
+                hadoopSection.find("input[name=groupList]").val(" hadoop ").change();
 
-                spyOn(chorus.models.HadoopInstance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.HdfsDataSource.prototype, "save").andCallThrough();
                 this.dialog.$("button.submit").click();
             });
 
             it("creates a hadoop data source model with the right data and saves it", function() {
                 var params = this.server.lastCreate().params();
 
-                expect(params['hadoop_instance[name]']).toBe("Instance_Name");
-                expect(params['hadoop_instance[description]']).toBe("Instance Description");
-                expect(params['hadoop_instance[host]']).toBe("foo.bar");
-                expect(params['hadoop_instance[port]']).toBe("1234");
-                expect(params['hadoop_instance[username]']).toBe("user");
-                expect(params['hadoop_instance[group_list]']).toBe("hadoop");
+                expect(params['hdfs_data_source[name]']).toBe("Instance_Name");
+                expect(params['hdfs_data_source[description]']).toBe("Instance Description");
+                expect(params['hdfs_data_source[host]']).toBe("foo.bar");
+                expect(params['hdfs_data_source[port]']).toBe("1234");
+                expect(params['hdfs_data_source[username]']).toBe("user");
+                expect(params['hdfs_data_source[group_list]']).toBe("hadoop");
             });
         });
 

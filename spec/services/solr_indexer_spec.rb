@@ -2,21 +2,21 @@ require 'spec_helper'
 
 describe SolrIndexer do
   describe ".refresh_external_data" do
-    it "refreshes all gpdb instances, all their databases, and all hadoop instances" do
+    it "refreshes all gpdb instances, all their databases, and all hadoop data sources" do
       data_source_count = 0
       any_instance_of(DataSource) do |data_source|
         stub(data_source).refresh(:mark_stale => true, :force_index => true) { data_source_count += 1 }
       end
 
-      hadoop_instance_count = 0
-      any_instance_of(HadoopInstance) do |hadoop_instance|
-        stub(hadoop_instance).refresh { hadoop_instance_count += 1 }
+      hdfs_data_source_count = 0
+      any_instance_of(HdfsDataSource) do |hdfs_data_source|
+        stub(hdfs_data_source).refresh { hdfs_data_source_count += 1 }
       end
 
       SolrIndexer.refresh_external_data
 
       data_source_count.should == GpdbDataSource.count + OracleDataSource.count
-      hadoop_instance_count.should == HadoopInstance.count
+      hdfs_data_source_count.should == HdfsDataSource.count
     end
   end
 

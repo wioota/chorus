@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.HdfsEntrySidebar({hadoopInstanceId: 123});
+        this.view = new chorus.views.HdfsEntrySidebar({hdfsDataSourceId: 123});
     });
 
     describe("#render", function() {
@@ -53,7 +53,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("has a link to create an external table", function() {
                 expect(this.view.$("a.directory_external_table")).toExist();
-                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_instance.create_directory_external_table");
+                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
             });
 
             it("calls the base implementation for postRender", function() {
@@ -74,7 +74,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 this.hdfsEntry = new chorus.models.HdfsEntry({
                     id: 55,
-                    hadoopInstance: {
+                    hdfsDataSource: {
                         id: 123
                     },
                     path: "/foo",
@@ -94,10 +94,10 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             context("when the file is at root", function() {
                 beforeEach(function() {
-                    this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/", hadoopInstanceId: 123});
+                    this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/", hdfsDataSourceId: 123});
 
                     this.hdfsEntry = new chorus.models.HdfsEntry({
-                        hadoopInstance: {
+                        hdfsDataSource: {
                             id: '123'
                         },
                         id: '55',
@@ -131,7 +131,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             context("when file is in subdirectory", function() {
                 beforeEach(function() {
                     this.hdfsEntry = new chorus.models.HdfsEntry({
-                        hadoopInstance: {
+                        hdfsDataSource: {
                             id: '123'
                         },
                         id: '55',
@@ -163,7 +163,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 this.modalSpy = stubModals();
 
                 this.hdfsEntry = new chorus.models.HdfsEntry({
-                    hadoopInstance: {
+                    hdfsDataSource: {
                         id: 111
                     },
                     path: "/",

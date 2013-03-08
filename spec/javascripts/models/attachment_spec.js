@@ -92,8 +92,8 @@ describe("chorus.models.Attachment", function() {
             var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
             var model = search.attachments().at(0);
             var hdfs = model.hdfsFile();
-            var hadoop = model.hadoopInstance();
-            expect(model.showUrl()).toBe("#/hadoop_instances/" + hadoop.id + "/browseFile/" + hdfs.id);
+            var hadoop = model.hdfsDataSource();
+            expect(model.showUrl()).toBe("#/hdfs_data_sources/" + hadoop.id + "/browseFile/" + hdfs.id);
         });
     });
 
@@ -185,7 +185,7 @@ describe("chorus.models.Attachment", function() {
             expect(this.model.instance()).toBeA(chorus.models.GpdbDataSource);
             var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
             var model = search.attachments().at(0);
-            expect(model.instance()).toBeA(chorus.models.HadoopInstance);
+            expect(model.instance()).toBeA(chorus.models.HdfsDataSource);
         });
 
         it("returns falsy when there is no data source", function() {

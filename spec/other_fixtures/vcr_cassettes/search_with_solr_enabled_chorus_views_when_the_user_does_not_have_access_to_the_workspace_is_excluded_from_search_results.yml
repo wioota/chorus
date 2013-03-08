@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 01:19:39 GMT
+  recorded_at: Fri, 08 Mar 2013 18:45:12 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 01:19:39 GMT
+  recorded_at: Fri, 08 Mar 2013 18:45:12 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -83,5 +83,5 @@ http_interactions:
         1000011'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bogus'',''bogus
         2''],''score''=>1137194.6}]}}]}},''highlighting''=>{''GpdbTable 1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table'']}}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 01:19:39 GMT
+  recorded_at: Fri, 08 Mar 2013 18:45:12 GMT
 recorded_with: VCR 2.3.0

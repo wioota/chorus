@@ -38,21 +38,21 @@ describe "Notes" do
     end
   end
 
-  describe "creating a note on a hadoop instance" do
+  describe "creating a note on a hadoop data source" do
     it "creates the note" do
-      hadoop_instance = hadoop_instances(:hadoop)
+      hdfs_data_source = hdfs_data_sources(:hadoop)
       visit("#/data_sources")
-      within ".hadoop_instance ul" do
-        find("li", :text => hadoop_instance.name).click
+      within ".hdfs_data_source ul" do
+        find("li", :text => hdfs_data_source.name).click
       end
       click_link "Add a note"
 
       within_modal do
-        set_cleditor_value("body", "Note on the hadoop instance")
+        set_cleditor_value("body", "Note on the hadoop data source")
         click_button "Add Note"
       end
 
-      hadoop_instance.events.last.body.should == "Note on the hadoop instance"
+      hdfs_data_source.events.last.body.should == "Note on the hadoop data source"
     end
   end
 

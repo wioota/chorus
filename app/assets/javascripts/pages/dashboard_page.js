@@ -15,7 +15,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.fetchAll();
 
         this.dataSourceSet = new chorus.collections.DataSourceSet([]);
-        this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
+        this.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([]);
         this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
 
         this.subscribePageEvent("instance:added", function() { this.fetchInstances(); });
@@ -35,8 +35,8 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.bindings.add(this.dataSourceSet, "loaded", this.mergeInstances);
         this.dataSourceSet.fetchAll();
 
-        this.bindings.add(this.hadoopInstanceSet, "loaded", this.mergeInstances);
-        this.hadoopInstanceSet.fetchAll();
+        this.bindings.add(this.hdfsDataSourceSet, "loaded", this.mergeInstances);
+        this.hdfsDataSourceSet.fetchAll();
 
         this.bindings.add(this.gnipInstanceSet, "loaded", this.mergeInstances);
         this.gnipInstanceSet.fetchAll();
@@ -44,7 +44,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     instancesLoaded: function() {
         return (this.dataSourceSet && this.dataSourceSet.loaded &&
-            this.hadoopInstanceSet && this.hadoopInstanceSet.loaded &&
+            this.hdfsDataSourceSet && this.hdfsDataSourceSet.loaded &&
                 this.gnipInstanceSet && this.gnipInstanceSet.loaded);
     },
 
@@ -57,7 +57,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
             };
 
             var proxyInstances = wrapInstances(this.dataSourceSet.models);
-            var proxyHadoopInstances = wrapInstances(this.hadoopInstanceSet.models);
+            var proxyHdfsDataSources = wrapInstances(this.hdfsDataSourceSet.models);
             var proxyGnipInstances = wrapInstances(this.gnipInstanceSet.models);
 
             this.arraySet = new chorus.collections.Base();
@@ -66,7 +66,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
             };
 
             this.arraySet.add(proxyInstances);
-            this.arraySet.add(proxyHadoopInstances);
+            this.arraySet.add(proxyHdfsDataSources);
             this.arraySet.add(proxyGnipInstances);
             this.arraySet.loaded = true;
 

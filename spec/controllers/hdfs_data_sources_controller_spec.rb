@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe HadoopInstancesController do
+describe HdfsDataSourcesController do
   ignore_authorization!
 
-  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
 
   before do
     @user = users(:no_collaborators)
@@ -13,7 +13,7 @@ describe HadoopInstancesController do
   describe "#create" do
     context "with valid attributes" do
       before do
-        stub(Hdfs::InstanceRegistrar).create!( {}, @user) { hadoop_instance }
+        stub(Hdfs::DataSourceRegistrar).create!( {}, @user) { hdfs_data_source }
       end
 
       it "reports that the instance was created" do
@@ -23,11 +23,11 @@ describe HadoopInstancesController do
 
       it "renders the newly created instance" do
         post :create
-        decoded_response.name.should == hadoop_instance.name
+        decoded_response.name.should == hdfs_data_source.name
       end
 
       it "schedules a job to refresh the instance" do
-        mock(QC.default_queue).enqueue_if_not_queued("HadoopInstance.full_refresh", numeric)
+        mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.full_refresh", numeric)
         post :create
       end
     end
@@ -35,12 +35,12 @@ describe HadoopInstancesController do
 
   describe "#update" do
     let(:attributes) { {'name' => 'some_random_value'} }
-    let(:params) { attributes.merge :id => hadoop_instance }
+    let(:params) { attributes.merge :id => hdfs_data_source }
     let(:fake_instance) { Object.new }
 
-    it "presents a hadoop instance returned by update" do
-      mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user) { fake_instance }
-      it_uses_authorization(:edit, hadoop_instance)
+    it "presents a hadoop data source returned by update" do
+      mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) { fake_instance }
+      it_uses_authorization(:edit, hdfs_data_source)
       mock_present { |instance| instance.should == fake_instance }
       put :update, params
     end
@@ -49,8 +49,8 @@ describe HadoopInstancesController do
       let(:attributes) { {'name' => 'some_wrong_value'} }
 
       before do
-        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user) do
-          raise(ActiveRecord::RecordInvalid.new(hadoop_instance))
+        mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) do
+          raise(ActiveRecord::RecordInvalid.new(hdfs_data_source))
         end
       end
 
@@ -62,8 +62,8 @@ describe HadoopInstancesController do
   end
 
   describe "#index" do
-    it "presents all hadoop instances" do
-      mock_present { |models| models.to_a.to_a.should =~ HadoopInstance.all.to_a }
+    it "presents all hadoop data sources" do
+      mock_present { |models| models.to_a.to_a.should =~ HdfsDataSource.all.to_a }
       get :index
     end
 
@@ -71,13 +71,13 @@ describe HadoopInstancesController do
   end
 
   describe "#show" do
-    it "presents the hadoop instance with the given id" do
-      get :show, :id => hadoop_instance.id
-      decoded_response.name.should == hadoop_instance.name
+    it "presents the hadoop data source with the given id" do
+      get :show, :id => hdfs_data_source.id
+      decoded_response.name.should == hdfs_data_source.name
     end
 
-    generate_fixture "hadoopInstance.json" do
-      get :show, :id => hadoop_instance.id
+    generate_fixture "hdfsDataSource.json" do
+      get :show, :id => hdfs_data_source.id
     end
   end
 end

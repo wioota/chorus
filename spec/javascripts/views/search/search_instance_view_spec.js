@@ -1,6 +1,6 @@
 describe("chorus.views.SearchInstance", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.hadoopInstance();
+        this.model = rspecFixtures.hdfsDataSource();
         this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
         this.view = new chorus.views.SearchInstance({ model: this.model });
         this.view.render();

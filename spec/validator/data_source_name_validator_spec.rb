@@ -56,7 +56,7 @@ describe DataSourceNameValidator do
 
     it_validates_against(GpdbDataSource)
     it_validates_against(OracleDataSource)
-    it_validates_against(HadoopInstance)
+    it_validates_against(HdfsDataSource)
     it_validates_against(GnipInstance)
 
     it "it matches data source names regardless of case" do

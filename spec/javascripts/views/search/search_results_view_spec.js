@@ -221,7 +221,7 @@ describe("chorus.views.SearchResults", function() {
             context('when the li is for a hadoop data source', function() {
                 it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                     var modelToClick = this.model.instances().find(function (instance) { return instance.isHadoop(); });
-                    this.view.$(".instance_list li.hadoop_instance").eq(0).click();
+                    this.view.$(".instance_list li.hdfs_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
                 });
             });

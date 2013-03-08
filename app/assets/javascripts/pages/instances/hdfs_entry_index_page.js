@@ -1,16 +1,16 @@
 chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     helpId: "instances",
 
-    setup:function (hadoopInstanceId, id) {
-        this.instance = new chorus.models.HadoopInstance({ id: hadoopInstanceId });
+    setup:function (hdfsDataSourceId, id) {
+        this.instance = new chorus.models.HdfsDataSource({ id: hdfsDataSourceId });
         this.instance.fetch();
         this.bindings.add(this.instance, "loaded", this.instanceFetched);
-        this.hadoopInstanceId = hadoopInstanceId;
+        this.hdfsDataSourceId = hdfsDataSourceId;
 
         this.hdfsEntry = new chorus.models.HdfsEntry({
             id: id,
-            hadoopInstance: {
-                id: hadoopInstanceId
+            hdfsDataSource: {
+                id: hdfsDataSourceId
             }
         });
         this.hdfsEntry.fetch();
@@ -18,8 +18,8 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.handleFetchErrorsFor(this.hdfsEntry);
 
         this.collection = new chorus.collections.HdfsEntrySet([], {
-            hadoopInstance: {
-                id: this.hadoopInstanceId
+            hdfsDataSource: {
+                id: this.hdfsDataSourceId
             }
         });
 
@@ -30,7 +30,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
-            hadoopInstanceId: this.hadoopInstanceId
+            hdfsDataSourceId: this.hdfsDataSourceId
         });
 
         this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);

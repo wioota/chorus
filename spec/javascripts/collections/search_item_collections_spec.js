@@ -5,7 +5,7 @@ describe("chorus.collections.Search", function() {
                 numFound: 131,
                 results: [
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "instance101", id: '101' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.hadoopInstanceJson({ response: { name: "instance102", id: '102' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.hdfsDataSourceJson({ response: { name: "instance102", id: '102' } }).response),
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gnipInstanceJson({ response: { name: "instance103", id: '103' } }).response),
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "instance104", id: '104' } }).response),
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "instance105", id: '105' } }).response)

@@ -1,5 +1,5 @@
 class HdfsEntryAccess < AdminFullAccess
   def show?(hdfs_entry)
-    HadoopInstanceAccess.new(context).can? :show, hdfs_entry.hadoop_instance
+    HdfsDataSourceAccess.new(context).can? :show, hdfs_entry.hdfs_data_source
   end
 end

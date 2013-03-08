@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
-        this.hadoopInstance = rspecFixtures.hadoopInstance({id: 1234, name: "MyInstance"});
+        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: 1234, name: "MyInstance"});
         this.file = rspecFixtures.hdfsFile({
             id: 789,
             path: "/my/path/my file.txt",
@@ -12,17 +12,17 @@ describe("chorus.pages.HdfsShowFilePage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("hadoop_instances");
+        expect(this.page.helpId).toBe("hdfs_data_sources");
     });
 
     it('constructs an HDFS file model with the right data source id', function() {
         expect(this.page.model).toBeA(chorus.models.HdfsEntry);
-        expect(this.page.model.get("hadoopInstance").id).toBe("1234");
+        expect(this.page.model.get("hdfsDataSource").id).toBe("1234");
     });
 
     context("fetches complete", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
+            this.server.completeFetchFor(this.page.hdfsDataSource, this.hdfsDataSource);
             this.server.completeFetchFor(this.page.model, this.file);
         });
 
@@ -66,7 +66,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         beforeEach(function() {
             spyOn(Backbone.history, 'loadUrl');
             this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
-            this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
+            this.server.completeFetchFor(this.page.hdfsDataSource, this.hdfsDataSource);
             this.server.lastFetchFor(this.page.model).failUnprocessableEntity({
                 record: "HDFS_CONTENTS_UNAVAILABLE"
             });
@@ -97,7 +97,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
                 }
             );
 
-            this.server.completeFetchFor(this.page.hadoopInstance, this.hadoopInstance);
+            this.server.completeFetchFor(this.page.hdfsDataSource, this.hdfsDataSource);
         });
 
         it("constructs the breadcrumb links correctly", function () {
@@ -107,11 +107,11 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
             expect($content.find("a").length).toBe(5);
 
-            expect($content.find("a").eq(0).attr("href")).toBe("#/hadoop_instances/1234/browse/55");
-            expect($content.find("a").eq(1).attr("href")).toBe("#/hadoop_instances/1234/browse/44");
-            expect($content.find("a").eq(2).attr("href")).toBe("#/hadoop_instances/1234/browse/33");
-            expect($content.find("a").eq(3).attr("href")).toBe("#/hadoop_instances/1234/browse/22");
-            expect($content.find("a").eq(4).attr("href")).toBe("#/hadoop_instances/1234/browse/11");
+            expect($content.find("a").eq(0).attr("href")).toBe("#/hdfs_data_sources/1234/browse/55");
+            expect($content.find("a").eq(1).attr("href")).toBe("#/hdfs_data_sources/1234/browse/44");
+            expect($content.find("a").eq(2).attr("href")).toBe("#/hdfs_data_sources/1234/browse/33");
+            expect($content.find("a").eq(3).attr("href")).toBe("#/hdfs_data_sources/1234/browse/22");
+            expect($content.find("a").eq(4).attr("href")).toBe("#/hdfs_data_sources/1234/browse/11");
 
             expect($content.find("a").eq(0).text()).toBe("start");
             expect($content.find("a").eq(1).text()).toBe("m1");

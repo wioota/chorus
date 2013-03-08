@@ -11,7 +11,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'hdfs_file',
                 'workspace',
                 'gpdb_data_source',
-                'hadoop_instance',
+                'hdfs_data_source',
                 'gnip_instance',
                 'oracle_data_source',
                 'user',
@@ -47,7 +47,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.HdfsEntry);
             expectToContainClass(this.searchResults, chorus.models.Workspace);
             expectToContainClass(this.searchResults, chorus.models.GpdbDataSource);
-            expectToContainClass(this.searchResults, chorus.models.HadoopInstance);
+            expectToContainClass(this.searchResults, chorus.models.HdfsDataSource);
             expectToContainClass(this.searchResults, chorus.models.GnipInstance);
             expectToContainClass(this.searchResults, chorus.models.OracleDataSource);
             expectToContainClass(this.searchResults, chorus.models.User);

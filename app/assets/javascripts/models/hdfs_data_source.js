@@ -1,16 +1,16 @@
-chorus.models.HadoopInstance = chorus.models.Instance.extend({
-    constructorName: "HadoopInstance",
-    urlTemplate: "hadoop_instances/{{id}}",
-    showUrlTemplate: "hadoop_instances/{{id}}/browse/",
+chorus.models.HdfsDataSource = chorus.models.Instance.extend({
+    constructorName: "HdfsDataSource",
+    urlTemplate: "hdfs_data_sources/{{id}}",
+    showUrlTemplate: "hdfs_data_sources/{{id}}/browse/",
     shared: true,
-    entityType: "hadoop_instance",
+    entityType: "hdfs_data_source",
 
     isShared: function() {
         return true;
     },
 
     providerIconUrl: function() {
-        return this._imagePrefix + "icon_hadoop_instance.png";
+        return this._imagePrefix + "icon_hdfs_data_source.png";
     },
 
     isHadoop: function() {

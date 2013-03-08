@@ -5,7 +5,7 @@ RSpec.configure do |config|
   end
 
   unless ENV['HADOOP_HOST']
-    warn "No Hadoop instance detected in environment variable 'HADOOP_HOST'.  Skipping Hadoop integration tests.  See the project wiki for more information on running tests"
+    warn "No Hadoop data source detected in environment variable 'HADOOP_HOST'.  Skipping Hadoop integration tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :hdfs_integration => true
   end
 

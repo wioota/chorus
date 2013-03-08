@@ -24,7 +24,7 @@ Capybara.default_wait_time = 20
 
 DatabaseCleaner.strategy = :truncation
 
-WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
+WEBPATH = YAML.load_file("spec/integration/webpath.yml") unless defined? WEBPATH
 
 def run_jobs_synchronously
   stub(QC.default_queue).enqueue_if_not_queued.with_any_args do |class_and_message, *args|
@@ -50,7 +50,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     unless page.has_selector?(".main_content")
-      puts "Counldn't find .main_content in #{example.full_description}"
+      puts "Could not find .main_content in #{example.full_description}"
     end
     unless page.has_no_selector?(".loading_section")
       puts "Incorrectly found .main_content in #{example.full_description}"
@@ -85,7 +85,7 @@ RSpec.configure do |config|
   config.include CleditorHelpers
   config.include GreenplumIntegration, :greenplum_integration => true
   config.include OracleIntegration, :oracle_integration => true
-  config.include HadoopIntegration, :hadoop_integration => true
+  config.include HdfsIntegration, :hadoop_integration => true
   config.include CapybaraHelpers
 end
 

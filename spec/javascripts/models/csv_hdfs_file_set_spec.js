@@ -4,11 +4,11 @@ describe("chorus.collections.CsvHdfsFileSet", function () {
             rspecFixtures.hdfsFile().attributes,
             rspecFixtures.hdfsDir().attributes,
             rspecFixtures.hdfsFile().attributes
-        ], { id: 123, hadoopInstance: {id: 1}});
+        ], { id: 123, hdfsDataSource: {id: 1}});
     });
 
     it("use the correct url", function() {
-        expect(this.collection.url()).toMatchUrl("/hadoop_instances/1/files/?id=123", {paramsToIgnore: ["page", "per_page"]});
+        expect(this.collection.url()).toMatchUrl("/hdfs_data_sources/1/files/?id=123", {paramsToIgnore: ["page", "per_page"]});
     });
 
     describe("#removeDirectories", function () {
