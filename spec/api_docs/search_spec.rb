@@ -26,7 +26,7 @@ resource "Search" do
 
   get "/search" do
     parameter :query, "Search term"
-    parameter :entity_type, "The type of entity to search for (e.g. Instance, User, Workspace, Workfile)"
+    parameter :entity_type, "The type of entity to search for (e.g. DataSource, User, Workspace, Workfile)"
     pagination
 
     required_parameters :query
@@ -57,7 +57,7 @@ resource "Search" do
   get "/workspaces/:workspace_id/search" do
     let(:workspace_id) { workspace.id }
     parameter :query, "Search term"
-    parameter :entity_type, "The type of entity to search for (e.g. Instance, User, Workspace, Workfile)"
+    parameter :entity_type, "The type of entity to search for (e.g. DataSource, User, Workspace, Workfile)"
     pagination
 
     required_parameters :query
