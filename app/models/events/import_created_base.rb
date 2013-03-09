@@ -1,5 +1,13 @@
 module Events
   class ImportCreatedBase < Base
+    after_update :create_dataset_activity
+
+    def create_dataset_activity
+      if changed_attributes.with_indifferent_access.include? :target2_id
+        Activity.create!(:event => self, :entity => dataset)
+      end
+    end
+
     def self.find_for_import(import)
       if import.import_schedule_id
         reference_id = import.import_schedule_id
