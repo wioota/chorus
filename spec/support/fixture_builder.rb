@@ -93,13 +93,11 @@ FixtureBuilder.configure do |fbuilder|
 
     @owner_creates_gpdb_data_source = Events::DataSourceCreated.by(owner).add(:data_source => owners_data_source)
 
-    oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: the_collaborator)
+    oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: owner)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
     fbuilder.name(:oracle, oracle_schema)
 
-    owners_oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'owners_oracle', owner: owner)
-    FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => owners_oracle_data_source)
-    fbuilder.name(:owners_oracle, owners_oracle_data_source)
+    FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => oracle_data_source)
 
     FactoryGirl.create(:oracle_schema, name: 'oracle_empty', data_source: oracle_data_source)
     oracle_table = FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)

@@ -81,7 +81,7 @@ describe DataSources::SharingController do
 
   context "with an oracle data source" do
     it_should_behave_like "a shareable data source" do
-      let(:data_source) { data_sources(:owners_oracle) }
+      let(:data_source) { data_sources(:oracle) }
       let(:owner_account) { data_source.owner_account }
       let(:owner) { users(:owner) }
       let(:user) { users(:default) }
