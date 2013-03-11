@@ -1330,6 +1330,14 @@ describe GreenplumConnection, :greenplum_integration do
           row[:disk_size].should == 0
         end
       end
+
+      context "when the table does not exist" do
+        let(:dataset_name) { "something_that_doesnt_exist?" }
+
+        it "returns nil" do
+          connection.metadata_for_dataset(dataset_name).should be_nil
+        end
+      end
     end
 
     describe "#primary_key_columns" do

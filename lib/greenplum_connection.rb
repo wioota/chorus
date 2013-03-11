@@ -361,8 +361,10 @@ class GreenplumConnection < DataSourceConnection
         query = query.select_append(disk_size => :disk_size)
 
         result = query.first
-        result[:row_count] = result[:row_count].to_i
-        result[:disk_size] = result[:disk_size].to_i unless result[:disk_size] == 'unknown'
+        if result
+          result[:row_count] = result[:row_count].to_i
+          result[:disk_size] = result[:disk_size].to_i unless result[:disk_size] == 'unknown'
+        end
         result
       end
     end
