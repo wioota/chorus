@@ -2,7 +2,6 @@ describe("chorus.views.TypeAheadSearch", function() {
     beforeEach(function() {
         this.result = rspecFixtures.typeAheadSearchResult();
         this.result.set({query: "test"});
-
         this.view = new chorus.views.TypeAheadSearch();
         this.view.$el.addClass('hidden');
         this.view.searchFor("test");
@@ -99,22 +98,13 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
         });
 
-        it("should display the correct name and type for gpdb_dataset", function() {
+        it("should display the correct name and type for dataset", function() {
             var dataset = resultForEntityType(this.results, 'dataset');
             var resultIndex = this.results.indexOf(dataset);
             var result = this.view.$("li.result:eq("+ resultIndex +")");
             expect(result.find(".name").html()).toBe(dataset.get("highlightedAttributes").objectName[0]);
             expect(result.find(".name").attr("href")).toBe(dataset.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
-        });
-
-        it("should display the correct name and type for oracle dataset", function() {
-            var dataset = resultForEntityType(this.results, 'oracle_dataset');
-            var resultIndex = this.results.indexOf(dataset);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
-            expect(result.find(".name").html()).toBe(dataset.get("highlightedAttributes").objectName[0]);
-            expect(result.find(".name").attr("href")).toBe(dataset.showUrl());
-            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.oracle_dataset");
         });
 
         it("should display the correct name and type for chorusView", function() {

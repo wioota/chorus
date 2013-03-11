@@ -15,10 +15,6 @@ class OracleDataset < Dataset
     "OracleDatasetColumn"
   end
 
-  def entity_type_name
-    'oracle_dataset'
-  end
-
   def all_rows_sql(limit = nil)
     select_clause = column_data.map do |column_data|
       if column_data.supported?

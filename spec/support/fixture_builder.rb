@@ -85,14 +85,13 @@ FixtureBuilder.configure do |fbuilder|
     Events::DataSourceCreated.by(admin).add(:data_source => gpdb_data_source)
 
     shared_instance = FactoryGirl.create(:gpdb_data_source, :name => "Shared", :owner => admin, :shared => true)
-    owners_gpdb_datasource = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
-    owners_oracle_datasource = FactoryGirl.create(:oracle_data_source, :name => "OwnersOracle", :owner => owner, :shared => true)
+    owners_instance = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
     admin_only_instance = FactoryGirl.create(:gpdb_data_source, :name => "Admins", :owner => admin, :shared => false)
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
     FactoryGirl.create(:gpdb_data_source, :name => "Online", :owner => owner, :state => "online")
 
-    @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:data_source => owners_gpdb_datasource)
+    @owner_creates_greenplum_instance = Events::DataSourceCreated.by(owner).add(:data_source => owners_instance)
 
     oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: the_collaborator)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
@@ -114,12 +113,12 @@ FixtureBuilder.configure do |fbuilder|
 
     # Instance Accounts
     @shared_instance_account = shared_instance.account_for_user(admin)
-    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => owners_gpdb_datasource)
-    owners_instance_account = owners_gpdb_datasource.account_for_user(owner)
-    owners_oracle_instance_account = owners_oracle_datasource.account_for_user(owner)
+    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => owners_instance)
+    owner_instance_account = owners_instance.account_for_user(owner)
+
 
     # Datasets
-    default_database = FactoryGirl.create(:gpdb_database, :data_source => owners_gpdb_datasource, :name => 'default')
+    default_database = FactoryGirl.create(:gpdb_database, :data_source => owners_instance, :name => 'default')
     default_schema = FactoryGirl.create(:gpdb_schema, :name => 'default', :database => default_database)
     FactoryGirl.create(:gpdb_schema, :name => "public", :database => default_database)
     default_table = FactoryGirl.create(:gpdb_table, :name => "table", :schema => default_schema)
@@ -137,11 +136,9 @@ FixtureBuilder.configure do |fbuilder|
     tagged.save!
 
     # Search setup
-    searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_gpdb_datasource, :name => 'searchquery_database')
+    searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_instance, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
     searchquery_table = FactoryGirl.create(:gpdb_table, :name => "searchquery_table", :schema => searchquery_schema)
-
-    oracle_searchable_schema = FactoryGirl.create(:oracle_schema, :name => "oracle_searchable_schema", :data_source => owners_oracle_datasource)
 
     shared_search_database = FactoryGirl.create(:gpdb_database, :data_source => shared_instance, :name => 'shared_database')
     shared_search_schema = FactoryGirl.create(:gpdb_schema, :name => 'shared_schema', :database => shared_search_database)
@@ -154,8 +151,6 @@ FixtureBuilder.configure do |fbuilder|
 
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead_gpdb_table", :schema => searchquery_schema)
-    FactoryGirl.create(:oracle_table, :name => "typeahead_oracle_table", :schema => oracle_searchable_schema)
-
     @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)
     typeahead_workfile = FactoryGirl.create :chorus_workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
@@ -177,9 +172,8 @@ FixtureBuilder.configure do |fbuilder|
     tagged_table.save!
 
     # Search Database Instance Accounts For Solr Permissions
-    searchquery_database.instance_accounts << owners_instance_account
-    default_database.instance_accounts << owners_instance_account
-    oracle_searchable_schema.instance_accounts << owners_oracle_instance_account
+    searchquery_database.instance_accounts << owner_instance_account
+    default_database.instance_accounts << owner_instance_account
     shared_search_database.instance_accounts << @shared_instance_account
 
     #Workspaces

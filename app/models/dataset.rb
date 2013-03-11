@@ -127,7 +127,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def entity_type_name
-    raise 'You should be called on a real dataset, not this parent class.'
+    'dataset'
   end
 
   def type_name

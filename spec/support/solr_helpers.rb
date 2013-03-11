@@ -18,14 +18,13 @@ module SolrHelpers
 
     #For the searchquery_table fixture specifically, return searchquery columns
     searchquery_dataset = datasets(:searchquery_table)
-
     stub(DatasetColumn).columns_for(anything, searchquery_dataset) {
       [ DatasetColumn.new(:name => 'searchquery', :description => "searchquery column description"),
         DatasetColumn.new(:name => 'searchquery 2', :description => "searchquery column description 2")
       ]
     }
 
-    any_instance_of(Dataset) do |ds|
+    any_instance_of(GpdbDataset) do |ds|
       stub(ds).table_description { "bogus" }
     end
 
@@ -41,7 +40,6 @@ module SolrHelpers
       Sunspot.commit
 
       searchquery_dataset.solr_index!
-      datasets(:typeahead_oracle_table).solr_index!
     end
   end
 
