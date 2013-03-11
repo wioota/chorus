@@ -4,7 +4,7 @@ class DataSourcesController < ApplicationController
   wrap_parameters :data_source, :exclude => []
 
   def index
-    data_sources = DataSource.by_type(params[:entity_type])
+    data_sources = DataSource.by_type(params[:entity_type]).includes(:tags, {:owner => :tags})
     data_sources = data_sources.accessible_to(current_user) unless params[:all]
 
     present paginate data_sources
