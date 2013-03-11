@@ -28,7 +28,12 @@ module SearchExtensions
 
       searchable(options, &block) if block_given?
       searchable do
-        integer(:tag_ids, :multiple => true) if model_context.taggable?
+        if model_context.taggable?
+          integer(:tag_ids, :multiple => true)
+          text :tag_names, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST do
+            tags.map { |tag| tag.name }
+          end
+        end
         string :grouping_id
         string :type_name
         string :security_type_name, :multiple => true

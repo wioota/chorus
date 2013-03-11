@@ -20,4 +20,9 @@ shared_examples "taggable models" do |fixture_data|
   it "is taggable" do
     model.class.should be_taggable
   end
+
+  it "indexes tag names in solr" do
+    model.class.should have_searchable_field :tag_names
+  end
+
 end
