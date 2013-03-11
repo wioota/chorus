@@ -638,7 +638,6 @@ describe ChorusInstaller do
 
     context "when new install" do
       before do
-        installer.create_database_config
         installer.generate_chorus_psql_files
       end
 
@@ -650,7 +649,6 @@ describe ChorusInstaller do
       end
 
       it "generates a file for connecting to psql with password" do
-        installer.generate_chorus_psql_files
         lines = File.read("/usr/local/greenplum-chorus/chorus_psql.sh").lines.to_a
         lines[3].strip.should == "$CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;"
         stats = File.stat("/usr/local/greenplum-chorus/chorus_psql.sh").mode
@@ -667,10 +665,22 @@ describe ChorusInstaller do
       it "does not generate .pgpass file" do
         File.exists?("/usr/local/greenplum-chorus/.pgpass").should be_false
       end
+    end
+  end
 
-      it "does not generate chorus_psql.sh file" do
-        File.exists?("/usr/local/greenplum-chorus/chorus_psql.sh").should be_false
-      end
+  describe "#generate_chorus_rails_console_file" do
+    before do
+      installer.destination_path = "/usr/local/greenplum-chorus"
+
+      FileUtils.mkdir_p installer.destination_path
+      installer.generate_chorus_rails_console_file
+    end
+
+    it "generates a file for starting a rails console" do
+      lines = File.read("/usr/local/greenplum-chorus/chorus_rails_console.sh").lines.to_a
+      lines[3].strip.should == "RAILS_ENV=production $CHORUS_HOME/current/bin/ruby $CHORUS_HOME/current/script/rails console"
+      stats = File.stat("/usr/local/greenplum-chorus/chorus_rails_console.sh").mode
+      sprintf("%o", stats).should == "100500"
     end
   end
 

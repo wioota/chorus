@@ -221,6 +221,14 @@ class ChorusInstaller
     FileUtils.chmod(0500, "#{destination_path}/chorus_psql.sh")
   end
 
+  def generate_chorus_rails_console_file
+    @logger.debug("generating chorus_rails_console file")
+    File.open("#{destination_path}/chorus_rails_console.sh", 'w') do |file|
+      file.puts CHORUS_RAILS_CONSOLE
+    end
+    FileUtils.chmod(0500, "#{destination_path}/chorus_rails_console.sh")
+  end
+
   def link_shared_files
     @logger.debug("Linking shared configuration files")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
@@ -385,6 +393,7 @@ class ChorusInstaller
     log "#{upgrade_existing? ? "Updating" : "Creating"} database..." do
       generate_paths_file
       generate_chorus_psql_files
+      generate_chorus_rails_console_file
       setup_database do
         enqueue_solr_reindex
       end
@@ -520,6 +529,14 @@ class ChorusInstaller
       $CHORUS_HOME/current/postgres/bin/psql -U postgres_chorus -p 8543 chorus;
     fi
   CHORUS_PSQL
+
+  CHORUS_RAILS_CONSOLE = <<-CHORUS_RAILS_CONSOLE
+      if [ "$CHORUS_HOME" = "" ]; then
+        echo "CHORUS_HOME is not set.  Exiting..."
+      else
+        RAILS_ENV=production $CHORUS_HOME/current/bin/ruby $CHORUS_HOME/current/script/rails console
+      fi
+  CHORUS_RAILS_CONSOLE
 
   EULA = <<-EULA
                    SOFTWARE LICENSE AND MAINTENANCE AGREEMENT
