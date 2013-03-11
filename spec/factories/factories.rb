@@ -18,14 +18,14 @@ FactoryGirl.define do
     version "9.1.2 - FactoryVersion"
     db_username 'username'
     db_password 'secret'
-    after(:build) do |instance|
-      def instance.valid_db_credentials?(account)
+    after(:build) do |data_source|
+      def data_source.valid_db_credentials?(account)
         true
       end
     end
 
-    after(:create) do |instance|
-      instance.singleton_class.send :remove_method, :valid_db_credentials?
+    after(:create) do |data_source|
+      data_source.singleton_class.send :remove_method, :valid_db_credentials?
     end
   end
 
@@ -37,14 +37,14 @@ FactoryGirl.define do
     owner
     db_username 'username'
     db_password 'secret'
-    after(:build) do |instance|
-      def instance.valid_db_credentials?(account)
+    after(:build) do |data_source|
+      def data_source.valid_db_credentials?(account)
         true
       end
     end
 
-    after(:create) do |instance|
-      instance.singleton_class.send :remove_method, :valid_db_credentials?
+    after(:create) do |data_source|
+      data_source.singleton_class.send :remove_method, :valid_db_credentials?
     end
   end
 

@@ -4,11 +4,11 @@ describe GnipInstanceImportsController do
 
   let(:user) { users(:owner) }
   let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
-  let(:gnip_instance) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_instances(:default) }
   let(:workspace) { workspaces(:public) }
 
   let(:gnip_instance_import_params) { {
-      :gnip_instance_id => gnip_instance.id,
+      :gnip_instance_id => gnip_data_source.id,
       :import => {
           :to_table => 'foobar',
           :workspace_id => workspace.id
@@ -24,7 +24,7 @@ describe GnipInstanceImportsController do
       context "when success" do
         before do
           mock(QC.default_queue).enqueue_if_not_queued("GnipImporter.import_to_table", 'foobar',
-                                                       gnip_instance.id, workspace.id, user.id, anything)
+                                                       gnip_data_source.id, workspace.id, user.id, anything)
 
           any_instance_of(GnipImporter) { |importer| stub(importer).valid? { true } }
         end

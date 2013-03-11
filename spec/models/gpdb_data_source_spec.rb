@@ -123,27 +123,27 @@ describe GpdbDataSource do
     let!(:gpdb_other_instance) { FactoryGirl.create(:gpdb_data_source) }
 
     context "for owners" do
-      it "includes owned gpdb instances" do
+      it "includes owned gpdb data sources" do
         GpdbDataSource.owned_by(owner).should include gpdb_owned_instance
       end
 
-      it "excludes other users' gpdb instances" do
+      it "excludes other users' gpdb data sources" do
         GpdbDataSource.owned_by(owner).should_not include gpdb_other_instance
       end
 
-      it "excludes shared gpdb instances" do
+      it "excludes shared gpdb data sources" do
         GpdbDataSource.owned_by(owner).should_not include gpdb_shared_instance
       end
     end
 
     context "for non-owners" do
-      it "excludes all gpdb instances" do
+      it "excludes all gpdb data sources" do
         GpdbDataSource.owned_by(FactoryGirl.build_stubbed(:user)).should be_empty
       end
     end
 
     context "for admins" do
-      it "includes all gpdb instances" do
+      it "includes all gpdb data sources" do
         GpdbDataSource.owned_by(users(:evil_admin)).count.should == GpdbDataSource.count
       end
     end

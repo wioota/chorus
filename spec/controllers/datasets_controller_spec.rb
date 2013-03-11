@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe DatasetsController do
-  let(:user) { users(:the_collaborator) }
-  let(:instance_account) { gpdb_data_source.account_for_user!(user) }
-  let(:gpdb_data_source) { data_sources(:owners) }
+  let(:user) { schema.data_source.owner }
+  let(:instance_account) { schema.data_source.account_for_user!(user) }
   let(:schema) { schemas(:default) }
   let(:table) { datasets(:table) }
 
@@ -25,7 +24,7 @@ describe DatasetsController do
 
       shared_examples :works do
         context "without any filter" do
-          it "should retrieve authorized db objects for a schema" do
+          it 'returns all the datasets in that schema' do
             get :index, :schema_id => schema.to_param
 
             response.code.should == "200"
@@ -73,7 +72,7 @@ describe DatasetsController do
 
         it_should_behave_like :works
 
-        it "should save a single dataset fixture until the show page works", :fixture do
+        it "saves a single dataset fixture until the show page works", :fixture do
           get :index, :schema_id => schema.to_param
           save_fixture "oracleDataset.json", { :response => response.decoded_body["response"].first }
         end

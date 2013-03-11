@@ -71,7 +71,7 @@ describe User do
 
   describe "#accessible_events" do
     let(:owner) { users(:owner) }
-    let(:instance_event) { events(:owner_creates_greenplum_instance) }
+    let(:instance_event) { events(:owner_creates_gpdb_data_source) }
     let(:public_workspace_event) { events(:owner_creates_public_workspace) }
     let(:private_workspace_event) { events(:owner_creates_private_workspace) }
     let(:user_added_event) { events(:admin_creates_owner) }
@@ -298,16 +298,16 @@ describe User do
   describe "#destroy" do
     let(:user) { users(:default) }
 
-    it "should not allow deleting a user who owns a gpdb instance" do
+    it "fails for a user who owns a data source" do
       user.gpdb_data_sources << FactoryGirl.build(:gpdb_data_source, :owner => user)
       expect { user.destroy }.to raise_error(ActiveRecord::RecordInvalid)
       user.should have_error_on(:user).with_message(:nonempty_instance_list)
     end
 
     it "does not allow deleting a user who owns a workspace" do
-      workspace_owner = users(:no_collaborators)
-      expect { workspace_owner.destroy}.to raise_exception(ActiveRecord::RecordInvalid)
-      workspace_owner.should have_error_on(:workspace_count).with_message(:equal_to).with_options(:count => 0)
+      workspace = FactoryGirl.create(:workspace)
+      expect { workspace.owner.destroy}.to raise_exception(ActiveRecord::RecordInvalid)
+      workspace.owner.should have_error_on(:workspace_count).with_message(:equal_to).with_options(:count => 0)
     end
 
     it "deletes associated memberships" do
@@ -334,23 +334,23 @@ describe User do
 
     it "deletes associated instance accounts" do
       user = users(:the_collaborator)
-      user.instance_accounts.count.should == 3
+      user.instance_accounts.count.should be > 0
       expect {
         user.destroy
-      }.to change(InstanceAccount, :count).by(-3)
+      }.to change { InstanceAccount.where(owner_id: user.id).count }.to(0)
     end
 
-    it "should not delete the database entry" do
+    it "persists the database record" do
       user.destroy
       User.find_with_destroyed(user.id).should_not be_nil
     end
 
-    it "should update the deleted_at field" do
+    it "updates the deleted_at field" do
       user.destroy
       User.find_with_destroyed(user.id).deleted_at.should_not be_nil
     end
 
-    it "should be hidden from subsequent #find calls" do
+    it "doesnt appear in the default scope" do
       user.destroy
       User.find_by_id(user.id).should be_nil
     end

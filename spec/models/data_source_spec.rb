@@ -107,7 +107,7 @@ describe DataSource do
       end
     end
 
-    it 'calls refresh on the instance' do
+    it 'calls refresh on the data source' do
       DataSource.refresh(data_source.id)
       @refreshed_data_source.should be_true
     end
@@ -142,7 +142,7 @@ describe DataSource do
   describe '#account_for_user!' do
     let(:user) { users(:owner) }
 
-    context 'shared gpdb instance' do
+    context 'shared data source' do
       let(:data_source) { data_sources(:shared) }
       let(:owner_account) { data_source.owner_account }
 
@@ -152,7 +152,7 @@ describe DataSource do
       end
     end
 
-    context 'individual gpdb instance' do
+    context 'individual data source' do
       let(:data_source) { data_sources(:owners) }
       let!(:owner_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, data_source.owner.id) }
       let!(:user_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, users(:the_collaborator).id) }
@@ -190,28 +190,28 @@ describe DataSource do
   end
 
   describe ".reindex_data_source" do
-    let(:instance) { data_sources(:owners) }
+    let(:data_source) { data_sources(:owners) }
 
     before do
       stub(Sunspot).index.with_any_args
     end
 
     it "reindexes itself" do
-      mock(Sunspot).index(instance)
-      DataSource.reindex_data_source(instance.id)
+      mock(Sunspot).index(data_source)
+      DataSource.reindex_data_source(data_source.id)
     end
 
     it "should reindex all of it's datasets" do
-      mock(Sunspot).index(is_a(Dataset)).times(instance.datasets.count)
-      DataSource.reindex_data_source(instance.id)
+      mock(Sunspot).index(is_a(Dataset)).times(data_source.datasets.count)
+      DataSource.reindex_data_source(data_source.id)
     end
   end
 
   describe ".solr_reindex_later" do
-    let(:instance) { data_sources(:owners) }
+    let(:data_source) { data_sources(:owners) }
     it "should enqueue a job" do
-      mock(QC.default_queue).enqueue_if_not_queued("DataSource.reindex_data_source", instance.id)
-      instance.solr_reindex_later
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.reindex_data_source", data_source.id)
+      data_source.solr_reindex_later
     end
   end
 
