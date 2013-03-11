@@ -226,7 +226,7 @@ class ChorusInstaller
     File.open("#{destination_path}/chorus_rails_console.sh", 'w') do |file|
       file.puts CHORUS_RAILS_CONSOLE
     end
-    FileUtils.chmod(0500, "#{destination_path}/chorus_rails_console.sh")
+    FileUtils.chmod(0700, "#{destination_path}/chorus_rails_console.sh")
   end
 
   def link_shared_files

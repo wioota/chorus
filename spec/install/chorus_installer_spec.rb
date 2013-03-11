@@ -680,7 +680,7 @@ describe ChorusInstaller do
       lines = File.read("/usr/local/greenplum-chorus/chorus_rails_console.sh").lines.to_a
       lines[3].strip.should == "RAILS_ENV=production $CHORUS_HOME/current/bin/ruby $CHORUS_HOME/current/script/rails console"
       stats = File.stat("/usr/local/greenplum-chorus/chorus_rails_console.sh").mode
-      sprintf("%o", stats).should == "100500"
+      sprintf("%o", stats).should == "100700"
     end
   end
 
