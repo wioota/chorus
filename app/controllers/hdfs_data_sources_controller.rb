@@ -9,7 +9,7 @@ class HdfsDataSourcesController < ApplicationController
   end
 
   def index
-    present paginate HdfsDataSource.scoped
+    present paginate HdfsDataSource.scoped.includes(:owner, :tags)
   end
 
   def show

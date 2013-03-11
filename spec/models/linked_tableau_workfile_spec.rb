@@ -23,12 +23,6 @@ describe LinkedTableauWorkfile do
     end
   end
 
-  it "should have a thumbnail"
-
-  context "when the thumbnail is blank" do
-    it "should not have a thumbnail"
-  end
-
   it "should have a content_type" do
     model.content_type.should == "tableau_workbook"
   end

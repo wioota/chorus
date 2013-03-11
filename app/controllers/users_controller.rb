@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   wrap_parameters :exclude => []
 
   def index
-    present paginate(User.order(params[:order]))
+    present paginate(User.includes(:tags).order(params[:order]))
   end
 
   def show

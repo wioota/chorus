@@ -27,7 +27,7 @@ class GpdbDataSource < DataSource
   end
 
   def used_by_workspaces(viewing_user)
-    workspaces.workspaces_for(viewing_user).order("lower(workspaces.name)")
+    workspaces.includes({:sandbox => {:database => :data_source }}, :owner).workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
   def accessible_to(user)

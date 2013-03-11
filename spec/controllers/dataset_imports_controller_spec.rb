@@ -13,8 +13,6 @@ describe DatasetImportsController do
       log_in user
     end
 
-    it "uses authorization based on the visible datasets"
-
     it_behaves_like "a paginated list" do
       let(:params) { {:workspace_id => import_three.workspace_id, :dataset_id => source_dataset.to_param} }
     end
