@@ -23,7 +23,6 @@ describe("chorus.views.SearchDataset", function() {
                     name: "Baz"
                 }
             ]});
-            this.fakeQtip = stubQtip();
             this.view.render();
         });
 
@@ -84,20 +83,4 @@ describe("chorus.views.SearchDataset", function() {
     });
 
     itBehavesLike.ItPresentsModelWithTags();
-
-    context("when the dataset has tags", function () {
-        beforeEach(function () {
-            this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
-            this.view.render();
-        });
-
-        it("shows a list of tags", function () {
-            expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
-            expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
-        });
-
-        it("tags have links to the tag show page", function () {
-            expect(this.view.$('.item_tag_list a.tag_name:first')).toHaveHref("#/tags/tag1");
-        });
-    });
 });

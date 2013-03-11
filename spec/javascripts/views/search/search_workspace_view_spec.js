@@ -100,4 +100,6 @@ describe("chorus.views.SearchWorkspace", function() {
             expect(this.view.$(".description .description_content").html()).toContain("<i>that is not highlighted</i>");
         });
     });
+
+    itBehavesLike.ItPresentsModelWithTags();
 });

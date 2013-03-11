@@ -118,4 +118,12 @@ describe("chorus.views.SearchHdfsEntry", function() {
             expect($links.eq(1).attr("href")).toMatchUrl(this.model.showUrl());
         });
     });
+
+    describe("tags", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.SearchHdfsEntry({model: this.model});
+        });
+
+        itBehavesLike.ItPresentsModelWithTags();
+    });
 });

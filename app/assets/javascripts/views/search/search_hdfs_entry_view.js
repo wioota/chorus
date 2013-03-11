@@ -18,14 +18,14 @@ chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
         }, this);
         var hdfsDataSource = this.model.getHdfsDataSource();
 
-        return {
+        return _.extend(this._super("additionalContext"), {
             showUrl: this.model.showUrl(),
             humanSize: I18n.toHumanSize(this.model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
             instanceLink: chorus.helpers.linkTo(hdfsDataSource.showUrl(), hdfsDataSource.get('name')),
             completePath: new Handlebars.SafeString(pathLinks.join(" / ")),
             displayableFiletype: this.model.get('isBinary') === false
-        };
+        });
     },
 
     getHighlightedPathSegments: function() {

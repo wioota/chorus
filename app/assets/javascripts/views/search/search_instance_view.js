@@ -7,13 +7,12 @@ chorus.views.SearchInstance = chorus.views.SearchItemBase.extend({
     },
 
     additionalContext: function () {
-        return {
+        return _.extend(this._super("additionalContext"), {
             stateUrl: this.model.stateIconUrl(),
             stateText: this.model.stateText(),
             showUrl: this.model.showUrl(),
             humanSize: I18n.toHumanSize(this.model.get("size")),
-            iconUrl: this.model.providerIconUrl(),
-            tags: this.model.tags().models
-        };
+            iconUrl: this.model.providerIconUrl()
+        });
     }
 });

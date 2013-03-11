@@ -3,10 +3,9 @@ chorus.views.SearchWorkspace = chorus.views.SearchItemBase.extend({
     templateName: "search_workspace",
 
     additionalContext: function(){
-        return {
+        return _.extend(this._super("additionalContext"), {
             showUrl: this.model.showUrl(),
-            iconUrl: this.model.defaultIconUrl(),
-            tags: this.model.tags().models
-        };
+            iconUrl: this.model.defaultIconUrl()
+        });
     }
 });

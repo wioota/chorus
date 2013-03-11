@@ -14,7 +14,7 @@ describe("chorus.views.SearchUser", function() {
             lastName: "Doe",
             image: { icon: "bar" }
         });
-        this.model.tags().reset([{name: "foo-tag"}]);
+
         this.view = new chorus.views.SearchUser({ model: this.model });
         this.view.render();
     });
@@ -33,11 +33,6 @@ describe("chorus.views.SearchUser", function() {
 
     it("has the title", function() {
         expect(this.view.$('.title .content').html()).toContain("<em>test</em>er");
-    });
-
-    it("shows the user's tags", function(){
-        expect(this.view.$(".item_tag_list")).toContainTranslation("tag_list.title");
-        expect(this.view.$(".item_tag_list")).toContainText("foo-tag");
     });
 
     describe("supporting messages (title, notes, etc.)", function() {
@@ -156,4 +151,6 @@ describe("chorus.views.SearchUser", function() {
             });
         });
     });
+
+    itBehavesLike.ItPresentsModelWithTags();
 });

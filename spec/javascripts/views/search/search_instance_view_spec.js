@@ -63,4 +63,6 @@ describe("chorus.views.SearchInstance", function() {
             expect(this.view.$(".search_result_comment_list .comment").length).toBe(1);
         });
     });
+
+    itBehavesLike.ItPresentsModelWithTags();
 });

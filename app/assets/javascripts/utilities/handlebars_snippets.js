@@ -381,6 +381,22 @@
             return new Handlebars.SafeString($("<span></span>").html(t(label, {location: schemaPieces.join('.')})).outerHtml());
         },
 
+        displayTagMatch: function(context) {
+            var highlighted = context["highlightedAttributes"];
+            var displayedTagName = this.name();
+
+            if (highlighted && highlighted["tagNames"]) {
+                _.each(highlighted["tagNames"], function(highlightedTagName) {
+                    var plainTagName = highlightedTagName.replace(/<\/?em>/g, "");
+                    if (displayedTagName === plainTagName) {
+                        displayedTagName = highlightedTagName;
+                    }
+                });
+            }
+
+            return new Handlebars.SafeString(displayedTagName);
+        },
+
         displaySearchMatch: function(attributeName) {
             var attr = chorus.helpers.withSearchResults(this).get(attributeName, false);
             if (attr) {
