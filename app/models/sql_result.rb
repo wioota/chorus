@@ -41,14 +41,7 @@ class SqlResult
   private
 
   def column_string_value(index)
-    type = @result_set.meta_data.column_type_name(index+1)
-
-    # greenplum float8#to_s gives us weird rounded numbers
-    if type == "float8"
-      @result_set.get_object(index+1).to_s
-    else
-      @result_set.get_string(index+1)
-    end
+    SqlValueParser.new(@result_set).string_value(index)
   end
 
   def load_from_result_set

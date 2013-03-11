@@ -103,6 +103,43 @@ describe OracleConnection, :oracle_integration do
     end
   end
 
+  describe "#stream_sql" do
+    let(:sql) { "SELECT * from \"#{OracleIntegration.schema_name}\".NEWTABLE" }
+
+    let(:subject) {
+      connection.stream_sql(sql) do
+        true
+      end
+    }
+    let(:expected) { true }
+
+    it_behaves_like "a well-behaved database query"
+
+    it "streams all rows of the results" do
+      bucket = []
+      connection.stream_sql(sql) do |row|
+        bucket << row
+      end
+
+      bucket.length.should == 10
+      bucket.each_with_index do |row, index|
+        index = index + 1
+        row.should == {:ID => index.to_s, :ROWNAME => "row_#{index}"}
+      end
+    end
+
+    context "when a limit is provided" do
+      it "only processes part of the results" do
+        bucket = []
+        connection.stream_sql(sql, 1) do |row|
+          bucket << row
+        end
+
+        bucket.should == [{:ID => "1", :ROWNAME => "row_1"}]
+      end
+    end
+  end
+
   describe "#prepare_and_execute_statement" do
     context "when a timeout is specified" do
       let(:options) { {:timeout => 1} }
