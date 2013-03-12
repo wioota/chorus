@@ -32,7 +32,7 @@ describe("textext extensions", function() {
 
         it("removes tags already in the tag set", function() {
             this.tagSet.add({name: 'foo'});
-            this.textext.ajax().onComplete({response: [{name: 'foo'}, {name: 'bar'}]}, 'bar');
+            this.textext.ajax().onComplete({response: [{name: 'foo'}, {name: 'bar'}]}, 'foo');
             expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
                 {result: [{text: 'bar', name: 'bar'}]});
         });

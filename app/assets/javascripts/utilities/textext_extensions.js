@@ -9,20 +9,20 @@
 
         self.dontShowLoading();
 
-        result = _.reject(result, function(tag) {
+        var suggestions = _.reject(result, function(tag) {
             return self.opts('ajax.existingTagCollection').containsTag(tag.name);
         });
 
-        _.each(result, function(tag) {
+        _.each(suggestions, function(tag) {
             tag.text = Handlebars.Utils.escapeExpression(tag.name);
         });
 
         if(query.trim().length > 0 && !_.any(result, function(tag) { return tag.name === query; })) {
             var escapedQuery = Handlebars.Utils.escapeExpression(query);
-            result.unshift({text: escapedQuery + " <span class='create_new'>(" + t("tags.create_new") + ")</span>", name: query});
+            suggestions.unshift({text: escapedQuery + " <span class='create_new'>(" + t("tags.create_new") + ")</span>", name: query});
         }
 
-        self.trigger('setSuggestions', { result : result });
+        self.trigger('setSuggestions', { result : suggestions });
     };
 
     $.fn.textext.TextExt.prototype.invalidateBounds = function() {
