@@ -138,12 +138,12 @@ describe DataSourcesController do
       }
     end
 
-    before do
-      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
-    end
-
     context 'for a GpdbDataSource' do
       let(:entity_type) { "gpdb_data_source" }
+
+      before do
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+      end
 
       it 'creates the data source' do
         expect {
@@ -177,37 +177,40 @@ describe DataSourcesController do
     context "for an OracleDataSource" do
       let(:entity_type) { "oracle_data_source" }
 
-      before do
-        stub(ChorusConfig.instance).oracle_configured? { true }
-      end
+      context "with valid db credentials" do
+        before do
+          any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+          stub(ChorusConfig.instance).oracle_configured? { true }
+        end
 
-      it "creates a new OracleDataSource" do
-        expect {
+        it "creates a new OracleDataSource" do
+          expect {
+            post :create, valid_attributes
+          }.to change(OracleDataSource, :count).by(1)
+          response.code.should == "201"
+        end
+
+        it "presents the OracleDataSource" do
+          mock_present do |data_source|
+            data_source.name == valid_attributes[:name]
+          end
+
+          post :create, :data_source => valid_attributes
+        end
+
+        it "creates a private OracleDataSource by default" do
+          mock_present do |data_source|
+            data_source.should_not be_shared
+          end
           post :create, valid_attributes
-        }.to change(OracleDataSource, :count).by(1)
-        response.code.should == "201"
-      end
-
-      it "presents the OracleDataSource" do
-        mock_present do |data_source|
-          data_source.name == valid_attributes[:name]
         end
 
-        post :create, :data_source => valid_attributes
-      end
-
-      it "creates a private OracleDataSource by default" do
-        mock_present do |data_source|
-          data_source.should_not be_shared
+        it "can create a shared OracleDataSource" do
+          mock_present do |data_source|
+            data_source.should be_shared
+          end
+          post :create, valid_attributes.merge(:shared => true)
         end
-        post :create, valid_attributes
-      end
-
-      it "can create a shared OracleDataSource" do
-        mock_present do |data_source|
-          data_source.should be_shared
-        end
-        post :create, valid_attributes.merge(:shared => true)
       end
 
       context "when oracle is not configured" do
