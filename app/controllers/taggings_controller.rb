@@ -20,7 +20,11 @@ class TaggingsController < ApplicationController
 
       unique_tag_names = tag_names.uniq(&:downcase).sort
 
-      model.tag_list = unique_tag_names
+      begin
+        model.tag_list = unique_tag_names
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
+        return present_errors({:record => "DUPLICATE_TAG", :message => e.message}, :status => :unprocessable_entity)
+      end
       model.save!
     end
 
@@ -34,5 +38,4 @@ class TaggingsController < ApplicationController
                                  {:field => "Tag",
                                   :count => MAXIMUM_TAG_LENGTH })
   end
-
 end

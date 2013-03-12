@@ -94,12 +94,22 @@ describe TaggingsController do
           response.code.should == '422'
         end
 
+        it 'presents a specific error message' do
+          post :create, params
+          decoded_errors.record.should == "DUPLICATE_TAG"
+        end
+
         context "when the uniqueness error is at the database level" do
           let(:exception) { ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang')) }
 
           it 'returns 422' do
             post :create, params
             response.code.should == '422'
+          end
+
+          it 'presents a specific error message' do
+            post :create, params
+            decoded_errors.record.should == "DUPLICATE_TAG"
           end
         end
       end
