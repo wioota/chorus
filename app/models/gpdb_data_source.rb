@@ -1,17 +1,9 @@
 class GpdbDataSource < DataSource
-  include SoftDelete
-  attr_accessor :db_username, :db_password
-
-  validates_associated :owner_account, :error_field => :instance_account, :unless => proc { |instance| (instance.changes.keys & ['host', 'port', 'db_name']).empty? }
-
-  validates_with DataSourceNameValidator
-
   has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy, :foreign_key => "data_source_id"
-  has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas
+  has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
 
-  before_validation :build_instance_account_for_owner, :on => :create
   after_update :create_instance_name_changed_event, :if => :current_user
 
   def self.create_for_user(user, data_source_hash)
@@ -28,10 +20,6 @@ class GpdbDataSource < DataSource
 
   def used_by_workspaces(viewing_user)
     workspaces.includes({:sandbox => {:database => :data_source }}, :owner).workspaces_for(viewing_user).order("lower(workspaces.name)")
-  end
-
-  def accessible_to(user)
-    GpdbDataSource.accessible_to(user).include?(self)
   end
 
   def connect_with(account, options = {})
@@ -62,10 +50,6 @@ class GpdbDataSource < DataSource
     connect_as(current_user).create_database(name)
     refresh_databases
     databases.find_by_name!(name)
-  end
-
-  def account_names
-    accounts.pluck(:db_username)
   end
 
   def refresh_databases(options ={})
@@ -120,11 +104,11 @@ class GpdbDataSource < DataSource
     "Greenplum Database"
   end
 
-  def self.type_name
-    'Instance'
-  end
-
   private
+
+  def account_names
+    accounts.pluck(:db_username)
+  end
 
   def database_and_role_sql
     roles = Arel::Table.new("pg_catalog.pg_roles", :as => "r")
@@ -141,10 +125,6 @@ class GpdbDataSource < DataSource
         roles[:rolname].as("db_username"),
         databases[:datname].as("database_name")
     ).to_sql
-  end
-
-  def build_instance_account_for_owner
-    build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
   end
 
   def create_instance_name_changed_event

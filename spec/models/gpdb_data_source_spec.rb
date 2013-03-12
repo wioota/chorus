@@ -1,12 +1,6 @@
 require "spec_helper"
 
 describe GpdbDataSource do
-  describe "validations" do
-    it "is valid when both host and port are empty" do
-      FactoryGirl.build(:gpdb_data_source, :host => "", :port => "").should be_valid
-    end
-  end
-
   describe "associations" do
     it { should have_many :databases }
   end

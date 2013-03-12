@@ -6,6 +6,8 @@ FactoryGirl.define do
     sequence(:host) { |n| "data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
     db_name "db_name"
+    db_username "username"
+    db_password "password"
     owner
   end
 

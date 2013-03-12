@@ -32,7 +32,14 @@ describe DataSource do
   end
 
   describe 'creating a DataSource' do
+    before do
+      any_instance_of(DataSource) do |data_source|
+        stub(data_source).valid_db_credentials? { true }
+      end
+    end
+
     it 'enqueues a refresh job' do
+      stub(QC.default_queue).enqueue_if_not_queued.any_times # for other jobs
       mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', anything, hash_including('new' => true))
       FactoryGirl.create(:data_source)
     end

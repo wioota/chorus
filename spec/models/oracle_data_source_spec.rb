@@ -5,7 +5,6 @@ describe OracleDataSource do
 
   describe "validations" do
     it { should validate_presence_of(:host) }
-    it { should validate_presence_of(:port) }
 
     context 'when creating' do
       it 'validates the owner account' do

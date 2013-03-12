@@ -5,7 +5,7 @@ def it_validates_duplicate(new_model, existing_model)
     FactoryGirl.create(new_model, :name => 'awesome_duplicate_name')
     FactoryGirl.build(existing_model, :name => 'awesome_duplicate_name').save(:validate => false)
 
-    ExistingDataSourcesValidator.run(data_sources).should be_false
+    ExistingDataSourcesValidator.run(data_source_classes).should be_false
   end
 end
 
@@ -15,10 +15,10 @@ describe ExistingDataSourcesValidator do
   end
 
   describe '.run' do
-    let(:data_sources) { [GpdbDataSource, HdfsDataSource, GnipDataSource] }
+    let(:data_source_classes) { [DataSource, HdfsDataSource, GnipDataSource] }
 
     it "returns true if the data sources are all valid" do
-      ExistingDataSourcesValidator.run(data_sources).should be_true
+      ExistingDataSourcesValidator.run(data_source_classes).should be_true
     end
 
     it_validates_duplicate(:gpdb_data_source, :gnip_data_source)
@@ -26,23 +26,18 @@ describe ExistingDataSourcesValidator do
     it_validates_duplicate(:gnip_data_source, :gnip_data_source)
 
     it "doesn't validate tables that don't exist" do
-      clazz = Class.new(ActiveRecord::Base) do
-        table_name = 'non_existant_records'
+      klass = Class.new(ActiveRecord::Base) do
+        table_name = 'non_existent_records'
       end
 
-      ExistingDataSourcesValidator.run([clazz]).should be_true
+      ExistingDataSourcesValidator.run([klass]).should be_true
     end
 
-    it "validates regardless of STI" do
-      data_source = FactoryGirl.create(:data_source)
-      data_source_type = data_source.type
-      data_source.type = 'LolType'
-      data_source.save!
+    it 'works even if one of the types no longer exists in the codebase' do
+      data_source = data_sources(:oracle)
+      data_source.update_attributes!(type: 'LolType')
 
       ExistingDataSourcesValidator.run([DataSource]).should be_true
-
-      data_source.type = data_source_type
-      data_source.save!(:validate => false)
     end
   end
 end

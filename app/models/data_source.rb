@@ -3,6 +3,7 @@ class DataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
+  attr_accessor :db_username, :db_password
   attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
@@ -13,8 +14,11 @@ class DataSource < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
 
-  validates_presence_of :name, :db_name
-  validates_numericality_of :port, :only_integer => true, :if => :host?
+  before_validation :build_instance_account_for_owner, :on => :create
+
+  validates_associated :owner_account, :if => :validate_owner?
+  validates_presence_of :name, :db_name, :host
+  validates_numericality_of :port, :only_integer => true
   validates_length_of :name, :maximum => 64
   validates_with DataSourceNameValidator
 
@@ -35,6 +39,10 @@ class DataSource < ActiveRecord::Base
     else
       self
     end
+  end
+
+  def self.type_name
+    'Instance'
   end
 
   def self.reindex_data_source(id)
@@ -129,6 +137,13 @@ class DataSource < ActiveRecord::Base
   end
 
   private
+  def build_instance_account_for_owner
+    build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
+  end
+
+  def validate_owner?
+    self.changed.include?('host') || self.changed.include?('port') || self.changed.include?('db_name')
+  end
 
   def enqueue_refresh
     QC.enqueue_if_not_queued("DataSource.refresh", self.id, 'new' => true)

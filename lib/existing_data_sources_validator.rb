@@ -10,22 +10,22 @@ module ExistingDataSourcesValidator
       ActiveRecord::Base.connection.table_exists? data_source.table_name
     }
 
-    invalid_instances = find_invalid_instances(existing_data_source_types)
+    invalid_data_sources = find_invalid_data_sources(existing_data_source_types)
 
-    if invalid_instances.empty?
+    if invalid_data_sources.empty?
       return true
     else
-      log "Duplicate data source names found: #{invalid_instances.uniq.join(", ")}"
+      log "Duplicate data source names found: #{invalid_data_sources.uniq.join(", ")}"
       return false
     end
   end
 
   private
 
-  def self.find_invalid_instances(data_source_types)
+  def self.find_invalid_data_sources(klasses)
     names = []
-    data_source_types.each do |type|
-      names += ActiveRecord::Base.connection.exec_query("select * from #{type.table_name}").map {|record| record["name"] }
+    klasses.each do |klass|
+      names += ActiveRecord::Base.connection.exec_query("select * from #{klass.table_name}").map {|record| record["name"] }
     end
 
     names.reject { |name| names.count(name) == 1 }

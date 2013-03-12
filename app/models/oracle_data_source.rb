@@ -1,21 +1,10 @@
 class OracleDataSource < DataSource
-  validates :host, :presence => true
-  validates :port, :presence => true
-  validates_associated :owner_account, :if => :validate_owner?
-  attr_accessor :db_username, :db_password
-
-  before_validation :build_instance_account_for_owner, :on => :create
-
-  has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
+  has_many :schemas, :as => :parent, :class_name => 'OracleSchema', :dependent => :destroy
 
   def self.create_for_user(user, params)
     user.oracle_data_sources.create!(params) do |data_source|
       data_source.shared = params[:shared]
     end
-  end
-
-  def self.type_name
-    'Instance'
   end
 
   def connect_with(account)
@@ -65,13 +54,5 @@ class OracleDataSource < DataSource
       Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
     end
     schema_permissions
-  end
-
-  def validate_owner?
-    self.changed.include?('host') || self.changed.include?('port') || self.changed.include?('db_name')
-  end
-
-  def build_instance_account_for_owner
-    build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
   end
 end
