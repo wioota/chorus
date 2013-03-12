@@ -413,11 +413,11 @@ describe("chorus.collections.Base", function() {
 
     describe("#saveTags", function() {
         beforeEach(function() {
-            this.model1 = rspecFixtures.workfile.sql({tags: [
+            this.model1 = rspecFixtures.workfile.sql({id: "123", tags: [
                 {name: "tag1"},
                 {name: "tag2"}
             ]});
-            this.model2 = rspecFixtures.workfile.sql({tags: [
+            this.model2 = rspecFixtures.workfile.sql({id: "456", tags: [
                 {name: "tag1"},
                 {name: "tag3"}
             ]});
@@ -425,14 +425,21 @@ describe("chorus.collections.Base", function() {
             this.collection.reset([
                 this.model1.attributes, this.model2.attributes
             ]);
-            spyOn(this.collection.at(0).tags(), "save");
-            spyOn(this.collection.at(1).tags(), "save");
+            this.fakeTaggingSetArray = new chorus.models.TaggingSetArray();
+            spyOn(this.fakeTaggingSetArray, "save");
+            spyOn(chorus.models, "TaggingSetArray").andReturn(this.fakeTaggingSetArray);
         });
 
         it("saves tags for each model in the collection", function() {
             this.collection.saveTags();
-            expect(this.collection.at(0).tags().save).toHaveBeenCalled();
-            expect(this.collection.at(1).tags().save).toHaveBeenCalled();
+            expect(chorus.models.TaggingSetArray).toHaveBeenCalled();
+            var initializerArg = chorus.models.TaggingSetArray.mostRecentCall.args[0];
+            expect(initializerArg.taggingSets.length).toEqual(2);
+            expect(initializerArg.taggingSets[0]).toEqual(jasmine.any(chorus.collections.TaggingSet));
+            expect(initializerArg.taggingSets[1]).toEqual(jasmine.any(chorus.collections.TaggingSet));
+            expect(initializerArg.taggingSets[0].attributes.entity.id).toEqual("123");
+            expect(initializerArg.taggingSets[1].attributes.entity.id).toEqual("456");
+            expect(this.fakeTaggingSetArray.save).toHaveBeenCalled();
         });
     });
 });

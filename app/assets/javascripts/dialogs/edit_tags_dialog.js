@@ -51,7 +51,6 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     },
 
     saveSuccess: function(savedModel) {
-        savedModel.saved = true;
         savedModel.trigger("change");
     },
 

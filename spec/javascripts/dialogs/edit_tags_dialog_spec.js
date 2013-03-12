@@ -96,7 +96,7 @@ describe("chorus.dialogs.EditTags", function() {
             it('triggers model.change', function() {
                 var savedModel = this.collection.last();
                 spyOnEvent(savedModel, "change");
-                this.server.lastCreateFor(savedModel.tags()).succeed();
+                this.server.lastCreate().succeed();
                 expect("change").toHaveBeenTriggeredOn(savedModel);
             });
 
@@ -122,13 +122,12 @@ describe("chorus.dialogs.EditTags", function() {
 
             context('when the save fails', function(){
                 beforeEach(function() {
-                    var savedModel = this.collection.last();
                     spyOn(this.dialog, "showErrors");
-                    this.server.lastCreateFor(savedModel.tags()).failForbidden({message: "Forbidden"});
+                    this.server.lastCreate().failForbidden({message: "Forbidden"});
                 });
 
                 it("shows an error message", function() {
-                    expect(this.dialog.showErrors).toHaveBeenCalledWith(this.collection.last().tags());
+                    expect(this.dialog.showErrors).toHaveBeenCalledWith(jasmine.objectContaining({serverErrors: {message: 'Forbidden'}}));
                 });
             });
         });

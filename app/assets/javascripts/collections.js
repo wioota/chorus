@@ -139,9 +139,10 @@ chorus.collections = {
             },
 
             saveTags: function(options) {
-                this.each(function (model) {
-                    model.tags().save(options);
-                });
+                new chorus.models.TaggingSetArray({
+                    taggingSets: this.map(function(model) {
+                        return model.tags();
+                })}).save(options);
             },
 
             remove: function (models, options) {
