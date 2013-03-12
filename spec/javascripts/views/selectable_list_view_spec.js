@@ -1,13 +1,13 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
         this.eventSpy = spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-        this.collection = new chorus.collections.UserSet([rspecFixtures.user(), rspecFixtures.user()]);
+        this.collection = new chorus.collections.DatabaseSet([rspecFixtures.database({name: "1" }), rspecFixtures.database({name: "2"})]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
         });
         // normally would be set by subclass
-        this.view.eventName = "user";
-        this.view.templateName = "user/list";
+        this.view.eventName = "database";
+        this.view.templateName = "database_list";
         this.view.render();
     });
 
@@ -17,7 +17,7 @@ describe("chorus.views.SelectableList", function() {
 
     it("preselects the first item", function() {
         expect(this.view.$("> li").eq(0)).toHaveClass("selected");
-        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(0));
+        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:selected", this.collection.at(0));
         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(0));
     });
 
@@ -43,7 +43,7 @@ describe("chorus.views.SelectableList", function() {
         });
 
         it("should call itemSelected with the selected model and broadcast a general selected event", function() {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(1));
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:selected", this.collection.at(1));
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(1));
         });
 
@@ -76,13 +76,12 @@ describe("chorus.views.SelectableList", function() {
         });
 
         it("broadcasts an item deselected event", function() {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:deselected");
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:deselected");
         });
     });
 
     describe("when eventName:search is triggered", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatabaseSet([rspecFixtures.database({name: "1" }), rspecFixtures.database({name: "2"})]);
             this.collection.loaded = true;
             this.view = new chorus.views.DatabaseList({collection: this.collection});
             $("#jasmine_content").append(this.view.el);

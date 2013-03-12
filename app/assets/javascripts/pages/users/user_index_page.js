@@ -1,4 +1,6 @@
 chorus.pages.UserIndexPage = chorus.pages.Base.extend({
+    constructorName: 'UserIndexPage',
+
     crumbs:[
         { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.users") }

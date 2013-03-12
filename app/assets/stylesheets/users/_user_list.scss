@@ -1,26 +1,6 @@
-.user_list {
-    img {
-        display: inline;
-        max-width: $icon-image-width;
-        max-height: $icon-image-height;
-    }
-
-    a.image {
+.user_list_item {
+    .image.profile {
         width: $icon-image-width + 6px;
         height: $icon-image-height + 6px;
-    }
-
-    li {
-        div.text {
-            left: 57px;
-        }
-
-        div.details {
-            position: relative;
-
-            span {
-                @include font-normal-alpha;
-            }
-        }
     }
 }

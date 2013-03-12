@@ -16,11 +16,6 @@
             }
         }
 
-        .image {
-            width: $icon-image-width + 18px;
-            height: $icon-image-height + 13px;
-        }
-
         .spacer_left, .spacer_right {
             position: absolute;
             top: 0;
@@ -39,6 +34,8 @@
         .image {
             display: block;
             float: left;
+            width: $icon-image-width + 18px;
+            height: $icon-image-height + 13px;
         }
 
         div.text {

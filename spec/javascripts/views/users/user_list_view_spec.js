@@ -1,6 +1,6 @@
 describe("chorus.views.UserList", function() {
-    it("is a selectable list", function() {
-        expect(new chorus.views.UserList({collection: rspecFixtures.userSet()})).toBeA(chorus.views.SelectableList);
+    it("is a checkable list", function() {
+        expect(new chorus.views.UserList({collection: rspecFixtures.userSet()})).toBeA(chorus.views.CheckableList);
     });
 
     describe("#render", function() {

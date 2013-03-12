@@ -1,8 +1,8 @@
 describe("chorus.pages.UserIndexPage", function() {
     beforeEach(function() {
         chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
+            "firstName": "Daniel",
+            "lastName": "Burkes",
             "fullName": "Daniel Francis Burkes"
         });
         this.page = new chorus.pages.UserIndexPage();
@@ -19,7 +19,7 @@ describe("chorus.pages.UserIndexPage", function() {
         });
     });
 
-    describe("#render", function() {
+    describe("before the users have loaded", function() {
         it("has the right header title", function() {
             expect(this.page.$(".content_header h1").text()).toBe("Users");
         });
@@ -29,18 +29,12 @@ describe("chorus.pages.UserIndexPage", function() {
             expect(this.page.$("li[data-type=firstName] .check")).not.toHaveClass("hidden");
         });
 
-        describe("when the collection is loading", function() {
-            it("should have a loading element", function() {
-                expect(this.page.$(".loading")).toExist();
-            });
-
-            it("has a header", function() {
-                expect(this.page.$("h1")).toExist();
-            });
+        it("shows the loading element", function() {
+            expect(this.page.$(".loading")).toExist();
         });
 
-        it("creates a UserList view", function() {
-            expect(this.page.$(".user_list")).toExist();
+        it("has a header", function() {
+            expect(this.page.$("h1")).toExist();
         });
 
         describe("when the authenticated user is an admin", function() {
@@ -65,6 +59,17 @@ describe("chorus.pages.UserIndexPage", function() {
             it("does not display an 'add user' button", function() {
                 expect(this.page.$("a[href=#/users/new] button")).not.toExist();
             });
+        });
+    });
+
+    describe('when the users have loaded', function() {
+        beforeEach(function() {
+            this.users = rspecFixtures.userSet();
+            this.server.completeFetchFor(this.page.collection, this.users);
+        });
+
+        it('shows the users', function() {
+            expect(this.page.$('.user_list_item')).toExist();
         });
     });
 

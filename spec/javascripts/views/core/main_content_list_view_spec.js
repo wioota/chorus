@@ -57,7 +57,8 @@ describe("MainContentList", function() {
             });
 
             it("gets mixed in to the content's options", function() {
-                expect(this.view.content.options).toEqual({foo: "bar", collection: this.collection});
+                expect(this.view.content.options.collection).toEqual(this.collection);
+                expect(this.view.content.options.foo).toEqual("bar");
             });
         });
 
