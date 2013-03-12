@@ -49,6 +49,46 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
         });
 
+        describe('when editing a oracle data source', function() {
+            beforeEach(function() {
+                this.dialog.model.set({
+                    entityType: "oracle_data_source",
+                    name: "orcl",
+                    host: "oracle",
+                    port: "1521",
+                    description: "it is a foobar",
+                    dbName: "oracle-db121"
+                });
+                this.dialog.render();
+            });
+
+            it("Field called 'name' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=name]").val()).toBe("orcl");
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'description' should be editable and pre populated", function() {
+                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a foobar");
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'host' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=host]").val()).toBe("oracle");
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'port' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=port]").val()).toBe("1521");
+                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a 'database' field that is pre-populated", function() {
+                expect(this.dialog.$("input[name='dbName']").val()).toBe("oracle-db121");
+                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
+            });
+        });
+
         describe('when editing a hdfs data source', function() {
             beforeEach(function() {
                 this.instance = rspecFixtures.hdfsDataSource({username: 'user', groupList: 'hadoop'});

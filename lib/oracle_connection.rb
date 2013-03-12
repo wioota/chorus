@@ -46,6 +46,8 @@ class OracleConnection < DataSourceConnection
   end
 
   def connect!
+    raise ApiValidationError.new(:oracle, :datasource_driver_not_configured) unless ChorusConfig.instance.oracle_configured?
+
     @connection ||= Sequel.connect(db_url, logger_options.merge({:test => true}))
   rescue Sequel::DatabaseError => e
     raise OracleConnection::DatabaseError.new(e)

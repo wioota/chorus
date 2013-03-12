@@ -9,10 +9,6 @@ class OracleDataSource < DataSource
   has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
 
   def self.create_for_user(user, params)
-    unless ChorusConfig.instance.oracle_configured?
-      raise ApiValidationError.new(:oracle, :not_configured)
-    end
-
     user.oracle_data_sources.create!(params) do |data_source|
       data_source.shared = params[:shared]
     end

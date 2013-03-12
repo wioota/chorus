@@ -218,7 +218,7 @@ describe DataSourcesController do
         it "should return an error" do
           post :create, valid_attributes
           response.code.should == "422"
-          decoded_errors.fields.oracle.should have_key :NOT_CONFIGURED
+          decoded_errors.fields.oracle.should have_key :DATASOURCE_DRIVER_NOT_CONFIGURED
         end
       end
     end

@@ -33,6 +33,18 @@ describe OracleConnection, :oracle_integration do
       connection.connect!
       connection.connected?.should be_true
     end
+
+    context "when oracle is not configured" do
+      before do
+        stub(ChorusConfig.instance).oracle_configured? { false }
+      end
+
+      it "raises an error" do
+        expect do
+          connection.connect!
+        end.to raise_error(ApiValidationError)
+      end
+    end
   end
 
   describe "#disconnect" do
