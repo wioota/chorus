@@ -119,4 +119,24 @@ describe Tag do
       expect { Tag.reset_counters }.to change { tag.reload.taggings_count }.to(2)
     end
   end
+
+  describe "reindexing tagged objects" do
+    let(:tag) { Tag.create!(name: "foo-tag-clan") }
+
+    it "should not reindex tagged objects after create" do
+      dont_allow(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", anything)
+      Tag.create!(name: "another-tag")
+    end
+
+    it "should reindex tagged objects after update" do
+      mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", tag.id)
+      tag.name = "new-tag-clan"
+      tag.save!
+    end
+
+    it "should reindex tagged objects after destroy" do
+      mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", tag.id)
+      tag.destroy
+    end
+  end
 end

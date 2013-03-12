@@ -62,4 +62,24 @@ describe SolrIndexer do
       SolrIndexer.refresh_and_reindex("Model")
     end
   end
+
+  describe ".reindex_objects_with_tag" do
+    let!(:tag) { Tag.create(name: "taggity-tag") }
+
+    let!(:model) do
+      FactoryGirl.create(:workfile).tap do |model|
+        model.tag_list = [tag.name]
+        model.save!
+      end
+    end
+
+    before do
+      mock(Sunspot).index([model])
+      mock(Sunspot).commit
+    end
+
+    it "reindexes objects that are tagged with the tag" do
+      SolrIndexer.reindex_objects_with_tag(tag.id)
+    end
+  end
 end

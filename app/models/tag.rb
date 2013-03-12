@@ -8,6 +8,9 @@ class Tag < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false
   validates_length_of :name, :maximum => 100, :minimum => 1
 
+  after_update :reindex_tagged_objects
+  after_destroy :reindex_tagged_objects
+
   searchable do
     string :type_name
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -23,5 +26,11 @@ class Tag < ActiveRecord::Base
 
   def self.find_or_create_by_tag_name(name)
     self.where("UPPER(name) = UPPER(?)", name).first_or_create!(:name => name)
+  end
+
+  private
+
+  def reindex_tagged_objects
+    QC.enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", id)
   end
 end

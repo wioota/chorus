@@ -22,6 +22,14 @@ module SolrIndexer
     Rails.logger.info("Solr Refreshes Queued")
   end
 
+  def self.reindex_objects_with_tag(tag_id)
+    Rails.logger.info("Starting Solr Tag Reindex")
+    taggings = Tagging.where(tag_id: tag_id)
+    Sunspot.index taggings.map(&:taggable)
+    Sunspot.commit
+    Rails.logger.info("Solr Tag Reindex Completed")
+  end
+
   private
 
   def self.types_to_index(types)
