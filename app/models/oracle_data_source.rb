@@ -34,9 +34,11 @@ class OracleDataSource < DataSource
   def update_permissions(schema_permissions)
     schema_permissions.each do |schema_id, account_ids|
       schema = schemas.find(schema_id)
-      schema.instance_account_ids = account_ids
-      schema.save!
-      QC.enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id)
+      if schema.instance_account_ids.sort != account_ids.sort
+        schema.instance_account_ids = account_ids
+        schema.save!
+        QC.enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id)
+      end
     end
   end
 

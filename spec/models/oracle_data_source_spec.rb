@@ -97,9 +97,12 @@ describe OracleDataSource do
         expect{data_source.refresh_schemas}.not_to raise_error
       end
 
-      it "enqueues a reindex_datasets worker for each schema" do
-        mock(QC.default_queue).enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id)
-        data_source.refresh_schemas()
+      it "enqueues a reindex_datasets worker for each schema if accounts were changed" do
+        schema.instance_accounts = []
+        schema.instance_accounts.find_by_id(account_with_access.id).should be_nil
+        mock(QC.default_queue).enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id).once
+        data_source.refresh_schemas
+        data_source.refresh_schemas
       end
     end
   end
