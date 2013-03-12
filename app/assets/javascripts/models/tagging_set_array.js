@@ -14,19 +14,12 @@ chorus.models.TaggingSetArray = chorus.models.Base.extend({
 
         var saver = new chorus.models.Base();
         saver.urlTemplate = "taggings";
-
         this.listenTo(saver, "saved", _.bind(function() {
-            _.each(this.get('taggingSets'), function(taggingSet) {
-                taggingSet.trigger("saved");
-            });
+            this.trigger("saved");
         }, this));
-
-        this.listenTo(saver, "saveFailed", _.bind(function(model) {
-            _.each(this.get('taggingSets'), function(taggingSet) {
-                taggingSet.trigger("saveFailed", model);
-            });
+        this.listenTo(saver, "saveFailed", _.bind(function(saverWithServerError) {
+            this.trigger("saveFailed", saverWithServerError);
         }, this));
-
         saver.save({taggings: setArray});
     }
 });

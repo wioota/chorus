@@ -4,17 +4,16 @@ describe("chorus.models.taggingSetArray", function() {
             {name: "foo"},
             {name: "bar"}
         ], { entity: rspecFixtures.dataset({id: 123}) });
-        spyOnEvent(this.taggingSet1, "saved");
-        spyOnEvent(this.taggingSet1, "saveFailed");
 
         this.taggingSet2 = new chorus.collections.TaggingSet([
             {name: "foo2"},
             {name: "bar2"}
         ], { entity: rspecFixtures.dataset({id: 456}) });
-        spyOnEvent(this.taggingSet2, "saved");
-        spyOnEvent(this.taggingSet2, "saveFailed");
 
         this.taggingSetArray = new chorus.models.TaggingSetArray({taggingSets: [this.taggingSet1, this.taggingSet2]});
+
+        spyOnEvent(this.taggingSetArray, "saved");
+        spyOnEvent(this.taggingSetArray, "saveFailed");
     });
 
     it("posts to taggings", function() {
@@ -33,17 +32,15 @@ describe("chorus.models.taggingSetArray", function() {
         expect(params["taggings[1][tag_names][]"]).toEqual(['foo2', 'bar2']);
     });
 
-    it("triggers saved on each tagging set", function() {
+    it("triggers saved on the tagging set array", function() {
         this.taggingSetArray.save();
         this.server.lastCreate().succeed();
-        expect("saved").toHaveBeenTriggeredOn(this.taggingSet1);
-        expect("saved").toHaveBeenTriggeredOn(this.taggingSet2);
+        expect("saved").toHaveBeenTriggeredOn(this.taggingSetArray);
     });
 
-    it("triggers saveFailed on each tagging set if it fails", function() {
+    it("triggers saveFailed the tagging set array", function() {
         this.taggingSetArray.save();
         this.server.lastCreate().failForbidden();
-        expect("saveFailed").toHaveBeenTriggeredOn(this.taggingSet1);
-        expect("saveFailed").toHaveBeenTriggeredOn(this.taggingSet2);
+        expect("saveFailed").toHaveBeenTriggeredOn(this.taggingSetArray);
     });
 });

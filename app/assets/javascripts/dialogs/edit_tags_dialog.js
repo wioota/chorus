@@ -9,13 +9,10 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.collection.each(function(model) {
-            this.bindings.add(model.tags(), "saved", _.bind(this.saveSuccess, this, model));
-            this.bindings.add(model.tags(), "saveFailed", this.saveFailed);
-        }, this);
         var tags = this.tags();
         this.bindings.add(tags, "add", this.addTag);
         this.bindings.add(tags, "remove", this.removeTag);
+        this.bindings.add(this.collection, "saveTagsFailed", this.saveFailed);
         this.tagsInput = new chorus.views.TagsInput({tags: tags});
     },
 
@@ -48,10 +45,6 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
             this._tags = new chorus.collections.TaggingSet(tagsHash);
         }
         return this._tags;
-    },
-
-    saveSuccess: function(savedModel) {
-        savedModel.trigger("change");
     },
 
     saveFailed: function(tags) {
