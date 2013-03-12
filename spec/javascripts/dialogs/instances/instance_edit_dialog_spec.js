@@ -129,7 +129,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe('when editing a gnip data source', function() {
             beforeEach(function() {
-                this.instance = rspecFixtures.gnipInstance({
+                this.instance = rspecFixtures.gnipDataSource({
                     name: "myGnip",
                     username: "me@fun.com",
                     streamUrl: "https://some.thing.com",
@@ -137,7 +137,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 });
                 this.dialog = new chorus.dialogs.InstanceEdit({ instance: this.instance });
 
-                this.dialog.model = new chorus.models.GnipInstance(this.dialog.model.attributes);
+                this.dialog.model = new chorus.models.GnipDataSource(this.dialog.model.attributes);
                 this.dialog.render();
             });
 
@@ -242,7 +242,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context('with a gnip data source', function() {
             beforeEach(function() {
-                this.dialog.model = new chorus.models.GnipInstance();
+                this.dialog.model = new chorus.models.GnipDataSource();
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=streamUrl]").val("https://www.test.me");

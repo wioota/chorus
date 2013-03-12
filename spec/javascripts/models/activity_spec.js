@@ -77,15 +77,15 @@ describe("chorus.models.Activity", function() {
             });
         });
 
-        describe("#gnipInstance", function() {
+        describe("#gnipDataSource", function() {
             it("returns a gnip data source with the right data", function() {
-                activity = rspecFixtures.activity.gnipInstanceCreated({
-                    gnipInstance: { id: 8 }
+                activity = rspecFixtures.activity.gnipDataSourceCreated({
+                    gnipDataSource: { id: 8 }
                 });
 
-                var gnipInstance = activity.gnipInstance();
-                expect(gnipInstance).toBeA(chorus.models.GnipInstance);
-                expect(gnipInstance.id).toBe(8);
+                var gnipDataSource = activity.gnipDataSource();
+                expect(gnipDataSource).toBeA(chorus.models.GnipDataSource);
+                expect(gnipDataSource.id).toBe(8);
             });
         });
 
@@ -199,21 +199,21 @@ describe("chorus.models.Activity", function() {
                         gpdbDataSource: { id: 13 }
                     });
 
-                    var instance = activity.gpdbDataSource();
-                    expect(instance).toBeA(chorus.models.GpdbDataSource);
-                    expect(instance.id).toBe(13);
+                    var dataSource = activity.gpdbDataSource();
+                    expect(dataSource).toBeA(chorus.models.GpdbDataSource);
+                    expect(dataSource.id).toBe(13);
                 });
             });
 
-            context("for a NoteOnGnipInstance", function() {
-                it("returns a gnipInstance with the right data", function() {
-                    activity = rspecFixtures.activity.noteOnGnipInstanceCreated({
-                        gnipInstance: { id: 13 }
+            context("for a NoteOnGnipDataSource", function() {
+                it("returns a gnip data source with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnGnipDataSourceCreated({
+                        gnipDataSource: { id: 13 }
                     });
 
-                    var instance = activity.gnipInstance();
-                    expect(instance).toBeA(chorus.models.GnipInstance);
-                    expect(instance.id).toBe(13);
+                    var gnipDataSource = activity.gnipDataSource();
+                    expect(gnipDataSource).toBeA(chorus.models.GnipDataSource);
+                    expect(gnipDataSource.id).toBe(13);
                 });
             });
 

@@ -1,6 +1,6 @@
 describe("chorus.presenters.Activity", function() {
     var model, actor, presenter, workfile, workspace, dataset, member,
-        sourceDataset, gnipInstance, datasetModel, schema, destination;
+        sourceDataset, gnipDataSource, datasetModel, schema, destination;
 
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
@@ -313,9 +313,9 @@ describe("chorus.presenters.Activity", function() {
 
     context('gnip data source created', function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.gnipInstanceCreated();
+            model = rspecFixtures.activity.gnipDataSourceCreated();
             presenter = new chorus.presenters.Activity(model);
-            gnipInstance = model.gnipInstance();
+            gnipDataSource = model.gnipDataSource();
             actor = model.actor();
         });
 
@@ -323,9 +323,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GnipInstanceCreated.default", {
+                "activity.header.GnipDataSourceCreated.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                    gnipDataSourceLink: linkTo(gnipDataSource.showUrl(), gnipDataSource.name())
                 }
             );
         });
@@ -1047,15 +1047,15 @@ describe("chorus.presenters.Activity", function() {
     context('note on a gnip data source', function() {
         var instance;
         beforeEach(function() {
-            model = rspecFixtures.activity.noteOnGnipInstanceCreated({
-                gnipInstance: {
+            model = rspecFixtures.activity.noteOnGnipDataSourceCreated({
+                gnipDataSource: {
                     id: 42,
-                    name: 'my_gnip_instance'
+                    name: 'my_gnip_data_source'
                 }
             });
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
-            instance = rspecFixtures.gnipInstance({id: 42, name: 'my_gnip_instance'});
+            instance = rspecFixtures.gnipDataSource({id: 42, name: 'my_gnip_data_source'});
         });
 
         itHasTheActorIcon();
@@ -1366,11 +1366,11 @@ describe("chorus.presenters.Activity", function() {
                 dataset = rspecFixtures.dataset();
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
-                gnipInstance = model.gnipInstance();
+                gnipDataSource = model.gnipDataSource();
 
                 activity_data = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name()),
+                    gnipDataSourceLink: linkTo(gnipDataSource.showUrl(), gnipDataSource.name()),
                     destObjectOrName: model.get('destinationTable')
                 };
             });
@@ -1394,12 +1394,12 @@ describe("chorus.presenters.Activity", function() {
 
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
-                gnipInstance = model.gnipInstance();
+                gnipDataSource = model.gnipDataSource();
 
                 activity_data = {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     destObjectOrName: linkTo(workspaceDataset.showUrl(), workspaceDataset.name()),
-                    gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                    gnipDataSourceLink: linkTo(gnipDataSource.showUrl(), gnipDataSource.name())
                 };
             });
 
@@ -1419,12 +1419,12 @@ describe("chorus.presenters.Activity", function() {
             presenter = new chorus.presenters.Activity(model);
             workspace = model.workspace();
             dataset = model.dataset();
-            gnipInstance = model.gnipInstance();
+            gnipDataSource = model.gnipDataSource();
 
             activity_data = {
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                 datasetLink: linkTo(dataset.showUrl(), dataset.name()),
-                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name())
+                gnipDataSourceLink: linkTo(gnipDataSource.showUrl(), gnipDataSource.name())
             };
         });
 
@@ -1442,11 +1442,11 @@ describe("chorus.presenters.Activity", function() {
             model = rspecFixtures.activity.gnipStreamImportFailed();
             presenter = new chorus.presenters.Activity(model);
             workspace = model.workspace();
-            gnipInstance = model.gnipInstance();
+            gnipDataSource = model.gnipDataSource();
 
             activity_data = {
                 workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
-                gnipInstanceLink: linkTo(gnipInstance.showUrl(), gnipInstance.name()),
+                gnipDataSourceLink: linkTo(gnipDataSource.showUrl(), gnipDataSource.name()),
                 destinationTable: model.get('destinationTable')
             };
         });

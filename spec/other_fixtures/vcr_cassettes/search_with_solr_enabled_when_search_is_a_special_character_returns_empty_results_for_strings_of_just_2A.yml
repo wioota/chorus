@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=%2A&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+version_comments_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=%2A&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts+summary_texts+file_name_texts+version_comments_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+parent_name_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -28,7 +28,7 @@ http_interactions:
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
         body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(User
-        OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
+        OR GpdbDataSource OR HadoopInstance OR GnipDataSource OR Workspace OR Workfile
         OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''type_name_s:(User
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
@@ -152,11 +152,11 @@ http_interactions:
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.0,''docs''=>[{''id''=>''HadoopInstance
         1000002'',''name_texts''=>[''typeahead_hadoop_instance''],''score''=>1.0}]}},{''groupValue''=>''HadoopInstance
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.0,''docs''=>[{''id''=>''HadoopInstance
-        1000003'',''name_texts''=>[''hadoop_instance44446''],''score''=>1.0}]}},{''groupValue''=>''GnipInstance
-        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''maxScore''=>1.0,''docs''=>[{''id''=>''GnipInstance
+        1000003'',''name_texts''=>[''hadoop_instance44446''],''score''=>1.0}]}},{''groupValue''=>''GnipDataSource
+        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''maxScore''=>1.0,''docs''=>[{''id''=>''GnipDataSource
         1000000'',''name_texts''=>[''default''],''description_texts''=>[''a searchquery
-        example gnip account''],''score''=>1.0},{''id''=>''Events::NoteOnGnipInstance
-        1000041'',''body_texts''=>[''i am a comment with gnipsearch in me''],''score''=>1.0},{''id''=>''Events::NoteOnGnipInstance
+        example gnip account''],''score''=>1.0},{''id''=>''Events::NoteOnGnipDataSource
+        1000041'',''body_texts''=>[''i am a comment with gnipsearch in me''],''score''=>1.0},{''id''=>''Events::NoteGnipDataSourcece
         1000042'',''body_texts''=>[''i am an insight with gnipinsight in me''],''score''=>1.0}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Workfile'',18,''Workspace'',17,''Dataset'',16,''Instance'',15,''Attachment'',11,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Attachment
         1000000''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_@@@hl@@@instance@@@endhl@@@'']},''Attachment
         1000001''=>{''name_texts''=>[''@@@hl@@@workfile.sql@@@endhl@@@'']},''Attachment
@@ -236,12 +236,12 @@ http_interactions:
         1000037''=>{''body_texts''=>[''@@@hl@@@hadoop@@@endhl@@@-@@@hl@@@idy@@@endhl@@@-@@@hl@@@doop@@@endhl@@@'']},''HadoopInstance
         1000001''=>{''name_texts''=>[''@@@hl@@@hadoop_instance44445@@@endhl@@@'']},''HadoopInstance
         1000002''=>{''name_texts''=>[''@@@hl@@@typeahead@@@endhl@@@_@@@hl@@@hadoop@@@endhl@@@_@@@hl@@@instance@@@endhl@@@'']},''HadoopInstance
-        1000003''=>{''name_texts''=>[''@@@hl@@@hadoop_instance44446@@@endhl@@@'']},''GnipInstance
+        1000003''=>{''name_texts''=>[''@@@hl@@@hadoop_instance44446@@@endhl@@@'']},''GnipDataSource
         1000000''=>{''description_texts''=>[''@@@hl@@@a@@@endhl@@@ @@@hl@@@searchquery@@@endhl@@@
-        @@@hl@@@example@@@endhl@@@ @@@hl@@@gnip@@@endhl@@@ @@@hl@@@account@@@endhl@@@''],''name_texts''=>[''@@@hl@@@default@@@endhl@@@'']},''Events::NoteOnGnipInstance
+        @@@hl@@@example@@@endhl@@@ @@@hl@@@gnip@@@endhl@@@ @@@hl@@@account@@@endhl@@@''],''name_texts''=>[''@@@hl@@@default@@@endhl@@@'']},''Events::NognipDataSourceance
         1000041''=>{''body_texts''=>[''@@@hl@@@i@@@endhl@@@ @@@hl@@@am@@@endhl@@@
         @@@hl@@@a@@@endhl@@@ @@@hl@@@comment@@@endhl@@@ @@@hl@@@with@@@endhl@@@ @@@hl@@@gnipsearch@@@endhl@@@
-        @@@hl@@@in@@@endhl@@@ @@@hl@@@me@@@endhl@@@'']},''Events::NoteOnGnipInstance
+        @@@hl@@@in@@@endhl@@@ @@@hl@@@me@@@endhl@@@'']},''Events::GnipDataSourcestance
         1000042''=>{''body_texts''=>[''@@@hl@@@i@@@endhl@@@ @@@hl@@@am@@@endhl@@@
         @@@hl@@@an@@@endhl@@@ @@@hl@@@insight@@@endhl@@@ @@@hl@@@with@@@endhl@@@ @@@hl@@@gnipinsight@@@endhl@@@
         @@@hl@@@in@@@endhl@@@ @@@hl@@@me@@@endhl@@@'']}}}'

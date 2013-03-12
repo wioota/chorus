@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GnipInstancePresenter, :type => :view do
-  let(:gnip_instance) { gnip_instances(:default) }
-  let(:user) { gnip_instance.owner }
-  let(:presenter) { GnipInstancePresenter.new(gnip_instance, view, options) }
+describe GnipDataSourcePresenter, :type => :view do
+  let(:gnip_data_source) { gnip_data_sources(:default) }
+  let(:user) { gnip_data_source.owner }
+  let(:presenter) { GnipDataSourcePresenter.new(gnip_data_source, view, options) }
   let(:options) { {} }
 
   describe "#to_hash" do
@@ -19,13 +19,13 @@ describe GnipInstancePresenter, :type => :view do
       hash.should have_key(:tags)
       hash.should have_key(:state)
 
-      hash[:entity_type].should == "gnip_instance"
+      hash[:entity_type].should == "gnip_data_source"
     end
 
-    it "should not present the password" do
+    it "excludes the password" do
       hash.should_not have_key(:password)
     end
 
-    it_behaves_like "activity stream instance presenter"
+    it_behaves_like "activity stream data source presenter"
   end
 end

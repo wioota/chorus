@@ -9,9 +9,9 @@ describe("chorus.models.DynamicInstance", function() {
         expect(model).toBeA(chorus.models.HdfsDataSource);
     });
 
-    it("should return a gnip data source when the entity_type is gnip_instance", function() {
-        var model = new chorus.models.DynamicInstance({entityType: "gnip_instance"});
-        expect(model).toBeA(chorus.models.GnipInstance);
+    it("should return a gnip data source when the entity_type is gnip_data_source", function() {
+        var model = new chorus.models.DynamicInstance({entityType: "gnip_data_source"});
+        expect(model).toBeA(chorus.models.GnipDataSource);
     });
 
     it("should return an oracle data source when the entity_type is oracle_data_source", function() {

@@ -95,7 +95,7 @@ end
 # Preload all note classes, otherwise, attachment.note will not work in dev mode.
 require 'events/note_on_dataset'
 require 'events/note_on_greenplum_instance'
-require 'events/note_on_gnip_instance'
+require 'events/note_on_gnip_data_source'
 require 'events/note_on_hdfs_data_source'
 require 'events/note_on_hdfs_file'
 require 'events/note_on_workfile'

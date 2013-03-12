@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe GnipInstancesController do
+describe GnipDataSourcesController do
   before do
     @user = users(:owner)
     log_in @user
   end
 
-  let(:gnip_instance) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_data_sources(:default) }
 
   describe "#create" do
-    context "with Valid credentials" do
+    context "with valid credentials" do
       before do
-        stub(Gnip::InstanceRegistrar).create!(anything, @user) { gnip_instance }
+        stub(Gnip::DataSourceRegistrar).create!(anything, @user) { gnip_data_source }
       end
 
-      it "reports that the instance was created with the correct owner" do
+      it "reports that the data source was created with the correct owner" do
         post :create
         response.code.should == "201"
         decoded_response.owner.id.should == @user.id
@@ -22,11 +22,12 @@ describe GnipInstancesController do
       end
     end
 
-    context "With Invalid credentials" do
+    context "with invalid credentials" do
       before do
-        stub(Gnip::InstanceRegistrar).create!(anything, @user) { raise(ApiValidationError) }
+        stub(Gnip::DataSourceRegistrar).create!(anything, @user) { raise ApiValidationError }
       end
-      it "raise an error" do
+
+      it "raises an error" do
         post :create
         response.code.should == "422"
       end
@@ -35,7 +36,7 @@ describe GnipInstancesController do
     context "accepts non-nested parameters" do
       let(:params) do
         {
-            :name => "new_gnip_instance",
+            :name => "new_gnip_data_source",
             :description => "some description",
             :stream_url => "http://www.example.com",
             :username => "gnip_username",
@@ -45,7 +46,7 @@ describe GnipInstancesController do
       end
 
       it "nests the params" do
-        stub(Gnip::InstanceRegistrar).create!(params.stringify_keys, anything) { gnip_instance }
+        stub(Gnip::DataSourceRegistrar).create!(params.stringify_keys, anything) { gnip_data_source }
 
         post :create, params
         response.code.should == "201"
@@ -54,42 +55,42 @@ describe GnipInstancesController do
   end
 
   describe "#index" do
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
 
     it "should return correct response code" do
       get :index
       response.code.should == "200"
       decoded_response.length.should == 2
-      decoded_response[0].id.should == gnip_instance.id
-      decoded_response[0].owner.id.should == gnip_instance.owner_id
+      decoded_response[0].id.should == gnip_data_source.id
+      decoded_response[0].owner.id.should == gnip_data_source.owner_id
     end
 
     it_behaves_like "a paginated list"
   end
 
   describe '#show' do
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
 
-    it 'presents the gnip instance' do
-      get :show, :id => gnip_instance.to_param
+    it 'presents the gnip data source' do
+      get :show, :id => gnip_data_source.to_param
       response.code.should == '200'
-      decoded_response['name'].should == gnip_instance.name
+      decoded_response['name'].should == gnip_data_source.name
     end
 
-    generate_fixture 'gnipInstance.json' do
-      get :show, :id => gnip_instance.to_param
+    generate_fixture 'gnipDataSource.json' do
+      get :show, :id => gnip_data_source.to_param
     end
   end
 
   describe '#update' do
-    let(:gnip_instance) { gnip_instances(:default) }
-    let(:params) { { :id => gnip_instance.id } }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
+    let(:params) { { :id => gnip_data_source.id } }
 
     describe "authorization" do
-      context "when user is the instance owner" do
+      context "when user is the data source owner" do
         before do
-          log_in gnip_instance.owner
-          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+          log_in gnip_data_source.owner
+          stub(Gnip::DataSourceRegistrar).update!(gnip_data_source.id.to_s, anything) { gnip_data_source }
         end
 
         it "allows updating" do
@@ -98,10 +99,10 @@ describe GnipInstancesController do
         end
       end
 
-      context "when the user is not the instance owner" do
+      context "when the user is not the data source owner" do
         before do
           log_in users(:no_collaborators)
-          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+          stub(Gnip::DataSourceRegistrar).update!(gnip_data_source.id.to_s, anything) { gnip_data_source }
         end
 
         it "prevents updating" do
@@ -113,7 +114,7 @@ describe GnipInstancesController do
       context "when the user is an admin" do
         before do
           log_in users(:admin)
-          stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+          stub(Gnip::DataSourceRegistrar).update!(gnip_data_source.id.to_s, anything) { gnip_data_source }
         end
 
         it "allows updating" do
@@ -125,10 +126,10 @@ describe GnipInstancesController do
 
     context "With valid credentials" do
       before do
-        stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { gnip_instance }
+        stub(Gnip::DataSourceRegistrar).update!(gnip_data_source.id.to_s, anything) { gnip_data_source }
       end
 
-      it 'correctly updates the gnip instance' do
+      it 'correctly updates the gnip data source' do
         put :update, params
 
         response.code.should == '200'
@@ -139,7 +140,7 @@ describe GnipInstancesController do
 
     context "With Invalid credentials" do
       before do
-        stub(Gnip::InstanceRegistrar).update!(gnip_instance.id.to_s, anything) { raise(ApiValidationError) }
+        stub(Gnip::DataSourceRegistrar).update!(gnip_data_source.id.to_s, anything) { raise(ApiValidationError) }
       end
       it "raise an error" do
         post :update, params

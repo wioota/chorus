@@ -4,7 +4,7 @@
         "dataset": "WorkspaceDataset",
         'dataSource': 'DynamicDataSource',
         "gpdbDataSource": "GpdbDataSource",
-        "gnipInstance": "GnipInstance",
+        "gnipDataSource": "GnipDataSource",
         "newOwner": "User",
         "hdfsDataSource": "HdfsDataSource",
         "workfile": "Workfile",
@@ -49,7 +49,7 @@
         actor: makeAssociationMethod("actor"),
         dataSource: makeAssociationMethod('dataSource'),
         gpdbDataSource: makeAssociationMethod("gpdbDataSource"),
-        gnipInstance: makeAssociationMethod("gnipInstance"),
+        gnipDataSource: makeAssociationMethod("gnipDataSource"),
         hdfsDataSource: makeAssociationMethod("hdfsDataSource"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
@@ -83,9 +83,9 @@
                     model = new chorus.models.GpdbDataSource();
                     model.set(this.get("gpdbDataSource"));
                     break;
-                case "NoteOnGnipInstance":
-                    model = new chorus.models.GnipInstance();
-                    model.set(this.get("gnipInstance"));
+                case "NoteOnGnipDataSource":
+                    model = new chorus.models.GnipDataSource();
+                    model.set(this.get("gnipDataSource"));
                     break;
                 case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsEntry();

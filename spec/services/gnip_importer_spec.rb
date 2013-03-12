@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GnipImporter do
   let(:user) { users(:owner) }
   let(:workspace) { workspaces(:public) }
-  let(:instance) { gnip_instances(:default) }
+  let(:instance) { gnip_data_sources(:default) }
   let(:import_created_event) { events(:gnip_stream_import_created) }
   let(:connection) { Object.new }
 

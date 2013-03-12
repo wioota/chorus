@@ -3,7 +3,7 @@ chorus.models.DynamicInstance = function(instanceJson) {
         instance: 'GpdbDataSource',
         gpdb_data_source: 'GpdbDataSource',
         hdfs_data_source: 'HdfsDataSource',
-        gnip_instance: 'GnipInstance',
+        gnip_data_source: 'GnipDataSource',
         oracle_data_source: 'OracleDataSource'
     };
 

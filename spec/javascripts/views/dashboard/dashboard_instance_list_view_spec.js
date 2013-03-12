@@ -1,20 +1,20 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
-        this.instance1 = rspecFixtures.oracleDataSource({ name: "broccoli" });
-        this.instance2 = rspecFixtures.hdfsDataSource({ name: "Camels" });
-        this.instance3 = rspecFixtures.hdfsDataSource({ name: "doppler" });
-        this.instance4 = rspecFixtures.gpdbDataSource({ name: "Ego" });
-        this.instance5 = rspecFixtures.gpdbDataSource({ name: "fatoush" });
-        this.instance6 = rspecFixtures.gnipInstance({ name: "kangaroo" });
-        this.instance7 = rspecFixtures.gnipInstance({ name: "chicken" });
+        this.dataSource1 = rspecFixtures.oracleDataSource({ name: "broccoli" });
+        this.dataSource2 = rspecFixtures.hdfsDataSource({ name: "Camels" });
+        this.dataSource3 = rspecFixtures.hdfsDataSource({ name: "doppler" });
+        this.dataSource4 = rspecFixtures.gpdbDataSource({ name: "Ego" });
+        this.dataSource5 = rspecFixtures.gpdbDataSource({ name: "fatoush" });
+        this.dataSource6 = rspecFixtures.gnipDataSource({ name: "kangaroo" });
+        this.dataSource7 = rspecFixtures.gnipDataSource({ name: "chicken" });
         this.collection = new chorus.collections.DataSourceSet([
-            this.instance5,
-            this.instance2,
-            this.instance4,
-            this.instance6,
-            this.instance3,
-            this.instance1,
-            this.instance7
+            this.dataSource5,
+            this.dataSource2,
+            this.dataSource4,
+            this.dataSource6,
+            this.dataSource3,
+            this.dataSource1,
+            this.dataSource7
         ]);
 
         var proxySet = new chorus.collections.Base(
@@ -35,10 +35,10 @@ describe("chorus.views.DashboardInstanceList", function() {
 
         it('displays the names of the data sources', function() {
             expect(this.view.$(".name").eq(0)).toContainText("broccoli");
-            expect(this.view.$(".name").eq(0)).toHaveHref(this.instance1.showUrl());
+            expect(this.view.$(".name").eq(0)).toHaveHref(this.dataSource1.showUrl());
 
             expect(this.view.$(".name").eq(1)).toContainText("Camels");
-            expect(this.view.$(".name").eq(1)).toHaveHref(this.instance2.showUrl());
+            expect(this.view.$(".name").eq(1)).toHaveHref(this.dataSource2.showUrl());
         });
 
         it('sorts the data sources case-insensitively', function() {
@@ -52,8 +52,8 @@ describe("chorus.views.DashboardInstanceList", function() {
         });
 
         it('displays the icon for each data source', function() {
-            expect(this.view.$(".image img").eq(0).attr("src")).toBe(this.instance1.providerIconUrl());
-            expect(this.view.$(".image img").eq(1).attr("src")).toBe(this.instance2.providerIconUrl());
+            expect(this.view.$(".image img").eq(0).attr("src")).toBe(this.dataSource1.providerIconUrl());
+            expect(this.view.$(".image img").eq(1).attr("src")).toBe(this.dataSource2.providerIconUrl());
         });
     });
 });

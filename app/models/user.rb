@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_accessor :password
 
-  has_many :gnip_instances, :foreign_key => :owner_id
+  has_many :gnip_data_sources, :foreign_key => :owner_id
   has_many :gpdb_data_sources, :foreign_key => :owner_id
   has_many :oracle_data_sources, :foreign_key => :owner_id
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
 
   has_many :instance_accounts, :foreign_key => :owner_id, :dependent => :destroy
   has_many :hdfs_data_sources, :foreign_key => :owner_id
-  has_many :gnip_instances, :foreign_key => :owner_id
+  has_many :gnip_data_sources, :foreign_key => :owner_id
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",

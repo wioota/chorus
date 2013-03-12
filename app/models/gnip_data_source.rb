@@ -1,4 +1,4 @@
-class GnipInstance < ActiveRecord::Base
+class GnipDataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 

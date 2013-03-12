@@ -10,11 +10,11 @@ chorus.views.InstanceIndexContentDetails = chorus.views.Base.extend({
     setup: function(){
         this.dataSources = this.options.dataSources;
         this.hdfsDataSources = this.options.hdfsDataSources;
-        this.gnipInstances = this.options.gnipInstances;
+        this.gnipDataSources = this.options.gnipDataSources;
 
         this.bindings.add(this.dataSources, 'loaded', this.render);
         this.bindings.add(this.hdfsDataSources, 'loaded', this.render);
-        this.bindings.add(this.gnipInstances, 'loaded', this.render);
+        this.bindings.add(this.gnipDataSources, 'loaded', this.render);
     },
 
     selectAll: function(e) {
@@ -29,8 +29,8 @@ chorus.views.InstanceIndexContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            loaded: this.dataSources.loaded && this.gnipInstances.loaded && this.hdfsDataSources.loaded,
-            count: this.dataSources.length + this.hdfsDataSources.length + this.gnipInstances.length
+            loaded: this.dataSources.loaded && this.gnipDataSources.loaded && this.hdfsDataSources.loaded,
+            count: this.dataSources.length + this.hdfsDataSources.length + this.gnipDataSources.length
         };
     }
 });

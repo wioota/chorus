@@ -8,19 +8,19 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
     setup:function () {
         var dataSources = new chorus.collections.DataSourceSet([], {all: true});
         var hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
-        var gnipInstances = new chorus.collections.GnipInstanceSet();
+        var gnipDataSources = new chorus.collections.GnipDataSourceSet();
         dataSources.fetchAll();
         hdfsDataSources.fetchAll();
-        gnipInstances.fetchAll();
+        gnipDataSources.fetchAll();
 
         this.handleFetchErrorsFor(dataSources);
         this.handleFetchErrorsFor(hdfsDataSources);
-        this.handleFetchErrorsFor(gnipInstances);
+        this.handleFetchErrorsFor(gnipDataSources);
 
         var options = {
             dataSources: dataSources,
             hdfsDataSources: hdfsDataSources,
-            gnipInstances: gnipInstances
+            gnipDataSources: gnipDataSources
         };
 
         this.mainContent = new chorus.views.MainContentView({

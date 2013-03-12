@@ -144,8 +144,8 @@
                 links: [ "actor", "dataSource" ]
             },
 
-            GnipInstanceCreated: {
-                links: [ "actor", "gnipInstance" ]
+            GnipDataSourceCreated: {
+                links: [ "actor", "gnipDataSource" ]
             },
 
             HdfsDataSourceCreated: {
@@ -286,17 +286,17 @@
             },
 
             GnipStreamImportCreated: {
-                links: ["actor", "gnipInstance", "dataset"],
+                links: ["actor", "gnipDataSource", "dataset"],
                 attrs: ["destinationTable"],
                 computed: ["destObjectOrName"]
             },
 
             GnipStreamImportSuccess: {
-                links: ["workspace", "gnipInstance", "dataset"]
+                links: ["workspace", "gnipDataSource", "dataset"]
             },
 
             GnipStreamImportFailed: {
-                links: ["workspace", "gnipInstance"],
+                links: ["workspace", "gnipDataSource"],
                 attrs: ["destinationTable"]
             },
 
@@ -445,7 +445,7 @@
             switch (actionType) {
                 case "NoteOnGreenplumInstance":
                 case "NoteOnHdfsDataSource":
-                case "NoteOnGnipInstance":
+                case "NoteOnGnipDataSource":
                     return "data source";
                 case "NoteOnHdfsFile":
                     return "file";

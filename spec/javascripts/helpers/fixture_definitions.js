@@ -11,7 +11,7 @@ window.rspecFixtureDefinitions = {
             fileImportCreated: {},
             fileImportFailed: {},
             fileImportSuccess: {},
-            gnipInstanceCreated: {},
+            gnipDataSourceCreated: {},
             gnipStreamImportCreated: {},
             gnipStreamImportFailed: {},
             gnipStreamImportSuccess: {},
@@ -27,7 +27,7 @@ window.rspecFixtureDefinitions = {
             insightOnGreenplumInstance: {},
             membersAdded: {},
             noteOnDatasetCreated: {},
-            noteOnGnipInstanceCreated: {},
+            noteOnGnipDataSourceCreated: {},
             noteOnGreenplumInstanceCreated: {},
             noteOnHdfsDataSourceCreated: {},
             noteOnHdfsFileCreated: {},
@@ -106,7 +106,7 @@ window.rspecFixtureDefinitions = {
         model: 'FrequencyTask'
     },
 
-    gnipInstance: { unique: ["id"] },
+    gnipDataSource: { unique: ["id"] },
 
     gpdbDataSource: { unique: [ "id" ] },
 

@@ -12,7 +12,7 @@ describe("chorus.pages.DashboardPage", function() {
         expect(this.page.userSet).toHaveBeenFetched();
         expect(this.page.dataSourceSet).toHaveBeenFetched();
         expect(this.page.hdfsDataSourceSet).toHaveBeenFetched();
-        expect(this.page.gnipInstanceSet).toHaveBeenFetched();
+        expect(this.page.gnipDataSourceSet).toHaveBeenFetched();
         expect(this.page.workspaceSet).toHaveBeenFetched();
     });
 
@@ -26,9 +26,9 @@ describe("chorus.pages.DashboardPage", function() {
                                          rspecFixtures.hdfsDataSource(),
                                          rspecFixtures.hdfsDataSource()
             ]);
-            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
-                                         rspecFixtures.gnipInstance(),
-                                         rspecFixtures.gnipInstance()
+            this.server.completeFetchAllFor(this.page.gnipDataSourceSet, [
+                                         rspecFixtures.gnipDataSource(),
+                                         rspecFixtures.gnipDataSource()
             ]);
 
             this.page.render();
@@ -83,9 +83,9 @@ describe("chorus.pages.DashboardPage", function() {
                 rspecFixtures.hdfsDataSource()
             ]);
 
-            this.server.completeFetchAllFor(this.page.gnipInstanceSet, [
-                rspecFixtures.gnipInstance(),
-                rspecFixtures.gnipInstance()
+            this.server.completeFetchAllFor(this.page.gnipDataSourceSet, [
+                rspecFixtures.gnipDataSource(),
+                rspecFixtures.gnipDataSource()
             ]);
         });
 
@@ -128,26 +128,26 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it('fetches the gnip data sources', function() {
-            expect(this.page.gnipInstanceSet).toBeA(chorus.collections.GnipInstanceSet);
-            expect(this.page.gnipInstanceSet).toHaveBeenFetched();
+            expect(this.page.gnipDataSourceSet).toBeA(chorus.collections.GnipDataSourceSet);
+            expect(this.page.gnipDataSourceSet).toHaveBeenFetched();
         });
 
         it('passes the data source set through to the data source list view', function() {
-            var packedUpDataSourceSet = this.page.dataSourceSet.map(function(instance) {
-                return new chorus.models.Base(instance);
+            var packedUpDataSourceSet = this.page.dataSourceSet.map(function(dataSource) {
+                return new chorus.models.Base(dataSource);
             });
-            var packedUpHadoopSet = this.page.hdfsDataSourceSet.map(function(instance) {
-                return new chorus.models.Base(instance);
+            var packedUpHadoopSet = this.page.hdfsDataSourceSet.map(function(dataSource) {
+                return new chorus.models.Base(dataSource);
             });
-            var packedUpGnipSet = this.page.gnipInstanceSet.map(function(instance) {
-                return new chorus.models.Base(instance);
+            var packedUpGnipSet = this.page.gnipDataSourceSet.map(function(dataSource) {
+                return new chorus.models.Base(dataSource);
             });
-            var packedUpInstanceSet = new chorus.collections.Base();
-            packedUpInstanceSet.add(packedUpGnipSet);
-            packedUpInstanceSet.add(packedUpDataSourceSet);
-            packedUpInstanceSet.add(packedUpHadoopSet);
+            var entireDataSourceSet = new chorus.collections.Base();
+            entireDataSourceSet.add(packedUpDataSourceSet);
+            entireDataSourceSet.add(packedUpGnipSet);
+            entireDataSourceSet.add(packedUpHadoopSet);
 
-            expect(packedUpInstanceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
+            expect(entireDataSourceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
         });
 
         describe('when a data source is added', function() {
@@ -164,13 +164,13 @@ describe("chorus.pages.DashboardPage", function() {
 
     describe('#fetchInstances', function(){
         beforeEach(function() {
-            spyOn(this.page.gnipInstanceSet, "fetchAll");
+            spyOn(this.page.gnipDataSourceSet, "fetchAll");
             spyOn(this.page.hdfsDataSourceSet, "fetchAll");
             this.page.fetchInstances();
         });
 
         it("fetches all gnip and hadoop instances", function() {
-            expect(this.page.gnipInstanceSet.fetchAll).toHaveBeenCalled();
+            expect(this.page.gnipDataSourceSet.fetchAll).toHaveBeenCalled();
             expect(this.page.hdfsDataSourceSet.fetchAll).toHaveBeenCalled();
         });
     });

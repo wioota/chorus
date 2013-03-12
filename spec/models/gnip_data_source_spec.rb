@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe GnipInstance do
+describe GnipDataSource do
   it_behaves_like "a notable model" do
     let!(:note) do
-      Events::NoteOnGnipInstance.create!({
+      Events::NoteOnGnipDataSource.create!({
         :actor => users(:owner),
-        :gnip_instance => model,
+        :gnip_data_source => model,
         :body => "This is the body"
       }, :as => :create)
     end
 
-    let!(:model) { FactoryGirl.create(:gnip_instance) }
+    let!(:model) { FactoryGirl.create(:gnip_data_source) }
   end
 
   describe "validations" do
@@ -23,7 +23,7 @@ describe GnipInstance do
     it_should_behave_like "it validates with DataSourceNameValidator"
 
     it_should_behave_like 'a model with name validations' do
-      let(:factory_name) { :gnip_instance }
+      let(:factory_name) { :gnip_data_source }
     end
   end
 
@@ -33,6 +33,6 @@ describe GnipInstance do
     it { should have_many :activities }
   end
 
-  it_should_behave_like "taggable models", [:gnip_instances, :default]
+  it_should_behave_like "taggable models", [:gnip_data_sources, :default]
 
 end

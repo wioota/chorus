@@ -1,6 +1,6 @@
-chorus.pages.GnipInstanceShowPage = chorus.pages.Base.extend({
+chorus.pages.GnipDataSourceShowPage = chorus.pages.Base.extend({
     setup: function(id) {
-        this.model = new chorus.models.GnipInstance({id: id});
+        this.model = new chorus.models.GnipDataSource({id: id});
         this.model.fetch();
 
         this.handleFetchErrorsFor(this.model);

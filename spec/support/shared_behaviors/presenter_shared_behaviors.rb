@@ -72,7 +72,7 @@ shared_examples "dataset presenter with workspace" do |dataset_factory_name|
   end
 end
 
-shared_examples "activity stream instance presenter" do
+shared_examples "activity stream data source presenter" do
   context "outside of activity Stream" do
     let(:options) { {:activity_stream => false} }
 

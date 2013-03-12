@@ -2,15 +2,15 @@ describe("chorus.views.InstanceList", function() {
     beforeEach(function() {
         this.dataSources = new chorus.collections.DataSourceSet();
         this.hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
-        this.gnipInstances = new chorus.collections.GnipInstanceSet();
+        this.gnipDataSources = new chorus.collections.GnipDataSourceSet();
         this.dataSources.fetch();
         this.hdfsDataSources.fetch();
-        this.gnipInstances.fetch();
+        this.gnipDataSources.fetch();
 
         this.view = new chorus.views.InstanceList({
             dataSources: this.dataSources,
             hdfsDataSources: this.hdfsDataSources,
-            gnipInstances: this.gnipInstances
+            gnipDataSources: this.gnipDataSources
         });
     });
 
@@ -23,7 +23,7 @@ describe("chorus.views.InstanceList", function() {
             it('renders empty text for each data source type', function() {
                 expect(this.view.$(".data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".hdfs_data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
-                expect(this.view.$(".gnip_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".gnip_data_source .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
         });
     });
@@ -40,10 +40,10 @@ describe("chorus.views.InstanceList", function() {
                 rspecFixtures.hdfsDataSource({name : "hadoop1", id: "2"}),
                 rspecFixtures.hdfsDataSource({name : "Hadoop10", id: "3"})
             ]);
-            this.server.completeFetchFor(this.gnipInstances, [
-                rspecFixtures.gnipInstance({name : "Gnip1", id:"1"}),
-                rspecFixtures.gnipInstance({name : "Gnip2", id: "2"}),
-                rspecFixtures.gnipInstance({name : "Gnip3", id: "3"})
+            this.server.completeFetchFor(this.gnipDataSources, [
+                rspecFixtures.gnipDataSource({name : "Gnip1", id:"1"}),
+                rspecFixtures.gnipDataSource({name : "Gnip2", id: "2"}),
+                rspecFixtures.gnipDataSource({name : "Gnip3", id: "3"})
             ]);
         });
 
@@ -76,7 +76,7 @@ describe("chorus.views.InstanceList", function() {
         });
 
         it('renders the gnip data sources in the correct data source div', function() {
-            var gnipItems = this.view.$(".gnip_instance li.instance");
+            var gnipItems = this.view.$(".gnip_data_source li.instance");
             expect(gnipItems.length).toBe(3);
             expect(gnipItems).toContainText("Gnip1");
             expect(gnipItems).toContainText("Gnip2");
@@ -149,14 +149,14 @@ describe("chorus.views.InstanceList", function() {
                 this.newInstance = rspecFixtures.oracleDataSource({id: 31415});
                 spyOn(this.view.dataSources, "fetchAll");
                 spyOn(this.view.hdfsDataSources, "fetchAll");
-                spyOn(this.view.gnipInstances, "fetchAll");
+                spyOn(this.view.gnipDataSources, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
             it('re-fetches the data sources, hadoop and gnip data sources', function() {
                 expect(this.view.dataSources.fetchAll).toHaveBeenCalled();
                 expect(this.view.hdfsDataSources.fetchAll).toHaveBeenCalled();
-                expect(this.view.gnipInstances.fetchAll).toHaveBeenCalled();
+                expect(this.view.gnipDataSources.fetchAll).toHaveBeenCalled();
             });
 
             it("selects the li with a matching id when fetch completes", function() {

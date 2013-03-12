@@ -39,6 +39,6 @@ describe GpdbDataSourcePresenter, :type => :view do
       owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
-    it_behaves_like "activity stream instance presenter"
+    it_behaves_like "activity stream data source presenter"
   end
 end

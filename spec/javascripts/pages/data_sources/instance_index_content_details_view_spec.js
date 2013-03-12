@@ -8,15 +8,15 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             rspecFixtures.hdfsDataSource(),
             rspecFixtures.hdfsDataSource()
         ]);
-        var gnipInstances = new chorus.collections.GnipInstanceSet([
-            rspecFixtures.gnipInstance(),
-            rspecFixtures.gnipInstance()
+        var gnipDataSources = new chorus.collections.GnipDataSourceSet([
+            rspecFixtures.gnipDataSource(),
+            rspecFixtures.gnipDataSource()
         ]);
 
         this.view = new chorus.views.InstanceIndexContentDetails({
             dataSources: dataSources,
             hdfsDataSources: hdfsDataSources,
-            gnipInstances: gnipInstances
+            gnipDataSources: gnipDataSources
         });
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
     });
@@ -37,8 +37,8 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             this.view.dataSources.trigger('loaded');
             this.view.hdfsDataSources.loaded = true;
             this.view.hdfsDataSources.trigger('loaded');
-            this.view.gnipInstances.loaded = true;
-            this.view.gnipInstances.trigger('loaded');
+            this.view.gnipDataSources.loaded = true;
+            this.view.gnipDataSources.trigger('loaded');
         });
 
         it("doesn't display the loading text", function() {

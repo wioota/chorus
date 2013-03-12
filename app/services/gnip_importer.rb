@@ -11,16 +11,16 @@ class GnipImporter
   validate :validate_schema_and_table
   validate :workspace_must_have_sandbox
 
-  attr_accessor :table_name, :gnip_instance_id, :workspace, :user_id, :user, :event_id
+  attr_accessor :table_name, :gnip_data_source_id, :workspace, :user_id, :user, :event_id
 
-  def self.import_to_table(table_name, gnip_instance_id, workspace_id, user_id, event_id)
-    importer = new(table_name, gnip_instance_id, workspace_id, user_id, event_id)
+  def self.import_to_table(table_name, gnip_data_source_id, workspace_id, user_id, event_id)
+    importer = new(table_name, gnip_data_source_id, workspace_id, user_id, event_id)
     importer.import
   end
 
-  def initialize(table_name, gnip_instance_id, workspace_id, user_id, event_id)
+  def initialize(table_name, gnip_data_source_id, workspace_id, user_id, event_id)
     self.table_name = table_name
-    self.gnip_instance_id = gnip_instance_id
+    self.gnip_data_source_id = gnip_data_source_id
     self.user_id = user_id
     self.user = User.find(user_id)
     self.event_id = event_id
@@ -28,8 +28,8 @@ class GnipImporter
   end
 
   def import
-    gnip_instance = GnipInstance.find(gnip_instance_id)
-    stream = ChorusGnip.from_stream(gnip_instance.stream_url, gnip_instance.username, gnip_instance.password)
+    gnip_data_source = GnipDataSource.find(gnip_data_source_id)
+    stream = ChorusGnip.from_stream(gnip_data_source.stream_url, gnip_data_source.username, gnip_data_source.password)
 
     first_time = true
     [*stream.fetch].each do |url|
@@ -103,7 +103,7 @@ class GnipImporter
     event = Events::GnipStreamImportSuccess.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
         :dataset => gnip_event.dataset,
-        :gnip_instance => gnip_event.gnip_instance
+        :gnip_data_source => gnip_event.gnip_data_source
     )
     Notification.create!(:recipient_id => gnip_event.actor.id, :event_id => event.id)
   end
@@ -113,7 +113,7 @@ class GnipImporter
     event = Events::GnipStreamImportFailed.by(gnip_event.actor).add(
         :workspace => gnip_event.workspace,
         :destination_table => table_name,
-        :gnip_instance => gnip_event.gnip_instance,
+        :gnip_data_source => gnip_event.gnip_data_source,
         :error_message => error_message
     )
     Notification.create!(:recipient_id => gnip_event.actor.id, :event_id => event.id)

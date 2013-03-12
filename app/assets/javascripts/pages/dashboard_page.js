@@ -16,7 +16,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
         this.dataSourceSet = new chorus.collections.DataSourceSet([]);
         this.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([]);
-        this.gnipInstanceSet = new chorus.collections.GnipInstanceSet([]);
+        this.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([]);
 
         this.subscribePageEvent("instance:added", function() { this.fetchInstances(); });
 
@@ -38,36 +38,36 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.bindings.add(this.hdfsDataSourceSet, "loaded", this.mergeInstances);
         this.hdfsDataSourceSet.fetchAll();
 
-        this.bindings.add(this.gnipInstanceSet, "loaded", this.mergeInstances);
-        this.gnipInstanceSet.fetchAll();
+        this.bindings.add(this.gnipDataSourceSet, "loaded", this.mergeInstances);
+        this.gnipDataSourceSet.fetchAll();
     },
 
     instancesLoaded: function() {
         return (this.dataSourceSet && this.dataSourceSet.loaded &&
             this.hdfsDataSourceSet && this.hdfsDataSourceSet.loaded &&
-                this.gnipInstanceSet && this.gnipInstanceSet.loaded);
+                this.gnipDataSourceSet && this.gnipDataSourceSet.loaded);
     },
 
     mergeInstances: function() {
         if(this.instancesLoaded()) {
-            var wrapInstances = function(set) {
-                return _.map(set, function(instance) {
-                    return new chorus.models.Base({ theInstance: instance });
+            var wrapDataSources = function(set) {
+                return _.map(set, function(dataSource) {
+                    return new chorus.models.Base({ theInstance: dataSource });
                 });
             };
 
-            var proxyInstances = wrapInstances(this.dataSourceSet.models);
-            var proxyHdfsDataSources = wrapInstances(this.hdfsDataSourceSet.models);
-            var proxyGnipInstances = wrapInstances(this.gnipInstanceSet.models);
+            var proxyDataSources = wrapDataSources(this.dataSourceSet.models);
+            var proxyHdfsDataSources = wrapDataSources(this.hdfsDataSourceSet.models);
+            var proxyGnipDataSources = wrapDataSources(this.gnipDataSourceSet.models);
 
             this.arraySet = new chorus.collections.Base();
             this.arraySet.comparator = function(instanceWrapper) {
                 return instanceWrapper.get("theInstance").name().toLowerCase();
             };
 
-            this.arraySet.add(proxyInstances);
+            this.arraySet.add(proxyDataSources);
             this.arraySet.add(proxyHdfsDataSources);
-            this.arraySet.add(proxyGnipInstances);
+            this.arraySet.add(proxyGnipDataSources);
             this.arraySet.loaded = true;
 
             this.mainContent = new chorus.views.Dashboard({

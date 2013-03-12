@@ -1,6 +1,6 @@
-describe("chorus.models.GnipInstance", function() {
+describe("chorus.models.GnipDataSource", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.gnipInstance({id: 123});
+        this.model = rspecFixtures.gnipDataSource({id: 123});
         this.attrs = {
             name: "someName",
             streamUrl: "someUrl",
@@ -10,7 +10,7 @@ describe("chorus.models.GnipInstance", function() {
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toBe("/gnip_instances/123");
+        expect(this.model.url()).toBe("/gnip_data_sources/123");
     });
 
     it("is shared", function() {
@@ -18,11 +18,11 @@ describe("chorus.models.GnipInstance", function() {
     });
 
     it("has the right showUrlTemplate", function() {
-        expect(this.model.showUrl()).toBe("#/gnip_instances/123");
+        expect(this.model.showUrl()).toBe("#/gnip_data_sources/123");
     });
 
     it("has the correct entityType", function() {
-        expect(this.model.entityType).toBe("gnip_instance");
+        expect(this.model.entityType).toBe("gnip_data_source");
     });
 
     it("returns true for isGnip", function() {

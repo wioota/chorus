@@ -52,7 +52,7 @@
             ["databases/:databaseId", "GpdbSchemaIndex"],
             ["schemas/:schemaId", "SchemaBrowse"],
             ["datasets/:id", "DatasetShow"],
-            ["gnip_instances/:id", "GnipInstanceShow"],
+            ["gnip_data_sources/:id", "GnipDataSourceShow"],
             ["hdfs_data_sources/:dataSourceId/browse", "HdfsEntryIndex"],
             ["hdfs_data_sources/:dataSourceId/browse/:id", "HdfsEntryIndex"],
             ["hdfs_data_sources/:dataSourceId/browseFile/:id", "HdfsShowFile"],

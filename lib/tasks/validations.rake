@@ -11,7 +11,7 @@ namespace :validations do
       legacy_gpdb_instance,
       DataSource,
       HdfsDataSource,
-      GnipInstance
+      GnipDataSource
     ])
 
     exit(1) unless data_valid

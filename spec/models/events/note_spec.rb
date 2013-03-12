@@ -8,7 +8,7 @@ describe Events::Note do
   let(:actor) { users(:not_a_member) }
   let(:gpdb_data_source) { data_sources(:default) }
   let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
-  let(:gnip_instance) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_data_sources(:default) }
   let(:workspace) { workspaces(:public) }
   let(:workfile) { workfiles(:public) }
   let(:tableau_workfile) { workfiles(:tableau) }
@@ -219,20 +219,20 @@ describe Events::Note do
     it_does_not_create_a_global_activity
   end
 
-  describe "NoteOnGnipInstance" do
+  describe "NoteOnGnipDataSource" do
     subject do
-      Events::NoteOnGnipInstance.create!({
+      Events::NoteOnGnipDataSource.create!({
           :actor => actor,
-          :gnip_instance => gnip_instance,
+          :gnip_data_source => gnip_data_source,
           :body => "This is the body"
       }, :as => :create)
     end
 
-    its(:gnip_instance) { should == gnip_instance }
-    its(:targets) { should == {:gnip_instance => gnip_instance} }
+    its(:gnip_data_source) { should == gnip_data_source }
+    its(:targets) { should == {:gnip_data_source => gnip_data_source} }
     its(:additional_data) { should == {'body' => "This is the body"} }
 
-    it_creates_activities_for { [actor, gnip_instance] }
+    it_creates_activities_for { [actor, gnip_data_source] }
     it_creates_a_global_activity
   end
 
@@ -358,14 +358,14 @@ describe Events::Note do
     end
 
     it "builds a note on a Gnip Instance" do
-      note = Events::Note.build_for(gnip_instance, {
+      note = Events::Note.build_for(gnip_data_source, {
           :body => "Some crazy content",
-          :entity_type => "gnip_instance"
+          :entity_type => "gnip_data_source"
       })
 
       note.save!
-      note.gnip_instance.should == gnip_instance
-      note.should be_a(Events::NoteOnGnipInstance)
+      note.gnip_data_source.should == gnip_data_source
+      note.should be_a(Events::NoteOnGnipDataSource)
       note.body.should == "Some crazy content"
       note.actor.should == user
     end

@@ -1,7 +1,7 @@
 class InstanceStatusChecker
   def self.check_all
-    DataSource.find_each { |ds| self.check(ds) }
-    HdfsDataSource.find_each { |instance| self.check(instance) }
+    DataSource.find_each { |data_source| self.check(data_source) }
+    HdfsDataSource.find_each { |data_source| self.check(data_source) }
   end
 
   def self.check(data_source)

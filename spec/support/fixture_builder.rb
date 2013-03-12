@@ -110,9 +110,9 @@ FixtureBuilder.configure do |fbuilder|
 
     fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
 
-    gnip_data_source = FactoryGirl.create(:gnip_instance, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
-    FactoryGirl.create(:gnip_instance, :owner => owner, :name => 'typeahead_gnip')
-    Events::GnipInstanceCreated.by(admin).add(:gnip_instance => gnip_data_source)
+    gnip_data_source = FactoryGirl.create(:gnip_data_source, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
+    FactoryGirl.create(:gnip_data_source, :owner => owner, :name => 'typeahead_gnip')
+    Events::GnipDataSourceCreated.by(admin).add(:gnip_data_source => gnip_data_source)
 
     # Instance Accounts
     @shared_instance_account = shared_data_source.account_for_user(admin)
@@ -403,8 +403,8 @@ FixtureBuilder.configure do |fbuilder|
       @note_on_hdfs_file = Events::NoteOnHdfsFile.create!({:note_target => @hdfs_file, :body => 'hhhhhhaaaadooooopppp'}, :as => :create)
       @note_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'Come see my awesome workspace!'}, :as => :create)
       @note_on_workfile = Events::NoteOnWorkfile.create!({:note_target => text_workfile, :body => "My awesome workfile"}, :as => :create)
-      @note_on_gnip_data_source = Events::NoteOnGnipInstance.create!({:note_target => gnip_data_source, :body => 'i am a comment with gnipsearch in me'}, :as => :create)
-      @insight_on_gnip_data_source = Events::NoteOnGnipInstance.create!({:note_target => gnip_data_source, :body => 'i am an insight with gnipinsight in me', :insight => true}, :as => :create)
+      @note_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am a comment with gnipsearch in me'}, :as => :create)
+      @insight_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am an insight with gnipinsight in me', :insight => true}, :as => :create)
   
       Events::NoteOnDataset.create!({:note_target => default_table, :body => 'Note on dataset'}, :as => :create)
       Events::NoteOnWorkspaceDataset.create!({:note_target => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset'}, :as => :create)
@@ -467,9 +467,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceImportCreated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
     Events::WorkspaceImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :source_dataset => default_table)
     Events::WorkspaceImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!")
-    fbuilder.name :gnip_stream_import_created, Events::GnipStreamImportCreated.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :gnip_instance => gnip_data_source)
-    Events::GnipStreamImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_instance => gnip_data_source)
-    Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :error_message => "an error", :gnip_instance => gnip_data_source)
+    fbuilder.name :gnip_stream_import_created, Events::GnipStreamImportCreated.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :gnip_data_source => gnip_data_source)
+    Events::GnipStreamImportSuccess.by(owner).add(:workspace => public_workspace, :dataset => other_table, :gnip_data_source => gnip_data_source)
+    Events::GnipStreamImportFailed.by(owner).add(:workspace => public_workspace, :destination_table => other_table.name, :error_message => "an error", :gnip_data_source => gnip_data_source)
     Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => default_table)
     Events::ImportScheduleUpdated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
     Events::ImportScheduleDeleted.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table_deleted')

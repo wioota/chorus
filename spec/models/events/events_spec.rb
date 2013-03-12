@@ -8,7 +8,7 @@ describe "Event types" do
   let(:actor) { users(:owner) }
   let(:gpdb_data_source) { data_sources(:default) }
   let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
-  let(:gnip_instance) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_data_sources(:default) }
   let(:user) { users(:the_collaborator) }
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
@@ -84,19 +84,19 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GnipInstanceCreated" do
+  describe "GnipDataSourceCreated" do
     subject do
-      Events::GnipInstanceCreated.add(
+      Events::GnipDataSourceCreated.add(
           :actor => actor,
-          :gnip_instance => gnip_instance
+          :gnip_data_source => gnip_data_source
       )
     end
 
-    its(:action) { should == "GnipInstanceCreated" }
-    its(:gnip_instance) { should == gnip_instance }
-    its(:targets) { should == {:gnip_instance => gnip_instance} }
+    its(:action) { should == "GnipDataSourceCreated" }
+    its(:gnip_data_source) { should == gnip_data_source }
+    its(:targets) { should == {:gnip_data_source => gnip_data_source} }
 
-    it_creates_activities_for { [actor, gnip_instance] }
+    it_creates_activities_for { [actor, gnip_data_source] }
     it_creates_a_global_activity
   end
 
@@ -531,55 +531,55 @@ describe "Event types" do
   end
 
   describe "GnipStreamImportCreated" do
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
     subject do
       Events::GnipStreamImportCreated.add(
           :dataset => dataset,
-          :gnip_instance => gnip_instance,
+          :gnip_data_source => gnip_data_source,
           :workspace => workspace
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_data_source => gnip_data_source} }
 
-    it_creates_activities_for { [workspace, dataset, gnip_instance] }
+    it_creates_activities_for { [workspace, dataset, gnip_data_source] }
     it_does_not_create_a_global_activity
   end
 
   describe "GnipStreamImportSuccess" do
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
     subject do
       Events::GnipStreamImportSuccess.add(
           :dataset => dataset,
-          :gnip_instance => gnip_instance,
+          :gnip_data_source => gnip_data_source,
           :workspace => workspace
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_instance => gnip_instance} }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset, :gnip_data_source => gnip_data_source} }
 
-    it_creates_activities_for { [workspace, dataset, gnip_instance] }
+    it_creates_activities_for { [workspace, dataset, gnip_data_source] }
     it_does_not_create_a_global_activity
   end
 
   describe "GnipStreamImportFailed" do
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
     subject do
       Events::GnipStreamImportFailed.add(
           :destination_table => dataset.name,
-          :gnip_instance => gnip_instance,
+          :gnip_data_source => gnip_data_source,
           :workspace => workspace,
           :error_message => 'Flying Monkey Attack'
       )
     end
 
     its(:destination_table) { should == dataset.name }
-    its(:targets) { should == {:workspace => workspace, :gnip_instance => gnip_instance} }
+    its(:targets) { should == {:workspace => workspace, :gnip_data_source => gnip_data_source} }
     its(:error_message) { should == 'Flying Monkey Attack' }
 
-    it_creates_activities_for { [workspace, gnip_instance] }
+    it_creates_activities_for { [workspace, gnip_data_source] }
     it_does_not_create_a_global_activity
   end
 

@@ -35,7 +35,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(GpdbDataSource)
       Sunspot.session.should be_a_search_for(OracleDataSource)
       Sunspot.session.should be_a_search_for(HdfsDataSource)
-      Sunspot.session.should be_a_search_for(GnipInstance)
+      Sunspot.session.should be_a_search_for(GnipDataSource)
       Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)
@@ -115,7 +115,7 @@ describe Search do
         Sunspot.session.should be_a_search_for(GpdbDataSource)
         Sunspot.session.should be_a_search_for(OracleDataSource)
         Sunspot.session.should be_a_search_for(HdfsDataSource)
-        Sunspot.session.should be_a_search_for(GnipInstance)
+        Sunspot.session.should be_a_search_for(GnipDataSource)
       end
 
       it "creates a search session just for that model" do
@@ -247,7 +247,7 @@ describe Search do
     let(:the_collaborator) { users(:the_collaborator) }
     let(:gpdb_data_source) { data_sources(:default) }
     let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
-    let(:gnip_instance) { gnip_instances(:default) }
+    let(:gnip_data_source) { gnip_data_sources(:default) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:attachment) { attachments(:attachment) }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
@@ -341,12 +341,12 @@ describe Search do
         create_and_record_search do |search|
           search.instances.should include(gpdb_data_source)
           search.instances.should include(hdfs_data_source)
-          search.instances.should include(gnip_instance)
+          search.instances.should include(gnip_data_source)
         end
       end
 
       context "including highlighted attributes" do
-        [GpdbDataSource, HdfsDataSource, GnipInstance].each do |instance_type|
+        [GpdbDataSource, HdfsDataSource, GnipDataSource].each do |instance_type|
           it "should include highlighted attributes for #{instance_type.name}" do
             create_and_record_search do |search|
               instance = search.instances.select { |instance| instance.is_a?(instance_type) }.first

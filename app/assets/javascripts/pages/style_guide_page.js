@@ -63,10 +63,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             online: true
         });
 
-        models.gnipInstance = new chorus.models.GnipInstance({
+        models.gnipDataSource = new chorus.models.GnipDataSource({
             name: "Some Gnip Source",
             online: true,
-            entityType: "gnip_instance"
+            entityType: "gnip_data_source"
         });
 
         models.database = new chorus.models.Database({
@@ -205,8 +205,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         collections.dataSourceSet = new chorus.collections.DataSourceSet([models.oracleDataSource, models.greenplumDataSource]);
         collections.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([models.hdfsDataSource]);
-        collections.gnipInstanceSet = new chorus.collections.GnipInstanceSet([models.gnipInstance]);
-        collections.dataSourceSet.loaded = collections.hdfsDataSourceSet.loaded = collections.gnipInstanceSet.loaded = true;
+        collections.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([models.gnipDataSource]);
+        collections.dataSourceSet.loaded = collections.hdfsDataSourceSet.loaded = collections.gnipDataSourceSet.loaded = true;
 
         collections.workfileSet = new chorus.collections.WorkfileSet([models.workfile, models.otherWorkfile]);
         collections.workfileSet.loaded = true;
@@ -478,7 +478,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 var options = {
                     dataSources: collections.dataSourceSet,
                     hdfsDataSources: collections.hdfsDataSourceSet,
-                    gnipInstances: collections.gnipInstanceSet
+                    gnipDataSources: collections.gnipDataSourceSet
                 };
 
                 return new chorus.views.MainContentView({

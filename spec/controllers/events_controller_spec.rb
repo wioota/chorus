@@ -222,7 +222,7 @@ describe EventsController do
 
     FIXTURE_FILES = {
         'dataSourceCreated' => Events::DataSourceCreated,
-        'gnipInstanceCreated' => Events::GnipInstanceCreated,
+        'gnipDataSourceCreated' => Events::GnipDataSourceCreated,
         'hdfsDataSourceCreated' => Events::HdfsDataSourceCreated,
         'greenplumInstanceChangedOwner' => Events::GreenplumInstanceChangedOwner,
         'greenplumInstanceChangedName' => Events::GreenplumInstanceChangedName,
@@ -239,8 +239,8 @@ describe EventsController do
         'sandboxAdded' => Events::WorkspaceAddSandbox,
         'noteOnGreenplumInstanceCreated' => Events::NoteOnGreenplumInstance.where(:insight => false),
         'insightOnGreenplumInstance' => Events::NoteOnGreenplumInstance.where(:insight => true),
-        'noteOnGnipInstanceCreated' => Events::NoteOnGnipInstance.where(:insight => false),
-        'insightOnGnipInstanceCreated' => Events::NoteOnGnipInstance.where(:insight => true),
+        'noteOnGnipDataSourceCreated' => Events::NoteOnGnipDataSource.where(:insight => false),
+        'insightOnGnipDataSourceCreated' => Events::NoteOnGnipDataSource.where(:insight => true),
         'noteOnHdfsDataSourceCreated' => Events::NoteOnHdfsDataSource,
         'noteOnHdfsFileCreated' => Events::NoteOnHdfsFile,
         'noteOnWorkspaceCreated' => Events::NoteOnWorkspace,

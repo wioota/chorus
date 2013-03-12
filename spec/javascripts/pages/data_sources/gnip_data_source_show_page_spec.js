@@ -1,7 +1,7 @@
-describe("chorus.pages.GnipInstanceShowPage", function() {
+describe("chorus.pages.GnipDataSourceShowPage", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.gnipInstance({name: "gnip"});
-        this.page = new chorus.pages.GnipInstanceShowPage(this.model.id);
+        this.model = rspecFixtures.gnipDataSource({name: "gnip"});
+        this.page = new chorus.pages.GnipDataSourceShowPage(this.model.id);
     });
 
     context('after the data source has loaded successfully', function() {
@@ -22,7 +22,7 @@ describe("chorus.pages.GnipInstanceShowPage", function() {
 
         it("has a title bar with an icon", function() {
             expect(this.page.$(".content_header")).toContainText("gnip");
-            expect(this.page.$(".content_header img").attr("src")).toContain("/images/data_sources/icon_gnip_instance.png");
+            expect(this.page.$(".content_header img").attr("src")).toContain("/images/data_sources/icon_gnip_data_source.png");
         });
 
         it("has a tag box", function() {

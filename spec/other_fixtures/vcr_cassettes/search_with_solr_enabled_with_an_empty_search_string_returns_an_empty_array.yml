@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipInstance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HadoopInstance+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28User+OR+Instance+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000003+OR+1000012%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -23,7 +23,7 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''50'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
-        OR GpdbDataSource OR HadoopInstance OR GnipInstance OR Workspace OR Workfile
+        OR GpdbDataSource OR HadoopInstance OR GnipDataSource OR Workspace OR Workfile
         OR Dataset OR HdfsEntry OR Attachment OR Events\\:\\:Note OR Comment)'',''type_name_s:(User
         OR Instance OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
@@ -141,11 +141,11 @@ http_interactions:
         1000002'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
         1000002'',''name_texts''=>[''typeahead_hadoop_instance'']}]}},{''groupValue''=>''HadoopInstance
         1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''HadoopInstance
-        1000003'',''name_texts''=>[''hadoop_instance44446'']}]}},{''groupValue''=>''GnipInstance
-        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''docs''=>[{''id''=>''GnipInstance
+        1000003'',''name_texts''=>[''hadoop_instance44446'']}]}},{''groupValue''=>''GnipDataSource
+        1000000'',''doclist''=>{''numFound''=>3,''start''=>0,''docs''=>[{''id''=>''GnipDataSource
         1000000'',''name_texts''=>[''default''],''description_texts''=>[''a searchquery
-        example gnip account'']},{''id''=>''Events::NoteOnGnipInstance 1000041'',''body_texts''=>[''i
-        am a comment with gnipsearch in me'']},{''id''=>''Events::NoteOnGnipInstance
+        example gnip account'']},{''id''=>''Events::NoteOnGnipDataSource 1000041'',''body_texts''=>[''i
+        am a comment with gnipsearch in me'']},{''id''=>''Events::NoteGnipDataSourcece
         1000042'',''body_texts''=>[''i am an insight with gnipinsight in me'']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',21,''Workfile'',18,''Workspace'',17,''Dataset'',16,''Instance'',15,''Attachment'',11,''HdfsEntry'',3]},''facet_dates''=>{},''facet_ranges''=>{}}}'
     http_version: '1.1'
   recorded_at: Thu, 14 Feb 2013 02:00:20 GMT

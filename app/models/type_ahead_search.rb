@@ -8,7 +8,7 @@ class TypeAheadSearch
     GpdbDataSource,
     OracleDataSource,
     HdfsDataSource,
-    GnipInstance,
+    GnipDataSource,
     Workspace,
     Workfile,
     Tag,

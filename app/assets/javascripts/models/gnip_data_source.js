@@ -1,10 +1,10 @@
-chorus.models.GnipInstance = chorus.models.Instance.extend({
-    constructorName: "GnipInstance",
-    urlTemplate: "gnip_instances/{{id}}",
-    showUrlTemplate: "gnip_instances/{{id}}",
+chorus.models.GnipDataSource = chorus.models.Instance.extend({
+    constructorName: "GnipDataSource",
+    urlTemplate: "gnip_data_sources/{{id}}",
+    showUrlTemplate: "gnip_data_sources/{{id}}",
     shared: true,
-    entityType: "gnip_instance",
-    parameterWrapper: "gnip_instance",
+    entityType: "gnip_data_source",
+    parameterWrapper: "gnip_data_source",
 
     isShared: function() {
         return true;

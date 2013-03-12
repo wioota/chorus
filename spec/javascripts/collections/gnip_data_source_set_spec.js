@@ -1,16 +1,16 @@
-describe("chorus.collections.GnipInstanceSet", function() {
+describe("chorus.collections.GnipDataSourceSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.GnipInstanceSet([
-            rspecFixtures.gnipInstance({ name: "Gun_instance" }),
-            rspecFixtures.gnipInstance({ name: "cat_instance" }),
-            rspecFixtures.gnipInstance({ name: "Fat_instance" }),
-            rspecFixtures.gnipInstance({ name: "egg_instance" }),
-            rspecFixtures.gnipInstance({ name: "Dog_instance" })
+        this.collection = new chorus.collections.GnipDataSourceSet([
+            rspecFixtures.gnipDataSource({ name: "Gun_instance" }),
+            rspecFixtures.gnipDataSource({ name: "cat_instance" }),
+            rspecFixtures.gnipDataSource({ name: "Fat_instance" }),
+            rspecFixtures.gnipDataSource({ name: "egg_instance" }),
+            rspecFixtures.gnipDataSource({ name: "Dog_instance" })
         ]);
     });
 
     it("has the right url", function() {
-        expect(this.collection.url()).toHaveUrlPath("/gnip_instances");
+        expect(this.collection.url()).toHaveUrlPath("/gnip_data_sources");
     });
 
     it('sorts the data sources by name, case insensitively', function() {

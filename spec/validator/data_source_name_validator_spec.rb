@@ -57,10 +57,10 @@ describe DataSourceNameValidator do
     it_validates_against(GpdbDataSource)
     it_validates_against(OracleDataSource)
     it_validates_against(HdfsDataSource)
-    it_validates_against(GnipInstance)
+    it_validates_against(GnipDataSource)
 
     it "it matches data source names regardless of case" do
-      FactoryGirl.create(:gnip_instance, :name => name.capitalize)
+      FactoryGirl.create(:gnip_data_source, :name => name.capitalize)
       record.valid?.should == false
       record.should have_error_on(:name).with_message(:taken)
     end

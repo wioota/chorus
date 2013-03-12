@@ -30,8 +30,8 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :gnip_instances, :only => [:index, :show, :create, :update] do
-    resources :imports, :only => [:create], :controller => 'gnip_instance_imports'
+  resources :gnip_data_sources, :only => [:index, :show, :create, :update] do
+    resources :imports, :only => [:create], :controller => 'gnip_data_source_imports'
   end
 
   resources :databases, :only => [:show], :controller => 'instance_databases' do

@@ -64,7 +64,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         if (dataSourceType === "register_existing_hdfs") {
             return chorus.models.HdfsDataSource;
         } else if (dataSourceType === "register_existing_gnip") {
-            return chorus.models.GnipInstance;
+            return chorus.models.GnipDataSource;
         } else if (dataSourceType === "register_existing_oracle") {
             return chorus.models.OracleDataSource;
         } else {

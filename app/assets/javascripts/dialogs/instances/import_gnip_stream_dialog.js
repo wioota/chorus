@@ -19,7 +19,7 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
         this._super("makeModel", arguments);
         this.resource = this.model = new chorus.models.GnipStream();
         this.gnip = this.pageModel;
-        this.model.set({gnip_instance_id: this.gnip.id});
+        this.model.set({gnip_data_source_id: this.gnip.id});
     },
 
     postRender: function() {

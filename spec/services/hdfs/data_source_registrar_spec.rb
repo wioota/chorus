@@ -19,7 +19,7 @@ describe Hdfs::DataSourceRegistrar do
   end
 
   describe ".create!" do
-    context "when connection succeeds but instance is invalid" do
+    context "when connection succeeds but data source is invalid" do
       it "does not save the object" do
         expect {
           Hdfs::DataSourceRegistrar.create!({}, owner)
@@ -28,7 +28,7 @@ describe Hdfs::DataSourceRegistrar do
     end
 
     context "when a connection is made using some hadoop version" do
-      it "save the instance with right version" do
+      it "save the data source with right version" do
         data_source = Hdfs::DataSourceRegistrar.create!(data_source_attributes, owner)
 
         data_source.version.should == "0.1.2.3"

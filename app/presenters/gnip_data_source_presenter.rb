@@ -1,4 +1,4 @@
-class GnipInstancePresenter < Presenter
+class GnipDataSourcePresenter < Presenter
   def to_hash
     {
         :name => model.name,

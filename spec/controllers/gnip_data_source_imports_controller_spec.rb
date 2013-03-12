@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe GnipInstanceImportsController do
+describe GnipDataSourceImportsController do
 
   let(:user) { users(:owner) }
   let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
-  let(:gnip_data_source) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_data_sources(:default) }
   let(:workspace) { workspaces(:public) }
 
-  let(:gnip_instance_import_params) { {
-      :gnip_instance_id => gnip_data_source.id,
+  let(:gnip_data_source_import_params) { {
+      :gnip_data_source_id => gnip_data_source.id,
       :import => {
           :to_table => 'foobar',
           :workspace_id => workspace.id
@@ -31,19 +31,19 @@ describe GnipInstanceImportsController do
 
         it "uses authentication" do
           mock(subject).authorize! :can_edit_sub_objects, workspace
-          post :create, gnip_instance_import_params
+          post :create, gnip_data_source_import_params
           response.code.should == '200'
         end
 
         it "leaves the job to handle the CSVFile" do
           expect {
-            post :create, gnip_instance_import_params
+            post :create, gnip_data_source_import_params
           }.to change(CsvFile, :count).by(0)
         end
 
         it "creates an event before it is run" do
           expect {
-            post :create, gnip_instance_import_params
+            post :create, gnip_data_source_import_params
           }.to change(Events::GnipStreamImportCreated, :count).by(1)
 
           created_event = Events::GnipStreamImportCreated.last
@@ -55,7 +55,7 @@ describe GnipInstanceImportsController do
       it "renders errors if the GnipImporter is not valid" do
         any_instance_of(GnipImporter) { |importer| stub(importer).valid? { false } }
         expect {
-          post :create, gnip_instance_import_params
+          post :create, gnip_data_source_import_params
         }.to_not change(Events::GnipStreamImportCreated, :count)
         response.code.should == "422"
       end

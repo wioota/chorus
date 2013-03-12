@@ -22,7 +22,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
         return {
             gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
-            gnipInstance: this.model.constructorName === "GnipInstance"
+            gnipDataSource: this.model.constructorName === "GnipDataSource"
         };
     },
 

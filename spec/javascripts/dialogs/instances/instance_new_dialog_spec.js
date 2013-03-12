@@ -427,11 +427,11 @@ describe("chorus.dialogs.InstancesNew", function() {
                 this.dialog.$("button.submit").click();
                 var params = this.server.lastCreate().params();
 
-                expect(params["gnip_instance[name]"]).toBe("Gnip Name");
-                expect(params["gnip_instance[description]"]).toBe("Gnip Description");
-                expect(params["gnip_instance[stream_url]"]).toBe("gnip.com");
-                expect(params["gnip_instance[username]"]).toBe("gnip_user");
-                expect(params["gnip_instance[password]"]).toBe("my_password");
+                expect(params["gnip_data_source[name]"]).toBe("Gnip Name");
+                expect(params["gnip_data_source[description]"]).toBe("Gnip Description");
+                expect(params["gnip_data_source[stream_url]"]).toBe("gnip.com");
+                expect(params["gnip_data_source[username]"]).toBe("gnip_user");
+                expect(params["gnip_data_source[password]"]).toBe("my_password");
             });
 
             testUpload();

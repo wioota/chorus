@@ -758,7 +758,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context('when a gnip data source is selected', function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.gnipInstance({name: "Harry's House of Glamour", username: "gnip" });
+            this.instance = rspecFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
             this.view = new chorus.views.InstanceListSidebar();
             chorus.PageEvents.broadcast("instance:selected", this.instance);
             this.server.completeFetchFor(this.instance.activities());
@@ -772,7 +772,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_instance');
+            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_data_source');
         });
 
         it("has a 'import stream' link", function() {

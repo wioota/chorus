@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-resource "Gnip instances" do
+resource "Gnip data sources" do
   let(:user) { users(:owner) }
-  let(:gnip_data_source) { gnip_instances(:default) }
+  let(:gnip_data_source) { gnip_data_sources(:default) }
 
   before do
     log_in user
@@ -11,7 +11,7 @@ resource "Gnip instances" do
     end
   end
 
-  post "/gnip_instances" do
+  post "/gnip_data_sources" do
     parameter :name, "gnip account name"
     parameter :description, "gnip account description"
     parameter :stream_url, "gnip stream url"
@@ -26,12 +26,12 @@ resource "Gnip instances" do
 
     required_parameters :name, :stream_url, :username, :password
 
-    example_request "Register a Gnip Instance" do
+    example_request "Register a Gnip data source" do
       status.should == 201
     end
   end
 
-  get "/gnip_instances" do
+  get "/gnip_data_sources" do
     pagination
 
     example_request "Get a list of registered Gnip data sources" do
@@ -39,16 +39,16 @@ resource "Gnip instances" do
     end
   end
 
-  get "/gnip_instances/:id" do
-    parameter :id, "gnip instance id"
+  get "/gnip_data_sources/:id" do
+    parameter :id, "gnip data source id"
 
-    let(:id) { gnip_instances(:default).id }
+    let(:id) { gnip_data_sources(:default).id }
     example_request "Get a registered Gnip data source" do
       status.should == 200
     end
   end
 
-  put "/gnip_instances/:id" do
+  put "/gnip_data_sources/:id" do
     parameter :id, "gnip data source id"
     parameter :name, "gnip account name"
     parameter :description, "gnip account description"
@@ -65,23 +65,23 @@ resource "Gnip instances" do
 
     required_parameters :name, :stream_url, :username
 
-    example_request "Update a registered Gnip Instance" do
+    example_request "Update a registered Gnip data source" do
       status.should == 200
     end
   end
 
-  post "/gnip_instances/:gnip_instance_id/imports" do
+  post "/gnip_data_sources/:gnip_data_source_id/imports" do
     before do
       any_instance_of(GnipImporter) {|importer| stub(importer).valid? { true } }
     end
 
-    parameter :gnip_instance_id, "gnip instance id"
+    parameter :gnip_data_source_id, "gnip data source id"
     parameter :workspace_id, "workspace id that will receive the import"
     parameter :to_table, "new table name in the sandbox"
 
     required_parameters :workspace_id, :to_table
 
-    let(:gnip_instance_id) { gnip_data_source.to_param }
+    let(:gnip_data_source_id) { gnip_data_source.to_param }
     let(:workspace_id) { workspaces(:public).id }
     let(:to_table) { "target_table" }
 

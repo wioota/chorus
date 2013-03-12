@@ -11,7 +11,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".dataset_list":         "datasetList",
         ".instance_list":        "instanceList",
         ".hdfs_data_source_list": "hdfsDataSourceList",
-        ".gnip_instance_list":   "gnipInstanceList",
+        ".gnip_data_source_list":   "gnipDataSourceList",
         ".attachment_list":      "attachmentList"
     },
 
