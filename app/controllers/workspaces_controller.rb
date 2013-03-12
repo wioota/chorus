@@ -7,13 +7,10 @@ class WorkspacesController < ApplicationController
     else
       workspaces = Workspace.workspaces_for(current_user)
     end
+
     workspaces = workspaces.active if params[:active]
-    present paginate(workspaces.includes(
-                         [:owner,
-                          :archiver,
-                          :tags,
-                          {:sandbox => {:database => {:data_source => [:tags, :owner]}}}
-                         ]).order("lower(name) ASC")), :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true'}
+    present paginate(workspaces.includes(Workspace.eager_load_associations).order("lower(name) ASC")),
+            :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true'}
   end
 
   def create

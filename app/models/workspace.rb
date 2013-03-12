@@ -60,6 +60,14 @@ class Workspace < ActiveRecord::Base
     workspace.comments(:reload => true).each(&:solr_index)
   end
 
+  def self.eager_load_associations
+    [:owner,
+     :archiver,
+     :tags,
+     {:sandbox => {:database => {:data_source => [:tags, :owner]}}}
+    ]
+  end
+
   def solr_reindex_later
     QC.enqueue_if_not_queued('Workspace.reindex_workspace', id)
   end

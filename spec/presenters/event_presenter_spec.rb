@@ -9,14 +9,13 @@ describe EventPresenter, :type => :view do
   end
 
   describe "#simple_hash" do
-    subject { EventPresenter.new(event, view, options) }
+    subject { EventPresenter.new(event, view, options).simple_hash }
     let(:options) { {} }
     let(:event) { events(:note_on_greenplum) }
 
     it "has targets and additional_data values in it" do
-      hash = subject.simple_hash
-      hash[:gpdb_data_source].should be
-      hash["body"].should == 'i am a comment with greenplumsearch in me'
+      subject[:gpdb_data_source].should be
+      subject["body"].should == 'i am a comment with greenplumsearch in me'
     end
   end
 
