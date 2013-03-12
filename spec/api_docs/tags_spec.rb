@@ -24,6 +24,18 @@ resource 'Tags' do
     end
   end
 
+  post '/taggings' do
+    parameter :taggings, 'An array of taggings, each with form {entity_id: <num>, entity_type: <type>, tag_names[]}'
+
+    required_parameters :taggings
+
+    let(:taggings) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile, 'tag_names' => ['alpha', 'omega']} } }
+
+    example_request 'Set tags for multiple entities' do
+      status.should == 201
+    end
+  end
+
   get '/tags' do
     parameter :query, 'String to search tags for'
 
