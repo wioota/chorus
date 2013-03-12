@@ -1,6 +1,7 @@
 chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     chorus.Mixins.InstanceCredentials.page
 ).extend({
+    constructorName: 'SchemaShow',
     helpId: "schema",
 
     setup: function(schema_id) {

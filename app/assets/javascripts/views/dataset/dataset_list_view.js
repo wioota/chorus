@@ -1,33 +1,18 @@
-chorus.views.DatasetList = chorus.views.SelectableList.extend({
+chorus.views.DatasetList = chorus.views.CheckableList.extend({
     constructorName: "DatasetListView",
-    templateName: "dataset_list",
     useLoadingSection: true,
     eventName: "dataset",
     persistent: true,
 
-    events: {
-        "click  li input[type=checkbox]": "checkboxClicked",
-        "change li input[type=checkbox]": "checkboxChanged"
-    },
-
     setup: function() {
+        this.options.entityType = "dataset";
+        this.options.entityViewType = chorus.views.Dataset;
+        this.options.listItemOptions = {
+            activeWorkspace: this.options.activeWorkspace,
+            checkable: this.options.checkable
+        };
+
         this._super("setup", arguments);
-        this.selectedDatasets = this.collection.clone().reset();
-
-        this.subscribePageEvent("selectAll", this.selectAll);
-        this.subscribePageEvent("selectNone", this.selectNone);
-    },
-
-    selectAll: function() {
-        this.selectedDatasets.reset(this.collection.models);
-        this.$("> li input[type=checkbox]").prop("checked", true).change();
-        chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
-    },
-
-    selectNone: function() {
-        this.selectedDatasets.reset([]);
-        this.$("> li input[type=checkbox]").prop("checked", false).change();
-        chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
     },
 
     postRender: function() {
@@ -49,52 +34,6 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
             $list.append(noDatasetEl);
         }
 
-        _.each(this.datasetViews, function(datasetView) {
-            datasetView.teardown();
-        });
-        this.datasetViews = [];
-
-        this.collection.each(function(model) {
-            var view = new chorus.views.Dataset({ model: model, activeWorkspace: this.options.activeWorkspace, checkable: this.options.checkable });
-            $list.append(view.render().el);
-            this.datasetViews.push(view);
-            this.registerSubView(view);
-        }, this);
         this._super("postRender", arguments);
-
-        this.checkSelectedDatasets();
-    },
-
-    checkSelectedDatasets: function() {
-        var checkboxes = this.$("input[type=checkbox]");
-        this.collection.each(function(model, i) {
-            if (this.selectedDatasets.get(model.id)) {
-                checkboxes.eq(i).prop("checked", true);
-            }
-        }, this);
-    },
-
-    checkboxChanged: function(e) {
-        var clickedBox = $(e.currentTarget);
-        var clickedLi = $(e.currentTarget.parentElement);
-        var index = this.$("> li input[type=checkbox]").index(clickedBox);
-        var isChecked = clickedBox.prop("checked");
-        var model = this.collection.at(index);
-
-        clickedLi.toggleClass("checked", isChecked);
-
-        if (isChecked) {
-            if (!this.selectedDatasets.contains(model)) {
-                this.selectedDatasets.add(model);
-            }
-        } else {
-            this.selectedDatasets.remove(model);
-        }
-
-        chorus.PageEvents.broadcast("dataset:checked", this.selectedDatasets);
-    },
-
-    checkboxClicked: function(e) {
-        e.stopPropagation();
     }
 });
