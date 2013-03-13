@@ -11,7 +11,7 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
       sql = CancelableQuery.format_sql_and_check_id(params[:sql], params[:check_id])
-      streamer = SqlStreamer.new(@schema, sql, current_user, row_limit: params[:num_of_rows])
+      streamer = SqlStreamer.new(sql, @schema.connect_as(current_user), row_limit: params[:num_of_rows].to_i)
       self.response_body = streamer.enum
     else
       account = @schema.account_for_user! current_user

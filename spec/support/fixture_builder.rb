@@ -493,13 +493,14 @@ FixtureBuilder.configure do |fbuilder|
     RR.reset
 
     if ENV['GPDB_HOST']
-      chorus_gpdb40 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => owner))
-      chorus_gpdb41 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => owner))
-      chorus_gpdb42 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => owner))
+      chorus_gpdb40 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+      chorus_gpdb41 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+      chorus_gpdb42 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => admin))
 
-      @chorus_gpdb42_test_superuser = chorus_gpdb42.account_for_user(owner)
+      @chorus_gpdb42_test_superuser = chorus_gpdb42.account_for_user(admin)
 
       FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42))
+      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => owner, :data_source => chorus_gpdb42))
 
       GreenplumIntegration.refresh_chorus
       chorus_gpdb42.refresh_databases(:skip_schema_refresh => true)

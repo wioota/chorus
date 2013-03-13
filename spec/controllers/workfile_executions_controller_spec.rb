@@ -87,10 +87,20 @@ describe WorkfileExecutionsController do
       }
       let(:user) { users(:owner) }
       let(:limit) { nil }
+
+      let(:connection) {
+        object = Object.new
+        stub(sandbox).connect_as(satisfy { |arg| arg.id == user.id && arg.class == User }) { object }
+        object
+      }
+
       before do
         log_in user
 
-        mock.proxy(SqlStreamer).new(workspace.sandbox, "/*#{check_id}*/#{sql}", user, row_limit: limit) do |streamer|
+        stub(Workfile).find(workfile.to_param) { workfile }
+        stub(workfile).execution_schema { sandbox }
+
+        mock.proxy(SqlStreamer).new("/*#{check_id}*/#{sql}", connection, row_limit: limit.to_i) do |streamer|
           mock(streamer).enum { 'response' }
         end
       end
