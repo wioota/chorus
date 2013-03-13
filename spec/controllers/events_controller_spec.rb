@@ -224,7 +224,7 @@ describe EventsController do
         'dataSourceCreated' => Events::DataSourceCreated,
         'gnipDataSourceCreated' => Events::GnipDataSourceCreated,
         'hdfsDataSourceCreated' => Events::HdfsDataSourceCreated,
-        'greenplumInstanceChangedOwner' => Events::GreenplumInstanceChangedOwner,
+        'dataSourceChangedOwner' => Events::DataSourceChangedOwner,
         'greenplumInstanceChangedName' => Events::GreenplumInstanceChangedName,
         'hdfsDataSourceChangedName' => Events::HdfsDataSourceChangedName,
         'publicWorkspaceCreated' => Events::PublicWorkspaceCreated,

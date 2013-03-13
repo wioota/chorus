@@ -24,7 +24,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this._super("makeModel", arguments);
         this.model = this.instance = this.options.instance;
 
-        this.ownership = new chorus.models.InstanceOwnership({instanceId: this.instance.id});
+        this.ownership = new chorus.models.DataSourceOwnership({instanceId: this.instance.id});
         this.users = new chorus.collections.UserSet();
         this.bindings.add(this.users, "reset", this.populateSelect);
         this.users.sortAsc("firstName");
@@ -123,7 +123,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     confirmChangeOwner: function(newOwner) {
-        var confirmAlert = new chorus.alerts.InstanceChangeOwner({ model: newOwner });
+        var confirmAlert = new chorus.alerts.DataSourceChangedOwner({ model: newOwner });
         confirmAlert.bind("confirmChangeOwner", this.saveOwner, this);
         this.launchSubModal(confirmAlert);
     },

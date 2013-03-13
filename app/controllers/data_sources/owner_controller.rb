@@ -1,9 +1,9 @@
 module DataSources
   class OwnerController < ApplicationController
     def update
-      authorize! :edit, gpdb_data_source
-      Gpdb::InstanceOwnership.change(current_user, gpdb_data_source, new_owner)
-      present gpdb_data_source
+      authorize! :edit, data_source
+      DataSourceOwnership.change(current_user, data_source, new_owner)
+      present data_source
     end
 
     private
@@ -12,8 +12,8 @@ module DataSources
       User.find(params[:owner][:id])
     end
 
-    def gpdb_data_source
-      @gpdb_data_source ||= GpdbDataSource.owned_by(current_user).find(params[:data_source_id])
+    def data_source
+      @data_source ||= DataSource.owned_by(current_user).find(params[:data_source_id])
     end
   end
 end

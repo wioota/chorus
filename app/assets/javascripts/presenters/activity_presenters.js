@@ -152,8 +152,8 @@
                 links: [ "actor", "hdfsDataSource" ]
             },
 
-            GreenplumInstanceChangedOwner: {
-                links: [ "actor", "gpdbDataSource", "newOwner" ]
+            DataSourceChangedOwner: {
+                links: [ "actor", "dataSource", "newOwner" ]
             },
 
             PublicWorkspaceCreated: {

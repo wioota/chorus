@@ -1,7 +1,7 @@
-describe("chorus.alerts.InstanceChangeOwner", function() {
+describe("chorus.alerts.DataSourceChangedOwner", function() {
     beforeEach(function() {
         this.user = rspecFixtures.user({ firstName: "Boxiong", lastName: "Ding" });
-        this.alert = new chorus.alerts.InstanceChangeOwner({ model: this.user });
+        this.alert = new chorus.alerts.DataSourceChangedOwner({ model: this.user });
         this.alert.render();
     });
 

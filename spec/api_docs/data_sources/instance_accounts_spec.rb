@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: accounts" do
+resource "Data sources: accounts" do
   let(:owner) { users(:owner) }
   let(:non_owner) { users(:no_collaborators) }
   let(:member) { users(:the_collaborator) }
@@ -17,7 +17,7 @@ resource "Greenplum DB: accounts" do
       log_in owner
     end
 
-    parameter :data_source_id, "The id of a Greenplum data source"
+    parameter :data_source_id, "The id of a data source"
 
     example_request "Get personal credentials" do
       explanation <<-DESC
@@ -31,7 +31,7 @@ resource "Greenplum DB: accounts" do
   end
 
   post "/data_sources/:data_source_id/account" do
-    parameter :data_source_id, "The id of a Greenplum data source"
+    parameter :data_source_id, "The id of a data source"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -50,7 +50,7 @@ resource "Greenplum DB: accounts" do
   end
 
   put "/data_sources/:data_source_id/account" do
-    parameter :data_source_id, "The id of a Greenplum data source"
+    parameter :data_source_id, "The id of a data source"
     parameter :db_username, "User name for connection"
     parameter :db_password, "Password for connection"
 
@@ -72,7 +72,7 @@ resource "Greenplum DB: accounts" do
     before do
       log_in member
     end
-    parameter :data_source_id, "The id of a Greenplum data source"
+    parameter :data_source_id, "The id of a data source"
 
     example_request "Remove personal credentials" do
       status.should == 200

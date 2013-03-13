@@ -222,5 +222,42 @@ describe DataSource do
     end
   end
 
+  describe ".owned_by" do
+    let(:owner) { users(:owner) }
+    let!(:gpdb_shared_data_source) { data_sources(:shared) }
+    let!(:gpdb_owned_data_source) { data_sources(:owners) }
+    let!(:oracle_data_source) {
+      ds = data_sources(:oracle)
+      ds.owner = users(:the_collaborator)
+      ds.save!
+    }
+
+    context "for owners" do
+      it "includes owned data sources" do
+        DataSource.owned_by(owner).should include gpdb_owned_data_source
+      end
+
+      it "excludes other users' data sources" do
+        DataSource.owned_by(owner).should_not include oracle_data_source
+      end
+
+      it "excludes shared data sources" do
+        DataSource.owned_by(owner).should_not include gpdb_shared_data_source
+      end
+    end
+
+    context "for non-owners" do
+      it "excludes all data sources" do
+        DataSource.owned_by(FactoryGirl.build_stubbed(:user)).should be_empty
+      end
+    end
+
+    context "for admins" do
+      it "includes all data sources" do
+        DataSource.owned_by(users(:evil_admin)).count.should == DataSource.count
+      end
+    end
+  end
+
   it_should_behave_like "taggable models", [:data_sources, :default]
 end

@@ -21,15 +21,32 @@ describe DataSources::OwnerController do
       request_ownership_update
     end
 
-    it "switches ownership of instance and account" do
-      mock(Gpdb::InstanceOwnership).change(user, data_source, new_owner)
-      request_ownership_update
+    context "with a greenplum data source" do
+      it "switches ownership of data source and account" do
+        mock(DataSourceOwnership).change(user, data_source, new_owner)
+        request_ownership_update
+      end
+
+      it "presents the data source" do
+        stub(DataSourceOwnership).change(user, data_source, new_owner)
+        mock_present { |data_source_presented| data_source_presented.should == data_source }
+        request_ownership_update
+      end
     end
 
-    it "presents the gpdb instance" do
-      stub(Gpdb::InstanceOwnership).change(user, data_source, new_owner)
-      mock_present { |instance_presented| instance_presented.should == data_source }
-      request_ownership_update
+    context "with an oracle data source" do
+      let(:data_source) { data_sources(:oracle) }
+
+      it "switches ownership of data source and account" do
+        mock(DataSourceOwnership).change(user, data_source, new_owner)
+        request_ownership_update
+      end
+
+      it "presents the data source" do
+        stub(DataSourceOwnership).change(user, data_source, new_owner)
+        mock_present { |data_source_presented| data_source_presented.should == data_source }
+        request_ownership_update
+      end
     end
   end
 end

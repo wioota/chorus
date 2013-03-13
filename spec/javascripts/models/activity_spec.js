@@ -8,9 +8,9 @@ describe("chorus.models.Activity", function() {
 
         describe("#newOwner", function() {
             it("returns a user with the newOwner data", function() {
-                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                activity = rspecFixtures.activity.dataSourceChangedOwner({
                     actor: { id: 5 },
-                    gpdbDataSource: { id: 6 },
+                    dataSource: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
@@ -22,9 +22,9 @@ describe("chorus.models.Activity", function() {
 
         describe("#actor", function() {
             it("returns a user with the right data", function() {
-                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                activity = rspecFixtures.activity.dataSourceChangedOwner({
                     actor: { id: 5 },
-                    gpdbDataSource: { id: 6 },
+                    dataSource: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
@@ -46,7 +46,7 @@ describe("chorus.models.Activity", function() {
                 expect(promoter.id).toBe(5);
             });
             it("returns null if the note is not an insight", function() {
-                activity = rspecFixtures.activity.greenplumInstanceChangedOwner();
+                activity = rspecFixtures.activity.dataSourceChangedOwner();
                 var promoter = activity.promoter();
                 expect(promoter).toBeNull();
             });
@@ -91,15 +91,15 @@ describe("chorus.models.Activity", function() {
 
         describe("#gpdbDataSource", function() {
             it("returns a gpdb data source with the right data", function() {
-                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                activity = rspecFixtures.activity.dataSourceChangedOwner({
                     actor: { id: 5 },
-                    gpdbDataSource: { id: 6 },
+                    dataSource: { id: 6 },
                     newOwner: { id: 7 }
                 });
 
-                var gpdbDataSource = activity.gpdbDataSource();
-                expect(gpdbDataSource).toBeA(chorus.models.GpdbDataSource);
-                expect(gpdbDataSource.id).toBe(6);
+                var dataSource = activity.dataSource();
+                expect(dataSource).toBeA(chorus.models.DataSource);
+                expect(dataSource.id).toBe(6);
             });
         });
 

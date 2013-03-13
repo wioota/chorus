@@ -100,18 +100,18 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GreenplumInstanceChangedOwner" do
+  describe "DataSourceChangedOwner" do
     subject do
-      Events::GreenplumInstanceChangedOwner.add(
+      Events::DataSourceChangedOwner.add(
           :actor => actor,
-          :gpdb_data_source => gpdb_data_source,
+          :data_source => gpdb_data_source,
           :new_owner => user
       )
     end
 
-    its(:gpdb_data_source) { should == gpdb_data_source }
+    its(:data_source) { should == gpdb_data_source }
     its(:new_owner) { should == user }
-    its(:targets) { should == {:gpdb_data_source => gpdb_data_source, :new_owner => user} }
+    its(:targets) { should == {:data_source => gpdb_data_source, :new_owner => user} }
 
     it_creates_activities_for { [user, gpdb_data_source] }
     it_creates_a_global_activity

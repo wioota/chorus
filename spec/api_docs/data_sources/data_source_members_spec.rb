@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: data source members" do
+resource "Data source members" do
   let(:owner) { users(:owner) }
   let(:non_member) { users(:no_collaborators) }
   let!(:member_account) { data_source.account_for_user(member) }
@@ -15,7 +15,7 @@ resource "Greenplum DB: data source members" do
   end
 
   get "/data_sources/:data_source_id/members" do
-    parameter :data_source_id, "Greenplum data source id"
+    parameter :data_source_id, "Data source id"
     pagination
 
     example_request "List members with access to data source" do
@@ -32,7 +32,7 @@ resource "Greenplum DB: data source members" do
   end
 
   post "/data_sources/:data_source_id/members" do
-    parameter :data_source_id, "Greenplum data source id"
+    parameter :data_source_id, "Data source id"
     parameter :owner_id, "User ID of new member"
     parameter :db_username, "Username for account that connects to data source"
     parameter :db_password, "Password for account that connects to data source"
@@ -49,7 +49,7 @@ resource "Greenplum DB: data source members" do
   end
 
   put "/data_sources/:data_source_id/members/:id" do
-    parameter :data_source_id, "Greenplum data source id"
+    parameter :data_source_id, "Data source id"
     parameter :id, "Account ID of member to update"
     parameter :db_username, "Username for account that connects to data source"
     parameter :db_password, "Password for account that connects to data source"
@@ -66,7 +66,7 @@ resource "Greenplum DB: data source members" do
   end
 
   delete "/data_sources/:data_source_id/members/:id" do
-    parameter :data_source_id, "Greenplum data source id"
+    parameter :data_source_id, "Data source id"
     parameter :id, "Account ID of member to delete"
 
     let(:id) { member_account.to_param }

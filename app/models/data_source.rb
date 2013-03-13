@@ -41,6 +41,14 @@ class DataSource < ActiveRecord::Base
     end
   end
 
+  def self.owned_by(user)
+    if user.admin?
+      scoped
+    else
+      where(:owner_id => user.id)
+    end
+  end
+
   def self.type_name
     'Instance'
   end

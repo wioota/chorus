@@ -147,7 +147,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"]});
 
         models.activity = new chorus.models.Activity({
-            "action": "GreenplumInstanceChangedOwner",
+            "action": "DataSourceChangedOwner",
             "actor": models.user,
             "gpdbDataSource": models.greenplumDataSource,
             "newOwner": models.otherUser,

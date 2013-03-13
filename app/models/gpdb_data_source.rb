@@ -10,14 +10,6 @@ class GpdbDataSource < DataSource
     user.gpdb_data_sources.create!(data_source_hash, :as => :create)
   end
 
-  def self.owned_by(user)
-    if user.admin?
-      scoped
-    else
-      where(:owner_id => user.id)
-    end
-  end
-
   def used_by_workspaces(viewing_user)
     workspaces.includes({:sandbox => {:database => :data_source }}, :owner).workspaces_for(viewing_user).order("lower(workspaces.name)")
   end

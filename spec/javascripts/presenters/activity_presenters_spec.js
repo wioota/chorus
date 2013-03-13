@@ -332,12 +332,12 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context('gpdb data source changed owner', function() {
-        var gpdbDataSource, newOwner;
+        var dataSource, newOwner;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.greenplumInstanceChangedOwner();
+            model = rspecFixtures.activity.dataSourceChangedOwner();
             presenter = new chorus.presenters.Activity(model);
-            gpdbDataSource = model.gpdbDataSource();
+            dataSource = model.dataSource();
             newOwner = model.newOwner();
             actor = model.actor();
         });
@@ -346,9 +346,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GreenplumInstanceChangedOwner.default", {
+                "activity.header.DataSourceChangedOwner.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name()),
+                    dataSourceLink: linkTo(dataSource.showUrl(), dataSource.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
                 }
             );

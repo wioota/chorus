@@ -13,18 +13,18 @@ describe Events::Base do
       workspace = workspaces(:public)
 
       Events::DataSourceCreated.by(user1).add(:data_source => gpdb_data_source1)
-      Events::GreenplumInstanceChangedOwner.by(user2).add(:gpdb_data_source => gpdb_data_source2, :new_owner => user3)
+      Events::DataSourceChangedOwner.by(user2).add(:data_source => gpdb_data_source2, :new_owner => user3)
       Events::HdfsFileExtTableCreated.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_entry, :workspace => workspace)
 
       event1 = Events::DataSourceCreated.last
-      event2 = Events::GreenplumInstanceChangedOwner.last
+      event2 = Events::DataSourceChangedOwner.last
       event3 = Events::HdfsFileExtTableCreated.last
 
       event1.actor.should == user1
       event1.data_source.should == gpdb_data_source1
 
       event2.actor.should == user2
-      event2.gpdb_data_source.should == gpdb_data_source2
+      event2.data_source.should == gpdb_data_source2
       event2.new_owner.should == user3
 
       event3.workspace.should == workspace

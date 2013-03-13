@@ -12,7 +12,7 @@ FactoryGirl.define do
       hdfs_data_source
     end
 
-    factory :greenplum_instance_changed_owner_event, :class => Events::GreenplumInstanceChangedOwner do
+    factory :greenplum_instance_changed_owner_event, :class => Events::DataSourceChangedOwner do
       gpdb_data_source
       new_owner :factory => :user
     end

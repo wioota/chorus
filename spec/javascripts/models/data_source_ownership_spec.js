@@ -1,6 +1,6 @@
-describe("chorus.models.InstanceOwnership", function() {
+describe("chorus.models.DataSourceOwnership", function() {
     beforeEach(function() {
-        this.model = new chorus.models.InstanceOwnership({instanceId: 1, user_id: 2});
+        this.model = new chorus.models.DataSourceOwnership({instanceId: 1, user_id: 2});
     });
 
     it("has a valid url", function() {

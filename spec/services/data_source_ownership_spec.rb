@@ -1,32 +1,32 @@
 require "spec_helper"
 
-describe Gpdb::InstanceOwnership do
+describe DataSourceOwnership do
   let!(:old_owner) { gpdb_data_source.owner }
   let!(:owner_account) { gpdb_data_source.owner_account }
   let!(:new_owner) { FactoryGirl.create(:user) }
 
-  describe ".change_owner(instance, new_owner)" do
+  describe ".change_owner(data_source, new_owner)" do
     let(:gpdb_data_source) { FactoryGirl.create(:gpdb_data_source, :shared => true) }
     before do
       stub(gpdb_data_source).valid_db_credentials? { true }
     end
 
-    it "creates a GreenplumInstanceChangedOwner event" do
+    it "creates a DataSourceChangedOwner event" do
       request_ownership_update
-      event = Events::GreenplumInstanceChangedOwner.by(old_owner).last
-      event.gpdb_data_source.should == gpdb_data_source
+      event = Events::DataSourceChangedOwner.by(old_owner).last
+      event.data_source.should == gpdb_data_source
       event.new_owner.should == new_owner
     end
 
-    context "with a shared gpdb instance" do
-      it "switches ownership of gpdb instance and account" do
+    context "with a shared gpdb data_source" do
+      it "switches ownership of gpdb data source and account" do
         request_ownership_update
         gpdb_data_source.owner.should == new_owner
         owner_account.owner.should == new_owner
       end
     end
 
-    context "with an unshared instance" do
+    context "with an unshared data source" do
       let(:gpdb_data_source) { FactoryGirl.create(:gpdb_data_source, :shared => false) }
 
       context "when switching to a user with an existing account" do
@@ -34,7 +34,7 @@ describe Gpdb::InstanceOwnership do
           FactoryGirl.build(:instance_account, :data_source => gpdb_data_source, :owner => new_owner).tap { |a| a.save(:validate => false)}
         end
 
-        it "switches ownership of instance" do
+        it "switches ownership of data source" do
           request_ownership_update
           gpdb_data_source.owner.should == new_owner
         end
@@ -56,7 +56,7 @@ describe Gpdb::InstanceOwnership do
   end
 
   def request_ownership_update
-    Gpdb::InstanceOwnership.change(old_owner, gpdb_data_source, new_owner)
+    DataSourceOwnership.change(old_owner, gpdb_data_source, new_owner)
     gpdb_data_source.reload
     owner_account.reload
   end

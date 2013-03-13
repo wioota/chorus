@@ -9,7 +9,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
 
         it("launches the change owner confirmation dialog", function() {
-            expect(this.submodal).toBeA(chorus.alerts.InstanceChangeOwner);
+            expect(this.submodal).toBeA(chorus.alerts.DataSourceChangedOwner);
         });
 
         it("passes the selected user to the confirmation dialog, as the model", function() {

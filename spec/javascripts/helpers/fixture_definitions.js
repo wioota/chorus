@@ -16,7 +16,7 @@ window.rspecFixtureDefinitions = {
             gnipStreamImportFailed: {},
             gnipStreamImportSuccess: {},
             greenplumInstanceChangedName: {},
-            greenplumInstanceChangedOwner: {},
+            dataSourceChangedOwner: {},
             hdfsDataSourceCreated: {},
             hdfsDataSourceChangedName: {},
             hdfsFileExtTableCreated: {},
