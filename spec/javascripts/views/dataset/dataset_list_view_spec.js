@@ -7,13 +7,15 @@ describe("chorus.views.DatasetList", function() {
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
-        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: true });
+        this.view = new chorus.views.DatasetList({
+            collection: this.collection,
+            activeWorkspace: true,
+            checkable: true
+        });
         this.view.render();
     });
 
-    it("is a checkable list", function() {
-        expect(this.view).toBeA(chorus.views.CheckableList);
-    });
+    itBehavesLike.CheckableList();
 
     it("does not re-render when a dataset is updated", function() {
         spyOn(this.view, "preRender");
@@ -22,6 +24,10 @@ describe("chorus.views.DatasetList", function() {
     });
 
     context("when the checkable flag is falsy", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.DatasetList({ collection: this.collection });
+        });
+
         it("does not render checkboxes", function() {
             expect(this.view.$("input[type=checkbox]")).not.toExist();
         });

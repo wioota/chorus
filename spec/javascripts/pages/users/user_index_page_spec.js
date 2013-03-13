@@ -62,17 +62,6 @@ describe("chorus.pages.UserIndexPage", function() {
         });
     });
 
-    describe('when the users have loaded', function() {
-        beforeEach(function() {
-            this.users = rspecFixtures.userSet();
-            this.server.completeFetchFor(this.page.collection, this.users);
-        });
-
-        it('shows the users', function() {
-            expect(this.page.$('.user_list_item')).toExist();
-        });
-    });
-
     describe("menus", function() {
         describe("sorting", function() {
             beforeEach(function() {

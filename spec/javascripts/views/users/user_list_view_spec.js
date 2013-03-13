@@ -1,6 +1,11 @@
 describe("chorus.views.UserList", function() {
-    it("is a checkable list", function() {
-        expect(new chorus.views.UserList({collection: rspecFixtures.userSet()})).toBeA(chorus.views.CheckableList);
+    describe("checkable list", function() {
+        beforeEach(function() {
+            this.collection = rspecFixtures.userSet();
+            this.view = new chorus.views.UserList({collection: this.collection});
+        });
+
+        itBehavesLike.CheckableList();
     });
 
     describe("#render", function() {
@@ -34,8 +39,11 @@ describe("chorus.views.UserList", function() {
                 expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
             });
 
-            it("displays the users' tags", function(){
-                this.collection.at(0).tags().reset([{name: "tag1"}, {name: "tag2"}]);
+            it("displays the users' tags", function() {
+                this.collection.at(0).tags().reset([
+                    {name: "tag1"},
+                    {name: "tag2"}
+                ]);
                 this.view.render();
 
                 expect(this.view.$(".item_tag_list:first")).toContainTranslation("tag_list.title");

@@ -35,10 +35,6 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
                 this.server.completeFetchFor(this.page.collection, this.workspaces);
             });
 
-            it("creates a WorkspaceList view", function() {
-                expect(this.page.$(".workspace_list")).toExist();
-            });
-
             it("passes the multiSelect option to the list content details", function() {
                 expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
             });

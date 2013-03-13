@@ -52,6 +52,8 @@ describe("chorus.views.WorkspaceList", function() {
             this.publicEl = this.view.$("li[data-id=4]");
         });
 
+        itBehavesLike.CheckableList();
+
         it("has class selectable", function() {
             expect($(this.view.el)).toHaveClass("selectable");
         });
@@ -117,11 +119,6 @@ describe("chorus.views.WorkspaceList", function() {
             it("displays archived relative time", function() {
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });
-        });
-
-        it("skips rendering of child views from CheckableList", function() {
-            expect(this.view.liViews).toBeUndefined();
-            expect(this.view.$("> li").eq(this.view.selectedIndex)).toHaveClass("selected");
         });
     });
 });
