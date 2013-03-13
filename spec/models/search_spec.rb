@@ -405,11 +405,13 @@ describe Search do
 
       it "removes tags from the note body" do
         create_and_record_search(owner, :query => 'searchwithhtml') do |search|
-          note = events(:note_on_dataset)
-          note.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
-          Sunspot.commit
-          dataset = search.datasets.first
-          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
+          restore_solr_index_after [Events::Note] do
+            note = events(:note_on_dataset)
+            note.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
+            Sunspot.commit
+            dataset = search.datasets.first
+            dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
+          end
         end
       end
 
@@ -447,11 +449,13 @@ describe Search do
 
       it "removes tags from the comment body" do
         create_and_record_search(owner, :query => 'searchwithhtml') do |search|
-          comment = comments(:comment_on_note_on_dataset)
-          comment.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
-          Sunspot.commit
-          dataset = search.datasets.first
-          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
+          restore_solr_index_after [Events::Note] do
+            comment = comments(:comment_on_note_on_dataset)
+            comment.update_attribute(:body, 'sometext <b>searchwithhtml</b> ftw')
+            Sunspot.commit
+            dataset = search.datasets.first
+            dataset.search_result_notes[0][:highlighted_attributes][:body][0].should match %r{sometext\s+<em>searchwithhtml</em>\s+ftw}
+          end
         end
       end
 
@@ -664,24 +668,26 @@ describe Search do
       it "returns workfiles sorted by file_name" do
         query_params = { :query => "tagSort", :tag => true }
         record_with_vcr do
-          public_workfile = workfiles(:public)
-          tagged_workfile = workfiles(:tagged)
+          restore_solr_index_after [Workfile, Tag] do
+            public_workfile = workfiles(:public)
+            tagged_workfile = workfiles(:tagged)
 
-          [public_workfile, tagged_workfile].each do |w|
-            w.tag_list = ["tagSort"]
-            w.save!
+            [public_workfile, tagged_workfile].each do |w|
+              w.tag_list = ["tagSort"]
+              w.save!
+            end
+            Sunspot.commit
+
+            search = Search.new(owner, query_params)
+            search.workfiles.should be_sorted_by :file_name, true
+
+            # changing the file names changes the order
+            search.workfiles.second.update_attributes(:file_name => "aaa_" + search.workfiles.second.file_name)
+            Sunspot.commit
+
+            search = Search.new(owner, query_params)
+            search.workfiles.should be_sorted_by :file_name, true
           end
-          Sunspot.commit
-
-          search = Search.new(owner, query_params)
-          search.workfiles.should be_sorted_by :file_name, true
-
-          # changing the file names changes the order
-          search.workfiles.second.update_attributes(:file_name => "aaa_" + search.workfiles.second.file_name)
-          Sunspot.commit
-
-          search = Search.new(owner, query_params)
-          search.workfiles.should be_sorted_by :file_name, true
         end
       end
     end
