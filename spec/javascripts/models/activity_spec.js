@@ -36,9 +36,9 @@ describe("chorus.models.Activity", function() {
 
         describe("#promoter", function() {
             it("returns a user with the right data", function() {
-                activity = rspecFixtures.activity.insightOnGreenplumInstance({
+                activity = rspecFixtures.activity.insightOnGreenplumDataSource({
                     promotedBy: { id: 5 },
-                    gpdbDataSource: { id: 6 }
+                    dataSource: { id: 6 }
                 });
 
                 var promoter = activity.promoter();
@@ -193,13 +193,13 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("#noteObject", function() {
-            context("for a NoteOnGreenplumInstance", function() {
+            context("for a NoteOnDataSource", function() {
                 it("returns a gpdbDataSource with the right data", function() {
-                    activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                        gpdbDataSource: { id: 13 }
+                    activity = rspecFixtures.activity.noteOnGreenplumDataSource({
+                        dataSource: { id: 13 }
                     });
 
-                    var dataSource = activity.gpdbDataSource();
+                    var dataSource = activity.dataSource();
                     expect(dataSource).toBeA(chorus.models.GpdbDataSource);
                     expect(dataSource.id).toBe(13);
                 });
@@ -297,11 +297,11 @@ describe("chorus.models.Activity", function() {
 
     describe("#isUserGenerated", function() {
         it("returns true for notes", function() {
-            expect(rspecFixtures.activity.noteOnGreenplumInstanceCreated().isUserGenerated()).toBeTruthy();
+            expect(rspecFixtures.activity.noteOnGreenplumDataSource().isUserGenerated()).toBeTruthy();
         });
 
         it("returns true for 'INSIGHT_CREATED' activities", function() {
-            expect(rspecFixtures.activity.insightOnGreenplumInstance().isUserGenerated()).toBeTruthy();
+            expect(rspecFixtures.activity.insightOnGreenplumDataSource().isUserGenerated()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
@@ -361,16 +361,16 @@ describe("chorus.models.Activity", function() {
     describe("#isOwner", function() {
 
         it("returns true for notes is current user is the owner of note", function() {
-            this.activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                gpdbDataSource: { id: 13 },
+            this.activity2 = rspecFixtures.activity.noteOnGreenplumDataSource({
+                dataSource: { id: 13 },
                 actor: {id: chorus.session.user().id}
 
             });
             expect(this.activity2.isOwner()).toBeTruthy();
         });
         it("returns false for notes is current user is not the owner of note", function() {
-            this.activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                gpdbDataSource: { id: 13 },
+            this.activity2 = rspecFixtures.activity.noteOnGreenplumDataSource({
+                dataSource: { id: 13 },
                 actor: {id: 1}
 
             });
@@ -381,7 +381,7 @@ describe("chorus.models.Activity", function() {
 
     describe("#toNote", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+            this.model = rspecFixtures.activity.noteOnGreenplumDataSource({
                 id: 101
             });
 

@@ -3,7 +3,7 @@ require "spec_helper"
 describe AttachmentAccess do
   let(:fake_controller) { ApplicationController.new }
   let(:access) { AttachmentAccess.new(fake_controller) }
-  let(:note) { Events::NoteOnGreenplumInstance.last }
+  let(:note) { Events::NoteOnDataSource.last }
 
   describe "#create?(params)" do
     context "when current user is same as actor of note" do

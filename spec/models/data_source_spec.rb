@@ -21,9 +21,9 @@ describe DataSource do
 
   it_behaves_like "a notable model" do
     let!(:note) do
-      Events::NoteOnGreenplumInstance.create!({
+      Events::NoteOnDataSource.create!({
           :actor => users(:owner),
-          :gpdb_data_source => model,
+          :data_source => model,
           :body => "This is the body"
       }, :as => :create)
     end

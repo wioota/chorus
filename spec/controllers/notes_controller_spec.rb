@@ -130,7 +130,7 @@ describe NotesController do
 
   describe "#destroy" do
     let(:note) {
-      Events::NoteOnGreenplumInstance.by(user).add(:gpdb_data_source => data_sources(:default), :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
+      Events::NoteOnDataSource.by(user).add(:gpdb_data_source => data_sources(:default), :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00')
     }
 
     before do
@@ -144,7 +144,7 @@ describe NotesController do
     it "destroys the note with the given id" do
       delete :destroy, :id => note.id
       note.reload.should be_deleted
-      Events::NoteOnGreenplumInstance.find_by_id(note.id).should be_nil
+      Events::NoteOnDataSource.find_by_id(note.id).should be_nil
     end
 
     it "returns an empty JSON body" do

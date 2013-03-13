@@ -10,7 +10,7 @@ describe("chorus.models.Note", function() {
     }
 
     beforeEach(function() {
-        var activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+        var activity = rspecFixtures.activity.noteOnGreenplumDataSource({
             id: '41',
             actor: {
                 id: "45",

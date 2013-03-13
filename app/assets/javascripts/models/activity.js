@@ -79,9 +79,8 @@
                     model = new chorus.models.HdfsDataSource();
                     model.set(this.get("hdfsDataSource"));
                     break;
-                case "NoteOnGreenplumInstance":
-                    model = new chorus.models.GpdbDataSource();
-                    model.set(this.get("gpdbDataSource"));
+                case "NoteOnDataSource":
+                    model = new chorus.models.DynamicDataSource(this.get("dataSource"));
                     break;
                 case "NoteOnGnipDataSource":
                     model = new chorus.models.GnipDataSource();

@@ -11,7 +11,7 @@ describe("chorus.views.ActivityList", function() {
 
     describe("pageEvent subscriptions", function() {
         beforeEach(function() {
-            this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+            this.note = rspecFixtures.activity.noteOnGreenplumDataSource();
             this.collection.add(this.note);
             this.view.render();
         });
@@ -22,7 +22,7 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it('re-renders when note:saved is fired', function() {
-            this.newNote = rspecFixtures.activity.noteOnGreenplumInstanceCreated({id: this.note.id, body: 'A New Note'});
+            this.newNote = rspecFixtures.activity.noteOnGreenplumDataSource({id: this.note.id, body: 'A New Note'});
             chorus.PageEvents.broadcast('note:saved', this.newNote);
             expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).toContainText("A New Note");
         });

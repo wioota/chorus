@@ -54,9 +54,7 @@
         {{#if isGreenplum}}
             <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
         {{/if}}
-        {{#unless isOracle}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
-        {{/unless}}
         {{#if isGnip}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-dialog="ImportGnipStream">{{t "actions.import_gnip_stream"}}</a></li>
         {{/if}}

@@ -152,7 +152,7 @@ describe("chorus.views.Activity", function() {
     describe("html content", function () {
         describe("#show", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
 
@@ -167,7 +167,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is a note", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -214,7 +214,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is an insight", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.insightOnGreenplumInstance();
+                this.model = rspecFixtures.activity.insightOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -279,7 +279,7 @@ describe("chorus.views.Activity", function() {
 
         describe("for notes", function () {
             beforeEach(function () {
-                this.model = this.presenter.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                this.model = this.presenter.model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
             });
 
@@ -307,7 +307,7 @@ describe("chorus.views.Activity", function() {
 
             context("when the note is already an insight", function () {
                 beforeEach(function () {
-                    this.model = this.presenter.model = rspecFixtures.activity.insightOnGreenplumInstance();
+                    this.model = this.presenter.model = rspecFixtures.activity.insightOnGreenplumDataSource();
                     this.view = new chorus.views.Activity({ model:this.model });
                 });
 

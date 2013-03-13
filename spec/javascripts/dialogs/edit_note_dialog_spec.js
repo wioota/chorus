@@ -1,7 +1,7 @@
 describe("chorus.dialogs.EditNote", function() {
     beforeEach(function() {
         this.text = "Hi i'm a friendly text";
-        this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+        this.note = rspecFixtures.activity.noteOnGreenplumDataSource({
             body: this.text
         });
         this.note.collection = new chorus.collections.ActivitySet([]);
@@ -20,7 +20,7 @@ describe("chorus.dialogs.EditNote", function() {
 
     context("when the activity is an insight", function() {
         beforeEach(function() {
-            this.note = rspecFixtures.activity.insightOnGreenplumInstance();
+            this.note = rspecFixtures.activity.insightOnGreenplumDataSource();
             this.dialog = new chorus.dialogs.EditNote({ activity: this.note });
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();

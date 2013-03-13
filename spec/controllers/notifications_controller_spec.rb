@@ -24,7 +24,7 @@ describe NotificationsController do
 
       event = matching_notification.event
       event.actor.id.should == event1.actor_id
-      event.gpdb_data_source.id.should == event1.target1_id
+      event.data_source.id.should == event1.target1_id
       event.body.should == event1.body
       matching_notification.should have_key(:unread)
     end

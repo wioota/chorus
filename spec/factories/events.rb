@@ -53,8 +53,8 @@ FactoryGirl.define do
       workspace
     end
 
-    factory :note_on_greenplum_instance_event, :class => Events::NoteOnGreenplumInstance do
-      gpdb_data_source
+    factory :note_on_data_source_event, :class => Events::NoteOnDataSource do
+      data_source { create :gpdb_data_source }
       body 'Note to self, add a body'
     end
 

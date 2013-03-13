@@ -197,7 +197,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when note is deleted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("note:deleted", rspecFixtures.activity.noteOnGreenplumInstanceCreated());
+                chorus.PageEvents.broadcast("note:deleted", rspecFixtures.activity.noteOnGreenplumDataSource());
             });
 
             itRefreshesWorkspaces();

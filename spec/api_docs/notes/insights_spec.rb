@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Notes" do
   let(:user) { users(:owner) }
-  let(:note) { Events::NoteOnGreenplumInstance.last }
+  let(:note) { Events::NoteOnDataSource.last }
   let(:workspace) { workspaces(:public) }
   let(:note_on_workspace) { Events::NoteOnWorkspace.first }
 

@@ -96,6 +96,7 @@ FixtureBuilder.configure do |fbuilder|
     oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: owner)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
     fbuilder.name(:oracle, oracle_schema)
+    @note_on_oracle = FactoryGirl.create :note_on_data_source_event, :data_source => oracle_data_source, :body => 'note on oracle data source'
 
     FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => oracle_data_source)
 
@@ -166,7 +167,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     with_current_user(owner) do
-      note_on_greenplum_typeahead = Events::NoteOnGreenplumInstance.create!({:note_target => typeahead_data_source, :body => 'i exist only for my attachments'}, :as => :create)
+      note_on_greenplum_typeahead = Events::NoteOnDataSource.create!({:note_target => typeahead_data_source, :body => 'i exist only for my attachments'}, :as => :create)
       note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
     end
 
@@ -392,13 +393,13 @@ FixtureBuilder.configure do |fbuilder|
 
     #Notes
     with_current_user(owner) do
-      @note_on_greenplum = Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i am a comment with greenplumsearch in me'}, :as => :create)
-      insight_on_greenplum = Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i am an insight with greenpluminsight in me', :insight => true}, :as => :create)
-      fbuilder.name :insight_on_greenplum, insight_on_greenplum
-      Events::NoteOnGreenplumInstance.create!({:note_target => gpdb_data_source, :body => 'i love searchquery'}, :as => :create)
-      Events::NoteOnGreenplumInstance.create!({:note_target => shared_data_source, :body => 'is this a greenplumsearch instance?'}, :as => :create)
-      Events::NoteOnGreenplumInstance.create!({:note_target => shared_data_source, :body => 'no, not greenplumsearch'}, :as => :create)
-      Events::NoteOnGreenplumInstance.create!({:note_target => shared_data_source, :body => 'really really?'}, :as => :create)
+      @note_on_greenplum = Events::NoteOnDataSource.create!({:note_target => gpdb_data_source, :body => 'i am a comment with greenplumsearch in me'}, :as => :create)
+      @insight_on_greenplum = Events::NoteOnDataSource.create!({:note_target => gpdb_data_source, :body => 'i am an insight with greenpluminsight in me', :insight => true}, :as => :create)
+
+      Events::NoteOnDataSource.create!({:note_target => gpdb_data_source, :body => 'i love searchquery'}, :as => :create)
+      Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'is this a greenplumsearch instance?'}, :as => :create)
+      Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'no, not greenplumsearch'}, :as => :create)
+      Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'really really?'}, :as => :create)
       @note_on_hdfs_data_source = Events::NoteOnHdfsDataSource.create!({:note_target => hdfs_data_source, :body => 'hadoop-idy-doop'}, :as => :create)
       @note_on_hdfs_file = Events::NoteOnHdfsFile.create!({:note_target => @hdfs_file, :body => 'hhhhhhaaaadooooopppp'}, :as => :create)
       @note_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'Come see my awesome workspace!'}, :as => :create)
@@ -536,7 +537,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     #Notification
-    notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
+    notes = Events::NoteOnDataSource.by(owner).order(:id)
 
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)
 

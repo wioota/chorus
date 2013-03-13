@@ -7,7 +7,7 @@ describe InsightsController do
     end
 
     let(:user) { note.actor }
-    let(:note) { Events::NoteOnGreenplumInstance.last }
+    let(:note) { Events::NoteOnDataSource.last }
     let(:note_id) { note.id }
     let(:post_params) { { :note => { :note_id => note_id } } }
 

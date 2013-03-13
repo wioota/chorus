@@ -5,10 +5,6 @@ module Events
   class Note < Base
     include SearchableHtml
 
-    @@entity_subtypes = {
-        'gpdb_data_source' => 'Events::NoteOnGreenplumInstance'
-    }
-
     validates_presence_of :actor_id
     validate :no_note_on_archived_workspace, :on => :create
     validates_presence_of :workspace, :if => :has_workspace?
@@ -33,14 +29,19 @@ module Events
     def self.build_for(model, params)
       params[:note_target] = model
 
-      event_class = @@entity_subtypes[params[:entity_type]].try(:constantize)
-      unless event_class
-        model_type = params[:entity_type]
-        model_type = 'workspace_dataset' if (model_type == 'dataset') && params[:workspace_id]
-
-        event_class = Events.const_get "note_on_#{model_type}".classify
-      end
-      event_class.new(params, :as => :create)
+      model_class = case model
+                      when Workfile then
+                        Workfile
+                      when HdfsEntry then
+                        HdfsFile
+                      when Dataset
+                        params[:workspace_id] ? 'WorkspaceDataset' : Dataset
+                      when DataSource
+                        DataSource
+                      else
+                        model.class
+                    end
+      Events.const_get("NoteOn#{model_class}").new(params, :as => :create)
     end
 
     def self.insights
@@ -94,7 +95,7 @@ end
 
 # Preload all note classes, otherwise, attachment.note will not work in dev mode.
 require 'events/note_on_dataset'
-require 'events/note_on_greenplum_instance'
+require 'events/note_on_data_source'
 require 'events/note_on_gnip_data_source'
 require 'events/note_on_hdfs_data_source'
 require 'events/note_on_hdfs_file'

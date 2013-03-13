@@ -50,10 +50,10 @@ describe("chorus.collections.NotificationSet", function() {
             expect(this.activities.models[2].get("action")).toBe("NOTE");
             expect(this.activities.models[3].get("action")).toBe("NOTE");
 
-            expect(this.activities.models[0].get("actionType")).toBe("NoteOnGreenplumInstance");
-            expect(this.activities.models[1].get("actionType")).toBe("NoteOnGreenplumInstance");
-            expect(this.activities.models[2].get("actionType")).toBe("NoteOnGreenplumInstance");
-            expect(this.activities.models[3].get("actionType")).toBe("NoteOnGreenplumInstance");
+            expect(this.activities.models[0].get("actionType")).toBe("NoteOnDataSource");
+            expect(this.activities.models[1].get("actionType")).toBe("NoteOnDataSource");
+            expect(this.activities.models[2].get("actionType")).toBe("NoteOnDataSource");
+            expect(this.activities.models[3].get("actionType")).toBe("NoteOnDataSource");
         });
     });
 

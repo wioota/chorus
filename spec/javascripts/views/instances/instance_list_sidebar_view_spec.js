@@ -411,18 +411,6 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.instance.accounts()).toHaveAllBeenFetched();
         });
 
-        context("sidebar links", function() {
-            beforeEach(function() {
-                spyOn(this.view, 'canEditInstance').andReturn(true);
-                this.view.render();
-            });
-
-            it('doesnt display the add note and edit link', function(){
-                expect(this.view.$('.actions')).not.toContainTranslation('actions.add_note');
-                expect(this.view.$('.actions')).not.toContainTranslation('instances.sidebar.edit_instance');
-            });
-        });
-
         context("when the data has been loaded", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
@@ -455,6 +443,13 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             it("sets the ActivityList displayStyle to without_object", function() {
                 expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
+            });
+
+            it("has a 'add a note' link", function() {
+                expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
+                expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
+                expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
+                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('oracle_data_source');
             });
 
             context('when user is an admin or owner of the data source', function() {

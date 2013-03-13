@@ -14,7 +14,7 @@ describe EventPresenter, :type => :view do
     let(:event) { events(:note_on_greenplum) }
 
     it "has targets and additional_data values in it" do
-      subject[:gpdb_data_source].should be
+      subject[:data_source].should be
       subject["body"].should == 'i am a comment with greenplumsearch in me'
     end
   end
@@ -108,12 +108,12 @@ describe EventPresenter, :type => :view do
     end
 
     context "Note event" do
-      let(:event) { FactoryGirl.create(:note_on_greenplum_instance_event) }
+      let(:event) { FactoryGirl.create(:note_on_data_source_event) }
 
       it "returns the correct hash for a note" do
         hash = subject.to_hash
         hash[:action].should == "NOTE"
-        hash[:action_type].should == "NoteOnGreenplumInstance"
+        hash[:action_type].should == "NoteOnDataSource"
       end
 
       it "sanitizes notes' body" do

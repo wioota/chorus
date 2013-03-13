@@ -39,17 +39,17 @@ describe Events::Note do
     end
   end
 
-  describe "NoteOnGreenplumInstance" do
+  describe "NoteOnDataSource" do
     subject do
-      Events::NoteOnGreenplumInstance.create!({
+      Events::NoteOnDataSource.create!({
           :actor => actor,
-          :gpdb_data_source => gpdb_data_source,
+          :data_source => gpdb_data_source,
           :body => "This is the body"
       }, :as => :create)
     end
 
-    its(:gpdb_data_source) { should == gpdb_data_source }
-    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
+    its(:data_source) { should == gpdb_data_source }
+    its(:targets) { should == {:data_source => gpdb_data_source} }
     its(:additional_data) { should == {'body' => "This is the body"} }
 
     it_creates_activities_for { [actor, gpdb_data_source] }
@@ -263,7 +263,7 @@ describe Events::Note do
   describe "#promote_to_insight" do
     let(:actor) { users(:owner) }
     let(:event) {
-      Events::NoteOnGreenplumInstance.create!({
+      Events::NoteOnDataSource.create!({
           :actor => actor,
           :gpdb_data_source => gpdb_data_source,
           :body => "This is the body"
@@ -307,8 +307,7 @@ describe Events::Note do
         workfile.workspace.save!
         note = Events::Note.build_for(workfile, {
             :body => "More crazy content",
-            :workspace_id => workspace.id,
-            :entity_type => "workfile"
+            :workspace_id => workspace.id
         })
         note.should_not be_valid
         note.should have_error_on(:workspace).with_message(:archived)
@@ -318,13 +317,25 @@ describe Events::Note do
     it "builds a note on a greenplum instance" do
       gpdb_data_source = data_sources(:default)
       note = Events::Note.build_for(gpdb_data_source, {
-          :body => "Some crazy content",
-          :entity_type => "gpdb_data_source"
+          :body => "Some crazy content"
       })
 
       note.save!
-      note.should be_a(Events::NoteOnGreenplumInstance)
-      note.gpdb_data_source.should == gpdb_data_source
+      note.should be_a(Events::NoteOnDataSource)
+      note.data_source.should == gpdb_data_source
+      note.body.should == "Some crazy content"
+      note.actor.should == user
+    end
+
+    it "builds a note on a oracle data source" do
+      data_source = data_sources(:oracle)
+      note = Events::Note.build_for(data_source, {
+          :body => "Some crazy content"
+      })
+
+      note.save!
+      note.should be_a(Events::NoteOnDataSource)
+      note.data_source.should == data_source
       note.body.should == "Some crazy content"
       note.actor.should == user
     end
@@ -332,8 +343,7 @@ describe Events::Note do
     it "builds a note on a hadoop data source" do
       hdfs_data_source = hdfs_data_sources(:hadoop)
       note = Events::Note.build_for(hdfs_data_source, {
-          :body => "Some crazy content",
-          :entity_type => "hdfs_data_source"
+          :body => "Some crazy content"
       })
 
       note.save!
@@ -345,8 +355,7 @@ describe Events::Note do
 
     it "builds a note on an hdfs file" do
       note = Events::Note.build_for(hdfs_entry, {
-          :body => "Some crazy content",
-          :entity_type => "hdfs_file"
+          :body => "Some crazy content"
       })
 
       note.save!
@@ -359,8 +368,7 @@ describe Events::Note do
 
     it "builds a note on a Gnip Instance" do
       note = Events::Note.build_for(gnip_data_source, {
-          :body => "Some crazy content",
-          :entity_type => "gnip_data_source"
+          :body => "Some crazy content"
       })
 
       note.save!
@@ -372,8 +380,7 @@ describe Events::Note do
 
     it "builds a note on a workfile" do
       note = Events::Note.build_for(workfile, {
-          :body => "Workfile content",
-          :entity_type => "workfile"
+          :body => "Workfile content"
       })
 
       note.save!
@@ -386,8 +393,7 @@ describe Events::Note do
 
     it "builds a note on a tableau workfile" do
       note = Events::Note.build_for(tableau_workfile, {
-          :body => "Workfile content",
-          :entity_type => "workfile"
+          :body => "Workfile content"
       })
 
       note.save!
@@ -400,8 +406,7 @@ describe Events::Note do
 
     it "builds a note on a dataset" do
       note = Events::Note.build_for(dataset, {
-          :body => "Crazy dataset content",
-          :entity_type => "dataset"
+          :body => "Crazy dataset content"
       })
 
       note.save!
@@ -414,8 +419,7 @@ describe Events::Note do
     it "builds a note on a dataset in a workspace" do
       note = Events::Note.build_for(dataset, {
           :body => "Crazy workspace dataset content",
-          :workspace_id => workspace.id,
-          :entity_type => "dataset"
+          :workspace_id => workspace.id
       })
 
       note.save!
@@ -429,8 +433,7 @@ describe Events::Note do
     it "doesn't always create insights" do
       note = Events::Note.build_for(dataset, {
           :body => "Crazy workspace dataset content",
-          :workspace_id => workspace.id,
-          :entity_type => "dataset"
+          :workspace_id => workspace.id
       })
 
       note.save!
@@ -443,8 +446,7 @@ describe Events::Note do
       note = Events::Note.build_for(dataset, {
           :body => "Crazy workspace dataset content",
           :workspace_id => workspace.id,
-          :is_insight => true,
-          :entity_type => "dataset"
+          :is_insight => true
       })
 
       note.save!
@@ -456,8 +458,7 @@ describe Events::Note do
     it "uses the target workspace over the workspace_id" do
       note = Events::Note.build_for(workfile, {
           :body => "Workfile content",
-          :workspace_id => workspaces(:empty_workspace).id,
-          :entity_type => "workfile"
+          :workspace_id => workspaces(:empty_workspace).id
       })
 
       note.save!
@@ -467,8 +468,7 @@ describe Events::Note do
 
       note = Events::Note.build_for(workfile, {
           :body => "Workfile content",
-          :workspace_id => workspaces(:empty_workspace).id,
-          :entity_type => "workfile"
+          :workspace_id => workspaces(:empty_workspace).id
       })
 
       note.save!

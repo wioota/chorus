@@ -443,7 +443,7 @@
         noteObjectType: function(self) {
             var actionType = self.model.get("actionType");
             switch (actionType) {
-                case "NoteOnGreenplumInstance":
+                case "NoteOnDataSource":
                 case "NoteOnHdfsDataSource":
                 case "NoteOnGnipDataSource":
                     return "data source";

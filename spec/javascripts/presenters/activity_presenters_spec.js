@@ -102,8 +102,8 @@ describe("chorus.presenters.Activity", function() {
             var noteObject;
 
             beforeEach(function() {
-                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-                noteObject = model.gpdbDataSource();
+                model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                noteObject = model.dataSource();
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
             });
@@ -125,7 +125,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("#canDelete", function() {
             beforeEach(function() {
-                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 presenter = new chorus.presenters.Activity(model);
             });
 
@@ -153,7 +153,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("#canEdit", function() {
             beforeEach(function() {
-                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 presenter = new chorus.presenters.Activity(model);
             });
 
@@ -175,7 +175,7 @@ describe("chorus.presenters.Activity", function() {
         describe("#isNote", function() {
             context ("when it is a note" , function() {
                 beforeEach(function() {
-                    model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                    model = rspecFixtures.activity.noteOnGreenplumDataSource();
                     presenter = new chorus.presenters.Activity(model);
                 });
                 it("returns true", function() {
@@ -198,7 +198,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("isNotification and isReadOnly", function() {
             beforeEach(function() {
-                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 var presenter_options = {
                     isNotification: true,
                     isReadOnly: true
@@ -216,7 +216,7 @@ describe("chorus.presenters.Activity", function() {
 
     describe("#promotionDetails", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.insightOnGreenplumInstance();
+            model = rspecFixtures.activity.insightOnGreenplumDataSource();
             var presenter_options = {
             };
             presenter = new chorus.presenters.Activity(model, presenter_options);
@@ -235,7 +235,7 @@ describe("chorus.presenters.Activity", function() {
 
         context(" when insight is published", function () {
             beforeEach(function () {
-                model = rspecFixtures.activity.insightOnGreenplumInstance({
+                model = rspecFixtures.activity.insightOnGreenplumDataSource({
                     isPublished:true
                 });
                 var presenter_options = {
@@ -252,7 +252,7 @@ describe("chorus.presenters.Activity", function() {
 
         context(" when insight is Not published", function () {
             beforeEach(function () {
-                model = rspecFixtures.activity.insightOnGreenplumInstance({
+                model = rspecFixtures.activity.insightOnGreenplumDataSource({
                     isPublished:false
                 });
                 var presenter_options = {
@@ -1020,8 +1020,8 @@ describe("chorus.presenters.Activity", function() {
         var instance;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                gpdbDataSource: {
+            model = rspecFixtures.activity.noteOnGreenplumDataSource({
+                dataSource: {
                     id: 42,
                     name: 'my_instance'
                 }

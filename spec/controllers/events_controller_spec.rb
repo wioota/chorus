@@ -237,10 +237,11 @@ describe EventsController do
         'sourceTableCreated' => Events::SourceTableCreated,
         'userCreated' => Events::UserAdded,
         'sandboxAdded' => Events::WorkspaceAddSandbox,
-        'noteOnGreenplumInstanceCreated' => Events::NoteOnGreenplumInstance.where(:insight => false),
-        'insightOnGreenplumInstance' => Events::NoteOnGreenplumInstance.where(:insight => true),
-        'noteOnGnipDataSourceCreated' => Events::NoteOnGnipDataSource.where(:insight => false),
-        'insightOnGnipDataSourceCreated' => Events::NoteOnGnipDataSource.where(:insight => true),
+        'insightOnGreenplumDataSource' => :insight_on_greenplum,
+        'noteOnGnipDataSourceCreated' => :note_on_gnip_data_source,
+        'insightOnGnipDataSourceCreated' => :insight_on_gnip_data_source,
+        'noteOnGreenplumDataSource' => :note_on_greenplum,
+        'noteOnOracleDataSource' => :note_on_oracle,
         'noteOnHdfsDataSourceCreated' => Events::NoteOnHdfsDataSource,
         'noteOnHdfsFileCreated' => Events::NoteOnHdfsFile,
         'noteOnWorkspaceCreated' => Events::NoteOnWorkspace,
@@ -274,21 +275,16 @@ describe EventsController do
         'hdfsPatternExtTableCreated' => Events::HdfsPatternExtTableCreated,
         'schemaImportCreated' => Events::SchemaImportCreated,
         'schemaImportSuccess' => Events::SchemaImportSuccess,
-        'schemaImportFailed' => Events::SchemaImportFailed
+        'schemaImportFailed' => Events::SchemaImportFailed,
+        'datasetImportFailedWithModelErrors' => :import_failed_with_model_errors
     }
 
     FIXTURE_FILES.each do |file_name, event_relation|
       generate_fixture "activity/#{file_name}.json" do
-        event = event_relation.last!
+        event = event_relation.is_a?(Symbol) ? events(event_relation) : event_relation.last!
         Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end
-    end
-
-    generate_fixture "activity/datasetImportFailedWithModelErrors.json" do
-      event = events(:import_failed_with_model_errors)
-      Activity.global.create!(:event => event)
-      get :show, :id => event.to_param
     end
   end
 end
