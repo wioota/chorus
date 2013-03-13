@@ -62,8 +62,9 @@ describe "Workspaces" do
 
       find('a', :text => "Active Workspaces", :visible => true).click
       find('a', :text => "All Workspaces", :visible => true).click
-      within ".workspace_list" do
-        page.should_not have_link(workspace_url(workspace))
+      within ".list" do
+        page.should have_css("a[href='#/workspaces/#{Workspace.first.id}']")
+        page.should_not have_css("a[href='#/workspaces/#{workspace.id}']")
       end
     end
   end

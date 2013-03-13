@@ -11,7 +11,7 @@ describe "Users" do
 
   describe "creating a user" do
 
-    it "Creates a user and saves their information" do
+    it "creates a user and saves their information" do
       visit "/#/users/new"
       fill_in 'firstName', :with => "new"
       fill_in 'lastName', :with => "person"
@@ -32,7 +32,7 @@ describe "Users" do
 
     it "user can upload a user image" do
       visit "#/users"
-      within ".user_list" do
+      within ".list" do
         click_link("#{admin.first_name} #{admin.last_name}")
       end
       click_link "Edit Profile"
@@ -46,7 +46,7 @@ describe "Users" do
   describe "changing the password for a user" do
     it "allows a user to change the password" do
       visit "#/users"
-      within ".user_list" do
+      within ".list" do
         click_link("#{admin.first_name} #{admin.last_name}")
       end
       click_link "Change password"
@@ -66,7 +66,7 @@ describe "Users" do
   describe "promoting a user to administrator" do
     it "allows the user to edit other admin accounts" do
       visit "#/users"
-      within ".user_list" do
+      within ".list" do
         click_link "#{user.first_name} #{user.last_name}"
       end
       click_link "Edit Profile"
@@ -77,7 +77,7 @@ describe "Users" do
       logout
       login(user)
       visit "#/users"
-      within ".user_list" do
+      within ".list" do
         click_link "#{admin.first_name} #{admin.last_name}"
       end
       page.should have_link("Edit Profile")
@@ -87,12 +87,12 @@ describe "Users" do
   describe "deleting a user" do
     it "deletes a user" do
       visit "#/users"
-      within ".user_list" do
+      within ".list" do
         click_link "#{user.first_name} #{user.last_name}"
       end
       click_link "Delete User"
       click_button "Delete User"
-      within ".user_list" do
+      within ".list" do
         page.should_not have_content("#{user.first_name} #{user.last_name}")
       end
     end
