@@ -181,13 +181,9 @@ describe Schema do
       end
 
       it "decrements the dataset counter on the schema" do
-        cached_before = dataset.schema.active_tables_and_views_count
-        not_stale_before = schema.active_tables_and_views.not_stale.count
-        schema.refresh_datasets(account, :mark_stale => true)
-        cached_after = dataset.schema.reload.active_tables_and_views_count
-        not_stale_after = schema.active_tables_and_views.not_stale.count
-
-        (not_stale_before - not_stale_after).should == cached_before - cached_after
+        expect {
+          schema.refresh_datasets(account, :mark_stale => true)
+        }.not_to change { schema.reload.active_tables_and_views_count }
       end
 
       it "does not update stale_at time" do

@@ -14,6 +14,10 @@ class GpdbSchema < Schema
       :class_name => 'GpdbDatabase'
   }
 
+  def active_tables_and_views
+    super.where("type != 'ChorusView'")
+  end
+
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
   has_many :imports, class_name: 'SchemaImport', foreign_key: 'schema_id'
 

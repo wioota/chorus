@@ -4,9 +4,7 @@ class Dataset < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
-  belongs_to :schema, :counter_cache => :active_tables_and_views_count
-
-  after_update :update_active_tables_and_views_counter_cache_on_schema
+  belongs_to :schema
 
   validates_presence_of :schema
   validates_presence_of :name
@@ -154,17 +152,5 @@ class Dataset < ActiveRecord::Base
     DatasetStatistics.build_for(self, schema.data_source.owner_account).description
   rescue
     nil
-  end
-
-  private
-
-  def update_active_tables_and_views_counter_cache_on_schema
-    if changed_attributes.include?('stale_at')
-      if stale?
-        Schema.decrement_counter(:active_tables_and_views_count, schema_id)
-      else
-        Schema.increment_counter(:active_tables_and_views_count, schema_id)
-      end
-    end
   end
 end

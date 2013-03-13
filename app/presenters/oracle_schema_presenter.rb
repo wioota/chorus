@@ -3,7 +3,7 @@ class OracleSchemaPresenter < Presenter
     {
       :id => model.id,
       :name => model.name,
-      :dataset_count => model.active_tables_and_views.size,
+      :dataset_count => model.active_tables_and_views_count,
       :entity_type => "oracle_schema",
       :instance => present(model.data_source),
       :refreshed_at => model.refreshed_at

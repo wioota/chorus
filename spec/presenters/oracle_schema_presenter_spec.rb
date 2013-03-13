@@ -3,7 +3,8 @@ require 'spec_helper'
 describe OracleSchemaPresenter, :type => :view do
   before do
     2.times { FactoryGirl.create(:oracle_table, :schema => schema) }
-    schema.reload
+    schema.active_tables_and_views_count = 2
+    schema.save!
     schema.touch :refreshed_at
   end
 
@@ -21,13 +22,6 @@ describe OracleSchemaPresenter, :type => :view do
       hash[:entity_type].should == "oracle_schema"
       hash[:instance][:id].should == schema.data_source.id
       hash[:instance][:name].should == schema.data_source.name
-    end
-
-    it "uses the cached counters for the dataset count" do
-      expect {
-        Schema.increment_counter(:active_tables_and_views_count, schema.id)
-        schema.reload
-      }.to change{presenter.to_hash[:dataset_count]}.by(1)
     end
   end
 end

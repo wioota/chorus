@@ -4,8 +4,9 @@ class Schema < ActiveRecord::Base
   has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   delegate :accessible_to, :to => :parent
 
-  has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
-           :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
+  def active_tables_and_views
+    datasets.where(:stale_at => nil)
+  end
 
   validates :name,
             :presence => true,
@@ -84,6 +85,9 @@ class Schema < ActiveRecord::Base
         dataset.mark_stale! unless dataset.is_a? ChorusView
       end
     end
+
+    self.active_tables_and_views_count = active_tables_and_views.count
+    save!
 
     found_datasets
   rescue DataSourceConnection::Error
