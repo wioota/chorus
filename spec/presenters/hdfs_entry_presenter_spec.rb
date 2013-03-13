@@ -8,6 +8,14 @@ describe HdfsEntryPresenter, :type => :view do
 
   describe "#to_hash" do
     let(:hash) { presenter.to_hash }
+
+    shared_examples_for :rendering_activities do
+      let(:options) { {activity_stream: true} }
+      it 'renders no tags' do
+        hash.should_not have_key(:tags)
+      end
+    end
+
     context "for a directory" do
       let(:entry) do
         hdfs_data_source.hdfs_entries.create!({
@@ -49,6 +57,8 @@ describe HdfsEntryPresenter, :type => :view do
           hash[:entries].should == []
         end
       end
+
+      it_behaves_like :rendering_activities
     end
 
     context "for a file" do
@@ -90,6 +100,8 @@ describe HdfsEntryPresenter, :type => :view do
           hash[:contents].should == "Content"
         end
       end
+
+      it_behaves_like :rendering_activities
     end
   end
 
@@ -121,4 +133,3 @@ describe HdfsEntryPresenter, :type => :view do
     end
   end
 end
-

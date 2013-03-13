@@ -7,12 +7,11 @@ class HdfsEntryPresenter < Presenter
         :is_dir => model.is_directory,
         :is_binary => false,
         :last_updated_stamp => model.modified_at.nil? ? "" : model.modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        :hdfs_data_source => present(model.hdfs_data_source),
         :ancestors => model.ancestors,
         :path => model.parent_path,
         :entity_type => model.entity_type_name,
-        :tags => present(model.tags)
-    }
+        :hdfs_data_source => present(model.hdfs_data_source, options)
+    }.merge(tags_hash)
 
     if model.is_directory
       hash[:entries] = present model.entries if options[:deep]
@@ -26,5 +25,11 @@ class HdfsEntryPresenter < Presenter
 
   def complete_json?
     !model.is_directory || options[:deep]
+  end
+
+  private
+
+  def tags_hash
+    rendering_activities? ? {} : {:tags => present(model.tags)}
   end
 end
