@@ -16,13 +16,13 @@ class DatasetPresenter < Presenter
       :schema => schema_hash,
       :recent_comments => present(recent_comments, :as_comment => true),
       :comment_count => comments.count + notes.count,
-      :tags => present(model.tags),
       :is_deleted => !model.deleted_at.nil?
     }.merge(workspace_hash).
       merge(credentials_hash).
       merge(associated_workspaces_hash).
       merge(frequency).
-      merge(tableau_workbooks_hash)
+      merge(tableau_workbooks_hash).
+      merge(tags_hash)
   end
 
   def complete_json?
@@ -30,6 +30,10 @@ class DatasetPresenter < Presenter
   end
 
   private
+
+  def tags_hash
+    rendering_activities? ? {} : {:tags => present(model.tags)}
+  end
 
   def schema_hash
     rendering_activities? ? {:id => model.schema_id, :name => model.schema.name } : present(model.schema)

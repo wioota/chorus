@@ -88,6 +88,10 @@ shared_examples "activity stream data source presenter" do
       presenter.presentation_hash[:owner].should be_nil
     end
 
+    it 'renders no tags' do
+      presenter.presentation_hash.should_not have_key(:tags)
+    end
+
     it "sets complete_json to false" do
       presenter.presentation_hash[:complete_json].should be_false
     end

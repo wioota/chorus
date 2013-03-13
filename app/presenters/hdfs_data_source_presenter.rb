@@ -11,9 +11,9 @@ class HdfsDataSourcePresenter < Presenter
         :version => model.version,
         :username => model.username,
         :group_list => model.group_list,
-        :entity_type => model.entity_type_name,
-        :tags => present(model.tags)
-    }.merge(owner_hash)
+        :entity_type => model.entity_type_name
+    }.merge(owner_hash).
+    merge(tags_hash)
   end
 
   def complete_json?
@@ -21,6 +21,10 @@ class HdfsDataSourcePresenter < Presenter
   end
 
   private
+
+  def tags_hash
+    rendering_activities? ? {} : {:tags => present(model.tags)}
+  end
 
   def owner_hash
     if rendering_activities?

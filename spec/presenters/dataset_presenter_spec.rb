@@ -64,11 +64,15 @@ describe DatasetPresenter, :type => :view do
       let(:schema) { FactoryGirl.create :gpdb_schema }
       let(:activity_stream) { true }
 
-      it 'renders the id and name' do
+      it 'renders the id and name of the schema' do
         hash[:schema].should == { id: schema.id, name: schema.name }
       end
 
-      it "renders empty/false value for mutiple keys" do
+      it 'renders no tags' do
+        hash.should_not have_key(:tags)
+      end
+
+      it "renders empty/false value for multiple keys" do
         hash[:frequency].should == ""
         hash[:tableau_workbooks].should == []
         hash[:associated_workspaces].should == []

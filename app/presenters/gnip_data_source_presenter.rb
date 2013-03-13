@@ -7,9 +7,9 @@ class GnipDataSourcePresenter < Presenter
         :description => model.description,
         :username => model.username,
         :state => "online",
-        :entity_type => model.entity_type_name,
-        :tags => present(model.tags)
-    }.merge(owner_hash)
+        :entity_type => model.entity_type_name
+    }.merge(owner_hash).
+    merge(tags_hash)
   end
 
   def complete_json?
@@ -17,6 +17,10 @@ class GnipDataSourcePresenter < Presenter
   end
 
   private
+
+  def tags_hash
+    rendering_activities? ? {} : {:tags => present(model.tags)}
+  end
 
   def owner_hash
     if rendering_activities?
