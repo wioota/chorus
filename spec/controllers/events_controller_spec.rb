@@ -14,7 +14,31 @@ describe EventsController do
      response.code.should == "200"
    end
 
-    context "getting activities for a particular model" do
+   it "eager loads the associations" do
+     mock_present do |models|
+       models.each do |model|
+         model.association(:workspace).should be_loaded
+         model.association(:datasets).should be_loaded
+         model.association(:actor).should be_loaded
+         model.association(:target1).should be_loaded
+         model.association(:target2).should be_loaded
+
+         model.association(:attachments).should be_loaded
+         model.attachments.each { |attachment| attachment.association(:note).should be_loaded }
+
+         model.association(:workfiles).should be_loaded
+         model.workfiles.each { |workfile| workfile.association(:latest_workfile_version).should be_loaded }
+         model.workfiles.each { |workfile| workfile.latest_workfile_version.association(:workfile).should be_loaded }
+
+         model.association(:comments).should be_loaded
+         model.comments.each { |comment| comment.association(:author).should be_loaded }
+       end
+     end
+
+     get :index, :entity_type => "dashboard"
+   end
+
+   context "getting activities for a particular model" do
       let(:event) { Events::Base.last }
       before do
         Activity.create!(:entity => object, :event => event)
