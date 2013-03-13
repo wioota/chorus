@@ -143,7 +143,7 @@ describe OracleConnection, :oracle_integration do
     context "when a limit is provided" do
       it "only processes part of the results" do
         bucket = []
-        connection.stream_sql(sql, 1) do |row|
+        connection.stream_sql(sql, { :limit => 1 }) do |row|
           bucket << row
         end
 

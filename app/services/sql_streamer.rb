@@ -8,7 +8,7 @@ class SqlStreamer
     @show_headers = options[:show_headers] == false ? false : true
 
     @stream_options = {}
-    @stream_options[:row_limit] = options[:row_limit] if options[:row_limit].to_i > 0
+    @stream_options[:limit] = options[:row_limit] if options[:row_limit].to_i > 0
     @stream_options[:quiet_null] = !!options[:quiet_null]
   end
 

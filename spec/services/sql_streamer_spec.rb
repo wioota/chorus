@@ -3,9 +3,9 @@ require 'spec_helper'
 describe SqlStreamer do
   let(:sql) { "select 1;" }
   let(:row_limit) { nil }
-  let(:options) { Hash.new }
+  let(:options) { { :quiet_null => false } }
   let(:streamer) { SqlStreamer.new(sql, connection, options) }
-  let(:streamer_options) { Hash.new }
+  let(:streamer_options) { { :quiet_null => false } }
 
   let(:streamed_data) { [
       {:id => 1, :something => 'hello'},
@@ -77,7 +77,7 @@ describe SqlStreamer do
 
     context "with row_limit" do
       let(:options) { { :row_limit => 2 } }
-      let(:streamer_options) { { :row_limit => 2 } }
+      let(:streamer_options) { { :limit => 2, :quiet_null => false } }
 
       it "uses the limit" do
         enumerator = streamer.enum
