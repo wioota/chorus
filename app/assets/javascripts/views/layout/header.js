@@ -61,7 +61,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.$(".search input").unbind("textchange").bind("textchange", _.bind(this.displayResult, this));
+        this.$(".search input").unbind("textchange").bind("textchange", _.bind(_.throttle(this.displayResult, 500), this));
         chorus.addClearButton(this.$(".search input"));
 
         if (chorus.isDevMode()) {
