@@ -23,9 +23,9 @@ http_interactions:
       content-type:
       - application/json; charset=utf-8
       server:
-      - Microsoft-IIS/7.5
+      - Microsoft-IIS/8.0
       date:
-      - Fri, 08 Mar 2013 18:39:24 GMT
+      - Wed, 13 Mar 2013 19:07:10 GMT
       connection:
       - close
       content-length:
@@ -35,5 +35,5 @@ http_interactions:
       string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766\r\n  ],\r\n\
         \  \"failed\": [\r\n    99999999\r\n  ]\r\n}"
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:39:23 GMT
+  recorded_at: Wed, 13 Mar 2013 19:07:10 GMT
 recorded_with: VCR 2.3.0

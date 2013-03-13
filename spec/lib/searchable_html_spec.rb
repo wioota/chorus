@@ -23,14 +23,13 @@ describe SearchableHtml do
 
     it "removes tags from the body" do
       VCR.use_cassette("searchable_html") do
-        Sunspot.session.remove_all
-        obj = SearchableHtmlTestClass.new(:html_field => 'this <b>is text</b>')
+        obj = SearchableHtmlTestClass.new(:html_field => 'hello <b>twinkletwinklelittlestar</b>')
         obj.id = 1
         obj.solr_index
         Sunspot.commit
 
-        results = SearchableHtmlTestClass.search { fulltext "text" }
-        results.hits[0].stored('html_field')[0].should == 'this is text'
+        results = SearchableHtmlTestClass.search { fulltext 'twinkletwinklelittlestar' }
+        results.hits[0].stored('html_field')[0].should == 'hello twinkletwinklelittlestar'
       end
     end
   end

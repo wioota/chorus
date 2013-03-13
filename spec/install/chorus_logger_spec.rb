@@ -1,9 +1,6 @@
+require 'minimal_spec_helper'
 require_relative "../../packaging/install/chorus_logger"
 require 'fakefs/spec_helpers'
-
-RSpec.configure do |config|
-  config.mock_with :rr
-end
 
 describe ChorusLogger do
   include FakeFS::SpecHelpers

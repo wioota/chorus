@@ -1,8 +1,5 @@
+require 'minimal_spec_helper'
 require_relative "../../packaging/install/installer_io"
-
-RSpec.configure do |config|
-  config.mock_with :rr
-end
 
 describe InstallerIO do
   let(:io) { described_class.new(silent) }

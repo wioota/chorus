@@ -1,3 +1,4 @@
+require 'minimal_spec_helper'
 require_relative "../../packaging/install/version_detector"
 require 'fakefs/spec_helpers'
 

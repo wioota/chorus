@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><delete><query>*:*</query></delete>
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
     headers:
       content-type:
       - text/xml
@@ -22,15 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>28}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:39:55 GMT
+  recorded_at: Wed, 13 Mar 2013 18:51:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">SearchableHtmlTestClass 1</field><field name="type">SearchableHtmlTestClass</field><field name="type">ActiveRecord::Base</field><field name="class_name">SearchableHtmlTestClass</field><field name="html_field_texts">this is text</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">SearchableHtmlTestClass 1</field><field name="type">SearchableHtmlTestClass</field><field name="type">ActiveRecord::Base</field><field name="class_name">SearchableHtmlTestClass</field><field name="html_field_texts">hello twinkletwinklelittlestar</field></doc></add>
     headers:
       content-type:
       - text/xml
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:39:55 GMT
+  recorded_at: Wed, 13 Mar 2013 19:08:28 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -72,15 +72,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>26}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:39:55 GMT
+  recorded_at: Wed, 13 Mar 2013 19:08:28 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3ASearchableHtmlTestClass&q=text&fl=%2A+score&qf=html_field_texts&defType=edismax&start=0&rows=30
+      string: fq=type%3ASearchableHtmlTestClass&q=twinkletwinklelittlestar&fl=%2A+score&qf=html_field_texts&defType=edismax&start=0&rows=30
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -97,9 +97,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10,''params''=>{''fl''=>''*
-        score'',''start''=>''0'',''q''=>''text'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:SearchableHtmlTestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.15342641,''docs''=>[{''id''=>''SearchableHtmlTestClass
-        1'',''html_field_texts''=>[''this is text''],''score''=>0.15342641}]}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''fl''=>''*
+        score'',''start''=>''0'',''q''=>''twinkletwinklelittlestar'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:SearchableHtmlTestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.4777176,''docs''=>[{''id''=>''SearchableHtmlTestClass
+        1'',''html_field_texts''=>[''hello twinkletwinklelittlestar''],''score''=>3.4777176}]}}'
     http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 18:39:55 GMT
+  recorded_at: Wed, 13 Mar 2013 19:08:28 GMT
 recorded_with: VCR 2.3.0

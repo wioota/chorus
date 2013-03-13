@@ -1,3 +1,4 @@
+require 'minimal_spec_helper'
 require 'stringio'
 require_relative '../../app/models/chorus_config'
 

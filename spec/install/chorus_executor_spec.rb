@@ -1,9 +1,6 @@
+require 'minimal_spec_helper'
 require_relative "../../packaging/install/chorus_executor"
 require 'fakefs/spec_helpers'
-
-RSpec.configure do |config|
-  config.mock_with :rr
-end
 
 describe ChorusExecutor do
   describe "constructor" do

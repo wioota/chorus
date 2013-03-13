@@ -1,10 +1,7 @@
+require 'minimal_spec_helper'
 require_relative "../../packaging/install/chorus_installer"
 require_relative "stub_executor"
 require 'fakefs/spec_helpers'
-
-RSpec.configure do |config|
-  config.mock_with :rr
-end
 
 describe ChorusInstaller do
   include FakeFS::SpecHelpers
