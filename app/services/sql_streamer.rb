@@ -1,40 +1,35 @@
 require 'csv'
 
 class SqlStreamer
-  attr_accessor :schema, :sql, :user, :row_limit, :target_is_greenplum
+  def initialize(sql, connection, options = {})
+    @sql = sql
+    @connection = connection
+    @target_is_greenplum = options[:target_is_greenplum]
+    @show_headers = options[:show_headers] == false ? false : true
 
-  def initialize(schema, sql, user, options = {})
-    self.schema = schema
-    self.sql = sql
-    self.user = user
-    self.row_limit = options[:row_limit]
-    self.target_is_greenplum = options[:target_is_greenplum]
+    @stream_options = {}
+    @stream_options[:row_limit] = options[:row_limit] if options[:row_limit].to_i > 0
+    @stream_options[:quiet_null] = !!options[:quiet_null]
   end
 
-  def format(hash, first_row_flag)
-    results = ''
-    results << format_row(hash.keys) if first_row_flag
-    results << format_row(hash.values)
-  end
-
-  def empty_results_error
-    "The query returned no rows"
-  end
-
-  def row_limit
-    @row_limit.to_i if @row_limit.to_i > 0
-  end
-
-  def enum(show_headers = true)
-    connection = schema.connect_as(user)
+  def enum
+    first_row = @show_headers
+    no_results = true
 
     Enumerator.new do |y|
       begin
-        connection.stream_sql(sql, row_limit) do |row|
-          y << format(row, show_headers)
-          show_headers = false
+        @connection.stream_sql(@sql, @stream_options) do |row|
+          no_results = false
+
+          if first_row && @show_headers
+            y << format_row(row.keys)
+            first_row = false
+          end
+
+          y << format_row(row.values)
         end
-        if show_headers
+
+        if no_results && @show_headers
           y << empty_results_error
         end
       rescue Exception => e
@@ -47,6 +42,10 @@ class SqlStreamer
 
   private
 
+  def empty_results_error
+    "The query returned no rows"
+  end
+
   def format_for_greenplum(value)
     if value.is_a?(String)
       return '' if value == '\0'
@@ -57,7 +56,7 @@ class SqlStreamer
   end
 
   def format_row(row)
-    if self.target_is_greenplum
+    if @target_is_greenplum
       row.map { |value| format_for_greenplum(value) }
     else
       row

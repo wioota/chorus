@@ -45,18 +45,14 @@ class DataSourceConnection
     true
   end
 
-  def stream_dataset(dataset, limit = nil, &block)
-    stream_sql(dataset.all_rows_sql, limit, &block)
-  end
-
-  def stream_sql(sql, limit = nil)
+  def stream_sql(sql, options = {})
     with_connection do
       @connection.synchronize do |jdbc_conn|
         jdbc_conn.set_auto_commit(false)
 
         stmnt = jdbc_conn.create_statement
         stmnt.set_fetch_size(1000)
-        stmnt.set_max_rows(limit) if limit
+        stmnt.set_max_rows(options[:limit]) if options[:limit]
 
         result_set = stmnt.execute_query(sql)
         column_number = result_set.meta_data.column_count
@@ -65,7 +61,8 @@ class DataSourceConnection
           record = {}
 
           column_number.times do |i|
-            record[result_set.meta_data.column_name(i+1).to_sym] = SqlValueParser.new(result_set, :nil_value => "null").string_value(i)
+            nil_value = options[:quiet_null] ? "" : "null"
+            record[result_set.meta_data.column_name(i+1).to_sym] = SqlValueParser.new(result_set, :nil_value => nil_value).string_value(i)
           end
 
           yield record

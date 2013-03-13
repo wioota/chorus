@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 describe SqlStreamer do
-  let(:schema) { schemas(:public) }
   let(:sql) { "select 1;" }
-  let(:user) { users(:owner) }
   let(:row_limit) { nil }
-  let(:options) { row_limit ? {row_limit: row_limit} : {} }
-  let(:streamer) { SqlStreamer.new(schema, sql, user, options) }
+  let(:options) { Hash.new }
+  let(:streamer) { SqlStreamer.new(sql, connection, options) }
+  let(:streamer_options) { Hash.new }
 
   let(:streamed_data) { [
       {:id => 1, :something => 'hello'},
@@ -14,31 +13,29 @@ describe SqlStreamer do
       {:id => 3, :something => 'world'}
   ] }
 
-  before do
-    any_instance_of(GreenplumConnection) do |conn|
-      stub(conn).stream_sql(sql, row_limit) do |sql, row_limit, block|
-        streamed_data.each do |row|
-          block.call row
-        end
-        true
+  let(:connection) {
+    obj = Object.new
+    mock(obj).stream_sql(sql, streamer_options) do |sql, options, block|
+      streamed_data.each do |row|
+        block.call row
       end
+      true
     end
-  end
 
-  describe "#initialize" do
-    it "takes a sql fragment and user" do
-      streamer.user.should == user
-      streamer.sql.should == sql
-    end
-  end
+    obj
+  }
 
   describe "#enum" do
     it "returns an enumerator that yields the header and rows from the sql in csv" do
       check_enumerator(streamer.enum)
     end
 
-    it "should not yield the header row when told not to" do
-      check_enumerator(streamer.enum(false), false)
+    context "when the headers are hidden" do
+      let(:options) {{:show_headers => false}}
+
+      it "should not yield the header row" do
+        check_enumerator(streamer.enum, false)
+      end
     end
 
     context "with special characters in the data" do
@@ -52,13 +49,14 @@ describe SqlStreamer do
       }
 
       it "escapes the characters in the csv" do
-        enumerator = streamer.enum
-        enumerator.next.split("\n").last.should == %Q{1,"with""double""quotes",with'single'quotes,"with,comma"}
-        finish_enumerator(enumerator)
+        enumerator = streamer.enum.to_a
+        first_record = enumerator[1]
+
+        first_record.should == %Q{1,"with""double""quotes",with'single'quotes,"with,comma"\n}
       end
 
       describe "when the sql streamer has greenplum as target" do
-        let(:streamer) { SqlStreamer.new(schema, sql, user, {target_is_greenplum: true}) }
+        let(:streamer) { SqlStreamer.new(sql, connection, { target_is_greenplum: true }) }
 
         let(:streamed_data) do
           [{
@@ -70,15 +68,16 @@ describe SqlStreamer do
         end
 
         it "converts special characters to whitespace or empty string" do
-          enumerator = streamer.enum
-          enumerator.next.split("\n").last.should == '1, , ,""'
-          finish_enumerator(enumerator)
+          enumerator = streamer.enum.to_a
+          first_record = enumerator[1]
+          first_record.should == "1, , ,\"\"\n"
         end
       end
     end
 
     context "with row_limit" do
-      let(:row_limit) { 2 }
+      let(:options) { { :row_limit => 2 } }
+      let(:streamer_options) { { :row_limit => 2 } }
 
       it "uses the limit" do
         enumerator = streamer.enum
@@ -87,26 +86,28 @@ describe SqlStreamer do
       end
     end
 
-    context "with a string row_limit" do
-      let(:row_limit) { 2 }
+    context "with quiet null" do
+      let(:options) { { :quiet_null => true } }
+      let(:streamer_options) { { :quiet_null => true } }
 
-      it "sends the limit as an integer" do
-        enumerator = SqlStreamer.new(schema, sql, user, row_limit: "2").enum
+      it "uses the limit" do
+        enumerator = streamer.enum
         enumerator.next
         finish_enumerator(enumerator)
       end
     end
 
     context "for connection errors" do
-      it "returns the error message" do
-        any_instance_of(GpdbSchema) do |schema|
-          stub(schema).connect_with(anything) {
-            stub(Object.new).stream_sql.with_any_args {
-              raise GreenplumConnection::DatabaseError, StandardError.new("Some friendly error message")
-            }
-          }
+      let(:connection) {
+        obj = Object.new
+        mock(obj).stream_sql(sql, streamer_options) do |sql, options, block|
+          raise GreenplumConnection::DatabaseError, StandardError.new("Some friendly error message")
         end
 
+        obj
+      }
+
+      it "returns the error message" do
         enumerator = streamer.enum
         enumerator.next.should == "Some friendly error message"
         finish_enumerator enumerator
@@ -124,21 +125,20 @@ describe SqlStreamer do
     end
 
     def check_enumerator(enumerator, show_headers=true)
-      next_result = enumerator.next
-      header_row, first_result = next_result.split("\n",2)
-      if show_headers
-        header_row.should == "id,something"
-      else
-        header_row.should_not == "id,something"
-        first_result = header_row
-      end
+      results = enumerator.to_a
 
-      first_result.should == "#{streamed_data[0][:id]},#{streamed_data[0][:something]}#{show_headers ? "\n" : ""}"
-      streamed_data.each_with_index do |row_data, index|
-        next if index == 0
-        enumerator.next.should == "#{row_data[:id]},#{row_data[:something]}\n"
+      if show_headers
+        results.length.should eq(4)
+        results[0].should == "id,something\n"
+        results[1].should == "1,hello\n"
+        results[2].should == "2,cruel\n"
+        results[3].should == "3,world\n"
+      else
+        results.length.should eq(3)
+        results[0].should == "1,hello\n"
+        results[1].should == "2,cruel\n"
+        results[2].should == "3,world\n"
       end
-      finish_enumerator(enumerator)
     end
 
     def finish_enumerator(enum)

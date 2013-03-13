@@ -882,31 +882,16 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#stream_dataset" do
-      let(:schema) { GpdbSchema.find_by_name(schema_name) }
-      let(:dataset) {
-        GpdbTable.new(:name => 'thing', :schema => schema)
-      }
-      let(:limit) { 42 }
-
-      it "calls stream_sql with dataset sql string and limit" do
-        mock(connection).stream_sql(dataset.all_rows_sql, limit) do |sql, row_limit, block, *args|
-          [1, 2, 3].each do |i|
-            block.call i
-          end
-          true
-        end
-
-        results = []
-        connection.stream_dataset(dataset, limit) do |row|
-          results << row
-        end
-        results.should == [1, 2, 3]
-      end
-    end
-
     describe "#stream_sql" do
       let(:sql) { "SELECT * from thing" }
+      let(:expected) { true }
+      let(:bucket) {[]}
+      let(:options) {{}}
+      let(:subject) {
+        connection.stream_sql(sql) do
+          true
+        end
+      }
 
       before do
         @db = Sequel.connect(db_url)
@@ -915,6 +900,10 @@ describe GreenplumConnection, :greenplum_integration do
         @db.execute("INSERT INTO thing VALUES (1, 2, '1999-01-08 04:05:06 -8:00', '1999-01-08 04:05:06')")
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', '1999-07-08 04:05:06')")
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', null)")
+
+        connection.stream_sql(sql, options) do |row|
+          bucket << row
+        end
       end
 
       after do
@@ -922,34 +911,27 @@ describe GreenplumConnection, :greenplum_integration do
         @db.disconnect
       end
 
-      let(:subject) {
-        connection.stream_sql(sql) do
-          true
-        end
-      }
-      let(:expected) { true }
-
       it_behaves_like "a well-behaved database query"
 
       it "streams all rows of the results" do
-        bucket = []
-        connection.stream_sql(sql) do |row|
-          bucket << row
-        end
-
         bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"},
                           {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "1999-07-08 04:05:06"},
                           {:one => "3", :two => "4", :three => "1999-07-08 00:05:06-07", :fourth => "null"}]
       end
 
       context "when a limit is provided" do
-        it "only processes part of the results" do
-          bucket = []
-          connection.stream_sql(sql, 1) do |row|
-            bucket << row
-          end
+        let(:options) {{:limit => 1}}
 
+        it "only processes part of the results" do
           bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"}]
+        end
+      end
+
+      context "with quiet null" do
+        let(:options) {{:quiet_null => true}}
+
+        it "returns null values as empty string" do
+          bucket.last[:fourth].should == ""
         end
       end
     end

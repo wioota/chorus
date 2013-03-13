@@ -16,14 +16,30 @@ describe ExternalStreamsController do
   end
 
   context "with a valid stream_key" do
+    let(:connection) {
+      object = Object.new
+      stub(source_table).connect_as(user) { object }
+      object
+    }
+
+    let(:streamer_options) do
+      {
+        :row_limit => 12,
+        :target_is_greenplum => true,
+        :show_headers => false
+      }
+    end
+
     before do
       import.update_attribute(:stream_key, '12345')
+      stub(Import).find_by_stream_key('12345') { import }
+
+      streamer = Object.new
+      mock(SqlStreamer).new(source_table.all_rows_sql(12), connection, streamer_options) { streamer }
+      mock(streamer).enum { "foo" }
     end
 
     it "initializes the correct dataset streamer and streams without a header row" do
-      streamer = Object.new
-      mock(DatasetStreamer).new(source_table, user, row_limit: '12', target_is_greenplum: true) { streamer }
-      mock(streamer).enum(false) { "foo" }  # testing the header row
       get :show, :stream_key => '12345', :row_limit => 12
       response.should be_success
       response.body.should == "foo"
