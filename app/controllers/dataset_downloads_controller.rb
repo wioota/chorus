@@ -3,7 +3,7 @@ class DatasetDownloadsController < StreamsController
 
   def show
     dataset = Dataset.find(params[:dataset_id])
-    stream_options = params.slice(:row_limit, :header).reverse_merge(header: true)
-    stream(dataset, current_user, stream_options)
+    stream_options = params.slice(:row_limit, :header)
+    stream(dataset, current_user, stream_options.merge(:quiet_null => true))
   end
 end
