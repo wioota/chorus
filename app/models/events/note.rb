@@ -20,7 +20,7 @@ module Events
     delegate :grouping_id, :type_name, :security_type_name, :to => :primary_target
 
     before_validation :set_promoted_info, :if => lambda { insight && insight_changed? }
-    before_validation :set_actor, :if => :current_user
+    before_validation :set_actor_to_current_user, :if => lambda { current_user && !actor }
 
     after_create :create_activities
 
@@ -78,7 +78,7 @@ module Events
       true
     end
 
-    def set_actor
+    def set_actor_to_current_user
       self.actor = current_user
     end
 

@@ -261,17 +261,13 @@ describe Events::Note do
   end
 
   describe "#promote_to_insight" do
-    let(:actor) { users(:owner) }
-    let(:event) {
-      Events::NoteOnDataSource.create!({
-          :actor => actor,
-          :gpdb_data_source => gpdb_data_source,
-          :body => "This is the body"
-      }, :as => :create)
-    }
+    let(:promoter) { users(:default) }
+    let(:creator) { users(:owner) }
+    let(:event) { FactoryGirl.create :note_on_data_source_event, :actor => creator }
+
     subject { event.promote_to_insight }
     before do
-      set_current_user(actor)
+      set_current_user(promoter)
     end
 
     it { should be_true }
@@ -289,7 +285,8 @@ describe Events::Note do
       end
 
       it { should be_insight }
-      its(:promoted_by) { should == actor }
+      its(:promoted_by) { should == promoter }
+      its(:actor) { should == creator }
       its(:promotion_time) { should be_within(1.minute).of(Time.current) }
     end
   end
