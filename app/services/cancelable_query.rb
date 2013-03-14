@@ -15,4 +15,8 @@ class CancelableQuery
   def cancel
     @connection.fetch("select pg_cancel_backend(procpid) from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'")
   end
+
+  def busy?
+    @connection.fetch("select procpid from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'").any?
+  end
 end

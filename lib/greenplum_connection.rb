@@ -402,11 +402,12 @@ class GreenplumConnection < DataSourceConnection
       true
     end
 
-    def copy_table_data(destination_fullname, source_table_name, setup_sql, limit=nil)
+    def copy_table_data(destination_fullname, source_table_name, setup_sql, limit=nil, check_id=nil)
       with_connection do
         @connection.execute(setup_sql)
         select_data = @connection.from(source_table_name.to_sym).limit(limit)
         copy_command = "INSERT INTO #{destination_fullname} (#{select_data.sql})"
+        copy_command = CancelableQuery.format_sql_and_check_id(copy_command, check_id) if check_id
         @connection.execute(copy_command)
       end
       true

@@ -12,6 +12,7 @@ describe OracleTableCopier do
   let(:truncate) { false }
   let(:destination_exists) { false }
   let(:stream_url) { "chorus.oracle_streamer.biz" }
+  let(:pipe_name) { "fake_pipe" }
 
   let(:copier) do
     OracleTableCopier.new(
@@ -22,7 +23,8 @@ describe OracleTableCopier do
             :user => user,
             :sample_count => sample_count,
             :truncate => truncate,
-            :stream_url => stream_url
+            :stream_url => stream_url,
+            :pipe_name => pipe_name
         }
     )
   end
@@ -137,7 +139,7 @@ describe OracleTableCopier do
       mock(destination_connection).create_external_table(hash_including(external_table_options)) do |arg_hash|
         arg_hash.should have_key(:columns)
       end
-      mock(destination_connection).copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '')
+      mock(destination_connection).copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '', nil, pipe_name)
       mock(destination_connection).disconnect
       copier.run
     end

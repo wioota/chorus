@@ -1391,11 +1391,12 @@ describe GreenplumConnection, :greenplum_integration do
       let(:destination_table_name) { 'a_new_db_table' }
       let(:source_table_name) { 'base_table1' }
       let(:limit) { nil }
+      let(:check_id) { nil }
       let(:conn) { Sequel.connect(db_url) }
       let(:setup_sql) { '' }
 
       let(:expected) { true }
-      let(:subject) { connection.copy_table_data(%Q{"#{schema_name}"."#{destination_table_name}"}, source_table_name, setup_sql, limit) }
+      let(:subject) { connection.copy_table_data(%Q{"#{schema_name}"."#{destination_table_name}"}, source_table_name, setup_sql, limit, check_id) }
 
       before do
         conn.default_schema = schema_name
@@ -1422,6 +1423,20 @@ describe GreenplumConnection, :greenplum_integration do
         it "should only copy that many rows" do
           subject
           conn.fetch("SELECT * from #{destination_table_name}").all.length.should == limit
+        end
+      end
+
+      context "with a check_id" do
+        let(:check_id) { "cancelable_id" }
+
+        it "should only copy that many rows" do
+          mock.proxy(CancelableQuery).format_sql_and_check_id(anything, check_id) do |expected_sql|
+            mock.proxy(connection.connect!).execute(expected_sql)
+            expected_sql
+          end
+          expect {
+            subject
+          }.to change { conn.fetch("SELECT * from #{destination_table_name}").all.length }
         end
       end
 

@@ -7,7 +7,7 @@ class OracleTableCopier < TableCopier
     destination_connection.connect!
     destination_connection.create_external_table(:location_url => stream_url, :temporary => true, :web => true,
       :table_name => source_dataset.name, :columns => table_definition, :null => 'null')
-    destination_connection.copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '')
+    destination_connection.copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '', nil, pipe_name)
   ensure
     destination_connection.disconnect
   end

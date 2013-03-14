@@ -35,13 +35,12 @@ describe CancelableQuery do
     end
   end
 
-  describe "#cancel" do
+  context "with a real database connection", :greenplum_integration do
+    let(:account) { GreenplumIntegration.real_account }
+    let(:gpdb_data_source) { account.data_source }
     let(:check_id) { '54321' }
 
-    describe "with a real database connection", :greenplum_integration do
-      let(:account) { GreenplumIntegration.real_account }
-      let(:gpdb_data_source) { account.data_source }
-
+    describe "#cancel" do
       it "cancels the query and throws a query error when the query is cancelled" do
         cancel_thread = Thread.new do
           cancel_connection = gpdb_data_source.connect_with(account)
@@ -58,17 +57,38 @@ describe CancelableQuery do
 
         cancel_thread.join
       end
+    end
 
-      def get_running_queries_by_check_id(conn)
-        query = "select current_query from pg_stat_activity;"
-        conn.fetch(query).find { |row| row[:current_query].include? check_id }
+    describe "busy?" do
+      let(:connection) { gpdb_data_source.connect_with(account) }
+
+      after do
+        CancelableQuery.new(connection, check_id).cancel
       end
 
-      def wait_until
-        Timeout::timeout 5.seconds do
-          until yield
-            sleep 0.1
-          end
+      it "returns true when the cancelable query is running" do
+        CancelableQuery.new(connection, check_id).busy?.should == false
+
+        Thread.new do
+          query_connection = gpdb_data_source.connect_with(account)
+          CancelableQuery.new(query_connection, check_id).execute("SELECT pg_sleep(15)")
+        end
+
+        wait_until { get_running_queries_by_check_id(connection).present? }
+
+        CancelableQuery.new(connection, check_id).busy?.should == true
+      end
+    end
+
+    def get_running_queries_by_check_id(conn)
+      query = "select current_query from pg_stat_activity;"
+      conn.fetch(query).find { |row| row[:current_query].include? check_id }
+    end
+
+    def wait_until
+      Timeout::timeout 5.seconds do
+        until yield
+          sleep 0.1
         end
       end
     end
