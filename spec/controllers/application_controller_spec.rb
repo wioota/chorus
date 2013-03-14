@@ -75,6 +75,17 @@ describe ApplicationController do
       decoded_errors.message.should == 'oops'
     end
 
+    it "returns error 422 when a data source driver error occurs" do
+      error = DataSourceConnection::DriverNotConfigured.new('Oracle')
+      stub(controller).index { raise error }
+
+      get :index
+
+      response.code.should == '422'
+      decoded_errors.record.should == "DATA_SOURCE_DRIVER_NOT_CONFIGURED"
+      decoded_errors.data_source.should == 'Oracle'
+    end
+
     it "returns error 422 when a Postgres error occurs" do
       stub(controller).index { raise ActiveRecord::JDBCError.new("oops") }
 

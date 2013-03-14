@@ -31,6 +31,11 @@ describe("chorus.Mixins.ServerErrors", function() {
                 expect(_.first(this.host.serverErrorMessages())).toBe("The record you requested could not be found");
             });
 
+            it("includes fields on server errors", function() {
+                this.host.serverErrors = {"record":"DATA_SOURCE_DRIVER_NOT_CONFIGURED", data_source: "Oracle"};
+                expect(_.first(this.host.serverErrorMessages())).toBe("Not able to connect to the Oracle data source. Please make sure the Oracle driver is configured correctly.");
+            });
+
             it("catches errors for external services", function() {
                 this.host.serverErrors = {"service": "SOLR_UNREACHABLE"};
                 expect(_.first(this.host.serverErrorMessages())).toMatchTranslation("service_error.SOLR_UNREACHABLE");

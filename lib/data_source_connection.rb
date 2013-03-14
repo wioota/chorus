@@ -28,6 +28,13 @@ class DataSourceConnection
 
   class QueryError < StandardError; end
 
+  class DriverNotConfigured < StandardError;
+    attr_accessor :data_source
+    def initialize(data_source)
+      self.data_source = data_source
+    end
+  end
+
   def self.escape_like_string(input_string)
     input_string.gsub(/[\_\%#{LIKE_ESCAPE_CHARACTER}]/) { |c| LIKE_ESCAPE_CHARACTER + c }
   end

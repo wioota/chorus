@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'DataSourceConnection::Error', :with => :render_database_error
+  rescue_from 'DataSourceConnection::DriverNotConfigured', :with => :render_driver_not_configured
   rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
   rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
@@ -63,6 +64,10 @@ class ApplicationController < ActionController::Base
 
   def render_database_error(e)
     present_errors({:record => e.error_type, :message => e.message}, :status => :unprocessable_entity)
+  end
+
+  def render_driver_not_configured(e)
+    present_errors({:record => :DATA_SOURCE_DRIVER_NOT_CONFIGURED, :data_source => e.data_source}, :status => :unprocessable_entity)
   end
 
   def render_missing_database_object(e)

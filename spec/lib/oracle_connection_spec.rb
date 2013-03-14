@@ -40,9 +40,11 @@ describe OracleConnection, :oracle_integration do
       end
 
       it "raises an error" do
-        expect do
+        expect {
           connection.connect!
-        end.to raise_error(ApiValidationError)
+        }.to raise_error(DataSourceConnection::DriverNotConfigured) { |error|
+          error.data_source.should == 'Oracle'
+        }
       end
     end
   end
