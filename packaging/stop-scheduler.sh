@@ -16,7 +16,7 @@ if [ -f $SCHEDULER_PID_FILE ]; then
     rm -f $SCHEDULER_PID_FILE
   else
     log "Could not stop scheduler. Check that process `cat $SCHEDULER_PID_FILE` exists"
-    exit 1
+    exit 0
   fi
 else
   log "no scheduler to stop"

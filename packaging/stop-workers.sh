@@ -16,7 +16,7 @@ if [ -f $WORKER_PID_FILE ]; then
     rm -f $WORKER_PID_FILE
   else
     log "Could not stop worker. Check that process `cat $WORKER_PID_FILE` exists"
-    exit 1
+    exit 0
   fi
 else
   log "no worker to stop"

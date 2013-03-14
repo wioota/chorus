@@ -16,7 +16,7 @@ if [ -f $SOLR_PID_FILE ]; then
     rm -f $SOLR_PID_FILE
   else
     log "Could not stop solr. Check that process `cat $SOLR_PID_FILE` exists"
-    exit 1
+    exit 0
   fi
 else
   log "no solr to stop"
