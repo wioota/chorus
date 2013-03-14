@@ -1,7 +1,11 @@
 module ImportConsole
   module ImportsHelper
     def table_description(schema, table_name)
-      schema.database.name + "." + schema.name + "." + table_name
+      description = ''
+      if schema.respond_to?(:database) && !schema.database.nil?
+        description << schema.database.name + "."
+      end
+      description << schema.name + "." + table_name
     end
 
     def instance_description_for_schema(schema)
@@ -17,16 +21,18 @@ module ImportConsole
       end
     end
 
-    def link_to_table(workspace, dataset)
+    def link_to_table(workspace_or_schema, dataset)
       type = dataset.type == "ChorusView" ? "chorus_views" : "datasets"
-      "/#/workspaces/#{workspace.id}/#{type}/#{dataset.id}"
+      "/#/workspaces/#{workspace_or_schema.id}/#{type}/#{dataset.id}"
     end
 
-    def link_to_destination(workspace, to_table)
-      description = table_description(workspace.sandbox, to_table)
-      dest_table = workspace.sandbox.datasets.find_by_name(to_table)
+    def link_to_destination(import_manager)
+      to_table = import_manager.to_table
+      schema_or_sandbox = import_manager.schema_or_sandbox
+      description = table_description(schema_or_sandbox, to_table)
+      dest_table = schema_or_sandbox.datasets.find_by_name(to_table)
       if dest_table
-        link_to(description, link_to_table(workspace, dest_table))
+        link_to(description, link_to_table(import_manager.workspace_or_schema, dest_table))
       else
         description
       end
@@ -35,7 +41,7 @@ module ImportConsole
     def show_process
       yield || "Not found"
     rescue Exception => e
-      "#{e}: #{e.message}"
+      "#{e}: #{e.message} - #{e.backtrace}"
     end
   end
 end

@@ -38,7 +38,44 @@ class Import < ActiveRecord::Base
     self.is_a?(WorkspaceImport)
   end
 
+  def handle
+    "#{created_at.to_i}_#{id}"
+  end
+
+  def update_status(status, message = nil)
+    return unless success.nil?
+
+    passed = (status == :passed)
+
+    touch(:finished_at)
+    update_attribute(:success, passed)
+    update_attribute(:stream_key, nil)
+
+    if passed
+      refresh_schema
+      mark_as_success
+    else
+      create_failed_event_and_notification(message)
+    end
+  end
+
+  def cancel(success, message = nil)
+    log "Terminating import: #{inspect}"
+    update_status(success ? :passed : :failed, message)
+  end
+
   private
+
+  def named_pipe
+    return @named_pipe if @named_pipe
+    return unless ChorusConfig.instance.gpfdist_configured?
+    dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
+    @named_pipe = Dir.glob(dir.join "pipe*_#{handle}").first
+  end
+
+  def log(message)
+    Rails.logger.info("Import Termination: #{message}")
+  end
 
   def update_import_created_event
     event = created_event_class.find_for_import(self)
@@ -47,5 +84,11 @@ class Import < ActiveRecord::Base
       event.dataset = find_destination_dataset
       event.save!
     end
+  end
+
+  def refresh_schema
+    # update rails db for new dataset
+    destination_account = schema.database.data_source.account_for_user!(user)
+    schema.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
   end
 end

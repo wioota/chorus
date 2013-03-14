@@ -112,4 +112,58 @@ describe Import, :greenplum_integration do
       import.reload.stream_key.should_not be_nil
     end
   end
+
+  describe "#handle" do
+    before do
+      import.created_at = Time.at(123456789)
+      import.id = 42
+    end
+
+    it "returns the right handle" do
+      import.handle.should == "123456789_42"
+    end
+  end
+
+  describe "#update_status" do
+    it "updates finished_at" do
+      -> {
+        import.update_status(:passed)
+      }.should change(import, :finished_at)
+    end
+
+    it "removes stream_key" do
+      import.stream_key = "foobar"
+
+      -> {
+        import.update_status(:passed)
+      }.should change(import, :stream_key).to(nil)
+    end
+
+    context "when import passed" do
+      it "marks the import as success and refreshes its schema" do
+        mock(import).mark_as_success
+        mock(import).refresh_schema
+        import.update_status(:passed)
+      end
+
+      it "sets success to true" do
+        -> {
+          import.update_status(:passed)
+        }.should change(import, :success).to(true)
+      end
+    end
+
+    context "when import failed" do
+      it "creates failed event and notification" do
+        mock(import).create_failed_event_and_notification("a message")
+        import.update_status(:failed, "a message")
+      end
+
+      it "sets success to false" do
+        -> {
+          import.update_status(:failed)
+        }.should change(import, :success).to(false)
+      end
+    end
+  end
 end

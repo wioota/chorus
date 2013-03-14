@@ -10,6 +10,22 @@ describe ImportConsole::ImportsController do
   end
 
   describe "#index" do
+    context "with an schema import (for oracle)" do
+      let(:pending_import) { imports(:oracle) }
+
+      before do
+        Import.where(:finished_at => nil).each do |import|
+          import.update_attribute(:finished_at, Time.now)
+        end
+        pending_import.update_attribute(:finished_at, nil)
+      end
+
+      it "returns success" do
+        get :index
+        response.should be_success
+      end
+    end
+
     context "when there are imports pending" do
       let(:pending_import) { imports(:one) }
 

@@ -22,7 +22,7 @@ class DatasetImportsController < ApplicationController
 
     ids.each do |id|
       import = Import.find(id)
-      #authorize! :update, import
+      authorize! :update, import
 
       unless import.finished_at
         dataset_import_params = params[:dataset_import]
@@ -35,6 +35,4 @@ class DatasetImportsController < ApplicationController
       format.html { redirect_to ":#{ChorusConfig.instance.server_port}/import_console/imports" }
     end
   end
-
-
 end

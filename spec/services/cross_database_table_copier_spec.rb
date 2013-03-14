@@ -32,7 +32,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
                       "time_stamp_with_precision" timestamp(3) with time zone,
                       PRIMARY KEY("id2", "id3", "id")'.tr("\n","").gsub(/\s+/, " ").strip }
   let(:distrib_def) { "" }
-  let(:import) { imports(:two) }
+  let(:import) { imports(:now) }
   let(:source_dataset) { schema.datasets.find_by_name(source_table) }
   let(:pipe_name) { Time.current.to_i.to_s + "_pipe_id" }
   let(:options) do

@@ -7,6 +7,7 @@ class ImportExecutor
   end
 
   def self.cancel(import, success, message = nil)
+    import.cancel(success, message)
     ImportExecutor.new(import).cancel(success, message)
   end
 
@@ -23,46 +24,12 @@ class ImportExecutor
     import.generate_key if copier_class.requires_chorus_authorization?
 
     copier_class.new(import_attributes).start
-    ################## Move to import?
-    update_status :passed
+    import.reload
+    import.update_status :passed
   rescue => e
-    ################## Move to import?
-    update_status :failed, e.message
+    import.reload
+    import.update_status :failed, e.message
     raise
-  end
-
-  def cancel(success, message = nil)
-    log "Terminating import: #{import.inspect}"
-    ################## Move to import?
-    update_status(success ? :passed : :failed, message)
-
-    read_pipe_searcher = "pipe%_#{pipe_name}_r"
-    read_connection = import.schema.connect_as(import.user)
-    if read_connection.running? read_pipe_searcher
-      log "Found running reader on database #{import.schema.database.name} on instance #{import.schema.data_source.name}, killing it"
-      read_connection.kill read_pipe_searcher
-    else
-      log "Could not find running reader on database #{import.schema.database.name} on instance #{import.schema.data_source.name}"
-    end
-
-    write_pipe_searcher = "pipe%_#{pipe_name}_w"
-    write_connection = import.source_dataset.connect_as(import.user)
-    if write_connection.running? write_pipe_searcher
-      source_dataset = import.source_dataset
-      log "Found running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}, killing it"
-      write_connection.kill write_pipe_searcher
-    else
-      log "Could not find running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}"
-    end
-
-    if named_pipe
-      log "Removing named pipe #{named_pipe}"
-      FileUtils.rm_f named_pipe
-    end
-  end
-
-  def log(message)
-    Rails.logger.info("Import Termination: #{message}")
   end
 
   private
@@ -85,13 +52,9 @@ class ImportExecutor
         :user => import.user,
         :sample_count => import.sample_count,
         :truncate => import.truncate,
-        :pipe_name => pipe_name,
+        :pipe_name => import.handle,
         :stream_url => stream_url
     }
-  end
-
-  def pipe_name
-    "#{import.created_at.to_i}_#{import.id}"
   end
 
   def stream_url
@@ -101,37 +64,6 @@ class ImportExecutor
                                                              :host => ChorusConfig.instance.public_url,
                                                              :port => ChorusConfig.instance.server_port,
                                                              :stream_key => import.stream_key)
-  end
-
-  def named_pipe
-    return @named_pipe if @named_pipe
-    return unless ChorusConfig.instance.gpfdist_configured?
-    dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
-    @named_pipe = Dir.glob(dir.join "pipe*_#{pipe_name}").first
-  end
-
-  def refresh_schema
-    # update rails db for new dataset
-    destination_account = import.schema.database.data_source.account_for_user!(import.user)
-    import.schema.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
-  end
-
-  ################## Move to import?
-  def update_status(status, message = nil)
-    return unless import.reload.success.nil?
-
-    passed = (status == :passed)
-
-    import.touch(:finished_at)
-    import.update_attribute(:success, passed)
-    import.update_attribute(:stream_key, nil)
-
-    if passed
-      refresh_schema
-      import.mark_as_success
-    else
-      import.create_failed_event_and_notification(message)
-    end
   end
 
   def import

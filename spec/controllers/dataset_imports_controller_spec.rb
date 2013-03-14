@@ -6,7 +6,7 @@ describe DatasetImportsController do
     let(:source_dataset) { import_three.source_dataset }
 
     let(:import_one) { imports(:one) }
-    let(:import_two) { imports(:two) }
+    let(:import_two) { imports(:now) }
     let(:import_three) { imports(:three) }
 
     before do

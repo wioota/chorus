@@ -367,7 +367,7 @@ FixtureBuilder.configure do |fbuilder|
     import_now = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                                          :created_at => '2012-09-03 23:00:00-07',
                                          :source_dataset_id => default_table.id)
-    fbuilder.name :two, import_now
+    fbuilder.name :now, import_now
 
     csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table")
     public_workspace.bound_datasets << csv_import_table
