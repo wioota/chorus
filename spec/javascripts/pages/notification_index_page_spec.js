@@ -21,7 +21,7 @@ describe("chorus.pages.NotificationIndexPage", function() {
 
         it("subscribes to the notification:deleted event", function() {
             expect(chorus.PageEvents.subscribe).toHaveBeenCalled();
-            expect(chorus.PageEvents.subscribe.callCount).toBe(2);
+            expect(chorus.PageEvents.subscribe.callCount).toBeGreaterThan(1);
             expect(chorus.PageEvents.subscribe.argsForCall[1][0]).toBe("notification:deleted");
         });
 

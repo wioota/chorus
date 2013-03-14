@@ -18,7 +18,7 @@ _.extend(sinon.fakeServer, {
 
     updates: function() {
         return _.filter(this.requests, function(request) {
-            return request.method === "PUT"
+            return request.method === "PUT";
         });
     },
 
@@ -96,6 +96,8 @@ _.extend(sinon.fakeServer, {
             return response.attributes ? response.attributes : response;
         } else if (modelOrCollection instanceof Backbone.Model) {
             return modelOrCollection.attributes;
+        } else if (modelOrCollection instanceof Backbone.Collection) {
+            return _.map(modelOrCollection.models, function(model) { return model.attributes; });
         } else {
             return [];
         }
@@ -103,7 +105,7 @@ _.extend(sinon.fakeServer, {
 
     completeFetchFor: function(model, response, options, pagination) {
         response = this.makeFakeResponse(model, response);
-        var fetch = this.lastFetchFor(model, options)
+        var fetch = this.lastFetchFor(model, options);
         if (fetch) {
             fetch.succeed(response, pagination);
         } else {
@@ -228,7 +230,7 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
     params: function() {
         var uri;
         if (this.requestBody) {
-            uri = new URI("?" + this.requestBody)
+            uri = new URI("?" + this.requestBody);
         } else {
             uri = new URI(this.url);
         }
@@ -241,6 +243,6 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
             404,
             {},
             ''
-        )
+        );
     }
 });

@@ -165,9 +165,13 @@ describe("sinon extensions", function() {
             });
 
             context("it is called with a collection", function() {
-                it("uses an empty model set", function() {
-                    var collection = new chorus.collections.UserSet([], { group: "Agents" });
-                    expect(this.server.makeFakeResponse(collection)).toEqual([]);
+                it("uses the model set", function() {
+                    var collection = new chorus.collections.UserSet([
+                        { id: '1', name: "Keanu Reeves" }
+                    ], { group: "Agents" });
+                    expect(this.server.makeFakeResponse(collection)).toEqual([
+                        { id: '1', name: "Keanu Reeves" }
+                    ]);
                 });
             });
         });
