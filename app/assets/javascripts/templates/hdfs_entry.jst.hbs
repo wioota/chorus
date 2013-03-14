@@ -1,0 +1,25 @@
+<span class="spacer_left"/>
+
+<div class='checkbox_containter'>
+    {{#unless isDir}}
+        <input type="checkbox"/>
+    {{/unless}}
+</div>
+
+<img src="{{iconUrl}}"/>
+<div class="description">
+    {{#if isDir}}
+        <a class="name" href="{{showUrl}}">{{name}}</a>
+        <span class="dir">{{dirInfo}}</span>
+    {{else}}
+        {{#if displayableFiletype}}
+            <a class="name" href="{{showUrl}}">{{name}}</a>
+            <span class="size">{{humanSize}}</span>
+        {{else}}
+            <span class="name">{{name}}</span>
+            <span class="size">{{humanSize}}</span>
+        {{/if}}
+        {{> itemTags}}
+    {{/if}}
+</div>
+<span class="spacer_right"/>

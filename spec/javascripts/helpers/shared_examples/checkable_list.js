@@ -7,7 +7,7 @@ jasmine.sharedExamples.CheckableList = function() {
 
     describe("#render", function() {
         it("renders each item in the collection", function() {
-            expect(this.view.$("li").length).toBe(this.collection.length);
+            expect(this.view.$("li").length).toBe(this.view.collection.length);
         });
 
         it("renders a checkbox for each item", function() {

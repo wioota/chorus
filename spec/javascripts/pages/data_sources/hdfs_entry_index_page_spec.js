@@ -1,8 +1,8 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.hdfsDataSource({id: "1234", name: "instance Name"});
+        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: "1234", name: "instance Name"});
         this.hdfsEntry = rspecFixtures.hdfsDir({
-            hdfsDataSource: this.instance.attributes,
+            hdfsDataSource: this.hdfsDataSource.attributes,
             id: "4",
             name: "myDir",
             path: "/foo"
@@ -19,7 +19,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
     });
 
     it('fetches the data source', function() {
-        expect(this.instance).toHaveBeenFetched();
+        expect(this.hdfsDataSource).toHaveBeenFetched();
     });
 
     describe('before the data source fetch completes', function() {
@@ -42,30 +42,30 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.hdfsDataSource);
             this.server.completeFetchFor(this.hdfsEntry,
                 {
                     ancestors: [],
                     path: "/foo",
                     name: "myDir",
-                    entries: []
+                    entries: [{name: "test.csv"}]
                 }
             );
         });
 
-        it("should have the right breadcrumbs", function() {
+        it("has the right breadcrumbs", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.instance.get("name") + " (2)");
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.hdfsDataSource.get("name") + " (2)");
 
             expect(this.page.$(".breadcrumb").length).toBe(3);
         });
 
-        it("should have a sidebar", function() {
+        it("has a sidebar", function() {
             expect($(this.page.el).find(this.page.sidebar.el)).toExist();
             expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
         });
@@ -81,12 +81,68 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 expect(this.page.model).toEqual(this.entry);
             });
         });
+
+        describe("multiple selection", function() {
+            beforeEach(function() {
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            });
+
+            it("should have a 'select all' and 'deselect all'", function() {
+                expect(this.page.$(".multiselect span")).toContainTranslation("actions.select");
+                expect(this.page.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
+                expect(this.page.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
+            });
+
+            describe("when the 'select all' link is clicked", function() {
+                it("broadcasts the 'selectAll' page event", function() {
+                    this.page.$(".multiselect a.select_all").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                });
+            });
+
+            describe("when the 'select none' link is clicked", function() {
+                it("broadcasts the 'selectNone' page event", function() {
+                    this.page.$(".multiselect a.select_none").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                });
+            });
+
+            it("does not display the multiple selection section", function() {
+                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            });
+
+            context("when a row has been checked", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("hdfs_entry:checked", this.page.collection.clone());
+                });
+
+                it("displays the multiple selection section", function() {
+                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                });
+
+                it("has an action to edit tags", function() {
+                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                });
+
+                describe("clicking the 'edit_tags' link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$(".multiple_selection a.edit_tags").click();
+                    });
+
+                    it("launches the dialog for editing tags", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+        });
     });
 
     describe("when the path is long", function () {
         beforeEach(function () {
             spyOn(chorus, "menu");
-            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.hdfsDataSource);
             this.server.completeFetchFor(this.hdfsEntry,
                 {
                     path: "/start/m1/m2/m3/end",

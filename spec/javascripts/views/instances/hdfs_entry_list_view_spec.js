@@ -7,7 +7,7 @@ describe("chorus.views.HdfsEntryList", function() {
             rspecFixtures.hdfsDir({count: -1})
         ], {hdfsDataSource: {id: "1234"}, path: "/abc" });
 
-        this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
+        this.view = new chorus.views.HdfsEntryList({collection: this.collection});
     });
 
     it("uses a loading section", function() {
@@ -15,14 +15,57 @@ describe("chorus.views.HdfsEntryList", function() {
         expect(this.view.$(".loading_section")).toExist();
     });
 
-    describe("#render", function() {
+    describe("checkability with uncheckable models", function() {
         beforeEach(function() {
-            this.collection.loaded = true;
-            spyOn(chorus.PageEvents, "broadcast");
+            this.files = [
+                rspecFixtures.hdfsFile(),
+                rspecFixtures.hdfsFile(),
+                rspecFixtures.hdfsFile()
+            ];
+
+            this.directories = [
+                rspecFixtures.hdfsDir({count: 1}),
+                rspecFixtures.hdfsDir({count: -1})
+            ];
+
+            var pageCollection = new chorus.collections.HdfsEntrySet([
+                this.files[0],
+                this.files[1],
+                this.directories[0],
+                this.directories[1],
+                this.files[2]
+            ], {hdfsDataSource: {id: "1234"}, path: "/abc" }
+            );
+
+            pageCollection.loaded = true;
+
+            this.collection = new chorus.collections.HdfsEntrySet(
+                this.files,
+                {hdfsDataSource: {id: "1234"}, path: "/abc" }
+            );
+
+            this.view = new chorus.views.HdfsEntryList({collection: pageCollection});
+
+            spyOn(this.view.selectedModels, "add").andCallThrough();
+
             this.view.render();
         });
 
-        it("should render li for each item", function() {
+        itBehavesLike.CheckableList();
+
+        it("can select a single model", function() {
+            this.view.$("input[type=checkbox]").eq(2).click().change();
+            expect(this.view.selectedModels.add).toHaveBeenCalledWith(this.files[2]);
+        });
+    });
+
+    describe("when the entries have loaded", function() {
+        beforeEach(function() {
+            this.collection.loaded = true;
+            this.view.render();
+        });
+
+        it("renders a li for each item", function() {
             expect(this.view.$("li").length).toBe(this.collection.length);
         });
 
@@ -40,13 +83,8 @@ describe("chorus.views.HdfsEntryList", function() {
             expect(this.view.$("li:eq(1) img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl(_.last(this.collection.at(1).get("name").split("."))));
         });
 
-        it("pre-selects the first item", function() {
-            expect(this.view.$("li:eq(0)")).toHaveClass("selected");
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(0));
-        });
-
         it("links the directory name to that browse page", function() {
-            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hdfs_data_sources/1234/browse/"+this.collection.at(0).id);
+            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hdfs_data_sources/1234/browse/" + this.collection.at(0).id);
         });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
@@ -67,20 +105,6 @@ describe("chorus.views.HdfsEntryList", function() {
             it("links the directory name to that browse page", function() {
                 expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hdfs_data_sources/1234/browse/" + this.collection.at(0).id);
             });
-        });
-
-        it("broadcasts hdfs_entry:selected on itemSelected", function() {
-            var model = new chorus.models.HdfsEntry({
-                hdfsDataSource: {
-                    id: 111
-                },
-                path: "/",
-                name: "foo.csv"
-            });
-
-            chorus.PageEvents.broadcast.reset();
-            this.view.itemSelected(model);
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", model);
         });
     });
 });

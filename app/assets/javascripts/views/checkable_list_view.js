@@ -43,11 +43,11 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     checkSelectedModels: function() {
-        var checkboxes = this.$("li input[type=checkbox]");
+        var liItems = this.$("li");
         this.collection.each(function(model, i) {
             var selected = !!this.selectedModels.get(model.id);
-            checkboxes.eq(i).prop("checked", selected);
-            checkboxes.eq(i).closest("li").toggleClass("checked", selected);
+            liItems.eq(i).find("input[type=checkbox]").prop("checked", selected);
+            liItems.eq(i).toggleClass("checked", selected);
         }, this);
     },
 
@@ -57,7 +57,8 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
 
     checkboxChanged: function(e) {
         var clickedBox = $(e.currentTarget);
-        var index = this.$("li input[type=checkbox]").index(clickedBox);
+        var clickedLi = clickedBox.closest("li");
+        var index = this.$("li").index(clickedLi);
         var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
 

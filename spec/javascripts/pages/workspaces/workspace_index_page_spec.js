@@ -54,6 +54,30 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             });
 
             describe("multiple selection", function() {
+                beforeEach(function() {
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                });
+
+                it("should have a 'select all' and 'deselect all'", function() {
+                    expect(this.page.$(".multiselect span")).toContainTranslation("actions.select");
+                    expect(this.page.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
+                    expect(this.page.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
+                });
+
+                describe("when the 'select all' link is clicked", function() {
+                    it("broadcasts the 'selectAll' page event", function() {
+                        this.page.$(".multiselect a.select_all").click();
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                    });
+                });
+
+                describe("when the 'select none' link is clicked", function() {
+                    it("broadcasts the 'selectNone' page event", function() {
+                        this.page.$(".multiselect a.select_none").click();
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                    });
+                });
+
                 it("does not display the multiple selection section", function() {
                     expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
                 });

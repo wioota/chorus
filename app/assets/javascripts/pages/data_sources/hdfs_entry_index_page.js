@@ -26,11 +26,24 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             contentHeader: new chorus.views.HdfsEntryHeader({dataSource: this.instance, hdfsEntry: this.hdfsEntry}),
             modelClass: "HdfsEntry",
-            collection: this.collection
+            collection: this.collection,
+            contentDetailsOptions: {multiSelect: true}
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
             hdfsDataSourceId: this.hdfsDataSourceId
+        });
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "hdfs_entry:checked",
+            actions: [
+                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+            ],
+            actionEvents: {
+                'click .edit_tags': _.bind(function() {
+                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                }, this)
+            }
         });
 
         this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);
