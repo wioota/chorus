@@ -33,7 +33,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         return {
             fileName: this.model.get("name"),
             entityId: this.model.id,
-            lastUpdated: t("hdfs.last_updated", { when: chorus.helpers.relativeTimestamp(this.model.get('lastUpdatedStamp')) }),
+            lastUpdated: t("hdfs.last_updated", { when: Handlebars.helpers.relativeTimestamp(this.model.get('lastUpdatedStamp')) }),
             canCreateExternalTable: this.canCreateExternalTable()
         };
     },

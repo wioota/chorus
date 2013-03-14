@@ -8,7 +8,7 @@
         },
 
         timestamp: function() {
-            return chorus.helpers.relativeTimestamp(this.model.get("timestamp"));
+            return Handlebars.helpers.relativeTimestamp(this.model.get("timestamp"));
         },
 
         iconSrc: function() {
@@ -98,7 +98,7 @@
         },
 
         promotionDetails: function() {
-            return chorus.helpers.safeT("insight.promoted_by", {
+            return Handlebars.helpers.unsafeT("insight.promoted_by", {
                 promoterLink: this.model.promoterLink(),
                 relativeTimestamp: this.model.promotionTimestamp()
             });
@@ -536,7 +536,7 @@
         },
 
         modelLink: function(model) {
-            return chorus.helpers.linkTo(model.showUrl(), model.name());
+            return Handlebars.helpers.linkTo(model.showUrl(), model.name());
         },
 
         workspaceOldName: function(self) {

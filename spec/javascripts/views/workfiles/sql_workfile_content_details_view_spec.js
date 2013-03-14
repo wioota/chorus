@@ -42,8 +42,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         });
 
         it("puts the shortcuts next to the menu items", function() {
-            expect(this.view.$("a.run_default").siblings(".menu_shortcut")).toContainText(chorus.helpers.hotKeyName("r"));
-            expect(this.view.$("a.run_selection").siblings(".menu_shortcut")).toContainText(chorus.helpers.hotKeyName("e"));
+            expect(this.view.$("a.run_default").siblings(".menu_shortcut")).toContainText(Handlebars.helpers.hotKeyName("r"));
+            expect(this.view.$("a.run_selection").siblings(".menu_shortcut")).toContainText(Handlebars.helpers.hotKeyName("e"));
         });
 
         context("when the workspace is archived", function() {

@@ -220,8 +220,9 @@ chorus.models = {
                 return (name.length < length) ? name : name.slice(0, length) + "...";
             },
 
+            // TODO: use the helper in the template, not in the model
             highlightedName: function() {
-                var highlightedModel = chorus.helpers.withSearchResults(this);
+                var highlightedModel = Handlebars.helpers.withSearchResults(this);
                 return new Handlebars.SafeString(highlightedModel.name());
             },
 

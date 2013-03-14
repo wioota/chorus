@@ -11,6 +11,7 @@ window.Chorus = function chorus$Global() {
     self.templates = {};
     self.features = {};
     self.utilities = {};
+    self.handlebarsHelpers = {};
     self.locale = 'en';
     self.cleanupFunctions = [];
     self.viewsToTearDown = [];

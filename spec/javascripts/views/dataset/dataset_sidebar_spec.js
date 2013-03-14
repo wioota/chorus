@@ -338,7 +338,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     it("has an 'imported xx ago' description", function() {
                         var sourceTable = this.lastImport.source();
-                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {timeAgo: chorus.helpers.relativeTimestamp(this.lastImport.get('completedStamp')), tableLink: "sourcey"});
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {timeAgo: Handlebars.helpers.relativeTimestamp(this.lastImport.get('completedStamp')), tableLink: "sourcey"});
                         expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl());
                     });
 
@@ -361,7 +361,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     it("has an 'imported xx ago' description", function() {
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
-                            timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
+                            timeAgo: Handlebars.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
                             tableLink: "some_source_..."
                         });
                     });
@@ -555,7 +555,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     it("has an 'imported xx ago' description", function() {
                         var lastImport = this.view.imports.last();
                         var destTable = lastImport.destination();
-                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."});
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: Handlebars.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."});
                         expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
                     });
                 });

@@ -13,7 +13,7 @@ chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
                 link.html(segments[index]);
                 return new Handlebars.SafeString(link.outerHtml());
             } else {
-                return chorus.helpers.linkTo(entry.showUrl(), entry.get("name"));
+                return Handlebars.helpers.linkTo(entry.showUrl(), entry.get("name"));
             }
         }, this);
         var hdfsDataSource = this.model.getHdfsDataSource();
@@ -22,7 +22,7 @@ chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
             showUrl: this.model.showUrl(),
             humanSize: I18n.toHumanSize(this.model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
-            instanceLink: chorus.helpers.linkTo(hdfsDataSource.showUrl(), hdfsDataSource.get('name')),
+            instanceLink: Handlebars.helpers.linkTo(hdfsDataSource.showUrl(), hdfsDataSource.get('name')),
             completePath: new Handlebars.SafeString(pathLinks.join(" / ")),
             displayableFiletype: this.model.get('isBinary') === false
         });

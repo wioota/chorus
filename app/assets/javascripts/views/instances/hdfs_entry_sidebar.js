@@ -64,7 +64,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     additionalContext: function() {
         return {
             entityId: this.resource && this.resource.id,
-            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
+            lastUpdatedStamp: t("hdfs.last_updated", { when : Handlebars.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
         };
     },
 

@@ -97,7 +97,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     var workspace_dataset_model = presenter.nextImport();
                     this.nextImportLink = presenter.nextImport().string;
                     expect(this.nextImportLink).toMatchTranslation('import.next_import', {
-                        nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
+                        nextTime: Handlebars.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
                         tableRef: "<a href=\"#/workspaces/13/datasets/234\" title=\"My New Table\">My New Table</a>"
                     });
                 });
@@ -119,7 +119,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     var workspace_dataset_model = presenter.nextImport();
                     this.nextImportLink = presenter.nextImport().string;
                     expect(this.nextImportLink).toMatchTranslation('import.next_import', {
-                        nextTime: chorus.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
+                        nextTime: Handlebars.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
                         tableRef: "My New Table"
                     });
                 });

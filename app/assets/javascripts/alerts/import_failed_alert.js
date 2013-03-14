@@ -20,7 +20,7 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
 
     getErrorMessage: function() {
         if(this.model.get("errorObjects")) {
-            return chorus.helpers.renderErrors({fields: this.model.get("errorObjects")});
+            return Handlebars.helpers.renderErrors({fields: this.model.get("errorObjects")});
         }
         return this.model.get("errorMessage");
     }

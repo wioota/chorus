@@ -8,7 +8,7 @@
         <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
     {{/if}}
     <input class="search" placeholder='{{t "schema.functions.list.hint"}}'/>
-    <div class="context">{{safeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
+    <div class="context">{{unsafeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
     {{#if hasCollection}}{{#if models.length}}
         <ul class="list accordion">
             {{#each models}}

@@ -18,14 +18,14 @@ chorus.alerts.FunctionInfo = chorus.alerts.Base.extend({
     },
 
     bodyContent: function() {
-        return chorus.helpers.renderTemplate("function_info_body", {
+        return Handlebars.helpers.renderTemplate("function_info_body", {
             definition: this.model.get("definition"),
             description: this.model.get("description")
         });
     },
 
     textContent: function() {
-        return chorus.helpers.renderTemplate("function_info_text", {
+        return Handlebars.helpers.renderTemplate("function_info_text", {
             returnType: this.model.get('returnType'),
             name: this.model.get("name"),
             functionArguments: this.model.formattedArgumentList()

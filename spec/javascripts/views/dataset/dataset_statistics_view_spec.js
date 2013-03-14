@@ -49,7 +49,7 @@ describe("chorus.views.DatasetStatistics", function() {
         });
 
         it("displays the last analyzed time", function() {
-            expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
+            expect(this.view.$(".last_analyzed_time .value").text()).toBe(Handlebars.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
         });
 
 

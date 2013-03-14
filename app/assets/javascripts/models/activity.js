@@ -252,7 +252,7 @@
 
         promoterLink: function() {
             var promoter = this.promoter();
-            return promoter ? chorus.helpers.userProfileLink(promoter) : "MISSING PROMOTER";
+            return promoter ? Handlebars.helpers.userProfileLink(promoter) : "MISSING PROMOTER";
         },
 
         promoter: function () {
@@ -260,7 +260,7 @@
         },
 
         promotionTimestamp:function() {
-            return this.get("promotionTime") ? chorus.helpers.relativeTimestamp(this.get("promotionTime")) : null;
+            return this.get("promotionTime") ? Handlebars.helpers.relativeTimestamp(this.get("promotionTime")) : null;
         },
 
         reindexError: function() {

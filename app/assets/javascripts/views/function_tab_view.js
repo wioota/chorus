@@ -72,7 +72,7 @@ chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
     },
 
     tooltipContent: function(model) {
-        var html = chorus.helpers.renderTemplate("function_tab_tooltip", {
+        var html = Handlebars.helpers.renderTemplate("function_tab_tooltip", {
             description:_.prune(model.get("description") || '', 100),
             returnType: model.get("returnType"),
             name: model.get("name"),

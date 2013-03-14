@@ -27,7 +27,7 @@ chorus.views.Workfile = chorus.views.Base.extend(chorus.Mixins.TagsContext).exte
         var ctx = new chorus.presenters.Attachment(this.model, { iconSize:'icon' });
 
         ctx.tableauWorkbook = this.model.get('fileType') === 'tableau_workbook';
-        ctx.tableauIcon = chorus.helpers.tableauIcon();
+        ctx.tableauIcon = Handlebars.helpers.tableauIcon();
         ctx.checkable = this.options.checkable;
 
         _.extend(ctx, this.additionalContextForTags());

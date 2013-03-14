@@ -84,7 +84,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var nextImportStartDate = importSchedule.get('nextImportAt');
 
         if (!nextImportStartDate) {
-            return chorus.helpers.safeT("import.no_next_import");
+            return Handlebars.helpers.unsafeT("import.no_next_import");
         }
 
         var nextTableRef;
@@ -94,8 +94,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             nextTableRef = this.ellipsize(importSchedule.destination().name());
         }
 
-        return chorus.helpers.safeT("import.next_import", {
-            nextTime: chorus.helpers.relativeTimestamp(nextImportStartDate),
+        return Handlebars.helpers.unsafeT("import.next_import", {
+            nextTime: Handlebars.helpers.relativeTimestamp(nextImportStartDate),
             tableRef: nextTableRef });
     },
 
@@ -116,7 +116,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         }
 
-        return chorus.helpers.safeT(importStringKey, { tableLink: tableLink });
+        return Handlebars.helpers.unsafeT(importStringKey, { tableLink: tableLink });
     },
 
     importInProgress: function() {
@@ -139,8 +139,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         }
 
         if(lastImport.isInProgress()) {
-            var startedAt = chorus.helpers.relativeTimestamp(lastImport.get('startedStamp'));
-            return chorus.helpers.safeT("import.began", { timeAgo: startedAt });
+            var startedAt = Handlebars.helpers.relativeTimestamp(lastImport.get('startedStamp'));
+            return Handlebars.helpers.unsafeT("import.began", { timeAgo: startedAt });
         }
 
         if(lastImport.get("sourceDatasetId") === this.resource.get("id")) {
@@ -155,7 +155,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         } else {
             var source = lastImport.source();
             tableLink = (lastImport.get("fileName")) ?
-                chorus.helpers.spanFor(this.ellipsize(lastImport.get("fileName")), { 'class': "source_file", title: lastImport.get("fileName") }) :
+                Handlebars.helpers.spanFor(this.ellipsize(lastImport.get("fileName")), { 'class': "source_file", title: lastImport.get("fileName") }) :
                 this._linkToModel(source);
             if(lastImport.get('success')) {
                 importStatusKey = "import.last_imported_into";
@@ -164,8 +164,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             }
         }
 
-        var completedAt = chorus.helpers.relativeTimestamp(lastImport.get('completedStamp'));
-        return chorus.helpers.safeT(importStatusKey, { timeAgo: completedAt, tableLink: tableLink });
+        var completedAt = Handlebars.helpers.relativeTimestamp(lastImport.get('completedStamp'));
+        return Handlebars.helpers.unsafeT(importStatusKey, { timeAgo: completedAt, tableLink: tableLink });
     },
 
     noCredentialsWarning: function() {
@@ -173,9 +173,9 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             return "";
         }
 
-        var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
+        var addCredentialsLink = Handlebars.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
         var dataSourceName = this.resource.instance().name();
-        return chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, dataSourceName: dataSourceName });
+        return Handlebars.helpers.unsafeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, dataSourceName: dataSourceName });
     },
 
     noCredentials: function() {
@@ -219,7 +219,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     _linkToModel: function(model) {
-        return chorus.helpers.linkTo(model.showUrl(), this.ellipsize(model.name()), {title: model.name()});
+        return Handlebars.helpers.linkTo(model.showUrl(), this.ellipsize(model.name()), {title: model.name()});
     },
 
     ellipsize: function (name) {

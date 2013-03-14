@@ -3,7 +3,7 @@ describe("chorus.presenters.Activity", function() {
         sourceDataset, gnipDataSource, datasetModel, schema, destination;
 
     function linkTo(url, text) {
-        return chorus.helpers.linkTo(url, text);
+        return Handlebars.helpers.linkTo(url, text);
     }
 
     function itHasTheActorIcon() {
@@ -65,7 +65,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("includes the relative timestamp", function() {
-                var relativeTime = chorus.helpers.relativeTimestamp(model.get("timestamp"));
+                var relativeTime = Handlebars.helpers.relativeTimestamp(model.get("timestamp"));
                 expect(presenter.timestamp()).toBe(relativeTime);
             });
 

@@ -10,7 +10,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             it("should display the last updated timestamp", function() {
-                var when = chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastUpdatedStamp"));
+                var when = Handlebars.helpers.relativeTimestamp(this.hdfsEntry.get("lastUpdatedStamp"));
                 expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
             });
 

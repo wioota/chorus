@@ -18,7 +18,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         } else {
             return {
                 schemaAssociated: true,
-                schemaLink: chorus.helpers.linkTo("#", this.schema.get('name')),
+                schemaLink: Handlebars.helpers.linkTo("#", this.schema.get('name')),
                 schemas: this.schemas.map(function(schema) {
                     return {
                         id: schema.get("id"),
@@ -27,8 +27,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                     };
                 }, this),
                 noCredentials: this.schemas.statusCode === 403,
-                noCredentialsWarning: chorus.helpers.safeT("dataset.credentials.missing.body", {
-                    linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
+                noCredentialsWarning: Handlebars.helpers.unsafeT("dataset.credentials.missing.body", {
+                    linkText: Handlebars.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
                     dataSourceName: this.schema.database() && this.schema.database().instance().name()
                 })
             };
