@@ -12,13 +12,13 @@ FactoryGirl.define do
       hdfs_data_source
     end
 
-    factory :greenplum_instance_changed_owner_event, :class => Events::DataSourceChangedOwner do
-      gpdb_data_source
+    factory :data_source_changed_owner_event, :class => Events::DataSourceChangedOwner do
+      data_source { create :data_source }
       new_owner :factory => :user
     end
 
-    factory :greenplum_instance_changed_name_event, :class => Events::GreenplumInstanceChangedName do
-      gpdb_data_source
+    factory :data_source_changed_name_event, :class => Events::DataSourceChangedName do
+      data_source { create :data_source }
       new_name 'new_instance_name'
       old_name 'old_instance_name'
     end

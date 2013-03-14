@@ -1,33 +1,33 @@
 require 'spec_helper'
 
 describe OracleDataSource do
-  let(:instance) { FactoryGirl.build(:oracle_data_source) }
+  let(:data_source) { FactoryGirl.build(:oracle_data_source) }
 
   describe "validations" do
     it { should validate_presence_of(:host) }
 
     context 'when creating' do
       it 'validates the owner account' do
-        mock(instance).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
-        instance.valid?
+        mock(data_source).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
+        data_source.valid?
       end
     end
   end
 
   describe "owner_account" do
     it "is created automatically" do
-      instance = FactoryGirl.build(:oracle_data_source, :owner_account => nil)
-      stub(instance).valid_db_credentials?(anything) { true }
-      instance.save!
-      instance.owner_account.should_not be_nil
+      data_source = FactoryGirl.build(:oracle_data_source, :owner_account => nil)
+      stub(data_source).valid_db_credentials?(anything) { true }
+      data_source.save!
+      data_source.owner_account.should_not be_nil
     end
   end
 
   it_should_behave_like :data_source_with_access_control
 
   describe "DataSource Integration", :oracle_integration do
-    let(:instance) { OracleIntegration.real_data_source }
-    let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
+    let(:data_source) { OracleIntegration.real_data_source }
+    let(:account) { data_source.accounts.find_by_owner_id(data_source.owner.id) }
 
     it_should_behave_like :data_source_integration
   end
@@ -36,6 +36,10 @@ describe OracleDataSource do
     it "is Instance" do
       subject.type_name.should == 'Instance'
     end
+  end
+
+  it_behaves_like(:data_source_with_update) do
+    let(:data_source) { data_sources(:oracle) }
   end
 
   describe "#schemas" do
@@ -50,8 +54,8 @@ describe OracleDataSource do
   describe "#refresh_databases" do
     it "calls refresh_schemas" do
       options = {:foo => 'bar'}
-      mock(instance).refresh_schemas(options)
-      instance.refresh_databases(options)
+      mock(data_source).refresh_schemas(options)
+      data_source.refresh_databases(options)
     end
   end
 

@@ -331,7 +331,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context('gpdb data source changed owner', function() {
+    context('relational data source changed owner', function() {
         var dataSource, newOwner;
 
         beforeEach(function() {
@@ -355,16 +355,16 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context('gpdb data source changed name', function() {
-        var gpdbDataSource;
+    context('relational data source changed name', function() {
+        var dataSource;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.greenplumInstanceChangedName({
+            model = rspecFixtures.activity.dataSourceChangedName({
                 newName: "jane",
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            gpdbDataSource = model.gpdbDataSource();
+            dataSource = model.dataSource();
             actor = model.actor();
         });
 
@@ -372,9 +372,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GreenplumInstanceChangedName.default", {
+                "activity.header.DataSourceChangedName.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    gpdbDataSourceLink: linkTo(gpdbDataSource.showUrl(), gpdbDataSource.name()),
+                    dataSourceLink: linkTo(dataSource.showUrl(), dataSource.name()),
                     newName: "jane",
                     oldName: "john"
                 }

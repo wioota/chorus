@@ -130,8 +130,8 @@
 
     hidden = {
         headerParamOptions: {
-            GreenplumInstanceChangedName: {
-                links: [ "actor", "gpdbDataSource" ],
+            DataSourceChangedName: {
+                links: [ "actor", "dataSource" ],
                 attrs: [ "newName", "oldName" ]
             },
 
@@ -408,11 +408,12 @@
 
         headerTranslationKey: function(self, isNotification) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
+            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
+            var key, n = possibleStyles.length;
+
             if (isNotification) {
                 mainKey += ".notification";
             }
-            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
-            var key, n = possibleStyles.length;
             for(var i = 0; i < n; i++) {
                 key = [mainKey, possibleStyles[i]].join(".");
                 if(I18n.lookup(key)) return key;
@@ -536,14 +537,6 @@
 
         modelLink: function(model) {
             return chorus.helpers.linkTo(model.showUrl(), model.name());
-        },
-
-        instanceAddress: function(self) {
-            return self.model.gpdbDataSource().get("host");
-        },
-
-        gpdbDataSourceName: function(self) {
-            return self.model.gpdbDataSource().get("name");
         },
 
         workspaceOldName: function(self) {

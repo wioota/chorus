@@ -23,9 +23,10 @@ class DataSource < ActiveRecord::Base
   validates_with DataSourceNameValidator
 
   after_update :solr_reindex_later, :if => :shared_changed?
+  after_update :create_name_changed_event, :if => :current_user
 
   after_create :enqueue_refresh
-  after_create :create_data_source_created_event, :if => :current_user
+  after_create :create_created_event, :if => :current_user
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
@@ -161,7 +162,17 @@ class DataSource < ActiveRecord::Base
     accounts.find_by_owner_id(user.id)
   end
 
-  def create_data_source_created_event
+  def create_created_event
     Events::DataSourceCreated.by(current_user).add(:data_source => self)
+  end
+
+  def create_name_changed_event
+    if name_changed?
+      Events::DataSourceChangedName.by(current_user).add(
+          :data_source => self,
+          :old_name => name_was,
+          :new_name => name
+      )
+    end
   end
 end

@@ -117,21 +117,21 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "GreenplumInstanceChangedName" do
+  describe "DataSourceChangedName" do
     subject do
-      Events::GreenplumInstanceChangedName.add(
+      Events::DataSourceChangedName.add(
           :actor => actor,
-          :gpdb_data_source => gpdb_data_source,
+          :data_source => gpdb_data_source,
           :old_name => "brent",
           :new_name => "brenda"
       )
     end
 
-    its(:gpdb_data_source) { should == gpdb_data_source }
+    its(:data_source) { should == gpdb_data_source }
     its(:old_name) { should == "brent" }
     its(:new_name) { should == "brenda" }
 
-    its(:targets) { should == {:gpdb_data_source => gpdb_data_source} }
+    its(:targets) { should == {:data_source => gpdb_data_source} }
     its(:additional_data) { should == {'old_name' => "brent", 'new_name' => "brenda"} }
 
     it_creates_activities_for { [actor, gpdb_data_source] }

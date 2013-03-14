@@ -4,8 +4,6 @@ class GpdbDataSource < DataSource
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
 
-  after_update :create_instance_name_changed_event, :if => :current_user
-
   def self.create_for_user(user, data_source_hash)
     user.gpdb_data_sources.create!(data_source_hash, :as => :create)
   end
@@ -117,15 +115,5 @@ class GpdbDataSource < DataSource
         roles[:rolname].as("db_username"),
         databases[:datname].as("database_name")
     ).to_sql
-  end
-
-  def create_instance_name_changed_event
-    if name_changed?
-      Events::GreenplumInstanceChangedName.by(current_user).add(
-          :gpdb_data_source => self,
-          :old_name => name_was,
-          :new_name => name
-      )
-    end
   end
 end

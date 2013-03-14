@@ -17,11 +17,11 @@
         "schema": "Schema"
     };
 
-    function makeAssociationMethod(name, setupFunction) {
+    function makeAssociationMethod(associate, setupFunction) {
         return function() {
-            var className = CLASS_MAP[name];
+            var className = CLASS_MAP[associate];
             var modelClass = chorus.models[className];
-            var model = new modelClass(this.get(name));
+            var model = new modelClass(this.get(associate));
             if (setupFunction) setupFunction.call(this, model);
             return model;
         };
@@ -48,7 +48,7 @@
         schema: makeAssociationMethod("schema"),
         actor: makeAssociationMethod("actor"),
         dataSource: makeAssociationMethod('dataSource'),
-        gpdbDataSource: makeAssociationMethod("gpdbDataSource"),
+        gpdbDataSource: makeAssociationMethod("gpdbDataSource"), // can be deleted?
         gnipDataSource: makeAssociationMethod("gnipDataSource"),
         hdfsDataSource: makeAssociationMethod("hdfsDataSource"),
         workfile: makeAssociationMethod("workfile"),

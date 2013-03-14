@@ -25,52 +25,23 @@ describe GpdbDataSource do
 
     it "requires db username and password" do
       [:db_username, :db_password].each do |attribute|
-        instance = GpdbDataSource.new(valid_input_attributes.merge(attribute => nil), :as => :create)
-        instance.should_not be_valid
-        instance.should have_error_on(:owner_account)
+        data_source = GpdbDataSource.new(valid_input_attributes.merge(attribute => nil), :as => :create)
+        data_source.should_not be_valid
+        data_source.should have_error_on(:owner_account)
       end
     end
 
     it "requires that a real connection to GPDB requires valid credentials" do
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
-      instance = GpdbDataSource.new(valid_input_attributes, :as => :create)
-      instance.should_not be_valid
-      instance.should have_error_on(:owner_account)
+      data_source = GpdbDataSource.new(valid_input_attributes, :as => :create)
+      data_source.should_not be_valid
+      data_source.should have_error_on(:owner_account)
     end
 
-    it "can save a new instance that is shared" do
-      instance = user.gpdb_data_sources.create(valid_input_attributes.merge({:shared => true}), :as => :create)
-      instance.shared.should == true
-      instance.should be_valid
-    end
-  end
-
-  describe "#update" do
-    before do
-      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
-    end
-
-    let(:instance) { data_sources(:shared) }
-
-    it "does not allow you to update the shared attribute" do
-      instance.update_attributes!(:shared => false)
-      instance.shared.should be_true
-    end
-
-    it "generates a GreenplumInstanceChangedName event when the name is being changed" do
-      set_current_user(instance.owner)
-      old_name = instance.name
-      instance.update_attributes(:name => 'something_else')
-      event = Events::GreenplumInstanceChangedName.find_last_by_actor_id(instance.owner)
-      event.gpdb_data_source.should == instance
-      event.old_name.should == old_name
-      event.new_name.should == 'something_else'
-    end
-
-    it "does not generate an event when the name is not being changed" do
-      expect {
-        instance.update_attributes!(:description => 'hi!')
-      }.to_not change(Events::GreenplumInstanceChangedName, :count)
+    it "can save a new data_source that is shared" do
+      data_source = user.gpdb_data_sources.create(valid_input_attributes.merge({:shared => true}), :as => :create)
+      data_source.shared.should == true
+      data_source.should be_valid
     end
   end
 
@@ -118,7 +89,7 @@ describe GpdbDataSource do
     let!(:workspace2) { FactoryGirl.create(:workspace, :name => "a_workspace", :sandbox => gpdb_schema, :public => false) }
     let!(:workspace3) { FactoryGirl.create(:workspace, :name => "ws_3") }
 
-    it "returns the workspaces that use this instance's schema as sandbox" do
+    it "returns the workspaces that use this data_source's schema as sandbox" do
       workspaces = gpdb_data_source.used_by_workspaces(users(:admin))
       workspaces.count.should == 2
       workspaces.should include(workspace1)
@@ -153,7 +124,7 @@ describe GpdbDataSource do
         database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
-      it "does not enqueue GpdbDatabase.reindex_datasets if the instance accounts for a database have not changed" do
+      it "does not enqueue GpdbDatabase.reindex_datasets if the data_source accounts for a database have not changed" do
         stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", anything)
         dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id)
         gpdb_data_source.refresh_databases
@@ -228,7 +199,7 @@ describe GpdbDataSource do
         end
       end
 
-      context "when the instance is not available" do
+      context "when the data_source is not available" do
         before do
           stub_gpdb_fail
         end
@@ -247,19 +218,19 @@ describe GpdbDataSource do
   end
 
   describe "#connect_with" do
-    let(:instance) { data_sources(:default) }
+    let(:data_source) { data_sources(:default) }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
       mock(GreenplumConnection).new({
-                                        :host => instance.host,
-                                        :port => instance.port,
+                                        :host => data_source.host,
+                                        :port => data_source.port,
                                         :username => account.db_username,
                                         :password => account.db_password,
-                                        :database => instance.db_name,
+                                        :database => data_source.db_name,
                                         :logger => Rails.logger
                                     }) { "this is my connection" }
-      instance.connect_with(account).should == "this is my connection"
+      data_source.connect_with(account).should == "this is my connection"
     end
   end
 
@@ -272,13 +243,13 @@ describe GpdbDataSource do
   end
 
   describe "#destroy" do
-    let(:instance) { data_sources(:owners) }
+    let(:data_source) { data_sources(:owners) }
 
     it "destroys dependent databases" do
-      databases = instance.databases
+      databases = data_source.databases
       databases.length.should > 0
 
-      instance.destroy
+      data_source.destroy
       databases.each do |database|
         GpdbDatabase.find_by_id(database.id).should be_nil
       end
@@ -286,10 +257,14 @@ describe GpdbDataSource do
   end
 
   it_should_behave_like :data_source_with_access_control
+  it_behaves_like(:data_source_with_update) do
+    let(:data_source) { data_sources(:default) }
+  end
+
 
   describe "DataSource Integration", :greenplum_integration do
-    let(:instance) { GreenplumIntegration.real_data_source }
-    let(:account) { instance.accounts.find_by_owner_id(instance.owner.id) }
+    let(:data_source) { GreenplumIntegration.real_data_source }
+    let(:account) { data_source.accounts.find_by_owner_id(data_source.owner.id) }
 
     it_behaves_like :data_source_integration
   end

@@ -1,18 +1,18 @@
 shared_examples_for :data_source_integration do
   describe "#valid_db_credentials?" do
     it "returns true when the credentials are valid" do
-      instance.valid_db_credentials?(account).should be_true
+      data_source.valid_db_credentials?(account).should be_true
     end
 
     it "returns true when the credentials are invalid" do
       account.db_username = 'awesome_hat'
-      instance.valid_db_credentials?(account).should be_false
+      data_source.valid_db_credentials?(account).should be_false
     end
 
     it "raises a DataSourceConnection::Error when other errors occur" do
-      instance.host = 'something_fake'
+      data_source.host = 'something_fake'
       expect {
-        instance.valid_db_credentials?(account)
+        data_source.valid_db_credentials?(account)
       }.to raise_error(DataSourceConnection::Error)
     end
   end
@@ -52,15 +52,15 @@ shared_examples_for :data_source_with_access_control do
     end
 
     describe '#accessible_to' do
-      it 'returns true if the instance is shared' do
+      it 'returns true if the data_source is shared' do
         @data_source_shared.accessible_to(user).should be_true
       end
 
-      it 'returns true if the instance is owned by the user' do
+      it 'returns true if the data_source is owned by the user' do
         @data_source_owned.accessible_to(user).should be_true
       end
 
-      it 'returns true if the user has an instance account' do
+      it 'returns true if the user has an data_source account' do
         @data_source_with_membership.accessible_to(user).should be_true
       end
 
@@ -90,45 +90,45 @@ shared_examples_for :data_source_with_access_control do
 
     context "when host, port, or db_name change" do
       let(:instance_account) { FactoryGirl.build :instance_account }
-      let(:instance) { FactoryGirl.build factory_name, :owner_account => instance_account }
+      let(:data_source) { FactoryGirl.build factory_name, :owner_account => instance_account }
 
       before do
-        instance.save!(:validate => false)
-        stub(instance).owner_account { instance_account }
+        data_source.save!(:validate => false)
+        stub(data_source).owner_account { instance_account }
         mock(instance_account).valid? { true }
       end
 
       it "validates the account when host changes" do
-        instance.host = 'something_new'
-        instance.valid?.should be_true
+        data_source.host = 'something_new'
+        data_source.valid?.should be_true
       end
 
       it "validates the account when port changes" do
-        instance.port = '5413'
-        instance.valid?.should be_true
+        data_source.port = '5413'
+        data_source.valid?.should be_true
       end
 
       it "validates the account when db_name changes" do
-        instance.db_name = 'something_new'
-        instance.valid?.should be_true
+        data_source.db_name = 'something_new'
+        data_source.valid?.should be_true
       end
 
-      it "pulls associated error messages onto the instance" do
-        stub(instance).valid_db_credentials? { false }
-        instance.db_name = 'something_new'
-        instance.valid?.should be_true
-        instance.errors.values.should =~ instance.owner_account.errors.values
+      it "pulls associated error messages onto the data_source" do
+        stub(data_source).valid_db_credentials? { false }
+        data_source.db_name = 'something_new'
+        data_source.valid?.should be_true
+        data_source.errors.values.should =~ data_source.owner_account.errors.values
       end
     end
 
     describe "when name changes" do
-      let!(:instance) { FactoryGirl.create factory_name }
+      let!(:data_source) { FactoryGirl.create factory_name }
       it "it does not validate the account" do
         any_instance_of(InstanceAccount) do |account|
           dont_allow(account).valid?
         end
-        instance.name = 'purple_bandana'
-        instance.valid?.should be_true
+        data_source.name = 'purple_bandana'
+        data_source.valid?.should be_true
       end
     end
 
@@ -177,36 +177,36 @@ shared_examples_for :data_source_with_access_control do
 
     it "makes a DataSourceCreated event" do
       set_current_user(user)
-      instance = nil
+      data_source = nil
       expect {
-        instance = FactoryGirl.create(factory_name, :owner => user)
+        data_source = FactoryGirl.create(factory_name, :owner => user)
       }.to change(Events::DataSourceCreated, :count).by(1)
       event = Events::DataSourceCreated.last
-      event.data_source.should == instance
+      event.data_source.should == data_source
       event.actor.should == user
     end
   end
 
   describe "#destroy" do
-    let(:instance) { FactoryGirl.create factory_name }
+    let(:data_source) { FactoryGirl.create factory_name }
 
     it "should not delete the database entry" do
-      instance.destroy
+      data_source.destroy
       expect {
-        instance.reload
+        data_source.reload
       }.to_not raise_error(Exception)
     end
 
     it "should update the deleted_at field" do
-      instance.destroy
-      instance.reload.deleted_at.should_not be_nil
+      data_source.destroy
+      data_source.reload.deleted_at.should_not be_nil
     end
 
-    it "destroys dependent instance accounts" do
-      instance_accounts = instance.accounts
+    it "destroys dependent data_source accounts" do
+      instance_accounts = data_source.accounts
       instance_accounts.length.should > 0
 
-      instance.destroy
+      data_source.destroy
       instance_accounts.each do |account|
         InstanceAccount.find_by_id(account.id).should be_nil
       end
@@ -223,5 +223,36 @@ shared_examples_for :data_source_with_access_control do
     it 'connects with the owners account' do
       data_source.connect_as_owner
     end
+  end
+end
+
+shared_examples_for :data_source_with_update do
+  before do
+    any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+  end
+
+  it "does not allow you to update the shared attribute" do
+    data_source.shared = true
+    data_source.save!
+    data_source.update_attributes!(:shared => false)
+    data_source.shared.should be_true
+  end
+
+  it "generates a DataSourceChangedName event when the name is being changed" do
+    set_current_user(data_source.owner)
+    old_name = data_source.name
+    expect {
+      data_source.update_attributes(:name => 'something_else')
+    }.to change(Events::DataSourceChangedName, :count).by(1)
+    event = Events::DataSourceChangedName.find_last_by_actor_id(data_source.owner)
+    event.data_source.should == data_source
+    event.old_name.should == old_name
+    event.new_name.should == 'something_else'
+  end
+
+  it "does not generate an event when the name is not being changed" do
+    expect {
+      data_source.update_attributes!(:description => 'hi!')
+    }.to_not change(Events::DataSourceChangedName, :count)
   end
 end
