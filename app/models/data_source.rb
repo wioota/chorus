@@ -97,8 +97,26 @@ class DataSource < ActiveRecord::Base
     success
   end
 
-  def connect_as_owner
-    connect_with(owner_account)
+  def connect_with(account, options = {})
+    build_options = options.dup
+    refresh_state = build_options.delete(:refresh_state).to_s != 'false'
+    if refresh_state && self.state == 'offline'
+      DataSourceStatusChecker.check(self)
+    end
+
+    connection = build_connection_with(account, build_options)
+
+    if block_given?
+      connection.with_connection do
+        yield connection
+      end
+    else
+      connection
+    end
+  end
+
+  def connect_as_owner(options = {})
+    connect_with(owner_account, options)
   end
 
   def connect_as(user)

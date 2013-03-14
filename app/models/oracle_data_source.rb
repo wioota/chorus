@@ -7,17 +7,6 @@ class OracleDataSource < DataSource
     end
   end
 
-  def connect_with(account)
-    OracleConnection.new(
-        :username => account.db_username,
-        :password => account.db_password,
-        :host => host,
-        :port => port,
-        :database => db_name,
-        :logger => Rails.logger
-    )
-  end
-
   def refresh_databases(options={})
     refresh_schemas options
   end
@@ -56,5 +45,16 @@ class OracleDataSource < DataSource
       Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
     end
     schema_permissions
+  end
+
+  def build_connection_with(account, options = {})
+    OracleConnection.new(
+        :username => account.db_username,
+        :password => account.db_password,
+        :host => host,
+        :port => port,
+        :database => db_name,
+        :logger => Rails.logger
+    )
   end
 end

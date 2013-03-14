@@ -12,27 +12,6 @@ class GpdbDataSource < DataSource
     workspaces.includes({:sandbox => {:database => :data_source }}, :owner).workspaces_for(viewing_user).order("lower(workspaces.name)")
   end
 
-  def connect_with(account, options = {})
-    params = {
-        :username => account.db_username,
-        :password => account.db_password,
-        :host => host,
-        :port => port,
-        :database => db_name,
-        :logger => Rails.logger
-    }.merge(options)
-
-    connection = GreenplumConnection.new params
-
-    if block_given?
-      connection.with_connection do
-        yield connection
-      end
-    else
-      connection
-    end
-  end
-
   def create_database(name, current_user)
     new_db = GpdbDatabase.new(:name => name, :data_source => self)
     raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
@@ -115,5 +94,16 @@ class GpdbDataSource < DataSource
         roles[:rolname].as("db_username"),
         databases[:datname].as("database_name")
     ).to_sql
+  end
+
+  def build_connection_with(account, options = {})
+    GreenplumConnection.new({
+      :username => account.db_username,
+      :password => account.db_password,
+      :host => host,
+      :port => port,
+      :database => db_name,
+      :logger => Rails.logger
+    }.merge(options))
   end
 end

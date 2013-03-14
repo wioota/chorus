@@ -257,10 +257,10 @@ describe GpdbDataSource do
   end
 
   it_should_behave_like :data_source_with_access_control
+
   it_behaves_like(:data_source_with_update) do
     let(:data_source) { data_sources(:default) }
   end
-
 
   describe "DataSource Integration", :greenplum_integration do
     let(:data_source) { GreenplumIntegration.real_data_source }

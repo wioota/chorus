@@ -20,6 +20,7 @@ end
 
 shared_examples_for :data_source_with_access_control do
   let(:factory_name) { described_class.name.underscore.to_sym }
+
   describe "access control" do
     let(:user) { users(:owner) }
 
@@ -217,11 +218,44 @@ shared_examples_for :data_source_with_access_control do
     let(:data_source) { FactoryGirl.build factory_name }
 
     before do
-      mock(data_source).connect_with(data_source.owner_account)
+      mock(data_source).connect_with(data_source.owner_account, {})
     end
 
     it 'connects with the owners account' do
       data_source.connect_as_owner
+    end
+  end
+
+  describe "#connect_with" do
+    let(:data_source) { FactoryGirl.build factory_name }
+    let(:account) { Object.new }
+    let(:fake_connection) { Object.new }
+
+    before do
+      mock(data_source).build_connection_with(account, {}) { fake_connection }
+    end
+
+    it "returns a connection built with build_connection_with" do
+      data_source.connect_with(account).should == fake_connection
+    end
+
+    it "doesn't call DataSourceStatusChecker.check by default" do
+      dont_allow(DataSourceStatusChecker).check
+      data_source.connect_with(account)
+    end
+
+    context "when the data source is offline" do
+      before { data_source.state = 'offline' }
+
+      it "calls DataSourceStatusChecker.check" do
+        mock(DataSourceStatusChecker).check(data_source)
+        data_source.connect_with(account)
+      end
+
+      it "doesn't call DataSourceStatusChecker.check if refresh_state option is false " do
+        dont_allow(DataSourceStatusChecker).check
+        data_source.connect_with(account, refresh_state: false)
+      end
     end
   end
 end
