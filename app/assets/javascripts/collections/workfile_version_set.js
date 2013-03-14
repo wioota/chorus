@@ -1,4 +1,4 @@
-chorus.collections.WorkfileVersionSet = chorus.collections.Base.extend({
+chorus.collections.WorkfileVersionSet = chorus.collections.Base.include(chorus.Mixins.MultiModelSet).extend({
     constructorName: "WorkfileVersionSet",
     urlTemplate:"workfiles/{{workfileId}}/versions",
     model:chorus.models.Workfile,
@@ -6,10 +6,9 @@ chorus.collections.WorkfileVersionSet = chorus.collections.Base.extend({
         return -model.get("versionInfo").versionNum;
     },
 
-    // TODO: don't mess with the id of all the models, but backbone is enforcing uniqueness
-    _prepareModel: function () {
-        var model = this._super('_prepareModel', arguments);
-        model.id = model.id + "v" + model.get("versionInfo").versionNum;
-        return model;
+    // used by the MultiModelSet mixin
+    idTemplate: function(model) {
+        return model.id + "v" + model.get("versionInfo").versionNum;
     }
+
 });

@@ -30,7 +30,6 @@ window.rspecFixtureDefinitions = {
             noteOnGreenplumDataSource: {},
             noteOnOracleDataSource: {},
             noteOnGnipDataSourceCreated: {},
-            // TODO: GreenplumInstance -> DataSource
             noteOnGreenplumInstanceCreated: {},
             noteOnHdfsDataSourceCreated: {},
             noteOnHdfsFileCreated: {},

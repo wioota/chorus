@@ -31,19 +31,13 @@
     };
 
     chorus.collections.Search.WorkspaceItemSet = chorus.collections.Base.include(
-        searchCollectionMixins
+        searchCollectionMixins, chorus.Mixins.MultiModelSet
     ).extend({
         constructorName: "WorkspaceItemSet",
         searchKey: "thisWorkspace",
         model: function(modelJson, options) {
             var constructor = constructorMap[modelJson.entityType];
             return new constructor(modelJson, options);
-        },
-        // TODO: don't mess with the id of all the models, but backbone is enforcing uniqueness
-        _prepareModel: function () {
-            var model = this._super('_prepareModel', arguments);
-            model.id = model.id + model.constructorName;
-            return model;
         }
     });
 
@@ -54,16 +48,10 @@
     });
 
     chorus.collections.Search.InstanceSet = chorus.collections.GpdbDataSourceSet.include(
-        searchCollectionMixins
+        searchCollectionMixins, chorus.Mixins.MultiModelSet
     ).extend({
         searchKey: "instances",
-        model: chorus.models.DynamicInstance,
-        // TODO: don't mess with the id of all the models, but backbone is enforcing uniqueness
-        _prepareModel: function () {
-            var model = this._super('_prepareModel', arguments);
-            model.id = model.id + model.constructorName;
-            return model;
-        }
+        model: chorus.models.DynamicInstance
     });
 
     chorus.collections.Search.DatasetSet = chorus.collections.SchemaDatasetSet.include(
