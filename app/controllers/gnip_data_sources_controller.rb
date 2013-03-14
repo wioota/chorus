@@ -6,7 +6,7 @@ class GnipDataSourcesController < ApplicationController
   end
 
   def index
-    present paginate GnipDataSource.all
+    present paginate GnipDataSource.scoped.includes([{:owner => :tags}, :tags])
   end
 
   def show

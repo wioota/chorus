@@ -61,10 +61,10 @@ class Workspace < ActiveRecord::Base
   end
 
   def self.eager_load_associations
-    [:owner,
+    [{:owner => :tags},
      :archiver,
      :tags,
-     {:sandbox => {:database => {:data_source => [:tags, :owner]}}}
+     {:sandbox => {:database => {:data_source => [:tags, {:owner => :tags}]}}}
     ]
   end
 
