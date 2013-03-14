@@ -3,7 +3,6 @@
         "actor": "User",
         "dataset": "WorkspaceDataset",
         'dataSource': 'DynamicDataSource',
-        "gpdbDataSource": "GpdbDataSource",
         "gnipDataSource": "GnipDataSource",
         "newOwner": "User",
         "hdfsDataSource": "HdfsDataSource",
@@ -48,7 +47,6 @@
         schema: makeAssociationMethod("schema"),
         actor: makeAssociationMethod("actor"),
         dataSource: makeAssociationMethod('dataSource'),
-        gpdbDataSource: makeAssociationMethod("gpdbDataSource"), // can be deleted?
         gnipDataSource: makeAssociationMethod("gnipDataSource"),
         hdfsDataSource: makeAssociationMethod("hdfsDataSource"),
         workfile: makeAssociationMethod("workfile"),
