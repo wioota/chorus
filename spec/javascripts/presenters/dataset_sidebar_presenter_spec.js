@@ -25,6 +25,7 @@ function itBehavesLikeAGpdbDataset(presenter) {
     expect(presenter.realWorkspace()).toBeFalsy();
     expect(presenter.importsEnabled()).toBeFalsy();
     expect(presenter.isDeleteable()).toBeFalsy();
+    expect(presenter.canScheduleImports()).toBeTruthy();
     itBehavesLikeADataset(presenter);
     itHasNoImports(presenter);
 }
@@ -354,5 +355,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
         it("enables imports", function() {
             expect(this.presenter.importsEnabled()).toBeTruthy();
         });
+
+        it("cannot schedule imports", function() {
+            expect(this.presenter.canScheduleImports()).toBeFalsy();
+        });
+
     });
 });
