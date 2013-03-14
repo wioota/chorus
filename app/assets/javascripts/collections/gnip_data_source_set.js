@@ -5,5 +5,15 @@ chorus.collections.GnipDataSourceSet = chorus.collections.Base.extend({
 
     comparator: function(instance) {
         return instance.get("name").toLowerCase();
+    },
+
+    urlParams: function () {
+        var params = {};
+
+        if (this.attributes.succinct) {
+            params.succinct = true;
+        }
+
+        return params;
     }
 });

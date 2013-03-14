@@ -20,4 +20,12 @@ describe("chorus.collections.GnipDataSourceSet", function() {
         expect(this.collection.at(3).get("name")).toBe("Fat_instance");
         expect(this.collection.at(4).get("name")).toBe("Gun_instance");
     });
+
+    describe("#urlParams", function() {
+        it("contains the 'succinct' attribute", function() {
+            expect(this.collection.urlParams().succinct).toBeUndefined();
+            this.collection.attributes.succinct = true;
+            expect(this.collection.urlParams().succinct).toBe(true);
+        });
+    });
 });

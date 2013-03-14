@@ -15,10 +15,16 @@ describe("chorus.collections.DataSourceSet", function() {
     });
 
     describe("#urlParams", function() {
-       it("contains the 'all' attribute", function() {
-           expect(this.collection.urlParams().all).toBeUndefined();
-           this.collection.attributes.all = true;
-           expect(this.collection.urlParams().all).toBe(true);
-       });
+        it("contains the 'all' attribute", function() {
+            expect(this.collection.urlParams().all).toBeUndefined();
+            this.collection.attributes.all = true;
+            expect(this.collection.urlParams().all).toBe(true);
+        });
+
+        it("contains the 'succinct' attribute", function() {
+            expect(this.collection.urlParams().succinct).toBeUndefined();
+            this.collection.attributes.succinct = true;
+            expect(this.collection.urlParams().succinct).toBe(true);
+        });
     });
 });

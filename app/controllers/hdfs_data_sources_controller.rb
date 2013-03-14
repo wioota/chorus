@@ -9,7 +9,9 @@ class HdfsDataSourcesController < ApplicationController
   end
 
   def index
-    present paginate HdfsDataSource.scoped.includes([{:owner => :tags}, :tags])
+    succinct = params[:succinct] == 'true'
+    includes = succinct ? [] : [{:owner => :tags}, :tags]
+    present paginate(HdfsDataSource.scoped.includes(includes)), :presenter_options => {:succinct => succinct}
   end
 
   def show

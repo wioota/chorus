@@ -31,4 +31,5 @@ describe OracleDataSourcePresenter, :type => :view do
   end
 
   it_behaves_like "activity stream data source presenter"
+  it_behaves_like :succinct_data_source_presenter
 end

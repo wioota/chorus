@@ -1,19 +1,24 @@
 class GnipDataSourcePresenter < Presenter
   def to_hash
-    {
-        :name => model.name,
-        :stream_url => model.stream_url,
+    hash = {
         :id => model.id,
-        :description => model.description,
-        :username => model.username,
-        :state => "online",
-        :entity_type => model.entity_type_name
-    }.merge(owner_hash).
-    merge(tags_hash)
+        :name => model.name
+    }
+    unless succinct?
+      hash.merge!({
+          :stream_url => model.stream_url,
+          :description => model.description,
+          :username => model.username,
+          :state => "online",
+          :entity_type => model.entity_type_name
+      }.merge(owner_hash).
+      merge(tags_hash))
+    end
+    hash
   end
 
   def complete_json?
-    !rendering_activities?
+    !rendering_activities? && !succinct?
   end
 
   private

@@ -6,7 +6,9 @@ class GnipDataSourcesController < ApplicationController
   end
 
   def index
-    present paginate GnipDataSource.scoped.includes([{:owner => :tags}, :tags])
+    succinct = params[:succinct] == 'true'
+    includes = succinct ? [] : [{:owner => :tags}, :tags]
+    present paginate(GnipDataSource.scoped.includes(includes)), :presenter_options => {:succinct => succinct}
   end
 
   def show

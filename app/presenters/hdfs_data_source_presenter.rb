@@ -1,23 +1,28 @@
 class HdfsDataSourcePresenter < Presenter
 
   def to_hash
-    {
-        :name => model.name,
-        :host => model.host,
-        :port => model.port,
+    hash = {
         :id => model.id,
-        :online => model.online?,
-        :description => model.description,
-        :version => model.version,
-        :username => model.username,
-        :group_list => model.group_list,
-        :entity_type => model.entity_type_name
-    }.merge(owner_hash).
-    merge(tags_hash)
+        :name => model.name
+    }
+    unless succinct?
+      hash.merge!({
+          :host => model.host,
+          :port => model.port,
+          :online => model.online?,
+          :description => model.description,
+          :version => model.version,
+          :username => model.username,
+          :group_list => model.group_list,
+          :entity_type => model.entity_type_name
+      }.merge(owner_hash).
+      merge(tags_hash))
+    end
+    hash
   end
 
   def complete_json?
-    !rendering_activities?
+    !rendering_activities? && !succinct?
   end
 
   private

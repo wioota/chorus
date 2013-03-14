@@ -4,10 +4,12 @@ class DataSourcesController < ApplicationController
   wrap_parameters :data_source, :exclude => []
 
   def index
-    data_sources = DataSource.by_type(params[:entity_type]).includes(:tags, {:owner => :tags})
+    succinct = params[:succinct] == 'true'
+    includes = succinct ? [] : [{:owner => :tags}, :tags]
+    data_sources = DataSource.by_type(params[:entity_type]).includes(includes)
     data_sources = data_sources.accessible_to(current_user) unless params[:all]
 
-    present paginate data_sources
+    present paginate(data_sources), :presenter_options => {:succinct => succinct}
   end
 
   def show

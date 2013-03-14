@@ -81,6 +81,7 @@ describe WorkspacesController do
       get :index, :show_latest_comments => 'true'
     end
 
+    it_behaves_like :succinct_list
   end
 
   describe "#create" do

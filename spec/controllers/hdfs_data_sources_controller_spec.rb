@@ -68,6 +68,7 @@ describe HdfsDataSourcesController do
     end
 
     it_behaves_like "a paginated list"
+    it_behaves_like :succinct_list
   end
 
   describe "#show" do

@@ -1,22 +1,27 @@
 class DataSourcePresenter < Presenter
   def to_hash
-    {
-        :name => model.name,
-        :host => model.host,
-        :port => model.port,
+    hash = {
         :id => model.id,
-        :shared => model.shared,
-        :online => model.state == "online",
-        :db_name => model.db_name,
-        :description => model.description,
-        :version => model.version,
-        :entity_type => model.entity_type_name
-    }.merge(owner_hash).
-    merge(tags_hash)
+        :name => model.name
+    }
+    unless succinct?
+      hash.merge!({
+          :host => model.host,
+          :port => model.port,
+          :shared => model.shared,
+          :online => model.state == "online",
+          :db_name => model.db_name,
+          :description => model.description,
+          :version => model.version,
+          :entity_type => model.entity_type_name
+      }.merge(owner_hash).
+      merge(tags_hash))
+    end
+    hash
   end
 
   def complete_json?
-    !rendering_activities?
+    !rendering_activities? && !succinct?
   end
 
   private

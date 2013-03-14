@@ -14,6 +14,7 @@ describe DataSourcesController do
     let(:offline_data_source) { data_sources(:offline) }
 
     it_behaves_like "a paginated list"
+    it_behaves_like :succinct_list
 
     it "returns only online data sources that the user can access" do
       get :index

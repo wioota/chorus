@@ -21,3 +21,12 @@ shared_examples_for "a paginated list" do
     decoded_pagination.page.should == 1
   end
 end
+
+shared_examples_for :succinct_list do
+  let(:params) { {:succinct => 'true'} }
+
+  it "should present succinctly" do
+    mock(Presenter).present(anything, anything, hash_including(:succinct => true))
+    send(:get, :index, params)
+  end
+end

@@ -3,7 +3,13 @@ chorus.collections.DataSourceSet = chorus.collections.Base.extend({
     constructorName: 'DataSourceSet',
     model: chorus.models.DynamicDataSource,
     urlParams: function() {
-        return { all: this.attributes.all };
+        var params = { all: this.attributes.all };
+
+        if (this.attributes.succinct) {
+            params.succinct = true;
+        }
+
+        return params;
     },
 
     comparator: function(dataSource) {

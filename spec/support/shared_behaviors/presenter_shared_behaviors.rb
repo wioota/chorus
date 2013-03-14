@@ -98,6 +98,18 @@ shared_examples "activity stream data source presenter" do
   end
 end
 
+shared_examples :succinct_data_source_presenter do
+  let(:options) { {:succinct => true} }
+
+  it "should only present enough for the dashboard list" do
+    presenter.presentation_hash.keys.sort.should == [:id, :name]
+  end
+
+  it "sets complete_json to false" do
+    presenter.presentation_hash[:complete_json].should be_false
+  end
+end
+
 shared_examples "oracle dataset presenter" do |dataset_factory_name|
   before do
     data_source = FactoryGirl.build(:oracle_data_source, :id => 123, :name => "instance1")

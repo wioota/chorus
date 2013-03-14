@@ -61,4 +61,8 @@ class Presenter
   def rendering_activities?
     @options[:activity_stream]
   end
+
+  def succinct?
+    @options[:succinct]
+  end
 end
