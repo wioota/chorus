@@ -140,6 +140,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".instance_configuration_details")).toContainText("99.999");
                 });
 
+                it("shows the owner", function() {
+                    expect(this.view.$(".instance_configuration_details")).toContainTranslation("instances.permissions.owner");
+                    expect(this.view.$(".instance_configuration_details")).toContainText(this.instance.owner().displayName());
+                });
+
                 describe('for existing greenplum data source', function() {
                     context('and the data source has a shared account', function() {
                         beforeEach(function() {

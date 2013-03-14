@@ -6,7 +6,8 @@ chorus.views.InstanceConfigurationDetails = chorus.views.Base.extend({
         return {
             sharedAccountDetails: shared && this.model.sharedAccountDetails(),
             version: this.model.version(),
-            shared: shared
+            shared: shared,
+            ownerName: this.model.owner().displayName()
         };
     }
 });
