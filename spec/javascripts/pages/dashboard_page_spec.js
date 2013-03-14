@@ -117,17 +117,20 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.attributes.userId).toBe("foo");
         });
 
-        it("fetches only the data sources where the user has permissions", function() {
+        it("fetches only the data sources where the user has permissions succinctly", function() {
+            expect(this.page.dataSourceSet.attributes.succinct).toBe(true);
             expect(this.page.dataSourceSet).toBeA(chorus.collections.DataSourceSet);
             expect(this.page.dataSourceSet).toHaveBeenFetched();
         });
 
         it('fetches the hadoop data sources', function() {
+            expect(this.page.hdfsDataSourceSet.attributes.succinct).toBe(true);
             expect(this.page.hdfsDataSourceSet).toBeA(chorus.collections.HdfsDataSourceSet);
             expect(this.page.hdfsDataSourceSet).toHaveBeenFetched();
         });
 
         it('fetches the gnip data sources', function() {
+            expect(this.page.gnipDataSourceSet.attributes.succinct).toBe(true);
             expect(this.page.gnipDataSourceSet).toBeA(chorus.collections.GnipDataSourceSet);
             expect(this.page.gnipDataSourceSet).toHaveBeenFetched();
         });

@@ -2,7 +2,8 @@ class DataSourcePresenter < Presenter
   def to_hash
     hash = {
         :id => model.id,
-        :name => model.name
+        :name => model.name,
+        :entity_type => model.entity_type_name
     }
     unless succinct?
       hash.merge!({
@@ -12,8 +13,7 @@ class DataSourcePresenter < Presenter
           :online => model.state == "online",
           :db_name => model.db_name,
           :description => model.description,
-          :version => model.version,
-          :entity_type => model.entity_type_name
+          :version => model.version
       }.merge(owner_hash).
       merge(tags_hash))
     end

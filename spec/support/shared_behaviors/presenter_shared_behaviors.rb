@@ -102,7 +102,7 @@ shared_examples :succinct_data_source_presenter do
   let(:options) { {:succinct => true} }
 
   it "should only present enough for the dashboard list" do
-    presenter.presentation_hash.keys.sort.should == [:id, :name]
+    presenter.presentation_hash.keys.sort.should =~ [:id, :name, :entity_type]
   end
 
   it "sets complete_json to false" do

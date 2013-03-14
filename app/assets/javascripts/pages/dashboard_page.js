@@ -15,11 +15,11 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.fetchAll();
 
         this.dataSourceSet = new chorus.collections.DataSourceSet([]);
-        this.dataSourceSet.attributes.nameOnly = true;
+        this.dataSourceSet.attributes.succinct = true;
         this.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([]);
-        this.hdfsDataSourceSet.attributes.nameOnly = true;
+        this.hdfsDataSourceSet.attributes.succinct = true;
         this.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([]);
-        this.gnipDataSourceSet.attributes.nameOnly = true;
+        this.gnipDataSourceSet.attributes.succinct = true;
 
         this.subscribePageEvent("instance:added", function() { this.fetchInstances(); });
 

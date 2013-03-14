@@ -2,15 +2,15 @@ class GnipDataSourcePresenter < Presenter
   def to_hash
     hash = {
         :id => model.id,
-        :name => model.name
+        :name => model.name,
+        :entity_type => model.entity_type_name
     }
     unless succinct?
       hash.merge!({
           :stream_url => model.stream_url,
           :description => model.description,
           :username => model.username,
-          :state => "online",
-          :entity_type => model.entity_type_name
+          :state => "online"
       }.merge(owner_hash).
       merge(tags_hash))
     end
