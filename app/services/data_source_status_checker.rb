@@ -1,4 +1,4 @@
-class InstanceStatusChecker
+class DataSourceStatusChecker
   def self.check_all
     DataSource.find_each { |data_source| self.check(data_source) }
     HdfsDataSource.find_each { |data_source| self.check(data_source) }
@@ -48,15 +48,7 @@ class InstanceStatusChecker
   def should_check
     return true if @data_source.last_checked_at.blank?
 
-    time_between_checks =
-        case @data_source.state
-          when 'offline' then
-            2.hours
-          when 'unauthorized' then
-            24.hours
-          else
-            0  #still shouldn't check more often than instance_poll_interval_minutes
-        end
+    time_between_checks = @data_source.state == 'unauthorized' ? 24.hours : 0
     Time.current - @data_source.last_checked_at > time_between_checks
   end
 end
