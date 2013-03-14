@@ -65,24 +65,14 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             ]);
         });
 
+        itBehavesLike.aPageWithMultiSelect();
+
         it("calls teardown on the old mainContent", function() {
             expect(this.originalMainContent.teardown).toHaveBeenCalled();
         });
 
-        it("passes the multiSelect option to the list content details", function() {
-            expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
-        });
-
-        it("renders a checkbox next to each dataset", function() {
-            expect(this.page.$("li input[type=checkbox]").length).toBe(this.page.collection.length);
-        });
-
         it("displays the search input", function() {
             expect(this.page.$("input.search").attr("placeholder")).toMatchTranslation("schema.search");
-        });
-
-        it("pre-selects the first item", function() {
-            expect(this.page.$(".list > li").eq(0)).toHaveClass("selected");
         });
 
         it("changes the selection after clicking another item", function() {
@@ -211,17 +201,9 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         });
 
         describe("multiple selection", function() {
-            it("does not display the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-            });
-
             context("when a row has been checked", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("dataset:checked", this.page.collection.clone());
-                });
-
-                it("displays the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
                 });
 
                 it("has an action to associate datasets with workspace", function() {
@@ -238,22 +220,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                         var dialog = this.modalSpy.lastModal();
                         expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
                         expect(dialog.datasets).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                    });
-                });
-
-                it("has an action to edit tags", function() {
-                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
-                });
-
-                describe("clicking the 'edit_tags' link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$(".multiple_selection a.edit_tags").click();
-                    });
-
-                    it("launches the dialog for editing tags", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
                     });
                 });
             });
