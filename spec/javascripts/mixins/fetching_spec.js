@@ -14,6 +14,11 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 this.collection.fetchAllIfNotLoaded();
             });
+
+            it("clears the status code", function() {
+                expect(this.collection.statusCode).toBeUndefined();
+            });
+
             context("when there is less than a single page of results", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.collection, undefined, undefined, {page: 1, total: 1, records: 1});
@@ -105,6 +110,11 @@ describe("chorus.Mixins.Fetching", function() {
             it("starts a fetch", function() {
                 this.resource.fetchIfNotLoaded();
                 expect(this.resource.fetch).toHaveBeenCalled();
+            });
+
+            it("clears the status code", function() {
+                this.resource.fetchIfNotLoaded();
+                expect(this.resource.statusCode).toBeUndefined();
             });
         });
 

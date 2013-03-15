@@ -17,6 +17,7 @@ var methodMap = {
 Backbone.emulateJSON = true;
 
 Backbone.sync = function(method, model, options) {
+    var originalOptions = _.clone(options || {});
     method = (options && options.method) || method;
 
     var type = methodMap[method];
@@ -34,7 +35,8 @@ Backbone.sync = function(method, model, options) {
     if (!options.url) {
         // urlError is in scope in the actual backbone file
         /*global urlError:true */
-        params.url = model.url({ method: method }) || urlError();
+        var urlOptions = _.extend(originalOptions, { method: method });
+        params.url = model.url(urlOptions) || urlError();
         /*global urlError:false */
     }
 

@@ -5,7 +5,8 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     persistent:true,
 
     setup:function () {
-        this.members = this.pageModel.members();
+        this.collection = this.pageModel.members();
+        this.collection.fetchAllIfNotLoaded();
         this.sortMenu = new chorus.views.ListHeaderView({
             linkMenus:{
                 sort:{
@@ -32,9 +33,9 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
-        var self = this;
-        var sortedMembers = _.sortBy(self.members.models, function (member) {
-            return member.get(self.choice);
+        var choice = this.choice;
+        var sortedMembers = _.sortBy(this.collection.models, function (member) {
+            return member.get(choice);
         });
         return {
             members:_.map(sortedMembers, function (member) {

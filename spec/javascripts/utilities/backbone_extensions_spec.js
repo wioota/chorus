@@ -9,17 +9,23 @@ describe("backbone_extensions", function() {
         it("passes the method to the model's url method", function() {
             spyOn(this.model, 'url').andReturn("foo");
             this.model.save();
-            expect(this.model.url).toHaveBeenCalledWith({ method: 'create' });
+            expect(this.model.url).toHaveBeenCalledWith(jasmine.objectContaining({ method: 'create' }));
 
             this.model.url.reset();
             this.model.fetch();
-            expect(this.model.url).toHaveBeenCalledWith({ method: 'read' });
+            expect(this.model.url).toHaveBeenCalledWith(jasmine.objectContaining({ method: 'read' }));
 
             this.model.url.reset();
             this.model.id = '24';
             this.model.save();
             
-            expect(this.model.url).toHaveBeenCalledWith({ method: 'update' });
+            expect(this.model.url).toHaveBeenCalledWith(jasmine.objectContaining({ method: 'update' }));
+        });
+
+        it("passes the options to the model's url method", function() {
+            spyOn(this.model, 'url').andReturn("foo");
+            this.model.fetch({foo: 'bar'});
+            expect(this.model.url).toHaveBeenCalledWith(jasmine.objectContaining({ foo: 'bar'}));
         });
 
         it("allows method override through options", function() {

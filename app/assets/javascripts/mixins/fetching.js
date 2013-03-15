@@ -22,6 +22,7 @@
                 return;
             }
             if (!this.fetching) {
+                delete this.statusCode;
                 this.fetch(options);
             }
         },
@@ -35,6 +36,7 @@
                 }
             }
             if (!this.fetching) {
+                delete this.statusCode;
                 this.fetchAll();
             }
         },

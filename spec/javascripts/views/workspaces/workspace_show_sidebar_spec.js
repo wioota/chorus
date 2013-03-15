@@ -9,26 +9,14 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 }});
     });
 
-    describe("#setup", function() {
-        beforeEach(function() {
-            spyOn(this.model.members(), 'fetch');
-            spyOn(this.model.members(), 'bind').andCallThrough();
-            this.view = new chorus.views.WorkspaceShowSidebar({model: this.model});
-        });
-
-        it("fetches the workspace's members", function() {
-            expect(this.model.members().fetch).toHaveBeenCalled();
-        });
-
-        it("binds render to the reset of the collection", function() {
-            expect(this.model.members().bind).toHaveBeenCalledWith('reset', this.view.render, this.view);
-        });
-    });
-
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.views.WorkspaceShowSidebar({model: this.model});
             this.view.render();
+        });
+
+        it("includes a workspace member list containing the workspace members", function() {
+            expect(this.view.workspaceMemberList.collection).toEqual(this.model.members());
         });
 
         it("renders the name of the workspace in an h1", function() {
