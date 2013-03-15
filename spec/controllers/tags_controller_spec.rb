@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe TagsController do
-  let(:user) { users(:owner) }
+  let(:user) { users(:default) }
 
-  before do
-    log_in user
-  end
+  before { log_in user }
 
   describe '#index' do
     it_behaves_like "a paginated list"
@@ -48,22 +46,37 @@ describe TagsController do
     let(:workfile) { workfiles(:tagged) }
     let(:tag) { Tag.find_by_name('alpha') }
 
-    it 'deletes the tag' do
-      dataset.tags.map(&:name).should include(tag.name)
-      workfile.tags.map(&:name).should include(tag.name)
+    it 'returns unauthorized' do
+      delete :destroy, id: tag.to_param
+      response.code.should == '403'
+    end
 
-      delete :destroy, :id => tag.id
-      response.code.should == "200"
-
-      Tag.where(:name => 'alpha').should be_empty
-      dataset.reload.tags.map(&:name).should_not include(tag.name)
-      workfile.reload.tags.map(&:name).should_not include(tag.name)
+    it 'does not delete the tag' do
+      -> {
+        delete :destroy, id: tag.to_param
+      }.should_not change(Tag, :count)
     end
 
     context "when the tag with the specified ID does not exist" do
       it "404s" do
-        delete :destroy, :id => "56789"
+        delete :destroy, :id => "definitely-not-an-ID"
         response.code.should == "404"
+      end
+    end
+
+    context "when the user is an admin" do
+      let(:user) { users(:admin) }
+
+      it 'deletes the tag' do
+        dataset.tags.map(&:name).should include(tag.name)
+        workfile.tags.map(&:name).should include(tag.name)
+
+        delete :destroy, :id => tag.id
+        response.code.should == "200"
+
+        Tag.where(:name => 'alpha').should be_empty
+        dataset.reload.tags.map(&:name).should_not include(tag.name)
+        workfile.reload.tags.map(&:name).should_not include(tag.name)
       end
     end
   end
@@ -73,7 +86,7 @@ describe TagsController do
 
     it "updates the tag's name" do
       expect do
-        put :update, { :id => tag.id, :name => "my new name"}
+        put :update, {:id => tag.id, :name => "my new name"}
       end.to change { tag.reload.name }.from("my name").to("my new name")
 
       response.should be_ok
@@ -83,7 +96,7 @@ describe TagsController do
       other_tag = Tag.create!(:name => "my other name")
 
       expect do
-        put :update, { :id => tag.id, :name => "my other name" }
+        put :update, {:id => tag.id, :name => "my other name"}
       end.to_not change { tag.reload.name }.to("my other name")
 
       response.should_not be_ok
@@ -93,7 +106,7 @@ describe TagsController do
       mock_present do |presented_tag|
         presented_tag.name.should == "my other name"
       end
-      put :update, { :id => tag.id, :name => "my other name" }
+      put :update, {:id => tag.id, :name => "my other name"}
     end
   end
 
