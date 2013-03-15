@@ -30,6 +30,13 @@ describe("chorus.collections.WorkspaceSet", function() {
         });
     });
 
+    context("when succinct is true", function() {
+        it("is included in the url params", function() {
+            this.collection.attributes.succinct = true;
+            expect(this.collection.url()).toMatchUrl("/workspaces/?succinct=true&page=1&per_page=50");
+        });
+    });
+
     context("with multiple paramaters", function(){
         it("it has correct Url when both are true", function() {
             this.collection.attributes.userId = 20;

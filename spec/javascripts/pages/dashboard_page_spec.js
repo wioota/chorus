@@ -113,6 +113,10 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.attributes.active).toBe(true);
         });
 
+        it("passes succinct to workspaceSet", function() {
+            expect(this.page.workspaceSet.attributes.succinct).toBe(true);
+        });
+
         it("passes the userId to workspaceSet", function() {
             expect(this.page.workspaceSet.attributes.userId).toBe("foo");
         });

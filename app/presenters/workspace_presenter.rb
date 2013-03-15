@@ -2,30 +2,31 @@ class WorkspacePresenter < Presenter
 
   def to_hash
     results = {
-        :id => model.id,
-        :name => model.name,
-        :is_deleted => model.deleted?,
-        :entity_type => model.entity_type_name
+      :id => model.id,
+      :name => model.name,
+      :is_deleted => model.deleted?,
+      :entity_type => model.entity_type_name,
+      :summary => sanitize(model.summary),
+      :archived_at => model.archived_at,
+      :public => model.public
     }
+
     unless succinct?
       results.merge!(
-          {
-              :summary => sanitize(model.summary),
-              :owner => present(model.owner),
-              :archiver => present(model.archiver),
-              :archived_at => model.archived_at,
-              :public => model.public,
-              :image => present(model.image),
-              :permission => model.permissions_for(current_user),
-              :has_added_member => model.has_added_member,
-              :has_added_workfile => model.has_added_workfile,
-              :has_added_sandbox => model.has_added_sandbox,
-              :has_changed_settings => model.has_changed_settings,
-              :tags => present(model.tags, @options),
-              :sandbox_info => present(model.sandbox)
-          }.merge(latest_comments_hash)
+        :owner => present(model.owner),
+        :archiver => present(model.archiver),
+        :image => present(model.image),
+        :permission => model.permissions_for(current_user),
+        :has_added_member => model.has_added_member,
+        :has_added_workfile => model.has_added_workfile,
+        :has_added_sandbox => model.has_added_sandbox,
+        :has_changed_settings => model.has_changed_settings,
+        :tags => present(model.tags, @options),
+        :sandbox_info => present(model.sandbox)
       )
     end
+
+    results.merge!(latest_comments_hash)
     results
   end
 
@@ -47,9 +48,9 @@ class WorkspacePresenter < Presenter
     latest_5 = recent_notes_and_comments.sort_by(&:updated_at).last(5)
 
     {
-        :number_of_insights => recent_insights.size,
-        :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
-        :latest_comment_list => present(latest_5)
+      :number_of_insights => recent_insights.size,
+      :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
+      :latest_comment_list => present(latest_5)
     }
   end
 end

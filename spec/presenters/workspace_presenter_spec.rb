@@ -75,7 +75,9 @@ describe WorkspacePresenter, :type => :view do
     end
 
     context "when rendering latest comments" do
-      let(:options) { {:show_latest_comments => true} }
+      # Make sure succinct doesn't break show_latest_comments
+      let(:options) { {:succinct => true, :show_latest_comments => true} }
+
       before do
         workspace.save!
       end
@@ -128,7 +130,15 @@ describe WorkspacePresenter, :type => :view do
       let(:options) { {:succinct => true} }
 
       it "should only present enough for the dashboard list" do
-        presenter.presentation_hash.keys.sort.should =~ [:id, :name, :entity_type, :is_deleted]
+        presenter.presentation_hash.keys.sort.should =~ [
+          :id,
+          :name,
+          :entity_type,
+          :is_deleted,
+          :summary,
+          :archived_at,
+          :public
+        ]
       end
     end
   end

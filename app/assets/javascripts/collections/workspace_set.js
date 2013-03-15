@@ -18,6 +18,8 @@ chorus.collections.WorkspaceSet = chorus.collections.Base.extend({
             params.showLatestComments = true;
         }
 
+        params.succinct = this.attributes.succinct;
+
         return params;
     }
 });
