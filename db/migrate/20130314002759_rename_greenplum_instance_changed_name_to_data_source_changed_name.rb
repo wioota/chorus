@@ -4,6 +4,6 @@ class RenameGreenplumInstanceChangedNameToDataSourceChangedName < ActiveRecord::
   end
 
   def down
-    execute "UPDATE events SET action='Events::GreenplumInstanceChangedName WHERE action='Events::DataSourceChangedName'"
+    execute "UPDATE events SET action='Events::GreenplumInstanceChangedName' WHERE action='Events::DataSourceChangedName'"
   end
 end

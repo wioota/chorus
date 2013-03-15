@@ -1,16 +1,9 @@
 class AddDefaultExecutionSchemaToWorkfiles < ActiveRecord::Migration
-  class Workfile < ActiveRecord::Base
-    belongs_to :workspace
-  end
-
-  class Workspace < ActiveRecord::Base
-  end
-
   def up
-    Workfile.where(:type => 'ChorusWorkfile').where(:content_type => 'sql').where('execution_schema_id IS NULL AND deleted_at IS NULL').each do |workfile|
-      workfile.execution_schema_id = workfile.workspace.sandbox_id
-      workfile.save!
-    end
+    execute <<-SQL
+      UPDATE workfiles SET execution_schema_id = (SELECT sandbox_id from workspaces where workspaces.id = workfiles.workspace_id)
+      WHERE workfiles.type = 'ChorusWorkfile' AND content_type = 'sql' AND execution_schema_id IS NULL AND deleted_at IS NULL
+    SQL
   end
 
   def down
