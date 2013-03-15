@@ -92,10 +92,5 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
         });
-    },
-
-    showHelp: function(e) {
-        e.preventDefault();
-        chorus.help();
     }
 });

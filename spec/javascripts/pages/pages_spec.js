@@ -332,15 +332,13 @@ describe("chorus.pages.Base", function() {
 
     describe("help", function() {
         beforeEach(function() {
-            spyOn(chorus, "help");
-            chorus.page = this.page = new chorus.pages.Base();
-            chorus.bindModalLaunchingClicks(this.page);
+            this.page = new chorus.pages.Base();
             this.page.render();
-            this.page.$("#help a").click();
         });
 
-        it("shows the help system", function() {
-            expect(chorus.help).toHaveBeenCalled();
+        it("has the correct link", function() {
+            expect(this.page.$("#help a")).toHaveAttr('href', 'http://www.greenplum.com/products/chorus/user-help');
+            expect(this.page.$("#help a")).toHaveAttr('target', '_blank');
         });
     });
 

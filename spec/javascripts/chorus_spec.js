@@ -642,39 +642,6 @@ describe("chorus global", function() {
         });
     });
 
-    describe("#help", function() {
-        beforeEach(function() {
-            spyOn(window, "FMCOpenHelp");
-        });
-
-        context("when the current page has a helpId", function() {
-            beforeEach(function() {
-                chorus.page = {
-                    helpId: "foo"
-                };
-
-                chorus.help();
-            });
-
-            it("calls into the help system with the helpId", function() {
-                expect(window.FMCOpenHelp).toHaveBeenCalledWith("foo", null, null, null, "/help");
-            });
-        });
-
-        context("when the current page does not have a helpId", function() {
-            beforeEach(function() {
-                chorus.page = {
-                };
-
-                chorus.help();
-            });
-
-            it("calls into the help system with 'home'", function() {
-                expect(window.FMCOpenHelp).toHaveBeenCalledWith("home", null, null, null, "/help");
-            });
-        });
-    });
-
     describe("#requireLogin", function() {
         beforeEach(function() {
             this.chorus.initialize();

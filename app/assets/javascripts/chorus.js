@@ -59,8 +59,7 @@ window.Chorus = function chorus$Global() {
             on("click.chorus_modal", "button.dialog, a.dialog", null,
             function(e) { (firstArg || self.page).createDialog(e); }).
             on("click.chorus_modal", "button.alert, a.alert", null,
-            function(e) { (firstArg || self.page).createAlert(e); }).
-            on("click.chorus_modal", "#help a", null, function(e) { (firstArg || self.page).showHelp(e); });
+            function(e) { (firstArg || self.page).createAlert(e); });
 
         if (window.jasmine) {
             var spec = window.jasmine.getEnv().currentSpec;
@@ -326,11 +325,6 @@ window.Chorus = function chorus$Global() {
 
     self.triggerHotKey = function(keyChar) {
         $(document).trigger(chorus.hotKeyEvent(keyChar));
-    };
-
-    self.help = function() {
-        var helpId = (chorus.page && chorus.page.helpId) || "home";
-        FMCOpenHelp(helpId, null, null, null, "/help") ;
     };
 
     self.namedConstructor = function(ctor, name) {
