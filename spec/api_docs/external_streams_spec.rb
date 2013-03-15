@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Internal Use: External Streams" do
-  let(:import) { imports(:previous_workspace) }
+  let(:import) { imports(:one) }
   let(:user) { import.user }
   let(:source_table) { import.source_dataset }
 
