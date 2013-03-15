@@ -58,8 +58,6 @@ resource "Workspaces" do
   end
 
   post "/workspaces/:workspace_id/sandbox", :greenplum_integration do
-
-    pending "this test is flakey"
     parameter :workspace_id, "Id of a workspace"
     parameter :data_source_id, "Id of a Greenplum data source to create new database in"
     parameter :database_name, "Name of a new database"
@@ -72,7 +70,7 @@ resource "Workspaces" do
     let(:schema_name) { "a_new_schema_name" }
     let(:user) { gpdb_data_source.owner }
 
-    after do
+    before do
       gpdb_data_source.connect_with(gpdb_data_source.owner_account).execute("DROP DATABASE IF EXISTS #{database_name}")
     end
 
