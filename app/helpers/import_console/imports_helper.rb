@@ -22,8 +22,12 @@ module ImportConsole
     end
 
     def link_to_table(workspace_or_schema, dataset)
-      type = dataset.type == "ChorusView" ? "chorus_views" : "datasets"
-      "/#/workspaces/#{workspace_or_schema.id}/#{type}/#{dataset.id}"
+      if workspace_or_schema.is_a? Schema
+        "/#/datasets/#{dataset.id}"
+      else
+        type = dataset.type == "ChorusView" ? "chorus_views" : "datasets"
+        "/#/workspaces/#{workspace_or_schema.id}/#{type}/#{dataset.id}"
+      end
     end
 
     def link_to_destination(import_manager)
@@ -32,7 +36,7 @@ module ImportConsole
       description = table_description(schema_or_sandbox, to_table)
       dest_table = schema_or_sandbox.datasets.find_by_name(to_table)
       if dest_table
-        link_to(description, link_to_table(import_manager.workspace_or_schema, dest_table))
+        link_to(description, link_to_table(import_manager.schema_or_workspace_with_deleted, dest_table))
       else
         description
       end
