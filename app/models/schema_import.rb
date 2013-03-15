@@ -4,7 +4,7 @@ class SchemaImport < Import
 
   def create_import_event
     destination_table = schema.datasets.tables.find_by_name(to_table)
-    Events::SchemaImportCreated.by(user).add(
+    created_event_class.by(user).add(
       {
         :source_dataset => source_dataset,
         :schema_id => schema.id,
@@ -20,8 +20,16 @@ class SchemaImport < Import
     Events::SchemaImportCreated
   end
 
+  def success_event_class
+    Events::SchemaImportSuccess
+  end
+
+  def failed_event_class
+    Events::SchemaImportFailed
+  end
+
   def create_passed_event_and_notification
-    event = Events::SchemaImportSuccess.by(user).add(
+    event = success_event_class.by(user).add(
       :dataset => destination_dataset,
       :source_dataset => source_dataset
     )
@@ -29,7 +37,7 @@ class SchemaImport < Import
   end
 
   def create_failed_event_and_notification(error_message)
-    event = Events::SchemaImportFailed.by(user).add(
+    event = failed_event_class.by(user).add(
       :destination_table => to_table,
       :error_message => error_message,
       :source_dataset => source_dataset,
@@ -37,5 +45,12 @@ class SchemaImport < Import
       :schema_id => schema.id
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
+  end
+
+  def cancel(success, message = nil)
+    super
+
+    connection = schema.connect_as(user)
+    CancelableQuery.new(connection, handle).cancel
   end
 end

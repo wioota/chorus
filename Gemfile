@@ -56,7 +56,6 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
   gem 'chunky_png'
   gem 'database_cleaner',    :require => false
   gem 'poltergeist', :github => "brutuscat/poltergeist"
-  gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
 end
 
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
@@ -64,6 +63,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_mig
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
+  gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder', :github => "rdy/fixture_builder"

@@ -31,4 +31,7 @@ Chorus::Application.configure do
 
   # Give paperclip path to ImageMagick tools
   Paperclip.options[:command_path] = "/usr/local/bin/"
+
+  # Only turn it on if you really need concurrent requests
+  #config.allow_concurrency = true
 end

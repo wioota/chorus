@@ -41,8 +41,12 @@ shared_examples_for :import_succeeds do |trigger|
     end
 
     it "refreshes the schema" do
-      mock(sandbox).refresh_datasets(sandbox.database.data_source.account_for_user!(user))
+      refreshed = false
+      any_instance_of(Schema) do |schema|
+        stub(schema).refresh_datasets(sandbox.database.data_source.account_for_user!(user)) { refreshed = true }
+      end
       send(trigger)
+      refreshed.should == true
     end
 
     it "updates the destination dataset id" do
@@ -99,8 +103,8 @@ shared_examples_for :import_succeeds do |trigger|
           expect {
             send(trigger)
           }.not_to raise_error
-        }.to change(Events::WorkspaceImportSuccess, :count).by(1)
-        event = Events::WorkspaceImportSuccess.last
+        }.to change(import.success_event_class, :count).by(1)
+        event = import.created_event_class.last
         event.dataset.should be_nil
       end
     end

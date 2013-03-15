@@ -8,7 +8,6 @@ class ImportExecutor
 
   def self.cancel(import, success, message = nil)
     import.cancel(success, message)
-    ImportExecutor.new(import).cancel(success, message)
   end
 
   def initialize(import)

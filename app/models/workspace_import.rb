@@ -9,7 +9,7 @@ class WorkspaceImport < Import
 
   def create_import_event
     destination_table = schema.datasets.tables.find_by_name(to_table)
-    Events::WorkspaceImportCreated.by(user).add(
+    created_event_class.by(user).add(
       :workspace => workspace,
       :source_dataset => source_dataset,
       :dataset => destination_table,
@@ -23,8 +23,16 @@ class WorkspaceImport < Import
     Events::WorkspaceImportCreated
   end
 
+  def success_event_class
+    Events::WorkspaceImportSuccess
+  end
+
+  def failed_event_class
+    Events::WorkspaceImportFailed
+  end
+
   def create_passed_event_and_notification
-    event = Events::WorkspaceImportSuccess.by(user).add(
+    event = success_event_class.by(user).add(
       :workspace => workspace,
       :dataset => destination_dataset,
       :source_dataset => source_dataset
@@ -33,7 +41,7 @@ class WorkspaceImport < Import
   end
 
   def create_failed_event_and_notification(error_message)
-    event = Events::WorkspaceImportFailed.by(user).add(
+    event = failed_event_class.by(user).add(
       :workspace => workspace_with_deleted,
       :destination_table => to_table,
       :error_message => error_message,

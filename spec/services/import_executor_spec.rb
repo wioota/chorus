@@ -10,6 +10,17 @@ describe ImportExecutor do
   let(:database_url) { sandbox.database.connect_with(account).db_url }
   let(:account) { sandbox.data_source.account_for_user!(user) }
 
+  let!(:import_created_event) do
+    Events::WorkspaceImportCreated.by(user).add(
+      :workspace => destination,
+      :dataset => nil,
+      :destination_table => destination_table_name,
+      :reference_id => import.id,
+      :reference_type => Import.name,
+      :source_dataset => source_dataset
+    )
+  end
+
   let(:import) do
     FactoryGirl.build(:import,
                       :user => user,
@@ -75,7 +86,7 @@ describe ImportExecutor do
     end
 
     context "when the import succeeds" do
-      it_behaves_like :it_succeeds, :copier_start
+      it_behaves_like :import_succeeds, :copier_start
     end
 
     context "when the import fails" do
@@ -86,7 +97,7 @@ describe ImportExecutor do
         }.to raise_error import_failure_message
       end
 
-      it_behaves_like :it_fails_with_message, :run_failing_import, "some crazy error"
+      it_behaves_like :import_fails_with_message, :run_failing_import, "some crazy error"
     end
 
     context "where the import source dataset has been deleted" do
@@ -246,7 +257,7 @@ describe ImportExecutor do
           }.to raise_error import_failure_message
         end
 
-        it_behaves_like :it_fails_with_message, :run_failing_import, "Please set public_url in chorus.properties"
+        it_behaves_like :import_fails_with_message, :run_failing_import, "Please set public_url in chorus.properties"
       end
     end
   end
