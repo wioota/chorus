@@ -17,6 +17,10 @@ class JobScheduler
       QC.enqueue_if_not_queued("SolrIndexer.refresh_external_data")
     end
 
+    every(ChorusConfig.instance['reset_counter_cache_interval_hours'].hours, 'Tag.reset_counters') do
+      QC.enqueue_if_not_queued("Tag.reset_counters")
+    end
+
     every(1.minute, 'ImportScheduler.run') do
       # At present, we choose to enqueue the pending imports in this thread. If this becomes a bottleneck,
       # we may choose to run this in a separate queued job.
