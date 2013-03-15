@@ -57,11 +57,12 @@ module GreenplumIntegration
       puts "  Importing into #{GreenplumIntegration.database_name}"
       drop_test_db
       execute_sql("create_gpadmin.sql")
-      execute_sql("drop_and_create_gpdb_databases.sql")
-      execute_sql("create_test_schemas.sql", database_name)
-      execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
-      execute_sql("create_test_schemas.sql", "#{database_name}_wo_pub")
-      execute_sql("drop_public_schema.sql", "#{database_name}_wo_pub")
+      success = execute_sql("drop_and_create_gpdb_databases.sql")
+      success ||= execute_sql("create_test_schemas.sql", database_name)
+      success ||= execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
+      success ||= execute_sql("create_test_schemas.sql", "#{database_name}_wo_pub")
+      success ||= execute_sql("drop_public_schema.sql", "#{database_name}_wo_pub")
+      raise "Unable to add test data to #{GreenplumIntegration.hostname}" unless success
       record_changes
     end
   end
