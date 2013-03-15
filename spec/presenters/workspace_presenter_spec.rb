@@ -74,18 +74,6 @@ describe WorkspacePresenter, :type => :view do
       end
     end
 
-    context "when rendering an activity stream" do
-      let(:options) { {:activity_stream => true} }
-
-      it "should only render the sandbox id" do
-        hash[:id].should == workspace.id
-        hash[:name].should == workspace.name
-        hash[:is_deleted].should == workspace.deleted?
-        hash[:entity_type].should == 'workspace'
-        hash.keys.size.should == 4
-      end
-    end
-
     context "when rendering latest comments" do
       let(:options) { {:show_latest_comments => true} }
       before do
@@ -135,19 +123,26 @@ describe WorkspacePresenter, :type => :view do
         end
       end
     end
+
+    context "when succinct is true" do
+      let(:options) { {:succinct => true} }
+
+      it "should only present enough for the dashboard list" do
+        presenter.presentation_hash.keys.sort.should =~ [:id, :name, :entity_type, :is_deleted]
+      end
+    end
   end
 
   describe "complete_json?" do
-    context "when rendering activities" do
-      let(:options) { {:activity_stream => true} }
-      it "is not true" do
-        presenter.complete_json?.should_not be_true
-      end
+    it "is true" do
+      presenter.presentation_hash[:complete_json].should be_true
     end
 
-    context "when not rendering activities" do
-      it "is true" do
-        presenter.complete_json?.should be_true
+    context "when succinct is true" do
+      let(:options) { { :succinct => true } }
+
+      it "is false" do
+        presenter.presentation_hash[:complete_json].should be_false
       end
     end
   end
