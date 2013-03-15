@@ -38,6 +38,11 @@ describe EventsController do
      get :index, :entity_type => "dashboard"
    end
 
+   it "passes the succinct option to the Presenter" do
+     mock_present { |models, view, options| options[:succinct].should be_true }
+     get :index, :entity_type => "dashboard"
+   end
+
    context "getting activities for a particular model" do
       let(:event) { Events::Base.last }
       before do
@@ -224,6 +229,11 @@ describe EventsController do
       log_in users(:owner)
       get :show, :id => event.to_param
       response.code.should == "404"
+    end
+
+    it "passes the succinct option to the Presenter" do
+      mock_present { |models, view, options| options[:succinct].should be_true }
+      get :show, :id => event.to_param
     end
 
     context "when the workspace is public" do

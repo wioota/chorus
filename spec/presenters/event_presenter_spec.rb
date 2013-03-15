@@ -24,7 +24,7 @@ describe EventPresenter, :type => :view do
     let(:options) { {} }
 
     context "when rendering the activity stream" do
-      let(:options) { {:activity_stream => true} }
+      let(:options) { {:activity_stream => true, :succinct => true } }
 
       context "SourceTableCreated" do
         let(:dataset) { datasets(:table) }
@@ -47,7 +47,7 @@ describe EventPresenter, :type => :view do
           hash[:workspace].should have_key(:name)
           hash[:workspace].should have_key(:is_deleted)
           hash[:workspace].should have_key(:entity_type)
-          hash[:workspace].keys.size.should == 4
+          hash[:workspace].keys.size.should == 7
         end
       end
     end
