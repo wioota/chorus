@@ -105,12 +105,8 @@ describe WorkspaceImport do
 
     before do
       stub(import).log.with_any_args
-      stub.proxy(import).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
-      stub.proxy(import).schema do |schema|
-        stub(schema).connect_as(user) do
-          destination_connection
-        end
-      end
+      stub(import.source_dataset).connect_as(user) { source_connection }
+      stub(import.schema).connect_as(user) { destination_connection }
 
       stub(source_connection).running?.with_any_args { true }
       stub(destination_connection).running?.with_any_args { true }
