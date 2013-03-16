@@ -94,6 +94,12 @@ describe("chorus.views.UserList", function() {
                 this.view.itemSelected(user);
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", user);
             });
+
+            it("does not re-render when a user is updated", function() {
+                spyOn(this.view, "preRender");
+                this.collection.at(0).trigger("change");
+                expect(this.view.preRender).not.toHaveBeenCalled();
+            });
         });
     });
 });
