@@ -214,6 +214,19 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(deleteLink).not.toExist();
             });
         });
+
+        describe('clicking the edit tags link', function(){
+            beforeEach(function(){
+                this.modalSpy = stubModals();
+                this.view.$('.edit_tags').click();
+            });
+
+            it('opens the tag edit dialog', function(){
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.workfile);
+            });
+        });
     });
 
     context("when showVersions is true", function() {

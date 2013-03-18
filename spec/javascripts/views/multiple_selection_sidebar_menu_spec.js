@@ -30,7 +30,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             expect(this.view.$el).toBeVisible();
         });
 
-        it("it shows the number of models selected", function() {
+        it("shows the number of models selected", function() {
             expect(this.view.$el).toContainText('1 Selected');
         });
 

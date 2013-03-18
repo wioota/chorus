@@ -17,6 +17,7 @@
             {{#if showAddNoteLink}}
                 <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id={{workspace.id}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
             {{/if}}
+            <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>
             {{#if showCopyLink}}
                 <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
             {{/if}}
