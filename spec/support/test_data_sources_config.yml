@@ -40,6 +40,10 @@ data_sources:
       port: 8020
       username: "pivotal"
 
+    - host: "chorus-gphd11"
+      port: 8020
+      username: "hadoop"
+
   oracle:
     - host: "chorus-oracle"
       port: 1521

@@ -3,6 +3,7 @@
 export RAILS_ENV=integration
 export GPDB_HOST=chorus-gpdb-ci
 export ORACLE_HOST=chorus-oracle
+export HADOOP_HOST=chorus-gphd11
 
 . script/ci/setup.sh
 
