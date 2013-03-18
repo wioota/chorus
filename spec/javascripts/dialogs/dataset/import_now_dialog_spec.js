@@ -384,9 +384,16 @@ describe("chorus.dialogs.ImportNow", function() {
                 this.modalSpy.lastModal().trigger("schema:selected", this.schema);
             });
 
-            it("displays the truncated schema", function() {
+            it("sets the dialog's schema", function() {
                 expect(this.dialog.schema).toBe(this.schema);
+            });
+
+            it("displays the truncated schema", function() {
                 expect(this.dialog.$(".destination")).toContainText(_.truncate(this.schema.canonicalName(), 40));
+            });
+
+            it("sets the schema selection's title attribute to the full schema path", function() {
+                expect(this.dialog.$(".selection")).toHaveAttr("title", this.schema.canonicalName());
             });
 
             it ("hides the select destination schema button", function() {

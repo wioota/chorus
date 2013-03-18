@@ -124,7 +124,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     schemaChosen: function(schema) {
         this.schema = schema;
-        this.$("span.selection").text(_.truncate(schema.canonicalName(), 40));
+        this.$(".selection").text(_.truncate(schema.canonicalName(), 40));
+        this.$(".selection").attr("title", schema.canonicalName());
         this.$("a.select_schema").addClass("hidden");
         this.$("a.change_schema").removeClass("hidden");
         this.updateInputState();

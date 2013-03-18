@@ -32,6 +32,10 @@ legend.subtitle {
         @include font-normal-alpha;
     }
 
+    .selection:hover {
+        cursor: text;
+    }
+
     fieldset {
         border: none;
         padding: 0 15px 0px;
