@@ -28,6 +28,13 @@ data_sources:
         db_username: "vagrant"
         db_password: "secret"
 
+    - host: "chorus-gpdb-ci"
+      port: 5432
+      db_name: "postgres"
+      account:
+        db_username: "gpadmin"
+        db_password: "secret"
+
   hadoop:
     - host: "chorus-gphd02"
       port: 8020

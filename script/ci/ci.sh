@@ -4,7 +4,7 @@ if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
 
-export GPDB_HOST=chorus-gpdb42
+export GPDB_HOST=chorus-gpdb-ci
 export HADOOP_HOST=chorus-gphd02
 export ORACLE_HOST=chorus-oracle
 
