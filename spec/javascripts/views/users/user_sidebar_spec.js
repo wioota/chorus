@@ -13,14 +13,6 @@ describe("chorus.views.UserSidebar", function() {
     });
 
     context("when the fetch completes", function() {
-        function itShouldNotHaveActionLinks() {
-            it("should not render the action links", function() {
-                expect(this.view.$(".actions .edit_user")).not.toExist();
-                expect(this.view.$(".actions .delete_user")).not.toExist();
-                expect(this.view.$(".actions .change_password")).not.toExist();
-            });
-        }
-
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
             this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.dataSourceCreated() ]);
@@ -30,23 +22,26 @@ describe("chorus.views.UserSidebar", function() {
             expect(this.view.$(".tab_control .activity_list")).toExist();
         });
 
+        it('doesnt show the edit tags link', function(){
+           expect(this.view.$('.edit_tags')).not.toExist();
+        });
+
         context("when logged in as an admin", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true, username: "edcadmin"});
                 this.view.render();
             });
 
-            it("should have a 'delete user' action when current user is not the same user", function() {
+            it("shows a 'delete user' action when current user is not the same user", function() {
                 expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
             });
 
-            it("should not have a 'delete user' action when current user is the same user", function() {
+            it("does not show the 'delete user' action when current user is the same user", function() {
                 setLoggedInUser({admin: true, username: this.user.get("username")});
                 this.view.render();
 
                 expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).not.toExist();
             });
-
 
             it("displays the 'change password' link", function() {
                 expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
@@ -57,10 +52,6 @@ describe("chorus.views.UserSidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: false});
                 this.view.render();
-            });
-
-            context("and the user being shown is not the current user", function() {
-                itShouldNotHaveActionLinks();
             });
 
             context("and the user being shown is the current user", function() {
@@ -124,14 +115,21 @@ describe("chorus.views.UserSidebar", function() {
             });
         });
 
-        describe("listMode", function() {
+        describe("when viewing in list mode", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});
                 this.view.options.listMode = true;
+                this.modalSpy = stubModals();
                 this.view.render();
             });
 
-            itShouldNotHaveActionLinks();
+            it('shows the edit tags link', function(){
+                this.view.$('.edit_tags').click();
+
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.user);
+            });
         });
 
         describe("#setUser(user)", function() {

@@ -9,7 +9,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView",
-        "click a.edit_tags": "startEditingTags"
+        "click .edit_tags": "startEditingTags"
     },
 
     subviews: {

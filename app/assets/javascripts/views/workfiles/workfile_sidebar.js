@@ -14,7 +14,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click a.version_list": 'displayVersionList',
-        "click a.edit_tags": 'startEditingTags'
+        "click .edit_tags": 'startEditingTags'
     },
 
     setup:function () {

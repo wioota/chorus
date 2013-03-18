@@ -6,6 +6,10 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         '.tab_control': 'tabs'
     },
 
+    events: {
+        "click .edit_tags": "startEditingTags"
+    },
+
     setup: function() {
         this.config = chorus.models.Config.instance();
         this.requiredResources.push(this.config);
@@ -47,5 +51,10 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         this.registerSubView(this.tabs.activity);
 
         this.render();
+    },
+
+    startEditingTags: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
     }
 });
