@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 resource 'Tags' do
-  let(:owner) { users(:owner) }
+  let(:user) { users(:owner) }
   let(:workfile) { workfiles("sql.sql") }
 
   before do
-    log_in owner
+    log_in user
   end
 
   post '/taggings' do
@@ -59,9 +59,11 @@ resource 'Tags' do
   end
 
   delete '/tags/:id' do
+    let(:user) { users(:admin) }
+    let(:id) { Tag.first.id }
+
     parameter :id, 'Id of the tag to delete'
 
-    let(:id) { Tag.first.id }
 
     example_request 'Delete a tag' do
       status.should == 200
