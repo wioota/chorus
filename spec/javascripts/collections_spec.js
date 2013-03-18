@@ -10,6 +10,23 @@ describe("chorus.collections.Base", function() {
         });
     });
 
+    describe("#reset", function() {
+        beforeEach(function() {
+            this.collection = new chorus.collections.Base([{id: 123}]);
+            this.collection.pagination = {records: 1};
+        });
+
+        it ("resets pagination.records on the collection", function() {
+            this.collection.reset([]);
+            expect(this.collection.pagination.records).toEqual(0);
+        });
+
+        it("accepts and sets pagination data", function() {
+            this.collection.reset([], { pagination: 1});
+            expect(this.collection.pagination).toEqual(1);
+        });
+    });
+
     describe("#url", function() {
         context("when the collection has pagination information from the server", function() {
             beforeEach(function() {

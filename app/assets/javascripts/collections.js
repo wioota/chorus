@@ -176,6 +176,15 @@ chorus.collections = {
                 return this;
             },
 
+            reset: function(models, options) {
+                if (options && options.pagination) {
+                    this.pagination = _.clone(options.pagination);
+                } else if (this.pagination) {
+                    this.pagination.records = (models || []).length;
+                }
+                return this._super("reset", arguments);
+            },
+
             _prepareModel: function() {
                 var model = this._super("_prepareModel", arguments);
                 this.attributes || (this.attributes = {});
