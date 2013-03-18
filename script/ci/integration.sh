@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export RAILS_ENV=integration
-export GPDB_HOST=chorus-gpdb42
+export GPDB_HOST=chorus-gpdb-ci
 export ORACLE_HOST=chorus-oracle
 
 . script/ci/setup.sh
