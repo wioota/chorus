@@ -25,8 +25,7 @@ chorus.dialogs.SchemaPicker = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            save: this.schemaPickerTranslation("save"),
-            subtitle: this.schemaPickerTranslation("select_schema")
+            save: this.schemaPickerTranslation("save")
         };
     },
 

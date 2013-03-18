@@ -347,7 +347,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 dataset: this.dataset
             });
             this.dialog.render();
-            this.schema = rspecFixtures.schema({id: 456});
+            this.schema = rspecFixtures.schema({id: 456, name: "ThisIsAReallyLongSchemaNameForPeopleThatLikeVerbosity"});
             $("#jasmine_content").append(this.dialog.el);
         });
 
@@ -384,10 +384,28 @@ describe("chorus.dialogs.ImportNow", function() {
                 this.modalSpy.lastModal().trigger("schema:selected", this.schema);
             });
 
-            it("displays the schema", function() {
+            it("displays the truncated schema", function() {
                 expect(this.dialog.schema).toBe(this.schema);
-                expect(this.dialog.$(".destination")).toContainText(this.schema.canonicalName());
-             });
+                expect(this.dialog.$(".destination")).toContainText(_.truncate(this.schema.canonicalName(), 40));
+            });
+
+            it ("hides the select destination schema button", function() {
+               expect(this.dialog.$(".select_schema")).toHaveClass("hidden");
+            });
+
+            describe("change schema link", function() {
+                it ("shows the change schema link", function() {
+                    expect(this.dialog.$(".change_schema")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".change_schema")).toContainTranslation("actions.change");
+                });
+
+                it ("launches the Schema Picker dialog", function() {
+                    this.modalSpy.reset();
+                    this.dialog.$("a.change_schema").click();
+                    expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
+                });
+            });
+
 
             it("enables the import target options", function() {
                 expect(this.dialog.$("input")).toBeVisible();

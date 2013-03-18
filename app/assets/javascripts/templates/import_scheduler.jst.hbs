@@ -2,6 +2,8 @@
     <div class="destination">
         {{#if allowSchemaSelection}}
             <a class="select_schema">{{t "import.select_schema"}}</a>
+            <span class="selection">{{t "import.no_schema_selected"}}</span>
+            <a class="change_schema hidden">{{t "actions.change"}}</a>
         {{else}}
             {{t "import.destination" canonicalName=canonicalName}}
         {{/if}}
@@ -39,6 +41,8 @@
         <legend class="subtitle">
             Options
         </legend>
+
+        <hr />
 
         <div class="row">
             <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>

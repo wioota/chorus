@@ -16,7 +16,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         "click button.submit": "saveModel",
         "click button.cancel": "onClickCancel",
         "click .existing_table a.dataset_picked": "launchDatasetPickerDialog",
-        "click a.select_schema": "launchSchemaPickerDialog"
+        "click a.select_schema": "launchSchemaPickerDialog",
+        "click a.change_schema": "launchSchemaPickerDialog"
     },
 
     resourcesLoaded: function() {
@@ -123,7 +124,9 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     schemaChosen: function(schema) {
         this.schema = schema;
-        this.$("a.select_schema").text(schema.canonicalName());
+        this.$("span.selection").text(_.truncate(schema.canonicalName(), 40));
+        this.$("a.select_schema").addClass("hidden");
+        this.$("a.change_schema").removeClass("hidden");
         this.updateInputState();
     },
 

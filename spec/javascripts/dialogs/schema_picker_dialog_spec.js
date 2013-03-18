@@ -9,10 +9,6 @@ describe("chorus.dialogs.SchemaPicker", function() {
             expect(this.dialog.$(".dialog_header h1")).toContainTranslation("schema_picker.select_import_schema.title");
         });
 
-        it("has the right label text", function() {
-            expect(this.dialog.$el).toContainTranslation("schema_picker.select_import_schema.select_schema");
-        });
-
         it("has a disabled Select Schema button", function() {
             expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("schema_picker.select_import_schema.save");
             expect(this.dialog.$("button.submit")).toBeDisabled();

@@ -6,6 +6,14 @@
     width: 480px;
 }
 
+.pick_items.dialog.with_sub_header.pick_dataset_with_action {
+    // Overriding the padding: 0 on .dialog.with_sub_header
+    // beacuse it breaks the Dataset Picker Dialog
+    .dialog_content {
+        padding: 1px 15px;
+    }
+}
+
 .pick_dataset_with_action, .import_datasets_picker_list {
     .search {
         padding: 5px 10px;
