@@ -215,9 +215,10 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("has no action links except for 'Preview Data' and 'Download'", function() {
-                expect(this.view.$(".actions a").length).toBe(2);
+                expect(this.view.$(".actions a").length).toBe(3);
                 expect(this.view.$(".actions a.dataset_preview")).toExist();
                 expect(this.view.$(".actions a.download")).toExist();
+                expect(this.view.$(".actions a.edit_tags")).toExist();
             });
         });
 
@@ -699,19 +700,17 @@ describe("chorus.views.DatasetSidebar", function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
             });
+        });
 
-            describe("when the 'associate with workspace' link is clicked", function() {
-                beforeEach(function() {
-                    this.view.$("a.associate").click();
-                });
+        describe('clicking the edit tags link', function(){
+            beforeEach(function(){
+                this.view.$('.edit_tags').click();
+            });
 
-                it("displays the associate with workspace dialog", function() {
-                    expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
-                });
-
-                it("lists only active workspaces", function() {
-                    expect(chorus.modal.options.activeOnly).toBeTruthy();
-                });
+            it('opens the tag edit dialog', function(){
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
             });
         });
     });

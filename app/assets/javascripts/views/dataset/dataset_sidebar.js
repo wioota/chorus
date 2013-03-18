@@ -8,7 +8,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
-        "click a.duplicate": "launchDuplicateChorusView"
+        "click a.duplicate": "launchDuplicateChorusView",
+        "click a.edit_tags": "startEditingTags"
     },
 
     subviews: {
@@ -150,5 +151,10 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     endVisualizationMode: function() {
         $(this.el).removeClass("visualizing");
+    },
+
+    startEditingTags: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.resource])}).launchModal();
     }
 });
