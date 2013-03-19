@@ -110,6 +110,15 @@ describe Tag do
       end.to change { tag.reload.taggings_count }.by(2)
     end
 
+    xit "updates the taggings count when removing taggings"  do
+      model_1.tags << tag
+      model_2.tags << tag
+      expect do
+        model_1.tags.delete(tag)
+        model_1.taggings.count.should == 0
+      end.to change { tag.reload.taggings_count}.to(1)
+    end
+
     it "resets the tag count" do
       model_1.tags << tag
       model_2.tags << tag
