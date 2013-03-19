@@ -63,23 +63,27 @@ describe SolrIndexer do
     end
   end
 
-  describe ".reindex_objects_with_tag" do
-    let!(:tag) { Tag.create(name: "taggity-tag") }
-
-    let!(:model) do
-      FactoryGirl.create(:workfile).tap do |model|
-        model.tag_list = [tag.name]
-        model.save!
-      end
-    end
+  describe ".reindex_objects" do
+    let(:model_1) { workfiles(:public) }
+    let(:model_2) { workspaces(:public) }
+    let(:job_args) { [
+        [model_1.class.to_s, model_1.id],
+        [model_2.class.to_s, model_2.id],
+    ] }
 
     before do
-      mock(Sunspot).index([model])
       mock(Sunspot).commit
     end
 
     it "reindexes objects that are tagged with the tag" do
-      SolrIndexer.reindex_objects_with_tag(tag.id)
+      mock(Sunspot).index([model_1, model_2])
+      SolrIndexer.reindex_objects(job_args)
+    end
+
+    it "ignores bad ids" do
+      mock(Sunspot).index([model_2])
+      job_args[0][1] = 123456789
+      SolrIndexer.reindex_objects(job_args)
     end
   end
 end

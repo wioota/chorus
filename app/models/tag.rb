@@ -9,7 +9,10 @@ class Tag < ActiveRecord::Base
   validates_length_of :name, :maximum => 100, :minimum => 1
 
   after_update :reindex_tagged_objects
-  after_destroy :reindex_tagged_objects
+  before_destroy do
+    reindex_tagged_objects
+    taggings.destroy_all
+  end
 
   searchable do
     string :type_name
@@ -31,6 +34,10 @@ class Tag < ActiveRecord::Base
   private
 
   def reindex_tagged_objects
-    QC.enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", id)
+    taggings = Tagging.where(tag_id: id)
+    objects_to_reindex = taggings.map(&:taggable).map do |obj|
+      [obj.class.to_s, obj.id]
+    end
+    QC.enqueue_if_not_queued("SolrIndexer.reindex_objects", objects_to_reindex)
   end
 end

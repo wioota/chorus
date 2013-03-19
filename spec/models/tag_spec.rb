@@ -122,20 +122,37 @@ describe Tag do
 
   describe "reindexing tagged objects" do
     let(:tag) { Tag.create!(name: "foo-tag-clan") }
+    let(:model_1) { workfiles(:public) }
+    let(:model_2) { workspaces(:public) }
+    let(:job_args) { [
+        [model_1.class.to_s, model_1.id],
+        [model_2.class.to_s, model_2.id],
+    ] }
+
+    before do
+      model_1.tags << tag
+      model_2.tags << tag
+    end
 
     it "should not reindex tagged objects after create" do
-      dont_allow(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", anything)
+      dont_allow(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects", anything)
       Tag.create!(name: "another-tag")
     end
 
     it "should reindex tagged objects after update" do
-      mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", tag.id)
+      mock(QC.default_queue).enqueue_if_not_queued.with_any_args do |*args|
+        args[0].should == "SolrIndexer.reindex_objects"
+        args[1].should =~ job_args
+      end
       tag.name = "new-tag-clan"
       tag.save!
     end
 
     it "should reindex tagged objects after destroy" do
-      mock(QC.default_queue).enqueue_if_not_queued("SolrIndexer.reindex_objects_with_tag", tag.id)
+      mock(QC.default_queue).enqueue_if_not_queued.with_any_args do |*args|
+        args[0].should == "SolrIndexer.reindex_objects"
+        args[1].should =~ job_args
+      end
       tag.destroy
     end
   end

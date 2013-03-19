@@ -5,10 +5,10 @@ module SolrIndexer
   end
 
   def self.reindex(types)
-    Rails.logger.info("Starting Solr Re-Index")
+    Rails.logger.info("Starting Solr Full Re-Index")
     types_to_index(types).each(&:solr_reindex)
     Sunspot.commit
-    Rails.logger.info("Solr Re-Index Completed")
+    Rails.logger.info("Solr Full Re-Index Completed")
   end
 
   def self.refresh_external_data
@@ -22,12 +22,21 @@ module SolrIndexer
     Rails.logger.info("Solr Refreshes Queued")
   end
 
-  def self.reindex_objects_with_tag(tag_id)
-    Rails.logger.info("Starting Solr Tag Reindex")
-    taggings = Tagging.where(tag_id: tag_id)
-    Sunspot.index taggings.map(&:taggable)
+  def self.reindex_objects(object_identifiers)
+    Rails.logger.info("Starting Solr Partial Reindex")
+    objects = object_identifiers.map do |ary|
+      begin
+        klass = ary[0].constantize
+        id = ary[1]
+        klass.find(id)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
+    end
+    objects.compact!
+    Sunspot.index objects
     Sunspot.commit
-    Rails.logger.info("Solr Tag Reindex Completed")
+    Rails.logger.info("Solr Partial Reindex Completed")
   end
 
   private
