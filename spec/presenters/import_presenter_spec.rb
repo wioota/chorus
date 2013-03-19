@@ -1,13 +1,11 @@
 require 'spec_helper'
 
 describe ImportPresenter, :type => :view do
-  before do
-    @presenter = ImportPresenter.new(import, view)
-  end
   let(:import) { imports(:three) }
 
   describe "#to_hash" do
-    let(:hash) { @presenter.to_hash }
+    let(:presenter) { ImportPresenter.new(import, view) }
+    let(:hash) { presenter.to_hash }
 
     it "includes the right keys" do
       hash.should have_key(:to_table)
@@ -21,10 +19,10 @@ describe ImportPresenter, :type => :view do
       hash.should have_key(:workspace_id)
     end
 
-    it "should not blow up if the source dataset does not exist" do
+    it "returns nil for source_dataset_name if it doesn't exist" do
       import.source_dataset_id = -1
-      hash = ImportPresenter.new(import, view).to_hash
-
+      import.save(:validate => false)
+      import.reload
       hash[:source_dataset_name].should be_nil
     end
   end

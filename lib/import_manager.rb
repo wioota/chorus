@@ -57,7 +57,4 @@ class ImportManager < DelegateClass(Import)
       workspace.sandbox
     end
   end
-
-  alias_method :source_dataset, :source_dataset_with_deleted
-  alias_method :workspace, :workspace_with_deleted
 end

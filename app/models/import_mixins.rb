@@ -53,13 +53,29 @@ module ImportMixins
 
     belongs_to :destination_dataset, :class_name => 'Dataset'
     before_validation :set_destination_dataset_id
+
+    extend ClassMethods
   end
 
-  def source_dataset_with_deleted
-    Dataset.unscoped.find(source_dataset_id)
-  end
+  module ClassMethods
+    def unscope_belongs_to(association)
+      name = association.name
+      new_method = "#{name}_with_unscoped".to_sym
+      original_method = "#{name}_without_unscoped".to_sym
+      define_method(new_method) do
+        send(original_method) || association.klass.unscoped do
+          reload if persisted?
+          send(original_method)
+        end
+      end
+      alias_method_chain name, :unscoped
+    end
 
-  def workspace_with_deleted
-    Workspace.unscoped.find(workspace_id)
+    def belongs_to(name, options = {})
+      include_unscoped = options.delete(:unscoped)
+      super.tap do |association|
+        unscope_belongs_to association if include_unscoped
+      end
+    end
   end
 end

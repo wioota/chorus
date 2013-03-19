@@ -2,11 +2,11 @@ class ImportSchedule < ActiveRecord::Base
   include SoftDelete
   include ImportMixins
 
-  belongs_to :workspace
+  belongs_to :workspace, :unscoped => true
   validates :workspace, :presence => true
   validate :workspace_is_not_archived, :unless => :deleted?
 
-  belongs_to :source_dataset, :class_name => 'Dataset'
+  belongs_to :source_dataset, :class_name => 'Dataset', :unscoped => true
   belongs_to :user
   has_many :imports, :validate => false, :class_name => 'WorkspaceImport'
 

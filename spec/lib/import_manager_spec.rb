@@ -8,7 +8,7 @@ describe ImportManager do
       let(:import) { imports(:one) }
 
       it "returns the workspace sandbox" do
-        import_manager.schema_or_sandbox.should == import.workspace_with_deleted.sandbox
+        import_manager.schema_or_sandbox.should == import.workspace.sandbox
       end
     end
 

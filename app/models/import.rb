@@ -7,7 +7,7 @@ class Import < ActiveRecord::Base
   attr_accessible :to_table, :new_table, :sample_count, :truncate
   attr_accessible :file_name # only for CSV files
 
-  belongs_to :source_dataset, :class_name => 'Dataset'
+  belongs_to :source_dataset, :class_name => 'Dataset', :unscoped => true
   belongs_to :user
   belongs_to :import_schedule
 

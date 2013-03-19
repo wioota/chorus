@@ -7,15 +7,17 @@ describe Import, :greenplum_integration do
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:account) { GreenplumIntegration.real_account }
   let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
+  let(:source_dataset) { workspace.sandbox.datasets.find_by_name('candy_one_column') }
 
   let(:import) do
-    WorkspaceImport.new.tap do |i|
-      i.workspace = workspace
-      i.to_table = 'new_table1234'
-      i.new_table = true
-      i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
-      i.user = user
-    end
+    WorkspaceImport.create(
+        {
+            :workspace => workspace,
+            :to_table => 'new_table1234',
+            :new_table => true,
+            :source_dataset => source_dataset,
+            :user => user
+        }, :without_protection => true)
   end
 
   before { workspace.update_attribute :sandbox_id, schema.id }
@@ -26,6 +28,16 @@ describe Import, :greenplum_integration do
   end
 
   describe "validations" do
+    let(:import) do
+      WorkspaceImport.new.tap do |i|
+        i.workspace = workspace
+        i.to_table = 'new_table1234'
+        i.new_table = true
+        i.source_dataset = i.workspace.sandbox.datasets.find_by_name('candy_one_column')
+        i.user = user
+      end
+    end
+
     it "validates the presence of to_table" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :to_table => nil)
       import.should_not be_valid
@@ -164,6 +176,22 @@ describe Import, :greenplum_integration do
           import.update_status(:failed)
         }.should change(import, :success).to(false)
       end
+    end
+  end
+
+  describe "#source_dataset" do
+    it "returns source_dataset even if it is deleted" do
+      import.source_dataset.should == source_dataset
+      source_dataset.destroy
+      import.reload.source_dataset.should == source_dataset
+    end
+  end
+
+  describe "#workspace" do
+    it "returns workspace even if it is deleted" do
+      import.workspace.should == workspace
+      workspace.destroy
+      import.reload.workspace.should == workspace
     end
   end
 end

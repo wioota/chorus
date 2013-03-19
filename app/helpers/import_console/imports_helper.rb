@@ -31,7 +31,7 @@ module ImportConsole
     end
 
     def link_to_source(import_manager)
-      source_dataset = import_manager.source_dataset_with_deleted
+      source_dataset = import_manager.source_dataset
       description = table_description(source_dataset.schema, source_dataset.name)
       if import_manager.workspace_import?
         link = link_to_workspace_table(import_manager.workspace, source_dataset)
@@ -48,7 +48,7 @@ module ImportConsole
       dest_table = schema_or_sandbox.datasets.find_by_name(to_table)
       if dest_table
         if import_manager.workspace_import?
-          link_to(description, link_to_workspace_table(import_manager.workspace_with_deleted, dest_table))
+          link_to(description, link_to_workspace_table(import_manager.workspace, dest_table))
         else
           link_to(description, link_to_table(dest_table))
         end

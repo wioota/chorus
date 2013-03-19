@@ -1,5 +1,5 @@
 class WorkspaceImport < Import
-  belongs_to :workspace
+  belongs_to :workspace, :unscoped => true
   validates :workspace, :presence => true
   validate :workspace_is_not_archived
 
@@ -42,11 +42,11 @@ class WorkspaceImport < Import
 
   def create_failed_event_and_notification(error_message)
     event = failed_event_class.by(user).add(
-      :workspace => workspace_with_deleted,
+      :workspace => workspace,
       :destination_table => to_table,
       :error_message => error_message,
       :source_dataset => source_dataset,
-      :dataset => workspace_with_deleted.sandbox.datasets.find_by_name(to_table)
+      :dataset => workspace.sandbox.datasets.find_by_name(to_table)
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
@@ -77,4 +77,10 @@ class WorkspaceImport < Import
       FileUtils.rm_f named_pipe
     end
   end
+
+  def workspace_with_deleted
+    workspace_without_deleted || Workspace.unscoped { reload.workspace_without_deleted }
+  end
+
+  alias_method_chain :workspace, :deleted
 end

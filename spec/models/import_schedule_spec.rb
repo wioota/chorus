@@ -240,4 +240,22 @@ describe ImportSchedule, :greenplum_integration do
       import.should be_persisted
     end
   end
+
+  describe "#source_dataset" do
+    let(:source_dataset) { import_schedule.source_dataset }
+
+    it "returns source_dataset even if it is deleted" do
+      import_schedule.source_dataset.should == source_dataset
+      source_dataset.destroy
+      import_schedule.reload.source_dataset.should == source_dataset
+    end
+  end
+
+  describe "#workspace" do
+    it "returns workspace even if it is deleted" do
+      import_schedule.workspace.should == workspace
+      workspace.destroy
+      import_schedule.reload.workspace.should == workspace
+    end
+  end
 end
