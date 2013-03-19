@@ -22,10 +22,6 @@ describe("chorus.views.UserSidebar", function() {
             expect(this.view.$(".tab_control .activity_list")).toExist();
         });
 
-        it('doesnt show the edit tags link', function(){
-           expect(this.view.$('.edit_tags')).not.toExist();
-        });
-
         context("when logged in as an admin", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true, username: "edcadmin"});

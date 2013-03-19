@@ -5,14 +5,11 @@
 
 <div class="actions">
     <ul>
-        {{#if listMode}}
-            <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
-        {{/if}}
+        <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
         {{#if permission}}
             {{#unless isInEditMode}}
             <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
             {{/unless}}
-
 
             {{#if deleteAvailable}}
             <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">{{t
