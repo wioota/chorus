@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export RAILS_ENV=packaging
-GPDB_HOST=chorus-gpdb42
+GPDB_HOST=chorus-gpdb-ci
 ORACLE_HOST=chorus-oracle
 
 . script/ci/setup.sh
