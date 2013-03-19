@@ -21,13 +21,24 @@ module ImportConsole
       end
     end
 
-    def link_to_table(workspace_or_schema, dataset)
-      if workspace_or_schema.is_a? Schema
-        "/#/datasets/#{dataset.id}"
+    def link_to_table(dataset)
+      "/#/datasets/#{dataset.id}"
+    end
+
+    def link_to_workspace_table(workspace, dataset)
+      type = dataset.type == "ChorusView" ? "chorus_views" : "datasets"
+      "/#/workspaces/#{workspace.id}/#{type}/#{dataset.id}"
+    end
+
+    def link_to_source(import_manager)
+      source_dataset = import_manager.source_dataset_with_deleted
+      description = table_description(source_dataset.schema, source_dataset.name)
+      if import_manager.workspace_import?
+        link = link_to_workspace_table(import_manager.workspace, source_dataset)
       else
-        type = dataset.type == "ChorusView" ? "chorus_views" : "datasets"
-        "/#/workspaces/#{workspace_or_schema.id}/#{type}/#{dataset.id}"
+        link = link_to_table(source_dataset)
       end
+      link_to(description, link)
     end
 
     def link_to_destination(import_manager)
@@ -36,7 +47,11 @@ module ImportConsole
       description = table_description(schema_or_sandbox, to_table)
       dest_table = schema_or_sandbox.datasets.find_by_name(to_table)
       if dest_table
-        link_to(description, link_to_table(import_manager.schema_or_workspace_with_deleted, dest_table))
+        if import_manager.workspace_import?
+          link_to(description, link_to_workspace_table(import_manager.workspace_with_deleted, dest_table))
+        else
+          link_to(description, link_to_table(dest_table))
+        end
       else
         description
       end

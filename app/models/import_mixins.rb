@@ -62,5 +62,4 @@ module ImportMixins
   def workspace_with_deleted
     Workspace.unscoped.find(workspace_id)
   end
-
 end

@@ -27,8 +27,20 @@ class ImportManager < DelegateClass(Import)
     end
   end
 
+  def workspace_import?
+    __getobj__.is_a? WorkspaceImport
+  end
+
+  def schema_import?
+    __getobj__.is_a? SchemaImport
+  end
+
   def using_pipe?
     source_dataset.is_a? GpdbDataset
+  end
+
+  def destination_dataset
+    schema_or_sandbox.datasets.find_by_name(to_table)
   end
 
   def named_pipe
@@ -38,19 +50,14 @@ class ImportManager < DelegateClass(Import)
     Dir.glob(dir.join "pipe*_#{created_at.to_i}_#{id}").first
   end
 
-  def schema_or_workspace_with_deleted
-    if workspace_id.nil?
+  def schema_or_sandbox
+    if schema_import?
       schema
     else
-      workspace_with_deleted
+      workspace.sandbox
     end
   end
 
-  def schema_or_sandbox
-    if workspace_id.nil?
-      schema
-    else
-      workspace_with_deleted.sandbox
-    end
-  end
+  alias_method :source_dataset, :source_dataset_with_deleted
+  alias_method :workspace, :workspace_with_deleted
 end

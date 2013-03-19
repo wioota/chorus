@@ -16,7 +16,7 @@ describe ImportConsole::ImportsHelper do
         let(:dataset) { datasets(:chorus_view) }
 
         it "includes chorus_views in the url" do
-          dummy.link_to_table(workspace, dataset).should include("chorus_views")
+          dummy.link_to_workspace_table(workspace, dataset).should include("chorus_views")
         end
       end
 
@@ -24,7 +24,7 @@ describe ImportConsole::ImportsHelper do
         let(:dataset) { datasets(:table) }
 
         it "includes datasets in the url" do
-          dummy.link_to_table(workspace, dataset).should include("datasets")
+          dummy.link_to_workspace_table(workspace, dataset).should include("datasets")
         end
       end
     end
@@ -34,7 +34,7 @@ describe ImportConsole::ImportsHelper do
       let (:dataset) { datasets(:table) }
 
       it "returns an URL to the dataset without schema/workspace in it" do
-        dummy.link_to_table(schema, dataset).should == "/#/datasets/#{dataset.id}"
+        dummy.link_to_table(dataset).should == "/#/datasets/#{dataset.id}"
       end
     end
   end
