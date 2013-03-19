@@ -35,9 +35,9 @@ fi
 if $run_ruby; then
     echo "starting gpfdist (Linux RHEL5 only)"
     export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
-    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8002 -d /tmp &
     GPPID1=$!
-    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp &
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8003 -d /tmp &
     GPPID2=$!
 fi
 
