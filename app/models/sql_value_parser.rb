@@ -5,7 +5,7 @@ class SqlValueParser
   end
 
   def string_value(index)
-    type = @result_set.meta_data.column_type_name(index+1)
+    type = meta_data.column_type_name(index+1)
 
     # greenplum float8#to_s gives us weird rounded numbers
     if type == "float8"
@@ -16,6 +16,10 @@ class SqlValueParser
   end
 
   private
+
+  def meta_data
+    @meta_data ||= @result_set.meta_data
+  end
 
   def nil_value
     @options[:nil_value].to_s

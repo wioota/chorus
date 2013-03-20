@@ -40,8 +40,8 @@ class SqlResult
 
   private
 
-  def column_string_value(index)
-    SqlValueParser.new(@result_set).string_value(index)
+  def parser
+    @parser ||= SqlValueParser.new(@result_set)
   end
 
   def load_from_result_set
@@ -57,7 +57,7 @@ class SqlResult
 
     while @result_set.next
       row = (0...column_count).map do |i|
-         column_string_value(i)
+        parser.string_value(i)
       end
 
       add_row(row)
