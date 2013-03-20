@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe ImportabilitiesController do
   let(:user) { users(:default) }
-
   let(:instance_account) { dataset.schema.data_source.owner_account }
 
   let(:supported_column) { DatasetColumn.new(data_type: "BINARY_DOUBLE", name: "supported_col") }
   let(:unsupported_column) { DatasetColumn.new(data_type: "RAINBOWS", name: "unsupported_col") }
+
+  let(:dataset) { datasets(:oracle_table) }
 
   before do
     log_in user
@@ -17,51 +18,37 @@ describe ImportabilitiesController do
       stub(DatasetColumn).columns_for(instance_account, dataset) { columns }
     end
 
-    context "when the dataset does not belong to an Oracle data source" do
-      let(:dataset) { datasets(:table) }
-      let(:columns) { [supported_column, unsupported_column] }
+    context "when all of the dataset's columns are of a supported type" do
+      let(:columns) { [supported_column] }
 
-      it "responds that the dataset is importable, regardless of the column types" do
+      it 'responds that the dataset is importable' do
         get :show, :dataset_id => dataset.to_param
         decoded_response.importability.should == true
       end
+
+      it 'does not include invalid_columns or supported_columns in the response' do
+        get :show, :dataset_id => dataset.to_param
+        decoded_response.keys.should_not include('invalid_columns')
+        decoded_response.keys.should_not include('supported_columns')
+      end
     end
 
-    context "when the dataset belongs to an Oracle data source" do
-      let(:dataset) { datasets(:oracle_table) }
+    context "when the dataset contains columns with unsupported types" do
+      let(:columns) { [supported_column, unsupported_column] }
 
-      context "when all of the dataset's columns are of a supported type" do
-        let(:columns) { [supported_column] }
-
-        it 'responds that the dataset is importable' do
-          get :show, :dataset_id => dataset.to_param
-          decoded_response.importability.should == true
-        end
-
-        it 'does not include invalid_columns or supported_columns in the response' do
-          get :show, :dataset_id => dataset.to_param
-          decoded_response.keys.should_not include('invalid_columns')
-          decoded_response.keys.should_not include('supported_columns')
-        end
+      it 'responds that the dataset is unimportable' do
+        get :show, :dataset_id => dataset.to_param
+        decoded_response.importability.should == false
       end
 
-      context "when the dataset contains columns with unsupported types" do
-        let(:columns) { [supported_column, unsupported_column] }
+      it 'identifies unsupported columns' do
+        get :show, :dataset_id => dataset.to_param
+        decoded_response.invalid_columns.should == ['unsupported_col (RAINBOWS)']
+      end
 
-        it 'responds that the dataset is unimportable' do
-          get :show, :dataset_id => dataset.to_param
-          decoded_response.importability.should == false
-        end
-
-        it 'identifies unsupported columns' do
-          get :show, :dataset_id => dataset.to_param
-          decoded_response.invalid_columns.should == ['unsupported_col (RAINBOWS)']
-        end
-
-        it 'lists the supported columns' do
-          get :show, :dataset_id => dataset.to_param
-          decoded_response.supported_columns.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
-        end
+      it 'lists the supported columns' do
+        get :show, :dataset_id => dataset.to_param
+        decoded_response.supported_columns.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
       end
     end
   end
