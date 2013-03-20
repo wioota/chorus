@@ -49,6 +49,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
+                expect(this.view.$("a.edit_tags")).not.toExist();
             });
 
             it("has a link to create an external table", function() {
@@ -91,6 +92,17 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("55");
             });
 
+            describe('clicking the edit tags link', function(){
+                beforeEach(function(){
+                    this.view.$('.edit_tags').click();
+                });
+
+                it('opens the tag edit dialog', function(){
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                    expect(this.modalSpy.lastModal().collection).toContain(this.hdfsEntry);
+                });
+            });
 
             context("when the file is at root", function() {
                 beforeEach(function() {
@@ -176,6 +188,18 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("does not have a create external table link", function() {
                 expect(this.view.$("a.external_table")).not.toExist();
+            });
+
+            describe('clicking the edit tags link', function(){
+                beforeEach(function(){
+                    this.view.$('.edit_tags').click();
+                });
+
+                it('opens the tag edit dialog', function(){
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                    expect(this.modalSpy.lastModal().collection).toContain(this.hdfsEntry);
+                });
             });
         });
 

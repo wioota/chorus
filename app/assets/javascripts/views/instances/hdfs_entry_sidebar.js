@@ -8,7 +8,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     events : {
         'click .external_table': 'createExternalTable',
-        'click .directory_external_table': "openDirectoryExternalTable"
+        'click .directory_external_table': "openDirectoryExternalTable",
+        "click .edit_tags": "startEditingTags"
     },
 
     setup: function() {
@@ -110,6 +111,10 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         e.preventDefault();
 
         new chorus.dialogs.HdfsInstanceWorkspacePicker({model: this.resource, activeOnly: true}).launchModal();
-    }
+    },
 
+    startEditingTags: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.resource])}).launchModal();
+    }
 });
