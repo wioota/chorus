@@ -30,14 +30,6 @@
         height: 25px;
         @include after-clearfix;
     }
-
-    .found_in {
-        margin-bottom: 7px;
-
-        a {
-            display: inline;
-        }
-    }
 }
 
 .content_details, .content_footer {

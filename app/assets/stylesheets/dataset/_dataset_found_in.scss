@@ -1,22 +1,14 @@
-.published_to {
-  @extend .dataset_metadata;
-  display: inline-block;
-}
-
 .workspace_association {
   display: inline-block;
   margin-right: 25px;
 }
 
-.found_in {
-  @extend .dataset_metadata;
-}
-
-.dataset_metadata {
+.item_metadata {
   font-size: 12px;
-  line-height: 16px;
+  line-height: 21px;
 
   color: $color-text2;
+
   a {
     font-size: inherit;
     font-weight: $semibold;

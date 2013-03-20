@@ -57,23 +57,6 @@
             .name_disabled {
                 color: $color-text2;
             }
-
-            .location, .found_in {
-                padding-top: 4px;
-                @include font-normal-small;
-                line-height: 16px;
-                vertical-align: top;
-                a {
-                    font-size: 12px;
-                    font-weight: $semibold;
-                    line-height: 16px;
-                    vertical-align: top;
-                }
-            }
-
-            .found_in {
-                padding-left: 20px;
-            }
         }
 
         div.main_text {
@@ -233,24 +216,13 @@
 }
 
 .item_tag_list {
-    font-size: 12px;
-    font-weight: normal;
-    color: $color-text2;
-    line-height: 21px;
-
-    a.tag_name {
-        color: $link-color;
-        font-weight: $semibold;
-        font-size: 12px;
-    }
-
-    a.tag_name:after {
+    .tag_name:after {
         content: ', ';
         color: $color-text2;
         font-weight: $semibold;
     }
 
-    a.tag_name:last-child:after {
+    .tag_name:last-child:after {
         content: '';
     }
 }

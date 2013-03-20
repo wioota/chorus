@@ -18,14 +18,14 @@ describe("chorus.views.Workfile", function() {
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/sql.png");
     });
 
-    context("when the workfile is a tableau workbook link", function () {
+    context("when the workfile is a linked tableau workbook", function () {
         beforeEach(function () {
             this.model.set({fileType: 'tableau_workbook', workbookUrl: 'http://tableau/hi', workbookName: 'Hi'});
         });
 
-        it("should show workbook details", function () {
-            expect(this.view.$('.details a.tableau')).toHaveHref(this.model.get('workbookUrl'));
-            expect(this.view.$('.details a.tableau')).toHaveText(this.model.get('workbookUrl'));
+        it("shows a link to the tableau workbook", function () {
+            expect(this.view.$('a.tableau')).toHaveHref(this.model.get('workbookUrl'));
+            expect(this.view.$('a.tableau')).toHaveText(this.model.get('workbookUrl'));
         });
     });
 

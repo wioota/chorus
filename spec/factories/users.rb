@@ -6,7 +6,7 @@ FactoryGirl.define do
     password 'password'
     first_name {Faker::Name.first_name}
     last_name {Faker::Name.last_name}
-    title 'Grand Poo Bah'
+    title 'Chief Data Scientist'
     dept 'Corporation Corp., Inc.'
     notes 'One of our top performers'
     email {Faker::Internet.email(first_name)}

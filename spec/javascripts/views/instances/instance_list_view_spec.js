@@ -295,19 +295,19 @@ describe("chorus.views.InstanceList", function() {
             });
         });
 
-        context("when an instance has tags", function () {
+        context("when a data source has tags", function () {
             beforeEach(function () {
-                var anInstance = this.view.collection.at(0);
-                anInstance.tags().reset([{name: "tag1"}, {name: "tag2"}]);
+                var dataSource = this.view.collection.at(0);
+                dataSource.tags().reset([{name: "tag1"}, {name: "tag2"}]);
                 this.view.render();
             });
 
-            it("should show a list of tags", function () {
+            it("shows a list of tags", function () {
                 expect(this.view.$('.item_tag_list')).toContainTranslation("tag_list.title");
                 expect(this.view.$('.item_tag_list')).toContainText("tag1 tag2");
             });
 
-            it("tags should link to the tag show page", function () {
+            it("links to the tag show page", function () {
                 expect(this.view.$(".item_tag_list a:contains(tag1)").attr("href")).toEqual("#/tags/tag1");
             });
 

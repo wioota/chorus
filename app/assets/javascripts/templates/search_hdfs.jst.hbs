@@ -7,12 +7,15 @@
     {{else}}
         <span class="name">{{displaySearchMatch "name"}}</span>
     {{/if}}
-    {{> itemTags}}
-    <div class="location">
+    <div class='item_metadata'>
+      {{> itemTags}}
+      <div class="location">
         {{t "hdfs.from"}}
         <span class="instance">{{instanceLink}} /</span>
         <span class="path_parts">{{completePath}}</span>
+      </div>
     </div>
+
 
     <div class="comments_container"/>
 </div>

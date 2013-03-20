@@ -32,7 +32,7 @@ describe("chorus.views.SearchUser", function() {
     });
 
     it("has the title", function() {
-        expect(this.view.$('.title .content').html()).toContain("<em>test</em>er");
+        expect(this.view.$el.html()).toContain("<em>test</em>er");
     });
 
     describe("supporting messages (title, notes, etc.)", function() {

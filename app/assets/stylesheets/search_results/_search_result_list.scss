@@ -70,20 +70,6 @@
                 font-weight: $semibold;
             }
 
-            .location {
-                padding: 5px 0;
-                color: $color-text2;
-                line-height: 15px;
-
-                a, span {
-                    font-size: 12px;
-                }
-
-                a {
-                    font-weight: $semibold;
-                }
-            }
-
             .description_content {
                 @include font-normal-alpha;
             }

@@ -3,13 +3,14 @@
 <img class="icon" src="{{iconUrl}}" title="{{humanizedDatasetType this}}"/>
 <div class="description">
     <a class="name" href="{{showUrl}}">{{displaySearchMatch "objectName"}}</a>
-    {{> itemTags }}
+    <div class="item_metadata">
+      {{> itemTags}}
 
-    <div class="location">
-        {{datasetLocation resource}}
-        {{usedInWorkspaces workspaces dataset}}
+      <div class="location">
+          {{datasetLocation resource}}
+          {{usedInWorkspaces workspaces dataset}}
+      </div>
     </div>
-
     <div class="comments_container"/>
 
 </div>

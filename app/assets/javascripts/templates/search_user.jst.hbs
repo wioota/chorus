@@ -3,11 +3,12 @@
 <img class="icon" src="{{iconSrc}}"/>
 <div class="description">
     <a class="name" href="{{link}}">{{displayName}}</a>
-    <div class="title">
-        <span class="content">{{title}}</span>
+    <div class="details">
+      <span class="title" title="{{title}}">{{title}}</span>
     </div>
-
-    {{> itemTags}}
+    <div class="item_metadata">
+      {{> itemTags}}
+    </div>
 
     <div class="supporting_message">
         {{#each supportingMessage}}

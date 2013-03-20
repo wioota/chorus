@@ -28,17 +28,33 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     buildModels: function() {
         var models = {};
+        var tagList = [
+            {name: 'Tag1'},
+            {name: 'tags2'}
+        ];
 
-        models.workspace = new chorus.models.Workspace({ name: "Some Workspace", summary: "One awesome workspace", owner: {firstName: "Bob", lastName: "Lablaw"}, "public": true, archivedAt: null});
-        models.workspace.loaded = true;
+        models.workspace = new chorus.models.Workspace({
+            name: "Some Workspace",
+            summary: "One awesome workspace",
+            owner: {firstName: "Bob", lastName: "Lablaw"},
+            "public": true,
+            archivedAt: null,
+            tags: tagList,
+            completeJson: true
+        });
         models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Instance'}}});
 
         models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         models.privateWorkspace.loaded = true;
 
-        models.archivedWorkspace = new chorus.models.Workspace({ name: "Archived Workspace", summary: "old data", owner: {firstName: "The", lastName: "Past"}, "public": false, archiver: {firstName: "Mr", lastName: "Archiver"}, archivedAt: "1985-07-21T06:21:02Z"});
+        models.archivedWorkspace = new chorus.models.Workspace({
+            name: "Archived Workspace",
+            summary: "old data",
+            owner: {firstName: "The", lastName: "Past"},
+            "public": false,
+            archiver: {firstName: "Mr", lastName: "Archiver"},
+            archivedAt: "1985-07-21T06:21:02Z"});
         models.archivedWorkspace.loaded = true;
-
 
         models.instanceAccount = new chorus.models.InstanceAccount();
 
@@ -49,24 +65,33 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         });
 
         models.greenplumDataSource = new chorus.models.GpdbDataSource({
-            "name": "Greenplum Data Source",
-            "online": true
+            name: "Greenplum Data Source",
+            online: true,
+            description: "I AM AWESOME",
+            tags: tagList,
+            completeJson: true
         });
 
         models.oracleDataSource = new chorus.models.OracleDataSource({
             "name": "Oracle Data Source",
-            "online": false
+            "online": false,
+            tags: tagList,
+            completeJson: true
         });
 
         models.hdfsDataSource = new chorus.models.HdfsDataSource({
             name: "Angry Elephant",
-            online: true
+            online: true,
+            tags: tagList,
+            completeJson: true
         });
 
         models.gnipDataSource = new chorus.models.GnipDataSource({
             name: "Some Gnip Source",
             online: true,
-            entityType: "gnip_data_source"
+            entityType: "gnip_data_source",
+            tags: tagList,
+            completeJson: true
         });
 
         models.database = new chorus.models.Database({
@@ -85,19 +110,24 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "datasetCount": 3,
             "refreshedAt": true
         });
-        
+
         models.otherSchema = new chorus.models.Schema({
-           "name": "Other schema",
+            "name": "Other schema",
             "database": models.database,
             refreshedAt: null
         });
 
         models.dataset = new chorus.models.Dataset({
-            "type": "SOURCE_TABLE",
-            "objectName": "table",
-            "schema": models.schema,
-            "entityType": "dataset",
-            "objectType": "TABLE"
+            type: "SOURCE_TABLE",
+            objectName: "table",
+            schema: models.schema,
+            entityType: "dataset",
+            objectType: "TABLE",
+            tags: tagList,
+            associatedWorkspaces: [
+                models.workspace
+            ],
+            completeJson: true
         });
 
         models.datasetImportability = new chorus.models.DatasetImportability({
@@ -117,11 +147,18 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         });
 
         models.workfile = new chorus.models.Workfile({
-            "fileName": "Some workfile"
+            fileName: "Some workfile",
+            tags: tagList,
+            completeJson: true,
+            workspace: models.workspace
         });
 
         models.otherWorkfile = new chorus.models.Workfile({
-            "fileName": "Other workfile.sql"
+            fileName: "Bestest Tableaust Workfile",
+            fileType: "tableau_workbook",
+            workbookName: "hey tableau is the bomb",
+            workbookUrl: "http://10.80.129.44/workbooks/hey tableau is the bomb",
+            completeJson: true
         });
 
         models.task = (function() {
@@ -145,16 +182,27 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             });
         })();
 
-        models.user = new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser1", image: { icon: "/images/default-user-icon.png"}});
+        models.user = new chorus.models.User({ username: "edcadmin",
+            firstName: "Johnny",
+            lastName: "Danger",
+            admin: false,
+            id: "InitialUser1",
+            image: { icon: "/images/default-user-icon.png"},
+            tags: tagList,
+            title: "Chief Data Scientist",
+            email: "searchquery@jacobibeier.com",
+            dept: "Corporation Corp., Inc.",
+            notes: "One of our top performers",
+            completeJson: true});
         models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
         models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
-        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"]});
+        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, completeJson: true});
 
         models.activity = new chorus.models.Activity({
             "action": "DataSourceChangedOwner",
             "actor": models.user,
-            "gpdbDataSource": models.greenplumDataSource,
+            "dataSource": models.greenplumDataSource,
             "newOwner": models.otherUser,
             "timestamp": "2013-01-31T20:14:27Z"
         });
@@ -179,10 +227,56 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             },
 
             workspaces: {
-                results: [models.workspace.set({ highlightedAttributes: {
-                    "summary": ["<em>Danger</em> Zone!!"]
-                }})],
+                results: [
+                    models.workspace.set({ highlightedAttributes: { summary: ["<em>Danger</em> Zone!!"]}}),
+                    models.archivedWorkspace.set({highlightedAttributes: { summary: ['<em>Search Hit</em>']}})
+                    ],
                 numFound: 1
+            },
+
+            hdfsEntries: {
+                results: [models.hdfsFile],
+                numFound: 1
+            },
+
+            datasets: {
+                results: [models.dataset],
+                numFound: 1000
+            },
+
+            workfiles: {
+                results: [models.workfile],
+                numFound: 2
+            },
+
+            instances: {
+                results: [models.greenplumDataSource, models.hdfsDataSource, models.gnipDataSource],
+                numFound: 4
+            },
+
+            attachment: {
+                results: [{
+                        "id": 1000009,
+                        "name": "searchquery_hadoop",
+                        "entityType": "attachment",
+                        "type": "",
+                        "instance": {
+                            "name": "searchquery_hadoop",
+                            "host": "hadoop.example.com",
+                            "port": 1111,
+                            "id": 1000000,
+                            "description": "searchquery for the hadoop data source",
+                            "entityType": "hdfs_data_source"
+                        },
+                        "completeJson": true,
+                        "highlightedAttributes": {
+                            "name": [
+                                "<em>searchquery</em>_<em>hadoop</em>"
+                            ]
+                        }
+                    }
+                ],
+                numFound: 7
             }
         });
 

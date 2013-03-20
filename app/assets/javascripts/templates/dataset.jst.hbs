@@ -24,14 +24,14 @@
         <span class="name">{{objectName}}</span>
     {{/ifAll}}
 
-    {{> itemTags}}
+    <div class="item_metadata">
+      {{> itemTags}}
 
-    <div class="location">
-        {{datasetLocation resource}}
+      <div class="location">
+          {{datasetLocation resource}}
+      </div>
+      {{usedInWorkspaces workspaces dataset}}
     </div>
-
-    {{usedInWorkspaces workspaces dataset}}
-
 
     {{#if lastComment}}
         <div class="comment">
