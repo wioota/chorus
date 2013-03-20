@@ -81,6 +81,6 @@
     chorus.collections.Search.AttachmentSet = chorus.collections.AttachmentSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "attachment"
+        searchKey: "otherFiles"
     });
 })();

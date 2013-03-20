@@ -10,7 +10,6 @@ describe SearchPresenter, :type => :view do
   end
 
   describe "#to_hash" do
-
     context "searching without workspace" do
       before do
         search = Search.new(user, :query => 'searchquery')
@@ -22,7 +21,7 @@ describe SearchPresenter, :type => :view do
         @hash = @presenter.to_hash
       end
 
-      it "includes the right user keys" do
+      it 'includes matching users' do
         @hash.should have_key(:users)
         user_hash = @hash[:users]
         user_hash.should have_key(:numFound)
@@ -31,7 +30,7 @@ describe SearchPresenter, :type => :view do
         user_hash[:results][0][:entity_type].should == 'user'
       end
 
-      it "includes the right instance keys" do
+      it 'includes matching data sources' do
         @hash.should have_key(:instances)
         instance_hash = @hash[:instances]
         instance_hash.should have_key(:numFound)
@@ -43,7 +42,7 @@ describe SearchPresenter, :type => :view do
         end
       end
 
-      it "includes the right workspace keys" do
+      it 'includes matching workspaces' do
         @hash.should have_key(:workspaces)
         workspaces_hash = @hash[:workspaces]
         workspaces_hash.should have_key(:numFound)
@@ -52,7 +51,7 @@ describe SearchPresenter, :type => :view do
         workspaces_hash[:results][0][:entity_type].should == 'workspace'
       end
 
-      it "includes the right workfile keys" do
+      it 'includes matching workfiles' do
         @hash.should have_key(:workfiles)
         workfile_hash = @hash[:workfiles]
         workfile_hash.should have_key(:numFound)
@@ -62,15 +61,15 @@ describe SearchPresenter, :type => :view do
         workfile_hash[:results].each { |wf| %w(workfile linked_tableau_workfile).should include(wf[:entity_type]) }
       end
 
-      it "includes the comments" do
-        gpdb_data_source_hash = @hash[:instances]
-        gpdb_data_source_result = gpdb_data_source_hash[:results][0]
-        gpdb_data_source_result.should have_key(:comments)
-        gpdb_data_source_result[:comments].length.should == 1
-        gpdb_data_source_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>searchquery</em>"
+      it 'includes matching notes' do
+        data_source_hash = @hash[:instances]
+        data_source_result = data_source_hash[:results][0]
+        data_source_result.should have_key(:comments)
+        data_source_result[:comments].length.should == 1
+        data_source_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>searchquery</em>"
       end
 
-      it "includes the right dataset keys" do
+      it 'includes matching datasets' do
         dataset = datasets(:searchquery_table)
 
         @hash.should have_key(:datasets)
@@ -93,7 +92,7 @@ describe SearchPresenter, :type => :view do
         table_hash[:entity_type].should == 'dataset'
       end
 
-      it "includes the hdfs entries" do
+      it 'includes matching hdfs entries' do
         @hash.should have_key(:hdfs_entries)
         hdfs_hash = @hash[:hdfs_entries]
         hdfs_hash.should have_key(:numFound)
@@ -106,21 +105,21 @@ describe SearchPresenter, :type => :view do
         first_result[:entity_type].should == 'hdfs_file'
       end
 
-      it "includes note attachments" do
-        @hash.should have_key(:attachment)
-        attachments_hash = @hash[:attachment]
-        attachments_hash.should have_key(:numFound)
-        attachments_hash.should have_key(:results)
-        attachments_hash[:results][0][:highlighted_attributes].should have_key(:name)
-        attachments_hash[:results][0][:entity_type].should == 'attachment'
+      it 'includes other matching files (just attachments on notes for now)' do
+        @hash.should have_key(:other_files)
+        other_files_hash = @hash[:other_files]
+        other_files_hash.should have_key(:numFound)
+        other_files_hash.should have_key(:results)
+        other_files_hash[:results][0][:highlighted_attributes].should have_key(:name)
+        other_files_hash[:results][0][:entity_type].should == 'attachment'
       end
 
-      it "does not include the this_workspace key" do
+      it 'does not include workspace-specific results' do
         @hash.should_not have_key(:this_workspace)
       end
     end
 
-    context "when workspace_id is set on the search" do
+    context 'when the search is restricted to a workspace' do
       let(:workspace) { workspaces(:search_public) }
 
       before do
@@ -133,14 +132,14 @@ describe SearchPresenter, :type => :view do
         @hash = @presenter.to_hash
       end
 
-      it "includes the right this_workspace keys" do
+      it 'includes matching results within that workspace' do
         @hash.should have_key(:this_workspace)
         this_workspace_hash = @hash[:this_workspace]
         this_workspace_hash.should have_key(:numFound)
         this_workspace_hash.should have_key(:results)
       end
 
-      it "puts the highlighted schema attributes on the schema" do
+      it 'highlights the schema attributes on the dataset' do
         dataset_hash = @hash[:this_workspace][:results].find { |entry| entry[:entity_type] == 'dataset' }
         dataset_hash[:schema][:highlighted_attributes][:name][0].should == "<em>searchquery</em>_schema"
         dataset_hash[:schema][:database][:highlighted_attributes][:name][0].should == "<em>searchquery</em>_database"

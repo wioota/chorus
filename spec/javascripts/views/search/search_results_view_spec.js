@@ -88,7 +88,7 @@ describe("chorus.views.SearchResults", function() {
                 this.model = makeSearchResults();
                 this.model.set({ entityType: "workfile" });
                 this.model.unset("workspaces");
-                this.model.unset("attachment");
+                this.model.unset("otherFiles");
                 this.model.unset("users");
                 this.model.unset("hdfsEntries");
                 this.model.unset("datasets");

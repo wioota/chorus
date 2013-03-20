@@ -7,7 +7,7 @@
         workspaceItems: "WorkspaceItemSet",
         instances: "InstanceSet",
         users: "UserSet",
-        attachments: "AttachmentSet"
+        other_files: "AttachmentSet"
     };
 
     function makeCollectionMethod(methodName) {
@@ -158,7 +158,7 @@
         users: makeCollectionMethod("users"),
         hdfs_entries: makeCollectionMethod("hdfs_entries"),
         workspaceItems: makeCollectionMethod("workspaceItems"),
-        attachments: makeCollectionMethod("attachments"),
+        attachments: makeCollectionMethod("other_files"),
 
         getResults: function() {
             if (this.isScopedToSingleWorkspace()) {
@@ -178,8 +178,8 @@
                     return this.instances();
                 case "hdfs_entry":
                     return this.hdfs_entries();
-                case "attachment":
-                    return this.attachments();
+                case "other_files":
+                    return this.other_files();
             }
         },
 

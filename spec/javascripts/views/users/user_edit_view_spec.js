@@ -37,9 +37,9 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
                     expect(this.view.$("span[name=username]").text()).toBe(this.user.get("username"));
                     expect(this.view.$("input[name=email]").val()).toBe(this.user.get("email"));
-                    expect(this.view.$("input[name=title]").val()).toBe("Grand Poo Bah");
-                    expect(this.view.$("textarea[name=notes]").text()).toBe("One of our top performers");
-                    expect(this.view.$("input[name=dept]").val()).toBe("Corporation Corp., Inc.");
+                    expect(this.view.$("input[name=title]").val()).toBe(this.user.get('title'));
+                    expect(this.view.$("textarea[name=notes]").text()).toBe(this.user.get('notes'));
+                    expect(this.view.$("input[name=dept]").val()).toBe(this.user.get('dept'));
                     expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
                 });
 

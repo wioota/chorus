@@ -254,7 +254,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 numFound: 4
             },
 
-            attachment: {
+            otherFiles: {
                 results: [{
                         "id": 1000009,
                         "name": "searchquery_hadoop",
