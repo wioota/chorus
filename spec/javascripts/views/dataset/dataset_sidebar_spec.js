@@ -161,12 +161,57 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when an oracle dataset is selected", function() {
             beforeEach(function() {
-                this.oracleDataset = rspecFixtures.oracleDataset();
+                this.oracleDataset = rspecFixtures.oracleDataset({id: 12});
                 chorus.PageEvents.broadcast("dataset:selected", this.oracleDataset);
             });
 
             it("displays an import dataset link", function() {
                 expect(this.view.$("a.import_now").text()).toMatchTranslation("actions.import_now");
+            });
+
+            context("when the import dataset link is clicked", function() {
+                beforeEach(function() {
+                    this.view.$("a.import_now").click();
+                });
+
+                it("asks the server whether or not the columns have supported data types", function() {
+                    expect(this.server.lastFetch().url).toBe("/datasets/12/importability");
+                });
+
+                context("when the server responds that the data types are valid", function () {
+                    beforeEach(function() {
+                        var expectedResponse = {
+                            importable: true,
+                            invalid_columns: []
+                        };
+                        var model = new chorus.models.DatasetImportability({
+                            datasetId: 12
+                        });
+                        this.server.completeFetchFor(model, expectedResponse);
+                    });
+
+                    it("opens the Import Now dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportNow);
+                    });
+                });
+
+                context("when the server responds that the data types are not valid", function () {
+                    beforeEach(function() {
+                        var expectedResponse = {
+                            importable: false,
+                            invalid_columns: ["foo", "bar"]
+                        };
+
+                        var model = new chorus.models.DatasetImportability({
+                            datasetId: 12
+                        });
+                        this.server.completeFetchFor(model, expectedResponse);
+                    });
+
+                    it("opens an alert indicating that the dataset it not importable", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.DatasetNotImportable);
+                    });
+                });
             });
         });
 
@@ -391,12 +436,10 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
 
                         _.each(linkClasses, function(linkClass) {
-                            it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
+                            it("has a '" + linkClass + "' link", function() {
                                 var link = this.view.$("a." + linkClass);
                                 expect(link).toExist();
                                 expect(link.text()).toMatchTranslation("actions." + linkClass);
-                                var dialog = linkClass === "import_now" ? "ImportNow" : "ImportScheduler";
-                                expect(link.data("dialog")).toBe(dialog);
                             });
 
                             it("attaches the dataset to the '" + linkClass + "' link", function() {

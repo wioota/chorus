@@ -37,7 +37,7 @@ xdescribe("chorus.alerts.FunctionInfo", function() {
         });
     });
 
-    it("has the 'info' class (so that it displays the right icon)", function() {
+    it("shows an info icon", function() {
         expect($(alert.el)).toHaveClass("info");
     });
 

@@ -108,6 +108,10 @@ class Dataset < ActiveRecord::Base
     schema.refresh_datasets account, options
   end
 
+  def self.supported_column_types
+    OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys
+  end
+
   def query_setup_sql
     ""
   end
@@ -152,5 +156,9 @@ class Dataset < ActiveRecord::Base
     DatasetStatistics.build_for(self, schema.data_source.owner_account).description
   rescue
     nil
+  end
+
+  def importable?
+    false
   end
 end

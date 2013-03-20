@@ -33,7 +33,6 @@ describe("chorus.dialogs.ImportNow", function() {
     });
 
     context('importing into a workspace', function() {
-
         it('creates a WorkspaceImport model', function(){
             expect(this.dialog.model).toBeA(chorus.models.WorkspaceImport);
         });

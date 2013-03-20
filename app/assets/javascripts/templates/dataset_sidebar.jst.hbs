@@ -59,7 +59,7 @@
             {{#unless workspaceArchived}}
                 {{#if canExport}}
                     {{#if importsEnabled}}
-                        <li><a class="import_now dialog" data-dialog="ImportNow" href="#">{{t "actions.import_now"}}</a></li>
+                        <li><a class="import_now dialog" href="#">{{t "actions.import_now"}}</a></li>
                         {{#if canScheduleImports}}
                           {{#if hasSchedule}}
                               <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" data-action="edit_schedule" href="#">{{t "actions.edit_schedule"}}</a></li>

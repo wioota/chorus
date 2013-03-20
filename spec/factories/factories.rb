@@ -125,6 +125,13 @@ FactoryGirl.define do
     sequence(:ordinal_position)
   end
 
+  factory :oracle_dataset_column do
+    sequence(:name) { |n| "column#{n}" }
+    data_type "text"
+    description "A nice Oracle description"
+    sequence(:ordinal_position)
+  end
+
   factory :dataset_statistics do
     initialize_with do
       new({

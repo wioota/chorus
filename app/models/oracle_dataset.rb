@@ -27,4 +27,20 @@ class OracleDataset < Dataset
     query << " WHERE rownum <= #{limit}" if limit
     query
   end
+
+  def importable?
+    unimportable_columns.empty?
+  end
+
+  def unimportable_columns
+    unimportable_columns = []
+
+    column_data.each do |column|
+      unless Dataset.supported_column_types.include? column.data_type
+        unimportable_columns << "#{column.name} (#{column.data_type})"
+      end
+    end
+
+    unimportable_columns
+  end
 end

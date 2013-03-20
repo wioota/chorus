@@ -17,6 +17,7 @@ describe Dataset do
 
     let!(:model) { dataset }
   end
+  it_should_behave_like "taggable models", [:datasets, :table]
 
   describe "associations" do
     it { should belong_to :schema }
@@ -230,6 +231,4 @@ describe Dataset do
       end
     end
   end
-
-  it_should_behave_like "taggable models", [:datasets, :table]
 end

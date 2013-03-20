@@ -100,6 +100,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "objectType": "TABLE"
         });
 
+        models.datasetImportability = new chorus.models.DatasetImportability({
+            "importable": "false",
+            "invalidColumns": []
+        });
+
         models.otherDataset = new chorus.models.Dataset({
             "type": "SOURCE_TABLE",
             "objectName": "other table",
@@ -544,7 +549,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: models.chorusView}),
 
-            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: models.dataset })
+            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: models.dataset }),
+
+            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: models.datasetImportability })
         };
     },
 

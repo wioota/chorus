@@ -50,6 +50,10 @@ class GpdbDataset < Dataset
     "GpdbDatasetColumn"
   end
 
+  def importable?
+    true
+  end
+
   private
 
   def create_import_event(params, user)
