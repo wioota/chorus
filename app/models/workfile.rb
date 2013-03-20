@@ -22,6 +22,8 @@ class Workfile < ActiveRecord::Base
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
 
+  validates :workspace, presence: true
+  validates :owner, presence: true
   validates_presence_of :file_name
 
   before_validation :init_file_name, :on => :create

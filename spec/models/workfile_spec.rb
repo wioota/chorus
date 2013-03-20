@@ -15,6 +15,8 @@ describe Workfile do
 
   describe "validations" do
     it { should validate_presence_of :file_name }
+    it { should validate_presence_of :workspace }
+    it { should validate_presence_of :owner }
 
     context "normalize the file name" do
       let!(:another_workfile) { FactoryGirl.create(:workfile, :file_name => 'workfile.sql') }
