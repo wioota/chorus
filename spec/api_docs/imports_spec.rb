@@ -204,4 +204,14 @@ resource 'Imports' do
       status.should == 200
     end
   end
+
+  get "/datasets/:dataset_id/importability" do
+    parameter :dataset_id, "ID of dataset"
+    required_parameters :dataset_id
+    let(:dataset_id) { datasets(:table).to_param }
+
+    example_request 'Check importability of dataset', { :format => :json } do
+      status.should == 200
+    end
+  end
 end
