@@ -7,6 +7,10 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
         ".workspace_member_list": "workspaceMemberList"
     },
 
+    events: {
+        "click .edit_tags": 'startEditingTags'
+    },
+
     setup: function() {
         this.subscribePageEvent("workspace:selected", this.setWorkspace);
         this.tabs = new chorus.views.TabControl(["activity"]);
@@ -50,5 +54,10 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
         }
 
         this.render();
+    },
+
+    startEditingTags: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
     }
 });

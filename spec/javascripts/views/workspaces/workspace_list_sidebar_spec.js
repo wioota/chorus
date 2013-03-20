@@ -64,5 +64,18 @@ describe("chorus.views.WorkspaceListSidebar", function() {
             expect(this.view.$(".actions a[data-dialog=NotesNew]")).toContainTranslation("actions.add_note");
             expect(this.view.$(".actions a[data-dialog=InsightsNew]")).toContainTranslation("actions.add_insight");
         });
+
+        describe('clicking the edit tags link', function(){
+            beforeEach(function(){
+                this.modalSpy = stubModals();
+                this.view.$('.edit_tags').click();
+            });
+
+            it('opens the tag edit dialog', function(){
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.workspace);
+            });
+        });
     });
 });
