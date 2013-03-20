@@ -231,4 +231,28 @@ describe Dataset do
       end
     end
   end
+
+  describe "caching" do
+    before do
+      mock(Rails.cache).fetch({:model_class => "GpdbTable", :model_id => dataset.id, :key => cache_key}, :expires_in => 60.seconds)
+    end
+
+    describe "#column_data" do
+      let(:cache_key) {:column_data}
+
+      it "uses caching" do
+        dataset.column_data
+      end
+    end
+
+    describe "#table_description" do
+      let(:cache_key) {:table_description}
+
+      it "uses caching" do
+        dataset.table_description
+      end
+    end
+  end
+
+  it_should_behave_like "taggable models", [:datasets, :table]
 end

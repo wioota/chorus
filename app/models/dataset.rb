@@ -149,16 +149,25 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_data
-    @column_data ||= DatasetColumn.columns_for(schema.data_source.owner_account, self)
+    cache(:column_data) do
+      DatasetColumn.columns_for(schema.data_source.owner_account, self)
+    end
   end
 
   def table_description
-    DatasetStatistics.build_for(self, schema.data_source.owner_account).description
+    cache(:table_description) do
+      DatasetStatistics.build_for(self, schema.data_source.owner_account).description
+    end
   rescue
     nil
   end
 
   def importable?
     false
+  end
+
+  def cache(key, &block)
+    cache_key = {:model_class => self.class.name, :model_id => id, :key => key}
+    Rails.cache.fetch(cache_key, :expires_in => 1.minutes, &block)
   end
 end
