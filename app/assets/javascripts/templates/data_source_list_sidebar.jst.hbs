@@ -1,7 +1,7 @@
 {{#if name}}
 <div class="info">
-    <div class="instance_name" title="{{name}}">{{name}}</div>
-    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
+    <div class="data_source_name" title="{{name}}">{{name}}</div>
+    <div class="data_source_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
 </div>
 {{#if isOnlineOrOffline}}
 <div class="account_info">
@@ -55,6 +55,7 @@
             <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
         {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+        <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>
         {{#if isGnip}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-dialog="ImportGnipStream">{{t "actions.import_gnip_stream"}}</a></li>
         {{/if}}

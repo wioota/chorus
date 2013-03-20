@@ -29,7 +29,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
             content: new chorus.views.InstanceList(options)
         });
 
-        this.sidebar = new chorus.views.InstanceListSidebar();
+        this.sidebar = new chorus.views.DataSourceListSidebar();
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "instance:checked",

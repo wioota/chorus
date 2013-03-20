@@ -90,7 +90,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserSidebar({listMode: true}),
             workspace: new chorus.views.WorkspaceListSidebar(),
             dataset: new chorus.views.DatasetSidebar({listMode: true, searchPage: true}),
-            instance: new chorus.views.InstanceListSidebar(),
+            instance: new chorus.views.DataSourceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
 

@@ -1,4 +1,4 @@
-.instance_list_sidebar {
+.data_source_list_sidebar {
     .info {
         margin-bottom: 10px;
     }
@@ -24,26 +24,16 @@
         }
     }
 
-    .instance_name {
+    .data_source_name {
         @include ellipsis;
         @include heading-sidebar;
     }
 
-    .instance_type {
+    .data_source_type {
         @include secondary-text-small;
     }
 
-    .instance_fault {
-        padding: 5px 0;
-        @include secondary-text-small;
-
-        span {
-            display: inline-block;
-            vertical-align: top;
-        }
-    }
-
-    .instance_configuration_details {
+    .data_source_configuration_details {
         dl {
             padding-right: 8px;
             font-size: 14px;

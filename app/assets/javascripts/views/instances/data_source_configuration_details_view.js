@@ -1,5 +1,5 @@
-chorus.views.InstanceConfigurationDetails = chorus.views.Base.extend({
-    templateName: "instance_configuration_details",
+chorus.views.DataSourceConfigurationDetails = chorus.views.Base.extend({
+    templateName: "data_source_configuration_details",
 
     additionalContext: function() {
         var shared = this.model.isShared && this.model.isShared();

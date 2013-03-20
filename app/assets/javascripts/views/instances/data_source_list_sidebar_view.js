@@ -1,10 +1,14 @@
-chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
-    constructorName: "InstanceListSidebarView",
-    templateName: "instance_list_sidebar",
+chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
+    constructorName: "DataSourceListSidebarView",
+    templateName: "data_source_list_sidebar",
     useLoadingSection: true,
 
     subviews: {
         '.tab_control': 'tabs'
+    },
+
+    events: {
+        "click .edit_tags": 'startEditingTags'
     },
 
     setup: function() {
@@ -47,7 +51,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
                 displayStyle: 'without_object'
             });
 
-            this.tabs.configuration = new chorus.views.InstanceConfigurationDetails({ model: this.instance });
+            this.tabs.configuration = new chorus.views.DataSourceConfigurationDetails({ model: this.instance });
 
             this.registerSubView(this.tabs.activity);
             this.registerSubView(this.tabs.configuration);
@@ -120,5 +124,10 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
                 this.$(".workspace_usage_container").append(el);
             }
         }
+    },
+
+    startEditingTags: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
     }
 });

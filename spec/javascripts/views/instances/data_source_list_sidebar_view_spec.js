@@ -1,7 +1,7 @@
-describe("chorus.views.InstanceListSidebar", function() {
+describe("chorus.views.DataSourceListSidebar", function() {
     context('when no data source is selected', function() {
         beforeEach(function() {
-            this.view = new chorus.views.InstanceListSidebar();
+            this.view = new chorus.views.DataSourceListSidebar();
             this.view.render();
         });
 
@@ -14,38 +14,38 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context('when a gpdb data source is selected', function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
-            this.view = new chorus.views.InstanceListSidebar();
-            chorus.PageEvents.broadcast("instance:selected", this.instance);
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.dataSource);
             $('#jasmine_content').append(this.view.el);
         });
 
         it('fetches the activities, data source usage and accounts', function() {
-            expect(this.instance.activities()).toHaveBeenFetched();
-            expect(this.instance.usage()).toHaveBeenFetched();
-            expect(this.instance.accounts()).toHaveAllBeenFetched();
+            expect(this.dataSource.activities()).toHaveBeenFetched();
+            expect(this.dataSource.usage()).toHaveBeenFetched();
+            expect(this.dataSource.accounts()).toHaveAllBeenFetched();
         });
 
         context("when the data has been loaded", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
-                this.server.completeFetchFor(this.instance.activities());
+                this.server.completeFetchFor(this.dataSource.activities());
                 var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
-                this.server.completeFetchAllFor(this.instance.accounts(), instanceAccountSet.models);
-                this.server.completeFetchFor(this.instance.accountForCurrentUser());
+                instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), instanceAccountSet.models);
+                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
             it('displays data source name', function() {
-                expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
+                expect(this.view.$(".data_source_name").text()).toBe("Harry's House of Glamour");
             });
 
             it('displays data source type', function() {
-                expect(this.view.$(".instance_type")).toContainText("Greenplum Database");
+                expect(this.view.$(".data_source_type")).toContainText("Greenplum Database");
             });
 
             it("calls super in postRender (so that scrolling works)", function() {
@@ -57,7 +57,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
             it("populates the ActivityList with the activities", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.instance.activities());
+                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
             });
 
             it("sets the ActivityList displayStyle to without_object", function() {
@@ -71,6 +71,19 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_data_source');
             });
 
+            describe('clicking the edit tags link', function(){
+                beforeEach(function(){
+                    this.modalSpy = stubModals();
+                    this.view.$('.edit_tags').click();
+                });
+
+                it('opens the tag edit dialog', function(){
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                    expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
+                });
+            });
+
             context('when user is an admin or owner of the data source', function() {
                 it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
@@ -80,7 +93,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.set({owner: {id: chorus.session.user().get('id')} });
+                    this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -92,7 +105,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context('when the data source is offline', function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
-                        this.instance.set({
+                        this.dataSource.set({
                             online: false
                         });
                         this.view.render();
@@ -111,7 +124,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             context('when user is not an admin or owner of the data source', function() {
                 beforeEach(function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.set({owner: {id: "harry"}});
+                    this.dataSource.set({owner: {id: "harry"}});
                     this.view.render();
                 });
 
@@ -126,23 +139,23 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
-                    expect(this.view.$(".instance_configuration_details")).not.toBeVisible();
+                    expect(this.view.$(".data_source_configuration_details")).not.toBeVisible();
                     this.view.$(".tab_control .tabs li[data-name=configuration]").click();
                 });
 
                 it("shows configuration", function() {
-                    expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden");
+                    expect(this.view.$(".data_source_configuration_details")).not.toHaveClass("hidden");
                     expect(this.view.$(".activity_list")).toHaveClass("hidden");
                 });
 
                 it("shows the database version", function() {
-                    expect(this.view.$(".instance_configuration_details")).toContainTranslation("instances.version");
-                    expect(this.view.$(".instance_configuration_details")).toContainText("99.999");
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("instances.version");
+                    expect(this.view.$(".data_source_configuration_details")).toContainText("99.999");
                 });
 
                 it("shows the owner", function() {
-                    expect(this.view.$(".instance_configuration_details")).toContainTranslation("instances.permissions.owner");
-                    expect(this.view.$(".instance_configuration_details")).toContainText(this.instance.owner().displayName());
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("instances.permissions.owner");
+                    expect(this.view.$(".data_source_configuration_details")).toContainText(this.dataSource.owner().displayName());
                 });
 
                 describe('for existing greenplum data source', function() {
@@ -153,20 +166,20 @@ describe("chorus.views.InstanceListSidebar", function() {
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
                             var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                            instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
+                            instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                             this.server.completeFetchFor(instance.accounts(), instanceAccountSet.models);
                             this.server.completeFetchFor(instance.accountForCurrentUser());
                         });
 
                         it("includes the shared account information", function() {
-                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text()).toContainTranslation("instances.shared_account");
                         });
                     });
 
                     context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
-                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text()).not.toContainTranslation("instances.shared_account");
                         });
                     });
                 });
@@ -178,23 +191,23 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
 
                     it("includes gpdb size information", function() {
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
                     });
 
                     it("does not include the port, host, or shared account information", function() {
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                     });
                 });
             });
 
             context('when the data source has a shared account', function() {
                 beforeEach(function() {
-                    this.instance.set({
+                    this.dataSource.set({
                         shared: true
                     });
-                    this.instance._accountForCurrentUser = rspecFixtures.instanceAccount();
+                    this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
                     this.view.render();
                 });
 
@@ -207,7 +220,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
                 it('displays the data source shared account info', function () {
-                    expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"));
+                    expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
                 });
 
                 it('displays edit data source link when user is admin', function() {
@@ -218,8 +231,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
-                    this.instance.set({owner: {id: chorus.session.user().get('id')}});
+                    this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
+                    this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -249,7 +262,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
                             expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
                             expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            expect(addCredentialsLink.data("instance")).toBe(this.instance);
+                            expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
                         });
 
                         it("does not show the 'edit credentials' link", function() {
@@ -264,7 +277,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     context('when the user has set up an account for the data source', function() {
                         beforeEach(function() {
                             var account = rspecFixtures.instanceAccount();
-                            spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
+                            spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
                             this.view.render();
                         });
 
@@ -284,7 +297,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
                             expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
                             expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
-                            expect(editCredentialsLink.data("instance")).toBe(this.instance);
+                            expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
                         });
 
                         it("does not show the 'add credentials' link", function() {
@@ -293,8 +306,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                         describe("when the user removes their credentials", function() {
                             beforeEach(function() {
-                                this.instance.accountForCurrentUser = this.instance.accountForCurrentUser.originalValue;
-                                this.instance.accountForCurrentUser().trigger("destroy");
+                                this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
+                                this.dataSource.accountForCurrentUser().trigger("destroy");
                                 this.view.render();
                             });
 
@@ -311,8 +324,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the current user is an admin", function() {
                     beforeEach(function() {
                         var account = rspecFixtures.instanceAccount();
-                        spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
+                        spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
+                        this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.view.render();
                     });
@@ -334,7 +347,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         expect(editAccountsSection).toBeVisible();
                         expect(editAccountsLink).toBeVisible();
                         expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
-                        expect(editAccountsLink.data("instance")).toBe(this.instance);
+                        expect(editAccountsLink.data("instance")).toBe(this.dataSource);
                         expect(editAccountsLink.data("dialog")).toBe("InstancePermissions");
                     });
                 });
@@ -346,13 +359,13 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when the workspace usage fetch completes", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.instance.usage(), rspecFixtures.instanceDetails());
+                    this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.instanceDetails());
                 });
 
                 context("when there are no workspaces", function() {
                     beforeEach(function() {
-                        this.instance.usage().set({workspaces: []});
-                        this.instance.usage().trigger("loaded");
+                        this.dataSource.usage().set({workspaces: []});
+                        this.dataSource.usage().trigger("loaded");
                     });
 
                     it("should disable the link", function() {
@@ -367,17 +380,17 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when there are workspaces", function() {
                     beforeEach(function() {
-                        expect(this.instance.usage().get("workspaces").length).toBeGreaterThan(0);
+                        expect(this.dataSource.usage().get("workspaces").length).toBeGreaterThan(0);
                     });
 
                     it("should be a dialog link", function() {
                         expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
                         expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
-                        expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.instance);
+                        expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.dataSource);
                     });
 
                     it("should show the appropriate number of workspaces", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: this.instance.usage().get("workspaces").length});
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: this.dataSource.usage().get("workspaces").length});
                     });
                 });
             });
@@ -385,14 +398,14 @@ describe("chorus.views.InstanceListSidebar", function() {
 
         context("when the user doesn't have permission to fetch the data source workspace usage", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchAllFor(this.instance.accounts());
-                this.server.completeFetchFor(this.instance.accountForCurrentUser());
-                this.server.completeFetchFor(this.instance.usage(), rspecFixtures.instanceDetailsWithoutPermission());
+                this.server.completeFetchFor(this.dataSource.activities());
+                this.server.completeFetchAllFor(this.dataSource.accounts());
+                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
+                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.instanceDetailsWithoutPermission());
             });
 
             it("renders without the workspace usage section", function() {
-                expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
+                expect(this.view.$(".data_source_name").text()).toBe("Harry's House of Glamour");
                 expect(this.view.$('.actions .workspace_usage')).not.toExist();
             });
         });
@@ -400,38 +413,38 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context('when a oracle data source is selected', function() {
         beforeEach(function(){
-            this.instance = rspecFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = rspecFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
-            this.view = new chorus.views.InstanceListSidebar();
-            chorus.PageEvents.broadcast("instance:selected", this.instance);
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.dataSource);
             $('#jasmine_content').append(this.view.el);
         });
 
         it('fetches the activities, data source usage and accounts', function() {
-            expect(this.instance.activities()).toHaveBeenFetched();
-            expect(this.instance.usage()).toHaveBeenFetched();
-            expect(this.instance.accounts()).toHaveAllBeenFetched();
+            expect(this.dataSource.activities()).toHaveBeenFetched();
+            expect(this.dataSource.usage()).toHaveBeenFetched();
+            expect(this.dataSource.accounts()).toHaveAllBeenFetched();
         });
 
         context("when the data has been loaded", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
-                this.server.completeFetchFor(this.instance.activities());
+                this.server.completeFetchFor(this.dataSource.activities());
                 var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
-                this.server.completeFetchAllFor(this.instance.accounts(), instanceAccountSet.models);
-                this.server.completeFetchFor(this.instance.accountForCurrentUser());
+                instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), instanceAccountSet.models);
+                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
             it('displays data source name', function() {
-                expect(this.view.$(".instance_name")).toContainText("Harry's House of Glamour");
+                expect(this.view.$(".data_source_name")).toContainText("Harry's House of Glamour");
             });
 
             it('displays data source type', function() {
-                expect(this.view.$(".instance_type")).toContainText("Oracle Database");
+                expect(this.view.$(".data_source_type")).toContainText("Oracle Database");
             });
 
             it("calls super in postRender (so that scrolling works)", function() {
@@ -443,7 +456,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
             it("populates the ActivityList with the activities", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.instance.activities());
+                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
             });
 
             it("sets the ActivityList displayStyle to without_object", function() {
@@ -457,6 +470,19 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('oracle_data_source');
             });
 
+            describe('clicking the edit tags link', function(){
+                beforeEach(function(){
+                    this.modalSpy = stubModals();
+                    this.view.$('.edit_tags').click();
+                });
+
+                it('opens the tag edit dialog', function(){
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                    expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
+                });
+            });
+
             context('when user is an admin or owner of the data source', function() {
                 it('displays edit data source link when user is admin', function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
@@ -466,7 +492,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.set({owner: {id: chorus.session.user().get('id')} });
+                    this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -478,7 +504,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context('when the data source is offline', function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
-                        this.instance.set({
+                        this.dataSource.set({
                             online: false
                         });
                         this.view.render();
@@ -497,7 +523,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             context('when user is not an admin or owner of the data source', function() {
                 beforeEach(function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.set({owner: {id: "harry"}});
+                    this.dataSource.set({owner: {id: "harry"}});
                     this.view.render();
                 });
 
@@ -512,12 +538,12 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
-                    expect(this.view.$(".instance_configuration_details")).not.toBeVisible();
+                    expect(this.view.$(".data_source_configuration_details")).not.toBeVisible();
                     this.view.$(".tab_control .tabs li[data-name=configuration]").click();
                 });
 
                 it("shows configuration", function() {
-                    expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden");
+                    expect(this.view.$(".data_source_configuration_details")).not.toHaveClass("hidden");
                     expect(this.view.$(".activity_list")).toHaveClass("hidden");
                 });
 
@@ -528,20 +554,20 @@ describe("chorus.views.InstanceListSidebar", function() {
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                            instanceAccountSet.models[0].set({owner: {id: this.instance.owner().id}});
+                            instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                             this.server.completeFetchFor(instance.accounts(), instanceAccountSet.models);
                             this.server.completeFetchFor(instance.accountForCurrentUser());
                         });
 
                         it("includes the shared account information", function() {
-                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
                         });
                     });
 
                     context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
-                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                         });
                     });
                 });
@@ -553,23 +579,23 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
 
                     it("includes size information", function() {
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
                     });
 
                     it("does not include the port, host, or shared account information", function() {
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                     });
                 });
             });
 
             context('when the data source has a shared account', function() {
                 beforeEach(function() {
-                    this.instance.set({
+                    this.dataSource.set({
                         shared: true
                     });
-                    this.instance._accountForCurrentUser = rspecFixtures.instanceAccount();
+                    this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
                     this.view.render();
                 });
 
@@ -582,7 +608,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
                 it('displays the data source shared account info', function () {
-                    expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"));
+                    expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
                 });
 
                 it('displays edit data source link when user is admin', function() {
@@ -593,8 +619,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it('displays edit data source link when user is owner', function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
-                    this.instance.set({owner: {id: chorus.session.user().get('id')}});
+                    this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
+                    this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -624,7 +650,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
                             expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
                             expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            expect(addCredentialsLink.data("instance")).toBe(this.instance);
+                            expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
                         });
 
                         it("does not show the 'edit credentials' link", function() {
@@ -639,7 +665,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     context('when the user has set up an account for the data source', function() {
                         beforeEach(function() {
                             var account = rspecFixtures.instanceAccount();
-                            spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
+                            spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
                             this.view.render();
                         });
 
@@ -659,7 +685,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
                             expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
                             expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
-                            expect(editCredentialsLink.data("instance")).toBe(this.instance);
+                            expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
                         });
 
                         it("does not show the 'add credentials' link", function() {
@@ -668,8 +694,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                         describe("when the user removes their credentials", function() {
                             beforeEach(function() {
-                                this.instance.accountForCurrentUser = this.instance.accountForCurrentUser.originalValue;
-                                this.instance.accountForCurrentUser().trigger("destroy");
+                                this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
+                                this.dataSource.accountForCurrentUser().trigger("destroy");
                                 this.view.render();
                             });
 
@@ -686,8 +712,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the current user is an admin", function() {
                     beforeEach(function() {
                         var account = rspecFixtures.instanceAccount();
-                        spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
+                        spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
+                        this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.view.render();
                     });
@@ -709,7 +735,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         expect(editAccountsSection).toBeVisible();
                         expect(editAccountsLink).toBeVisible();
                         expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
-                        expect(editAccountsLink.data("instance")).toBe(this.instance);
+                        expect(editAccountsLink.data("instance")).toBe(this.dataSource);
                         expect(editAccountsLink.data("dialog")).toBe("InstancePermissions");
                     });
                 });
@@ -717,18 +743,17 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-
     context('when a hadoop data source is selected', function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.hdfsDataSource({
+            this.dataSource = rspecFixtures.hdfsDataSource({
                 name: "Harry's House of Glamour",
                 username: "hadoop",
                 groupList: "hadoop",
                 owner: {id: chorus.session.user().get('id')}
             });
-            this.view = new chorus.views.InstanceListSidebar();
-            chorus.PageEvents.broadcast("instance:selected", this.instance);
-            this.server.completeFetchFor(this.instance.activities());
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.dataSource);
+            this.server.completeFetchFor(this.dataSource.activities());
         });
 
         it("does not display edit permissions link", function() {
@@ -740,7 +765,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
 
         it('displays data source type', function() {
-            expect(this.view.$(".instance_type")).toContainText("Hadoop");
+            expect(this.view.$(".data_source_type")).toContainText("Hadoop");
         });
 
         it("has a 'add a note' link", function() {
@@ -750,22 +775,35 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hdfs_data_source');
         });
 
+        describe('clicking the edit tags link', function(){
+            beforeEach(function(){
+                this.modalSpy = stubModals();
+                this.view.$('.edit_tags').click();
+            });
+
+            it('opens the tag edit dialog', function(){
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
+            });
+        });
+
         it("shows the shared account", function() {
-            var shared_account_info = this.instance.get("username") + ", " + this.instance.get("groupList");
-            expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
+            var shared_account_info = this.dataSource.get("username") + ", " + this.dataSource.get("groupList");
+            expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });
     });
 
     context('when a gnip data source is selected', function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
-            this.view = new chorus.views.InstanceListSidebar();
-            chorus.PageEvents.broadcast("instance:selected", this.instance);
-            this.server.completeFetchFor(this.instance.activities());
+            this.dataSource = rspecFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.dataSource);
+            this.server.completeFetchFor(this.dataSource.activities());
         });
 
         it('displays data source type', function() {
-            expect(this.view.$(".instance_type")).toContainText("Gnip Account");
+            expect(this.view.$(".data_source_type")).toContainText("Gnip Account");
         });
 
         it("has a 'add a note' link", function() {
@@ -775,19 +813,32 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_data_source');
         });
 
+        describe('clicking the edit tags link', function(){
+            beforeEach(function(){
+                this.modalSpy = stubModals();
+                this.view.$('.edit_tags').click();
+            });
+
+            it('opens the tag edit dialog', function(){
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+                expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
+            });
+        });
+
         it("has a 'import stream' link", function() {
             expect(this.view.$("a[data-dialog=ImportGnipStream]")).toExist();
             expect(this.view.$("a[data-dialog=ImportGnipStream]").text()).toMatchTranslation("actions.import_gnip_stream");
         });
 
         it("shows the shared account", function() {
-            var shared_account_info = this.instance.get("username");
-            expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
+            var shared_account_info = this.dataSource.get("username");
+            expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });
 
         it("shows the stream url", function() {
-            var shared_account_info = this.instance.get("streamUrl");
-            expect(this.view.$(".instance_configuration_details .streamUrl")).toContainText(shared_account_info);
+            var shared_account_info = this.dataSource.get("streamUrl");
+            expect(this.view.$(".data_source_configuration_details .streamUrl")).toContainText(shared_account_info);
         });
     });
 });

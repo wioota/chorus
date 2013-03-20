@@ -213,7 +213,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     expect(this.instanceLIs.length).toBe(3);
                 });
 
-                describe('clicking on andata source search result', function() {
+                describe('clicking on a data source search result', function() {
                     beforeEach(function() {
                         spyOn(this.page.sidebars.instance, "setInstance");
                         this.instanceLIs.eq(0).trigger("click");
@@ -224,7 +224,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it('shows the data source in the sidebar', function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar");
+                        expect($(this.page.sidebar.el)).toHaveClass("data_source_list_sidebar");
                         expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0));
                     });
                 });

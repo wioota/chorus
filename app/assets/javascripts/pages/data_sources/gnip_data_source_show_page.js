@@ -10,7 +10,7 @@ chorus.pages.GnipDataSourceShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.TaggableHeader({model: this.model})
         });
 
-        this.sidebar = new chorus.views.InstanceListSidebar();
+        this.sidebar = new chorus.views.DataSourceListSidebar();
         this.sidebar.setInstance(this.model);
 
         this.breadcrumbs.requiredResources.add(this.model);
