@@ -62,14 +62,18 @@ class DataSourceConnection
         stmnt.set_max_rows(options[:limit]) if options[:limit]
 
         result_set = stmnt.execute_query(sql)
-        column_number = result_set.meta_data.column_count
+
+        meta_data = result_set.meta_data
+        column_names = (1..meta_data.column_count).map {|i| meta_data.column_name(i).to_sym}
+
+        nil_value = options[:quiet_null] ? "" : "null"
+        parser = SqlValueParser.new(result_set, :nil_value => nil_value)
 
         while result_set.next
           record = {}
 
-          column_number.times do |i|
-            nil_value = options[:quiet_null] ? "" : "null"
-            record[result_set.meta_data.column_name(i+1).to_sym] = SqlValueParser.new(result_set, :nil_value => nil_value).string_value(i)
+          column_names.each.with_index do |name, i|
+            record[name] = parser.string_value(i)
           end
 
           yield record
