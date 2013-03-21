@@ -5,10 +5,10 @@ describe Workspace do
   it_behaves_like "a notable model" do
     let!(:note) do
       Events::NoteOnWorkspace.create!({
-                                          :actor => users(:owner),
-                                          :workspace => model,
-                                          :body => "This is the body"
-                                      }, :as => :create)
+                                          actor: users(:owner),
+                                          workspace: model,
+                                          body: "This is the body"
+                                      }, as: :create)
     end
 
     let!(:model) { workspaces(:public_with_no_collaborators) }
@@ -36,7 +36,7 @@ describe Workspace do
   describe "create" do
     it "creates a membership for the owner" do
       owner = users(:no_collaborators)
-      workspace = owner.owned_workspaces.create!(:name => 'new workspace!')
+      workspace = owner.owned_workspaces.create!(name: 'new workspace!')
       workspace.members.should include(owner)
     end
   end
@@ -141,20 +141,20 @@ describe Workspace do
   describe "#datasets and #dataset_count" do
     let!(:schema) { FactoryGirl.create(:gpdb_schema) }
     let!(:other_schema) { FactoryGirl.create(:gpdb_schema) }
-    let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, :schema => schema) }
-    let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, :schema => schema) }
-    let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
-    let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
+    let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, schema: schema) }
+    let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, schema: schema) }
+    let!(:source_table) { FactoryGirl.create(:gpdb_table, schema: other_schema) }
+    let!(:other_table) { FactoryGirl.create(:gpdb_table, schema: other_schema) }
     let!(:chorus_view) {
-      FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => schema, :query => "select * from a_table", :workspace => workspace)
+      FactoryGirl.create(:chorus_view, name: "chorus_view", schema: schema, query: "select * from a_table", workspace: workspace)
     }
     let!(:chorus_view_from_source) {
-      FactoryGirl.create(:chorus_view, :name => "chorus_view_from_source", :schema => other_schema, :query => "select 1", :workspace => workspace)
+      FactoryGirl.create(:chorus_view, name: "chorus_view_from_source", schema: other_schema, query: "select 1", workspace: workspace)
     }
     let(:user) { users(:the_collaborator) }
 
     context "when the workspace has a sandbox" do
-      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
+      let!(:workspace) { FactoryGirl.create(:workspace, sandbox: schema) }
 
       before do
         workspace.source_datasets << source_table
@@ -168,7 +168,7 @@ describe Workspace do
       end
 
       context "when the user has an instance account" do
-        let!(:account) { FactoryGirl.build(:instance_account, :data_source => schema.database.data_source, :owner => user).tap { |a| a.save(:validate => false) } }
+        let!(:account) { FactoryGirl.build(:instance_account, data_source: schema.database.data_source, owner: user).tap { |a| a.save(validate: false) } }
 
         context "when the sandbox has tables" do
           before do
@@ -176,7 +176,7 @@ describe Workspace do
             stub(schema).dataset_count(account, anything) { 142 }
           end
 
-          it "includes datasets in the workspace's sandbox and all of its bound datasets" do
+          it "includes datasets in the workspace's sandbox and all of its source datasets" do
             workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
             workspace.dataset_count(user).should == 1 + 2 + 142
           end
@@ -193,8 +193,8 @@ describe Workspace do
 
           describe "filtering by sandbox table" do
             before do
-              options ={:entity_subtype => "SANDBOX_TABLE",
-                        :tables_only => true}
+              options ={entity_subtype: "SANDBOX_TABLE",
+                        tables_only: true}
               mock(GpdbDataset).visible_to(account, schema, options) {
                 [sandbox_table]
               }
@@ -203,8 +203,8 @@ describe Workspace do
             end
 
             it "filters out views" do
-              workspace.datasets(user, {:entity_subtype => "SANDBOX_TABLE"}).to_a.should =~ [sandbox_table]
-              workspace.dataset_count(user, {:entity_subtype => "SANDBOX_TABLE"}).should == 141
+              workspace.datasets(user, {entity_subtype: "SANDBOX_TABLE"}).to_a.should =~ [sandbox_table]
+              workspace.dataset_count(user, {entity_subtype: "SANDBOX_TABLE"}).should == 141
             end
           end
         end
@@ -243,13 +243,13 @@ describe Workspace do
     end
 
     context "when the workspace does not have a sandbox" do
-      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+      let!(:workspace) { FactoryGirl.create(:workspace, sandbox: nil) }
       let!(:chorus_view) {
         FactoryGirl.create(:chorus_view,
-                           :name => "chorus_view",
-                           :query => "select 1",
-                           :schema => schema,
-                           :workspace => workspace)
+                           name: "chorus_view",
+                           query: "select 1",
+                           schema: schema,
+                           workspace: workspace)
       }
 
       before do
@@ -340,7 +340,7 @@ describe Workspace do
 
   describe "#destroy" do
     let(:workspace) { workspaces(:public) }
-    let(:workfile) { workfiles(:public) }
+    let!(:workfile) { FactoryGirl.create(:workfile, workspace: workspace) }
 
     it "should not delete the database entry" do
       workspace.destroy
@@ -359,17 +359,12 @@ describe Workspace do
       Workspace.find_by_id(workspace.id).should be_nil
     end
 
-    it "does not reindex the workspace for each member" do
-      any_instance_of(Workspace) do |instance|
-        mock(instance).solr_reindex.with_any_args.times(0)
-      end
+    it 'does not reindex the workspace' do
+      any_instance_of(Workspace) { |instance| dont_allow(instance).solr_reindex }
       workspace.destroy
     end
 
     it "soft-deletes the associated workfiles" do
-      workspace.workfiles << workfile
-      workspace.save!
-
       workspace.destroy
       workfile.reload
       workfile.deleted_at.should_not be_nil
@@ -380,9 +375,7 @@ describe Workspace do
       chorus_views.length.should > 0
 
       workspace.destroy
-      chorus_views.each do |cv|
-        cv.reload.deleted_at.should_not be_nil
-      end
+      chorus_views.each { |cv| cv.reload.deleted_at.should_not be_nil }
     end
 
     it "soft deletes associations to source datasets" do
@@ -394,9 +387,7 @@ describe Workspace do
 
     it "soft deletes import schedules" do
       [Import, ImportSchedule].each do |importable|
-        any_instance_of(importable) do |import|
-          stub(import).valid? { true }
-        end
+        any_instance_of(importable) { |import| stub(import).valid? { true } }
       end
 
       import_schedule = FactoryGirl.create(:import_schedule, :workspace_id => workspace.id)
