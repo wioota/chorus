@@ -1,5 +1,5 @@
 chorus.collections.SchemaDatasetSet = chorus.collections.LastFetchWins.include(
-    chorus.Mixins.InstanceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model
 ).extend({
     constructorName: 'SchemaDatasetSet',
     model:chorus.models.DynamicDataset,

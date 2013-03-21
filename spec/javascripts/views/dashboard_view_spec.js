@@ -70,13 +70,13 @@ describe("chorus.views.Dashboard", function(){
             });
 
             it("has a 'browse all' link in the content details", function() {
-                var browseLink = this.view.$(".dashboard_instance_list_content_details a.browse_all");
+                var browseLink = this.view.$(".dashboard_data_source_list_content_details a.browse_all");
                 expect(browseLink.text().trim()).toMatchTranslation("dashboard.instances.browse_all");
                 expect(browseLink.attr("href")).toBe("#/data_sources");
             });
 
             it('has the Add a Data Source link', function() {
-                var link = this.view.$(".dashboard_instance_list_content_details a.add");
+                var link = this.view.$(".dashboard_data_source_list_content_details a.add");
                 expect(link.text().trim()).toMatchTranslation("dashboard.instances.add");
                 expect(link.data("dialog")).toBe("InstancesNew");
             });

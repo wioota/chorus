@@ -1,5 +1,5 @@
 chorus.pages.GpdbSchemaIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.InstanceCredentials.page
+    chorus.Mixins.DataSourceCredentials.page
 ).extend({
     constructorName: "GpdbSchemaIndexPage",
     helpId: "instances",

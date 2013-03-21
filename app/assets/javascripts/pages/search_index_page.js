@@ -90,7 +90,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserSidebar({listMode: true}),
             workspace: new chorus.views.WorkspaceListSidebar(),
             dataset: new chorus.views.DatasetSidebar({listMode: true, searchPage: true}),
-            instance: new chorus.views.DataSourceListSidebar(),
+            dataSource: new chorus.views.DataSourceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
 
@@ -112,7 +112,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("dataset:selected", this.datasetSelected);
         this.subscribePageEvent("workfile:selected", this.workfileSelected);
         this.subscribePageEvent("user:selected", this.userSelected);
-        this.subscribePageEvent("instance:selected", this.instanceSelected);
+        this.subscribePageEvent("data_source:selected", this.dataSourceSelected);
         this.subscribePageEvent("attachment:selected", this.attachmentSelected);
 
         this.subscribePageEvent("choice:search_in", this.scopeSearchResults);
@@ -143,9 +143,9 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.renderSidebar(this.sidebars.user);
     },
 
-    instanceSelected: function(instance) {
-        this.sidebars.instance.setInstance(instance);
-        this.renderSidebar(this.sidebars.instance);
+    dataSourceSelected: function(dataSource) {
+        this.sidebars.dataSource.setDataSource(dataSource);
+        this.renderSidebar(this.sidebars.dataSource);
     },
 
     attachmentSelected: function(attachment) {

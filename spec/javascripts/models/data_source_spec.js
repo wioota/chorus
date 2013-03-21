@@ -139,19 +139,19 @@ describe('chorus.models.DataSource', function() {
         beforeEach(function() {
             this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
-            this.instanceUsage = this.model.usage();
+            this.dataSourceUsage = this.model.usage();
         });
 
-        it("returns an InstanceUsage object", function() {
-            expect(this.instanceUsage).toBeA(chorus.models.InstanceUsage);
+        it("returns an DataSourceUsage object", function() {
+            expect(this.dataSourceUsage).toBeA(chorus.models.DataSourceUsage);
         });
 
         it("sets the data source id", function() {
-            expect(this.instanceUsage.attributes.instanceId).toBe(this.model.get('id'));
+            expect(this.dataSourceUsage.attributes.instanceId).toBe(this.model.get('id'));
         });
 
         it("memoizes", function() {
-            expect(this.instanceUsage).toBe(this.model.usage());
+            expect(this.dataSourceUsage).toBe(this.model.usage());
         });
     });
 

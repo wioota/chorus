@@ -31,8 +31,8 @@ describe SearchPresenter, :type => :view do
       end
 
       it 'includes matching data sources' do
-        @hash.should have_key(:instances)
-        instance_hash = @hash[:instances]
+        @hash.should have_key(:data_sources)
+        instance_hash = @hash[:data_sources]
         instance_hash.should have_key(:numFound)
         instance_hash.should have_key(:results)
         instance_types = instance_hash[:results].map {|result| result[:entity_type]}.uniq
@@ -62,7 +62,7 @@ describe SearchPresenter, :type => :view do
       end
 
       it 'includes matching notes' do
-        data_source_hash = @hash[:instances]
+        data_source_hash = @hash[:data_sources]
         data_source_result = data_source_hash[:results][0]
         data_source_result.should have_key(:comments)
         data_source_result[:comments].length.should == 1

@@ -7,12 +7,12 @@ describe("chorus.views.SearchResultList", function() {
                 workspaceId: 123
             });
 
-            var instances = this.result.instances();
-            instances.pagination.records = 24;
+            var dataSources = this.result.instances();
+            dataSources.pagination.records = 24;
 
             this.view = new chorus.views.SearchResultList({
-                entityType: "instance",
-                collection: instances,
+                entityType: "dataSource",
+                collection: dataSources,
                 search: this.result
             });
 
@@ -163,15 +163,15 @@ describe("chorus.views.SearchResultList", function() {
             this.result = rspecFixtures.searchResult();
             this.result.set({ query: "foo" });
 
-            this.instances = this.result.instances();
-            this.instances.pagination.records = 24;
+            this.dataSources = this.result.instances();
+            this.dataSources.pagination.records = 24;
 
             this.selectedModels = new chorus.collections.Base();
 
             this.view = new chorus.views.SearchResultList({
                 selectedModels: this.selectedModels,
-                entityType: "instance",
-                collection: this.instances,
+                entityType: "data_source",
+                collection: this.dataSources,
                 search: this.result
             });
 
@@ -180,15 +180,15 @@ describe("chorus.views.SearchResultList", function() {
         });
 
         it("clicking a row sets the selectedItem for the search model", function() {
-            this.view.$(".instance_list li:nth-child(2)").click();
-            expect(this.result.selectedItem).toEqual(this.instances.at(1));
+            this.view.$(".data_source_list li:nth-child(2)").click();
+            expect(this.result.selectedItem).toEqual(this.dataSources.at(1));
         });
 
         describe("multiple selection", function() {
             it("clicking a checkbox adds the model to the selectedModels", function() {
-                var instanceToClick = this.instances.at(0);
-                this.view.$(".instance_list li:first input[type=checkbox]").click();
-                expect(this.selectedModels.models).toEqual([instanceToClick]);
+                var dataSourceToClick = this.dataSources.at(0);
+                this.view.$(".data_source_list li:first input[type=checkbox]").click();
+                expect(this.selectedModels.models).toEqual([dataSourceToClick]);
             });
         });
     });

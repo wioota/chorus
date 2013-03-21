@@ -5,8 +5,8 @@ describe("chorus.collections.SchemaDatasetSet", function() {
         });
     });
 
-    it("includes the InstanceCredentials mixin", function() {
-        expect(this.collection.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    it("includes the DataSourceCredentials mixin", function() {
+        expect(this.collection.dataSourceRequiringCredentials).toBe(chorus.Mixins.DataSourceCredentials.model.dataSourceRequiringCredentials);
     });
 
     it("extends chorus.collections.LastFetchWins", function() {

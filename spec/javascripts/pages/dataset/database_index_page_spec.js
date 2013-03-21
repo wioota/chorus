@@ -7,7 +7,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
 
     it("includes the instance credentials mixin", function() {
         expect(this.page.dependentResourceForbidden).toBe(
-            chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden
+            chorus.Mixins.DataSourceCredentials.page.dependentResourceForbidden
         );
     });
 

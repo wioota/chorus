@@ -63,7 +63,7 @@ describe("chorus.views.SearchResults", function() {
                 expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
                 expect(sections.filter(".hdfs_entry_list.selectable")).toExist();
-                expect(sections.filter(".instance_list.selectable")).toExist();
+                expect(sections.filter(".data_source_list.selectable")).toExist();
             });
         });
 
@@ -76,7 +76,7 @@ describe("chorus.views.SearchResults", function() {
                 it("does not show the sections for other types of items", function() {
                     expect(this.view.$(".search_result_list .this_workspace")).not.toExist();
                     expect(this.view.$(".search_result_list .attachment_list")).not.toExist();
-                    expect(this.view.$(".search_result_list .instance_list")).not.toExist();
+                    expect(this.view.$(".search_result_list .data_source_list")).not.toExist();
                     expect(this.view.$(".search_result_list .workspace_list")).not.toExist();
                     expect(this.view.$(".search_result_list .user_list")).not.toExist();
                     expect(this.view.$(".search_result_list .dataset_list")).not.toExist();
@@ -119,7 +119,7 @@ describe("chorus.views.SearchResults", function() {
             it("does not show the other sections", function() {
                 expect(this.view.$(".workfile_list")).toHaveHtml("");
                 expect(this.view.$(".attachment_list")).toHaveHtml("");
-                expect(this.view.$(".instance_list")).toHaveHtml("");
+                expect(this.view.$(".data_source_list")).toHaveHtml("");
                 expect(this.view.$(".workspace_list")).toHaveHtml("");
                 expect(this.view.$(".user_list")).toHaveHtml("");
                 expect(this.view.$(".dataset_list")).toHaveHtml("");
@@ -211,26 +211,26 @@ describe("chorus.views.SearchResults", function() {
             });
 
             context('when the li is for a data source', function() {
-                it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.instances().find(function (instance) { return instance.isGreenplum(); });
-                    this.view.$(".instance_list li.gpdb_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
+                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isGreenplum(); });
+                    this.view.$(".data_source_list li.gpdb_data_source").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
 
             context('when the li is for a hadoop data source', function() {
-                it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.instances().find(function (instance) { return instance.isHadoop(); });
-                    this.view.$(".instance_list li.hdfs_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
+                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isHadoop(); });
+                    this.view.$(".data_source_list li.hdfs_data_source").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
 
             context('when the li is for a gnip data source', function() {
-                it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
-                    var modelToClick = this.model.instances().find(function (instance) { return instance.isGnip(); });
-                    this.view.$(".instance_list li.gnip_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
+                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isGnip(); });
+                    this.view.$(".data_source_list li.gnip_data_source").eq(0).click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
         });

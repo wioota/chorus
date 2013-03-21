@@ -11,7 +11,7 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     eventType: function() {
-        return "instance";
+        return "data_source";
     },
 
     isOnline: function() {

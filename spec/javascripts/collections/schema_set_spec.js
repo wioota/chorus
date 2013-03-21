@@ -8,8 +8,8 @@ describe("chorus.collections.SchemaSet", function() {
         expect(this.collection.url()).toContain("/databases/42/schemas");
     });
 
-    it("includes the InstanceCredentials mixin", function() {
-        expect(this.collection.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    it("includes the DataSourceCredentials mixin", function() {
+        expect(this.collection.dataSourceRequiringCredentials).toBe(chorus.Mixins.DataSourceCredentials.model.dataSourceRequiringCredentials);
     });
 
     describe("#sort", function() {

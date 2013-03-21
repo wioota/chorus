@@ -1,5 +1,5 @@
 chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.InstanceCredentials.page
+    chorus.Mixins.DataSourceCredentials.page
 ).extend({
     constructorName: "DatabaseIndexPage",
     helpId: "instances",

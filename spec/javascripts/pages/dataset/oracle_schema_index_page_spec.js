@@ -8,8 +8,8 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         });
     });
 
-    it("includes the InstanceCredentials mixin", function() {
-        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
+    it("includes the DataSourceCredentials mixin", function() {
+        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.DataSourceCredentials.page.dependentResourceForbidden);
     });
 
     it('sets up the right collection', function(){

@@ -137,11 +137,11 @@ window.rspecFixtureDefinitions = {
     instanceAccountSet: {},
 
     instanceDetails: {
-        model: 'InstanceUsage'
+        model: 'DataSourceUsage'
     },
 
     instanceDetailsWithoutPermission: {
-        model: 'InstanceUsage'
+        model: 'DataSourceUsage'
     },
 
     kaggleUserSet: { unique: ["id"] },

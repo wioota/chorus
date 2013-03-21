@@ -54,7 +54,7 @@
                 });
             } else {
                 this.instances = new chorus.collections.GpdbDataSourceSet();
-                this.bindings.add(this.instances, "loaded", this.instancesLoaded);
+                this.bindings.add(this.instances, "loaded", this.dataSourcesLoaded);
                 this.instances.attributes.accessible = true;
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
@@ -78,7 +78,7 @@
             this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this));
         },
 
-        instancesLoaded: function () {
+        dataSourcesLoaded: function () {
             var state = (this.gpdbDataSources().length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ instance: state });
         },

@@ -18,8 +18,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.instanceList = new chorus.views.MainContentView({
             collection: this.options.dataSourceSet,
             contentHeader: chorus.views.StaticTemplate("default_content_header", {title:t("header.browse_data")}),
-            contentDetails: new chorus.views.StaticTemplate("dashboard/instance_list_content_details"),
-            content: new chorus.views.DashboardInstanceList({ collection: this.options.dataSourceSet })
+            contentDetails: new chorus.views.StaticTemplate("dashboard/data_source_list_content_details"),
+            content: new chorus.views.DashboardDataSourceList({ collection: this.options.dataSourceSet })
         });
 
         var activities = new chorus.collections.ActivitySet([]);

@@ -159,24 +159,24 @@ describe("chorus.pages.DashboardPage", function() {
 
         describe('when a data source is added', function() {
             beforeEach(function() {
-                spyOn(this.page, "fetchInstances");
-                chorus.PageEvents.broadcast("instance:added");
+                spyOn(this.page, "fetchDataSources");
+                chorus.PageEvents.broadcast("data_source:added");
             });
 
             it('re-fetches all data sources', function() {
-                expect(this.page.fetchInstances).toHaveBeenCalled();
+                expect(this.page.fetchDataSources).toHaveBeenCalled();
             });
         });
     });
 
-    describe('#fetchInstances', function(){
+    describe('#fetchDataSources', function(){
         beforeEach(function() {
             spyOn(this.page.gnipDataSourceSet, "fetchAll");
             spyOn(this.page.hdfsDataSourceSet, "fetchAll");
-            this.page.fetchInstances();
+            this.page.fetchDataSources();
         });
 
-        it("fetches all gnip and hadoop instances", function() {
+        it("fetches all gnip and hadoop data sources", function() {
             expect(this.page.gnipDataSourceSet.fetchAll).toHaveBeenCalled();
             expect(this.page.hdfsDataSourceSet.fetchAll).toHaveBeenCalled();
         });

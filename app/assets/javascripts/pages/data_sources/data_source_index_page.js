@@ -25,14 +25,14 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentView({
             contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("instances.title_plural")}),
-            contentDetails: new chorus.views.InstanceIndexContentDetails(options),
-            content: new chorus.views.InstanceList(options)
+            contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
+            content: new chorus.views.DataSourceList(options)
         });
 
         this.sidebar = new chorus.views.DataSourceListSidebar();
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "instance:checked",
+            selectEvent: "data_source:checked",
             actions: [
                 '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
             ],
@@ -43,10 +43,10 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
             }
         });
 
-        this.subscribePageEvent("instance:selected", this.setModel);
+        this.subscribePageEvent("data_source:selected", this.setModel);
     },
 
-    setModel:function (instance) {
-        this.model = instance;
+    setModel:function (dataSource) {
+        this.model = dataSource;
     }
 });

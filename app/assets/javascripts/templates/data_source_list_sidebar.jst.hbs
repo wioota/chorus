@@ -1,7 +1,7 @@
 {{#if name}}
 <div class="info">
     <div class="data_source_name" title="{{name}}">{{name}}</div>
-    <div class="data_source_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
+    <div class="data_source_type" title="{{dataSourceProvider}}">{{dataSourceProvider}}</div>
 </div>
 {{#if isOnlineOrOffline}}
 <div class="account_info">
@@ -9,14 +9,14 @@
         <img src="/images/data_sources/shared_icon.png"/>
         {{t "instances.sidebar.is_shared_account"}}
         {{#if userCanEditPermissions}}
-            <a href="#" class="dialog" data-dialog="InstancePermissions">{{t "instances.sidebar.edit"}}</a>
+            <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "instances.sidebar.edit"}}</a>
         {{/if}}
     {{else}}
         {{#if userCanEditPermissions}}
             <div class="edit_individual_accounts">
                 <img src="/images/data_sources/individual.png"/>
                 <span class="individual_accounts_count">{{t "instances.sidebar.there_are_x_individual_accounts" count=instanceAccountsCount}}</span>
-                 <a href="#" class="dialog" data-dialog="InstancePermissions">{{t "instances.sidebar.edit"}}</a>
+                 <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "instances.sidebar.edit"}}</a>
             </div>
         {{else}}
             <div class="individual_account">
@@ -34,7 +34,7 @@
 {{/if}}
 <div class="actions">
     <ul>
-        {{#ifAny shared userCanEditInstance }}
+        {{#ifAny shared userCanEditDataSource }}
         {{else}}
             {{#if userHasAccount}}
                 <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>
@@ -43,12 +43,12 @@
                 <li><a class="dialog add_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{t "instances.sidebar.add_credentials"}}</a></li>
             {{/if}}
         {{/ifAny}}
-        {{#if userCanEditInstance}}
+        {{#if userCanEditDataSource}}
             {{#if editable}}
-                <li><a class="dialog edit_instance" href="#" data-dialog="InstanceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
+                <li><a class="dialog edit_data_source" href="#" data-dialog="DataSourceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
             {{/if}}
             {{#if deleteable}}
-                <li><a class="alert delete_instance" href="#" data-alert="InstanceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
+                <li><a class="alert delete_data_source" href="#" data-alert="DataSourceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
             {{/if}}
         {{/if}}
         {{#if isGreenplum}}

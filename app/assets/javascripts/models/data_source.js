@@ -49,10 +49,10 @@ chorus.models.DataSource = chorus.models.Instance.extend({
     },
 
     usage: function() {
-        if(!this.instanceUsage) {
-            this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id')});
+        if(!this.dataSourceUsage) {
+            this.dataSourceUsage = new chorus.models.DataSourceUsage({ instanceId: this.get('id')});
         }
-        return this.instanceUsage;
+        return this.dataSourceUsage;
     },
 
     hasWorkspaceUsageInfo: function() {

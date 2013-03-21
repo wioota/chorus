@@ -1,5 +1,5 @@
 chorus.models.Database = chorus.models.Base.include(
-    chorus.Mixins.InstanceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model
 ).extend({
     constructorName: "Database",
     showUrlTemplate: "databases/{{id}}",

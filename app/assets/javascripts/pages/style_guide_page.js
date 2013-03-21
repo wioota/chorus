@@ -581,8 +581,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 };
 
                 return new chorus.views.MainContentView({
-                    contentDetails: new chorus.views.InstanceIndexContentDetails(options),
-                    content: new chorus.views.InstanceList(options)
+                    contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
+                    content: new chorus.views.DataSourceList(options)
                 });
             })(),
 

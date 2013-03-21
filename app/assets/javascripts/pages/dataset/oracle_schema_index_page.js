@@ -1,5 +1,5 @@
 chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.include(
-        chorus.Mixins.InstanceCredentials.page
+        chorus.Mixins.DataSourceCredentials.page
 ).extend({
     setup: function(oracleDataSourceId){
         this.dataSource = new chorus.models.OracleDataSource({id: oracleDataSourceId});

@@ -91,8 +91,8 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    it("includes the InstanceCredentials mixin", function() {
-        expect(this.dataset.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    it("includes the DataSourceCredentials mixin", function() {
+        expect(this.dataset.dataSourceRequiringCredentials).toBe(chorus.Mixins.DataSourceCredentials.model.dataSourceRequiringCredentials);
     });
 
     describe("#initialize", function() {

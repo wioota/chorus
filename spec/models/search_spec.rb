@@ -67,7 +67,7 @@ describe Search do
         search = Search.new(user, :query => 'bob', :per_type => 3)
         stub(search).num_found do
           hsh = Hash.new(0)
-          hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
+          hsh.merge({:users => 100, :data_sources => 100, :workspaces => 100, :workfiles => 100, :datasets => 100, :hdfs_entries => 100, :attachments => 100})
         end
         stub(search.search).each_hit_with_result { [] }
         search.models
@@ -300,7 +300,7 @@ describe Search do
       it "returns a hash with the number found of each type" do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
-          search.num_found[:instances].should == 3
+          search.num_found[:data_sources].should == 3
           search.num_found[:datasets].should == 7
         end
       end
@@ -308,7 +308,7 @@ describe Search do
       it "returns a hash with the total count for the given type" do
         create_and_record_search(owner, :query => 'searchquery', :entity_type => 'user') do |search|
           search.num_found[:users].should == 1
-          search.num_found[:instances].should == 0
+          search.num_found[:data_sources].should == 0
         end
       end
 

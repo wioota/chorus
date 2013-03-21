@@ -1,4 +1,4 @@
-describe("chorus.mixins.clEditor", function() {
+describe("chorus.Mixins.clEditor", function() {
     var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
     beforeEach(function() {
         stubSetTimeout();

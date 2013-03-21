@@ -64,14 +64,14 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         it('launches a new data source dialog', function() {
             var modal = stubModals();
             this.page.mainContent.contentDetails.$("button").click();
-            expect(modal.lastModal()).toBeA(chorus.dialogs.InstancesNew);
+            expect(modal.lastModal()).toBeA(chorus.dialogs.DataSourcesNew);
         });
 
-        it("sets the page model when a 'instance:selected' event is broadcast", function() {
-            var instance = rspecFixtures.gpdbDataSource();
-            expect(this.page.model).not.toBe(instance);
-            chorus.PageEvents.broadcast('instance:selected', instance);
-            expect(this.page.model).toBe(instance);
+        it("sets the page model when a 'data_source:selected' event is broadcast", function() {
+            var dataSource = rspecFixtures.gpdbDataSource();
+            expect(this.page.model).not.toBe(dataSource);
+            chorus.PageEvents.broadcast('data_source:selected', dataSource);
+            expect(this.page.model).toBe(dataSource);
         });
 
         it("displays the loading text", function() {
@@ -98,7 +98,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
         describe("pre-selection", function() {
             it("pre-selects the first item by default", function() {
-                expect(this.page.mainContent.content.$(".data_source li.instance:eq(0)")).toHaveClass("selected");
+                expect(this.page.mainContent.content.$(".data_source li.data_source:eq(0)")).toHaveClass("selected");
             });
         });
 
@@ -127,7 +127,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("instance:checked", this.page.mainContent.content.collection);
+                    chorus.PageEvents.broadcast("data_source:checked", this.page.mainContent.content.collection);
                 });
 
                 it("displays the multiple selection section", function() {

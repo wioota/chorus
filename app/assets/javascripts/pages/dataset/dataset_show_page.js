@@ -1,5 +1,5 @@
 chorus.pages.DatasetShowPage = chorus.pages.Base.include(
-    chorus.Mixins.InstanceCredentials.page).extend({
+    chorus.Mixins.DataSourceCredentials.page).extend({
         constructorName: "DatasetShowPage",
         helpId: "dataset",
         isInstanceBrowser: true,

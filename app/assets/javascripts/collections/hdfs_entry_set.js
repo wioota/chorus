@@ -1,5 +1,5 @@
 chorus.collections.HdfsEntrySet = chorus.collections.Base.include(
-    chorus.Mixins.InstanceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model
 ).extend({
         constructorName: "HdfsEntrySet",
         model: chorus.models.HdfsEntry,

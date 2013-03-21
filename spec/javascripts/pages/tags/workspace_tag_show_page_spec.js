@@ -119,7 +119,7 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
                 expect(sections.filter(".attachment_list.selectable")).toExist();
                 expect(sections.filter(".workspace_list.selectable")).toExist();
                 expect(sections.filter(".hdfs_entry_list.selectable")).toExist();
-                expect(sections.filter(".instance_list.selectable")).toExist();
+                expect(sections.filter(".data_source_list.selectable")).toExist();
             });
 
         });

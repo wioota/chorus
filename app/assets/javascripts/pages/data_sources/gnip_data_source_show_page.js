@@ -11,7 +11,7 @@ chorus.pages.GnipDataSourceShowPage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.DataSourceListSidebar();
-        this.sidebar.setInstance(this.model);
+        this.sidebar.setDataSource(this.model);
 
         this.breadcrumbs.requiredResources.add(this.model);
     },

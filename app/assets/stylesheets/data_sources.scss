@@ -4,11 +4,11 @@
 @import "compass/css3/images";
 
 @import "data_sources/_data_source_sidebar.scss";
-@import "data_sources/_instance_list.scss";
-@import "data_sources/_instance_content_details.scss";
-@import "data_sources/_instance_new_dialog.scss";
-@import "data_sources/_instance_permissions_dialog.scss";
-@import "data_sources/_instance_edit_dialog.scss";
-@import "data_sources/_instance_usage_dialog.scss";
+@import "data_sources/_data_source_list.scss";
+@import "data_sources/_data_source_content_details.scss";
+@import "data_sources/_data_source_new_dialog.scss";
+@import "data_sources/_data_source_permissions_dialog.scss";
+@import "data_sources/_data_source_edit_dialog.scss";
+@import "data_sources/_data_source_usage_dialog.scss";
 @import "data_sources/_sandbox_new.scss";
 @import "data_sources/_import_gnip_stream.scss";

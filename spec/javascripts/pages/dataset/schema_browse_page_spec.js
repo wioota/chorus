@@ -15,8 +15,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.$(".content_header h1").text()).toBe("");
     });
 
-    it("includes the InstanceCredentials mixin", function() {
-        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
+    it("includes the DataSourceCredentials mixin", function() {
+        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.DataSourceCredentials.page.dependentResourceForbidden);
     });
 
     it("fetches the schema's datasets", function() {

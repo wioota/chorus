@@ -1,0 +1,35 @@
+<div class='data_source_provider data_source'>
+    <div class="details">{{t "instances.list.type.data_sources"}}</div>
+    <ul class="list selectable">
+        {{#each dataSources}}
+            <li class="data_source" data-type="{{entityType}}" data-data-source-id="{{id}}">{{renderTemplate "data_source" this}}</li>
+        {{/each}}
+    </ul>
+    {{#unless hasDataSources}}
+        <div class="no_data_sources">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>
+
+<div class="data_source_provider hdfs_data_source">
+    <div class="details">{{t "instances.list.type.hdfs"}}</div>
+    <ul class="list selectable">
+        {{#each hadoop}}
+            <li class="data_source" data-type="{{entityType}}" data-data-source-id="{{id}}">{{renderTemplate "data_source" this}}</li>
+        {{/each}}
+    </ul>
+    {{#unless hasHadoop}}
+        <div class="no_data_sources">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>
+
+<div class="data_source_provider gnip_data_source">
+    <div class="details">{{t "instances.list.type.gnip"}}</div>
+    <ul class="list selectable">
+        {{#each gnip}}
+        <li class="data_source" data-type="{{entityType}}" data-data-source-id="{{id}}">{{renderTemplate "data_source" this}}</li>
+        {{/each}}
+    </ul>
+    {{#unless hasGnip}}
+    <div class="no_data_sources">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>

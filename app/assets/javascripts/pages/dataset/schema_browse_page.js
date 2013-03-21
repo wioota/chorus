@@ -1,5 +1,5 @@
 chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
-    chorus.Mixins.InstanceCredentials.page
+    chorus.Mixins.DataSourceCredentials.page
 ).extend({
     constructorName: 'SchemaShow',
     helpId: "schema",

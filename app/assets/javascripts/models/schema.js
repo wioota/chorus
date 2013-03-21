@@ -1,5 +1,5 @@
 chorus.models.Schema = chorus.models.Base.include(
-    chorus.Mixins.InstanceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model
 ).extend({
     constructorName: "Schema",
     showUrlTemplate: "schemas/{{id}}",

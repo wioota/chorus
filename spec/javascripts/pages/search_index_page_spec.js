@@ -206,26 +206,26 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             describe('the data source section', function() {
                 beforeEach(function() {
-                    this.instanceLIs = this.page.$(".instance_list li");
+                    this.dataSourceLIs = this.page.$(".data_source_list li");
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.instanceLIs.length).toBe(3);
+                    expect(this.dataSourceLIs.length).toBe(3);
                 });
 
                 describe('clicking on a data source search result', function() {
                     beforeEach(function() {
-                        spyOn(this.page.sidebars.instance, "setInstance");
-                        this.instanceLIs.eq(0).trigger("click");
+                        spyOn(this.page.sidebars.dataSource, "setDataSource");
+                        this.dataSourceLIs.eq(0).trigger("click");
                     });
 
                     it('selects that data source', function() {
-                        expect(this.instanceLIs.eq(0)).toHaveClass("selected");
+                        expect(this.dataSourceLIs.eq(0)).toHaveClass("selected");
                     });
 
                     it('shows the data source in the sidebar', function() {
                         expect($(this.page.sidebar.el)).toHaveClass("data_source_list_sidebar");
-                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(0));
+                        expect(this.page.sidebars.dataSource.setDataSource).toHaveBeenCalledWith(this.page.search.instances().at(0));
                     });
                 });
             });

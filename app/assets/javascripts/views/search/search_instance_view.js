@@ -1,6 +1,6 @@
-chorus.views.SearchInstance = chorus.views.SearchItemBase.extend({
-    constructorName: "SearchInstanceView",
-    templateName: "search_instance",
+chorus.views.SearchDataSource = chorus.views.SearchItemBase.extend({
+    constructorName: "SearchDataSourceView",
+    templateName: "search_data_source",
 
     setup: function() {
         this.additionalClass += " " + this.model.get("entityType");

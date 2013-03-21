@@ -1,5 +1,5 @@
 chorus.models.Dataset = chorus.models.Base.include(
-    chorus.Mixins.InstanceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model
 ).extend({
     nameAttribute: 'objectName',
     constructorName: "Dataset",

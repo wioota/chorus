@@ -1,8 +1,8 @@
-describe("chorus.views.SearchInstance", function() {
+describe("chorus.views.SearchDataSource", function() {
     beforeEach(function() {
         this.model = rspecFixtures.hdfsDataSource();
         this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
-        this.view = new chorus.views.SearchInstance({ model: this.model });
+        this.view = new chorus.views.SearchDataSource({ model: this.model });
         this.view.render();
     });
 
@@ -19,7 +19,7 @@ describe("chorus.views.SearchInstance", function() {
         expect(this.view.$("img.state").attr("title")).toBe(this.model.stateText());
     });
 
-    it('has a link to the instance for each data source in the collection', function() {
+    it('has a link to the data source for each data source in the collection', function() {
         expect(this.view.$('.name').attr('href')).toBe(this.model.showUrl());
     });
 
@@ -41,12 +41,12 @@ describe("chorus.views.SearchInstance", function() {
                     {
                         "lastUpdatedStamp": "2012-03-07 17:19:14",
                         "isPublished": false,
-                        "content": "what an awesome instance",
+                        "content": "what an awesome data source",
                         "isComment": false,
                         "id": "10120",
                         "isInsight": true,
                         "highlightedAttributes": {
-                            "content": ["what an <em>awesome<\/em> instance"]
+                            "content": ["what an <em>awesome<\/em> data source"]
                         },
                         "owner": {
                             "id": "InitialUser",

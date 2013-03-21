@@ -149,8 +149,8 @@ describe("chorus.models.Schema", function() {
             this.model = rspecFixtures.schema();
         });
 
-        it("includes InstanceCredentials mixin", function() {
-            expect(this.model.instanceRequiringCredentials).toBeTruthy();
+        it("includes DataSourceCredentials mixin", function() {
+            expect(this.model.dataSourceRequiringCredentials).toBeTruthy();
         });
     });
 });
