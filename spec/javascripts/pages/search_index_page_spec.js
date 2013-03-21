@@ -64,7 +64,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace");
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user");
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance");
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.data_source");
             });
 
             describe("filtering by result type", function() {

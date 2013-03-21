@@ -177,8 +177,8 @@ describe("chorus.models.Attachment", function() {
 
         it("returns the data source", function() {
             this.instance = this.model.instance();
-            expect(this.instance.get('name')).toBe(this.model.get('instance').name);
-            expect(this.instance.get('id')).toBe(this.model.get('instance').id);
+            expect(this.instance.get('name')).toBe(this.model.get('dataSource').name);
+            expect(this.instance.get('id')).toBe(this.model.get('dataSource').id);
         });
 
         it("dynamically assigns the data source type", function() {
@@ -189,7 +189,7 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("returns falsy when there is no data source", function() {
-            this.model.unset('instance');
+            this.model.unset('dataSource');
             expect(this.model.instance()).toBeFalsy();
         });
 

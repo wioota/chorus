@@ -109,7 +109,7 @@ describe Search do
 
     context "when limiting the type of model searched" do
       it "searches only the specified model type" do
-        search = Search.new(user, :query => 'bob', :entity_type => 'instance')
+        search = Search.new(user, :query => 'bob', :entity_type => 'data_source')
         search.search
         Sunspot.session.should_not be_a_search_for(User)
         Sunspot.session.should be_a_search_for(GpdbDataSource)
@@ -336,22 +336,22 @@ describe Search do
       end
     end
 
-    describe "instances" do
+    describe "data_sources" do
       it "should include Gpdb, Hadoop, and Gnip" do
         create_and_record_search do |search|
-          search.instances.should include(gpdb_data_source)
-          search.instances.should include(hdfs_data_source)
-          search.instances.should include(gnip_data_source)
+          search.data_sources.should include(gpdb_data_source)
+          search.data_sources.should include(hdfs_data_source)
+          search.data_sources.should include(gnip_data_source)
         end
       end
 
       context "including highlighted attributes" do
-        [GpdbDataSource, HdfsDataSource, GnipDataSource].each do |instance_type|
-          it "should include highlighted attributes for #{instance_type.name}" do
+        [GpdbDataSource, HdfsDataSource, GnipDataSource].each do |data_source_type|
+          it "should include highlighted attributes for #{data_source_type.name}" do
             create_and_record_search do |search|
-              instance = search.instances.select { |instance| instance.is_a?(instance_type) }.first
-              instance.highlighted_attributes.length.should > 0
-              instance.highlighted_attributes[:description][0].should =~ /<em>searchquery<\/em>/
+              data_source = search.data_sources.select { |data_source| data_source.is_a?(data_source_type) }.first
+              data_source.highlighted_attributes.length.should > 0
+              data_source.highlighted_attributes[:description][0].should =~ /<em>searchquery<\/em>/
             end
           end
         end
@@ -637,8 +637,8 @@ describe Search do
     describe "highlighted notes" do
       it "includes highlighted notes in the highlighted_attributes" do
         create_and_record_search(owner, :query => 'greenplumsearch') do |search|
-          search.instances.length.should == 2
-          gpdb_data_source_with_notes = search.instances[1]
+          search.data_sources.length.should == 2
+          gpdb_data_source_with_notes = search.data_sources[1]
           gpdb_data_source_with_notes.search_result_notes.length.should == 2
           gpdb_data_source_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end
@@ -747,7 +747,7 @@ describe "SearchExtensions" do
       ChorusView.security_type_name.should =~ [ChorusView.type_name, GpdbDataset.type_name, Dataset.type_name]
     end
 
-    it "instances behave the same way" do
+    it "data_sources behave the same way" do
       ChorusView.first.security_type_name.should =~ ChorusView.security_type_name
     end
   end

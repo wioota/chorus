@@ -77,8 +77,8 @@ class Search
     models[:users]
   end
 
-  def instances
-    models[:instances]
+  def data_sources
+    models[:data_sources]
   end
 
   def workspaces

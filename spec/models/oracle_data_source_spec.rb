@@ -33,8 +33,8 @@ describe OracleDataSource do
   end
 
   describe ".type_name" do
-    it "is Instance" do
-      subject.type_name.should == 'Instance'
+    it "is DataSource" do
+      subject.type_name.should == 'DataSource'
     end
   end
 

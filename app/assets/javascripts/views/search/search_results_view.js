@@ -9,7 +9,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".workfile_list":        "workfileList",
         ".workspace_list":       "workspaceList",
         ".dataset_list":         "datasetList",
-        ".data_source_list":        "instanceList",
+        ".data_source_list":        "dataSourceList",
         ".hdfs_data_source_list": "hdfsDataSourceList",
         ".gnip_data_source_list":   "gnipDataSourceList",
         ".attachment_list":      "attachmentList"
@@ -34,7 +34,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             this.datasetList = this.buildListView('dataset', this.model.datasets());
         }
         if (this.model.instances().length) {
-            this.instanceList = this.buildListView('data_source', this.model.instances());
+            this.dataSourceList = this.buildListView('data_source', this.model.instances());
         }
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());

@@ -8,9 +8,9 @@ class SearchPresenter < SearchPresenterBase
             :numFound => model.num_found[:users]
         },
 
-        :instances => {
-            :results => present_models_with_highlights(model.instances),
-            :numFound => model.num_found[:instances]
+        :data_sources => {
+            :results => present_models_with_highlights(model.data_sources),
+            :numFound => model.num_found[:data_sources]
         },
 
         :workspaces => {

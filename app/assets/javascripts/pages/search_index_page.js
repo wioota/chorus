@@ -46,7 +46,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             {data: "attachment", text: t("search.type.attachment")},
             {data: "hdfs_entry", text: t("search.type.hdfs_entry")},
             {data: "dataset", text: t("search.type.dataset")},
-            {data: "instance", text: t("search.type.instance")},
+            {data: "data_source", text: t("search.type.data_source")},
             {data: "workspace", text: t("search.type.workspace")},
             {data: "user", text: t("search.type.user")}
         ];

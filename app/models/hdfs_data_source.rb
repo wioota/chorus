@@ -43,7 +43,7 @@ class HdfsDataSource < ActiveRecord::Base
   end
 
   def self.type_name
-    'Instance'
+    'DataSource'
   end
 
   def online?

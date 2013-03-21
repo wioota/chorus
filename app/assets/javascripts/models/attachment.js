@@ -64,7 +64,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
 
     instance: function() {
         if (!this._instance) {
-            this._instance = this.get('instance') && new chorus.models.DynamicInstance(this.get('instance'));
+            this._instance = this.get('dataSource') && new chorus.models.DynamicInstance(this.get('dataSource'));
         }
         return this._instance;
     },

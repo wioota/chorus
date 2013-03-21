@@ -50,7 +50,7 @@
     chorus.collections.Search.InstanceSet = chorus.collections.GpdbDataSourceSet.include(
         searchCollectionMixins, chorus.Mixins.MultiModelSet
     ).extend({
-        searchKey: "instances",
+        searchKey: "dataSources",
         model: chorus.models.DynamicInstance
     });
 

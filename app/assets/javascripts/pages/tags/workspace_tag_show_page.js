@@ -8,7 +8,7 @@ chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
     typeOptions: function() {
         var options = this._super("typeOptions", arguments);
         if (this.search.isScoped()) {
-            var toDisable = ["instance", "user", "workspace", "hdfs_entry"];
+            var toDisable = ["data_source", "user", "workspace", "hdfs_entry"];
             _.each(options, function(option) {
                 if (_.include(toDisable, option.data)) {
                     option.disabled = true;

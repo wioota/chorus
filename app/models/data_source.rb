@@ -51,7 +51,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def self.type_name
-    'Instance'
+    'DataSource'
   end
 
   def self.reindex_data_source(id)

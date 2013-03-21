@@ -1,7 +1,7 @@
 describe("chorus.collections.Search", function() {
     beforeEach(function() {
         this.search = rspecFixtures.searchResult({
-            instances: {
+            dataSources: {
                 numFound: 131,
                 results: [
                     chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "instance101", id: '101' } }).response),
@@ -54,7 +54,7 @@ describe("chorus.collections.Search", function() {
 
         it("refreshes the collection on success", function() {
             this.server.completeFetchFor(this.search, new chorus.models.SearchResult({
-                instances: {
+                dataSources: {
                     numFound: 51,
                     results: [
                         rspecFixtures.gpdbDataSourceJson({ response: { name: "instance121", id: '121' } }).response,

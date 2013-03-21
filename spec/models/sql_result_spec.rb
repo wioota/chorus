@@ -45,7 +45,7 @@ describe SqlResult, :oracle_integration do
 
       describe "connecting to greenplum", :greenplum_integration do
         let(:data_source) { GreenplumIntegration.real_data_source }
-        let(:schema) { GreenplumIntegration.real_database.schemas.first }
+        let(:schema) { GreenplumIntegration.real_database.schemas.where(:name => "test_schema").first }
         let(:account) { data_source.owner_account }
         let(:table_name) { "binary_columns_table"}
 

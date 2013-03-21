@@ -20,6 +20,6 @@ class GnipDataSource < ActiveRecord::Base
   end
 
   def self.type_name
-    'Instance'
+    'DataSource'
   end
 end
