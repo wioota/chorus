@@ -28,10 +28,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     buildModels: function() {
         var models = {};
-        var tagList = [
-            {name: 'Tag1'},
-            {name: 'tags2'}
-        ];
+        var tagList = (function(length) {
+            var tags = [];
+            for(var i = 0; i < length; i++) {
+                tags.push({name: "Tag Numba " + i});
+            }
+            return tags;
+        })(50);
 
         models.workspace = new chorus.models.Workspace({
             name: "Some Workspace",
@@ -42,7 +45,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             tags: tagList,
             completeJson: true
         });
-        models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Instance'}}});
+        models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Data Source'}}});
 
         models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         models.privateWorkspace.loaded = true;
@@ -67,14 +70,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.greenplumDataSource = new chorus.models.GpdbDataSource({
             name: "Greenplum Data Source",
             online: true,
-            description: "I AM AWESOME",
+            description: "This is a description of a data source. It is so sick, so AWESOME!",
             tags: tagList,
             completeJson: true
         });
 
         models.oracleDataSource = new chorus.models.OracleDataSource({
-            "name": "Oracle Data Source",
-            "online": false,
+            name: "Oracle Data Source",
+            online: false,
             tags: tagList,
             completeJson: true
         });
@@ -197,7 +200,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
         models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
-        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, completeJson: true});
+        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, size: 1024, completeJson: true});
+        models.hdfsDir = new chorus.models.HdfsEntry({name: "TestExpression", path: '/arbitrary/path', isDir: true, hdfsDataSource: models.hdfsDataSource, tags: tagList, count: 4, completeJson: true});
 
         models.activity = new chorus.models.Activity({
             "action": "DataSourceChangedOwner",
@@ -315,6 +319,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         collections.userCollection.loaded = true;
 
         collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([models.hdfsFile], {hdfsDataSource: models.hdfsDataSource});
+
+        collections.hdfsEntrySet = new chorus.collections.HdfsEntrySet([models.hdfsFile, models.hdfsDir], {
+            path: '/data/somewhere',
+            hdfsDataSource: {id: 222},
+            id: 11
+        });
+        collections.hdfsEntrySet.loaded = true;
 
         collections.activitySet = new chorus.collections.ActivitySet([models.activity, models.otherActivity]);
         collections.activitySet.loaded = true;
@@ -557,23 +568,29 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 ]
             }),
 
-            "Dataset list": new chorus.views.MainContentList({
+            "Dataset List": new chorus.views.MainContentList({
                 collection: collections.datasetSet,
                 modelClass: "Dataset",
                 checkable: true
             }),
 
-            "Database list": new chorus.views.MainContentList({
+            "HDFS Entry List": new chorus.views.MainContentList({
+                collection: collections.hdfsEntrySet,
+                modelClass: "HdfsEntry",
+                checkable: true
+            }),
+
+            "Database List": new chorus.views.MainContentList({
                 collection: collections.databaseSet,
                 modelClass: "Database"
             }),
 
-            "Schema list": new chorus.views.MainContentList({
+            "Schema List": new chorus.views.MainContentList({
                 collection: collections.schemaSet,
                 modelClass: "Schema"
             }),
 
-            "Data source list": (function() {
+            "Data Source List": (function() {
                 var options = {
                     dataSources: collections.dataSourceSet,
                     hdfsDataSources: collections.hdfsDataSourceSet,
@@ -586,7 +603,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 });
             })(),
 
-            "Workfile list": new chorus.views.MainContentList({
+            "Workfile List": new chorus.views.MainContentList({
                 collection: collections.workfileSet,
                 modelClass: "Workfile",
                 checkable: true
@@ -597,13 +614,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 modelClass: "Workspace"
             }),
 
-            "Activity List": new chorus.views.ActivityList({
-                collection: collections.activitySet
-            }),
-
             "Search Result List": new chorus.views.SearchResults({
                 model: models.searchResult
+            }),
+
+            "Activity List": new chorus.views.ActivityList({
+                collection: collections.activitySet
             })
+
         };
     },
 
