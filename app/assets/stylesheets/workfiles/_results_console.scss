@@ -1,7 +1,7 @@
 .results_console {
     .execution {
         height: 32px;
-        line-height: 32px;
+        line-height: 31px;
         vertical-align: middle;
         padding: 0 $padding-x;
         background: $shaded-background-color;
@@ -162,5 +162,9 @@
     .maximized .data_table {
         height: 500px;
         width: 100%;
+    }
+
+    &.fixed {
+        top: $header-height + 30px + 3px;
     }
 }

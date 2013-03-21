@@ -102,6 +102,25 @@ describe("chorus.views.WorkfileContentDetails", function() {
         });
     });
 
+    describe("custom scrolling", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.workfile.text();
+            this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
+            spyOn(this.view, "scrollHandler");
+            this.view.render();
+        });
+        it("handles scrolling (to anchor content details to the top of the window when scrolling down)", function() {
+            $(window).trigger("scroll");
+            expect(this.view.scrollHandler).toHaveBeenCalled();
+        });
+        it("only binds scroll handling once", function() {
+            this.view.render();
+            this.view.render();
+            $(window).trigger("scroll");
+            expect(this.view.scrollHandler.callCount).toBe(1);
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.saveFileMenu = stubQtip(".save_file_as");

@@ -6,6 +6,22 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         this.subscribePageEvent("file:autosaved", this.updateAutosaveText);
         this.subscribePageEvent("file:selectionEmpty", this.showSaveFileMenu);
         this.subscribePageEvent("file:selectionPresent", this.showSaveSelectionMenu);
+
+    },
+
+    scrollHandler: function() {
+        if (!this.$el) return;
+        this.topPosition = this.topPosition || this.$el.parent().offset().top;
+        var contentDetailsTop = this.topPosition  - $(window).scrollTop();
+        var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
+        this.$el.parent().toggleClass('fixed', distanceToHeader <= 0);
+        this.$el.closest('.main_content').find('.results_console').toggleClass('fixed', distanceToHeader <= 0);
+    },
+
+    teardown: function() {
+        this._super("teardown", arguments);
+        $(window).unbind('scroll', this.boundScrollHandler);
+        delete this.boundScrollHandler;
     },
 
     updateAutosaveText: function(args) {
@@ -72,6 +88,11 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
         if (!this.model.workspace().isActive()) {
             this.$(".save_file_as, .save_selection_as").attr("disabled", true);
+        }
+
+        if(!this.boundScrollHandler) {
+            this.boundScrollHandler = _.bind(this.scrollHandler, this);
+            $(window).scroll(this.boundScrollHandler);
         }
     },
 

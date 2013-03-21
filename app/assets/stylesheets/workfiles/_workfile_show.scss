@@ -36,6 +36,10 @@
             }
         }
 
+        &.fixed {
+            top: $header-height + 1;
+        }
+
         .down_arrow {
             width: 0;
             height: 0;
@@ -97,6 +101,14 @@
     .CodeMirror.editable {
         background: white;
         width: 100%;
+    }
+
+    .fixed{
+        position: fixed;
+        right: 0px;
+        left: $guts-padding;
+        z-index: $header-z-index - 1;
+        margin-right: $sidebar-width + $sidebar-padding-x + 1;
     }
 }
 
