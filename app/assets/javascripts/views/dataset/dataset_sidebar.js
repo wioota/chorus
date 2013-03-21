@@ -130,7 +130,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
         datasetImportability.fetch({
             success: _.bind(function() {
-                if (datasetImportability.get('importable')) {
+                if (datasetImportability.get('importability')) {
                     new chorus.dialogs.ImportNow({dataset: this.resource}).launchModal();
                 } else {
                     new chorus.alerts.DatasetNotImportable({datasetImportability: datasetImportability}).launchModal();

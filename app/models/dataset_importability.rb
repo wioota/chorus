@@ -4,7 +4,7 @@ class DatasetImportability
   end
 
   def importable?
-    invalid_columns.empty?
+    @dataset.kind_of?(GpdbDataset) || invalid_columns.empty?
   end
 
   def invalid_columns
