@@ -21,7 +21,7 @@ resource "Workspaces" do
   end
 
   get "/workspaces" do
-    parameter :active, "1 if you only want active workspaces, 0 if you want all workspaces. Defaults to all workspaces if the parameter is not provided"
+    parameter :active, "true if you only want active workspaces, false if you want all workspaces. Defaults to all workspaces if the parameter is not provided"
     parameter :user_id, "If provided, only return workspaces the specified user is a member of"
     pagination
 
@@ -43,13 +43,13 @@ resource "Workspaces" do
   put "/workspaces/:id" do
     parameter :id, "Id of a workspace"
     parameter :name, "Name of workspace"
-    parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
+    parameter :public, "true if the workspace should be public, false if it should be private. Defaults to public if the parameter is not provided."
     parameter :summary, "Notes about the workspace"
 
     required_parameters :id
 
     let(:name) { "Awesome Workspace" }
-    let(:public) { "1" }
+    let(:public) { true }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
 
     example_request "Update workspace details" do
@@ -114,13 +114,13 @@ resource "Workspaces" do
 
   post "/workspaces" do
     parameter :name, "Workspace name"
-    parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
+    parameter :public, "true if the workspace should be public, false if it should be private. Defaults to public if the parameter is not provided."
     parameter :summary, "Notes about the workspace"
 
     required_parameters :name
 
     let(:name) { "Awesome Workspace" }
-    let(:public) { "1" }
+    let(:public) { true }
     let(:summary) { "Lots of good data in here" }
 
     example_request "Create a workspace" do

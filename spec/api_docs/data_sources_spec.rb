@@ -17,7 +17,7 @@ resource "Data sources" do
     parameter :db_name, "Database on data source to use for initial connection (usually 'postgres')"
     parameter :db_username, "Username for connection to data source"
     parameter :db_password, "Password for connection to data source"
-    parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
+    parameter :shared, "true to allow anyone to connect using these credentials, false to require individuals to enter their own credentials"
     parameter :entity_type, "The type of data source (either 'gpdb_data_source' or 'oracle_data_source')"
 
     let(:name) { "Sesame_Street" }
@@ -27,7 +27,7 @@ resource "Data sources" do
     let(:db_name) { "postgres" }
     let(:db_username) { "big" }
     let(:db_password) { "bird_yellow" }
-    let(:shared) { "1" }
+    let(:shared) { true }
     let(:entity_type) { "gpdb_data_source" }
 
     required_parameters :name, :host, :port, :db_name, :db_username, :db_password, :entity_type
@@ -39,11 +39,11 @@ resource "Data sources" do
 
   get "/data_sources" do
     parameter :entity_type, "The specific type of data sources to return. Returns all types if blank"
-    parameter :accessible, "1 to limit the list to data sources the current user can access, 0 for all data sources"
+    parameter :accessible, "true to limit the list to data sources the current user can access, false for all data sources"
     pagination
 
     let(:entity_type) { "gpdb_data_source" }
-    let(:accessible) { "1" }
+    let(:accessible) { true }
 
     example_request "Get a list of registered data sources" do
       status.should == 200
