@@ -1,4 +1,8 @@
 chorus.views.MainContentList = chorus.views.MainContentView.extend({
+    constructorName: 'MainContentListView',
+    additionalClass: "main_content_list",
+    suppressRenderOnChange: true,
+
     setup: function(options) {
         var modelClass = options.modelClass;
         var collection = this.collection;
@@ -20,8 +24,6 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
             this.persistent = options.persistent;
         }
 
-        this.suppressRenderOnChange = true;
-
         if (options.contentDetails) {
             this.contentDetails = options.contentDetails;
         } else {
@@ -40,7 +42,5 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
                 hideIfNoPagination: true
             });
         }
-    },
-
-    additionalClass: "main_content_list"
+    }
 });

@@ -1,11 +1,15 @@
 jasmine.sharedExamples.CheckableList = function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+        this.eventSpy = spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.view.render();
         this.checkboxes = this.view.$("> li input[type=checkbox]");
     });
 
     describe("#render", function() {
+        it("is a ul with class list", function() {
+            expect($(this.view.el).is("ul.list")).toBe(true);
+        });
+
         it("renders each item in the collection", function() {
             expect(this.view.$("li").length).toBe(this.view.collection.length);
         });
@@ -17,7 +21,14 @@ jasmine.sharedExamples.CheckableList = function() {
         it("selects the first item", function() {
             expect(this.view.$("> li").eq(0)).toHaveClass("selected");
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(0));
         });
+    });
+
+    it("does not re-render when an item is updated", function() {
+        spyOn(this.view, 'preRender');
+        this.collection.at(0).trigger('change');
+        expect(this.view.preRender).not.toHaveBeenCalled();
     });
 
     function expectItemChecked(expectedModels) {
@@ -113,6 +124,81 @@ jasmine.sharedExamples.CheckableList = function() {
             chorus.PageEvents.broadcast("checked", this.view.selectedModels);
             expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
+        });
+    });
+
+    describe("clicking on the same entry again", function() {
+        beforeEach(function() {
+            this.eventSpy.reset();
+            this.view.$("> li").eq(0).click();
+        });
+
+        it("doesn't fire the selected event again", function() {
+            expect(this.eventSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("clicking another entry", function() {
+        beforeEach(function() {
+            this.view.$("> li").eq(1).click();
+        });
+
+        it("selects only that entry", function() {
+            expect(this.view.$("> li").eq(0)).not.toHaveClass("selected");
+            expect(this.view.$("> li").eq(1)).toHaveClass("selected");
+        });
+
+        it("should call itemSelected with the selected model and broadcast a general selected event", function() {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(1));
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(1));
+        });
+
+        describe("rerendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("keeps the entry selected", function() {
+                expect(this.view.$("> li").eq(1)).toHaveClass("selected");
+            });
+        });
+
+        describe("loading the next page of results", function() {
+            beforeEach(function() {
+                this.collection.fetchPage(2);
+                this.server.completeFetchFor(this.collection, this.collection.models, {page: 2});
+            });
+
+            it("selects the first item on that page", function() {
+                expect(this.view.$("> li").eq(0)).toHaveClass("selected");
+            });
+        });
+
+        describe("selecting an item that does not exist", function() {
+            beforeEach(function() {
+                this.view.$("li").addClass("hidden");
+                this.view.selectItem(this.view.$("li:not(:hidden)").eq(0));
+            });
+
+            it("broadcasts an item deselected event", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":deselected");
+            });
+        });
+
+        describe("when eventName:search is triggered", function() {
+            beforeEach(function() {
+                this.collection.loaded = true;
+                $("#jasmine_content").append(this.view.el);
+                this.view.render();
+
+                this.view.$("li").eq(0).removeClass("selected").addClass("hidden");
+                chorus.PageEvents.broadcast(this.view.options.entityType + ":search");
+            });
+
+            it("selects the first visible item", function() {
+                expect(this.view.$("li").eq(0)).not.toHaveClass("selected");
+                expect(this.view.$("li").eq(1)).toHaveClass("selected");
+            });
         });
     });
 };

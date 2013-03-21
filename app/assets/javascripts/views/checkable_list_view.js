@@ -2,6 +2,8 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     constructorName: "CheckableListView",
     additionalClass: "selectable list",
     templateName: "empty",
+    persistent: false,
+    suppressRenderOnChange: true,
 
     events: {
         "click  li input[type=checkbox]": "checkboxClicked",
@@ -38,9 +40,9 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
             this.registerSubView(view);
         }, this);
 
-        this._super('postRender', arguments);
-
         this.checkSelectedModels();
+
+        this._super('postRender', arguments);
     },
 
     checkSelectedModels: function() {

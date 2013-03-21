@@ -1,7 +1,7 @@
 chorus.views.DatasetList = chorus.views.CheckableList.extend({
+    eventName: "dataset",
     constructorName: "DatasetListView",
     useLoadingSection: true,
-    eventName: "dataset",
 
     setup: function() {
         this.options.entityType = "dataset";

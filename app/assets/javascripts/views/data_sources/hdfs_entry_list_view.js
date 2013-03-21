@@ -1,7 +1,7 @@
 chorus.views.HdfsEntryList = chorus.views.CheckableList.extend({
+    eventName: "hdfs_entry",
     constructorName: "HdfsEntryList",
     useLoadingSection: true,
-    eventName: "hdfs_entry",
 
     setup: function() {
         this.options.entityType = "hdfs_entry";
@@ -10,7 +10,7 @@ chorus.views.HdfsEntryList = chorus.views.CheckableList.extend({
     },
 
     selectAll: function() {
-        var files = _.reject(this.collection.models, function(entry) {
+        var files = this.collection.reject(function(entry) {
             return entry.get('isDir');
         });
 

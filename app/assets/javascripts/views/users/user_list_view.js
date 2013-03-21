@@ -1,6 +1,5 @@
 chorus.views.UserList = chorus.views.CheckableList.extend({
     eventName: "user",
-    persistent: true,
 
     setup: function() {
         this.options.entityType = "user";

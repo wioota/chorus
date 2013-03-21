@@ -28,23 +28,12 @@ describe("chorus.views.HdfsEntryList", function() {
                 rspecFixtures.hdfsDir({count: -1})
             ];
 
-            var pageCollection = new chorus.collections.HdfsEntrySet([
-                this.files[0],
-                this.files[1],
-                this.directories[0],
-                this.directories[1],
-                this.files[2]
-            ], {hdfsDataSource: {id: "1234"}, path: "/abc" }
-            );
-
-            pageCollection.loaded = true;
-
             this.collection = new chorus.collections.HdfsEntrySet(
                 this.files,
                 {hdfsDataSource: {id: "1234"}, path: "/abc" }
             );
 
-            this.view = new chorus.views.HdfsEntryList({collection: pageCollection});
+            this.view = new chorus.views.HdfsEntryList({collection: this.collection});
 
             spyOn(this.view.selectedModels, "add").andCallThrough();
 
