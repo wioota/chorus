@@ -26,10 +26,14 @@ describe ImportabilitiesController do
         decoded_response.importability.should == true
       end
 
-      it 'does not include invalid_columns or supported_columns in the response' do
+      it 'does not include invalid_columns or supported_column_types in the response' do
         get :show, :dataset_id => dataset.to_param
         decoded_response.keys.should_not include('invalid_columns')
-        decoded_response.keys.should_not include('supported_columns')
+        decoded_response.keys.should_not include('supported_column_types')
+      end
+
+      generate_fixture "datasetImportability.json" do
+        get :show, :dataset_id => dataset.to_param
       end
     end
 
@@ -48,7 +52,11 @@ describe ImportabilitiesController do
 
       it 'lists the supported columns' do
         get :show, :dataset_id => dataset.to_param
-        decoded_response.supported_columns.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
+        decoded_response.supported_column_types.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
+      end
+
+      generate_fixture "datasetImportabilityForUnimportableDataset.json" do
+        get :show, :dataset_id => dataset.to_param
       end
     end
   end

@@ -180,10 +180,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the server responds that the data types are valid", function () {
                     beforeEach(function() {
-                        var expectedResponse = {
-                            importable: true,
-                            invalid_columns: []
-                        };
+                        var expectedResponse = rspecFixtures.datasetImportability();
                         var model = new chorus.models.DatasetImportability({
                             datasetId: 12
                         });
@@ -197,11 +194,10 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the server responds that the data types are not valid", function () {
                     beforeEach(function() {
-                        var expectedResponse = {
-                            importable: false,
-                            invalid_columns: ["foo", "bar"]
-                        };
-
+                        var expectedResponse = rspecFixtures.datasetImportabilityForUnimportableDataset({
+                            importability: false,
+                            invalidColumns: ["foo", "bar"]
+                        });
                         var model = new chorus.models.DatasetImportability({
                             datasetId: 12
                         });

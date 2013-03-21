@@ -1,9 +1,9 @@
 describe("chorus.alerts.DatasetNotImportable", function() {
     beforeEach(function() {
-        this.datasetImportability = new chorus.models.DatasetImportability({
-            importable: false,
+        this.datasetImportability = rspecFixtures.datasetImportabilityForUnimportableDataset({
+            importability: false,
             invalidColumns: ["foo", "bar"],
-            supportedDatatypes: ["supported_type1", "supported_type2"]
+            supportedColumnTypes: ["supported_type1", "supported_type2"]
         });
 
         this.alert = new chorus.alerts.DatasetNotImportable({

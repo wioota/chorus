@@ -19,7 +19,7 @@ class DatasetImportabilityPresenter < Presenter
     {
       :importability => false,
       :invalid_columns => format_invalid_columns,
-      :supported_columns => @model.supported_column_types
+      :supported_column_types => @model.supported_column_types
     }
   end
 

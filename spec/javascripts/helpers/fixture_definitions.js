@@ -86,6 +86,10 @@ window.rspecFixtureDefinitions = {
 
     dataset: { unique: [ "id" ] },
 
+    datasetImportability: {},
+
+    datasetImportabilityForUnimportableDataset: {},
+
     datasetImportScheduleSet: {},
 
     workspaceImportSet: {},
