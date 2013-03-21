@@ -15,13 +15,13 @@ describe("chorus.views.Dataset", function() {
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();
-        this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
+        this.view = new chorus.views.Dataset({ model: this.dataset, hasActiveWorkspace: true });
         this.view.render();
     });
 
     context("when the checkable flag is enabled", function() {
         beforeEach(function() {
-            this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true, checkable: true });
+            this.view = new chorus.views.Dataset({ model: this.dataset, hasActiveWorkspace: true, checkable: true });
             this.view.render();
         });
 
@@ -51,7 +51,7 @@ describe("chorus.views.Dataset", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.dataset();
 
-            this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
+            this.view = new chorus.views.Dataset({ model: this.dataset, hasActiveWorkspace: true });
             this.view.render();
         });
 
@@ -81,7 +81,7 @@ describe("chorus.views.Dataset", function() {
 
     xdescribe("when the workspace is archived", function() {
         beforeEach(function() {
-            this.view.options.activeWorkspace = false;
+            this.view.options.hasActiveWorkspace = false;
             this.view.render();
         });
 

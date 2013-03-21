@@ -105,7 +105,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         var targetButton = this.mainContent.options.buttons[0];
 
         if (this.workspace.isActive()) {
-            this.mainContent.content.options.activeWorkspace = true;
+            this.mainContent.content.options.hasActiveWorkspace = true;
         } else {
             this.mainContent.contentDetails.options.buttons = [];
         }

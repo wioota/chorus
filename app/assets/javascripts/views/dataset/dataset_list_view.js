@@ -7,7 +7,7 @@ chorus.views.DatasetList = chorus.views.CheckableList.extend({
         this.options.entityType = "dataset";
         this.options.entityViewType = chorus.views.Dataset;
         this.options.listItemOptions = {
-            activeWorkspace: this.options.activeWorkspace,
+            hasActiveWorkspace: this.options.hasActiveWorkspace,
             checkable: true
         };
 

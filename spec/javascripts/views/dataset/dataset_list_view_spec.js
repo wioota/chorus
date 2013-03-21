@@ -9,7 +9,7 @@ describe("chorus.views.DatasetList", function() {
 
         this.view = new chorus.views.DatasetList({
             collection: this.collection,
-            activeWorkspace: true,
+            hasActiveWorkspace: true,
             checkable: true
         });
         this.view.render();
@@ -66,11 +66,11 @@ describe("chorus.views.DatasetList", function() {
         });
     });
 
-    it("passes the 'activeWorkspace' option to the dataset views, so that they render the links", function() {
+    it("passes the 'hasActiveWorkspace' option to the dataset views, so that they render the links", function() {
         expect(this.view.$("li a.image").length).toBe(this.collection.length);
         expect(this.view.$("li a.name").length).toBe(this.collection.length);
 
-        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: false });
+        this.view = new chorus.views.DatasetList({ collection: this.collection, hasActiveWorkspace: false });
         this.view.render();
 
         expect(this.view.$("li a.image").length).toBe(0);

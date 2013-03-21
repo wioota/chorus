@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceList", function() {
     beforeEach(function() {
-        this.activeWorkspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace", tags:[{name: "tag"}]});
+        this.workspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace", tags:[{name: "tag"}]});
 
         this.archivedWorkspace = new chorus.models.Workspace({
             id: 2,
@@ -39,7 +39,7 @@ describe("chorus.views.WorkspaceList", function() {
         beforeEach(function() {
             this.collection.fetchAll();
             this.server.completeFetchAllFor(this.collection, [
-                this.activeWorkspace.attributes,
+                this.workspace.attributes,
                 this.archivedWorkspace.attributes,
                 this.privateWorkspace.attributes,
                 this.publicWorkspace.attributes,
@@ -71,8 +71,8 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("links the workspace name to the show url", function() {
-            expect($("a.name span", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
-            expect($("a.name", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
+            expect($("a.name span", this.activeEl).text().trim()).toBe(this.workspace.get("name"));
+            expect($("a.name", this.activeEl).attr("href")).toBe(this.workspace.showUrl());
         });
 
         it("indicates which workspaces are private", function() {
@@ -101,7 +101,7 @@ describe("chorus.views.WorkspaceList", function() {
 
         describe("archived workspace", function() {
             it("displays the active workspace icon for the active workspace", function() {
-                expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());
+                expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.workspace.defaultIconUrl());
             });
 
             it("displays the archived workspace icon for the archived workspace", function() {

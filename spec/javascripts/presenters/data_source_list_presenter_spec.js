@@ -27,7 +27,7 @@ describe("chorus.presenters.DataSourceList", function() {
         presenter.present();
     });
 
-    it("returns an object with three arrays 'greenplum', 'hadoop', and 'gnip'", function() {
+    it("includes the gpdb/oracle, hadoop and gnip data sources", function() {
         expect(presenter.dataSources.length).toBe(2);
         expect(presenter.hadoop.length).toBe(3);
         expect(presenter.gnip.length).toBe(3);

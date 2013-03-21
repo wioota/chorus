@@ -219,7 +219,7 @@ describe("chorus.views.DataSourceList", function() {
             });
         });
 
-        describe('clicking on a hadoopdata source', function() {
+        describe('clicking on a hadoop data source', function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy();
                 chorus.PageEvents.subscribe("data_source:selected", this.eventSpy);

@@ -37,7 +37,7 @@ chorus.views.Dataset = chorus.views.Base.extend(chorus.Mixins.TagsContext).exten
     additionalContext: function() {
         var recentComment = this.model.lastComment();
         // For database objects that are not in workspaces, active workspace is undefined, but the dataset should be viewable
-        var viewable = this.options.activeWorkspace !== false;
+        var viewable = this.options.hasActiveWorkspace !== false;
 
         var ctx = {
             dataset: this.model.asWorkspaceDataset(),
