@@ -100,15 +100,15 @@ describe WorkspaceDatasetsController do
         post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
         response.code.should == "201"
         response.decoded_body.should_not be_nil
-        workspace.bound_datasets.should include(other_table)
+        workspace.source_datasets.should include(other_table)
       end
 
       it "should associate multiple tables/views to the workspace for one table" do
         post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param, other_view.to_param]
         response.code.should == "201"
 
-        workspace.bound_datasets.should include(other_table)
-        workspace.bound_datasets.should include(other_view)
+        workspace.source_datasets.should include(other_table)
+        workspace.source_datasets.should include(other_view)
       end
 
       it "should create event and activity" do
@@ -262,7 +262,7 @@ describe WorkspaceDatasetsController do
 
     describe "index" do
       context "for a source_table" do
-        let(:dataset) { workspace.bound_datasets.first }
+        let(:dataset) { workspace.source_datasets.first }
 
         it "works" do
           get :show, :id => dataset.to_param, :workspace_id => workspace.to_param

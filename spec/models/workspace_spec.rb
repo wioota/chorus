@@ -1,14 +1,14 @@
-require "spec_helper"
+require 'spec_helper'
 require 'timecop'
 
 describe Workspace do
   it_behaves_like "a notable model" do
     let!(:note) do
       Events::NoteOnWorkspace.create!({
-          :actor => users(:owner),
-          :workspace => model,
-          :body => "This is the body"
-      }, :as => :create)
+                                          :actor => users(:owner),
+                                          :workspace => model,
+                                          :body => "This is the body"
+                                      }, :as => :create)
     end
 
     let!(:model) { workspaces(:public_with_no_collaborators) }
@@ -157,7 +157,7 @@ describe Workspace do
       let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
 
       before do
-        workspace.bound_datasets << source_table
+        workspace.source_datasets << source_table
       end
 
       context "when the user does not have an instance account" do
@@ -168,7 +168,7 @@ describe Workspace do
       end
 
       context "when the user has an instance account" do
-        let!(:account) { FactoryGirl.build(:instance_account, :data_source => schema.database.data_source, :owner => user).tap { |a| a.save(:validate => false)} }
+        let!(:account) { FactoryGirl.build(:instance_account, :data_source => schema.database.data_source, :owner => user).tap { |a| a.save(:validate => false) } }
 
         context "when the sandbox has tables" do
           before do
@@ -182,19 +182,19 @@ describe Workspace do
           end
 
           it "filters by entity_subtype" do
-            workspace.datasets(user, { :entity_subtype => "SANDBOX_DATASET" }).to_a.should =~ [sandbox_table, sandbox_view]
-            workspace.dataset_count(user, { :entity_subtype => "SANDBOX_DATASET" }).should == 142
-            workspace.datasets(user, { :entity_subtype => "CHORUS_VIEW" }).to_a.should =~ [chorus_view, chorus_view_from_source]
-            workspace.dataset_count(user, { :entity_subtype => "CHORUS_VIEW" }).should == 2
-            workspace.datasets(user, { :entity_subtype => "SOURCE_TABLE" }).to_a.should =~ [source_table]
-            workspace.datasets(user, { :entity_subtype => "NON_CHORUS_VIEW" }).to_a.should =~ [sandbox_table, sandbox_view, source_table]
-            workspace.dataset_count(user, { :entity_subtype => "SOURCE_TABLE" }).should == 1
+            workspace.datasets(user, {:entity_subtype => "SANDBOX_DATASET"}).to_a.should =~ [sandbox_table, sandbox_view]
+            workspace.dataset_count(user, {:entity_subtype => "SANDBOX_DATASET"}).should == 142
+            workspace.datasets(user, {:entity_subtype => "CHORUS_VIEW"}).to_a.should =~ [chorus_view, chorus_view_from_source]
+            workspace.dataset_count(user, {:entity_subtype => "CHORUS_VIEW"}).should == 2
+            workspace.datasets(user, {:entity_subtype => "SOURCE_TABLE"}).to_a.should =~ [source_table]
+            workspace.datasets(user, {:entity_subtype => "NON_CHORUS_VIEW"}).to_a.should =~ [sandbox_table, sandbox_view, source_table]
+            workspace.dataset_count(user, {:entity_subtype => "SOURCE_TABLE"}).should == 1
           end
 
           describe "filtering by sandbox table" do
             before do
               options ={:entity_subtype => "SANDBOX_TABLE",
-                        :tables_only => true }
+                        :tables_only => true}
               mock(GpdbDataset).visible_to(account, schema, options) {
                 [sandbox_table]
               }
@@ -203,8 +203,8 @@ describe Workspace do
             end
 
             it "filters out views" do
-              workspace.datasets(user, { :entity_subtype => "SANDBOX_TABLE" }).to_a.should =~ [sandbox_table]
-              workspace.dataset_count(user, { :entity_subtype => "SANDBOX_TABLE" }).should == 141
+              workspace.datasets(user, {:entity_subtype => "SANDBOX_TABLE"}).to_a.should =~ [sandbox_table]
+              workspace.dataset_count(user, {:entity_subtype => "SANDBOX_TABLE"}).should == 141
             end
           end
         end
@@ -216,9 +216,9 @@ describe Workspace do
           end
 
           it "returns no results" do
-            workspace.datasets(user, { :entity_subtype => "SANDBOX_TABLE" }).should =~ []
-            workspace.datasets(user, { :entity_subtype => "SANDBOX_DATASET" }).should =~ []
-            workspace.dataset_count(user, { :entity_subtype => "SANDBOX_DATASET" }).should == 0
+            workspace.datasets(user, {:entity_subtype => "SANDBOX_TABLE"}).should =~ []
+            workspace.datasets(user, {:entity_subtype => "SANDBOX_DATASET"}).should =~ []
+            workspace.dataset_count(user, {:entity_subtype => "SANDBOX_DATASET"}).should == 0
           end
         end
       end
@@ -229,8 +229,8 @@ describe Workspace do
         let(:dataset2) { datasets(:searchquery_table) }
 
         before do
-          workspace.bound_datasets << dataset1
-          workspace.bound_datasets << dataset2
+          workspace.source_datasets << dataset1
+          workspace.source_datasets << dataset2
         end
 
         it "filters the datasets to specified database" do
@@ -253,7 +253,7 @@ describe Workspace do
       }
 
       before do
-        workspace.bound_datasets << source_table
+        workspace.source_datasets << source_table
       end
 
       it "includes the workspace's bound datasets" do
@@ -270,12 +270,12 @@ describe Workspace do
         let(:dataset2) { datasets(:searchquery_table) }
 
         before do
-          workspace.bound_datasets << dataset1
-          workspace.bound_datasets << dataset2
+          workspace.source_datasets << dataset1
+          workspace.source_datasets << dataset2
         end
 
         it "filters for given database" do
-          workspace.datasets(user, { :database_id => dataset1.schema.database.id }).should =~ [dataset1, chorus_view]
+          workspace.datasets(user, {:database_id => dataset1.schema.database.id}).should =~ [dataset1, chorus_view]
         end
       end
     end
@@ -349,12 +349,12 @@ describe Workspace do
       }.to_not raise_error(Exception)
     end
 
-    it "should update the deleted_at field" do
+    it "updates the deleted_at field" do
       workspace.destroy
       workspace.reload.deleted_at.should_not be_nil
     end
 
-    it "should be hidden from subsequent #find calls" do
+    it "is hidden from subsequent #find calls" do
       workspace.destroy
       Workspace.find_by_id(workspace.id).should be_nil
     end
@@ -385,24 +385,16 @@ describe Workspace do
       end
     end
 
-    it "soft deletes the associated source tables" do
-      tables =  workspace.bound_datasets.tables
-
+    it "soft deletes associations to source datasets" do
       expect {
         workspace.destroy
-        tables.map(&:reload)
-      }.to change{ tables.select { |table| table.deleted_at != nil }.size }.by_at_least(1)
-    end
-
-    it "soft deletes dataset associations" do
-      expect {
-        workspace.destroy
-      }.to change{ workspace.associated_datasets.select { |ad| ad.deleted_at != nil }.size }.by_at_least(1)
+      }.to change { AssociatedDataset.where(:workspace_id => workspace.id).count }.to(0)
+      AssociatedDataset.unscoped.where(:workspace_id => workspace.id).should_not be_empty
     end
 
     it "soft deletes import schedules" do
-      [Import, ImportSchedule].each do |stuff|
-        any_instance_of(stuff) do |import|
+      [Import, ImportSchedule].each do |importable|
+        any_instance_of(importable) do |import|
           stub(import).valid? { true }
         end
       end
@@ -460,7 +452,7 @@ describe Workspace do
     end
 
     it "returns true if the dataset has already been associated with the workspace" do
-      workspace.bound_datasets << dataset
+      workspace.source_datasets << dataset
       workspace.has_dataset?(dataset).should be_true
     end
 
@@ -539,24 +531,24 @@ describe Workspace do
     end
 
     describe "before_update" do
-      describe "clear_assigned_datasets_on_sandbox_assignment" do
+      describe "remove_source_datasets_on_sandbox_addition" do
         let(:sandbox_dataset) { datasets(:tagged) }
         let(:other_dataset) { datasets(:other_table) }
 
         before do
-          workspace.bound_datasets << sandbox_dataset
-          workspace.bound_datasets << other_dataset
+          workspace.source_datasets << sandbox_dataset
+          workspace.source_datasets << other_dataset
           workspace.sandbox_id = sandbox.id
           workspace.save!
         end
 
         it "removes duplicate datasets" do
-          workspace.bound_datasets.should_not include(sandbox_dataset)
+          workspace.source_datasets.should_not include(sandbox_dataset)
           sandbox_dataset.reload.should_not be_nil
         end
 
         it "does not remove datasets from other schemas" do
-          workspace.bound_datasets.should include(other_dataset)
+          workspace.source_datasets.should include(other_dataset)
         end
       end
     end

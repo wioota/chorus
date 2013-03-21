@@ -421,7 +421,7 @@ describe "Event types" do
 
   describe "WorkspaceImportFailed" do
     let(:source_dataset) {datasets(:other_table)}
-    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    let!(:workspace_association) { workspace.source_datasets << source_dataset }
     subject do
       Events::WorkspaceImportFailed.add(
         :actor => actor,
@@ -446,7 +446,7 @@ describe "Event types" do
 
   describe "WorkspaceImportSuccess" do
     let(:source_dataset) { datasets(:other_table) }
-    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    let!(:workspace_association) { workspace.source_datasets << source_dataset }
     subject do
       Events::WorkspaceImportSuccess.add(
         :actor => actor,
@@ -470,7 +470,7 @@ describe "Event types" do
 
   describe "ImportScheduleUpdated" do
     let(:source_dataset) { datasets(:other_table) }
-    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    let!(:workspace_association) { workspace.source_datasets << source_dataset }
     subject do
       Events::ImportScheduleUpdated.add(
           :actor => actor,
@@ -491,7 +491,7 @@ describe "Event types" do
 
   describe "ImportScheduleDeleted" do
     let(:source_dataset) { datasets(:other_table) }
-    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+    let!(:workspace_association) { workspace.source_datasets << source_dataset }
     subject do
       Events::ImportScheduleDeleted.add(
           :actor => actor,

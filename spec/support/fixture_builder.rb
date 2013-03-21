@@ -207,8 +207,8 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     # Workspace / Dataset associations
-    public_workspace.bound_datasets << source_table
-    public_workspace.bound_datasets << source_view
+    public_workspace.source_datasets << source_table
+    public_workspace.source_datasets << source_view
 
     @owner_creates_public_workspace = Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
     @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
@@ -370,7 +370,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :now, import_now
 
     csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table")
-    public_workspace.bound_datasets << csv_import_table
+    public_workspace.source_datasets << csv_import_table
 
     csv_import = FactoryGirl.create(:csv_import, :user => owner, :workspace => public_workspace, :to_table => "csv_import_table",
                                     :destination_dataset => csv_import_table,
@@ -517,7 +517,7 @@ FixtureBuilder.configure do |fbuilder|
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
 
       test_schema2 = test_database.schemas.find_by_name('test_schema2')
-      @gpdb_workspace.bound_datasets << test_schema2.active_tables_and_views.first
+      @gpdb_workspace.source_datasets << test_schema2.active_tables_and_views.first
 
       real_chorus_view = FactoryGirl.create(:chorus_view,
                                                :name => "real_chorus_view",

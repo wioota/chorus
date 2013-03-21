@@ -24,7 +24,7 @@ class WorkspaceDatasetsController < ApplicationController
 
     datasets.each do |dataset|
       if !workspace.has_dataset?(dataset)
-        workspace.bound_datasets << dataset
+        workspace.source_datasets << dataset
         create_event_for_dataset(dataset, workspace)
       end
     end

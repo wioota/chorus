@@ -7,7 +7,7 @@ describe Events::WorkspaceImportCreated do
   let(:workspace) { workspaces(:public) }
   let(:actor) { users(:default) }
   let(:dataset) { datasets(:table) }
-  let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+  let!(:workspace_association) { workspace.source_datasets << source_dataset }
   subject do
     Events::WorkspaceImportCreated.add(
       :actor => actor,

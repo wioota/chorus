@@ -9,7 +9,7 @@ describe Events::WorkspaceImportFailed do
   let(:actor) { workspace.owner }
   let(:destination_dataset) { datasets(:table) }
   let(:source_dataset) {datasets(:other_table)}
-  let!(:workspace_association) { workspace.bound_datasets << source_dataset }
+  let!(:workspace_association) { workspace.source_datasets << source_dataset }
   subject do
     Events::WorkspaceImportFailed.add(
       :actor => actor,

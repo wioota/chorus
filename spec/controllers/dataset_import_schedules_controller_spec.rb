@@ -151,7 +151,7 @@ describe DatasetImportSchedulesController do
     end
 
     it "returns an error for archived workspaces" do
-      archived_workspace.bound_datasets << source_table
+      archived_workspace.source_datasets << source_table
       attributes[:workspace_id] = archived_workspace.id
       post :create, attributes
 
@@ -159,7 +159,7 @@ describe DatasetImportSchedulesController do
     end
 
     it "does not create an Import scheduled event if the schedule is not saved" do
-      archived_workspace.bound_datasets << source_table
+      archived_workspace.source_datasets << source_table
       attributes[:workspace_id] = archived_workspace.id
 
       expect {

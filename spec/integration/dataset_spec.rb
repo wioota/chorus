@@ -29,6 +29,6 @@ describe "Dataset", :database_integration do
       end
       click_button "Associate Datasets"
     end
-    workspace.bound_datasets.should include(dataset)
+    workspace.source_datasets.should include(dataset)
   end
 end

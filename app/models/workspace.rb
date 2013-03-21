@@ -26,8 +26,8 @@ class Workspace < ActiveRecord::Base
 
   has_many :csv_files
 
-  has_many :associated_datasets
-  has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
+  has_many :associated_datasets, :dependent => :destroy
+  has_many :source_datasets, :through => :associated_datasets, :source => :dataset
   has_many :imports, :class_name => 'WorkspaceImport'
 
   validates_presence_of :name
@@ -36,12 +36,11 @@ class Workspace < ActiveRecord::Base
   validate :archiver_is_set_when_archiving
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
-  before_update :clear_assigned_datasets_on_sandbox_assignment, :create_name_change_event
+  before_update :unassociate_source_datasets_in_sandbox, :create_name_change_event
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
   after_update :unschedule_imports, :if => :archived_at_changed?
-  before_destroy :destroy_datasets_and_associations
 
   scope :active, where(:archived_at => nil)
 
@@ -53,7 +52,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def self.reindex_workspace(workspace_id)
-    workspace = Workspace.find(workspace_id)
+    workspace = find(workspace_id)
     workspace.solr_index
     workspace.workfiles(:reload => true).each(&:solr_index)
     workspace.owned_notes(:reload => true).each(&:solr_index)
@@ -112,7 +111,7 @@ class Workspace < ActiveRecord::Base
     entity_subtype = options[:entity_subtype] if options
     database_id = options[:database_id] if options
 
-    scoped_bound_datasets = scope_to_database(bound_datasets, database_id)
+    scoped_source_datasets = scope_to_database(source_datasets, database_id)
     scoped_chorus_views = scope_to_database(chorus_views, database_id)
 
     datasets = []
@@ -121,9 +120,9 @@ class Workspace < ActiveRecord::Base
       when "CHORUS_VIEW" then
         datasets << chorus_views
       when "SOURCE_TABLE", "NON_CHORUS_VIEW" then
-        datasets << scoped_bound_datasets
+        datasets << scoped_source_datasets
       else
-        datasets << scoped_bound_datasets << scoped_chorus_views
+        datasets << scoped_source_datasets << scoped_chorus_views
     end
 
     datasets.map do |relation|
@@ -215,7 +214,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def has_dataset?(dataset)
-    dataset.schema == sandbox || bound_datasets.include?(dataset)
+    dataset.schema == sandbox || source_datasets.include?(dataset)
   end
 
   def member?(user)
@@ -242,15 +241,6 @@ class Workspace < ActiveRecord::Base
   end
 
   private
-
-  def destroy_datasets_and_associations
-    bound_datasets.each do |bound_dataset|
-      bound_dataset.destroy
-    end
-    associated_datasets.each do |assoc_dataset|
-      assoc_dataset.destroy
-    end
-  end
 
   def unschedule_imports
     import_schedules.destroy_all if archived?
@@ -282,10 +272,10 @@ class Workspace < ActiveRecord::Base
     create_workspace_name_change_event if name_changed?
   end
 
-  def clear_assigned_datasets_on_sandbox_assignment
+  def unassociate_source_datasets_in_sandbox
     return true unless sandbox_id_changed? && sandbox
-    bound_datasets.each do |dataset|
-      bound_datasets.destroy(dataset) if sandbox.datasets.include? dataset
+    source_datasets.each do |source_dataset|
+      source_datasets.destroy(source_dataset) if sandbox.datasets.include? source_dataset
     end
     true
   end

@@ -139,7 +139,7 @@ describe ChorusViewsController, :greenplum_integration do
 
       new_chorus_view = GpdbDataset.chorus_views.last
       new_chorus_view.name.should == "duplicate_chorus_view"
-      chorus_view.workspace.bound_datasets.should_not include(new_chorus_view)
+      chorus_view.workspace.source_datasets.should_not include(new_chorus_view)
 
       response.code.should == "201"
       decoded_response[:query].should == chorus_view.query
