@@ -51,22 +51,19 @@ describe Workfile do
   end
 
   describe ".validate_name_uniqueness" do
-    let!(:workspace) { FactoryGirl.create(:workspace) }
-    let!(:other_workspace) { FactoryGirl.create(:workspace) }
-    let!(:existing_workfile) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+    let(:workspace) { workspaces(:public) }
+    let(:other_workspace) { workspaces(:private) }
+    let(:existing_workfile) { workspace.workfiles.first! }
 
-    it "returns false and adds an error to the error list if name in workspace is taken" do
-      new_workfile = Workfile.new :file_name => 'workfile.sql'
-      new_workfile.workspace = workspace
+    it "is invalid if a workfile in the workspace has the same name" do
+      new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => workspace)
       new_workfile.validate_name_uniqueness.should be_false
       new_workfile.should have_error_on(:file_name)
     end
 
-    it "returns true if there are no conflicts in its own workspace" do
-      new_workfile = Workfile.new :file_name => 'workfile.sql'
-      new_workfile.workspace = other_workspace
+    it "is valid if a workfile in another workspace has the same name" do
+      new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => other_workspace)
       new_workfile.validate_name_uniqueness.should be_true
-      new_workfile.should be_valid
     end
   end
 
@@ -81,7 +78,7 @@ describe Workfile do
       let(:workfile) { workfiles(:private) }
       let(:author) { workfile.owner }
 
-      it "should return notes" do
+      it 'returns notes' do
         set_current_user(author)
         note = Events::NoteOnWorkfile.create!({:note_target => workfile, :body => "note on a workfile"}, :as => :create)
         workfile.reload

@@ -1,6 +1,3 @@
-# An immutable record of an Import action
-# Can be a user-initiated import or from an ImportSchedule
-
 class Import < ActiveRecord::Base
   include ImportMixins
 

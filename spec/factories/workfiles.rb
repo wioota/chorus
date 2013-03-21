@@ -29,5 +29,4 @@ FactoryGirl.define do
     owner
     content 'Excellent content'
   end
-
 end

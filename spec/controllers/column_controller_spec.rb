@@ -23,7 +23,7 @@ describe ColumnController do
         end
       end
 
-      it "should check for permissions" do
+      it "checks for permissions" do
         mock(subject).authorize! :show_contents, table.data_source
         get :index, :dataset_id => table.to_param
       end
@@ -32,7 +32,7 @@ describe ColumnController do
         let(:params) {{ :dataset_id => table.to_param }}
       end
 
-      it "should retrieve column for a table" do
+      it "retrieves column for a table" do
         get :index, :dataset_id => table.to_param
 
         response.code.should == "200"
