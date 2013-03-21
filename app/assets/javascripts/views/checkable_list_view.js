@@ -1,4 +1,5 @@
 chorus.views.CheckableList = chorus.views.SelectableList.extend({
+    constructorName: "CheckableListView",
     additionalClass: "selectable list",
     templateName: "empty",
 

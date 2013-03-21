@@ -67,6 +67,10 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 it("has no items", function() {
                     expect(this.page.collection.length).toBe(0);
                 });
+
+                it("has a 'no results' message", function() {
+                   expect(this.page.$(".browse_more")).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
+                });
             });
 
             describe("when the fetch returns two items", function() {
@@ -170,7 +174,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 expect(this.page.mainContent).toBeDefined();
                 expect(this.page.mainContent.model).toBeA(chorus.models.Workspace);
                 expect(this.page.mainContent.model.get("id")).toBe(this.workspace.get("id"));
-                expect(this.page.mainContent.options.checkable).toEqual(true);
                 expect(this.page.mainContent.options.contentDetailsOptions.multiSelect).toEqual(true);
                 expect(this.page.$("#main_content")).toExist();
                 expect(this.page.$("#main_content")).not.toBeEmpty();

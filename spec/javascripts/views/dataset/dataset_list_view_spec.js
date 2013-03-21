@@ -17,22 +17,6 @@ describe("chorus.views.DatasetList", function() {
 
     itBehavesLike.CheckableList();
 
-    it("does not re-render when a dataset is updated", function() {
-        spyOn(this.view, "preRender");
-        this.collection.at(0).trigger("change");
-        expect(this.view.preRender).not.toHaveBeenCalled();
-    });
-
-    context("when the checkable flag is falsy", function() {
-        beforeEach(function() {
-            this.view = new chorus.views.DatasetList({ collection: this.collection });
-        });
-
-        it("does not render checkboxes", function() {
-            expect(this.view.$("input[type=checkbox]")).not.toExist();
-        });
-    });
-
     describe("when there are no datasets", function() {
         beforeEach(function() {
             this.view.collection = new chorus.collections.SchemaDatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
@@ -51,7 +35,7 @@ describe("chorus.views.DatasetList", function() {
             });
 
             it("renders the no datasets in this workspace message", function() {
-                expect($(this.view.el)).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
+                expect(this.view.$el).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
                 expect(this.view.$(".browse_more a")).toHaveHref("#/data_sources");
             });
         });
@@ -65,7 +49,7 @@ describe("chorus.views.DatasetList", function() {
             });
 
             it("renders the no datasets message if there are no datasets", function() {
-                expect($(this.view.el)).toContainTranslation("dataset.filtered_empty");
+                expect(this.view.$el).toContainTranslation("dataset.filtered_empty");
             });
         });
 

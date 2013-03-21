@@ -2,21 +2,20 @@ chorus.views.DatasetList = chorus.views.CheckableList.extend({
     constructorName: "DatasetListView",
     useLoadingSection: true,
     eventName: "dataset",
-    persistent: true,
 
     setup: function() {
         this.options.entityType = "dataset";
         this.options.entityViewType = chorus.views.Dataset;
         this.options.listItemOptions = {
             activeWorkspace: this.options.activeWorkspace,
-            checkable: this.options.checkable
+            checkable: true
         };
 
         this._super("setup", arguments);
     },
 
     postRender: function() {
-        var $list = $(this.el);
+        var $list = this.$el;
         if(this.collection.length === 0 && this.collection.loaded) {
             var linkText = Handlebars.helpers.linkTo("#/data_sources", t("datasource.browse"));
             var noDatasetEl = $("<div class='browse_more'></div>");
