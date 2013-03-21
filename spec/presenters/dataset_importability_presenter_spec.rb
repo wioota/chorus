@@ -30,7 +30,7 @@ describe DatasetImportabilityPresenter, :type => :view do
     it "includes importability, invalid columns, and supported columns" do
       hash[:importability].should == false
       hash[:invalid_columns].should == ["a (potato)", "b (celery)"]
-      hash[:supported_columns].should == ["SOME", "SUPPORTED", "COLUMNS"]
+      hash[:supported_column_types].should == ["SOME", "SUPPORTED", "COLUMNS"]
     end
   end
 end
