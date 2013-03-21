@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DatasetImportabilityPresenter, :type => :view do
   let(:importability) { Object.new }
-  let(:presenter) { DatasetImportabilityPresenter.new(importability) }
+  let(:presenter) { DatasetImportabilityPresenter.new(importability, view) }
   let(:hash) { presenter.to_hash }
 
   before do
