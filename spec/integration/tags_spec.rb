@@ -107,7 +107,7 @@ describe 'add a tag' do
       within ".main_content" do
         total_workfiles = 0
         within ".content" do
-          total_workfiles = all('.workfile').count
+          total_workfiles = all('.workfile_item').count
         end
         all('a', :text => 'new_tag').count.should == total_workfiles
       end
