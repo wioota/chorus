@@ -1,4 +1,4 @@
-chorus.alerts.PublishInsight = chorus.alerts.Base.extend({
+chorus.alerts.PublishInsight = chorus.alerts.Confirm.extend({
     constructorName: "PublishInsight",
 
     setup: function(options){
@@ -11,6 +11,6 @@ chorus.alerts.PublishInsight = chorus.alerts.Base.extend({
 
     confirmAlert:function () {
         this.publish ? this.model.publish() : this.model.unpublish();
-        $(document).trigger("close.facebox");
+        this.closeModal();
     }
 });

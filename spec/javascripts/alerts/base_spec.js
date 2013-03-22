@@ -1,16 +1,16 @@
-describe("chorus.alerts", function() {
+describe("chorus.alerts.Base", function() {
     beforeEach(function() {
         spyOn(chorus.alerts.Base.prototype, "cancelAlert").andCallThrough();
         this.model = new chorus.models.Base({ id: "foo"});
-        this.alert = new chorus.alerts.Base({ model : this.model });
+        this.alert = new chorus.alerts.Base({ model: this.model });
         this.alert.title = "OH HAI";
         this.alert.text = "How are you?";
-        this.alert.ok = "Do it!";
+        this.alert.render();
     });
 
     describe("#render", function() {
-        beforeEach(function() {
-            this.alert.render();
+        it("hides the submit button", function() {
+            expect(this.alert.$("button.submit")).toHaveClass("hidden");
         });
 
         it("displays the title", function() {
@@ -23,10 +23,6 @@ describe("chorus.alerts", function() {
 
         it("displays the icon", function() {
             expect(this.alert.$("img")).toHaveAttr("src", "/images/message_icon.png");
-        });
-
-        it("displays the 'ok' text on the submit button", function() {
-            expect(this.alert.$("button.submit").text()).toBe("Do it!");
         });
 
         it("displays the default cancel text on the cancel button", function() {
@@ -61,7 +57,7 @@ describe("chorus.alerts", function() {
         });
 
         it("displays server errors", function() {
-            this.alert.resource.set({serverErrors : { fields: { connection: { INVALID: { message: "Couldn't find host/port to connect to" } } } }});
+            this.alert.resource.set({serverErrors: { fields: { connection: { INVALID: { message: "Couldn't find host/port to connect to" } } } }});
             this.alert.render();
 
             expect(this.alert.$(".errors").text()).toContain("Couldn't find host/port to connect to");
@@ -101,6 +97,16 @@ describe("chorus.alerts", function() {
             it("dismisses the alert", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
+        });
+    });
+
+    describe("#revealed", function() {
+        it("focuses on the cancel button", function() {
+            spyOn($.fn, 'focus');
+            this.alert.render();
+            this.alert.revealed();
+            expect($.fn.focus).toHaveBeenCalled();
+            expect($.fn.focus.mostRecentCall.object).toBe("button.cancel");
         });
     });
 });

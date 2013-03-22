@@ -1,4 +1,4 @@
-chorus.alerts.RemoveSharedAccount = chorus.alerts.Base.extend({
+chorus.alerts.RemoveSharedAccount = chorus.alerts.Confirm.extend({
     constructorName: "RemoveSharedAccount",
 
     text:t("instances.remove_shared_account.text"),
@@ -7,7 +7,7 @@ chorus.alerts.RemoveSharedAccount = chorus.alerts.Base.extend({
 
     confirmAlert:function () {
         this.trigger("removeSharedAccount");
-        $(document).trigger("close.facebox");
+        this.closeModal();
     }
 });
 

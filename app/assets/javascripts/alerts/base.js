@@ -9,6 +9,8 @@ chorus.alerts.Base = chorus.Modal.extend({
 
     confirmAlert: $.noop,
 
+    focusSelector: "button.cancel",
+
     cancelAlert: function() {
         this.closeModal();
     },
@@ -25,9 +27,6 @@ chorus.alerts.Base = chorus.Modal.extend({
 
     revealed: function() {
         $("#facebox").removeClass().addClass("alert_facebox");
-        var cancelButton = this.$("button.cancel");
-        if (cancelButton) {
-            cancelButton.focus();
-        }
+        this.$(this.focusSelector).focus();
     }
 });

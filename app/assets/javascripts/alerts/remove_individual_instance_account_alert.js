@@ -1,4 +1,4 @@
-chorus.alerts.RemoveIndividualAccount = chorus.alerts.Base.extend({
+chorus.alerts.RemoveIndividualAccount = chorus.alerts.Confirm.extend({
     constructorName: "RemoveIndividualAccount",
 
     ok:t("instances.remove_individual_account.remove"),
@@ -9,7 +9,7 @@ chorus.alerts.RemoveIndividualAccount = chorus.alerts.Base.extend({
 
     confirmAlert:function () {
         this.trigger("removeIndividualAccount");
-        $(document).trigger("close.facebox");
+        this.closeModal();
     }
 });
 

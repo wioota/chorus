@@ -41,6 +41,7 @@
 //= require presenters
 //= require dialogs
 //= require alerts/base
+//= require alerts/confirm
 //= require alerts/model_delete_alert
 //= require_tree ./alerts
 //= require views/sidebar_view

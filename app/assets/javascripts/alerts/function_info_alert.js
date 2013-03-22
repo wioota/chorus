@@ -13,10 +13,6 @@ chorus.alerts.FunctionInfo = chorus.alerts.Base.extend({
         this.body = this.bodyContent();
     },
 
-    postRender: function() {
-        this.$("button.submit").addClass("hidden");
-    },
-
     bodyContent: function() {
         return Handlebars.helpers.renderTemplate("function_info_body", {
             definition: this.model.get("definition"),

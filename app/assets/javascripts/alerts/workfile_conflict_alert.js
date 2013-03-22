@@ -1,4 +1,4 @@
-chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
+chorus.alerts.WorkfileConflict = chorus.alerts.Confirm.extend({
     constructorName: "WorkfileConflict",
 
     text:t("workfile.conflict.alert.text"),
@@ -12,13 +12,10 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
     },
 
     postRender:function () {
+        this._super('postRender');
         this.$("button.cancel").click(_.bind(function () {
             this.discardChanges();
         }, this));
-
-        _.delay(_.bind(function () {
-            this.$("button.submit").focus();
-        }, this), 250);
     },
 
     confirmAlert:function () {

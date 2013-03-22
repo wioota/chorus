@@ -1,4 +1,4 @@
-chorus.alerts.Analyze = chorus.alerts.Base.extend({
+chorus.alerts.Analyze = chorus.alerts.Confirm.extend({
     constructorName: "Analyze",
     text: t("analyze.alert.text"),
     ok: t("analyze.alert.ok"),

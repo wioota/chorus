@@ -8,11 +8,5 @@ chorus.alerts.Error = chorus.alerts.Base.extend({
         this.options = this.options || {};
         this.body = this.options.body || this.model.serverErrorMessage();
         this.title = this.options.title || this.title;
-    },
-
-    postRender:function () {
-        this._super("postRender");
-        this.$(".errors").addClass('hidden');
-        this.$("button.submit").addClass("hidden");
     }
 });

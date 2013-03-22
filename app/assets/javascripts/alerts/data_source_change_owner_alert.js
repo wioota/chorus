@@ -1,4 +1,4 @@
-chorus.alerts.DataSourceChangedOwner = chorus.alerts.Base.extend({
+chorus.alerts.DataSourceChangedOwner = chorus.alerts.Confirm.extend({
     constructorName: "DataSourceChangedOwner",
 
     text:t("instances.confirm_change_owner.text"),
@@ -10,7 +10,7 @@ chorus.alerts.DataSourceChangedOwner = chorus.alerts.Base.extend({
 
     confirmAlert:function () {
         this.trigger("confirmChangeOwner", this.model);
-        $(document).trigger("close.facebox");
+        this.closeModal();
     }
 });
 

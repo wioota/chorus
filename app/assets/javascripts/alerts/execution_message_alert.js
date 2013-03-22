@@ -24,9 +24,5 @@ chorus.alerts.ExecutionMessage = chorus.alerts.Base.extend({
             return t("workfile.execution.message.title");
         else
             return t("dataset.execution.message.title");
-    },
-
-    postRender: function() {
-        this.$("button.submit").addClass("hidden");
     }
 });

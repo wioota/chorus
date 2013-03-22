@@ -10,10 +10,6 @@ chorus.alerts.DatasetNotImportable = chorus.alerts.Base.extend({
         this.body = this.bodyContent(invalidColumns, supportedColumnTypes);
     },
 
-    postRender: function() {
-        this.$("button.submit").addClass("hidden");
-    },
-
     bodyContent: function(invalidColumns, supportedColumnTypes) {
         return Handlebars.helpers.renderTemplate("dataset_not_importable_body", {
             invalidColumns: invalidColumns,
