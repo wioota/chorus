@@ -1,5 +1,5 @@
-chorus.views.Dataset = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
-    templateName: "dataset",
+chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    templateName: "dataset_item",
     tagName: "li",
 
     subviews: {

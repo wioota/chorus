@@ -1,4 +1,4 @@
-describe("chorus.views.Dataset", function() {
+describe("chorus.views.DatasetItem", function() {
     function itRendersTheNameAndIcon() {
         it("renders the dataset's name", function() {
             expect(this.view.$(".name")).toContainText("john_the_table");
