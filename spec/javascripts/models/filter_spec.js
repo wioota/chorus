@@ -22,6 +22,15 @@ describe("chorus.models.Filter", function() {
                 expect(this.model.get("comparator")).toBeUndefined();
                 expect(this.model.get("input")).toBeUndefined();
             });
+
+            it("triggers change after the comparator and input have been cleared", function() {
+                this.model.on('change', _.bind(function () {
+                   expect(this.model.get('comparator')).toBeUndefined();
+                   expect(this.model.get('input')).toBeUndefined();
+                }, this));
+                var column = new chorus.models.Base({ name: 'column_name' });
+                this.model.setColumn(column);
+            });
         });
     });
 
