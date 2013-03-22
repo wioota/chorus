@@ -71,6 +71,40 @@ describe TypeAheadSearch do
       end
     end
 
+    describe "partial word matching" do
+      context "with a hypen" do
+        it "matches when there is an exact match" do
+          create_and_record_search owner, {:query => "typeahead-with-dash"} do |search|
+            search.results.should include(datasets(:typeahead_with_dash))
+          end
+        end
+        it "matches when there is a partial match" do
+          create_and_record_search owner, {:query => "typeahead-wi"} do |search|
+            search.results.should include(datasets(:typeahead_with_dash))
+          end
+        end
+      end
+
+      context "with an underscore" do
+        it "matches when there is an exact match" do
+          create_and_record_search owner, {:query => "typeahead_with_underscore"} do |search|
+            search.results.should include(datasets(:typeahead_with_underscore))
+          end
+        end
+        it "matches when there is a partial match" do
+          create_and_record_search owner, {:query => "typeahead_wi"} do |search|
+            search.results.should include(datasets(:typeahead_with_underscore))
+          end
+        end
+      end
+
+      it "matches stems" do
+        create_and_record_search owner, {:query => "plural"} do |search|
+          search.results.should include(datasets(:plurals))
+        end
+      end
+    end
+
     describe "when typeahead search begins with a special character" do
       %w{+ -}.each do | character |
         it "returns empty results for strings of just #{character}" do

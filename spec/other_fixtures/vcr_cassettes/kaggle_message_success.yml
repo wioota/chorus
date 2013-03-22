@@ -25,7 +25,7 @@ http_interactions:
       server:
       - Microsoft-IIS/8.0
       date:
-      - Thu, 21 Mar 2013 22:56:27 GMT
+      - Fri, 22 Mar 2013 21:46:40 GMT
       connection:
       - close
       content-length:
@@ -35,5 +35,5 @@ http_interactions:
       string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
         \n  ],\r\n  \"failed\": []\r\n}"
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:56:28 GMT
+  recorded_at: Fri, 22 Mar 2013 21:46:39 GMT
 recorded_with: VCR 2.3.0

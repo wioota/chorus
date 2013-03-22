@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         database_name_texts table_description_texts schema_name_texts column_name_texts
         column_description_texts query_texts tag_names_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
         score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''searchquery'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
@@ -30,33 +30,33 @@ http_interactions:
         AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005 OR
         1000006 OR 1000016 OR 1000017))'',''-(security_type_name_sm:ChorusView AND
         -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>7,''ngroups''=>7,''groups''=>[{''groupValue''=>''GpdbTable
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3768430.5,''docs''=>[{''id''=>''GpdbTable
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1416883.1,''docs''=>[{''id''=>''GpdbTable
         1000010'',''column_description_texts''=>[''searchquery column description'',''searchquery
         column description 2''],''name_texts''=>[''searchquery_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''searchquery
         table description''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''searchquery'',''searchquery
-        2''],''score''=>3768430.5}]}},{''groupValue''=>''GpdbTable 1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1075199.2,''docs''=>[{''id''=>''GpdbTable
+        2''],''score''=>1416883.1}]}},{''groupValue''=>''GpdbTable 1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>409563.66,''docs''=>[{''id''=>''GpdbTable
         1000011'',''name_texts''=>[''searchquery_shared_table''],''database_name_texts''=>[''shared_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''shared_schema''],''column_name_texts''=>[''bogus'',''bogus
-        2''],''score''=>1075199.2}]}},{''groupValue''=>''ChorusView 1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1075199.2,''docs''=>[{''id''=>''ChorusView
-        1000017'',''name_texts''=>[''searchquery_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        searchquery from a_table''],''score''=>1075199.2}]}},{''groupValue''=>''ChorusView
-        1000018'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>940799.4,''docs''=>[{''id''=>''ChorusView
-        1000018'',''name_texts''=>[''searchquery_chorus_view_private''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        searchquery from a_table''],''score''=>940799.4}]}},{''groupValue''=>''GpdbTable
-        1000012'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1980.1906,''docs''=>[{''id''=>''GpdbTable
-        1000012'',''name_texts''=>[''typeahead_gpdb_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
-        2''],''score''=>1980.1906}]}},{''groupValue''=>''GpdbTable 1000014'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1980.1906,''docs''=>[{''id''=>''GpdbTable
-        1000014'',''name_texts''=>[''searchable_tag''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''tag_names_texts''=>[''typeahead''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
-        2''],''score''=>1980.1906}]}},{''groupValue''=>''ChorusView 1000013'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1980.1906,''docs''=>[{''id''=>''ChorusView
-        1000013'',''name_texts''=>[''typeahead_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
-        1''],''score''=>1980.1906}]}}]}},''highlighting''=>{''GpdbTable 1000010''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
+        2''],''score''=>409563.66}]}},{''groupValue''=>''ChorusView 1000020'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>409563.66,''docs''=>[{''id''=>''ChorusView
+        1000020'',''name_texts''=>[''searchquery_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        searchquery from a_table''],''score''=>409563.66}]}},{''groupValue''=>''ChorusView
+        1000021'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>351054.56,''docs''=>[{''id''=>''ChorusView
+        1000021'',''name_texts''=>[''searchquery_chorus_view_private''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        searchquery from a_table''],''score''=>351054.56}]}},{''groupValue''=>''GpdbTable
+        1000015'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>688.6834,''docs''=>[{''id''=>''GpdbTable
+        1000015'',''name_texts''=>[''typeahead_gpdb_table''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>688.6834}]}},{''groupValue''=>''GpdbTable 1000017'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>688.6834,''docs''=>[{''id''=>''GpdbTable
+        1000017'',''name_texts''=>[''searchable_tag''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''tag_names_texts''=>[''typeahead''],''schema_name_texts''=>[''searchquery_schema''],''column_name_texts''=>[''bogus'',''bogus
+        2''],''score''=>688.6834}]}},{''groupValue''=>''ChorusView 1000016'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>688.6834,''docs''=>[{''id''=>''ChorusView
+        1000016'',''name_texts''=>[''typeahead_chorus_view''],''database_name_texts''=>[''searchquery_database''],''table_description_texts''=>[''bogus''],''schema_name_texts''=>[''searchquery_schema''],''query_texts''=>[''select
+        1''],''score''=>688.6834}]}}]}},''highlighting''=>{''GpdbTable 1000010''=>{''column_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
         column description'',''@@@hl@@@searchquery@@@endhl@@@ column description 2''],''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_table''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''table_description_texts''=>[''@@@hl@@@searchquery@@@endhl@@@
         table description''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''column_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@'',''@@@hl@@@searchquery@@@endhl@@@
         2'']},''GpdbTable 1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_shared_table'']},''ChorusView
-        1000017''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''query_texts''=>[''select
-        @@@hl@@@searchquery@@@endhl@@@ from a_table'']},''ChorusView 1000018''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view_private''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''query_texts''=>[''select
-        @@@hl@@@searchquery@@@endhl@@@ from a_table'']},''GpdbTable 1000012''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''GpdbTable
-        1000014''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
-        1000013''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']}}}'
+        1000020''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''query_texts''=>[''select
+        @@@hl@@@searchquery@@@endhl@@@ from a_table'']},''ChorusView 1000021''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_chorus_view_private''],''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema''],''query_texts''=>[''select
+        @@@hl@@@searchquery@@@endhl@@@ from a_table'']},''GpdbTable 1000015''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''GpdbTable
+        1000017''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']},''ChorusView
+        1000016''=>{''database_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_database''],''schema_name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_schema'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:57:58 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:09 GMT
 recorded_with: VCR 2.3.0

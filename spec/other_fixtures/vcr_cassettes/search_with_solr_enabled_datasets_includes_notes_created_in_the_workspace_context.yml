@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts tag_names_texts name_texts description_texts
         summary_texts file_name_texts version_comments_texts database_name_texts table_description_texts
         schema_name_texts column_name_texts column_description_texts query_texts parent_name_texts
@@ -42,15 +42,15 @@ http_interactions:
         -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>3,''ngroups''=>3,''groups''=>[{''groupValue''=>''ChorusView
-        1000018'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.0940478,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000053'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.0940478}]}},{''groupValue''=>''GpdbTable
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.0940478,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000054'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.0940478}]}},{''groupValue''=>''GpdbTable
-        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3.0940478,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
-        1000055'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>3.0940478}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',3]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
+        1000021'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.5824388,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000053'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>0.5824388}]}},{''groupValue''=>''GpdbTable
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.5824388,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000054'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>0.5824388}]}},{''groupValue''=>''GpdbTable
+        1000007'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.5824388,''docs''=>[{''id''=>''Events::NoteOnWorkspaceDataset
+        1000055'',''body_texts''=>[''workspacedatasetnotesearch''],''score''=>0.5824388}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',3]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NoteOnWorkspaceDataset
         1000053''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']},''Events::NoteOnWorkspaceDataset
         1000054''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']},''Events::NoteOnWorkspaceDataset
         1000055''=>{''body_texts''=>[''@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:57:58 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:09 GMT
 recorded_with: VCR 2.3.0

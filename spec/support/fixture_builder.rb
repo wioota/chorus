@@ -153,6 +153,10 @@ FixtureBuilder.configure do |fbuilder|
     typeahead_public_workspace = FactoryGirl.create :workspace, :name => "typeahead_public", :public => true, :owner => owner, :sandbox => searchquery_schema
     FactoryGirl.create :workspace, :name => "typeahead_private_no_members", :public => false, :owner => no_collaborators
 
+    typeahead_with_dash = FactoryGirl.create(:gpdb_table, :name => "typeahead-with-dash", :schema => shared_search_schema)
+    typeahead_with_underscore = FactoryGirl.create(:gpdb_table, :name => "typeahead_with_underscore", :schema => shared_search_schema)
+    plurals = FactoryGirl.create(:gpdb_table, :name => "plurals", :schema => shared_search_schema)
+
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
     FactoryGirl.create(:gpdb_table, :name => "typeahead_gpdb_table", :schema => searchquery_schema)
     @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)

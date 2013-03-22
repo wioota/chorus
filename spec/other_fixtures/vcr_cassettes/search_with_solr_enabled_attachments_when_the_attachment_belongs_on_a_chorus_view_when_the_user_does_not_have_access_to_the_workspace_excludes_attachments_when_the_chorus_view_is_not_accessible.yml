@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:58:00 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -49,7 +49,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:58:00 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -81,5 +81,5 @@ http_interactions:
         AND -member_ids_im:1000008 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000008 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>0,''ngroups''=>0,''groups''=>[]}},''highlighting''=>{}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:58:00 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:11 GMT
 recorded_with: VCR 2.3.0

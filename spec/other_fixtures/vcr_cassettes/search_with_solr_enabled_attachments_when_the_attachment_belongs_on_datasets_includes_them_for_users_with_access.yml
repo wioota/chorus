@@ -31,20 +31,20 @@ http_interactions:
         -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
         AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
         AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>7,''ngroups''=>7,''groups''=>[{''groupValue''=>''Attachment
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1622852.8,''docs''=>[{''id''=>''Attachment
-        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>1622852.8}]}},{''groupValue''=>''Attachment
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1622852.8,''docs''=>[{''id''=>''Attachment
-        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>1622852.8}]}},{''groupValue''=>''Attachment
-        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1622852.8,''docs''=>[{''id''=>''Attachment
-        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>1622852.8}]}},{''groupValue''=>''Attachment
-        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1622852.8,''docs''=>[{''id''=>''Attachment
-        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>1622852.8}]}},{''groupValue''=>''Attachment
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1622852.8,''docs''=>[{''id''=>''Attachment
-        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>1622852.8}]}},{''groupValue''=>''Attachment
-        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1298282.2,''docs''=>[{''id''=>''Attachment
-        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>1298282.2}]}},{''groupValue''=>''Attachment
-        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1298282.2,''docs''=>[{''id''=>''Attachment
-        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>1298282.2}]}}]}},''highlighting''=>{''Attachment
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000003'',''name_texts''=>[''searchquery_instance''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000004'',''name_texts''=>[''searchquery_workspace''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000006'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000006'',''name_texts''=>[''searchquery_workfile''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000008'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000008'',''name_texts''=>[''searchquery_dataset''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000009'',''name_texts''=>[''searchquery_hadoop''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000010'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>564940.94,''docs''=>[{''id''=>''Attachment
+        1000010'',''name_texts''=>[''searchquery_hdfs_file''],''score''=>564940.94}]}},{''groupValue''=>''Attachment
+        1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>423705.7,''docs''=>[{''id''=>''Attachment
+        1000011'',''name_texts''=>[''searchquery_workspace_dataset''],''score''=>423705.7}]}}]}},''highlighting''=>{''Attachment
         1000003''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_instance'']},''Attachment
         1000004''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace'']},''Attachment
         1000006''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workfile'']},''Attachment
@@ -53,5 +53,5 @@ http_interactions:
         1000010''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_hdfs_file'']},''Attachment
         1000011''=>{''name_texts''=>[''@@@hl@@@searchquery@@@endhl@@@_workspace_dataset'']}}}'
     http_version: '1.1'
-  recorded_at: Thu, 21 Mar 2013 22:58:00 GMT
+  recorded_at: Fri, 22 Mar 2013 21:55:11 GMT
 recorded_with: VCR 2.3.0
