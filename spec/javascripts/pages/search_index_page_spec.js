@@ -225,7 +225,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                     it('shows the data source in the sidebar', function() {
                         expect($(this.page.sidebar.el)).toHaveClass("data_source_list_sidebar");
-                        expect(this.page.sidebars.dataSource.setDataSource).toHaveBeenCalledWith(this.page.search.instances().at(0));
+                        expect(this.page.sidebars.dataSource.setDataSource).toHaveBeenCalledWith(this.page.search.dataSources().at(0));
                     });
                 });
             });

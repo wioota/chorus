@@ -33,8 +33,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         if (this.model.datasets().length) {
             this.datasetList = this.buildListView('dataset', this.model.datasets());
         }
-        if (this.model.instances().length) {
-            this.dataSourceList = this.buildListView('data_source', this.model.instances());
+        if (this.model.dataSources().length) {
+            this.dataSourceList = this.buildListView('data_source', this.model.dataSources());
         }
         if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());

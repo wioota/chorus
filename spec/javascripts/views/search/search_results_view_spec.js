@@ -212,7 +212,7 @@ describe("chorus.views.SearchResults", function() {
 
             context('when the li is for a data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
-                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isGreenplum(); });
+                    var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGreenplum(); });
                     this.view.$(".data_source_list li.gpdb_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
@@ -220,7 +220,7 @@ describe("chorus.views.SearchResults", function() {
 
             context('when the li is for a hadoop data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
-                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isHadoop(); });
+                    var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isHadoop(); });
                     this.view.$(".data_source_list li.hdfs_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
@@ -228,7 +228,7 @@ describe("chorus.views.SearchResults", function() {
 
             context('when the li is for a gnip data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
-                    var modelToClick = this.model.instances().find(function (dataSource) { return dataSource.isGnip(); });
+                    var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGnip(); });
                     this.view.$(".data_source_list li.gnip_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });

@@ -337,9 +337,9 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
-        describe("#instances", function() {
-            it("returns a Search InstanceSet", function() {
-                expect(this.model.instances()).toBeA(chorus.collections.Search.InstanceSet);
+        describe("#dataSources", function() {
+            it("returns a Search DataSourceSet", function() {
+                expect(this.model.dataSources()).toBeA(chorus.collections.Search.DataSourceSet);
             });
         });
 
@@ -359,7 +359,7 @@ describe("chorus.models.SearchResult", function() {
                     workfiles: "WorkfileSet",
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",
-                    instances: "InstanceSet",
+                    dataSources: "DataSourceSet",
                     users: "UserSet",
                     attachments: "AttachmentSet"
                 };

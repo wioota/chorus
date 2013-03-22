@@ -5,7 +5,7 @@
         workfiles: "WorkfileSet",
         workspaces: "WorkspaceSet",
         workspaceItems: "WorkspaceItemSet",
-        instances: "InstanceSet",
+        data_sources: "DataSourceSet",
         users: "UserSet",
         other_files: "AttachmentSet"
     };
@@ -154,7 +154,7 @@
         workfiles: makeCollectionMethod("workfiles"),
         datasets: makeCollectionMethod("datasets"),
         workspaces: makeCollectionMethod("workspaces"),
-        instances: makeCollectionMethod("instances"),
+        dataSources: makeCollectionMethod("data_sources"),
         users: makeCollectionMethod("users"),
         hdfs_entries: makeCollectionMethod("hdfs_entries"),
         workspaceItems: makeCollectionMethod("workspaceItems"),
@@ -174,8 +174,8 @@
                     return this.workfiles();
                 case "dataset":
                     return this.datasets();
-                case "instance":
-                    return this.instances();
+                case "data_source":
+                    return this.dataSources();
                 case "hdfs_entry":
                     return this.hdfs_entries();
                 case "other_files":

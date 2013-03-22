@@ -7,7 +7,7 @@ describe("chorus.views.SearchResultList", function() {
                 workspaceId: 123
             });
 
-            var dataSources = this.result.instances();
+            var dataSources = this.result.dataSources();
             dataSources.pagination.records = 24;
 
             this.view = new chorus.views.SearchResultList({
@@ -163,7 +163,7 @@ describe("chorus.views.SearchResultList", function() {
             this.result = rspecFixtures.searchResult();
             this.result.set({ query: "foo" });
 
-            this.dataSources = this.result.instances();
+            this.dataSources = this.result.dataSources();
             this.dataSources.pagination.records = 24;
 
             this.selectedModels = new chorus.collections.Base();
