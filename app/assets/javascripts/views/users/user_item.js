@@ -1,5 +1,5 @@
-chorus.views.User = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
-    templateName: "user/list_item",
+chorus.views.UserItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    templateName: "user/user_item",
     tagName: "li",
 
     additionalContext: function() {

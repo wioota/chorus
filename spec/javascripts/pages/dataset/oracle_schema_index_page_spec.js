@@ -35,14 +35,14 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
             expect(this.page.mainContent.content.$el).toContainText("schema2");
         });
 
-        it("should have set up search correctly", function() {
+        it("set up search correctly", function() {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("schema.search_placeholder"));
             expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
 
             this.page.$("input.search").val("schema1").trigger("keyup");
 
-            expect(this.page.$("li.schema:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".schema_item:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
             expect(this.page.mainContent.options.search.eventName).toBe("schema:search");
         });
@@ -67,7 +67,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
 
             it("includes the selected schemas name and type", function() {
                 expect(this.page.sidebar.$el).toContainText("schema1");
-                this.page.$('.schema:eq(1)').click();
+                this.page.$('.schema_item:eq(1)').click();
                 expect(this.page.sidebar.$el).toContainText("schema2");
                 expect(this.page.sidebar.$el).toContainText("Oracle DB Schema");
             });

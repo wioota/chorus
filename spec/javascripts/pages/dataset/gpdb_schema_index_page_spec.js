@@ -45,7 +45,7 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
 
             this.page.$("input.search").val("bar").trigger("keyup");
 
-            expect(this.page.$("li.schema:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".schema_item:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
             expect(this.page.mainContent.options.search.eventName).toBe("schema:search");
         });

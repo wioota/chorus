@@ -15,7 +15,6 @@ chorus.views.KaggleUserList = chorus.views.SelectableList.extend({
     },
 
     postRender: function() {
-
         this._super("postRender", arguments);
 
         this.checkSelectedKaggleUsers();

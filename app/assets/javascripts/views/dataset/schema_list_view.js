@@ -1,21 +1,10 @@
-chorus.views.SchemaList = chorus.views.SelectableList.extend({
-    templateName: "schema_list",
+chorus.views.SchemaList = chorus.views.CheckableList.extend({
     eventName: "schema",
+    persistent: true,
 
-    collectionModelContext: function(model) {
-        return {
-            showUrl: model.showUrl(),
-            datasetMessage: this.datasetMessage(model)
-        };
-    },
-
-    datasetMessage: function(model) {
-        var datasetCount = model.get('datasetCount');
-
-        if(model.get('refreshedAt')) {
-            return I18n.t("entity.name.WorkspaceDataset", {count: datasetCount});
-        } else {
-            return I18n.t("entity.name.WorkspaceDataset.refreshing");
-        }
+    setup: function() {
+        this.options.entityType = "schema";
+        this.options.entityViewType = chorus.views.SchemaItem;
+        this._super("setup", arguments);
     }
 });
