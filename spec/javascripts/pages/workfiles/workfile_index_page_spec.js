@@ -165,7 +165,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             this.page.$("input.search").val("bar").trigger("keyup");
 
-            expect(this.page.$("li.workfile:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$("li.workfile_item:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 1});
             expect(this.page.mainContent.options.search.eventName).toBe("workfile:search");
 

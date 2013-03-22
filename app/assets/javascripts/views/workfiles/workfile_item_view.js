@@ -1,5 +1,5 @@
-chorus.views.Workfile = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
-    templateName:"workfile",
+chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    templateName:"workfile_item",
     tagName: "li",
 
     subviews: {
@@ -44,7 +44,6 @@ chorus.views.Workfile = chorus.views.Base.extend(chorus.Mixins.TagsContext).exte
 
             ctx.otherCommentCount = parseInt(this.model.get("commentCount"), 10) - 1;
         }
-
         return ctx;
     }
 });

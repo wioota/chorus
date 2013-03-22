@@ -1,5 +1,5 @@
-chorus.views.Workspace = chorus.views.Base.extend({
-    templateName: "workspace",
+chorus.views.WorkspaceItem = chorus.views.Base.extend({
+    templateName: "workspace_item",
     tagName: "li",
 
     subviews: {

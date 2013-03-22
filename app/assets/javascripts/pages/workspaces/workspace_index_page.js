@@ -23,6 +23,7 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             modelClass:"Workspace",
             collection:this.collection,
+            checkable:true,
             linkMenus:{
                 type:{
                     title:t("filter.show"),

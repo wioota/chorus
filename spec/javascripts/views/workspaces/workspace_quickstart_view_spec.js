@@ -15,7 +15,6 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         expect(this.view.$(".body")).toContainTranslation("workspace.quickstart.body");
     });
 
-
     context("when the quickstart guide is shown", function() {
         context("the tasks haven't been done", function() {
             beforeEach(function() {

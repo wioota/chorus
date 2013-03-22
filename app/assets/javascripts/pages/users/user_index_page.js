@@ -24,6 +24,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             modelClass:"User",
             collection:this.collection,
+            checkable:true,
             linkMenus:{
                 sort:{
                     title:t("users.header.menu.sort.title"),
