@@ -540,11 +540,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Color Palette": new chorus.views.ColorPaletteView(),
 
-            "List Page (loading)": new chorus.views.MainContentList({modelClass: "User", collection: collections.loadingCollection}),
+            "List Page (loading)": new chorus.views.MainContentList({
+                modelClass: "Dataset",
+                checkable: true,
+                collection: collections.loadingCollection}),
 
-            "List Page": new chorus.views.MainContentList({
+            "User List": new chorus.views.MainContentList({
                 modelClass: "User",
                 collection: collections.userCollection,
+                checkable: true,
                 linkMenus: {
                     sort: {
                         title: t("users.header.menu.sort.title"),
@@ -568,26 +572,38 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 ]
             }),
 
-            "Dataset List": new chorus.views.MainContentList({
-                collection: collections.datasetSet,
-                modelClass: "Dataset",
+            "Database List": new chorus.views.MainContentList({
+                collection: collections.databaseSet,
+                modelClass: "Database",
+                checkable: true
+            }),
+
+            "Workfile List": new chorus.views.MainContentList({
+                collection: collections.workfileSet,
+                modelClass: "Workfile",
+                checkable: true
+            }),
+
+            "Schema List": new chorus.views.MainContentList({
+                collection: collections.schemaSet,
+                modelClass: "Schema",
+                checkable: true
+            }),
+
+            "Workspace List": new chorus.views.MainContentList({
+                collection: collections.workspaceSet,
+                modelClass: "Workspace",
                 checkable: true
             }),
 
             "HDFS Entry List": new chorus.views.MainContentList({
                 collection: collections.hdfsEntrySet,
-                modelClass: "HdfsEntry",
-                checkable: true
+                modelClass: "HdfsEntry"
             }),
 
-            "Database List": new chorus.views.MainContentList({
-                collection: collections.databaseSet,
-                modelClass: "Database"
-            }),
-
-            "Schema List": new chorus.views.MainContentList({
-                collection: collections.schemaSet,
-                modelClass: "Schema"
+            "Dataset List": new chorus.views.MainContentList({
+                collection: collections.datasetSet,
+                modelClass: "Dataset"
             }),
 
             "Data Source List": (function() {
@@ -603,16 +619,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 });
             })(),
 
-            "Workfile List": new chorus.views.MainContentList({
-                collection: collections.workfileSet,
-                modelClass: "Workfile",
-                checkable: true
-            }),
-
-            "Workspace List": new chorus.views.MainContentList({
-                collection: collections.workspaceSet,
-                modelClass: "Workspace"
-            }),
 
             "Search Result List": new chorus.views.SearchResults({
                 model: models.searchResult
