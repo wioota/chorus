@@ -17,10 +17,11 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "kaggleUser:checked",
             actions: [
-                '<a class="send_message" href="#">{{t "actions.send_kaggle_message"}}</a>'
+                '<a class="send_message" href="#">{{t "actions.compose_kaggle_message"}}</a>'
             ],
             actionEvents: {
-                'click .send_message': _.bind(function() {
+                'click .send_message': _.bind(function(e) {
+                    e.preventDefault();
                     new chorus.dialogs.ComposeKaggleMessage({recipients: this.multiSelectSidebarMenu.selectedModels, workspace: this.workspace}).launchModal();
                 }, this)
             }
@@ -31,6 +32,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("filterKaggleUsers", this.filterKaggleUsers);
 
         this.breadcrumbs.requiredResources.add(this.workspace);
+        this.requiredResources.add(this.workspace);
     },
 
     makeModel: function(workspaceId) {

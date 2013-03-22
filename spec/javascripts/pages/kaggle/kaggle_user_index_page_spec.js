@@ -5,36 +5,33 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 
-    describe("setup", function() {
-        it("fetches the kaggle users", function() {
-            expect(this.kaggleUsers).toHaveBeenFetched();
+    it("fetches the kaggle users", function() {
+        expect(this.kaggleUsers).toHaveBeenFetched();
+    });
+
+    it("has a sidebar with the workspace", function() {
+        expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
+        expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
+    });
+
+    context("Kaggle user list is unreachable", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.kaggleUsers).failUnprocessableEntity({
+                record: 'KAGGLE_API_UNREACHABLE'
+            });
         });
 
-        it("has a sidebar with the workspace", function() {
-            expect(this.page.sidebar).toBeA(chorus.views.KaggleUserSidebar);
-            expect(this.page.sidebar.workspace.id).toBe(this.workspace.id);
-        });
-
-        context("Kaggle user list is unreachable", function() {
-            beforeEach(function() {
-                spyOn(Backbone.history, "loadUrl");
-                this.server.lastFetchFor(this.kaggleUsers).failUnprocessableEntity({
-                    record: 'KAGGLE_API_UNREACHABLE'
-                });
-            });
-
-            it("redirects to the unprocessable entity page", function() {
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
-                expect(chorus.pageOptions.title).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE_title');
-                expect(chorus.pageOptions.text).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE');
-            });
+        it("redirects to the unprocessable entity page", function() {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
+            expect(chorus.pageOptions.title).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE_title');
+            expect(chorus.pageOptions.text).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE');
         });
     });
 
     context("after the workspace has loaded successfully", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace, this.workspace);
-            this.page.render();
         });
 
         it("displays the breadcrumbs", function() {
@@ -88,9 +85,9 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
     });
 
-    describe("render", function() {
+    describe("when the users and the workspace have loaded", function() {
         beforeEach(function() {
-            this.page.render();
+            this.server.completeFetchFor(this.workspace);
             this.server.completeFetchFor(this.kaggleUsers);
         });
 
@@ -108,7 +105,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
     });
 
-    describe("on filterKaggleUsers page event", function() {
+    describe("filtering the kaggle users", function() {
         beforeEach(function() {
             this.server.reset();
             var filterCollection = new chorus.collections.KaggleFilterSet([
@@ -120,7 +117,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             chorus.PageEvents.broadcast("filterKaggleUsers", filterCollection);
         });
 
-        it("send the params as format filter|comparator|value", function() {
+        it("sends a request for the filtered users", function() {
             expect(this.page.collection).toHaveBeenFetched();
             var url = this.server.lastFetchFor(this.page.collection).url;
             expect(url).toContainQueryParams({'filters[]': 'someValue'});
