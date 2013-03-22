@@ -43,7 +43,8 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isExternal: function() {
-        return this.statistics().get("objectType") === "EXT_TABLE";
+        var objectType = this.statistics().get("objectType");
+        return (/EXT_TABLE$/).test(objectType);
     },
 
     columns: function(options) {

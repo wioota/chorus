@@ -1085,13 +1085,24 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#isExternal", function() {
-        it('returns true if the table is external', function() {
+        beforeEach(function() {
             this.dataset.statistics().fetch();
-            var statistics = rspecFixtures.datasetStatisticsTable();
-            statistics.set("datasetId", this.dataset.id);
-            statistics.set("object_type", "EXT_TABLE");
-            this.server.completeFetchFor(statistics);
+            this.dataset.statistics().set("datasetId", this.dataset.id);
+            this.server.completeFetchFor(this.dataset.statistics());
+        });
+
+        it('returns true if the table is external', function() {
+            this.dataset.statistics().set("objectType", "EXT_TABLE");
             expect(this.dataset.isExternal()).toBe(true);
+        });
+
+        it('returns true it the table is some other kind of external table', function(){
+            this.dataset.statistics().set("objectType", "JOES_EXT_TABLE");
+            expect(this.dataset.isExternal()).toBe(true);
+        });
+
+        it('returns false if the table is any other kind of table', function(){
+            expect(this.dataset.isExternal()).toBe(false);
         });
     });
 
