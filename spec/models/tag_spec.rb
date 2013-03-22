@@ -40,7 +40,7 @@ describe Tag do
     end
   end
 
-  describe "polymorphicism" do
+  describe "polymorphism" do
     it "can belong to multiple types" do
       table = FactoryGirl.create(:gpdb_table)
       table.tags << Tag.new(:name => "fancy tag")
@@ -110,7 +110,7 @@ describe Tag do
       end.to change { tag.reload.taggings_count }.by(2)
     end
 
-    xit "updates the taggings count when removing taggings"  do
+    it "updates the taggings count when removing taggings"  do
       model_1.tags << tag
       model_2.tags << tag
       expect do
