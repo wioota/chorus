@@ -64,7 +64,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         models.subNav = new chorus.views.SubNav({model: models.workspace, tab: "workfiles"});
 
         models.tag = new chorus.models.Tag({
-            "name": "my first tag"
+            name: "my first tag",
+            count: 20
         });
 
         models.greenplumDataSource = new chorus.models.GpdbDataSource({
@@ -293,6 +294,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     buildCollections: function(models) {
         var collections = {};
+
+        collections.tagSet = new chorus.collections.TagSet([models.tag, new chorus.models.Tag({name: 'Another Taggy TagTag', count: 10})]);
+        collections.tagSet.loaded = true;
 
         collections.workspaceSet = new chorus.collections.WorkspaceSet([models.workspace, models.privateWorkspace, models.archivedWorkspace]);
         collections.workspaceSet.loaded = true;
@@ -588,6 +592,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Workspace List": new chorus.views.MainContentList({
                 collection: collections.workspaceSet,
                 modelClass: "Workspace"
+            }),
+
+            "Tag List": new chorus.views.MainContentList({
+                collection: collections.tagSet,
+                modelClass: 'Tag'
             }),
 
             "HDFS Entry List": new chorus.views.MainContentList({

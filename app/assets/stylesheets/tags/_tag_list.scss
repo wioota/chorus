@@ -1,33 +1,31 @@
-.list {
-    li.tag {
-        color: #5f5f5f;
-        background-image: url('/images/tags/icon_tag.png');
-        background-position: 10px 10px;
-        background-repeat: no-repeat;
+.tag_item {
+    color: #5f5f5f;
+    background-image: url('/images/tags/icon_tag.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
 
-        div {
-            margin: 5px;
-            margin-left: 60px;
-            word-wrap: break-word;
-            word-break:break-all;
-        }
+    div {
+        margin: 5px;
+        margin-left: 60px;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
 
-        .name {
-          margin-bottom: 0px;
+    .name {
+        margin-bottom: 0px;
 
-          a {
+        a {
             font-size: 18px;
-          }
-        }
-
-        .count {
-            margin-top: 0px;
-            font-size: 12px;
-            color: #7d7d7d;
         }
     }
 
-    li.tag.selected {
-        color: #2c95dd;
+    .count {
+        margin-top: 0px;
+        font-size: 12px;
+        color: #7d7d7d;
     }
+}
+
+.tag_item.selected {
+    color: #2c95dd;
 }
