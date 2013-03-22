@@ -8,7 +8,7 @@ describe "Data Source Permissions" do
   before do
     login(owner)
     visit("#/data_sources/")
-    find("li.instance[data-instance-id='#{the_data_source.id}']").click
+    find("li.data_source[data-data-source-id='#{the_data_source.id}']").click
     within '.account_info' do
       click_link "Edit"
     end
