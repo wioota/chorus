@@ -44,6 +44,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             }
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
+                useCustomList: true,
                 collection: this.columnSet,
                 persistent: true,
                 contentHeader: this.customHeaderView,

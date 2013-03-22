@@ -50,7 +50,7 @@
             ["data_sources", "DataSourceIndex"],
             ["data_sources/:dataSourceId/databases", "DatabaseIndex"],
             ["databases/:databaseId", "GpdbSchemaIndex"],
-            ["schemas/:schemaId", "SchemaBrowse"],
+            ["schemas/:schemaId", "SchemaDatasetIndex"],
             ["datasets/:id", "DatasetShow"],
             ["gnip_data_sources/:id", "GnipDataSourceShow"],
             ["hdfs_data_sources/:dataSourceId/browse", "HdfsEntryIndex"],

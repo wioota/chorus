@@ -12,7 +12,6 @@ chorus.pages.OracleSchemaIndexPage = chorus.pages.Base.include(
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",
-            checkable: true,
             contentHeader: new chorus.views.TaggableHeader({model: this.dataSource}),
             collection: this.collection,
             search: {

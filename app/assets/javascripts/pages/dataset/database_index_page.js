@@ -18,7 +18,6 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.mainContent = new chorus.views.MainContentList({
             emptyTitleBeforeFetch: true,
             modelClass: "Database",
-            checkable: true,
             collection: this.collection,
             contentHeader: new chorus.views.TaggableHeader({model: this.instance}),
             search: {

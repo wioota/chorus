@@ -20,13 +20,13 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         expect(this.page.model.get("hdfsDataSource").id).toBe("1234");
     });
 
-    context("fetches complete", function() {
+    context("when the file and the hdfs data source have loaded", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.page.hdfsDataSource, this.hdfsDataSource);
             this.server.completeFetchFor(this.page.model, this.file);
         });
 
-        it("has the breadcrumbs", function() {
+        it("shows the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
             expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 
@@ -41,7 +41,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("my file.txt");
         });
 
-        it("has the file is read-only indicator", function() {
+        it("shows the read-only indicator", function() {
             expect(this.page.$(".content_details")).toContainTranslation("hdfs.read_only");
         });
 
@@ -76,7 +76,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".errors")).toExist();
             expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
         });
-
     });
 
     describe("when the path is long", function() {

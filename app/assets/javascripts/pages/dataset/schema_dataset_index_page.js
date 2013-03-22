@@ -1,7 +1,7 @@
-chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
+chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
     chorus.Mixins.DataSourceCredentials.page
 ).extend({
-    constructorName: 'SchemaShow',
+    constructorName: 'SchemaDatasetIndexPage',
     helpId: "schema",
 
     setup: function(schema_id) {
@@ -79,7 +79,9 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
                 placeholder: t("schema.search"),
                 onTextChange: onTextChangeFunction
             },
-            contentOptions: { checkable: true },
+            contentOptions: {
+                checkable: true
+            },
             contentDetailsOptions: { multiSelect: true }
         });
         this.render();

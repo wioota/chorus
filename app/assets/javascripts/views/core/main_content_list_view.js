@@ -7,15 +7,14 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         var modelClass = options.modelClass;
         var collection = this.collection;
 
-        if(options.checkable) {
+        if(options.useCustomList) {
+            this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
+        } else {
             this.content = new chorus.views.CheckableList(_.extend({
                     collection: collection,
                     entityType: modelClass.toLowerCase(),
                     entityViewType: chorus.views[modelClass + "Item"]
-                },
-                options.contentOptions));
-        } else {
-            this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
+                }, options.contentOptions));
         }
 
         this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl, sandbox: options.sandbox});

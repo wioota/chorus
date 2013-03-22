@@ -9,6 +9,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "KaggleUser",
+            useCustomList: true,
             collection: this.collection,
             contentHeader: new chorus.views.KaggleHeader(),
             contentDetails: new chorus.views.KaggleUserListContentDetails({collection: this.collection})

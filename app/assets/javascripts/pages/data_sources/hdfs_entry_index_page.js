@@ -27,6 +27,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.HdfsEntryHeader({dataSource: this.instance, hdfsEntry: this.hdfsEntry}),
             modelClass: "HdfsEntry",
             collection: this.collection,
+            useCustomList: true,
             contentDetailsOptions: {multiSelect: true}
         });
 

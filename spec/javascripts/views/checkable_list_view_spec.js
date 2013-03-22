@@ -6,7 +6,7 @@ describe("chorus.views.CheckableList", function() {
         ], {schemaId: "3"});
         this.view = new chorus.views.CheckableList({
             entityType: 'dataset',
-            entityViewType: chorus.views.Dataset,
+            entityViewType: chorus.views.DatasetItem,
             collection: this.collection,
             listItemOptions: {itemOption: 123}
         });
@@ -19,7 +19,7 @@ describe("chorus.views.CheckableList", function() {
            this.selectedModels = new chorus.collections.Base();
             this.view = new chorus.views.CheckableList({
                 entityType: 'dataset',
-                entityViewType: chorus.views.Dataset,
+                entityViewType: chorus.views.DatasetItem,
                 collection: this.collection,
                 selectedModels: this.selectedModels
             });

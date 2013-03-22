@@ -13,7 +13,6 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             collection: this.collection,
             model: this.workspace,
             title: t("workfiles.title"),
-            checkable: true,
             contentDetailsOptions: { multiSelect: true },
             contentOptions: {listItemOptions: {workspaceIdForTagLink: this.workspace.id} },
             linkMenus: {

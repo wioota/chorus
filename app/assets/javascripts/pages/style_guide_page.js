@@ -542,13 +542,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "List Page (loading)": new chorus.views.MainContentList({
                 modelClass: "Dataset",
-                checkable: true,
                 collection: collections.loadingCollection}),
 
             "User List": new chorus.views.MainContentList({
                 modelClass: "User",
                 collection: collections.userCollection,
-                checkable: true,
                 linkMenus: {
                     sort: {
                         title: t("users.header.menu.sort.title"),
@@ -574,36 +572,34 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Database List": new chorus.views.MainContentList({
                 collection: collections.databaseSet,
-                modelClass: "Database",
-                checkable: true
+                modelClass: "Database"
             }),
 
             "Workfile List": new chorus.views.MainContentList({
                 collection: collections.workfileSet,
-                modelClass: "Workfile",
-                checkable: true
+                modelClass: "Workfile"
             }),
 
             "Schema List": new chorus.views.MainContentList({
                 collection: collections.schemaSet,
-                modelClass: "Schema",
-                checkable: true
+                modelClass: "Schema"
             }),
 
             "Workspace List": new chorus.views.MainContentList({
                 collection: collections.workspaceSet,
-                modelClass: "Workspace",
-                checkable: true
+                modelClass: "Workspace"
             }),
 
             "HDFS Entry List": new chorus.views.MainContentList({
                 collection: collections.hdfsEntrySet,
-                modelClass: "HdfsEntry"
+                modelClass: "HdfsEntry",
+                useCustomList: true
             }),
 
             "Dataset List": new chorus.views.MainContentList({
                 collection: collections.datasetSet,
-                modelClass: "Dataset"
+                modelClass: "Dataset",
+                useCustomList: true
             }),
 
             "Data Source List": (function() {
@@ -615,7 +611,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
                 return new chorus.views.MainContentView({
                     contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
-                    content: new chorus.views.DataSourceList(options)
+                    content: new chorus.views.DataSourceList(options),
+                    useCustomList: true
                 });
             })(),
 

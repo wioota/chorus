@@ -44,7 +44,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             modelClass: "Dataset",
             collection: this.collection,
             model: this.workspace,
-            checkable: false,
+            useCustomList: true,
             title: t("dataset.title"),
             contentDetailsOptions: { multiSelect: true },
             search: {

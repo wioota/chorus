@@ -16,7 +16,6 @@ chorus.pages.GpdbSchemaIndexPage = chorus.pages.Base.include(
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",
-            checkable: true,
             collection: this.collection,
             title: _.bind(this.database.name, this.database),
             imageUrl: "/images/data_sources/greenplum_database.png",
