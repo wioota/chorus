@@ -42,6 +42,10 @@ chorus.models.Dataset = chorus.models.Base.include(
       return this.instance().isGreenplum();
     },
 
+    isExternal: function() {
+        return this.statistics().get("objectType") === "EXT_TABLE";
+    },
+
     columns: function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
@@ -273,7 +277,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     canAnalyze: function() {
-        return this.hasCredentials() && this.isGpdbTable() && !this.workspaceArchived();
+        return this.hasCredentials() && this.isGpdbTable() && !this.workspaceArchived() && !this.isExternal();
     },
 
     analyze: function() {

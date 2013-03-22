@@ -1078,6 +1078,21 @@ describe("chorus.models.Dataset", function() {
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
+        it("returns false when the dataset is an external table", function(){
+            spyOn(this.dataset, "isExternal").andReturn(true);
+            expect(this.dataset.canAnalyze()).toBeFalsy();
+        });
+    });
+
+    describe("#isExternal", function() {
+        it('returns true if the table is external', function() {
+            this.dataset.statistics().fetch();
+            var statistics = rspecFixtures.datasetStatisticsTable();
+            statistics.set("datasetId", this.dataset.id);
+            statistics.set("object_type", "EXT_TABLE");
+            this.server.completeFetchFor(statistics);
+            expect(this.dataset.isExternal()).toBe(true);
+        });
     });
 
     describe("Analyze", function() {
