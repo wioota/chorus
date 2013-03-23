@@ -40,7 +40,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
 
         it("returns objects of the appropriate type, excluding artifacts", function() {
             var expectToContainClass = function(list, entityClass) {
-                expect(!!_.find(list, function(element) {
+                expect(_.find(list, function(element) {
                     return element instanceof entityClass;
                 })).toBeTruthy();
             };
@@ -52,8 +52,6 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.OracleDataSource);
             expectToContainClass(this.searchResults, chorus.models.User);
             expectToContainClass(this.searchResults, chorus.models.Workfile);
-            expectToContainClass(this.searchResults, chorus.models.Dataset);
-//            expectToContainClass(this.searchResults, chorus.models.ChorusView);
         });
 
         it("expects all result objects to have a name and downloadUrl/showUrl method", function() {

@@ -114,7 +114,7 @@ describe SearchController do
       end
 
       generate_and_record_fixture "typeAheadSearchResult.json" do
-        get :type_ahead, :query => 'typeahead', :per_page => 15
+        get :type_ahead, :query => 'typeahead', :per_page => 20
       end
     end
   end
