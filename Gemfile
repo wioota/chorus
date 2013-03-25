@@ -77,4 +77,5 @@ group :development do
   gem 'license_finder'
   gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
   gem 'bullet'
+  gem 'vagrant'
 end
