@@ -197,6 +197,14 @@ describe GpdbDataSource do
           mock(gpdb_data_source).refresh_schemas(options)
           gpdb_data_source.refresh_databases options
         end
+
+        it 'does not refresh schemas in stale databases' do
+          missing_database.mark_stale!
+          dont_allow(Schema).refresh(anything, missing_database, anything)
+          mock(Schema).refresh(anything, database, anything)
+
+          gpdb_data_source.refresh_schemas
+        end
       end
 
       context "when the data_source is not available" do

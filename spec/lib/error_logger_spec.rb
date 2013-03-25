@@ -9,4 +9,13 @@ describe Chorus do
       end
     end
   end
+
+  describe "#log_debug" do
+    it "prepends the date and time in utc" do
+      Timecop.travel(Time.utc(2012, 11, 11, 11, 0, 0)) do
+        mock(Rails.logger).debug("2012-11-11 11:00:00 DEBUG: Help")
+        Chorus.log_debug("Help")
+      end
+    end
+  end
 end

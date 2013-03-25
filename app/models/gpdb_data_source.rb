@@ -56,11 +56,11 @@ class GpdbDataSource < DataSource
   end
 
   def refresh_schemas(options={})
-    databases.each do |database|
+    databases.not_stale.each do |database|
       begin
         Schema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
       rescue GreenplumConnection::DatabaseError => e
-        Chorus.log_error "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
+        Chorus.log_debug "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
       end
     end
   end
