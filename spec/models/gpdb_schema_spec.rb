@@ -318,4 +318,8 @@ describe GpdbSchema do
       schema.class_for_type('v').should == GpdbView
     end
   end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { schemas(:default)}
+  end
 end

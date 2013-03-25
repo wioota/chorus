@@ -2,7 +2,6 @@ require 'greenplum_connection'
 
 class GpdbSchema < Schema
   include Stale
-  include SoftDelete
 
   attr_accessible :database
   alias_attribute :parent, :database

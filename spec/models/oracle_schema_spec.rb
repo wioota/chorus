@@ -117,4 +117,8 @@ describe OracleSchema do
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:oracle) }
   end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { schemas(:oracle)}
+  end
 end
