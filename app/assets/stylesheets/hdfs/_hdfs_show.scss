@@ -1,24 +1,23 @@
-#page[data-page=HdfsShowFile] {
-    .hdfs_show_file_view {
-        .hdfs_content {
-            .hdfs_file_content {
-                padding: $padding-y $padding-x;
-                overflow-x: auto;
-            }
+.hdfs_show_file_view {
+    .hdfs_content {
+        .hdfs_file_content {
+            padding: $padding-y $padding-x;
+            overflow-x: auto;
         }
     }
+}
 
-    .content_details {
-         background: $content-details-action-background-color;
-         height: auto;
-         line-height: 30px;
-         vertical-align: middle;
-         color: $content-details-action-link-color;
-         text-align: right;
+.hdfs_show_file_details {
+    background: $content-details-action-background-color;
+    color: $content-details-action-link-color;
+    height: inherit;
+    line-height: 30px;
+    padding: 0 10px;
+    text-align: right;
+    vertical-align: middle;
 
-        .errors {
-            margin-left: -$padding-x;
-            margin-right: -$padding-x;
-        }
-     }
+    .errors {
+        margin-left: -$padding-x;
+        margin-right: -$padding-x;
+    }
 }

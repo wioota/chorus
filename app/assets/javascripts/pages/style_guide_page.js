@@ -27,7 +27,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     className: "views",
 
     buildModels: function() {
-        var models = {};
+        this.models = {};
         var tagList = (function(length) {
             var tags = [];
             for(var i = 0; i < length; i++) {
@@ -36,7 +36,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             return tags;
         })(50);
 
-        models.workspace = new chorus.models.Workspace({
+        this.models.workspace = new chorus.models.Workspace({
             name: "Some Workspace",
             summary: "One awesome workspace",
             owner: {firstName: "Bob", lastName: "Lablaw"},
@@ -45,30 +45,30 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             tags: tagList,
             completeJson: true
         });
-        models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Data Source'}}});
+        this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Data Source'}}});
 
-        models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
-        models.privateWorkspace.loaded = true;
+        this.models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
+        this.models.privateWorkspace.loaded = true;
 
-        models.archivedWorkspace = new chorus.models.Workspace({
+        this.models.archivedWorkspace = new chorus.models.Workspace({
             name: "Archived Workspace",
             summary: "old data",
             owner: {firstName: "The", lastName: "Past"},
             "public": false,
             archiver: {firstName: "Mr", lastName: "Archiver"},
             archivedAt: "1985-07-21T06:21:02Z"});
-        models.archivedWorkspace.loaded = true;
+        this.models.archivedWorkspace.loaded = true;
 
-        models.instanceAccount = new chorus.models.InstanceAccount();
+        this.models.instanceAccount = new chorus.models.InstanceAccount();
 
-        models.subNav = new chorus.views.SubNav({model: models.workspace, tab: "workfiles"});
+        this.models.subNav = new chorus.views.SubNav({model: this.models.workspace, tab: "workfiles"});
 
-        models.tag = new chorus.models.Tag({
+        this.models.tag = new chorus.models.Tag({
             name: "my first tag",
             count: 20
         });
 
-        models.greenplumDataSource = new chorus.models.GpdbDataSource({
+        this.models.greenplumDataSource = new chorus.models.GpdbDataSource({
             name: "Greenplum Data Source",
             online: true,
             description: "This is a description of a data source. It is so sick, so AWESOME!",
@@ -76,21 +76,21 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             completeJson: true
         });
 
-        models.oracleDataSource = new chorus.models.OracleDataSource({
+        this.models.oracleDataSource = new chorus.models.OracleDataSource({
             name: "Oracle Data Source",
             online: false,
             tags: tagList,
             completeJson: true
         });
 
-        models.hdfsDataSource = new chorus.models.HdfsDataSource({
+        this.models.hdfsDataSource = new chorus.models.HdfsDataSource({
             name: "Angry Elephant",
             online: true,
             tags: tagList,
             completeJson: true
         });
 
-        models.gnipDataSource = new chorus.models.GnipDataSource({
+        this.models.gnipDataSource = new chorus.models.GnipDataSource({
             name: "Some Gnip Source",
             online: true,
             entityType: "gnip_data_source",
@@ -98,66 +98,67 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             completeJson: true
         });
 
-        models.database = new chorus.models.Database({
+        this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "instance": models.greenplumDataSource
+            "instance": this.models.greenplumDataSource
         });
 
-        models.otherDatabase = new chorus.models.Database({
+        this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "instance": models.greenplumDataSource
+            "instance": this.models.greenplumDataSource
         });
 
-        models.schema = new chorus.models.Schema({
+        this.models.schema = new chorus.models.Schema({
             "name": "Some schema",
-            "database": models.database,
+            "database": this.models.database,
             "datasetCount": 3,
             "refreshedAt": true
         });
 
-        models.otherSchema = new chorus.models.Schema({
+        this.models.otherSchema = new chorus.models.Schema({
             "name": "Other schema",
-            "database": models.database,
+            "database": this.models.database,
             refreshedAt: null
         });
 
-        models.dataset = new chorus.models.Dataset({
+        this.models.dataset = new chorus.models.Dataset({
             type: "SOURCE_TABLE",
             objectName: "table",
-            schema: models.schema,
+            schema: this.models.schema,
             entityType: "dataset",
             objectType: "TABLE",
             tags: tagList,
             associatedWorkspaces: [
-                models.workspace
+                this.models.workspace
             ],
             completeJson: true
         });
 
-        models.datasetImportability = new chorus.models.DatasetImportability({
+        this.models.datasetImportability = new chorus.models.DatasetImportability({
             "importable": "false",
             "invalidColumns": []
         });
 
-        models.otherDataset = new chorus.models.Dataset({
+        this.models.otherDataset = new chorus.models.Dataset({
             "type": "SOURCE_TABLE",
             "objectName": "other table",
-            "schema": models.schema,
+            "schema": this.models.schema,
             "tags": [
-                models.tag
+                this.models.tag
             ],
             "entityType": "dataset",
             "objectType": "TABLE"
         });
 
-        models.workfile = new chorus.models.Workfile({
+        this.models.workfile = new chorus.models.Workfile({
             fileName: "Some workfile",
             tags: tagList,
+            fileType: 'sql',
             completeJson: true,
-            workspace: models.workspace
+            workspace: this.models.workspace
         });
 
-        models.otherWorkfile = new chorus.models.Workfile({
+        this.models.tableauWorkfile = new chorus.models.Workfile({
             fileName: "Bestest Tableaust Workfile",
             fileType: "tableau_workbook",
             workbookName: "hey tableau is the bomb",
@@ -165,7 +166,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             completeJson: true
         });
 
-        models.task = (function() {
+        this.models.task = (function() {
             var animals = ['aardvark', 'bat', 'cheetah'];
             var columns = [
                 { name: "id" },
@@ -186,7 +187,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             });
         })();
 
-        models.user = new chorus.models.User({ username: "edcadmin",
+        this.models.user = new chorus.models.User({ username: "edcadmin",
             firstName: "Johnny",
             lastName: "Danger",
             admin: false,
@@ -198,32 +199,32 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             dept: "Corporation Corp., Inc.",
             notes: "One of our top performers",
             completeJson: true});
-        models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
-        models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
+        this.models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
+        this.models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
-        models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, size: 1024, completeJson: true});
-        models.hdfsDir = new chorus.models.HdfsEntry({name: "TestExpression", path: '/arbitrary/path', isDir: true, hdfsDataSource: models.hdfsDataSource, tags: tagList, count: 4, completeJson: true});
+        this.models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: this.models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, size: 1024, completeJson: true});
+        this.models.hdfsDir = new chorus.models.HdfsEntry({name: "TestExpression", path: '/arbitrary/path', isDir: true, hdfsDataSource: this.models.hdfsDataSource, tags: tagList, count: 4, completeJson: true});
 
-        models.activity = new chorus.models.Activity({
+        this.models.activity = new chorus.models.Activity({
             "action": "DataSourceChangedOwner",
-            "actor": models.user,
-            "dataSource": models.greenplumDataSource,
-            "newOwner": models.otherUser,
+            "actor": this.models.user,
+            "dataSource": this.models.greenplumDataSource,
+            "newOwner": this.models.otherUser,
             "timestamp": "2013-01-31T20:14:27Z"
         });
 
-        models.otherActivity = new chorus.models.Activity({
+        this.models.otherActivity = new chorus.models.Activity({
             "action": "WorkfileCreated",
-            "actor": models.user,
-            "workfile": models.workfile,
+            "actor": this.models.user,
+            "workfile": this.models.workfile,
             "commitMessage": "I am committed to this workfile",
-            "workspace": models.workspace,
+            "workspace": this.models.workspace,
             "timestamp": "2013-01-31T20:14:27Z"
         });
 
-        models.searchResult = new chorus.models.SearchResult({
+        this.models.searchResult = new chorus.models.SearchResult({
             users: {
-                results: [models.user.set({ highlightedAttributes: {
+                results: [this.models.user.set({ highlightedAttributes: {
                     "lastName": [
                         "<em>Danger</em>"
                     ]
@@ -233,29 +234,29 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             workspaces: {
                 results: [
-                    models.workspace.set({ highlightedAttributes: { summary: ["<em>Danger</em> Zone!!"]}}),
-                    models.archivedWorkspace.set({highlightedAttributes: { summary: ['<em>Search Hit</em>']}})
+                    this.models.workspace.set({ highlightedAttributes: { summary: ["<em>Danger</em> Zone!!"]}}),
+                    this.models.archivedWorkspace.set({highlightedAttributes: { summary: ['<em>Search Hit</em>']}})
                     ],
                 numFound: 1
             },
 
             hdfsEntries: {
-                results: [models.hdfsFile],
+                results: [this.models.hdfsFile],
                 numFound: 1
             },
 
             datasets: {
-                results: [models.dataset],
+                results: [this.models.dataset],
                 numFound: 1000
             },
 
             workfiles: {
-                results: [models.workfile],
+                results: [this.models.workfile],
                 numFound: 2
             },
 
             instances: {
-                results: [models.greenplumDataSource, models.hdfsDataSource, models.gnipDataSource],
+                results: [this.models.greenplumDataSource, this.models.hdfsDataSource, this.models.gnipDataSource],
                 numFound: 4
             },
 
@@ -285,59 +286,78 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }
         });
 
-        models.chorusView = new chorus.models.ChorusView(models.dataset.set({query: "SELECT * FROM everywhere;"}));
+        this.models.chorusView = new chorus.models.ChorusView(this.models.dataset.set({query: "SELECT * FROM everywhere;"}));
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
-        return models;
+        return this.models;
     },
 
-    buildCollections: function(models) {
-        var collections = {};
+    buildCollections: function() {
+        this.collections = {};
+        this.collections.tagSet = new chorus.collections.TagSet([this.models.tag, new chorus.models.Tag({name: 'Another Taggy TagTag', count: 10})]);
+        this.collections.tagSet.loaded = true;
 
-        collections.tagSet = new chorus.collections.TagSet([models.tag, new chorus.models.Tag({name: 'Another Taggy TagTag', count: 10})]);
-        collections.tagSet.loaded = true;
+        this.collections.workspaceSet = new chorus.collections.WorkspaceSet([this.models.workspace, this.models.privateWorkspace, this.models.archivedWorkspace]);
+        this.collections.workspaceSet.loaded = true;
 
-        collections.workspaceSet = new chorus.collections.WorkspaceSet([models.workspace, models.privateWorkspace, models.archivedWorkspace]);
-        collections.workspaceSet.loaded = true;
+        this.collections.datasetSet = new chorus.collections.SchemaDatasetSet([this.models.dataset, this.models.otherDataset], {schemaId: this.models.schema.get("id")});
+        this.collections.datasetSet.loaded = true;
 
-        collections.datasetSet = new chorus.collections.SchemaDatasetSet([models.dataset, models.otherDataset], {schemaId: models.schema.get("id")});
-        collections.datasetSet.loaded = true;
+        this.collections.databaseSet = new chorus.collections.DatabaseSet([this.models.database, this.models.otherDatabase]);
+        this.collections.databaseSet.loaded = true;
 
-        collections.databaseSet = new chorus.collections.DatabaseSet([models.database, models.otherDatabase]);
-        collections.databaseSet.loaded = true;
+        this.collections.schemaSet = new chorus.collections.SchemaSet([this.models.schema, this.models.otherSchema]);
+        this.collections.schemaSet.loaded = true;
 
-        collections.schemaSet = new chorus.collections.SchemaSet([models.schema, models.otherSchema]);
-        collections.schemaSet.loaded = true;
+        this.collections.dataSourceSet = new chorus.collections.DataSourceSet([this.models.oracleDataSource, this.models.greenplumDataSource]);
+        this.collections.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([this.models.hdfsDataSource]);
+        this.collections.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([this.models.gnipDataSource]);
+        this.collections.dataSourceSet.loaded = this.collections.hdfsDataSourceSet.loaded = this.collections.gnipDataSourceSet.loaded = true;
 
-        collections.dataSourceSet = new chorus.collections.DataSourceSet([models.oracleDataSource, models.greenplumDataSource]);
-        collections.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([models.hdfsDataSource]);
-        collections.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([models.gnipDataSource]);
-        collections.dataSourceSet.loaded = collections.hdfsDataSourceSet.loaded = collections.gnipDataSourceSet.loaded = true;
+        this.collections.workfileSet = new chorus.collections.WorkfileSet([this.models.workfile, this.models.tableauWorkfile]);
+        this.collections.workfileSet.loaded = true;
 
-        collections.workfileSet = new chorus.collections.WorkfileSet([models.workfile, models.otherWorkfile]);
-        collections.workfileSet.loaded = true;
+        this.collections.loadingCollection = new chorus.collections.UserSet();
+        this.collections.userCollection = new chorus.collections.UserSet([this.models.user, this.models.otherUser, this.models.thirdUser]);
+        this.collections.userCollection.loaded = true;
 
-        collections.loadingCollection = new chorus.collections.UserSet();
-        collections.userCollection = new chorus.collections.UserSet([models.user, models.otherUser, models.thirdUser]);
-        collections.userCollection.loaded = true;
+        this.collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([this.models.hdfsFile], {hdfsDataSource: this.models.hdfsDataSource});
 
-        collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([models.hdfsFile], {hdfsDataSource: models.hdfsDataSource});
-
-        collections.hdfsEntrySet = new chorus.collections.HdfsEntrySet([models.hdfsFile, models.hdfsDir], {
+        this.collections.hdfsEntrySet = new chorus.collections.HdfsEntrySet([this.models.hdfsFile, this.models.hdfsDir], {
             path: '/data/somewhere',
             hdfsDataSource: {id: 222},
             id: 11
         });
-        collections.hdfsEntrySet.loaded = true;
+        this.collections.hdfsEntrySet.loaded = true;
 
-        collections.activitySet = new chorus.collections.ActivitySet([models.activity, models.otherActivity]);
-        collections.activitySet.loaded = true;
-
-        return collections;
+        this.collections.activitySet = new chorus.collections.ActivitySet([this.models.activity, this.models.otherActivity]);
+        this.collections.activitySet.loaded = true;
     },
 
-    buildViews: function(models, collections) {
+    buildContentDetails: function() {
+        var views = {
+            "Dataset Details": new chorus.views.DatasetContentDetails({
+                dataset: this.models.dataset,
+                collection: this.collections.datasetSet
+            }),
+
+            "Chorus View Details": new chorus.views.DatasetContentDetails({
+                dataset: this.models.chorusView,
+                collection: this.collections.datasetSet
+            }),
+
+            "Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.workfile),
+
+            "Tableau Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.tableauWorkfile),
+
+            "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model:this.models.hdfsFile })
+        };
+
+        return views;
+    },
+
+    buildViews: function() {
         return {
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
@@ -347,7 +367,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 ]
             }),
 
-            "Sub Nav": new chorus.views.SubNav({model: models.workspace, tab: "summary"}),
+            "Sub Nav": new chorus.views.SubNav({model: this.models.workspace, tab: "summary"}),
 
             "Link Menu": new chorus.views.LinkMenu({title: "Link Menu", options: [
                 {data: "first", text: "Text of first option"},
@@ -417,7 +437,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bucket: 'march', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 35, percentage: "10.12" },
                         { bucket: 'april', min: 2, firstQuartile: 3, median: 8, thirdQuartile: 9, max: 15, percentage: "30%" }
                     ],
-                    dataset: models.dataset
+                    dataset: this.models.dataset
                 }),
                 x: 'animal',
                 y: 'value'
@@ -438,7 +458,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bucket: "Zero", count: 0 }
                     ],
                     "chart[yAxis]": "Custom y Axis Title",
-                    dataset: models.dataset
+                    dataset: this.models.dataset
                 })
             }),
 
@@ -457,7 +477,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bin: [8, 10], frequency: 20 }
                     ],
                     "chart[xAxis]": "Custom x Axis Title",
-                    dataset: models.dataset
+                    dataset: this.models.dataset
                 })
             }),
 
@@ -505,7 +525,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         {yLabel: [169.33, 204.17], xLabel: [1033333.5, 1200000], value: 27951, y: 5, x: 6},
                         {yLabel: [204.17, 239], xLabel: [1033333.5, 1200000], value: 26807, y: 6, x: 6}
                     ],
-                    dataset: models.dataset
+                    dataset: this.models.dataset
                 })
             }),
 
@@ -538,7 +558,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     xAxis: "Day of the Week",
                     yAxis: "Parties",
                     timeType: "date",
-                    dataset: models.dataset
+                    dataset: this.models.dataset
                 })
             }),
 
@@ -546,11 +566,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "List Page (loading)": new chorus.views.MainContentList({
                 modelClass: "Dataset",
-                collection: collections.loadingCollection}),
+                collection: this.collections.loadingCollection}),
 
             "User List": new chorus.views.MainContentList({
                 modelClass: "User",
-                collection: collections.userCollection,
+                collection: this.collections.userCollection,
                 linkMenus: {
                     sort: {
                         title: t("users.header.menu.sort.title"),
@@ -564,58 +584,58 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 },
                 buttons: [
                     {
-                        url: "#/users/new",
-                        text: "Create Thing"
+                        url: "#",
+                        text: "Button 1"
                     },
                     {
-                        url: "#/users/new",
-                        text: "Create Other Thing"
+                        url: "#",
+                        text: "Button 2"
                     }
                 ]
             }),
 
             "Database List": new chorus.views.MainContentList({
-                collection: collections.databaseSet,
+                collection: this.collections.databaseSet,
                 modelClass: "Database"
             }),
 
             "Workfile List": new chorus.views.MainContentList({
-                collection: collections.workfileSet,
+                collection: this.collections.workfileSet,
                 modelClass: "Workfile"
             }),
 
             "Schema List": new chorus.views.MainContentList({
-                collection: collections.schemaSet,
+                collection: this.collections.schemaSet,
                 modelClass: "Schema"
             }),
 
             "Workspace List": new chorus.views.MainContentList({
-                collection: collections.workspaceSet,
+                collection: this.collections.workspaceSet,
                 modelClass: "Workspace"
             }),
 
             "Tag List": new chorus.views.MainContentList({
-                collection: collections.tagSet,
+                collection: this.collections.tagSet,
                 modelClass: 'Tag'
             }),
 
             "HDFS Entry List": new chorus.views.MainContentList({
-                collection: collections.hdfsEntrySet,
+                collection: this.collections.hdfsEntrySet,
                 modelClass: "HdfsEntry",
                 useCustomList: true
             }),
 
             "Dataset List": new chorus.views.MainContentList({
-                collection: collections.datasetSet,
+                collection: this.collections.datasetSet,
                 modelClass: "Dataset",
                 useCustomList: true
             }),
 
-            "Data Source List": (function() {
+            "Data Source List": function() {
                 var options = {
-                    dataSources: collections.dataSourceSet,
-                    hdfsDataSources: collections.hdfsDataSourceSet,
-                    gnipDataSources: collections.gnipDataSourceSet
+                    dataSources: this.collections.dataSourceSet,
+                    hdfsDataSources: this.collections.hdfsDataSourceSet,
+                    gnipDataSources: this.collections.gnipDataSourceSet
                 };
 
                 return new chorus.views.MainContentView({
@@ -623,27 +643,25 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     content: new chorus.views.DataSourceList(options),
                     useCustomList: true
                 });
-            })(),
-
+            }.call(this),
 
             "Search Result List": new chorus.views.SearchResults({
-                model: models.searchResult
+                model: this.models.searchResult
             }),
 
             "Activity List": new chorus.views.ActivityList({
-                collection: collections.activitySet
+                collection: this.collections.activitySet
             })
-
         };
     },
 
-    buildDialogs: function(models, collections) {
+    buildDialogs: function() {
         return {
-            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: models.instanceAccount, pageModel: models.workspace}),
+            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: this.models.instanceAccount, pageModel: this.models.workspace}),
 
             "Instance Account Dialog": new chorus.dialogs.InstanceAccount({
                 title: t("instances.account.add.title"),
-                instance: models.greenplumDataSource
+                instance: this.models.greenplumDataSource
             }),
 
             "Change Password Dialog": new chorus.dialogs.ChangePassword(),
@@ -655,44 +673,48 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Comment Dialog": new chorus.dialogs.Comment(),
 
             "Create Directory External Table from HDFS Dialog": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
-                collection: collections.CsvHdfsFileSet,
+                collection: this.collections.CsvHdfsFileSet,
                 directoryName: "some directory"
             }),
 
             "Edit Note Dialog": new chorus.dialogs.EditNote({
-                activity: models.activity
+                activity: this.models.activity
             }),
 
             "Edit Tags Dialog": new chorus.dialogs.EditTags({
-                collection: collections.workfileSet
+                collection: this.collections.workfileSet
             }),
 
             "Insights New Dialog": new chorus.dialogs.InsightsNew(),
 
-            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({collection: collections.workspaceSet}),
+            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
 
-            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: models.chorusView}),
+            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
 
-            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: models.dataset }),
+            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
-            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: models.datasetImportability })
+            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability })
         };
     },
 
     initialize: function() {
         _.defer(_.bind(this.render, this));
 
-        var models = this.buildModels();
-        var collections = this.buildCollections(models);
+        this.buildModels();
+        this.buildCollections();
 
-        this.views = this.buildViews(models, collections);
-        this.dialogs = this.buildDialogs(models, collections);
+        this.views = this.buildViews();
+        this.contentDetails = this.buildContentDetails();
+        this.dialogs = this.buildDialogs();
     },
 
-    renderViews: function(views) {
+    renderViews: function(views, parentClass) {
         var self = this;
         _.each(views, function(view, name) {
-            $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>");
+            var $element = $("<div class='view_guts'/>");
+            if(parentClass) $element = $('<div class="'+ parentClass + '"/>').html($element);
+            var styleGuideEntry = $("<li class='view'><h1>" + name + "</h1></li>").append($element);
+            $(self.el).append(styleGuideEntry);
             view.setElement(self.$(".view_guts:last"));
             view.render();
         });
@@ -703,6 +725,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.renderViews(this.views);
         this.renderViews(this.dialogs);
+        this.renderViews(this.contentDetails, "content_details");
 
         setInterval(this.enableScrolling, 100);
 

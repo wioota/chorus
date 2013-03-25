@@ -8,12 +8,11 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workfile.image();
-                spyOn(chorus.views, "ImageWorkfileContentDetails");
-                chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
             it("instantiates an ImageWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.ImageWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                expect(contentDetails).toBeA(chorus.views.ImageWorkfileContentDetails);
             });
         });
 
