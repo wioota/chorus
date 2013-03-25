@@ -147,6 +147,24 @@ describe DatasetPresenter, :type => :view do
         hash[:frequency].should == import_schedule.frequency
       end
     end
+
+    context "when dataset and schema are soft deleted" do
+      let(:workspace) { FactoryGirl.create :workspace, :sandbox => schema }
+      let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
+      let(:schema) { FactoryGirl.create :gpdb_schema }
+      let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
+      let(:activity_stream) { true }
+
+      before do
+        schema.destroy
+        dataset.reload
+      end
+
+      it "presents the schema json" do
+        hash.should have_key(:schema)
+        hash[:schema][:name].should == schema.name
+      end
+    end
   end
 
   describe "complete_json?" do

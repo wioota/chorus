@@ -25,6 +25,14 @@ describe Dataset do
     it { should have_many :events }
     it { should have_many :notes }
     it { should have_many :comments }
+
+    describe "#schema" do
+      it "returns the schema even if it is deleted" do
+        dataset.schema.should == schema
+        schema.destroy
+        dataset.reload.schema.should == schema
+      end
+    end
   end
 
   describe "workspace association" do

@@ -4,7 +4,7 @@ class Dataset < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
-  belongs_to :schema
+  belongs_to :schema, :unscoped => true
 
   validates_presence_of :schema
   validates_presence_of :name

@@ -5,7 +5,7 @@ class GpdbDataset < Dataset
   delegate :definition, :to => :statistics
   delegate :database, :to => :schema
 
-  belongs_to :schema, :class_name => 'GpdbSchema'
+  belongs_to :schema, :class_name => 'GpdbSchema', :unscoped => true
 
   def instance_account_ids
     database.instance_account_ids
