@@ -362,4 +362,10 @@ describe("chorus.views.TagsInput", function() {
             });
         });
     });
+
+    it("waits for facebox to finalize position before focusing so the page doesn't scroll wierdly", function() {
+        spyOn(view.input, 'focus');
+        view.focusInput();
+        expect(view.input.focus).toHaveBeenCalledWith(0);
+    });
 });
