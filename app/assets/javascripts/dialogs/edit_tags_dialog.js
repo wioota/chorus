@@ -54,6 +54,9 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     revealed: function() {
         this._super("revealed", arguments);
         $("#facebox").css("overflow", "visible");
-        this.tagsInput.focusInput();
+        var self = this;
+        setTimeout(function () {
+            self.tagsInput.focusInput();
+        }, 0);
     }
 });

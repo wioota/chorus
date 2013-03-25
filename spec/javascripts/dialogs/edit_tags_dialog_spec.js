@@ -38,10 +38,17 @@ describe("chorus.dialogs.EditTags", function() {
     });
 
     describe("after the dialog is revealed by facebox", function() {
-        it("focus moves to the tag input box", function() {
-            spyOn(this.dialog.tagsInput, "focusInput");
+        it("waits for facebox to finalize position before focusing so the page doesn't scroll weirdly", function() {
+            spyOn(window, 'setTimeout');
             this.dialog.launchModal();
+            expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 0);
+
+            spyOn(this.dialog.tagsInput, "focusInput");
+            _(setTimeout.calls).chain().select(function (item) { return item.args[1] === 0; }).each(function (call) {
+               call.args[0]();
+            });
             expect(this.dialog.tagsInput.focusInput).toHaveBeenCalled();
+
             this.dialog.closeModal();
             $(document).trigger("close.facebox");
         });

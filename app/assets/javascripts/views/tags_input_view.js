@@ -136,6 +136,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     },
 
     focusInput: function() {
-        this.input.focus(0);
+        this.input.focus();
     }
 });
