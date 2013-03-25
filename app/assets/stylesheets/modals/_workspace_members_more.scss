@@ -19,9 +19,16 @@
 }
 
 .dialog.workspace_members_more {
-
     .dialog_content {
         padding: 0;
-    }
 
+        &.is_loading {
+            padding: 50px;
+            text-align: center;
+
+            & > div {
+                display: inline-block;
+            }
+        }
+    }
 }

@@ -3,7 +3,7 @@ describe("jquery extensions", function() {
         beforeEach(function() {
             var container = $("<div/>");
             _.times(5, function(i) {
-                container.append("<button>Original Text " + i + "</button>");
+                container.append("<button><b>Original</b> Text " + i + "</button>");
             });
             container.append("<span>Original Span Text</span>");
             this.buttons = container.find("button");
@@ -21,7 +21,7 @@ describe("jquery extensions", function() {
             describe("#stopLoading", function() {
                 it("doesn't modify the text", function() {
                     this.button.stopLoading();
-                    expect(this.button.text()).toBe("Original Text 0");
+                    expect(this.button.html()).toBe("<b>Original</b> Text 0");
                 });
             });
         });
@@ -71,7 +71,7 @@ describe("jquery extensions", function() {
 
                 it("still restores to the original text when stopLoading is called", function() {
                     this.button.stopLoading();
-                    expect(this.button.text()).toBe("Original Text 0");
+                    expect(this.button.html()).toBe("<b>Original</b> Text 0");
                 });
             });
 
