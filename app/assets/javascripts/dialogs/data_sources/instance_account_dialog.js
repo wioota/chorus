@@ -11,8 +11,8 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
     },
 
     makeModel: function(options) {
-        var instance = this.options.instance;
-        this.model = instance.accountForCurrentUser();
+        var dataSource = this.options.instance;
+        this.model = dataSource.accountForCurrentUser();
         this._super("makeModel", arguments);
     },
 

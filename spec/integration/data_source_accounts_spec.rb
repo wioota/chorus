@@ -1,14 +1,14 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "Data Source Permissions" do
-  let(:the_data_source) { GreenplumIntegration.real_data_source }
+describe "Data Source Accounts" do
+  let(:data_source) { GreenplumIntegration.real_data_source }
   let(:no_access_user) { users(:default) }
   let(:owner) { users(:admin)}
 
   before do
     login(owner)
     visit("#/data_sources/")
-    find("li.data_source[data-data-source-id='#{the_data_source.id}']").click
+    find("li.data_source[data-data-source-id='#{data_source.id}']").click
     within '.account_info' do
       click_link "Edit"
     end
@@ -20,7 +20,7 @@ describe "Data Source Permissions" do
 
     login(no_access_user)
     visit("#/data_sources/")
-    click_link the_data_source.name
+    click_link data_source.name
     within ".content_details" do
       find(:css, '.count').text.should =~ /.*Databases/
     end
