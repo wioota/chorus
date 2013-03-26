@@ -16,9 +16,9 @@ module GreenplumIntegration
 
   def self.execute_sql(sql_file, database = greenplum_config['db_name'])
     puts "Executing SQL file: #{sql_file} on host: #{hostname}"
-    sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
+    sql_erb = ERB.new(File.read(File.expand_path("../#{sql_file}.erb", __FILE__)))
 
-    sql = sql_read.gsub('gpdb_test_database', GreenplumIntegration.database_name)
+    sql = sql_erb.result(binding)
 
     database_string = "jdbc:postgresql://#{hostname}:#{port}/#{database}?user=#{username}&password=#{password}"
     Sequel.connect(database_string) do |database_connection|
