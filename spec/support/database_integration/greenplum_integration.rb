@@ -56,7 +56,7 @@ module GreenplumIntegration
     if gpdb_changed?
       puts "  Importing into #{GreenplumIntegration.database_name}"
       drop_test_db
-      execute_sql("create_gpadmin.sql")
+      execute_sql("create_users.sql")
       success = execute_sql("drop_and_create_gpdb_databases.sql")
       success &&= execute_sql("create_test_schemas.sql", database_name)
       success &&= execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
