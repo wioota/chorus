@@ -14,10 +14,6 @@ jasmine.sharedExamples.CheckableList = function() {
             expect(this.view.$("li").length).toBe(this.view.collection.length);
         });
 
-        it("renders a checkbox for each item", function() {
-            expect(this.checkboxes.length).toBe(this.collection.length);
-        });
-
         it("selects the first item", function() {
             expect(this.view.$("> li").eq(0)).toHaveClass("selected");
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
@@ -25,10 +21,12 @@ jasmine.sharedExamples.CheckableList = function() {
         });
     });
 
-    it("does not re-render when an item is updated", function() {
-        spyOn(this.view, 'preRender');
-        this.collection.at(0).trigger('change');
-        expect(this.view.preRender).not.toHaveBeenCalled();
+    describe('when an item is changed', function(){
+        it("does not re-render the entire list", function() {
+            spyOn(this.view, 'preRender');
+            this.collection.at(0).trigger('change');
+            expect(this.view.preRender).not.toHaveBeenCalled();
+        });
     });
 
     function expectItemChecked(expectedModels) {
@@ -59,7 +57,7 @@ jasmine.sharedExamples.CheckableList = function() {
             expect(this.view.$("li").eq(1)).not.toBe(".selected");
         });
 
-        it("add class checked", function() {
+        it("adds class checked", function() {
             expect(this.view.$("li").eq(1)).toHaveClass('checked');
         });
 
@@ -71,6 +69,7 @@ jasmine.sharedExamples.CheckableList = function() {
         });
 
         it("unselects items when they are re-checked", function() {
+
             this.checkboxes.eq(0).click().change();
             this.checkboxes.eq(0).click().change();
             expectItemChecked.call(this, [ this.collection.at(1) ]);
@@ -81,6 +80,11 @@ jasmine.sharedExamples.CheckableList = function() {
             this.server.completeFetchFor(this.view.collection, this.view.collection.models);
             expect(this.view.$("input[type=checkbox]").filter(":checked").length).toBe(1);
             expect(this.view.$("input[type=checkbox]").eq(1)).toBe(":checked");
+        });
+
+        it('is persisted when the item is re-rendered', function(){
+            this.view.collection.at(1).trigger('change');
+            expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
         });
     });
 

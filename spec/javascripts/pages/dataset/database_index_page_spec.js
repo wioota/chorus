@@ -66,7 +66,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
 
             this.page.$("input.search").val("bar").trigger("keyup");
 
-            expect(this.page.$("li.database_item:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$("li.item_wrapper:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Database", {count: 1});
         });
 

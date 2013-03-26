@@ -1,7 +1,7 @@
 chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     constructorName: "WorkfileItemView",
     templateName:"workfile_item",
-    tagName: "li",
+    tagName: "div",
 
     subviews: {
         ".comment .body": "commentBody"

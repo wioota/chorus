@@ -69,7 +69,7 @@ describe "Workfiles" do
         find('a', :text => "Alphabetically", :visible => true).click
         find('a', :text => "By Date", :visible => true).click
         find('.workfile_sidebar .fileName').should have_content(workfile_first_by_date.file_name)
-        workfiles = page.all("li.workfile_item")
+        workfiles = page.all(".workfile_item")
         workfiles.first.text.should include workfile_first_by_date.file_name
         workfiles.last.text.should include workfile_last_by_date.file_name
       end

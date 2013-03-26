@@ -39,7 +39,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
 
             this.page.$("input.search").val("schema1").trigger("keyup");
 
-            expect(this.page.$(".schema_item:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".item_wrapper:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
             expect(this.page.mainContent.options.search.eventName).toBe("schema:search");
         });
@@ -64,7 +64,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
 
             it("includes the selected schemas name and type", function() {
                 expect(this.page.sidebar.$el).toContainText("schema1");
-                this.page.$('.schema_item:eq(1)').click();
+                this.page.$('.item_wrapper:eq(1)').click();
                 expect(this.page.sidebar.$el).toContainText("schema2");
                 expect(this.page.sidebar.$el).toContainText("Oracle DB Schema");
             });

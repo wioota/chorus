@@ -28,9 +28,8 @@ describe("chorus.views.HdfsEntryList", function() {
                 rspecFixtures.hdfsDir({count: -1})
             ];
 
-            this.collection = new chorus.collections.HdfsEntrySet(
-                this.files,
-                {hdfsDataSource: {id: "1234"}, path: "/abc" }
+            this.collection = new chorus.collections.HdfsEntrySet(this.files,
+                { hdfsDataSource: {id: "1234"}, path: "/abc" }
             );
 
             this.view = new chorus.views.HdfsEntryList({collection: this.collection});
@@ -41,21 +40,12 @@ describe("chorus.views.HdfsEntryList", function() {
         });
 
         itBehavesLike.CheckableList();
-
-        it("can select a single model", function() {
-            this.view.$("input[type=checkbox]").eq(2).click().change();
-            expect(this.view.selectedModels.add).toHaveBeenCalledWith(this.files[2]);
-        });
     });
 
     describe("when the entries have loaded", function() {
         beforeEach(function() {
             this.collection.loaded = true;
             this.view.render();
-        });
-
-        it("renders a li for each item", function() {
-            expect(this.view.$("li").length).toBe(this.collection.length);
         });
 
         it("renders the name for each item", function() {
@@ -80,7 +70,11 @@ describe("chorus.views.HdfsEntryList", function() {
             expect(this.view.$("li:eq(0) .description")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")});
         });
 
-        it("shows 'Directory - x files' in the subtitle line for the directory", function() {
+        it('doesnt show a checkbox', function(){
+            expect(this.view.$("li:eq(0) input[type=checkbox]")).not.toExist();
+        });
+
+        it("displays a not permitted message if the user doesnt have access", function() {
             expect(this.view.$("li:last .description")).toContainTranslation("hdfs.directory_files.no_permission");
         });
 

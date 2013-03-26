@@ -45,7 +45,12 @@
             }
         }
 
-        div.right-of-image {
+        .name {
+            padding-bottom: 5px;
+            font-weight: $semibold;
+        }
+
+        .right_of_image {
             vertical-align: top;
             line-height: 21px;
             overflow:hidden;
@@ -55,11 +60,6 @@
 
             .summary {
                 padding-bottom: 3px;
-            }
-
-            .item_name {
-                padding-bottom: 5px;
-                font-weight: $semibold;
             }
 
             .name_disabled {

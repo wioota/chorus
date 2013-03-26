@@ -159,13 +159,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             ]);
         });
 
-        it("should have set up search correctly", function() {
+        it("sets up search correctly", function() {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("workfile.search_placeholder"));
 
             this.page.$("input.search").val("bar").trigger("keyup");
 
-            expect(this.page.$("li.workfile_item:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$("li.item_wrapper:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 1});
             expect(this.page.mainContent.options.search.eventName).toBe("workfile:search");
 

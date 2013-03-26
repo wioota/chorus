@@ -1,7 +1,7 @@
 chorus.views.UserItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     constructorName: "UserItemView",
     templateName: "user/user_item",
-    tagName: "li",
+    tagName: "div",
 
     additionalContext: function() {
         return {

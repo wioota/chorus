@@ -156,7 +156,7 @@ describe("chorus.views.SearchResults", function() {
                 context("and it is for a workfile", function() {
                     it("triggers the 'workfile:selected' event on itself, with the clicked model", function() {
                         var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'workfile';});
-                        this.view.$(".this_workspace li[data-template=search_workfile]").click();
+                        this.view.$(".this_workspace [data-template=search_workfile]").click();
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", modelToClick);
                     });
                 });
@@ -213,7 +213,7 @@ describe("chorus.views.SearchResults", function() {
             context('when the li is for a data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGreenplum(); });
-                    this.view.$(".data_source_list li.gpdb_data_source").eq(0).click();
+                    this.view.$(".data_source_list .gpdb_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
@@ -221,7 +221,7 @@ describe("chorus.views.SearchResults", function() {
             context('when the li is for a hadoop data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isHadoop(); });
-                    this.view.$(".data_source_list li.hdfs_data_source").eq(0).click();
+                    this.view.$(".data_source_list .hdfs_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
@@ -229,7 +229,7 @@ describe("chorus.views.SearchResults", function() {
             context('when the li is for a gnip data source', function() {
                 it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGnip(); });
-                    this.view.$(".data_source_list li.gnip_data_source").eq(0).click();
+                    this.view.$(".data_source_list .gnip_data_source").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });

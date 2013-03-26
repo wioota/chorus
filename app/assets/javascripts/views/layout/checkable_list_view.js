@@ -1,3 +1,5 @@
+//= require ./item_wrapper_view
+
 chorus.views.CheckableList = chorus.views.SelectableList.extend({
     constructorName: "CheckableListView",
     additionalClass: "selectable list",
@@ -15,7 +17,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.entityViewType = this.options.entityViewType;
         this.listItemOptions = this.options.listItemOptions || {};
 
-        if (this.options.entityType) {
+        if(this.options.entityType) {
             this.selectedModels = this.options.selectedModels || this.collection.clone().reset();
         } else {
             this.selectedModels = this.options.selectedModels || new chorus.collections.Base();
@@ -65,8 +67,8 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
 
-        if (isChecked) {
-            if (!this.findSelectedModel(model)) {
+        if(isChecked) {
+            if(!this.findSelectedModel(model)) {
                 this.selectedModels.add(model);
             }
         } else {
@@ -75,7 +77,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         }
 
         chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName+":checked", this.selectedModels);
+        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },
 
     findSelectedModel: function(model) {
@@ -98,6 +100,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     makeListItemView: function(model) {
-        return new this.entityViewType(_.extend({model: model, checkable: true}, this.listItemOptions));
+        var itemView = new this.entityViewType(_.extend({model: model, checkable: true}, this.listItemOptions));
+        return new chorus.views.ItemWrapper({itemView: itemView});
     }
 });

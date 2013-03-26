@@ -1,7 +1,7 @@
 chorus.views.HdfsEntryItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     constructorName: "HdfsEntryItemView",
-    templateName: "hdfs_entry",
-    tagName: "li",
+    templateName: "hdfs_entry_item",
+    tagName: "div",
 
     additionalContext: function() {
         var message;
@@ -23,6 +23,8 @@ chorus.views.HdfsEntryItem = chorus.views.Base.extend(chorus.Mixins.TagsContext)
                 "/images/data_sources/hadoop_directory_large.png" :
                 chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
             url: url,
+            checkable: !isDir,
+            checkboxPlaceholder: true,
             displayableFiletype: this.model.get('isBinary') === false,
             tags: this.model.tags().models,
             fileInfo: message

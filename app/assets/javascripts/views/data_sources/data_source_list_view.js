@@ -1,3 +1,5 @@
+//= require views/layout/checkable_list_view
+
 chorus.views.DataSourceList = chorus.views.CheckableList.extend({
     constructorName: "DataSourceListView",
     templateName: "data_source_list",

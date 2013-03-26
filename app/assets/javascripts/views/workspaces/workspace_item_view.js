@@ -1,7 +1,7 @@
 chorus.views.WorkspaceItem = chorus.views.Base.extend({
     constructorName: "WorkspaceItemView",
     templateName: "workspace_item",
-    tagName: "li",
+    tagName: "div",
 
     subviews: {
         ".summary": "summary"

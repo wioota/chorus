@@ -1,11 +1,12 @@
 chorus.views.DatabaseItem = chorus.views.Base.extend({
     constructorName: "DatabaseItemView",
     templateName: "database_item",
-    tagName: "li",
+    tagName: "div",
 
     additionalContext: function() {
         return {
-            url: this.model.showUrl()
+            url: this.model.showUrl(),
+            checkable: false
         };
     }
 });

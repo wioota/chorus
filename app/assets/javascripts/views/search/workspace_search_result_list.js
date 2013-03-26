@@ -1,11 +1,13 @@
+//= require views/layout/checkable_list_view
+
 (function() {
     var viewConstructorMap = {
-        workfile:                   chorus.views.SearchWorkfile,
-        linked_tableau_workfile:    chorus.views.SearchWorkfile,
-        dataset:                    chorus.views.SearchDataset,
-        chorusView:                 chorus.views.SearchDataset,
-        workspace:                  chorus.views.SearchWorkspace,
-        attachment:                 chorus.views.SearchAttachment
+        workfile: chorus.views.SearchWorkfile,
+        linked_tableau_workfile: chorus.views.SearchWorkfile,
+        dataset: chorus.views.SearchDataset,
+        chorusView: chorus.views.SearchDataset,
+        workspace: chorus.views.SearchWorkspace,
+        attachment: chorus.views.SearchAttachment
     };
 
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({
@@ -17,13 +19,15 @@
 
         listClass: chorus.views.CheckableList.extend({
             constructorName: "WorkspaceSearchResultCheckableList",
+
             makeListItemView: function(model) {
                 var viewConstructor = viewConstructorMap[model.get("entityType")];
-                return new viewConstructor({
+                var itemView = new viewConstructor({
                     model: model,
                     search: this.listItemOptions.search,
                     workspaceIdForTagLink: this.listItemOptions.search.get('workspaceId')
                 });
+                return new chorus.views.ItemWrapper({itemView: itemView});
             }
         }),
 

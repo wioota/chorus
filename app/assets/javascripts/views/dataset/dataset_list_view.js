@@ -1,3 +1,5 @@
+//= require views/layout/checkable_list_view
+
 chorus.views.DatasetList = chorus.views.CheckableList.extend({
     eventName: "dataset",
     constructorName: "DatasetListView",

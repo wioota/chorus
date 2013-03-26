@@ -1,7 +1,7 @@
 chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
     constructorName: "DatasetItemView",
     templateName: "dataset_item",
-    tagName: "li",
+    tagName: "div",
 
     subviews: {
         ".comment .body": "commentBody"

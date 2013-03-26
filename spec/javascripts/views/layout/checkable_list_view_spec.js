@@ -1,12 +1,13 @@
 describe("chorus.views.CheckableList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.SchemaDatasetSet([
-            rspecFixtures.dataset({id: 123}),
-            rspecFixtures.dataset({id: 456})
+        this.collection = new chorus.collections.UserSet([
+            rspecFixtures.user({id: 123}),
+            rspecFixtures.user({id: 456})
         ], {schemaId: "3"});
+
         this.view = new chorus.views.CheckableList({
-            entityType: 'dataset',
-            entityViewType: chorus.views.DatasetItem,
+            entityType: 'user',
+            entityViewType: chorus.views.UserItem,
             collection: this.collection,
             listItemOptions: {itemOption: 123}
         });
@@ -18,8 +19,8 @@ describe("chorus.views.CheckableList", function() {
         it("uses selectedModels if passed one", function() {
            this.selectedModels = new chorus.collections.Base();
             this.view = new chorus.views.CheckableList({
-                entityType: 'dataset',
-                entityViewType: chorus.views.DatasetItem,
+                entityType: 'user',
+                entityViewType: chorus.views.UserItem,
                 collection: this.collection,
                 selectedModels: this.selectedModels
             });
@@ -27,9 +28,9 @@ describe("chorus.views.CheckableList", function() {
         });
     });
 
-    describe("#render", function() {
-        it("sets the list item options on the child list item views", function() {
-            expect(this.view.liViews[0].options.itemOption).toBe(123);
+    describe("creating the item views", function() {
+        it("passes through the list item options", function() {
+            expect(this.view.liViews[0].itemView.options.itemOption).toBe(123);
         });
     });
 });

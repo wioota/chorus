@@ -282,7 +282,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 numFound: 2
             },
 
-            instances: {
+            dataSources: {
                 results: [this.models.greenplumDataSource, this.models.hdfsDataSource, this.models.gnipDataSource],
                 numFound: 4
             },

@@ -1,4 +1,12 @@
-<span class="spacer_left"></span>
-<div class="name"><a href="#/tags/{{encode this.name}}">{{this.name}}</a></div>
-<div class="count">{{t "tag_list.item_count" count=this.count}}</div>
-<span class="spacer_right"></span>
+<a class="image" href="#/tags/{{encode name}}">
+    <img src="/images/tags/icon_tag.png"/>
+</a>
+
+<div class='right_of_image'>
+    <a class='name' href="#/tags/{{encode name}}">{{name}}</a>
+
+    <div class="item_metadata">
+        <div class="count">{{t "tag_list.item_count" count=count}}</div>
+    </div>
+</div>
+

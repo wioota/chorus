@@ -20,14 +20,16 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
             actions: [
-                '<a class="associate">{{t "actions.associate_with_another_workspace"}}</a>',
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>',
+                '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
             ],
             actionEvents: {
-                'click .associate': _.bind(function() {
+                'click .associate': _.bind(function(e) {
+                    e.preventDefault();
                     new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.multiSelectSidebarMenu.selectedModels, activeOnly: true}).launchModal();
                 }, this),
-                'click .edit_tags': _.bind(function() {
+                'click .edit_tags': _.bind(function(e) {
+                    e.preventDefault();
                     new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
                 }, this)
             }

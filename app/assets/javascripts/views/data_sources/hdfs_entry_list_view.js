@@ -1,3 +1,5 @@
+//= require views/layout/checkable_list_view
+
 chorus.views.HdfsEntryList = chorus.views.CheckableList.extend({
     eventName: "hdfs_entry",
     constructorName: "HdfsEntryList",

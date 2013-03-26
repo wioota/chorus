@@ -1,5 +1,5 @@
 chorus.views.SearchItemBase = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
-    tagName: "li",
+    tagName: "div",
     additionalClass: "result_item",
 
     events: {

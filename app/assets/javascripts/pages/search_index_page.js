@@ -168,7 +168,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        this.$('li.result_item').eq(0).click();
+        this.$('.result_item').eq(0).click();
     },
 
     scopeSearchResults: function(data) {
