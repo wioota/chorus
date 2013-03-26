@@ -44,7 +44,6 @@ end
 group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
   gem 'rspec', :require => false
   gem 'rr'
-  gem 'fuubar'
   gem 'factory_girl'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'

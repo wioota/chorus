@@ -4,4 +4,5 @@ whitelist:
 - Apache 2.0
 - GPLv2
 - ruby
+- Ruby
 ignore_groups:
