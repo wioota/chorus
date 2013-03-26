@@ -1,6 +1,6 @@
 .truncated_text {
     .styled_text {
-        height: $summary-line-height * 2;
+        max-height: $summary-line-height * 2;
         &.extra_line {
             height: $summary-line-height * 3;
         }
@@ -43,6 +43,7 @@
 
     &.expanded .styled_text {
         height: auto;
+        max-height: inherit;
     }
 
     .links {

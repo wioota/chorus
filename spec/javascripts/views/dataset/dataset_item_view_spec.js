@@ -19,23 +19,6 @@ describe("chorus.views.DatasetItem", function() {
         this.view.render();
     });
 
-    context("when the checkable flag is enabled", function() {
-        beforeEach(function() {
-            this.view = new chorus.views.DatasetItem({ model: this.dataset, hasActiveWorkspace: true, checkable: true });
-            this.view.render();
-        });
-
-        it("renders a checkbox next to each item", function() {
-            expect(this.view.$("input[type=checkbox]")).toExist();
-        });
-    });
-
-    context("when the checkable flag is falsy", function() {
-        it("does not render checkboxes", function() {
-            expect(this.view.$("input[type=checkbox]")).not.toExist();
-        });
-    });
-
     it('renders breadcrumbs for the data source, database and schema', function() {
         expect(this.view.$(".instance")).toContainText(this.dataset.instance().get("name"));
         expect(this.view.$(".database")).toContainText(this.dataset.database().get("name"));

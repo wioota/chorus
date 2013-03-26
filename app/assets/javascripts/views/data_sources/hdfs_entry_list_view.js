@@ -5,7 +5,7 @@ chorus.views.HdfsEntryList = chorus.views.CheckableList.extend({
 
     setup: function() {
         this.options.entityType = "hdfs_entry";
-        this.options.entityViewType = chorus.views.HdfsEntry;
+        this.options.entityViewType = chorus.views.HdfsEntryItem;
         this._super("setup", arguments);
     },
 

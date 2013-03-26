@@ -38,7 +38,7 @@
             height: $icon-image-height + 13px;
         }
 
-        div.text {
+        div.right-of-image {
             vertical-align: top;
             line-height: 21px;
             overflow:hidden;
@@ -47,15 +47,23 @@
             padding-left: $padding-x;
 
             .summary {
-                padding-bottom: 15px;
+                padding-bottom: 3px;
             }
 
-            .name {
+            .item_name {
+                padding-bottom: 5px;
                 font-weight: $semibold;
             }
 
             .name_disabled {
                 color: $color-text2;
+            }
+
+            .comment {
+                padding-bottom: 3px;
+            }
+            .tableau {
+                padding-bottom: 3px;
             }
         }
 
@@ -127,12 +135,20 @@
             font-size: 12px;
             font-style: italic;
         }
+
+        .checkbox_placeholder {
+            float: left;
+            display: inline-block;
+            width:  18px;
+            height: 1px;
+        }
+
     }
 
     &.selectable {
         input[type=checkbox] {
             float: left;
-            margin-top: 16px;
+            margin-top: 5px;
         }
 
         .no_credentials {

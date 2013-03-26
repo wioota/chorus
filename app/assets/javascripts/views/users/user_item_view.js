@@ -1,13 +1,14 @@
 chorus.views.UserItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    constructorName: "UserItemView",
     templateName: "user/user_item",
     tagName: "li",
 
     additionalContext: function() {
         return {
             admin: this.model.isAdmin(),
-            imageUrl: this.model.fetchImageUrl({size: "icon"}),
-            showUrl: this.model.showUrl(),
-            fullName: this.model.displayName(),
+            iconUrl: this.model.fetchImageUrl({size: "icon"}),
+            url: this.model.showUrl(),
+            name: this.model.displayName(),
             title: this.model.get("title"),
             tags: this.model.tags().models
         };

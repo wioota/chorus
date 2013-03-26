@@ -1,49 +1,17 @@
 <span class="spacer_left"></span>
 
-{{#if checkable}}
-    <input type="checkbox"/>
-{{/if}}
+<input type="checkbox"/>
 
 {{#ifAll hasCredentials viewable}}
-    <a class="image" href="{{showUrl}}">
-        <img src="{{iconImgUrl}}" title="{{humanizedDatasetType this}}"/>
+    <a class="image" href="{{url}}">
+        <img src="{{iconUrl}}" title="{{humanizedDatasetType this}}"/>
     </a>
 {{else}}
     <span class="image">
-        <img src="{{iconImgUrl}}" title="{{humanizedDatasetType this}}"/>
+        <img src="{{iconUrl}}" title="{{humanizedDatasetType this}}"/>
     </span>
 {{/ifAll}}
 
-<div class="text">
+{{> listItemText}}
 
-    {{importFrequencyTag humanizedImportFrequency}}
-
-    {{#ifAll hasCredentials viewable}}
-        <a href="{{showUrl}}" class="name">{{objectName}}</a>
-    {{else}}
-        <span class="name">{{objectName}}</span>
-    {{/ifAll}}
-
-    <div class="item_metadata">
-      {{> itemTags}}
-
-      <div class="location">
-          {{datasetLocation resource}}
-      </div>
-      {{usedInWorkspaces workspaces dataset}}
-    </div>
-
-    {{#if lastComment}}
-        <div class="comment">
-            <div class="body"></div>
-            {{userProfileLink lastComment.creator}}
-            <span class="comment_info">
-                {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
-                    {{#if otherCommentCount }}
-                        - {{t "comments.other_comments" count=otherCommentCount}}
-                    {{/if}}
-            </span>
-        </div>
-    {{/if}}
-</div>
 <span class="spacer_right"></span>

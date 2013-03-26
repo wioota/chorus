@@ -1,4 +1,5 @@
 chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    constructorName: "WorkfileItemView",
     templateName:"workfile_item",
     tagName: "li",
 
@@ -24,11 +25,17 @@ chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).
     },
 
     additionalContext: function() {
-        var ctx = new chorus.presenters.Attachment(this.model, { iconSize:'icon' });
 
-        ctx.tableauWorkbook = this.model.get('fileType') === 'tableau_workbook';
-        ctx.tableauIcon = Handlebars.helpers.tableauIcon();
-        ctx.checkable = this.options.checkable;
+        var ctx = {
+            iconUrl:  this.model.iconUrl({size: 'icon'}),
+            name:  this.model.name(),
+            tableauWorkbook: this.model.get('fileType') === 'tableau_workbook',
+            tableauIcon: Handlebars.helpers.tableauIcon(),
+            checkable: this.options.checkable,
+            model: this.model
+        };
+
+        ctx.url = this.model.hasOwnPage() ? this.model.showUrl() : this.model.downloadUrl();
 
         _.extend(ctx, this.additionalContextForTags());
 

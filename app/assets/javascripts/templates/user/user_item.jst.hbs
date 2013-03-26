@@ -1,24 +1,10 @@
 <span class="spacer_left"/>
 <input type="checkbox" />
-<a href="{{showUrl}}">
-    <img src="{{imageUrl}}" class="profile image"/>
+
+<a href="{{url}}">
+    <img src="{{iconUrl}}" class="profile image"/>
 </a>
-<div class="text">
-    <div class="main">
-        <a class="name" href="{{showUrl}}">
-            <span title="{{fullName}}">{{fullName}}</span>
-        </a>
-        {{#if admin}}
-            <span class="administrator tag">
-                <span class="arrow_left"/><span class="tag_name">{{t "users.administrator"}}</span>
-            </span>
-        {{/if}}
-    </div>
-    <div class="details">
-        <span class="title" title="{{title}}">{{title}}</span>
-    </div>
-    <div class="item_metadata">
-      {{> itemTags}}
-    </div>
-</div>
+
+{{> listItemText}}
+
 <span class="spacer_right"/>

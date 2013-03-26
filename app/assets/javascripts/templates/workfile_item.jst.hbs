@@ -3,34 +3,9 @@
 <input type="checkbox"/>
 
 <span class="image">
-    <img src="{{iconSrc}}"/>
+    <img src="{{iconUrl}}"/>
 </span>
 
-<div class="text">
+{{> listItemText}}
 
-    <div class="main">
-        <a title="{{fileName}}" class="name" href="{{url}}">{{fileName}}</a>
-    </div>
-
-    <div class="item_metadata">
-      {{> itemTags}}
-
-      {{#if tableauWorkbook}}
-        {{fromTableau model}}
-      {{/if}}
-    </div>
-    {{#if lastComment}}
-        <div class="comment">
-            <div class="body"></div>
-            {{userProfileLink lastComment.creator}}
-            <span class="comment_info">
-                {{t "workfiles.commented_on"}} <span class="on">{{lastComment.on}}</span>
-                {{#if otherCommentCount }}
-                    - {{t "workfiles.other_comments" count=otherCommentCount}}
-                {{/if}}
-            </span>
-        </div>
-    {{/if}}
-
-</div>
 <span class="spacer_right"/>

@@ -64,7 +64,7 @@ describe("chorus.views.HdfsEntryList", function() {
         });
 
         it("renders the size for the file", function() {
-            expect(this.view.$("li:eq(1) .size")).toContainText(I18n.toHumanSize(this.collection.at(1).get("size")));
+            expect(this.view.$("li:eq(1) .description")).toContainText(I18n.toHumanSize(this.collection.at(1).get("size")));
         });
 
         it("renders the icon for each item", function() {
@@ -77,11 +77,11 @@ describe("chorus.views.HdfsEntryList", function() {
         });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
-            expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")});
+            expect(this.view.$("li:eq(0) .description")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")});
         });
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
-            expect(this.view.$("li:last .dir")).toContainTranslation("hdfs.directory_files.no_permission");
+            expect(this.view.$("li:last .description")).toContainTranslation("hdfs.directory_files.no_permission");
         });
 
         describe("when browsing the root directory", function() {

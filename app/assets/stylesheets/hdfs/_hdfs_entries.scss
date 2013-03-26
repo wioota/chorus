@@ -19,35 +19,6 @@
         display: inline-block;
     }
 
-    .checkbox_containter {
-        width: 20px;
-        display: inline-block;
-    }
-
-    .description {
-        display: inline-block;
-        font-size: 18px;
-        font-weight: $semibold;
-        color: $color-text2;
-
-        .dir {
-            padding-top: 3px;
-            display: block;
-            font-weight: $semibold;
-            @include font-content-details;
-
-            a {
-                font-size: 18px;
-                font-weight: $semibold;
-            }
-        }
-
-        .size {
-            padding-top: 3px;
-            display: block;
-            @include font-content-details;
-        }
-    }
 }
 
 ul.hdfs_link_menu {

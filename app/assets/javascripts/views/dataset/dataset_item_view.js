@@ -1,4 +1,5 @@
 chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+    constructorName: "DatasetItemView",
     templateName: "dataset_item",
     tagName: "li",
 
@@ -39,15 +40,18 @@ chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).e
         // For database objects that are not in workspaces, active workspace is undefined, but the dataset should be viewable
         var viewable = this.options.hasActiveWorkspace !== false;
 
+        var url = (viewable && this.model.hasCredentials()) ? this.model.showUrl() : undefined;
+
         var ctx = {
+            name: this.model.name(),
             dataset: this.model.asWorkspaceDataset(),
-            showUrl: this.model.showUrl(),
+            url: url,
             hasCredentials: this.model.hasCredentials(),
-            iconImgUrl: this.model.iconUrl(),
+            iconUrl: this.model.iconUrl(),
             humanizedImportFrequency: Handlebars.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.workspacesAssociated(),
             viewable: viewable,
-            checkable: this.options.checkable
+            isDataset: true
         };
 
         _.extend(ctx, this.additionalContextForTags());

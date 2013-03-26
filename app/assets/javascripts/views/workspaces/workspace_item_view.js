@@ -1,4 +1,5 @@
 chorus.views.WorkspaceItem = chorus.views.Base.extend({
+    constructorName: "WorkspaceItemView",
     templateName: "workspace_item",
     tagName: "li",
 
@@ -8,14 +9,15 @@ chorus.views.WorkspaceItem = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            imageUrl: this.model.defaultIconUrl(),
-            showUrl: this.model.showUrl(),
+            iconUrl: this.model.defaultIconUrl(),
+            url: this.model.showUrl(),
             ownerUrl: this.model.owner().showUrl(),
             archiverUrl: this.model.archiver().showUrl(),
             archiverFullName: this.model.archiver().displayName(),
             ownerFullName: this.model.owner().displayName(),
             active: this.model.isActive(),
-            tags: this.model.tags().models
+            tags: this.model.tags().models,
+            isWorkspace: true
         };
     },
 

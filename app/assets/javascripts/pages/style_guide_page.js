@@ -153,15 +153,37 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             fileType: 'sql',
             completeJson: true,
             workspace: this.models.workspace,
+            recentComments: [{
+                author: {
+                    id:1,
+                    username:"chorusadmin",
+                    firstName:"Mr",
+                    lastName:"Comment"},
+                body: "Comments are fun",
+                complete_json: true,
+                timestamp: "2013-03-25T17:49:58Z"
+            }],
             executionSchema: this.models.schema
         });
 
         this.models.tableauWorkfile = new chorus.models.Workfile({
             fileName: "Bestest Tableaust Workfile",
             fileType: "tableau_workbook",
+            tags: tagList,
             workbookName: "hey tableau is the bomb",
             workbookUrl: "http://10.80.129.44/workbooks/hey tableau is the bomb",
-            completeJson: true
+            completeJson: true,
+            recentComments: [{
+                author: {
+                    id:1,
+                    username:"chorusadmin",
+                    firstName:"Chorus",
+                    lastName:"Admin"},
+                body: "I always get the last comment, and I like writing really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things ",
+                complete_json: true,
+                timestamp: "2013-03-25T17:49:58Z"
+            }],
+            commentCount: 89
         });
 
         this.models.archivedWorkfile = new chorus.models.Workfile({
@@ -195,7 +217,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         this.models.user = new chorus.models.User({ username: "edcadmin",
             firstName: "Johnny",
             lastName: "Danger",
-            admin: false,
+            admin: true,
             id: "InitialUser1",
             image: { icon: "/images/default-user-icon.png"},
             tags: tagList,
