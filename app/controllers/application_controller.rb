@@ -11,23 +11,23 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
   before_filter :extend_expiration
-  #rescue_from 'ActionController::MissingFile', :with => :render_not_found
-  #rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
-  #rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
-  #rescue_from 'ApiValidationError', :with => :render_not_valid
-  #rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
-  #rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
-  #rescue_from 'DataSourceConnection::Error', :with => :render_database_error
-  #rescue_from 'DataSourceConnection::DriverNotConfigured', :with => :render_driver_not_configured
-  #rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
-  #rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
-  #rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
-  #rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
-  #rescue_from 'ModelNotCreated', :with => :render_model_error
-  #rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
-  #rescue_from 'SunspotError', :with => :render_unprocessable_entity
-  #rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
-  #rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
+  rescue_from 'ActionController::MissingFile', :with => :render_not_found
+  rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
+  rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
+  rescue_from 'ApiValidationError', :with => :render_not_valid
+  rescue_from 'ActiveRecord::JDBCError', :with => :render_unprocessable_entity
+  rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
+  rescue_from 'DataSourceConnection::Error', :with => :render_database_error
+  rescue_from 'DataSourceConnection::DriverNotConfigured', :with => :render_driver_not_configured
+  rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
+  rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
+  rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
+  rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
+  rescue_from 'ModelNotCreated', :with => :render_model_error
+  rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
+  rescue_from 'SunspotError', :with => :render_unprocessable_entity
+  rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
+  rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
 
   helper_method :current_user
 
