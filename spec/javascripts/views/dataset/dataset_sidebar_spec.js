@@ -168,47 +168,6 @@ describe("chorus.views.DatasetSidebar", function() {
             it("displays an import dataset link", function() {
                 expect(this.view.$("a.import_now").text()).toMatchTranslation("actions.import_now");
             });
-
-            context("when the import dataset link is clicked", function() {
-                beforeEach(function() {
-                    this.view.$("a.import_now").click();
-                });
-
-                it("asks the server whether or not the columns have supported data types", function() {
-                    expect(this.server.lastFetch().url).toBe("/datasets/12/importability");
-                });
-
-                context("when the server responds that the data types are valid", function () {
-                    beforeEach(function() {
-                        var expectedResponse = rspecFixtures.datasetImportability();
-                        var model = new chorus.models.DatasetImportability({
-                            datasetId: 12
-                        });
-                        this.server.completeFetchFor(model, expectedResponse);
-                    });
-
-                    it("opens the Import Now dialog", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportNow);
-                    });
-                });
-
-                context("when the server responds that the data types are not valid", function () {
-                    beforeEach(function() {
-                        var expectedResponse = rspecFixtures.datasetImportabilityForUnimportableDataset({
-                            importability: false,
-                            invalidColumns: ["foo", "bar"]
-                        });
-                        var model = new chorus.models.DatasetImportability({
-                            datasetId: 12
-                        });
-                        this.server.completeFetchFor(model, expectedResponse);
-                    });
-
-                    it("opens an alert indicating that the dataset it not importable", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.alerts.DatasetNotImportable);
-                    });
-                });
-            });
         });
 
         it("displays a download link", function() {

@@ -10,29 +10,29 @@ jasmine.sharedExamples.importIntoNewTableIsSelected = function() {
 };
 
 describe("chorus.dialogs.ImportNow", function() {
-    beforeEach(function() {
-        this.workspace = rspecFixtures.workspace({id: 123});
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
-        this.importSchedules = rspecFixtures.datasetImportScheduleSet();
-        _.extend(this.importSchedules.attributes, {
-            datasetId: this.dataset.get('id'),
-            workspaceId: this.dataset.get("workspace").id
-        });
-        this.importSchedule = this.importSchedules.at(0);
-        this.importSchedule.set({
-            datasetId: this.dataset.get('id'),
-            workspaceId: this.dataset.get('workspace').id,
-            destinationDatasetId: 789
-        });
-        this.importSchedule.unset('sampleCount');
-
-        this.dialog = new chorus.dialogs.ImportNow({
-            dataset: this.dataset,
-            workspace: this.workspace
-        });
-    });
-
     context('importing into a workspace', function() {
+        beforeEach(function() {
+            this.workspace = rspecFixtures.workspace({id: 123});
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
+            this.importSchedules = rspecFixtures.datasetImportScheduleSet();
+            _.extend(this.importSchedules.attributes, {
+                datasetId: this.dataset.get('id'),
+                workspaceId: this.dataset.get("workspace").id
+            });
+            this.importSchedule = this.importSchedules.at(0);
+            this.importSchedule.set({
+                datasetId: this.dataset.get('id'),
+                workspaceId: this.dataset.get('workspace').id,
+                destinationDatasetId: 789
+            });
+            this.importSchedule.unset('sampleCount');
+
+            this.dialog = new chorus.dialogs.ImportNow({
+                dataset: this.dataset,
+                workspace: this.workspace
+            });
+        });
+
         it('creates a WorkspaceImport model', function(){
             expect(this.dialog.model).toBeA(chorus.models.WorkspaceImport);
         });
@@ -346,120 +346,161 @@ describe("chorus.dialogs.ImportNow", function() {
                 dataset: this.dataset
             });
             this.dialog.render();
-            this.schema = rspecFixtures.schema({id: 456, name: "ThisIsAReallyLongSchemaNameForPeopleThatLikeVerbosity"});
             $("#jasmine_content").append(this.dialog.el);
         });
 
-        it('creates a SchemaImport model', function(){
-            expect(this.dialog.model).toBeA(chorus.models.SchemaImport);
+        it("asks the server whether or not the columns have supported data types", function() {
+            expect(this.server.lastFetch().url).toBe("/datasets/" + this.dataset.id + "/importability");
         });
 
-        it("all options are hidden until a schema is selected", function() {
-            expect(this.dialog.$("input:radio")).toBeHidden();
-            expect(this.dialog.$("input:checkbox")).toBeHidden();
+        context("when dataset importability has not yet been fetched", function() {
+            it("shows a loading spinner", function() {
+                expect(this.dialog.$('.dialog_content').isLoading()).toBe(true);
+            });
         });
 
-        it("the submit button remains disabled when a table name is provided", function() {
-            expect(this.dialog.$("button.submit")).toBeDisabled();
-            this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-            expect(this.dialog.$("button.submit")).toBeDisabled();
-        });
-
-        describe("when the select schema link is clicked", function() {
+        context("when the server responds that the data types are invalid", function(){
             beforeEach(function() {
-                this.modalSpy = stubModals();
-                this.dialog.$("a.select_schema").click();
+                spyOn(this.dialog, "closeModal");
+                var expectedResponse = rspecFixtures.datasetImportabilityForUnimportableDataset({
+                    invalidColumns: ["foo", "bar"]
+                });
+                var model = new chorus.models.DatasetImportability({
+                    datasetId: this.dataset.id
+                });
+                this.server.completeFetchFor(model, expectedResponse);
             });
 
-            it("displays a schema picker dialog", function() {
-                expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
+            it("closes the import now dialog", function(){
+                expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("opens the dataset not importable dialog", function(){
+                expect(chorus.modal).toBeA(chorus.alerts.DatasetNotImportable);
             });
         });
 
-        context("when a schema has been selected", function() {
+        context("when the server responds that the data types are valid", function () {
             beforeEach(function() {
-                this.modalSpy = stubModals();
-                this.dialog.$("a.select_schema").click();
-                this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+                var expectedResponse = rspecFixtures.datasetImportability();
+                var model = new chorus.models.DatasetImportability({
+                    datasetId: this.dataset.id
+                });
+                this.server.completeFetchFor(model, expectedResponse);
             });
 
-            it("sets the dialog's schema", function() {
-                expect(this.dialog.schema).toBe(this.schema);
+            it('creates a SchemaImport model', function(){
+                expect(this.dialog.model).toBeA(chorus.models.SchemaImport);
             });
 
-            it("displays the truncated schema", function() {
-                expect(this.dialog.$(".destination")).toContainText(_.truncate(this.schema.canonicalName(), 40));
+            it("all options are hidden until a schema is selected", function() {
+                expect(this.dialog.$("input:radio")).toBeHidden();
+                expect(this.dialog.$("input:checkbox")).toBeHidden();
             });
 
-            it("sets the schema selection's title attribute to the full schema path", function() {
-                expect(this.dialog.$(".selection")).toHaveAttr("title", this.schema.canonicalName());
+            it("the submit button remains disabled when a table name is provided", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
+                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
-            it ("hides the select destination schema button", function() {
-               expect(this.dialog.$(".select_schema")).toHaveClass("hidden");
-            });
-
-            describe("change schema link", function() {
-                it ("shows the change schema link", function() {
-                    expect(this.dialog.$(".change_schema")).not.toHaveClass("hidden");
-                    expect(this.dialog.$(".change_schema")).toContainTranslation("actions.change");
+            describe("when the select schema link is clicked", function() {
+                beforeEach(function() {
+                    this.modalSpy = stubModals();
+                    this.dialog.$("a.select_schema").click();
                 });
 
-                it ("launches the Schema Picker dialog", function() {
-                    this.modalSpy.reset();
-                    this.dialog.$("a.change_schema").click();
+                it("displays a schema picker dialog", function() {
                     expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
                 });
             });
 
-
-            it("enables the import target options", function() {
-                expect(this.dialog.$("input")).toBeVisible();
-            });
-
-            it("shows the submit button when a table name is entered", function() {
-                expect(this.dialog.$("button.submit")).toBeDisabled();
-                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-                expect(this.dialog.$("button.submit")).toBeEnabled();
-            });
-
-            context("when 'Import into Existing Table' is checked", function() {
+            context("when a schema has been selected", function() {
                 beforeEach(function() {
-                    this.dialog.$(".new_table input:radio").prop("checked", false);
-                    this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                });
-
-                it("should enable the 'select destination table' link", function() {
-                    expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
-                    expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
-                });
-
-                context("when the dataset picker link is clicked", function() {
-                    beforeEach(function() {
-                        this.dialog.$(".existing_table a.dataset_picked").click();
-                    });
-
-                    it("should have a link to the dataset picker dialog", function() {
-                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
-                    });
-
-                    it("passes a collection of datasets in the selected schema", function() {
-                        var collection = chorus.modal.options.collection;
-                        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
-                        expect(collection.attributes.schemaId).toEqual(456);
-                    });
-                });
-            });
-
-            context("when the form is submitted", function() {
-                beforeEach(function() {
-                    this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                    this.schema = rspecFixtures.schema({id: 456, name: "ThisIsAReallyLongSchemaNameForPeopleThatLikeVerbosity"});
+                    this.modalSpy = stubModals();
+                    this.dialog.$("a.select_schema").click();
                     this.modalSpy.lastModal().trigger("schema:selected", this.schema);
-                    this.dialog.$("button.submit").click();
                 });
 
-                it("saves the model", function() {
-                    expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
+                it("sets the dialog's schema", function() {
+                    expect(this.dialog.schema).toBe(this.schema);
+                });
+
+                it("displays the truncated schema", function() {
+                    expect(this.dialog.$(".destination")).toContainText(_.truncate(this.schema.canonicalName(), 40));
+                });
+
+                it("sets the schema selection's title attribute to the full schema path", function() {
+                    expect(this.dialog.$(".selection")).toHaveAttr("title", this.schema.canonicalName());
+                });
+
+                it ("hides the select destination schema button", function() {
+                    expect(this.dialog.$(".select_schema")).toHaveClass("hidden");
+                });
+
+                describe("change schema link", function() {
+                    it ("shows the change schema link", function() {
+                        expect(this.dialog.$(".change_schema")).not.toHaveClass("hidden");
+                        expect(this.dialog.$(".change_schema")).toContainTranslation("actions.change");
+                    });
+
+                    it ("launches the Schema Picker dialog", function() {
+                        this.modalSpy.reset();
+                        this.dialog.$("a.change_schema").click();
+                        expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.SchemaPicker);
+                    });
+                });
+
+
+                it("enables the import target options", function() {
+                    expect(this.dialog.$("input")).toBeVisible();
+                });
+
+                it("shows the submit button when a table name is entered", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                    this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                    expect(this.dialog.$("button.submit")).toBeEnabled();
+                });
+
+                context("when 'Import into Existing Table' is checked", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input:radio").prop("checked", false);
+                        this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                    });
+
+                    it("should enable the 'select destination table' link", function() {
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
+                        expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
+                    });
+
+                    context("when the dataset picker link is clicked", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".existing_table a.dataset_picked").click();
+                        });
+
+                        it("should have a link to the dataset picker dialog", function() {
+                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                        });
+
+                        it("passes a collection of datasets in the selected schema", function() {
+                            var collection = chorus.modal.options.collection;
+                            expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
+                            expect(collection.attributes.schemaId).toEqual(456);
+                        });
+                    });
+                });
+
+                context("when the form is submitted", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                        this.modalSpy.lastModal().trigger("schema:selected", this.schema);
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("saves the model", function() {
+                        expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
+                    });
                 });
             });
         });

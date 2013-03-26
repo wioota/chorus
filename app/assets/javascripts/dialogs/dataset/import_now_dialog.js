@@ -58,6 +58,25 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
             this.showErrors(this.model);
             this.$("button.submit").stopLoading();
         });
+
+        this.checkImportability();
+    },
+
+    checkImportability: function() {
+        this.importability = new chorus.models.DatasetImportability({
+            datasetId: this.options.dataset.id
+        });
+        this.importability.fetch({
+            success: _.bind(function() {
+                if (this.importability.get('importability')) {
+                    this.$(".dialog_content").stopLoading();
+                } else {
+                    this.closeModal();
+                    new chorus.alerts.DatasetNotImportable({
+                        datasetImportability: this.importability}).launchModal();
+                }
+            }, this)
+        });
     },
 
     customSetup: function() {
@@ -82,6 +101,10 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.$(".truncate").prop("disabled", true);
         this.schedule && this.setFieldValuesFromSchedule(this.schedule);
         this.updateExistingTableLink();
+
+        if (!this.workspace && !this.importability.loaded) {
+            this.$(".dialog_content").startLoading();
+        }
     },
 
     launchDatasetPickerDialog: function(e) {

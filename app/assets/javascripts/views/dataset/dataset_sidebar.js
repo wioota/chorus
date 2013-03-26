@@ -9,7 +9,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView",
-        "click .import_now.dialog": "launchDatasetImportDialog",
         "click .edit_tags": "startEditingTags"
     },
 
@@ -119,24 +118,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         e.preventDefault();
 
         new chorus.dialogs.AssociateWithWorkspace({model: this.resource, activeOnly: true}).launchModal();
-    },
-
-    launchDatasetImportDialog: function(e) {
-        e.preventDefault();
-
-        var datasetImportability = new chorus.models.DatasetImportability({
-            datasetId: this.resource.id
-        });
-
-        datasetImportability.fetch({
-            success: _.bind(function() {
-                if (datasetImportability.get('importability')) {
-                    new chorus.dialogs.ImportNow({dataset: this.resource}).launchModal();
-                } else {
-                    new chorus.alerts.DatasetNotImportable({datasetImportability: datasetImportability}).launchModal();
-                }
-            }, this)
-        });
     },
 
     launchDatasetPreviewDialog: function(e) {
