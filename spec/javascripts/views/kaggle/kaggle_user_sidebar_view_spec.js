@@ -12,7 +12,7 @@ describe("chorus.views.KaggleUserSidebar", function () {
 
     context("with no user", function() {
         beforeEach(function() {
-            chorus.PageEvents.broadcast('kaggleUser:deselected', null);
+            chorus.PageEvents.broadcast('kaggle_user:deselected', null);
         });
 
         it("does not show an username", function () {
@@ -30,7 +30,7 @@ describe("chorus.views.KaggleUserSidebar", function () {
 
     context("with a user", function () {
         beforeEach(function () {
-            chorus.PageEvents.broadcast('kaggleUser:selected', this.model);
+            chorus.PageEvents.broadcast('kaggle_user:selected', this.model);
         });
 
         it("shows the user's name", function () {

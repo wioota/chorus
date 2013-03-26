@@ -12,7 +12,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         } else {
             this.content = new chorus.views.CheckableList(_.extend({
                     collection: collection,
-                    entityType: modelClass.toLowerCase(),
+                    entityType: _.underscored(modelClass),
                     entityViewType: chorus.views[modelClass + "Item"]
                 }, options.contentOptions));
         }

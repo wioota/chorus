@@ -11,8 +11,8 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
 
     setup: function(options) {
         this.workspace = options.workspace;
-        this.subscribePageEvent("kaggleUser:selected", this.setKaggleUser);
-        this.subscribePageEvent("kaggleUser:deselected", this.setKaggleUser);
+        this.subscribePageEvent("kaggle_user:selected", this.setKaggleUser);
+        this.subscribePageEvent("kaggle_user:deselected", this.setKaggleUser);
     },
 
     additionalContext: function() {

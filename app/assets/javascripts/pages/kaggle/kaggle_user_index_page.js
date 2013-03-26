@@ -9,14 +9,13 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "KaggleUser",
-            useCustomList: true,
             collection: this.collection,
             contentHeader: new chorus.views.KaggleHeader(),
             contentDetails: new chorus.views.KaggleUserListContentDetails({collection: this.collection})
         });
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "kaggleUser:checked",
+            selectEvent: "kaggle_user:checked",
             actions: [
                 '<a class="send_message" href="#">{{t "actions.compose_kaggle_message"}}</a>'
             ],

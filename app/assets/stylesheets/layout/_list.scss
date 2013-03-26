@@ -36,6 +36,13 @@
             float: left;
             width: $icon-image-width + 18px;
             height: $icon-image-height + 13px;
+
+            img {
+                height: auto;
+                width:  auto;
+                max-width: $icon-image-width + 18px;
+                max-height: $icon-image-height + 13px;
+            }
         }
 
         div.right-of-image {

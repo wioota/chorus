@@ -58,7 +58,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("kaggleUser:checked", this.kaggleUsers.clone());
+                    chorus.PageEvents.broadcast("kaggle_user:checked", this.kaggleUsers.clone());
                 });
 
                 it("displays the multiple selection section", function() {
@@ -97,7 +97,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         it("creates a KaggleUserList view", function() {
-            expect(this.page.$(".kaggle_user_list")).toExist();
+            expect(this.page.$(".list li.kaggle_user_item").length).toBe(this.kaggleUsers.length);
         });
 
         it("creates a KaggleUserSidebar view", function() {

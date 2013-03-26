@@ -12,8 +12,7 @@
     }
 }
 
-.kaggle_user_list {
-
+div[data-page="KaggleUserIndex"] {
     .content_details {
         height: auto;
         padding: 0;
@@ -40,32 +39,12 @@
       }
     }
 
-    .name {
-        color: $color-text2;
-    }
-
-    .image {
-        text-align: center;
-        width: 70px;
-    }
-
-    img.profile {
-        max-width: 64px;
-        max-height: 64px;
-    }
-
     .kaggle_rank {
         background-color: $color-text3;
         color: white;
         padding: 0 5px;
         @include border-radius(3px);
         margin-right: 5px;
-    }
-
-    input[type=checkbox] {
-      float: left;
-      margin-top: 28px;
-      margin-right: 10px;
     }
 
     .kaggle_filter {
