@@ -78,7 +78,7 @@ describe("chorus.views.Dashboard", function(){
             it('has the Add a Data Source link', function() {
                 var link = this.view.$(".dashboard_data_source_list_content_details a.add");
                 expect(link.text().trim()).toMatchTranslation("dashboard.instances.add");
-                expect(link.data("dialog")).toBe("InstancesNew");
+                expect(link.data("dialog")).toBe("DataSourcesNew");
             });
         });
 
