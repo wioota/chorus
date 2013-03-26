@@ -83,6 +83,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             this.showErrorWithDetailsLink(this.collection, chorus.alerts.Error);
         }
         this.showErrors(this.dataset);
+
+        if(!this.boundScrollHandler) {
+            this.boundScrollHandler = _.bind(this.scrollHandler, this);
+            $(window).scroll(this.boundScrollHandler);
+        }
     },
 
     triggerSelectAll: function(e) {
@@ -257,5 +262,20 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
           dataset: this.dataset
       });
       this.dialog.launchModal();
+    },
+
+    scrollHandler: function() {
+        if (!this.$el) return;
+        this.topPosition = this.topPosition || this.$el.parent().offset().top;
+        var contentDetailsTop = this.topPosition  - $(window).scrollTop();
+        var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
+        this.$el.parent().toggleClass('fixed', distanceToHeader <= 0);
+        this.$el.closest('.main_content').find('.results_console').toggleClass('fixed', distanceToHeader <= 0);
+    },
+
+    teardown: function() {
+        this._super("teardown", arguments);
+        $(window).unbind('scroll', this.boundScrollHandler);
+        delete this.boundScrollHandler;
     }
 });

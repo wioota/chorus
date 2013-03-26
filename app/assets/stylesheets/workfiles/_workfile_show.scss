@@ -1,25 +1,16 @@
-.workfile_content_details {
-    background: $content-details-action-background-color;
-    color: $content-details-action-link-color;
-    height:  100%;
-    line-height: 30px;
-    padding: 0 $padding-x;
-    vertical-align: middle;
-    @include font-content-details;
-    button, a.button {
-        margin-left: 0;
-        color: $content-details-action-link-color;
-        font-weight: $semibold;
-        font-size: 13px;
-        @include content-details-button($content-details-action-link-border-color);
-        margin-bottom: 0;
-    }
+.fixed {
+    position: fixed;
+    left: $guts-padding;
+    margin-right: $sidebar-width + $sidebar-padding-x + 1;
+    right: 0px;
+    top: $header-height + 1;
+    z-index: $header-z-index - 1;
+}
 
+.workfile_content_details {
     a {
         @include font-content-details;
-        color: $content-details-action-link-color;
     }
-
 
     .save {
         float: right;
@@ -37,10 +28,6 @@
         }
     }
 
-    &.fixed {
-        top: $header-height + 1;
-    }
-
     .down_arrow {
         width: 0;
         height: 0;
@@ -52,7 +39,6 @@
     }
 
     .execution_schema {
-
         color: $content-details-action-link-color;
         display: inline;
         padding-left: $padding-x;
@@ -62,18 +48,12 @@
 }
 
 .read_only_workfile_content_details {
-    line-height: 31px;
     background-image: url("/images/binary_workfile_action_bar_tile.png");
-    a.download {
-        margin-top: -1px;
+
+    button {
+        @include content-details-button(#AAA);
+        color: $color-text2;
         float: right;
-        button {
-            font-size: 13px;
-            font-weight: $semibold;
-            color: $color-text2;
-            @include content-details-button(#AAA);
-            background-color: #D2D8DD;
-        }
     }
 
     .not_previewable {
@@ -95,14 +75,6 @@
 .CodeMirror.editable {
     background: white;
     width: 100%;
-}
-
-.fixed {
-    position: fixed;
-    right: 0px;
-    left: $guts-padding;
-    z-index: $header-z-index - 1;
-    margin-right: $sidebar-width + $sidebar-padding-x + 1;
 }
 
 .save_menu, .run_menu, .schema_menu {

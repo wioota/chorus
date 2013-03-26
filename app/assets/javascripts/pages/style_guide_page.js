@@ -6,9 +6,6 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
             contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Design rules for a happy family.'})
         });
 
-        //sidebar is optional
-        this.sidebar = new chorus.views.StaticTemplate("plain_text", {text: "sidebar is 250px wide"});
-
         //subnavs require a workspace and are optional
         this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
         this.workspace.loaded = true;
@@ -155,7 +152,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             tags: tagList,
             fileType: 'sql',
             completeJson: true,
-            workspace: this.models.workspace
+            workspace: this.models.workspace,
+            executionSchema: this.models.schema
         });
 
         this.models.tableauWorkfile = new chorus.models.Workfile({
@@ -163,6 +161,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             fileType: "tableau_workbook",
             workbookName: "hey tableau is the bomb",
             workbookUrl: "http://10.80.129.44/workbooks/hey tableau is the bomb",
+            completeJson: true
+        });
+
+        this.models.archivedWorkfile = new chorus.models.Workfile({
+            fileName: "Archived SQL Workfile",
+            fileType: "sql",
+            workspace: this.models.archivedWorkspace,
             completeJson: true
         });
 
@@ -350,6 +355,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.workfile),
 
             "Tableau Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.tableauWorkfile),
+
+            "Read Only (Binary or Archived) Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.archivedWorkfile),
 
             "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model:this.models.hdfsFile })
         };

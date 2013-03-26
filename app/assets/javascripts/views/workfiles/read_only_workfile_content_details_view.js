@@ -1,6 +1,6 @@
 chorus.views.ReadOnlyWorkfileContentDetails = chorus.views.Base.extend({
     templateName: "read_only_workfile_content_details",
-    additionalClass: "workfile_content_details",
+    additionalClass: "workfile_content_details action_bar",
 
     additionalContext: function() {
         return {

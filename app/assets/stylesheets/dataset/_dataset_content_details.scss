@@ -13,7 +13,6 @@
         border-top: 1px solid #B2C7D6;
         background-color: $content-details-info-bar-background-color;
 
-
         .right {
             float: right;
             a {
@@ -43,11 +42,6 @@
     }
 
     button {
-        margin: 1px 5px 0 5px;
-        color: $content-details-action-link-color;
-        font-weight: $semibold;
-        font-size: 13px;
-        @include content-details-button($content-details-action-link-border-color);
         float: right;
 
         &.preview {
@@ -57,10 +51,9 @@
     }
 
     .definition, .create_chart, .create_chorus_view, .edit_chorus_view {
+        border-bottom: 1px solid #8D9DA8;
         height: 32px;
         line-height: 33px;
-        border-bottom: 1px solid #8D9DA8;
-        background-color: $content-details-action-background-color;
     }
 
     .definition {

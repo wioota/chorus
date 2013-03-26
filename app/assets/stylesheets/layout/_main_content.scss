@@ -44,9 +44,23 @@
         border: none;
     }
 
-    button {
+    button, .button {
         @include font-content-details;
         @include content-details-button($border-color);
+        margin: 1px 5px 0 5px;
+    }
+
+    .action_bar {
+        background-color: $content-details-action-background-color;
+        height:  100%;
+        padding: 0 $padding-x;
+        line-height: 30px;
+        vertical-align: middle;
+
+        button, .button {
+            color: $content-details-action-link-color;
+            @include content-details-button($content-details-action-link-border-color);
+        }
     }
 }
 

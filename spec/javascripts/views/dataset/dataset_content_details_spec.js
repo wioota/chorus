@@ -11,6 +11,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 collection: this.collection,
                 $columnList: this.$columnList
             });
+            spyOn(this.view, "scrollHandler");
             spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
             spyOn(chorus, "search");
             this.server.completeFetchFor(this.dataset.statistics(), rspecFixtures.datasetStatisticsView());
@@ -166,8 +167,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                             });
 
                             it("should not display '.column_count' ", function() {
-                               expect(this.view.$(".column_count")).toHaveClass("hidden");
-                               expect(this.view.$(".data_preview")).toHaveClass("hidden");
+                                expect(this.view.$(".column_count")).toHaveClass("hidden");
+                                expect(this.view.$(".data_preview")).toHaveClass("hidden");
                             });
                         });
                     });
@@ -305,7 +306,6 @@ describe("chorus.views.DatasetContentDetails", function() {
                 it("broadcasts start:visualization", function() {
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("start:visualization");
                 });
-
 
                 context("and cancel is clicked", function() {
                     beforeEach(function() {
@@ -519,8 +519,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                     });
 
-                    context("and click on data preview close button when data preview was opened", function () {
-                        it("shows the search column count bar", function () {
+                    context("and click on data preview close button when data preview was opened", function() {
+                        it("shows the search column count bar", function() {
                             this.view.$(".column_count .preview").click();
                             this.view.$(".data_preview .close").click();
                             expect(this.view.$(".column_count")).not.toHaveClass("hidden");
@@ -851,6 +851,19 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.configView.options.errorContainer).toBe(this.view);
             });
         });
+
+        describe("custom scrolling", function() {
+            it("handles scrolling (to anchor content details to the top of the window when scrolling down)", function() {
+                $(window).trigger("scroll");
+                expect(this.view.scrollHandler).toHaveBeenCalled();
+            });
+
+            it("only binds scroll handling once", function() {
+                this.view.render();
+                $(window).trigger("scroll");
+                expect(this.view.scrollHandler.callCount).toBe(1);
+            });
+        });
     });
 
     describe('when the statistics have not loaded', function() {
@@ -868,13 +881,13 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.view.render();
         });
 
-        it('renders the page', function(){
+        it('renders the page', function() {
             expect(this.view.$el).toContainText('Explore'); // hella random text
         });
     });
 
-    describe('when the statistics have loaded', function(){
-        beforeEach(function(){
+    describe('when the statistics have loaded', function() {
+        beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -890,7 +903,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.server.completeFetchFor(this.dataset.statistics(), this.statistics);
         });
 
-        it("renders the page with the view's query", function(){
+        it("renders the page with the view's query", function() {
             expect(this.view.$('.definition')).toContainText(this.statistics.get('definition'));
         });
     });

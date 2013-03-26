@@ -1,6 +1,6 @@
 chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
     templateName:"workfile_content_details",
-    additionalClass: "workfile_content_details",
+    additionalClass: "workfile_content_details action_bar",
 
     setup: function() {
         this.subscribePageEvent("file:autosaved", this.updateAutosaveText);
