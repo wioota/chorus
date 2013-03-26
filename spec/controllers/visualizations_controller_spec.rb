@@ -23,9 +23,7 @@ describe VisualizationsController do
 
       describe "fixtures", :greenplum_integration do
         let(:account) { GreenplumIntegration.real_account }
-        before do
-          log_in account.owner
-        end
+        before { log_in account.owner }
 
         generate_fixture "frequencyTask.json" do
           dataset = Dataset.find_by_name!("base_table1")

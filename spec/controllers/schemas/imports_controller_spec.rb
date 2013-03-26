@@ -1,20 +1,25 @@
 require 'spec_helper'
 
 describe Schemas::ImportsController do
-  describe '#create', :greenplum_integration do
+  describe '#create' do
     let(:source_dataset) { datasets(:oracle_table) }
-    let(:schema) { GreenplumIntegration.real_database.schemas.first! }
+    let(:schema) { schemas(:default) }
     let(:user) { schema.data_source.owner }
 
     before do
+      any_instance_of(GreenplumConnection) do |connection|
+        stub(connection).table_exists?(to_table) { table_exists }
+      end
       log_in user
     end
 
     context 'when importing a dataset immediately' do
       context 'into a new destination dataset' do
+        let(:table_exists) { false }
+        let(:to_table) { "the_new_table" }
         let(:attributes) {
           HashWithIndifferentAccess.new(
-            :to_table => "the_new_table",
+            :to_table => to_table,
             :sample_count => "12",
             :schema_id => schema.to_param,
             :truncate => "false",
@@ -34,7 +39,7 @@ describe Schemas::ImportsController do
           }.to change(SchemaImport, :count).by(1)
           import = SchemaImport.last
           import.schema.should == schema
-          import.to_table.should == "the_new_table"
+          import.to_table.should == to_table
           import.source_dataset.should == source_dataset
           import.truncate.should == false
           import.user_id.should == user.id

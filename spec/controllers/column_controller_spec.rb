@@ -40,7 +40,7 @@ describe ColumnController do
       end
     end
 
-    context "with real data", :greenplum_integration do
+    context "with real greenplum data", :greenplum_integration do
       let(:account) { GreenplumIntegration.real_account }
       let(:user) { account.owner }
       let(:database) { GreenplumIntegration.real_database }
