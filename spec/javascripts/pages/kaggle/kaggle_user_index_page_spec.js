@@ -96,11 +96,11 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             expect(this.page.mainContent.contentDetails.collection).toBeA(chorus.collections.KaggleUserSet);
         });
 
-        it("creates a KaggleUserList view", function() {
-            expect(this.page.$(".list li .kaggle_user_item").length).toBe(this.kaggleUsers.length);
+        it("shows the kaggle users", function() {
+            expect(this.page.$(".kaggle_user_item").length).toBe(this.kaggleUsers.length);
         });
 
-        it("creates a KaggleUserSidebar view", function() {
+        it("shows the kaggle user sidebar", function() {
             expect(this.page.$(".kaggle_user_sidebar")).toExist();
         });
     });
