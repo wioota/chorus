@@ -672,7 +672,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
                 return new chorus.views.MainContentView({
                     contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
-                    content: new chorus.views.DataSourceList(options),
+                    content: new chorus.views.DataSourceIndex(options),
                     useCustomList: true
                 });
             }.call(this),
