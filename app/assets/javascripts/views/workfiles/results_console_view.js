@@ -21,6 +21,19 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.subscribePageEvent("file:executionSucceeded", this.executionSucceeded);
         this.subscribePageEvent("file:executionFailed", this.executionFailed);
         this.subscribePageEvent("file:executionCancelled", this.hideSpinner);
+        this.setModel(this.model);
+    },
+
+    setModel: function() {
+        if(this.model) {
+            this.bindings.remove(this.model, "canceled", this.cancelCompleted);
+            this.bindings.remove(this.model, "cancelFailed", this.cancelFailed);
+        }
+        this._super('setModel', arguments);
+        if(this.model){
+            this.bindings.add(this.model, "canceled", this.cancelCompleted);
+            this.bindings.add(this.model, "cancelFailed", this.cancelFailed);
+        }
     },
 
     teardown: function() {
@@ -114,10 +127,13 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     showErrors: function() {
         this.$(".sql_errors").removeClass("hidden");
+        this.$(".action.view_details").removeClass("hidden");
+        this.$(".actions.separator").removeClass("hidden");
         this.$(".result_table").addClass("hidden");
         this.$(".bottom_gutter").addClass("hidden");
         this.$(".execution").addClass("hidden");
         this.$(".message").empty();
+        this.$(".error").text(this.$(".error").text() || t("results_console_view.there_was_an_error"));
     },
 
     cancelExecution: function(event) {
@@ -189,6 +205,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     closeError: function(e) {
         e && e.preventDefault();
         this.$(".sql_errors").addClass("hidden");
+        this.$(".error").text("");
     },
 
     clickCloseError: function(e) {
@@ -239,6 +256,21 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             enableExpander: this.options.enableExpander,
             hasResults: this.model && this.model.hasResults()
         };
+    },
+
+    cancelCompleted: function() {
+        this.showErrors();
+        this.$(".action.view_details").addClass("hidden");
+        this.$(".actions.separator").addClass("hidden");
+        this.$(".error").text(t("workfile.execution.cancelled"));
+
+    },
+
+    cancelFailed: function() {
+        this.showErrors();
+        this.$(".action.view_details").addClass("hidden");
+        this.$(".actions.separator").addClass("hidden");
+        this.$(".error").text(t("workfile.execution.cancel_failed"));
     }
 });
 

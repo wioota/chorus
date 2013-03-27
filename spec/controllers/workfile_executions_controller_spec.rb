@@ -169,7 +169,7 @@ describe WorkfileExecutionsController do
     end
 
     it "cancels the query for the given id" do
-      mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
+      mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id) { true }
       delete :destroy, :workfile_id => workfile.id, :id => check_id
       response.should be_success
     end
@@ -179,6 +179,12 @@ describe WorkfileExecutionsController do
       response.code.should == '422'
       decoded = JSON.parse(response.body)
       decoded['errors']['fields']['check_id'].should have_key('BLANK')
+    end
+
+    it "returns an error if canceling the query fails" do
+      mock(SqlExecutor).cancel_query.with_any_args { false }
+      delete :destroy, :workfile_id => workfile.id, :id => check_id
+      response.code.should == '422'
     end
 
     context "with an archived workspace" do

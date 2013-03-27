@@ -406,6 +406,20 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(destroy).toBeDefined();
                     });
 
+                    context("when the destroy succeeds", function(){
+                        it("displays an informational message", function(){
+                            this.server.lastDestroy().succeed();
+                            expect(this.view.$(".error")).toContainTranslation("workfile.execution.cancelled");
+                        });
+                    });
+
+                    context("when the destroy fails", function(){
+                        it("displays an informational message", function(){
+                            this.server.lastDestroy().fail();
+                            expect(this.view.$(".error")).toContainTranslation("workfile.execution.cancel_failed");
+                        });
+                    });
+
                     itRemovesExecutionUI(true);
                 });
 
