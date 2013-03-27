@@ -178,12 +178,12 @@
         }
 
         li {
-            a {
+            .name {
                 color: $color-text2;
+            }
 
-                &:hover {
-                    text-decoration: underline;
-                }
+            a:hover {
+                text-decoration: underline;
             }
 
             &.checked {
