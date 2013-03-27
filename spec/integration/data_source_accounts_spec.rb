@@ -8,7 +8,7 @@ describe "Data Source Accounts" do
   before do
     login(owner)
     visit("#/data_sources/")
-    find("li.data_source[data-data-source-id='#{data_source.id}']").click
+    find(".data_source_item", :text => data_source.name).click
     within '.account_info' do
       click_link "Edit"
     end
