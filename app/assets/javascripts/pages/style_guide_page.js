@@ -65,7 +65,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             count: 20
         });
 
-        this.models.greenplumDataSource = new chorus.models.GpdbDataSource({
+        this.models.gpdbDataSource = new chorus.models.GpdbDataSource({
             name: "Greenplum Data Source",
             online: true,
             description: "This is a description of a data source. It is so sick, so AWESOME!",
@@ -97,12 +97,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "instance": this.models.greenplumDataSource
+            "instance": this.models.gpdbDataSource
         });
 
         this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "instance": this.models.greenplumDataSource
+            "instance": this.models.gpdbDataSource
         });
 
         this.models.schema = new chorus.models.Schema({
@@ -235,7 +235,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         this.models.activity = new chorus.models.Activity({
             "action": "DataSourceChangedOwner",
             "actor": this.models.user,
-            "dataSource": this.models.greenplumDataSource,
+            "dataSource": this.models.gpdbDataSource,
             "newOwner": this.models.otherUser,
             "timestamp": "2013-01-31T20:14:27Z"
         });
@@ -283,7 +283,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             },
 
             dataSources: {
-                results: [this.models.greenplumDataSource, this.models.hdfsDataSource, this.models.gnipDataSource],
+                results: [this.models.gpdbDataSource, this.models.hdfsDataSource, this.models.gnipDataSource],
                 numFound: 4
             },
 
@@ -337,7 +337,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         this.collections.schemaSet = new chorus.collections.SchemaSet([this.models.schema, this.models.otherSchema]);
         this.collections.schemaSet.loaded = true;
 
-        this.collections.dataSourceSet = new chorus.collections.DataSourceSet([this.models.oracleDataSource, this.models.greenplumDataSource]);
+        this.collections.dataSourceSet = new chorus.collections.DataSourceSet([this.models.oracleDataSource, this.models.gpdbDataSource]);
         this.collections.hdfsDataSourceSet = new chorus.collections.HdfsDataSourceSet([this.models.hdfsDataSource]);
         this.collections.gnipDataSourceSet = new chorus.collections.GnipDataSourceSet([this.models.gnipDataSource]);
         this.collections.dataSourceSet.loaded = this.collections.hdfsDataSourceSet.loaded = this.collections.gnipDataSourceSet.loaded = true;
@@ -698,7 +698,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Instance Account Dialog": new chorus.dialogs.InstanceAccount({
                 title: t("instances.account.add.title"),
-                instance: this.models.greenplumDataSource
+                instance: this.models.gpdbDataSource
             }),
 
             "Change Password Dialog": new chorus.dialogs.ChangePassword(),
@@ -729,6 +729,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
 
             "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
+
+            "Edit Data Source Dialog": new chorus.dialogs.DataSourceEdit({
+                instance: this.models.gpdbDataSource
+            }),
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability })
         };
