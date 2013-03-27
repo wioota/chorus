@@ -2,11 +2,11 @@
     position: relative;
 
     li {
-        padding: $padding-y 0;
+        @include after-clearfix;
         border-bottom: $dotted-list-item-border;
         margin: 0 $padding-x;
+        padding: $padding-y 0;
         position: relative;
-        @include after-clearfix;
 
         &:last-child {
             border-bottom: none;
@@ -50,13 +50,13 @@
             font-weight: $semibold;
         }
 
-        .right_of_image {
-            vertical-align: top;
+        .item_information {
+            _overflow:visible;
             line-height: 21px;
             overflow:hidden;
-            _overflow:visible;
-            zoom:1;
             padding-left: $padding-x;
+            vertical-align: top;
+            zoom:1;
 
             .summary {
                 padding-bottom: 3px;
@@ -74,7 +74,7 @@
             }
         }
 
-        div.main_text {
+        .main_text {
             display: inline-block;
         }
 
@@ -82,7 +82,7 @@
             @include secondary-text-small;
         }
 
-        div.details {
+        .details {
             font-size: 13px;
         }
 
@@ -93,7 +93,7 @@
             }
         }
 
-        div.summary {
+        .summary {
             color: $color-text4;
             @include summary-text;
 
