@@ -139,6 +139,10 @@ resource "Workfiles" do
     parameter :workfile_id, "Workfile Id"
     parameter :id, "A client-generated identifier, previously passed as 'check_id' to workfile execution method to identify a query"
 
+    before do
+      stub(SqlExecutor).cancel_query.with_any_args { true }
+    end
+
     required_parameters :id, :workfile_id
 
     let(:id) { 0 }

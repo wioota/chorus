@@ -22,8 +22,12 @@ class WorkfileExecutionsController < ApplicationController
   end
 
   def destroy
-    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id])
-    head :ok
+    successful = SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id])
+    if successful
+      head :ok
+    else
+      head :unprocessable_entity
+    end
   end
 
   private
