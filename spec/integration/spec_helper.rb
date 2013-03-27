@@ -19,7 +19,7 @@ Capybara.app = Rails.application
 Capybara.default_driver = :selenium
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
-Capybara.save_and_open_page_path = ENV['WORKSPACE']
+Capybara.save_and_open_page_path = ENV['WORKSPACE'] || Rails.root.join('tmp', 'screenshots')
 Capybara.default_wait_time = 20
 
 DatabaseCleaner.strategy = :truncation
