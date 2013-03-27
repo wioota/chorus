@@ -70,6 +70,61 @@
   - mail
   - capybara
   - paperclip
+- name: ffi
+  source: bundle
+  version: 1.6.0
+  manual: true
+  license: LGPLv3
+  approved: false
+  license_files:
+  - LICENSE
+  - COPYING
+  - COPYING.LESSER
+  - README.md
+  bundler_groups: []
+  summary: Ruby FFI
+  description: Ruby FFI library
+  homepage: http://wiki.github.com/ffi/ffi
+  children: []
+  parents:
+  - childprocess
+  - mizuno
+- name: chorusgnip
+  source: bundle
+  version: 0.0.1
+  manual: true
+  license: Apache 2.0
+  approved: true
+  license_files:
+  - LICENSE
+  - README.md
+  bundler_groups:
+  - :default
+  summary: Summary
+  description: Description
+  homepage: ''
+  children: []
+  parents: []
+- name: tabcmd_gem
+  source: bundle
+  version: 0.0.1
+  manual: true
+  license: Apache 2.0
+  approved: true
+  license_files:
+  - README
+  - tabcmd/common/ruby/rails-plugins/fixture_replacement2/README
+  - tabcmd/common/ruby/rails-plugins/fixture_replacement2/etc/patches/2007_10_18_README.diff
+  bundler_groups:
+  - :default
+  summary: Summary
+  description: Description
+  homepage: http://pivotallabs.com
+  children:
+  - rchardet19
+  - hpricot
+  - highline
+  parents: []
 - name: rake
   source: bundle
   version: 10.0.3
@@ -3169,58 +3224,6 @@
   children:
   - POpen4
   parents: []
-- name: chorusgnip
-  source: bundle
-  version: 0.0.1
-  license: NONE
-  approved: false
-  license_files:
-  - LICENSE
-  - README.md
-  bundler_groups:
-  - :default
-  summary: Summary
-  description: Description
-  homepage: ''
-  children: []
-  parents: []
-- name: tabcmd_gem
-  source: bundle
-  version: 0.0.1
-  license: NONE
-  approved: false
-  license_files:
-  - README
-  - tabcmd/common/ruby/rails-plugins/fixture_replacement2/README
-  - tabcmd/common/ruby/rails-plugins/fixture_replacement2/etc/patches/2007_10_18_README.diff
-  bundler_groups:
-  - :default
-  summary: Summary
-  description: Description
-  homepage: http://pivotallabs.com
-  children:
-  - rchardet19
-  - hpricot
-  - highline
-  parents: []
-- name: ffi
-  source: bundle
-  version: 1.6.0
-  license: LGPL-3
-  approved: false
-  license_files:
-  - LICENSE
-  - COPYING
-  - COPYING.LESSER
-  - README.md
-  bundler_groups: []
-  summary: Ruby FFI
-  description: Ruby FFI library
-  homepage: http://wiki.github.com/ffi/ffi
-  children: []
-  parents:
-  - childprocess
-  - mizuno
 - name: rdoc
   source: bundle
   version: 3.12.2
