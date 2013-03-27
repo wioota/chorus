@@ -1,4 +1,75 @@
 ---
+- name: mime-types
+  source: bundle
+  version: '1.21'
+  license: ruby
+  manual: true
+  license_url: http://www.ruby-lang.org/en/LICENSE.txt
+  approved: true
+  license_files:
+  - Licence.rdoc
+  - docs/COPYING.txt
+  - README.rdoc
+  bundler_groups: []
+  summary: This library allows for the identification of a file's likely MIME content type
+  description: This library allows for the identification of a file's likely MIME content
+
+    type. This is release 1.21 with new MIME types. The identification of MIME
+
+    content type is based on a file's filename extensions.
+
+
+    MIME types are used in MIME-compliant communications, as in e-mail or
+
+    HTTP traffic, to indicate the type of content which is transmitted.
+
+    MIME::Types provides the ability for detailed information about MIME
+
+    entities (provided as a set of MIME::Type objects) to be determined and
+
+    used programmatically. There are many types defined by RFCs and vendors,
+
+    so the list is long but not complete; don't hesitate to ask to add
+
+    additional information. This library follows the IANA collection of MIME
+
+    types (see below for reference).
+
+
+    MIME::Types for Ruby was originally based on and synchronized with MIME::Types
+
+    for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
+
+    format for the MIME::Type list has changed and the synchronization will no
+
+    longer happen.
+
+
+    MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
+
+    follows the official {IANA registry}[http://www.iana.org/assignments/media-types/]
+
+    ({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
+
+    added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp].
+  homepage: http://mime-types.rubyforge.org/
+  children:
+  - rubyforge
+  - minitest
+  - rdoc
+  - hoe-bundler
+  - hoe-doofus
+  - hoe-gemspec
+  - hoe-git
+  - hoe-rubygems
+  - hoe-travis
+  - nokogiri
+  - rake
+  - hoe
+  parents:
+  - mail
+  - capybara
+  - paperclip
 - name: rake
   source: bundle
   version: 10.0.3
@@ -3101,10 +3172,8 @@
 - name: chorusgnip
   source: bundle
   version: 0.0.1
-  license: Apache 2.0
-  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
-  approved: true
-  notes:
+  license: NONE
+  approved: false
   license_files:
   - LICENSE
   - README.md
@@ -3118,10 +3187,8 @@
 - name: tabcmd_gem
   source: bundle
   version: 0.0.1
-  license: Apache 2.0
-  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
-  approved: true
-  notes:
+  license: NONE
+  approved: false
   license_files:
   - README
   - tabcmd/common/ruby/rails-plugins/fixture_replacement2/README
@@ -3139,10 +3206,8 @@
 - name: ffi
   source: bundle
   version: 1.6.0
-  license: LGPLv3
-  license_url:
+  license: LGPL-3
   approved: false
-  notes:
   license_files:
   - LICENSE
   - COPYING
@@ -3162,7 +3227,6 @@
   license: ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  notes:
   license_files:
   - LICENSE.rdoc
   - README.rdoc
@@ -3201,84 +3265,12 @@
   - rsolr
   - webmock
   - uglifier
-- name: mime-types
-  source: bundle
-  version: '1.21'
-  license: ruby
-  license_url: http://www.ruby-lang.org/en/LICENSE.txt
-  approved: true
-  notes:
-  license_files:
-  - Licence.rdoc
-  - docs/COPYING.txt
-  - README.rdoc
-  bundler_groups: []
-  summary: This library allows for the identification of a file's likely MIME content type
-  description: This library allows for the identification of a file's likely MIME content
-
-    type. This is release 1.21 with new MIME types. The identification of MIME
-
-    content type is based on a file's filename extensions.
-
-
-    MIME types are used in MIME-compliant communications, as in e-mail or
-
-    HTTP traffic, to indicate the type of content which is transmitted.
-
-    MIME::Types provides the ability for detailed information about MIME
-
-    entities (provided as a set of MIME::Type objects) to be determined and
-
-    used programmatically. There are many types defined by RFCs and vendors,
-
-    so the list is long but not complete; don't hesitate to ask to add
-
-    additional information. This library follows the IANA collection of MIME
-
-    types (see below for reference).
-
-
-    MIME::Types for Ruby was originally based on and synchronized with MIME::Types
-
-    for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
-
-    format for the MIME::Type list has changed and the synchronization will no
-
-    longer happen.
-
-
-    MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
-
-    follows the official {IANA registry}[http://www.iana.org/assignments/media-types/]
-
-    ({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
-
-    added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp].
-  homepage: http://mime-types.rubyforge.org/
-  children:
-  - rubyforge
-  - minitest
-  - rdoc
-  - hoe-bundler
-  - hoe-doofus
-  - hoe-gemspec
-  - hoe-git
-  - hoe-rubygems
-  - hoe-travis
-  - nokogiri
-  - rake
-  - hoe
-  parents:
-  - mail
-  - capybara
-  - paperclip
 - name: columnize
   source: bundle
   version: 0.3.6
-  license: ruby
+  license: Ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  notes:
   license_files:
   - COPYING
   - README.md
@@ -3298,7 +3290,6 @@
   license: ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  notes:
   license_files:
   - README
   bundler_groups: []
@@ -3311,10 +3302,9 @@
 - name: json
   source: bundle
   version: 1.7.7
-  license: ruby
+  license: Ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  notes:
   license_files: []
   bundler_groups: []
   summary: JSON implementation for JRuby
@@ -3335,7 +3325,6 @@
   license: ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
-  notes:
   license_files:
   - LICENSE
   - README.md
