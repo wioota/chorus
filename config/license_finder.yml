@@ -1,8 +1,11 @@
 --- 
 whitelist: 
 - MIT
+- Apache 1.1
 - Apache 2.0
-- GPLv2
+- BSD
+- Public Domain
 - ruby
 - Ruby
+- Tcl
 ignore_groups:

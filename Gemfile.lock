@@ -68,6 +68,13 @@ GIT
       multi_json (~> 1.0)
 
 GIT
+  remote: git://github.com/pivotal/LicenseFinder.git
+  revision: e0eba6fb24f80ee08ce943aee6c0dcc70e4e2384
+  specs:
+    license_finder (0.7.3)
+      bundler
+
+GIT
   remote: git://github.com/pivotal/jasmine-gem.git
   revision: 63e8d46556a421cbb3b511b52cd8c2188d72b9db
   specs:
@@ -234,8 +241,6 @@ GEM
     jshint_on_rails (1.0.2)
     json (1.7.7)
     json (1.7.7-java)
-    license_finder (0.7.0)
-      bundler
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     log4r (1.1.10)
@@ -403,7 +408,7 @@ DEPENDENCIES
   journey
   jruby-openssl
   jshint_on_rails
-  license_finder
+  license_finder!
   logger-syslog!
   mizuno!
   net-ldap
