@@ -76,7 +76,7 @@ describe("chorus.views.SearchDataset", function() {
     });
 
     it("displays an icon for the item", function() {
-        var img = this.view.$(".icon");
+        var img = this.view.$("img");
         expect(img).toExist();
         expect(img).toHaveAttr("src", this.model.iconUrl());
         expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes));

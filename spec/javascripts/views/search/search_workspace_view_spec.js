@@ -45,8 +45,8 @@ describe("chorus.views.SearchWorkspace", function() {
         expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/10000");
     });
 
-    it("shows matching description if any", function() {
-        expect(this.view.$(".description .description_content").html()).toContain("<em>ws</em> <i>other text</i>");
+    it("shows matching description", function() {
+        expect(this.view.$el.html()).toContain("<em>ws</em> <i>other text</i>");
     });
 
     it("shows matching name", function() {
@@ -97,7 +97,7 @@ describe("chorus.views.SearchWorkspace", function() {
         });
 
         it("uses the displaySearchMatchFromSafeField method for the description", function() {
-            expect(this.view.$(".description .description_content").html()).toContain("<i>that is not highlighted</i>");
+            expect(this.view.$el.html()).toContain("<i>that is not highlighted</i>");
         });
     });
 
