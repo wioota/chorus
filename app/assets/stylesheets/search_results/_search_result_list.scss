@@ -35,44 +35,12 @@
         color: $color-text4;
     }
 
-    li.result_item {
+    .result_item {
         min-height: 45px;
-        a.name {
-            font-size: 18px;
-        }
 
-        img {
-            vertical-align: top;
-            padding-top: 6px;
-            max-width: $icon-image-width;
-            max-height: $icon-image-height;
-            float: left;
-        }
-
-        .image {
-            width: $icon-image-width;
-            height: $icon-image-height;
-            display: inline-block;
-        }
-
-        .description {
-            padding-left: 5px;
-            display: block;
-            vertical-align: middle;
-            margin-left: 54px;
-
-            .found_in {
-                display: block;
-            }
-
-            em {
-                background-color: $search-highlight-color;
-                font-weight: $semibold;
-            }
-
-            .description_content {
-                @include font-normal-alpha;
-            }
+        em {
+            background-color: $search-highlight-color;
+            font-weight: $semibold;
         }
 
         .prefix {
@@ -99,14 +67,6 @@
 
                 .comment_type {
                     padding-right: 5px;
-                }
-
-                .comment_content {
-                    @include font-normal-alpha;
-
-                    em {
-                        background: yellow;
-                    }
                 }
             }
 
