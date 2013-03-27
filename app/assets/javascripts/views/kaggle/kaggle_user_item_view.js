@@ -1,7 +1,7 @@
 chorus.views.KaggleUserItem = chorus.views.Base.extend({
     constructorName: "KaggleUserItem",
     templateName: "kaggle/user_item",
-    tagName: "li",
+    tagName: "div",
 
     additionalContext: function() {
         return {

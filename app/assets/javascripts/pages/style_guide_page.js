@@ -360,6 +360,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.collections.activitySet = new chorus.collections.ActivitySet([this.models.activity, this.models.otherActivity]);
         this.collections.activitySet.loaded = true;
+
+        this.collections.kaggleUserSet = new chorus.collections.KaggleUserSet([new chorus.models.KaggleUser({fullName: "Abraham Lincoln", rank: 1, location: 'Gettysburg', numberOfEnteredCompetitions: 12})]);
+        this.collections.kaggleUserSet.loaded = true;
     },
 
     buildContentDetails: function() {
@@ -680,6 +683,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Activity List": new chorus.views.ActivityList({
                 collection: this.collections.activitySet
+            }),
+
+            "Kaggle User List": new chorus.views.MainContentList({
+                collection: this.collections.kaggleUserSet,
+                modelClass: "KaggleUser"
             })
         };
     },
