@@ -75,7 +75,7 @@
   version: 1.6.0
   manual: true
   license: LGPLv3
-  approved: false
+  approved: true
   license_files:
   - LICENSE
   - COPYING
@@ -3032,7 +3032,7 @@
   source: bundle
   version: 0.7.7
   license: LGPLv2.1
-  approved: false
+  approved: true
   license_files:
   - License.txt
   - README.txt
@@ -3051,7 +3051,7 @@
   source: bundle
   version: 1.1.10
   license: LGPLv3
-  approved: false
+  approved: true
   license_files:
   - doc/dev/README.developers
   - examples/README
