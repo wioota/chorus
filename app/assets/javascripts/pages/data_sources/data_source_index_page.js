@@ -9,6 +9,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         var dataSources = new chorus.collections.DataSourceSet([], {all: true});
         var hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
         var gnipDataSources = new chorus.collections.GnipDataSourceSet();
+
         dataSources.fetchAll();
         hdfsDataSources.fetchAll();
         gnipDataSources.fetchAll();
@@ -26,7 +27,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentView({
             contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("instances.title_plural")}),
             contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
-            content: new chorus.views.DataSourceList(options)
+            content: new chorus.views.DataSourceIndex(options)
         });
 
         this.sidebar = new chorus.views.DataSourceListSidebar();

@@ -110,6 +110,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)
 
     fbuilder.name :searchable, HdfsEntry.create!({:path => "/searchquery/result.txt", :size => 10, :is_directory => false, :modified_at => "2010-10-20 22:00:00", :content_count => 4, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
+    fbuilder.name :searchable2, HdfsEntry.create!({:path => "/searchquery/other_result.txt", :size => 11, :is_directory => false, :modified_at => "2010-10-21 22:00:00", :content_count => 22, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
 
     gnip_data_source = FactoryGirl.create(:gnip_data_source, :owner => owner, :name => "default", :description => "a searchquery example gnip account")
     FactoryGirl.create(:gnip_data_source, :owner => owner, :name => 'typeahead_gnip')

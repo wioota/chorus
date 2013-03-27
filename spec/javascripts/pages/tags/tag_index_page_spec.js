@@ -28,7 +28,7 @@ describe("chorus.pages.TagIndexPage", function() {
 
     describe("when the tags have loaded", function() {
         beforeEach(function() {
-            this.fetchedTags = [{ name: "IamTag"}, { name: "IamAlsoTag" }];
+            this.fetchedTags = [{ id: 1, name: "IamTag"}, { id:2, name: "IamAlsoTag" }];
             this.server.completeFetchAllFor(this.tagSet, this.fetchedTags);
         });
 
@@ -44,7 +44,9 @@ describe("chorus.pages.TagIndexPage", function() {
 
         describe("sidebar", function() {
             it("selects the first tag and shows it on the sidebar", function() {
-                expect(this.page.$('.tag_title')).toContainText("IamTag");
+                var firstTag = this.page.$('.tag_item:first .name').text();
+                var $tag_title = this.page.$('.tag_title');
+                expect($tag_title).toContainText(firstTag);
             });
         });
     });

@@ -1,5 +1,5 @@
 .data_source_list {
-    .data_source_provider .details{
+    &.data_source_provider .details{
         @include list-section-heading;
         padding: 5px 10px;
         @include background-image(linear-gradient(#ebeef2, #d7dfe9));

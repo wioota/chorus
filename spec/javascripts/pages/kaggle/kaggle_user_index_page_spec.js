@@ -97,7 +97,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         it("creates a KaggleUserList view", function() {
-            expect(this.page.$(".list li.kaggle_user_item").length).toBe(this.kaggleUsers.length);
+            expect(this.page.$(".list li .kaggle_user_item").length).toBe(this.kaggleUsers.length);
         });
 
         it("creates a KaggleUserSidebar view", function() {

@@ -69,7 +69,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         var $target = $(e.currentTarget);
         if ($target.hasClass("selected")) return;
 
-        this.$("li.result_item").removeClass("selected");
+        this.$(".item_wrapper").removeClass("selected");
         $target.addClass("selected");
     }
 });

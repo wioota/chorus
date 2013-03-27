@@ -13,7 +13,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     setup: function() {
-        this.eventName = this.eventName || this.options.entityType;
+        this.eventName = this.options.eventName || this.options.entityType;
         this.entityViewType = this.options.entityViewType;
         this.listItemOptions = this.options.listItemOptions || {};
 
@@ -50,7 +50,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     checkSelectedModels: function() {
         var liItems = this.$("li");
         this.collection.each(function(model, i) {
-            var selected = !!this.selectedModels.get(model.id);
+            var selected = !!this.findSelectedModel(model);
             liItems.eq(i).find("input[type=checkbox]").prop("checked", selected);
             liItems.eq(i).toggleClass("checked", selected);
         }, this);
@@ -88,7 +88,7 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     selectAll: function() {
-        this.selectedModels.reset(this.collection.models);
+        this.selectedModels.add(this.collection.models);
         chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },

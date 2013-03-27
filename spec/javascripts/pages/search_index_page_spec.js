@@ -274,7 +274,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.fileLis.length).toBe(1);
+                    expect(this.fileLis.length).toBe(2);
                 });
 
                 describe("clicking on a file search result", function() {

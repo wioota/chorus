@@ -96,12 +96,6 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             ]);
         });
 
-        describe("pre-selection", function() {
-            it("pre-selects the first item by default", function() {
-                expect(this.page.mainContent.content.$(".data_source li.data_source:eq(0)")).toHaveClass("selected");
-            });
-        });
-
         it("doesn't display the loading text", function() {
             expect(this.page.mainContent.contentDetails.$(".loading")).not.toExist();
         });
@@ -127,7 +121,8 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("data_source:checked", this.page.mainContent.content.collection);
+                    var dataSources = new chorus.collections.DataSourceSet([rspecFixtures.gpdbDataSource()]);
+                    chorus.PageEvents.broadcast("data_source:checked", dataSources);
                 });
 
                 it("displays the multiple selection section", function() {

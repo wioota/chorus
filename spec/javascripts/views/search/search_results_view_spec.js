@@ -204,8 +204,8 @@ describe("chorus.views.SearchResults", function() {
 
             context("when the li is for a hadoop file", function() {
                 it("broadcasts the 'hdfs_entry:selected' page event with the clicked hdfs file", function() {
-                    var modelToClick = this.model.hdfs_entries().at(0);
-                    this.view.$(".hdfs_list li").eq(0).click();
+                    var modelToClick = this.model.hdfs_entries().at(1);
+                    this.view.$(".hdfs_list li").eq(1).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
                 });
             });

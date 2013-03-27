@@ -129,6 +129,17 @@ jasmine.sharedExamples.CheckableList = function() {
             expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
         });
+
+        it("doesn't check models with the same id but different entity types", function() {
+            this.view.render();
+            var decoyModel = this.view.collection.at(0).clone();
+            decoyModel.set({entityType: "notReal"});
+            this.view.selectedModels.reset(this.collection.models.slice(1));
+            this.view.selectedModels.add([decoyModel]);
+            chorus.PageEvents.broadcast("checked", this.view.selectedModels);
+            expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
+            expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
+        });
     });
 
     describe("clicking on the same entry again", function() {
