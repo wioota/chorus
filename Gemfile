@@ -41,7 +41,7 @@ group :integration do
   gem 'capybara-screenshot'
 end
 
-group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
+group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration, :ci_legacy_packaging do
   gem 'rspec', :require => false
   gem 'rr'
   gem 'factory_girl'
@@ -57,7 +57,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
   gem 'poltergeist', :github => "brutuscat/poltergeist"
 end
 
-group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_migration do
+group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy_migration, :ci_legacy_packaging do
   gem 'foreman', '0.46',         :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false

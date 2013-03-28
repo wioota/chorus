@@ -6,5 +6,5 @@ java_options: $CHORUS_JAVA_OPTIONS
 ruby_version: 1.9
 app_type: rack
 http_port: 3000
-bundle_without: [integration, development, test, packaging, ci_jasmine, ci_legacy_migration]
+bundle_without: [integration, development, test, packaging, ci_jasmine, ci_legacy_migration, ci_legacy_packaging]
 max_concurrent_connections: 20
