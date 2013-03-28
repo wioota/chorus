@@ -33,5 +33,5 @@ Chorus::Application.configure do
   Paperclip.options[:command_path] = "/usr/local/bin/"
 
   # Only turn it on if you really need concurrent requests
-  #config.allow_concurrency = true
+  config.allow_concurrency = true
 end

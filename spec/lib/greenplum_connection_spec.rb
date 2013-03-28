@@ -333,6 +333,18 @@ describe GreenplumConnection, :greenplum_integration do
         expect { subject }.to raise_error(GreenplumConnection::QueryError, /timeout/)
       end
     end
+
+    context "when a block is given" do
+      it "should call the block with the prepared statement" do
+        called = false
+        connection.prepare_and_execute_statement(sql, options) do |arg|
+          called = true
+          arg.should be_a(java.sql.Statement)
+        end
+
+        called.should == true
+      end
+    end
   end
 
   describe "process management" do

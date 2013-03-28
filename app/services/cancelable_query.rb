@@ -1,4 +1,6 @@
 class CancelableQuery
+  @@running_statements = {}
+
   def self.format_sql_and_check_id(sql, check_id)
     "/*#{check_id}*/#{sql}"
   end
@@ -9,12 +11,23 @@ class CancelableQuery
   end
 
   def execute(sql, options = {})
-    @connection.prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, @check_id), options.merge(:warnings => true))
+    @connection.prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, @check_id), options.merge(:warnings => true)) do |statement|
+      @@running_statements[@check_id] = statement
+    end
+  ensure
+    @@running_statements.delete(@check_id)
   end
 
   def cancel
-    cancel = @connection.fetch("select pg_cancel_backend(procpid) from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'")
-    !!cancel[0] && cancel[0][:pg_cancel_backend]
+    statement = @@running_statements[@check_id]
+    if statement
+      statement.cancel
+      !busy?
+    else
+      false
+    end
+  rescue Exception
+    false
   end
 
   def busy?

@@ -92,6 +92,8 @@ class DataSourceConnection
       @connection.synchronize do |jdbc_conn|
         statement = jdbc_conn.prepare_statement(query)
 
+        yield statement if block_given?
+
         if options[:timeout]
           set_timeout(options[:timeout], statement)
         end

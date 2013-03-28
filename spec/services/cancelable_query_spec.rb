@@ -6,6 +6,10 @@ describe CancelableQuery do
   let(:check_id) { '0.1234' }
   let(:cancelable_query) { CancelableQuery.new(connection, check_id) }
 
+  before do
+    CancelableQuery.class_variable_set(:@@running_statements, {})
+  end
+
   describe ".execute" do
     let(:connection) { Object.new }
     let(:options) { {:warnings => true}.merge(extra_options) }
@@ -35,35 +39,60 @@ describe CancelableQuery do
     end
   end
 
-  describe "#cancel" do
-    let(:response) { [{:pg_cancel_backend => successful }] }
-    let(:query) do
-      connection = Object.new
-      stub(connection).fetch { response }
-      CancelableQuery.new(connection, 0)
+  describe "execution and cancelling" do
+    let(:connection) { Object.new }
+    let(:results) { :results }
+    let(:still_running) { false }
+
+    before do
+      stub(connection).fetch(anything) { still_running ? [1] : [] }
     end
 
-    context "when the query is cancelled succesfully" do
-      let(:successful) { true }
+    it "should store the statement in the callback block and delete it when finished" do
+      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
 
-      it "returns true" do
-        query.cancel.should be_true
+      mock(connection).prepare_and_execute_statement(anything, anything).yields do |sql, options, block|
+        fake_statement = :fake_statement
+        block.call(fake_statement)
+        CancelableQuery.class_variable_get(:@@running_statements)[check_id].should == fake_statement
+        results
+      end
+      cancelable_query.execute(sql).should == results
+      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
+    end
+
+    it "should cancel correctly" do
+      fake_statement = Object.new
+      CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
+      mock(fake_statement).cancel
+      cancelable_query.cancel.should be_true
+    end
+
+    it "should not blow up if the query is already finished" do
+      cancelable_query.cancel.should be_false
+    end
+
+    it "should not blow up when threads suck" do
+      fake_statement = Object.new
+      CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
+      mock(fake_statement).cancel { raise Exception, "you didn't rescue!" }
+      cancelable_query.cancel.should be_false
+    end
+
+    context "when the query is no longer running" do
+      it "should return false" do
+        cancelable_query.cancel.should be_false
       end
     end
 
-    context "when the query cannot be cancelled succesfully" do
-      let(:successful) { false }
+    context "when the cancel failed" do
+      let(:still_running) { true }
 
-      it "returns false" do
-        query.cancel.should be_false
-      end
-    end
-
-    context "when the cancel operation returns an empty array" do
-      let(:response) { [] }
-
-      it "returns false" do
-        query.cancel.should be_false
+      it "should return false" do
+        fake_statement = Object.new
+        CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
+        mock(fake_statement).cancel
+        cancelable_query.cancel.should be_false
       end
     end
   end
