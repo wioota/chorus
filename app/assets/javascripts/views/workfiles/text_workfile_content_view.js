@@ -22,7 +22,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
             onChange: _.bind(this.startTimer, this),
             extraKeys: extraKeys,
             beforeEdit: function() {
-                if (self.model.canEdit()) {
+                if (!chorus.modal && self.model.canEdit()) {
                     setTimeout(_.bind(self.editText, self), 100);
                 }
             },
