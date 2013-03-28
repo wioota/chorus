@@ -323,6 +323,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
     buildCollections: function() {
         this.collections = {};
         this.collections.tagSet = new chorus.collections.TagSet([this.models.tag, new chorus.models.Tag({name: 'Another Taggy TagTag', count: 10})]);
+        this.collections.tagSet.pagination = {page: 1, perPage: 50, records: 124, total: 3};
         this.collections.tagSet.loaded = true;
 
         this.collections.workspaceSet = new chorus.collections.WorkspaceSet([this.models.workspace, this.models.privateWorkspace, this.models.archivedWorkspace]);
@@ -347,6 +348,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.collections.loadingCollection = new chorus.collections.UserSet();
         this.collections.userCollection = new chorus.collections.UserSet([this.models.user, this.models.otherUser, this.models.thirdUser]);
+        this.collections.userCollection.pagination = {page: 1, perPage: 50, records: 124, total: 3};
         this.collections.userCollection.loaded = true;
 
         this.collections.CsvHdfsFileSet = new chorus.collections.CsvHdfsFileSet([this.models.hdfsFile], {hdfsDataSource: this.models.hdfsDataSource});
@@ -363,6 +365,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.collections.kaggleUserSet = new chorus.collections.KaggleUserSet([new chorus.models.KaggleUser({fullName: "Abraham Lincoln", rank: 1, location: 'Gettysburg', numberOfEnteredCompetitions: 12})]);
         this.collections.kaggleUserSet.loaded = true;
+
+        window.collections = this.collections;
     },
 
     buildContentDetails: function() {
