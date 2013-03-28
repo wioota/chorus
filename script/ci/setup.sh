@@ -3,7 +3,7 @@ export PATH="$HOME/phantomjs/bin:$HOME/.rbenv/bin:$PATH"
 
 eval "$(rbenv init - --no-rehash)"
 rbenv shell `cat .rbenv-version`
-export JASMINE_PORT=8888
+export JASMINE_PORT=9999
 
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
