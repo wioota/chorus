@@ -1,10 +1,11 @@
 class Import < ActiveRecord::Base
   include ImportMixins
+  include UnscopedBelongsTo
 
   attr_accessible :to_table, :new_table, :sample_count, :truncate
   attr_accessible :file_name # only for CSV files
 
-  belongs_to :scoped_source_dataset, :class_name => 'Dataset', :foreign_key => 'source_dataset_id'
+  unscoped_belongs_to :source_dataset, :class_name => 'Dataset'
   belongs_to :user
   belongs_to :import_schedule
 
@@ -18,16 +19,6 @@ class Import < ActiveRecord::Base
 
   after_create :create_import_event
   after_create { QC.enqueue_if_not_queued("ImportExecutor.run", id) unless file_name }
-
-  def source_dataset
-    self.scoped_source_dataset ||= Dataset.unscoped.find(source_dataset_id)
-  rescue ActiveRecord::RecordNotFound
-    nil
-  end
-
-  def source_dataset=(value)
-    self.scoped_source_dataset = value
-  end
   
   def generate_key
     update_attribute(:stream_key, SecureRandom.hex(20))
