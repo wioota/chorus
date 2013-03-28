@@ -67,6 +67,7 @@ class DataSourceConnection
   def prepare_and_execute_statement(query, options={})
     with_jdbc_connection(options) do |jdbc_conn|
       statement = build_and_configure_statement(jdbc_conn, options, query)
+      yield statement if block_given?
       set_timeout(options[:timeout], statement) if options[:timeout]
 
       if options[:describe_only]

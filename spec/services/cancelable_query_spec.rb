@@ -6,6 +6,10 @@ describe CancelableQuery do
   let(:check_id) { '0.1234' }
   let(:cancelable_query) { CancelableQuery.new(connection, check_id) }
 
+  before do
+    CancelableQuery.class_variable_set(:@@running_statements, {})
+  end
+
   describe ".execute" do
     let(:connection) { Object.new }
     let(:options) { {:warnings => true}.merge(extra_options) }
@@ -32,6 +36,35 @@ describe CancelableQuery do
       it "passes the timeout option through to the greenplum connection" do
         cancelable_query.execute(sql, :timeout => 100)
       end
+    end
+  end
+
+  describe "execution and cancelling" do
+    let(:connection) { Object.new }
+    let(:results) { :results }
+
+    it "should store the statement in the callback block and delete it when finished" do
+      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
+
+      mock(connection).prepare_and_execute_statement(anything, anything).yields do |sql, options, block|
+        fake_statement = :fake_statement
+        block.call(fake_statement)
+        CancelableQuery.class_variable_get(:@@running_statements)[check_id].should == fake_statement
+        results
+      end
+      cancelable_query.execute(sql).should == results
+      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
+    end
+
+    it "should cancel correctly" do
+      fake_statement = Object.new
+      CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
+      mock(fake_statement).cancel
+      cancelable_query.cancel
+    end
+
+    it "should not blow up if the query is already finished" do
+      expect { cancelable_query.cancel }.not_to raise_error
     end
   end
 
