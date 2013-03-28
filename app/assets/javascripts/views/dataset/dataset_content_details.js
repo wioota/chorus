@@ -269,21 +269,23 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.topPosition = this.topPosition || this.$el.parent().offset().top;
         var contentDetailsTop = this.topPosition  - $(window).scrollTop();
         var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
-        var atTheTop = distanceToHeader <= 0;
+        var contentDetailsAtTop = distanceToHeader <= 0;
         var $parent = this.$el.parent();
 
-        if(atTheTop) {
-            var $spacer = $parent.clone();
-            $spacer.addClass("scrollSpacer");
-            $spacer.css("visibility", "hidden");
-            $parent.before($spacer);
+        if(contentDetailsAtTop) {
+            if($(".scrollSpacer").length === 0) {
+                var $spacer = $parent.clone();
+                $spacer.addClass("scrollSpacer");
+                $spacer.css("visibility", "hidden");
+                $parent.before($spacer);
+            }
         } else {
             $(".scrollSpacer").remove();
         }
 
-        $parent.toggleClass('fixed', atTheTop);
+        $parent.toggleClass('fixed', contentDetailsAtTop);
         var $results_console = this.$el.closest('.main_content').find('.results_console');
-        $results_console.toggleClass('fixed', atTheTop);
+        $results_console.toggleClass('fixed', contentDetailsAtTop);
     },
 
     teardown: function() {
