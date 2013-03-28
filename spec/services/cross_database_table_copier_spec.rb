@@ -70,9 +70,9 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
         when "data_dir"
           '/tmp'
         when "write_port"
-          "8000"
+          "8002"
         when "read_port"
-          "8001"
+          "8003"
         when "url"
           Socket.gethostname
         when "ssl.enabled"
