@@ -1,17 +1,7 @@
 class WorkspaceImport < Import
-  belongs_to :scoped_workspace, :class_name => 'Workspace', :foreign_key => 'workspace_id'
+  unscoped_belongs_to :workspace
   validates :workspace, :presence => true
   validate :workspace_is_not_archived
-
-  def workspace
-    self.scoped_workspace ||= Workspace.unscoped.find(workspace_id)
-  rescue ActiveRecord::RecordNotFound
-    nil
-  end
-
-  def workspace=(value)
-    self.scoped_workspace = value
-  end
 
   def schema
     workspace.sandbox
