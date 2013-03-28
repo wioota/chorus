@@ -176,20 +176,11 @@ describe("chorus.views.SearchResultList", function() {
             });
 
             this.view.render();
-            $('#jasmine_content').append(this.view.$el);
         });
 
         it("clicking a row sets the selectedItem for the search model", function() {
-            this.view.$(".data_source_list li:nth-child(2)").click();
+            this.view.$(".data_source_list li:eq(1)").click();
             expect(this.result.selectedItem).toEqual(this.dataSources.at(1));
-        });
-
-        describe("multiple selection", function() {
-            it("clicking a checkbox adds the model to the selectedModels", function() {
-                var dataSourceToClick = this.dataSources.at(0);
-                this.view.$(".data_source_list li:first input[type=checkbox]").click();
-                expect(this.selectedModels.models).toEqual([dataSourceToClick]);
-            });
         });
     });
 });

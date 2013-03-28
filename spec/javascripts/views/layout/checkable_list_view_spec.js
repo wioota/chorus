@@ -2,7 +2,8 @@ describe("chorus.views.CheckableList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.UserSet([
             rspecFixtures.user({id: 123}),
-            rspecFixtures.user({id: 456})
+            rspecFixtures.user({id: 456}),
+            rspecFixtures.user({id: 789})
         ], {schemaId: "3"});
 
         this.view = new chorus.views.CheckableList({
@@ -17,20 +18,83 @@ describe("chorus.views.CheckableList", function() {
 
     describe("#setup", function() {
         it("uses selectedModels if passed one", function() {
-           this.selectedModels = new chorus.collections.Base();
+            this.checkedModels = new chorus.collections.Base();
             this.view = new chorus.views.CheckableList({
                 entityType: 'user',
                 entityViewType: chorus.views.UserItem,
                 collection: this.collection,
-                selectedModels: this.selectedModels
+                selectedModels: this.checkedModels
             });
-            expect(this.view.selectedModels).toBe(this.selectedModels);
+            expect(this.checkedModels).toBe(this.checkedModels);
         });
     });
 
     describe("creating the item views", function() {
         it("passes through the list item options", function() {
             expect(this.view.liViews[0].itemView.options.itemOption).toBe(123);
+        });
+    });
+
+    describe("multiple selection", function() {
+        beforeEach(function() {
+            chorus.PageEvents.subscribe("checked", function(collection) {
+                this.checkedModels = collection.models;
+            }, this);
+        });
+
+        it("clicking a checkbox adds the model to the selectedModels", function() {
+            var modelToClick = this.collection.at(0);
+            this.view.$("li:first input[type=checkbox]").click();
+            expect(this.checkedModels).toEqual([modelToClick]);
+        });
+
+        describe('shift+click', function() {
+            beforeEach(function() {
+                expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
+                expect(this.collection.models.length).toBeGreaterThan(2);
+            });
+
+            function shiftClick(target) {
+                var event = jQuery.Event("click");
+                event.shiftKey = true;
+                target.trigger(event);
+            }
+
+            describe("holding shift and clicking selects the item in between", function() {
+                it("clicking top to bottom", function() {
+                    this.view.$("li:first input[type=checkbox]").click();
+                    shiftClick(this.view.$("li:eq(2) input[type=checkbox]"));
+                    expect(this.checkedModels.length).toBe(3);
+                    expect(this.checkedModels).toContain(this.collection.at(0));
+                    expect(this.checkedModels).toContain(this.collection.at(1));
+                    expect(this.checkedModels).toContain(this.collection.at(2));
+                });
+
+                it("clicking bottom to top", function() {
+                    this.view.$("li:eq(2) input[type=checkbox]").click();
+                    shiftClick(this.view.$("li:first input[type=checkbox]"));
+                    expect(this.checkedModels.length).toBe(3);
+                    expect(this.checkedModels).toContain(this.collection.at(0));
+                    expect(this.checkedModels).toContain(this.collection.at(1));
+                    expect(this.checkedModels).toContain(this.collection.at(2));
+                });
+            });
+
+            it("clicking without holding shift only selects the clicked item", function() {
+                this.view.$("li:first input[type=checkbox]").click();
+                this.view.$("li:eq(2) input[type=checkbox]").click();
+                expect(this.checkedModels.length).toBe(2);
+                expect(this.checkedModels).toContain(this.collection.at(0));
+                expect(this.checkedModels).not.toContain(this.collection.at(1));
+                expect(this.checkedModels).toContain(this.collection.at(2));
+            });
+
+            it("unchecking resets shift+click selection", function() {
+                this.view.$("li:first input[type=checkbox]").click().click();
+                shiftClick(this.view.$("li:last input[type=checkbox]"));
+                expect(this.checkedModels.length).toBe(1);
+                expect(this.checkedModels).toContain(this.collection.at(this.collection.length-1));
+            });
         });
     });
 });
