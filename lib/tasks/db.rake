@@ -59,7 +59,7 @@ namespace :db do
     end
   end
 
-  %w{integration ci_jasmine ci_legacy_migration ci_legacy_packaging}.each do |database_name|
+  %w{integration ci_jasmine ci_legacy_migration ci_legacy}.each do |database_name|
      create_database_tasks(database_name)
   end
 
