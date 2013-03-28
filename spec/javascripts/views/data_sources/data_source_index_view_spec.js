@@ -102,7 +102,7 @@ describe("chorus.views.DataSourceIndex", function() {
             });
         });
 
-        describe("data_source:added event", function() {
+        context("when a data source is added", function() {
             beforeEach(function() {
                 this.newDataSource = rspecFixtures.oracleDataSource({id: 31415, name: "new data source"});
                 spyOn(this.view.dataSources, "fetchAll").andCallThrough();
@@ -117,24 +117,38 @@ describe("chorus.views.DataSourceIndex", function() {
                 expect(this.view.gnipDataSources.fetchAll).toHaveBeenCalled();
             });
 
-            it("selects the li with a matching id when fetch completes", function() {
-                this.server.completeFetchFor(this.dataSources, [
-                    rspecFixtures.gpdbDataSource({name : "GP9", id: "1"}),
-                    rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
-                    this.newDataSource,
-                    rspecFixtures.oracleDataSource({name : "oracle", id: "3"})
-                ]);
-                this.server.completeFetchFor(this.hdfsDataSources, [
-                    rspecFixtures.hdfsDataSource({name : "Hadoop9", id: "1"}),
-                    rspecFixtures.hdfsDataSource({name : "hadoop1", id: "2"}),
-                    rspecFixtures.hdfsDataSource({name : "Hadoop10", id: "3"})
-                ]);
-                this.server.completeFetchFor(this.gnipDataSources, [
-                    rspecFixtures.gnipDataSource({name : "Gnip1", id:"1"}),
-                    rspecFixtures.gnipDataSource({name : "Gnip2", id: "2"}),
-                    rspecFixtures.gnipDataSource({name : "Gnip3", id: "3"})
-                ]);
-                expect(this.view.$("li.selected .name")).toHaveText("new data source");
+            context("when the datasources have been re-fetched", function() {
+                beforeEach(function() {
+                    this.selectedSpy = jasmine.createSpy("selected");
+                    chorus.PageEvents.subscribe("data_source:selected", this.selectedSpy);
+                    this.server.completeFetchFor(this.dataSources, [
+                        rspecFixtures.gpdbDataSource({name: "GP9", id: "1"}),
+                        rspecFixtures.gpdbDataSource({name: "gP1", id: "2"}),
+                        this.newDataSource,
+                        rspecFixtures.oracleDataSource({name: "oracle", id: "3"})
+                    ]);
+                    this.server.completeFetchFor(this.hdfsDataSources, [
+                        rspecFixtures.hdfsDataSource({name: "Hadoop9", id: "1"}),
+                        rspecFixtures.hdfsDataSource({name: "hadoop1", id: "2"}),
+                        rspecFixtures.hdfsDataSource({name: "Hadoop10", id: "3"})
+                    ]);
+                    this.server.completeFetchFor(this.gnipDataSources, [
+                        rspecFixtures.gnipDataSource({name: "Gnip1", id: "1"}),
+                        rspecFixtures.gnipDataSource({name: "Gnip2", id: "2"}),
+                        rspecFixtures.gnipDataSource({name: "Gnip3", id: "3"})
+                    ]);
+                });
+
+                it("selects the li with a matching id when fetch completes", function() {
+                    expect(this.view.$("li.selected .name")).toHaveText("new data source");
+                });
+
+                it("broadcasts a data_source:selected event to update the sidebar", function() {
+                    expect(this.selectedSpy).toHaveBeenCalled();
+                    var selectedDataSource = _.last(this.selectedSpy.calls).args[0];
+                    expect(selectedDataSource).toBe(this.newDataSource);
+                });
+
             });
         });
 
