@@ -12,11 +12,11 @@ if [[ -z "$JASMINE_PORT" ]]; then
   export JASMINE_PORT=8888
 fi
 
-if [[ -z "$GPFDIST_WRITE_PORT" ]]; then
+if [[ -z "$CI_GPFDIST_WRITE_PORT" ]]; then
   export CI_GPFDIST_WRITE_PORT=8000
 fi
 
-if [[ -z "$GPFDIST_READ_PORT" ]]; then
+if [[ -z "$CI_GPFDIST_READ_PORT" ]]; then
   export CI_GPFDIST_READ_PORT=8001
 fi
 
