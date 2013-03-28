@@ -44,9 +44,6 @@ silence_warnings do
 end
 
 RSpec.configure do |config|
-
-  config.filter_run_excluding :legacy_migration => true
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -59,7 +56,6 @@ RSpec.configure do |config|
 
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
-    self.class.fixtures :all unless self.class.metadata[:legacy_migration]
   end
 
   config.before(:each) do
