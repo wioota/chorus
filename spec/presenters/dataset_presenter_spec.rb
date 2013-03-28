@@ -150,8 +150,8 @@ describe DatasetPresenter, :type => :view do
 
     context "when dataset and schema are soft deleted" do
       let(:workspace) { FactoryGirl.create :workspace, :sandbox => schema }
-      let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
       let(:schema) { FactoryGirl.create :gpdb_schema }
+      let!(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
       let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
       let(:activity_stream) { true }
 

@@ -4,9 +4,9 @@ class Dataset < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
-  belongs_to :schema, :unscoped => true
+  belongs_to :scoped_schema, :class_name => 'Schema', :foreign_key => 'schema_id'
 
-  validates_presence_of :schema
+  validates_presence_of :scoped_schema
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:schema_id,  :type, :deleted_at]
 
@@ -36,6 +36,20 @@ class Dataset < ActiveRecord::Base
   attr_accessible :name
 
   delegate :data_source, :accessible_to, :connect_with, :connect_as, :to => :schema
+
+  def schema
+    if deleted_at.nil?
+      scoped_schema
+    else
+      Schema.unscoped.find(schema_id)
+    end
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def schema=(value)
+    self.scoped_schema = value
+  end
 
   def self.add_search_permissions(current_user, search)
     search.build do

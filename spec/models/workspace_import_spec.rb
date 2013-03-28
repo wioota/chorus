@@ -5,7 +5,7 @@ describe WorkspaceImport do
   let(:user) { import.user }
 
   describe 'associations' do
-    it { should belong_to :workspace }
+    it { should belong_to(:scoped_workspace).class_name("Workspace") }
     it { should belong_to :import_schedule }
   end
 

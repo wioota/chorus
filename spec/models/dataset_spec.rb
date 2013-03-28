@@ -20,7 +20,7 @@ describe Dataset do
   it_should_behave_like "taggable models", [:datasets, :table]
 
   describe "associations" do
-    it { should belong_to :schema }
+    it { should belong_to(:scoped_schema).class_name('Schema') }
     it { should have_many :activities }
     it { should have_many :events }
     it { should have_many :notes }
@@ -44,7 +44,7 @@ describe Dataset do
   end
 
   describe "validations" do
-    it { should validate_presence_of :schema }
+    it { should validate_presence_of :scoped_schema }
     it { should validate_presence_of :name }
 
     it "validates uniqueness of name in the database" do
@@ -132,7 +132,7 @@ describe Dataset do
 
   describe ".filter_by_name" do
     let(:second_dataset) {
-      GpdbTable.new({:name => 'rails_only_table', :schema => schema}, :without_protection => true)
+      GpdbTable.new({:name => 'rails_only_table', :scoped_schema => schema}, :without_protection => true)
     }
     let(:dataset_list) {
       [dataset, second_dataset]
