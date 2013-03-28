@@ -365,8 +365,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.collections.kaggleUserSet = new chorus.collections.KaggleUserSet([new chorus.models.KaggleUser({fullName: "Abraham Lincoln", rank: 1, location: 'Gettysburg', numberOfEnteredCompetitions: 12})]);
         this.collections.kaggleUserSet.loaded = true;
-
-        window.collections = this.collections;
     },
 
     buildContentDetails: function() {
