@@ -14,17 +14,13 @@ class TaggingsController < ApplicationController
       authorize! :show, model
 
       tag_names = tagging[:tag_names] || []
-      tag_names.each do |tagname|
-        raise_validation_error if tagname.length > MAXIMUM_TAG_LENGTH
+      tag_names.each do |tag_name|
+        raise_validation_error if tag_name.length > MAXIMUM_TAG_LENGTH
       end
 
       unique_tag_names = tag_names.uniq(&:downcase).sort
 
-      begin
-        model.tag_list = unique_tag_names
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
-        return present_errors({:record => "DUPLICATE_TAG", :message => e.message}, :status => :unprocessable_entity)
-      end
+      model.tag_list = unique_tag_names
       model.save!
     end
 
