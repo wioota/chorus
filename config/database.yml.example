@@ -40,6 +40,10 @@ ci_legacy_migration:
   database: chorus_rails_ci_legacy_migration
   <<: *default
 
+ci_legacy:
+  database: chorus_rails_ci_legacy
+  <<: *default
+
 integration:
   database: chorus_rails_integration
   <<: *default

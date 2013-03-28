@@ -19,7 +19,7 @@ describe TaggingsController do
         entity.reload.tags.map(&:name).should =~ tag_names
       end
 
-      it "removes tags" do
+      it 'removes tags' do
         entity.tag_list = ["alpha", "beta", "gamma"]
         entity.save!
 
@@ -75,42 +75,6 @@ describe TaggingsController do
           post :create, params
           response.should_not be_success
           decoded_errors.fields.base.should have_key :TOO_LONG
-        end
-      end
-
-      context 'when saving the tag_list fails due uniqueness errors' do
-        let(:tag_names) { %w{a b c} }
-        let(:exception) { ActiveRecord::RecordInvalid.new(Tag.new) }
-
-        before do
-          mock(ModelMap).model_from_params(entity.class.name.underscore, entity.to_param) { entity }
-          mock(entity, :tag_list=).with_any_args {
-            raise exception
-          }
-        end
-
-        it 'returns 422' do
-          post :create, params
-          response.code.should == '422'
-        end
-
-        it 'presents a specific error message' do
-          post :create, params
-          decoded_errors.record.should == "DUPLICATE_TAG"
-        end
-
-        context "when the uniqueness error is at the database level" do
-          let(:exception) { ActiveRecord::RecordNotUnique.new('bang', StandardError.new('bang')) }
-
-          it 'returns 422' do
-            post :create, params
-            response.code.should == '422'
-          end
-
-          it 'presents a specific error message' do
-            post :create, params
-            decoded_errors.record.should == "DUPLICATE_TAG"
-          end
         end
       end
 

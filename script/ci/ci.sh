@@ -8,6 +8,18 @@ export GPDB_HOST=chorus-gpdb-ci
 export HADOOP_HOST=chorus-gphd02
 export ORACLE_HOST=chorus-oracle
 
+if [[ -z "$JASMINE_PORT" ]]; then
+  export JASMINE_PORT=8888
+fi
+
+if [[ -z "$CI_GPFDIST_WRITE_PORT" ]]; then
+  export CI_GPFDIST_WRITE_PORT=8000
+fi
+
+if [[ -z "$CI_GPFDIST_READ_PORT" ]]; then
+  export CI_GPFDIST_READ_PORT=8001
+fi
+
 set -e
 
 . script/ci/setup.sh
@@ -35,9 +47,9 @@ fi
 if $run_ruby; then
     echo "starting gpfdist (Linux RHEL5 only)"
     export LD_LIBRARY_PATH=vendor/gpfdist-rhel5/lib:${LD_LIBRARY_PATH}
-    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8000 -d /tmp &
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p $CI_GPFDIST_WRITE_PORT -d /tmp &
     GPPID1=$!
-    ./vendor/gpfdist-rhel5/bin/gpfdist -p 8001 -d /tmp &
+    ./vendor/gpfdist-rhel5/bin/gpfdist -p $CI_GPFDIST_READ_PORT -d /tmp &
     GPPID2=$!
 fi
 
