@@ -114,11 +114,7 @@ class DataSourceConnection
 
   def with_jdbc_connection(options={})
     with_connection options do
-      @connection.synchronize do |jdbc|
-        result = yield jdbc
-        jdbc.close
-        result
-      end
+      @connection.synchronize { |jdbc| yield jdbc }
     end
   end
 
