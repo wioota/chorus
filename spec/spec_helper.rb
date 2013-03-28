@@ -56,6 +56,7 @@ RSpec.configure do |config|
 
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
+    self.class.fixtures :all
   end
 
   config.before(:each) do
