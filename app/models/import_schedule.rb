@@ -2,11 +2,11 @@ class ImportSchedule < ActiveRecord::Base
   include SoftDelete
   include ImportMixins
 
-  belongs_to :workspace, :unscoped => true
+  belongs_to :scoped_workspace, :class_name => 'Workspace', :foreign_key => 'workspace_id'
   validates :workspace, :presence => true
   validate :workspace_is_not_archived, :unless => :deleted?
 
-  belongs_to :source_dataset, :class_name => 'Dataset', :unscoped => true
+  belongs_to :scoped_source_dataset, :class_name => 'Dataset', :foreign_key => 'source_dataset_id'
   belongs_to :user
   has_many :imports, :validate => false, :class_name => 'WorkspaceImport'
 
@@ -28,6 +28,34 @@ class ImportSchedule < ActiveRecord::Base
   validate :table_does_not_exist, :if => lambda { new_table? && (to_table_changed? || new_table_changed?) }
   validate :table_does_exist, :if => lambda { !new_table? && to_table_changed? }
   validate :tables_have_consistent_schema, :unless => :new_table
+  
+  def workspace
+    if deleted_at.nil?
+      scoped_workspace
+    else
+      Workspace.unscoped.find(workspace_id)
+    end
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def workspace=(value)
+    self.scoped_workspace = value
+  end
+  
+  def source_dataset
+    if deleted_at.nil?
+      scoped_source_dataset
+    else
+      Dataset.unscoped.find(source_dataset_id)
+    end
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def source_dataset=(value)
+    self.scoped_source_dataset = value
+  end
 
   def create_import_event
     dst_table = workspace.sandbox.datasets.find_by_name(to_table) unless new_table

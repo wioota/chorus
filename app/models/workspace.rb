@@ -101,7 +101,7 @@ class Workspace < ActiveRecord::Base
 
   def scope_to_database(datasets, database_id = nil)
     if database_id
-      datasets.joins(:schema).where(:schemas => { :parent_id => database_id })
+      datasets.joins(:scoped_schema).where(:schemas => { :parent_id => database_id })
     else
       datasets
     end

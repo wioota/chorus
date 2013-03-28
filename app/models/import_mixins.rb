@@ -53,7 +53,5 @@ module ImportMixins
 
     belongs_to :destination_dataset, :class_name => 'Dataset'
     before_validation :set_destination_dataset_id
-
-    extend UnscopedBelongsTo
   end
 end

@@ -3,7 +3,6 @@ module SoftDelete
 
   included do
     default_scope :conditions => {:deleted_at => nil}
-    extend UnscopedBelongsTo
   end
 
   def destroy
