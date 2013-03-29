@@ -26,7 +26,7 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
         return {
             id: model.get("id"),
             name: model.get("objectName"),
-            imageUrl: model.iconUrl({size: 'medium'})
+            imageUrl: model.iconUrl({size: 'icon'})
         };
     },
 
