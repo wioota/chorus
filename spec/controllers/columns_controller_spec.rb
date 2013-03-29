@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ColumnController do
+describe ColumnsController do
   ignore_authorization!
 
   before do

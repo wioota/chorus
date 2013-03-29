@@ -1,4 +1,4 @@
-class ColumnController < ApplicationController
+class ColumnsController < ApplicationController
   include DataSourceAuth
 
   def index
