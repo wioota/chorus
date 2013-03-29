@@ -1,6 +1,6 @@
 module Visualization
   class TimeseriesPresenter < Presenter
-    include PostgresDbTypesToChorus
+    include GpdbDataTypes
 
     def to_hash
       {

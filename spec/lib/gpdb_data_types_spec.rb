@@ -1,18 +1,12 @@
 require 'spec_helper'
-require 'postgres_db_types_to_chorus'
+require 'gpdb_data_types'
 
-describe "DbTypesToChorus" do
-  describe "#type_category" do
-    before do
-      class TestFubar
-        include PostgresDbTypesToChorus
-      end
-    end
-
+describe GpdbDataTypes do
+  describe '#type_category' do
     def self.it_has_type_category(type, category)
       context "with a '#{type}' column" do
         it "has the #{category} category" do
-          TestFubar.new.to_category(type).should == category
+          GpdbDataTypes.pretty_category_name(type).should == category
         end
       end
     end

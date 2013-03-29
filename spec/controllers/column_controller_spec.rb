@@ -7,8 +7,8 @@ describe ColumnController do
     log_in user
   end
 
-  context "#index" do
-    context "with mock data" do
+  context '#index' do
+    context 'with mock data' do
       let(:user) { users(:no_collaborators) }
       let(:table) { datasets(:table) }
 
@@ -23,24 +23,24 @@ describe ColumnController do
         end
       end
 
-      it "checks for permissions" do
+      it 'checks for permissions' do
         mock(subject).authorize! :show_contents, table.data_source
         get :index, :dataset_id => table.to_param
       end
 
-      it_behaves_like "a paginated list" do
+      it_behaves_like 'a paginated list' do
         let(:params) {{ :dataset_id => table.to_param }}
       end
 
-      it "retrieves column for a table" do
+      it 'retrieves column for a table' do
         get :index, :dataset_id => table.to_param
 
-        response.code.should == "200"
+        response.code.should == '200'
         decoded_response.length.should == 2
       end
     end
 
-    context "with real greenplum data", :greenplum_integration do
+    context 'with real greenplum data', :greenplum_integration do
       let(:account) { GreenplumIntegration.real_account }
       let(:user) { account.owner }
       let(:database) { GreenplumIntegration.real_database }
@@ -50,36 +50,35 @@ describe ColumnController do
         dataset.analyze(account)
       end
 
-      it "presents gpdb dataset columns" do
+      it 'presents gpdb dataset columns' do
         mock_present do |column_set|
           column_set.first.should be_a GpdbDatasetColumn
         end
         get :index, :dataset_id => dataset.to_param
       end
 
-      generate_fixture "databaseColumnSet.json" do
+      generate_fixture 'databaseColumnSet.json' do
         get :index, :dataset_id => dataset.to_param
       end
 
-      it "generates a column fixture", :fixture do
+      it 'generates a column fixture', :fixture do
         get :index, :dataset_id => dataset.to_param
-        save_fixture "databaseColumn.json", { :response => response.decoded_body["response"].first }
+        save_fixture 'databaseColumn.json', { :response => response.decoded_body['response'].first }
       end
     end
 
-    context "with real oracle data", :oracle_integration do
+    context 'with real oracle data', :oracle_integration do
       let(:user) { users(:owner) }
       let(:account) { OracleIntegration.real_account }
-      #let(:user) { User.find_by_nameOracleIntegration.user }
       let(:schema) { OracleIntegration.real_schema }
       let(:data_source) { OracleIntegration.real_data_source }
-      let(:dataset) { schema.datasets.find_by_name("TWO_COLUMN_TABLE") }
+      let(:dataset) { schema.datasets.find_by_name('TWO_COLUMN_TABLE') }
 
       before do
         schema.refresh_datasets(data_source.owner_account)
       end
 
-      it "presents oracle dataset columns" do
+      it 'presents oracle dataset columns' do
         mock_present do |column_set|
           column_set.first.should be_a OracleDatasetColumn
         end

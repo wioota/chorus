@@ -23,6 +23,6 @@ class DatasetImportability
   end
 
   def supported_column_types
-    OracleDbTypeConversions::GREENPLUM_TYPE_MAP.keys
+    OracleDataTypes::GREENPLUM_TYPE_MAP.keys
   end
 end

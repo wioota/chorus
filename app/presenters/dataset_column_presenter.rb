@@ -11,7 +11,7 @@ class DatasetColumnPresenter < Presenter
   end
 
   def type_category
-    to_category(model.data_type)
+    raise 'Subclasses must define their own conversion function'
   end
 
   def statistics
