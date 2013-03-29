@@ -11,7 +11,7 @@ class DatasetImportability
     invalid_columns = []
 
     @dataset.column_data.each do |column|
-      unless supported_column_types.include? column.data_type
+      unless OracleDataTypes.greenplum_type_for(column.data_type)
         invalid_columns << {
           column_name: column.name,
           column_type: column.data_type
@@ -23,6 +23,6 @@ class DatasetImportability
   end
 
   def supported_column_types
-    OracleDataTypes::GREENPLUM_TYPE_MAP.keys
+    OracleDataTypes.supported_column_types
   end
 end

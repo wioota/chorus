@@ -1,5 +1,5 @@
 module OracleDataTypes
-  CATEGORY_MAP = {
+  ORACLE_TO_PRETTY_CATEGORY_NAME_MAP = {
       'BFILE' => 'OTHER',
       'BINARY_DOUBLE' => 'REAL_NUMBER',
       'BINARY_FLOAT' => 'REAL_NUMBER',
@@ -28,7 +28,7 @@ module OracleDataTypes
       'TIMESTAMP(6)' => 'DATETIME'
   }
 
-  GREENPLUM_TYPE_MAP = {
+  ORACLE_TO_GPDB_TYPE_MAP = {
       'BINARY_DOUBLE' => 'float8',
       'BINARY_FLOAT' => 'float8',
       'CHAR' => 'character',
@@ -52,10 +52,14 @@ module OracleDataTypes
 
   def self.greenplum_type_for(oracle_type)
     oracle_type_without_specification = oracle_type.split('(').first
-    GREENPLUM_TYPE_MAP[oracle_type_without_specification]
+    ORACLE_TO_GPDB_TYPE_MAP[oracle_type_without_specification]
   end
 
   def self.pretty_category_name(oracle_type)
-    CATEGORY_MAP[oracle_type.upcase]
+    ORACLE_TO_PRETTY_CATEGORY_NAME_MAP[oracle_type.upcase]
+  end
+
+  def self.supported_column_types
+    ORACLE_TO_GPDB_TYPE_MAP.keys
   end
 end
