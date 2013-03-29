@@ -19,6 +19,6 @@ class OracleTableCopier < TableCopier
   end
 
   def convert_column_type(oracle_type)
-    OracleDbTypeConversions.convert_column_type oracle_type
+    OracleDataTypes.greenplum_type_for oracle_type
   end
 end
