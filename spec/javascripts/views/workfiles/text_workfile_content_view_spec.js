@@ -222,48 +222,62 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             spyOn(this.view, "stopTimer");
             spyOn(this.textfile, "save").andCallThrough();
+            spyOn(this.view, "editText").andCallThrough();
             spyOn(this.textfile, "canEdit").andReturn(true);
         });
 
         describe("the 'file:replaceCurrentVersion' event", function() {
-            beforeEach(function() {
-                chorus.PageEvents.broadcast("file:replaceCurrentVersion");
-                this.clock.tick(10000);
-            });
+            context("when there is no modal", function(){
+                beforeEach(function() {
+                    chorus.modal = null;
+                    chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+                    this.clock.tick(10000);
+                });
 
-            it("calls save", function() {
-                expect(this.view.model.save).toHaveBeenCalled();
-            });
+                it("calls save", function() {
+                    expect(this.view.model.save).toHaveBeenCalled();
+                });
 
-            it("sets cursor at the correct position", function() {
-                expect(this.view.editor.getCursor().ch).toBe(19);
-                expect(this.view.editor.getCursor().line).toBe(0);
-            });
+                it("sets cursor at the correct position", function() {
+                    expect(this.view.editor.getCursor().ch).toBe(19);
+                    expect(this.view.editor.getCursor().line).toBe(0);
+                });
 
-            it("sets readonly to nocursor", function() {
-                expect(this.view.editor.getOption("readOnly")).toBe(false);
-            });
+                it("sets readonly to nocursor", function() {
+                    expect(this.view.editor.getOption("readOnly")).toBe(false);
+                });
 
-            it("saves the selected content only", function() {
-                expect(this.view.model.content()).toBe('This should be a big enough text, okay?');
-            });
+                it("saves the selected content only", function() {
+                    expect(this.view.model.content()).toBe('This should be a big enough text, okay?');
+                });
 
-            it("maintains the editor in edit mode", function() {
-                expect(this.view.$(".CodeMirror")).toHaveClass("editable");
-            });
+                it("maintains the editor in edit mode", function() {
+                    expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+                });
 
-            context("when there is a version conflict", function() {
-                it("shows the version conflict alert", function() {
-                    this.server.lastUpdate().failUnprocessableEntity({fields: {version: {INVALID: {}}}});
+                context("when there is a version conflict", function() {
+                    it("shows the version conflict alert", function() {
+                        this.server.lastUpdate().failUnprocessableEntity({fields: {version: {INVALID: {}}}});
 
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                    });
+                });
+
+                context("when you are replacing a deleted version", function() {
+                    it("shows the version conflict alert", function() {
+                        this.server.lastUpdate().failNotFound();
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                    });
                 });
             });
 
-            context("when you are replacing a deleted version", function() {
-                it("shows the version conflict alert", function() {
-                    this.server.lastUpdate().failNotFound();
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+            context("when a modal is open", function(){
+                beforeEach(function(){
+                    chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+                });
+
+                it('does not move focus from the modal to the text editor', function() {
+                    expect(this.view.editText).not.toHaveBeenCalled();
                 });
             });
         });
@@ -294,6 +308,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             describe("the 'file:replaceCurrentVersionWithSelection' event", function() {
                 beforeEach(function() {
+                    chorus.modal = null;
                     chorus.PageEvents.broadcast("file:replaceCurrentVersionWithSelection");
                     this.clock.tick(10000);
                 });

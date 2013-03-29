@@ -9,4 +9,4 @@ rbenv shell `cat .rbenv-version`
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 
-b/license_finder > /dev/null
+b/license_finder

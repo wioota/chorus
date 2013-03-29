@@ -121,9 +121,7 @@ describe OracleConnection, :oracle_integration do
     let(:sql) { "SELECT * from \"#{OracleIntegration.schema_name}\".NEWTABLE" }
 
     let(:subject) {
-      connection.stream_sql(sql) do
-        true
-      end
+      connection.stream_sql(sql) { true }
     }
     let(:expected) { true }
 
@@ -131,9 +129,7 @@ describe OracleConnection, :oracle_integration do
 
     it "streams all rows of the results" do
       bucket = []
-      connection.stream_sql(sql) do |row|
-        bucket << row
-      end
+      connection.stream_sql(sql) { |row| bucket << row }
 
       bucket.length.should == 10
       bucket.each_with_index do |row, index|
@@ -145,9 +141,7 @@ describe OracleConnection, :oracle_integration do
     context "when a limit is provided" do
       it "only processes part of the results" do
         bucket = []
-        connection.stream_sql(sql, { :limit => 1 }) do |row|
-          bucket << row
-        end
+        connection.stream_sql(sql, {:limit => 1}) { |row| bucket << row }
 
         bucket.should == [{:ID => "1", :ROWNAME => "row_1"}]
       end

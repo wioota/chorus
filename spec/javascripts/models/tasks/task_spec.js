@@ -69,25 +69,13 @@ describe("chorus.models.Task", function() {
                 expect('canceled').toHaveBeenTriggeredOn(task);
             });
 
-            context("calling cancel again", function() {
+            context("click on cancel again", function() {
                 beforeEach(function() {
                     task.save();
                     task.cancel();
                 });
 
                 itCreatesCancelRequestAndIgnoreSubsequent();
-            });
-        });
-
-        describe("when the request fails", function(){
-            beforeEach(function() {
-                spyOnEvent(task, 'cancelFailed');
-                task.cancel();
-                this.server.lastDestroy().fail();
-            });
-
-            it('triggers the cancelFailed event on the task', function(){
-               expect('cancelFailed').toHaveBeenTriggeredOn(task);
             });
         });
 

@@ -200,7 +200,7 @@ describe("sinon extensions", function() {
             this.fakeRequest.fail();
         });
 
-        itReturnsStatus(400);
+        itReturnsStatus(200);
 
         it("returns an error message in the 'message' field", function() {
             expect(this.fakeRequest.responseText).toContain("something went wrong!");

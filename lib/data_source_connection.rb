@@ -39,7 +39,7 @@ class DataSourceConnection
     input_string.gsub(/[\_\%#{LIKE_ESCAPE_CHARACTER}]/) { |c| LIKE_ESCAPE_CHARACTER + c }
   end
 
-  def fetch(sql, parameters = {})
+  def fetch(sql, parameters={})
     with_connection { @connection.fetch(sql, parameters).all }
   end
 
@@ -52,92 +52,93 @@ class DataSourceConnection
     true
   end
 
-  def stream_sql(sql, options = {})
-    with_connection do
-      @connection.synchronize do |jdbc_conn|
-        jdbc_conn.set_auto_commit(false)
 
-        stmnt = jdbc_conn.create_statement
-        stmnt.set_fetch_size(1000)
-        stmnt.set_max_rows(options[:limit]) if options[:limit]
+  def stream_sql(query, options={}, &record_handler)
+    with_jdbc_connection(options) do |jdbc_conn|
+      statement = build_and_configure_statement(jdbc_conn, options, query)
+      statement.execute
 
-        result_set = stmnt.execute_query(sql)
-
-        meta_data = result_set.meta_data
-        column_names = (1..meta_data.column_count).map {|i| meta_data.column_name(i).to_sym}
-
-        nil_value = options[:quiet_null] ? "" : "null"
-        parser = SqlValueParser.new(result_set, :nil_value => nil_value)
-
-        while result_set.next
-          record = {}
-
-          column_names.each.with_index do |name, i|
-            record[name] = parser.string_value(i)
-          end
-
-          yield record
-        end
-
-        result_set.close
-        jdbc_conn.close
-      end
+      stream_through_block(options, record_handler, statement)
+      jdbc_conn.close
     end
-
     true
   end
 
-  def prepare_and_execute_statement(query, options = {})
-    with_connection options do
-      @connection.synchronize do |jdbc_conn|
-        statement = jdbc_conn.prepare_statement(query)
+  def prepare_and_execute_statement(query, options={})
+    with_jdbc_connection(options) do |jdbc_conn|
+      statement = build_and_configure_statement(jdbc_conn, options, query)
+      yield statement if block_given?
+      set_timeout(options[:timeout], statement) if options[:timeout]
 
-        yield statement if block_given?
-
-        if options[:timeout]
-          set_timeout(options[:timeout], statement)
-        end
-
-        if options[:limit]
-          jdbc_conn.set_auto_commit(false)
-          statement.set_fetch_size(options[:limit])
-          statement.set_max_rows(options[:limit])
-        end
-
-        if options[:describe_only]
-          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
-        else
-          statement.execute
-        end
-
-        warnings = []
-        if options[:warnings]
-          warning = statement.get_warnings
-          while (warning)
-            warnings << warning.to_s
-            warning = warning.next_warning
-          end
-        end
-
-        result_set = statement.get_result_set
-        if support_multiple_result_sets?
-          while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
-            result_set.close if result_set
-            result_set = statement.get_result_set
-          end
-        end
-
-        result = create_sql_result(warnings, result_set)
-
-        if options[:limit]
-          jdbc_conn.commit
-        end
-
-        result
+      if options[:describe_only]
+        statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
+      else
+        statement.execute
       end
+
+      result = query_result(options, statement)
+      jdbc_conn.commit if options[:limit]
+      result
     end
   rescue Exception => e
     raise QueryError, "The query could not be completed. Error: #{e.message}"
+  end
+
+  private
+
+  def stream_through_block(options, record_handler, statement)
+    result_set = last_result_set(statement)
+    meta_data = result_set.meta_data
+    column_names = (1..meta_data.column_count).map { |i| meta_data.column_name(i).to_sym }
+    nil_value = options[:quiet_null] ? "" : "null"
+    parser = SqlValueParser.new(result_set, :nil_value => nil_value)
+
+    while result_set.next
+      record = {}
+      column_names.each.with_index { |column, i| record[column] = parser.string_value(i) }
+      record_handler.call(record)
+    end
+  end
+
+  def query_result(options, statement)
+    create_sql_result(warnings(options, statement), last_result_set(statement))
+  end
+
+  def build_and_configure_statement(jdbc_conn, options, query)
+    statement = jdbc_conn.prepare_statement(query)
+    jdbc_conn.set_auto_commit(false) if options[:limit]
+    statement.set_fetch_size(options[:limit]) if options[:limit]
+    statement.set_max_rows(options[:limit]) if options[:limit]
+    statement
+  end
+
+  def with_jdbc_connection(options={})
+    with_connection options do
+      @connection.synchronize { |jdbc| yield jdbc }
+    end
+  end
+
+  def warnings(options, statement)
+    warnings = []
+    if options[:warnings]
+      warning = statement.get_warnings
+      while (warning)
+        warnings << warning.to_s
+        warning = warning.next_warning
+      end
+    end
+    warnings
+  end
+
+  def last_result_set(statement)
+    result_set = statement.get_result_set
+    if support_multiple_result_sets?
+      while (statement.more_results(statement.class::KEEP_CURRENT_RESULT) || statement.update_count != -1)
+        result_set.close if result_set
+        result_set = statement.get_result_set
+      end
+    end
+    result_set
   end
 
   def support_multiple_result_sets?

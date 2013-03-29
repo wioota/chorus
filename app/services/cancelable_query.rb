@@ -19,15 +19,7 @@ class CancelableQuery
   end
 
   def cancel
-    statement = @@running_statements[@check_id]
-    if statement
-      statement.cancel
-      !busy?
-    else
-      false
-    end
-  rescue Exception
-    false
+    @@running_statements[@check_id].cancel if @@running_statements.has_key?(@check_id)
   end
 
   def busy?

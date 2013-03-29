@@ -42,11 +42,6 @@ describe CancelableQuery do
   describe "execution and cancelling" do
     let(:connection) { Object.new }
     let(:results) { :results }
-    let(:still_running) { false }
-
-    before do
-      stub(connection).fetch(anything) { still_running ? [1] : [] }
-    end
 
     it "should store the statement in the callback block and delete it when finished" do
       CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
@@ -65,35 +60,11 @@ describe CancelableQuery do
       fake_statement = Object.new
       CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
       mock(fake_statement).cancel
-      cancelable_query.cancel.should be_true
+      cancelable_query.cancel
     end
 
     it "should not blow up if the query is already finished" do
-      cancelable_query.cancel.should be_false
-    end
-
-    it "should not blow up when threads suck" do
-      fake_statement = Object.new
-      CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
-      mock(fake_statement).cancel { raise Exception, "you didn't rescue!" }
-      cancelable_query.cancel.should be_false
-    end
-
-    context "when the query is no longer running" do
-      it "should return false" do
-        cancelable_query.cancel.should be_false
-      end
-    end
-
-    context "when the cancel failed" do
-      let(:still_running) { true }
-
-      it "should return false" do
-        fake_statement = Object.new
-        CancelableQuery.class_variable_get(:@@running_statements)[check_id] = fake_statement
-        mock(fake_statement).cancel
-        cancelable_query.cancel.should be_false
-      end
+      expect { cancelable_query.cancel }.not_to raise_error
     end
   end
 
@@ -107,7 +78,7 @@ describe CancelableQuery do
         cancel_thread = Thread.new do
           cancel_connection = gpdb_data_source.connect_with(account)
           wait_until { get_running_queries_by_check_id(cancel_connection).present? }
-          CancelableQuery.new(cancel_connection, check_id).cancel.should == true
+          CancelableQuery.new(cancel_connection, check_id).cancel
         end
 
         query_connection = gpdb_data_source.connect_with(account)
@@ -118,11 +89,6 @@ describe CancelableQuery do
         get_running_queries_by_check_id(query_connection).should be_nil
 
         cancel_thread.join
-      end
-
-      it "returns false if the cancel operation is not successful" do
-        cancel_connection = gpdb_data_source.connect_with(account)
-        CancelableQuery.new(cancel_connection, 0).cancel.should == false
       end
     end
 

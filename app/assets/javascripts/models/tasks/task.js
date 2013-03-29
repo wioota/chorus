@@ -27,10 +27,6 @@ chorus.models.Task = chorus.models.Base.include(
                 this.trigger("canceled");
                 delete this._cancelInProgress;
             }, this),
-            error: _.bind(function(){
-                this.trigger("cancelFailed");
-                delete this._cancelInProgress;
-            }, this),
             data: this.underscoreKeys(this.destroyParams())
         });
     },

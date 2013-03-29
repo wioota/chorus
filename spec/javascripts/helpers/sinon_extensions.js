@@ -185,7 +185,7 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
     },
 
     fail: function fail(message, resource) {
-        return this.respondJson(400, {
+        return this.respondJson(200, {
             status: "fail",
             resource: resource || [],
             message: message || "something went wrong!"

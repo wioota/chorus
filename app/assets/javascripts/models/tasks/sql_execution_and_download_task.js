@@ -16,9 +16,6 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
     },
 
     saved: function() {
-        // this always happens.
-        // successCallback refers to the browser showing a save dialog,
-        // not to anything about the http request
         this.trigger("saved", this);
     },
 

@@ -47,24 +47,10 @@ jasmine.sharedExamples.CheckableList = function() {
     }
 
     describe("checking an item", function() {
-        // workaround since browser and jquery trigger native handler and custom handler in different orders
-        // see http://bugs.jquery.com/ticket/3827
-        // probably fixed by jquery 1.9
-        function safeClick(target) {
-            var checked = $(target).prop('checked');
-            $(target).click();
-            $(target).prop('checked', !checked);
-        }
-
         beforeEach(function() {
             this.view.render();
-            $('#jasmine_content').append(this.view.el);
             this.checkboxes = this.view.$("> li input[type=checkbox]");
-            safeClick(this.checkboxes.eq(1));
-        });
-
-        it("checks the checkbox", function() {
-            expect(this.view.$("li input[type=checkbox]").eq(1)).toBeChecked();
+            this.checkboxes.eq(1).click().change();
         });
 
         it("does not 'select' the item", function() {
@@ -77,13 +63,15 @@ jasmine.sharedExamples.CheckableList = function() {
 
         it("broadcasts the '{{eventName}}:checked' event with the collection of currently-checked items", function() {
             expectItemChecked.call(this, [ this.collection.at(1) ]);
-            this.checkboxes.eq(0).click();
+
+            this.checkboxes.eq(0).click().change();
             expectItemChecked.call(this, [ this.collection.at(1), this.collection.at(0) ]);
         });
 
         it("unselects items when they are re-checked", function() {
-            this.checkboxes.eq(0).click();
-            this.checkboxes.eq(0).click();
+
+            this.checkboxes.eq(0).click().change();
+            this.checkboxes.eq(0).click().change();
             expectItemChecked.call(this, [ this.collection.at(1) ]);
         });
 
@@ -95,11 +83,8 @@ jasmine.sharedExamples.CheckableList = function() {
         });
 
         it('is persisted when the item is re-rendered', function(){
-            expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
-            expect(this.view.$("li").eq(1)).toHaveClass('checked');
             this.view.collection.at(1).trigger('change');
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
-            expect(this.view.$("li").eq(1)).toHaveClass('checked');
         });
     });
 

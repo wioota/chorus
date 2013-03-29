@@ -201,7 +201,7 @@ describe SqlExecutor do
   end
 
   describe "#cancel_query" do
-    it "cancels the query and return the value of CancelableQuery's cancel" do
+    it "cancels the query" do
       fake_connection = Object.new
       fake_query = Object.new
       connection_provider = Object.new
@@ -209,9 +209,9 @@ describe SqlExecutor do
 
       mock(connection_provider).connect_with(account) { fake_connection }
       mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
-      mock(fake_query).cancel { :cancel_return_value }
+      mock(fake_query).cancel
 
-      SqlExecutor.cancel_query(connection_provider, account, check_id).should == :cancel_return_value
+      SqlExecutor.cancel_query(connection_provider, account, check_id)
     end
   end
 end

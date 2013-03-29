@@ -182,9 +182,7 @@ describe GreenplumConnection, :greenplum_integration do
     let(:options) { {} }
     let(:expected) { [{'answer' => '1'}] }
 
-    subject do
-      connection.prepare_and_execute_statement(sql, options)
-    end
+    subject { connection.prepare_and_execute_statement(sql, options) }
 
     it "should return a SqlResult" do
       subject.should be_a(SqlResult)
@@ -899,11 +897,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:expected) { true }
       let(:bucket) {[]}
       let(:options) {{}}
-      let(:subject) {
-        connection.stream_sql(sql) do
-          true
-        end
-      }
+      let(:subject) { connection.stream_sql(sql) { true } }
 
       before do
         @db = Sequel.connect(db_url)
@@ -913,9 +907,7 @@ describe GreenplumConnection, :greenplum_integration do
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', '1999-07-08 04:05:06')")
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', null)")
 
-        connection.stream_sql(sql, options) do |row|
-          bucket << row
-        end
+        connection.stream_sql(sql, options) { |row| bucket << row }
       end
 
       after do
@@ -944,6 +936,19 @@ describe GreenplumConnection, :greenplum_integration do
 
         it "returns null values as empty string" do
           bucket.last[:fourth].should == ""
+        end
+      end
+
+      context "with multiple query results" do
+        let(:sql) do
+          <<-SQL
+            select 1;
+            select 2 as "two";
+          SQL
+        end
+
+        it "streams the result of the last query" do
+          bucket.should == [ {:two => "2"} ]
         end
       end
     end

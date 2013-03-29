@@ -36,10 +36,6 @@ ci_jasmine:
   database: chorus_rails_ci_jasmine
   <<: *default
 
-ci_legacy_migration:
-  database: chorus_rails_ci_legacy_migration
-  <<: *default
-
 ci_legacy:
   database: chorus_rails_ci_legacy
   <<: *default

@@ -8,7 +8,8 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     suppressRenderOnChange: true,
 
     events: {
-        "click  li input[type=checkbox]": "checkboxClicked"
+        "click  li input[type=checkbox]": "checkboxClicked",
+        "change li input[type=checkbox]": "checkboxChanged"
     },
 
     setup: function() {
@@ -55,33 +56,24 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         }, this);
     },
 
-    addModelsToSelection: function(models) {
-        this.selectedModels.add(_.filter(models, function (model) {
-            return !this.findSelectedModel(model);
-        }, this));
-    },
-
     checkboxClicked: function(e) {
         e.stopPropagation();
+    },
+
+    checkboxChanged: function(e) {
         var clickedBox = $(e.currentTarget);
         var clickedLi = clickedBox.closest("li");
         var index = this.$("li").index(clickedLi);
+        var isChecked = clickedBox.prop("checked");
         var model = this.collection.at(index);
-        var willBeChecked = !this.findSelectedModel(model);
 
-        if (willBeChecked) {
-            var modelsToAdd = [model];
-            if (e.shiftKey && this.previousIndex >= 0) {
-                var min = _.min([this.previousIndex, index]);
-                var max = _.max([this.previousIndex, index]);
-                modelsToAdd = this.collection.models.slice(min, max + 1);
+        if(isChecked) {
+            if(!this.findSelectedModel(model)) {
+                this.selectedModels.add(model);
             }
-            this.addModelsToSelection(modelsToAdd);
-            this.previousIndex = index;
         } else {
             var match = this.findSelectedModel(model);
             this.selectedModels.remove(match);
-            delete this.previousIndex;
         }
 
         chorus.PageEvents.broadcast("checked", this.selectedModels);
