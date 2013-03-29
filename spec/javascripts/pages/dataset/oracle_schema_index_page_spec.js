@@ -2,7 +2,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
     beforeEach(function() {
         this.oracle = rspecFixtures.oracleDataSource({name: "Davis"});
         this.page = new chorus.pages.OracleSchemaIndexPage(this.oracle.id);
-        this.schemas = rspecFixtures.oracleSchemaSet([rspecFixtures.oracleSchema({name: "schema1"}), rspecFixtures.oracleSchema({name: "schema2"})]);
+        this.schemas = rspecFixtures.oracleSchemaSet([rspecFixtures.oracleSchema({name: "schema1"}).attributes, rspecFixtures.oracleSchema({name: "schema2"}).attributes]);
     });
 
     it("includes the DataSourceCredentials mixin", function() {
