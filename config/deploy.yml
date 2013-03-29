@@ -19,3 +19,8 @@ fresh_install:
 load_test:
   <<: *stage
   host: chorus-load-test
+
+vprevious:
+  host: chorus-vprevious
+  install_path: ~/chorus
+  postgres_build: 2

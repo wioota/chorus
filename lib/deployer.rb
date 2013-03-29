@@ -118,7 +118,7 @@ class Deployer
       #give the data directory
       f.puts(install_path + "/shared") if clean_install.present? || legacy_path.present?
 
-      f.puts(postgres_build)
+      f.puts(postgres_build) if postgres_build
 
       f.puts("this is a secret passphrase")
     end
