@@ -107,12 +107,13 @@ jasmine.sharedExamples.CheckableList = function() {
         context("when the selectAll page event is received", function() {
             beforeEach(function() {
                 this.view.render();
+                this.view.$el.prepend("<li><input type='checkbox'></li>");
                 chorus.PageEvents.broadcast("selectAll");
             });
 
             it("checks all of the items", function() {
                 expect(this.view.$("input[type=checkbox]:checked").length).toBe(this.collection.length);
-                expect(this.view.$("input[type=checkbox]:checked").closest("li")).toHaveClass('checked');
+                expect(this.view.$(".item_wrapper.checked").length).toBe(this.collection.length);
             });
 
             it("broadcasts the '{{eventName}}:checked' page event with a collection of all models", function() {
