@@ -30,10 +30,10 @@ class DataSourceStatusChecker
     @data_source.version = get_data_source_version
     @data_source.state = "online"
   rescue DataSourceConnection::Error => e
-    Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+    Chorus.log_debug "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     @data_source.state = e.error_type == :INVALID_PASSWORD ? "unauthorized" : "offline"
   rescue => e
-    Chorus.log_error "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
+    Chorus.log_debug "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     @data_source.state = "offline"
   end
 
