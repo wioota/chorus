@@ -24,3 +24,4 @@ vprevious:
   host: chorus-vprevious
   install_path: ~/chorus
   postgres_build: 2
+  clean_install: true
