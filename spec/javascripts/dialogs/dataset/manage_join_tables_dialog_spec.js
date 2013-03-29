@@ -96,8 +96,8 @@ describe("chorus.dialogs.ManageJoinTables", function () {
 
         it("shows the medium dataset icon for each table/view", function () {
             var icons = this.dialog.$("img.image");
-            expect(icons.eq(0)).toHaveAttr("src", this.dataset1.iconUrl({ size:"medium" }));
-            expect(icons.eq(1)).toHaveAttr("src", this.dataset2.iconUrl({ size:"medium" }));
+            expect(icons.eq(0)).toHaveAttr("src", this.dataset1.iconUrl({ size:"icon" }));
+            expect(icons.eq(1)).toHaveAttr("src", this.dataset2.iconUrl({ size:"icon" }));
         });
 
         it("renders a search input", function () {

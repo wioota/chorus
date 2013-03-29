@@ -1,4 +1,4 @@
-describe("chorus.dialogs.WorkspaceSettings", function() {
+describe("chorus.dialogs.EditWorkspace", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({
             name: "my name",
@@ -23,7 +23,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
-        this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+        this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
     });
 
     it("does not re-render when the model changes", function() {
@@ -32,15 +32,15 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+            this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
         });
 
         it("fetches the workspace's members", function() {
             this.server.completeFetchAllFor(this.workspace.members());
         });
 
-        it("sorts the members by last name ascending", function() {
-            expect(_.last(this.server.requests).url).toContain("order=last_name");
+        it("has a sorted list of workspace members (last name ASC)", function() {
+            expect(this.server.lastRequest().url).toContainQueryParams({order: 'last_name'});
         });
     });
 
@@ -126,7 +126,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 it("shows sandbox info", function() {
                     var workspace = rspecFixtures.workspace();
                     workspace.unset("sandboxInfo");
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: workspace });
+                    this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
                     this.dialog.render();
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
                 });
@@ -164,7 +164,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     name: "richard"
                 }});
                 disableSpy.reset();
-                this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+                this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
                 this.dialog.render();
             });
 
@@ -240,7 +240,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 this.workspace.set({ permission: ["read", "commenting", "update"] });
                 setLoggedInUser({ id: 11 });
                 disableSpy.reset();
-                this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+                this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
                 this.dialog.render();
             });
 
@@ -260,7 +260,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: '99', admin: false });
                     disableSpy.reset();
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+                    this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
                     this.dialog.render();
                 });
 
@@ -320,7 +320,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     setLoggedInUser({ admin: true });
                     this.workspace.set({ permission: ["admin"] });
                     disableSpy.reset();
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
+                    this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
                     this.dialog.render();
                 });
 
