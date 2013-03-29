@@ -1068,6 +1068,10 @@ describe ChorusInstaller do
   end
 
   describe "#dump_environment" do
+    DCA_FILES = ['/opt/greenplum/conf/build-version.txt',
+                 '/opt/greenplum/conf/productid',
+                 '/opt/greenplum/serialnumber']
+
     describe "detecting the installation OS" do
       before do
         stub(System.get_properties).entry_set { ["os.name=TestOS", "os.version=1.2.3"] }
@@ -1098,8 +1102,7 @@ describe ChorusInstaller do
         context "when there are DCA files present" do
           before do
             FileUtils.mkdir_p('/opt/greenplum/conf')
-            ['/opt/greenplum/conf/build-version.txt',
-             '/opt/greenplum/conf/productid'].each do |path|
+            DCA_FILES.each do |path|
               File.open(path, 'w') { |f| f.puts "#{path} content" }
             end
           end
@@ -1107,6 +1110,20 @@ describe ChorusInstaller do
           it "outputs the section header" do
             mock(logger).log("== DCA SPECIFIC FILES")
             installer.dump_environment
+          end
+
+          context "when the current user does not have permission to access the DCA files" do
+            before do
+              DCA_FILES.each do |path|
+                mock(File).readable?(path) { false }
+              end
+
+              stub(File).open('/opt/greenplum/conf/build-version.txt') { raise Errno::EACCES.new("permission denied") }
+            end
+
+            it "does not explode" do
+              expect {installer.dump_environment}.not_to raise_error
+            end
           end
         end
 
@@ -1122,8 +1139,7 @@ describe ChorusInstaller do
     describe "DCA specific files" do
       it "prints out the file names and contents if files exist" do
         FileUtils.mkdir_p('/opt/greenplum/conf')
-        ['/opt/greenplum/conf/build-version.txt',
-         '/opt/greenplum/conf/productid'].each do |path|
+        DCA_FILES.each do |path|
           mock(logger).log("#{path}: #{path} content")
           File.open(path, 'w') { |f| f.puts "#{path} content" }
         end

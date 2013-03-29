@@ -500,7 +500,7 @@ class ChorusInstaller
     ['/opt/greenplum/conf/build-version.txt',
      '/opt/greenplum/conf/productid',
      '/opt/greenplum/serialnumber'].each do |path|
-      next unless File.exists?(path)
+      next unless File.readable?(path)
       @logger.log("== DCA SPECIFIC FILES") unless dca_files_exist
       dca_files_exist = true
       @logger.log("#{path}: #{File.open(path).readlines.first}".chomp)
