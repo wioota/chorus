@@ -49,8 +49,7 @@ module CapybaraHelpers
   end
 
   def wait_for_page_load
-    within(".main_content") do
-      page.should have_no_selector(".loading_section")
-    end
+    page.should have_selector(".main_content")
+    page.should have_no_selector(".loading_section")
   end
 end
