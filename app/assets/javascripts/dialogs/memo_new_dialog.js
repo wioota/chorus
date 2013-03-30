@@ -284,7 +284,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         var datasetDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
         this.$(".options_area").append(datasetDetailsRow);
 
-        var iconSrc = dataset.iconUrl({size: 'medium'});
+        var iconSrc = dataset.iconUrl({size: 'icon'});
         datasetDetailsRow.find('img.icon').attr('src', iconSrc);
         datasetDetailsRow.find('span.name').text(dataset.get("objectName")).attr('title', dataset.get("objectName"));
         datasetDetailsRow.data("attachment", dataset);

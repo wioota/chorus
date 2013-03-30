@@ -1,29 +1,29 @@
 chorus.views.Activity = chorus.views.Base.extend({
-    constructorName: "ActivityView",
-    templateName:"activity",
-    tagName:"li",
+    constructorName: 'ActivityView',
+    templateName: 'activity',
+    tagName: 'li',
 
     events: {
-        "click a.promote": "promote",
-        "click a.publish": "publish",
-        "click a.unpublish": "unpublish"
+        'click a.promote': 'promote',
+        'click a.publish': 'publish',
+        'click a.unpublish': 'unpublish'
     },
 
-    subviews:{
-        ".comment_list":"commentList",
-        ".activity_content > .truncated_text": "htmlContent",
-        ".activity_content > .actions > .error_details": "failureContent"
+    subviews: {
+        '.comment_list': 'commentList',
+        '.activity_content > .truncated_text': 'htmlContent',
+        '.activity_content > .actions > .error_details': 'failureContent'
     },
 
     setup: function() {
-        this.addCommentHandle = this.subscribePageEvent("comment:added", this.addComment);
-        this.deleteCommentHandle = this.subscribePageEvent("comment:deleted", this.deleteComment);
+        this.addCommentHandle = this.subscribePageEvent('comment:added', this.addComment);
+        this.deleteCommentHandle = this.subscribePageEvent('comment:deleted', this.deleteComment);
     },
 
     addComment: function(comment) {
-        if (this.model.id === comment.get('eventId')) {
+        if(this.model.id === comment.get('eventId')) {
             var comments = this.model.comments();
-            if( !comments.get(comment.id)) {
+            if(!comments.get(comment.id)) {
                 comments.add(comment);
             }
             this.render();
@@ -32,25 +32,25 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     deleteComment: function(comment) {
         var comments = this.model.comments();
-        if (comments.get(comment.id)) {
+        if(comments.get(comment.id)) {
             comments.remove(comment);
             this.render();
         }
     },
 
-    context: function () {
+    context: function() {
         return new chorus.presenters.Activity(this.model, this.options);
     },
 
-    setupSubviews:function () {
+    setupSubviews: function() {
         this.commentList = this.commentList || new chorus.views.CommentList({ collection: this.model.comments() });
 
-        if (!this.htmlContent) {
-            if (this.model.isUserGenerated()) {
-                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
+        if(!this.htmlContent) {
+            if(this.model.isUserGenerated()) {
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'body', attributeIsHtmlSafe: true});
             }
-            if (this.model.hasCommitMessage()) {
-                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "commitMessage", attributeIsHtmlSafe: false});
+            if(this.model.hasCommitMessage()) {
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'commitMessage', attributeIsHtmlSafe: false});
             }
         }
         this.failureContent = this.failureContent || new chorus.views.ErrorDetails({model: this.model});
@@ -60,7 +60,7 @@ chorus.views.Activity = chorus.views.Base.extend({
         e.preventDefault();
         this.model.promoteToInsight({
             success: _.bind(function() {
-                chorus.PageEvents.broadcast("insight:promoted", this.model);
+                chorus.PageEvents.broadcast('insight:promoted', this.model);
             }, this)
         });
     },
@@ -77,11 +77,11 @@ chorus.views.Activity = chorus.views.Base.extend({
         alert.launchModal();
     },
 
-    postRender:function () {
-        $(this.el).attr("data-activity-id", this.model.get("errorModelId") || this.model.get("id"));
-        this.$("a.delete_link, a.edit_link").data("activity", this.model);
-        if (this.model.get("isInsight")) {
-            $(this.el).addClass("insight");
+    postRender: function() {
+        $(this.el).attr('data-activity-id', this.model.get('errorModelId') || this.model.get('id'));
+        this.$('a.delete_link, a.edit_link').data('activity', this.model);
+        if(this.model.get('isInsight')) {
+            $(this.el).addClass('insight');
         }
     },
 
@@ -90,7 +90,7 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     teardown: function() {
-        this._super("teardown");
+        this._super('teardown');
         chorus.PageEvents.unsubscribe(this.addCommentHandle);
         chorus.PageEvents.unsubscribe(this.deleteCommentHandle);
     }

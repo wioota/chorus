@@ -24,7 +24,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
 
     iconUrl: function() {
         var result = this._super("iconUrl", arguments);
-        if (this.get('hasCredentials') === false) {
+        if (!this.hasCredentials()) {
             result = result.replace(".png", "_locked.png");
         }
         return result;

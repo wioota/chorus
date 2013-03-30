@@ -25,26 +25,26 @@ chorus.handlebarsHelpers.dataset = {
         return new Handlebars.SafeString(t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan}));
     },
 
-    datasetLocation: function(dataset, label) {
+    datasetLocation: function(databaseObject, label) {
         label = _.isString(label) ? label : "dataset.from";
-        if (!dataset.schema()) return "";
-        var instance = dataset.instance();
-        var schema = dataset.schema();
-        var database = dataset.database();
+        if (!databaseObject.schema()) return "";
+        var dataSource = databaseObject.instance();
+        var schema = databaseObject.schema();
+        var database = databaseObject.database();
 
         var schemaPieces = [];
-        var dataSourceName = instance.name();
+        var dataSourceName = dataSource.name();
         var databaseName = (database && Handlebars.helpers.withSearchResults(database).name()) || "";
         var schemaName = Handlebars.helpers.withSearchResults(schema).name();
 
-        if (dataset.get('hasCredentials') === false) {
+        if (databaseObject.get('hasCredentials') === false) {
             schemaPieces.push(dataSourceName);
             if (databaseName.toString()) {
                 schemaPieces.push(databaseName);
             }
             schemaPieces.push(schemaName);
         } else {
-            schemaPieces.push(Handlebars.helpers.linkTo(instance.showUrl(), dataSourceName, {"class": "instance"}).toString());
+            schemaPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "instance"}).toString());
             if (databaseName.toString()) {
                 schemaPieces.push(Handlebars.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
             }

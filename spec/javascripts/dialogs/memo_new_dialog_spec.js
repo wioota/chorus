@@ -284,8 +284,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 it("displays the appropriate icons", function() {
                     var datasetIcons = this.dialog.$(".dataset_details:visible img.icon");
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[0].iconUrl({size: 'medium'}));
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[1].iconUrl({size: 'medium'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[0].iconUrl({size: 'icon'}));
                 });
 
                 it("stores the collection", function() {
@@ -296,7 +295,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 context("when the 'attach dataset' link is clicked again", function() {
                     beforeEach(function() {
-                        this.dialog.$("a.add_dataset").click();
+                        this.dialog.$(".add_dataset").click();
                     });
 
                     it("does not pre-select any of the datasets", function() {

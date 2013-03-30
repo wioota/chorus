@@ -53,7 +53,7 @@ class DatasetPresenter < Presenter
 
   def credentials_hash
     {
-        :has_credentials => rendering_activities? ? false : model.accessible_to(current_user)
+        :has_credentials => rendering_activities? ? true : model.accessible_to(current_user)
     }
   end
 

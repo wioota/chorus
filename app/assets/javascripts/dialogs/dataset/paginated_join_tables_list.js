@@ -21,7 +21,7 @@ chorus.views.PaginatedJoinTablesList = chorus.views.Base.extend({
         return {
             columns: model.has("columns") && model.get("columns"),
             isView: model.metaType() === "view",
-            iconUrl: model.iconUrl({ size: "medium" })
+            iconUrl: model.iconUrl({ size: "icon" })
         };
     }
 });

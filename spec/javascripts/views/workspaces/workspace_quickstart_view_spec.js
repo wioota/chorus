@@ -185,7 +185,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("launches the right dialog", function() {
             expect(this.view.$(link)).toHaveClass("dialog");
-            expect(this.view.$(link).data("dialog")).toBe("WorkspaceSettings");
+            expect(this.view.$(link).data("dialog")).toBe("EditWorkspace");
         });
     });
 

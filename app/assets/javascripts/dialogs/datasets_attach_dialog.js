@@ -21,7 +21,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
     collectionModelContext: function (model) {
         return {
             name: model.get("objectName"),
-            imageUrl: model.iconUrl({size: 'medium'})
+            imageUrl: model.iconUrl({size: 'icon'})
         };
     }
 });

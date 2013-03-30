@@ -38,7 +38,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         });
 
         it("has the correct iconUrl", function() {
-            expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', datasetModels[0].iconUrl({size: 'medium'}));
+            expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', datasetModels[0].iconUrl({size: 'icon'}));
         });
 
         it("has the correct name", function() {

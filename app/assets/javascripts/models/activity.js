@@ -175,9 +175,9 @@
 
         attachments: function() {
             if (!this._attachments) {
-                this._attachments = _.map(this.get("attachments"), function(artifactJson) {
+                this._attachments = _.map(this.get("attachments"), function(attachment) {
                     var klass;
-                    switch (artifactJson.entityType) {
+                    switch (attachment.entityType) {
                         case 'workfile':
                             klass = chorus.models.DynamicWorkfile;
                             break;
@@ -188,7 +188,7 @@
                             klass = chorus.models.Attachment;
                             break;
                     }
-                    return new klass(artifactJson);
+                    return new klass(attachment);
                 });
             }
             return this._attachments;

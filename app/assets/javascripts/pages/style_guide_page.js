@@ -153,16 +153,18 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             fileType: 'sql',
             completeJson: true,
             workspace: this.models.workspace,
-            recentComments: [{
-                author: {
-                    id:1,
-                    username:"chorusadmin",
-                    firstName:"Mr",
-                    lastName:"Comment"},
-                body: "Comments are fun",
-                complete_json: true,
-                timestamp: "2013-03-25T17:49:58Z"
-            }],
+            recentComments: [
+                {
+                    author: {
+                        id: 1,
+                        username: "chorusadmin",
+                        firstName: "Mr",
+                        lastName: "Comment"},
+                    body: "Comments are fun",
+                    complete_json: true,
+                    timestamp: "2013-03-25T17:49:58Z"
+                }
+            ],
             executionSchema: this.models.schema
         });
 
@@ -173,16 +175,18 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             workbookName: "hey tableau is the bomb",
             workbookUrl: "http://10.80.129.44/workbooks/hey tableau is the bomb",
             completeJson: true,
-            recentComments: [{
-                author: {
-                    id:1,
-                    username:"chorusadmin",
-                    firstName:"Chorus",
-                    lastName:"Admin"},
-                body: "I always get the last comment, and I like writing really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things ",
-                complete_json: true,
-                timestamp: "2013-03-25T17:49:58Z"
-            }],
+            recentComments: [
+                {
+                    author: {
+                        id: 1,
+                        username: "chorusadmin",
+                        firstName: "Chorus",
+                        lastName: "Admin"},
+                    body: "I always get the last comment, and I like writing really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things ",
+                    complete_json: true,
+                    timestamp: "2013-03-25T17:49:58Z"
+                }
+            ],
             commentCount: 89
         });
 
@@ -241,12 +245,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         });
 
         this.models.otherActivity = new chorus.models.Activity({
-            "action": "WorkfileCreated",
-            "actor": this.models.user,
-            "workfile": this.models.workfile,
-            "commitMessage": "I am committed to this workfile",
-            "workspace": this.models.workspace,
-            "timestamp": "2013-01-31T20:14:27Z"
+            action: "WorkfileCreated",
+            actor: this.models.user,
+            workfile: this.models.workfile,
+            commitMessage: "I am committed to this workfile",
+            workspace: this.models.workspace,
+            timestamp: "2013-01-31T20:14:27Z"
         });
 
         this.models.searchResult = new chorus.models.SearchResult({
@@ -263,7 +267,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 results: [
                     this.models.workspace.set({ highlightedAttributes: { summary: ["<em>Danger</em> Zone!!"]}}),
                     this.models.archivedWorkspace.set({highlightedAttributes: { summary: ['<em>Search Hit</em>']}})
-                    ],
+                ],
                 numFound: 1
             },
 
@@ -288,7 +292,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             },
 
             otherFiles: {
-                results: [{
+                results: [
+                    {
                         "id": 1000009,
                         "name": "searchquery_hadoop",
                         "entityType": "attachment",
@@ -313,7 +318,38 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }
         });
 
-        this.models.chorusView = new chorus.models.ChorusView(this.models.dataset.set({query: "SELECT * FROM everywhere;"}));
+        this.models.chorusView = new chorus.models.ChorusView(_.extend(this.models.dataset.attributes, {objectName: 'My Favorite Chorus View', query: "SELECT * FROM everywhere;", workspace: this.models.workspace}));
+
+        this.models.note = new chorus.models.Activity({
+            action: "NOTE",
+            actionType: "NoteOnWorkspace",
+            actor: this.models.user,
+            id: 26,
+            body: "Notey note note note! :D",
+            workspace: this.models.workspace,
+            timestamp: "2013-03-29T18:18:49Z",
+            attachments: [
+                {
+                    "id": 2,
+                    "name": "Screen_Shot_2013-03-27_at_2.26.16_PM.png",
+                    "timestamp": "2013-03-29T18:00:37Z",
+                    "icon_url": "/notes/26/attachments/2?style=icon&1364580037",
+                    "entity_type": "attachment",
+                    "type": "png",
+                    "workspace": {
+                        "id": 1,
+                        "name": "ws",
+                        "is_deleted": false,
+                        "entity_type": "workspace",
+                        "summary": "This is my summary and it is hot shit. g",
+                        "archived_at": null,
+                        "public": true
+                    },
+                    "complete_json": true
+                },
+                this.models.chorusView.attributes
+            ]
+        });
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
@@ -360,7 +396,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         });
         this.collections.hdfsEntrySet.loaded = true;
 
-        this.collections.activitySet = new chorus.collections.ActivitySet([this.models.activity, this.models.otherActivity]);
+        this.collections.activitySet = new chorus.collections.ActivitySet([this.models.activity, this.models.otherActivity, this.models.note]);
         this.collections.activitySet.loaded = true;
 
         this.collections.kaggleUserSet = new chorus.collections.KaggleUserSet([new chorus.models.KaggleUser({fullName: "Abraham Lincoln", rank: 1, location: 'Gettysburg', numberOfEnteredCompetitions: 12})]);
@@ -385,7 +421,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Read Only (Binary or Archived) Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.archivedWorkfile),
 
-            "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model:this.models.hdfsFile })
+            "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model: this.models.hdfsFile })
         };
 
         return views;
@@ -412,6 +448,100 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: 'Content Header'}),
                 contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
                 content: new chorus.views.StaticTemplate("ipsum")
+            }),
+
+            "List Page (loading)": new chorus.views.MainContentList({
+                modelClass: "Dataset",
+                collection: this.collections.loadingCollection}),
+
+            "User List": new chorus.views.MainContentList({
+                modelClass: "User",
+                collection: this.collections.userCollection,
+                linkMenus: {
+                    sort: {
+                        title: t("users.header.menu.sort.title"),
+                        options: [
+                            {data: "firstName", text: t("users.header.menu.sort.first_name")},
+                            {data: "lastName", text: t("users.header.menu.sort.last_name")}
+                        ],
+                        event: "sort",
+                        chosen: "lastName"
+                    }
+                },
+                buttons: [
+                    {
+                        url: "#",
+                        text: "Button 1"
+                    },
+                    {
+                        url: "#",
+                        text: "Button 2"
+                    }
+                ]
+            }),
+
+            "Database List": new chorus.views.MainContentList({
+                collection: this.collections.databaseSet,
+                modelClass: "Database"
+            }),
+
+            "Workfile List": new chorus.views.MainContentList({
+                collection: this.collections.workfileSet,
+                modelClass: "Workfile"
+            }),
+
+            "Schema List": new chorus.views.MainContentList({
+                collection: this.collections.schemaSet,
+                modelClass: "Schema"
+            }),
+
+            "Workspace List": new chorus.views.MainContentList({
+                collection: this.collections.workspaceSet,
+                modelClass: "Workspace"
+            }),
+
+            "Tag List": new chorus.views.MainContentList({
+                collection: this.collections.tagSet,
+                modelClass: 'Tag'
+            }),
+
+            "HDFS Entry List": new chorus.views.MainContentList({
+                collection: this.collections.hdfsEntrySet,
+                modelClass: "HdfsEntry",
+                useCustomList: true
+            }),
+
+            "Dataset List": new chorus.views.MainContentList({
+                collection: this.collections.datasetSet,
+                modelClass: "Dataset",
+                useCustomList: true
+            }),
+
+            "Data Source List": function() {
+                var options = {
+                    dataSources: this.collections.dataSourceSet,
+                    hdfsDataSources: this.collections.hdfsDataSourceSet,
+                    gnipDataSources: this.collections.gnipDataSourceSet
+                };
+
+                return new chorus.views.MainContentView({
+                    contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
+                    content: new chorus.views.DataSourceIndex(options),
+                    useCustomList: true
+                });
+            }.call(this),
+
+            "Search Result List": new chorus.views.SearchResults({
+                model: this.models.searchResult
+            }),
+
+            "Activity List": new chorus.views.ActivityList({
+                collection: this.collections.activitySet
+            }),
+
+            "Kaggle User List": new chorus.views.MainContentList({
+                collection: this.collections.kaggleUserSet,
+                modelClass: "KaggleUser"
             }),
 
             "Font Styles": new chorus.views.StyleGuideFonts(),
@@ -596,101 +726,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 })
             }),
 
-            "Color Palette": new chorus.views.ColorPaletteView(),
-
-            "List Page (loading)": new chorus.views.MainContentList({
-                modelClass: "Dataset",
-                collection: this.collections.loadingCollection}),
-
-            "User List": new chorus.views.MainContentList({
-                modelClass: "User",
-                collection: this.collections.userCollection,
-                linkMenus: {
-                    sort: {
-                        title: t("users.header.menu.sort.title"),
-                        options: [
-                            {data: "firstName", text: t("users.header.menu.sort.first_name")},
-                            {data: "lastName", text: t("users.header.menu.sort.last_name")}
-                        ],
-                        event: "sort",
-                        chosen: "lastName"
-                    }
-                },
-                buttons: [
-                    {
-                        url: "#",
-                        text: "Button 1"
-                    },
-                    {
-                        url: "#",
-                        text: "Button 2"
-                    }
-                ]
-            }),
-
-            "Database List": new chorus.views.MainContentList({
-                collection: this.collections.databaseSet,
-                modelClass: "Database"
-            }),
-
-            "Workfile List": new chorus.views.MainContentList({
-                collection: this.collections.workfileSet,
-                modelClass: "Workfile"
-            }),
-
-            "Schema List": new chorus.views.MainContentList({
-                collection: this.collections.schemaSet,
-                modelClass: "Schema"
-            }),
-
-            "Workspace List": new chorus.views.MainContentList({
-                collection: this.collections.workspaceSet,
-                modelClass: "Workspace"
-            }),
-
-            "Tag List": new chorus.views.MainContentList({
-                collection: this.collections.tagSet,
-                modelClass: 'Tag'
-            }),
-
-            "HDFS Entry List": new chorus.views.MainContentList({
-                collection: this.collections.hdfsEntrySet,
-                modelClass: "HdfsEntry",
-                useCustomList: true
-            }),
-
-            "Dataset List": new chorus.views.MainContentList({
-                collection: this.collections.datasetSet,
-                modelClass: "Dataset",
-                useCustomList: true
-            }),
-
-            "Data Source List": function() {
-                var options = {
-                    dataSources: this.collections.dataSourceSet,
-                    hdfsDataSources: this.collections.hdfsDataSourceSet,
-                    gnipDataSources: this.collections.gnipDataSourceSet
-                };
-
-                return new chorus.views.MainContentView({
-                    contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
-                    content: new chorus.views.DataSourceIndex(options),
-                    useCustomList: true
-                });
-            }.call(this),
-
-            "Search Result List": new chorus.views.SearchResults({
-                model: this.models.searchResult
-            }),
-
-            "Activity List": new chorus.views.ActivityList({
-                collection: this.collections.activitySet
-            }),
-
-            "Kaggle User List": new chorus.views.MainContentList({
-                collection: this.collections.kaggleUserSet,
-                modelClass: "KaggleUser"
-            })
+            "Color Palette": new chorus.views.ColorPaletteView()
         };
     },
 
@@ -755,7 +791,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         var self = this;
         _.each(views, function(view, name) {
             var $element = $("<div class='view_guts'/>");
-            if(parentClass) $element = $('<div class="'+ parentClass + '"/>').html($element);
+            if(parentClass) $element = $('<div class="' + parentClass + '"/>').html($element);
             var styleGuideEntry = $("<li class='view'><h1>" + name + "</h1></li>").append($element);
             $(self.el).append(styleGuideEntry);
             view.setElement(self.$(".view_guts:last"));
@@ -775,8 +811,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         return this;
     },
 
-    // Used to ensure scrolling works after re-rendering dialog
+// Used to ensure scrolling works after re-rendering dialog
     enableScrolling: function() {
         $("body").css("overflow", "visible");
     }
-});
+})
+;
