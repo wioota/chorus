@@ -19,10 +19,6 @@ class Import < ActiveRecord::Base
 
   after_create :create_import_event
   after_create { QC.enqueue_if_not_queued("ImportExecutor.run", id) unless file_name }
-  
-  def generate_key
-    update_attribute(:stream_key, SecureRandom.hex(20))
-  end
 
   def mark_as_success
     set_destination_dataset_id
@@ -47,7 +43,6 @@ class Import < ActiveRecord::Base
 
     touch(:finished_at)
     update_attribute(:success, passed)
-    update_attribute(:stream_key, nil)
 
     if passed
       refresh_schema

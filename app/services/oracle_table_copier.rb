@@ -1,8 +1,4 @@
 class OracleTableCopier < TableCopier
-  def self.requires_chorus_authorization?
-    true
-  end
-
   def run
     destination_connection.connect!.synchronize do |jdbc_conn|
       copy_manager(jdbc_conn).copy_in(copy_sql, java_stream)

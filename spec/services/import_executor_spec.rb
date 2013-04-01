@@ -208,57 +208,5 @@ describe ImportExecutor do
         end.to change { event.reload.dataset.try(:name) }.from(nil).to(import.to_table)
       end
     end
-
-    context "when the table copier requires authorization" do
-      let(:source_dataset) { datasets(:oracle_table) }
-      let(:copier) { Object.new }
-      let(:stream_key) { 'f00baa' }
-      let(:public_url) { 'myServer.com' }
-      let(:stream_url) do
-        Rails.application.routes.url_helpers.external_stream_url(:dataset_id => source_dataset.id,
-                                                                    :row_limit => import.sample_count,
-                                                                    :host => ChorusConfig.instance.public_url,
-                                                                    :port => ChorusConfig.instance.server_port,
-                                                                    :stream_key => stream_key
-        )
-      end
-
-      let(:copier_params) do
-        {
-            :source_dataset => source_dataset,
-            :stream_url => stream_url
-        }
-      end
-
-      before do
-        stub(copier).start
-        stub(ChorusConfig.instance).public_url { public_url }
-      end
-
-      it "generates a login key in the import and passes in a stream url to the copier" do
-        mock(OracleTableCopier).new(hash_including(copier_params)) { copier }
-        stub(import).stream_key { stream_key }
-        mock(import).generate_key
-        ImportExecutor.new(import).run
-      end
-
-      it "erases the stream_key after running" do
-        stub(OracleTableCopier).new.with_any_args { copier }
-        ImportExecutor.new(import).run
-        import.reload.stream_key.should be_nil
-      end
-
-      describe "when the public_url is not set" do
-        let(:public_url) { nil }
-        let(:import_failure_message) { "Please set public_url in chorus.properties" }
-        let(:run_failing_import) do
-          expect {
-            ImportExecutor.new(import).run
-          }.to raise_error import_failure_message
-        end
-
-        it_behaves_like :import_fails_with_message, :run_failing_import, "Please set public_url in chorus.properties"
-      end
-    end
   end
 end
