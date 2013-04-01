@@ -405,6 +405,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
     buildContentDetails: function() {
         var views = {
+            "User Details": new chorus.views.StaticTemplate("plain_text", {text: t("users.details")}),
+
             "Dataset Details": new chorus.views.DatasetContentDetails({
                 dataset: this.models.dataset,
                 collection: this.collections.datasetSet
@@ -415,13 +417,19 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 collection: this.collections.datasetSet
             }),
 
-            "Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.workfile),
+            "Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.workfile),
 
-            "Tableau Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.tableauWorkfile),
+            "Tableau Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.tableauWorkfile),
 
-            "Read Only (Binary or Archived) Workfile Content Details": chorus.views.WorkfileContentDetails.buildFor(this.models.archivedWorkfile),
+            "Read Only (Binary or Archived) Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.archivedWorkfile),
 
-            "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model: this.models.hdfsFile })
+            "HDFS File Details": new chorus.views.HdfsShowFileDetails({ model: this.models.hdfsFile }),
+
+            "Data Source Details": new chorus.views.DataSourceIndexContentDetails({
+                dataSources: this.collections.dataSourceSet,
+                hdfsDataSources: this.collections.hdfsDataSourceSet,
+                gnipDataSources: this.collections.gnipDataSourceSet
+            })
         };
 
         return views;
