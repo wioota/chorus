@@ -5,25 +5,25 @@ module SolrIndexer
   end
 
   def self.reindex(types)
-    Rails.logger.info("Starting Solr Full Re-Index")
+    self.log("Starting Solr Full Re-Index")
     types_to_index(types).each(&:solr_reindex)
     Sunspot.commit
-    Rails.logger.info("Solr Full Re-Index Completed")
+    self.log("Solr Full Re-Index Completed")
   end
 
   def self.refresh_external_data
-    Rails.logger.info("Starting Solr Refresh")
+    self.log("Starting Solr Refresh")
     DataSource.find_each do |ds|
       QC.enqueue_if_not_queued("DataSource.refresh", ds.id, 'mark_stale' => true, 'force_index' => false)
     end
     HdfsDataSource.find_each do |ds|
       QC.enqueue_if_not_queued("HdfsDataSource.refresh", ds.id)
     end
-    Rails.logger.info("Solr Refreshes Queued")
+    self.log("Solr Refreshes Queued")
   end
 
   def self.reindex_objects(object_identifiers)
-    Rails.logger.info("Starting Solr Partial Reindex")
+    self.log("Starting Solr Partial Reindex")
     objects = object_identifiers.map do |ary|
       begin
         klass = ary[0].constantize
@@ -36,10 +36,14 @@ module SolrIndexer
     objects.compact!
     Sunspot.index objects
     Sunspot.commit
-    Rails.logger.info("Solr Partial Reindex Completed")
+    self.log("Solr Partial Reindex Completed")
   end
 
   private
+
+  def self.log(message)
+    Rails.logger.debug(message)
+  end
 
   def self.types_to_index(types)
     types = Array(types)
