@@ -69,8 +69,6 @@ Chorus::Application.routes.draw do
 
   resource :imports, :only => :update, :controller => "dataset_imports"
 
-  resource :external_stream, :only => :show
-
   resources :workspaces, :only => [:index, :create, :show, :update, :destroy] do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:create, :show], :controller => :workspace_images

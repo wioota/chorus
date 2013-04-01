@@ -117,14 +117,6 @@ describe Import, :greenplum_integration do
     end
   end
 
-  describe "generate_key" do
-    it "generates a stream_key" do
-      import.save
-      import.generate_key
-      import.reload.stream_key.should_not be_nil
-    end
-  end
-
   describe "#handle" do
     before do
       import.created_at = Time.at(123456789)
@@ -141,14 +133,6 @@ describe Import, :greenplum_integration do
       -> {
         import.update_status(:passed)
       }.should change(import, :finished_at)
-    end
-
-    it "removes stream_key" do
-      import.stream_key = "foobar"
-
-      -> {
-        import.update_status(:passed)
-      }.should change(import, :stream_key).to(nil)
     end
 
     context "when import passed" do

@@ -20,8 +20,6 @@ class ImportExecutor
     raise "Destination workspace #{import.workspace.name} has been deleted" if import.workspace_import? && import.workspace.deleted?
     raise "Original source dataset #{import.source_dataset.scoped_name} has been deleted" if import.source_dataset.deleted?
 
-    import.generate_key if copier_class.requires_chorus_authorization?
-
     copier_class.new(import_attributes).start
     import.reload
     import.update_status :passed
@@ -51,18 +49,8 @@ class ImportExecutor
         :user => import.user,
         :sample_count => import.sample_count,
         :truncate => import.truncate,
-        :pipe_name => import.handle,
-        :stream_url => stream_url
+        :pipe_name => import.handle
     }
-  end
-
-  def stream_url
-    raise StandardError.new("Please set public_url in chorus.properties") if ChorusConfig.instance.public_url.nil?
-    Rails.application.routes.url_helpers.external_stream_url(:dataset_id => import.source_dataset.id,
-                                                             :row_limit => import.sample_count,
-                                                             :host => ChorusConfig.instance.public_url,
-                                                             :port => ChorusConfig.instance.server_port,
-                                                             :stream_key => import.stream_key)
   end
 
   def import
