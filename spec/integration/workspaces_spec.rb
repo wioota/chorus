@@ -57,7 +57,7 @@ describe "Workspaces" do
 
       visit('/#/workspaces')
       within '.content_footer' do
-        page.should have_no_selector(".loading")
+        page.should have_no_selector(".loading_section")
       end
 
       find('a', :text => "Active Workspaces", :visible => true).click

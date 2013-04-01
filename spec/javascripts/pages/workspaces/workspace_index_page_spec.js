@@ -21,7 +21,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
         describe("when the collection is loading", function() {
             it("should have a loading element", function() {
-                expect(this.page.$(".loading")).toExist();
+                expect(this.page.$(".loading_section")).toExist();
             });
 
             it("has a header", function() {

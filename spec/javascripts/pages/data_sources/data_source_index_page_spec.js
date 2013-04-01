@@ -75,7 +75,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         });
 
         it("displays the loading text", function() {
-            expect(this.page.mainContent.contentDetails.$(".loading")).toExist();
+            expect(this.page.mainContent.contentDetails.$(".loading_section")).toExist();
         });
     });
 
@@ -97,7 +97,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         });
 
         it("doesn't display the loading text", function() {
-            expect(this.page.mainContent.contentDetails.$(".loading")).not.toExist();
+            expect(this.page.mainContent.contentDetails.$(".loading_section")).not.toExist();
         });
 
         it('displays the data source count', function(){

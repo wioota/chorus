@@ -268,7 +268,7 @@ describe("chorus.views.ListContentDetails", function() {
             });
 
             it("displays 'loading'", function() {
-                expect(this.view.$(".loading")).toExist();
+                expect(this.view.$(".loading_section")).toExist();
             });
         });
     });

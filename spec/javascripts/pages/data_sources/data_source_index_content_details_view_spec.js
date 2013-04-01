@@ -27,7 +27,7 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
         });
 
         it("displays the loading text", function() {
-            expect(this.view.$(".loading")).toExist();
+            expect(this.view.$(".loading_section")).toExist();
         });
     });
 
@@ -42,7 +42,7 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
         });
 
         it("doesn't display the loading text", function() {
-            expect(this.view.$(".loading")).not.toExist();
+            expect(this.view.$(".loading_section")).not.toExist();
         });
 
         it('shows the data sources count', function() {

@@ -30,7 +30,7 @@ describe("chorus.pages.UserIndexPage", function() {
         });
 
         it("shows the loading element", function() {
-            expect(this.page.$(".loading")).toExist();
+            expect(this.page.$(".loading_section")).toExist();
         });
 
         it("has a header", function() {
