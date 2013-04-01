@@ -1,37 +1,22 @@
 chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
     setup: function() {
         this.mainContent = new chorus.views.MainContentView({
-            content: new chorus.views.StaticTemplate("style_guide"),
+            content: new chorus.pages.StyleGuidePage.SiteElementsView(),
             contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: 'Style Guide Page'}),
             contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Design rules for a happy family.'})
         });
-
-        //subnavs require a workspace and are optional
-        this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"});
-        this.workspace.loaded = true;
-        this.subNav = new chorus.views.SubNav({model: this.workspace, tab: "workfiles"});
-
-    },
-
-    postRender: function() {
-        this.siteElements = new chorus.pages.StyleGuidePage.SiteElementsView();
-        $(this.el).append(this.siteElements.render().el);
     }
 });
 
-chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
-    tagName: "ul",
+chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
     className: "views",
+    templateName: 'style_guide',
 
     buildModels: function() {
         this.models = {};
-        var tagList = (function(length) {
-            var tags = [];
-            for(var i = 0; i < length; i++) {
-                tags.push({name: "Tag Numba " + i});
-            }
-            return tags;
-        })(50);
+        var tagList = _.range(25).map(function(i) {
+            return {name: "Tag Numba " + i};
+        });
 
         this.models.workspace = new chorus.models.Workspace({
             name: "Some Workspace",
@@ -57,8 +42,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         this.models.archivedWorkspace.loaded = true;
 
         this.models.instanceAccount = new chorus.models.InstanceAccount();
-
-        this.models.subNav = new chorus.views.SubNav({model: this.models.workspace, tab: "workfiles"});
 
         this.models.tag = new chorus.models.Tag({
             name: "my first tag",
@@ -552,8 +535,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 modelClass: "KaggleUser"
             }),
 
-            "Font Styles": new chorus.views.StyleGuideFonts(),
-
             "Data Table": new chorus.views.TaskDataTable({
                 model: new chorus.models.WorkfileExecutionTask({ result: {
                     columns: [
@@ -732,9 +713,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     timeType: "date",
                     dataset: this.models.dataset
                 })
-            }),
-
-            "Color Palette": new chorus.views.ColorPaletteView()
+            })
         };
     },
 
@@ -793,33 +772,42 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         this.views = this.buildViews();
         this.contentDetails = this.buildContentDetails();
         this.dialogs = this.buildDialogs();
+        this.colorPalette = { "Color Palette": new chorus.views.ColorPaletteView() };
+        this.fontStyles = { "Font Styles": new chorus.views.StyleGuideFonts() };
     },
 
-    renderViews: function(views, parentClass) {
+    renderViews: function(views, tabId, parentClass) {
         var self = this;
+
         _.each(views, function(view, name) {
             var $element = $("<div class='view_guts'/>");
             if(parentClass) $element = $('<div class="' + parentClass + '"/>').html($element);
-            var styleGuideEntry = $("<li class='view'><h1>" + name + "</h1></li>").append($element);
-            $(self.el).append(styleGuideEntry);
+
+            var $heading = $("<div class='view'><h1>" + name + "</h1></div>");
+            var styleGuideEntry = $heading.append($element);
+
+            $(self.$("#tabs > " + tabId)).append(styleGuideEntry);
             view.setElement(self.$(".view_guts:last"));
             view.render();
         });
     },
 
-    render: function() {
-        $(this.el).empty();
+    postRender: function() {
 
-        this.renderViews(this.views);
-        this.renderViews(this.dialogs);
-        this.renderViews(this.contentDetails, "content_details");
+        this.renderViews(this.fontStyles, "#fonts");
+        this.renderViews(this.dialogs, '#dialogs');
+        this.renderViews(this.contentDetails, "#content_details", "content_details");
 
+        this.renderViews(this.views, '#views');
+        this.renderViews(this.colorPalette, '#color_palette');
+
+        $(this.$('#tabs')).tabs();
         setInterval(this.enableScrolling, 100);
 
         return this;
     },
 
-// Used to ensure scrolling works after re-rendering dialog
+    // Used to ensure scrolling works after re-rendering dialog
     enableScrolling: function() {
         $("body").css("overflow", "visible");
     }

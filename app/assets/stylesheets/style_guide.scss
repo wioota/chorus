@@ -5,10 +5,14 @@
     .secondary_text_color { color : $color-text3 }
     .weak_text_color { color : $color-text4 }
 
-    ul.views {
+    .fixed {
+      position: static;
+    }
+
+    div.views {
         padding: 20px;
 
-        li.view {
+        div.view {
             padding: 20px 0;
 
             > h1 {
@@ -93,8 +97,6 @@
 
     table {
         td, th, tr { @include debugging-mixin; }
-        width: 90%;
-        margin-left: 20px;
         text-shadow: none !important;
         border-spacing: 0px;
         border-collapse: separate;
@@ -159,6 +161,22 @@
         .color-swatch-name {
             position: absolute;
             top: 13px;
+        }
+    }
+
+    .style_guide_fonts {
+        overflow: hidden;
+    }
+
+    .ui-state-active {
+        background: white;
+    }
+
+    ul.ui-tabs-nav {
+        border-bottom: 1px solid black;
+        border-radius: 0;
+        & > li {
+          display: inline-block;
         }
     }
 }
