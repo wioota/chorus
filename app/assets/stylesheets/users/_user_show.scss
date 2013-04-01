@@ -70,3 +70,9 @@ $column-padding-y : $padding-x;
     margin-bottom : 3px;
   }
 }
+
+.content_details {
+    >div.plain_text {
+        padding-left: $padding-x;
+    }
+}
