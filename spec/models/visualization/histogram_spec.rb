@@ -4,6 +4,11 @@ describe Visualization::Histogram do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'analytics') }
   let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '2009_sfo_customer_survey', :schema => schema) }
   let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
+  let(:connection) {
+    object = Object.new
+    stub(schema).connect_with(instance_account) { object }
+    object
+  }
 
   describe "#fetch!" do
     it "returns visualization structure" do
@@ -12,7 +17,7 @@ describe Visualization::Histogram do
           :x_axis => 'airport_cleanliness'
       })
 
-      mock(SqlExecutor).execute_sql(schema, instance_account, 17, visualization.build_min_max_sql) do
+      mock(SqlExecutor).execute_sql(visualization.build_min_max_sql, connection, schema, 17) do
         GreenplumSqlResult.new.tap do |result|
           result.add_column("min", "double")
           result.add_column("max", "double")
@@ -22,7 +27,7 @@ describe Visualization::Histogram do
 
       visualization.instance_variable_set(:@min, "1.0")
       visualization.instance_variable_set(:@max, "9.0")
-      mock(SqlExecutor).execute_sql(schema, instance_account, 17, visualization.build_row_sql) do
+      mock(SqlExecutor).execute_sql(visualization.build_row_sql, connection, schema, 17) do
         GreenplumSqlResult.new.tap do |result|
           result.add_column("bin", "text")
           result.add_column("frequency", "int8")

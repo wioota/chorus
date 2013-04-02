@@ -53,12 +53,14 @@ class DataSourceConnection
   end
 
 
-  def stream_sql(query, options={}, &record_handler)
+  def stream_sql(query, options={}, store_statement = lambda { |nothing| }, &record_handler)
     with_jdbc_connection(options) do |jdbc_conn|
       statement = build_and_configure_statement(jdbc_conn, options, query)
+      store_statement.call(statement)
       statement.execute
 
       stream_through_block(options, record_handler, statement)
+
       jdbc_conn.close
     end
     true

@@ -18,8 +18,21 @@ class CancelableQuery
     @@running_statements.delete(@check_id)
   end
 
+  def stream(sql, options)
+    store_statement = lambda { |statement| @@running_statements[@check_id] = statement }
+    SqlStreamer.new(CancelableQuery.format_sql_and_check_id(sql, @check_id), @connection, options, store_statement).enum
+  end
+
   def cancel
-    @@running_statements[@check_id].cancel if @@running_statements.has_key?(@check_id)
+    statement = @@running_statements[@check_id]
+    if statement
+      statement.cancel
+      !busy?
+    else
+      false
+    end
+  rescue Exception
+    false
   end
 
   def busy?

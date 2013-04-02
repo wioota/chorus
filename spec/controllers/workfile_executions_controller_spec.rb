@@ -14,6 +14,13 @@ describe WorkfileExecutionsController do
   let(:default_row_limit) { 500 }
 
   describe "#create" do
+    let(:user) { workspace_member }
+    let(:connection) {
+      object = Object.new
+      stub(sandbox).connect_as(user) { object }
+      object
+    }
+
     it_behaves_like "an action that requires authentication", :post, :create, :workfile_id => '-1'
 
     context "as a member of the workspace" do
@@ -21,17 +28,20 @@ describe WorkfileExecutionsController do
         log_in workspace_member
         stub.proxy(ChorusConfig.instance).[](anything)
         stub(ChorusConfig.instance).[]('default_preview_row_limit') { default_row_limit }
+        stub(Workfile).find(workfile.to_param) { workfile }
+        stub(workfile).execution_schema { sandbox }
+
       end
 
       it "executes the sql with the check_id and default row limit" do
-        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:limit => default_row_limit)) {
+        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, hash_including(:limit => default_row_limit)) {
           GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
 
       it "always uses default row limit, even if num_of_rows is specified" do
-        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, hash_including(:limit => default_row_limit)) { GreenplumSqlResult.new }
+        mock(SqlExecutor).execute_sql(anything, anything, anything,anything, hash_including(:limit => default_row_limit)) { GreenplumSqlResult.new }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
       end
 
@@ -42,7 +52,7 @@ describe WorkfileExecutionsController do
       end
 
       it "executes the sql with include_public_schema_in_search_path option" do
-        mock(SqlExecutor).execute_sql(sandbox, sandbox.account_for_user!(workspace_member), check_id, sql, hash_including(:include_public_schema_in_search_path => true)) {
+        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, hash_including(:include_public_schema_in_search_path => true)) {
           GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
@@ -87,12 +97,7 @@ describe WorkfileExecutionsController do
       }
       let(:user) { users(:owner) }
       let(:limit) { nil }
-
-      let(:connection) {
-        object = Object.new
-        stub(sandbox).connect_as(satisfy { |arg| arg.id == user.id && arg.class == User }) { object }
-        object
-      }
+      let(:options) { {:row_limit => limit.to_i} }
 
       before do
         log_in user
@@ -100,9 +105,7 @@ describe WorkfileExecutionsController do
         stub(Workfile).find(workfile.to_param) { workfile }
         stub(workfile).execution_schema { sandbox }
 
-        mock.proxy(SqlStreamer).new("/*#{check_id}*/#{sql}", connection, row_limit: limit.to_i) do |streamer|
-          mock(streamer).enum { 'response' }
-        end
+        mock(SqlExecutor).stream(sql, connection, check_id, options) { 'response' }
       end
 
       it "sets content disposition: attachment" do

@@ -13,9 +13,9 @@ describe SqlStreamer do
       {:id => 3, :something => 'world'}
   ] }
 
-  let(:connection) {
+  let(:connection) do
     obj = Object.new
-    mock(obj).stream_sql(sql, streamer_options) do |sql, options, block|
+    mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, other_block, block|
       streamed_data.each do |row|
         block.call row
       end
@@ -23,7 +23,7 @@ describe SqlStreamer do
     end
 
     obj
-  }
+  end
 
   describe "#enum" do
     it "returns an enumerator that yields the header and rows from the sql in csv" do
@@ -100,7 +100,7 @@ describe SqlStreamer do
     context "for connection errors" do
       let(:connection) {
         obj = Object.new
-        mock(obj).stream_sql(sql, streamer_options) do |sql, options, block|
+        mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, block|
           raise GreenplumConnection::DatabaseError, StandardError.new("Some friendly error message")
         end
 
