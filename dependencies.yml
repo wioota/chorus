@@ -12,45 +12,28 @@
   - README.rdoc
   bundler_groups: []
   summary: This library allows for the identification of a file's likely MIME content type
-  description: This library allows for the identification of a file's likely MIME content
-
+  description: |-
+    This library allows for the identification of a file's likely MIME content
     type. This is release 1.21 with new MIME types. The identification of MIME
-
     content type is based on a file's filename extensions.
 
-
     MIME types are used in MIME-compliant communications, as in e-mail or
-
     HTTP traffic, to indicate the type of content which is transmitted.
-
     MIME::Types provides the ability for detailed information about MIME
-
     entities (provided as a set of MIME::Type objects) to be determined and
-
     used programmatically. There are many types defined by RFCs and vendors,
-
     so the list is long but not complete; don't hesitate to ask to add
-
     additional information. This library follows the IANA collection of MIME
-
     types (see below for reference).
 
-
     MIME::Types for Ruby was originally based on and synchronized with MIME::Types
-
     for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
-
     format for the MIME::Type list has changed and the synchronization will no
-
     longer happen.
 
-
     MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
-
     follows the official {IANA registry}[http://www.iana.org/assignments/media-types/]
-
     ({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
-
     added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp].
   homepage: http://mime-types.rubyforge.org/
   children:
@@ -140,7 +123,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Ruby based make-like utility.
   description: Rake is a Make-like program implemented in Ruby. Tasks and dependencies arespecified in standard Ruby syntax.
   homepage: http://rake.rubyforge.org
@@ -307,17 +290,12 @@
   - README.rdoc
   bundler_groups: []
   summary: Builders for MarkUp.
-  description: ! 'Builder provides a number of builder objects that make creating
-    structured data
-
+  description: |
+    Builder provides a number of builder objects that make creating structured data
     simple to do.  Currently the following builder objects are supported:
 
-
     * XML Markup
-
     * XML Events
-
-    '
   homepage: http://onestepback.org
   children: []
   parents:
@@ -359,14 +337,19 @@
   - doc-api/files/README_txt.html
   bundler_groups: []
   summary: a fast and extensible eRuby implementation which supports multi-language
-  description: ! "  Erubis is an implementation of eRuby and has the following features:\n\
-    \n  * Very fast, almost three times faster than ERB and about 10% faster than\
-    \ eruby.\n  * Multi-language support (Ruby/PHP/C/Java/Scheme/Perl/Javascript)\n\
-    \  * Auto escaping support\n  * Auto trimming spaces around '<% %>'\n  * Embedded\
-    \ pattern changeable (default '<% %>')\n  * Enable to handle Processing Instructions\
-    \ (PI) as embedded pattern (ex. '<?rb ... ?>')\n  * Context object available and\
-    \ easy to combine eRuby template with YAML datafile\n  * Print statement available\n\
-    \  * Easy to extend and customize in subclass\n  * Ruby on Rails support\n"
+  description: |2
+      Erubis is an implementation of eRuby and has the following features:
+
+      * Very fast, almost three times faster than ERB and about 10% faster than eruby.
+      * Multi-language support (Ruby/PHP/C/Java/Scheme/Perl/Javascript)
+      * Auto escaping support
+      * Auto trimming spaces around '<% %>'
+      * Embedded pattern changeable (default '<% %>')
+      * Enable to handle Processing Instructions (PI) as embedded pattern (ex. '<?rb ... ?>')
+      * Context object available and easy to combine eRuby template with YAML datafile
+      * Print statement available
+      * Easy to extend and customize in subclass
+      * Ruby on Rails support
   homepage: http://www.kuwata-lab.com/erubis/
   children: []
   parents:
@@ -386,7 +369,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Journey is a router
   description: Journey is a router.  It routes requests.
   homepage: http://github.com/rails/journey
@@ -410,20 +393,14 @@
   - README.rdoc
   bundler_groups: []
   summary: a modular Ruby webserver interface
-  description: ! 'Rack provides a minimal, modular and adaptable interface for developing
-
+  description: |
+    Rack provides a minimal, modular and adaptable interface for developing
     web applications in Ruby.  By wrapping HTTP requests and responses in
-
     the simplest way possible, it unifies and distills the API for web
-
     servers, web frameworks, and software in between (the so-called
-
     middleware) into a single method call.
 
-
     Also see http://rack.github.com/.
-
-    '
   homepage: http://rack.github.com/
   children:
   - bacon
@@ -476,12 +453,10 @@
   - README.rdoc
   bundler_groups: []
   summary: Simple testing API built on Rack
-  description: Rack::Test is a small, simple testing API for Rack apps. It can be used on its
-
+  description: |-
+    Rack::Test is a small, simple testing API for Rack apps. It can be used on its
     own or as a reusable starting point for Web frameworks and testing libraries
-
     to build on. Most of its initial functionality is an extraction of Merb 1.0's
-
     request helpers feature.
   homepage: http://github.com/brynary/rack-test
   children:
@@ -620,13 +595,11 @@
   - README.txt
   bundler_groups: []
   summary: Augment 'require' to load non-Ruby file types
-  description: ! '
+  description: |2-
 
     The Polyglot library allows a Ruby module to register a loader
-
     for the file type associated with a filename extension, and it
-
-    augments ''require'' to find and load matching files.'
+    augments 'require' to find and load matching files.
   homepage: http://github.com/cjheath/polyglot
   children: []
   parents:
@@ -702,18 +675,14 @@
   - README.markdown
   bundler_groups: []
   summary: Arel is a SQL AST manager for Ruby
-  description: Arel is a SQL AST manager for Ruby. It
-
+  description: |-
+    Arel is a SQL AST manager for Ruby. It
 
     1. Simplifies the generation of complex SQL queries
-
     2. Adapts to various RDBMS systems
 
-
     It is intended to be a framework framework; that is, you can build your own ORM
-
     with it, focusing on innovative object and collection modeling as opposed to
-
     database compatibility and query generation.
   homepage: http://github.com/rails/arel
   children:
@@ -777,10 +746,9 @@
   - README.rdoc
   bundler_groups: []
   summary: JDBC adapter for ActiveRecord, for use within JRuby on Rails.
-  description: activerecord-jdbc-adapter is a database adapter for Rails\' ActiveRecord
-
+  description: |-
+    activerecord-jdbc-adapter is a database adapter for Rails\' ActiveRecord
     component that can be used with JRuby[http://www.jruby.org/]. It allows use of
-
     virtually any JDBC-compliant database with your JRuby on Rails application.
   homepage: https://github.com/jruby/activerecord-jdbc-adapter
   children: []
@@ -833,14 +801,10 @@
   - README.md
   bundler_groups: []
   summary: URI Implementation
-  description: ! 'Addressable is a replacement for the URI implementation that is
-    part of
-
-    Ruby''s standard library. It more closely conforms to the relevant RFCs and
-
+  description: |
+    Addressable is a replacement for the URI implementation that is part of
+    Ruby's standard library. It more closely conforms to the relevant RFCs and
     adds support for IRIs and URI templates.
-
-    '
   homepage: http://addressable.rubyforge.org/
   children:
   - rake
@@ -966,7 +930,7 @@
   bundler_groups:
   - :default
   summary: ! "Nokogiri (é\x8b¸) is an HTML, XML, SAX, and Reader parser"
-  description: ! "Nokogiri (é\x8b¸) is an HTML, XML, SAX, and Reader parser.  Among\
+  description: "Nokogiri (é\x8b¸) is an HTML, XML, SAX, and Reader parser.  Among\
     \ Nokogiri's\nmany features is the ability to search documents via XPath or CSS3\
     \ selectors.\n\nXML is like violence - if it doesnâ\x80\x99t solve your problems,\
     \ you are not using\nenough of it."
@@ -1177,17 +1141,17 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Pure ruby library for read/write, chunk-level access to PNG files
-  description: ! "    This pure Ruby library can read and write PNG images without\
-    \ depending on an external \n    image library, like RMagick. It tries to be memory\
-    \ efficient and reasonably fast.\n    \n    It supports reading and writing all\
-    \ PNG variants that are defined in the specification, \n    with one limitation:\
-    \ only 8-bit color depth is supported. It supports all transparency, \n    interlacing\
-    \ and filtering options the PNG specifications allows. It can also read and \n\
-    \    write textual metadata from PNG files. Low-level read/write access to PNG\
-    \ chunks is\n    also possible.\n    \n    This library supports simple drawing\
-    \ on the image canvas and simple operations like\n    alpha composition and cropping.\
+  description: "    This pure Ruby library can read and write PNG images without depending\
+    \ on an external \n    image library, like RMagick. It tries to be memory efficient\
+    \ and reasonably fast.\n    \n    It supports reading and writing all PNG variants\
+    \ that are defined in the specification, \n    with one limitation: only 8-bit\
+    \ color depth is supported. It supports all transparency, \n    interlacing and\
+    \ filtering options the PNG specifications allows. It can also read and \n   \
+    \ write textual metadata from PNG files. Low-level read/write access to PNG chunks\
+    \ is\n    also possible.\n    \n    This library supports simple drawing on the\
+    \ image canvas and simple operations like\n    alpha composition and cropping.\
     \ Finally, it can import from and export to RMagick for \n    interoperability.\n\
     \    \n    Also, have a look at OilyPNG at http://github.com/wvanbergen/oily_png.\
     \ OilyPNG is a \n    drop in mixin module that implements some of the ChunkyPNG\
@@ -1270,10 +1234,11 @@
   - vendor/listen/README.md
   bundler_groups: []
   summary: A powerful but elegant CSS compiler that makes CSS fun again.
-  description: ! "      Sass makes CSS fun again. Sass is an extension of CSS3, adding\n\
-    \      nested rules, variables, mixins, selector inheritance, and more.\n    \
-    \  It's translated to well-formatted, standard CSS using the\n      command line\
-    \ tool or a web-framework plugin.\n"
+  description: |2
+          Sass makes CSS fun again. Sass is an extension of CSS3, adding
+          nested rules, variables, mixins, selector inheritance, and more.
+          It's translated to well-formatted, standard CSS using the
+          command line tool or a web-framework plugin.
   homepage: http://sass-lang.com/
   children:
   - yard
@@ -1353,7 +1318,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Strategies for cleaning databases.  Can be used to ensure a clean state for testing.
   description: Strategies for cleaning databases.  Can be used to ensure a clean state for testing.
   homepage: http://github.com/bmabey/database_cleaner
@@ -1391,35 +1356,23 @@
   - README.rdoc
   bundler_groups: []
   summary: Diff::LCS is a port of Perl's Algorithm::Diff that uses the McIlroy-Hunt longest common subsequence (LCS) algorithm to compute intelligent differences between two sequenced enumerable containers
-  description: ! 'Diff::LCS is a port of Perl''s Algorithm::Diff that uses the McIlroy-Hunt
-
+  description: |-
+    Diff::LCS is a port of Perl's Algorithm::Diff that uses the McIlroy-Hunt
     longest common subsequence (LCS) algorithm to compute intelligent differences
-
     between two sequenced enumerable containers. The implementation is based on
-
-    Mario I. Wolczko''s {Smalltalk version 1.2}[ftp://st.cs.uiuc.edu/pub/Smalltalk/MANCHESTER/manchester/4.0/diff.st]
-
-    (1993) and Ned Konz''s Perl version
-
+    Mario I. Wolczko's {Smalltalk version 1.2}[ftp://st.cs.uiuc.edu/pub/Smalltalk/MANCHESTER/manchester/4.0/diff.st]
+    (1993) and Ned Konz's Perl version
     {Algorithm::Diff 1.15}[http://search.cpan.org/~nedkonz/Algorithm-Diff-1.15/].
 
-
     This is release 1.1.3, fixing several small bugs found over the years. Version
-
     1.1.0 added new features, including the ability to #patch and #unpatch changes
-
     as well as a new contextual diff callback, Diff::LCS::ContextDiffCallbacks,
-
     that should improve the context sensitivity of patching.
 
-
     This library is called Diff::LCS because of an early version of Algorithm::Diff
-
     which was restrictively licensed. This version has seen a minor license change:
-
-    instead of being under Ruby''s license as an option, the third optional license
-
-    is the MIT license.'
+    instead of being under Ruby's license as an option, the third optional license
+    is the MIT license.
   children:
   - rspec
   - hoe
@@ -1459,11 +1412,12 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: factory_girl provides a framework and DSL for defining and using model instance factories.
-  description: ! "factory_girl provides a framework and DSL for defining and\n   \
-    \                   using factories - less error-prone, more explicit, and\n \
-    \                     all-around easier to work with than fixtures."
+  description: |-
+    factory_girl provides a framework and DSL for defining and
+                          using factories - less error-prone, more explicit, and
+                          all-around easier to work with than fixtures.
   homepage: https://github.com/thoughtbot/factory_girl
   children:
   - activesupport
@@ -1492,7 +1446,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: A fake filesystem. Use it in your tests.
   description: A fake filesystem. Use it in your tests.
   homepage: http://github.com/defunkt/fakefs
@@ -1517,7 +1471,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Easily generate fake data
   description: ! 'Faker, a port of Data::Faker from Perl, is used to easily generate
     fake data: names, addresses, phone numbers, etc.'
@@ -1543,7 +1497,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: A tool for faking responses to HTTP requests
   description: FakeWeb is a helper for faking web requests in Ruby. It works at a global level, without modifying code or writing extensive stubs.
   homepage: http://github.com/chrisk/fakeweb
@@ -1585,7 +1539,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Build YAML fixtures using object factories
   description: FixtureBuilder allows testers to use their existing factories, like FactoryGirl, to generate high performance fixtures that can be shared across all your tests
   homepage: http://github.com/rdy/fixture_builder
@@ -1632,7 +1586,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Easy and customizable generation of forged data.
   description: Easy and customizable generation of forged data. Can be used as a gem or a rails plugin. Includes rails generators for creating your own forgeries.
   homepage: http://github.com/sevenwire/forgery
@@ -1673,7 +1627,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Your friendly neighborhood hash toolkit.
   description: Hashie is a small collection of tools that make hashes more powerful. Currently includes Mash (Mocking Hash) and Dash (Discrete Hash).
   homepage: https://github.com/intridea/hashie
@@ -1695,10 +1649,8 @@
   bundler_groups:
   - :integration
   summary: Ruby headless display interface
-  description: ! '    Headless is a Ruby interface for Xvfb. It allows you to create
-    a headless display straight from Ruby code, hiding some low-level action.
-
-    '
+  description: |2
+        Headless is a Ruby interface for Xvfb. It allows you to create a headless display straight from Ruby code, hiding some low-level action.
   homepage: http://leonid.shevtsov.me/en/headless
   children:
   - rspec
@@ -1715,16 +1667,11 @@
   - README.rdoc
   bundler_groups: []
   summary: HighLine is a high-level command-line IO library.
-  description: ! 'A high-level IO library that provides validation, type conversion,
-    and more for
-
+  description: |
+    A high-level IO library that provides validation, type conversion, and more for
     command-line interfaces. HighLine also includes a complete menu system that can
-
     crank out anything from simple list selection to complete shells with just
-
     minutes of work.
-
-    '
   homepage: http://highline.rubyforge.org
   children: []
   parents:
@@ -1891,7 +1838,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: rspec-2.12.0
   description: BDD for Ruby
   homepage: http://github.com/rspec
@@ -1956,7 +1903,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: JavaScript BDD framework
   description: Test your JavaScript without any framework dependencies, in any environment, and with a nice descriptive syntax.
   homepage: http://pivotal.github.com/jasmine/
@@ -1988,7 +1935,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: JSHint is a little more flexible JavaScript checker, wrapped in a Ruby gem for easier use
   description: JSHint wrapped in a Ruby gem for easier use
   homepage: http://github.com/bgouveia/jshint_on_rails
@@ -2029,7 +1976,7 @@
   bundler_groups:
   - :development
   summary: Audit the OSS licenses of your application's dependencies.
-  description: ! "  Do you know the licenses of all your application's dependencies?\
+  description: "  Do you know the licenses of all your application's dependencies?\
     \ What open source software licenses will your business accept?\n\n  LicenseFinder\
     \ culls your Gemfile, detects the licenses of the gems in it, and gives you a\
     \ report that you can act on. If you already know \n  what licenses your business\
@@ -2098,27 +2045,18 @@
   - README.md
   bundler_groups: []
   summary: Mustache is a framework-agnostic way to render logic-free views.
-  description: ! 'Inspired by ctemplate, Mustache is a framework-agnostic way to render
-
+  description: |
+    Inspired by ctemplate, Mustache is a framework-agnostic way to render
     logic-free views.
 
-
     As ctemplates says, "It emphasizes separating logic from presentation:
-
     it is impossible to embed application logic in this template
-
     language.
 
-
     Think of Mustache as a replacement for your views. Instead of views
-
     consisting of ERB or HAML with random helpers and arbitrary logic,
-
     your views are broken into two parts: a Ruby class and an HTML
-
     template.
-
-    '
   homepage: http://github.com/defunkt/mustache
   children: []
   parents:
@@ -2135,25 +2073,17 @@
   bundler_groups:
   - :default
   summary: Net::LDAP for Ruby (also called net-ldap) implements client access for the Lightweight Directory Access Protocol (LDAP), an IETF standard protocol for accessing distributed directory services
-  description: Net::LDAP for Ruby (also called net-ldap) implements client access for the
-
+  description: |-
+    Net::LDAP for Ruby (also called net-ldap) implements client access for the
     Lightweight Directory Access Protocol (LDAP), an IETF standard protocol for
-
     accessing distributed directory services. Net::LDAP is written completely in
-
     Ruby with no external dependencies. It supports most LDAP client features and a
-
     subset of server features as well.
 
-
     Net::LDAP has been tested against modern popular LDAP servers including
-
     OpenLDAP and Active Directory. The current release is mostly compliant with
-
     earlier versions of the IETF LDAP RFCs (2251–2256, 2829–2830, 3377, and 3771).
-
     Our roadmap for Net::LDAP 1.0 is to gain full <em>client</em> compliance with
-
     the most recent LDAP RFCs (4510–4519, plus portions of 4520–4532).
   homepage: http://rubyldap.com/
   children:
@@ -2212,19 +2142,13 @@
   bundler_groups:
   - :default
   summary: New Relic Ruby Agent
-  description: ! 'New Relic is a performance management system, developed by New Relic,
-
+  description: |
+    New Relic is a performance management system, developed by New Relic,
     Inc (http://www.newrelic.com).  New Relic provides you with deep
-
     information about the performance of your web application as it runs
-
     in production. The New Relic Ruby Agent is dual-purposed as a either a
-
     Gem or plugin, hosted on
-
     http://github.com/newrelic/rpm/
-
-    '
   homepage: http://www.github.com/newrelic/rpm
   children: []
   parents: []
@@ -2280,7 +2204,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: PhantomJS driver for Capybara
   description: PhantomJS driver for Capybara
   homepage: http://github.com/jonleighton/poltergeist
@@ -2325,8 +2249,8 @@
   - README.rdoc
   bundler_groups: []
   summary: GeoHash encode/decode library for pure Ruby
-  description: GeoHash encode/decode library for pure Ruby.
-
+  description: |-
+    GeoHash encode/decode library for pure Ruby.
 
     It's implementation of http://en.wikipedia.org/wiki/Geohash
   homepage: http://github.com/masuidrive/pr_geohash
@@ -2377,9 +2301,8 @@
   - README.md
   bundler_groups: []
   summary: Force SSL/TLS in your app.
-  description: ! '    Rack middleware to force SSL/TLS.
-
-    '
+  description: |2
+        Rack middleware to force SSL/TLS.
   homepage: https://github.com/josh/rack-ssl
   children:
   - rack
@@ -2431,7 +2354,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: RR (Double Ruby) is a double framework that features a rich selection of double techniques and a terse syntax. http://xunitpatterns.com/Test%20Double.html
   description: RR (Double Ruby) is a double framework that features a rich selection of double techniques and a terse syntax. http://xunitpatterns.com/Test%20Double.html
   homepage: http://pivotallabs.com
@@ -2458,7 +2381,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: rspec-rails-2.12.0
   description: RSpec for Rails
   homepage: http://github.com/rspec/rspec-rails
@@ -2525,7 +2448,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: A double black belt for your docs
   description: Generate API docs from your test suite
   homepage: http://smartlogicsolutions.com
@@ -2557,11 +2480,9 @@
   - README
   bundler_groups: []
   summary: Java implementation of Fast Ruby Debugger
-  description: ! 'Java extension to make fast ruby debugger run on JRuby.
-
+  description: |
+    Java extension to make fast ruby debugger run on JRuby.
     It is the same what ruby-debug-base is for native Ruby.
-
-    '
   homepage: http://rubyforge.org/projects/debug-commons/
   children: []
   parents:
@@ -2622,7 +2543,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Making tests easy on the fingers and eyes
   description: Making tests easy on the fingers and eyes
   homepage: http://thoughtbot.com/community/
@@ -2647,11 +2568,10 @@
   - LICENSE
   bundler_groups: []
   summary: Library for expressive, powerful interaction with the Solr search engine
-  description: ! "    Sunspot is a library providing a powerful, all-ruby API for\
-    \ the Solr search engine. Sunspot manages the configuration of persistent\n  \
-    \  Ruby classes for search and indexing and exposes Solr's most powerful features\
-    \ through a collection of DSLs. Complex search operations\n    can be performed\
-    \ without hand-writing any boolean queries or building Solr parameters by hand.\n"
+  description: |2
+        Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent
+        Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations
+        can be performed without hand-writing any boolean queries or building Solr parameters by hand.
   homepage: http://outoftime.github.com/sunspot
   children:
   - rsolr
@@ -2676,7 +2596,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: RSpec matchers and Test::Unit assertions for testing Sunspot
   description: These matchers and assertions allow you to test what is happening inside the Sunspot Search DSL blocks
   homepage: https://github.com/pivotal/sunspot_matchers
@@ -2699,12 +2619,13 @@
   bundler_groups:
   - :default
   summary: Rails integration for the Sunspot Solr search library
-  description: ! "    Sunspot::Rails is an extension to the Sunspot library for Solr\
-    \ search.\n    Sunspot::Rails adds integration between Sunspot and ActiveRecord,\
-    \ including\n    defining search and indexing related methods on ActiveRecord\
-    \ models themselves,\n    running a Sunspot-compatible Solr instance for development\
-    \ and test\n    environments, and automatically commit Solr index changes at the\
-    \ end of each\n    Rails request.\n"
+  description: |2
+        Sunspot::Rails is an extension to the Sunspot library for Solr search.
+        Sunspot::Rails adds integration between Sunspot and ActiveRecord, including
+        defining search and indexing related methods on ActiveRecord models themselves,
+        running a Sunspot-compatible Solr instance for development and test
+        environments, and automatically commit Solr index changes at the end of each
+        Rails request.
   homepage: http://github.com/outoftime/sunspot/tree/master/sunspot_rails
   children:
   - sunspot
@@ -2746,7 +2667,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: A gem providing "time travel" and "time freezing" capabilities, making it dead simple to test time-dependent code.  It provides a unified method to mock Time.now, Date.today, and DateTime.now in a single call.
   description: A gem providing "time travel" and "time freezing" capabilities, making it dead simple to test time-dependent code.  It provides a unified method to mock Time.now, Date.today, and DateTime.now in a single call.
   homepage: http://github.com/jtrupiano/timecop
@@ -2846,7 +2767,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests.
   description: VCR provides a simple API to record and replay your test suite's HTTP interactions.  It works with a variety of HTTP client libraries, HTTP stubbing libraries and testing frameworks.
   homepage: http://github.com/myronmarston/vcr
@@ -2941,7 +2862,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: CI::Reporter allows you to generate reams of XML for use with continuous integration systems.
   description: CI::Reporter is an add-on to Test::Unit, RSpec and Cucumber that allows you to generate XML reports of your test, spec and/or feature runs. The resulting files can be read by a continuous integration system that understands Ant's JUnit report XML format, thus allowing your CI system to track test/spec successes and failures.
   homepage: http://caldersphere.rubyforge.org/ci_reporter
@@ -2972,7 +2893,7 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Process manager for applications with multiple components
   description: Process manager for applications with multiple components
   homepage: http://github.com/ddollar/foreman
@@ -3163,11 +3084,10 @@
   - :integration
   - :packaging
   - :ci_jasmine
-  - :ci_legacy_migration
+  - :ci_legacy
   summary: Command line interface (CLI) for ruby-debug-base
-  description: ! 'A generic command line interface for ruby-debug.
-
-    '
+  description: |
+    A generic command line interface for ruby-debug.
   homepage: http://rubyforge.org/projects/ruby-debug/
   children:
   - columnize
@@ -3187,9 +3107,10 @@
   bundler_groups:
   - :default
   summary: Bundled Solr distribution for Sunspot
-  description: ! "    Sunspot::Solr provides a bundled Solr distribution for use with\
-    \ Sunspot.\n    Typical deployment environments will require more configuration,\
-    \ but this\n    distribution is well suited to development and testing.\n"
+  description: |2
+        Sunspot::Solr provides a bundled Solr distribution for use with Sunspot.
+        Typical deployment environments will require more configuration, but this
+        distribution is well suited to development and testing.
   homepage: https://github.com/outoftime/sunspot/tree/master/sunspot_solr
   children:
   - rspec
@@ -3236,12 +3157,10 @@
   - test/README
   bundler_groups: []
   summary: RDoc produces HTML and command-line documentation for Ruby projects
-  description: RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
-
+  description: |-
+    RDoc produces HTML and command-line documentation for Ruby projects.  RDoc
     includes the +rdoc+ and +ri+ tools for generating and displaying online
-
     documentation.
-
 
     See RDoc for a description of RDoc's markup and basic use.
   homepage: http://docs.seattlerb.org/rdoc
@@ -3279,10 +3198,9 @@
   - README.md
   bundler_groups: []
   summary: Module to format an Array as an Array of String aligned in columns
-  description: ! "\nIn showing a long lists, sometimes one would prefer to see the\
-    \ value\narranged aligned in columns. Some examples include listing methods\n\
-    of an object or debugger commands. \nSee Examples in the rdoc documentation for\
-    \ examples.\n"
+  description: "\nIn showing a long lists, sometimes one would prefer to see the value\n\
+    arranged aligned in columns. Some examples include listing methods\nof an object\
+    \ or debugger commands. \nSee Examples in the rdoc documentation for examples.\n"
   homepage: https://github.com/rocky/columnize
   children: []
   parents:
@@ -3333,24 +3251,16 @@
   - README.md
   bundler_groups: []
   summary: Ruby/EventMachine library
-  description: EventMachine implements a fast, single-threaded engine for arbitrary network
-
+  description: |-
+    EventMachine implements a fast, single-threaded engine for arbitrary network
     communications. It's extremely easy to use in Ruby. EventMachine wraps all
-
     interactions with IP sockets, allowing programs to concentrate on the
-
     implementation of network protocols. It can be used to create both network
-
     servers and clients. To create a server or client, a Ruby program only needs
-
     to specify the IP address and port, and provide a Module that implements the
-
     communications protocol. Implementations of several standard network protocols
-
     are provided with the package, primarily to serve as examples. The real goal
-
     of EventMachine is to enable programs to easily interface with other programs
-
     using TCP/IP, especially if custom protocols are required.
   homepage: http://rubyeventmachine.com
   children:
