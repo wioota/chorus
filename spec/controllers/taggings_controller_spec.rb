@@ -8,24 +8,19 @@ describe TaggingsController do
   end
 
   describe 'create' do
-    context 'when a single entity is being tagged' do
+    let(:taggables) { { '0' => { :entity_id => entity.id, :entity_type => entity.class.name.underscore } } }
+
+    describe 'adding tags' do
       let(:entity) { workfiles(:public) }
-      let(:params) { { :entity_id => entity.id, :entity_type => entity.class.name.underscore, :tag_names => tag_names } }
-      let(:tag_names) { ['alpha', 'beta'] }
+      let(:params) { { :taggables => taggables, :add => tag_name } }
+      let(:tag_name) { 'alpha' }
 
       it 'adds the tags' do
-        post :create, params
-        response.code.should == '201'
-        entity.reload.tags.map(&:name).should =~ tag_names
-      end
-
-      it 'removes tags' do
-        entity.tag_list = ["alpha", "beta", "gamma"]
+        entity.tag_list = ['first-tag']
         entity.save!
-
         post :create, params
         response.code.should == '201'
-        entity.reload.tags.map(&:name).should =~ tag_names
+        entity.reload.tags.map(&:name).should =~ ['first-tag', 'alpha']
       end
 
       context 'with a dataset' do
@@ -34,22 +29,15 @@ describe TaggingsController do
         it 'adds the tags' do
           post :create, params
           response.code.should == '201'
-          entity.reload.tags.map(&:name).should =~ tag_names
-        end
-      end
-
-      context 'when no tag names are provided' do
-        let(:tag_names) { [] }
-
-        it 'clears the list of tags on the model' do
-          post :create, params
-          response.code.should == '201'
-          entity.reload.tags.should == []
+          entity.reload.tags.map(&:name).should include 'alpha'
         end
       end
 
       context 'with duplicate tag names' do
-        let(:tag_names) { ['dupe', 'dupe'] }
+        before do
+          entity.tag_list = ["alpha"]
+          entity.save!
+        end
 
         it 'sets the tag only once' do
           post :create, params
@@ -69,7 +57,7 @@ describe TaggingsController do
       end
 
       context 'when tags are more than 100 characters' do
-        let(:tag_names) { ["a" * 101] }
+        let(:tag_name) { 'a' * 101 }
 
         it 'raise a validation error' do
           post :create, params
@@ -79,33 +67,61 @@ describe TaggingsController do
       end
 
       describe 'when tags differ only in case' do
-        let(:tag_names) { ['AlphaNotInFixtures', 'alphaNotInFixtures'] }
+        let(:tag_name) { 'panda' }
+        before do
+          entity.tag_list = ['Panda']
+          entity.save!
+        end
 
         it "sets a single tag on the workfile using the first tag's case" do
           post :create, params
           response.code.should == '201'
-          entity.reload.tags.map(&:name).should == ['AlphaNotInFixtures']
+          entity.reload.tags.map(&:name).should == ['Panda']
         end
       end
     end
-  end
 
-  context 'when multiple entities are being tagged' do
-    let(:first_entity) { workfiles(:public) }
-    let(:second_entity) { datasets(:table) }
-    let(:params) {
-      { taggings: {
-          "0" => {:entity_id => first_entity.id, :entity_type => first_entity.class.name.underscore, :tag_names => tag_names},
-          "1" => {:entity_id => second_entity.id, :entity_type => second_entity.class.name.underscore, :tag_names => tag_names}}
-      }
-    }
-    let(:tag_names) { ['alpha', 'beta'] }
+    describe 'removing tags' do
+      let(:entity) { workfiles(:public) }
+      let(:params) { { :taggables => taggables, :remove => tag_name} }
+      let(:tag_name) { 'alpha' }
 
-    it 'adds the tags to each entity' do
-      post :create, params
-      response.code.should == '201'
-      first_entity.reload.tags.map(&:name).should =~ tag_names
-      second_entity.reload.tags.map(&:name).should =~ tag_names
+      before do
+        entity.tag_list = ['alpha', 'beta', 'gamma']
+        entity.save!
+      end
+
+      it 'removes tags' do
+        post :create, params
+        response.code.should == '201'
+        entity.reload.tags.map(&:name).should =~ ['beta', 'gamma']
+      end
+
+      describe 'when the case is different' do
+        let(:tag_name) { 'Alpha' }
+        it "still removes the tag" do
+          post :create, params
+          response.code.should == '201'
+          entity.reload.tags.map(&:name).should =~ ['beta', 'gamma']
+        end
+      end
+    end
+
+    context 'when multiple entities are being tagged' do
+      let(:first_entity) { workfiles(:public) }
+      let(:second_entity) { datasets(:table) }
+      let(:tag_name) { 'alpha' }
+      let(:taggables) { {
+          "0" => {:entity_id => first_entity.id, :entity_type => first_entity.class.name.underscore},
+          "1" => {:entity_id => second_entity.id, :entity_type => second_entity.class.name.underscore}} }
+      let(:params) { { :taggables => taggables, :add => tag_name} }
+
+      it 'adds the tag to each entity' do
+        post :create, params
+        response.code.should == '201'
+        first_entity.reload.tags.map(&:name).should include 'alpha'
+        second_entity.reload.tags.map(&:name).should include 'alpha'
+      end
     end
   end
 end

@@ -7,7 +7,7 @@ describe("chorus.views.TagBox", function() {
         delete this.model.statusCode;
         this.model.fetch();
         this.view = new chorus.views.TagBox({model: this.model});
-
+        spyOn(this.model, "updateTags");
         stubDefer(); // don't defer auto-suggest server requests from textext to avoid test pollution
     });
 
@@ -36,9 +36,9 @@ describe("chorus.views.TagBox", function() {
         });
 
         describe("when a valid tag is entered", function() {
+            var tagName = _.repeat("a", 100);
+
             beforeEach(function() {
-                spyOn(this.view.tags, "save");
-                var tagName = _.repeat("a", 100);
                 enterTag(this.view, tagName);
             });
 
@@ -55,15 +55,16 @@ describe("chorus.views.TagBox", function() {
             });
 
             it('saves the tags', function() {
-                expect(this.view.tags.save).toHaveBeenCalled();
+                expect(this.model.updateTags).toHaveBeenCalled();
+                expect(this.model.updateTags.mostRecentCall.args[0].add.name()).toBe(tagName);
             });
         });
             
         describe("when a tag is removed", function() {
             it('saves the tags', function() {
-                spyOn(this.view.tags, "save");
                 this.view.$('.text-remove:first').click();
-                expect(this.view.tags.save).toHaveBeenCalled();
+                expect(this.model.updateTags).toHaveBeenCalled();
+                expect(this.model.updateTags.mostRecentCall.args[0].remove.name()).toBe('alpha');
             });
         });
 

@@ -17,7 +17,7 @@ module TaggableBehavior
       begin
         Tag.create!(name: tag_name)
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e # find_or_create_by_name is not concurrent-safe
-        Tag.find_by_name(tag_name)
+        Tag.first(:conditions => [ "lower(name) = ?", tag_name.downcase ])
       end
     end
   end

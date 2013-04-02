@@ -74,7 +74,7 @@ describe("chorus.dialogs.EditTags", function() {
                 this.model2.attributes
             ]);
             this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
-            spyOn(this.collection, "saveTags").andCallThrough();
+            spyOn(this.collection, "updateTags").andCallThrough();
             this.dialog.render();
         });
 
@@ -86,21 +86,21 @@ describe("chorus.dialogs.EditTags", function() {
         });
 
         describe('when a tag is added', function() {
-             beforeEach(function(){
-                enterTag(this.dialog, "foo");
-             });
-
             it('adds the tag to all the models', function() {
+                enterTag(this.dialog, "foo");
                 this.collection.each(function(model) {
                     expect(model.tags().pluck('name')).toContain('foo');
                 });
             });
 
             it('saves the tags', function() {
-                expect(this.collection.saveTags).toHaveBeenCalled();
+                enterTag(this.dialog, "foo");
+                expect(this.collection.updateTags).toHaveBeenCalled();
+                expect(this.collection.updateTags.mostRecentCall.args[0].add.name()).toBe("foo");
             });
 
-            it('triggers model.change', function() {
+            it('triggers model.change on each model in the collection', function() {
+                enterTag(this.dialog, "foo");
                 var savedModel = this.collection.last();
                 spyOnEvent(savedModel, "change");
                 this.server.lastCreate().succeed();
@@ -109,26 +109,28 @@ describe("chorus.dialogs.EditTags", function() {
 
             context('when the tag is already on some of the models', function() {
                beforeEach(function(){
-                   enterTag(this.dialog, 'tag2');
+                   enterTag(this.dialog, "foo");
                });
 
                 it('saves the tags', function() {
-                    expect(this.collection.saveTags).toHaveBeenCalled();
+                    expect(this.collection.updateTags).toHaveBeenCalled();
+                    expect(this.collection.updateTags.mostRecentCall.args[0].add.name()).toBe("foo");
                 });
 
                 it('adds the tag to all the models', function(){
                     this.collection.each(function(model) {
-                        expect(model.tags().pluck('name')).toContain('tag2');
+                        expect(model.tags().pluck('name')).toContain('foo');
                     });
                 });
 
                 it('puts the new tag at the end', function(){
-                    expect(this.dialog.tags().last().get('name')).toEqual('tag2');
+                    expect(this.dialog.tags().last().get('name')).toEqual('foo');
                 });
             });
 
             context('when the save fails', function(){
                 beforeEach(function() {
+                    enterTag(this.dialog, "foo");
                     spyOn(this.dialog, "showErrors");
                     this.server.lastCreate().failForbidden({message: "Forbidden"});
                 });
@@ -151,7 +153,8 @@ describe("chorus.dialogs.EditTags", function() {
             });
 
             it('saves the tags', function(){
-                expect(this.collection.saveTags).toHaveBeenCalled();
+                expect(this.collection.updateTags).toHaveBeenCalled();
+                expect(this.collection.updateTags.mostRecentCall.args[0].remove.name()).toBe("tag1");
             });
         });
     });

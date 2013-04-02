@@ -20,7 +20,8 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
         this.collection.each(function(model) {
             model.tags().add(tag);
         });
-        this.collection.saveTags();
+
+        this.collection.updateTags({add: tag});
     },
 
     removeTag: function(tag) {
@@ -28,7 +29,8 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
             var tagToRemove = model.tags().where({name: tag.name()});
             model.tags().remove(tagToRemove);
         });
-        this.collection.saveTags();
+
+        this.collection.updateTags({remove: tag});
     },
 
     tags: function() {
