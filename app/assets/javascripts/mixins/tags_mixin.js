@@ -13,5 +13,9 @@ chorus.Mixins.Taggable = {
             this._tags = new chorus.collections.TaggingSet(this.get('tags'), {entity: this});
         }
         return this._tags;
+    },
+
+    updateTags: function(options) {
+        new chorus.collections.Base([this]).updateTags(options);
     }
 };

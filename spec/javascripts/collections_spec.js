@@ -428,7 +428,7 @@ describe("chorus.collections.Base", function() {
 
     });
 
-    describe("#saveTags", function() {
+    describe("#updateTags", function() {
         beforeEach(function() {
             this.model1 = rspecFixtures.workfile.sql({id: "123", tags: [
                 {name: "tag1"},
@@ -442,21 +442,35 @@ describe("chorus.collections.Base", function() {
             this.collection.reset([
                 this.model1.attributes, this.model2.attributes
             ]);
-            this.fakeTaggingSetArray = new chorus.models.TaggingSetArray();
-            spyOn(this.fakeTaggingSetArray, "save");
-            spyOn(chorus.models, "TaggingSetArray").andReturn(this.fakeTaggingSetArray);
+            this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater();
+            spyOn(this.fakeTaggingsUpdater, "save");
+            spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
-        it("saves tags for each model in the collection", function() {
-            this.collection.saveTags();
-            expect(chorus.models.TaggingSetArray).toHaveBeenCalled();
-            var initializerArg = chorus.models.TaggingSetArray.mostRecentCall.args[0];
-            expect(initializerArg.taggingSets.length).toEqual(2);
-            expect(initializerArg.taggingSets[0]).toEqual(jasmine.any(chorus.collections.TaggingSet));
-            expect(initializerArg.taggingSets[1]).toEqual(jasmine.any(chorus.collections.TaggingSet));
-            expect(initializerArg.taggingSets[0].attributes.entity.id).toEqual("123");
-            expect(initializerArg.taggingSets[1].attributes.entity.id).toEqual("456");
-            expect(this.fakeTaggingSetArray.save).toHaveBeenCalled();
+        it("removes and saves tags for each model in the collection", function() {
+            this.tag = new chorus.models.Tag({name: 'foo'});
+            this.collection.updateTags({add: this.tag});
+
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
+            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+
+            expect(initializerArg.collection.length).toEqual(2);
+            expect(initializerArg.collection).toEqual(this.collection);
+            expect(initializerArg.add.attributes.name).toEqual("foo");
+            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+        });
+
+        it("adds and saves tags for each model in the collection", function() {
+            this.tag = new chorus.models.Tag({name: 'foo'});
+            this.collection.updateTags({remove: this.tag});
+
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
+            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+
+            expect(initializerArg.collection.length).toEqual(2);
+            expect(initializerArg.collection).toEqual(this.collection);
+            expect(initializerArg.remove.attributes.name).toEqual("foo");
+            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
         });
     });
 });

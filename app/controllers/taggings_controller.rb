@@ -3,24 +3,24 @@ class TaggingsController < ApplicationController
   wrap_parameters :tagging, :exclude => []
 
   def create
-    if params.has_key?(:taggings)
-      taggings = params[:taggings].values
-    else
-      taggings = [params[:tagging]]
-    end
-
-    taggings.each do |tagging|
-      model = ModelMap.model_from_params(tagging[:entity_type], tagging[:entity_id])
+    taggables = params[:tagging][:taggables].values
+    taggables.each do |taggable|
+      model = ModelMap.model_from_params(taggable[:entity_type], taggable[:entity_id])
       authorize! :show, model
 
-      tag_names = tagging[:tag_names] || []
-      tag_names.each do |tag_name|
+      tag_names = model.tags.map(&:name)
+
+      if params[:tagging][:add]
+        tag_name = params[:tagging][:add]
         raise_validation_error if tag_name.length > MAXIMUM_TAG_LENGTH
+        tag_names << tag_name
+        tag_names.uniq!(&:downcase)
+      else
+        tag_name = params[:tagging][:remove]
+        tag_names.reject! { |item| item.downcase == tag_name.downcase }
       end
 
-      unique_tag_names = tag_names.uniq(&:downcase).sort
-
-      model.tag_list = unique_tag_names
+      model.tag_list = tag_names.sort
       model.save!
     end
 

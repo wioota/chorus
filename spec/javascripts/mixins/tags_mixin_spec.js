@@ -105,4 +105,42 @@ describe("chorus.Mixins.Taggable", function() {
             });
         });
     });
+
+    describe("#updateTags", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.workfile.sql({id: "123", tags: [
+                {name: "tag1"},
+                {name: "tag2"}
+            ]});
+            this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater();
+            spyOn(this.fakeTaggingsUpdater, "save");
+            spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
+        });
+
+        it("add and saves tags", function() {
+            this.tag = new chorus.models.Tag({name: 'foo'});
+            this.model.updateTags({add: this.tag});
+
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
+            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+
+            expect(initializerArg.collection.length).toEqual(1);
+            expect(initializerArg.collection.at(0)).toEqual(this.model);
+            expect(initializerArg.add.attributes.name).toEqual("foo");
+            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+        });
+
+        it("removes and saves tags", function() {
+            this.tag = new chorus.models.Tag({name: 'foo'});
+            this.model.updateTags({remove: this.tag});
+
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
+            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+
+            expect(initializerArg.collection.length).toEqual(1);
+            expect(initializerArg.collection.at(0)).toEqual(this.model);
+            expect(initializerArg.remove.attributes.name).toEqual("foo");
+            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+        });
+    });
 });

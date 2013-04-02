@@ -9,29 +9,31 @@ resource 'Tags' do
   end
 
   post '/taggings' do
-    parameter :entity_id, 'Id of the associated object'
-    parameter :entity_type, 'Type of the associated object, e.g. Workfile or Dataset'
-    parameter :'tag_names[]', 'Tag names (100 characters or less)'
+    parameter :taggables, 'An array of objects to be tagged, each with form {entity_id: <num>, entity_type: <type>}'
+    parameter :add, 'Tag name (100 characters or less)'
+    required_parameters :taggables
 
-    required_parameters :entity_id, :entity_type, :'tag_names[]'
+    let(:taggables) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile} } }
+    let(:add) { 'alpha' }
 
-    let(:entity_id) { workfile.to_param }
-    let(:entity_type) { 'Workfile' }
-    let(:'tag_names[]') { ['alpha', 'omega'] }
-
-    example_request 'Set tags for a workfile or dataset' do
+    example_request 'Adding a tag to multiple entities' do
       status.should == 201
     end
   end
 
   post '/taggings' do
-    parameter :taggings, 'An array of taggings, each with form {entity_id: <num>, entity_type: <type>, tag_names[]}'
+    parameter :taggables, 'An array of objects to be tagged, each with form {entity_id: <num>, entity_type: <type>}'
+    parameter :remove, 'Tag name'
+    required_parameters :taggables
 
-    required_parameters :taggings
+    before do
+      workfile.tag_list = ['alpha']
+    end
 
-    let(:taggings) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile, 'tag_names' => ['alpha', 'omega']} } }
+    let(:taggables) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile} } }
+    let(:remove) { 'alpha' }
 
-    example_request 'Set tags for multiple entities' do
+    example_request 'Removing a tag from multiple entities' do
       status.should == 201
     end
   end
