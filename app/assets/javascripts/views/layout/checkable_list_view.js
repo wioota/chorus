@@ -1,14 +1,49 @@
 //= require ./item_wrapper_view
 
-chorus.views.CheckableList = chorus.views.SelectableList.extend({
+chorus.views.CheckableList = chorus.views.Base.extend({
     constructorName: "CheckableListView",
     additionalClass: "selectable list",
+    tagName: "ul",
     templateName: "empty",
     persistent: false,
     suppressRenderOnChange: true,
 
     events: {
         "click  li input[type=checkbox]": "checkboxClicked"
+    },
+
+    checkboxClicked: function(e) {
+        e.stopPropagation();
+        var clickedBox = $(e.currentTarget);
+        var clickedLi = clickedBox.closest(".item_wrapper");
+        var index = this.$(".item_wrapper").index(clickedLi);
+        var model = this.collection.at(index);
+        var willBeChecked = !this.findSelectedModel(model);
+
+        if(willBeChecked) {
+            var modelsToAdd = [model];
+            if(e.shiftKey && this.previousIndex >= 0) {
+                var min = _.min([this.previousIndex, index]);
+                var max = _.max([this.previousIndex, index]);
+                modelsToAdd = this.collection.models.slice(min, max + 1);
+            }
+            this.addModelsToSelection(modelsToAdd);
+            this.previousIndex = index;
+        } else {
+            var match = this.findSelectedModel(model);
+            this.selectedModels.remove(match);
+            delete this.previousIndex;
+        }
+
+        chorus.PageEvents.broadcast("checked", this.selectedModels);
+        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+    },
+
+    delegateEvents: function() {
+        this._super("delegateEvents", arguments);
+        $(this.el)
+            .off("click." + this.cid)
+            .on("click." + this.cid, "ul.list > li", null, _.bind(this.listItemClicked, this));
     },
 
     setup: function() {
@@ -26,7 +61,20 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.subscribePageEvent("selectNone", this.selectNone);
         this.subscribePageEvent("checked", this.checkSelectedModels);
 
-        this._super("setup", arguments);
+        this.selectedIndex = 0;
+        this.collection.bind("paginate", function() {
+            this.selectedIndex = 0;
+        }, this);
+
+        if(this.eventName) {
+            this.subscribePageEvent(this.eventName + ":search", function() {
+                this.selectItem(this.$(">li:not(:hidden)").eq(0));
+            });
+        }
+
+        this.subscriptions.push(chorus.PageEvents.subscribe("selected",
+            this.updateSelection,
+            this));
     },
 
     postRender: function() {
@@ -43,7 +91,11 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
 
         this.checkSelectedModels();
 
-        this._super('postRender', arguments);
+        this.selectItem(this.$(">li").eq(this.selectedIndex));
+    },
+
+    listItemClicked: function(e) {
+        this.selectItem($(e.currentTarget));
     },
 
     checkSelectedModels: function() {
@@ -56,36 +108,9 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
     },
 
     addModelsToSelection: function(models) {
-        this.selectedModels.add(_.filter(models, function (model) {
+        this.selectedModels.add(_.filter(models, function(model) {
             return !this.findSelectedModel(model);
         }, this));
-    },
-
-    checkboxClicked: function(e) {
-        e.stopPropagation();
-        var clickedBox = $(e.currentTarget);
-        var clickedLi = clickedBox.closest(".item_wrapper");
-        var index = this.$(".item_wrapper").index(clickedLi);
-        var model = this.collection.at(index);
-        var willBeChecked = !this.findSelectedModel(model);
-
-        if (willBeChecked) {
-            var modelsToAdd = [model];
-            if (e.shiftKey && this.previousIndex >= 0) {
-                var min = _.min([this.previousIndex, index]);
-                var max = _.max([this.previousIndex, index]);
-                modelsToAdd = this.collection.models.slice(min, max + 1);
-            }
-            this.addModelsToSelection(modelsToAdd);
-            this.previousIndex = index;
-        } else {
-            var match = this.findSelectedModel(model);
-            this.selectedModels.remove(match);
-            delete this.previousIndex;
-        }
-
-        chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
     },
 
     findSelectedModel: function(model) {
@@ -105,6 +130,52 @@ chorus.views.CheckableList = chorus.views.SelectableList.extend({
         this.selectedModels.reset();
         chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+    },
+
+    selectItem: function($target) {
+        var $lis = this.$(">li");
+        var preSelected = $target.hasClass("selected");
+
+        $lis.removeClass("selected");
+        $target.addClass("selected");
+
+        this.selectedIndex = $lis.index($target);
+        if(this.selectedIndex >= 0) {
+            if(!preSelected) {
+                this.itemSelected(this.collection.at(this.selectedIndex));
+            }
+        } else {
+            this.selectedIndex = 0;
+            this.itemDeselected();
+        }
+    },
+
+    itemSelected: function(model) {
+        var eventName = this.eventName || model.eventType();
+        if(eventName) {
+            this.lastEventName = eventName;
+            chorus.PageEvents.broadcast(eventName + ":selected", model);
+            chorus.PageEvents.broadcast("selected", model);
+        }
+    },
+
+    itemDeselected: function() {
+        if(this.lastEventName) {
+            chorus.PageEvents.broadcast(this.lastEventName + ":deselected");
+        }
+    },
+
+    updateSelection: function(selectedModel) {
+        delete this.selectedIndex;
+        this.collection.each(function(model, index) {
+            var selected = _.isEqual(
+                _.pick(model.attributes, 'id', 'entityType'),
+                _.pick(selectedModel.attributes, 'id', 'entityType'));
+            this.$(">li").eq(index).toggleClass("selected", selected);
+            if(selected) {
+                this.selectedIndex = index;
+            }
+        }, this);
     },
 
     makeListItemView: function(model) {

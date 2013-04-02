@@ -45,7 +45,6 @@
 //= require alerts/model_delete_alert
 //= require_tree ./alerts
 //= require views/sidebar_view
-//= require views/selectable_list_view
 //= require views/dataset/chart_configuration_view
 //= require views/database_sidebar_list_view
 //= require views/utilities/code_editor_view
