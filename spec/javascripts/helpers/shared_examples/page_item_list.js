@@ -1,4 +1,4 @@
-jasmine.sharedExamples.CheckableList = function() {
+jasmine.sharedExamples.PageItemList = function() {
     beforeEach(function() {
         this.eventSpy = spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.view.render();

@@ -1,4 +1,4 @@
-describe("chorus.views.CheckableList", function() {
+describe("chorus.views.PageItemList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.UserSet([
             rspecFixtures.user({id: 123}),
@@ -6,7 +6,7 @@ describe("chorus.views.CheckableList", function() {
             rspecFixtures.user({id: 789})
         ], {schemaId: "3"});
 
-        this.view = new chorus.views.CheckableList({
+        this.view = new chorus.views.PageItemList({
             entityType: 'user',
             entityViewType: chorus.views.UserItem,
             collection: this.collection,
@@ -14,12 +14,12 @@ describe("chorus.views.CheckableList", function() {
         });
     });
 
-    itBehavesLike.CheckableList();
+    itBehavesLike.PageItemList();
 
     describe("#setup", function() {
         it("uses selectedModels if passed one", function() {
             this.checkedModels = new chorus.collections.Base();
-            this.view = new chorus.views.CheckableList({
+            this.view = new chorus.views.PageItemList({
                 entityType: 'user',
                 entityViewType: chorus.views.UserItem,
                 collection: this.collection,
@@ -41,7 +41,7 @@ describe("chorus.views.CheckableList", function() {
             it("uses eventName if passed one", function() {
                 var eventSpy = jasmine.createSpy();
                 chorus.PageEvents.subscribe("alternate_event_name:selected", eventSpy);
-                this.view = new chorus.views.CheckableList({
+                this.view = new chorus.views.PageItemList({
                     eventName: 'alternate_event_name',
                     entityType: 'user',
                     entityViewType: chorus.views.UserItem,

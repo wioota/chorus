@@ -1,7 +1,7 @@
 //= require ./item_wrapper_view
 
-chorus.views.CheckableList = chorus.views.Base.extend({
-    constructorName: "CheckableListView",
+chorus.views.PageItemList = chorus.views.Base.extend({
+    constructorName: "PageItemListView",
     additionalClass: "selectable list",
     tagName: "ul",
     templateName: "empty",

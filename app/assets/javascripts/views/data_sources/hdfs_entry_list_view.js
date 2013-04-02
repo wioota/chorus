@@ -1,6 +1,6 @@
-//= require views/layout/checkable_list_view
+//= require views/layout/page_item_list_view
 
-chorus.views.HdfsEntryList = chorus.views.CheckableList.extend({
+chorus.views.HdfsEntryList = chorus.views.PageItemList.extend({
     eventName: "hdfs_entry",
     constructorName: "HdfsEntryList",
     useLoadingSection: true,

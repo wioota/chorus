@@ -1,6 +1,6 @@
-//= require views/layout/checkable_list_view
+//= require views/layout/page_item_list_view
 
-chorus.views.DatasetList = chorus.views.CheckableList.extend({
+chorus.views.DatasetList = chorus.views.PageItemList.extend({
     eventName: "dataset",
     constructorName: "DatasetListView",
     useLoadingSection: true,

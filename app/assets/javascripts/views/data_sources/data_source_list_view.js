@@ -14,7 +14,7 @@ chorus.views.DataSourceList = chorus.views.Base.extend({
     },
 
     buildList: function() {
-        return new chorus.views.CheckableList({
+        return new chorus.views.PageItemList({
             eventName: "data_source",
             collection: this.collection,
             entityViewType: chorus.views.DataSourceItem,

@@ -15,7 +15,7 @@ describe("chorus.views.DatasetList", function() {
         this.view.render();
     });
 
-    itBehavesLike.CheckableList();
+    itBehavesLike.PageItemList();
 
     describe("when there are no datasets", function() {
         beforeEach(function() {

@@ -1,4 +1,4 @@
-//= require views/layout/checkable_list_view
+//= require views/layout/page_item_list_view
 
 (function() {
     var viewConstructorMap = {
@@ -17,8 +17,8 @@
             return t("search.type.this_workspace", { name: this.search.workspace().get("name") });
         },
 
-        listClass: chorus.views.CheckableList.extend({
-            constructorName: "WorkspaceSearchResultCheckableList",
+        listClass: chorus.views.PageItemList.extend({
+            constructorName: "WorkspaceSearchResultPageItemList",
 
             makeListItemView: function(model) {
                 var viewConstructor = viewConstructorMap[model.get("entityType")];

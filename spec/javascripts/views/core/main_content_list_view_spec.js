@@ -138,8 +138,8 @@ describe("MainContentList", function() {
             });
         });
 
-        it("sets up a CheckableList as the content", function() {
-            expect(this.view.content).toBeA(chorus.views.CheckableList);
+        it("sets up a PageItemList as the content", function() {
+            expect(this.view.content).toBeA(chorus.views.PageItemList);
         });
     });
 });

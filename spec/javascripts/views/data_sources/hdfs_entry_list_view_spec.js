@@ -39,7 +39,7 @@ describe("chorus.views.HdfsEntryList", function() {
             this.view.render();
         });
 
-        itBehavesLike.CheckableList();
+        itBehavesLike.PageItemList();
     });
 
     describe("when the entries have loaded", function() {

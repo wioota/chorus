@@ -10,7 +10,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         if(options.useCustomList) {
             this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
         } else {
-            this.content = new chorus.views.CheckableList(_.extend({
+            this.content = new chorus.views.PageItemList(_.extend({
                     collection: collection,
                     entityType: _.underscored(modelClass),
                     entityViewType: chorus.views[modelClass + "Item"]

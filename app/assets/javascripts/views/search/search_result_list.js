@@ -23,7 +23,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     buildList: function() {
-        return new chorus.views.CheckableList({
+        return new chorus.views.PageItemList({
             collection: this.collection,
             entityViewType: chorus.views["Search" + _.classify(this.options.entityType)],
             listItemOptions: {
