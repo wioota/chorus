@@ -4,7 +4,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     constructorName: "PageItemListView",
     additionalClass: "selectable list",
     tagName: "ul",
-    templateName: "empty",
+    templateName: "no_template",
     persistent: false,
     suppressRenderOnChange: true,
 
