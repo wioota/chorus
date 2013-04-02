@@ -19,6 +19,8 @@ module Visualization
   end
 
   class Base
+    include CurrentUser
+
     def row_sql
       @dataset.query_setup_sql + build_row_sql
     end

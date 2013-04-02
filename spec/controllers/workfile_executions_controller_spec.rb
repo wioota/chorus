@@ -34,14 +34,14 @@ describe WorkfileExecutionsController do
       end
 
       it "executes the sql with the check_id and default row limit" do
-        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, hash_including(:limit => default_row_limit)) {
+        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, user, hash_including(:limit => default_row_limit)) {
           GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
       end
 
       it "always uses default row limit, even if num_of_rows is specified" do
-        mock(SqlExecutor).execute_sql(anything, anything, anything,anything, hash_including(:limit => default_row_limit)) { GreenplumSqlResult.new }
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, user, hash_including(:limit => default_row_limit)) { GreenplumSqlResult.new }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :num_of_rows => 123
       end
 
@@ -52,7 +52,7 @@ describe WorkfileExecutionsController do
       end
 
       it "executes the sql with include_public_schema_in_search_path option" do
-        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, hash_including(:include_public_schema_in_search_path => true)) {
+        mock(SqlExecutor).execute_sql(sql, connection, sandbox, check_id, user, hash_including(:include_public_schema_in_search_path => true)) {
           GreenplumSqlResult.new
         }
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id
@@ -105,7 +105,7 @@ describe WorkfileExecutionsController do
         stub(Workfile).find(workfile.to_param) { workfile }
         stub(workfile).execution_schema { sandbox }
 
-        mock(SqlExecutor).stream(sql, connection, check_id, options) { 'response' }
+        mock(SqlExecutor).stream(sql, connection, check_id, user, options) { 'response' }
       end
 
       it "sets content disposition: attachment" do
@@ -172,7 +172,7 @@ describe WorkfileExecutionsController do
     end
 
     it "cancels the query for the given id" do
-      mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id)
+      mock(SqlExecutor).cancel_query(sandbox, sandbox.account_for_user!(workspace_member), check_id, workspace_member)
       delete :destroy, :workfile_id => workfile.id, :id => check_id
       response.should be_success
     end

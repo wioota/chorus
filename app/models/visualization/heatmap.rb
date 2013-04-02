@@ -52,7 +52,7 @@ module Visualization
     end
 
     def fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(min_max_sql, @schema.connect_with(account), @schema, check_id).rows[0]
+      result = SqlExecutor.execute_sql(min_max_sql, @schema.connect_with(account), @schema, check_id, current_user).rows[0]
 
       @min_x = result[0].to_f
       @max_x = result[1].to_f
@@ -62,7 +62,7 @@ module Visualization
 
     def fetch!(account, check_id)
       fetch_min_max(account, check_id)
-      result = SqlExecutor.execute_sql(row_sql, @schema.connect_with(account), @schema, check_id)
+      result = SqlExecutor.execute_sql(row_sql, @schema.connect_with(account), @schema, check_id, current_user)
       row_data = result.rows.map { |row| {:x => row[0].to_i, :y => row[1].to_i, :value => row[2].to_i} }
       @rows = fill_missing(row_data)
     end

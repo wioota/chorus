@@ -1,17 +1,18 @@
 class CancelableQuery
+  attr_reader :check_id
   @@running_statements = {}
 
-  def self.format_sql_and_check_id(sql, check_id)
-    "/*#{check_id}*/#{sql}"
+  def format_sql_and_check_id(sql)
+    "/*#{@check_id}*/#{sql}"
   end
 
-  def initialize(connection, check_id)
+  def initialize(connection, check_id, user)
     @connection = connection
-    @check_id = check_id
+    @check_id = "#{check_id}_#{user.id}"
   end
 
   def execute(sql, options = {})
-    @connection.prepare_and_execute_statement(CancelableQuery.format_sql_and_check_id(sql, @check_id), options.merge(:warnings => true)) do |statement|
+    @connection.prepare_and_execute_statement(format_sql_and_check_id(sql), options.merge(:warnings => true)) do |statement|
       @@running_statements[@check_id] = statement
     end
   ensure
@@ -20,7 +21,7 @@ class CancelableQuery
 
   def stream(sql, options)
     store_statement = lambda { |statement| @@running_statements[@check_id] = statement }
-    SqlStreamer.new(CancelableQuery.format_sql_and_check_id(sql, @check_id), @connection, options, store_statement).enum
+    SqlStreamer.new(format_sql_and_check_id(sql), @connection, options, store_statement).enum
   end
 
   def cancel

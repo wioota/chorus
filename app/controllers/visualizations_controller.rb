@@ -6,14 +6,14 @@ class VisualizationsController < ApplicationController
   def create
     dataset = Dataset.find(params[:dataset_id])
     v = Visualization.build(dataset, params[:chart_task])
-    v.fetch!(authorized_account(dataset.schema.database), params[:chart_task][:check_id] + "_#{current_user.id}")
+    v.fetch!(authorized_account(dataset.schema.database), params[:chart_task][:check_id])
     present v
   end
 
   def destroy
     dataset = Dataset.find(params[:dataset_id])
     instance_account = authorized_account(dataset)
-    SqlExecutor.cancel_query(dataset, instance_account, params[:id] + "_#{current_user.id}")
+    SqlExecutor.cancel_query(dataset, instance_account, params[:id], current_user)
     head :ok
   end
 end

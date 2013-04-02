@@ -11,16 +11,16 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
 
-      self.response_body= SqlExecutor.stream(params[:sql], @schema.connect_as(current_user), params[:check_id], :row_limit => params[:num_of_rows].to_i)
+      self.response_body= SqlExecutor.stream(params[:sql], @schema.connect_as(current_user), params[:check_id], current_user, :row_limit => params[:num_of_rows].to_i)
     else
-      present SqlExecutor.execute_sql(params[:sql], @schema.connect_as(current_user), @schema, params[:check_id],
+      present SqlExecutor.execute_sql(params[:sql], @schema.connect_as(current_user), @schema, params[:check_id], current_user,
                                       :limit => ChorusConfig.instance['default_preview_row_limit'],
                                       :include_public_schema_in_search_path => true)
     end
   end
 
   def destroy
-    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id])
+    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id], current_user)
     head :ok
   end
 

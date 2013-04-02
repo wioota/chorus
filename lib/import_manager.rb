@@ -23,7 +23,7 @@ class ImportManager < DelegateClass(Import)
     if using_pipe?
       connection(type).fetch(procpid_sql(type)).any?
     else
-      @reader_busy ||= CancelableQuery.new(connection(:reader), handle).busy?
+      @reader_busy ||= CancelableQuery.new(connection(:reader), handle, user).busy?
     end
   end
 

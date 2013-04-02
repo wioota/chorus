@@ -8,8 +8,9 @@ describe SqlExecutor do
       let(:account) { GreenplumIntegration.real_account }
       let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
       let(:table) { database.find_dataset_in_schema('pg_all_types', 'test_schema') }
+      let(:user) { account.owner }
 
-      subject { SqlExecutor.preview_dataset(table, table.schema.connect_with(account), check_id) }
+      subject { SqlExecutor.preview_dataset(table, table.schema.connect_with(account), check_id, user) }
 
       it "returns a SqlResult object with the correct rows" do
         row = subject.rows[0]
@@ -134,8 +135,8 @@ describe SqlExecutor do
       it "uses the default preview row limit" do
         stub.proxy(ChorusConfig.instance).[](anything)
         stub(ChorusConfig.instance).[]('default_preview_row_limit') { 123 }
-        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, :limit => 123)
-        SqlExecutor.preview_dataset(datasets(:table), Object.new, Object.new)
+        mock(SqlExecutor).execute_sql(anything, anything, anything, anything, anything, :limit => 123)
+        SqlExecutor.preview_dataset(datasets(:table), Object.new, Object.new, Object.new)
       end
     end
   end
@@ -145,8 +146,10 @@ describe SqlExecutor do
     let(:sql) { 'create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings; create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings' }
     let(:check_id) { '42' }
     let(:timeout) { nil }
-    let(:connection) { schema.connect_with(instance_accounts(:chorus_gpdb42_test_superuser)) }
-    let(:result) { SqlExecutor.execute_sql(sql, connection, schema, check_id) }
+    let(:account) { instance_accounts(:chorus_gpdb42_test_superuser) }
+    let(:user) { account.owner }
+    let(:connection) { schema.connect_with(account) }
+    let(:result) { SqlExecutor.execute_sql(sql, connection, schema, check_id, user) }
 
     before do
       stub.proxy(ChorusConfig.instance).[].with_any_args
@@ -175,7 +178,7 @@ describe SqlExecutor do
         any_instance_of(CancelableQuery) do |query|
           mock.proxy(query).execute(sql, :limit => 42)
         end
-        SqlExecutor.execute_sql(sql, connection, Object.new, check_id, :limit => 42)
+        SqlExecutor.execute_sql(sql, connection, Object.new, check_id, user, :limit => 42)
       end
     end
 
@@ -187,11 +190,11 @@ describe SqlExecutor do
         fake_query = Object.new
         sql = "SELECT pg_sleep(.2);"
 
-        mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
+        mock(CancelableQuery).new(fake_connection, check_id, user) { fake_query }
         mock(fake_query).execute(sql, {:timeout => 60 * timeout}) { raise GreenplumConnection::QueryError }
 
         expect {
-          SqlExecutor.execute_sql(sql, fake_connection, Object.new, check_id)
+          SqlExecutor.execute_sql(sql, fake_connection, Object.new, check_id, user)
         }.to raise_error(GreenplumConnection::QueryError)
       end
     end
@@ -202,8 +205,10 @@ describe SqlExecutor do
     let(:sql) { 'SELECT 1 as "one", 2 as "two"' }
     let(:check_id) { '42' }
     let(:timeout) { nil }
-    let(:connection) { schema.connect_with(instance_accounts(:chorus_gpdb42_test_superuser)) }
-    let(:result) { SqlExecutor.stream(sql, connection, check_id) }
+    let(:account) { instance_accounts(:chorus_gpdb42_test_superuser) }
+    let(:user) { account.owner }
+    let(:connection) { schema.connect_with(account) }
+    let(:result) { SqlExecutor.stream(sql, connection, check_id, user) }
 
     it "returns an enumerator containing that query result" do
       result.to_a.should == [ "one,two\n", "1,2\n" ]
@@ -218,12 +223,13 @@ describe SqlExecutor do
       fake_query = Object.new
       connection_provider = Object.new
       account = Object.new
+      user = Object.new
 
       mock(connection_provider).connect_with(account) { fake_connection }
-      mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
+      mock(CancelableQuery).new(fake_connection, check_id, user) { fake_query }
       mock(fake_query).cancel
 
-      SqlExecutor.cancel_query(connection_provider, account, check_id)
+      SqlExecutor.cancel_query(connection_provider, account, check_id, user)
     end
   end
 end

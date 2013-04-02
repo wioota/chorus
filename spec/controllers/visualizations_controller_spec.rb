@@ -14,7 +14,7 @@ describe VisualizationsController do
       it "returns json for visualization, in ascending order" do
         fake_visualization = Object.new
         mock(Visualization).build(dataset, {"type" => "frequency", "check_id" => "43"}) { fake_visualization }
-        mock(fake_visualization).fetch!(instance_account, "43_#{user.id}")
+        mock(fake_visualization).fetch!(instance_account, "43")
         mock_present { |model| model.should == fake_visualization }
 
         post :create, :type => "frequency", :check_id => "43", :dataset_id => dataset.id
@@ -98,7 +98,7 @@ describe VisualizationsController do
     context "when there is an error" do
       before do
         any_instance_of(Visualization::Histogram) do |visualization|
-          stub(visualization).fetch!(instance_account, "43_#{user.id}") { raise GreenplumConnection::QueryError }
+          stub(visualization).fetch!(instance_account, "43") { raise GreenplumConnection::QueryError }
         end
       end
 
@@ -112,12 +112,12 @@ describe VisualizationsController do
 
   describe "#destroy" do
     it "cancels the visualization query" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43_#{user.id}")
+      mock(SqlExecutor).cancel_query(dataset, instance_account, "43", user)
       delete :destroy, :id => "43", :dataset_id => dataset.to_param
     end
 
     it "returns successfully" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43_#{user.id}")
+      mock(SqlExecutor).cancel_query(dataset, instance_account, "43", user)
       delete :destroy, :id => "43", :dataset_id => dataset.to_param
       response.should be_success
     end

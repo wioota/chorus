@@ -7,7 +7,7 @@ class PreviewsController < ApplicationController
     dataset = Dataset.find(params[:dataset_id])
     authorize_data_source_access(dataset)
 
-    result = SqlExecutor.preview_dataset(dataset, dataset.connect_as(current_user), params[:task][:check_id])
+    result = SqlExecutor.preview_dataset(dataset, dataset.connect_as(current_user), params[:task][:check_id], current_user)
     present(result, :status => :created)
   end
 
@@ -15,7 +15,7 @@ class PreviewsController < ApplicationController
     dataset = Dataset.find(params[:dataset_id])
     authorize_data_source_access(dataset)
 
-    SqlExecutor.cancel_query(dataset, dataset.connect_as(current_user), params[:id])
+    SqlExecutor.cancel_query(dataset, dataset.connect_as(current_user), params[:id], current_user)
     head :ok
   end
 
@@ -26,7 +26,7 @@ class PreviewsController < ApplicationController
 
     sql_without_semicolon = task[:query].gsub(';', '')
     sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view;"
-    result = SqlExecutor.execute_sql(sql, schema.connect_as(current_user), schema, task[:check_id], :limit => ChorusConfig.instance['default_preview_row_limit'])
+    result = SqlExecutor.execute_sql(sql, schema.connect_as(current_user), schema, task[:check_id], current_user, :limit => ChorusConfig.instance['default_preview_row_limit'])
     present(result, :status => :ok)
   end
 end
