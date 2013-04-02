@@ -84,6 +84,10 @@ describe DatasetsController do
         let(:dataset3) { datasets(:other_table) }
 
         it_should_behave_like :works
+
+        generate_fixture "schemaDatasetSet.json" do
+          get :index, :schema_id => schema.to_param
+        end
       end
     end
 

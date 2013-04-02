@@ -31,7 +31,6 @@ chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).
             name:  this.model.name(),
             tableauWorkbook: this.model.get('fileType') === 'tableau_workbook',
             tableauIcon: Handlebars.helpers.tableauIcon(),
-            checkable: this.options.checkable,
             model: this.model
         };
 

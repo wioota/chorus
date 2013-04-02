@@ -81,9 +81,7 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
                 placeholder: t("schema.search"),
                 onTextChange: onTextChangeFunction
             },
-            contentOptions: {
-                checkable: true
-            },
+
             contentDetailsOptions: { multiSelect: true }
         });
         this.render();

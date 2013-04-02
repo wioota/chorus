@@ -168,6 +168,8 @@ window.rspecFixtureDefinitions = {
 
     schema: { unique: [ "id", "database.id", "database.instance.id" ] },
 
+    schemaDatasetSet: { unique: ["id"] },
+
     schemaFunctionSet: {},
 
     schemaSet: { unique: [ "id" ] },

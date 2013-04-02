@@ -9,8 +9,7 @@ describe("chorus.views.DatasetList", function() {
 
         this.view = new chorus.views.DatasetList({
             collection: this.collection,
-            hasActiveWorkspace: true,
-            checkable: true
+            hasActiveWorkspace: true
         });
         this.view.render();
     });

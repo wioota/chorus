@@ -5,7 +5,7 @@ describe("MainContentList", function() {
 
     context("when no title override is provided", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User" });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User" });
         });
 
         it("sets the title of the content header to the plural of the model class", function() {
@@ -14,7 +14,7 @@ describe("MainContentList", function() {
 
         context("emptyTitleBeforeFetch option set", function() {
             beforeEach(function() {
-                this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User", emptyTitleBeforeFetch: true });
+                this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", emptyTitleBeforeFetch: true });
             });
 
             it("should not display the title", function() {
@@ -24,7 +24,7 @@ describe("MainContentList", function() {
     });
 
     it("doesn't re-render on collection change events", function() {
-        var view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User" });
+        var view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User" });
         spyOn(view, "preRender");
         this.collection.trigger('change');
         expect(view.preRender).not.toHaveBeenCalled();
@@ -32,7 +32,7 @@ describe("MainContentList", function() {
 
     context("when a title override is provided", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User", title: "YES!" });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", title: "YES!" });
         });
 
         it("sets the title of the content header to the override", function() {
@@ -42,7 +42,7 @@ describe("MainContentList", function() {
 
     context("when a contentDetailsOptions hash is provided", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User", contentDetailsOptions: {foo: "bar"} });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", contentDetailsOptions: {foo: "bar"} });
         });
 
         it("gets mixed in to the options for the list content details", function() {
@@ -52,7 +52,7 @@ describe("MainContentList", function() {
 
     context("when a contentOptions hash is provided", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User", contentOptions: {foo: "bar"} });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", contentOptions: {foo: "bar"} });
         });
 
         it("gets mixed in to the content's options", function() {
@@ -63,7 +63,7 @@ describe("MainContentList", function() {
 
     context("when no contentDetails is provided", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User" });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User" });
         });
 
         it("creates a ListContentDetails view", function() {
@@ -74,7 +74,7 @@ describe("MainContentList", function() {
     context("when a custom contentDetails is provided", function() {
         beforeEach(function() {
             this.contentDetails = stubView();
-            this.view = new chorus.views.MainContentList({ collection: this.collection, checkable: true, modelClass: "User", contentDetails: this.contentDetails });
+            this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "User", contentDetails: this.contentDetails });
         });
 
         it("does not create a ListContentDetails view", function() {
@@ -92,7 +92,7 @@ describe("MainContentList", function() {
 
     context("when persistent is passed as an option", function() {
         beforeEach(function() {
-            this.view = new chorus.views.MainContentList({ persistent: true, collection: this.collection, checkable: true, modelClass: "User" });
+            this.view = new chorus.views.MainContentList({ persistent: true, collection: this.collection, modelClass: "User" });
         });
 
         it("sets persistent as a property of the view", function() {
@@ -103,7 +103,7 @@ describe("MainContentList", function() {
     context("when contentHeader is provided", function() {
         beforeEach(function() {
             this.contentHeader = stubView();
-            this.view = new chorus.views.MainContentList({ contentHeader: this.contentHeader, collection: this.collection, checkable: true, modelClass: "User" });
+            this.view = new chorus.views.MainContentList({ contentHeader: this.contentHeader, collection: this.collection, modelClass: "User" });
         });
 
         it("uses the provided view", function() {
@@ -116,7 +116,6 @@ describe("MainContentList", function() {
             this.searchOptions = {foo: "bar"};
             this.view = new chorus.views.MainContentList({
                 collection: this.collection,
-                checkable: true,
                 modelClass: "User",
                 search: this.searchOptions
             });
@@ -128,18 +127,17 @@ describe("MainContentList", function() {
         });
     });
 
-    context("when checkable is true", function() {
+    context("when useCustomList is true", function() {
         beforeEach(function() {
-            this.collection = rspecFixtures.workfileSet();
             this.view = new chorus.views.MainContentList({
-                collection: this.collection,
-                checkable: true,
-                modelClass: "Workfile"
+                collection: rspecFixtures.schemaDatasetSet(),
+                modelClass: "Dataset",
+                useCustomList: true
             });
         });
 
-        it("sets up a PageItemList as the content", function() {
-            expect(this.view.content).toBeA(chorus.views.PageItemList);
+        it("sets up a list based on the model class", function() {
+            expect(this.view.content).toBeA(chorus.views.DatasetList);
         });
     });
 });

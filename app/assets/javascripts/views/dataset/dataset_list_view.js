@@ -9,8 +9,7 @@ chorus.views.DatasetList = chorus.views.PageItemList.extend({
         this.options.entityType = "dataset";
         this.options.entityViewType = chorus.views.DatasetItem;
         this.options.listItemOptions = {
-            hasActiveWorkspace: this.options.hasActiveWorkspace,
-            checkable: true
+            hasActiveWorkspace: this.options.hasActiveWorkspace
         };
 
         this._super("setup", arguments);

@@ -10,8 +10,7 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Tag",
-            collection: tags,
-            checkable: true
+            collection: tags
         });
 
         this.sidebar = new chorus.views.TagListSidebar();
