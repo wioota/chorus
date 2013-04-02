@@ -125,7 +125,7 @@ class Deployer
   end
 
   def remove_old_builds(builds_to_keep=5)
-    ssh.run %Q{cd #{install_path}/releases && test `ls | wc -l` -gt 5 && find . -maxdepth 1 -not -newer "`ls -t | head -6 | tail -1`" -not -name "." -exec rm -rf {} \\;}, :quote => "'"
+    ssh.run %Q{cd #{install_path}/releases && test `ls | wc -l` -gt #{builds_to_keep} && find . -maxdepth 1 -not -newer "`ls -t | head -#{builds_to_keep + 1} | tail -1`" -not -name "." -exec rm -rf {} \\;}, :quote => "'"
   end
 
   class Ssh
