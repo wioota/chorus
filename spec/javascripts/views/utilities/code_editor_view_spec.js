@@ -57,17 +57,6 @@ describe("chorus.views.CodeEditorView", function() {
         it("prepares the editor for drag/drop events", function() {
             expect($($.fn.droppable.calls[0].object)[0]).toBe(this.view.$(".CodeMirror")[0]);
         });
-
-        context("and the user clicks insert on a function", function() {
-            beforeEach(function() {
-                spyOn(this.view.editor, 'replaceSelection');
-                chorus.PageEvents.broadcast("file:insertText", "my awesome function");
-            });
-
-            it("inserts the function", function() {
-                expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
-            });
-        });
     });
 
     describe("dragging a dataset, column, or function", function() {

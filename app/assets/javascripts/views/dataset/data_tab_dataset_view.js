@@ -17,11 +17,6 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
         this.columnsVisible = false;
     },
 
-    insertText: function(e) {
-        e && e.preventDefault();
-        chorus.PageEvents.broadcast("file:insertText", this.model.toText());
-    },
-
     teardown: function() {
         this.$el.qtip("destroy");
         this._super("teardown", arguments);

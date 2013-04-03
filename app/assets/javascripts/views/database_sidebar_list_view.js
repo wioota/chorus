@@ -91,12 +91,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         this.render();
     },
 
-    insertText: function(cid, e) {
-        e && e.preventDefault();
-        var model = this.collection.get(cid);
-        chorus.PageEvents.broadcast("file:insertText", model.toText());
-    },
-
     closeQtip: function() {
         $(".workfile_show_sidebar li:hover a").trigger("mouseleave");
         $(".workfile_show_sidebar .context a").trigger("unfocus");
