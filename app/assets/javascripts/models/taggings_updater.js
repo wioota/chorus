@@ -3,9 +3,31 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
     constructorName: "TaggingsUpdater",
 
     updateTags: function(options) {
+        var tagging = this.createTagging(options);
+
+        // ensure that only one save happens at a time
+        this.queue = this.queue || [];
+
+        this.queue.push(tagging);
+        if (this.queue.length===1) {
+            tagging.save();
+        }
+    },
+
+    createTagging: function(options) {
         var tagging = new chorus.models.Base();
         tagging.urlTemplate = "taggings";
+        this.addEventListeners(tagging);
+        var taggables = this.getTaggableEntities();
 
+        var attributes = {taggables: taggables};
+        var method = options.add ? 'add' : 'remove';
+        attributes[method] = options[method].name();
+        tagging.set(attributes);
+        return tagging;
+    },
+
+    addEventListeners: function(tagging) {
         this.listenTo(tagging, "saved", _.bind(function() {
             this.saveNextFromQueue();
             this.trigger("saved");
@@ -15,26 +37,15 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
             this.saveNextFromQueue();
             this.trigger("saveFailed", saverWithServerError);
         }, this));
+    },
 
-        var taggables = this.get("collection").map(function (model) {
+    getTaggableEntities: function() {
+        return this.get("collection").map(function(model) {
             return {
                 entityId: model.id,
                 entityType: model.get('entityType')
             };
         });
-
-        var attributes = {taggables: taggables};
-        var method = options.add ? 'add' : 'remove';
-        attributes[method] = options[method].name();
-        tagging.set(attributes);
-
-        // ensure that only one save happens at a time
-        this.queue = this.queue || [];
-
-        this.queue.push(tagging);
-        if (this.queue.length===1) {
-            tagging.save();
-        }
     },
 
     saveNextFromQueue: function() {
