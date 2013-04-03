@@ -18,7 +18,8 @@ class WorkspaceDatasetsController < ApplicationController
                                                                   {:bound_workspaces => :tags},
                                                                   :tableau_workbook_publications,
                                                                   :most_recent_notes,
-                                                                  :most_recent_comments
+                                                                  :most_recent_comments,
+                                                                  :import_schedules
     ).list_order
 
     present paginate(datasets), :presenter_options => { :workspace => workspace }

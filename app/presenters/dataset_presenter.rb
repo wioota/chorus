@@ -1,14 +1,15 @@
 class DatasetPresenter < Presenter
 
   def to_hash
+    recent_comments = Array.wrap(recent_comment)
     {
       :id => model.id,
       :entity_type => model.entity_type_name,
       :entity_subtype => thetype,
       :object_name => model.name,
       :schema => schema_hash,
-      :recent_comments => present(Array.wrap(recent_comment), :as_comment => true),
-      :comment_count => model.comments.count + model.notes.count,
+      :recent_comments => present(recent_comments, :as_comment => true),
+      :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
       :is_deleted => !model.deleted_at.nil?
     }.merge(workspace_hash).
       merge(credentials_hash).
@@ -56,8 +57,8 @@ class DatasetPresenter < Presenter
 
   def frequency
     if !rendering_activities? && options[:workspace] && options[:workspace].id
-      import_schedule = model.import_schedules.where(:workspace_id => options[:workspace].id)
-      {:frequency => import_schedule.first ? import_schedule.first.frequency : ""}
+      import_schedule = model.import_schedules.to_a.select {|sched| sched.workspace_id == options[:workspace].id}.first
+      {:frequency => import_schedule ? import_schedule.frequency : ""}
     else
       {:frequency => ""}
     end
