@@ -74,7 +74,7 @@ class Schema < ActiveRecord::Base
         elsif force_index
           dataset.index
         end
-        found_datasets << dataset
+        found_datasets << dataset.id
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError
       end
     end
@@ -83,7 +83,7 @@ class Schema < ActiveRecord::Base
 
     if mark_stale
       raise "You should not use mark_stale and limit at the same time" if options[:limit]
-      (datasets.not_stale - found_datasets).each do |dataset|
+      (datasets.not_stale.reject { |dataset| found_datasets.include?(dataset.id) }).each do |dataset|
         dataset.mark_stale! unless dataset.is_a? ChorusView
       end
     end
@@ -91,10 +91,10 @@ class Schema < ActiveRecord::Base
     self.active_tables_and_views_count = active_tables_and_views.count
     save!
 
-    found_datasets
+    Dataset.where(:id => found_datasets)
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
-    found_datasets
+    Dataset.where(:id => found_datasets)
   end
 
   def dataset_count(account, options={})

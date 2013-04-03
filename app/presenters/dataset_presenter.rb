@@ -1,21 +1,14 @@
 class DatasetPresenter < Presenter
 
   def to_hash
-    notes = model.notes
-    comments = model.comments
-
-    recent_comments = [notes.last,
-                       comments.last].compact
-    recent_comments = *recent_comments.sort_by(&:created_at).last
-
     {
       :id => model.id,
       :entity_type => model.entity_type_name,
       :entity_subtype => thetype,
       :object_name => model.name,
       :schema => schema_hash,
-      :recent_comments => present(recent_comments, :as_comment => true),
-      :comment_count => comments.count + notes.count,
+      :recent_comments => present(recent_comment, :as_comment => true),
+      :comment_count => model.comments.count + model.notes.count,
       :is_deleted => !model.deleted_at.nil?
     }.merge(workspace_hash).
       merge(credentials_hash).
@@ -30,6 +23,10 @@ class DatasetPresenter < Presenter
   end
 
   private
+
+  def recent_comment
+    [model.most_recent_notes.last, model.most_recent_comments.last].compact.sort_by(&:created_at).last
+  end
 
   def tags_hash
     rendering_activities? ? {} : {:tags => present(model.tags)}

@@ -107,7 +107,7 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def filtered_datasets(current_user, options = {})
+  def filtered_datasets(options = {})
     entity_subtype = options[:entity_subtype] if options
     database_id = options[:database_id] if options
 
@@ -146,7 +146,7 @@ class Workspace < ActiveRecord::Base
         database_id && (database_id != sandbox.database_id) ||
         ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype)
 
-    datasets = filtered_datasets(current_user, options)
+    datasets = filtered_datasets(options)
     yield datasets, options.merge(extra_options), account, skip_sandbox
   end
 
@@ -163,7 +163,7 @@ class Workspace < ActiveRecord::Base
   def datasets(current_user, options = {})
     with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
       datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
-      if datasets.count == 1 && !datasets.first.is_a?(Array) # return intact relations for optimization
+      if datasets.count == 1 # return intact relations for optimization
         datasets.first
       else
         Dataset.where(:id => datasets.flatten)
