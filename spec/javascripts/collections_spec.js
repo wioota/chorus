@@ -442,35 +442,25 @@ describe("chorus.collections.Base", function() {
             this.collection.reset([
                 this.model1.attributes, this.model2.attributes
             ]);
-            this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater();
-            spyOn(this.fakeTaggingsUpdater, "save");
+            this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});
+            spyOn(this.fakeTaggingsUpdater, "updateTags");
             spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
         it("removes and saves tags for each model in the collection", function() {
             this.tag = new chorus.models.Tag({name: 'foo'});
-            this.collection.updateTags({add: this.tag});
+            this.collection.updateTags({remove: this.tag});
 
-            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
-            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
-
-            expect(initializerArg.collection.length).toEqual(2);
-            expect(initializerArg.collection).toEqual(this.collection);
-            expect(initializerArg.add.attributes.name).toEqual("foo");
-            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalledWith({collection: this.collection});
+            expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({remove: this.tag});
         });
 
         it("adds and saves tags for each model in the collection", function() {
             this.tag = new chorus.models.Tag({name: 'foo'});
-            this.collection.updateTags({remove: this.tag});
+            this.collection.updateTags({add: this.tag});
 
-            expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
-            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
-
-            expect(initializerArg.collection.length).toEqual(2);
-            expect(initializerArg.collection).toEqual(this.collection);
-            expect(initializerArg.remove.attributes.name).toEqual("foo");
-            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+            expect(chorus.models.TaggingsUpdater).toHaveBeenCalledWith({collection: this.collection});
+            expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({add: this.tag});
         });
     });
 });
