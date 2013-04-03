@@ -139,20 +139,23 @@ chorus.collections = {
             },
 
             updateTags: function(options) {
-                var taggingsUpdater = new chorus.models.TaggingsUpdater(_.extend({
-                    collection: this
-                }, options));
-
-                this.listenTo(taggingsUpdater, "saved", _.bind(function() {
-                    this.each(function(model) {
-                        model.trigger("change");
+                if (!this.taggingsUpdater) {
+                    this.taggingsUpdater = new chorus.models.TaggingsUpdater({
+                        collection: this
                     });
-                }, this));
 
-                this.listenTo(taggingsUpdater, "saveFailed", _.bind(function(saver) {
-                    this.trigger("saveTagsFailed", saver);
-                }, this));
-                taggingsUpdater.save(options);
+                    this.listenTo(this.taggingsUpdater, "saved", _.bind(function() {
+                        this.each(function(model) {
+                            model.trigger("change");
+                        });
+                    }, this));
+
+                    this.listenTo(this.taggingsUpdater, "saveFailed", _.bind(function(saver) {
+                        this.trigger("saveTagsFailed", saver);
+                    }, this));
+                }
+
+                this.taggingsUpdater.updateTags(options);
             },
 
             remove: function (models, options) {

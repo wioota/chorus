@@ -113,7 +113,7 @@ describe("chorus.Mixins.Taggable", function() {
                 {name: "tag2"}
             ]});
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater();
-            spyOn(this.fakeTaggingsUpdater, "save");
+            spyOn(this.fakeTaggingsUpdater, "updateTags");
             spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
@@ -126,8 +126,7 @@ describe("chorus.Mixins.Taggable", function() {
 
             expect(initializerArg.collection.length).toEqual(1);
             expect(initializerArg.collection.at(0)).toEqual(this.model);
-            expect(initializerArg.add.attributes.name).toEqual("foo");
-            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+            expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({add: this.tag});
         });
 
         it("removes and saves tags", function() {
@@ -139,8 +138,7 @@ describe("chorus.Mixins.Taggable", function() {
 
             expect(initializerArg.collection.length).toEqual(1);
             expect(initializerArg.collection.at(0)).toEqual(this.model);
-            expect(initializerArg.remove.attributes.name).toEqual("foo");
-            expect(this.fakeTaggingsUpdater.save).toHaveBeenCalled();
+            expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({remove: this.tag});
         });
     });
 });
