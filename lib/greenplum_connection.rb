@@ -92,7 +92,7 @@ class GreenplumConnection < DataSourceConnection
       @connection.execute(search_path)
     end
 
-    yield
+    yield @connection
 
   rescue Sequel::DatabaseError => e
     raise GreenplumConnection::DatabaseError.new(e)
@@ -217,16 +217,12 @@ class GreenplumConnection < DataSourceConnection
       with_connection do
         location_string = options[:location_url] ? "LOCATION (E'#{options[:location_url]}')" : ""
         execution_string = options[:execute] ? "EXECUTE E'#{options[:execute]}'" : ""
+        table_name = %Q{"#{schema_name}"."#{options[:table_name]}"}
 
-        if options[:temporary]
-          table_name = %Q{"#{options[:table_name]}"}
-        else
-          table_name = %Q{"#{schema_name}"."#{options[:table_name]}"}
-        end
         @connection.execute(<<-SQL)
-          CREATE EXTERNAL #{options[:web] ? 'WEB ' : ''}#{options[:temporary] ? 'TEMPORARY ' : ''}TABLE #{table_name}
-          (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'CSV'
-          (DELIMITER '#{delimiter}' #{"NULL 'null'" if options[:null]})
+          CREATE EXTERNAL TABLE #{table_name}
+          (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'TEXT'
+          (DELIMITER '#{delimiter}')
         SQL
       end
       true
