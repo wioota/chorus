@@ -1,7 +1,7 @@
 require 'csv'
 
 class SqlStreamer
-  def initialize(sql, connection, options = {})
+  def initialize(sql, connection, options = {}, store_statement = lambda {|statement|})
     @sql = sql
     @connection = connection
     @target_is_greenplum = options[:target_is_greenplum]
@@ -10,6 +10,7 @@ class SqlStreamer
     @stream_options = {}
     @stream_options[:limit] = options[:row_limit] if options[:row_limit].to_i > 0
     @stream_options[:quiet_null] = !!options[:quiet_null]
+    @store_statement = store_statement
   end
 
   def enum
@@ -18,7 +19,7 @@ class SqlStreamer
 
     Enumerator.new do |y|
       begin
-        @connection.stream_sql(@sql, @stream_options) do |row|
+        @connection.stream_sql(@sql, @stream_options, @store_statement) do |row|
           no_results = false
 
           if first_row && @show_headers

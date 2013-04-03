@@ -13,6 +13,10 @@ describe Visualization::Heatmap do
   end
   let(:instance_account) { GreenplumIntegration.real_account }
 
+  before do
+    set_current_user users(:default)
+  end
+
   describe "#fetch!", :greenplum_integration do
 
     before do

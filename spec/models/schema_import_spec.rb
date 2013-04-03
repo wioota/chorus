@@ -120,7 +120,7 @@ describe SchemaImport do
 
       stub(source_connection).running?.with_any_args { true }
       stub(destination_connection).running?.with_any_args { true }
-      mock.proxy(CancelableQuery).new(destination_connection, import.handle) do |query|
+      mock.proxy(CancelableQuery).new(destination_connection, import.handle, import.user) do |query|
         mock(query).cancel
       end
       any_instance_of(Schema) do |schema|

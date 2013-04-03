@@ -51,6 +51,6 @@ class SchemaImport < Import
     super
 
     connection = schema.connect_as(user)
-    CancelableQuery.new(connection, handle).cancel
+    CancelableQuery.new(connection, handle, user).cancel
   end
 end

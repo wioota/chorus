@@ -15,7 +15,11 @@ describe Visualization::Timeseries, :greenplum_integration do
     })
   end
 
-  context "blah" do
+  before do
+    set_current_user users(:default)
+  end
+
+  context "when domain values exceed limit" do
     let(:test_schema) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema') }
     let(:filters) { [] }
     let(:dataset) {

@@ -10,19 +10,17 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Cache-Control"] = 'no-cache'
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
-      sql = CancelableQuery.format_sql_and_check_id(params[:sql], params[:check_id])
-      streamer = SqlStreamer.new(sql, @schema.connect_as(current_user), row_limit: params[:num_of_rows].to_i)
-      self.response_body = streamer.enum
+
+      self.response_body= SqlExecutor.stream(params[:sql], @schema.connect_as(current_user), params[:check_id], current_user, :row_limit => params[:num_of_rows].to_i)
     else
-      account = @schema.account_for_user! current_user
-      present SqlExecutor.execute_sql(@schema, account, params[:check_id], params[:sql],
+      present SqlExecutor.execute_sql(params[:sql], @schema.connect_as(current_user), @schema, params[:check_id], current_user,
                                       :limit => ChorusConfig.instance['default_preview_row_limit'],
                                       :include_public_schema_in_search_path => true)
     end
   end
 
   def destroy
-    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id])
+    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id], current_user)
     head :ok
   end
 

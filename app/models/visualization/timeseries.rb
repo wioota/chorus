@@ -15,7 +15,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(@schema, account, check_id, row_sql)
+      result = SqlExecutor.execute_sql(row_sql, @schema.connect_with(account), @schema, check_id, current_user)
       raise ApiValidationError.new(:base, :too_many_rows) if result.rows.count > 1000
       @rows = result.rows.map { |row| {:value => row[0].to_f.round(3), :time => row[1]} }
     end

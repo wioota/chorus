@@ -8,9 +8,13 @@ describe PreviewsController do
   let(:user) { users(:the_collaborator) }
   let(:account) { gpdb_data_source.account_for_user!(user) }
   let(:check_id) { 'id-for-cancelling-previews' }
+  let(:connection) { Object.new }
 
   before do
     log_in user
+    any_instance_of(Dataset) do |dataset|
+      stub(dataset).connect_as(user) { connection }
+    end
   end
 
   describe "#create" do
@@ -20,7 +24,7 @@ describe PreviewsController do
     context "when create is successful" do
       before do
         fake_result = GreenplumSqlResult.new
-        mock(SqlExecutor).preview_dataset(gpdb_table, account, check_id) { fake_result }
+        mock(SqlExecutor).preview_dataset(gpdb_table, connection, check_id, user) { fake_result }
       end
 
       it "uses authentication" do
@@ -47,7 +51,7 @@ describe PreviewsController do
 
     context "when there's an error'" do
       before do
-        mock(SqlExecutor).preview_dataset(gpdb_table, account, check_id) { raise GreenplumConnection::QueryError }
+        mock(SqlExecutor).preview_dataset(gpdb_table, connection, check_id, user) { raise GreenplumConnection::QueryError }
       end
       it "returns an error if the query fails" do
         post :create, params
@@ -60,7 +64,7 @@ describe PreviewsController do
 
   describe "#destroy" do
     it "cancels the data preview command" do
-      mock(SqlExecutor).cancel_query(gpdb_table, account, check_id)
+      mock(SqlExecutor).cancel_query(gpdb_table, connection, check_id, user)
       delete :destroy, :dataset_id => gpdb_table.to_param, :id => check_id
 
       response.code.should == '200'
@@ -79,11 +83,14 @@ describe PreviewsController do
 
     before do
       stub.proxy(ChorusConfig.instance).[](anything)
+      any_instance_of(Schema) do |schema|
+        stub(schema).connect_as(user) { connection }
+      end
       stub(ChorusConfig.instance).[]('default_preview_row_limit') { row_limit }
     end
 
     it "returns the results of the sql" do
-      mock(SqlExecutor).execute_sql(schema, account, check_id, expected_sql, :limit => row_limit) { GreenplumSqlResult.new }
+      mock(SqlExecutor).execute_sql(expected_sql, connection, schema, check_id, user, :limit => row_limit) { GreenplumSqlResult.new }
 
       post :preview_sql, params
 

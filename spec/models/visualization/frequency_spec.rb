@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Visualization::Frequency, :greenplum_integration do
+  before do
+    set_current_user users(:default)
+  end
+
   let(:account) { GreenplumIntegration.real_account }
   let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
   let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
