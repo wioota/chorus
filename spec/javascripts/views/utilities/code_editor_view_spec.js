@@ -136,10 +136,12 @@ describe("chorus.views.CodeEditorView", function() {
         });
 
         it("inserts text at the beginning of a line", function() {
-            var pos = this.view.editor.charCoords({line: 1, ch: 0});
-            var fakeEvent = { pageX: pos.x, pageY: pos.y};
+            var pos = this.view.editor.charCoords({line: 2, ch: 0});
+            // Shift coordinates a little bit so we aren't right on a line boundary
+            // This was causing different behavior between Chrome, Firefox, and Phantom
+            var fakeEvent = { pageX: pos.x, pageY: pos.y-1};
             this.view.acceptDrop(fakeEvent, this.drag);
-            expect(this.view.editor.getLine(0)).toBe("testthis is the first line");
+            expect(this.view.editor.getLine(1)).toBe("test");
         });
 
         it("inserts text in the middle of a line", function() {
