@@ -7,8 +7,8 @@ describe("chorus.models.TaggingsUpdater", function() {
 
         this.taggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});
 
-        spyOnEvent(this.taggingsUpdater, "saved");
-        spyOnEvent(this.taggingsUpdater, "saveFailed");
+        spyOnEvent(this.taggingsUpdater, "updated");
+        spyOnEvent(this.taggingsUpdater, "updateFailed");
     });
 
     describe("adding a tag", function() {
@@ -28,14 +28,24 @@ describe("chorus.models.TaggingsUpdater", function() {
             expect(params["remove"]).toEqual();
         });
 
-        it("triggers saved on the tagging set array", function() {
-            this.server.lastCreate().succeed();
-            expect("saved").toHaveBeenTriggeredOn(this.taggingsUpdater);
+        context("when the update succeeds", function() {
+            beforeEach(function() {
+                this.server.lastCreate().succeed();
+            });
+
+            it("triggers updated on the tagging set array", function() {
+                expect("updated").toHaveBeenTriggeredOn(this.taggingsUpdater);
+            });
         });
 
-        it("triggers saveFailed the tagging set array", function() {
-            this.server.lastCreate().failForbidden();
-            expect("saveFailed").toHaveBeenTriggeredOn(this.taggingsUpdater);
+        context("when the update failed", function() {
+            beforeEach(function() {
+                this.server.lastCreate().failForbidden();
+            });
+
+            it("triggers updateFailed on the taggings", function() {
+                expect("updateFailed").toHaveBeenTriggeredOn(this.taggingsUpdater);
+            });
         });
 
         context("with multiple tag updates", function() {

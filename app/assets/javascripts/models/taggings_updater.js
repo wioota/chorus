@@ -23,12 +23,12 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
     addEventListeners: function(tagging) {
         this.listenTo(tagging, "saved", _.bind(function() {
             this.saveNextTaggingFromQueue();
-            this.trigger("saved");
+            this.trigger("updated");
         }, this));
 
         this.listenTo(tagging, "saveFailed", _.bind(function(saverWithServerError) {
             this.saveNextTaggingFromQueue();
-            this.trigger("saveFailed", saverWithServerError);
+            this.trigger("updateFailed", saverWithServerError);
         }, this));
     },
 

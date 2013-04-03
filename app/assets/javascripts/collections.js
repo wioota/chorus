@@ -144,13 +144,13 @@ chorus.collections = {
                         collection: this
                     });
 
-                    this.listenTo(this.taggingsUpdater, "saved", _.bind(function() {
+                    this.listenTo(this.taggingsUpdater, "updated", _.bind(function() {
                         this.each(function(model) {
                             model.trigger("change");
                         });
                     }, this));
 
-                    this.listenTo(this.taggingsUpdater, "saveFailed", _.bind(function(saver) {
+                    this.listenTo(this.taggingsUpdater, "updateFailed", _.bind(function(saver) {
                         this.trigger("saveTagsFailed", saver);
                     }, this));
                 }
