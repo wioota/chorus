@@ -106,6 +106,7 @@ $toast-closing-z-index: $modal-tooltip-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
 $hidden-z-index: -100;
 $select-menu-z-index: 1000000;
+$drag-z-index: 9999;
 
 // Font weights
 $semibold: 600;

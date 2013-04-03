@@ -76,6 +76,10 @@ input[type=checkbox], input[type=radio] {
     display: none !important;
 }
 
+.no_cursor {
+    cursor: none;
+}
+
 img.disabled {
     @include opacity(0.25);
 }

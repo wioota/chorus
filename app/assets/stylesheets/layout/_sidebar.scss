@@ -351,7 +351,7 @@ data_tab_dataset_list {
 .drag_helper {
     width: 225px;
     height: 29px;
-    z-index: 9999;
+    z-index: $drag-z-index;
     margin-top: 2px;
     font-size: 14px;
 
