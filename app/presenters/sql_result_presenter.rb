@@ -3,7 +3,6 @@ class SqlResultPresenter < Presenter
     {
         :columns => present(model.columns),
         :rows => model.rows,
-        :execution_schema => present(model.schema),
         :warnings => model.warnings
     }
   end

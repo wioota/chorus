@@ -23,17 +23,6 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         expect(_.keys(params).length).toEqual(2);
     });
 
-    describe("executionSchema", function() {
-        beforeEach(function () {
-            this.model.set({"executionSchema": rspecFixtures.schemaJson()});
-        });
-
-        it("returns the schema", function() {
-            expect(this.model.executionSchema()).toBeA(chorus.models.Schema);
-            expect(this.model.executionSchema().id).toEqual(this.model.get("executionSchema").id);
-        });
-    });
-
     it("mixes in SQLResults", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     });

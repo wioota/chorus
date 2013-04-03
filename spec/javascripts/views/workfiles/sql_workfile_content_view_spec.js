@@ -137,26 +137,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         it("renders the resultsConsole", function() {
                             expect(this.view.resultsConsole.render).toHaveBeenCalled();
                         });
-
-                        describe("executing again", function() {
-                            beforeEach(function() {
-                                this.originalSchema = this.view.task.executionSchema();
-                                chorus.PageEvents.broadcast("file:runCurrent");
-                            });
-
-                            it("executes the task again", function() {
-                                expect(this.server.creates().length).toBe(2);
-                            });
-
-                            it("saves the new executionSchema", function() {
-                                this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults({
-                                    executionSchema: {
-                                        id: 42
-                                    }
-                                }));
-                                expect(this.view.task.executionSchema().id).toEqual(42);
-                            });
-                        });
                     });
 
                     describe("when the task completion fails", function() {

@@ -9,7 +9,6 @@ describe SqlResultPresenter, :type => :view do
       result.add_row(["11", "t"])
       result.add_row(["21", "f"])
       result.add_row(["31", "f"])
-      result.schema = schema
       result.warnings = ['warning1', 'warning2']
     end
   end
@@ -35,10 +34,6 @@ describe SqlResultPresenter, :type => :view do
           ["21", "f"],
           ["31", "f"]
       ]
-    end
-
-    it "presents the execution schema" do
-      hash[:execution_schema].should == GpdbSchemaPresenter.new(schema, view).presentation_hash
     end
 
     it "presents the warnings" do
