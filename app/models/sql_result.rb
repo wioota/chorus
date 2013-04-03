@@ -2,7 +2,7 @@ require_relative 'dataset_column'
 
 class SqlResult
   attr_reader :columns, :rows
-  attr_accessor :schema, :warnings
+  attr_accessor :warnings
 
   def initialize(options = {})
     @columns = []

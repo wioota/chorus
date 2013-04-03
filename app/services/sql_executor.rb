@@ -8,9 +8,7 @@ module SqlExecutor
       cancelable_query = CancelableQuery.new(connection, check_id, user)
 
       options.merge!({ :timeout => sql_execution_timeout }) if sql_execution_timeout > 0
-      result = cancelable_query.execute(sql, options)
-      result.schema = schema
-      result
+      cancelable_query.execute(sql, options)
     end
 
     def cancel_query(gpdb_connection_provider, account, check_id, user)

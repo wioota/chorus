@@ -165,10 +165,6 @@ describe SqlExecutor do
       result.should be_a SqlResult
     end
 
-    it "sets the schema on the SqlResult" do
-      result.schema.should == schema
-    end
-
     it 'includes warnings from postgres' do
       result.warnings.should_not be_empty
     end

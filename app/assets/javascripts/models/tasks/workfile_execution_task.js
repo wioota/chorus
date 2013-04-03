@@ -7,18 +7,6 @@ chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
         return this.get("workfile").get("fileName");
     },
 
-    executionSchema: function() {
-        if(!this._executionSchema) {
-            this._executionSchema = new chorus.models.Schema(this.get("executionSchema"));
-        }
-        return this._executionSchema;
-    },
-
-    clear: function() {
-        delete this._executionSchema;
-        this._super('clear', arguments);
-    },
-
     getRows: function() {
         var rows = this.get("rows"),
             columns = this.get("columns"),
