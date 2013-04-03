@@ -13,15 +13,13 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
         this.bindings.add(tags, "add", this.addTag);
         this.bindings.add(tags, "remove", this.removeTag);
         this.bindings.add(this.collection, "saveTagsFailed", this.saveFailed);
-        this.tagsInput = new chorus.views.TagsInput({tags: tags});
+        this.tagsInput = new chorus.views.TagsInput({tags: tags, taggable: this.collection});
     },
 
     addTag: function(tag) {
         this.collection.each(function(model) {
             model.tags().add(tag);
         });
-
-        this.collection.updateTags({add: tag});
     },
 
     removeTag: function(tag) {
@@ -29,8 +27,6 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
             var tagToRemove = model.tags().where({name: tag.name()});
             model.tags().remove(tagToRemove);
         });
-
-        this.collection.updateTags({remove: tag});
     },
 
     tags: function() {

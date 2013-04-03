@@ -6,10 +6,8 @@ chorus.views.TagBox = chorus.views.Base.extend({
     setup: function() {
         this.requiredResources.add(this.model);
         this.tags = this.model.tags();
-        this.tagsInput = new chorus.views.TagsInput({tags: this.tags});
+        this.tagsInput = new chorus.views.TagsInput({tags: this.tags, taggable: this.model});
         this.bindings.add(this.tagsInput, "tag:click", this.navigateToTagShowPage);
-        this.bindings.add(this.tags, "add", this.addTag);
-        this.bindings.add(this.tags, "remove", this.removeTag);
     },
 
    navigateToTagShowPage: function(tag) {
@@ -20,13 +18,5 @@ chorus.views.TagBox = chorus.views.Base.extend({
 
     resourcesLoaded: function() {
         this.tags.reset(this.model.get("tags"));
-    },
-
-    addTag: function(model) {
-        this.model.updateTags({add: model});
-    },
-
-    removeTag: function(model) {
-        this.model.updateTags({remove: model});
     }
 });

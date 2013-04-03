@@ -7,11 +7,18 @@ describe("chorus.views.TagsInput", function() {
             {name: 'beta'},
             {name: 'gamma'}
         ]);
-        view = new chorus.views.TagsInput({tags: tags});
+
+        this.taggable = {
+            updateTags: $.noop
+        };
+
+        view = new chorus.views.TagsInput({tags: tags, taggable: this.taggable});
+
         this.addedSpy = jasmine.createSpy("addedTag");
         this.removedSpy = jasmine.createSpy("removedTag");
         tags.on("add", this.addedSpy);
         tags.on("remove", this.removedSpy);
+
         view.render();
         input = view.$("input");
 
