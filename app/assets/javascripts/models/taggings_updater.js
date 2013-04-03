@@ -4,14 +4,7 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
 
     updateTags: function(options) {
         var tagging = this.createTagging(options);
-
-        // ensure that only one save happens at a time
-        this.queue = this.queue || [];
-
-        this.queue.push(tagging);
-        if (this.queue.length===1) {
-            tagging.save();
-        }
+        this.pushTaggingOntoQueue(tagging);
     },
 
     createTagging: function(options) {
@@ -29,12 +22,12 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
 
     addEventListeners: function(tagging) {
         this.listenTo(tagging, "saved", _.bind(function() {
-            this.saveNextFromQueue();
+            this.saveNextTaggingFromQueue();
             this.trigger("saved");
         }, this));
 
         this.listenTo(tagging, "saveFailed", _.bind(function(saverWithServerError) {
-            this.saveNextFromQueue();
+            this.saveNextTaggingFromQueue();
             this.trigger("saveFailed", saverWithServerError);
         }, this));
     },
@@ -48,10 +41,20 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
         });
     },
 
-    saveNextFromQueue: function() {
-        this.queue.shift();
+    pushTaggingOntoQueue: function(tagging) {
+        // ensure that only one save happens at a time
+        this.queue = this.queue || [];
+
+        this.queue.push(tagging);
+        if (this.queue.length===1) {
+            tagging.save();
+        }
+    },
+
+    saveNextTaggingFromQueue: function() {
+        this.queue.shift(); // note that the last tagging has finished saving by removing it
         if(this.queue.length > 0) {
-            this.queue[0].save();
+            this.queue[0].save(); // start saving the next tagging
         }
     }
 });

@@ -5,6 +5,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
 
     setup: function() {
         this.tags = this.options.tags;
+        this.taggable = this.options.taggable;
     },
 
     postRender: function() {
@@ -86,7 +87,9 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         if(duplicate) {
             this.tags.remove(duplicate, {silent: true});
         }
+
         this.tags.add(newTag);
+        this.taggable.updateTags({add: newTag});
         this.render();
         this.focusInput();
     },
@@ -97,6 +100,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             return !_.contains(tagNames, tag.name());
         });
         this.tags.remove(missingTag);
+        this.taggable.updateTags({remove: missingTag});
     },
 
     textExtValidate: function(e, data) {
