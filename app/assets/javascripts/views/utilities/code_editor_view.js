@@ -48,28 +48,41 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
                 if(this.options.beforeEdit) {
                     this.options.beforeEdit.call(this);
                 }
-                this.$(".CodeMirror").droppable().on('drop', _.bind(this.acceptDrop, this));
+                this.$(".CodeMirror").droppable({
+                    drop: _.bind(this.acceptDrop, this),
+                    out: _.bind(this.endDragging, this),
+                    over: _.bind(this.startDragging, this)
+                });
             }
         }
     },
 
     postRender: function() {
         _.defer(_.bind(this.setupCodeMirror, this));
+        this.$dropInsertionPoint = $('.drop_insertion_point');
+        this.$noCursorOverlay = $('.no_cursor_overlay');
     },
 
-    onBlur: function () {
-      this.trigger('blur');
+    repositionInsertionPoint: function(event) {
+        var characterPosition = this.editor.coordsChar({x: event.pageX, y: event.pageY });
+        var pixelPosition = this.editor.charCoords(characterPosition);
+        this.$dropInsertionPoint.css("left", pixelPosition.x);
+        this.$dropInsertionPoint.css("top", pixelPosition.y);
     },
 
-    onChange: function () {
-      this.trigger('change');
+    startDragging: function() {
+        this.$noCursorOverlay.show();
+        this.$noCursorOverlay.bind("mousemove.drop_insertion_point", _.bind(this.repositionInsertionPoint, this));
+        this.$dropInsertionPoint.show();
     },
 
-    additionalContext: function() {
-        return { editorContent: this.model.content() };
+    endDragging: function() {
+        this.$noCursorOverlay.hide();
+        this.$dropInsertionPoint.hide();
     },
 
     acceptDrop: function(e, ui) {
+        this.endDragging();
         var pos = this.editor.coordsChar({x: e.pageX, y: e.pageY});
         this.editor.setCursor(pos);
         this.insertText(ui.draggable.data("fullname"));
@@ -79,6 +92,18 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
         this.editor.focus();
         this.editor.replaceSelection(text);
         this.editor.setCursor(this.editor.getCursor(false));
+    },
+
+    onBlur: function () {
+        this.trigger('blur');
+    },
+
+    onChange: function () {
+        this.trigger('change');
+    },
+
+    additionalContext: function() {
+        return { editorContent: this.model.content() };
     }
 });
 

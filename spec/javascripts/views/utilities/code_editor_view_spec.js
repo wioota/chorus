@@ -68,26 +68,91 @@ describe("chorus.views.CodeEditorView", function() {
                 expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
             });
         });
+    });
 
-        describe("drag and drop", function() {
+    describe("dragging a dataset, column, or function", function() {
+        beforeEach(function() {
+            stubDefer();
+            this.view.render();
+            this.drag = {draggable: $('<div data-fullname="test"></div>')};
+            this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
+            expect(this.view.editor.lineCount()).toBe(3);
+        });
+
+        describe("repositioning the insertion point", function() {
             beforeEach(function() {
-                this.drag = {draggable: $('<div data-fullname="test"></div>')};
-                this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
-                expect(this.view.editor.lineCount()).toBe(3);
+                this.mouseMoveEvent = {pageX: -1, pageY: -1};
+                this.characterPosition = {line: 2, ch: 12};
+                this.insertionPointPixelPosition = {x: 12, y: 34};
+                spyOn(this.view.editor, "coordsChar").andReturn(this.characterPosition);
+                spyOn(this.view.editor, "charCoords").andReturn(this.insertionPointPixelPosition);
             });
 
-            it("inserts text at the beginning of a line", function() {
-                var pos = this.view.editor.charCoords({line: 1, ch: 0});
-                var fakeEvent = { pageX: pos.x, pageY: pos.y };
-                this.view.acceptDrop(fakeEvent, this.drag);
-                expect(this.view.editor.getLine(1)).toBe("test");
+            it("computes the insertion point's pixel position based on the character position where text will be inserted", function() {
+                this.view.repositionInsertionPoint(this.mouseMoveEvent);
+                var pixelPositionParameters = this.view.editor.charCoords.calls[0].args[0];
+                expect(pixelPositionParameters).toBe(this.characterPosition);
             });
 
-            it("inserts text in the middle of a line", function() {
-                var pos = this.view.editor.charCoords({line:2, ch: 12});
-                this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
-                expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
+            it("updates the position of the insertion point", function(){
+                this.view.repositionInsertionPoint(this.mouseMoveEvent);
+
+                var $reticle = this.view.$dropInsertionPoint;
+                expect($reticle.css("left")).toBe(this.insertionPointPixelPosition.x + "px");
+                expect($reticle.css("top")).toBe(this.insertionPointPixelPosition.y + "px");
             });
+        });
+
+        describe("starting dragging", function() {
+            it("shows the no cursor overlay", function() {
+                expect(this.view.$('.no_cursor_overlay')).toBeHidden();
+                this.view.startDragging();
+                expect(this.view.$('.no_cursor_overlay')).not.toBeHidden();
+            });
+
+            it("shows the insertion point", function() {
+                expect(this.view.$dropInsertionPoint).toBeHidden();
+                this.view.startDragging();
+                expect(this.view.$dropInsertionPoint).not.toBeHidden();
+            });
+
+            xit("repositions the insertion point when the mouse is moved", function() {
+                spyOn(this.view, 'repositionInsertionPoint');
+                this.view.startDragging();
+                $(".no_cursor_overlay").trigger('mousemove');
+                expect(this.view.repositionInsertionPoint).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe("dropping a dataset, column, or function", function() {
+        beforeEach(function() {
+            stubDefer();
+            this.view.render();
+            this.drag = {draggable: $('<div data-fullname="test"></div>')};
+            this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
+            expect(this.view.editor.lineCount()).toBe(3);
+            this.view.startDragging();
+        });
+
+        it("inserts text at the beginning of a line", function() {
+            var pos = this.view.editor.charCoords({line: 1, ch: 0});
+            var fakeEvent = { pageX: pos.x, pageY: pos.y};
+            this.view.acceptDrop(fakeEvent, this.drag);
+            expect(this.view.editor.getLine(0)).toBe("testthis is the first line");
+        });
+
+        it("inserts text in the middle of a line", function() {
+            var pos = this.view.editor.charCoords({line: 2, ch: 12});
+            this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+            expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
+        });
+
+        it('cancels all the dragging behavior', function(){
+            var pos = {x: -1, y: -1};
+            this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+            expect(this.view.$('.no_cursor_overlay')).toBeHidden();
+            expect(this.view.$dropInsertionPoint).toBeHidden();
         });
     });
 
