@@ -7,7 +7,7 @@ class DatasetPresenter < Presenter
       :entity_subtype => thetype,
       :object_name => model.name,
       :schema => schema_hash,
-      :recent_comments => present(recent_comment, :as_comment => true),
+      :recent_comments => present(Array.wrap(recent_comment), :as_comment => true),
       :comment_count => model.comments.count + model.notes.count,
       :is_deleted => !model.deleted_at.nil?
     }.merge(workspace_hash).
