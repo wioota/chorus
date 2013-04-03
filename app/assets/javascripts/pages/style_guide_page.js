@@ -759,7 +759,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 instance: this.models.gpdbDataSource
             }),
 
-            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability })
+            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
+
+            "Dataset Download Dialog": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset})
         };
     },
 
