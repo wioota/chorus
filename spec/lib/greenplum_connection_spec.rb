@@ -604,11 +604,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:table_name) { "a_new_external_table" }
       let(:columns) { "field1 varchar, field2 integer" }
       let(:location_url) { "gphdfs://foo/*.csv" }
-      let(:delimiter) { "," }
-      let(:web) { false }
       let(:execute_command) { nil }
-      let(:temporary) { false }
-      let(:null_string) { 'null' }
 
       let(:subject) do
         connection.create_external_table(
@@ -617,10 +613,7 @@ describe GreenplumConnection, :greenplum_integration do
                 :columns => columns,
                 :location_url => location_url,
                 :execute => execute_command,
-                :delimiter => delimiter,
-                :web => web,
-                :temporary => temporary,
-                :null => null_string
+                :delimiter => ","
             }
         )
       end
@@ -634,37 +627,20 @@ describe GreenplumConnection, :greenplum_integration do
         }.to change { Sequel.connect(db_url).tables }
       end
 
-      context 'for an external web table' do
-        let(:web) { true }
-        let(:location_url) { nil }
-        let(:execute_command) { 'echo "1,2"' }
-
-        # we cannot directly test create_external_table with a location_string since we can't provide
-        # an http URL that serves data in the context of this test, so we test execution_string instead.
-        it 'creates an external table' do
-          subject
-          row = Sequel.connect(db_url).fetch("SELECT * from #{schema_name}.#{table_name}").first
-          row[:field1].should == "1"
-          row[:field2].should == 2
-        end
-      end
-      context 'creating an external temporary table' do
-        let(:temporary) { true }
-        let(:web) { true }
-        let(:location_url) { nil }
-        let(:execute_command) { 'echo "1,2"' }
-
-        it 'creates an external temporary table' do
-          connection.connect!
-          begin
-            subject
-            row = connection.fetch("SELECT * from #{table_name}").first
-            row[:field1].should == "1"
-            row[:field2].should == 2
-          ensure
-            connection.disconnect
-          end
-          expect { connection.fetch("SELECT * from #{table_name}") }.to raise_error(GreenplumConnection::DatabaseError, /not exist/)
+      it 'sets the format to TEXT' do
+        # CSV table type breaks hadoop external tables
+        subject
+        connection.with_connection do |conn|
+          sql = <<-SQL
+            SELECT
+              *
+            FROM pg_catalog.pg_class
+              INNER JOIN pg_exttable ON pg_exttable.reloid = pg_catalog.pg_class.oid
+              INNER JOIN pg_namespace ON pg_namespace.oid = relnamespace AND pg_namespace.nspname = '#{schema_name}'
+            WHERE relname = '#{table_name}'
+              AND fmttype = 't' -- fmttype = 't' means it is a TEXT external table and not CSV
+          SQL
+          conn.fetch(sql).count.should == 1
         end
       end
 
@@ -675,20 +651,6 @@ describe GreenplumConnection, :greenplum_integration do
             subject
           }.to raise_error(GreenplumConnection::DatabaseError)
         end
-      end
-
-      context 'without a delimiter' do
-        let(:delimiter) { nil }
-        let(:web) { true }
-        let(:location_url) { nil }
-        let(:execute_command) { 'echo "1,2"' }
-
-        it_should_behave_like "a well-behaved database query"
-      end
-
-      context "without a null" do
-        let(:null_string) { nil }
-        it_should_behave_like "a well-behaved database query"
       end
     end
 
