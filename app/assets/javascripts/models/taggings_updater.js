@@ -32,8 +32,8 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
         this.queue = this.queue || [];
 
         this.queue.push(tagging);
-        if (this.queue.length==1) {
-            tagging.save()
+        if (this.queue.length===1) {
+            tagging.save();
         }
     },
 
