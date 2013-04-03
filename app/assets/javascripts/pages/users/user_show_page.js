@@ -32,10 +32,7 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
     },
 
     setupSidebar: function() {
-        if(this.model.id === chorus.session.user().id.toString()){
-            this.sidebar = new chorus.views.UserSidebar({model: this.model, showApiKey: true});
-        } else {
-            this.sidebar = new chorus.views.UserSidebar({model: this.model});
-        }
+        var showApiKey = parseInt(this.model.id, 10) === parseInt(chorus.session.user().id, 10);
+        this.sidebar = new chorus.views.UserSidebar({model: this.model, showApiKey: showApiKey});
     }
 });

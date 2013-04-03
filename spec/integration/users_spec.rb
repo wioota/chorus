@@ -97,4 +97,20 @@ describe "Users" do
       end
     end
   end
+
+  describe "API key" do
+    it "should show the user their API key" do
+      visit "#/users"
+      within ".list" do
+        click_link "#{admin.first_name} #{admin.last_name}"
+      end
+      within ".user_sidebar .actions" do
+        click_link "Display API key"
+      end
+      within_modal do
+        page.should have_content(admin.api_key)
+        click_on "Close Window"
+      end
+    end
+  end
 end
