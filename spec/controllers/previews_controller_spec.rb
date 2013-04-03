@@ -64,7 +64,7 @@ describe PreviewsController do
 
   describe "#destroy" do
     it "cancels the data preview command" do
-      mock(SqlExecutor).cancel_query(gpdb_table, connection, check_id, user)
+      mock(SqlExecutor).cancel_query(gpdb_table, account, check_id, user)
       delete :destroy, :dataset_id => gpdb_table.to_param, :id => check_id
 
       response.code.should == '200'

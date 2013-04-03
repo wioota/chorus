@@ -13,9 +13,9 @@ class PreviewsController < ApplicationController
 
   def destroy
     dataset = Dataset.find(params[:dataset_id])
-    authorize_data_source_access(dataset)
+    account = authorized_account(dataset)
 
-    SqlExecutor.cancel_query(dataset, dataset.connect_as(current_user), params[:id], current_user)
+    SqlExecutor.cancel_query(dataset, account, params[:id], current_user)
     head :ok
   end
 
