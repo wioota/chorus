@@ -38,6 +38,23 @@ resource 'Tags' do
     end
   end
 
+  get '/taggings' do
+    parameter :entity_id, 'The id of taggable entity'
+    parameter :entity_type, 'The type of the taggable entity (workfile, dataset, etc)'
+    required_parameters :entity_id, :entity_type
+
+    before do
+      workfile.tag_list = ['alpha']
+    end
+
+    let(:entity_id) { workfile.id }
+    let(:entity_type) { 'workfile' }
+
+    example_request 'Get the list of tags for an entity' do
+      status.should == 200
+    end
+  end
+
   get '/tags' do
     parameter :query, 'String to search tags for'
 
