@@ -100,11 +100,8 @@ describe "Users" do
 
   describe "API key" do
     it "should show the user their API key" do
-      visit "#/users"
-      within ".list" do
-        click_link "#{admin.first_name} #{admin.last_name}"
-      end
-      within ".user_sidebar .actions" do
+      visit "#/users/#{admin.id}"
+      within ".user_sidebar" do
         click_link "Display API key"
       end
       within_modal do
