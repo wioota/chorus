@@ -15,7 +15,7 @@ describe DatasetsController do
       before do
         stub(Schema).find(schema.id.to_s) { schema }
         stub(schema).refresh_datasets(anything, options) do
-          [dataset1, dataset2, dataset3]
+          fake_relation([dataset1, dataset2, dataset3])
         end
         stub(schema).dataset_count { 122 }
       end
