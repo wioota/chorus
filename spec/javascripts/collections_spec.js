@@ -440,10 +440,13 @@ describe("chorus.collections.Base", function() {
             ]});
             this.collection = rspecFixtures.workfileSet();
             this.collection.reset([
-                this.model1.attributes, this.model2.attributes
+                this.model1, this.model2
             ]);
+
+            spyOnEvent(this.model1, "change:tags");
+            spyOnEvent(this.model2, "change:tags");
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});
-            spyOn(this.fakeTaggingsUpdater, "updateTags");
+            spyOn(this.fakeTaggingsUpdater, "updateTags").andCallThrough();
             spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
@@ -461,6 +464,14 @@ describe("chorus.collections.Base", function() {
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalledWith({collection: this.collection});
             expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({add: this.tag});
+        });
+
+        it("triggers change:tags on models when tags have saved", function() {
+            this.tag = new chorus.models.Tag({name: 'foo'});
+            this.collection.updateTags({add: this.tag});
+            this.server.lastCreate().succeed();
+            expect('change:tags').toHaveBeenTriggeredOn(this.model1);
+            expect('change:tags').toHaveBeenTriggeredOn(this.model2);
         });
     });
 });

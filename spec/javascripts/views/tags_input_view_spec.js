@@ -8,9 +8,8 @@ describe("chorus.views.TagsInput", function() {
             {name: 'gamma'}
         ]);
 
-        this.taggable = {
-            updateTags: $.noop
-        };
+        this.taggable = new chorus.models.Base();
+        spyOn(chorus.views.TagsInput.prototype, 'render').andCallThrough();
 
         view = new chorus.views.TagsInput({tags: tags, taggable: this.taggable});
 
@@ -40,6 +39,12 @@ describe("chorus.views.TagsInput", function() {
         expect(view.$el).toContainText("alpha");
         expect(view.$el).toContainText("beta");
         expect(view.$el).toContainText("gamma");
+    });
+
+    it("re renders when the taggable trigger change:tags", function() {
+        view.render.reset();
+        this.taggable.trigger('change:tags');
+        expect(view.render).toHaveBeenCalled();
     });
 
     describe('clicking on the x', function() {

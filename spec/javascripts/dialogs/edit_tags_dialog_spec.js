@@ -99,12 +99,12 @@ describe("chorus.dialogs.EditTags", function() {
                 expect(this.collection.updateTags.mostRecentCall.args[0].add.name()).toBe("foo");
             });
 
-            it('triggers model.change on each model in the collection', function() {
+            it('triggers change:tags on each model in the collection', function() {
                 enterTag(this.dialog, "foo");
                 var savedModel = this.collection.last();
-                spyOnEvent(savedModel, "change");
+                spyOnEvent(savedModel, "change:tags");
                 this.server.lastCreate().succeed();
-                expect("change").toHaveBeenTriggeredOn(savedModel);
+                expect("change:tags").toHaveBeenTriggeredOn(savedModel);
             });
 
             context('when the tag is already on some of the models', function() {

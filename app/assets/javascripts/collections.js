@@ -146,7 +146,7 @@ chorus.collections = {
 
                     this.listenTo(this.taggingsUpdater, "saved", _.bind(function() {
                         this.each(function(model) {
-                            model.trigger("change");
+                            model.trigger("change:tags");
                         });
                     }, this));
 
