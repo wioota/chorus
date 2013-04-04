@@ -40,11 +40,16 @@ describe("chorus.models.TaggingsUpdater", function() {
 
         context("when the update failed", function() {
             beforeEach(function() {
+                spyOn(chorus, "toast");
                 this.server.lastCreate().failForbidden();
             });
 
             it("triggers updateFailed on the taggings", function() {
                 expect("updateFailed").toHaveBeenTriggeredOn(this.taggingsUpdater);
+            });
+
+            it("pops up a toast", function() {
+                expect(chorus.toast).toHaveBeenCalled();
             });
         });
 
