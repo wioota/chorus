@@ -53,23 +53,35 @@ describe("chorus.models.TaggingsUpdater", function() {
             });
         });
 
-        context("with multiple tag updates", function() {
-            it("does not call save for the second tag until the first tag completes saving", function() {
+        context("when a second request is queued", function() {
+            beforeEach(function() {
                 var tag2 = new chorus.models.Tag({name: "bar"});
-                expect(this.server.requests.length).toBe(1);
                 this.taggingsUpdater.updateTags({add: tag2});
+            });
+
+            it("only saves the second tag after the first tag completes saving", function() {
                 expect(this.server.requests.length).toBe(1);
                 this.server.lastCreate().succeed();
                 expect(this.server.requests.length).toBe(2);
             });
 
-            it("handles queueing correctly even when first tagging request fails", function() {
-                var tag2 = new chorus.models.Tag({name: "bar"});
-                expect(this.server.requests.length).toBe(1);
-                this.taggingsUpdater.updateTags({add: tag2});
-                expect(this.server.requests.length).toBe(1);
-                this.server.lastCreate().failForbidden();
-                expect(this.server.requests.length).toBe(2);
+            context("when the initial tagging request fails", function() {
+                beforeEach(function() {
+                    var tag2 = new chorus.models.Tag({name: "bar"});
+                    this.taggingsUpdater.updateTags({add: tag2});
+                    this.server.lastCreate().failForbidden();
+                });
+
+                it("doesn't send requests that are already queued", function() {
+                    expect(this.server.requests.length).toBe(1);
+                });
+
+                it("still allows new requests to be made", function() {
+                    this.server.reset();
+                    var tag3 = new chorus.models.Tag({name: "baz"});
+                    this.taggingsUpdater.updateTags({add: tag3});
+                    expect(this.server.requests.length).toBe(1);
+                });
             });
         });
     });
