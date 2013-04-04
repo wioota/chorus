@@ -63,8 +63,12 @@ class Schema < ActiveRecord::Base
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
+      dataset = datasets.to_a.select { |set| set.name == attrs[:name] }.first
       klass = class_for_type attrs.delete(:type)
-      dataset = klass.find_or_initialize_by_name_and_schema_id(attrs[:name], id)
+      unless dataset
+        dataset = klass.new(:name => attrs[:name])
+        dataset.schema = self
+      end
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin

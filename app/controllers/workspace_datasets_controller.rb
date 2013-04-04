@@ -13,14 +13,7 @@ class WorkspaceDatasetsController < ApplicationController
     end
 
     params.merge!(:total_entries => workspace.dataset_count(current_user, options))
-    datasets = workspace.datasets(current_user, options).includes(:tags,
-                                                                  {:scoped_schema => {:database => {:data_source => :tags}}},
-                                                                  {:bound_workspaces => :tags},
-                                                                  :tableau_workbook_publications,
-                                                                  :most_recent_notes,
-                                                                  :most_recent_comments,
-                                                                  :import_schedules
-    ).list_order
+    datasets = workspace.datasets(current_user, options).includes(Dataset.eager_load_associations).list_order
 
     present paginate(datasets), :presenter_options => { :workspace => workspace }
   end

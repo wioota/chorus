@@ -8,7 +8,7 @@ class Dataset < ActiveRecord::Base
 
   validates_presence_of :scoped_schema
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => [:schema_id,  :type, :deleted_at]
+  validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -37,6 +37,16 @@ class Dataset < ActiveRecord::Base
   attr_accessible :name
 
   delegate :data_source, :accessible_to, :connect_with, :connect_as, :to => :schema
+
+  def self.eager_load_associations
+    [:tags,
+     {:scoped_schema => {:database => {:data_source => :tags}}},
+     {:bound_workspaces => :tags},
+     :tableau_workbook_publications,
+     :most_recent_notes,
+     :most_recent_comments,
+     :import_schedules]
+  end
 
   def self.add_search_permissions(current_user, search)
     search.build do

@@ -68,8 +68,8 @@ describe Schema do
       end
 
       before do
-        mock(schema).class_for_type('v').at_least(1) { GpdbDataset }
-        mock(schema).class_for_type('r').at_least(1) { GpdbTable }
+        stub(schema).class_for_type('v').at_least(1) { GpdbDataset }
+        stub(schema).class_for_type('r').at_least(1) { GpdbTable }
       end
 
       it "creates new copies of the datasets in our db" do
@@ -106,23 +106,23 @@ describe Schema do
       context "when trying to create a duplicate record" do
         let(:duped_dataset) { Dataset.new({:name => dataset.name, :schema_id => schema.id}, :without_protection => true) }
         before do
-          stub.proxy(GpdbTable).find_or_initialize_by_name_and_schema_id(anything, anything) do |table|
-            table.persisted? ? duped_dataset : table
-          end
+          stub(schema).datasets { Dataset.where(:id => nil) }
+          stub.proxy(GpdbTable).new(anything)
+          stub(GpdbTable).new(hash_including(:name => dataset.name)) { duped_dataset }
         end
 
         it "keeps going when caught by rails validations" do
           expect { schema.refresh_datasets(account) }.to change { GpdbTable.count }.by(1)
-          schema.datasets.find_by_name('new_table').should be_present
-          schema.datasets.find_by_name('new_view').should be_present
+          Dataset.where(:name => 'new_view', :schema_id => schema.id).first.should be_present
+          Dataset.where(:name => 'new_table', :schema_id => schema.id).first.should be_present
         end
 
         it "keeps going when not caught by rails validations" do
           mock(duped_dataset).save! { raise ActiveRecord::RecordNotUnique.new("boooo!", Exception.new) }
 
           expect { schema.refresh_datasets(account) }.to change { GpdbTable.count }.by(1)
-          schema.datasets.find_by_name('new_table').should be_present
-          schema.datasets.find_by_name('new_view').should be_present
+          Dataset.where(:name => 'new_view', :schema_id => schema.id).first.should be_present
+          Dataset.where(:name => 'new_table', :schema_id => schema.id).first.should be_present
         end
 
         it "returns the list of datasets without duplicates" do
@@ -153,7 +153,7 @@ describe Schema do
     context "with stale records that now exist" do
       before do
         dataset.mark_stale!
-        mock(schema).class_for_type('r') { GpdbTable }
+        stub(schema).class_for_type('r') { GpdbTable }
       end
 
       let(:found_datasets) { [{:type => "r", :name => dataset.name, :master_table => 't'}] }
@@ -212,12 +212,13 @@ describe Schema do
       end
 
       before do
-        mock(schema).class_for_type('v').at_least(1) { GpdbDataset }
-        mock(schema).class_for_type('r').at_least(1) { GpdbTable }
+        stub(schema).class_for_type('v').at_least(1) { GpdbDataset }
+        stub(schema).class_for_type('r').at_least(1) { GpdbTable }
       end
 
       it "reindexes unmodified datasets" do
         schema.refresh_datasets(account)
+        schema.reload
         mock(Sunspot).index(is_a(Dataset)).times(3)
         schema.refresh_datasets(account, :force_index => true)
       end
