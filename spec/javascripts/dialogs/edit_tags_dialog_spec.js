@@ -100,9 +100,9 @@ describe("chorus.dialogs.EditTags", function() {
             });
 
             it('triggers model.change on each model in the collection', function() {
-                enterTag(this.dialog, "foo");
                 var savedModel = this.collection.last();
                 spyOnEvent(savedModel, "change");
+                enterTag(this.dialog, "foo");
                 this.server.lastCreate().succeed();
                 expect("change").toHaveBeenTriggeredOn(savedModel);
             });

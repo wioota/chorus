@@ -11,6 +11,9 @@ chorus.Mixins.Taggable = {
 
         if(!this._tags) {
             this._tags = new chorus.collections.TaggingSet(this.get('tags'), {entity: this});
+            this.listenTo(this._tags, "all", _.bind(function() {
+                this.trigger("change");
+            }, this));
         }
         return this._tags;
     },
