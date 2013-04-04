@@ -439,9 +439,7 @@ describe("chorus.collections.Base", function() {
                 {name: "tag3"}
             ]});
             this.collection = rspecFixtures.workfileSet();
-            this.collection.reset([
-                this.model1.attributes, this.model2.attributes
-            ]);
+            this.collection.reset([this.model1, this.model2]);
             this.tag = new chorus.models.Tag({name: 'foo'});
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});
             spyOn(this.fakeTaggingsUpdater, "updateTags");
@@ -463,12 +461,22 @@ describe("chorus.collections.Base", function() {
         });
 
         context("when updating tags fails", function() {
-            it("triggers a updateTagsFailed event", function() {
+            beforeEach(function() {
                 spyOnEvent(this.collection, 'updateTagsFailed');
-                var failingModel = {};
+                this.failingTaggings = {};
                 this.collection.updateTags({remove: this.tag});
-                this.fakeTaggingsUpdater.trigger('updateFailed', failingModel);
-                expect('updateTagsFailed').toHaveBeenTriggeredOn(this.collection, [failingModel]);
+                spyOn(this.model1.tags(), 'fetchAll');
+                spyOn(this.model2.tags(), 'fetchAll');
+                this.fakeTaggingsUpdater.trigger('updateFailed', this.failingTaggings);
+            });
+
+            it("triggers a updateTagsFailed event", function() {
+                expect('updateTagsFailed').toHaveBeenTriggeredOn(this.collection, [this.failingTaggings]);
+            });
+
+            it("re-fetches tags for all items in collection", function() {
+                expect(this.model1.tags().fetchAll).toHaveBeenCalled();
+                expect(this.model2.tags().fetchAll).toHaveBeenCalled();
             });
         });
     });

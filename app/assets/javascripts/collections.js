@@ -146,6 +146,9 @@ chorus.collections = {
 
                     this.listenTo(this.taggingsUpdater, "updateFailed", function(modelWithServerErrors) {
                         this.trigger("updateTagsFailed", modelWithServerErrors);
+                        this.each(function(model) {
+                            model.tags().fetchAll();
+                        });
                     });
                 }
 
