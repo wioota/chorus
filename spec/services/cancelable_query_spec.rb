@@ -20,11 +20,13 @@ describe CancelableQuery do
 
   describe "#execute" do
     let(:options) { {:warnings => true}.merge(extra_options) }
-    let(:extra_options) { {} }
+    let(:extra_options) { { } }
     let(:results) { GreenplumSqlResult.new }
+    let(:chorus_config_timeout) { nil }
 
     before do
       mock(connection).prepare_and_execute_statement(cancelable_query.format_sql_and_check_id(sql), options) { results }
+      stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { chorus_config_timeout }
     end
 
     it "calls to the connection" do
@@ -42,6 +44,14 @@ describe CancelableQuery do
       let(:extra_options) { {:timeout => 100} }
       it "passes the timeout option through to the greenplum connection" do
         cancelable_query.execute(sql, :timeout => 100)
+      end
+    end
+
+    context "when a timeout is not passed, but is set in ChorusConfig" do
+      let(:chorus_config_timeout) { 75 }
+      let(:extra_options) { { :timeout => 60 * chorus_config_timeout } }
+      it "uses the timeout from ChorusConfig" do
+        cancelable_query.execute(sql)
       end
     end
   end

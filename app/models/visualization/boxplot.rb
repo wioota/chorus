@@ -16,7 +16,7 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-      result = SqlExecutor.execute_sql(row_sql, @schema.connect_with(account), @schema, check_id, current_user)
+      result = CancelableQuery.new(@schema.connect_with(account), check_id, current_user).execute(row_sql)
       row_data = result.rows.map { |row| {:bucket => row[0], :ntile => row[1].to_i, :min => row[2].to_f, :max => row[3].to_f, :count => row[4].to_i} }
       @rows = BoxplotSummary.summarize(row_data, @bins)
     end

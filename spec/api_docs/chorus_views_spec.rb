@@ -77,12 +77,13 @@ resource "Chorus Views" do
       GreenplumSqlResult.new.tap do |r|
         r.add_column("t_bit", "bit")
         r.add_rows([["10101"]])
-        r.schema = schema
       end
     }
 
     before do
-      mock(SqlExecutor).execute_sql.with_any_args { sql_result }
+      mock(CancelableQuery).new.with_any_args do
+        mock(Object.new).execute.with_any_args { sql_result }
+      end
     end
 
     parameter :schema_id, "Id of the schema to use for the SQL command"

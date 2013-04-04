@@ -4,6 +4,7 @@ class WorkfileExecutionsController < ApplicationController
   require_params :id, :only => :destroy, :field_name => :check_id
 
   def create
+    query = CancelableQuery.new(@schema.connect_as(current_user), params[:check_id], current_user)
     if params[:download]
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
       response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"
@@ -11,16 +12,15 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
 
-      self.response_body= SqlExecutor.stream(params[:sql], @schema.connect_as(current_user), params[:check_id], current_user, :row_limit => params[:num_of_rows].to_i)
+      self.response_body= query.stream(params[:sql], :row_limit => params[:num_of_rows].to_i)
     else
-      present SqlExecutor.execute_sql(params[:sql], @schema.connect_as(current_user), @schema, params[:check_id], current_user,
-                                      :limit => ChorusConfig.instance['default_preview_row_limit'],
+      present query.execute(params[:sql], :limit => ChorusConfig.instance['default_preview_row_limit'],
                                       :include_public_schema_in_search_path => true)
     end
   end
 
   def destroy
-    SqlExecutor.cancel_query(@schema, @schema.account_for_user!(current_user), params[:id], current_user)
+    CancelableQuery.cancel(params[:id], current_user)
     head :ok
   end
 

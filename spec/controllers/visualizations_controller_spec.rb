@@ -111,13 +111,10 @@ describe VisualizationsController do
   end
 
   describe "#destroy" do
-    it "cancels the visualization query" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43", user)
-      delete :destroy, :id => "43", :dataset_id => dataset.to_param
+    before do
+      mock(CancelableQuery).cancel("43", user)
     end
-
-    it "returns successfully" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43", user)
+    it "cancels the visualization query" do
       delete :destroy, :id => "43", :dataset_id => dataset.to_param
       response.should be_success
     end

@@ -7,15 +7,17 @@ class PreviewsController < ApplicationController
     dataset = Dataset.find(params[:dataset_id])
     authorize_data_source_access(dataset)
 
-    result = SqlExecutor.preview_dataset(dataset, dataset.connect_as(current_user), params[:task][:check_id], current_user)
+    check_id = params[:task][:check_id]
+    query = CancelableQuery.new(dataset.connect_as(current_user), check_id, current_user)
+    result = query.execute(dataset.preview_sql, :limit => ChorusConfig.instance['default_preview_row_limit'])
     present(result, :status => :created)
-  end
+  end 
 
   def destroy
     dataset = Dataset.find(params[:dataset_id])
-    account = authorized_account(dataset)
+    authorize_data_source_access(dataset)
 
-    SqlExecutor.cancel_query(dataset, account, params[:id], current_user)
+    CancelableQuery.cancel(params[:id], current_user)
     head :ok
   end
 
@@ -26,7 +28,8 @@ class PreviewsController < ApplicationController
 
     sql_without_semicolon = task[:query].gsub(';', '')
     sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view;"
-    result = SqlExecutor.execute_sql(sql, schema.connect_as(current_user), schema, task[:check_id], current_user, :limit => ChorusConfig.instance['default_preview_row_limit'])
+    connection = schema.connect_as(current_user)
+    result = CancelableQuery.new(connection, task[:check_id], current_user).execute(sql)
     present(result, :status => :ok)
   end
 end
