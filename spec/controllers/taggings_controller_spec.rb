@@ -124,4 +124,26 @@ describe TaggingsController do
       end
     end
   end
+
+  describe 'index' do
+    let(:entity) { workfiles(:public) }
+    let(:params) { { :entity_id => entity.id, :entity_type => entity.type } }
+
+    it 'presents the tags for an entity' do
+      mock_present do |taggings|
+        taggings.should == entity.tags
+      end
+      get :index, params
+    end
+
+    context 'when the user cannot see the entity' do
+      let(:user) { users(:no_collaborators) }
+      let(:entity) { workfiles(:private) }
+
+      it 'returns unauthorized' do
+        get :index, params
+        response.code.should == '403'
+      end
+    end
+  end
 end

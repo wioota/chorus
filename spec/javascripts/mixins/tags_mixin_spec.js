@@ -124,13 +124,13 @@ describe("chorus.Mixins.Taggable", function() {
                 {name: "tag1"},
                 {name: "tag2"}
             ]});
+            this.tag = new chorus.models.Tag({name: 'foo'});
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater();
             spyOn(this.fakeTaggingsUpdater, "updateTags");
             spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
         it("add and saves tags", function() {
-            this.tag = new chorus.models.Tag({name: 'foo'});
             this.model.updateTags({add: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
@@ -142,7 +142,6 @@ describe("chorus.Mixins.Taggable", function() {
         });
 
         it("removes and saves tags", function() {
-            this.tag = new chorus.models.Tag({name: 'foo'});
             this.model.updateTags({remove: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
@@ -151,6 +150,18 @@ describe("chorus.Mixins.Taggable", function() {
             expect(initializerArg.collection.length).toEqual(1);
             expect(initializerArg.collection.at(0)).toEqual(this.model);
             expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({remove: this.tag});
+        });
+
+        context("when a tag update fails", function() {
+            beforeEach(function() {
+                this.model.updateTags({add: this.tag});
+            });
+
+            it("re-fetches the model", function() {
+                spyOn(this.model.tags(), "fetchAll");
+                this.fakeTaggingsUpdater.trigger("updateFailed");
+                expect(this.model.tags().fetchAll).toHaveBeenCalled();
+            });
         });
     });
 });

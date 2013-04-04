@@ -1,5 +1,5 @@
 chorus.collections.TaggingSet = chorus.collections.Base.extend({
-    urlTemplate: 'taggings',
+    urlTemplate: 'taggings?entity_id={{entity.id}}&entity_type={{entity.entityType}}',
     model: chorus.models.Tag,
     constructorName: "TaggingSet",
 

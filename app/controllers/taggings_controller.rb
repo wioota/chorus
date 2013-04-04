@@ -27,6 +27,12 @@ class TaggingsController < ApplicationController
     render :json => {}, :status => :created
   end
 
+  def index
+    model = ModelMap.model_from_params(params[:entity_type], params[:entity_id])
+    authorize! :show, model
+    present model.tags
+  end
+
   private
 
   def raise_validation_error
