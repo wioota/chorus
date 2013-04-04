@@ -10,6 +10,7 @@ resource "Hdfs" do
   before do
     log_in owner
     stub(Hdfs::QueryService).version_of(anything) { "1.0.0" }
+    stub(Hdfs::QueryService).accessible?(anything) { true }
 
     service = Object.new
     stub(Hdfs::QueryService).new(data_source.host, data_source.port, data_source.username, data_source.version) { service }
