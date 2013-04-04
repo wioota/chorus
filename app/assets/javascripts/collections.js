@@ -144,9 +144,9 @@ chorus.collections = {
                         collection: this
                     });
 
-                    this.listenTo(this.taggingsUpdater, "updateFailed", _.bind(function(saver) {
-                        this.trigger("saveTagsFailed", saver);
-                    }, this));
+                    this.listenTo(this.taggingsUpdater, "updateFailed", function(modelWithServerErrors) {
+                        this.trigger("updateTagsFailed", modelWithServerErrors);
+                    });
                 }
 
                 this.taggingsUpdater.updateTags(options);

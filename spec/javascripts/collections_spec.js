@@ -442,13 +442,13 @@ describe("chorus.collections.Base", function() {
             this.collection.reset([
                 this.model1.attributes, this.model2.attributes
             ]);
+            this.tag = new chorus.models.Tag({name: 'foo'});
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});
             spyOn(this.fakeTaggingsUpdater, "updateTags");
             spyOn(chorus.models, "TaggingsUpdater").andReturn(this.fakeTaggingsUpdater);
         });
 
         it("removes and saves tags for each model in the collection", function() {
-            this.tag = new chorus.models.Tag({name: 'foo'});
             this.collection.updateTags({remove: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalledWith({collection: this.collection});
@@ -456,11 +456,20 @@ describe("chorus.collections.Base", function() {
         });
 
         it("adds and saves tags for each model in the collection", function() {
-            this.tag = new chorus.models.Tag({name: 'foo'});
             this.collection.updateTags({add: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalledWith({collection: this.collection});
             expect(this.fakeTaggingsUpdater.updateTags).toHaveBeenCalledWith({add: this.tag});
+        });
+
+        context("when updating tags fails", function() {
+            it("triggers a updateTagsFailed event", function() {
+                spyOnEvent(this.collection, 'updateTagsFailed');
+                var failingModel = {};
+                this.collection.updateTags({remove: this.tag});
+                this.fakeTaggingsUpdater.trigger('updateFailed', failingModel);
+                expect('updateTagsFailed').toHaveBeenTriggeredOn(this.collection, [failingModel]);
+            });
         });
     });
 });
