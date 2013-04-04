@@ -35,13 +35,12 @@ module Visualization
     end
 
     def fetch!(account, check_id)
-
-      min_max_result = SqlExecutor.execute_sql(min_max_sql, @schema.connect_with(account), @schema, check_id, current_user)
+      min_max_result = CancelableQuery.new(@schema.connect_with(account), check_id, current_user).execute(min_max_sql)
 
       @min = min_max_result.rows[0][0].to_f
       @max = min_max_result.rows[0][1].to_f
 
-      result = SqlExecutor.execute_sql(row_sql, @schema.connect_with(account), @schema, check_id, current_user)
+      result = CancelableQuery.new(@schema.connect_with(account), check_id, current_user).execute(row_sql)
       row_data = result.rows.map { |row| {:bin => row[0].to_i, :frequency => row[1].to_i} }
 
       @rows = massage(row_data)

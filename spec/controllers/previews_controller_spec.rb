@@ -9,6 +9,7 @@ describe PreviewsController do
   let(:account) { gpdb_data_source.account_for_user!(user) }
   let(:check_id) { 'id-for-cancelling-previews' }
   let(:connection) { Object.new }
+  let(:default_limit) { 1000 }
 
   before do
     log_in user
@@ -21,10 +22,18 @@ describe PreviewsController do
     let(:attributes) { { :check_id => check_id } }
     let(:params) { attributes.merge :dataset_id => gpdb_table.to_param }
 
+    before do
+      stub.proxy(ChorusConfig.instance).[](anything)
+      stub(ChorusConfig.instance).[]('default_preview_row_limit') { default_limit }
+    end
+
     context "when create is successful" do
       before do
-        fake_result = GreenplumSqlResult.new
-        mock(SqlExecutor).preview_dataset(gpdb_table, connection, check_id, user) { fake_result }
+        mock(CancelableQuery).new(connection, check_id, user) do
+          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => default_limit }) do
+            GreenplumSqlResult.new
+          end
+        end
       end
 
       it "uses authentication" do
@@ -51,7 +60,11 @@ describe PreviewsController do
 
     context "when there's an error'" do
       before do
-        mock(SqlExecutor).preview_dataset(gpdb_table, connection, check_id, user) { raise GreenplumConnection::QueryError }
+        mock(CancelableQuery).new(connection, check_id, user) do
+          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => default_limit }) do
+            raise GreenplumConnection::QueryError
+          end
+        end
       end
       it "returns an error if the query fails" do
         post :create, params
@@ -64,7 +77,7 @@ describe PreviewsController do
 
   describe "#destroy" do
     it "cancels the data preview command" do
-      mock(SqlExecutor).cancel_query(gpdb_table, connection, check_id, user)
+      mock(CancelableQuery).cancel(check_id, user) { true }
       delete :destroy, :dataset_id => gpdb_table.to_param, :id => check_id
 
       response.code.should == '200'
@@ -90,7 +103,9 @@ describe PreviewsController do
     end
 
     it "returns the results of the sql" do
-      mock(SqlExecutor).execute_sql(expected_sql, connection, schema, check_id, user, :limit => row_limit) { GreenplumSqlResult.new }
+      fake_query = Object.new
+      mock(fake_query).execute(expected_sql) { GreenplumSqlResult.new }
+      mock(CancelableQuery).new(connection, check_id, user) { fake_query }
 
       post :preview_sql, params
 

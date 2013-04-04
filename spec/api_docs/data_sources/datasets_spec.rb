@@ -21,13 +21,15 @@ resource "Greenplum DB: datasets" do
 
   before do
     log_in owner
-    stub(SqlExecutor).preview_dataset { result }
+    any_instance_of(CancelableQuery) do |query|
+      stub(query).execute.with_any_args { result }
+    end
+    stub(CancelableQuery).cancel.with_any_args { status }
     stub(DatasetColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_dataset_column), FactoryGirl.build(:gpdb_dataset_column)] }
     any_instance_of(GpdbTable) do |dataset|
       stub(dataset).verify_in_source(anything) { true }
     end
 
-    stub(SqlExecutor).cancel_query.with_any_args { status }
   end
 
   get "/datasets/:id" do

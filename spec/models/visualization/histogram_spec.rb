@@ -21,25 +21,29 @@ describe Visualization::Histogram do
           :x_axis => 'airport_cleanliness'
       })
 
-      mock(SqlExecutor).execute_sql(visualization.build_min_max_sql, connection, schema, 17, user) do
-        GreenplumSqlResult.new.tap do |result|
-          result.add_column("min", "double")
-          result.add_column("max", "double")
-          result.add_rows([['1.0', '9.0']])
+      mock(CancelableQuery).new(connection, 17, user) do
+        mock(Object.new).execute(visualization.build_min_max_sql) do
+          GreenplumSqlResult.new.tap do |result|
+            result.add_column("min", "double")
+            result.add_column("max", "double")
+            result.add_rows([['1.0', '9.0']])
+          end
         end
       end
 
       visualization.instance_variable_set(:@min, "1.0")
       visualization.instance_variable_set(:@max, "9.0")
-      mock(SqlExecutor).execute_sql(visualization.build_row_sql, connection, schema, 17, user) do
-        GreenplumSqlResult.new.tap do |result|
-          result.add_column("bin", "text")
-          result.add_column("frequency", "int8")
-          result.add_rows([
-            ['1', '2'],
-            ['3', '6'],
-            ['4', '9']
-          ])
+      mock(CancelableQuery).new(connection, 17, user) do
+        mock(Object.new).execute(visualization.build_row_sql) do
+          GreenplumSqlResult.new.tap do |result|
+            result.add_column("bin", "text")
+            result.add_column("frequency", "int8")
+            result.add_rows([
+              ['1', '2'],
+              ['3', '6'],
+              ['4', '9']
+            ])
+          end
         end
       end
 

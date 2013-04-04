@@ -10,8 +10,10 @@ resource "Workfiles" do
 
   before do
     log_in owner
-    stub(SqlExecutor).execute_sql.with_any_args { result }
-    stub(SqlExecutor).cancel_query.with_any_args { }
+    any_instance_of(CancelableQuery) do |query|
+      stub(query).execute.with_any_args { result }
+    end
+    stub(CancelableQuery).cancel.with_any_args { true }
   end
 
   get "/workfiles/:id" do
