@@ -17,6 +17,11 @@ module Hdfs
       new(instance.host, instance.port, instance.username, instance.version).version
     end
 
+    def self.accessible?(instance)
+      hdfs = JavaHdfs.new(instance.host, instance.port.to_s, instance.username, instance.version)
+      hdfs.list("/").present?
+    end
+
     def initialize(host, port, username, version = nil)
       @host = host
       @port = port.to_s

@@ -13,9 +13,11 @@ describe Hdfs::DataSourceRegistrar do
       :group_list => "staff,team1"
     }
   end
+  let(:is_accessible) { true }
 
   before do
-    mock(Hdfs::QueryService).version_of(is_a(HdfsDataSource)) { hadoop_version }
+    stub(Hdfs::QueryService).version_of(is_a(HdfsDataSource)) { hadoop_version }
+    stub(Hdfs::QueryService).accessible?(is_a(HdfsDataSource)) { is_accessible }
   end
 
   describe ".create!" do
@@ -24,6 +26,16 @@ describe Hdfs::DataSourceRegistrar do
         expect {
           Hdfs::DataSourceRegistrar.create!({}, owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "when the data source is unreachable" do
+      let(:is_accessible) { false }
+
+      it "raises an api validation error" do
+        expect {
+          Hdfs::DataSourceRegistrar.create!(data_source_attributes, owner)
+        }.to raise_error(ApiValidationError)
       end
     end
 
@@ -75,6 +87,16 @@ describe Hdfs::DataSourceRegistrar do
         expect do
           described_class.update!(hdfs_data_source.id, data_source_attributes, user)
         end.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "when the data source is unreachable" do
+      let(:is_accessible) { false }
+
+      it "raises an api validation error" do
+        expect {
+          Hdfs::DataSourceRegistrar.update!(hdfs_data_source.id, data_source_attributes, owner)
+        }.to raise_error(ApiValidationError)
       end
     end
 

@@ -39,6 +39,31 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
   end
 
+  describe "#accessible?" do
+    context "when the hadoop server can be reached" do
+      let(:reachable_instance) do
+        HdfsDataSource.new hdfs_params
+      end
+
+      it "returns true" do
+        Hdfs::QueryService.accessible?(reachable_instance).should be_true
+      end
+    end
+
+    context "when the hadoop server cannot be reached" do
+      let(:instance) { "garbage" }
+      let(:port) { 8888 }
+      let(:username) { "pivotal" }
+      let(:unreachable_instance) do
+        HdfsDataSource.new :host => instance, :port => port, :username => username
+      end
+
+      it "returns false" do
+        Hdfs::QueryService.accessible?(unreachable_instance).should be_false
+      end
+    end
+  end
+
   describe "#list" do
     let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp") }
 
@@ -63,7 +88,7 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
 
     context "connection is invalid" do
-      let(:service) { Hdfs::QueryService.new("garbage", "8020", "pivotal", "0.20.1gp") }
+      let(:service) { Hdfs::QueryService.new("bagbage", "8020", "pivotal", "0.20.1gp") }
 
       it "raises an exception" do
         expect { service.list("/") }.to raise_error(Hdfs::DirectoryNotFoundError)
