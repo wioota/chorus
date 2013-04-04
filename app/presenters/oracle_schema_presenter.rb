@@ -5,7 +5,7 @@ class OracleSchemaPresenter < Presenter
       :name => model.name,
       :dataset_count => model.active_tables_and_views_count,
       :entity_type => "oracle_schema",
-      :instance => present(model.data_source),
+      :instance => present(model.data_source, options),
       :refreshed_at => model.refreshed_at
     }
   end

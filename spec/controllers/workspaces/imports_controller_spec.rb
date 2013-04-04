@@ -129,11 +129,11 @@ describe Workspaces::ImportsController do
         end
 
         it "throws an error if table structure is not consistent" do
-          any_instance_of(GpdbDataset) do |d|
-            stub(d).can_import_from(anything) { false }
+          any_instance_of(GpdbDataset) do |dataset|
+            stub(dataset).can_import_from(anything) { false }
           end
-          any_instance_of(Import) do |d|
-            stub(d).table_exists? { true }
+          any_instance_of(Import) do |import|
+            stub(import).table_exists? { true }
           end
 
           post :create, attributes

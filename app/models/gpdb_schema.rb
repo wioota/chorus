@@ -4,14 +4,7 @@ class GpdbSchema < Schema
   include Stale
 
   attr_accessible :database
-  alias_attribute :parent, :database
-
-  belongs_to :database, {
-      :polymorphic => true,
-      :foreign_key => 'parent_id',
-      :foreign_type => 'parent_type',
-      :class_name => 'GpdbDatabase'
-  }
+  alias_attribute :database, :parent
 
   def active_tables_and_views
     super.where("type != 'ChorusView'")

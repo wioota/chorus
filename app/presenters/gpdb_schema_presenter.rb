@@ -3,7 +3,7 @@ class GpdbSchemaPresenter < Presenter
     {
         :id => model.id,
         :name => model.name,
-        :database => present(model.database),
+        :database => present(model.database, options),
         :dataset_count => model.active_tables_and_views_count,
         :has_credentials => model.accessible_to(current_user),
         :refreshed_at => model.refreshed_at,

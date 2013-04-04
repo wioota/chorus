@@ -63,7 +63,7 @@ class Workspace < ActiveRecord::Base
     [{:owner => :tags},
      :archiver,
      :tags,
-     {:sandbox => {:database => {:data_source => [:tags, {:owner => :tags}]}}}
+     {:sandbox => {:parent => {:data_source => [:tags, {:owner => :tags}]}}}
     ]
   end
 

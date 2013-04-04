@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GpdbSchema do
   describe "associations" do
-    it { should belong_to(:database) }
+    it { should belong_to(:parent) }
     it { should have_many(:datasets) }
     it { should have_many(:workspaces) }
     it { should have_many(:imports) }

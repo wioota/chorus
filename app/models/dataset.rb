@@ -18,6 +18,7 @@ class Dataset < ActiveRecord::Base
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
   has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :foreign_key => 'source_dataset_id'
+  has_many :tableau_workbook_publications, :dependent => :destroy
 
   searchable_model :if => :should_reindex? do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -40,9 +41,9 @@ class Dataset < ActiveRecord::Base
 
   def self.eager_load_associations
     [:tags,
-     :scoped_schema,
+     {:scoped_schema => :parent},
      {:bound_workspaces => :tags},
-     #:tableau_workbook_publications,
+     :tableau_workbook_publications,
      :most_recent_notes,
      :most_recent_comments,
      :import_schedules]
