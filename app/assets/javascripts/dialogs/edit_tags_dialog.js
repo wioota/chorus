@@ -47,6 +47,7 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
 
     saveFailed: function(tags) {
         this.showErrors(tags);
+        this.tagsInput.$el.addClass('hidden');
     },
 
     revealed: function() {

@@ -69,10 +69,7 @@ describe("chorus.dialogs.EditTags", function() {
                 ]
             });
             this.collection = rspecFixtures.workfileSet();
-            this.collection.reset([
-                this.model1.attributes,
-                this.model2.attributes
-            ]);
+            this.collection.reset([this.model1, this.model2]);
             this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
             spyOn(this.collection, "updateTags").andCallThrough();
             this.dialog.render();
@@ -137,6 +134,10 @@ describe("chorus.dialogs.EditTags", function() {
 
                 it("shows an error message", function() {
                     expect(this.dialog.showErrors).toHaveBeenCalledWith(jasmine.objectContaining({serverErrors: {message: 'Forbidden'}}));
+                });
+
+                it("hides the tags input so the user cannot enter more tags without closing the dialog", function() {
+                    expect(this.dialog.$('.tags_input')).toHaveClass('hidden');
                 });
             });
         });
