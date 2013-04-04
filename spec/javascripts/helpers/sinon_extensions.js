@@ -92,12 +92,19 @@ _.extend(sinon.fakeServer, {
     },
 
     makeFakeResponse: function(modelOrCollection, response) {
+        function normalizeId(attributes) {
+            if(attributes.id) {
+                attributes.id = parseInt(attributes.id, 10) || attributes.id;
+            }
+            return attributes;
+        }
+
         if (response) {
             return response.attributes ? response.attributes : response;
         } else if (modelOrCollection instanceof Backbone.Model) {
-            return modelOrCollection.attributes;
+            return normalizeId(modelOrCollection.attributes);
         } else if (modelOrCollection instanceof Backbone.Collection) {
-            return _.map(modelOrCollection.models, function(model) { return model.attributes; });
+            return _.map(modelOrCollection.models, function(model) { return normalizeId(model.attributes); });
         } else {
             return [];
         }

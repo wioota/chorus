@@ -160,7 +160,13 @@ describe("sinon extensions", function() {
                 it("uses the current attributes of the model", function() {
                     var user = new chorus.models.User({ id: '1', name: "Keanu Reeves" });
                     var fakeRequest = this.server.makeFakeResponse(user);
-                    expect(fakeRequest).toEqual({ id: '1', name: "Keanu Reeves" });
+                    expect(fakeRequest).toEqual({ id: 1, name: "Keanu Reeves" });
+                });
+
+                it("does not convert the id to an integer if it is non-numeric", function() {
+                    var user = new chorus.models.User({ id: 'hiya' });
+                    var fakeRequest = this.server.makeFakeResponse(user);
+                    expect(fakeRequest).toEqual({ id: 'hiya' });
                 });
             });
 
@@ -170,7 +176,16 @@ describe("sinon extensions", function() {
                         { id: '1', name: "Keanu Reeves" }
                     ], { group: "Agents" });
                     expect(this.server.makeFakeResponse(collection)).toEqual([
-                        { id: '1', name: "Keanu Reeves" }
+                        { id: 1, name: "Keanu Reeves" }
+                    ]);
+                });
+
+                it("does not convert the ids to an integer if it is non-numeric", function() {
+                    var collection = new chorus.collections.UserSet([
+                        { id: 'hiya' }
+                    ], { group: "Agents" });
+                    expect(this.server.makeFakeResponse(collection)).toEqual([
+                        { id: 'hiya' }
                     ]);
                 });
             });

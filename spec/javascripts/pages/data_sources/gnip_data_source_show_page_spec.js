@@ -33,7 +33,7 @@ describe("chorus.pages.GnipDataSourceShowPage", function() {
             var sidebar = this.page.sidebar;
             expect(sidebar).toBeDefined();
             expect(sidebar).toBeA(chorus.views.DataSourceListSidebar);
-            expect(sidebar.model.id).toBe(this.model.id);
+            expect(sidebar.model.id).toBe(this.page.model.id);
             expect(this.page.$('.sidebar_content')).toContainText('Import Stream');
         });
 

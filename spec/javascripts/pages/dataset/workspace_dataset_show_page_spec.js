@@ -30,7 +30,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         this.datasetId = this.dataset.get('id');
 
-        this.page = new chorus.pages.WorkspaceDatasetShowPage(this.workspace.get("id"), this.datasetId);
+        this.page = new chorus.pages.WorkspaceDatasetShowPage(this.workspace.get("id").toString(), this.datasetId);
         spyOn(this.page, "drawColumns").andCallThrough();
     });
 
@@ -90,11 +90,11 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                     });
 
                     it("sets the sidebar's workspace", function() {
-                        expect(this.page.sidebar.options.workspace.id).toBe(this.workspace.id);
+                        expect(this.page.sidebar.options.workspace.id).toBe(this.page.workspace.id);
                     });
 
                     it("sets the contentDetail's workspace", function() {
-                        expect(this.page.mainContent.contentDetails.options.workspace.id).toBe(this.workspace.id);
+                        expect(this.page.mainContent.contentDetails.options.workspace.id).toBe(this.page.workspace.id);
                     });
                 });
             });
@@ -200,7 +200,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             });
 
             it("has a workspace id", function() {
-                expect(this.page.mainContent.contentHeader.options.workspaceId).toBe('100');
+                expect(this.page.mainContent.contentHeader.options.workspaceId).toBe(100);
             });
         });
     });
