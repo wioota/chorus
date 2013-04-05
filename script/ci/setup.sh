@@ -1,6 +1,7 @@
 export JRUBY_OPTS="--client -J-Xmx512m -J-Xms512m -J-Xmn128m -Xcext.enabled=true"
 export PATH="$HOME/phantomjs/bin:$HOME/.rbenv/bin:$PATH"
 
+./install-ruby.sh
 eval "$(rbenv init - --no-rehash)"
 rbenv shell `cat .rbenv-version`
 
