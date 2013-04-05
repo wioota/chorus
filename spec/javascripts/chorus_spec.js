@@ -652,7 +652,7 @@ describe("chorus global", function() {
         it("deletes the user from the session", function () {
             var user = this.chorus.session.user();
             this.chorus.requireLogin();
-            expect(this.chorus.session.user()).not.toEqual(user);
+            expect(this.chorus.session.user().cid).not.toEqual(user.cid);
         });
 
         it("tells the session to save the path of the page the user was trying to get to", function() {

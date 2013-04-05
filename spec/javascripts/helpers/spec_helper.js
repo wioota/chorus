@@ -61,15 +61,32 @@
         }, "all templates and fixtures to be loaded", 5000);
     });
 
+    var regexEqualityTester = function(a, b) {
+        if(a instanceof RegExp && b instanceof RegExp) {
+            return a.toString() === b.toString();
+        }
+    };
+    jasmine.getEnv().addEqualityTester(regexEqualityTester);
+
+    var backboneModelEqualityTester = function(a, b) {
+        if(a instanceof Backbone.Model && b instanceof Backbone.Model) {
+            if(a.constructor !== b.constructor) {
+                return false;
+            }
+
+            if (a.cid === b.cid) {
+                return true;
+            }
+
+            if (!(_.isUndefined(a.id) && _.isUndefined(b.id))) {
+                return a.id === b.id;
+            }
+        }
+    };
+    jasmine.getEnv().addEqualityTester(backboneModelEqualityTester);
+
     beforeEach(function() {
         loadTemplatesOnce();
-
-        var regexEqualityTester = function(a, b) {
-            if(a instanceof RegExp && b instanceof RegExp) {
-                return a.toString() === b.toString();
-            }
-        };
-        jasmine.getEnv().addEqualityTester(regexEqualityTester);
 
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
         runs(function() {
