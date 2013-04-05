@@ -24,6 +24,17 @@ describe("chorus.views.TagsInput", function() {
         stubDefer(); // don't defer auto-suggest server requests from textext to avoid test pollution
     });
 
+    context("when the view is rendered", function() {
+        beforeEach(function() {
+            spyOn(view, "focusInput");
+            view.render();
+        });
+
+        it("sets the focus on the tag input", function() {
+            expect(view.focusInput).toHaveBeenCalled();
+        });
+    });
+
     context("with no tags", function() {
         beforeEach(function() {
             view.tags.reset();
