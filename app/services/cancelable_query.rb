@@ -1,6 +1,8 @@
+require 'java'
+
 class CancelableQuery
   attr_reader :check_id
-  @@running_statements = {}
+  @@running_statements = java.util.concurrent.ConcurrentHashMap.new(16, 0.75, 1)
 
   def format_sql_and_check_id(sql)
     "/*#{@check_id}*/#{sql}"
@@ -25,7 +27,7 @@ class CancelableQuery
   end
 
   def cancel
-    statement = @@running_statements[@check_id]
+    statement = @@running_statements.get(@check_id)
     if statement
       statement.cancel
       @connection ? !busy? : true
@@ -45,11 +47,11 @@ class CancelableQuery
   end
 
   def store_statement(statement)
-    @@running_statements[@check_id] = statement
+    @@running_statements.put(@check_id, statement)
   end
 
   def clean_statement
-    @@running_statements.delete @check_id
+    @@running_statements.remove @check_id
   end
 
   private
