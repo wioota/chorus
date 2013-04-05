@@ -9,7 +9,7 @@ describe CancelableQuery do
   let(:cancelable_query) { CancelableQuery.new(connection, check_id, user) }
 
   before do
-    CancelableQuery.class_variable_set(:@@running_statements, {})
+    CancelableQuery.class_variable_get(:@@running_statements).clear
   end
 
   describe "format_sql_and_check_id" do
@@ -156,11 +156,11 @@ describe CancelableQuery do
 
         it 'removes the applicable running statement entry' do
           stream.to_a.first
-          running_statements.should have_key("#{check_id}_#{user.id}")
+          running_statements.contains_key("#{check_id}_#{user.id}").should be_true
 
           cancel_thread.join
           stream.close   #This is called by Rack in the application
-          running_statements.should_not have_key("#{check_id}_#{user.id}")
+          running_statements.contains_key("#{check_id}_#{user.id}").should be_false
         end
       end
     end
