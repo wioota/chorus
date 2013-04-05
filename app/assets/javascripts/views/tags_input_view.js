@@ -6,6 +6,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     setup: function() {
         this.tags = this.options.tags;
         this.taggable = this.options.taggable;
+
+        this.listenTo(this.taggable, 'change:tags', this.render);
     },
 
     postRender: function() {

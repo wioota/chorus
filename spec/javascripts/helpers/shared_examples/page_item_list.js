@@ -27,6 +27,17 @@ jasmine.sharedExamples.PageItemList = function() {
             this.collection.at(0).trigger('change');
             expect(this.view.preRender).not.toHaveBeenCalled();
         });
+
+        context("when the tags on an item are changed", function() {
+            it("re renders the item's view", function() {
+                spyOn(this.view.entityViewType.prototype, 'render');
+                this.view.render();
+                this.view.liViews[0].itemView.render.reset();
+                this.collection.at(0).trigger('change:tags');
+                expect(this.view.liViews[0].itemView.render).toHaveBeenCalled();
+                expect(this.view.entityViewType.prototype.render.callCount).toEqual(1);
+            });
+        });
     });
 
     function expectItemChecked(expectedModels) {

@@ -180,6 +180,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     makeListItemView: function(model) {
         var itemView = new this.entityViewType(_.extend({model: model, checkable: true}, this.listItemOptions));
+        itemView.listenTo(model, 'change:tags', itemView.render);
         return new chorus.views.ItemWrapper({itemView: itemView});
     }
 });

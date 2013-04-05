@@ -12,7 +12,7 @@ chorus.Mixins.Taggable = {
         if(!this._tags) {
             this._tags = new chorus.collections.TaggingSet(this.get('tags'), {entity: this});
             this.listenTo(this._tags, "all", function() {
-                this.trigger("change");
+                this.trigger("change:tags");
             });
         }
         return this._tags;

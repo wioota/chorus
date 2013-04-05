@@ -45,16 +45,16 @@ describe("chorus.Mixins.Taggable", function() {
                     expect(this.model.tags()).toEqual(originalTags);
                 });
 
-                it("adding a tag triggers 'change' on the model", function() {
-                    spyOnEvent(this.model, "change");
+                it("adding a tag triggers 'change:tags' on the model", function() {
+                    spyOnEvent(this.model, "change:tags");
                     this.model.tags().add({name: 'new-foo'});
-                    expect("change").toHaveBeenTriggeredOn(this.model);
+                    expect("change:tags").toHaveBeenTriggeredOn(this.model);
                 });
 
-                it("removing a tag triggers 'change' on the model", function() {
-                    spyOnEvent(this.model, "change");
+                it("removing a tag triggers 'change:tags' on the model", function() {
+                    spyOnEvent(this.model, "change:tags");
                     this.model.tags().remove(this.model.tags().at(0));
-                    expect("change").toHaveBeenTriggeredOn(this.model);
+                    expect("change:tags").toHaveBeenTriggeredOn(this.model);
                 });
             });
         });
