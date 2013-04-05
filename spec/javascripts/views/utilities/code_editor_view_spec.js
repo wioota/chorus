@@ -68,13 +68,13 @@ describe("chorus.views.CodeEditorView", function() {
             expect(this.view.editor.lineCount()).toBe(3);
         });
 
-        describe("repositioning the insertion point", function() {
+        describe("repositioning the insertion reticle", function() {
             beforeEach(function() {
                 this.mouseMoveEvent = {pageX: -1, pageY: -1};
                 this.characterPosition = {line: 2, ch: 12};
-                this.insertionPointPixelPosition = {x: 12, y: 34};
+                this.pixelPosition = {left: 12, top: 34};
                 spyOn(this.view.editor, "coordsChar").andReturn(this.characterPosition);
-                spyOn(this.view.editor, "charCoords").andReturn(this.insertionPointPixelPosition);
+                spyOn(this.view.editor, "charCoords").andReturn(this.pixelPosition);
             });
 
             it("computes the insertion point's pixel position based on the character position where text will be inserted", function() {
@@ -87,8 +87,8 @@ describe("chorus.views.CodeEditorView", function() {
                 this.view.repositionInsertionPoint(this.mouseMoveEvent);
 
                 var $reticle = this.view.$dropInsertionPoint;
-                expect($reticle.css("left")).toBe(this.insertionPointPixelPosition.x + "px");
-                expect($reticle.css("top")).toBe(this.insertionPointPixelPosition.y + "px");
+                expect($reticle.css("left")).toBe(this.pixelPosition.left + "px");
+                expect($reticle.css("top")).toBe(this.pixelPosition.top + "px");
             });
         });
 
@@ -105,7 +105,7 @@ describe("chorus.views.CodeEditorView", function() {
                 expect(this.view.$dropInsertionPoint).not.toBeHidden();
             });
 
-            xit("repositions the insertion point when the mouse is moved", function() {
+            it("repositions the insertion point when the mouse is moved", function() {
                 spyOn(this.view, 'repositionInsertionPoint');
                 this.view.startDragging();
                 $(".no_cursor_overlay").trigger('mousemove');
@@ -118,30 +118,30 @@ describe("chorus.views.CodeEditorView", function() {
         beforeEach(function() {
             stubDefer();
             this.view.render();
-            this.drag = {draggable: $('<div data-fullname="test"></div>')};
+            this.drag = {draggable: $('<div data-fullname="+++"></div>')};
             this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
             expect(this.view.editor.lineCount()).toBe(3);
             this.view.startDragging();
         });
 
         it("inserts text at the beginning of a line", function() {
-            var pos = this.view.editor.charCoords({line: 2, ch: 0});
             // Shift coordinates a little bit so we aren't right on a line boundary
             // This was causing different behavior between Chrome, Firefox, and Phantom
-            var fakeEvent = { pageX: pos.x, pageY: pos.y-1};
-            this.view.acceptDrop(fakeEvent, this.drag);
-            expect(this.view.editor.getLine(1)).toBe("test");
+            var pixelPosition = this.view.editor.charCoords({line: 2, ch: 0});
+            var event = { pageX: pixelPosition.left, pageY: pixelPosition.top-1};
+            this.view.acceptDrop(event, this.drag);
+            expect(this.view.editor.getLine(1)).toBe("+++");
         });
 
         it("inserts text in the middle of a line", function() {
             var pos = this.view.editor.charCoords({line: 2, ch: 12});
-            this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
-            expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
+            this.view.acceptDrop({pageX: pos.left, pageY: pos.top}, this.drag);
+            expect(this.view.editor.getLine(2)).toBe("this is the +++third line");
         });
 
         it('cancels all the dragging behavior', function(){
-            var pos = {x: -1, y: -1};
-            this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+            var pos = this.view.editor.charCoords({line: -1, ch: -1});
+            this.view.acceptDrop({pageX: pos.left, pageY: pos.top}, this.drag);
             expect(this.view.$('.no_cursor_overlay')).toBeHidden();
             expect(this.view.$dropInsertionPoint).toBeHidden();
         });

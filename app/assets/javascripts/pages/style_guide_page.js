@@ -143,6 +143,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             tags: tagList,
             fileType: 'sql',
             completeJson: true,
+            versionInfo: {
+                versionNum: 23,
+                content: "Rainbows!"
+            },
             workspace: this.models.workspace,
             recentComments: [
                 {
@@ -723,6 +727,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     timeType: "date",
                     dataset: this.models.dataset
                 })
+            }),
+
+            "Text Workfile Content": new chorus.views.TextWorkfileContent({
+                model: this.models.workfile
             })
         };
     },
@@ -762,6 +770,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
 
             "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
+
+            "Verify Chorus View Dialog": new chorus.dialogs.VerifyChorusView({model: this.models.chorusView}),
 
             "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 

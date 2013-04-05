@@ -6,10 +6,14 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
         this.options = _.extend({
             lineNumbers: true,
             fixedGutter: true,
+            styleActiveLine: true,
             theme: "default",
             lineWrapping: true,
             onBlur: _.bind(this.onBlur, this),
-            onChange: _.bind(this.onChange, this)
+            onChange: _.bind(this.onChange, this),
+            onCursorActivity: $.noop,
+            viewportMargin: Infinity,
+            highlightSelectionMatches: true
         }, options);
     },
 
@@ -29,6 +33,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
 
         delete this.options.onBlur;
         delete this.options.onChange;
+        delete this.options.onCursorActivity;
         delete this.editor;
         delete this.textArea;
 
@@ -41,6 +46,9 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             if(textArea !== this.textArea) {
                 this.textArea = textArea;
                 var editor = this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
+                editor.on('change', this.options.onChange);
+                editor.on('blur', this.options.onBlur);
+                editor.on('cursorActivity', this.options.onCursorActivity);
                 _.defer(function() {
                     editor.refresh();
                 });
@@ -50,7 +58,8 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
                 this.$(".CodeMirror").droppable({
                     drop: _.bind(this.acceptDrop, this),
                     out: _.bind(this.endDragging, this),
-                    over: _.bind(this.startDragging, this)
+                    over: _.bind(this.startDragging, this),
+                    tolerance: 'pointer'
                 });
             }
         }
@@ -63,10 +72,11 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
     },
 
     repositionInsertionPoint: function(event) {
-        var characterPosition = this.editor.coordsChar({x: event.pageX, y: event.pageY });
+        var characterPosition = this.editor.coordsChar({left: event.pageX, top: event.pageY });
         var pixelPosition = this.editor.charCoords(characterPosition);
-        this.$dropInsertionPoint.css("left", pixelPosition.x);
-        this.$dropInsertionPoint.css("top", pixelPosition.y);
+        this.$dropInsertionPoint.css("left", pixelPosition.left);
+        this.$dropInsertionPoint.css("top", pixelPosition.top);
+        this.editor.setCursor(characterPosition);
     },
 
     startDragging: function() {
@@ -82,7 +92,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
 
     acceptDrop: function(e, ui) {
         this.endDragging();
-        var pos = this.editor.coordsChar({x: e.pageX, y: e.pageY});
+        var pos = this.editor.coordsChar({left: e.pageX, top: e.pageY});
         this.editor.setCursor(pos);
         this.insertText(ui.draggable.data("fullname"));
     },

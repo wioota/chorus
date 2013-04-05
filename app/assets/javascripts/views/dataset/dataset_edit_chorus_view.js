@@ -11,7 +11,7 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
         this.editor = new chorus.views.CodeEditorView({
             model: this.model,
             readOnly: false,
-            mode: "text/x-sql",
+            mode: "text/x-plsql",
             extraKeys: {}
         });
 

@@ -46,7 +46,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     mode: function() {
         if (this.model.isSql()) {
-            return "text/x-sql";
+            return "text/x-plsql";
         } else {
             return "text/plain";
         }

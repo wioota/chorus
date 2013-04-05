@@ -43,8 +43,8 @@ describe("chorus.views.DatasetEditChorusView", function() {
             expect(this.view.editor.getValue()).toBe(this.dataset.get("query"));
         });
 
-        it("uses the 'text/x-sql' mode", function() {
-            expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
+        it("uses the 'text/x-plsql' mode", function() {
+            expect(this.view.editor.getOption("mode")).toBe("text/x-plsql");
         });
 
         it("provides CodeMirror with an onBlur function", function() {

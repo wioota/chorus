@@ -34,11 +34,6 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
         return this.editor.getValue();
     },
 
-    makeCodeMirrorOptions: function() {
-        var options = this._super("makeCodeMirrorOptions");
-        return options;
-    },
-
     makeEditable: function(e) {
         e && e.preventDefault();
 

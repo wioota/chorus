@@ -25,8 +25,8 @@ Dual licensed under the MIT or GPL Version 2 licenses.
 
 -----------------------------------------------------------------
 
-CodeMirror version 2.2
-Copyright (C) 2011 by Marijn Haverbeke <marijnh@gmail.com>
+CodeMirror version 3.11
+Copyright (C) 2013 by Marijn Haverbeke <marijnh@gmail.com>
 
 MIT License
 http://codemirror.net/

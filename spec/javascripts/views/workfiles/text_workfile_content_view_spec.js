@@ -77,8 +77,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 this.view.render();
             });
 
-            it("uses the 'text/x-sql' mode", function() {
-                expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
+            it("uses the 'text/x-plsql' mode", function() {
+                expect(this.view.editor.getOption("mode")).toBe("text/x-plsql");
             });
         });
     });

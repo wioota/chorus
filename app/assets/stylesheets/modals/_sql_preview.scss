@@ -12,13 +12,14 @@
 
     .sql {
         padding-top: 5px;
-        max-height: 140px;
+        min-height: 300px;
+        max-height: 300px;
         overflow-y: auto;
     }
 
     .CodeMirror-scroll {
         height: auto;
-        overflow: visible;
+        overflow-y: visible;
     }
 
     .CodeMirror-gutter {

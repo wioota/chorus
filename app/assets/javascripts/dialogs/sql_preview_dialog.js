@@ -27,12 +27,12 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     makeCodeMirrorOptions: function() {
         return {
-            readOnly: "nocursor",
             lineNumbers: true,
-            mode: "text/x-sql",
             fixedGutter: true,
             theme: "default",
-            lineWrapping: true
+            lineWrapping: true,
+            readOnly: "nocursor",
+            mode: "text/x-plsql"
         };
     },
 

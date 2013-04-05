@@ -18,7 +18,7 @@ chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
     setupDragging: function() {
         this.$("ul.list li").draggable({
             cursorAt: { top: 0, left: 0 },
-            containment: "window",
+            containment: "document",
             appendTo: "body",
             helper: this.dragHelper
         });

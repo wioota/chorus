@@ -66,14 +66,37 @@
     height: 100%;
 }
 
-.CodeMirror-scroll {
-    height: auto;
-    overflow-y: hidden;
+.drop_insertion_point {
+    margin-top: -3px;
+    margin-left: -2px;
+    display: none;
+    border: none;
+    position: absolute;
+    z-index: $drag-z-index + 1;
+    width:3px;
+    height: 1.2em;
+    background-color:$content-details-create-background-color;
+    border-radius: 1px;
+}
+
+.no_cursor_overlay {
+    display: none;
+    position: absolute;
+    z-index: 99999999999999;
     width: 100%;
+    height: 100%;
+    top:  0px;
+    left:  0px;
 }
 
 .CodeMirror.editable {
     background: white;
+    width: 100%;
+}
+
+.CodeMirror-scroll {
+    min-height: 300px;
+    overflow-y: hidden;
     width: 100%;
 }
 
