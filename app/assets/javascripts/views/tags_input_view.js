@@ -66,6 +66,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             // Trigger getSuggestions to fix a bug where a "," suggestion would show up for "Create new" option.
             textextInput.trigger("getSuggestions");
         });
+
+        this.focusInput();
     },
 
     resizeTextExt: function() {
@@ -93,7 +95,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.tags.add(newTag);
         this.taggable.updateTags({add: newTag});
         this.render();
-        this.focusInput();
     },
 
     removeMissingTag: function(tags) {
