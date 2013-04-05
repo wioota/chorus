@@ -127,16 +127,16 @@ class ChorusInstaller
     case input
       when 1
         @logger.log "Selected RedHat version 5."
-        "postgres-redhat5.5-9.2.1.tar.gz"
+        "postgres-redhat5.5-9.2.4.tar.gz"
       when 2
         @logger.log "Selected RedHat version 6."
-        "postgres-redhat6.2-9.2.1.tar.gz"
+        "postgres-redhat6.2-9.2.4.tar.gz"
       when 3
         @logger.log "Selected SuSE version 11."
-        "postgres-suse11-9.2.1.tar.gz"
+        "postgres-suse11-9.2.4.tar.gz"
       when 5
         @logger.log "Selected OS X."
-        "postgres-osx-9.2.1.tar.gz"
+        "postgres-osx-9.2.4.tar.gz"
       else
         raise InstallerErrors::InstallAborted, "OS version not supported."
     end
