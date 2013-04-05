@@ -109,8 +109,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     openDirectoryExternalTable: function(e) {
         e.preventDefault();
-
-        new chorus.dialogs.HdfsInstanceWorkspacePicker({model: this.resource, activeOnly: true}).launchModal();
+        new chorus.dialogs.HdfsDataSourceWorkspacePicker({model: this.resource, activeOnly: true}).launchModal();
     },
 
     startEditingTags: function(e) {

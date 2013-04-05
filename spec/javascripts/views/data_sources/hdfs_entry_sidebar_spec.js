@@ -55,6 +55,9 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             it("has a link to create an external table", function() {
                 expect(this.view.$("a.directory_external_table")).toExist();
                 expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
+                var modalSpy = stubModals();
+                this.view.$("a.directory_external_table").click();
+                expect(modalSpy).toHaveModal(chorus.dialogs.HdfsDataSourceWorkspacePicker);
             });
 
             it("calls the base implementation for postRender", function() {
