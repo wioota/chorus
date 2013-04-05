@@ -53,10 +53,11 @@ class DataSourceConnection
   end
 
 
-  def stream_sql(query, options={}, store_statement = lambda { |nothing| }, &record_handler)
+  def stream_sql(query, options={}, cancelable_query = nil, &record_handler)
     with_jdbc_connection(options) do |jdbc_conn|
       statement = build_and_configure_statement(jdbc_conn, options, query)
-      store_statement.call(statement)
+
+      cancelable_query.store_statement(statement) if cancelable_query
       statement.execute
 
       stream_through_block(options, record_handler, statement)
@@ -66,10 +67,11 @@ class DataSourceConnection
     true
   end
 
-  def prepare_and_execute_statement(query, options={})
+  def prepare_and_execute_statement(query, options={}, cancelable_query = nil)
     with_jdbc_connection(options) do |jdbc_conn|
       statement = build_and_configure_statement(jdbc_conn, options, query)
-      yield statement if block_given?
+      cancelable_query.store_statement(statement) if cancelable_query
+
       set_timeout(options[:timeout], statement) if options[:timeout]
 
       if options[:describe_only]

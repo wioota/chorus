@@ -1,7 +1,17 @@
 require 'csv'
 
 class SqlStreamer
-  def initialize(sql, connection, options = {}, store_statement = lambda {|statement|})
+  class ClosableEnumerator < Enumerator
+    def initialize(cq, &proc)
+      @cq = cq
+      super &proc
+    end
+    def close
+      @cq.clean_statement if @cq
+    end
+  end
+
+  def initialize(sql, connection, options = {}, cancelable_query = nil)
     @sql = sql
     @connection = connection
     @target_is_greenplum = options[:target_is_greenplum]
@@ -10,16 +20,16 @@ class SqlStreamer
     @stream_options = {}
     @stream_options[:limit] = options[:row_limit] if options[:row_limit].to_i > 0
     @stream_options[:quiet_null] = !!options[:quiet_null]
-    @store_statement = store_statement
+    @cancelable_query = cancelable_query
   end
 
   def enum
     first_row = @show_headers
     no_results = true
 
-    Enumerator.new do |y|
+    ClosableEnumerator.new(@cancelable_query) do |y|
       begin
-        @connection.stream_sql(@sql, @stream_options, @store_statement) do |row|
+        @connection.stream_sql(@sql, @stream_options, @cancelable_query) do |row|
           no_results = false
 
           if first_row && @show_headers
@@ -36,7 +46,6 @@ class SqlStreamer
       rescue Exception => e
         y << e.message
       end
-
       ActiveRecord::Base.connection.close
     end
   end

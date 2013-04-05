@@ -12,7 +12,7 @@ class WorkfileExecutionsController < ApplicationController
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
 
-      self.response_body= query.stream(params[:sql], :row_limit => params[:num_of_rows].to_i)
+      self.response_body = query.stream(params[:sql], :row_limit => params[:num_of_rows].to_i)
     else
       present query.execute(params[:sql], :limit => ChorusConfig.instance['default_preview_row_limit'],
                                       :include_public_schema_in_search_path => true)
