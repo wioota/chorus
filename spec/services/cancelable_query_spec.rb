@@ -12,20 +12,20 @@ describe CancelableQuery do
     CancelableQuery.class_variable_set(:@@running_statements, {})
   end
 
-  describe "#format_sql_and_check_id" do
+  describe "format_sql_and_check_id" do
     it "includes the check_id and the query" do
       cancelable_query.format_sql_and_check_id("select 1").should == "/*#{check_id}_#{user.id}*/select 1"
     end
   end
 
-  describe "#execute" do
+  describe "execute" do
     let(:options) { {:warnings => true}.merge(extra_options) }
-    let(:extra_options) { { } }
+    let(:extra_options) { {} }
     let(:results) { GreenplumSqlResult.new }
     let(:chorus_config_timeout) { nil }
 
     before do
-      mock(connection).prepare_and_execute_statement(cancelable_query.format_sql_and_check_id(sql), options) { results }
+      mock(connection).prepare_and_execute_statement(cancelable_query.format_sql_and_check_id(sql), options, anything) { results }
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { chorus_config_timeout }
     end
 
@@ -49,7 +49,7 @@ describe CancelableQuery do
 
     context "when a timeout is not passed, but is set in ChorusConfig" do
       let(:chorus_config_timeout) { 75 }
-      let(:extra_options) { { :timeout => 60 * chorus_config_timeout } }
+      let(:extra_options) { {:timeout => 60 * chorus_config_timeout} }
       it "uses the timeout from ChorusConfig" do
         cancelable_query.execute(sql)
       end
@@ -60,29 +60,22 @@ describe CancelableQuery do
     let(:connection) { Object.new }
     let(:results) { :results }
     let(:still_running) { false }
+    let(:fake_statement) { Object.new }
+    let(:running_statements) { CancelableQuery.class_variable_get(:@@running_statements) }
+    let(:options) { {} }
 
     before do
       stub(connection).fetch(anything) { still_running ? [1] : [] }
     end
 
-    it "should store the statement in the callback block and delete it when finished" do
-      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
-
-      mock(connection).prepare_and_execute_statement(anything, anything).yields do |sql, options, block|
-        fake_statement = :fake_statement
-        block.call(fake_statement)
-        CancelableQuery.class_variable_get(:@@running_statements)[cancelable_query.check_id].should == fake_statement
-        results
+    it "stores the statement" do
+      running_statements.should_not have_key("#{check_id}_#{user.id}")
+      mock(connection).prepare_and_execute_statement(anything, anything, cancelable_query) do |sql, options, cq|
+        cq.store_statement(fake_statement)
+        running_statements.should have_key("#{check_id}_#{user.id}")
       end
-      cancelable_query.execute(sql).should == results
-      CancelableQuery.class_variable_get(:@@running_statements).should_not have_key(check_id)
-    end
 
-    it "should cancel correctly" do
-      fake_statement = Object.new
-      CancelableQuery.class_variable_get(:@@running_statements)[cancelable_query.check_id] = fake_statement
-      mock(fake_statement).cancel
-      cancelable_query.cancel.should be_true
+      cancelable_query.execute(sql, options)
     end
 
     it "should not blow up if the query is already finished" do
@@ -91,7 +84,7 @@ describe CancelableQuery do
 
     it "should not blow up when threads suck" do
       fake_statement = Object.new
-      CancelableQuery.class_variable_get(:@@running_statements)[cancelable_query.check_id] = fake_statement
+      running_statements[cancelable_query.check_id] = fake_statement
       mock(fake_statement).cancel { raise Exception, "you didn't rescue!" }
       cancelable_query.cancel.should be_false
     end
@@ -107,7 +100,7 @@ describe CancelableQuery do
 
       it "should return false" do
         fake_statement = Object.new
-        CancelableQuery.class_variable_get(:@@running_statements)[cancelable_query.check_id] = fake_statement
+        running_statements[cancelable_query.check_id] = fake_statement
         mock(fake_statement).cancel
         cancelable_query.cancel.should be_false
       end
@@ -120,43 +113,55 @@ describe CancelableQuery do
     let(:gpdb_data_source) { account.data_source }
     let(:check_id) { '54321' }
 
-    describe "#cancel" do
-      it "cancels the query and throws a query error when the query is cancelled" do
-        cancel_thread = Thread.new do
-          cancel_connection = gpdb_data_source.connect_with(account)
-          wait_until { get_running_queries_by_check_id(cancel_connection).present? }
-          CancelableQuery.new(cancel_connection, check_id, user).cancel.should == true
-        end
-
-        query_connection = gpdb_data_source.connect_with(account)
-        expect {
-          CancelableQuery.new(query_connection, check_id, user).execute("SELECT pg_sleep(15)")
-        }.to raise_error GreenplumConnection::QueryError
-        cancel_thread.join
-        get_running_queries_by_check_id(query_connection).should be_nil
-      end
-
-      it "cancels the query and throws a query error when the streaming query is cancelled" do
-        cancel_thread = Thread.new do
-          cancel_connection = gpdb_data_source.connect_with(account)
-          wait_until { get_running_queries_by_check_id(cancel_connection).present? }
-          CancelableQuery.new(cancel_connection, check_id, user).cancel.should == true
-        end
-
-        query_connection = gpdb_data_source.connect_with(account)
-        stream = CancelableQuery.new(query_connection, check_id, user).stream("SELECT pg_sleep(15)", {})
-
-        stream.to_a.first.should == "ERROR: canceling statement due to user request"
-
-        cancel_thread.join
-
-        get_running_queries_by_check_id(query_connection).should be_nil
-
-      end
-
-      it "returns false if the cancel operation is not successful" do
+    describe "cancel" do
+      it 'returns false if the cancel operation is not successful' do
         cancel_connection = gpdb_data_source.connect_with(account)
         CancelableQuery.new(cancel_connection, 0, user).cancel.should == false
+      end
+
+      context 'bulk executing' do
+        it "cancels the query and throws a query error" do
+          cancel_thread = Thread.new do
+            cancel_connection = gpdb_data_source.connect_with(account)
+            wait_until { get_running_queries_by_check_id(cancel_connection).present? }
+            CancelableQuery.new(cancel_connection, check_id, user).cancel.should == true
+          end
+
+          query_connection = gpdb_data_source.connect_with(account)
+          expect {
+            CancelableQuery.new(query_connection, check_id, user).execute("SELECT pg_sleep(15)")
+          }.to raise_error GreenplumConnection::QueryError
+          cancel_thread.join
+          get_running_queries_by_check_id(query_connection).should be_nil
+        end
+      end
+
+      context 'streaming' do
+        let!(:cancel_thread) do
+          Thread.new do
+            connection_to_cancel = gpdb_data_source.connect_with(account)
+            wait_until { get_running_queries_by_check_id(connection_to_cancel).present? }
+            CancelableQuery.new(connection_to_cancel, check_id, user).cancel.should == true
+          end
+        end
+        let(:query_connection) { gpdb_data_source.connect_with(account) }
+        let(:stream) { CancelableQuery.new(query_connection, check_id, user).stream("SELECT pg_sleep(15)", {}) }
+        let(:running_statements) { CancelableQuery.class_variable_get(:@@running_statements) }
+
+        it 'cancels the query and throws a query error' do
+          stream.to_a.first.should == "ERROR: canceling statement due to user request"
+          cancel_thread.join
+          get_running_queries_by_check_id(query_connection).should be_nil
+        end
+
+        it 'removes the applicable running statement entry' do
+          stream.to_a.first
+          running_statements.should have_key("#{check_id}_#{user.id}")
+
+          cancel_thread.join
+          stream.close   #This is called by Rack in the application
+          running_statements.should_not have_key("#{check_id}_#{user.id}")
+        end
       end
     end
 

@@ -15,10 +15,8 @@ describe SqlStreamer do
 
   let(:connection) do
     obj = Object.new
-    mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, other_block, block|
-      streamed_data.each do |row|
-        block.call row
-      end
+    mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, cancelable_query, block|
+      streamed_data.each { |row| block.call row }
       true
     end
 
@@ -121,6 +119,18 @@ describe SqlStreamer do
         enumerator = streamer.enum
         enumerator.next.should == "The query returned no rows"
         finish_enumerator(enumerator)
+      end
+    end
+
+    context "with a cancelable query" do
+      let(:cancelable_query) { Object.new }
+      let(:streamer) { SqlStreamer.new(sql, connection, options, cancelable_query) }
+
+      it 'cleans up statements on enum.close' do
+        mock(cancelable_query).clean_statement
+        enum = streamer.enum
+        finish_enumerator(enum)
+        enum.close
       end
     end
 

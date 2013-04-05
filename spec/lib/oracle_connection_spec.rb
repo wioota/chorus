@@ -138,6 +138,12 @@ describe OracleConnection, :oracle_integration do
       end
     end
 
+    it 'stores the statement through the cancelable_query' do
+      cancelable_query = Object.new
+      mock(cancelable_query).store_statement.with_any_args
+      connection.stream_sql(sql, {}, cancelable_query) {}
+    end
+
     context "when a limit is provided" do
       it "only processes part of the results" do
         bucket = []
@@ -149,6 +155,7 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe "#prepare_and_execute_statement" do
+    let(:sql) { "SELECT * from \"#{OracleIntegration.schema_name}\".NEWTABLE" }
     context "when a timeout is specified" do
       let(:options) { {:timeout => 1} }
       let(:too_many_rows) { 2500 }
@@ -185,6 +192,12 @@ describe OracleConnection, :oracle_integration do
           connection.prepare_and_execute_statement sql, options
         end.to raise_error(DataSourceConnection::QueryError, /requested cancel/)
       end
+    end
+
+    it 'stores the statement through the cancelable_query' do
+      cancelable_query = Object.new
+      mock(cancelable_query).store_statement.with_any_args
+      connection.prepare_and_execute_statement(sql, {}, cancelable_query)
     end
   end
 

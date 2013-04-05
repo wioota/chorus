@@ -12,16 +12,16 @@ class CancelableQuery
   end
 
   def execute(sql, options = {})
-    @connection.prepare_and_execute_statement(format_sql_and_check_id(sql), options.reverse_merge(default_options)) do |statement|
-      @@running_statements[@check_id] = statement
-    end
+    sql = format_sql_and_check_id(sql)
+    options = options.reverse_merge(default_options)
+    @connection.prepare_and_execute_statement(sql, options, self)
   ensure
-    @@running_statements.delete(@check_id)
+    clean_statement
   end
 
   def stream(sql, options)
-    store_statement = lambda { |statement| @@running_statements[@check_id] = statement }
-    SqlStreamer.new(format_sql_and_check_id(sql), @connection, options, store_statement).enum
+    sql = format_sql_and_check_id(sql)
+    SqlStreamer.new(sql, @connection, options, self).enum
   end
 
   def cancel
@@ -44,6 +44,14 @@ class CancelableQuery
     @connection.fetch("select procpid from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%'").any?
   end
 
+  def store_statement(statement)
+    @@running_statements[@check_id] = statement
+  end
+
+  def clean_statement
+    @@running_statements.delete @check_id
+  end
+
   private
 
   def default_options
@@ -55,4 +63,5 @@ class CancelableQuery
   def sql_execution_timeout
     (60 * (ChorusConfig.instance["execution_timeout_in_minutes"] || 0))
   end
+
 end

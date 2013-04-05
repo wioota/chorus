@@ -30,7 +30,7 @@ describe GreenplumConnection, :greenplum_integration do
 
   let(:connection) { GreenplumConnection.new(details) }
 
-  describe "#connect!" do
+  describe "connect!" do
     context "when a logger is not provided" do
       before do
         mock.proxy(Sequel).connect(db_url, :test => true)
@@ -76,7 +76,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#disconnect" do
+  describe "disconnect" do
     before do
       mock_conn = Object.new
 
@@ -92,7 +92,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#with_connection" do
+  describe "with_connection" do
     before do
       mock.proxy(Sequel).connect(db_url, satisfy { |options| options[:test] })
     end
@@ -119,7 +119,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#fetch" do
+  describe "fetch" do
     let(:sql) { "SELECT 1 AS answer" }
     let(:parameters) { {} }
     let(:subject) { connection.fetch(sql) }
@@ -137,7 +137,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#fetch_value" do
+  describe "fetch_value" do
     let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
     let(:subject) { connection.fetch_value(sql) }
     let(:expected) { 1 }
@@ -150,7 +150,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#execute" do
+  describe "execute" do
     let(:sql) { "SET search_path TO 'public'" }
     let(:parameters) { {} }
     let(:subject) { connection.execute(sql) }
@@ -159,7 +159,7 @@ describe GreenplumConnection, :greenplum_integration do
     it_should_behave_like "a well-behaved database query"
   end
 
-  describe "#set_timeout" do
+  describe "set_timeout" do
     let(:statement_connection) { Object.new }
     let(:statement) { Object.new }
 
@@ -177,7 +177,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "#prepare_and_execute_statement" do
+  describe "prepare_and_execute_statement" do
     let(:sql) { "SELECT 1 AS answer" }
     let(:options) { {} }
     let(:expected) { [{'answer' => '1'}] }
@@ -187,6 +187,12 @@ describe GreenplumConnection, :greenplum_integration do
     it "should return a SqlResult" do
       subject.should be_a(SqlResult)
       subject.hashes.should == expected
+    end
+
+    it 'stores the statement through the cancelable_query' do
+      cancelable_query = Object.new
+      mock(cancelable_query).store_statement.with_any_args
+      connection.prepare_and_execute_statement(sql, {}, cancelable_query)
     end
 
     describe "when the schema is set" do
@@ -200,9 +206,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "SELECT * from table_in_public" }
 
       it "doesn't search public by default" do
-        expect {
-          subject
-        }.to raise_error(GreenplumConnection::QueryError, /"table_in_public" does not exist/)
+        expect { subject }.to raise_error(GreenplumConnection::QueryError, /"table_in_public" does not exist/)
       end
 
       describe "when including the public schema in the search path" do
@@ -331,18 +335,6 @@ describe GreenplumConnection, :greenplum_integration do
         expect { subject }.to raise_error(GreenplumConnection::QueryError, /timeout/)
       end
     end
-
-    context "when a block is given" do
-      it "should call the block with the prepared statement" do
-        called = false
-        connection.prepare_and_execute_statement(sql, options) do |arg|
-          called = true
-          arg.should be_a(java.sql.Statement)
-        end
-
-        called.should == true
-      end
-    end
   end
 
   describe "process management" do
@@ -377,7 +369,7 @@ describe GreenplumConnection, :greenplum_integration do
   describe "InstanceMethods" do
     let(:database_name) { 'postgres' }
 
-    describe "#databases" do
+    describe "databases" do
       let(:database_list_sql) do
         <<-SQL
           SELECT
@@ -403,7 +395,7 @@ describe GreenplumConnection, :greenplum_integration do
       it_should_behave_like "a well-behaved database query"
     end
 
-    describe "#create_database" do
+    describe "create_database" do
       let(:new_database_name) { "foobarbaz" }
       let(:subject) { connection.create_database("foobarbaz") }
       let(:expected) { true }
@@ -425,7 +417,7 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   describe "DatabaseMethods" do
-    describe "#schemas" do
+    describe "schemas" do
       let(:schema_list_sql) do
         <<-SQL
       SELECT
@@ -444,7 +436,7 @@ describe GreenplumConnection, :greenplum_integration do
       it_should_behave_like "a well-behaved database query"
     end
 
-    describe "#schema_exists?" do
+    describe "schema_exists?" do
       let(:schema_name) { 'test_schema' }
       let(:subject) { connection.schema_exists?(schema_name) }
       let(:expected) { true }
@@ -460,7 +452,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#create_schema" do
+    describe "create_schema" do
       let(:new_schema_name) { "foobarbaz" }
       let(:subject) { connection.create_schema("foobarbaz") }
       let(:expected) { true }
@@ -480,7 +472,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#drop_schema" do
+    describe "drop_schema" do
       context "if the schema exists" do
         let(:schema_to_drop) { "hopefully_unused_schema" }
         let(:subject) { connection.drop_schema(schema_to_drop) }
@@ -521,7 +513,7 @@ describe GreenplumConnection, :greenplum_integration do
     let(:connection) { GreenplumConnection.new(details.merge(:schema => schema_name)) }
     let(:schema_name) { "test_schema" }
 
-    describe "#functions" do
+    describe "functions" do
       let(:schema_functions_sql) do
         <<-SQL
           SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, (SELECT t2.typname ORDER BY inputtypeid) AS argtypes, t1.prosrc, d.description
@@ -547,7 +539,7 @@ describe GreenplumConnection, :greenplum_integration do
       it_should_behave_like "a well-behaved database query"
     end
 
-    describe "#disk_space_used" do
+    describe "disk_space_used" do
       let(:disk_space_sql) do
         <<-SQL
           SELECT sum(pg_total_relation_size(pg_catalog.pg_class.oid))::bigint AS size
@@ -654,7 +646,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#table_exists?" do
+    describe "table_exists?" do
       let(:subject) { connection.table_exists?(table_name) }
       let(:expected) { true }
 
@@ -685,7 +677,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#view_exists?" do
+    describe "view_exists?" do
       let(:subject) { connection.view_exists?(view_name) }
       context "when the view exists" do
         let(:expected) { true }
@@ -709,7 +701,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#analyze_table" do
+    describe "analyze_table" do
       context "when the table exists" do
         let(:table_name) { "table_to_analyze" }
 
@@ -736,7 +728,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#drop_table" do
+    describe "drop_table" do
       context "if the table exists" do
         let(:table_to_drop) { "hopefully_unused_table" }
         let(:subject) { connection.drop_table(table_to_drop) }
@@ -773,7 +765,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#truncate_table" do
+    describe "truncate_table" do
       let(:subject) { connection.truncate_table(table_to_truncate) }
       let(:expected) { true }
 
@@ -809,7 +801,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#fetch" do
+    describe "fetch" do
       let(:sql) { "SELECT 1 AS answer" }
       let(:parameters) { {} }
       let(:subject) { connection.fetch(sql) }
@@ -836,7 +828,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#fetch_value" do
+    describe "fetch_value" do
       let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
       let(:subject) { connection.fetch_value(sql) }
       let(:expected) { 1 }
@@ -854,7 +846,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#stream_sql" do
+    describe "stream_sql" do
       let(:sql) { "SELECT * from thing" }
       let(:expected) { true }
       let(:bucket) {[]}
@@ -878,6 +870,12 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       it_behaves_like "a well-behaved database query"
+
+      it 'stores the statement through the cancelable_query' do
+        cancelable_query = Object.new
+        mock(cancelable_query).store_statement.with_any_args
+        connection.stream_sql(sql, {}, cancelable_query) {}
+      end
 
       it "streams all rows of the results" do
         bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"},
@@ -915,7 +913,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#execute" do
+    describe "execute" do
       let(:sql) { "SET search_path TO 'public'" }
       let(:parameters) { {} }
       let(:subject) { connection.execute(sql) }
@@ -924,7 +922,7 @@ describe GreenplumConnection, :greenplum_integration do
       it_behaves_like "a well-behaved database query"
     end
 
-    describe "#validate_query" do
+    describe "validate_query" do
       let(:subject) {
         connection.validate_query('SELECT * FROM base_table1')
       }
@@ -978,7 +976,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#datasets" do
+    describe "datasets" do
       let(:datasets_sql) do
         (<<-SQL).strip_heredoc
           SELECT pg_catalog.pg_class.relkind as type, pg_catalog.pg_class.relname as name, pg_catalog.pg_class.relhassubclass as master_table
@@ -1118,7 +1116,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#datasets_count" do
+    describe "datasets_count" do
       let(:datasets_sql) do
         <<-SQL
           SELECT count(pg_catalog.pg_class.relname)
@@ -1182,7 +1180,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#column_info" do
+    describe "column_info" do
       let(:table_name) { "base_table1" }
       let(:columns_sql) do
         <<-SQL
@@ -1231,7 +1229,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#partitions_disk_size" do
+    describe "partitions_disk_size" do
       let(:dataset_name) { "master_table1" }
 
       it "should calculate the total disk size" do
@@ -1239,7 +1237,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#metadata_for_dataset" do
+    describe "metadata_for_dataset" do
       context "a base table" do
         let(:dataset_name) { "base_table1" }
 
@@ -1301,7 +1299,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#primary_key_columns" do
+    describe "primary_key_columns" do
       context "with a primary key" do
         let(:expected) { %w(id2 id3 id) }
         let(:subject) { connection.primary_key_columns('candy') }
@@ -1317,7 +1315,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#distribution_key_columns" do
+    describe "distribution_key_columns" do
       context "with a distribution key" do
         let(:expected) { %w(id) }
         let(:subject) { connection.distribution_key_columns('base_table1') }
@@ -1366,7 +1364,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#copy_table_data" do
+    describe "copy_table_data" do
       let(:destination_table_name) { 'a_new_db_table' }
       let(:source_table_name) { 'base_table1' }
       let(:limit) { nil }
@@ -1413,7 +1411,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    describe "#count_rows" do
+    describe "count_rows" do
       let(:expected) { db.from(Sequel.qualify(schema_name, table_name)).count }
       let(:subject) { connection.count_rows(table_name) }
       let(:table_name) { 'base_table1' }
