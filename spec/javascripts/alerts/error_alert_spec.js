@@ -5,6 +5,8 @@ describe("chorus.alerts.Error", function() {
     });
     beforeEach(function() {
         this.modelWithError = rspecFixtures.userWithErrors();
+        this.modelWithError.fetch();
+        this.server.lastFetchFor(this.modelWithError).failUnprocessableEntity(this.modelWithError.attributes);
         this.alert = new FakeAlert({model: this.modelWithError});
     });
 
@@ -49,6 +51,10 @@ describe("chorus.alerts.Error", function() {
 
         it("should display a 'Close Window' button", function() {
             expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.close_window");
+        });
+
+        it("should hide the error div when model has errors", function() {
+            expect(this.alert.$(".errors")).toHaveClass('hidden');
         });
     });
 });
