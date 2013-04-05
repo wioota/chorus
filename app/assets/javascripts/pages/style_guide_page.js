@@ -328,6 +328,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             input: {value: "original_filter_value_a"}
         });
 
+        this.models.hdfsExternalTable = new chorus.models.HdfsExternalTable({
+            path: this.models.hdfsFile.get('path'),
+            hdfsDataSourceId: this.models.hdfsDataSource.get('id'),
+            hdfs_entry_id: this.models.hdfsFile.get('id')
+        });
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return this.models;
@@ -765,6 +771,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 chartOptions: this.models.chartOptions,
                 filters: this.collections.datasetFilterSet,
                 columnSet: this.models.dataset.columns()
+            }),
+
+            "Create External Table From Hdfs": new chorus.dialogs.CreateExternalTableFromHdfs({
+                model: this.models.hdfsExternalTable,
+                csvOptions: {
+                    tableName: this.models.hdfsFile.name(),
+                    contents: this.models.hdfsFile.get('contents')
+                }
             })
         };
     },
