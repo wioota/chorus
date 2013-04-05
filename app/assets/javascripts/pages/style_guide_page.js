@@ -180,26 +180,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             completeJson: true
         });
 
-        this.models.task = (function() {
-            var animals = ['aardvark', 'bat', 'cheetah'];
-            var columns = [
-                { name: "id" },
-                { name: "value" },
-                { name: "animal" }
-            ];
-            var rows = _.map(_.range(50), function(i) {
-                return {
-                    id: i,
-                    value: Math.round(100 * Math.random(), 0),
-                    animal: _.shuffle(animals)[0]
-                };
-            });
-
-            return new chorus.models.WorkfileExecutionTask({
-                columns: columns,
-                rows: rows
-            });
-        })();
+        this.models.boxplotTask = new chorus.models.BoxplotTask({
+            xAxis: "category",
+            yAxis: "column2",
+            dataset: this.models.dataset,
+            bins: 20
+        });
 
         this.models.user = new chorus.models.User({ username: "edcadmin",
             firstName: "Johnny",
@@ -334,6 +320,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             ]
         });
 
+        this.models.chartOptions = {type: "boxplot", name: "Foo"};
+
+        this.models.datasetFilter = new chorus.models.DatasetFilter({
+            column: this.models.dataset.columns().at(0),
+            comparator: "equal",
+            input: {value: "original_filter_value_a"}
+        });
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return this.models;
@@ -384,6 +378,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.collections.kaggleUserSet = new chorus.collections.KaggleUserSet([new chorus.models.KaggleUser({fullName: "Abraham Lincoln", rank: 1, location: 'Gettysburg', numberOfEnteredCompetitions: 12})]);
         this.collections.kaggleUserSet.loaded = true;
+
+        this.collections.datasetFilterSet = new chorus.collections.DatasetFilterSet([this.models.datasetFilter]);
     },
 
     buildContentDetails: function() {
@@ -761,7 +757,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
 
-            "Dataset Download Dialog": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset})
+            "Dataset Download Dialog": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
+
+            "Visualization Dialog": new chorus.dialogs.Visualization({
+                task: this.models.boxplotTask,
+                model: this.models.chorusView,
+                chartOptions: this.models.chartOptions,
+                filters: this.collections.datasetFilterSet,
+                columnSet: this.models.dataset.columns()
+            })
         };
     },
 
