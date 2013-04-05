@@ -25,7 +25,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "public": true,
             archivedAt: null,
             tags: tagList,
-            completeJson: true
+            completeJson: true,
+            sandboxInfo: {
+                id: 1,
+                instance: {
+                    id: 1,
+                    name: 'Data Source',
+                    entityType: 'gpdb_data_source'
+                }
+            }
         });
         this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Data Source'}}});
 
@@ -779,6 +787,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     tableName: this.models.hdfsFile.name(),
                     contents: this.models.hdfsFile.get('contents')
                 }
+            }),
+
+            "Import Now": new chorus.dialogs.ImportNow({
+                dataset: this.models.dataset
             })
         };
     },
