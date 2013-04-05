@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DESIRED_RUBY_VERSION=`cat $CHORUS_HOME/.ruby-version`
+DESIRED_RUBY_VERSION=`cat .ruby-version`
 
 # Pipe through sed to remove asterisks, which get executed by backticks
 INSTALLED_RUBY_VERSIONS=`rbenv versions | sed -e 's/*//'`
