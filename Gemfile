@@ -58,7 +58,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy do
 end
 
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy do
-  gem 'foreman', '0.46',         :require => false
+  gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
