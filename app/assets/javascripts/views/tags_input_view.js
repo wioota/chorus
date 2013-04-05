@@ -11,27 +11,32 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.input = this.$('input');
-        this.tagsForTextext = this.tags.map(function(tag) {
+        this.$input = this.$('input');
+        this.buildTextExt();
+        this.focusInput();
+    },
+
+    buildTextExt: function() {
+        var tagsForTextext = this.tags.map(function(tag) {
             return {name: tag.name(), model: tag};
         });
 
-        var textextInput = this.input.textext({
+        var textExtInput = this.$input.textext({
             plugins: 'tags autocomplete ajax',
-            tagsItems: this.tagsForTextext,
+            tagsItems: tagsForTextext,
             itemManager: chorus.utilities.TagItemManager,
             keys: {
-                8   : 'backspace',
-                9   : 'tab',
-                13  : 'enter!',
-                27  : 'escape',
-                37  : 'left',
-                38  : 'up!',
-                39  : 'right',
-                40  : 'down!',
-                46  : 'delete',
-                108 : 'numpadEnter',
-                188 : 'comma'
+                8: 'backspace',
+                9: 'tab',
+                13: 'enter!',
+                27: 'escape',
+                37: 'left',
+                38: 'up!',
+                39: 'right',
+                40: 'down!',
+                46: 'delete',
+                108: 'numpadEnter',
+                188: 'comma'
             },
             ajax: {
                 url: '/tags',
@@ -48,15 +53,19 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             }
         });
 
-        this.input.attr("placeholder", t("tags.add_tags"));
+        this.setUpBindings(textExtInput);
+    },
 
+    setUpBindings: function(textextInput) {
         // TODO #42333697: change these to use this.binding.add so they get cleaned up
-        this.textext = this.input.textext()[0];
-        this.input.on("setFormData", _.bind(this.updateTags, this));
-        this.input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
-        this.input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+        this.textext = this.$input.textext()[0];
+        this.$input.on("setFormData", _.bind(this.updateTags, this));
+        this.$input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
+        this.$input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+
         // this is so the dropdown always appears at the bottom of the text area
-        this.input.bind('focus', _.bind(this.resizeTextExt, this));
+        this.$input.bind('focus', _.bind(this.resizeTextExt, this));
+
         textextInput.bind('tagClick', _.bind(function(e, tag, value, callback) {
             this.trigger("tag:click", value.model);
         }, this));
@@ -66,8 +75,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             // Trigger getSuggestions to fix a bug where a "," suggestion would show up for "Create new" option.
             textextInput.trigger("getSuggestions");
         });
-
-        this.focusInput();
     },
 
     resizeTextExt: function() {
@@ -123,7 +130,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     validateTag: function(tag) {
         this.clearErrors();
         if(!tag.performValidation(tag.attributes)) {
-            this.markInputAsInvalid(this.input, tag.errors.name, false);
+            this.markInputAsInvalid(this.$input, tag.errors.name, false);
             this.keepInvalidTagName = true;
             return false;
         }
@@ -131,7 +138,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     },
 
     restoreInvalidTag: function(e, tag) {
-        this.input.val(tag || this.invalidTagName);
+        this.$input.val(tag || this.invalidTagName);
         this.invalidTagName = "";
     },
 
@@ -143,6 +150,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     },
 
     focusInput: function() {
-        this.input.focus();
+        this.$input.focus();
     }
 });
