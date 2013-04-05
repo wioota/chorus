@@ -5,7 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'sunspot_matchers'
 require 'rspec/rails'
 require 'rspec/autorun'
-require "paperclip/matchers"
+require 'paperclip/matchers'
 require 'rspec_api_documentation'
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
@@ -39,9 +39,7 @@ FACTORY_GIRL_SEQUENCE_OFFSET = 44444
 FactoryGirl.find_definitions
 
 require 'support/fixture_builder'
-silence_warnings do
-  FACTORY_GIRL_SEQUENCE_OFFSET = 0
-end
+silence_warnings { FACTORY_GIRL_SEQUENCE_OFFSET = 0 }
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

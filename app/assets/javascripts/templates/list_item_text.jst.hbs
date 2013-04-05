@@ -20,21 +20,9 @@
         {{#if title}}
             <div class="title" title="{{title}}">{{title}}</div>
         {{/if}}
-
         {{#if lastComment}}
-            <div class="comment">
-                <div class="body"></div>
-                {{userProfileLink lastComment.creator}}
-                <span class="comment_info">
-                    {{t "workfiles.commented_on"}} <span class="on">{{lastComment.on}}</span>
-                    {{#if otherCommentCount }}
-                        - {{t "workfiles.other_comments" count=otherCommentCount}}
-                    {{/if}}
-                </span>
-            </div>
+            {{> itemLastComment}}
         {{/if}}
-
-
         {{#if datasetCountMessage}}
             <div class="description">
                 {{ datasetCountMessage }}
@@ -51,40 +39,20 @@
             </div>
         {{/if}}
         {{#if isWorkspace}}
-            <div class="summary">
-            </div>
-            <div class="details">
-                <span class="owner">
-                    {{#if active}}
-                        {{t "workspaces.owned_by"}}
-                        <a href="{{ownerUrl}}">{{ownerFullName}}</a>
-                    {{else}}
-                        {{t "workspaces.archived_by"}}
-                        <a href="{{archiverUrl}}">{{archiverFullName}}</a>
-                        <span class="timestamp">{{relativeTimestamp archivedAt}}</span>
-                    {{/if}}
-                </span>
-                {{#unless public}}
-                    <span class="private">
-                    <img src="/images/workspace-lock.png"/>
-                        {{t "workspaces.private"}}
-                    </span>
-                {{/unless}}
-            </div>
+            {{> workspaceItemDetails}}
         {{/if}}
-
         {{#if tableauWorkbook}}
             <div class="tableau">
                 {{fromTableau model}}
             </div>
         {{/if}}
-
         {{#if isDataset}}
             {{usedInWorkspaces workspaces dataset}}
             <div class="location">
                 {{datasetLocation resource}}
             </div>
         {{/if}}
+
         {{> itemTags}}
     </div>
 </div>
