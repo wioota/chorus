@@ -10,14 +10,14 @@ describe("chorus.dialogs.VerifyChorusView", function() {
 
     it("has an non-editable CodeMirror", function() {
         expect(this.dialog.editor.getOption("readOnly")).toBeTruthy();
-        expect(this.dialog.$(".CodeMirror")).not.toHaveClass("editable");
+        expect(this.dialog.$(".CodeMirror")).not.toHaveClass("cm-s-editable");
         expect(this.dialog.$("button.edit")).not.toHaveClass("disabled");
     });
 
     it("can make CodeMirror editable", function() {
         this.dialog.$("button.edit").click();
         expect(this.dialog.editor.getOption("readOnly")).toBeFalsy();
-        expect(this.dialog.$(".CodeMirror")).toHaveClass("editable");
+        expect(this.dialog.$(".CodeMirror")).toHaveClass("cm-s-editable");
         expect(this.dialog.$("button.edit")).toHaveClass("disabled");
     });
 

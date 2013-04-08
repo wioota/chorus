@@ -32,7 +32,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
             theme: "default",
             lineWrapping: true,
             readOnly: "nocursor",
-            mode: "text/x-plsql"
+            mode: "text/x-plsql",
+            viewportMargin: Infinity
         };
     },
 
@@ -42,7 +43,6 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         _.defer(_.bind(function() {
             this.editor = CodeMirror.fromTextArea(textArea[0], this.makeCodeMirrorOptions());
             this.editor.refresh();
-            this.setupScrolling(this.$(".container"));
         }, this));
         this.hidePreviewData();
     },

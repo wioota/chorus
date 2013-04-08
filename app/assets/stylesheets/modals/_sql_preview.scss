@@ -12,14 +12,22 @@
 
     .sql {
         padding-top: 5px;
-        min-height: 300px;
-        max-height: 300px;
+        min-height: $texteditor-min-height;
+        max-height: $texteditor-min-height;
         overflow-y: auto;
+        position: relative;
+    }
+
+    .CodeMirror {
+        width: 99%;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        position: relative;
     }
 
     .CodeMirror-scroll {
-        height: auto;
-        overflow-y: visible;
+        //avoid y-scrollbars
+        min-height: $texteditor-min-height - 2px;
     }
 
     .CodeMirror-gutter {

@@ -38,7 +38,7 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
         e && e.preventDefault();
 
         this.editor.setOption("readOnly", false);
-        this.$(".CodeMirror").addClass("editable");
+        this.editor.setOption("theme", "default editable");
 
         $(e.target).addClass("disabled");
     }

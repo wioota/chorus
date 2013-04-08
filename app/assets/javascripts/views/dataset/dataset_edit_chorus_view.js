@@ -12,7 +12,8 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
             model: this.model,
             readOnly: false,
             mode: "text/x-plsql",
-            extraKeys: {}
+            extraKeys: {},
+            theme: "default editable"
         });
 
         this.subscribePageEvent("dataset:saveEdit", this.saveModel);

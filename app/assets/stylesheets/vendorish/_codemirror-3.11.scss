@@ -263,14 +263,33 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
     height: auto;
     background: $body-background-color;
     position: inherit;
+    overflow-x: hidden;
 }
 .CodeMirror-scroll {
     overflow-y: hidden;
-    overflow-x: auto;
+    overflow-x: hidden;
+    min-height: $texteditor-min-height;
+    width: 100%;
+}
+
+.CodeMirror.cm-s-editable {
+    background: white;
+    width: 100%;
 }
 
 .CodeMirror-gutters {
-    min-height: 30000px;
+    height:  100%;
+    min-height: $texteditor-min-height;
 }
+
+.CodeMirror-vscrollbar {
+    display: none !important;
+}
+
+.CodeMirror-hscrollbar {
+    display: none !important;
+}
+
+
 
 /*-------------------------*/

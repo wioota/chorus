@@ -65,7 +65,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         }
 
         this.editor.setOption("readOnly", false);
-        this.$(".CodeMirror").addClass("editable");
+        this.editor.setOption("theme", "default editable");
         this.editor.focus();
     },
 

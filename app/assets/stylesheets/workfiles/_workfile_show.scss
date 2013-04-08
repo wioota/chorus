@@ -89,17 +89,6 @@
     left:  0px;
 }
 
-.CodeMirror.editable {
-    background: white;
-    width: 100%;
-}
-
-.CodeMirror-scroll {
-    min-height: 300px;
-    overflow-y: hidden;
-    width: 100%;
-}
-
 .save_menu, .run_menu, .schema_menu {
     li {
         padding: 5px;

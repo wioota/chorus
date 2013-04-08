@@ -127,7 +127,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("adds the editable class to the CodeMirror div", function() {
-            expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+            expect(this.view.$(".CodeMirror")).toHaveClass("cm-s-editable");
         });
     });
 
@@ -252,7 +252,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("maintains the editor in edit mode", function() {
-                    expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+                    expect(this.view.$(".CodeMirror")).toHaveClass("cm-s-editable");
                 });
 
                 context("when there is a version conflict", function() {
@@ -330,7 +330,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("maintains the editor in edit mode", function() {
-                    expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+                    expect(this.view.$(".CodeMirror")).toHaveClass("cm-s-editable");
                 });
 
                 context("when there is a version conflict", function() {
