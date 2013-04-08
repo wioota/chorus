@@ -1,4 +1,4 @@
-jruby: http://jruby.org.s3.amazonaws.com/downloads/1.7.2/jruby-complete-1.7.2.jar
+jruby: http://jruby.org.s3.amazonaws.com/downloads/1.7.3/jruby-complete-1.7.3.jar
 jetty: http://dist.codehaus.org/jetty/jetty-hightide-8.1.9/jetty-hightide-8.1.9.v20130131.zip
 jruby-rack: http://repository.codehaus.org/org/jruby/rack/jruby-rack/1.0.10/jruby-rack-1.0.10.jar
 app_root: $CHORUS_HOME
