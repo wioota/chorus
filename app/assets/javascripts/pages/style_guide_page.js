@@ -801,6 +801,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Import Now": new chorus.dialogs.ImportNow({
                 dataset: this.models.dataset
+            }),
+
+            "Name Chorus View": new chorus.dialogs.NameChorusView({
+                model: this.models.chorusView
             })
         };
     },
