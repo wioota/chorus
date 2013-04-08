@@ -346,6 +346,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             hdfs_entry_id: this.models.hdfsFile.get('id')
         });
 
+        this.models.csvImport = new chorus.models.CSVImport({ workspaceId: '90210' });
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return this.models;
@@ -737,53 +739,53 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildDialogs: function() {
         return {
-            "Workspace Instance Account Dialog": new chorus.dialogs.WorkspaceInstanceAccount({model: this.models.instanceAccount, pageModel: this.models.workspace}),
+            "Workspace Instance Account": new chorus.dialogs.WorkspaceInstanceAccount({model: this.models.instanceAccount, pageModel: this.models.workspace}),
 
-            "Instance Account Dialog": new chorus.dialogs.InstanceAccount({
+            "Instance Account": new chorus.dialogs.InstanceAccount({
                 title: t("instances.account.add.title"),
                 instance: this.models.gpdbDataSource
             }),
 
-            "Change Password Dialog": new chorus.dialogs.ChangePassword(),
+            "Change Password": new chorus.dialogs.ChangePassword(),
 
-            "Show API Key Dialog": new chorus.dialogs.ShowApiKey(),
+            "Show API Key": new chorus.dialogs.ShowApiKey(),
 
-            "New Note Dialog": new chorus.dialogs.NotesNew(),
+            "New Note": new chorus.dialogs.NotesNew(),
 
-            "Comment Dialog": new chorus.dialogs.Comment(),
+            "Comment": new chorus.dialogs.Comment(),
 
-            "Create Directory External Table from HDFS Dialog": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
+            "Create Directory External Table from HDFS": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
                 collection: this.collections.CsvHdfsFileSet,
                 directoryName: "some directory"
             }),
 
-            "Edit Note Dialog": new chorus.dialogs.EditNote({
+            "Edit Note": new chorus.dialogs.EditNote({
                 activity: this.models.activity
             }),
 
-            "Edit Tags Dialog": new chorus.dialogs.EditTags({
+            "Edit Tags": new chorus.dialogs.EditTags({
                 collection: this.collections.workfileSet
             }),
 
-            "Insights New Dialog": new chorus.dialogs.InsightsNew(),
+            "Insights New": new chorus.dialogs.InsightsNew(),
 
-            "Pick Workspace Dialog": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
+            "Pick Workspace": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
 
-            "SQL Preview Dialog": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
+            "SQL Preview": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
 
-            "Verify Chorus View Dialog": new chorus.dialogs.VerifyChorusView({model: this.models.chorusView}),
+            "Verify Chorus View": new chorus.dialogs.VerifyChorusView({model: this.models.chorusView}),
 
-            "Create Database View Dialog": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
+            "Create Database View": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
-            "Edit Data Source Dialog": new chorus.dialogs.DataSourceEdit({
+            "Edit Data Source": new chorus.dialogs.DataSourceEdit({
                 instance: this.models.gpdbDataSource
             }),
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
 
-            "Dataset Download Dialog": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
+            "Dataset Download": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
 
-            "Visualization Dialog": new chorus.dialogs.Visualization({
+            "Visualization": new chorus.dialogs.Visualization({
                 task: this.models.boxplotTask,
                 model: this.models.chorusView,
                 chartOptions: this.models.chartOptions,
@@ -805,6 +807,29 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Name Chorus View": new chorus.dialogs.NameChorusView({
                 model: this.models.chorusView
+            }),
+
+            "New Table Import CSV": new chorus.dialogs.NewTableImportCSV({
+                model: this.models.csvImport, csvOptions: {tableName: 'foobar'}
+            }),
+
+            "Publish To Tableau": new chorus.dialogs.PublishToTableau({
+                model: this.models.dataset.deriveTableauWorkbook(),
+                dataset: this.models.dataset
+            }),
+
+            "Import Gnip Stream": new chorus.dialogs.ImportGnipStream({
+                pageModel: this.models.gnipDataSource
+            }),
+
+            "New Data Source": new chorus.dialogs.DataSourcesNew(),
+
+            "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
+                instance: this.models.gpdbDataSource
+            }),
+
+            "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({
+                recipients: this.collections.kaggleUserSet
             })
         };
     },

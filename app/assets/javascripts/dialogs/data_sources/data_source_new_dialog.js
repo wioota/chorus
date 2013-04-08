@@ -1,16 +1,16 @@
 chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     constructorName: "DataSourcesNew",
-    templateName:"data_source_new",
-    title:t("instances.new_dialog.title"),
-    persistent:true,
+    templateName: "data_source_new",
+    title: t("instances.new_dialog.title"),
+    persistent: true,
 
-    events:{
-        "change select.data_sources":"showFieldset",
+    events: {
+        "change select.data_sources": "showFieldset",
         "click button.submit": "createDataSource",
         "click a.close_errors": "clearServerErrors"
     },
 
-    setup:function () {
+    setup: function () {
         this.requiredResources.add(chorus.models.Config.instance());
     },
 
@@ -23,7 +23,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         }, this));
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this.model = this.model || new chorus.models.GpdbDataSource();
     },
 
@@ -34,7 +34,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         };
     },
 
-    showFieldset:function (e) {
+    showFieldset: function (e) {
         this.$(".data_sources_form").addClass("collapsed");
         var className = $(e.currentTarget).val();
 
@@ -45,7 +45,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         this.clearErrors();
     },
 
-    createDataSource:function (e) {
+    createDataSource: function (e) {
         e && e.preventDefault();
 
         this.resource = this.model = new (this.dataSourceClass())();
@@ -89,13 +89,13 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         this.model.serverErrors = {};
     },
 
-    saveSuccess:function () {
+    saveSuccess: function () {
         chorus.PageEvents.broadcast("data_source:added", this.model);
         chorus.toast('instances.add.toast', {dataSourceName: this.model.name()});
         this.closeModal();
     },
 
-    saveFailed:function () {
+    saveFailed: function () {
         this.$("button.submit").stopLoading();
         this.showErrors();
     }
