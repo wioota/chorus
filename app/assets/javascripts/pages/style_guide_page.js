@@ -830,6 +830,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({
                 recipients: this.collections.kaggleUserSet
+            }),
+
+            "Change Workfile Schema": new chorus.dialogs.ChangeWorkfileSchema({ model: this.models.workfile }),
+
+            "New Workfile Version": new chorus.dialogs.WorkfileNewVersion({ pageModel: this.models.workfile }),
+
+            "Import Workfiles": new chorus.dialogs.WorkfilesImport({
+                workspaceId: 'bar',
+                pageModel: this.models.workfile,
+                pageCollection: this.models.workfileSet
+            }),
+
+            "New SQL Workfile": new chorus.dialogs.WorkfilesSqlNew({ workspaceId: 'the-singing-detective' }),
+
+            "Associate With Workspace": new chorus.dialogs.AssociateWithWorkspace({
+                model: this.models.dataset,
+                activeOnly: true
             })
         };
     },
