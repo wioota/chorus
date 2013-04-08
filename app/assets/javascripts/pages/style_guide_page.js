@@ -847,6 +847,19 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Associate With Workspace": new chorus.dialogs.AssociateWithWorkspace({
                 model: this.models.dataset,
                 activeOnly: true
+            }),
+
+            "New Visualization Notes": new chorus.dialogs.VisualizationNotesNew({
+                entityId: "1",
+                entityName: "my dataset",
+                workspaceId: "22",
+                entityType: "dataset",
+                allowWorkspaceAttachments: "true",
+                pageModel: this.models.dataset,
+                attachVisualization: {
+                    fileName: "hello-frequency.png",
+                    svgData: "<svg/>"
+                }
             })
         };
     },
