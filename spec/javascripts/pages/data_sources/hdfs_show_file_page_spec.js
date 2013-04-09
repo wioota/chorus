@@ -37,6 +37,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyInstance (2)");
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/hdfs_data_sources/1234/browse");
 
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("my file.txt");
         });
