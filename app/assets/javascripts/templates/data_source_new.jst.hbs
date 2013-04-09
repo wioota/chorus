@@ -27,7 +27,7 @@
         <label class="required db_username" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
         <label class="required db_password" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
         <input class="db_username" type="text" name="dbUsername" maxlength="256"/>
-        <input class="db_password" type="password" name="dbPassword" maxlength="256"/>
+        <input class="db_password" type="password" name="dbPassword" maxlength="256" accept="" autocomplete="off"/>
 
         <input type="checkbox" name="shared" id="register_greenplum_shared"/>
         <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}}
@@ -56,7 +56,7 @@
     <label class="required db_username" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
     <label class="required db_password" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
     <input class="db_username" type="text" name="dbUsername" maxlength="256"/>
-    <input class="db_password" type="password" name="dbPassword" maxlength="256"/>
+    <input class="db_password" type="password" name="dbPassword" maxlength="256" autocomplete="off"/>
 
     <input type="checkbox" name="shared" id="register_oracle_shared"/>
     <label for="register_oracle_shared">{{t "instances.dialog.is_community_account"}}
@@ -107,7 +107,7 @@
         <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
         <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>
         <input class="gnip_username" type="text" name="username" maxlength="255"/>
-        <input class="gnip_password" type="password" name="password" maxlength="255"/>
+        <input class="gnip_password" type="password" name="password" maxlength="255" autocomplete="off"/>
     </form>
 </div>
 {{/if}}

@@ -11,6 +11,11 @@ describe("chorus.dialogs.ChangePassword", function() {
         this.view.render();
     });
 
+    it("does not autocomplete password inputs", function(){
+        var passwordField = this.view.$("input[type=password]");
+        expect(passwordField).toHaveAttr("autocomplete", "off");
+    });
+
     describe("when the user clicks submit with mis-matched passwords", function() {
         beforeEach(function() {
             this.user.set({password: "abc", passwordConfirmation: "abc"});

@@ -10,6 +10,10 @@ describe("chorus.views.Login", function() {
         expect(this.view.$("form.login")).toExist();
     });
 
+    it("does not autocomplete password inputs", function(){
+        expect(this.view.$("input[type=password]")).toHaveAttr("autocomplete", "off");
+    });
+
     it("requests the version string from the server", function() {
         expect(this.server.requests[0].url).toHaveUrlPath("/VERSION");
     });

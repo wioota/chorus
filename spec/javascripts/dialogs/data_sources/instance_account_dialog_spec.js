@@ -13,6 +13,11 @@ describe("chorus.dialogs.InstanceAccount", function() {
         it("has the right title based on the launch element", function() {
             expect(this.dialog.title).toMatchTranslation("instances.account.add.title");
         });
+
+        it("does not autocomplete password inputs", function(){
+            var passwordField = this.dialog.$("input[name=dbPassword]");
+            expect(passwordField).toHaveAttr("autocomplete", "off");
+        });
     });
 
     describe("#makeModel", function() {

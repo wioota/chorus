@@ -13,6 +13,10 @@ describe("chorus.views.userNew", function() {
                 expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
             });
 
+            it("does not autocomplete password inputs", function(){
+                expect(this.view.$("input[type=password]")).toHaveAttr("autocomplete", "off");
+            });
+
             context("submitting the form", function() {
                 beforeEach(function() {
                     this.view.$("input[name=firstName]").val("Frankie");

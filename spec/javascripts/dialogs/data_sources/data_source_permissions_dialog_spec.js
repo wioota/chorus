@@ -118,6 +118,10 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 this.dialog.launchModal();
             });
 
+            it("does not autocomplete password inputs", function(){
+                expect(this.dialog.$("input[type=password]")).toHaveAttr("autocomplete", "off");
+            });
+
             it("displays the shared account subheader", function() {
                 expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account");
             });
@@ -319,6 +323,10 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             this.otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
 
             $('#jasmine_content').append(this.dialog.el);
+        });
+
+        it("does not autocomplete password inputs", function(){
+            expect(this.dialog.$("input[type=password]")).toHaveAttr("autocomplete", "off");
         });
 
         it("only shows 'owner' in the row corresponding to the owner", function() {

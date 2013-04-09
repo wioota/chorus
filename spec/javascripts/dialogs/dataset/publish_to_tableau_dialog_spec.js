@@ -6,6 +6,10 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         this.dialog.render();
     });
 
+    it("does not autocomplete password inputs", function(){
+        expect(this.dialog.$("input[type=password]")).toHaveAttr("autocomplete", "off");
+    });
+
     it("populates the dataset name in the name input", function () {
         expect(this.dialog.$("input[name='name']").val()).toBe("myDataset");
         expect(this.dialog.$("label[name='name']").text()).toMatchTranslation("tableau.dialog.name");

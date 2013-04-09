@@ -27,6 +27,13 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         expect(this.dialog.$(".register_existing_hdfs .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hdfs_help_text");
     });
 
+    it("does not autocomplete password inputs", function(){
+        var passwordFields = this.dialog.$("input[type=password]");
+        _.each(passwordFields, function(field) {
+            expect($(field)).toHaveAttr("autocomplete", "off");
+        });
+    });
+
     describe("when the configuration is loaded", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
@@ -229,6 +236,11 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             it("shows the gnip streamUrl", function() {
                 expect(this.dialog.$(".register_existing_gnip input[name=streamUrl]").val()).toBe("");
+            });
+
+            it("does not autocomplete password inputs", function(){
+                var passwordField = this.dialog.$("input[type=password].gnip_password ");
+                expect(passwordField).toHaveAttr("autocomplete", "off");
             });
         });
     });

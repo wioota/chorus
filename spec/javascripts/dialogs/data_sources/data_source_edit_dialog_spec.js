@@ -165,6 +165,10 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.$("input[name=password]").val()).toBe("");
                 expect(this.dialog.$("input[name=password]").prop("disabled")).toBeFalsy();
             });
+
+            it("does not autocomplete password inputs", function(){
+                expect(this.dialog.$("input[type='password']")).toHaveAttr("autocomplete", "off");
+            });
         });
     });
 
