@@ -23,21 +23,21 @@ chorus.views.SearchItemBase = chorus.views.Base.extend(chorus.Mixins.TagsContext
 
     getTableDescription: function() {
         var descriptions = this.model.get("tableDescription") || [];
-        _.each(descriptions, function(description) { description.isTableDescription = true; });
+        _.each(descriptions, function(description) { description.subType = 'table_description'; });
 
         return descriptions;
     },
 
     getColumns: function() {
         var columns = this.model.get("columns") || [];
-        _.each(columns, function(column) { column.isColumn = true; });
+        _.each(columns, function(column) { column.subType = 'column'; });
 
         return columns;
     },
 
     getColumnDescriptions: function() {
         var columnDescriptions = this.model.get("columnDescriptions") || [];
-        _.each(columnDescriptions, function(columnDescription) { columnDescription.isColumnDescription = true; });
+        _.each(columnDescriptions, function(columnDescription) { columnDescription.subType = 'column_description'; });
 
         return columnDescriptions;
     },

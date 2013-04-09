@@ -44,6 +44,9 @@ chorus.handlebarsHelpers.search = {
         if (comment.isVersionComment) {
             return t("search.supporting_message_types.version_comment");
         }
+        if (comment.subType) {
+            return t("search.supporting_message_types." + comment.subType);
+        }
         return t("search.supporting_message_types.note");
     }
 };

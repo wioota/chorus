@@ -86,5 +86,16 @@ describe('chorus.handlebarsHelpers.search', function() {
                 expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.note");
             });
         });
+
+        context("when the comment has a subType", function() {
+            beforeEach(function() {
+                this.comment = rspecFixtures.activity.noteOnWorkfileCreated().attributes;
+                this.comment.subType = "table_description";
+            });
+
+            it("returns the table title", function() {
+                expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.table_description");
+            });
+        });
     });
 });
