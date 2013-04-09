@@ -102,7 +102,7 @@ window.Chorus = function chorus$Global() {
             view.teardown();
         }
 
-        //TODO remove cleanupFunctions after dealing with bindHotKeys in views.js
+        // remove hotkey bindings and bindings to dom elements not managed by a view
         _.each(self.cleanupFunctions, function(func) {
             func();
         });
