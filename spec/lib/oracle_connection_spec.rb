@@ -1,21 +1,20 @@
 require 'spec_helper'
 
 describe OracleConnection, :oracle_integration do
-  let(:username) { OracleIntegration.username }
-  let(:password) { OracleIntegration.password }
-  let(:db_name) { OracleIntegration.db_name }
-  let(:host) { OracleIntegration.hostname }
+  let(:database_name) { OracleIntegration.db_name }
+  let(:hostname) { OracleIntegration.hostname }
   let(:port) { OracleIntegration.port }
   let(:db_url) { OracleIntegration.db_url }
   let(:db) { Sequel.connect(db_url) }
+  let(:account) { OracleIntegration.real_account }
+  let(:exception_class) { OracleConnection::DatabaseError }
 
   let(:details) {
     {
-        :host => host,
-        :username => username,
-        :password => password,
+        :host => hostname,
+        :account => account,
         :port => port,
-        :database => db_name,
+        :database => database_name,
         :logger => Rails.logger
     }
   }
@@ -23,7 +22,12 @@ describe OracleConnection, :oracle_integration do
 
   before do
     stub.proxy(Sequel).connect.with_any_args
-    details.delete(:logger)
+  end
+
+  it_should_behave_like "a data source connection" do
+    let(:empty_set_sql) { "SELECT 1 FROM dual where 1=2" }
+    let(:sql) { "SELECT 1 as col1 FROM dual" }
+    let(:sql_with_parameter) { "SELECT :param as col1 FROM dual" }
   end
 
   describe "#connect!" do
@@ -46,22 +50,6 @@ describe OracleConnection, :oracle_integration do
           error.data_source.should == 'Oracle'
         }
       end
-    end
-  end
-
-  describe "#disconnect" do
-    before do
-      mock_conn = Object.new
-
-      mock(Sequel).connect(anything, anything) { mock_conn }
-      mock(mock_conn).disconnect
-      connection.connect!
-    end
-
-    it "disconnects Sequel connection" do
-      connection.should be_connected
-      connection.disconnect
-      connection.should_not be_connected
     end
   end
 
@@ -449,11 +437,11 @@ describe OracleConnection, :oracle_integration do
 
   describe "OracleConnection::DatabaseError" do
     let(:sequel_exception) {
-      obj = Object.new
-      wrp_exp = Object.new
-      stub(obj).wrapped_exception { wrp_exp }
-      stub(obj).message { "A message" }
-      obj
+      exception = Exception.new
+      wrapped_exception = Object.new
+      stub(exception).wrapped_exception { wrapped_exception }
+      stub(exception).message { "A message" }
+      exception
     }
 
     let(:error) do

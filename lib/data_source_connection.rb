@@ -46,6 +46,24 @@ class DataSourceConnection
     input_string.gsub(/[\_\%#{LIKE_ESCAPE_CHARACTER}]/) { |c| LIKE_ESCAPE_CHARACTER + c }
   end
 
+  def initialize(details)
+    @account = details.delete(:account)
+    @settings = details
+  end
+
+  def connect!
+    verify_driver_configuration
+    if @account.invalid_credentials?
+      raise error_class.new(:INVALID_PASSWORD)
+    else
+      @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+    end
+  rescue Sequel::DatabaseError => e
+    exception = error_class.new(e)
+    @account.invalid_credentials! if exception.error_type == :INVALID_PASSWORD
+    raise exception
+  end
+
   def fetch(sql, parameters={})
     with_connection { @connection.fetch(sql, parameters).all }
   end
@@ -95,7 +113,23 @@ class DataSourceConnection
     raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
+  def verify_driver_configuration
+  end
+
   private
+
+
+  def error_class
+    DataSourceConnection::Error
+  end
+
+  def logger_options
+    if @settings[:logger]
+      { :logger => @settings[:logger], :sql_log_level => :debug }
+    else
+      {}
+    end
+  end
 
   def stream_through_block(options, record_handler, statement)
     result_set = last_result_set(statement)

@@ -39,25 +39,6 @@ class GreenplumConnection < DataSourceConnection
     @@gpdb_login_timeout
   end
 
-  def initialize(details)
-    @account = details.delete(:account)
-    @settings = details
-  end
-
-  def connect!
-    if @account.invalid_credentials?
-      raise GreenplumConnection::DatabaseError.new(:INVALID_PASSWORD)
-    else
-      begin
-        @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
-      rescue Sequel::DatabaseError => e
-        exception = GreenplumConnection::DatabaseError.new(e)
-        @account.invalid_credentials! if exception.error_type == :INVALID_PASSWORD
-        raise exception
-      end
-    end
-  end
-
   def disconnect
     @connection.disconnect if @connection
     @connection = nil
@@ -80,8 +61,8 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def kill(search)
-    with_connection do
-      @connection.select { pg_terminate_backend(procpid) }.from(find_pid_query(search)).all
+    with_connection do |connection|
+      connection.select { pg_terminate_backend(procpid) }.from(find_pid_query(search)).all
     end
   end
 
@@ -125,12 +106,8 @@ class GreenplumConnection < DataSourceConnection
 
   private
 
-  def logger_options
-    if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
-    else
-      {}
-    end
+  def error_class
+    GreenplumConnection::DatabaseError
   end
 
   def quote_identifier(identifier)
@@ -143,16 +120,16 @@ class GreenplumConnection < DataSourceConnection
 
   module DatabaseMethods
     def schemas
-      with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:schema_name] } }
+      with_connection { |connection| connection.fetch(SCHEMAS_SQL).map { |row| row[:schema_name] } }
     end
 
     def create_schema(name)
-      with_connection { @connection.create_schema(name) }
+      with_connection { |connection| connection.create_schema(name) }
       true
     end
 
     def drop_schema(name)
-      with_connection { @connection.drop_schema(name, :if_exists => true) }
+      with_connection { |connection| connection.drop_schema(name, :if_exists => true) }
       true
     end
 
@@ -176,7 +153,7 @@ class GreenplumConnection < DataSourceConnection
 
   module InstanceMethods
     def databases
-      with_connection { @connection.fetch(DATABASES_SQL).map { |row| row[:database_name] } }
+      with_connection { |connection| connection.fetch(DATABASES_SQL).map { |row| row[:database_name] } }
     end
 
     def version
@@ -184,14 +161,14 @@ class GreenplumConnection < DataSourceConnection
       # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
       # then we just want "4.1.1.2"
 
-      with_connection do
-        version_string = @connection.fetch("select version()").first[:version]
+      with_connection do |connection|
+        version_string = connection.fetch("select version()").first[:version]
         version_string.match(/Greenplum Database ([\d\.]*)/)[1]
       end
     end
 
     def create_database(database_name)
-      with_connection { @connection.execute("CREATE DATABASE #{quote_identifier(database_name)}") }
+      with_connection { |connection| connection.execute("CREATE DATABASE #{quote_identifier(database_name)}") }
       true
     end
 
@@ -210,26 +187,26 @@ class GreenplumConnection < DataSourceConnection
 
   module SchemaMethods
     def functions
-      with_connection { @connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
+      with_connection { |connection| connection.fetch(SCHEMA_FUNCTIONS_SQL, :schema => schema_name).all }
     end
 
     def disk_space_used
-      with_connection { @connection.fetch(SCHEMA_DISK_SPACE_QUERY, :schema => schema_name).single_value }
+      with_connection { |connection| connection.fetch(SCHEMA_DISK_SPACE_QUERY, :schema => schema_name).single_value }
     end
 
     def create_view(view_name, query)
-      with_connection { @connection.create_view(view_name, query) }
+      with_connection { |connection| connection.create_view(view_name, query) }
       true
     end
 
     def create_external_table(options)
       delimiter = options[:delimiter] || ','
-      with_connection do
+      with_connection do |connection|
         location_string = options[:location_url] ? "LOCATION (E'#{options[:location_url]}')" : ""
         execution_string = options[:execute] ? "EXECUTE E'#{options[:execute]}'" : ""
         table_name = %Q{"#{schema_name}"."#{options[:table_name]}"}
 
-        @connection.execute(<<-SQL)
+        connection.execute(<<-SQL)
           CREATE EXTERNAL TABLE #{table_name}
           (#{options[:columns]}) #{location_string} #{execution_string} FORMAT 'TEXT'
           (DELIMITER '#{delimiter}')
@@ -239,11 +216,11 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def table_exists?(table_name)
-      with_connection { @connection.table_exists?(table_name.to_s) }
+      with_connection { |connection| connection.table_exists?(table_name.to_s) }
     end
 
     def view_exists?(view_name)
-      with_connection { @connection.views.map(&:to_s).include? view_name }
+      with_connection { |connection| connection.views.map(&:to_s).include? view_name }
     end
 
     def analyze_table(table_name)
@@ -256,7 +233,7 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def drop_table(table_name)
-      with_connection { @connection.drop_table(table_name, :if_exists => true) }
+      with_connection { |connection| connection.drop_table(table_name, :if_exists => true) }
       true
     end
 
@@ -307,24 +284,24 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def column_info(table_name, table_setup_sql)
-      with_connection do
-        @connection.execute(table_setup_sql)
-        @connection.fetch(COLUMN_METADATA_QUERY, :schema => schema_name, :table => table_name).all
+      with_connection do |connection|
+        connection.execute(table_setup_sql)
+        connection.fetch(COLUMN_METADATA_QUERY, :schema => schema_name, :table => table_name).all
       end
     end
 
     def partitions_disk_size(table_name)
-      with_connection do
-        partitions = @connection[:pg_partitions]
+      with_connection do |connection|
+        partitions = connection[:pg_partitions]
         query = partitions.where(:tablename => table_name, :schemaname => schema_name)
         query.sum { pg_total_relation_size(partitiontablename) }
       end
     end
 
     def metadata_for_dataset(table_name)
-      with_connection do
-        relations = @connection.from(:pg_catalog__pg_class => :relations)
-        schema_query = @connection.from(:pg_namespace => :schemas).where(:nspname => schema_name).select(:oid)
+      with_connection do |connection|
+        relations = connection.from(:pg_catalog__pg_class => :relations)
+        schema_query = connection.from(:pg_namespace => :schemas).where(:nspname => schema_name).select(:oid)
         relations_in_schema = relations.where(:relnamespace => schema_query)
         query = relations_in_schema.where(:relations__relname => table_name)
 
@@ -341,7 +318,7 @@ class GreenplumConnection < DataSourceConnection
                              :pg_views__definition => :definition, :relations__relnatts => :column_count,
                              :pg_stat_last_operation__statime => :last_analyzed)
 
-        partition_count_query = @connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
+        partition_count_query = connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
         query = query.select_append(partition_count_query => :partition_count)
 
         query = query.select_append { obj_description(relations__oid).as('description') }
@@ -376,32 +353,32 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def primary_key_columns(table_name)
-      with_connection do
+      with_connection do |connection|
         sql = <<-SQL
           SELECT attname
           FROM   (SELECT *, generate_series(1, array_upper(conkey, 1)) AS rn
           FROM   pg_constraint where conrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass and contype='p'
           ) y, pg_attribute WHERE attrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass::oid AND conkey[rn] = attnum ORDER by rn;
         SQL
-        @connection.fetch(sql).map { |row| row[:attname] }
+        connection.fetch(sql).map { |row| row[:attname] }
       end
     end
 
     def distribution_key_columns(table_name)
-      with_connection do
+      with_connection do |connection|
         sql = <<-SQL
           SELECT attname
           FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
           FROM   gp_distribution_policy where localoid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass
           ) y, pg_attribute WHERE attrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
         SQL
-        @connection.fetch(sql).map { |row| row[:attname] }
+        connection.fetch(sql).map { |row| row[:attname] }
       end
     end
 
     def create_table(table_name, table_definition, distribution_clause)
-      with_connection do
-        @connection.execute <<-SQL
+      with_connection do |connection|
+        connection.execute <<-SQL
         CREATE TABLE #{quote_identifier(table_name)} (#{table_definition}) #{distribution_clause}
         SQL
       end
@@ -409,24 +386,24 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def copy_table_data(destination_fullname, source_table_name, setup_sql, limit=nil)
-      with_connection do
-        @connection.execute(setup_sql)
-        select_data = @connection.from(source_table_name.to_sym).limit(limit)
+      with_connection do |connection|
+        connection.execute(setup_sql)
+        select_data = connection.from(source_table_name.to_sym).limit(limit)
         copy_command = "INSERT INTO #{destination_fullname} (#{select_data.sql})"
-        @connection.execute(copy_command)
+        connection.execute(copy_command)
       end
       true
     end
 
     def count_rows(table_name)
-      with_connection { @connection.from(table_name).count }
+      with_connection { |connection| connection.from(table_name).count }
     end
 
     private
 
     def datasets_query(options)
-      with_connection do
-        query = @connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
+      with_connection do |connection|
+        query = connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
         query = query.select_append do |o|
           o.`(%Q{('#{quote_identifier(schema_name)}."' || relations.relname || '"')::regclass})
         end

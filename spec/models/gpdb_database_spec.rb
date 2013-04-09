@@ -205,8 +205,7 @@ describe GpdbDatabase do
       mock(GreenplumConnection).new({
                                                             :host => instance.host,
                                                             :port => instance.port,
-                                                            :username => account.db_username,
-                                                            :password => account.db_password,
+                                                            :account => account,
                                                             :database => database.name,
                                                             :logger => Rails.logger
       }) { "this is my connection" }

@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe SqlResult, :oracle_integration do
-  let(:username) { OracleIntegration.username }
-  let(:password) { OracleIntegration.password }
+  let(:account) { OracleIntegration.real_account }
   let(:db_name) { OracleIntegration.db_name }
   let(:host) { OracleIntegration.hostname }
   let(:port) { OracleIntegration.port }
@@ -12,8 +11,7 @@ describe SqlResult, :oracle_integration do
   let(:details) do
     {
         :host => host,
-        :username => username,
-        :password => password,
+        :account => account,
         :port => port,
         :database => db_name,
         :logger => Rails.logger

@@ -11,8 +11,7 @@ class OracleSchema < Schema
 
   def connect_with(account)
     ::OracleConnection.new(
-        :username => account.db_username,
-        :password => account.db_password,
+        :account => account,
         :host => data_source.host,
         :port => data_source.port,
         :database => data_source.db_name,

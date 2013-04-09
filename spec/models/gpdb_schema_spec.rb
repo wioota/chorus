@@ -201,8 +201,7 @@ describe GpdbSchema do
       mock(GreenplumConnection).new({
                                         :host => schema.data_source.host,
                                         :port => schema.data_source.port,
-                                        :username => account.db_username,
-                                        :password => account.db_password,
+                                        :account => account,
                                         :database => schema.database.name,
                                         :schema => schema.name,
                                         :logger => Rails.logger

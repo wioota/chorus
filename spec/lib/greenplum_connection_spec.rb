@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe GreenplumConnection, :greenplum_integration do
-  let(:username) { GreenplumIntegration.username }
-  let(:password) { GreenplumIntegration.password }
   let(:database_name) { GreenplumIntegration.database_name }
   let(:hostname) { GreenplumIntegration.hostname }
   let(:port) { GreenplumIntegration.port }
@@ -10,12 +8,8 @@ describe GreenplumConnection, :greenplum_integration do
     query_params = URI.encode_www_form(:user => account.db_username, :password => account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params
   }
-  let(:account) do
-    GreenplumIntegration.real_account.tap do |account|
-      account.db_username = username
-      account.db_password = password
-    end
-  end
+  let(:account) { GreenplumIntegration.real_account }
+  let(:exception_class) { GreenplumConnection::DatabaseError }
 
   before :all do
     GreenplumIntegration.setup_gpdb
@@ -35,162 +29,10 @@ describe GreenplumConnection, :greenplum_integration do
 
   let(:connection) { GreenplumConnection.new(details) }
 
-  describe "connect!" do
-    context "when a logger is not provided" do
-      before do
-        mock.proxy(Sequel).connect(db_url, :test => true)
-        details.delete :logger
-      end
-
-      context "with valid credentials" do
-        it "connects successfully passing no logging options" do
-          connection.connect!
-          connection.should be_connected
-        end
-      end
-    end
-
-    context "when a logger is provided" do
-      let(:logger) do
-        log = Object.new
-        stub(log).debug
-        log
-      end
-
-      let(:details) {
-        {
-            :host => hostname,
-            :account => account,
-            :port => port,
-            :database => database_name,
-            :logger => logger
-        }
-      }
-
-      before do
-        mock.proxy(Sequel).connect(db_url, hash_including(:test => true, :sql_log_level => :debug, :logger => logger))
-      end
-
-      context "with valid credentials" do
-        it "connects successfully passing the proper logging options" do
-          connection.connect!
-          connection.should be_connected
-        end
-      end
-    end
-
-    context "when credentials are valid" do
-      it "does not set invalid credentials on the account" do
-        connection.connect!
-        account.invalid_credentials?.should be_false
-      end
-    end
-
-    context "when credentials are invalid" do
-      let(:username) { 'wrong!' }
-      let(:password) { 'wrong!' }
-      it "sets invalid_credentials on the account" do
-        expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError) do |error|
-          error.error_code.should == :INVALID_PASSWORD
-        end
-        account.invalid_credentials?.should be_true
-      end
-
-      context "when account is already flagged as invalid" do
-        before do
-          account.invalid_credentials!
-        end
-
-        it "does not attempt to connect, but still throws an INVALID_PASSWORD error" do
-          dont_allow(Sequel).connect
-          expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError) do |error|
-            error.error_code.should == :INVALID_PASSWORD
-          end
-        end
-      end
-
-      context "when connection fails for some reason unrelated to invalid credentials" do
-        let(:hostname) { 'example.com' }
-        it "does not set invalid credentials on the account" do
-          expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError)
-          account.invalid_credentials?.should be_false
-        end
-      end
-    end
-  end
-
-  describe "disconnect" do
-    before do
-      mock_conn = Object.new
-
-      mock(Sequel).connect(anything, anything) { mock_conn }
-      mock(mock_conn).disconnect
-      connection.connect!
-    end
-
-    it "disconnects Sequel connection" do
-      connection.should be_connected
-      connection.disconnect
-      connection.should_not be_connected
-    end
-  end
-
-  describe "with_connection" do
-    before do
-      mock.proxy(Sequel).connect(db_url, satisfy { |options| options[:test] })
-    end
-
-    context "with valid credentials" do
-      it "connects for the duration of the given block" do
-        expect {
-          connection.with_connection do
-            connection.should be_connected
-            throw :ran_block
-          end
-        }.to throw_symbol :ran_block
-        connection.should_not be_connected
-      end
-
-      it "can be nested" do
-        connection.with_connection do
-          connection.with_connection do
-            connection.should be_connected
-          end
-        end
-        connection.should_not be_connected
-      end
-    end
-  end
-
-  describe "fetch" do
-    let(:sql) { "SELECT 1 AS answer" }
-    let(:parameters) { {} }
-    let(:subject) { connection.fetch(sql) }
-    let(:expected) { [{:answer => 1}] }
-
-    it_should_behave_like "a well-behaved database query"
-
-    context "with SQL parameters" do
-      let(:sql) { "SELECT :num AS answer" }
-      let(:parameters) { {:num => 3} }
-
-      it "succeeds" do
-        connection.fetch(sql, parameters).should == [{:answer => 3}]
-      end
-    end
-  end
-
-  describe "fetch_value" do
-    let(:sql) { "SELECT * FROM ((SELECT 1) UNION (SELECT 2) UNION (SELECT 3)) AS thing" }
-    let(:subject) { connection.fetch_value(sql) }
-    let(:expected) { 1 }
-
-    it_should_behave_like "a well-behaved database query"
-
-    it "returns nil for an empty set" do
-      sql = "SELECT * FROM (SELECT * FROM (SELECT 1 as column1) AS set1 WHERE column1 = 2) AS empty"
-      connection.fetch_value(sql).should == nil
-    end
+  it_should_behave_like "a data source connection" do
+    let(:empty_set_sql) { "SELECT 1 where false;" }
+    let(:sql) { "SELECT 1 AS col1" }
+    let(:sql_with_parameter) { "SELECT :param as col1" }
   end
 
   describe "execute" do
@@ -409,7 +251,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "InstanceMethods" do
+  describe "DataSourceMethods" do
     let(:database_name) { 'postgres' }
 
     describe "databases" do

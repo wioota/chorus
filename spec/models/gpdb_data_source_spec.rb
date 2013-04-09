@@ -233,8 +233,7 @@ describe GpdbDataSource do
       mock(GreenplumConnection).new({
                                         :host => data_source.host,
                                         :port => data_source.port,
-                                        :username => account.db_username,
-                                        :password => account.db_password,
+                                        :account => account,
                                         :database => data_source.db_name,
                                         :logger => Rails.logger
                                     }) { "this is my connection" }

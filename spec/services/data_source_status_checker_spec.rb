@@ -156,7 +156,12 @@ describe DataSourceStatusChecker do
 
         stub(offline_data_source).connect_as_owner {
           connection = Object.new
-          stub(connection).version { raise GreenplumConnection::DatabaseError.new('bang') }
+
+          exception = Exception.new
+          wrapped_exception = Object.new
+          stub(exception).wrapped_exception { wrapped_exception }
+
+          stub(connection).version { raise GreenplumConnection::DatabaseError.new(exception) }
           connection
         }
       end

@@ -33,23 +33,8 @@ class OracleConnection < DataSourceConnection
     end
   end
 
-  def initialize(details)
-    @settings = details
-  end
-
-  def logger_options
-    if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
-    else
-      {}
-    end
-  end
-
-  def connect!
+  def verify_driver_configuration
     raise DriverNotConfigured.new('Oracle') unless ChorusConfig.instance.oracle_configured?
-    @connection ||= Sequel.connect(db_url, logger_options.merge({:test => true}))
-  rescue Sequel::DatabaseError => e
-    raise OracleConnection::DatabaseError.new(e)
   end
 
   def connected?
@@ -66,7 +51,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def db_url
-    "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
+    "jdbc:oracle:thin:#{@account.db_username}/#{@account.db_password}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
   end
 
   def version
@@ -77,7 +62,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def schemas
-    with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:name] } }
+    with_connection { |connection| connection.fetch(SCHEMAS_SQL).map { |row| row[:name] } }
   end
 
   def schema_exists?(name)
@@ -85,12 +70,12 @@ class OracleConnection < DataSourceConnection
   end
 
   def table_exists?(name)
-    with_connection { @connection.table_exists?("#{schema_name}__#{name.to_s}".to_sym) }
+    with_connection { |connection| connection.table_exists?("#{schema_name}__#{name.to_s}".to_sym) }
   end
 
   def view_exists?(name)
-    with_connection do
-      @connection[:ALL_VIEWS].select(:VIEW_NAME).where(:OWNER => schema_name, :VIEW_NAME => name).first.present?
+    with_connection do |connection|
+      connection[:ALL_VIEWS].select(:VIEW_NAME).where(:OWNER => schema_name, :VIEW_NAME => name).first.present?
     end
   end
 
@@ -107,8 +92,8 @@ class OracleConnection < DataSourceConnection
   end
 
   def metadata_for_dataset(dataset_name)
-    with_connection do
-      @connection.fetch(<<-SQL, :table_name => dataset_name, :schema_name => schema_name).first
+    with_connection do |connection|
+      connection.fetch(<<-SQL, :table_name => dataset_name, :schema_name => schema_name).first
         SELECT COUNT(*) AS column_count
         FROM ALL_TAB_COLUMNS
         WHERE TABLE_NAME = :table_name AND OWNER = :schema_name
@@ -117,8 +102,8 @@ class OracleConnection < DataSourceConnection
   end
 
   def column_info(table_name, setup_sql)
-    with_connection do
-      @connection.fetch(<<-SQL, :table => table_name, :schema => schema_name).all
+    with_connection do |connection|
+      connection.fetch(<<-SQL, :table => table_name, :schema => schema_name).all
         SELECT COLUMN_NAME as attname, DATA_TYPE as format_type, COLUMN_ID as attnum
         FROM ALL_TAB_COLUMNS
         WHERE TABLE_NAME = :table AND OWNER = :schema
@@ -128,7 +113,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def primary_key_columns(table_name)
-    with_connection do
+    with_connection do |connection|
       sql = <<-SQL
         SELECT cols.table_name, cols.column_name, cols.position, cons.status, cons.owner
         FROM all_constraints cons, all_cons_columns cols
@@ -139,7 +124,7 @@ class OracleConnection < DataSourceConnection
         AND cons.owner = cols.owner
         ORDER BY cols.table_name, cols.position
       SQL
-      @connection.fetch(sql).map { |row| row[:column_name] }
+      connection.fetch(sql).map { |row| row[:column_name] }
     end
   end
 
@@ -147,12 +132,25 @@ class OracleConnection < DataSourceConnection
     OracleSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
+  def with_connection(options = {})
+    connect!
+    yield @connection
+  rescue Sequel::DatabaseError => e
+    raise OracleConnection::DatabaseError.new(e)
+  ensure
+    disconnect
+  end
+
   private
 
+  def error_class
+    OracleConnection::DatabaseError
+  end
+
   def datasets_query(options)
-    with_connection do
-      table_query = @connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:owner => schema_name)
-      view_query = @connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:owner => schema_name)
+    with_connection do |connection|
+      table_query = connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:owner => schema_name)
+      view_query = connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:owner => schema_name)
       if options[:name_filter]
         table_query = table_query.where(["REGEXP_LIKE(TABLE_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
         view_query = view_query.where(["REGEXP_LIKE(VIEW_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
@@ -193,13 +191,4 @@ class OracleConnection < DataSourceConnection
       )
       WHERE rownum <= :limit
   SQL
-
-  def with_connection(options = {})
-    connect!
-    yield
-  rescue Sequel::DatabaseError => e
-    raise OracleConnection::DatabaseError.new(e)
-  ensure
-    disconnect
-  end
 end
