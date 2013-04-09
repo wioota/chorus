@@ -8,8 +8,7 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
     },
 
     setup:function () {
-        this.popupEventName = "chorus:menu:popup." + this.cid;
-        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this));
+        this.subscribePageEvent("popup_menu:opened", this.popupEventHandler, this);
     },
 
     context:function () {
@@ -63,7 +62,7 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         $(document).bind("click.popup_menu", _.bind(this.dismissMenu, this));
     },
 
-    dismissMenu:function (ev) {
+    dismissMenu:function () {
         this.togglePopup();
         this.releaseClicks();
     },
@@ -72,8 +71,8 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         $(document).unbind("click.popup_menu");
     },
 
-    triggerPopupEvent:function (ev) {
-        $(document).trigger("chorus:menu:popup", this.$(".popup"));
+    triggerPopupEvent:function () {
+        chorus.PageEvents.broadcast("popup_menu:opened");
     },
 
     popupEventHandler:function (ev, el) {

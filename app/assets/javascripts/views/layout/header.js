@@ -17,8 +17,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.popupEventName = "chorus:menu:popup." + this.cid;
-        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this));
+        this.subscribePageEvent('popup_menu:opened', this.popupEventHandler);
         this.session = chorus.session;
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
@@ -122,11 +121,6 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$(".type_ahead_result").addClass("hidden");
     },
 
-    teardown: function() {
-        $(document).unbind(this.popupEventName);
-        this._super("teardown");
-    },
-
     additionalContext: function(ctx) {
         this.requiredResources.reset();
         var user = this.session.user();
@@ -218,8 +212,8 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$(".menu.popup_account").toggleClass("hidden", accountNameWasPoppedUp);
     },
 
-    triggerPopupEvent: function(el) {
-        $(document).trigger("chorus:menu:popup", el);
+    triggerPopupEvent: function() {
+        chorus.PageEvents.broadcast("popup_menu:opened");
     },
 
     captureClicks: function() {

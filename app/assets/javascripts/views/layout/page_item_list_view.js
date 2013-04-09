@@ -9,7 +9,8 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     suppressRenderOnChange: true,
 
     events: {
-        "click  li input[type=checkbox]": "checkboxClicked"
+        "click  li input[type=checkbox]": "checkboxClicked",
+        "click .item_wrapper": "listItemClicked"
     },
 
     checkboxClicked: function(e) {
@@ -37,13 +38,6 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
         chorus.PageEvents.broadcast("checked", this.selectedModels);
         chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
-    },
-
-    delegateEvents: function() {
-        this._super("delegateEvents", arguments);
-        $(this.el)
-            .off("click." + this.cid)
-            .on("click." + this.cid, "ul.list > li", null, _.bind(this.listItemClicked, this));
     },
 
     setup: function() {

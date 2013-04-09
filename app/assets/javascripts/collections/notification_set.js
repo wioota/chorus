@@ -24,7 +24,6 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
     },
 
     markAllRead: function(options) {
-        var self = this;
         if (this.length > 0) {
             $.ajax({
                 type: "PUT",

@@ -45,7 +45,7 @@ describe("chorus.pages.UserIndexPage", function() {
             });
 
             it("displays an 'add user' button", function() {
-                expect(this.page.$("a.button[href=#/users/new]")).toExist();
+                expect(this.page.$("a.button[href='#/users/new']")).toExist();
             });
         });
 
@@ -57,7 +57,7 @@ describe("chorus.pages.UserIndexPage", function() {
             });
 
             it("does not display an 'add user' button", function() {
-                expect(this.page.$("a[href=#/users/new] button")).not.toExist();
+                expect(this.page.$("a[href='#/users/new'] button")).not.toExist();
             });
         });
     });

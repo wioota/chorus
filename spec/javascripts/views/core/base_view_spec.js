@@ -163,7 +163,7 @@ describe("chorus.views.Base", function() {
         });
 
         it("binds hotkeys", function() {
-            expect($(document).data("events").keydown).toBeDefined();
+            expect($._data(document, "events").keydown).toBeDefined();
         });
 
         it("broadcasts events on hotkeys", function() {
@@ -175,12 +175,13 @@ describe("chorus.views.Base", function() {
 
         describe("navigating away", function() {
             beforeEach(function() {
-                this.oldKeydownCount = $(document).data("events").keydown.length;
+                this.oldKeydownCount = $._data(document, "events").keydown.length;
                 chorus._navigated();
             });
 
             it("should unbind from document", function() {
-                expect(($(document).data("events").keydown || []).length).toBe(this.oldKeydownCount - 1);
+                var keydown = $._data(document, "events") && $._data(document, "events").keydown;
+                expect((keydown || []).length).toBe(this.oldKeydownCount - 1);
             });
         });
     });

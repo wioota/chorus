@@ -33,6 +33,7 @@ group :assets do
   gem 'uglifier'
   gem 'yui-compressor'
   gem 'turbo-sprockets-rails3'
+  gem 'jquery-rails', '2.1.4'
 end
 
 group :integration do

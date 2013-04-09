@@ -13,40 +13,22 @@ describe("chorus.views.Header", function() {
         this.view.session.loaded = true;
     });
 
-    describe("initialization", function() {
-        it("has required resources", function() {
-            expect(this.view.requiredResources.length).toBe(0);
-        });
-
-        it("does not have a model", function() {
-            expect(this.view.model).toBeUndefined();
-        });
-
-        it("fetches unread notifications", function() {
-            expect(this.view.unreadNotifications.attributes.type).toBe("unread");
-            expect(this.view.unreadNotifications).toHaveBeenFetched();
-        });
-
-        it("fetches the first page of notifications (not just unread ones)", function() {
-            expect(this.view.notifications.attributes.type).toBeUndefined();
-            expect(this.view.notifications).toHaveBeenFetched();
-        });
-
-        it("binds to the document for menu popup", function() {
-            expect($(document).data("events")["chorus:menu:popup"]).toBeDefined();
-        });
-
+    it("has required resources", function() {
+        expect(this.view.requiredResources.length).toBe(0);
     });
 
-    describe("navigating away", function() {
-        beforeEach(function() {
-            this.oldChorusMenuPopupCount = $(document).data("events")["chorus:menu:popup"].length;
-            chorus._navigated();
-        });
+    it("does not have a model", function() {
+        expect(this.view.model).toBeUndefined();
+    });
 
-        it("should unbind from document", function() {
-            expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
-        });
+    it("fetches unread notifications", function() {
+        expect(this.view.unreadNotifications.attributes.type).toBe("unread");
+        expect(this.view.unreadNotifications).toHaveBeenFetched();
+    });
+
+    it("fetches the first page of notifications (not just unread ones)", function() {
+        expect(this.view.notifications.attributes.type).toBeUndefined();
+        expect(this.view.notifications).toHaveBeenFetched();
     });
 
     describe("the notifications", function() {
@@ -271,7 +253,7 @@ describe("chorus.views.Header", function() {
             describe("when clicked", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
-                    $(document).bind("chorus:menu:popup", this.popupSpy);
+                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
                     this.view.$(".username a").click();
                 });
 
@@ -279,7 +261,7 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
                 });
 
-                it("triggers chorus:menu:popup on the document", function() {
+                it("broadcasts 'popup_menu:opened'", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
                 });
 
@@ -294,6 +276,8 @@ describe("chorus.views.Header", function() {
             });
 
             describe("the popup menu", function() {
+                itBehavesLike.PopupMenu(".username a", ".menu.popup_username");
+
                 it("has a link to 'your profile'", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/users/55']").text()).toBe(t("header.your_profile"));
                 });
@@ -302,21 +286,69 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
                 });
             });
-
-            describe("chorus:menu:popup handling", function() {
-                beforeEach(function() {
-                    this.view.$(".username a").click();
-                    expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
-                    $(document).trigger("chorus:menu:popup", $(""));
-                });
-
-                it("dismisses the popup", function() {
-                    expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
-                });
-            });
         });
 
-        xdescribe("notifications", function() {
+        describe("the gear menu", function() {
+            it("is rendered", function() {
+                expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png");
+            });
+
+            it("has a hidden popup menu", function() {
+                expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
+            });
+
+            describe("when clicked", function() {
+                beforeEach(function() {
+                    this.popupSpy = jasmine.createSpy();
+                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
+                    this.view.$(".gear a").click();
+                });
+
+                it("shows a popup menu", function() {
+                    expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
+                });
+
+                it("broadcasts 'popup_menu:opened'", function() {
+                    expect(this.popupSpy).toHaveBeenCalled();
+                });
+
+                describe("and when clicked again", function() {
+                    beforeEach(function() {
+                        this.view.$(".gear a").click();
+                    });
+                    it("becomes hidden again", function() {
+                        expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
+                    });
+                });
+            });
+
+            describe("the popup menu", function() {
+                itBehavesLike.PopupMenu(".gear a", ".menu.popup_gear");
+
+                it("has a link to 'Users'", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toMatchTranslation("header.users_list");
+                });
+
+                it('has a link to data sources', function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/data_sources']").text()).toMatchTranslation("header.instances");
+                });
+
+                it("has a link to the workspaces list", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toMatchTranslation("header.workspaces");
+                });
+
+                it("has a link to the notifications", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/notifications']").text()).toMatchTranslation("header.notifications");
+                });
+
+                it("has a link to the tags", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/tags']").text()).toMatchTranslation("header.tags");
+                });
+            });
+
+        });
+
+        describe("notifications", function() {
             it("displays the notification link", function() {
                 expect(this.view.$("a.notifications")).toExist();
             });
@@ -324,7 +356,7 @@ describe("chorus.views.Header", function() {
             describe("when the notification count is clicked", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
-                    $(document).bind("chorus:menu:popup", this.popupSpy);
+                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
                     spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
@@ -336,7 +368,7 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
                 });
 
-                it("triggers chorus:menu:popup on the document", function() {
+                it("broadcasts 'popup_menu:opened'", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
                 });
 
@@ -375,7 +407,7 @@ describe("chorus.views.Header", function() {
                     });
 
                     it("internally marks the unread notifications as read", function() {
-                        expect(this.view.notificationList.collection.find(function(model) { return model.get("unread"); })).toBeUndefined();
+                        expect(this.view.unreadNotifications.find(function(model) { return model.get("unread"); })).toBeUndefined();
                     });
 
                     it("re-renders the notification list subview", function() {
@@ -429,75 +461,6 @@ describe("chorus.views.Header", function() {
                 it("has a show-all link", function() {
                     expect(this.view.$(".popup_notifications a.notifications_all")).toContainTranslation("notification.see_all");
                     expect(this.view.$(".popup_notifications a.notifications_all").attr("href")).toBe("#/notifications");
-                });
-            });
-        });
-
-        describe("the gear menu", function() {
-            it("is rendered", function() {
-                expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png");
-            });
-
-            it("has a hidden popup menu", function() {
-                expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-            });
-
-            describe("when clicked", function() {
-                beforeEach(function() {
-                    this.popupSpy = jasmine.createSpy();
-                    $(document).bind("chorus:menu:popup", this.popupSpy);
-                    this.view.$(".gear a").click();
-                });
-
-                it("shows a popup menu", function() {
-                    expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
-                });
-
-                it("triggers chorus:menu:popup on the document", function() {
-                    expect(this.popupSpy).toHaveBeenCalled();
-                });
-
-                describe("and when clicked again", function() {
-                    beforeEach(function() {
-                        this.view.$(".gear a").click();
-                    });
-                    it("becomes hidden again", function() {
-                        expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-                    });
-                });
-            });
-
-            describe("the popup menu", function() {
-                it("has a link to 'Users'", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toMatchTranslation("header.users_list");
-                });
-
-                it('has a link to data sources', function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/data_sources']").text()).toMatchTranslation("header.instances");
-                });
-
-                it("has a link to the workspaces list", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toMatchTranslation("header.workspaces");
-                });
-
-                it("has a link to the notifications", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/notifications']").text()).toMatchTranslation("header.notifications");
-                });
-
-                it("has a link to the tags", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/tags']").text()).toMatchTranslation("header.tags");
-                });
-            });
-
-            describe("chorus:menu:popup handling", function() {
-                beforeEach(function() {
-                    this.view.$(".gear a").click();
-                    expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
-                    $(document).trigger("chorus:menu:popup", $(""));
-                });
-
-                it("dismisses the popup", function() {
-                    expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
                 });
             });
         });
