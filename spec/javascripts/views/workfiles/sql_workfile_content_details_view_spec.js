@@ -125,9 +125,15 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            it("appends the Save file as a Chorus View to the Save File menu", function() {
-                this.view.$(".save_file_as").click();
-                expect(this.qtipElement).toContainTranslation("workfile.content_details.save_file_as_chorus_view");
+            it("the 'Save As' menu includes the 'Save file as a Chorus View' option", function() {
+                this.view.$(".save_as").click();
+                expect(this.qtipElement).toContainTranslation("workfile.content_details.save_as_chorus_view");
+            });
+
+            it("the 'Save as' menu includes the disabled 'Save selection as a Chorus View' option", function() {
+                this.view.$(".save_as").click();
+                expect(this.qtipElement).toContainTranslation("workfile.content_details.save_selection_as_chorus_view");
+                expect(this.qtipElement.find("li a[data-menu-name='newSelectionChorusView']")).toHaveAttr('disabled');
             });
         });
 
@@ -143,27 +149,23 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_selected");
             });
 
-            it("Changes the 'Save File As' button to 'Save Selection As'", function() {
-                expect(this.view.$(".save_selection_as")).not.toHaveClass("hidden");
-                expect(this.view.$(".save_file_as")).toHaveClass("hidden");
-            });
-
-            it("appends the Save selection as a Chorus View to the Save File menu", function() {
-                this.view.$(".save_selection_as").click();
-                expect(this.qtipElement).toContainTranslation("workfile.content_details.save_selection_as_chorus_view");
+            it("it enables the 'Save selection as a Chorus View' option", function() {
+                this.view.$(".save_as").click();
+                expect(this.qtipElement.find("li a[data-menu-name='newSelectionChorusView']")).not.toHaveAttr('disabled');
             });
 
             context("when the user de-selects text", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("file:selectionEmpty");
                 });
+
                 it("changes Run Selected button text back to Run File", function() {
                     expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_file");
                 });
 
-                it("changes 'Save Selection As' button back to 'Save File As'", function() {
-                    expect(this.view.$(".save_selection_as")).toHaveClass("hidden");
-                    expect(this.view.$(".save_file_as")).not.toHaveClass("hidden");
+                it("disables the 'Save selection as a Chorus View' option", function() {
+                    this.view.$(".save_as").click();
+                    expect(this.qtipElement.find("li a[data-menu-name='newSelectionChorusView']")).toHaveAttr('disabled');
                 });
             });
 
@@ -323,44 +325,38 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
     describe("create chorus view", function() {
         beforeEach(function() {
+            stubModals();
             this.view.model.workspace().set({active: true});
-            spyOn(chorus.PageEvents, "broadcast");
+            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         });
 
-        context("when there is no selection", function() {
+        describe("from file", function() {
             beforeEach(function() {
+                this.view.render();
                 chorus.PageEvents.broadcast('file:selectionEmpty');
             });
 
             it("broadcasts file:newChorusView", function() {
-                this.view.render();
-                this.view.$('.save_file_as').click();
+                this.view.$('.save_as').click();
                 this.qtipElement.$('a[data-menu-name="newChorusView"]').click();
-
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:newChorusView");
-            });
-
-            context("there is no sandbox nor executionSchema", function() {
-                it("disables the Chorus View creation menu", function() {
-                    this.view.model.attributes.executionSchema = null;
-                    spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
-                    this.view.render();
-
-                    this.view.$('.save_file_as').click();
-                    expect(this.qtipElement.$('a[data-menu-name="newChorusView"]')).toHaveAttr('disabled');
-                });
             });
         });
 
-        context("when there is selection", function() {
-            beforeEach(function() {
-                chorus.PageEvents.broadcast('file:selectionPresent');
-            });
+        it("it disables the Chorus View creation menu if no valid schema", function() {
+            this.view.model.attributes.executionSchema = null;
+            spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
+            this.view.render();
 
-            it("broadcasts file:newChorusView", function() {
+            this.view.$('.save_as').click();
+            expect(this.qtipElement.$('a[data-menu-name="newChorusView"]')).toHaveAttr('disabled');
+        });
+
+        context("with a selection", function() {
+            it("broadcasts file:newSelectionChorusView", function() {
                 this.view.render();
-
-                this.view.$('.save_selection_as').click();
+                chorus.PageEvents.broadcast('file:selectionPresent');
+                this.view.$('.save_as').click();
                 this.qtipElement.$('a[data-menu-name="newSelectionChorusView"]').click();
 
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:newSelectionChorusView");
@@ -370,9 +366,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("disables the Chorus View creation menu", function() {
                     this.view.model.attributes.executionSchema = null;
                     spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
-                    this.view.render();
 
-                    this.view.$('.save_selection_as').click();
+                    this.view.render();
+                    chorus.PageEvents.broadcast('file:selectionPresent');
+
+                    this.view.$('.save_as').click();
                     expect(this.qtipElement.$('a[data-menu-name="newSelectionChorusView"]')).toHaveAttr('disabled');
                 });
             });

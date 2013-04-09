@@ -4,9 +4,6 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
     setup: function() {
         this.subscribePageEvent("file:autosaved", this.updateAutosaveText);
-        this.subscribePageEvent("file:selectionEmpty", this.showSaveFileMenu);
-        this.subscribePageEvent("file:selectionPresent", this.showSaveSelectionMenu);
-
     },
 
     scrollHandler: function() {
@@ -38,20 +35,6 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         };
     },
 
-    selectionMenuItems: function() {
-        return [{
-                name: "new",
-                text: t("workfile.content_details.save_selection_new_version"),
-                onSelect: _.bind(this.createNewVersionFromSelection, this)
-            },
-            {
-                name: "replace",
-                text: t("workfile.content_details.replace_current_with_selection"),
-                onSelect: _.bind(this.replaceCurrentVersionWithSelection, this)
-            }
-        ];
-    },
-
     fileMenuItems: function() {
         return [{
                 name: "new",
@@ -68,26 +51,18 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
     postRender: function() {
         this.fileMenu = new chorus.views.Menu({
-            launchElement: this.$(".save_file_as"),
+            launchElement: this.$(".save_as"),
             checkable: false,
             orientation: "left",
             items: this.fileMenuItems()
         });
 
-        this.selectionMenu = new chorus.views.Menu({
-            launchElement: this.$(".save_selection_as"),
-            checkable: false,
-            orientation: "left",
-            items: this.selectionMenuItems()
-        });
-
         if (!this.model.isLatestVersion()) {
             this.fileMenu.disableItem("replace");
-            this.selectionMenu.disableItem("replace");
         }
 
         if (!this.model.workspace().isActive()) {
-            this.$(".save_file_as, .save_selection_as").attr("disabled", true);
+            this.$(".save_as").attr("disabled", true);
         }
 
         if(!this.boundScrollHandler) {
@@ -101,28 +76,10 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("file:replaceCurrentVersion");
     },
 
-    replaceCurrentVersionWithSelection: function() {
-        this.updateAutosaveText("workfile.content_details.save");
-        chorus.PageEvents.broadcast("file:replaceCurrentVersionWithSelection");
-    },
-
     createNewVersion: function() {
         chorus.PageEvents.broadcast("file:createNewVersion");
     },
 
-    createNewVersionFromSelection: function() {
-        chorus.PageEvents.broadcast("file:createNewVersionFromSelection");
-    },
-
-    showSaveFileMenu: function() {
-        this.$('.save_file_as').removeClass('hidden');
-        this.$('.save_selection_as').addClass('hidden');
-    },
-
-    showSaveSelectionMenu: function() {
-        this.$('.save_file_as').addClass('hidden');
-        this.$('.save_selection_as').removeClass('hidden');
-    },
 
     formatTime: function(time) {
         var hours = time.getHours();
@@ -150,11 +107,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
         if (model.isSql()) {
             if (model.workspace().isActive()) {
-//                if (model.workspace().canUpdate()) {
-                    return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
-//                } else {
-//                    return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
-//                }
+                return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
             } else {
                 return new chorus.views.ArchivedWorkfileContentDetails({ model:model });
             }
