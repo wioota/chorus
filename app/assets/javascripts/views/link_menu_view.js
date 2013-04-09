@@ -49,11 +49,6 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         this.poppingUp = false;
     },
 
-    teardown: function() {
-        $(document).unbind(this.popupEventName);
-        this._super("teardown");
-    },
-
     togglePopup:function () {
         this.$(".menu").toggleClass("hidden");
     },
