@@ -98,8 +98,7 @@ class GpdbDataSource < DataSource
 
   def build_connection_with(account, options = {})
     GreenplumConnection.new({
-      :username => account.db_username,
-      :password => account.db_password,
+      :account => account,
       :host => host,
       :port => port,
       :database => db_name,

@@ -7,9 +7,15 @@ describe GreenplumConnection, :greenplum_integration do
   let(:hostname) { GreenplumIntegration.hostname }
   let(:port) { GreenplumIntegration.port }
   let(:db_url) {
-    query_params = URI.encode_www_form(:user => details[:username], :password => details[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
+    query_params = URI.encode_www_form(:user => account.db_username, :password => account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params
   }
+  let(:account) do
+    GreenplumIntegration.real_account.tap do |account|
+      account.db_username = username
+      account.db_password = password
+    end
+  end
 
   before :all do
     GreenplumIntegration.setup_gpdb
@@ -21,8 +27,7 @@ describe GreenplumConnection, :greenplum_integration do
 
   let(:details) { {
       :host => hostname,
-      :username => username,
-      :password => password,
+      :account => account,
       :port => port,
       :database => database_name,
       :logger => Rails.logger
@@ -55,8 +60,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:details) {
         {
             :host => hostname,
-            :username => username,
-            :password => password,
+            :account => account,
             :port => port,
             :database => database_name,
             :logger => logger
@@ -71,6 +75,45 @@ describe GreenplumConnection, :greenplum_integration do
         it "connects successfully passing the proper logging options" do
           connection.connect!
           connection.should be_connected
+        end
+      end
+    end
+
+    context "when credentials are valid" do
+      it "does not set invalid credentials on the account" do
+        connection.connect!
+        account.invalid_credentials?.should be_false
+      end
+    end
+
+    context "when credentials are invalid" do
+      let(:username) { 'wrong!' }
+      let(:password) { 'wrong!' }
+      it "sets invalid_credentials on the account" do
+        expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError) do |error|
+          error.error_code.should == :INVALID_PASSWORD
+        end
+        account.invalid_credentials?.should be_true
+      end
+
+      context "when account is already flagged as invalid" do
+        before do
+          account.invalid_credentials!
+        end
+
+        it "does not attempt to connect, but still throws an INVALID_PASSWORD error" do
+          dont_allow(Sequel).connect
+          expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError) do |error|
+            error.error_code.should == :INVALID_PASSWORD
+          end
+        end
+      end
+
+      context "when connection fails for some reason unrelated to invalid credentials" do
+        let(:hostname) { 'example.com' }
+        it "does not set invalid credentials on the account" do
+          expect { connection.connect! }.to raise_error(GreenplumConnection::DatabaseError)
+          account.invalid_credentials?.should be_false
         end
       end
     end
@@ -1002,13 +1045,15 @@ describe GreenplumConnection, :greenplum_integration do
         let(:restricted_password) { "secret" }
 
         let(:connection) do
-          GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
+          GreenplumConnection.new(details.merge(:schema => schema_name, :account => account))
         end
 
         before do
           db.execute("CREATE USER #{restricted_user} WITH PASSWORD '#{restricted_password}';") rescue nil
           db.execute("GRANT CONNECT ON DATABASE \"#{database_name}\" TO #{restricted_user};")
           db.execute("REVOKE ALL ON SCHEMA #{schema_name} FROM #{restricted_user};")
+          account.db_username = restricted_user
+          account.db_password = restricted_password
         end
 
         after do
@@ -1140,13 +1185,15 @@ describe GreenplumConnection, :greenplum_integration do
         let(:restricted_password) { "secret" }
 
         let(:connection) do
-          GreenplumConnection.new(details.merge(:schema => schema_name, :username => restricted_user, :password => restricted_password))
+          GreenplumConnection.new(details.merge(:schema => schema_name, :account => account))
         end
 
         before do
           db.execute("CREATE USER #{restricted_user} WITH PASSWORD '#{restricted_password}';") rescue nil
           db.execute("GRANT CONNECT ON DATABASE \"#{database_name}\" TO #{restricted_user};")
           db.execute("REVOKE ALL ON SCHEMA #{schema_name} FROM #{restricted_user};")
+          account.db_username = restricted_user
+          account.db_password = restricted_password
         end
 
         after do
@@ -1428,16 +1475,14 @@ describe GreenplumConnection, :greenplum_integration do
 
   describe "GreenplumConnection::DatabaseError" do
     let(:sequel_exception) {
-      obj = Object.new
-      wrp_exp = Object.new
-      stub(obj).wrapped_exception { wrp_exp }
-      stub(obj).message { "A message" }
-      obj
+      exception = Exception.new
+      wrapped_exception = Object.new
+      stub(exception).wrapped_exception { wrapped_exception }
+      stub(exception).message { "A message" }
+      exception
     }
 
-    let(:error) do
-      GreenplumConnection::DatabaseError.new(sequel_exception)
-    end
+    let(:error) { GreenplumConnection::DatabaseError.new(sequel_exception) }
 
     describe "error_type" do
       context "when the wrapped error has a sql state error code" do
@@ -1499,6 +1544,13 @@ describe GreenplumConnection, :greenplum_integration do
           error.error_type.should == :GENERIC
         end
       end
+
+      context "when DatabaseError is created with an error_type" do
+        let(:error) { GreenplumConnection::DatabaseError.new(:ERROR) }
+        it "returns the given error_type" do
+          error.error_type.should == :ERROR
+        end
+      end
     end
 
     describe "sanitizing exception messages" do
@@ -1545,6 +1597,4 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
   end
-
-
 end

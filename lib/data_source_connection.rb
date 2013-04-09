@@ -4,11 +4,18 @@ class DataSourceConnection
   LIKE_ESCAPE_CHARACTER = "@"
 
   class Error < StandardError
-    def initialize(exception = nil)
-      if exception
-        super(exception.message)
-        @exception = exception
+    attr_reader :error_type
+
+    def initialize(exception_or_error_type = nil)
+      message = nil
+      case exception_or_error_type
+        when Exception
+          message = exception_or_error_type.message
+          @exception = exception_or_error_type
+        when Symbol
+          @error_type = exception_or_error_type
       end
+      super message
     end
 
     def to_s

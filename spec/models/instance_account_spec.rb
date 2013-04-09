@@ -101,4 +101,19 @@ describe InstanceAccount do
       end
     end
   end
+
+  describe "invalid!" do
+    let(:account) { instance_accounts(:shared_instance_account) }
+    it "flags the model as invalid and saves it" do
+      account.invalid_credentials.should be_false
+      account.invalid_credentials!
+      account.reload
+      account.invalid_credentials.should be_true
+    end
+
+    it "does not validate the credentials" do
+      dont_allow(account).credentials_are_valid
+      account.invalid_credentials!
+    end
+  end
 end

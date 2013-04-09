@@ -4,6 +4,7 @@ require_relative '../app/models/sql_result'
 class GreenplumConnection < DataSourceConnection
   class DatabaseError < Error
     def error_type
+      return @error_type if @error_type
       case error_code
         when /28.../ then :INVALID_PASSWORD
         when '3D000' then :DATABASE_MISSING
@@ -39,13 +40,22 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def initialize(details)
+    @account = details.delete(:account)
     @settings = details
   end
 
   def connect!
-    @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
-  rescue Sequel::DatabaseError => e
-    raise GreenplumConnection::DatabaseError.new(e)
+    if @account.invalid_credentials?
+      raise GreenplumConnection::DatabaseError.new(:INVALID_PASSWORD)
+    else
+      begin
+        @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+      rescue Sequel::DatabaseError => e
+        exception = GreenplumConnection::DatabaseError.new(e)
+        @account.invalid_credentials! if exception.error_type == :INVALID_PASSWORD
+        raise exception
+      end
+    end
   end
 
   def disconnect
@@ -101,7 +111,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def db_url
-    query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
+    query_params = URI.encode_www_form(:user => @account.db_username, :password => @account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
     "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
   end
 

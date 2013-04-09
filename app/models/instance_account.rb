@@ -24,6 +24,11 @@ class InstanceAccount < ActiveRecord::Base
     data_source.refresh_databases_later
   end
 
+  def invalid_credentials!
+    self.invalid_credentials = true
+    save(:validate => false)
+  end
+
   private
 
   def credentials_are_valid

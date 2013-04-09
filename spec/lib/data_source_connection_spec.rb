@@ -18,4 +18,17 @@ describe DataSourceConnection do
       DataSourceConnection.escape_like_string(like_string).should == escaped_string
     end
   end
+
+  describe "Error" do
+    it "can be initialized with an exception" do
+      original_exception = Exception.new('error!')
+      exception = DataSourceConnection::Error.new(original_exception)
+      exception.message.should == original_exception.message
+    end
+
+    it "can be initialized with an error_type" do
+      exception = DataSourceConnection::Error.new(:I_AM_AN_ERROR_TYPE)
+      exception.error_type.should == :I_AM_AN_ERROR_TYPE
+    end
+  end
 end
