@@ -506,7 +506,7 @@ describe OracleConnection, :oracle_integration do
     let(:restricted_password) { "secret" }
 
     before do
-      db.execute("CREATE USER #{restricted_user} IDENTIFIED BY PASSWORD '#{restricted_password}'") rescue nil
+      db.execute("CREATE USER #{restricted_user} IDENTIFIED BY #{restricted_password}") rescue nil
       db.execute("GRANT CREATE SESSION TO #{restricted_user}")
 
       account.db_username = restricted_user
