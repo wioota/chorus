@@ -300,12 +300,23 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
 
                 describe("getDesiredDataTableHeight", function() {
+                    beforeEach(function() {
+                        this.originalSize = this.view.getDesiredDataTableHeight();
+                    });
+
                     it("incorporates the footerSize passed to the view as a function", function() {
-                        var originalSize = this.view.getDesiredDataTableHeight();
-                        this.view.options.footerSize = function() {
-                            return 10;
-                        };
-                        expect(this.view.getDesiredDataTableHeight()).toBe(originalSize - 10);
+                        spyOn(this.view, "footerSize").andReturn(10);
+                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 10);
+                    });
+
+                    it("takes into account the vertical padding passed into the view", function() {
+                        this.view.options.verticalDialogPadding = 20;
+                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 20);
+                    });
+
+                    it("takes into account the bottom gutter", function() {
+                        spyOn(this.view, "bottomGutterHeight").andReturn(35);
+                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 35);
                     });
                 });
 

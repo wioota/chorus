@@ -165,16 +165,38 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     getDesiredDataTableHeight: function() {
-        var distanceFromTopOfDocument = this.$(".data_table").offset().top;
-        var distanceFromTopOfWindow = distanceFromTopOfDocument - $(window).scrollTop();
-        return $(window).height() - distanceFromTopOfWindow - this.$(".bottom_gutter").height() - this.footerSize();
+        var arbitrarySpacing = 2; // to eliminate spurious y-scrollbar
+        return $(window).height() - this.distanceFromTopOfWindow() - this.distanceFromBottomOfWindow() - arbitrarySpacing;
+    },
+
+    bottomGutterHeight: function() {
+        if( this.$(".bottom_gutter").is(":visible") ){
+            return this.$(".bottom_gutter").height();
+        } else {
+            return 0;
+        }
     },
 
     footerSize: function() {
         if (this.options.footerSize) {
             return this.options.footerSize();
+        } else {
+            return 0;
         }
-        return 0;
+    },
+
+    distanceFromTopOfWindow: function() {
+        var distanceFromTopOfDocument = this.$(".data_table").offset().top;
+        return distanceFromTopOfDocument - $(window).scrollTop();
+    },
+
+    distanceFromBottomOfWindow: function() {
+        var verticalDialogPadding = 0;
+        if (this.options.verticalDialogPadding) {
+            verticalDialogPadding = this.options.verticalDialogPadding;
+        }
+
+        return verticalDialogPadding + this.bottomGutterHeight() + this.footerSize();
     },
 
     collapseTable: function() {

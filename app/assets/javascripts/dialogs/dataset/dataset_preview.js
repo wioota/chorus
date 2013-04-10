@@ -19,7 +19,8 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
             showDownloadDialog: true,
             dataset: this.model,
             enableResize: true,
-            enableExpander: true
+            enableExpander: true,
+            verticalDialogPadding: this.verticalPadding
         });
         this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeModal);
         this.modalClosedHandle = this.subscribePageEvent("modal:closed", this.cancelTask);

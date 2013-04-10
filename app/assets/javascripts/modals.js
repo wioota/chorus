@@ -1,5 +1,6 @@
 chorus.Modal = chorus.views.Base.extend({
     constructorName: "Modal",
+    verticalPadding: 30,
 
     launchModal: function() {
         if (chorus.modal && this !== chorus.modal) {
@@ -33,8 +34,8 @@ chorus.Modal = chorus.views.Base.extend({
 
         if (!windowHeight) windowHeight = $window.height();
 
-        $facebox.css('top', 30 + 'px');
-        var popupHeight = windowHeight - 60;
+        $facebox.css('top', this.verticalPadding + 'px');
+        var popupHeight = windowHeight - this.verticalPadding*2;
         $popup.css("max-height", popupHeight + "px");
     },
 
