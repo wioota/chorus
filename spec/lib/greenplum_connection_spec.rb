@@ -1439,4 +1439,26 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
   end
+
+  context "when the user doesn't have permission to access the database" do
+    let(:db) { Sequel.connect(db_url) }
+    let(:restricted_user) { "user_with_no_access" }
+    let(:restricted_password) { "secret" }
+
+    before do
+      db.execute("CREATE USER #{restricted_user} WITH PASSWORD '#{restricted_password}';") rescue nil
+      account.db_username = restricted_user
+      account.db_password = restricted_password
+    end
+
+    after do
+      db.execute("DROP USER #{restricted_user};") rescue nil
+      db.disconnect
+    end
+
+    it "does not flag the account as invalid_credentials when they connect" do
+      expect { connection.connect! }.to raise_error
+      account.invalid_credentials.should be_false
+    end
+  end
 end
