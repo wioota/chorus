@@ -1,7 +1,7 @@
 chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     constructorName: "TypeAheadSearchView",
     templateName: "type_ahead_search",
-
+    additionalClass: "menu", // dismiss it like the other popups
     resultLimit: 5,
 
     makeModel: function() {
@@ -86,10 +86,8 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         if (trimmedQuery && trimmedQuery !== "" ){
             this.model.set({query: trimmedQuery}, {silent: true});
             this.model.fetch();
-            this.$el.removeClass("hidden");
             return true;
         } else {
-            this.$el.addClass("hidden");
             return false;
         }
     }

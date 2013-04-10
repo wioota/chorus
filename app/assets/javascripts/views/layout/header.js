@@ -3,7 +3,6 @@ chorus.views.Header = chorus.views.Base.extend({
     templateName: "header",
     events: {
         "click .username a": "togglePopupUsername",
-        "click .account a": "togglePopupAccount",
         "click a.notifications": "togglePopupNotifications",
         "click .gear a": "togglePopupGear",
         "submit .search form": "startSearch",
@@ -17,7 +16,6 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.subscribePageEvent('popup_menu:opened', this.popupEventHandler);
         this.session = chorus.session;
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
@@ -106,19 +104,17 @@ chorus.views.Header = chorus.views.Base.extend({
     displayResult: function() {
         var query = this.$(".search input").val();
         if (this.typeAheadView.searchFor(query)) {
-            this.captureClicks();
+            if ( this.typeAheadView.$el.hasClass("hidden") ) {
+                chorus.PopupMenu.toggle(this, this.typeAheadView.el);
+            }
         } else {
-            this.releaseClicks();
+            chorus.PopupMenu.close(this);
         }
     },
 
     clearSearch: function() {
         this.$(".search input").val('');
-        this.dismissSearch();
-    },
-
-    dismissSearch: function() {
-        this.$(".type_ahead_result").addClass("hidden");
+        this.displayResult();
     },
 
     additionalContext: function(ctx) {
@@ -142,15 +138,11 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     togglePopupNotifications: function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
         var beingShown = this.$(".menu.popup_notifications").hasClass("hidden");
-        this.dismissPopups();
-        this.triggerPopupEvent(e.target);
+
+        chorus.PopupMenu.toggle(this, ".menu.popup_notifications", e);
 
         if (beingShown) {
-            this.captureClicks();
             this.unreadNotifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
             this.notificationList.show();
         } else {
@@ -159,8 +151,6 @@ chorus.views.Header = chorus.views.Base.extend({
             });
             this.notificationList.collection.trigger("reset");
         }
-
-        this.$(".menu.popup_notifications").toggleClass("hidden", !beingShown);
     },
 
     clearNotificationCount: function() {
@@ -168,73 +158,11 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     togglePopupUsername: function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        var userNameWasPoppedUp = !this.$(".menu.popup_username").hasClass("hidden");
-        this.dismissPopups();
-        this.triggerPopupEvent(e.target);
-
-        if (!userNameWasPoppedUp) {
-            this.captureClicks();
-        }
-
-        this.$(".menu.popup_username").toggleClass("hidden", userNameWasPoppedUp);
+        chorus.PopupMenu.toggle(this, ".menu.popup_username", e);
     },
 
     togglePopupGear: function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        var gearNameWasPoppedUp = !this.$(".menu.popup_gear").hasClass("hidden");
-        this.dismissPopups();
-        this.triggerPopupEvent(e.target);
-
-        if (!gearNameWasPoppedUp) {
-            this.captureClicks();
-        }
-
-        this.$(".menu.popup_gear").toggleClass("hidden", gearNameWasPoppedUp);
-    },
-
-    togglePopupAccount: function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        var accountNameWasPoppedUp = !this.$(".menu.popup_account").hasClass("hidden");
-        this.dismissPopups();
-        this.triggerPopupEvent(e.target);
-
-        if (!accountNameWasPoppedUp) {
-            this.captureClicks();
-        }
-
-        this.$(".menu.popup_account").toggleClass("hidden", accountNameWasPoppedUp);
-    },
-
-    triggerPopupEvent: function() {
-        chorus.PageEvents.broadcast("popup_menu:opened");
-    },
-
-    captureClicks: function() {
-        $(document).bind("click.popup_menu", _.bind(this.dismissPopups, this));
-    },
-
-    releaseClicks: function() {
-        $(document).unbind("click.popup_menu");
-    },
-
-    popupEventHandler: function(ev, el) {
-        if ($(el).closest(".header").length === 0) {
-            this.dismissPopups();
-            this.releaseClicks();
-        }
-    },
-
-    dismissPopups: function() {
-        this.dismissSearch();
-        this.releaseClicks();
-        this.$(".menu").addClass("hidden");
+        chorus.PopupMenu.toggle(this, ".menu.popup_gear", e);
     },
 
     startSearch: function(e) {

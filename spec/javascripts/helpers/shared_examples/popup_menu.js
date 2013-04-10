@@ -4,7 +4,7 @@ jasmine.sharedExamples.PopupMenu = function(linkSelector, menuSelector) {
             this.view.render();
             this.view.$(linkSelector).click();
             expect(this.view.$(menuSelector)).not.toHaveClass("hidden");
-            chorus.PageEvents.broadcast("popup_menu:opened", $(''));
+            chorus.PopupMenu.toggle(this.view, '.fake_selector');
         });
 
         it("dismisses the popup", function() {

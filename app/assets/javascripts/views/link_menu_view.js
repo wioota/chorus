@@ -7,10 +7,6 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         "click .menu a":"choose"
     },
 
-    setup:function () {
-        this.subscribePageEvent("popup_menu:opened", this.popupEventHandler, this);
-    },
-
     context:function () {
         if (!this.options.chosen) {
             this.options.chosen = this.options.options[0].data;
@@ -29,52 +25,8 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
 
     },
 
-    popupLinkClicked:function (ev) {
-        this.poppingUp = true;
-
-        var becomingVisible = this.$(".menu").hasClass("hidden");
-
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.togglePopup();
-
-        this.triggerPopupEvent();
-
-        if (becomingVisible) {
-            this.captureClicks();
-        } else {
-            this.releaseClicks();
-        }
-
-        this.poppingUp = false;
-    },
-
-    togglePopup:function () {
-        this.$(".menu").toggleClass("hidden");
-    },
-
-    captureClicks:function () {
-        $(document).bind("click.popup_menu", _.bind(this.dismissMenu, this));
-    },
-
-    dismissMenu:function () {
-        this.togglePopup();
-        this.releaseClicks();
-    },
-
-    releaseClicks:function () {
-        $(document).unbind("click.popup_menu");
-    },
-
-    triggerPopupEvent:function () {
-        chorus.PageEvents.broadcast("popup_menu:opened");
-    },
-
-    popupEventHandler:function (ev, el) {
-        if (!$(el).is(this.$(".popup")) && !this.$(".menu").hasClass("hidden") && !this.poppingUp) {
-            this.togglePopup();
-            this.releaseClicks();
-        }
+    popupLinkClicked:function (e) {
+        chorus.PopupMenu.toggle(this, ".menu", e);
     },
 
     choose:function (e) {
@@ -82,7 +34,6 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         var ul = $(e.target).closest("ul"),
             li = $(e.target).closest("li");
         this.options.chosen = li.data("type");
-        this.dismissMenu();
 
         var eventName = ul.data("event");
         var pickedChoiceData = $(e.target).closest('li').data("type");

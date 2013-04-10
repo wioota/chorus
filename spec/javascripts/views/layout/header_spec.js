@@ -152,8 +152,13 @@ describe("chorus.views.Header", function() {
 
         describe("typing in the search bar", function() {
             beforeEach(function() {
-                spyOn(this.view.typeAheadView, "searchFor");
+                spyOn(this.view.typeAheadView, "searchFor").andCallThrough();
                 this.view.$(".search input:text").val("test_query/with/slashes").trigger("textchange");
+                this.server.completeFetchFor(this.view.typeAheadView.model);
+            });
+
+            it("shows the typeAhead view", function() {
+                expect($(this.view.typeAheadView.el)).not.toHaveClass("hidden");
             });
 
             it("sets the query in the typeAhead view", function() {
@@ -168,6 +173,12 @@ describe("chorus.views.Header", function() {
 
                 expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
                 expect(this.view.$(".search input:text").val()).toBe("");
+            });
+
+            it("does not hide the typeahead view if you type again", function() {
+                stubSetTimeout();
+                this.view.$(".search input:text").val("other_query").trigger("textchange");
+                expect($(this.view.typeAheadView.el)).not.toHaveClass("hidden");
             });
 
             describe("clicking outside of the typeahead area", function() {
@@ -252,8 +263,7 @@ describe("chorus.views.Header", function() {
 
             describe("when clicked", function() {
                 beforeEach(function() {
-                    this.popupSpy = jasmine.createSpy();
-                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
+                    spyOn(chorus.PopupMenu, "toggle").andCallThrough();
                     this.view.$(".username a").click();
                 });
 
@@ -261,8 +271,8 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
                 });
 
-                it("broadcasts 'popup_menu:opened'", function() {
-                    expect(this.popupSpy).toHaveBeenCalled();
+                it("opens a popup menu with the correct element", function() {
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_username", jasmine.any(jQuery.Event));
                 });
 
                 describe("and when clicked again", function() {
@@ -299,8 +309,7 @@ describe("chorus.views.Header", function() {
 
             describe("when clicked", function() {
                 beforeEach(function() {
-                    this.popupSpy = jasmine.createSpy();
-                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
+                    spyOn(chorus.PopupMenu, "toggle").andCallThrough();
                     this.view.$(".gear a").click();
                 });
 
@@ -308,8 +317,8 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
                 });
 
-                it("broadcasts 'popup_menu:opened'", function() {
-                    expect(this.popupSpy).toHaveBeenCalled();
+                it("opens a popup menu with the correct element", function() {
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_gear", jasmine.any(jQuery.Event));
                 });
 
                 describe("and when clicked again", function() {
@@ -355,8 +364,7 @@ describe("chorus.views.Header", function() {
 
             describe("when the notification count is clicked", function() {
                 beforeEach(function() {
-                    this.popupSpy = jasmine.createSpy();
-                    chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
+                    spyOn(chorus.PopupMenu, "toggle").andCallThrough();
                     spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
@@ -368,8 +376,8 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
                 });
 
-                it("broadcasts 'popup_menu:opened'", function() {
-                    expect(this.popupSpy).toHaveBeenCalled();
+                it("opens a popup menu with the correct element", function() {
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_notifications", jasmine.any(jQuery.Event));
                 });
 
                 it("marks the notifications as read", function() {

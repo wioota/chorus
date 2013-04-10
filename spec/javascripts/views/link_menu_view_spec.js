@@ -80,8 +80,7 @@ describe("chorus.views.LinkMenu", function() {
 
     describe("clicking the popup link", function() {
         beforeEach(function() {
-            this.popupSpy = jasmine.createSpy();
-            chorus.PageEvents.subscribe("popup_menu:opened", this.popupSpy);
+            spyOn(chorus.PopupMenu, "toggle").andCallThrough();
             this.view.$("a.popup").click();
         });
 
@@ -89,10 +88,9 @@ describe("chorus.views.LinkMenu", function() {
             expect(this.view.$(".menu")).not.toHaveClass("hidden");
         });
 
-        it("broadcasts 'popup_menu:opened'", function() {
-            expect(this.popupSpy).toHaveBeenCalled();
+        it("opens a popup menu with the correct element", function() {
+            expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu", jasmine.any(jQuery.Event));
         });
-
         describe("clicking on the link again", function() {
             beforeEach(function() {
                 this.view.$("a.popup").click();
