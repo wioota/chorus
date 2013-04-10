@@ -8,12 +8,12 @@ describe InstanceAccount do
 
   describe "validations" do
     let(:gpdb_data_source) { FactoryGirl.build(:gpdb_data_source) }
+    let(:account) { InstanceAccount.first }
 
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
 
     it "validates the uniqueness of owner_id and instance_id" do
-      account = InstanceAccount.first
       data_source = account.data_source
       stub(data_source).valid_db_credentials?(anything) { true }
       new_account = data_source.accounts.build(:owner => account.owner)
@@ -21,19 +21,64 @@ describe InstanceAccount do
       new_account.should have_error_on(:owner_id).with_message(:taken)
     end
 
-    it "validates the credentials are valid" do
-      account = InstanceAccount.first
-      stub(account.data_source).valid_db_credentials?(account) { false }
-      account.should_not be_valid
-      account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
-    end
-
-    context "during legacy migration" do
-      it "does not validate credentials" do
-        account = InstanceAccount.first
+    describe "credentials_are_valid" do
+      it "validates the credentials are valid" do
         stub(account.data_source).valid_db_credentials?(account) { false }
-        account.legacy_migrate = true
-        account.should be_valid
+        account.should_not be_valid
+        account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
+      end
+
+      context "when the account is flagged as invalid_credentials" do
+        before do
+          account.invalid_credentials!
+        end
+
+        context "and the credentials are now valid" do
+          before do
+            stub(account.data_source).valid_db_credentials?(account) { true }
+          end
+
+          it "clears the invalid_credentials flag" do
+            account.valid?
+            account.invalid_credentials.should be_false
+          end
+        end
+
+        context "and the credentials are still invalid" do
+          before do
+            any_instance_of(GreenplumConnection::DatabaseError) do |exception|
+              stub(exception).error_type { :INVALID_PASSWORD }
+            end
+            stub(Sequel).connect { raise Sequel::DatabaseError }
+          end
+
+          it "does not clear the invalid_credentials flag" do
+            account.valid?
+            account.reload.invalid_credentials.should be_true
+          end
+
+          it "does not persist the bad credentials" do
+            account.db_username = 'somethingelse'
+            account.valid?
+            account.reload.db_username.should_not == 'somethingelse'
+          end
+        end
+      end
+
+      context "when the account is not flagged as invalid_credentials" do
+        context "and the new credentials are invalid" do
+          before do
+            any_instance_of(GreenplumConnection::DatabaseError) do |exception|
+              stub(exception).error_type { :INVALID_PASSWORD }
+            end
+            stub(Sequel).connect { raise Sequel::DatabaseError }
+          end
+
+          it "does not set the invalid_credentials flag" do
+            account.valid?
+            account.invalid_credentials.should be_false
+          end
+        end
       end
     end
   end

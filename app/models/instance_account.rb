@@ -25,6 +25,7 @@ class InstanceAccount < ActiveRecord::Base
   end
 
   def invalid_credentials!
+    return if @currently_validating_creds
     self.invalid_credentials = true
     save(:validate => false)
   end
@@ -32,6 +33,8 @@ class InstanceAccount < ActiveRecord::Base
   private
 
   def credentials_are_valid
+    @currently_validating_creds = true
+    self.invalid_credentials = false
     association = association(:data_source)
     if association.loaded?
       association.loaded! if association.stale_target?
@@ -40,5 +43,7 @@ class InstanceAccount < ActiveRecord::Base
     unless data_source.valid_db_credentials?(self)
       errors.add(:base, :INVALID_PASSWORD)
     end
+  ensure
+    @currently_validating_creds = false
   end
 end
