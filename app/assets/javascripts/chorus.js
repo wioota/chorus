@@ -56,9 +56,9 @@ window.Chorus = function chorus$Global() {
         var firstArg = arguments[0];
         var target = arguments.length ? firstArg.el : document;
         $(target).
-            on("click.chorus_modal", "button.dialog, a.dialog", null,
+            on("click.chorus_modal", "[data-dialog]", null,
             function(e) { (firstArg || self.page).createDialog(e); }).
-            on("click.chorus_modal", "button.alert, a.alert", null,
+            on("click.chorus_modal", "[data-alert]", null,
             function(e) { (firstArg || self.page).createAlert(e); });
 
         if (window.jasmine) {
