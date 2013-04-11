@@ -94,8 +94,10 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     },
 
     teardown: function() {
+        if (this.saveTimer) {
+            this.saveDraft();
+        }
         this._super("teardown");
-        if (this.saveTimer) this.saveDraft();
     },
 
     saveCursorPosition: function() {

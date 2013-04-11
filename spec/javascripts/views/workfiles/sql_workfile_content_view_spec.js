@@ -103,7 +103,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     });
 
                     it("saves the task", function() {
-                        expect(this.server.creates().length).toBe(1);
+                        var requestBody = this.server.lastCreate().requestBody;
+                        expect('foo?' + requestBody).toContainQueryParams({sql: "select * from foos"});
                         expect(this.server.lastCreate().url).toBe(this.view.task.url());
                     });
 
@@ -206,7 +207,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("saves the task", function() {
-                            expect(this.server.creates().length).toBe(1);
+                            var requestBody = this.server.lastCreate().requestBody;
+                            expect('foo?' + requestBody).toContainQueryParams({"sql": "select 1 from table"});
                             expect(this.server.lastCreate().url).toBe(this.view.task.url());
                         });
                     });

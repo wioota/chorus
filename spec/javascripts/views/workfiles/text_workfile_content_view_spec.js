@@ -153,7 +153,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     });
 
                     it("only saves the file once", function() {
-                        expect(this.server.creates().length).toBe(1);
+                        var requestBody = this.server.lastCreate().requestBody;
+                        expect('foo?' + requestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar, Baz"});
                         expect(this.server.updates().length).toBe(0);
                     });
                 });
@@ -165,7 +166,9 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 });
 
                 it("creates a draft", function() {
-                    expect(this.server.creates().length).toBe(1);
+                    var requestBody = this.server.lastCreate().requestBody;
+                    expect('foo?' + requestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar"});
+
                     expect(this.server.updates().length).toBe(0);
                 });
 
@@ -175,7 +178,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     });
 
                     it("does not save the draft again", function() {
-                        expect(this.server.creates().length).toBe(1);
+                        var requestBody = this.server.lastCreate().requestBody;
+                        expect('foo?' + requestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar"});
                         expect(this.server.updates().length).toBe(0);
                     });
                 });
@@ -189,8 +193,11 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     });
 
                     it("updates the draft", function() {
-                        expect(this.server.creates().length).toBe(1);
-                        expect(this.server.updates().length).toBe(1);
+                        var creatRequestBody = this.server.lastCreate().requestBody;
+                        expect('foo?' + creatRequestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar"});
+
+                        var updateRequestBody = this.server.lastUpdate().requestBody;
+                        expect('foo?' + updateRequestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar"});
                     });
                 });
             });
@@ -404,7 +411,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
             });
 
             it("saves a draft", function() {
-                expect(this.server.creates().length).toBe(1);
+                var requestBody = this.server.lastCreate().requestBody;
+                expect('foo?' + requestBody).toContainQueryParams({"workfileDraft[content]": "Foo, Bar, Baz, Quux"});
             });
         });
 
