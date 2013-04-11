@@ -54,8 +54,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.setModel(task);
         task.save();
         this.executionStarted();
-        this.bindings.add(task, "saved", _.bind(this.executionSucceeded, this, task));
-        this.bindings.add(task, "saveFailed", _.bind(this.executionFailed, this, task));
+        this.listenTo(task, "saved", _.bind(this.executionSucceeded, this, task));
+        this.listenTo(task, "saveFailed", _.bind(this.executionFailed, this, task));
     },
 
     executionStarted: function() {

@@ -11,7 +11,7 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
         this.collection = this.model.activities();
         this.collection.fetch();
 
-        this.bindings.add(this.collection, "changed", this.render);
+        this.listenTo(this.collection, "changed", this.render);
         this.requiredResources.push(this.model);
     },
 
@@ -27,6 +27,6 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
             displayStyle: ['without_object', 'without_workspace']
         });
 
-        this.bindings.add(this.tabs, 'selected', this.recalculateScrolling);
+        this.listenTo(this.tabs, 'selected', this.recalculateScrolling);
     }
 });

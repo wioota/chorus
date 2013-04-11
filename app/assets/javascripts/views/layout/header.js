@@ -73,8 +73,8 @@ chorus.views.Header = chorus.views.Base.extend({
         function switchUser(username) {
             session.requestLogout(function() {
                 // log back in as new user
-                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router));
-                self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
+                self.listenTo(session, "saved", _.bind(chorus.router.reload, chorus.router));
+                self.listenTo(session, "saveFailed", function() { session.trigger("needsLogin"); });
                 session.save({username: username, password: "secret"});
             });
         }
@@ -94,7 +94,7 @@ chorus.views.Header = chorus.views.Base.extend({
             });
         }
 
-        this.bindings.add(this.users, "loaded", addDropdown);
+        this.listenTo(this.users, "loaded", addDropdown);
     },
 
     searchKeyPressed: function(event) {

@@ -10,9 +10,9 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
     makeModel: function() {
@@ -29,7 +29,7 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
     launchWorkspacePicker: function() {
         this.workspace_picker = new chorus.dialogs.ImportStreamWorkspacePicker();
         this.workspace_picker.launchModal();
-        this.bindings.add(this.workspace_picker, "workspace:selected", this.workspaceSelected);
+        this.listenTo(this.workspace_picker, "workspace:selected", this.workspaceSelected);
     },
 
     workspaceSelected: function(workspace){

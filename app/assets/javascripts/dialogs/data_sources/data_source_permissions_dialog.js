@@ -26,16 +26,16 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
 
         this.ownership = new chorus.models.DataSourceOwnership({instanceId: this.dataSource.id});
         this.users = new chorus.collections.UserSet();
-        this.bindings.add(this.users, "reset", this.populateSelect);
+        this.listenTo(this.users, "reset", this.populateSelect);
         this.users.sortAsc("firstName");
         this.users.fetchAll();
         this.collection = this.dataSource.accounts();
 
-        this.bindings.add(this.collection, "reset", this.render);
-        this.bindings.add(this.collection, "add", this.render);
-        this.bindings.add(this.collection, "saved", this.saved);
-        this.bindings.add(this.collection, "saveFailed", this.saveFailed);
-        this.bindings.add(this.collection, "validationFailed", this.saveFailed);
+        this.listenTo(this.collection, "reset", this.render);
+        this.listenTo(this.collection, "add", this.render);
+        this.listenTo(this.collection, "saved", this.saved);
+        this.listenTo(this.collection, "saveFailed", this.saveFailed);
+        this.listenTo(this.collection, "validationFailed", this.saveFailed);
 
     },
 
@@ -130,8 +130,8 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
 
     saveOwner: function(user) {
         var newOwnerId = user.get("id");
-        this.bindings.add(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
-        this.bindings.add(this.ownership, "saved", function() {
+        this.listenTo(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
+        this.listenTo(this.ownership, "saved", function() {
             chorus.toast("instances.confirm_change_owner.toast");
             this.closeModal();
             this.collection.fetch({
@@ -216,10 +216,10 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var li = $(event.target).closest("li");
         li.find("a.save").startLoading("instances.permissions.saving");
 
-        this.bindings.add(this.account, "validationFailed", function() {
+        this.listenTo(this.account, "validationFailed", function() {
             this.showErrors(this.account);
         });
-        this.bindings.add(this.account, "saveFailed", function() {
+        this.listenTo(this.account, "saveFailed", function() {
             this.showErrors(this.account);
         });
         this.account.save({
@@ -334,10 +334,10 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var account = this.collection.get(accountId);
         var selectedUser = this.collection.get(accountId).user();
 
-        this.bindings.add(account, "destroyFailed", function() {
+        this.listenTo(account, "destroyFailed", function() {
             this.showErrors(account);
         }, this);
-        this.bindings.add(account, "destroy", function() {
+        this.listenTo(account, "destroy", function() {
             chorus.toast("instances.remove_individual_account.toast", {
                 dataSourceName: this.dataSource.get("name"),
                 userName: selectedUser.displayName()

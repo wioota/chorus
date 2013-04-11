@@ -120,7 +120,7 @@ describe("chorus.views.Base", function() {
             spyOn(this.view, 'render');
             this.view.resource = this.view.model = this.oldModel;
             this.view.bindCallbacks();
-            this.view.bindings.add(this.randomModel, "change", this.view.render);
+            this.view.listenTo(this.randomModel, "change", this.view.render);
             this.view.setModel(this.newModel);
         });
 

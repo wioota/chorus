@@ -10,9 +10,9 @@ chorus.views.DataTabDatasetList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.bindings.add(this.collection, "reset", this.markDatasetViewsAsDirty);
-        this.bindings.add(this.collection, "add", this.markDatasetViewsAsDirty);
-        this.bindings.add(this.collection, "searched", this.rebuildDatasetViews);
+        this.listenTo(this.collection, "reset", this.markDatasetViewsAsDirty);
+        this.listenTo(this.collection, "add", this.markDatasetViewsAsDirty);
+        this.listenTo(this.collection, "searched", this.rebuildDatasetViews);
         this.datasetViews = [];
     },
 

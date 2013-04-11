@@ -45,13 +45,13 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
             this.model = dataset;
         });
 
-        this.bindings.add(this.collection, 'searched', function() {
+        this.listenTo(this.collection, 'searched', function() {
             this.mainContent.content.render();
             this.mainContent.contentFooter.render();
             this.mainContent.contentDetails.updatePagination();
         });
 
-        this.bindings.add(this.schema, "loaded", this.schemaLoaded);
+        this.listenTo(this.schema, "loaded", this.schemaLoaded);
         this.breadcrumbs.requiredResources.add(this.schema);
     },
 

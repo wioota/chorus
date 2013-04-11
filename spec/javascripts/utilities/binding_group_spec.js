@@ -40,8 +40,6 @@ describe("chorus.BindingGroup", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.callCount).toBe(1);
             });
-
-
         });
 
         it("does not call the event immediately", function() {

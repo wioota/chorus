@@ -16,7 +16,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         });
 
-        this.bindings.add(this.collection, 'searched', function() {
+        this.listenTo(this.collection, 'searched', function() {
             this.mainContent.content.render();
             this.mainContent.contentFooter.render();
             this.mainContent.contentDetails.updatePagination();
@@ -121,7 +121,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.instance = this.workspace.sandbox().instance();
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
-            this.bindings.add(this.account, "loaded", this.checkAccount);
+            this.listenTo(this.account, "loaded", this.checkAccount);
             this.mainContent.contentDetails.render();
 
             this.account.fetchIfNotLoaded();

@@ -11,7 +11,7 @@ chorus.dialogs.WorkfileNewVersion = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.bindings.add(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saved", this.saved);
     },
 
     makeModel:function () {

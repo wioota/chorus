@@ -2,7 +2,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     helpId: "workspace_summary",
 
     setup: function(workspaceId) {
-        this.bindings.add(this.model, "loaded", this.decideIfQuickstart);
+        this.listenTo(this.model, "loaded", this.decideIfQuickstart);
         this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"});
         this.sidebar = new chorus.views.WorkspaceShowSidebar({model: this.model});
 

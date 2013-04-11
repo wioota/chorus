@@ -9,7 +9,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
     persistent:true,
 
     setup:function () {
-        this.bindings.add(this.model, "saved", this.userSaved);
+        this.listenTo(this.model, "saved", this.userSaved);
     },
 
     makeModel:function () {

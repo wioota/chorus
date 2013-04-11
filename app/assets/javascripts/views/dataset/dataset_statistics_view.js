@@ -6,7 +6,7 @@ chorus.views.DatasetStatistics = chorus.views.Base.extend({
 
         this.statistics = this.model.statistics();
         this.statistics.fetchIfNotLoaded();
-        this.bindings.add(this.statistics, "loaded", this.render);
+        this.listenTo(this.statistics, "loaded", this.render);
     },
 
     context: function() {

@@ -19,8 +19,8 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.bindings.add(this.resource, "saved", this.saved);
-        this.bindings.add(this.resource, "saveFailed", this.saveFailed);
+        this.listenTo(this.resource, "saved", this.saved);
+        this.listenTo(this.resource, "saveFailed", this.saveFailed);
     },
 
     create:function create(e) {

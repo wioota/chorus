@@ -13,9 +13,9 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
         this.hdfsDataSources = this.options.hdfsDataSources;
         this.gnipDataSources = this.options.gnipDataSources;
 
-        this.bindings.add(this.dataSources, 'loaded', this.render);
-        this.bindings.add(this.hdfsDataSources, 'loaded', this.render);
-        this.bindings.add(this.gnipDataSources, 'loaded', this.render);
+        this.listenTo(this.dataSources, 'loaded', this.render);
+        this.listenTo(this.hdfsDataSources, 'loaded', this.render);
+        this.listenTo(this.gnipDataSources, 'loaded', this.render);
     },
 
     selectAll: function(e) {

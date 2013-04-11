@@ -14,7 +14,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     drawColumns: function() {
         this.bindings.remove(this.mainContent.contentDetails);
         this._super('drawColumns');
-        this.bindings.add(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
+        this.listenTo(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
     },
 
     editChorusView: function() {

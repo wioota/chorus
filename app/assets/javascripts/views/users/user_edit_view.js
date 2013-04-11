@@ -16,8 +16,8 @@
         },
 
         setup:function () {
-            this.bindings.add(this.model, "saved", userSuccessfullySaved);
-            this.bindings.add(this.model, "image:change", function() { this.model.trigger("invalidated"); });
+            this.listenTo(this.model, "saved", userSuccessfullySaved);
+            this.listenTo(this.model, "image:change", function() { this.model.trigger("invalidated"); });
             this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
         },
 

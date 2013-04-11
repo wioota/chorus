@@ -7,7 +7,7 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.requiredResources.add(this.model);
         this.tags = this.model.tags();
         this.tagsInput = new chorus.views.TagsInput({tags: this.tags, taggable: this.model});
-        this.bindings.add(this.tagsInput, "tag:click", this.navigateToTagShowPage);
+        this.listenTo(this.tagsInput, "tag:click", this.navigateToTagShowPage);
     },
 
    navigateToTagShowPage: function(tag) {

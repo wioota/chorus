@@ -17,7 +17,7 @@
 
         setup: function() {
             this.model.ldap = true;
-            this.bindings.add(this.model, "saved", userSuccessfullySaved);
+            this.listenTo(this.model, "saved", userSuccessfullySaved);
         },
 
         postRender: function() {
@@ -43,7 +43,7 @@
 
             this.collection.fetch();
 
-            this.bindings.add(this.collection, "reset", function() {
+            this.listenTo(this.collection, "reset", function() {
                 if (this.collection.models.length > 0) {
                     callback.call(this);
                 } else {

@@ -13,7 +13,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.subscribePageEvent("column:deselected", this.removeColumn);
         this.chorusView = this.model.deriveChorusView();
         this.chorusView.aggregateColumnSet = this.options.aggregateColumnSet;
-        this.bindings.add(this.chorusView, "change", this.render);
+        this.listenTo(this.chorusView, "change", this.render);
     },
 
     teardown: function() {

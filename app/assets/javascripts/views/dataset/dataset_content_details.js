@@ -45,8 +45,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.statistics = this.dataset.statistics();
         this.statistics.fetchIfNotLoaded();
 
-        this.bindings.add(this.statistics, "loaded", this.render);
-        this.bindings.add(this.collection, "add remove", this.updateColumnCount);
+        this.listenTo(this.statistics, "loaded", this.render);
+        this.listenTo(this.collection, "add remove", this.updateColumnCount);
     },
 
     dataPreview: function(e) {

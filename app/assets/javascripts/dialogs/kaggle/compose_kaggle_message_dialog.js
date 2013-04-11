@@ -37,8 +37,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.workspace = options.workspace;
         this.maxRecipientCharacters = options.maxRecipientCharacters || 70;
         this.requiredDatasets = new chorus.RequiredResources();
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
         this._super('setup', arguments);
     },
 
@@ -73,7 +73,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         this.model = new chorus.models.KaggleMessage({
             recipients: options.recipients
         });
-        this.bindings.add(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saved", this.saved);
     },
 
     combineNames: function(recipients){
@@ -118,7 +118,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
             var datasetDialog = new chorus.dialogs.KaggleInsertDatasetSchema({
                 workspaceId: this.workspace.get('id')
             });
-            this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }
     },
@@ -131,8 +131,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
             var collection = dataset.columns();
             var statistic = dataset.statistics();
 
-            this.bindings.add(collection, 'loaded', this.columnsLoaded);
-            this.bindings.add(statistic, 'loaded', this.columnsLoaded);
+            this.listenTo(collection, 'loaded', this.columnsLoaded);
+            this.listenTo(statistic, 'loaded', this.columnsLoaded);
 
             this.requiredDatasets.push(statistic);
             this.requiredDatasets.push(collection);

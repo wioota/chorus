@@ -36,13 +36,13 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     },
 
     fetchDataSources: function() {
-        this.bindings.add(this.dataSourceSet, "loaded", this.mergeDataSources);
+        this.listenTo(this.dataSourceSet, "loaded", this.mergeDataSources);
         this.dataSourceSet.fetchAll();
 
-        this.bindings.add(this.hdfsDataSourceSet, "loaded", this.mergeDataSources);
+        this.listenTo(this.hdfsDataSourceSet, "loaded", this.mergeDataSources);
         this.hdfsDataSourceSet.fetchAll();
 
-        this.bindings.add(this.gnipDataSourceSet, "loaded", this.mergeDataSources);
+        this.listenTo(this.gnipDataSourceSet, "loaded", this.mergeDataSources);
         this.gnipDataSourceSet.fetchAll();
     },
 

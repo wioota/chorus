@@ -4,7 +4,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     setup:function (hdfsDataSourceId, id) {
         this.instance = new chorus.models.HdfsDataSource({ id: hdfsDataSourceId });
         this.instance.fetch();
-        this.bindings.add(this.instance, "loaded", this.instanceFetched);
+        this.listenTo(this.instance, "loaded", this.instanceFetched);
         this.hdfsDataSourceId = hdfsDataSourceId;
 
         this.hdfsEntry = new chorus.models.HdfsEntry({
@@ -49,7 +49,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
 
         this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);
 
-        this.bindings.add(this.hdfsEntry, "loaded", this.entryFetched);
+        this.listenTo(this.hdfsEntry, "loaded", this.entryFetched);
     },
 
     crumbs: function() {

@@ -10,9 +10,9 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.bindings.add(this.model, "saved", this.chorusViewCreated);
-        this.bindings.add(this.model, "saveFailed", this.chorusViewFailed);
-        this.bindings.add(this.model, "validationFailed", this.chorusViewFailed);
+        this.listenTo(this.model, "saved", this.chorusViewCreated);
+        this.listenTo(this.model, "saveFailed", this.chorusViewFailed);
+        this.listenTo(this.model, "validationFailed", this.chorusViewFailed);
     },
 
     nameChorusView: function(e) {

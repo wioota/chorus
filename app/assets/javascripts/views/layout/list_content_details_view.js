@@ -10,7 +10,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     },
 
     setup: function(){
-        this.bindings.add(this.collection, "remove", this.render);
+        this.listenTo(this.collection, "remove", this.render);
     },
 
     fetchNextPage: function() {

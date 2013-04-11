@@ -24,8 +24,8 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     submit: function() {
         var datasetSet = this.selectedItem().datasets();
         datasetSet.reset([this.model]);
-        this.bindings.add(datasetSet, "saved", this.saved);
-        this.bindings.add(datasetSet, "saveFailed", this.bulkSaveFailed);
+        this.listenTo(datasetSet, "saved", this.saved);
+        this.listenTo(datasetSet, "saveFailed", this.bulkSaveFailed);
 
         datasetSet.save();
         this.$("button.submit").startLoading("actions.associating");

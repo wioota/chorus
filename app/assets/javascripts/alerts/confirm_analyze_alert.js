@@ -9,8 +9,8 @@ chorus.alerts.Analyze = chorus.alerts.Confirm.extend({
 
     confirmAlert: function() {
         this.$("button.submit").startLoading("analyze.alert.loading");
-        this.bindings.add(this.model.analyze(), "saveFailed", this.saveFailed);
-        this.bindings.add(this.model.analyze(), "saved", this.saved);
+        this.listenTo(this.model.analyze(), "saveFailed", this.saveFailed);
+        this.listenTo(this.model.analyze(), "saved", this.saved);
         this.model.analyze().save();
     },
 

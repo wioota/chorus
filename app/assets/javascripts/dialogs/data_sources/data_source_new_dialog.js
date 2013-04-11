@@ -49,9 +49,9 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         e && e.preventDefault();
 
         this.resource = this.model = new (this.dataSourceClass())();
-        this.bindings.add(this.model, "saved", this.saveSuccess);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saveSuccess);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
 
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         var values = this.fieldValues();

@@ -39,9 +39,9 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
                 editable: this.pageModel.workspaceAdmin()
             });
 
-            this.bindings.add(this.pageModel, "saved", this.saved);
-            this.bindings.add(this.pageModel, "validationFailed", this.saveFailed);
-            this.bindings.add(this.pageModel, "saveFailed", this.saveFailed);
+            this.listenTo(this.pageModel, "saved", this.saved);
+            this.listenTo(this.pageModel, "validationFailed", this.saveFailed);
+            this.listenTo(this.pageModel, "saveFailed", this.saveFailed);
             this.model.members().sortAsc("lastName");
             this.model.members().fetchAll();
 

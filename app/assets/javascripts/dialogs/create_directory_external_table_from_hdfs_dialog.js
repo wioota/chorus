@@ -125,16 +125,16 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.setupCsvOptions();
         this.setupModel();
 
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
 
         this.model.fetch();
         this.model.set({hasHeader: false}, {silent: true});
 
         this.$(".data_table").startLoading();
 
-        this.bindings.add(this.model, "loaded", function() {
+        this.listenTo(this.model, "loaded", function() {
             this.contents = this.model.get('contents');
             this.$(".data_table").stopLoading();
             this.render();

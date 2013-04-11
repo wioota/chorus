@@ -54,9 +54,9 @@
                 });
             } else {
                 this.instances = new chorus.collections.GpdbDataSourceSet();
-                this.bindings.add(this.instances, "loaded", this.dataSourcesLoaded);
+                this.listenTo(this.instances, "loaded", this.dataSourcesLoaded);
                 this.instances.attributes.accessible = true;
-                this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
+                this.listenTo(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
 
                 this.setState({ instance: LOADING });
@@ -112,8 +112,8 @@
         fetchDatabases:function(selectedInstance) {
             this.databases = selectedInstance.databases();
             this.databases.fetchAllIfNotLoaded();
-            this.bindings.add(this.databases, "fetchFailed", this.databaseFetchFailed);
-            this.bindings.add(this.databases, "loaded", this.databasesLoaded);
+            this.listenTo(this.databases, "fetchFailed", this.databaseFetchFailed);
+            this.listenTo(this.databases, "loaded", this.databasesLoaded);
         },
 
         databaseSelected: function () {
@@ -134,8 +134,8 @@
         fetchSchemas: function(selectedDatabase) {
             this.schemas = selectedDatabase.schemas();
             this.schemas.fetchAllIfNotLoaded();
-            this.bindings.add(this.schemas, "fetchFailed", this.schemaFetchFailed);
-            this.bindings.add(this.schemas, "loaded", this.schemasLoaded);
+            this.listenTo(this.schemas, "fetchFailed", this.schemaFetchFailed);
+            this.listenTo(this.schemas, "loaded", this.schemasLoaded);
         },
 
         schemaSelected:function () {

@@ -6,7 +6,7 @@ chorus.views.KaggleFilter = chorus.views.Filter.extend({
         this.collection = this.collection || new chorus.collections.KaggleColumnSet();
         this.model = this.model || new chorus.models.KaggleFilter();
         this._super("setup", arguments);
-        this.bindings.add(this.columnFilter, "refresh", this.columnSelected);
+        this.listenTo(this.columnFilter, "refresh", this.columnSelected);
     },
 
     postRender: function() {

@@ -19,7 +19,7 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
         config.fetch(); // needs to refetch to see ldap #28824949
 
         this.handleFetchErrorsFor(config);
-        this.bindings.add(config, "loaded", this.configLoaded);
+        this.listenTo(config, "loaded", this.configLoaded);
     },
 
     configLoaded: function() {

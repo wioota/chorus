@@ -7,7 +7,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     },
 
     setup:function () {
-        this.bindings.add(this.model, "image:change", this.render);
+        this.listenTo(this.model, "image:change", this.render);
         this.workspaceMemberList = new chorus.views.WorkspaceMemberList({collection: this.model.members()});
     },
 

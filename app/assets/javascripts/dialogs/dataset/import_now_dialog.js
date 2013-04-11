@@ -53,8 +53,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
         this.customSetup();
 
-        this.bindings.add(this.model, "saved", this.modelSaved);
-        this.bindings.add(this.model, "saveFailed validationFailed", function() {
+        this.listenTo(this.model, "saved", this.modelSaved);
+        this.listenTo(this.model, "saveFailed validationFailed", function() {
             this.showErrors(this.model);
             this.$("button.submit").stopLoading();
         });
@@ -118,7 +118,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
             };
 
             var datasetDialog = new chorus.dialogs.DatasetsPicker(pickerOptions);
-            this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }
     },
@@ -141,7 +141,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var schemaPickerDialog = new chorus.dialogs.SchemaPicker({
             action: "select_import_schema"
         });
-        this.bindings.add(schemaPickerDialog, "schema:selected", this.schemaChosen, this);
+        this.listenTo(schemaPickerDialog, "schema:selected", this.schemaChosen, this);
         this.launchSubModal(schemaPickerDialog);
     },
 

@@ -13,9 +13,9 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.bindings.add(this.model, "saved", this.saveSuccess);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saveSuccess);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
     additionalContext: function() {

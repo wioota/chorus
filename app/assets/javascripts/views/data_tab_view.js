@@ -64,7 +64,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
         this.listview = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.registerSubView(this.listview);
 
-        this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
+        this.listenTo(this.listview, "fetch:more", this.fetchMoreDatasets);
     },
 
     setSchemaToCurrentWorkspace: function() {

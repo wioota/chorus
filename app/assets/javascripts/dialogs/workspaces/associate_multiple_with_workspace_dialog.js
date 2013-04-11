@@ -17,7 +17,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         var datasetSet = workspace.datasets();
         datasetSet.reset(this.datasets.models);
 
-        this.bindings.add(datasetSet, "saved", this.saved);
+        this.listenTo(datasetSet, "saved", this.saved);
         datasetSet.save();
     },
 

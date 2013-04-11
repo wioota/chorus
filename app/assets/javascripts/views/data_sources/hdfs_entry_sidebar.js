@@ -46,8 +46,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
                 var activities = entry.activities();
                 activities.fetch();
 
-                this.bindings.add(activities, "changed", this.render);
-                this.bindings.add(activities, "reset", this.render);
+                this.listenTo(activities, "changed", this.render);
+                this.listenTo(activities, "reset", this.render);
 
                 this.tabs.activity = new chorus.views.ActivityList({
                     collection: activities,
@@ -80,7 +80,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
         hdfsFile.fetch();
 
-        this.bindings.add(hdfsFile, "loaded", function() {
+        this.listenTo(hdfsFile, "loaded", function() {
             var externalTable = new chorus.models.HdfsExternalTable({
                 path: hdfsFile.get('path'),
                 hdfsDataSourceId: hdfsDataSource.get('id'),
@@ -97,7 +97,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             dialog.launchModal();
         });
 
-        this.bindings.add(hdfsFile, "unprocessableEntity", function() {
+        this.listenTo(hdfsFile, "unprocessableEntity", function() {
             var fields = hdfsFile.serverErrors.fields;
             _.forEach(fields, function(field, fieldName) {
                 _.forEach(field, function(_, message) {

@@ -9,7 +9,7 @@ chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).e
 
     setup: function() {
         this._super("setup", arguments);
-        this.bindings.add(this.model, "invalidated", function() { this.model.fetch(); }, this);
+        this.listenTo(this.model, "invalidated", function() { this.model.fetch(); }, this);
     },
 
     setupSubviews: function() {

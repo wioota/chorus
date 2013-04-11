@@ -9,8 +9,8 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
     },
 
     postRender: function() {

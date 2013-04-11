@@ -75,13 +75,13 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
             var statistics = dataset.statistics();
             statistics.fetchIfNotLoaded();
-            this.bindings.add(statistics, "loaded", this.render);
+            this.listenTo(statistics, "loaded", this.render);
 
             if (dataset.canBeImportSourceOrDestination()) {
                 this.imports = dataset.getImports();
                 this.importSchedules = dataset.getImportSchedules();
-                this.bindings.add(this.imports, "loaded", this.render);
-                this.bindings.add(this.importSchedules, "loaded", this.render);
+                this.listenTo(this.imports, "loaded", this.render);
+                this.listenTo(this.importSchedules, "loaded", this.render);
                 this.imports.fetch();
                 this.importSchedules.fetch();
             }

@@ -24,7 +24,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
             this.handleFetchErrorsFor(this.dataset);
 
-            this.bindings.add(this.dataset, "loaded", this.datasetLoaded);
+            this.listenTo(this.dataset, "loaded", this.datasetLoaded);
 
             this.breadcrumbs.requiredResources.add(this.dataset);
         },
@@ -75,7 +75,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
         fetchColumnSet: function() {
             if(!this.columnSet.loaded) {
-                this.bindings.add(this.columnSet, "loaded", this.drawColumns);
+                this.listenTo(this.columnSet, "loaded", this.drawColumns);
                 this.columnSet.fetchAll();
             }
         },
@@ -91,7 +91,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             this.sidebar = new chorus.views.DatasetSidebar(this.sidebarOptions);
             this.sidebar.setDataset(this.dataset);
 
-            this.bindings.add(this.mainContent.contentDetails, "transform:sidebar", this.showSidebar);
+            this.listenTo(this.mainContent.contentDetails, "transform:sidebar", this.showSidebar);
         },
 
         drawColumns: function() {

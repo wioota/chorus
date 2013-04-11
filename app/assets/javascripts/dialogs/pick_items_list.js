@@ -29,7 +29,7 @@ chorus.views.PickItemsList = chorus.views.Base.extend({
             }
             this.options.selectedItemIds = _.map(this.options.selectedItemIds, function(id) { return id.toString(); });
         }
-        this.bindings.add(this.collection, 'searched', this.render);
+        this.listenTo(this.collection, 'searched', this.render);
     },
 
     additionalContext: function() {

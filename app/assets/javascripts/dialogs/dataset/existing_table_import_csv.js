@@ -37,9 +37,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
         this.initializeModel(columns);
 
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
     initializeModel: function(columnData) {

@@ -61,12 +61,12 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     makeModel: function() {
         this._super("makeModel", arguments);
 
-        this.bindings.add(this.model, "saved", this.modelSaved);
-        this.bindings.add(this.model, "fileUploadSuccess", this.saved);
-        this.bindings.add(this.model, "fileUploadFailed", this.saveFailed);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
-        this.bindings.add(this.model, "fileUploadDone", this.uploadDone);
+        this.listenTo(this.model, "saved", this.modelSaved);
+        this.listenTo(this.model, "fileUploadSuccess", this.saved);
+        this.listenTo(this.model, "fileUploadFailed", this.saveFailed);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "fileUploadDone", this.uploadDone);
 
         this.workspaceId = this.model.get("workspaceId");
         this.model.datasets = new chorus.collections.WorkspaceDatasetSet();

@@ -12,8 +12,8 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
     makeModel:function (options) {
         this.dataset = this.options.pageModel;
         this.model = new chorus.models.DatabaseViewConverter({workspaceId: this.dataset.get("workspace") && this.dataset.get("workspace").id }, {from: this.dataset});
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
     },
 
     additionalContext: function() {

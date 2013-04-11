@@ -9,7 +9,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
 
     setup: function() {
         if(this.collection) {
-        this.bindings.add(this.collection, "join:added", this.render);
+        this.listenTo(this.collection, "join:added", this.render);
         }
     },
 

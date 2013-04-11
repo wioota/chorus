@@ -102,7 +102,7 @@ chorus.views.FunctionTab = chorus.views.DatabaseSidebarList.extend({
 
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.functions();
-        this.bindings.add(this.resource, "change reset add remove fetchFailed", this.render);
+        this.listenTo(this.resource, "change reset add remove fetchFailed", this.render);
         this.collection.fetchAllIfNotLoaded();
     },
 

@@ -67,7 +67,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             this.collection.fetchAll();
         }, this);
 
-        this.bindings.add(this.workspace, "change", this.updateButtons);
+        this.listenTo(this.workspace, "change", this.updateButtons);
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 

@@ -29,16 +29,16 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         this.resource = this.model = workfile;
         if (this.model) {
             this.collection = this.model.activities();
-            this.bindings.add(this.collection, "reset", this.render);
-            this.bindings.add(this.collection, "changed", this.render);
-            this.bindings.add(this.model, "changed", this.render);
+            this.listenTo(this.collection, "reset", this.render);
+            this.listenTo(this.collection, "changed", this.render);
+            this.listenTo(this.model, "changed", this.render);
             this.collection.fetch();
 
             if(this.options.showVersions) {
                 this.allVersions = this.model.allVersions();
                 this.versionList = new chorus.views.WorkfileVersionList({collection:this.allVersions});
                 this.bindings.add(this.model, "invalidated", this.allVersions.fetch, this.allVersions);
-                this.bindings.add(this.allVersions, "changed", this.render);
+                this.listenTo(this.allVersions, "changed", this.render);
 
                 this.allVersions.fetch();
                 this.subscribePageEvent("workfile_version:deleted", this.versionDestroyed);

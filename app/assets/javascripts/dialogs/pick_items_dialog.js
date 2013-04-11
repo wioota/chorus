@@ -20,7 +20,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
             this.collection.comparator = this.collectionComparator;
         }
 
-        this.bindings.add(this.collection, "loaded", this.sortCollection);
+        this.bindings.add(this.collection, 'loaded', this.sortCollection);
 
         this.pickItemsList = new chorus.views.PickItemsList({
             collection: this.collection,
@@ -32,8 +32,8 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         });
         this.pickItemsList.baseCollectionModelContext = this.collectionModelContext; // forwarding inheritance on to pickItemsList
 
-        this.bindings.add(this.collection, 'searched', this.enableOrDisableSubmitButton);
-        this.bindings.add(this.pickItemsList, 'item:selected', this.itemSelected);
+        this.listenTo(this.collection, 'searched', this.enableOrDisableSubmitButton);
+        this.listenTo(this.pickItemsList, 'item:selected', this.itemSelected);
     },
 
     sortCollection: function() {

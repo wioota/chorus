@@ -19,7 +19,7 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
 
     makeModel:function () {
         this._super("makeModel", arguments);
-        this.bindings.add(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saved", this.saved);
     },
 
     save:function (e) {

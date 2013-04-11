@@ -25,8 +25,8 @@ chorus.views.Filter = chorus.views.Base.extend({
             disableOtherTypeCategory: false
         });
 
-        this.bindings.add(this.columnFilter, "columnSelected", this.columnSelected);
-        this.bindings.add(this.collection, "remove", this.render);
+        this.listenTo(this.columnFilter, "columnSelected", this.columnSelected);
+        this.listenTo(this.collection, "remove", this.render);
     },
 
     postRender: function() {

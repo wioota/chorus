@@ -11,7 +11,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
         this.options = this.options || {};
         this.columnSet = this.options.columnSet;
         this.collection = this.collection || this.filterCollection();
-        this.bindings.add(this.columnSet, 'remove', this.removeInvalidFilters);
+        this.listenTo(this.columnSet, 'remove', this.removeInvalidFilters);
     },
 
     additionalContext: function() {
@@ -47,7 +47,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
         var $ul = this.$(".filters");
         var filterView = this.filterView(filter);
         $ul.append(filterView.render().el);
-        this.bindings.add(filterView, "deleted", function() {this.removeFilterView(filterView);}, this);
+        this.listenTo(filterView, "deleted", function() {this.removeFilterView(filterView);}, this);
         this.filterViews.push(filterView);
         this.registerSubView(filterView);
     },

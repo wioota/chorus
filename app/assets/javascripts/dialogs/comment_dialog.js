@@ -16,7 +16,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
             entityType: this.options.entityType,
             eventId: this.options.eventId
         });
-        this.bindings.add(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saved", this.saved);
     },
 
     additionalContext:function () {

@@ -33,7 +33,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
         this.tableData = new chorus.views.ResultsConsole({shuttle: false, enableResize: true, enableExpander: false, model: this.task, footerSize: _.bind(this.footerSize, this)});
-        this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
+        this.listenTo(this.filters, "add remove change", this.filtersChanged);
     },
 
     footerSize: function() {
@@ -105,7 +105,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
         this.showButtons(["stop", "refresh"]);
         this.$("button.refresh").startLoading("visualization.refreshing");
-        this.bindings.add(this.task, "saved", this.chartRefreshed, this);
+        this.listenTo(this.task, "saved", this.chartRefreshed);
     },
 
     saveFailed: function() {
@@ -128,7 +128,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     cancelRefresh: function() {
         this.task.cancel();
-        this.bindings.add(this.task, "canceled", this.filtersChanged);
+        this.listenTo(this.task, "canceled", this.filtersChanged);
         this.$("button.refresh").stopLoading();
     },
 
@@ -223,7 +223,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     revertFilters: function() {
         this.filters = this.lastSavedFilters;
-        this.bindings.add(this.filters, "remove change", this.filtersChanged, this);
+        this.listenTo(this.filters, "remove change", this.filtersChanged);
         this.filterWizard.collection = this.filters;
         this.filterWizard.render();
         this.chartUpToDate();

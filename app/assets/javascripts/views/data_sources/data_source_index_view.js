@@ -27,9 +27,9 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
         this.gnipDataSourceList = this.buildListView('gnip_data_source', this.gnipDataSources);
         this.registerSubView(this.gnipDataSourceList);
 
-        this.bindings.add(this.dataSources, 'loaded', this.selectModel);
-        this.bindings.add(this.hdfsDataSources, 'loaded', this.selectModel);
-        this.bindings.add(this.gnipDataSources, 'loaded', this.selectModel);
+        this.listenTo(this.dataSources, 'loaded', this.selectModel);
+        this.listenTo(this.hdfsDataSources, 'loaded', this.selectModel);
+        this.listenTo(this.gnipDataSources, 'loaded', this.selectModel);
 
         this.subscribePageEvent("data_source:added", function(dataSource) {
             this.dataSources.loaded = false;

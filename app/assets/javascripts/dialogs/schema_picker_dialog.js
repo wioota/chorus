@@ -18,9 +18,9 @@ chorus.dialogs.SchemaPicker = chorus.dialogs.Base.extend({
         this.title = this.schemaPickerTranslation("title");
 
         this.schemaPicker = new chorus.views.SchemaPicker({ defaultSchema: this.options.schema });
-        this.bindings.add(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
-        this.bindings.add(this.schemaPicker, "error", this.showErrors);
-        this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);
+        this.listenTo(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
+        this.listenTo(this.schemaPicker, "error", this.showErrors);
+        this.listenTo(this.schemaPicker, "clearErrors", this.clearErrors);
     },
 
     additionalContext: function() {

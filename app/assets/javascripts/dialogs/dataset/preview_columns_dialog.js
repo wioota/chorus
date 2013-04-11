@@ -8,7 +8,7 @@ chorus.dialogs.PreviewColumns = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.resource = this.collection = this.model.columns();
-        this.bindings.add(this.collection, 'fetchFailed', this.columnFetchFailed);
+        this.listenTo(this.collection, 'fetchFailed', this.columnFetchFailed);
         this.collection.fetchAll();
     },
 

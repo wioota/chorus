@@ -17,8 +17,8 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         var activities = this.model.activities();
         activities.fetch();
 
-        this.bindings.add(activities, "changed", this.render);
-        this.bindings.add(activities, "reset", this.render);
+        this.listenTo(activities, "changed", this.render);
+        this.listenTo(activities, "reset", this.render);
 
         this.tabs.activity = new chorus.views.ActivityList({
             collection: activities,

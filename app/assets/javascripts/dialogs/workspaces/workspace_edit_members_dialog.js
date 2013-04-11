@@ -17,8 +17,8 @@ chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
         this.collection.fetchAllIfNotLoaded();
         this.members.fetchAllIfNotLoaded();
 
-        this.bindings.add(this.collection, "reset", this.render);
-        this.bindings.add(this.members, "saved", this.saved);
+        this.listenTo(this.collection, "reset", this.render);
+        this.listenTo(this.members, "saved", this.saved);
     },
 
     subviews:{

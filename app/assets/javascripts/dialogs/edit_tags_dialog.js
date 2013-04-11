@@ -10,9 +10,9 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
 
     setup: function() {
         var tags = this.tags();
-        this.bindings.add(tags, "add", this.addTag);
-        this.bindings.add(tags, "remove", this.removeTag);
-        this.bindings.add(this.collection, "updateTagsFailed", this.saveFailed);
+        this.listenTo(tags, "add", this.addTag);
+        this.listenTo(tags, "remove", this.removeTag);
+        this.listenTo(this.collection, "updateTagsFailed", this.saveFailed);
         this.tagsInput = new chorus.views.TagsInput({tags: tags, taggable: this.collection});
     },
 

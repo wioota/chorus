@@ -16,18 +16,18 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.schemaPicker = new chorus.views.SchemaPicker({allowCreate: true});
-        this.bindings.add(this.schemaPicker, "change", this.enableOrDisableSaveButton);
-        this.bindings.add(this.schemaPicker, "error", this.showErrors);
-        this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);
+        this.listenTo(this.schemaPicker, "change", this.enableOrDisableSaveButton);
+        this.listenTo(this.schemaPicker, "error", this.showErrors);
+        this.listenTo(this.schemaPicker, "clearErrors", this.clearErrors);
 
         this.workspace.fetch();
 
         this.requiredResources.add(this.workspace);
         this.requiredResources.add(chorus.models.Config.instance());
 
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
     makeModel: function() {

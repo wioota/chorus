@@ -26,7 +26,7 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Confirm.extend({
 
     discardChanges:function () {
         var draft = new chorus.models.Draft({workspaceId:this.model.workspace().id, workfileId:this.model.get("id")});
-        this.bindings.add(draft, "change", function (draft) {
+        this.listenTo(draft, "change", function (draft) {
             draft.destroy();
         });
 

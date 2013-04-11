@@ -13,8 +13,8 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         this.title = this.activity.isInsight() ? t("notes.edit_dialog.insight_title") : t("notes.edit_dialog.note_title");
         this.resource = this.model = this.activity.toNote();
 
-        this.bindings.add(this.resource, "validationFailed", this.showErrors);
-        this.bindings.add(this.resource, "saved", this.submitSucceeds);
+        this.listenTo(this.resource, "validationFailed", this.showErrors);
+        this.listenTo(this.resource, "saved", this.submitSucceeds);
     },
 
     showErrors: function(model) {

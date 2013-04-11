@@ -13,8 +13,8 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
     title: t("schema_picker.change_workfile_schema.title"),
 
     setup: function() {
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "saved", this.saved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
 
         var options = {};
 
@@ -24,9 +24,9 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
         }
 
         this.schemaPicker = new chorus.views.SchemaPicker(options);
-        this.bindings.add(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
-        this.bindings.add(this.schemaPicker, "error", this.showErrors);
-        this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);
+        this.listenTo(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
+        this.listenTo(this.schemaPicker, "error", this.showErrors);
+        this.listenTo(this.schemaPicker, "clearErrors", this.clearErrors);
     },
 
     postRender: function() {
