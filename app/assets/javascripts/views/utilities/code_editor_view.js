@@ -12,8 +12,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             onBlur: _.bind(this.onBlur, this),
             onChange: _.bind(this.onChange, this),
             onCursorActivity: $.noop,
-            viewportMargin: Infinity,
-            highlightSelectionMatches: true
+            viewportMargin: Infinity
         }, options);
     },
 
