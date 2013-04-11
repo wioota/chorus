@@ -163,6 +163,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             executionSchema: this.models.schema
         });
 
+        this.models.workfileWithErrors = this.models.workfile.clone();
+        this.models.workfileWithErrors.serverErrors = {
+            fields: { general: { GENERIC: { field: "general", message: "JDBC::Postgres::Oracle::Connection Really long message that should not wrap in a weird way" }}}
+        };
+
         this.models.tableauWorkfile = new chorus.models.Workfile({
             fileName: "Bestest Tableaust Workfile",
             fileType: "tableau_workbook",
@@ -836,6 +841,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "New Workfile Version": new chorus.dialogs.WorkfileNewVersion({ pageModel: this.models.workfile }),
 
+            "Dialog With Errors": new chorus.dialogs.WorkfileNewVersion({ pageModel: this.models.workfileWithErrors }),
+
             "Import Workfiles": new chorus.dialogs.WorkfilesImport({
                 workspaceId: 'bar',
                 pageModel: this.models.workfile,
@@ -901,11 +908,16 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.renderViews(this.views, '#views');
         this.renderViews(this.colorPalette, '#color_palette');
+        this.renderErrors();
 
         $(this.$('#tabs')).tabs();
         setInterval(this.enableScrolling, 100);
 
         return this;
+    },
+
+    renderErrors: function() {
+        this.models.workfileWithErrors.trigger('saveFailed');
     },
 
     // Used to ensure scrolling works after re-rendering dialog
