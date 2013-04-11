@@ -163,14 +163,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             _.each(this.columnMapping, function(name) {
                 var frequency = frequencies[name];
                 if (frequency > 0) {
-                    menu.find("li[name=" + name + "] .count").text(" (" + frequency + ")");
+                    menu.find("li[name='" + name + "'] .count").text(" (" + frequency + ")");
                 }
                 if (frequency > 1) {
-                    menu.find("li[name=" + name + "] .name").addClass("selection_conflict");
+                    menu.find("li[name='" + name + "'] .name").addClass("selection_conflict");
                 }
             });
 
-            var $selectedLi = menu.find("li[name=" + this.columnMapping[i] + "]");
+            var $selectedLi = menu.find("li[name='" + this.columnMapping[i] + "']");
             menu.find(".check").addClass("hidden");
             $selectedLi.find(".check").removeClass("hidden");
             $selectedLi.find(".name").addClass("selected");
