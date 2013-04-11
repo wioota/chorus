@@ -2,7 +2,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     constructorName: "NewTableImportCSV",
 
     templateName: "new_table_import_csv",
-    additionalClass: "table_import_csv",
+    additionalClass: "table_import_csv dialog_wide",
     title: t("dataset.import.table.title"),
     ok: t("dataset.import.table.submit"),
     loadingKey: "dataset.import.importing",

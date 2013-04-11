@@ -25,7 +25,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     postRender: function() {
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 566, height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 150 });
         }, this));
     },
 
@@ -41,7 +41,6 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
             this.markInputAsInvalid($input, model.errors.text, true);
 
             this.$("iframe").contents().find("text").css("margin-right", "20px");
-            this.$(".cleditorMain").css("width", "545px");
         }
     },
 

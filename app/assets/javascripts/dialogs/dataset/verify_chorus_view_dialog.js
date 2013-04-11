@@ -3,7 +3,7 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
 
     templateName: "verify_chorus_view",
     title: t("dataset.verify_chorus_view.title"),
-    additionalClass: "sql_preview",
+    additionalClass: "sql_preview dialog_wide",
 
     persistent: true,
 

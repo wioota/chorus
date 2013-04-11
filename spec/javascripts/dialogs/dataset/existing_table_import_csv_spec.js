@@ -461,6 +461,32 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         beforeEach(function() {
             this.addMatchers(chorus.svgHelpers.matchers);
 
+            this.csvOptions = {
+                tableName: 'existing_table',
+                hasHeader: true,
+                contents: [
+                    "COL1,col2, col3 ,col 4,Col_5, col6, col7, col8",
+                    "val1.1,val1.2,val1.3,val1.4,val1.5,6,7,8",
+                    "val2.1,val2.2,val2.3,val2.4,val2.5,6,7,8",
+                    "val3.1,val3.2,val3.3,val3.4,val3.5,6,7,8",
+                    "val4.1,val4.2,val4.3,val4.4,val4.5,6,7,8"
+                ]
+            };
+
+            this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions , datasetId: "dat-id"});
+            this.columns = [
+                {name: "col1", typeCategory: "WHOLE_NUMBER", ordinalPosition: "3"},
+                {name: "col2", typeCategory: "STRING", ordinalPosition: "4"},
+                {name: "col3", typeCategory: "WHOLE_NUMBER", ordinalPosition: "1"},
+                {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
+                {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"},
+                {name: "col6", typeCategory: "WHOLE_NUMBER", ordinalPosition: "6"},
+                {name: "col7", typeCategory: "WHOLE_NUMBER", ordinalPosition: "7"},
+                {name: "col8", typeCategory: "WHOLE_NUMBER", ordinalPosition: "8"}
+            ];
+
+            this.server.completeFetchFor(this.dialog.columnSet, this.columns);
+
             spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
@@ -472,6 +498,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
 
         context("scroll position after the page re-renders", function() {
+            //You need enough columns to make a scroll bar before this context can pass
             beforeEach(function() {
                 var api = this.dialog.$(".tbody").data("jsp");
                 api.scrollTo(7, 4);

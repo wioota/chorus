@@ -3,6 +3,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     templateName: "sql_preview",
     title: t("sql_preview.dialog.title"),
+    additionalClass: "dialog_wide",
 
     events: {
         "click .preview" : "previewData",

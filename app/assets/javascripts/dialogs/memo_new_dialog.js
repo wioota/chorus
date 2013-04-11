@@ -54,7 +54,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         });
 
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 566, height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 150 });
         }, this));
     },
 
@@ -170,7 +170,6 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             this.markInputAsInvalid($input, model.errors.body, true);
 
             this.$("iframe").contents().find("body").css("margin-right", "20px");
-            this.$(".cleditorMain").css("width", "545px");
         }
     },
 

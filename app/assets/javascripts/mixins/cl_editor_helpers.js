@@ -1,7 +1,7 @@
 chorus.Mixins.ClEditor = {
     makeEditor: function($container, controlSelector, inputName, options) {
         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
-
+        $container.find(controlSelector).empty();
         _.each(controls, function(control, i) {
             var $controlContainer = $container.find(controlSelector);
             $controlContainer.append($('<a class="'+ control +'" href="#"></a>').text(t("workspace.settings.toolbar."+ control)));

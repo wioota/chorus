@@ -120,6 +120,10 @@
   }
 }
 
-.dialog.dialog-narrow {
-    width:500px;
+div.dialog {
+    width: 500px;
+
+    &.dialog_wide {
+      width:940px;
+    }
 }

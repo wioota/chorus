@@ -1,7 +1,6 @@
 chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
     templateName:"change_password",
     title:t("user.change_password.title"),
-    additionalClass: "dialog-narrow",
     events:{
         "submit form":"save"
     },
