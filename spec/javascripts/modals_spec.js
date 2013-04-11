@@ -1,7 +1,6 @@
 describe("chorus.Modal", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Base();
-        this.modal = new chorus.Modal({ pageModel: this.model });
+        this.modal = new chorus.Modal();
         spyOn(chorus.Modal.prototype, "resize").andCallThrough();
         spyOn(chorus.Modal.prototype, "recalculateScrolling").andCallThrough();
         stubModals();
@@ -9,22 +8,27 @@ describe("chorus.Modal", function() {
     });
 
     describe("intialization", function() {
+        beforeEach(function() {
+            this.pageModel = new chorus.models.Base();
+        });
         context("when a model option is provided", function() {
             it("sets the model on the view", function() {
                 var otherModel = new chorus.models.User({ id: 1 });
-                this.modal = new chorus.Modal({ pageModel: this.model, model: otherModel });
+                this.modal = new chorus.Modal({ pageModel: this.pageModel, model: otherModel });
                 expect(this.modal.model).toBe(otherModel);
             });
         });
 
         context("when no model is passed", function() {
             it("sets the model to the pageModel", function() {
-                expect(this.modal.model).toBe(this.model);
+                this.modal = new chorus.Modal({ pageModel: this.pageModel });
+                expect(this.modal.model).toBe(this.pageModel);
             });
         });
 
         it("sets the pageModel", function() {
-            expect(this.modal.pageModel).toBe(this.model);
+            this.modal = new chorus.Modal({ pageModel: this.pageModel });
+            expect(this.modal.pageModel).toBe(this.pageModel);
         });
     });
 
@@ -191,7 +195,7 @@ describe("chorus.Modal", function() {
             this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
             $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
 
-            this.subModal = new chorus.Modal({ pageModel: this.model });
+            this.subModal = new chorus.Modal();
             this.subModal.templateName = this.modal.templateName;
             spyOn(this.subModal, "launchNewModal").andCallThrough();
             $.facebox.settings.inited = true;
@@ -234,10 +238,9 @@ describe("chorus.Modal", function() {
                 this.faceboxOverlayProxy2 = $("<div id='facebox_overlay'/>");
                 $("#jasmine_content").append(this.faceboxProxy2).append(this.faceboxOverlayProxy2);
 
-                this.subSubModal = new chorus.Modal({ pageModel: this.model });
+                this.subSubModal = new chorus.Modal();
                 this.subSubModal.templateName = this.modal.templateName;
                 spyOn(this.subSubModal, "launchNewModal").andCallThrough();
-                $.facebox.settings.inited = true;
                 this.subModal.launchSubModal(this.subSubModal);
             });
 

@@ -110,7 +110,7 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     background: function () {
-        this.faceboxCacheId = "" + (new Date().getTime());
+        this.faceboxCacheId = Math.floor((Math.random()*1e8)+1).toString();
         $("#facebox").attr("id", "facebox-" + this.faceboxCacheId).addClass("hidden");
         $("#facebox_overlay").attr("id", "facebox_overlay-" + this.faceboxCacheId);
     },
