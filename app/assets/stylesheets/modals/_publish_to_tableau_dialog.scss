@@ -1,12 +1,5 @@
 .publish_to_tableau_dialog {
-  $dialog-width : 450px;
-  $account_width : 200px;
-  $input-spacing : 16px;
-
-  width: $dialog-width;
-
   .target_location {
-    width: $dialog-width;
     @include font-normal-small;
     @include ellipsis;
     padding-bottom: 8px;
@@ -19,7 +12,7 @@
 
   .username, .password {
     margin-left: 0px;
-    width: $dialog-width/2 - 30px;
+    width: $default-dialog-width/2 - 30px;
     display: inline-block;
   }
 

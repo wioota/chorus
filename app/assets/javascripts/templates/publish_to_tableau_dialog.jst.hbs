@@ -1,16 +1,20 @@
 <div class="target_location">
-    Publish a workbook for this dataset in the default Tableau project.
+    {{t "tableau.dialog.target_description" }}
 </div>
 
 <label class="name required" name="name">{{t "tableau.dialog.name"}}</label>
 <input id="create_database_view_name" value="{{name}}" type="text" name="name" tabindex="1" maxlength="64"/>
 
-<label class="username required" name="tableau_username">{{t "tableau.dialog.username"}}</label>
-<label class="password required" name="tableau_password">{{t "tableau.dialog.password"}}</label>
-<input class="username" type="text" name="tableau_username" value="" maxlength="255"/>
-<input class="password" type="password" name="tableau_password" value="" maxlength="255" autocomplete="off"/>
+<div>
+    <label class="username required" name="tableau_username">{{t "tableau.dialog.username"}}</label>
+    <label class="password required" name="tableau_password">{{t "tableau.dialog.password"}}</label>
+    <input class="username" type="text" name="tableau_username" value="" maxlength="255"/>
+    <input class="password" type="password" name="tableau_password" value="" maxlength="255" autocomplete="off"/>
+</div>
 
-<input class="workfile" id="create_work_file" type="checkbox" checked="checked" name="create_work_file" tabindex="2" /><label for="create_work_file">{{t "actions.create_tableau_workfile"}}</label>
+<div>
+    <input class="workfile" id="create_work_file" type="checkbox" checked="checked" name="create_work_file" tabindex="2" /><label for="create_work_file">{{t "actions.create_tableau_workfile"}}</label>
+</div>
 
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex=4>{{t "actions.cancel"}}</button>

@@ -121,7 +121,7 @@
 }
 
 div.dialog {
-    width: 500px;
+    width: $default-dialog-width;
 
     &.dialog_wide {
       width:940px;
