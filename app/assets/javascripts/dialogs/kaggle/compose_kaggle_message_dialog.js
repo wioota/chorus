@@ -118,7 +118,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
             var datasetDialog = new chorus.dialogs.KaggleInsertDatasetSchema({
                 workspaceId: this.workspace.get('id')
             });
-            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen);
             this.launchSubModal(datasetDialog);
         }
     },

@@ -47,7 +47,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
         var $ul = this.$(".filters");
         var filterView = this.filterView(filter);
         $ul.append(filterView.render().el);
-        this.listenTo(filterView, "deleted", function() {this.removeFilterView(filterView);}, this);
+        this.listenTo(filterView, "deleted", function() {this.removeFilterView(filterView);});
         this.filterViews.push(filterView);
         this.registerSubView(filterView);
     },

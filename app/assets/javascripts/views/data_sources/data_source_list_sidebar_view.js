@@ -67,7 +67,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
 
         this.requiredResources.reset();
         this.bindings.removeAll();
-        this.listenTo(this.resource, "change", this.render, this);
+        this.listenTo(this.resource, "change", this.render);
 
         if(this.resource.isGreenplum() || this.resource.isOracle()) {
             var account = this.dataSource.accountForCurrentUser();
@@ -84,7 +84,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         var dataSourceUsage = this.dataSource.usage();
         if(dataSourceUsage) {
             this.listenTo(dataSourceUsage, "loaded", this.updateWorkspaceUsage);
-            this.listenTo(dataSourceUsage, "fetchFailed", this.updateWorkspaceUsage, this);
+            this.listenTo(dataSourceUsage, "fetchFailed", this.updateWorkspaceUsage);
             dataSourceUsage.fetchIfNotLoaded();
         }
         this.render();

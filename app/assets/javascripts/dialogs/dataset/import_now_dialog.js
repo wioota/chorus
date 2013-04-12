@@ -118,7 +118,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
             };
 
             var datasetDialog = new chorus.dialogs.DatasetsPicker(pickerOptions);
-            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen);
             this.launchSubModal(datasetDialog);
         }
     },
@@ -141,7 +141,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         var schemaPickerDialog = new chorus.dialogs.SchemaPicker({
             action: "select_import_schema"
         });
-        this.listenTo(schemaPickerDialog, "schema:selected", this.schemaChosen, this);
+        this.listenTo(schemaPickerDialog, "schema:selected", this.schemaChosen);
         this.launchSubModal(schemaPickerDialog);
     },
 
