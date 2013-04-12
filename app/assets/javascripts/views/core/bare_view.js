@@ -109,10 +109,10 @@ chorus.views.Bare = Backbone.View.include(
         bindHotkeys: function() {
             var keydownEventName = "keydown." + this.cid;
             _.each(this.hotkeys, _.bind(function(eventName, hotkey) {
-                this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
+                $(document).bind(keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
                     chorus.PageEvents.broadcast(eventName, event);
                 });
-            }, this));
+            }));
 
             if (this.hotkeys) {
                 chorus.afterNavigate(function() {
