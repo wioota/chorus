@@ -1,4 +1,6 @@
-chorus.views.HdfsEntryHeader = chorus.views.Base.extend({
+chorus.views.HdfsEntryHeader = chorus.views.Base.include(
+        chorus.Mixins.HdfsViews
+    ).extend({
     templateName: "hdfs_entry_header",
 
     setup: function(options) {
@@ -25,24 +27,5 @@ chorus.views.HdfsEntryHeader = chorus.views.Base.extend({
 
     showTags: function() {
         return this.hdfsEntry.get('path') === '/' && this.hdfsEntry.get('name') === '/';
-    },
-
-    ellipsizePath: function() {
-        var dir = this.hdfsEntry.get("path");
-        if(!dir) {
-            return '';
-        }
-        if(this.hdfsEntry.name() === "/") {
-            dir = "";
-        } else if(!dir.match(/\/$/)) {
-            dir += '/';
-        }
-        var path = dir + this.hdfsEntry.name();
-        var folders = path.split('/');
-        if(folders.length > 3) {
-            return "/" + folders[1] + "/.../" + folders[folders.length - 1];
-        } else {
-            return path;
-        }
     }
 });

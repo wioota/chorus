@@ -1,4 +1,6 @@
-chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
+chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
+        chorus.Mixins.HdfsViews
+    ).extend({
     helpId: "instances",
 
     setup:function (hdfsDataSourceId, id) {
@@ -106,22 +108,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
                 hide: { event: "mouseleave", delay: 500, fixed: true }
             }
         });
-    },
-
-    ellipsizePath: function() {
-        var dir = this.hdfsEntry.get("path");
-        if (this.hdfsEntry.name() === "/") {
-          dir = "";
-        } else if (!dir.match(/\/$/)) {
-            dir += '/';
-        }
-        var path = dir + this.hdfsEntry.name();
-        var folders = path.split('/');
-        if (folders.length > 3) {
-            return "/" + folders[1] + "/.../" + folders[folders.length-1];
-        } else {
-            return path;
-        }
     },
 
     entrySelected : function(model) {
