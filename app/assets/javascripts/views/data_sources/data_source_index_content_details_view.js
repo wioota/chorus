@@ -4,7 +4,8 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
 
     events: {
         "click a.select_all": "selectAll",
-        "click a.select_none": "selectNone"
+        "click a.select_none": "selectNone",
+        "click button.add_data_source": "launchAddDataSourceDialog"
     },
 
     setup: function(){
@@ -32,5 +33,12 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
             loaded: this.dataSources.loaded && this.gnipDataSources.loaded && this.hdfsDataSources.loaded,
             count: this.dataSources.length + this.hdfsDataSources.length + this.gnipDataSources.length
         };
+    },
+
+    launchAddDataSourceDialog: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.DataSourcesNew();
+        dialog.launchModal();
     }
+
 });
