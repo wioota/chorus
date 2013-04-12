@@ -528,7 +528,6 @@ describe("chorus.views.Base", function() {
                 this.view = new chorus.views.Base();
                 spyOn($.fn, "remove");
                 spyOn(this.view.requiredResources, 'cleanUp');
-                spyOn(this.view.bindings, 'removeAll');
                 spyOn(this.view, 'unbind');
                 this.view.teardown();
             });
@@ -540,7 +539,6 @@ describe("chorus.views.Base", function() {
             it("removes its backbone event bindings", function() {
                 expect(this.view.unbind).toHaveBeenCalled();
                 expect(this.view.requiredResources.cleanUp).toHaveBeenCalledWith(this.view);
-                expect(this.view.bindings.removeAll).toHaveBeenCalled();
             });
         });
     });

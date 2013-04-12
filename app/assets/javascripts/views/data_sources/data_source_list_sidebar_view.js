@@ -66,7 +66,6 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         this.dataSource.activities().fetch();
 
         this.requiredResources.reset();
-        this.bindings.removeAll();
         this.listenTo(this.resource, "change", this.render);
 
         if(this.resource.isGreenplum() || this.resource.isOracle()) {

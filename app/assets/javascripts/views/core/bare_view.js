@@ -20,7 +20,6 @@ chorus.views.Bare = Backbone.View.include(
         },
 
         initialize: function initialize() {
-            this.bindings = new chorus.BindingGroup(this);
             this.preInitialize.apply(this, arguments);
             chorus.viewsToTearDown.push(this);
             this.subViewObjects = [];
@@ -75,8 +74,6 @@ chorus.views.Bare = Backbone.View.include(
             this.unbind();
             this.stopListening();
             this.undelegateEvents();
-            this.bindings.removeAll();
-            delete this.bindings.defaultContext;
             this.requiredResources.cleanUp(this);
             this.$el.unbind();
             if(preserveContainer) {

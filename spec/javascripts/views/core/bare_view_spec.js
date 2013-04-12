@@ -259,7 +259,6 @@ describe("chorus.views.Bare", function() {
             this.view.registerSubView(this.subViewObject);
 
             spyOn(this.view, "unbind");
-            spyOn(this.view.bindings, "removeAll");
             expect(this.view.requiredResources.models.length).toBe(1);
 
             spyOn(chorus.PageEvents, "unsubscribe");
@@ -275,7 +274,6 @@ describe("chorus.views.Bare", function() {
 
         it("should call cleanup functions", function() {
             expect(this.view.unbind).toHaveBeenCalled();
-            expect(this.view.bindings.removeAll).toHaveBeenCalled();
             expect(_.isEmpty(this.view.requiredResources.models)).toBeTruthy();
         });
 
@@ -292,7 +290,6 @@ describe("chorus.views.Bare", function() {
         });
 
         describe("when the teardown function is told to preserve the container", function() {
-
             beforeEach(function() {
                 this.view = new chorus.views.Bare();
                 this.view.templateName = "plain_text";

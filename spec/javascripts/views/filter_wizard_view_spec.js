@@ -22,13 +22,6 @@ describe("chorus.views.FilterWizard", function() {
             expect(this.view.$("li.dataset_filter")).toHaveClass("last");
         });
 
-        it("doesn't leak bindings", function() {
-            var originalBindingCount = this.view.bindings.bindings.length;
-            this.view.render();
-            this.view.render();
-            expect(this.view.bindings.bindings.length).toBe(originalBindingCount);
-        });
-
         describe("#filterCount", function() {
             beforeEach(function() {
                 this.view.addFilter();
