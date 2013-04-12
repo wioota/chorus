@@ -332,10 +332,10 @@ chorus.views.Bare = Backbone.View.include(
 
                         if (chorus.page && chorus.page.bind) {
                             if(this.resizeCallback) {
-                                this.bindings.remove(chorus.page, "resized", this.resizeCallback);
+                                this.stopListening(chorus.page, "resized", this.resizeCallback);
                             }
                             this.resizeCallback = function() { this.recalculateScrolling($el); };
-                            this.bindings.add(chorus.page, "resized", this.resizeCallback, this);
+                            this.listenTo(chorus.page, "resized", this.resizeCallback);
                         }
                     }
                 }

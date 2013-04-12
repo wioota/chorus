@@ -16,7 +16,7 @@ describe("chorus.views.Bare", function() {
             spyOn($.fn, "jScrollPane").andCallThrough();
             spyOn($.fn, "hide").andCallThrough();
             spyOn($.fn, "bind").andCallThrough();
-            spyOn(this.page, "bind").andCallThrough();
+            spyOn(this.page, "on").andCallThrough();
             spyOn(this.view, "recalculateScrolling").andCallThrough();
         });
 
@@ -43,7 +43,7 @@ describe("chorus.views.Bare", function() {
             });
 
             it("binds the view to resized events on the page", function() {
-                expect(this.page.bind).toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
+                expect(this.page.on).toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
             });
 
             it("binds to the mousewheel event on the container", function() {
@@ -53,7 +53,7 @@ describe("chorus.views.Bare", function() {
 
             context("when called again", function() {
                 beforeEach(function() {
-                    this.page.bind.reset();
+                    this.page.on.reset();
                     $.fn.hide.reset();
                     $.fn.jScrollPane.reset();
                     $.fn.bind.reset();
@@ -71,7 +71,7 @@ describe("chorus.views.Bare", function() {
                 });
 
                 it("does not re-bind the view to resized events on the page", function() {
-                    expect(this.page.bind).not.toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
+                    expect(this.page.on).not.toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
                 });
 
                 it("does not re-bind to the mousewheel event on the container", function() {
