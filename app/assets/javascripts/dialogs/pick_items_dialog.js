@@ -20,7 +20,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
             this.collection.comparator = this.collectionComparator;
         }
 
-        this.bindings.add(this.collection, 'loaded', this.sortCollection);
+        this.onceLoaded(this.collection, this.sortCollection);
 
         this.pickItemsList = new chorus.views.PickItemsList({
             collection: this.collection,

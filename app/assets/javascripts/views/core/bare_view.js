@@ -365,6 +365,14 @@ chorus.views.Bare = Backbone.View.include(
                     }, this));
                 }
             });
+        },
+
+        onceLoaded: function(subject, callback) {
+            if (subject.loaded) {
+                callback.apply(this);
+            } else {
+                subject.once('loaded', _.bind(callback, this));
+            }
         }
     }, {
         extended: function(subclass) {

@@ -200,14 +200,14 @@ describe("chorus.views.Bare", function() {
             beforeEach(function() {
                 this.view.teardown();
                 spyOn(chorus.PageEvents, "subscribe");
-                spyOn(this.view.bindings, "add");
+                spyOn(this.view, "listenTo");
                 this.view.setupScrolling(".foo");
             });
 
             it("does not bind anything to the view", function() {
                 expect($.fn.bind).not.toHaveBeenCalled();
                 expect(chorus.PageEvents.subscribe).not.toHaveBeenCalled();
-                expect(this.view.bindings.add).not.toHaveBeenCalled();
+                expect(this.view.listenTo).not.toHaveBeenCalled();
             });
         });
     });
@@ -327,6 +327,37 @@ describe("chorus.views.Bare", function() {
             this.view.registerSubView(this.subViewObject);
             this.view.registerSubView(this.subViewObject);
             expect(this.view.getSubViews().length).toBe(1);
+        });
+    });
+
+    describe("#onceLoaded", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.Base();
+            this.model = new chorus.models.Base();
+            this.callback = jasmine.createSpy("callback");
+        });
+
+        describe("when the model has already been loaded", function() {
+            it("calls the callback", function() {
+                this.model.loaded = true;
+
+                expect(this.callback).not.toHaveBeenCalled();
+                this.view.onceLoaded(this.model, this.callback);
+                expect(this.callback).toHaveBeenCalled();
+            });
+        });
+
+        describe("when the model has not been loaded yet", function() {
+            it("calls the callback on the loaded event once", function() {
+                this.model.loaded = false;
+
+                this.view.onceLoaded(this.model, this.callback);
+                expect(this.callback).not.toHaveBeenCalled();
+                this.model.trigger('loaded');
+                expect(this.callback).toHaveBeenCalled();
+                this.model.trigger('loaded');
+                expect(this.callback.callCount).toBe(1);
+            });
         });
     });
 });

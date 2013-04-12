@@ -37,7 +37,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             if(this.options.showVersions) {
                 this.allVersions = this.model.allVersions();
                 this.versionList = new chorus.views.WorkfileVersionList({collection:this.allVersions});
-                this.bindings.add(this.model, "invalidated", this.allVersions.fetch, this.allVersions);
+                this.listenTo(this.model, "invalidated", _.bind(this.allVersions.fetch, this.allVersions));
                 this.listenTo(this.allVersions, "changed", this.render);
 
                 this.allVersions.fetch();
@@ -50,7 +50,8 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 displayStyle:['without_object', 'without_workspace']
             });
             this.tabs.bind("selected", _.bind(this.recalculateScrolling, this));
-            this.bindings.add(this.model, "loaded", this.modelLoaded);
+            this.onceLoaded(this.model, this.modelLoaded);
+
         } else {
             delete this.collection;
             delete this.allVersions;

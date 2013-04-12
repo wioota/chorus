@@ -20,7 +20,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
 
         this.subscribePageEvent("workfileVersion:changed", this.workfileVersionChanged);
 
-        this.bindings.add(this.model, "loaded", this.buildPage);
+        this.onceLoaded(this.model, this.buildPage);
 
         this.breadcrumbs.requiredResources.add(this.model);
     },
