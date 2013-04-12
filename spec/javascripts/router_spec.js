@@ -4,7 +4,7 @@ describe("chorus.router", function() {
             this.chorus = new window.Chorus();
             this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
-            spyOn(window, "scroll");
+            spyOn(this.chorus, "scrollToTop");
             spyOn(chorus.PageEvents, "reset");
 
         });
@@ -48,10 +48,9 @@ describe("chorus.router", function() {
                     expect(chorus.PageEvents.reset).toHaveBeenCalled();
                 });
 
-                // TODO #42307447: this test is flaky on ci with jasmine 1.3.1
-                xit("sets the scroll position to (0,0)", function() {
+                it("scrolls to the top of the page", function() {
                     this.chorus.router.navigate("/users/new");
-                    expect(window.scroll).toHaveBeenCalledWith(0, 0);
+                    expect(this.chorus.scrollToTop).toHaveBeenCalled();
                 });
 
                 it("triggers the 'leaving' event on itself", function() {

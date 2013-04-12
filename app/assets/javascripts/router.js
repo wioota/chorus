@@ -121,8 +121,7 @@
 
                         if (self.app.modal) self.app.modal.closeModal();
                     }
-
-                    window.scroll(0, 0);
+                    self.app.scrollToTop();
                 };
 
                 if (this.pageRequiresLogin(className) && !self.app.session.loaded) {

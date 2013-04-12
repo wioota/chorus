@@ -373,6 +373,10 @@ window.Chorus = function chorus$Global() {
     self.updateCachebuster = function() {
         self._cachebuster = $.now();
     };
+
+    self.scrollToTop = function() {
+        window.scroll(0, 0);
+    };
 };
 
 window.chorus = window.chorus || new window.Chorus();
