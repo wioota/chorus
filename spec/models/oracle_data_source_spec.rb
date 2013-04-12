@@ -96,8 +96,9 @@ describe OracleDataSource do
         schema.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
-      it "continues when unable to connect with an account" do
-        stub(data_source).connect_with { raise StandardError.new("logon denied") }
+      it "continues to next account when unable to connect with an account" do
+        stub(data_source).accounts { [account_with_access, account_with_access] }
+        mock(Schema).refresh.with_any_args.twice { raise OracleConnection::DatabaseError.new(:GENERIC) }
         expect{data_source.refresh_schemas}.not_to raise_error
       end
 

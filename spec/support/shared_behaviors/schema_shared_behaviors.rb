@@ -62,17 +62,17 @@ shared_examples_for 'a subclass of schema' do
       end
 
       it "marks all the associated schemas as stale if mark_stale is set" do
-        Schema.refresh(account, schema_parent, :mark_stale => true)
+        expect {
+          Schema.refresh(account, schema_parent, :mark_stale => true)
+        }.to raise_error(DataSourceConnection::Error)
         schema.reload.should be_stale
       end
 
       it "does not mark the associated schemas as stale if mark_stale is not set" do
-        Schema.refresh(account, schema_parent)
+        expect {
+          Schema.refresh(account, schema_parent)
+        }.to raise_error(DataSourceConnection::Error)
         schema.reload.should_not be_stale
-      end
-
-      it "should return an empty array" do
-        Schema.refresh(account, schema_parent).should == []
       end
     end
   end

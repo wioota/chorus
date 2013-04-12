@@ -33,9 +33,6 @@ class Schema < ActiveRecord::Base
     end
 
     found_schemas
-  rescue DataSourceConnection::Error => e
-    Chorus.log_debug "Could not refresh schemas: #{e.message} on #{e.backtrace[0]}"
-    return []
   ensure
     if options[:mark_stale]
       (schema_parent.schemas.not_stale - found_schemas).each do |schema|

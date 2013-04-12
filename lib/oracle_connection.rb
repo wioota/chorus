@@ -13,6 +13,8 @@ end
 class OracleConnection < DataSourceConnection
   class DatabaseError < Error
     def error_type
+      return @error_type if @error_type
+
       error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_error_code) && @exception.wrapped_exception.get_error_code
       Rails.logger.error "Oracle error code = #{error_code}"
       errortype = case error_code

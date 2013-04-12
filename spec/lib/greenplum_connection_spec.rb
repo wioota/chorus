@@ -1386,13 +1386,6 @@ describe GreenplumConnection, :greenplum_integration do
           error.error_type.should == :GENERIC
         end
       end
-
-      context "when DatabaseError is created with an error_type" do
-        let(:error) { GreenplumConnection::DatabaseError.new(:ERROR) }
-        it "returns the given error_type" do
-          error.error_type.should == :ERROR
-        end
-      end
     end
 
     describe "sanitizing exception messages" do

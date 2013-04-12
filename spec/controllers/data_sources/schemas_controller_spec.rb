@@ -6,6 +6,7 @@ describe DataSources::SchemasController do
 
   before do
     log_in user
+    stub(Schema).visible_to { [schema_1, schema_2] }
   end
 
   describe "#index" do
@@ -21,8 +22,6 @@ describe DataSources::SchemasController do
       mock_present do |models|
         models.should == [schema_1, schema_2]
       end
-
-      stub(Schema).visible_to { [schema_1, schema_2] }
 
       get :index, :data_source_id => data_source.to_param
     end

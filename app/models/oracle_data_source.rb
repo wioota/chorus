@@ -35,10 +35,14 @@ class OracleDataSource < DataSource
     begin
       schema_permissions = {}
       accounts.each do |account|
-        schemas = Schema.refresh(account, self, options.reverse_merge(:refresh_all => true))
-        schemas.each do |schema|
-          schema_permissions[schema.id] ||= []
-          schema_permissions[schema.id] << account.id
+        begin
+          schemas = Schema.refresh(account, self, options.reverse_merge(:refresh_all => true))
+          schemas.each do |schema|
+            schema_permissions[schema.id] ||= []
+            schema_permissions[schema.id] << account.id
+          end
+        rescue OracleConnection::DatabaseError => e
+          Chorus.log_debug "Could not refresh schemas for Oracle account #{account.id}: #{e.error_type} #{e.message} #{e.backtrace.to_s}"
         end
       end
     rescue => e

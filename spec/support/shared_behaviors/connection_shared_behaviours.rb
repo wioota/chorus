@@ -177,4 +177,13 @@ shared_examples "a data source connection" do
       connection.fetch_value(empty_set_sql).should == nil
     end
   end
+
+  describe "error_type" do
+    context "when an Error is created with an error_type" do
+      let(:error) { exception_class.new(:ERROR) }
+      it "returns the given error_type" do
+        error.error_type.should == :ERROR
+      end
+    end
+  end
 end
