@@ -35,7 +35,7 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
 
         if (model) {
             if(this.activities) {
-                this.bindings.remove(this.activities);
+                this.stopListening(this.activities);
             }
 
             this.activities = model.activities();

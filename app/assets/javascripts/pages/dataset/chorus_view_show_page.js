@@ -12,13 +12,13 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     },
 
     drawColumns: function() {
-        this.bindings.remove(this.mainContent.contentDetails);
+        this.stopListening(this.mainContent.contentDetails);
         this._super('drawColumns');
         this.listenTo(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
     },
 
     editChorusView: function() {
-        this.bindings.remove(this.mainContent.contentDetails);
+        this.stopListening(this.mainContent.contentDetails);
         var sameHeader = this.mainContent.contentHeader;
 
         if (this.mainContent) {

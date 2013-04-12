@@ -23,7 +23,7 @@ chorus.views.FilterWizard = chorus.views.Base.extend({
 
     postRender: function() {
         _.each(this.filterViews, function(filterView) {
-            this.bindings.remove(filterView);
+            this.stopListening(filterView);
             filterView.teardown();
         }, this);
         this.filterViews = [];
