@@ -12,20 +12,6 @@ chorus.models.GpdbDataSource = chorus.models.DataSource.extend({
         entityType: 'gpdb_data_source'
     },
 
-    declareValidations: function(newAttrs) {
-        this.require("name", newAttrs);
-        this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
-
-        this.require("host", newAttrs);
-        this.require("port", newAttrs);
-        this.require("dbName", newAttrs);
-        this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
-        if(this.isNew()) {
-            this.require("dbUsername", newAttrs);
-            this.require("dbPassword", newAttrs);
-        }
-    },
-
     databases: function() {
         this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId: this.get("id")}));
         return this._databases;

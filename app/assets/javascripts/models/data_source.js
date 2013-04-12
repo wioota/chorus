@@ -68,5 +68,19 @@ chorus.models.DataSource = chorus.models.Instance.extend({
 
     sharedAccountDetails: function() {
         return this.accountForOwner() && this.accountForOwner().get("dbUsername");
+    },
+
+    declareValidations: function(newAttrs) {
+        this.require("name", newAttrs);
+        this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
+
+        this.require("host", newAttrs);
+        this.require("port", newAttrs);
+        this.require("dbName", newAttrs);
+        this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
+        if (this.isNew()) {
+            this.require("dbUsername", newAttrs);
+            this.require("dbPassword", newAttrs);
+        }
     }
 });
