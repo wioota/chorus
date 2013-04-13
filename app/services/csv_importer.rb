@@ -127,6 +127,6 @@ class CsvImporter
   end
 
   def header_sql
-    csv_file.file_contains_header ? "HEADER" : ""
+    csv_file.has_header ? "HEADER" : ""
   end
 end

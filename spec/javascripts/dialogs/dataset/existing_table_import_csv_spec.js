@@ -516,11 +516,11 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("when all columns have been mapped", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
-            this.expectedColumnsMap = [];
+            this.expectedColumnNames = [];
             for (var i = 0; i < 5; i++) {
                 this.dialog.$(".column_mapping .map a:eq(" + i + ")").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
-                this.expectedColumnsMap.push({sourceOrder: "col" + (i+1), targetOrder: this.columns[i].name});
+                this.expectedColumnNames.push(this.columns[i].name);
             }
         });
 
@@ -559,8 +559,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect(params["fake_model[type]"]).toBe("existingTable");
                 expect(params["fake_model[has_header]"]).toBe('true');
                 expect(params["fake_model[truncate]"]).toBe('true');
-                expect(JSON.parse(params["fake_model[columns_map]"])).toEqual(this.expectedColumnsMap);
-
+                expect(params["fake_model[column_names][]"]).toEqual(this.expectedColumnNames);
             });
 
             context("when the post to import responds with success", function() {

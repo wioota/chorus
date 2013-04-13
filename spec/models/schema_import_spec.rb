@@ -146,4 +146,10 @@ describe SchemaImport do
       it_behaves_like :import_fails_with_message, :cancel_import, "some crazy error"
     end
   end
+
+  describe "copier_class" do
+    it "should be OracleTableCopier" do
+      import.copier_class.should == OracleTableCopier
+    end
+  end
 end

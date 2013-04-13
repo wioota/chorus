@@ -2,7 +2,7 @@ class Import < ActiveRecord::Base
   include ImportMixins
   include UnscopedBelongsTo
 
-  attr_accessible :to_table, :new_table, :sample_count, :truncate
+  attr_accessible :to_table, :new_table, :sample_count, :truncate, :user
   attr_accessible :file_name # only for CSV files
 
   unscoped_belongs_to :source_dataset, :class_name => 'Dataset'
@@ -18,7 +18,15 @@ class Import < ActiveRecord::Base
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
   after_create :create_import_event
-  after_create { QC.enqueue_if_not_queued("ImportExecutor.run", id) unless file_name }
+  after_create :enqueue_import, :unless => :file_name
+
+  def create_import_event
+    raise "implement me!"
+  end
+
+  def copier_class
+    raise "implement me!"
+  end
 
   def mark_as_success
     set_destination_dataset_id
@@ -55,6 +63,14 @@ class Import < ActiveRecord::Base
   def cancel(success, message = nil)
     log "Terminating import: #{inspect}"
     update_status(success ? :passed : :failed, message)
+  end
+
+  def enqueue_import
+    QC.enqueue_if_not_queued("ImportExecutor.run", id)
+  end
+
+  def source
+    source_dataset
   end
 
   private

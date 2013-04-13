@@ -1,4 +1,0 @@
-class WorkspaceImportPresenter < ImportPresenter
-
-end
-

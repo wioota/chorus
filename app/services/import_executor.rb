@@ -1,6 +1,6 @@
-require 'sequel/no_core_ext'
-
 class ImportExecutor
+  attr_accessor :import
+
   def self.run(import_id)
     import = Import.find(import_id)
     ImportExecutor.new(import).run if import.success.nil?
@@ -20,7 +20,7 @@ class ImportExecutor
     raise "Destination workspace #{import.workspace.name} has been deleted" if import.workspace_import? && import.workspace.deleted?
     raise "Original source dataset #{import.source_dataset.scoped_name} has been deleted" if import.source_dataset.deleted?
 
-    copier_class.new(import_attributes).start
+    import.copier_class.new(import_attributes).start
     import.reload
     import.update_status :passed
   rescue => e
@@ -31,19 +31,9 @@ class ImportExecutor
 
   private
 
-  def copier_class
-    if import.source_dataset.class.name =~ /^Oracle/
-      OracleTableCopier
-    elsif import.source_dataset.database != import.schema.database
-      CrossDatabaseTableCopier
-    else
-      TableCopier
-    end
-  end
-
   def import_attributes
     {
-        :source_dataset => import.source_dataset,
+        :source => import.source,
         :destination_schema => import.schema,
         :destination_table_name => import.to_table,
         :user => import.user,
@@ -51,9 +41,5 @@ class ImportExecutor
         :truncate => import.truncate,
         :pipe_name => import.handle
     }
-  end
-
-  def import
-    @import
   end
 end

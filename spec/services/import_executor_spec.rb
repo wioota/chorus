@@ -67,8 +67,17 @@ describe ImportExecutor do
       ImportExecutor.new(import).run
     end
 
-    it "creates a new table copier and runs it" do
-      copier_start
+    it "creates a new table copier as specified by the import and runs it" do
+      class FooCopier
+        def initialize(attrs={})
+        end
+
+        def start
+          raise "started FooCopier"
+        end
+      end
+      stub(import).copier_class { FooCopier }
+      expect { ImportExecutor.new(import).run }.to raise_error("started FooCopier")
     end
 
     it "sets the started_at time" do
@@ -157,55 +166,6 @@ describe ImportExecutor do
         event = Events::WorkspaceImportFailed.last
         event.error_message.should == error_message
         event.workspace.should == destination
-      end
-    end
-
-    context "when the source and destinations are in different greenplum databases" do
-      let(:source_dataset) { datasets(:searchquery_table) }
-
-      it "should create a CrossDatabaseTableCopier to run the import" do
-        dont_allow(TableCopier).new.with_any_args
-        ran = false
-        any_instance_of(CrossDatabaseTableCopier) do |copier|
-          stub(copier).start { ran = true }
-        end
-        ImportExecutor.new(import).run
-        ran.should be_true
-      end
-    end
-
-    context 'when the import is into a schema' do
-      let!(:import) do
-        import = FactoryGirl.build(:schema_import, :user => users(:owner),
-                                   :schema => schemas(:default),
-                                   :to_table => "new_table_for_import",
-                                   :created_at => '2012-09-03 23:00:00-07',
-                                   :source_dataset_id => datasets(:oracle_table).id, )
-        import.save!(:validate => false)
-        import
-      end
-      let(:event) {  }
-
-      it 'creates an OracleTableCopier to run the import' do
-        dont_allow(TableCopier).new.with_any_args
-        ran = false
-        any_instance_of(OracleTableCopier) do |copier|
-          stub(copier).start { ran = true }
-        end
-        ImportExecutor.new(import).run
-        ran.should be_true
-      end
-
-      it 'updates the SchemaImportCreated event' do
-        event = Events::SchemaImportCreated.find_for_import(import)
-
-        any_instance_of(OracleTableCopier) do |copier|
-          mock(copier).start
-        end
-
-        expect do
-          ImportExecutor.new(import).run
-        end.to change { event.reload.dataset.try(:name) }.from(nil).to(import.to_table)
       end
     end
   end

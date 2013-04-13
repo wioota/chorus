@@ -28,6 +28,10 @@ class SchemaImport < Import
     Events::SchemaImportFailed
   end
 
+  def copier_class
+    OracleTableCopier
+  end
+
   def create_passed_event_and_notification
     event = success_event_class.by(user).add(
       :dataset => destination_dataset,

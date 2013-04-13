@@ -1,11 +1,12 @@
 class CsvFile < ActiveRecord::Base
-  attr_accessible :contents, :column_names, :types, :delimiter, :to_table, :file_contains_header, :new_table, :truncate
+  attr_accessible :contents, :column_names, :types, :delimiter, :to_table, :has_header, :new_table, :truncate
 
   serialize :column_names
   serialize :types
 
   belongs_to :workspace
   belongs_to :user
+  belongs_to :import
 
   has_attached_file :contents, :path => ":rails_root/system/:class/:id/:basename.:extension"
 
@@ -34,7 +35,7 @@ class CsvFile < ActiveRecord::Base
   end
 
   def ready_to_import?
-    to_table.present? && column_names.present? && types.present? && file_contains_header != nil &&
+    to_table.present? && column_names.present? && types.present? && has_header != nil &&
     delimiter != nil && delimiter.length > 0 && valid?
   end
 end

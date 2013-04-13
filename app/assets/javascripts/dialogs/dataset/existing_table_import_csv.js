@@ -17,7 +17,6 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.resource = this.model = this.options.model;
         this.csvOptions = this.options.csvOptions;
         this.tableName = this.csvOptions.tableName;
         this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.model.get("workspaceId")}, id: this.options.datasetId });
@@ -200,23 +199,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         this.$('button.submit').startLoading("dataset.import.importing");
-        var self = this;
-
-        var columnData = _.map(this.columnMapping, function(destination, i) {
-            var column = _.find(self.destinationColumns, function(column) {
-                return column.name === destination;
-            });
-            return {
-                sourceOrder: destination,
-                targetOrder: column ? column.name : ''
-            };
-        });
 
         this.model.set({
             delimiter: this.delimiter,
             type: "existingTable",
             hasHeader: !!(this.$("#hasHeader").prop("checked")),
-            columnsMap: JSON.stringify(columnData)
+            columnNames: this.columnMapping
         }, { silent: true });
 
         this.$("button.submit").startLoading("dataset.import.importing");
@@ -264,7 +252,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.refreshCSV();
     },
 
-    focusOtherInputField: function(e) {
+    focusOtherInputField: function() {
         this.$("input[name=custom_delimiter]").focus();
     },
 

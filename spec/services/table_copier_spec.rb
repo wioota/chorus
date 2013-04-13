@@ -4,7 +4,7 @@ describe TableCopier do
   let(:copier) do
     TableCopier.new(
         {
-            :source_dataset => source_dataset,
+            :source => source_dataset,
             :destination_schema => destination_schema,
             :destination_table_name => destination_table_name,
             :user => user,

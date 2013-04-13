@@ -37,7 +37,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
   let(:pipe_name) { Time.current.to_i.to_s + "_pipe_id" }
   let(:options) do
     {
-        :source_dataset => source_dataset,
+        :source => source_dataset,
         :destination_schema => sandbox,
         :destination_table_name => destination_table_name,
         :user => user,

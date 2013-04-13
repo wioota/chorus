@@ -86,7 +86,7 @@ Chorus::Application.routes.draw do
 
     resources :external_tables, :only => [:create]
     resources :csv, :only => [:create], :controller => 'workspace_csv' do
-      resources :imports, :only => [:create], :controller => 'workspace_csv_imports'
+      resources :imports, :only => [:create], :controller => 'workspaces/csv_imports'
     end
   end
 

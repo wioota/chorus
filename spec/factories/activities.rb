@@ -10,14 +10,4 @@ FactoryGirl.define do
   factory :insight, :parent => :note_on_workspace_event do
     insight true
   end
-
-  factory :csv_file do
-    workspace
-    user
-    truncate false
-    to_table 'some_new_table'
-    column_names ['id', 'body']
-    types ['text', 'text']
-    delimiter ','
-  end
 end

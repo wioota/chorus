@@ -144,4 +144,23 @@ describe WorkspaceImport do
       it_behaves_like :import_fails_with_message, :cancel_import, "some crazy error"
     end
   end
+
+  describe "copier_class" do
+    let(:import) { FactoryGirl.build(:import, :source_dataset => source_dataset, :workspace => workspaces(:public)) }
+    context "when the source and destinations are in different greenplum databases" do
+      let(:source_dataset) { datasets(:searchquery_table) }
+
+      it "should be CrossDatabaseTableCopier" do
+        import.copier_class.should == CrossDatabaseTableCopier
+      end
+    end
+
+    context "when the source and destination are in the same database" do
+      let(:source_dataset) { datasets(:table) }
+
+      it "should be TableCopier" do
+        import.copier_class.should == TableCopier
+      end
+    end
+  end
 end

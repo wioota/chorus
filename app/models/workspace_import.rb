@@ -31,6 +31,18 @@ class WorkspaceImport < Import
     Events::WorkspaceImportFailed
   end
 
+  def copier_class
+    if source_dataset.database != schema.database
+      CrossDatabaseTableCopier
+    else
+      TableCopier
+    end
+  end
+
+  def self.presenter_class
+    ImportPresenter
+  end
+
   def create_passed_event_and_notification
     event = success_event_class.by(user).add(
       :workspace => workspace,

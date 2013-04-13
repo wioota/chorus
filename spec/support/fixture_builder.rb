@@ -384,15 +384,15 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :csv, csv_import
 
     #CSV File
-    csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)
 
-    csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file_owner.save!(:validate => false)
     fbuilder.name :default, csv_file_owner
 
 
-    unimported_csv_file = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'table_will_not_be_imported', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    unimported_csv_file = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table_will_not_be_imported', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     unimported_csv_file.save!(:validate => false)
     fbuilder.name :unimported, unimported_csv_file
 

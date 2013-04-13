@@ -8,15 +8,15 @@ describe CsvFile do
         :types => ['a', 'b', 'c'],
         :delimiter => '"',
         :to_table => "new_table",
-        :file_contains_header => false,
+        :has_header => false,
         :new_table => false,
         :truncate => false,
         :user => users(:owner),
         :workspace => workspaces(:public)
     }}
 
-    it "is not ready to import if it is missing a column" do
-      [:column_names, :types, :delimiter, :file_contains_header, :to_table].each do |param|
+    it "is not ready to import if it is missing a setting" do
+      [:column_names, :types, :delimiter, :has_header, :to_table].each do |param|
         c = CsvFile.new(default_params.reject{ |k,v| k == param }, :without_protection => true)
         c.ready_to_import?.should be_false
       end
@@ -99,26 +99,32 @@ describe CsvFile do
     end
   end
   
-  describe "#table_already_exists", :greenplum_integration do
-    let(:csv_file) { CsvFile.first }
-    let(:account) { GreenplumIntegration.real_account }
-    let(:user) { account.owner }
-    let(:database) { GpdbDatabase.find_by_name_and_data_source_id!(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
-    let(:schema) { database.schemas.find_by_name('test_schema') }
-    let(:workspace) { workspaces(:public) }
+  describe "#table_already_exists" do
+    let(:csv_file) { csv_files(:default) }
+    let(:user) { csv_file.user }
+    let(:schema) { schemas(:public) }
+    let(:workspace) { csv_file.workspace }
+    let(:table_name) { "foo_bar" }
+    subject { csv_file.table_already_exists(table_name) }
 
     before do
-      csv_file.update_attribute(:user, user)
       workspace.sandbox = schema
       workspace.save!
+      connection = Object.new
+      stub(workspace.sandbox).connect_as(user) { connection }
+      stub(connection).table_exists? { table_exists }
     end
 
-    it "returns true when the table name already exists" do
-      csv_file.table_already_exists('base_table1').should be_true
+    context "when the table exists" do
+      let(:table_exists) { true }
+
+      it { should be_true }
     end
 
-    it "returns false" do
-      csv_file.table_already_exists("non_existent_table").should be_false
+    context "when the table does not exist" do
+      let(:table_exists) { false }
+
+      it { should be_false }
     end
   end
 end

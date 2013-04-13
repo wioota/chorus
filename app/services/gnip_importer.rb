@@ -1,8 +1,6 @@
-class GnipException < RuntimeError
-  end
+class GnipException < RuntimeError; end
 
-class GnipFileSizeExceeded < RuntimeError
-end
+class GnipFileSizeExceeded < RuntimeError; end
 
 class GnipImporter
   include ActiveModel::Validations
@@ -127,7 +125,7 @@ class GnipImporter
          :delimiter => ',',
          :to_table => table_name,
          :new_table => first_time,
-         :file_contains_header => false,
+         :has_header => false,
          :user_uploaded => false,
          :user_id => user_id
         },

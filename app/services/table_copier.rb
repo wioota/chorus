@@ -8,6 +8,7 @@ class TableCopier
   end
 
   def start
+    validate!
     initialize_destination_table
     run
   rescue Exception => e
@@ -15,6 +16,9 @@ class TableCopier
     wrapped = ImportFailed.new(e.message)
     wrapped.set_backtrace e.backtrace
     raise wrapped
+  end
+
+  def validate!
   end
 
   def source_connection
@@ -46,6 +50,10 @@ class TableCopier
     else
       super
     end
+  end
+
+  def source_dataset
+    source
   end
 
   private

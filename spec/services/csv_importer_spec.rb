@@ -125,7 +125,7 @@ describe CsvImporter do
         end
       end
 
-      context "when the csv file is not completely populated" do
+      context "when the csv file is not ready to import" do
         it "refuses to import a csv file" do
           csv_file.update_attribute(:delimiter, nil)
           expect do
@@ -228,7 +228,7 @@ describe CsvImporter do
               :column_names => [:id, :dog],
               :types => [:integer, :varchar],
               :delimiter => "\t",
-              :file_contains_header => true)
+              :has_header => true)
           CsvImporter.import_file(csv_file.id, file_import_created_event.id)
 
           fetch_from_gpdb("select * from #{table_name} order by ID asc;") do |result|
@@ -321,7 +321,7 @@ describe CsvImporter do
 
   describe "without connecting to GPDB" do
     let(:csv_file) do
-      file = CsvFile.first
+      file = csv_files(:default)
       file.update_attributes :new_table => false
       file
     end
@@ -460,7 +460,7 @@ describe CsvImporter do
         :column_names => [:id, :where],
         :types => [:integer, :varchar],
         :delimiter => ',',
-        :file_contains_header => false,
+        :has_header => false,
         :new_table => true,
         :to_table => table_name,
         :truncate => false

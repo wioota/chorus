@@ -37,12 +37,24 @@ FactoryGirl.define do
     association :import_schedule
   end
 
-  factory :csv_import, class: WorkspaceImport do
+  factory :csv_file do
+    workspace
+    user
+    truncate false
+    to_table 'some_new_table'
+    column_names ['id', 'body']
+    types ['text', 'text']
+    delimiter ','
+    has_header true
+    contents { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
+  end
+
+  factory :csv_import, class: CsvImport do
     created_at Time.current
-    association :workspace, factory: :workspace
+    workspace
     association :destination_dataset, factory: :gpdb_table
     user
-    file_name "import.csv"
+    csv_file
     sequence(:to_table) { |n| "factoried_import_table#{n}" }
     truncate false
     new_table true

@@ -117,14 +117,6 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
                 this.uploadObj.type = "POST";
                 this.uploadObj.source = "fs";
                 this.request = this.uploadObj.submit();
-//
-//                this.request = $.ajax({
-//                    type: 'POST',
-//                    url: "/workspaces/" + this.options.workspaceId + "/csv",
-//                    source: "fs",
-//                    data: this.uploadObj.data
-//                });
-//                this.request = this.uploadObj.submit();
             } else {
                 this.$("button.choose").prop("disabled", false);
                 this.$(".file-wrapper a").removeClass("hidden");
@@ -173,7 +165,7 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
         };
     },
 
-    uploadFinished: function(e, data) {
+    uploadFinished: function(e) {
         e && e.preventDefault();
         this.$(".file-wrapper a").removeClass("hidden");
         this.$(".import_controls input[type=radio]").prop("disabled", false);
