@@ -1,11 +1,3 @@
-.pick_dataset_with_action, .preview_columns, .join_configuration {
-    max-height: 600px;
-}
-
-.pick_dataset_with_action {
-    width: 480px;
-}
-
 .pick_items.dialog.with_sub_header.pick_dataset_with_action {
     // Overriding the padding: 0 on .dialog.with_sub_header
     // beacuse it breaks the Dataset Picker Dialog
@@ -94,8 +86,6 @@
 }
 
 .join_configuration {
-    width: 480px;
-
     .join_tables_content {
         padding: 20px;
         padding-top: 10px;
@@ -115,8 +105,6 @@
 }
 
 .preview_columns {
-    width: 480px;
-
     .list_container {
         max-height: 10 * 36px;
         overflow-y: auto;

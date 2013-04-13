@@ -1,10 +1,7 @@
 .data_source_edit {
-    $dialog-width : 475px;
     $host-width : 320px;
     $account_width : 212px;
     $input-spacing : 16px;
-
-    width: $dialog-width;
 
     input[type=text][disabled=disabled] {
         border: 0;
@@ -37,7 +34,7 @@
     }
 
     .port {
-        width: $dialog-width - $host-width - 40px;
+        width: $default-dialog-width - $host-width - 40px;
         margin-left: 4px;
         display: inline-block;
     }
