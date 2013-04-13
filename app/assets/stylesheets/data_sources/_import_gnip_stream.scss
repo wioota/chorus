@@ -1,6 +1,4 @@
 .import_gnip_stream {
-
-  width: 450px;
   font-size: 13px;
 
   fieldset {
@@ -12,7 +10,7 @@
       }
 
       input {
-        width: 225px;
+        width: 275px;
         margin-left: 15px;
       }
     }
@@ -22,7 +20,7 @@
       @include link-with-dotted-underline;
       font-size: 13px;
       display: inline-block;
-      max-width: 240px;
+      max-width: 290px;
       @include ellipsis;
     }
   }

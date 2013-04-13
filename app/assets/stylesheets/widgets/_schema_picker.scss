@@ -1,12 +1,5 @@
 .schema_picker {
-    $inner-width: 450px;
-
-	div {
-        width: $inner-width;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
+  $inner-width: $default-dialog-width - 65px;
     a {
         font-size: 13px;
     }
@@ -35,19 +28,11 @@
     }
 
     .create_container {
-        input {
-            margin: 0;
-            width: $inner-width;
-        }
-
         a.cancel {
             display: none;
         }
 
         &.show_cancel_link {
-            input {
-                width: 285px;
-            }
 
             a.cancel {
                 display: inline;
