@@ -265,21 +265,21 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
     },
 
     confirmRemoveSharedAccount: function() {
-        var localGroup = new chorus.BindingGroup(this);
+        var localGroup = _.extend({}, Backbone.Events);
         function displaySuccessToast() {
             this.dataSource.set({shared: false});
             chorus.toast("instances.shared_account_removed");
             this.render();
-            localGroup.removeAll();
+            localGroup.stopListening();
         }
 
         function displayFailureToast() {
             chorus.toast("instances.shared_account_remove_failed");
-            localGroup.removeAll();
+            localGroup.stopListening();
         }
 
-        localGroup.add(this.dataSource.sharing(), "destroy", displaySuccessToast);
-        localGroup.add(this.dataSource.sharing(), "destroyFailed", displayFailureToast);
+        localGroup.listenTo(this.dataSource.sharing(), "destroy", _.bind(displaySuccessToast, this));
+        localGroup.listenTo(this.dataSource.sharing(), "destroyFailed", _.bind(displayFailureToast, this));
 
         this.dataSource.sharing().set({id: -1}); // so that model isNew() is false, and destroy sends message to server
         this.dataSource.sharing().destroy();
@@ -293,23 +293,23 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
     },
 
     confirmAddSharedAccount: function() {
-        var localGroup = new chorus.BindingGroup(this);
+        var localGroup = _.extend({}, Backbone.Events);
         function success() {
             this.dataSource.set({shared: true});
             chorus.toast("instances.shared_account_added");
             this.render();
-            localGroup.removeAll();
+            localGroup.stopListening();
 
             this.collection.fetch();
         }
 
         function displayFailureToast() {
             chorus.toast("instances.shared_account_add_failed");
-            localGroup.removeAll();
+            localGroup.stopListening();
         }
 
-        localGroup.add(this.dataSource.sharing(), "saved", success);
-        localGroup.add(this.dataSource.sharing(), "saveFailed", displayFailureToast);
+        localGroup.listenTo(this.dataSource.sharing(), "saved", _.bind(success, this));
+        localGroup.listenTo(this.dataSource.sharing(), "saveFailed", _.bind(displayFailureToast, this));
 
         this.dataSource.sharing().unset("id"); // so that model isNew() is true, and server sees a create
         this.dataSource.sharing().save();
