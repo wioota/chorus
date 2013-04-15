@@ -74,7 +74,7 @@ class Import < ActiveRecord::Base
   end
 
   def validate_source!
-    raise "Original source dataset #{import.source.scoped_name} has been deleted" if import.source.deleted?
+    raise "Original source dataset #{source.scoped_name} has been deleted" if source.deleted?
   end
 
   private
