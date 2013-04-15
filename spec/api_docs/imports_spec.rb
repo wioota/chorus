@@ -164,12 +164,12 @@ resource 'Imports' do
     parameter :workspace_id, 'Workspace Id'
     parameter :csv_id, 'CSV File Id'
     parameter :type, 'Table type ( existingTable, newTable )'
-    parameter :columns_map, 'Mapping of columns from CSV to table ( only for existing table )'
+    parameter :column_names, 'List of columns names that the CSV will import into. The first column name passed will correspond to the first column of the CSV.'
     parameter :to_table, 'Target table name'
     parameter :has_header, 'Does the CSV file contain a header row? ( true, false )'
 
     required_parameters :workspace_id, :csv_id, :type, :to_table, :has_header
-    scope_parameters :csvimport, [:type, :columns_map, :to_table, :has_header]
+    scope_parameters :csv_import, [:type, :column_names, :to_table, :has_header]
 
     let(:csv_file) { csv_files(:default) }
 
@@ -177,7 +177,7 @@ resource 'Imports' do
     let(:type)         { 'existingTable' }
     let(:to_table)     { 'a_fine_table' }
     let(:has_header) { 'true' }
-    let(:columns_map) { '[{"sourceOrder":"id","targetOrder":"id"},{"sourceOrder":"boarding_area","targetOrder":"boarding_area"},{"sourceOrder":"terminal","targetOrder":"terminal"}]' }
+    let(:column_names) { ["id", "boarding_area", "terminal"] }
 
     example_request 'Complete import of a CSV file' do
       status.should == 201
