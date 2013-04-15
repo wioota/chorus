@@ -1,3 +1,255 @@
+jasmine.sharedExamples.aSidebar = function() {
+    it('displays data source name', function() {
+        expect(this.view.$(".data_source_name")).toContainText(this.dataSource.get("name"));
+    });
+
+    it('displays data source type', function() {
+        expect(this.view.$(".data_source_type")).toContainText(t("instances.provider." + this.dataSource.get('entityType')));
+    });
+
+    it("has a 'add a note' link", function() {
+        expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
+        expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
+        expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
+        expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe(this.dataSource.entityType);
+    });
+
+    describe('clicking the edit tags link', function(){
+        beforeEach(function(){
+            this.modalSpy = stubModals();
+            this.view.$('.edit_tags').click();
+        });
+
+        it('opens the tag edit dialog', function(){
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
+            expect(this.modalSpy.lastModal().collection.length).toBe(1);
+            expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
+        });
+    });
+};
+
+jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = function() {
+    context('when the data source has a shared account', function() {
+        beforeEach(function() {
+            this.dataSource.set({
+                shared: true
+            });
+            this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
+            this.view.render();
+        });
+
+        it("does not show the 'edit credentials' link", function() {
+            expect(this.view.$(".actions .edit_credentials")).not.toExist();
+        });
+
+        it("does not show the 'add credentials' link", function() {
+            expect(this.view.$(".actions .add_credentials")).not.toExist();
+        });
+
+        it('displays the data source shared account info', function () {
+            expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
+        });
+
+        it('displays edit data source link when user is admin', function() {
+            setLoggedInUser({ username: "benjamin", admin: true});
+            this.view.render();
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('displays edit data source link when user is owner', function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
+            this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
+            this.view.render();
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('does NOT display the edit data source link when user is not an admin or owner', function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.view.render();
+            expect(this.view.$(".actions .edit_data_source")).not.toExist();
+        });
+
+        it("shows shared account information", function() {
+            expect(this.view.$(".account_info")).toContainTranslation("instances.sidebar.is_shared_account");
+        });
+    });
+
+    context('when the data source does not have a shared account', function() {
+        context('when the current user is NOT an admin or owner of the data source', function() {
+            context('when the user does not have an account for the data source', function() {
+                it("shows the 'no access' text and image", function() {
+                    expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
+                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
+                });
+
+                it("shows the add credentials link", function() {
+                    var addCredentialsLink = this.view.$(".actions a.add_credentials");
+                    expect(addCredentialsLink).toExist();
+                    expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
+                    expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
+                    expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
+                    expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
+                });
+
+                it("does not show the 'edit credentials' link", function() {
+                    expect(this.view.$(".actions .edit_credentials")).not.toExist();
+                });
+
+                it("does not show the 'remove credentials' link", function() {
+                    expect(this.view.$(".actions .remove_credentials")).not.toExist();
+                });
+            });
+
+            context('when the user has set up an account for the data source', function() {
+                beforeEach(function() {
+                    var account = rspecFixtures.instanceAccount();
+                    spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
+                    this.view.render();
+                });
+
+                it("shows the 'access' text and image", function() {
+                    expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/access.png");
+                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
+                });
+
+                it("shows the 'remove credentials' link", function() {
+                    expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("instances.sidebar.remove_credentials");
+                    expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("InstanceAccountDelete");
+                });
+
+                it("shows the 'edit credentials' link", function() {
+                    var editCredentialsLink = this.view.$(".actions .edit_credentials");
+                    expect(editCredentialsLink).toExist();
+                    expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
+                    expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
+                    expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
+                    expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
+                });
+
+                it("does not show the 'add credentials' link", function() {
+                    expect(this.view.$(".actions .add_credentials")).not.toExist();
+                });
+
+                describe("when the user removes their credentials", function() {
+                    beforeEach(function() {
+                        this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
+                        this.dataSource.accountForCurrentUser().trigger("destroy");
+                        this.view.render();
+                    });
+
+                    it("shows the add credentials link", function() {
+                        expect(this.view.$(".actions .add_credentials")).toExist();
+                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
+                        expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
+                        expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
+                    });
+                });
+            });
+        });
+
+        context("when the current user is an admin", function() {
+            beforeEach(function() {
+                var account = rspecFixtures.instanceAccount();
+                spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
+                this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
+                setLoggedInUser({ username: "benjamin", admin: true});
+                this.view.render();
+            });
+
+            it("does not show the individual_account area", function() {
+                expect(this.view.$('.individual_account')).not.toBeVisible();
+            });
+
+            it("does not show the add/edit/remove credentials links", function() {
+                expect(this.view.$(".actions .remove_credentials")).not.toBeVisible();
+                expect(this.view.$(".actions .edit_credentials")).not.toBeVisible();
+                expect(this.view.$(".actions .add_credentials")).not.toBeVisible();
+            });
+
+            it("shows the edit_individual_accounts area", function() {
+                var editAccountsSection = this.view.$(".edit_individual_accounts"),
+                    editAccountsLink = editAccountsSection.find("a");
+
+                expect(editAccountsSection).toBeVisible();
+                expect(editAccountsLink).toBeVisible();
+                expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
+                expect(editAccountsLink.data("instance")).toBe(this.dataSource);
+                expect(editAccountsLink.data("dialog")).toBe("DataSourcePermissions");
+            });
+        });
+    });
+
+    it("calls super in postRender (so that scrolling works)", function() {
+        expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
+    });
+
+    it("renders ActivityList subview", function() {
+        expect(this.view.$(".activity_list")).toBeVisible();
+    });
+
+    it("populates the ActivityList with the activities", function() {
+        expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
+    });
+
+    it("sets the ActivityList displayStyle to without_object", function() {
+        expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
+    });
+
+    context('when user is an admin or owner of the data source', function() {
+        it('displays edit data source link when user is admin', function() {
+            setLoggedInUser({ username: "benjamin", admin: true});
+            this.view.render();
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('displays edit data source link when user is owner', function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
+            this.view.render();
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('does not display the delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).not.toExist();
+        });
+
+        context('when the data source is offline', function() {
+            beforeEach(function() {
+                setLoggedInUser({ username: "benjamin", admin: true});
+                this.dataSource.set({
+                    online: false
+                });
+                this.view.render();
+            });
+
+            it('does display the edit data source link', function() {
+                expect(this.view.$(".actions .edit_data_source")).toExist();
+            });
+
+            it("does display the edit accounts link", function() {
+                expect(this.view.$("a[data-dialog=DataSourcePermissions]")).toExist();
+            });
+        });
+    });
+
+    context('when user is not an admin or owner of the data source', function() {
+        beforeEach(function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.dataSource.set({owner: {id: "harry"}});
+            this.view.render();
+        });
+
+        it('does not display edit data source link when user is neither admin nor owner', function() {
+            expect(this.view.$(".actions .edit_data_source")).not.toExist();
+        });
+
+        it('does not display the delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).not.toExist();
+        });
+    });
+};
+
 describe("chorus.views.DataSourceListSidebar", function() {
     context('when no data source is selected', function() {
         beforeEach(function() {
@@ -40,102 +292,8 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
-            it('displays data source name', function() {
-                expect(this.view.$(".data_source_name").text()).toBe("Harry's House of Glamour");
-            });
-
-            it('displays data source type', function() {
-                expect(this.view.$(".data_source_type")).toContainText("Greenplum Database");
-            });
-
-            it("calls super in postRender (so that scrolling works)", function() {
-                expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
-            });
-
-            it("renders ActivityList subview", function() {
-                expect(this.view.$(".activity_list")).toBeVisible();
-            });
-
-            it("populates the ActivityList with the activities", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
-            });
-
-            it("sets the ActivityList displayStyle to without_object", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
-            });
-
-            it("has a 'add a note' link", function() {
-                expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
-                expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
-                expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gpdb_data_source');
-            });
-
-            describe('clicking the edit tags link', function(){
-                beforeEach(function(){
-                    this.modalSpy = stubModals();
-                    this.view.$('.edit_tags').click();
-                });
-
-                it('opens the tag edit dialog', function(){
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                    expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
-                });
-            });
-
-            context('when user is an admin or owner of the data source', function() {
-                it('displays edit data source link when user is admin', function() {
-                    setLoggedInUser({ username: "benjamin", admin: true});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('displays edit data source link when user is owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('does not display the delete data source link', function() {
-                    expect(this.view.$(".actions .delete_data_source")).not.toExist();
-                });
-
-                context('when the data source is offline', function() {
-                    beforeEach(function() {
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.dataSource.set({
-                            online: false
-                        });
-                        this.view.render();
-                    });
-
-                    it('does display the edit data source link', function() {
-                        expect(this.view.$(".actions .edit_data_source")).toExist();
-                    });
-
-                    it("does display the edit accounts link", function() {
-                        expect(this.view.$("a[data-dialog=DataSourcePermissions]")).toExist();
-                    });
-                });
-            });
-
-            context('when user is not an admin or owner of the data source', function() {
-                beforeEach(function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.set({owner: {id: "harry"}});
-                    this.view.render();
-                });
-
-                it('does not display edit data source link when user is neither admin nor owner', function() {
-                    expect(this.view.$(".actions .edit_data_source")).not.toExist();
-                });
-
-                it('does not display the delete data source link', function() {
-                    expect(this.view.$(".actions .delete_data_source")).not.toExist();
-                });
-            });
+            itBehavesLike.aSidebar();
+            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
@@ -198,157 +356,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
                         expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
                         expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
                         expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
-                    });
-                });
-            });
-
-            context('when the data source has a shared account', function() {
-                beforeEach(function() {
-                    this.dataSource.set({
-                        shared: true
-                    });
-                    this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
-                    this.view.render();
-                });
-
-                it("does not show the 'edit credentials' link", function() {
-                    expect(this.view.$(".actions .edit_credentials")).not.toExist();
-                });
-
-                it("does not show the 'add credentials' link", function() {
-                    expect(this.view.$(".actions .add_credentials")).not.toExist();
-                });
-
-                it('displays the data source shared account info', function () {
-                    expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
-                });
-
-                it('displays edit data source link when user is admin', function() {
-                    setLoggedInUser({ username: "benjamin", admin: true});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('displays edit data source link when user is owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
-                    this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('does NOT display the edit data source link when user is not an admin or owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).not.toExist();
-                });
-
-                it("shows shared account information", function() {
-                    expect(this.view.$(".account_info")).toContainTranslation("instances.sidebar.is_shared_account");
-                });
-            });
-
-            context('when the data source does not have a shared account', function() {
-                context('when the current user is NOT an admin or owner of the data source', function() {
-                    context('when the user does not have an account for the data source', function() {
-                        it("shows the 'no access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
-                            expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
-                        });
-
-                        it("shows the add credentials link", function() {
-                            var addCredentialsLink = this.view.$(".actions a.add_credentials");
-                            expect(addCredentialsLink).toExist();
-                            expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                            expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
-                            expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
-                        });
-
-                        it("does not show the 'edit credentials' link", function() {
-                            expect(this.view.$(".actions .edit_credentials")).not.toExist();
-                        });
-
-                        it("does not show the 'remove credentials' link", function() {
-                            expect(this.view.$(".actions .remove_credentials")).not.toExist();
-                        });
-                    });
-
-                    context('when the user has set up an account for the data source', function() {
-                        beforeEach(function() {
-                            var account = rspecFixtures.instanceAccount();
-                            spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                            this.view.render();
-                        });
-
-                        it("shows the 'access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/access.png");
-                            expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
-                        });
-
-                        it("shows the 'remove credentials' link", function() {
-                            expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("instances.sidebar.remove_credentials");
-                            expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("InstanceAccountDelete");
-                        });
-
-                        it("shows the 'edit credentials' link", function() {
-                            var editCredentialsLink = this.view.$(".actions .edit_credentials");
-                            expect(editCredentialsLink).toExist();
-                            expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                            expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
-                            expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
-                            expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
-                        });
-
-                        it("does not show the 'add credentials' link", function() {
-                            expect(this.view.$(".actions .add_credentials")).not.toExist();
-                        });
-
-                        describe("when the user removes their credentials", function() {
-                            beforeEach(function() {
-                                this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
-                                this.dataSource.accountForCurrentUser().trigger("destroy");
-                                this.view.render();
-                            });
-
-                            it("shows the add credentials link", function() {
-                                expect(this.view.$(".actions .add_credentials")).toExist();
-                                expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
-                                expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
-                                expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            });
-                        });
-                    });
-                });
-
-                context("when the current user is an admin", function() {
-                    beforeEach(function() {
-                        var account = rspecFixtures.instanceAccount();
-                        spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                        this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.view.render();
-                    });
-
-                    it("does not show the individual_account area", function() {
-                        expect(this.view.$('.individual_account')).not.toBeVisible();
-                    });
-
-                    it("does not show the add/edit/remove credentials links", function() {
-                        expect(this.view.$(".actions .remove_credentials")).not.toBeVisible();
-                        expect(this.view.$(".actions .edit_credentials")).not.toBeVisible();
-                        expect(this.view.$(".actions .add_credentials")).not.toBeVisible();
-                    });
-
-                    it("shows the edit_individual_accounts area", function() {
-                        var editAccountsSection = this.view.$(".edit_individual_accounts"),
-                            editAccountsLink = editAccountsSection.find("a");
-
-                        expect(editAccountsSection).toBeVisible();
-                        expect(editAccountsLink).toBeVisible();
-                        expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
-                        expect(editAccountsLink.data("instance")).toBe(this.dataSource);
-                        expect(editAccountsLink.data("dialog")).toBe("DataSourcePermissions");
                     });
                 });
             });
@@ -439,102 +446,8 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
-            it('displays data source name', function() {
-                expect(this.view.$(".data_source_name")).toContainText("Harry's House of Glamour");
-            });
-
-            it('displays data source type', function() {
-                expect(this.view.$(".data_source_type")).toContainText("Oracle Database");
-            });
-
-            it("calls super in postRender (so that scrolling works)", function() {
-                expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
-            });
-
-            it("renders ActivityList subview", function() {
-                expect(this.view.$(".activity_list")).toBeVisible();
-            });
-
-            it("populates the ActivityList with the activities", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
-            });
-
-            it("sets the ActivityList displayStyle to without_object", function() {
-                expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
-            });
-
-            it("has a 'add a note' link", function() {
-                expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
-                expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
-                expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('oracle_data_source');
-            });
-
-            describe('clicking the edit tags link', function(){
-                beforeEach(function(){
-                    this.modalSpy = stubModals();
-                    this.view.$('.edit_tags').click();
-                });
-
-                it('opens the tag edit dialog', function(){
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                    expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
-                });
-            });
-
-            context('when user is an admin or owner of the data source', function() {
-                it('displays edit data source link when user is admin', function() {
-                    setLoggedInUser({ username: "benjamin", admin: true});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('displays edit data source link when user is owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('does not display the delete data source link', function() {
-                    expect(this.view.$(".actions .delete_data_source")).not.toExist();
-                });
-
-                context('when the data source is offline', function() {
-                    beforeEach(function() {
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.dataSource.set({
-                            online: false
-                        });
-                        this.view.render();
-                    });
-
-                    it('does display the edit data source link', function() {
-                        expect(this.view.$(".actions .edit_data_source")).toExist();
-                    });
-
-                    it("does display the edit accounts link", function() {
-                        expect(this.view.$("a[data-dialog=DataSourcePermissions]")).toExist();
-                    });
-                });
-            });
-
-            context('when user is not an admin or owner of the data source', function() {
-                beforeEach(function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.set({owner: {id: "harry"}});
-                    this.view.render();
-                });
-
-                it('does not display edit data source link when user is neither admin nor owner', function() {
-                    expect(this.view.$(".actions .edit_data_source")).not.toExist();
-                });
-
-                it('does not display the delete data source link', function() {
-                    expect(this.view.$(".actions .delete_data_source")).not.toExist();
-                });
-            });
+            itBehavesLike.aSidebar();
+            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
@@ -589,157 +502,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     });
                 });
             });
-
-            context('when the data source has a shared account', function() {
-                beforeEach(function() {
-                    this.dataSource.set({
-                        shared: true
-                    });
-                    this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
-                    this.view.render();
-                });
-
-                it("does not show the 'edit credentials' link", function() {
-                    expect(this.view.$(".actions .edit_credentials")).not.toExist();
-                });
-
-                it("does not show the 'add credentials' link", function() {
-                    expect(this.view.$(".actions .add_credentials")).not.toExist();
-                });
-
-                it('displays the data source shared account info', function () {
-                    expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
-                });
-
-                it('displays edit data source link when user is admin', function() {
-                    setLoggedInUser({ username: "benjamin", admin: true});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('displays edit data source link when user is owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
-                    this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).toExist();
-                });
-
-                it('does NOT display the edit data source link when user is not an admin or owner', function() {
-                    setLoggedInUser({ username: "benjamin", admin: false});
-                    this.view.render();
-                    expect(this.view.$(".actions .edit_data_source")).not.toExist();
-                });
-
-                it("shows shared account information", function() {
-                    expect(this.view.$(".account_info")).toContainTranslation("instances.sidebar.is_shared_account");
-                });
-            });
-
-            context('when the data source does not have a shared account', function() {
-                context('when the current user is NOT an admin or owner of the data source', function() {
-                    context('when the user does not have an account for the data source', function() {
-                        it("shows the 'no access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
-                            expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
-                        });
-
-                        it("shows the add credentials link", function() {
-                            var addCredentialsLink = this.view.$(".actions a.add_credentials");
-                            expect(addCredentialsLink).toExist();
-                            expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                            expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
-                            expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
-                        });
-
-                        it("does not show the 'edit credentials' link", function() {
-                            expect(this.view.$(".actions .edit_credentials")).not.toExist();
-                        });
-
-                        it("does not show the 'remove credentials' link", function() {
-                            expect(this.view.$(".actions .remove_credentials")).not.toExist();
-                        });
-                    });
-
-                    context('when the user has set up an account for the data source', function() {
-                        beforeEach(function() {
-                            var account = rspecFixtures.instanceAccount();
-                            spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                            this.view.render();
-                        });
-
-                        it("shows the 'access' text and image", function() {
-                            expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/access.png");
-                            expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
-                        });
-
-                        it("shows the 'remove credentials' link", function() {
-                            expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("instances.sidebar.remove_credentials");
-                            expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("InstanceAccountDelete");
-                        });
-
-                        it("shows the 'edit credentials' link", function() {
-                            var editCredentialsLink = this.view.$(".actions .edit_credentials");
-                            expect(editCredentialsLink).toExist();
-                            expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                            expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
-                            expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
-                            expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
-                        });
-
-                        it("does not show the 'add credentials' link", function() {
-                            expect(this.view.$(".actions .add_credentials")).not.toExist();
-                        });
-
-                        describe("when the user removes their credentials", function() {
-                            beforeEach(function() {
-                                this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
-                                this.dataSource.accountForCurrentUser().trigger("destroy");
-                                this.view.render();
-                            });
-
-                            it("shows the add credentials link", function() {
-                                expect(this.view.$(".actions .add_credentials")).toExist();
-                                expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
-                                expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
-                                expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
-                            });
-                        });
-                    });
-                });
-
-                context("when the current user is an admin", function() {
-                    beforeEach(function() {
-                        var account = rspecFixtures.instanceAccount();
-                        spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                        this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
-                        setLoggedInUser({ username: "benjamin", admin: true});
-                        this.view.render();
-                    });
-
-                    it("does not show the individual_account area", function() {
-                        expect(this.view.$('.individual_account')).not.toBeVisible();
-                    });
-
-                    it("does not show the add/edit/remove credentials links", function() {
-                        expect(this.view.$(".actions .remove_credentials")).not.toBeVisible();
-                        expect(this.view.$(".actions .edit_credentials")).not.toBeVisible();
-                        expect(this.view.$(".actions .add_credentials")).not.toBeVisible();
-                    });
-
-                    it("shows the edit_individual_accounts area", function() {
-                        var editAccountsSection = this.view.$(".edit_individual_accounts"),
-                            editAccountsLink = editAccountsSection.find("a");
-
-                        expect(editAccountsSection).toBeVisible();
-                        expect(editAccountsLink).toBeVisible();
-                        expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
-                        expect(editAccountsLink.data("instance")).toBe(this.dataSource);
-                        expect(editAccountsLink.data("dialog")).toBe("DataSourcePermissions");
-                    });
-                });
-            });
         });
     });
 
@@ -764,29 +526,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             expect(this.view.$(".actions .edit_data_source")).toExist();
         });
 
-        it('displays data source type', function() {
-            expect(this.view.$(".data_source_type")).toContainText("Hadoop");
-        });
-
-        it("has a 'add a note' link", function() {
-            expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
-            expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
-            expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hdfs_data_source');
-        });
-
-        describe('clicking the edit tags link', function(){
-            beforeEach(function(){
-                this.modalSpy = stubModals();
-                this.view.$('.edit_tags').click();
-            });
-
-            it('opens the tag edit dialog', function(){
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
-            });
-        });
+        itBehavesLike.aSidebar();
 
         it("shows the shared account", function() {
             var shared_account_info = this.dataSource.get("username") + ", " + this.dataSource.get("groupList");
@@ -802,29 +542,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             this.server.completeFetchFor(this.dataSource.activities());
         });
 
-        it('displays data source type', function() {
-            expect(this.view.$(".data_source_type")).toContainText("Gnip Account");
-        });
-
-        it("has a 'add a note' link", function() {
-            expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
-            expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
-            expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
-            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('gnip_data_source');
-        });
-
-        describe('clicking the edit tags link', function(){
-            beforeEach(function(){
-                this.modalSpy = stubModals();
-                this.view.$('.edit_tags').click();
-            });
-
-            it('opens the tag edit dialog', function(){
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
-            });
-        });
+        itBehavesLike.aSidebar();
 
         it("has a 'import stream' link", function() {
             expect(this.view.$("a[data-dialog=ImportGnipStream]")).toExist();
