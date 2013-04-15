@@ -19,7 +19,9 @@ class CsvImport < Import
         :dataset => destination_table,
         :file_name => file_name,
         :import_type => 'file',
-        :destination_table => to_table
+        :destination_table => to_table,
+        :reference_id => id,
+        :reference_type => 'Import'
     )
   end
 
@@ -62,6 +64,8 @@ class CsvImport < Import
   def source
     csv_file
   end
+
+  def validate_source!; end
 
   private
 

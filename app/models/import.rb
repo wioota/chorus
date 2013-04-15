@@ -73,6 +73,10 @@ class Import < ActiveRecord::Base
     source_dataset
   end
 
+  def validate_source!
+    raise "Original source dataset #{import.source.scoped_name} has been deleted" if import.source.deleted?
+  end
+
   private
 
   def named_pipe

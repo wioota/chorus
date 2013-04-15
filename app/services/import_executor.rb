@@ -18,7 +18,7 @@ class ImportExecutor
     import.touch(:started_at)
     # raises go into import#throw_if_not_runnable ?
     raise "Destination workspace #{import.workspace.name} has been deleted" if import.workspace_import? && import.workspace.deleted?
-    raise "Original source dataset #{import.source_dataset.scoped_name} has been deleted" if import.source_dataset.deleted?
+    import.validate_source!
 
     import.copier_class.new(import_attributes).start
     import.reload
