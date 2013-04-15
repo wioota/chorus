@@ -1,5 +1,6 @@
 chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
     constructorName: "DatasetPreview",
+    additionalClass: "dialog_wide",
 
     templateName: 'dataset_preview',
     title: function() {return t("dataset.data_preview_title", {name: this.model.get("objectName")}); },

@@ -1,6 +1,4 @@
 .dataset_preview.dialog {
-    width: 800px;
-
     &.dialog {
         .dialog_content {
             padding: 0;
@@ -8,7 +6,6 @@
 
         h1 {
             @include ellipsis;
-            max-width: 750px;
         }
     }
 
