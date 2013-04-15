@@ -13,8 +13,6 @@ class DataSourceStatusChecker
   end
 
   def check
-    return unless should_check
-
     poll_data_source
 
     @data_source.touch(:last_checked_at)
@@ -29,9 +27,6 @@ class DataSourceStatusChecker
   def poll_data_source
     @data_source.version = get_data_source_version
     @data_source.state = "online"
-  rescue DataSourceConnection::Error => e
-    Chorus.log_debug "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
-    @data_source.state = e.error_type == :INVALID_PASSWORD ? "unauthorized" : "offline"
   rescue => e
     Chorus.log_debug "Could not check status: #{e}: #{e.message} on #{e.backtrace[0]}"
     @data_source.state = "offline"
@@ -43,13 +38,6 @@ class DataSourceStatusChecker
     else
       @data_source.connect_as_owner(refresh_state: false).version
     end
-  end
-
-  def should_check
-    return true if @data_source.last_checked_at.blank?
-
-    time_between_checks = @data_source.state == 'unauthorized' ? 24.hours : 0
-    Time.current - @data_source.last_checked_at > time_between_checks
   end
 end
 

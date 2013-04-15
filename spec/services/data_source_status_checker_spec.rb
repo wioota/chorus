@@ -25,33 +25,6 @@ describe DataSourceStatusChecker do
         }.to change(online_data_source, :last_online_at)
       end
     end
-
-    context 'when the data_source is unauthorized' do
-      before do
-        offline_data_source.state = 'unauthorized'
-        offline_data_source.save!
-      end
-
-      context 'when the last checked time was more than 24 hours ago' do
-        let(:last_checked_at) { 25.hours.ago }
-
-        it 'checks the data_source' do
-          expect {
-            DataSourceStatusChecker.check(offline_data_source)
-          }.to change(offline_data_source, :last_checked_at)
-        end
-      end
-
-      context 'when last checked time was less than 24 hours ago' do
-        let(:last_checked_at) { 23.hours.ago }
-
-        it 'does not check the data_source' do
-          expect {
-            DataSourceStatusChecker.check(offline_data_source)
-          }.not_to change(offline_data_source, :last_checked_at)
-        end
-      end
-    end
   end
 
   describe 'checking a hadoop data source:' do
@@ -125,20 +98,6 @@ describe DataSourceStatusChecker do
         it 'sets the state to offline' do
           DataSourceStatusChecker.check(gpdb_data_source)
           gpdb_data_source.state.should == 'offline'
-        end
-      end
-
-      context 'When the connection fails due to authentication' do
-        let(:error) { GreenplumConnection::DatabaseError.new }
-
-        before do
-          stub(error).error_type { :INVALID_PASSWORD }
-          stub(connection).version { raise error }
-          DataSourceStatusChecker.check(gpdb_data_source)
-        end
-
-        it 'sets the state to unauthorized' do
-          gpdb_data_source.state.should == 'unauthorized'
         end
       end
     end
