@@ -60,7 +60,7 @@ class Schema < ActiveRecord::Base
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
-      dataset = datasets.to_a.select { |set| set.name == attrs[:name] }.first
+      dataset = datasets.detect { |set| set.name == attrs[:name] }
       klass = class_for_type attrs.delete(:type)
       unless dataset
         dataset = klass.new(:name => attrs[:name])
