@@ -2,15 +2,15 @@ This ReadMe mirrors our [Github Wiki page](https://github.com/GreenplumChorus/ch
 
 Browse to the [Wiki pages list](https://github.com/GreenplumChorus/chorus/wiki/_pages) to review what's available here.Key pages include:
 
-1. [Contributing to Chorus](wiki/Contributing-to-Chorus)
-1. [Architecture Overview](wiki/Architecture-Overview)
-1. [Javascript Architecture](wiki/Javascript-Architecture)
-1. [Building a Package for Deployment](wiki/Building-a-Package-for-Deployment)
-1. [Getting started with Chorus development](wiki/Getting-started-with-Chorus-development)
-1. [New-Class-Walkthrough](wiki/New-Class-Walkthrough)
-1. [How to run Chorus tests](wiki/How-to-run-Chorus-tests)
-1. [Test Writing Guidelines](wiki/Test-Writing-Guidelines)
-1. [Code Style Guidelines](wiki/Code-style)
+1. [Contributing to Chorus](https://github.com/GreenplumChorus/chorus/wiki/Contributing-to-Chorus)
+1. [Architecture Overview](https://github.com/GreenplumChorus/chorus/wiki/Architecture-Overview)
+1. [Javascript Architecture](https://github.com/GreenplumChorus/chorus/wiki/Javascript-Architecture)
+1. [Building a Package for Deployment](https://github.com/GreenplumChorus/chorus/wiki/Building-a-Package-for-Deployment)
+1. [Getting started with Chorus development](https://github.com/GreenplumChorus/chorus/wiki/Getting-started-with-Chorus-development)
+1. [New-Class-Walkthrough](https://github.com/GreenplumChorus/chorus/wiki/New-Class-Walkthrough)
+1. [How to run Chorus tests](https://github.com/GreenplumChorus/chorus/wiki/How-to-run-Chorus-tests)
+1. [Test Writing Guidelines](https://github.com/GreenplumChorus/chorus/wiki/Test-Writing-Guidelines)
+1. [Code Style Guidelines](https://github.com/GreenplumChorus/chorus/wiki/Code-style)
 
 Have a question?  See [Greenplum's site](http://www.greenplum.com/communities/developer/openchorus) for more information.  You can also reach us via the [development mailing list](https://groups.google.com/forum/?fromgroups#!forum/chorus-dev). 
 
