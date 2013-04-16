@@ -30,8 +30,7 @@ describe GnipCopier do
       let(:table_exists) { false }
 
       it "should create the table with the right columns" do
-        csv_result = GnipCsvResult.new('')
-        table_description = csv_result.column_names.zip(csv_result.types).map { |name, type| "#{name} #{type}" }.join(", ")
+        table_description = ChorusGnip.column_names.zip(ChorusGnip.column_types).map { |name, type| "#{name} #{type}" }.join(", ")
         mock(connection).create_table(destination_table_name, table_description, 'DISTRIBUTED RANDOMLY')
         copier.initialize_destination_table
       end
@@ -53,7 +52,7 @@ describe GnipCopier do
 
     it 'copies the data into the destination table' do
       first_time = true
-      mock(connection).copy_csv(is_a(java.io.StringReader), destination_table_name, GnipCsvResult.new('').column_names, ',', false).times(2) do |reader|
+      mock(connection).copy_csv(is_a(java.io.StringReader), destination_table_name, ChorusGnip.column_names, ',', false).times(2) do |reader|
         buffer = java.io.BufferedReader.new(reader)
         if first_time
           buffer.read_line.should == foo_csv

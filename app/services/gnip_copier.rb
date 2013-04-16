@@ -23,10 +23,14 @@ class GnipCopier < TableCopier
   end
 
   def load_table_definition
-    column_names.zip(GnipCsvResult.new('').types).map{|name, type| "#{name} #{type}"}.join(", ")
+    column_names.zip(column_types).map{|name, type| "#{name} #{type}"}.join(", ")
+  end
+
+  def column_types
+    ChorusGnip.column_types
   end
 
   def column_names
-    GnipCsvResult.new('').column_names
+    ChorusGnip.column_names
   end
 end
