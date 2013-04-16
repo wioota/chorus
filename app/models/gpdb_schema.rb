@@ -61,10 +61,6 @@ class GpdbSchema < Schema
     nil
   end
 
-  def connect_with(account, &block)
-    database.connect_with account, { :schema => name }, &block
-  end
-
   def class_for_type(type)
     type == 'r' ? GpdbTable : GpdbView
   end

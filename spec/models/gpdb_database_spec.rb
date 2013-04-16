@@ -23,7 +23,7 @@ describe GpdbDatabase do
     describe 'name uniqueness' do
       let(:existing) { gpdb_databases(:default) }
 
-      context 'in the same instance' do
+      context 'in the same data_source' do
         it 'does not allow two databases with the same name' do
           new_database = FactoryGirl.build(:gpdb_database,
                                            :name => existing.name,
@@ -33,7 +33,7 @@ describe GpdbDatabase do
         end
       end
 
-      context 'in a different instance' do
+      context 'in a different data_source' do
         it 'allows same names' do
           new_database = FactoryGirl.build(:gpdb_database, :name => existing.name)
           new_database.should be_valid
@@ -95,7 +95,7 @@ describe GpdbDatabase do
     end
   end
 
-  context "refresh using a real greenplum instance", :greenplum_integration do
+  context "refresh using a real greenplum data_source", :greenplum_integration do
     let(:account) { GreenplumIntegration.real_account }
 
     it "sorts the database by name in ASC order" do
@@ -198,16 +198,13 @@ describe GpdbDatabase do
 
   describe "#connect_with" do
     let(:database) { gpdb_databases(:default) }
-    let(:instance) { database.data_source }
+    let(:data_source) { database.data_source }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
-      mock(GreenplumConnection).new({
-                                                            :host => instance.host,
-                                                            :port => instance.port,
-                                                            :account => account,
-                                                            :database => database.name,
-                                                            :logger => Rails.logger
+      mock(GreenplumConnection).new(data_source, account, {
+          :database => database.name,
+          :logger => Rails.logger
       }) { "this is my connection" }
       database.connect_with(account).should == "this is my connection"
     end

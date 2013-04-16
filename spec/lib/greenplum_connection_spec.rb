@@ -1,13 +1,9 @@
 require 'spec_helper'
 
 describe GreenplumConnection, :greenplum_integration do
+  let(:data_source) { GreenplumIntegration.real_data_source }
   let(:database_name) { GreenplumIntegration.database_name }
-  let(:hostname) { GreenplumIntegration.hostname }
-  let(:port) { GreenplumIntegration.port }
-  let(:db_url) {
-    query_params = URI.encode_www_form(:user => account.db_username, :password => account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-    "jdbc:postgresql://#{details[:host]}:#{details[:port]}/#{details[:database]}?" << query_params
-  }
+  let(:db_url) { connection.db_url }
   let(:account) { GreenplumIntegration.real_account }
   let(:exception_class) { GreenplumConnection::DatabaseError }
 
@@ -19,15 +15,12 @@ describe GreenplumConnection, :greenplum_integration do
     stub.proxy(Sequel).connect.with_any_args
   end
 
-  let(:details) { {
-      :host => hostname,
-      :account => account,
-      :port => port,
+  let(:options) { {
       :database => database_name,
       :logger => Rails.logger
   } }
 
-  let(:connection) { GreenplumConnection.new(details) }
+  let(:connection) { GreenplumConnection.new(data_source, account, options) }
 
   it_should_behave_like "a data source connection" do
     let(:empty_set_sql) { "SELECT 1 where false;" }
@@ -64,10 +57,10 @@ describe GreenplumConnection, :greenplum_integration do
 
   describe "prepare_and_execute_statement" do
     let(:sql) { "SELECT 1 AS answer" }
-    let(:options) { {} }
+    let(:execute_options) { {} }
     let(:expected) { [{'answer' => '1'}] }
 
-    subject { connection.prepare_and_execute_statement(sql, options) }
+    subject { connection.prepare_and_execute_statement(sql, execute_options) }
 
     it "should return a SqlResult" do
       subject.should be_a(SqlResult)
@@ -82,7 +75,7 @@ describe GreenplumConnection, :greenplum_integration do
 
     describe "when the schema is set" do
       before do
-        details.merge!(
+        options.merge!(
             :schema => "test_schema",
             :logger => Rails.logger
         )
@@ -95,7 +88,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       describe "when including the public schema in the search path" do
-        let(:options) { {:include_public_schema_in_search_path => true} }
+        let(:execute_options) { {:include_public_schema_in_search_path => true} }
 
         it "finds the the table in the public schema" do
           expect {
@@ -145,7 +138,7 @@ describe GreenplumConnection, :greenplum_integration do
 
     context 'with warnings enabled' do
       let(:sql) { "create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings;create table surface_warnings (id INT PRIMARY KEY); drop table surface_warnings;" }
-      let(:options) { {:warnings => true} }
+      let(:execute_options) { {:warnings => true} }
 
       it 'surfaces all notices and warnings' do
         subject.warnings.length.should == 2
@@ -159,7 +152,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "select 1 as hi limit 3; select * from test_schema.base_table1 limit 4" }
 
       context "when a limit is passed" do
-        let(:options) { {:limit => 1} }
+        let(:execute_options) { {:limit => 1} }
 
         it "should limit the query" do
           subject.rows.length.should == 1
@@ -213,7 +206,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     context "when a timeout is specified" do
-      let(:options) { {:timeout => 0.1} }
+      let(:execute_options) { {:timeout => 0.1} }
       let(:sql) { "SELECT pg_sleep(.2);" }
 
       it "should raise a timeout error" do
@@ -224,7 +217,7 @@ describe GreenplumConnection, :greenplum_integration do
 
   describe "process management" do
     let(:sql) { "SELECT pg_sleep(300) /* kill_me */" }
-    let(:runner_connection) { GreenplumConnection.new(details) }
+    let(:runner_connection) { GreenplumConnection.new(data_source, account, options) }
     let(:thread) do
       Thread.new do
         begin
@@ -395,7 +388,7 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   describe "SchemaMethods" do
-    let(:connection) { GreenplumConnection.new(details.merge(:schema => schema_name)) }
+    let(:connection) { GreenplumConnection.new(data_source, account, options.merge(:schema => schema_name)) }
     let(:schema_name) { "test_schema" }
 
     describe "functions" do
@@ -735,7 +728,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "SELECT * from thing" }
       let(:expected) { true }
       let(:bucket) {[]}
-      let(:options) {{}}
+      let(:execute_options) {{}}
       let(:subject) { connection.stream_sql(sql) { true } }
 
       before do
@@ -746,7 +739,7 @@ describe GreenplumConnection, :greenplum_integration do
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', '1999-07-08 04:05:06')")
         @db.execute("INSERT INTO thing VALUES (3, 4, '1999-07-08 04:05:06 -3:00', null)")
 
-        connection.stream_sql(sql, options) { |row| bucket << row }
+        connection.stream_sql(sql, execute_options) { |row| bucket << row }
       end
 
       after do
@@ -769,7 +762,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       context "when a limit is provided" do
-        let(:options) {{:limit => 1}}
+        let(:execute_options) {{:limit => 1}}
 
         it "only processes part of the results" do
           bucket.should == [{:one => "1", :two => "2", :three => "1999-01-08 04:05:06-08", :fourth => "1999-01-08 04:05:06"}]
@@ -777,7 +770,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       context "with quiet null" do
-        let(:options) {{:quiet_null => true}}
+        let(:execute_options) {{:quiet_null => true}}
 
         it "returns null values as empty string" do
           bucket.last[:fourth].should == ""
@@ -887,7 +880,7 @@ describe GreenplumConnection, :greenplum_integration do
         let(:restricted_password) { "secret" }
 
         let(:connection) do
-          GreenplumConnection.new(details.merge(:schema => schema_name, :account => account))
+          GreenplumConnection.new(data_source, account, options.merge(:schema => schema_name, :account => account))
         end
 
         before do
@@ -1027,7 +1020,7 @@ describe GreenplumConnection, :greenplum_integration do
         let(:restricted_password) { "secret" }
 
         let(:connection) do
-          GreenplumConnection.new(details.merge(:schema => schema_name, :account => account))
+          GreenplumConnection.new(data_source, account, options.merge(:schema => schema_name, :account => account))
         end
 
         before do

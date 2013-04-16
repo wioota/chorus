@@ -131,7 +131,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def account_for_user!(user)
-    account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
+    account_for_user(user) || (raise ActiveRecord::RecordNotFound)
   end
 
   def data_source

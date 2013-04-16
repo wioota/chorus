@@ -24,7 +24,7 @@ shared_examples "a data source connection" do
     context "when a logger is not provided" do
       before do
         mock.proxy(Sequel).connect(db_url, :test => true)
-        details.delete :logger
+        options.delete :logger
       end
 
       context "with valid credentials" do
@@ -42,11 +42,8 @@ shared_examples "a data source connection" do
         log
       end
 
-      let(:details) {
+      let(:options) {
         {
-          :host => hostname,
-          :account => account,
-          :port => port,
           :database => database_name,
           :logger => logger
         }
@@ -94,7 +91,10 @@ shared_examples "a data source connection" do
       end
 
       context "when connection fails for some reason unrelated to invalid credentials" do
-        let(:port) { '8675309' }
+        before do
+          data_source.port = '8675309'
+        end
+
         it "does not set invalid credentials on the account" do
           expect { connection.connect! }.to raise_error(exception_class)
           account.invalid_credentials?.should be_false

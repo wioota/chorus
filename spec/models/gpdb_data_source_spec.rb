@@ -230,11 +230,7 @@ describe GpdbDataSource do
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
-      mock(GreenplumConnection).new({
-                                        :host => data_source.host,
-                                        :port => data_source.port,
-                                        :account => account,
-                                        :database => data_source.db_name,
+      mock(GreenplumConnection).new(data_source, account, {
                                         :logger => Rails.logger
                                     }) { "this is my connection" }
       data_source.connect_with(account).should == "this is my connection"

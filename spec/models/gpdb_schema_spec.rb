@@ -198,14 +198,11 @@ describe GpdbSchema do
     let(:mockConnection) { {} }
 
     before do
-      mock(GreenplumConnection).new({
-                                        :host => schema.data_source.host,
-                                        :port => schema.data_source.port,
-                                        :account => account,
-                                        :database => schema.database.name,
-                                        :schema => schema.name,
-                                        :logger => Rails.logger
-                                    }) {
+      mock(GreenplumConnection).new(schema.data_source, account, {
+          :schema => schema.name,
+          :database => schema.database.name,
+          :logger => Rails.logger
+      }) {
         mockConnection
       }
     end

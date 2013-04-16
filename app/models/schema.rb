@@ -49,6 +49,10 @@ class Schema < ActiveRecord::Base
     parent.connect_as(user).schema_exists?(name)
   end
 
+  def connect_with(account, &block)
+    parent.connect_with account, { :schema => name }, &block
+  end
+
   def connect_as(user, &block)
     connect_with(data_source.account_for_user!(user), &block)
   end

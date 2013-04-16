@@ -53,7 +53,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def db_url
-    "jdbc:oracle:thin:#{@account.db_username}/#{@account.db_password}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
+    "jdbc:oracle:thin:#{@account.db_username}/#{@account.db_password}@//#{@data_source.host}:#{@data_source.port}/#{@data_source.db_name}"
   end
 
   def version
@@ -167,7 +167,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def schema_name
-    @settings[:schema]
+    @options[:schema]
   end
 
   SCHEMAS_SQL = <<-SQL

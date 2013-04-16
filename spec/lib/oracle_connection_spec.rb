@@ -1,24 +1,19 @@
 require 'spec_helper'
 
 describe OracleConnection, :oracle_integration do
-  let(:database_name) { OracleIntegration.db_name }
-  let(:hostname) { OracleIntegration.hostname }
-  let(:port) { OracleIntegration.port }
-  let(:db_url) { OracleIntegration.db_url }
-  let(:db) { Sequel.connect(db_url) }
+  let(:data_source) { OracleIntegration.real_data_source }
+  let(:database_name) { data_source.db_name }
   let(:account) { OracleIntegration.real_account }
+  let(:db) { Sequel.connect(db_url) }
   let(:exception_class) { OracleConnection::DatabaseError }
 
-  let(:details) {
+  let(:options) {
     {
-        :host => hostname,
-        :account => account,
-        :port => port,
-        :database => database_name,
         :logger => Rails.logger
     }
   }
-  let(:connection) { OracleConnection.new(details) }
+  let(:connection) { OracleConnection.new(data_source, account, options) }
+  let(:db_url) { connection.db_url }
 
   before do
     stub.proxy(Sequel).connect.with_any_args
@@ -145,7 +140,7 @@ describe OracleConnection, :oracle_integration do
   describe "#prepare_and_execute_statement" do
     let(:sql) { "SELECT * from \"#{OracleIntegration.schema_name}\".NEWTABLE" }
     context "when a timeout is specified" do
-      let(:options) { {:timeout => 1} }
+      let(:execute_options) { {:timeout => 1} }
       let(:too_many_rows) { 2500 }
       let(:sql) do
         sql = <<-SQL
@@ -178,7 +173,7 @@ describe OracleConnection, :oracle_integration do
       #
       #it "should raise a timeout error (which is 'requested cancel' on oracle)" do
       #  expect do
-      #    connection.prepare_and_execute_statement sql, options
+      #    connection.prepare_and_execute_statement sql, execute_options
       #  end.to raise_error(DataSourceConnection::QueryError, /requested cancel/)
       #end
     end
@@ -192,7 +187,7 @@ describe OracleConnection, :oracle_integration do
 
   describe "methods within a schema" do
     let(:schema_name) { OracleIntegration.schema_name }
-    let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+    let(:connection) { OracleConnection.new(data_source, account, options.merge(:schema => schema_name)) }
 
     describe "#datasets" do
       let(:dataset_list_sql) {
@@ -296,7 +291,7 @@ describe OracleConnection, :oracle_integration do
     end
 
     describe "#datasets_count" do
-      let(:connection) { OracleConnection.new(details.merge(:schema => schema_name)) }
+      let(:connection) { OracleConnection.new(data_source, account, options.merge(:schema => schema_name)) }
       let(:schema_name) { OracleIntegration.schema_name }
       let(:dataset_list_sql) {
         <<-SQL

@@ -52,12 +52,9 @@ class OracleDataSource < DataSource
   end
 
   def build_connection_with(account, options = {})
-    OracleConnection.new(
-        :account => account,
-        :host => host,
-        :port => port,
-        :database => db_name,
+    options = {
         :logger => Rails.logger
-    )
+    }.merge(options)
+    OracleConnection.new(self, account, options)
   end
 end

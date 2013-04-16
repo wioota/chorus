@@ -48,9 +48,10 @@ class DataSourceConnection
     input_string.gsub(/[\_\%#{LIKE_ESCAPE_CHARACTER}]/) { |c| LIKE_ESCAPE_CHARACTER + c }
   end
 
-  def initialize(details)
-    @account = details.delete(:account)
-    @settings = details
+  def initialize(data_source, account, options)
+    @data_source = data_source
+    @account = account
+    @options = options
   end
 
   def connect!
@@ -131,8 +132,8 @@ class DataSourceConnection
   end
 
   def logger_options
-    if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
+    if @options[:logger]
+      { :logger => @options[:logger], :sql_log_level => :debug }
     else
       {}
     end

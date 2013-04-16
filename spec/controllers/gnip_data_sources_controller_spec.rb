@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe GnipDataSourcesController do
+  let(:user) { users(:owner) }
   before do
-    @user = users(:owner)
-    log_in @user
+    log_in user
   end
 
   let(:gnip_data_source) { gnip_data_sources(:default) }
@@ -11,20 +11,20 @@ describe GnipDataSourcesController do
   describe "#create" do
     context "with valid credentials" do
       before do
-        stub(Gnip::DataSourceRegistrar).create!(anything, @user) { gnip_data_source }
+        stub(Gnip::DataSourceRegistrar).create!(anything, user) { gnip_data_source }
       end
 
       it "reports that the data source was created with the correct owner" do
         post :create
         response.code.should == "201"
-        decoded_response.owner.id.should == @user.id
+        decoded_response.owner.id.should == user.id
         decoded_response.password.should be_nil
       end
     end
 
     context "with invalid credentials" do
       before do
-        stub(Gnip::DataSourceRegistrar).create!(anything, @user) { raise ApiValidationError }
+        stub(Gnip::DataSourceRegistrar).create!(anything, user) { raise ApiValidationError }
       end
 
       it "raises an error" do

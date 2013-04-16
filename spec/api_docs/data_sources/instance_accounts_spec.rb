@@ -22,8 +22,8 @@ resource "Data sources: accounts" do
     example_request "Get personal credentials" do
       explanation <<-DESC
         The current user's personal credentials for connecting to this
-        instance.  Does not return a shared account's credentials, unless
-        the current user is the instance owner.
+        instance.  If the data source has shared credentials, the shared credentials
+        returned.
       DESC
 
       status.should == 200

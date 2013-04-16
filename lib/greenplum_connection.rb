@@ -93,7 +93,7 @@ class GreenplumConnection < DataSourceConnection
 
   def db_url
     query_params = URI.encode_www_form(:user => @account.db_username, :password => @account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+    "jdbc:postgresql://#{@data_source.host}:#{@data_source.port}/#{database_name}?" << query_params
   end
 
   def support_multiple_result_sets?
@@ -411,6 +411,10 @@ class GreenplumConnection < DataSourceConnection
 
     private
 
+    def database_name
+      @options[:database] || @data_source.db_name
+    end
+
     def datasets_query(options)
       with_connection do |connection|
         query = connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
@@ -436,7 +440,7 @@ class GreenplumConnection < DataSourceConnection
     end
 
     def schema_name
-      @settings[:schema]
+      @options[:schema]
     end
 
     SCHEMA_FUNCTIONS_SQL = <<-SQL
