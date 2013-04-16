@@ -13,7 +13,7 @@ describe Visualization::Boxplot, :greenplum_integration do
     Visualization::Boxplot.new(dataset, {
         :x_axis => x_axis,
         :y_axis => y_axis,
-        :bins => 20,
+        :buckets => 20,
         :filters => filters
     })
   end
@@ -98,6 +98,7 @@ describe Visualization::Boxplot, :greenplum_integration do
       let(:dataset) { datasets(:executable_chorus_view) }
 
       it "returns the boxplot data" do
+        visualization.fetch!(account, 12345)
         visualization.rows.should == [
             {:bucket => "papaya", :min => 5.0, :median => 6.5, :max => 8.0, :first_quartile => 5.5, :third_quartile => 7.5, :percentage => "44.44%", :count => 4},
             {:bucket => "orange", :min => 2.0, :median => 3.0, :max => 4.0, :first_quartile => 2.5, :third_quartile => 3.5, :percentage => "33.33%", :count => 3},
@@ -109,6 +110,7 @@ describe Visualization::Boxplot, :greenplum_integration do
         let(:filters) { ["category != 'apple'"] }
 
         it "returns the boxplot data based on the filtered dataset" do
+          visualization.fetch!(account, 12345)
           visualization.rows.should == [
               {:bucket => "papaya", :min => 5.0, :median => 6.5, :max => 8.0, :first_quartile => 5.5, :third_quartile => 7.5, :percentage => "57.14%", :count => 4},
               {:bucket => "orange", :min => 2.0, :median => 3.0, :max => 4.0, :first_quartile => 2.5, :third_quartile => 3.5, :percentage => "42.86%", :count => 3}

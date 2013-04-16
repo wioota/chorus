@@ -36,7 +36,7 @@ FactoryGirl.define do
   end
 
   factory :visualization_boxplot, :class => Visualization::Boxplot do
-    bins 10
+    buckets 10
     category "category"
     values "column1"
     association :dataset, :factory => :gpdb_table
