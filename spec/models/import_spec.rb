@@ -23,7 +23,7 @@ describe Import, :greenplum_integration do
   before { workspace.update_attribute :sandbox_id, schema.id }
 
   describe "associations" do
-    it { should belong_to(:scoped_source_dataset).class_name('Dataset') }
+    it { should belong_to(:source) }
     it { should belong_to :user }
   end
 
@@ -45,14 +45,14 @@ describe Import, :greenplum_integration do
     end
 
     it "validates the presence of source_dataset if no file_name present" do
-      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :scoped_source_dataset => nil, :file_name => nil)
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source => nil, :file_name => nil)
       import.should_not be_valid
       import.should have_error_on(:scoped_source_dataset)
       import.should have_error_on(:file_name)
     end
 
     it "does not validate the presence of source_dataset if file_name present" do
-      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source_dataset => nil, :file_name => "foo.csv")
+      import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source => nil, :file_name => "foo.csv")
       import.should be_valid
     end
 

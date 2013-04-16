@@ -1,12 +1,13 @@
 class SchemaImport < Import
   belongs_to :schema
   validates :schema, :presence => true
+  alias_attribute :source_dataset, :source
 
   def create_import_event
     destination_table = schema.datasets.tables.find_by_name(to_table)
     created_event_class.by(user).add(
       {
-        :source_dataset => source_dataset,
+        :source_dataset => source,
         :schema_id => schema.id,
         :destination_table => to_table,
         :dataset => destination_table,
@@ -35,7 +36,7 @@ class SchemaImport < Import
   def create_passed_event_and_notification
     event = success_event_class.by(user).add(
       :dataset => destination_dataset,
-      :source_dataset => source_dataset
+      :source_dataset => source
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
@@ -44,7 +45,7 @@ class SchemaImport < Import
     event = failed_event_class.by(user).add(
       :destination_table => to_table,
       :error_message => error_message,
-      :source_dataset => source_dataset,
+      :source_dataset => source,
       :dataset => schema.datasets.find_by_name(to_table),
       :schema_id => schema.id
     )

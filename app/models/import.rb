@@ -5,7 +5,7 @@ class Import < ActiveRecord::Base
   attr_accessible :to_table, :new_table, :sample_count, :truncate, :user
   attr_accessible :file_name # only for CSV files
 
-  unscoped_belongs_to :source_dataset, :class_name => 'Dataset'
+  belongs_to :source, :polymorphic => true
   belongs_to :user
   belongs_to :import_schedule
 
@@ -13,12 +13,23 @@ class Import < ActiveRecord::Base
   validates :user, :presence => true
 
   validate :table_does_not_exist, :if => :new_table, :on => :create
-  validates :scoped_source_dataset, :presence => true, :unless => :file_name
-  validates :file_name, :presence => true, :unless => :scoped_source_dataset
+  validates :scoped_source, :presence => true, :unless => :file_name
+  validates :file_name, :presence => true, :unless => :scoped_source
   validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
 
   after_create :create_import_event
   after_create :enqueue_import, :unless => :file_name
+
+  alias_method :scoped_source, :source
+  def source
+    value = scoped_source
+    unless value
+      value = self.source = source_type.constantize.unscoped.find(source_id)
+    end
+    value
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
 
   def create_import_event
     raise "implement me!"
@@ -67,10 +78,6 @@ class Import < ActiveRecord::Base
 
   def enqueue_import
     QC.enqueue_if_not_queued("ImportExecutor.run", id)
-  end
-
-  def source
-    source_dataset
   end
 
   def validate_source!

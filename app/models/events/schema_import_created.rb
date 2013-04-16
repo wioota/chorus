@@ -11,7 +11,7 @@ module Events
     end
 
     def self.filter_for_import_events(import)
-      where(:target1_id => import.source_dataset_id)
+      where(:target1_id => import.source_id, :target1_type => import.source_type)
     end
   end
 end

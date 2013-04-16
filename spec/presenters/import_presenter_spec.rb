@@ -20,7 +20,7 @@ describe ImportPresenter, :type => :view do
     end
 
     it "returns nil for source_dataset_name if it doesn't exist" do
-      import.source_dataset_id = -1
+      import.source_id = -1
       import.save(:validate => false)
       import.reload
       hash[:source_dataset_name].should be_nil

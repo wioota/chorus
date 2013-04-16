@@ -31,7 +31,7 @@ describe Events::WorkspaceImportCreated do
                          :workspace => workspaces(:public),
                          :to_table => "new_table_for_import",
                          :created_at => '2012-09-03 23:00:00-07',
-                         :source_dataset_id => datasets(:table).id, )
+                         :source => datasets(:table))
       import.save!(:validate => false)
       import
     end

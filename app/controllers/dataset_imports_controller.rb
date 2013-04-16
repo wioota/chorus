@@ -8,11 +8,10 @@ class DatasetImportsController < ApplicationController
 
     table = Dataset.find(params[:dataset_id])
     if (table.is_a?(ChorusView))
-      imports = Import.where('source_dataset_id = ?',
-                             table.id).order('created_at DESC')
+      imports = Import.where(:source_id => table.id, :source_type => 'Dataset').order('created_at DESC')
     else
-      imports = Import.where('source_dataset_id = ? OR (to_table = ? AND workspace_id = ?)',
-                             table.id, table.name, workspace.id).order('created_at DESC')
+      imports = Import.where('(source_id = ? AND source_type = ?) OR (to_table = ? AND workspace_id = ?)',
+                             table.id, 'Dataset', table.name, workspace.id).order('created_at DESC')
     end
     present paginate imports
   end

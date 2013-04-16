@@ -233,7 +233,7 @@ describe ImportSchedule, :greenplum_integration do
 
       import.workspace_id.should == import_schedule.workspace_id
       import.to_table.should == import_schedule.to_table
-      import.source_dataset_id.should == import_schedule.source_dataset_id
+      import.source_id.should == import_schedule.source_dataset_id
       import.truncate.should == import_schedule.truncate
       import.user_id.should == import_schedule.user_id
       import.sample_count.should == import_schedule.sample_count

@@ -350,7 +350,7 @@ FixtureBuilder.configure do |fbuilder|
     )
     fbuilder.name :dataset_import_created, dataset_import_created
 
-    schema_import = FactoryGirl.create(:schema_import, :user => owner, :to_table => "schema_import_table", :source_dataset_id => oracle_table.id, :schema => default_schema)
+    schema_import = FactoryGirl.create(:schema_import, :user => owner, :to_table => "schema_import_table", :source => oracle_table, :schema => default_schema)
     fbuilder.name :oracle, schema_import
 
     import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
@@ -361,17 +361,17 @@ FixtureBuilder.configure do |fbuilder|
 
     import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                   :import_schedule => import_schedule,
-                  :source_dataset_id => default_table.id)
+                  :source => default_table)
     fbuilder.name :three, import
 
     previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                                          :import_schedule => import_schedule, :created_at => '2012-09-04 23:00:00-07',
-                                         :source_dataset_id => default_table.id)
+                                         :source => default_table)
     fbuilder.name :one, previous_import
 
     import_now = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
                                          :created_at => '2012-09-03 23:00:00-07',
-                                         :source_dataset_id => default_table.id)
+                                         :source => default_table)
     fbuilder.name :now, import_now
 
     csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table")

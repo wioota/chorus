@@ -36,7 +36,7 @@ describe Events::SchemaImportCreated do
                                  :schema => schemas(:default),
                                  :to_table => "new_table_for_import",
                                  :created_at => '2012-09-03 23:00:00-07',
-                                 :source_dataset_id => datasets(:oracle_table).id, )
+                                 :source => datasets(:oracle_table))
       import.save!(:validate => false)
       import
     end

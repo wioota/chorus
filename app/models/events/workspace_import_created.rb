@@ -7,7 +7,8 @@ module Events
     has_additional_data :destination_table, :reference_id, :reference_type
 
     def self.filter_for_import_events(import)
-      where(:target1_id => import.source_dataset_id,
+      where(:target1_id => import.source_id,
+            :target1_type => import.source_type,
             :workspace_id => import.workspace_id)
     end
   end

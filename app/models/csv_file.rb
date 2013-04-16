@@ -38,4 +38,8 @@ class CsvFile < ActiveRecord::Base
     to_table.present? && column_names.present? && types.present? && has_header != nil &&
     delimiter != nil && delimiter.length > 0 && valid?
   end
+
+  def name
+    nil
+  end
 end

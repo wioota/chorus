@@ -16,7 +16,6 @@ FactoryGirl.define do
 
   factory :abstract_import, class: Import do
     created_at Time.current
-    association :source_dataset, factory: :gpdb_table
     user
     sequence(:to_table) { |n| "factoried_import_table#{n}" }
     truncate false
@@ -26,10 +25,12 @@ FactoryGirl.define do
 
     factory :import, class: WorkspaceImport do
       association :workspace, factory: :workspace
+      association :source, factory: :gpdb_table
     end
 
     factory :schema_import, class: SchemaImport do
       association :schema, factory: :gpdb_schema
+      association :source, factory: :gpdb_table
     end
   end
 
@@ -49,7 +50,7 @@ FactoryGirl.define do
     contents { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/test.csv", Rails.root), "text/csv") }
   end
 
-  factory :csv_import, class: CsvImport do
+  factory :csv_import do
     created_at Time.current
     workspace
     association :destination_dataset, factory: :gpdb_table

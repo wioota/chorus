@@ -2,6 +2,7 @@ class WorkspaceImport < Import
   unscoped_belongs_to :workspace
   validates :workspace, :presence => true
   validate :workspace_is_not_archived
+  alias_attribute :source_dataset, :source
 
   def schema
     workspace.sandbox
@@ -11,7 +12,7 @@ class WorkspaceImport < Import
     destination_table = schema.datasets.tables.find_by_name(to_table)
     created_event_class.by(user).add(
       :workspace => workspace,
-      :source_dataset => source_dataset,
+      :source_dataset => source,
       :dataset => destination_table,
       :destination_table => to_table,
       :reference_id => id,
@@ -32,7 +33,7 @@ class WorkspaceImport < Import
   end
 
   def copier_class
-    if source_dataset.database != schema.database
+    if source.database != schema.database
       CrossDatabaseTableCopier
     else
       TableCopier
@@ -47,7 +48,7 @@ class WorkspaceImport < Import
     event = success_event_class.by(user).add(
       :workspace => workspace,
       :dataset => destination_dataset,
-      :source_dataset => source_dataset
+      :source_dataset => source
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
@@ -57,7 +58,7 @@ class WorkspaceImport < Import
       :workspace => workspace,
       :destination_table => to_table,
       :error_message => error_message,
-      :source_dataset => source_dataset,
+      :source_dataset => source,
       :dataset => workspace.sandbox.datasets.find_by_name(to_table)
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
@@ -76,12 +77,12 @@ class WorkspaceImport < Import
     end
 
     write_pipe_searcher = "pipe%_#{handle}_w"
-    write_connection = source_dataset.connect_as(user)
+    write_connection = source.connect_as(user)
     if write_connection.running? write_pipe_searcher
-      log "Found running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}, killing it"
+      log "Found running writer on database #{source.schema.database.name} on data source #{source.data_source.name}, killing it"
       write_connection.kill write_pipe_searcher
     else
-      log "Could not find running writer on database #{source_dataset.schema.database.name} on data source #{source_dataset.data_source.name}"
+      log "Could not find running writer on database #{source.schema.database.name} on data source #{source.data_source.name}"
     end
 
     if named_pipe
