@@ -26,16 +26,27 @@ module Visualization
     def build_row_sql
       filters = @filters.present? ? "#{@filters.join(" AND ")} AND" : ""
 
-      innerQuery = <<-SQL
-        select innerQuery."#{@category}", innerQuery.ntile, min(innerQuery."#{@values}"), max(innerQuery."#{@values}"), count(*) cnt from
-          (select "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile FROM #{@dataset.scoped_name} WHERE #{filters} "#{@category}" is not null and "#{@values}" is not null WINDOW t AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")) as innerQuery
-          GROUP BY innerQuery."#{@category}", innerQuery.ntile ORDER BY innerQuery."#{@category}", innerQuery.ntile
+      ntiles_for_each_datapoint = <<-SQL
+        SELECT "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile
+        FROM #{@dataset.scoped_name}
+        WHERE #{filters} "#{@category}" IS NOT NULL AND "#{@values}" IS NOT NULL WINDOW t
+        AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")
       SQL
 
-      <<-SQL
-        SELECT "#{@category}", ntile, min, max, cnt, sum(cnt) OVER(w) AS total FROM (#{innerQuery}) AS outerQuery
-          WINDOW w AS (PARTITION BY "#{@category}") ORDER BY total desc, "#{@category}", ntile LIMIT #{(@bins * 4).to_s}
+      ntiles_for_each_bin = <<-SQL
+        SELECT "#{@category}", ntile, MIN("#{@values}"), MAX("#{@values}"), COUNT(*) cnt
+        FROM (#{ntiles_for_each_datapoint}) AS ntilesForEachDataPoint
+        GROUP BY "#{@category}", ntile ORDER BY "#{@category}", ntile
       SQL
+
+      ntiles_for_each_bin_with_total = <<-SQL
+        SELECT "#{@category}", ntile, min, max, cnt, SUM(cnt) OVER(w) AS total
+        FROM (#{ntiles_for_each_bin}) AS ntilesForEachBin
+        WINDOW w AS (PARTITION BY "#{@category}")
+        ORDER BY total desc, "#{@category}", ntile LIMIT #{(@bins * 4).to_s}
+      SQL
+
+      return ntiles_for_each_bin_with_total
     end
   end
 end
